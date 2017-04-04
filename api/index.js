@@ -28,3 +28,5 @@ router(app);
 
 const server = app.listen(config.port);
 console.log('Server started - port: ' + config.port );
+
+module.exports = server;

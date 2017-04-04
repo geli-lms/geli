@@ -14,7 +14,8 @@ module.exports = function(app) {
   // Initializing route groups
   const apiRoutes = express.Router(),
         userRoutes = express.Router(),
-        courseRoutes = express.Router();
+        courseRoutes = express.Router(),
+        exampleRoutes = express.Router();
 
 
   /*
@@ -36,6 +37,10 @@ module.exports = function(app) {
   courseRoutes.put('/:courseid/enroll', requireAuth, AuthenticationController.roleAuthorization(['student', 'teacher','admin']), CourseController.enrollStudent);
 
 
+  apiRoutes.use('/example', exampleRoutes);
+  exampleRoutes.get('/', function (req, res) {
+    res.send({'app': 'works'})
+  })
 
   app.use('/api', apiRoutes);
 };

@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha"
   },
   "author": "Thomas Sauer",
   "license": "ISC",
@@ -22,6 +22,9 @@
     "passport-local": "^1.0.0"
   },
   "devDependencies": {
-    "express-api-doc": "0.0.11"
+    "chai": "^3.5.0",
+    "chai-http": "^3.0.0",
+    "express-api-doc": "0.0.11",
+    "mocha": "^3.2.0"
   }
 }
