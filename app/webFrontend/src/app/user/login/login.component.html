@@ -1,0 +1,16 @@
+<div class="center-both">
+    <h1>Login</h1>
+    <md-card>
+        <form name="form" class="login-form" (ngSubmit)="login()" [formGroup]="loginForm">
+            <md-input-container class="full-width">
+                <input mdInput formControlName="username" placeholder="User name">
+            </md-input-container>
+            <br />
+            <md-input-container class="full-width">
+                <input mdInput type="password" formControlName="password" placeholder="Password">
+            </md-input-container>
+            <br />
+            <button md-button class="md-button" type="submit" [disabled]="loading">Login</button>
+        </form>
+    </md-card>
+</div>

@@ -1,0 +1,31 @@
+
+<md-card>
+<md-tab-group>
+    <md-tab label="General">
+        <md-card>
+            <h1>{{course}}</h1>
+            <form class="course-form" (ngSubmit)="createCourse()">
+
+                <md-input-container dynamicHeight="true" class="full-width">
+                    <input async mdInput id="name" placeholder="Course Name" [(ngModel)]="course" [ngModelOptions]="{standalone: true}">
+                </md-input-container>
+                <br />
+                <md-input-container class="full-width">
+                    <textarea mdInput id="description" placeholder="Course Description" [(ngModel)]="description" [ngModelOptions]="{standalone: true}"></textarea>
+                </md-input-container>
+                <br />
+                <md-checkbox>Course activated?</md-checkbox>
+                <br /> <br />
+                <button md-button class="md-button" type="submit">Save</button>
+            </form>
+        </md-card>
+
+
+    </md-tab>
+
+    <md-tab label="Manage Content"><app-manage-content [course]="courseOb"></app-manage-content></md-tab>
+
+    <md-tab label="Course Members">Course Members</md-tab>
+
+</md-tab-group>
+</md-card>
