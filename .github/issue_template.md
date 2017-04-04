@@ -8,6 +8,6 @@
 
 ### Akzeptanzkriterien:
 
-### Storrypoints:
+### Storypoints:
 
 ### Sonstiges:
