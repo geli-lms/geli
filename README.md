@@ -1,7 +1,4 @@
-# geli
-
-https://www.fbi.h-da.de/organisation/personen/trapp-ute/mpse.html
-
+# Great E-Learning Informatics (geli)
 
 ## Requirements
 
@@ -10,7 +7,6 @@ https://www.fbi.h-da.de/organisation/personen/trapp-ute/mpse.html
 
 
 # Backend
-
 
 ## Installation
 
@@ -30,8 +26,8 @@ npm start
 
 ## Testing
 
-1. Kopie von `config/test.dist.json` als `config/test.json` anlegen und entsprechend anpassen
-2. Zum Ausführen der Tests:
+1. Copy `config/test.dist.json` to `config/test.json` and change it accordingly.
+2. To execute the tests:
 
 ```bash
 cd /api
