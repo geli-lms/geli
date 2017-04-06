@@ -17,7 +17,7 @@
 1. Open a Terminal and type following:
 
 ```bash
-cd /path/to/project
+cd /path/to/project/api
 npm install
 ```
 
