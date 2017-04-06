@@ -1,5 +1,9 @@
 # Great E-Learning Informatics (geli)
 
+## Communication
+
+- [geli gitter channel](https://gitter.im/mpse-geli/)
+
 ## Requirements
 
 - [Node.js](https://nodejs.org/en/)
