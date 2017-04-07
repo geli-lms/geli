@@ -9,7 +9,6 @@
 - [Node.js](https://nodejs.org/en/)
 - [MongoDB](https://www.mongodb.com/download-center#community)
 
-
 # Backend
 
 ## Installation
@@ -40,6 +39,10 @@ npm test
 
 # Frontend
 ## Getting started
+
+## Angular CLI (globally required):
+
+Run npm install -g `@angular/cli@latest`
 
 ## How to use:
 
