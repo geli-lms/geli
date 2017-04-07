@@ -42,7 +42,7 @@ npm test
 
 ## Angular CLI (globally required):
 
-Run npm install -g `@angular/cli@latest`
+Run `npm install -g @angular/cli@latest` to install the latest version of the angular cli globally.
 
 ## How to use:
 
