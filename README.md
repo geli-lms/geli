@@ -10,6 +10,14 @@
 - [MongoDB](https://www.mongodb.com/download-center#community)
 
 
+## Vagrant
+To use Vagrant for the development download VirtualBox, install it and then do the same with vagrant.
+After that open the e.g. git bash _AS ADMIN_ and go to the project root. Now run `vagrant up`.
+
+After everything is installed and all npm dependencies are downloaded you can connect to the VirtualBox
+via `vagrant ssh`. The Ports 4200 and 27017 are forwarded to your host system. Just type localhost:4200 in your
+browser after starting `./nodemon.sh` and in a nother terminal `./ng-serve.sh`.
+
 # Backend
 
 ## Installation
