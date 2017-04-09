@@ -9,7 +9,6 @@
 - [Node.js](https://nodejs.org/en/)
 - [MongoDB](https://www.mongodb.com/download-center#community)
 
-
 ## Vagrant
 To use Vagrant for the development download VirtualBox, install it and then do the same with vagrant.
 After that open the e.g. git bash _AS ADMIN_ and go to the project root. Now run `vagrant up`.
@@ -48,6 +47,10 @@ npm test
 
 # Frontend
 ## Getting started
+
+## Angular CLI (globally required):
+
+Run `npm install -g @angular/cli@latest` to install the latest version of the angular cli globally.
 
 ## How to use:
 
