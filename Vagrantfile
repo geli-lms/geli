@@ -92,19 +92,19 @@ Vagrant.configure(2) do |config|
   # documentation for more information about their specific syntax and use.
   config.vm.provision "shell", inline: <<-SHELL
     echo
-	echo "## update dependency tree"
+    echo "## update dependency tree"
     sudo apt-get update -qq
-  #   sudo apt-get install -y
+    # sudo apt-get install -y
     echo
-	echo "## npm selfupdate"
-	sudo npm install --save selfupdate
+    echo "## npm selfupdate"
+    sudo npm install --save selfupdate
   SHELL
   # --no-bin-links
   config.vm.provision "shell" do |f|
     f.inline = <<-SCRIPT
         for FOLDER in $(echo $2 | tr ";" "\n")
         do
-		    echo
+	    echo
             echo "## installing npm dependencies in folder '$FOLDER'"
             cd $1
             cd $FOLDER
