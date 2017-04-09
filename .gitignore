@@ -2,3 +2,6 @@
 .vagrant
 *.log
 
+# Ignore vendor of npm/nodejs
+/api/node_modules
+/web/*/node_modules

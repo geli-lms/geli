@@ -26,8 +26,8 @@ Vagrant.configure(2) do |config|
   # boxes at https://atlas.hashicorp.com/search.
   # config.vm.box = "arvindr21/mean-box"
   config.vm.box = "aeimer/mean-box"
-  config.ssh.username = "ubuntu"
-
+  config.vm.box_version = ">= 0.2"
+  
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
   # `vagrant box outdated`. This is not recommended.
@@ -91,9 +91,13 @@ Vagrant.configure(2) do |config|
   # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
   # documentation for more information about their specific syntax and use.
   config.vm.provision "shell", inline: <<-SHELL
+    echo
+	echo "## update dependency tree"
     sudo apt-get update -qq
   #   sudo apt-get install -y
-    sudo npm install --save selfupdate
+    echo
+	echo "## npm selfupdate"
+	sudo npm install --save selfupdate
   SHELL
   # --no-bin-links
   config.vm.provision "shell" do |f|
@@ -101,7 +105,7 @@ Vagrant.configure(2) do |config|
         for FOLDER in $(echo $2 | tr ";" "\n")
         do
 		    echo
-            echo "+++ installing npm dependencies in folder '$FOLDER' +++"
+            echo "## installing npm dependencies in folder '$FOLDER'"
             cd $1
             cd $FOLDER
             sudo npm install
