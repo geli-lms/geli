@@ -1,0 +1,26 @@
+version: "2"
+services:
+  db:
+    image: "mongo:3.0"
+    ports:
+      - "27017:27017"
+  api:
+    build: ".docker/api"
+    volumes:
+      - ".:/usr/src"
+    working_dir: "/usr/src/api"
+    command: "npm run start-docker-dev"
+    environment:
+      - "DB_HOST=db"
+    links:
+      - "db"
+  web-frontend:
+    build: ".docker/web-frontend"
+    volumes:
+      - ".:/usr/src"
+    working_dir: "/usr/src/app/webFrontend"
+    command: "npm run start-docker-dev"
+    ports:
+      - "4200:4200"
+    links:
+      - "api"
