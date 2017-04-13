@@ -2,6 +2,8 @@ language: node_js
 node_js:
   - "7"
 
+before_install:
+
 script:
-  - cd api && npm test
+  - cd api && npm install && npm test
   - cd app/webFrontend && npm test && npm e2e
