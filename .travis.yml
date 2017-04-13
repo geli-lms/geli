@@ -5,6 +5,12 @@ node_js:
 services:
   - mongodb
 
+branches:
+  only:
+    - master
+    - develop
+    - .*travis.*
+
 before_install:
   - cd api
   - npm install
@@ -18,8 +24,8 @@ script:
   - npm test
   - cd ..
   - cd app/webFrontend
-  - npm lint
-  - npm build
-  - npm test
-  - npm e2e
+  - ng lint
+  - ng build
+  - ng test
+  - ng e2e
   - cd ../..
