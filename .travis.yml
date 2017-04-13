@@ -3,7 +3,16 @@ node_js:
   - "7"
 
 before_install:
+  - cd api
+  - npm install
+  - cd ..
+  - cd app/webFrontend
+  - npm install
 
 script:
-  - cd api && npm install && npm test
-  - cd app/webFrontend && npm test && npm e2e
+  - cd api 
+  - npm test
+  - cd ..
+  - cd app/webFrontend
+  - npm test
+  - npm e2e
