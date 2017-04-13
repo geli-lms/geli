@@ -47,7 +47,6 @@ script:
   # run frontend-tests and return back to root for following steps
   - cd app/webFrontend # npm scripts won't work here (dunno why...)
   - ng lint
-  - ng build
   - ng test
   - ng e2e
   - cd ../..
