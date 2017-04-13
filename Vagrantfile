@@ -24,9 +24,8 @@ Vagrant.configure(2) do |config|
 
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://atlas.hashicorp.com/search.
-  # config.vm.box = "arvindr21/mean-box"
   config.vm.box = "aeimer/mean-box"
-  config.vm.box_version = ">= 0.2"
+  config.vm.box_version = ">= 0.3"
   
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
