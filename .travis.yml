@@ -1,0 +1,7 @@
+language: node_js
+node_js:
+  - "7"
+
+script:
+  - cd api && npm test
+  - cd app/webFrontend && npm test && npm e2e
