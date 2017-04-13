@@ -55,7 +55,7 @@ Run `npm install -g @angular/cli@latest` to install the latest version of the an
 ## How to use:
 
 1. Run `npm install` in the root folder of the app
-2. Run `ng serve` to use the angular-cli
+2. Run `npm start` to use angular-cli serve
 
 If you have problems with the angular-cli version try following:
 
@@ -88,3 +88,21 @@ Before running the tests make sure you are serving the app via `ng serve`.
 ## Further help
 
 To get more help on the `angular-cli` use `ng --help` or go check out the [Angular-CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+
+# Usage with Docker
+You need `docker` and `docker-compose`.
+
+## Installing dependencies
+You can install dependencies by running the following commands from the project root.
+
+    docker-compose run --rm --no-deps api npm install
+    docker-compose run --rm --no-deps web-frontend npm install
+    
+## Running the application
+After installing the dependencies you can run the application by executing:
+
+    docker-compose up
+    
+You can access the web frontend on your host machine at `http://localhost:4200`.
+
+The API will be proxied to `http://localhost:4200/api` and MongoDB is accessible at `localhost:27017`.
