@@ -7,7 +7,7 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class BackendService {
 
-    baseURL: string = 'http://localhost:3030/';
+    baseURL: string = '/';
     apiURL: string = this.baseURL + "api/";
     token: string = '';
 
