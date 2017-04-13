@@ -8,6 +8,7 @@ before_install:
   - cd ..
   - cd app/webFrontend
   - npm install
+  - cd api
 
 script:
   - cd api 
