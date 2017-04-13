@@ -9,7 +9,7 @@ branches:
   only:
     - master
     - develop
-    - .*travis.*
+    - feature/14-travis
 
 before_install:
   - cd api
