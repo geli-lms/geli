@@ -8,7 +8,7 @@ before_install:
   - cd ..
   - cd app/webFrontend
   - npm install
-  - cd api
+  - cd ../..
 
 script:
   - cd api 
@@ -17,3 +17,4 @@ script:
   - cd app/webFrontend
   - npm test
   - npm e2e
+  - cd ../..
