@@ -16,9 +16,10 @@ before_install:
 script:
   - cd api 
   - npm test
-  - npm start&
   - cd ..
   - cd app/webFrontend
+  - npm lint
+  - npm build
   - npm test
   - npm e2e
   - cd ../..
