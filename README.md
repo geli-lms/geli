@@ -6,16 +6,34 @@
 
 ## Requirements
 
-- [Node.js](https://nodejs.org/en/)
-- [MongoDB](https://www.mongodb.com/download-center#community)
+- [Node.js | 7.9](https://nodejs.org/en/)
+- [MongoDB | 3.4.3](https://www.mongodb.com/download-center#community)
 
-## Vagrant
+# Vagrant
 To use Vagrant for the development download VirtualBox, install it and then do the same with vagrant.
-After that open the e.g. git bash _AS ADMIN_ and go to the project root. Now run `vagrant up`.
+After that open the e.g. __git bash__ _AS ADMIN_ and go to the project root. Now run `vagrant up`.
 
 After everything is installed and all npm dependencies are downloaded you can connect to the VirtualBox
 via `vagrant ssh`. The Ports 4200 and 27017 are forwarded to your host system. Just type localhost:4200 in your
-browser after starting `./nodemon.sh` and in a nother terminal `./ng-serve.sh`.
+browser.
+
+# Usage with Docker
+You need `docker` and `docker-compose`.
+
+## Installing dependencies
+You can install dependencies by running the following commands from the project root.
+
+    docker-compose run --rm --no-deps api npm install
+    docker-compose run --rm --no-deps web-frontend npm install
+    
+## Running the application
+After installing the dependencies you can run the application by executing:
+
+    docker-compose up
+    
+You can access the web frontend on your host machine at `http://localhost:4200`.
+
+The API will be proxied to `http://localhost:4200/api` and MongoDB is accessible at `localhost:27017`.
 
 # Backend
 
@@ -32,7 +50,7 @@ npm install
 
 ```bash
 cd /api
-npm start
+npm start-dev
 ```
 
 ## Testing
@@ -54,8 +72,9 @@ Run `npm install -g @angular/cli@latest` to install the latest version of the an
 
 ## How to use:
 
-1. Run `npm install` in the root folder of the app
-2. Run `npm start` to use angular-cli serve
+1. Go to `app/webFrontend/`
+2. Run `npm install` in the root folder of the app
+3. Run `npm start-docker-dev` or `npm start-vagrant-dev` to use angular-cli serve
 
 If you have problems with the angular-cli version try following:
 
@@ -89,20 +108,4 @@ Before running the tests make sure you are serving the app via `ng serve`.
 
 To get more help on the `angular-cli` use `ng --help` or go check out the [Angular-CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
 
-# Usage with Docker
-You need `docker` and `docker-compose`.
 
-## Installing dependencies
-You can install dependencies by running the following commands from the project root.
-
-    docker-compose run --rm --no-deps api npm install
-    docker-compose run --rm --no-deps web-frontend npm install
-    
-## Running the application
-After installing the dependencies you can run the application by executing:
-
-    docker-compose up
-    
-You can access the web frontend on your host machine at `http://localhost:4200`.
-
-The API will be proxied to `http://localhost:4200/api` and MongoDB is accessible at `localhost:27017`.
