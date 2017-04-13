@@ -1,5 +1,5 @@
 sudo: required
-dist: trusty
+#dist: trusty
 language: node_js
 node_js:
   - "7"
@@ -43,8 +43,8 @@ script:
   - cd ..
   # run frontend-tests and return to root for following steps
   - cd app/webFrontend
-  - npm lint
-  - npm build
-  - npm test
-  - npm e2e
+  - ng lint
+  - ng build
+  - ng test
+  - ng e2e
   - cd ../..
