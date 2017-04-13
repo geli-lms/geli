@@ -95,11 +95,9 @@ Vagrant.configure(2) do |config|
     echo "## update dependency tree"
     sudo apt-get update -qq
     # sudo apt-get install -y
-    echo
-    echo "## npm selfupdate"
-    sudo npm install --save selfupdate
+    # echo "## npm selfupdate"
+    # sudo npm install --save selfupdate
   SHELL
-  # --no-bin-links
   config.vm.provision "shell" do |f|
     f.inline = <<-SCRIPT
         for FOLDER in $(echo $2 | tr ";" "\n")
