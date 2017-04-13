@@ -1,16 +1,19 @@
-sudo: required
-dist: trusty
+#sudo: required
+#dist: trusty
 language: node_js
 node_js:
   - "7"
+
 addons:
   apt:
     sources:
       - google-chrome
     packages:
+      # manually update dependencies for chrome
       - libfontconfig1
       - libstdc++6
       - lsb-base
+      # used for Frontend e2e tests
       - google-chrome-stable
 
 services:
@@ -23,21 +26,22 @@ branches:
     - feature/14-travis
 
 before_script:
+  # needed for chrome to start properly
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
 
 install:
-  - cd api
-  - npm install
-  - cd ..
-  - cd app/webFrontend
-  - npm install
-  - cd ../..
+  # install api and return back to root for following steps
+  - cd api && npm install && cd ..
+  # install frontend and return to root for following steps
+  - cd app/webFrontend && npm install && cd ../..
 
 script:
+  # run backend-tests and return to root for following steps
   - cd api 
   - npm test
   - cd ..
+  # run frontend-tests and return to root for following steps
   - cd app/webFrontend
   - ng lint
   - ng build
