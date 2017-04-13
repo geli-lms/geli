@@ -37,15 +37,15 @@ Vagrant.configure(2) do |config|
   # within the machine from a port on the host machine. In the example below,
   # accessing "localhost:8080" will access port 80 on the guest machine.
   # NodeJS-Web-Port
-  config.vm.network "forwarded_port", guest: 4200, host: 4200, host_ip: "127.0.0.1"
+  config.vm.network "forwarded_port", id: "http", guest: 4200, host: 4200, host_ip: "127.0.0.1"
   # MongoDB-Database-Port
-  config.vm.network "forwarded_port", guest: 27017, host: 27017, host_ip: "127.0.0.1"
+  config.vm.network "forwarded_port", id: "mongodb", guest: 27017, host: 27017, host_ip: "127.0.0.1"
   # MongoDB-Status-Page
-  # config.vm.network "forwarded_port", guest: 28017, host: 28017, host_ip: "127.0.0.1"
+  # config.vm.network "forwarded_port", id: "mongodb_status", guest: 28017, host: 28017, host_ip: "127.0.0.1"
 
   # Create a private network, which allows host-only access to the machine
   # using a specific IP.
-  config.vm.network "private_network", ip: "11.12.13.14"
+  config.vm.network "private_network", type: "dhcp"
 
   # Create a public network, which generally matched to bridged network.
   # Bridged networks make the machine appear as another physical device on
@@ -56,10 +56,8 @@ Vagrant.configure(2) do |config|
   # the path on the host to the actual folder. The second argument is
   # the path on the guest to mount the folder. And the optional third
   # argument is a set of non-required options.
-  
-  # Info see: https://coderwall.com/p/uaohzg/use-nfs-to-speed-up-your-vagrant
-  config.vm.synced_folder ".", $vagrant_sync_folder , :nfs => true, mount_options: ["dmode=775,fmode=664"]
-  
+  config.vm.synced_folder ".", $vagrant_sync_folder
+
   # See https://github.com/npm/npm/issues/7308
   config.vm.provider "virtualbox" do |v|
     v.customize ["setextradata", :id, "VBoxInternal2/SharedFoldersEnableSymlinksCreate/vagrant", "1"]
