@@ -1,5 +1,8 @@
-#sudo: required
+
+# required for chrome to install
 dist: trusty
+# required for e2e tests to complete succesfully (page crash???)
+sudo: required
 language: node_js
 node_js:
   - "7"
@@ -39,10 +42,10 @@ install:
 script:
   # run backend-tests and return back to root for following steps
   - cd api 
-  - npm test
+  - npm test # use direct command instead of npm script
   - cd ..
   # run frontend-tests and return back to root for following steps
-  - cd app/webFrontend
+  - cd app/webFrontend # npm scripts won't work here (dunno why...)
   - ng lint
   - ng build
   - ng test
