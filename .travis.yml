@@ -1,4 +1,4 @@
-sudo: required
+#sudo: required
 #dist: trusty
 language: node_js
 node_js:
@@ -13,7 +13,7 @@ addons:
       - libfontconfig1
       - libstdc++6
       - lsb-base
-      # used for Frontend e2e tests
+      # used for frontend e2e tests
       - google-chrome-stable
 
 services:
@@ -33,15 +33,15 @@ before_script:
 install:
   # install api and return back to root for following steps
   - cd api && npm install && cd ..
-  # install frontend and return to root for following steps
+  # install frontend and return back to root for following steps
   - cd app/webFrontend && npm install && cd ../..
 
 script:
-  # run backend-tests and return to root for following steps
+  # run backend-tests and return back to root for following steps
   - cd api 
   - npm test
   - cd ..
-  # run frontend-tests and return to root for following steps
+  # run frontend-tests and return back to root for following steps
   - cd app/webFrontend
   - ng lint
   - ng build
