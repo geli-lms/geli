@@ -58,7 +58,7 @@ Vagrant.configure(2) do |config|
   # argument is a set of non-required options.
   
   # Info see: https://coderwall.com/p/uaohzg/use-nfs-to-speed-up-your-vagrant
-  config.vm.synced_folder ".", $vagrant_sync_folder #, :nfs => true, mount_options: ["dmode=775,fmode=664"]
+  config.vm.synced_folder ".", $vagrant_sync_folder , :nfs => true, mount_options: ["dmode=775,fmode=664"]
   
   # See https://github.com/npm/npm/issues/7308
   config.vm.provider "virtualbox" do |v|
