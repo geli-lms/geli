@@ -1,0 +1,18 @@
+<md-card>
+  <table class="table">
+    <thead>
+    <tr>
+      <th>ID</th>
+      <th>Username</th>
+      <th>Role</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let user of allUsers">
+      <td>{{user._id}}</td>
+      <td>{{user.username}}</td>
+      <td>{{user.role}}</td>
+    </tr>
+    </tbody>
+  </table>
+</md-card>
