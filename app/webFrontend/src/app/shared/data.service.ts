@@ -101,7 +101,6 @@ export class DataService {
   }
 }
 
-
 @Injectable()
 export class CourseService extends DataService {
   constructor(public backendService: BackendService) {
@@ -109,3 +108,9 @@ export class CourseService extends DataService {
   }
 }
 
+@Injectable()
+export class UserDataService extends DataService {
+  constructor(public backendService: BackendService) {
+    super('users/', backendService);
+  }
+}

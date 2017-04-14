@@ -7,6 +7,7 @@ import {AuthGuardService} from './shared/auth-guard.service';
 import {CourseDetailComponent} from './course/course-detail/course-detail.component';
 import {CourseEditComponent} from './course/course-edit/course-edit.component';
 import {CourseNewComponent} from './course/course-new/course-new.component';
+import {UserRolesComponent} from './admin/user-roles/user-roles.component';
 
 export const routes = [
   {path: '', component: HomescreenComponent, pathMatch: 'full'},
@@ -41,5 +42,11 @@ export const routes = [
     component: DashboardComponent,
     canActivate: [AuthGuardService],
     data: {roles: ['student', 'teacher', 'admin']}
+  },
+  {
+    path: 'admin/users',
+    component: UserRolesComponent,
+    canActivate: [AuthGuardService],
+    data: { roles: ['admin']}
   }
 ];
