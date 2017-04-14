@@ -111,6 +111,6 @@ export class CourseService extends DataService {
 @Injectable()
 export class UserDataService extends DataService {
   constructor(public backendService: BackendService) {
-    super('users/', backendService);
+    super('user/', backendService);
   }
 }
