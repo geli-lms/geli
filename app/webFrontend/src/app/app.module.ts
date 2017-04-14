@@ -20,7 +20,7 @@ import { AuthGuardService } from './shared/auth-guard.service';
 import { DashboardStudentComponent } from './dashboard/dashboard-student/dashboard-student.component';
 import { DashboardTeacherComponent } from './dashboard/dashboard-teacher/dashboard-teacher.component';
 import { DashboardAdminComponent } from './dashboard/dashboard-admin/dashboard-admin.component';
-import { CourseService } from './shared/data.service';
+import {CourseService, UserDataService} from './shared/data.service';
 import { BackendService } from './shared/backend.service';
 import { CourseComponent } from './course/course.component';
 import { CourseDetailComponent } from './course/course-detail/course-detail.component';
@@ -32,6 +32,7 @@ import { ShowProgressService } from './shared/show-progress.service';
 import { UnitComponent } from './course/course-edit/unit/unit.component';
 import { ManageContentComponent } from './course/course-edit/manage-content/manage-content.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { UserRolesComponent } from './admin/user-roles/user-roles.component';
 
 
 @NgModule({
@@ -50,7 +51,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     CourseEditComponent,
     CourseNewComponent,
     UnitComponent,
-    ManageContentComponent
+    ManageContentComponent,
+    UserRolesComponent
   ],
   imports: [
     BrowserModule,
@@ -66,6 +68,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
               AuthenticationService,
               AuthGuardService,
               CourseService,
+              UserDataService,
               BackendService,
               DataService,
               ShowProgressService],
