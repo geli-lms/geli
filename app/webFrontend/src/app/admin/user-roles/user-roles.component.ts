@@ -16,7 +16,7 @@ export class UserRolesComponent implements OnInit {
 
   constructor(private userService: UserDataService,
               private router: Router,
-              private  showProgress: ShowProgressService) {
+              private showProgress: ShowProgressService) {
     this.getUsers();
     this.getRoles();
   }
