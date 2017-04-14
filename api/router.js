@@ -2,7 +2,8 @@ const AuthenticationController = require('./controllers/authentication'),
       express = require('express'),
       passportService = require('./config/passport'),
       passport = require('passport'),
-      CourseController = require('./controllers/course');
+      CourseController = require('./controllers/course'),
+      UserController = require('./controllers/user');
 
 
 // Middleware to require login/auth
@@ -22,6 +23,7 @@ module.exports = function(app) {
   User Routes
    */
   apiRoutes.use('/user', userRoutes);
+  userRoutes.get('/', requireAuth, UserController.getUser);
   userRoutes.post('/register', AuthenticationController.register);
   userRoutes.post('/login', requireLogin, AuthenticationController.login);
 
