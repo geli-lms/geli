@@ -40,11 +40,12 @@ install:
   - cd app/webFrontend && npm install && cd ../..
 
 script:
-  # run backend-tests and return back to root for following steps
+  # +++ run backend-tests and return back to root for following steps
   - cd api 
-  - npm test # use direct command instead of npm script
+  - mocha # run backend test
+  #- ng lint # run linter
   - cd ..
-  # run frontend-tests and return back to root for following steps
+  # +++ run frontend-tests and return back to root for following steps
   - cd app/webFrontend # npm scripts won't work here (dunno why...)
   - ng lint
   #- ng test # does not work properly
