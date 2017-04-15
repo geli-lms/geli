@@ -4,7 +4,8 @@
 const jwt = require('jsonwebtoken'),
       crypto = require('crypto'),
       User = require('../models/user'),
-      config = require('../config/main');
+      config = require('../config/main'),
+      emailService = require('./email');
 
 function generateToken(user) {
   return jwt.sign(user, config.secret, {
@@ -89,6 +90,8 @@ exports.register = function(req, res, next) {
         token: 'JWT ' + generateToken(userInfo),
         user: userInfo
       });
+
+      emailService.sendActivation(user);
     });
   });
 }

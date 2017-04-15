@@ -26,6 +26,7 @@ const UserSchema = new Schema({
       enum: ['student', 'teacher', 'tutor', 'admin'],
       default: 'student'
     },
+    activationToken: { type: String },
     resetPasswordToken: { type: String },
     resetPasswordExpires: { type: Date }
   },
