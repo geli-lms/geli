@@ -23,3 +23,16 @@ exports.getUser = function (req, res) {
     });
   }
 }
+
+exports.getRoles = function (req, res) {
+  res.json(User.schema.path('role').enumValues);
+}
+
+exports.updateUser = function (req, res) {
+  User.findByIdAndUpdate(req.body._id, req.body, { new: true }, function (err, user) {
+    if (err) {
+      return handleError(err);
+    }
+    res.send(user);
+  })
+}
