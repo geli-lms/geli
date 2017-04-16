@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {UserDataService} from '../../shared/data.service';
 import {User} from '../../models/user';
 import {Router} from '@angular/router';
+import {ShowProgressService} from '../../shared/show-progress.service';
 
 @Component({
   selector: 'app-user-roles',
@@ -11,10 +12,13 @@ import {Router} from '@angular/router';
 export class UserRolesComponent implements OnInit {
 
   allUsers: User[];
+  availableRoles: String[];
 
   constructor(private userService: UserDataService,
-              private router: Router) {
+              private router: Router,
+              private  showProgress: ShowProgressService) {
     this.getUsers();
+    this.getRoles();
   }
 
   ngOnInit() {
@@ -30,4 +34,24 @@ export class UserRolesComponent implements OnInit {
     });
   }
 
+  getRoles() {
+    this.userService.getRoles().then(roles => {
+      this.availableRoles = roles;
+    });
+  }
+
+  updateRole(userIndex: number) {
+    console.log('Index ' + userIndex);
+    console.log(this.allUsers[userIndex]);
+    this.userService.updateItem(this.allUsers[userIndex]).then(
+      (val) => {
+        console.log(val);
+        this.showProgress.toggleLoadingGlobal(false);
+      },
+      (error) => {
+        this.showProgress.toggleLoadingGlobal(false);
+        console.log(error);
+      }
+    );
+  }
 }
