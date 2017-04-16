@@ -4,15 +4,21 @@
     <thead>
     <tr>
       <th>ID</th>
-      <th>Username</th>
+      <th>E-Mail</th>
       <th>Role</th>
     </tr>
     </thead>
     <tbody>
-    <tr *ngFor="let user of allUsers">
+    <tr *ngFor="let user of allUsers; let i = index;">
       <td>{{user._id}}</td>
-      <td>{{user.username}}</td>
-      <td>{{user.role}}</td>
+      <td>{{user.email}}</td>
+      <td>
+        <md-select [(ngModel)]="user.role" name="role" (change)="updateRole(i)">
+          <md-option *ngFor="let role of availableRoles" [value]="role">
+            {{role}}
+          </md-option>
+        </md-select>
+      </td>
     </tr>
     </tbody>
   </table>

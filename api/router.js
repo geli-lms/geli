@@ -23,9 +23,11 @@ module.exports = function(app) {
   User Routes
    */
   apiRoutes.use('/user', userRoutes);
-  userRoutes.get('/', requireAuth, UserController.getUser);
+  userRoutes.get('/', requireAuth, AuthenticationController.roleAuthorization(['admin']), UserController.getUser);
+  userRoutes.get('/roles', requireAuth, AuthenticationController.roleAuthorization(['admin']), UserController.getRoles);
   userRoutes.post('/register', AuthenticationController.register);
   userRoutes.post('/login', requireLogin, AuthenticationController.login);
+  userRoutes.put('/:userid', requireAuth, AuthenticationController.roleAuthorization(['admin']), UserController.updateUser);
 
 
   /*
