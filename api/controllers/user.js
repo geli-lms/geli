@@ -4,7 +4,7 @@
 const User = require('../models/user');
 
 exports.getUser = function (req, res) {
-  var userId = req.params.userid;
+  let userId = req.params.userid;
 
   if(userId) {
     User.findOne({'_id': userId}).exec(function (err, users) {
@@ -22,17 +22,28 @@ exports.getUser = function (req, res) {
       res.json(users);
     });
   }
-}
+};
 
 exports.getRoles = function (req, res) {
   res.json(User.schema.path('role').enumValues);
-}
+};
 
 exports.updateUser = function (req, res) {
-  User.findByIdAndUpdate(req.body._id, req.body, { new: true }, function (err, user) {
-    if (err) {
-      return handleError(err);
+  User.find({'role': 'admin'}).exec(function (err, users) {
+    if(err) {
+      res.send(err);
     }
-    res.send(user);
-  })
-}
+
+    if(users.length === 1) {
+      return res.status(400).send('There are no other accounts with admin privileges.');
+    }
+    else {
+      User.findByIdAndUpdate(req.body._id, req.body, { new: true }, function (err, user) {
+        if (err) {
+          return handleError(err);
+        }
+        res.send(user);
+      });
+    }
+  });
+};
