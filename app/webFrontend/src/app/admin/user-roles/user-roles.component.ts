@@ -41,8 +41,7 @@ export class UserRolesComponent implements OnInit {
   }
 
   updateRole(userIndex: number) {
-    console.log('Index ' + userIndex);
-    console.log(this.allUsers[userIndex]);
+    this.showProgress.toggleLoadingGlobal(false);
     this.userService.updateItem(this.allUsers[userIndex]).then(
       (val) => {
         console.log(val);
