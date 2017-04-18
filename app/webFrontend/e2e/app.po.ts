@@ -2,8 +2,8 @@ import { browser, element, by } from 'protractor';
 
 export class WebFrontendPage {
   navigateTo() {
-    browser.ignoreSynchronization = true;
-    return browser.get('/');
+    // call '/' with a timeout of 3 seconds
+    return browser.get('/', 3000);
   }
 
   getParagraphText() {
