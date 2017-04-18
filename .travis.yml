@@ -47,8 +47,8 @@ install:
 script:
   # run backend-tests and return back to root for following steps
   - cd api 
-  - npm test            # run backend test
   - ng lint             # run linter
+  - npm test            # run backend test
   - cd ..
   # run frontend-tests and return back to root for following steps
   # npm scripts won't work here (dunno why...)
