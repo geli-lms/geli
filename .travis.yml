@@ -27,7 +27,7 @@ branches:
   only:
     - master
     - develop
-    # - feature/14-travis
+    - feature/14-travis
 
 before_script:
   # required for chrome to start properly
@@ -55,7 +55,7 @@ script:
   - cd app/webFrontend
   - ng lint             # run linter
   # - npm test            # run test - does not work properly
-  # - ng e2e              # run end-to-end-tests - does not work properly
+  - ng e2e              # run end-to-end-tests - does not work properly
   - cd ../..
 
 notifications:
