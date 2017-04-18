@@ -48,13 +48,13 @@ script:
   # run backend-tests and return back to root for following steps
   - cd api 
   - npm test            # run backend test
-  # - ng lint             # run linter
+  - ng lint             # run linter
   - cd ..
   # run frontend-tests and return back to root for following steps
   # npm scripts won't work here (dunno why...)
   - cd app/webFrontend
-  # - ng lint             # run linter
-  - npm test            # run test - does not work properly
+  - ng lint             # run linter
+  # - npm test            # run test - does not work properly
   - ng e2e              # run end-to-end-tests
   - cd ../..
 
