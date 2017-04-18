@@ -23,10 +23,10 @@
     "passport-local": "^1.0.0"
   },
   "devDependencies": {
+    "@angular/cli": "1.0.0",
     "chai": "^3.5.0",
     "chai-http": "^3.0.0",
     "express-api-doc": "0.0.11",
-    "mocha": "^3.2.0",
-    "ng-common": "^0.8.13"
+    "mocha": "^3.2.0"
   }
 }
