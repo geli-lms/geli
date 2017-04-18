@@ -1,6 +1,6 @@
 # Great E-Learning Informatics (geli)
 
-[![Build Status](https://travis-ci.org/khase/geli.svg?branch=master)](https://travis-ci.org/khase/geli)
+[![Build Status](https://travis-ci.org/h-da/geli.svg?branch=develop)](https://travis-ci.org/h-da/geli)
 
 ## Communication
 
