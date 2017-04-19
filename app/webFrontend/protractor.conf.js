@@ -26,5 +26,7 @@ exports.config = {
   },
   onPrepare() {
     jasmine.getEnv().addReporter(new SpecReporter({ spec: { displayStacktrace: true } }));
-  }
+  },
+  // wait x seconds for angular
+  //getPageTimeout: 7000
 };

@@ -1,5 +1,7 @@
 # Great E-Learning Informatics (geli)
 
+[![Build Status](https://travis-ci.org/h-da/geli.svg?branch=develop)](https://travis-ci.org/h-da/geli)
+
 ## Communication
 
 - [geli gitter channel](https://gitter.im/mpse-geli/)
