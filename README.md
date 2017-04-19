@@ -50,7 +50,7 @@ npm install
 
 ```bash
 cd /api
-npm start-dev
+npm run start-dev
 ```
 
 ## Testing
