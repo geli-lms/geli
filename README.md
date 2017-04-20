@@ -1,15 +1,22 @@
 # Great E-Learning Informatics (geli)
 
+[![NodeJS Version](https://img.shields.io/badge/nodeJS-7.9-blue.svg)](https://nodejs.org/en)
+[![MongoDB Version](https://img.shields.io/badge/mongoDB-3.4-blue.svg)](https://www.mongodb.com/download-center#community)
+
+[![GitHub release](https://img.shields.io/github/release/h-da/geli.svg)]()
 [![Build Status](https://travis-ci.org/h-da/geli.svg?branch=develop)](https://travis-ci.org/h-da/geli)
 
-## Communication
+[![license](https://img.shields.io/github/license/h-da/geli.svg)]()
+[![Github Releases](https://img.shields.io/github/downloads/h-da/geli/latest/total.svg)]()
+[![Gitter chat](https://badges.gitter.im/h-da/geli.png)](https://gitter.im/mpse-geli/Lobby)
 
-- [geli gitter channel](https://gitter.im/mpse-geli/)
+---
 
-## Requirements
+This project aims to develop a Open-Source platform for E-Learning in the Informatics.
+We want to have an API, so Apps and other "Frontends" can be added easily.
 
-- [Node.js | 7.9](https://nodejs.org/en/)
-- [MongoDB | 3.4.3](https://www.mongodb.com/download-center#community)
+This project is mainly developed by master-students of the University of Applied Science in Darmstadt, Germany.
+If you want to support this project, just say hello on Gitter.
 
 # Vagrant
 To use Vagrant for the development download VirtualBox, install it and then do the same with vagrant.
