@@ -53,7 +53,7 @@ gulp.task(TSLINT, function() {
         .pipe(tslint({formatter: "verbose"}))
         .pipe(tslint.report({
             // set this to true, if you want the build process to fail on tslint errors.
-            emitError: false
+            emitError: true
         }));
 });
 
