@@ -1,7 +1,3 @@
-/**
- * Created by Steffen on 14.04.2017.
- */
-const User = require('../models/user');
 
 exports.getUser = function (req, res) {
   let userId = req.params.userid;
