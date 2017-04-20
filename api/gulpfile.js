@@ -140,3 +140,13 @@ gulp.task("watch", [BUILD], function() {
         tasks: [BUILD]
     });
 });
+
+gulp.task("debug", [BUILD], function () {
+  return nodemon({
+    ext: "ts js json",
+    script: "build/src/server.js",
+    watch: ["src/*", "test/*"],
+    tasks: [BUILD],
+    nodeArgs: ["--debug-brk=9000"]
+  });
+});
