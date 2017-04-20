@@ -8,5 +8,5 @@ export interface ICourse {
     description: string;
     courseAdmin: IUser;
     students: IUser[];
-    lectures: ILecture[]
+    lectures: ILecture[];
 }

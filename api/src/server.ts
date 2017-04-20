@@ -1,6 +1,6 @@
 import "reflect-metadata";
 import {createExpressServer} from "routing-controllers";
-import * as mongoose from 'mongoose';
+import * as mongoose from "mongoose";
 import * as morgan from "morgan";
 import * as winston from "winston";
 import * as passport from "passport";
