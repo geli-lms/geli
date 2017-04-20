@@ -34,7 +34,7 @@ exports.sendActivation = function (user) {
         // plaintext body
         text: 'Hello ' + user.profile.firstName + ', \n\n' +
         'your account was successfully created. Please use the following link to verify your E-Mail: \n' +
-        'some URL with activation token' + '\n\n' +
+        'http://localhost:4200/activate?t=' + encodeURIComponent(user.activationToken) + '\n\n' +
         'Your GELI Team.'
 
     };

@@ -13,6 +13,10 @@ function generateToken(user) {
   });
 }
 
+function generateSecureActivationToken() {
+    return crypto.randomBytes(64).toString('base64');
+}
+
 
 // Set user info from request
 function setUserInfo(request) {
@@ -22,7 +26,7 @@ function setUserInfo(request) {
     lastName: request.profile.lastName,
     email: request.email,
     role: request.role
-  }};
+  }}
 
 
 //========================================
@@ -31,14 +35,22 @@ function setUserInfo(request) {
 exports.login = function(req, res, next) {
 
   console.log('login...');
-  var userInfo = setUserInfo(req.user);
+  const userInfo = setUserInfo(req.user);
 
   res.status(200).json({
     token: 'JWT ' + generateToken(userInfo),
     user: userInfo
   });
-}
+};
 
+
+//========================================
+// Activation Route
+//========================================
+exports.activate = function(req, res, next) {
+  console.log('activate...');
+  console.log('token: ' + _token);
+};
 
 //========================================
 // Registration Route
@@ -77,7 +89,8 @@ exports.register = function(req, res, next) {
     var user = new User({
       email: email,
       password: password,
-      profile: { firstName: firstName, lastName: lastName }
+      profile: { firstName: firstName, lastName: lastName },
+      activationToken: generateSecureActivationToken()
     });
 
     user.save(function(err, user) {

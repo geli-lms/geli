@@ -1,4 +1,4 @@
-version: "2"
+version: "2.1"
 services:
   db:
     image: "mongo:3.0"
@@ -9,7 +9,7 @@ services:
     volumes:
       - ".:/usr/src"
     working_dir: "/usr/src/api"
-    command: "npm run start-docker-dev"
+    command: "npm run start-dev"
     environment:
       - "DB_HOST=db"
     links:

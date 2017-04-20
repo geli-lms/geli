@@ -23,6 +23,7 @@ module.exports = function(app) {
    */
   apiRoutes.use('/user', userRoutes);
   userRoutes.post('/register', AuthenticationController.register);
+  userRoutes.post('/activate/:token', AuthenticationController.activate);
   userRoutes.post('/login', requireLogin, AuthenticationController.login);
 
 
