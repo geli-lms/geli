@@ -12,7 +12,7 @@
 
 ---
 
-This project aims to develop a Open-Source platform for E-Learning in the Informatics.
+This project aims to develop a Open-Source platform for E-Learning in computer science.
 We want to have an API, so Apps and other "Frontends" can be added easily.
 
 This project is mainly developed by master-students of the University of Applied Science in Darmstadt, Germany.
