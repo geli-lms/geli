@@ -27,7 +27,8 @@ branches:
   only:
     # - master
     - develop
-    - feature/14-travis-new
+    # Only for dev 
+    # - feature/14-travis-new
 
 before_script:
   # required for chrome to start properly
