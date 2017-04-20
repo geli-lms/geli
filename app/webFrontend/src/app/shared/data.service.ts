@@ -116,7 +116,7 @@ export class UserDataService extends DataService {
 
   getRoles(): Promise<any[]> {
     const originalApiPath = this.apiPath;
-    this.apiPath += '/roles';
+    this.apiPath += 'roles';
     const promise = this.readItems();
     this.apiPath = originalApiPath;
     return promise;
