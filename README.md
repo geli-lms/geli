@@ -18,6 +18,8 @@ We want to have an API, so Apps and other "Frontends" can be added easily.
 This project is mainly developed by master-students of the University of Applied Science in Darmstadt, Germany.
 If you want to support this project, just say hello on Gitter.
 
+---
+
 # Vagrant
 To use Vagrant for the development download VirtualBox, install it and then do the same with vagrant.
 After that open the e.g. __git bash__ _AS ADMIN_ and go to the project root. Now run `vagrant up`.
