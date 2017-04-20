@@ -18,7 +18,8 @@
     "doc": "gulp generate:doc",
     "start": "gulp watch",
     "test": "gulp test",
-    "tslint": "gulp tslint"
+    "tslint": "gulp tslint",
+    "debug": "gulp debug"
   },
   "dependencies": {
     "bcrypt-nodejs": "0.0.3",
