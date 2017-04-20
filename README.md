@@ -3,11 +3,11 @@
 [![NodeJS Version](https://img.shields.io/badge/nodeJS-7.9-blue.svg)](https://nodejs.org/en)
 [![MongoDB Version](https://img.shields.io/badge/mongoDB-3.4-blue.svg)](https://www.mongodb.com/download-center#community)
 
-[![GitHub release](https://img.shields.io/github/release/h-da/geli.svg)]()
+![GitHub release](https://img.shields.io/github/release/h-da/geli.svg)
 [![Build Status](https://travis-ci.org/h-da/geli.svg?branch=develop)](https://travis-ci.org/h-da/geli)
 
-[![license](https://img.shields.io/github/license/h-da/geli.svg)]()
-[![Github Releases](https://img.shields.io/github/downloads/h-da/geli/latest/total.svg)]()
+![license](https://img.shields.io/github/license/h-da/geli.svg)
+[Github Releases](https://img.shields.io/github/downloads/h-da/geli/latest/total.svg)
 [![Gitter chat](https://badges.gitter.im/h-da/geli.png)](https://gitter.im/mpse-geli/Lobby)
 
 ---
