@@ -7,7 +7,7 @@
 [![Build Status](https://travis-ci.org/h-da/geli.svg?branch=develop)](https://travis-ci.org/h-da/geli)
 
 ![license](https://img.shields.io/github/license/h-da/geli.svg)
-[Github Releases](https://img.shields.io/github/downloads/h-da/geli/latest/total.svg)
+![Github Releases](https://img.shields.io/github/downloads/h-da/geli/latest/total.svg)
 [![Gitter chat](https://badges.gitter.im/h-da/geli.png)](https://gitter.im/mpse-geli/Lobby)
 
 ---
