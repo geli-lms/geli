@@ -1,31 +1,70 @@
 {
-  "name": "learnitapi",
-  "version": "1.0.0",
-  "description": "a RESTful API for LearnIT",
-  "main": "index.js",
-  "scripts": {
-    "start": "node index.js",
-    "start-docker-dev": "nodemon index.js",
-    "test": "mocha"
+  "name": "geli-api",
+  "version": "0.1.0",
+  "description": "",
+  "homepage": "",
+  "author": {
+    "name": "Lukas Korte",
+    "email": "lukas@korte.me"
   },
-  "author": "Thomas Sauer",
-  "license": "ISC",
+  "main": "build/index.js",
+  "keywords": [
+    "Node",
+    "Express",
+    "Typescript"
+  ],
+  "scripts": {
+    "build": "gulp build",
+    "doc": "gulp generate:doc",
+    "start": "gulp watch",
+    "test": "gulp test",
+    "tslint": "gulp tslint"
+  },
   "dependencies": {
     "bcrypt-nodejs": "0.0.3",
-    "body-parser": "^1.15.2",
-    "crypto": "0.0.3",
-    "express": "^4.14.0",
-    "jsonwebtoken": "^7.2.1",
-    "mongoose": "^4.7.1",
-    "morgan": "^1.7.0",
+    "body-parser": "^1.16.0",
+    "express": "4.14.0",
+    "jsonwebtoken": "^7.3.0",
+    "mongoose": "^4.9.5",
+    "morgan": "1.7.0",
     "passport": "^0.3.2",
     "passport-jwt": "^2.2.1",
-    "passport-local": "^1.0.0"
+    "passport-local": "^1.0.0",
+    "reflect-metadata": "^0.1.10",
+    "routing-controllers": "^0.6.12",
+    "winston": "2.3.1"
   },
   "devDependencies": {
-    "chai": "^3.5.0",
-    "chai-http": "^3.0.0",
-    "express-api-doc": "0.0.11",
-    "mocha": "^3.2.0"
+    "@types/bcrypt-nodejs": "0.0.30",
+    "@types/body-parser": "0.0.33",
+    "@types/chai": "3.4.34",
+    "@types/express": "4.0.35",
+    "@types/jsonwebtoken": "^7.2.0",
+    "@types/mocha": "2.2.38",
+    "@types/mongoose": "^4.7.11",
+    "@types/morgan": "1.7.32",
+    "@types/passport": "^0.3.3",
+    "@types/passport-jwt": "^2.0.19",
+    "@types/passport-local": "^1.0.30",
+    "@types/winston": "2.2.0",
+    "chai": "3.5.0",
+    "gulp": "3.9.1",
+    "gulp-istanbul": "1.1.1",
+    "gulp-mocha": "3.0.1",
+    "gulp-nodemon": "2.2.1",
+    "gulp-plumber": "1.1.0",
+    "gulp-sourcemaps": "2.4.0",
+    "gulp-tslint": "7.0.1",
+    "gulp-typedoc": "2.0.2",
+    "gulp-typescript": "3.1.4",
+    "remap-istanbul": "0.8.4",
+    "rimraf": "2.5.4",
+    "run-sequence": "1.2.2",
+    "tslint": "4.3.1",
+    "typedoc": "0.5.5",
+    "typescript": "2.1.5"
+  },
+  "engines": {
+    "node": ">=4.0.0"
   }
 }
