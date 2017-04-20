@@ -47,7 +47,7 @@ install:
 script:
   # run backend-tests and return back to root for following steps
   - cd api 
-  - npm run tslint      # run linter
+  # - npm run tslint      # run linter | included in command test
   - npm run test        # run backend test
   - cd ..
   # run frontend-tests and return back to root for following steps
