@@ -74,7 +74,7 @@ Run `npm install -g @angular/cli@latest` to install the latest version of the an
 
 1. Go to `app/webFrontend/`
 2. Run `npm install` in the root folder of the app
-3. Run `npm start-docker-dev` or `npm start-vagrant-dev` to use angular-cli serve
+3. Run `npm start` to use angular-cli serve
 
 If you have problems with the angular-cli version try following:
 
