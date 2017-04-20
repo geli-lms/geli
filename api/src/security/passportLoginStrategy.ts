@@ -6,7 +6,7 @@ export default new LocalStrategy(
         usernameField: "email"
     },
     (email, password, done) => {
-        console.log('login strategy');
+        console.log("login strategy");
         User.findOne({email: email})
             .then((user) => {
                 if (!user) {
@@ -22,7 +22,7 @@ export default new LocalStrategy(
                         return done(null, false, {message: "Your login details could not be verified. Please try again."});
                     }
 
-                    console.log('logged in');
+                    console.log("logged in");
                     return done(null, user);
                 });
             })
