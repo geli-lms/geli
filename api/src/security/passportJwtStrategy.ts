@@ -1,6 +1,6 @@
-import {User} from "../models/User";
-import {Strategy as JwtStrategy, ExtractJwt} from "passport-jwt";
-import config from "../config/main";
+import {User} from '../models/User';
+import {Strategy as JwtStrategy, ExtractJwt} from 'passport-jwt';
+import config from '../config/main';
 
 export default new JwtStrategy(
     {
@@ -15,7 +15,7 @@ export default new JwtStrategy(
                 if (user) {
                     done(null, user);
                 } else {
-                    done(null, false,);
+                    done(null, false);
                 }
             })
             .catch(done);

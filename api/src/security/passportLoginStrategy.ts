@@ -1,16 +1,16 @@
-import {User} from "../models/User";
-import {Strategy as LocalStrategy} from "passport-local";
+import {User} from '../models/User';
+import {Strategy as LocalStrategy} from 'passport-local';
 
 export default new LocalStrategy(
     {
-        usernameField: "email"
+        usernameField: 'email'
     },
     (email, password, done) => {
         console.log('login strategy');
         User.findOne({email: email})
             .then((user) => {
                 if (!user) {
-                    done(null, false, {message: "Your login details could not be verified. Please try again."});
+                    done(null, false, {message: 'Your login details could not be verified. Please try again.'});
                     return;
                 }
 
@@ -19,7 +19,7 @@ export default new LocalStrategy(
                         return done(err);
                     }
                     if (!isMatch) {
-                        return done(null, false, {message: "Your login details could not be verified. Please try again."});
+                        return done(null, false, {message: 'Your login details could not be verified. Please try again.'});
                     }
 
                     console.log('logged in');
