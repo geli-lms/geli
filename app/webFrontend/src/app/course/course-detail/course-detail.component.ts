@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {Course} from "../../models/course";
-import {ActivatedRoute} from "@angular/router";
+import {Course} from '../../models/course';
+import {ActivatedRoute} from '@angular/router';
 import 'rxjs/add/operator/switchMap';
 
 
@@ -13,16 +13,15 @@ export class CourseDetailComponent implements OnInit {
 
   course: Course;
 
-  name:string;
+  name: string;
 
   constructor(private route: ActivatedRoute) { }
 
   ngOnInit() {
-    this.route.params.subscribe(params => { this.name = decodeURIComponent(params['name']) });
+    this.route.params.subscribe(params => { this.name = decodeURIComponent(params['name']); });
   }
 
-  apply(){
+  apply() {
       console.log('apply');
   }
-
 }

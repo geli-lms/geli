@@ -1,9 +1,9 @@
 import {Component, OnInit, ViewContainerRef} from '@angular/core';
-import {ActivatedRoute} from "@angular/router";
-import {FormGroup, FormBuilder, Validators} from "@angular/forms";
-import {CourseService} from "../../shared/data.service";
-import {MdSnackBar} from "@angular/material";
-import {ShowProgressService} from "../../shared/show-progress.service";
+import {ActivatedRoute} from '@angular/router';
+import {FormGroup, FormBuilder, Validators} from '@angular/forms';
+import {CourseService} from '../../shared/data.service';
+import {MdSnackBar} from '@angular/material';
+import {ShowProgressService} from '../../shared/show-progress.service';
 
 @Component({
   selector: 'app-course-edit',
@@ -21,7 +21,7 @@ export class CourseEditComponent implements OnInit {
 
 
 
-  message: string = 'Course successfully added.';
+  message = 'Course successfully added.';
 
   constructor(private route: ActivatedRoute,
               private formBuilder: FormBuilder,

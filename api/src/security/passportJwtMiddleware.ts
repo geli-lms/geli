@@ -1,3 +1,3 @@
-import {authenticate} from "passport";
+import {authenticate} from 'passport';
 
-export default authenticate("jwt", { session: false });
+export default authenticate('jwt', { session: false });

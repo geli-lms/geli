@@ -34,7 +34,7 @@ export class RegisterComponent implements OnInit {
                                             this.registerForm.value.lastname).then(
             (val) => {
                 console.log('register done...' + val);
-                //window.location.href = '../';
+                // window.location.href = '../';
             }, (error) => {
                 console.log('wrong credentials');
                 console.log(error);

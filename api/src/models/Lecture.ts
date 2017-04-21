@@ -1,6 +1,6 @@
-import * as mongoose from "mongoose";
-import {ILecture} from "./ILecture";
-import {Unit} from "./Unit";
+import * as mongoose from 'mongoose';
+import {ILecture} from './ILecture';
+import {Unit} from './Unit';
 
 interface ILectureModel extends ILecture, mongoose.Document {
 }
@@ -32,6 +32,6 @@ const lectureSchema = new mongoose.Schema({
 );
 
 
-const Lecture = mongoose.model<ILectureModel>("Lecture", lectureSchema);
+const Lecture = mongoose.model<ILectureModel>('Lecture', lectureSchema);
 
 export {Lecture, ILectureModel};

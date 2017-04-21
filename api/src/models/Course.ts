@@ -1,7 +1,7 @@
-import * as mongoose from "mongoose";
-import {ICourse} from "./ICourse";
-import {User} from "./User";
-import {Lecture} from "./Lecture";
+import * as mongoose from 'mongoose';
+import {ICourse} from './ICourse';
+import {User} from './User';
+import {Lecture} from './Lecture';
 
 interface ICourseModel extends ICourse, mongoose.Document {
 }
@@ -49,6 +49,6 @@ const courseSchema = new mongoose.Schema({
 );
 
 
-const Course = mongoose.model<ICourseModel>("Course", courseSchema);
+const Course = mongoose.model<ICourseModel>('Course', courseSchema);
 
 export {Course, ICourseModel};
