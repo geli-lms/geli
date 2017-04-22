@@ -1,1 +1,26 @@
-<p>Test</p>
+<div class="layout-column">
+  <h2 align="center"> Students </h2>
+  <ng-container *ngFor="let member of members">
+    <md-card>
+      <md-card-header>{{member.profile.firstname}} {{ member.profile.lastname }}</md-card-header>
+      <md-card-actions>
+        <button md-button>LIKE</button>
+        <button md-button>SHARE</button>
+      </md-card-actions>
+    </md-card>
+    <br>
+  </ng-container>
+</div>
+
+<div class="layout-column">
+  <h2 align="center"> Members </h2>
+  <md-card>
+    <md-card-header>
+      Test
+    </md-card-header>
+    <md-card-actions>
+      <button md-button>LIKE</button>
+      <button md-button>SHARE</button>
+    </md-card-actions>
+  </md-card>
+</div>
