@@ -53,7 +53,7 @@ gulp.task(TSLINT, function() {
         .pipe(tslint({formatter: "verbose"}))
         .pipe(tslint.report({
             // set this to true, if you want the build process to fail on tslint errors.
-            emitError: false
+            emitError: true
         }));
 });
 
@@ -139,4 +139,14 @@ gulp.task("watch", [BUILD], function() {
         watch: ["src/*", "test/*"],
         tasks: [BUILD]
     });
+});
+
+gulp.task("debug", [BUILD], function () {
+  return nodemon({
+    ext: "ts js json",
+    script: "build/src/server.js",
+    watch: ["src/*", "test/*"],
+    tasks: [BUILD],
+    nodeArgs: ["--debug-brk=9000"]
+  });
 });

@@ -1,4 +1,4 @@
-import {Injectable} from "@angular/core";
+import {Injectable} from '@angular/core';
 import {Http, Headers, Response} from '@angular/http';
 
 import {Observable} from 'rxjs/Rx';
@@ -7,20 +7,20 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class BackendService {
 
-    baseURL: string = '/';
-    apiURL: string = this.baseURL + "api/";
-    token: string = '';
+    baseURL = '/';
+    apiURL: string = this.baseURL + 'api/';
+    token = '';
 
     constructor(private http: Http) {
         this.token = localStorage.getItem('currentUserToken');
     }
 
     authHeader(): Headers {
-        let headers = new Headers({'Content-Type': 'application/json'});
+        const headers = new Headers({'Content-Type': 'application/json'});
         if (this.token !== '') {
-            headers.set('Authorization', this.token)
+            headers.set('Authorization', this.token);
         }
-        return headers
+        return headers;
     }
 
     get(serviceUrl: string): Observable<Response> {

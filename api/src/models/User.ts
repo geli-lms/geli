@@ -1,6 +1,6 @@
-import * as mongoose from "mongoose";
-import * as bcrypt from "bcrypt-nodejs";
-import {IUser} from "./IUser";
+import * as mongoose from 'mongoose';
+import * as bcrypt from 'bcrypt-nodejs';
+import {IUser} from './IUser';
 
 interface IUserModel extends IUser, mongoose.Document {
     comparePassword: (candidatePassword: string, callback: (error: Error, result: boolean) => void) => void;
@@ -23,14 +23,20 @@ const userSchema = new mongoose.Schema({
         },
         role: {
             type: String,
-            "enum": ['student', 'teacher', 'tutor', 'admin'],
-            "default": 'student'
+            'enum': ['student', 'teacher', 'tutor', 'admin'],
+            'default': 'student'
         },
         resetPasswordToken: {type: String},
         resetPasswordExpires: {type: Date}
     },
     {
-        timestamps: true
+        timestamps: true,
+        toObject: {
+            transform: function (doc: any, ret: any) {
+                ret._id = ret.id;
+                delete ret.id;
+            }
+        }
     });
 
 
@@ -38,13 +44,20 @@ const userSchema = new mongoose.Schema({
 userSchema.pre('save', function (next) {
     const user = this, SALT_FACTOR = 5;
 
-    if (!user.isModified("password")) return next();
+    if (!user.isModified('password')) {
+        return next();
+    }
 
+    // TODO: Refactor to use promises
     bcrypt.genSalt(SALT_FACTOR, function (err, salt) {
-        if (err) return next(err);
+        if (err) {
+            return next(err);
+        }
 
-        bcrypt.hash(user.password, salt, null, function (err, hash) {
-            if (err) return next(err);
+        bcrypt.hash(user.password, salt, null, function (error, hash) {
+            if (error) {
+                return next(error);
+            }
             user.password = hash;
             next();
         });
@@ -67,6 +80,6 @@ userSchema.methods.comparePassword = function (candidatePassword: string, callba
 };
 
 
-const User = mongoose.model<IUserModel>("User", userSchema);
+const User = mongoose.model<IUserModel>('User', userSchema);
 
 export {User, IUserModel};

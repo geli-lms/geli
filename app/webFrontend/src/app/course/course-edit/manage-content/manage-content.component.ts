@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import {Component, OnInit, Input} from '@angular/core';
 
 @Component({
   selector: 'app-manage-content',
@@ -7,14 +7,11 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class ManageContentComponent implements OnInit {
 
-  constructor() { }
   @Input() course;
 
-
-
   ngOnInit() {
-      console.log('init manage...');
-      console.log(this.course);
+    console.log('init manage...');
+    console.log(this.course);
   }
 
 }
