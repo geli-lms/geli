@@ -23,4 +23,9 @@ export class MembersComponent implements OnInit {
     console.log(this.course);
   }
 
+  switchButton() {
+    console.log('Pushed switch button.');
+    console.log(this.course);
+  }
+
 }

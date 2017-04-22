@@ -4,8 +4,8 @@
     <md-card>
       <md-card-header>{{member.profile.firstname}} {{ member.profile.lastname }}</md-card-header>
       <md-card-actions>
-        <button md-button>LIKE</button>
-        <button md-button>SHARE</button>
+        <button md-button class="md-button" (click)="switchButton()">left</button>
+        <button md-button class="md-button" (click)="switchButton()">right</button>
       </md-card-actions>
     </md-card>
     <br>
@@ -19,8 +19,8 @@
       Test
     </md-card-header>
     <md-card-actions>
-      <button md-button>LIKE</button>
-      <button md-button>SHARE</button>
+      <button md-button class="md-button" (click)="switchButton()">left</button>
+      <button md-button class="md-button" (click)="switchButton()">right</button>
     </md-card-actions>
   </md-card>
 </div>
