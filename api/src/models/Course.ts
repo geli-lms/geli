@@ -21,19 +21,19 @@ const courseSchema = new mongoose.Schema({
     courseAdmin: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: User
+        ref: 'User'
       }
     ],
     students: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: User
+        ref: 'User'
       }
     ],
     lectures: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: Lecture
+        ref: 'Lecture'
       }
     ],
   },
