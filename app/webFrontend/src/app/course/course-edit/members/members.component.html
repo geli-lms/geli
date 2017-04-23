@@ -1,11 +1,13 @@
 <div class="layout-column">
   <h2 align="center"> Students </h2>
-  <ng-container *ngFor="let member of members">
+  <ng-container *ngFor="let user of users">
     <md-card>
-      <md-card-header>{{member.profile.firstname}} {{ member.profile.lastname }}</md-card-header>
+      <md-card-header>{{user.profile.firstname}} {{ user.profile.lastname }}</md-card-header>
       <md-card-actions>
-        <button md-button class="md-button" (click)="switchButton()">left</button>
-        <button md-button class="md-button" (click)="switchButton()">right</button>
+        <button md-button class="md-button" (click)="switchUser(user.email,'left')" [disabled]="true"><i
+          class="material-icons md-24">arrow_back</i></button>
+        <button md-button class="md-button" (click)="switchUser(user.email,'right')"><i class="material-icons md-24">arrow_forward</i>
+        </button>
       </md-card-actions>
     </md-card>
     <br>
@@ -14,13 +16,17 @@
 
 <div class="layout-column">
   <h2 align="center"> Members </h2>
-  <md-card>
-    <md-card-header>
-      Test
-    </md-card-header>
-    <md-card-actions>
-      <button md-button class="md-button" (click)="switchButton()">left</button>
-      <button md-button class="md-button" (click)="switchButton()">right</button>
-    </md-card-actions>
-  </md-card>
+  <ng-container *ngFor="let member of members">
+    <md-card>
+      <md-card-header>
+        <md-card-header>{{member.profile.firstname}} {{ member.profile.lastname }}</md-card-header>
+      </md-card-header>
+      <md-card-actions>
+        <button md-button class="md-button" (click)="switchUser(member.email,'left')"><i class="material-icons md-24">arrow_back</i>
+        </button>
+        <button md-button class="md-button" (click)="switchUser(member.email,'right')" [disabled]="true"><i
+          class="material-icons md-24">arrow_forward</i></button>
+      </md-card-actions>
+    </md-card>
+  </ng-container>
 </div>
