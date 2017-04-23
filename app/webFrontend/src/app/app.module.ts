@@ -20,7 +20,7 @@ import { AuthGuardService } from './shared/auth-guard.service';
 import { DashboardStudentComponent } from './dashboard/dashboard-student/dashboard-student.component';
 import { DashboardTeacherComponent } from './dashboard/dashboard-teacher/dashboard-teacher.component';
 import { DashboardAdminComponent } from './dashboard/dashboard-admin/dashboard-admin.component';
-import { CourseService } from './shared/data.service';
+import { CourseService, LectureService } from './shared/data.service';
 import { BackendService } from './shared/backend.service';
 import { CourseComponent } from './course/course.component';
 import { CourseDetailComponent } from './course/course-detail/course-detail.component';
@@ -30,6 +30,9 @@ import { CourseNewComponent } from './course/course-new/course-new.component';
 
 import { ShowProgressService } from './shared/show-progress.service';
 import { UnitComponent } from './course/course-edit/unit/unit.component';
+import { LectureComponent } from './lecture/lecture.component';
+import { LectureNewComponent } from './lecture/lecture-new/lecture-new.component';
+import { LectureEditComponent } from './lecture/lecture-edit/lecture-edit.component';
 import { ManageContentComponent } from './course/course-edit/manage-content/manage-content.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -50,6 +53,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     CourseEditComponent,
     CourseNewComponent,
     UnitComponent,
+    LectureComponent,
+    LectureNewComponent,
+    LectureEditComponent,
     ManageContentComponent
   ],
   imports: [
@@ -66,6 +72,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
               AuthenticationService,
               AuthGuardService,
               CourseService,
+              LectureService,
               BackendService,
               DataService,
               ShowProgressService],

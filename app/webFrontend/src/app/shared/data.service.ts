@@ -101,3 +101,10 @@ export class CourseService extends DataService {
   }
 }
 
+@Injectable()
+export class LectureService extends DataService {
+  constructor(public backendService: BackendService) {
+    super('lecture/', backendService);
+  }
+}
+
