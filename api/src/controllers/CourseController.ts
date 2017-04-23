@@ -19,7 +19,12 @@ export class CourseController {
     @Get('/:id')
     getCourse(@Param('id') id: string) {
         return Course.findById(id)
-            .then((c) => c.toObject());
+          .populate('lectures')
+          .populate('courseAdmin')
+          .populate('students')
+          .then((course) => {
+            return course.toObject();
+          });
     }
 
     @Post('/')
