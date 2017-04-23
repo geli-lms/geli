@@ -41,8 +41,7 @@ const courseSchema = new mongoose.Schema({
     timestamps: true,
     toObject: {
       transform: function(doc: any, ret: any) {
-        ret._id = ret.id;
-        delete ret.id;
+        ret._id = ret._id.toString();
       }
     }
   }
