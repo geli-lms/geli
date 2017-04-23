@@ -6,6 +6,11 @@ export class UserService {
     userName: string;
     userRole: string;
 
+    constructor() {
+        this.getCurrentUserName();
+        this.getCurrentUserRole();
+    }
+
     isStudent(): boolean {
         return this.userRole === 'student';
     }
