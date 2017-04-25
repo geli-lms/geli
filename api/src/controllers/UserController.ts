@@ -1,6 +1,6 @@
 import {sign} from 'jsonwebtoken';
 import {Request, Response} from 'express';
-import {Body, Post, JsonController, Req, Res, HttpError, UseBefore} from 'routing-controllers';
+import {Body, Post, JsonController, Req, Res, HttpError, UseBefore, Get, Param, Put} from 'routing-controllers';
 import {json as bodyParserJson} from 'body-parser';
 import passportLoginMiddleware from '../security/passportLoginMiddleware';
 
@@ -21,6 +21,23 @@ export class UserController {
     );
   }
 
+  @Get('/')
+  getUsers() {
+    return User.find({})
+      .then((users) => users.map((user) => user.toObject({ virtuals: true})));
+  }
+
+  @Get('/roles')
+  getRoles() {
+    return User.schema.path("role").enumValues;
+  }
+
+  @Get('/:id')
+  getUser(@Param("id") id: string) {
+    return User.findById(id)
+      .then((user) => user.toObject());
+  }
+
   @Post('/login')
   @UseBefore(bodyParserJson(), passportLoginMiddleware) // We need body-parser for passport to find the credentials
   postLogin(@Req() request: Request) {
@@ -30,7 +47,7 @@ export class UserController {
       token: 'JWT ' + UserController.generateToken(user),
       user: user.toObject()
     };
-  }
+    }
 
   @Post('/register')
   postRegister(@Body() user: IUser, @Res() res: Response) {
@@ -45,9 +62,15 @@ export class UserController {
       })
       .then((savedUser) => {
         return {
-          token: 'JWT ' + UserController.generateToken(savedUser),
+          token: 'JWT ' + UserController.generateToken(saveUser),
           user: savedUser.toObject()
         };
       });
+  }
+
+  @Put("/:id")
+  updateUser(@Param("id") id: string, @Body() user: IUser) {
+    return User.findByIdAndUpdate(id, user, {"new": true})
+      .then((user) => user.toObject());
   }
 }
