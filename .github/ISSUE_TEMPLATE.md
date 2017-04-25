@@ -1,13 +1,19 @@
 # User Story
 
-### als: 
+### As a: 
 
-### möchte ich:
 
-### damit ich:
+### I want:
 
-### Akzeptanzkriterien:
 
-### Storypoints:
+### so that:
 
-### Sonstiges:
+
+## Storypoints:
+
+
+## Acceptance criteria:
+
+
+## Additional info:
+
