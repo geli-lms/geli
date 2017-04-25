@@ -115,7 +115,7 @@ gulp.task(REMAP_COVERAGE, function() {
             fail: true,
             reports: {
                 "html": "./coverage",
-                "json": "./coverage",
+                "json": "./coverage/coverage-report.json",
                 "text-summary": null,
                 "lcovonly": "./coverage/lcov.info"
             }
