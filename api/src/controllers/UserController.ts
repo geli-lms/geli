@@ -29,11 +29,11 @@ export class UserController {
 
   @Get('/roles')
   getRoles() {
-    return User.schema.path("role").enumValues;
+    return User.schema.path('role').enumValues;
   }
 
   @Get('/:id')
-  getUser(@Param("id") id: string) {
+  getUser(@Param('id') id: string) {
     return User.findById(id)
       .then((user) => user.toObject());
   }
@@ -68,9 +68,9 @@ export class UserController {
       });
   }
 
-  @Put("/:id")
-  updateUser(@Param("id") id: string, @Body() user: IUser) {
-    return User.findByIdAndUpdate(id, user, {"new": true})
-      .then((user) => user.toObject());
+  @Put('/:id')
+  updateUser(@Param('id') id: string, @Body() user: IUser) {
+    return User.findByIdAndUpdate(id, user, {'new': true})
+      .then((savedUser) => savedUser.toObject());
   }
 }

@@ -15,8 +15,7 @@ export default new JwtStrategy(
     .then((user) => {
       if (user) {
         done(null, user);
-      }
-      else {
+      } else {
         done(null, false);
       }
     })
