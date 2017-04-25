@@ -62,7 +62,7 @@ export class UserController {
       })
       .then((savedUser) => {
         return {
-          token: 'JWT ' + UserController.generateToken(saveUser),
+          token: 'JWT ' + UserController.generateToken(savedUser),
           user: savedUser.toObject()
         };
       });
