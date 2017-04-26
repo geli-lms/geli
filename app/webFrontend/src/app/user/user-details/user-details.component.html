@@ -1,2 +1,17 @@
-<p>app works!</p>
-<p>{{user}}</p>
+<md-card>
+  <md-card-header>
+    <md-card-title>{{user._id}}</md-card-title>
+    <md-card-subtitle>Subtitle</md-card-subtitle>
+  </md-card-header>
+  <md-card-content>
+    Text content
+  </md-card-content>
+  <md-card-actions align="start">
+    <button md-button (click)="onAction1">Action1</button>
+    <button md-button (click)="onAction2">Action2</button>
+    xxx
+  </md-card-actions>
+  <md-card-footer>
+    Footer
+  </md-card-footer>
+</md-card>

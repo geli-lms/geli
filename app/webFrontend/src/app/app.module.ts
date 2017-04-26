@@ -9,6 +9,7 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './user/login/login.component';
 import { UserDetailsComponent } from './user/user-details/user-details.component';
 import { MaterialModule } from '@angular/material';
+import { JwtHelper } from 'angular2-jwt';
 
 import { routes } from './app.routes';
 import { UserService } from './shared/user.service';
@@ -71,7 +72,8 @@ import { UserRolesComponent } from './admin/user-roles/user-roles.component';
               UserDataService,
               BackendService,
               DataService,
-              ShowProgressService],
+              ShowProgressService,
+              JwtHelper],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

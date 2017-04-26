@@ -9,7 +9,6 @@ import {IUser} from '../models/IUser';
 import {IUserModel, User} from '../models/User';
 
 @JsonController('/user')
-@UseBefore(passportLoginMiddleware)
 export class UserController {
 
   static generateToken(user: IUser) {
@@ -71,7 +70,20 @@ export class UserController {
 
   @Put('/:id')
   updateUser(@Param('id') id: string, @Body() user: IUser) {
-    return User.findByIdAndUpdate(id, user, {'new': true})
+    return User.find({'role': 'admin'})
+      .then((adminUsers) => {
+        console.log('AdminUsers: ' + adminUsers.length);
+        const _id = adminUsers[0]._id;
+        const idTest = adminUsers[0].get('id');
+        if (adminUsers.length === 1 &&
+            adminUsers[0].get('id') === id &&
+            adminUsers[0].role === 'admin' &&
+            user.role !== 'admin') {
+          throw new HttpError(400, 'There are no other users with admin privileges.');
+        } else {
+          return User.findByIdAndUpdate(id, user, {'new': true});
+        }
+      })
       .then((savedUser) => savedUser.toObject());
   }
 }

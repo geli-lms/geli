@@ -3,7 +3,6 @@ import {UserDataService} from '../../shared/data.service';
 import {Router} from '@angular/router';
 import {User} from '../../models/user';
 import {UserService} from '../../shared/user.service';
-import {AuthenticationService} from "../../shared/authentification.service";
 
 @Component({
   selector: 'app-user-details',
@@ -12,14 +11,14 @@ import {AuthenticationService} from "../../shared/authentification.service";
 })
 export class UserDetailsComponent implements OnInit {
 
-  user: User;
+  user: any[];
 
-  constructor(private authenticationService: AuthenticationService,
+  constructor(private userService: UserService,
               private userDataService: UserDataService,
               private router: Router) {
     if(this.router.url === '/profile') {
-      var decodedToken = this.authenticationService.getDecodedToken();
-      this.getUser(decodedToken._id);
+      const userId = this.userService.getCurrentUserId();
+      this.getUser(userId);
     }
   }
 
@@ -27,8 +26,8 @@ export class UserDetailsComponent implements OnInit {
   }
 
   getUser(userId: string) {
-    this.userDataService.readSingleItem(userId).then(user => {
-      this.user = user[0];
+    this.userDataService.readSingleItem(userId).then((user) => {
+      this.user = user;
     });
   }
 
