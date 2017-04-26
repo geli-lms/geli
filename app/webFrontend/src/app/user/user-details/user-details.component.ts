@@ -3,6 +3,7 @@ import {UserDataService} from '../../shared/data.service';
 import {Router} from '@angular/router';
 import {User} from '../../models/user';
 import {UserService} from '../../shared/user.service';
+import {AuthenticationService} from "../../shared/authentification.service";
 
 @Component({
   selector: 'app-user-details',
@@ -13,10 +14,12 @@ export class UserDetailsComponent implements OnInit {
 
   user: User;
 
-  constructor(private userDataService: UserDataService,
+  constructor(private authenticationService: AuthenticationService,
+              private userDataService: UserDataService,
               private router: Router) {
-    if(this.router.url === 'profile') {
-      let token = localStorage.getItem('currentUserToken');
+    if(this.router.url === '/profile') {
+      var decodedToken = this.authenticationService.getDecodedToken();
+      this.getUser(decodedToken._id);
     }
   }
 

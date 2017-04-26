@@ -9,6 +9,7 @@ import {IUser} from '../models/IUser';
 import {IUserModel, User} from '../models/User';
 
 @JsonController('/user')
+@UseBefore(passportLoginMiddleware)
 export class UserController {
 
   static generateToken(user: IUser) {

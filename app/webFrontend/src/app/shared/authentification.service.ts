@@ -3,14 +3,18 @@ import {Http, Headers, Response} from '@angular/http';
 import 'rxjs/add/operator/map';
 import {BackendService} from './backend.service';
 import {UserService} from './user.service';
+import {JwtHelper} from "angular2-jwt";
 
 @Injectable()
 export class AuthenticationService {
 
   private token: string;
   private isLoggedIn = false;
+  private jwtHelper = new JwtHelper();
 
-  constructor(private http: Http, private backendService: BackendService, private userService: UserService) {
+  constructor(private http: Http,
+              private backendService: BackendService,
+              private userService: UserService) {
     // set token if saved in local storage
     // var currentUser = JSON.parse(localStorage.getItem('currentUser'));
     this.token = localStorage.getItem('currentUserToken');
@@ -100,5 +104,9 @@ export class AuthenticationService {
 
   getToken() {
     return this.token;
+  }
+
+  getDecodedToken() {
+    return this.jwtHelper.decodeToken(this.token);
   }
 }
