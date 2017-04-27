@@ -6,7 +6,6 @@ export default new LocalStrategy(
         usernameField: "email"
     },
     (email, password, done) => {
-        console.log('login strategy');
         User.findOne({email: email})
             .then((user) => {
                 if (!user) {
@@ -21,10 +20,14 @@ export default new LocalStrategy(
                     if (!isMatch) {
                         return done(null, false, {message: "Your login details could not be verified. Please try again."});
                     }
-
-                    console.log('logged in');
-                    return done(null, user);
                 });
+
+                if (user.authenticationToken !== undefined) {
+                   return done(null, false, {message: "Your account has not been activated yet."});
+                }
+
+                console.log("logged in");
+                return done(null, user);
             })
             .catch(done);
     });

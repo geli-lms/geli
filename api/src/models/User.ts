@@ -6,10 +6,12 @@ import * as crypto from "crypto";
 interface IUserModel extends IUser, mongoose.Document {
     comparePassword: (candidatePassword: string, callback: (error: Error, result: boolean) => void) => void;
     authenticationToken: string;
+    resetPasswordToken: string;
+    resetPasswordExpires: Date;
 }
 
 function generateSecureActivationToken() {
-    return crypto.randomBytes(64).toString('base64');
+    return crypto.randomBytes(64).toString("base64");
 }
 
 const userSchema = new mongoose.Schema({
@@ -23,21 +25,26 @@ const userSchema = new mongoose.Schema({
             type: String,
             required: true
         },
-        profile: {
-            firstName: {type: String},
-            lastName: {type: String}
+        firstName: {
+            type: String
+        },
+        lastName: {
+            type: String
         },
         authenticationToken: {
-            type: String,
-            "default": generateSecureActivationToken
+            type: String
         },
         role: {
             type: String,
-            "enum": ['student', 'teacher', 'tutor', 'admin'],
-            "default": 'student'
+            "enum": ["student", "teacher", "tutor", "admin"],
+            "default": "student"
         },
-        resetPasswordToken: {type: String},
-        resetPasswordExpires: {type: Date}
+        resetPasswordToken: {
+            type: String
+        },
+        resetPasswordExpires: {
+            type: Date
+        }
     },
     {
         timestamps: true
@@ -45,8 +52,12 @@ const userSchema = new mongoose.Schema({
 
 
 // Pre-save of user to database, hash password if password is modified or new
-userSchema.pre('save', function (next) {
+userSchema.pre("save", function (next) {
     const user = this, SALT_FACTOR = 5;
+
+    if (this.isNew){
+        user.authenticationToken = generateSecureActivationToken();
+    }
 
     if (!user.isModified("password")) return next();
 

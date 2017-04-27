@@ -32,6 +32,7 @@ import { ShowProgressService } from './shared/show-progress.service';
 import { UnitComponent } from './course/course-edit/unit/unit.component';
 import { ManageContentComponent } from './course/course-edit/manage-content/manage-content.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ActivationComponent } from './user/activation/activation.component';
 
 
 @NgModule({
@@ -50,7 +51,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     CourseEditComponent,
     CourseNewComponent,
     UnitComponent,
-    ManageContentComponent
+    ManageContentComponent,
+    ActivationComponent
   ],
   imports: [
     BrowserModule,
