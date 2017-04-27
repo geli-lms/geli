@@ -27,7 +27,7 @@ export class AuthenticationService {
 
     return new Promise((resolve, reject) => {
 
-      this.backendService.post('user/login', {email: username, password: password})
+      this.backendService.post('auth/login', {email: username, password: password})
         .subscribe(
           (response: any) => {
             console.log(response);
@@ -80,7 +80,7 @@ export class AuthenticationService {
 
     return new Promise((resolve, reject) => {
 
-      this.backendService.post('user/register', {
+      this.backendService.post('auth/register', {
         email: username,
         password: password,
         firstName: prename,
