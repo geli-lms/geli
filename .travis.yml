@@ -29,6 +29,11 @@ branches:
     # Only for development purposes
     # - feature/14-travis-new
 
+cache:
+  directories:
+    - api/node_modules
+    - app/webFrontend/node_modules
+
 before_script:
   # required for chrome to start properly
   - export DISPLAY=:99.0
