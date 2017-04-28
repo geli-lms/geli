@@ -3,7 +3,7 @@ import {Http, Headers, Response} from '@angular/http';
 import 'rxjs/add/operator/map';
 import {BackendService} from './backend.service';
 import {UserService} from './user.service';
-import {JwtHelper} from "angular2-jwt";
+import {JwtHelper} from 'angular2-jwt';
 
 @Injectable()
 export class AuthenticationService {
@@ -76,15 +76,18 @@ export class AuthenticationService {
     localStorage.removeItem('currentUserRole');
   }
 
-  register(username: string, password: string, prename: string, surname: string) {
+  register(prename: string, surname: string, username: string, email: string, password: string) {
 
     return new Promise((resolve, reject) => {
 
       this.backendService.post('auth/register', {
-        email: username,
+        email: email,
+        username: username,
         password: password,
-        firstName: prename,
-        lastName: surname
+        profile: {
+          firstName: prename,
+          lastName: surname
+        },
       })
         .subscribe(
           (json: any) => {

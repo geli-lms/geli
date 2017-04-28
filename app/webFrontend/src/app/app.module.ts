@@ -62,7 +62,6 @@ import { UserRolesComponent } from './admin/user-roles/user-roles.component';
     RouterModule.forRoot(routes),
     BrowserAnimationsModule,
     MaterialModule.forRoot(),
-    MaterialModule.forRoot(),
     ReactiveFormsModule
   ],
   providers: [UserService,
