@@ -1,7 +1,11 @@
 /** Created by Oliver Neff on 14.04.2017. */
 import {Component, Input, OnInit} from '@angular/core';
+import {UserDataService} from '../../../shared/data.service';
 import {ShowProgressService} from '../../../shared/show-progress.service';
 import {CourseService} from '../../../shared/data.service';
+import {User} from '../../../models/user';
+import {ActivatedRoute} from '@angular/router';
+import {log} from 'util';
 
 @Component({
   selector: 'app-members',
@@ -10,41 +14,26 @@ import {CourseService} from '../../../shared/data.service';
 })
 export class MembersComponent implements OnInit {
   @Input() course;
-
-  members = [];
-  users: { email: string, role: string, profile: { firstname: string, lastname: string } }[] = [];
+  @Input() courseId;
+  members: User[] = [];
+  users: User[] = [];
 
   constructor(
+    private userService: UserDataService,
+    private route: ActivatedRoute,
     private courseService: CourseService,
     private showProgress: ShowProgressService) {
-    this.users[0] = {email: 'MaxMüller@gmx.de', role: 'student', profile: {firstname: 'Max', lastname: 'Müller'}};
-    this.users[1] = {
-      email: 'FrankWalther@aol.com',
-      role: 'student',
-      profile: {firstname: 'Frank', lastname: 'Walther'}
-    };
-    this.users[2] = {
-      email: 'PaulRiebmann@test.com',
-      role: 'teacher',
-      profile: {firstname: 'Paul', lastname: 'Riebmann'}
-    };
-    this.users[3] = {
-      email: 'SvenjaMüller@google.de',
-      role: 'admin',
-      profile: {firstname: 'Svenja', lastname: 'Müller'}
-    };
+    this.getUsers();
   }
 
   ngOnInit() {
     console.log('init users...');
     console.log(this.course);
-  }
+}
 
   updateMembersInCourse() {
     this.showProgress.toggleLoadingGlobal(true);
-    console.log(this.course);
-
-    this.courseService.updateItem({'name': this.course}).then(
+    this.courseService.updateItem({'students': this.course.students, '_id': this.courseId}).then(
       (val) => {
         console.log(val);
         this.showProgress.toggleLoadingGlobal(false);
@@ -57,12 +46,20 @@ export class MembersComponent implements OnInit {
 
   switchUser(username: string, direction: string) {
     if (direction === 'right') {
-      this.members = this.members.concat(this.users.filter(obj => username === obj.email));
-      this.users = this.users.filter(obj => !(username === obj.email));
+      this.members = this.members.concat(this.users.filter(obj => username === obj.username));
+      this.users = this.users.filter(obj => !(username === obj.username));
     } else if (direction === 'left') {
-      this.users = this.users.concat(this.members.filter(obj => username === obj.email));
-      this.members = this.members.filter(obj => !(username === obj.email));
+      this.users = this.users.concat(this.members.filter(obj => username === obj.username));
+      this.members = this.members.filter(obj => !(username === obj.username));
     }
+    this.course.students = this.members;
+    this.updateMembersInCourse();
+  }
+
+  getUsers() {
+    this.userService.readItems().then(users => {
+      this.users = users;
+    });
   }
 
 }

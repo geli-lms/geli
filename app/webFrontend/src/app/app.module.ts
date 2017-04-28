@@ -20,7 +20,7 @@ import { AuthGuardService } from './shared/auth-guard.service';
 import { DashboardStudentComponent } from './dashboard/dashboard-student/dashboard-student.component';
 import { DashboardTeacherComponent } from './dashboard/dashboard-teacher/dashboard-teacher.component';
 import { DashboardAdminComponent } from './dashboard/dashboard-admin/dashboard-admin.component';
-import { CourseService } from './shared/data.service';
+import { CourseService, UserDataService } from './shared/data.service';
 import { BackendService } from './shared/backend.service';
 import { CourseComponent } from './course/course.component';
 import { CourseDetailComponent } from './course/course-detail/course-detail.component';
@@ -61,7 +61,6 @@ import {MembersComponent} from './course/course-edit/members/members.component';
     RouterModule.forRoot(routes),
     BrowserAnimationsModule,
     MaterialModule.forRoot(),
-    MaterialModule.forRoot(),
     ReactiveFormsModule
   ],
   providers: [UserService,
@@ -70,6 +69,7 @@ import {MembersComponent} from './course/course-edit/members/members.component';
               CourseService,
               BackendService,
               DataService,
+              UserDataService,
               ShowProgressService],
   bootstrap: [AppComponent]
 })

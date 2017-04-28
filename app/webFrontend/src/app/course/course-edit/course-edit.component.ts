@@ -49,7 +49,6 @@ export class CourseEditComponent implements OnInit {
   }
 
   ngOnInit() {
-
   }
 
   createCourse() {
