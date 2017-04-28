@@ -3,7 +3,7 @@ import {Http, Headers, Response} from '@angular/http';
 import 'rxjs/add/operator/map';
 import {BackendService} from './backend.service';
 import {UserService} from './user.service';
-import {JwtHelper} from "angular2-jwt";
+import {JwtHelper} from 'angular2-jwt';
 
 @Injectable()
 export class AuthenticationService {
