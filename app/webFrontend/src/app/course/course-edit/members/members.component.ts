@@ -1,5 +1,7 @@
 /** Created by Oliver Neff on 14.04.2017. */
 import {Component, Input, OnInit} from '@angular/core';
+import {ShowProgressService} from '../../../shared/show-progress.service';
+import {CourseService} from '../../../shared/data.service';
 
 @Component({
   selector: 'app-members',
@@ -12,7 +14,9 @@ export class MembersComponent implements OnInit {
   members = [];
   users: { email: string, role: string, profile: { firstname: string, lastname: string } }[] = [];
 
-  constructor() {
+  constructor(
+    private courseService: CourseService,
+    private showProgress: ShowProgressService) {
     this.users[0] = {email: 'MaxMüller@gmx.de', role: 'student', profile: {firstname: 'Max', lastname: 'Müller'}};
     this.users[1] = {
       email: 'FrankWalther@aol.com',
@@ -35,6 +39,21 @@ export class MembersComponent implements OnInit {
     console.log('init users...');
     console.log(this.course);
   }
+
+  updateMembersInCourse() {
+    this.showProgress.toggleLoadingGlobal(true);
+    console.log(this.course);
+
+    this.courseService.updateItem({'name': this.course}).then(
+      (val) => {
+        console.log(val);
+        this.showProgress.toggleLoadingGlobal(false);
+      }, (error) => {
+        this.showProgress.toggleLoadingGlobal(false);
+        console.log(error);
+      });
+  }
+
 
   switchUser(username: string, direction: string) {
     if (direction === 'right') {
