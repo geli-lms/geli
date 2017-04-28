@@ -1,29 +1,32 @@
 <div class="center-both">
-    <h1>Register</h1>
-    <md-card>
-        <form name="form" class="register-form" (ngSubmit)="register()" [formGroup]="registerForm">
+  <h1>Register</h1>
+  <md-card>
+    <form name="form" class="register-form" (ngSubmit)="register()" [formGroup]="registerForm">
 
-            <md-input-container class="full-width">
-                <input mdInput formControlName="firstname" placeholder="First name">
-            </md-input-container>
-            <br/>
-            <md-input-container class="full-width">
-                <input mdInput formControlName="lastname" placeholder="Last name">
-            </md-input-container>
-            <br/>
+      <md-input-container class="full-width">
+        <input mdInput formControlName="firstName" placeholder="First name" />
+      </md-input-container>
+      <br/>
+      <md-input-container class="full-width">
+        <input mdInput formControlName="lastName" placeholder="Last name" />
+      </md-input-container>
+      <br/>
 
-            <md-input-container class="full-width">
-                <input mdInput formControlName="username" placeholder="User name">
-            </md-input-container>
-            <br/>
+      <md-input-container class="full-width">
+        <input mdInput formControlName="username" placeholder="User name" />
+      </md-input-container>
+      <br/>
+      <md-input-container class="full-width">
+        <input mdInput formControlName="email" placeholder="e-mail" />
+      </md-input-container>
 
-            <md-input-container class="full-width">
-                <input mdInput type="password" formControlName="password" placeholder="Password">
-            </md-input-container>
-            <br/>
+      <md-input-container class="full-width">
+        <input mdInput type="password" formControlName="password" placeholder="Password">
+      </md-input-container>
+      <br/>
 
-            <button md-button class="md-button" type="submit" [disabled]="loading">Register</button>
+      <button md-button class="md-button" type="submit" [disabled]="loading">Register</button>
 
-        </form>
-    </md-card>
+    </form>
+  </md-card>
 </div>

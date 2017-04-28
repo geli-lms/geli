@@ -15,6 +15,7 @@ export class UserService {
     }
 
     isAdmin(): boolean {
+        this.getCurrentUserRole();
         return this.userRole === 'admin';
     }
 
