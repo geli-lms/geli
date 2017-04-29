@@ -28,7 +28,16 @@ export class MembersComponent implements OnInit {
 
   ngOnInit() {
     console.log('init users...');
-    console.log(this.course);
+    console.log(this.courseId);
+    // this.getMembers(this.course.students);
+    this.courseService.readSingleItem(this.courseId).then(
+      (val: any) => {
+        this.course = val;
+        this.members = this.users.filter(obj => this.course.students.includes(obj._id));
+      }, (error) => {
+        console.log(error);
+      });
+
 }
 
   updateMembersInCourse() {

@@ -34,15 +34,15 @@ export class CourseEditComponent implements OnInit {
           this.id = params['id'];
 
           this.courseService.readSingleItem(this.id).then(
-              (val: any) => {
-                  this.course = val.name;
-                  this.description = val.description;
-                  this.courseOb = val;
-                  console.log(this.courseOb);
-                  this.generateForm();
-              }, (error) => {
-                  console.log(error);
-              });
+        (val: any) => {
+          this.course = val.name;
+          this.description = val.description;
+          this.courseOb = val;
+          console.log(this.courseOb);
+          this.generateForm();
+        }, (error) => {
+          console.log(error);
+        });
 
 
       });
