@@ -1,33 +1,50 @@
+<md-input-container dynamicHeight="true" class="filter-size">
+  <input mdInput id="firstName" placeholder="filter first name" [(ngModel)]="filterLastName"
+         [ngModelOptions]="{standalone: true}">
+</md-input-container>
+<md-input-container dynamicHeight="true" class="filter-size">
+  <input mdInput id="lastName" placeholder="filter last name" [(ngModel)]="filterFirstName"
+         [ngModelOptions]="{standalone: true}">
+</md-input-container>
+
 <div class="layout-column">
   <h2 align="center"> Students </h2>
   <ng-container *ngFor="let user of users">
-    <md-card>
-      <md-card-header>{{user.username }}</md-card-header>
-      <md-card-actions>
-        <button md-button class="md-button" (click)="switchUser(user.username,'left')" [disabled]="true"><i
-          class="material-icons md-24">arrow_back</i></button>
-        <button md-button class="md-button" (click)="switchUser(user.username,'right')"><i class="material-icons md-24">arrow_forward</i>
-        </button>
-      </md-card-actions>
-    </md-card>
-    <br>
+    <ng-container
+      *ngIf="user.profile.firstName.includes(filterFirstName) && user.profile.lastName.includes(filterLastName)">
+      <md-card>
+        <md-card-header>{{user.profile.firstName }} {{user.profile.lastName}}</md-card-header>
+        <md-card-actions>
+          <button md-button class="md-button" (click)="switchUser(user.username,'left')" [disabled]="true"><i
+            class="material-icons md-24">arrow_back</i></button>
+          <button md-button class="md-button" (click)="switchUser(user.username,'right')"><i
+            class="material-icons md-24">arrow_forward</i>
+          </button>
+        </md-card-actions>
+      </md-card>
+      <br>
+    </ng-container>
   </ng-container>
 </div>
 
 <div class="layout-column">
   <h2 align="center"> Members </h2>
   <ng-container *ngFor="let member of members">
-    <md-card>
-      <md-card-header>
-        <md-card-header>{{member.username }}</md-card-header>
-      </md-card-header>
-      <md-card-actions>
-        <button md-button class="md-button" (click)="switchUser(member.username,'left')"><i class="material-icons md-24">arrow_back</i>
-        </button>
-        <button md-button class="md-button" (click)="switchUser(member.username,'right')" [disabled]="true"><i
-          class="material-icons md-24">arrow_forward</i></button>
-      </md-card-actions>
-    </md-card>
-    <br>
+    <ng-container
+      *ngIf="member.profile.firstName.includes(filterFirstName) && member.profile.lastName.includes(filterLastName)">
+      <md-card>
+        <md-card-header>
+          <md-card-header>{{member.profile.firstName }} {{member.profile.lastName}}</md-card-header>
+        </md-card-header>
+        <md-card-actions>
+          <button md-button class="md-button" (click)="switchUser(member.username,'left')"><i
+            class="material-icons md-24">arrow_back</i>
+          </button>
+          <button md-button class="md-button" (click)="switchUser(member.username,'right')" [disabled]="true"><i
+            class="material-icons md-24">arrow_forward</i></button>
+        </md-card-actions>
+      </md-card>
+      <br>
+    </ng-container>
   </ng-container>
 </div>

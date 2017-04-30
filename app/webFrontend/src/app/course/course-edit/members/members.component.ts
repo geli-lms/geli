@@ -1,11 +1,8 @@
 /** Created by Oliver Neff on 14.04.2017. */
 import {Component, Input, OnInit} from '@angular/core';
-import {UserDataService} from '../../../shared/data.service';
+import {CourseService, UserDataService} from '../../../shared/data.service';
 import {ShowProgressService} from '../../../shared/show-progress.service';
-import {CourseService} from '../../../shared/data.service';
 import {User} from '../../../models/user';
-import {ActivatedRoute} from '@angular/router';
-import {log} from 'util';
 
 @Component({
   selector: 'app-members',
@@ -13,33 +10,28 @@ import {log} from 'util';
   styleUrls: ['./members.component.scss']
 })
 export class MembersComponent implements OnInit {
-  @Input() course;
   @Input() courseId;
+  course: any;
   members: User[] = [];
   users: User[] = [];
+  filterFirstName = '';
+  filterLastName = '';
 
-  constructor(
-    private userService: UserDataService,
-    private route: ActivatedRoute,
-    private courseService: CourseService,
-    private showProgress: ShowProgressService) {
-    this.getUsers();
+  constructor(private userService: UserDataService,
+              private courseService: CourseService,
+              private showProgress: ShowProgressService) {
+    this.getStudents();
   }
 
   ngOnInit() {
-    console.log('init users...');
+    console.log('init course members with course id:');
     console.log(this.courseId);
-    // this.getMembers(this.course.students);
-    this.courseService.readSingleItem(this.courseId).then(
-      (val: any) => {
-        this.course = val;
-        this.members = this.users.filter(obj => this.course.students.includes(obj._id));
-      }, (error) => {
-        console.log(error);
-      });
+    this.getCourseMembers();
+  }
 
-}
-
+  /**
+   * Save all students in this course in database.
+   */
   updateMembersInCourse() {
     this.showProgress.toggleLoadingGlobal(true);
     this.courseService.updateItem({'students': this.course.students, '_id': this.courseId}).then(
@@ -52,7 +44,11 @@ export class MembersComponent implements OnInit {
       });
   }
 
-
+  /**
+   * Switch a user from student to member and back and update this course in database.
+   * @param username
+   * @param direction
+   */
   switchUser(username: string, direction: string) {
     if (direction === 'right') {
       this.members = this.members.concat(this.users.filter(obj => username === obj.username));
@@ -65,10 +61,31 @@ export class MembersComponent implements OnInit {
     this.updateMembersInCourse();
   }
 
-  getUsers() {
+  /**
+   * Get all users from api and filter those role student.
+   */
+  getStudents() {
     this.userService.readItems().then(users => {
-      this.users = users;
+      this.users = users.filter(obj => obj.role === 'student');
     });
+  }
+
+  /**
+   * Get this course from api and filter all members from users.
+   */
+  getCourseMembers() {
+    this.courseService.readSingleItem(this.courseId).then(
+      (val: any) => {
+        this.course = val;
+        for (let i = this.users.length - 1; i >= 0; i--) {
+          if (this.course.students.includes(this.users[i]._id)) {
+            this.members.push(this.users[i]);
+            this.users.splice(i, 1);
+          }
+        }
+      }, (error) => {
+        console.log(error);
+      });
   }
 
 }
