@@ -43,10 +43,12 @@ install:
   # install api and return back to root for following steps
   - cd api
   - npm install
+  - npm prune          # remove not (anymore) in package.json required packages (to keep the cache clean)
   - cd ..
   # install frontend and return back to root for following steps
   - cd app/webFrontend
   - npm install
+  - npm prune          # remove not (anymore) in package.json required packages (to keep the cache clean)
   - cd ../..
 
 script:
