@@ -33,9 +33,11 @@ import { UnitComponent } from './course/course-edit/unit/unit.component';
 import { LectureComponent } from './lecture/lecture.component';
 import { LectureNewComponent } from './lecture/lecture-new/lecture-new.component';
 import { LectureEditComponent } from './lecture/lecture-edit/lecture-edit.component';
+import { UploadComponent } from './upload/upload.component';
 import { ManageContentComponent } from './course/course-edit/manage-content/manage-content.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
+import { FileSelectDirective } from 'ng2-file-upload';
 
 @NgModule({
   declarations: [
@@ -56,7 +58,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     LectureComponent,
     LectureNewComponent,
     LectureEditComponent,
-    ManageContentComponent
+    UploadComponent,
+    ManageContentComponent,
+    FileSelectDirective
   ],
   imports: [
     BrowserModule,
