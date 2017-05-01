@@ -3,6 +3,7 @@ import {UserDataService} from '../../shared/data.service';
 import {User} from '../../models/user';
 import {Router} from '@angular/router';
 import {ShowProgressService} from '../../shared/show-progress.service';
+import {MdSnackBar} from '@angular/material';
 
 @Component({
   selector: 'app-user-roles',
@@ -16,7 +17,8 @@ export class UserRolesComponent implements OnInit {
 
   constructor(private userService: UserDataService,
               private router: Router,
-              private showProgress: ShowProgressService) {}
+              private showProgress: ShowProgressService,
+              public  snackBar: MdSnackBar) {}
 
   ngOnInit() {
     this.getUsers();
@@ -43,12 +45,11 @@ export class UserRolesComponent implements OnInit {
     this.showProgress.toggleLoadingGlobal(true);
     this.userService.updateItem(this.allUsers[userIndex]).then(
       (val) => {
-        console.log(val);
         this.showProgress.toggleLoadingGlobal(false);
+        this.snackBar.open('Role of user ' + val._id + ' successfully updated to ' + val.role, '', { duration: 3000 })
       },
       (error) => {
         this.showProgress.toggleLoadingGlobal(false);
-        console.log(error);
       }
     );
   }
