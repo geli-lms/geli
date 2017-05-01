@@ -16,12 +16,11 @@ export class UserRolesComponent implements OnInit {
 
   constructor(private userService: UserDataService,
               private router: Router,
-              private showProgress: ShowProgressService) {
-    this.getUsers();
-    this.getRoles();
-  }
+              private showProgress: ShowProgressService) {}
 
   ngOnInit() {
+    this.getUsers();
+    this.getRoles();
   }
 
   getAllUsers(): User[] {
@@ -41,7 +40,7 @@ export class UserRolesComponent implements OnInit {
   }
 
   updateRole(userIndex: number) {
-    this.showProgress.toggleLoadingGlobal(false);
+    this.showProgress.toggleLoadingGlobal(true);
     this.userService.updateItem(this.allUsers[userIndex]).then(
       (val) => {
         console.log(val);

@@ -34,6 +34,7 @@ import { UnitComponent } from './course/course-edit/unit/unit.component';
 import { ManageContentComponent } from './course/course-edit/manage-content/manage-content.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { UserRolesComponent } from './admin/user-roles/user-roles.component';
+import { UserEditComponent } from './user/user-edit/user-edit.component';
 
 
 @NgModule({
@@ -53,7 +54,8 @@ import { UserRolesComponent } from './admin/user-roles/user-roles.component';
     CourseNewComponent,
     UnitComponent,
     ManageContentComponent,
-    UserRolesComponent
+    UserRolesComponent,
+    UserEditComponent
   ],
   imports: [
     BrowserModule,

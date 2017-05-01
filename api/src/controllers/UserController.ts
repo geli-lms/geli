@@ -1,12 +1,10 @@
 import {sign} from 'jsonwebtoken';
-import {Request, Response} from 'express';
-import {Body, Post, JsonController, Req, Res, HttpError, UseBefore, Get, Param, Put} from 'routing-controllers';
-import {json as bodyParserJson} from 'body-parser';
+import {Body, JsonController, HttpError, UseBefore, Get, Param, Put} from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 
 import config from '../config/main';
 import {IUser} from '../models/IUser';
-import {IUserModel, User} from '../models/User';
+import {User} from '../models/User';
 
 @JsonController('/user')
 @UseBefore(passportJwtMiddleware)
@@ -43,14 +41,25 @@ export class UserController {
   updateUser(@Param('id') id: string, @Body() user: IUser) {
     return User.find({'role': 'admin'})
       .then((adminUsers) => {
-        console.log('AdminUsers: ' + adminUsers.length);
-        const _id = adminUsers[0]._id;
-        const idTest = adminUsers[0].get('id');
         if (adminUsers.length === 1 &&
             adminUsers[0].get('id') === id &&
             adminUsers[0].role === 'admin' &&
             user.role !== 'admin') {
           throw new HttpError(400, 'There are no other users with admin privileges.');
+        } else {
+          return User.find({'email': user.email});
+        }
+      })
+      .then((emailInUse) => {
+        if (emailInUse.length > 0) {
+          throw new HttpError(400, 'This mail address is already in use.');
+        } else {
+          return User.find({'username': user.username});
+        }
+      })
+      .then((usernameInUse) => {
+        if (usernameInUse.length > 0) {
+          throw new HttpError(400, 'This username is already in use.');
         } else {
           return User.findByIdAndUpdate(id, user, {'new': true});
         }

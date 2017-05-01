@@ -1,15 +1,15 @@
 <md-card>
   <md-card-header>
-    <md-card-title>{{user['email']}}</md-card-title>
-    <md-card-subtitle>{{user}}</md-card-subtitle>
+    <md-card-title>Profile details</md-card-title>
   </md-card-header>
   <md-card-content>
-    Text content
+    <h2>{{user?.firstName}} {{user?.lastName}}</h2>
+    <div>
+      <label>E-Mail: <span>{{user?.email}}</span></label>
+    </div>
   </md-card-content>
   <md-card-actions align="start">
-    <button md-button (click)="onAction1">Action1</button>
-    <button md-button (click)="onAction2">Action2</button>
-    xxx
+    <button md-raised-button color="primary" routerLink="/profile/edit" routerLinkActive="active">Edit profile</button>
   </md-card-actions>
   <md-card-footer>
     Footer

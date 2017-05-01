@@ -8,6 +8,7 @@ import {CourseDetailComponent} from './course/course-detail/course-detail.compon
 import {CourseEditComponent} from './course/course-edit/course-edit.component';
 import {CourseNewComponent} from './course/course-new/course-new.component';
 import {UserRolesComponent} from './admin/user-roles/user-roles.component';
+import {UserEditComponent} from './user/user-edit/user-edit.component';
 
 export const routes = [
   {path: '', component: HomescreenComponent, pathMatch: 'full'},
@@ -29,13 +30,19 @@ export const routes = [
     path: 'course/detail/:name',
     component: CourseDetailComponent,
     canActivate: [AuthGuardService],
-    data: {roles: ['student', 'teacher', 'admin']}
+    data: {roles: ['student', 'tutor', 'teacher', 'admin']}
   },
   {
     path: 'profile',
     component: UserDetailsComponent,
     canActivate: [AuthGuardService],
-    data: {roles: ['student', 'teacher', 'admin']}
+    data: {roles: ['student', 'tutor', 'teacher', 'admin']}
+  },
+  {
+    path: 'profile/edit',
+    component: UserEditComponent,
+    canActivate: [AuthGuardService],
+    data: {roles: ['student', 'tutor', 'teacher', 'admin']}
   },
   {
     path: 'dashboard',

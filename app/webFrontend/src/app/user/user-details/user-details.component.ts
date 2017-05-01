@@ -11,24 +11,31 @@ import {UserService} from '../../shared/user.service';
 })
 export class UserDetailsComponent implements OnInit {
 
-  user: any[];
+  user: User;
 
   constructor(private userService: UserService,
               private userDataService: UserDataService,
-              private router: Router) {
+              private router: Router) {}
+
+  ngOnInit() {
     if(this.router.url === '/profile') {
       const userId = this.userService.getCurrentUserId();
-      this.getUser(userId);
+      this.loadUser(userId);
     }
   }
 
-  ngOnInit() {
+  getProfileUser() : User {
+    return this.user;
   }
 
-  getUser(userId: string) {
-    this.userDataService.readSingleItem(userId).then((user) => {
-      this.user = user;
-    });
+  loadUser(userId: string) {
+    this.userDataService.readSingleItem(userId).then(
+      (val: any) => {
+        this.user = val;
+      },
+      (error) => {
+        console.log(error);
+      });
   }
 
 }

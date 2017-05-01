@@ -15,7 +15,7 @@
 
     <span><button class="dashboard" md-button *ngIf="isLoggedIn()" routerLink="/dashboard" routerLinkActive="active">Dashboard</button></span>
 
-    <span><button class="admin" md-button *ngIf="isLoggedIn() && this.userService.isAdmin()" [mdMenuTriggerFor]="adminmenu">Admin</button></span>
+    <span><button class="admin" md-button *ngIf="isLoggedIn() && isAdmin()" [mdMenuTriggerFor]="adminmenu">Admin</button></span>
 
     <md-menu #adminmenu="mdMenu">
       <button md-menu-item routerLink="/admin/users" routerLinkActive="active">

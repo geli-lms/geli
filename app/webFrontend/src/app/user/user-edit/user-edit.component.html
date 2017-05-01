@@ -1,0 +1,38 @@
+<div class="center-both">
+  <md-card>
+    <md-card-header>
+      <md-card-title>Title</md-card-title>
+      <md-card-subtitle>Subtitle</md-card-subtitle>
+    </md-card-header>
+    <md-card-content *ngIf="user">
+      <form name="form" class="user-form" (ngSubmit)="onSubmit()" [formGroup]="userForm">
+        <div class="form-group" formGroupName="profile">
+        <md-input-container class="full-width">
+          <input mdInput formControlName="firstName" placeholder="First name"/>
+        </md-input-container>
+        <br/>
+        <md-input-container class="full-width">
+          <input mdInput formControlName="lastName" placeholder="Last name" />
+        </md-input-container>
+        <br/>
+        </div>
+        <md-input-container class="full-width">
+          <input mdInput formControlName="username" placeholder="User name" />
+        </md-input-container>
+        <br/>
+        <md-input-container class="full-width">
+          <input mdInput formControlName="email" placeholder="e-mail" />
+        </md-input-container>
+        <br/>
+
+        <md-input-container class="full-width">
+          <input mdInput type="password" formControlName="password" placeholder="Password">
+        </md-input-container>
+        <br/>
+
+        <button md-raised-button color="accent" class="md-button" type="submit" [disabled]="loading">Save</button>
+
+      </form>
+    </md-card-content>
+  </md-card>
+</div>
