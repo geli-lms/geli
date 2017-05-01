@@ -47,21 +47,21 @@ export class UserController {
             user.role !== 'admin') {
           throw new HttpError(400, 'There are no other users with admin privileges.');
         } else {
-          return User.find({'email': user.email});
+          return User.find({ $and: [{'email': user.email}, {'_id': { $ne: user._id }}]});
         }
       })
       .then((emailInUse) => {
         if (emailInUse.length > 0) {
           throw new HttpError(400, 'This mail address is already in use.');
-        } else {
-          return User.find({'username': user.username});
+        } else if (typeof user.username !== 'undefined') {
+          return User.find({ $and: [{'username': user.username}, {'_id': { $ne: user._id }}]});
         }
       })
       .then((usernameInUse) => {
-        if (usernameInUse.length > 0) {
-          throw new HttpError(400, 'This username is already in use.');
-        } else {
+        if (typeof usernameInUse === 'undefined' || usernameInUse.length === 0) {
           return User.findByIdAndUpdate(id, user, {'new': true});
+        } else {
+          throw new HttpError(400, 'This username is already in use.');
         }
       })
       .then((savedUser) => savedUser.toObject());

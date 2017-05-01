@@ -1,9 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import {MdSnackBar} from '@angular/material';
 import {UserDataService} from '../../shared/data.service';
 import {User} from '../../models/user';
 import {UserService} from '../../shared/user.service';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {ShowProgressService} from '../../shared/show-progress.service';
 
 @Component({
@@ -18,10 +19,12 @@ export class UserEditComponent implements OnInit {
   userForm: FormGroup;
 
   constructor(private route: ActivatedRoute,
+              private router: Router,
               private userService: UserService,
               private userDataService: UserDataService,
               private showProgress: ShowProgressService,
-              private formBuilder: FormBuilder) {
+              private formBuilder: FormBuilder,
+              public snackBar: MdSnackBar) {
     this.generateForm();
     this.getUserData();
   }
@@ -46,12 +49,17 @@ export class UserEditComponent implements OnInit {
       },
       (error) => {
         console.log(error);
+        this.snackBar.open(error);
       });
   }
 
   onSubmit() {
     this.user = this.prepareSaveUser();
     this.updateUser();
+  }
+
+  onCancel() {
+    this.navigateBack();
   }
 
   prepareSaveUser(): User {
@@ -79,10 +87,12 @@ export class UserEditComponent implements OnInit {
       (val) => {
         console.log(val);
         this.showProgress.toggleLoadingGlobal(false);
+        this.snackBar.open('Profile successfully updated.', '', { duration: 3000 });
+        this.navigateBack();
       },
       (error) => {
         this.showProgress.toggleLoadingGlobal(false);
-        console.log(error);
+        this.snackBar.open(error, '', { duration: 3000 });
       });
   }
 
@@ -96,5 +106,9 @@ export class UserEditComponent implements OnInit {
       email: ['', Validators.required],
       password: ['']
     });
+  }
+
+  private navigateBack() {
+    this.router.navigate(['/profile']);
   }
 }

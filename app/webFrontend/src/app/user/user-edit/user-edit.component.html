@@ -1,8 +1,7 @@
 <div class="center-both">
   <md-card>
     <md-card-header>
-      <md-card-title>Title</md-card-title>
-      <md-card-subtitle>Subtitle</md-card-subtitle>
+      <md-card-title><h2>Edit your profile</h2></md-card-title>
     </md-card-header>
     <md-card-content *ngIf="user">
       <form name="form" class="user-form" (ngSubmit)="onSubmit()" [formGroup]="userForm">
@@ -31,6 +30,7 @@
         <br/>
 
         <button md-raised-button color="accent" class="md-button" type="submit" [disabled]="loading">Save</button>
+        <a md-raised-button color="warn" class="md-button" (onClick)="onCancel()" [disabled]="loading">Cancel</a>
 
       </form>
     </md-card-content>
