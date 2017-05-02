@@ -51,6 +51,8 @@ export class AuthenticationService {
       this.backendService.token = json.token;
       console.log('done');
       localStorage.setItem('currentUserRole', json.user.role);
+      localStorage.setItem('currentUserId', json.user.id);
+      console.log('currentUserId:' + json.user.id);
     }
 
     if (json.user) {
@@ -70,6 +72,7 @@ export class AuthenticationService {
     localStorage.removeItem('currentUser');
     localStorage.removeItem('currentUserToken');
     localStorage.removeItem('currentUserRole');
+    localStorage.removeItem('currentUserId');
   }
 
   register(username: string, password: string, prename: string, surname: string) {

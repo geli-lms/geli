@@ -40,8 +40,9 @@ export class DashboardComponent implements OnInit {
     this.router.navigate([url]);
   }
 
-  apply() {
+  apply(courseId: string) {
     console.log('apply');
+    this.courseService.enrollStudent(courseId, {'_id': localStorage.getItem('currentUserId')});
   }
 
   goToInfo(course: string) {

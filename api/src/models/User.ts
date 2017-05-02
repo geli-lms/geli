@@ -31,12 +31,12 @@ const userSchema = new mongoose.Schema({
     },
     {
         timestamps: true,
-        toObject: {
-            transform: function (doc: any, ret: any) {
-                ret._id = ret.id;
-                delete ret.id;
-            }
+      toObject: {
+        transform: function(doc: any, ret: any) {
+          ret.id = ret._id.toString();
+          delete ret._id;
         }
+      }
     });
 
 
