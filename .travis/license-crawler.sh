@@ -23,6 +23,9 @@ echo + crawling licenses from app/webFrontend
 # append frontend licenses to existing csv; we have to skip the first line (header)
 ../../api/node_modules/nlf/bin/nlf-cli.js --csv | awk '{if(NR>1)print}'  >> ../../$CSV_FILE
 
+echo + going back to root folder
+cd ../..
+
 echo
 echo + Finished crawling
 echo + Printing out found Apache Licenses
