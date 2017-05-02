@@ -1,6 +1,7 @@
 import * as nodemailer from 'nodemailer';
 
 import {IUserModel, User} from "../models/User";
+import config from "../config/main";
 
 class EmailService {
     sendActivation (user: IUserModel) {
@@ -10,16 +11,13 @@ class EmailService {
         let transporter = nodemailer.createTransport(
             {
                 //define endpoint and login-credentials for smtp server
-                service: "DebugMail",
-                auth: {
-                    user: "hasenbank.ken@gmail.com",
-                    pass: "72759eb0-1e99-11e7-b8ac-59cc35386e58"
-                },
-                debug: true // include SMTP traffic in the logs
+                service: config.mailProvider,
+                auth: config.mailAuth,
+                debug: false // include SMTP traffic in the logs
             }, {
                 // default message fields
                 // sender info
-                from: "GELI <no-reply@geli.edu>"
+                from: "GELI <" + config.mailSender + ">"
             }
         );
 
@@ -34,7 +32,13 @@ class EmailService {
             text: "Hello " + user.firstName + ", \n\n" +
             "your account was successfully created. Please use the following link to verify your E-Mail: \n" +
             "http://localhost:4200/activate/" + encodeURIComponent(user.authenticationToken) + "\n\n" +
-            "Your GELI Team."
+            "Your GELI Team.",
+
+            // html body
+            html: "<p>Hello " + user.firstName + ",</p><br>" +
+            "<p>your account was successfully created. Please use the following link to verify your E-Mail: \n" +
+            "<a href='http://localhost:4200/activate/" + encodeURIComponent(user.authenticationToken) + "'>http://localhost:4200/activate/" + encodeURIComponent(user.authenticationToken) + "</a></p><br>" +
+            "<p>Your GELI Team.</p>"
         };
 
         transporter.sendMail(message, (error, info) => {

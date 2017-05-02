@@ -15,6 +15,8 @@ export class RegisterComponent implements OnInit {
     error = '';
     registerForm: FormGroup;
 
+    message: string;
+
     constructor(
         private router: Router,
         private authenticationService: AuthenticationService,
@@ -34,9 +36,10 @@ export class RegisterComponent implements OnInit {
                                             this.registerForm.value.lastname).then(
             (val) => {
                 console.log('register done...' + val);
+                this.message = "We've sent an activation link to your email."
                 //window.location.href = '../';
             }, (error) => {
-                console.log('wrong credentials');
+                console.log('registration failed');
                 console.log(error);
             });
     }

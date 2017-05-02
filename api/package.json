@@ -59,6 +59,7 @@
     "gulp-tslint": "7.0.1",
     "gulp-typedoc": "2.0.2",
     "gulp-typescript": "3.1.4",
+    "pow-mongoose-fixtures": "^0.3.0",
     "remap-istanbul": "0.8.4",
     "rimraf": "2.5.4",
     "run-sequence": "1.2.2",

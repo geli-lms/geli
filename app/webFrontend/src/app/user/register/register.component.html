@@ -1,5 +1,6 @@
 <div class="center-both">
     <h1>Register</h1>
+    <p [hidden]="message===undefined">{{message}}</p>
     <md-card>
         <form name="form" class="register-form" (ngSubmit)="register()" [formGroup]="registerForm">
 
@@ -13,7 +14,7 @@
             <br/>
 
             <md-input-container class="full-width">
-                <input mdInput formControlName="username" placeholder="User name">
+                <input mdInput formControlName="username" placeholder="E-Mail">
             </md-input-container>
             <br/>
 
