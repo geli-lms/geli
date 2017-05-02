@@ -1,0 +1,32 @@
+<div>
+
+
+        <div>
+         <i>Mulitple-Choice-Aufgabe:  </i>
+            <div >
+                <p>
+                    <span [hidden]="onEdit">{{edittedTask.name}}</span>
+                </p>
+                <p [hidden]="!onEdit">
+                    <textarea [(ngModel)]="edittedTask.name" rows="4"></textarea>
+                 </p>
+
+            </div>
+        </div>
+
+    <div >
+        <div [hidden]="edittedTask._id === null">
+            <button  (click)="editTask()">
+                    {{onEdit === false ? "Edit" : "Cancel"}}
+                </button>
+            <button   [hidden]="!onEdit" (click)="updateTask()" [disabled]="!isTaskValid()">
+               Update</button>
+            <button (click)="removeTask()">
+                Remove</button>
+        </div>
+        <div [hidden]="(edittedTask._id !== null)">
+            <button  [hidden]="!onEdit" (click)="createTask()" [disabled]="!isTaskValid()">
+                 Create</button>
+        </div>
+    </div>
+</div>

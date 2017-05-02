@@ -109,3 +109,31 @@ export class CourseService extends DataService {
   }
 }
 
+@Injectable()
+export class TaskService extends DataService {
+  constructor(public backendService: BackendService) {
+    super('tasks/', backendService);
+  }
+
+  getTasksForCourse(id: string): Promise<any[]> {
+    return new Promise((resolve, reject) => {
+      this.backendService.get(this.apiPath + 'course/' + id)
+        .subscribe(
+          (responseItems: any) => {
+            if (this.changeProps2Date) {
+              responseItems.forEach(item => {
+                this.changeProps2Date.forEach(prop => {
+                  DataService.changeStringProp2DateProp(item, prop);
+                });
+              });
+            }
+
+            this.items = responseItems;
+            resolve(responseItems);
+          },
+          error => reject(error)
+        );
+    });
+  }
+
+}
