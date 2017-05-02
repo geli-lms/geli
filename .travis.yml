@@ -69,8 +69,9 @@ after_script:
   # add coveralls calls here
   # - coveralls stuff
   # run license checker (nlf) on branch develop
-  - echo "$TRAVIS_BRANCH"
-  - if [ "$TRAVIS_BRANCH" = "feature/31-license-crawler" ]; then ./.travis/license-crawler.sh; fi
+  # TODO: we should check if the build was triggered after accepting a PR to dev and only then run
+  # https://docs.travis-ci.com/user/environment-variables/
+  # - if [ "$TRAVIS_BRANCH" = "develop" ]; then ./.travis/license-crawler.sh; fi
   - ./.travis/license-crawler.sh
 
 notifications:
