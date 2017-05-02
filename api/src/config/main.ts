@@ -15,8 +15,8 @@ export default {
     // mailSMTPServer: process.env.MAILSMTPSERVER || 'undefined',
     // mailSMTPPort: process.env.MAILSMTPPORT || 25,
     mailAuth: {
-      user: process.env.MAILUSER || 'hasenbank.ken@gmail.com',
-      pass: process.env.MAILPASS || '72759eb0-1e99-11e7-b8ac-59cc35386e58'
+      user: process.env.MAILUSER || '',
+      pass: process.env.MAILPASS || ''
     },
     mailSender: process.env.MAILSENDER || 'no-reply@geli.edu'
 };

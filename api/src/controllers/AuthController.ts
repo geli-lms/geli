@@ -35,7 +35,6 @@ export class AuthController {
 
   @Post('/register')
   postRegister(@Body() user: IUser, @Res() res: Response) {
-    console.log(user);
     return User.findOne({email: user.email})
       .then((existingUser) => {
         // If user is not unique, return error
