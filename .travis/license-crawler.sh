@@ -28,7 +28,7 @@ echo + Finished crawling
 echo + Printing out found Apache Licenses
 
 # print first line (head => column-titles) of csv
-tail -p $CSV_FILE
+head -1 $CSV_FILE
 
 # print rows which contain apache, with the caseinsensitive flag
 cat $CSV_FILE | grep -i "apache" > $CSV_FILE_APACHE
