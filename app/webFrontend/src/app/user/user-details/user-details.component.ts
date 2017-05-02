@@ -18,13 +18,13 @@ export class UserDetailsComponent implements OnInit {
               private router: Router) {}
 
   ngOnInit() {
-    if(this.router.url === '/profile') {
+    if (this.router.url === '/profile') {
       const userId = this.userService.getCurrentUserId();
       this.loadUser(userId);
     }
   }
 
-  getProfileUser() : User {
+  getProfileUser(): User {
     return this.user;
   }
 

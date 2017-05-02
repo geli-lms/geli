@@ -39,8 +39,8 @@ export class UserService {
     }
 
     getCurrentUserId(): string {
-      let token = this.getCurrentToken();
-      let decodedToken = this.jwtHelper.decodeToken(token);
+      const token = this.getCurrentToken();
+      const decodedToken = this.jwtHelper.decodeToken(token);
       return decodedToken._id;
     }
 }

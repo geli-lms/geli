@@ -65,15 +65,15 @@ export class UserEditComponent implements OnInit {
   prepareSaveUser(): User {
     const userFormModel = this.userForm.value;
 
-    let saveUser: User = new User();
-    for(let key in userFormModel) {
-      if(userFormModel.hasOwnProperty(key)) {
+    const saveUser: User = new User();
+    for (const key in userFormModel) {
+      if (userFormModel.hasOwnProperty(key)) {
         saveUser[key] = userFormModel[key];
       }
     }
 
-    for(let key in this.user) {
-      if(typeof saveUser[key] === 'undefined') {
+    for (const key in this.user) {
+      if (typeof saveUser[key] === 'undefined') {
         saveUser[key] = this.user[key];
       }
     }

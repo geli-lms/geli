@@ -46,7 +46,7 @@ export class UserRolesComponent implements OnInit {
     this.userService.updateItem(this.allUsers[userIndex]).then(
       (val) => {
         this.showProgress.toggleLoadingGlobal(false);
-        this.snackBar.open('Role of user ' + val._id + ' successfully updated to ' + val.role, '', { duration: 3000 })
+        this.snackBar.open('Role of user ' + val._id + ' successfully updated to ' + val.role, '', { duration: 3000 });
       },
       (error) => {
         this.showProgress.toggleLoadingGlobal(false);
