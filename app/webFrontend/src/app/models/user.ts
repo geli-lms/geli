@@ -1,9 +1,11 @@
 export class User {
-    _id: string;
-    username: string;
-    email: string;
-    password: string;
+  _id: string;
+  username: string;
+  email: string;
+  password: string;
+  profile: {
     firstName: string;
-    lastName: string;x
-    role: string;
+    lastName: string;
+  };
+  role: string;
 }

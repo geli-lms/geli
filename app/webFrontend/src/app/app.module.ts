@@ -61,7 +61,6 @@ import { ActivationComponent } from './user/activation/activation.component';
     RouterModule.forRoot(routes),
     BrowserAnimationsModule,
     MaterialModule.forRoot(),
-    MaterialModule.forRoot(),
     ReactiveFormsModule
   ],
   providers: [UserService,

@@ -1,8 +1,8 @@
 import {Component, OnInit, ViewEncapsulation} from '@angular/core';
-import {UserService} from "../shared/user.service";
-import {Course} from "../models/course";
-import {CourseService} from "../shared/data.service";
-import {Router} from "@angular/router";
+import {UserService} from '../shared/user.service';
+import {Course} from '../models/course';
+import {CourseService} from '../shared/data.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
@@ -36,16 +36,16 @@ export class DashboardComponent implements OnInit {
   }
 
   editCourse(id: string) {
-    let url = '/course/edit/' + id;
+    const url = '/course/edit/' + id;
     this.router.navigate([url]);
   }
 
   apply() {
-    console.log("apply");
+    console.log('apply');
   }
 
   goToInfo(course: string) {
-    let url = '/course/detail/' + course;
+    const url = '/course/detail/' + course;
     this.router.navigate([url]);
   }
 

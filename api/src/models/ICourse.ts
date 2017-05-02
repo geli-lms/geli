@@ -1,5 +1,5 @@
-import {IUser} from "./IUser";
-import {ILecture} from "./ILecture";
+import {IUser} from './IUser';
+import {ILecture} from './ILecture';
 
 export interface ICourse {
     _id: any;
@@ -8,5 +8,5 @@ export interface ICourse {
     description: string;
     courseAdmin: IUser;
     students: IUser[];
-    lectures: ILecture[]
+    lectures: ILecture[];
 }

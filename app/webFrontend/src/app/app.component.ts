@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import {UserService} from "./shared/user.service";
-import {AuthenticationService} from "./shared/authentification.service";
-import {ShowProgressService} from "./shared/show-progress.service";
+import {UserService} from './shared/user.service';
+import {AuthenticationService} from './shared/authentification.service';
+import {ShowProgressService} from './shared/show-progress.service';
 
 @Component({
   selector: 'app-root',
@@ -15,16 +15,16 @@ export class AppComponent {
   showProgressBar = false;
 
   constructor(private userService: UserService, private authService: AuthenticationService, private showProgress: ShowProgressService) {
-    //localStorage.clear();
+    // localStorage.clear();
       showProgress.toggleSidenav$.subscribe(
           toggle => {
               this.toggleProgressBar();
           }
-      )
+      );
   }
 
-  toggleProgressBar(){
-    if(this.showProgressBar == true) {
+  toggleProgressBar() {
+    if (this.showProgressBar === true) {
       this.showProgressBar = false;
     } else {
       this.showProgressBar = true;
@@ -36,6 +36,10 @@ export class AppComponent {
       this.loggedIn = true;
     }
     return this.loggedIn;
+  }
+
+  isAdmin(): boolean {
+    return this.userService.isAdmin();
   }
 
   logout(): void {

@@ -1,5 +1,7 @@
 # Great E-Learning Informatics (geli)
 
+[![Build Status](https://travis-ci.org/h-da/geli.svg?branch=develop)](https://travis-ci.org/h-da/geli)
+
 ## Communication
 
 - [geli gitter channel](https://gitter.im/mpse-geli/)
@@ -52,6 +54,8 @@ npm install
 cd /api
 npm start-dev
 ```
+
+or `nodemon -L index.js` to 'poll'. You can use this if you are using vagrant or docker on windows/mac.
 
 ## Testing
 

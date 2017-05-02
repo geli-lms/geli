@@ -1,5 +1,5 @@
-import * as mongoose from "mongoose";
-import {IUnit} from "./IUnit";
+import * as mongoose from 'mongoose';
+import {IUnit} from './IUnit';
 
 interface IUnitModel extends IUnit, mongoose.Document {
 }
@@ -27,6 +27,6 @@ const unitSchema = new mongoose.Schema({
 );
 
 
-const Unit = mongoose.model<IUnitModel>("Unit", unitSchema);
+const Unit = mongoose.model<IUnitModel>('Unit', unitSchema);
 
 export {Unit, IUnitModel};
