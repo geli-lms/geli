@@ -19,7 +19,8 @@
     "start": "gulp watch",
     "test": "gulp test",
     "tslint": "gulp tslint",
-    "debug": "gulp debug"
+    "debug": "gulp debug",
+    "load:fixtures": "gulp load:fixtures"
   },
   "dependencies": {
     "bcrypt-nodejs": "0.0.3",
