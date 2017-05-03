@@ -70,8 +70,7 @@ after_script:
   # - coveralls stuff
   # run license checker (nlf) on branch develop
   # TODO: we should check if the build was triggered after accepting a PR to dev and only then run
-  - test $TRAVIS_BRANCH = develop -a $TRAVIS_PULL_REQUEST = false \
-    && ./.travis/license-crawler.sh
+  - test $TRAVIS_BRANCH = develop -a $TRAVIS_PULL_REQUEST = false && ./.travis/license-crawler.sh
   - echo $TRAVIS_BRANCH
   - echo $TRAVIS_EVENT_TYPE
   - echo $TRAVIS_PULL_REQUEST
