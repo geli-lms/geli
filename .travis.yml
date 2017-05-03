@@ -73,6 +73,9 @@ after_script:
   # https://docs.travis-ci.com/user/environment-variables/
   # - if [ "$TRAVIS_BRANCH" = "develop" ]; then ./.travis/license-crawler.sh; fi
   - ./.travis/license-crawler.sh
+  - echo $TRAVIS_BRANCH
+  - echo $TRAVIS_EVENT_TYPE
+  - echo $TRAVIS_PULL_REQUEST
 
 notifications:
   webhooks:
