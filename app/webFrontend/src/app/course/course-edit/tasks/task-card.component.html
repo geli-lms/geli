@@ -1,50 +1,45 @@
-<div>
+<div class="panel panel-primary">
 
-  <div>
-   <i>Mulitple-Choice-Aufgabe:  </i>
+  <div class="panel-heading">
       <div >
           <p>
-              <span [hidden]="onEdit">{{task.name}}</span>
+              <span [class.hidden]="onEdit">{{task.name}}</span>
           </p>
-          <p [hidden]="!onEdit">
-              <textarea [(ngModel)]="task.name" rows="4"></textarea>
+          <p [class.hidden]="!onEdit">
+              <textarea [(ngModel)]="task.name" class="form-control"></textarea>
            </p>
 
       </div>
-      <div>
-          <button [hidden]="!onEdit || !task._id" (click)="addAnswer()">Add Answer</button>
-<!--
-        <label *ngFor="let answer of task.answers; let i = index; trackBy: trackByIndex">
-          {{items[i]}}
-          <input type="number" min="0" max="10" step="2" [(ngModel)]="items[i]">
-        </label>
-{{(answer.text)}} {{log(answer)}}
-        trackBy:answer?.id
--->
-          <div *ngFor="let answer of task.answers; let idx = index;">
-            <p>
-              <input [hidden]="onEdit" type="checkbox" [(ngModel)]="answer.value" [disabled]="true">
-              <span [hidden]="onEdit">{{answer.text}}</span>
-            </p>
+  </div>
+      <div highlight="whitesmoke" class="panel-body">
+          <button [class.hidden]="!onEdit || !task._id" (click)="addAnswer()" class="btn btn btn-xs">+</button>
 
+        <div *ngFor="let answer of task.answers; let idx = index;">
 
-            <input [hidden]="!onEdit" type="checkbox" [(ngModel)]="answer.value">
-
-            <input [hidden]="!onEdit" [(ngModel)]="answer.text"> <button [hidden]="!onEdit" (click)="removeAnswer(idx)">Remove</button>
-          </div>
+              <p align="left">
+                <input [class.hidden]="onEdit" type="checkbox" [(ngModel)]="answer.value" [disabled]="true" name="value_{{idx}}">
+                <span [class.hidden]="onEdit">{{answer.text}}</span>
+              </p>
+        
+            <form class="form-inline">
+              <div class="form-group">
+                  <input [class.hidden]="!onEdit" type="checkbox" [(ngModel)]="answer.value" name="value_{{idx}}" class="form-control"> <input [class.hidden]="!onEdit" [(ngModel)]="answer.text" name="text_{{idx}}" class="form-control"> <button [class.hidden]="!onEdit" (click)="removeAnswer(idx)" class="btn btn btn-xs">-</button>
+              </div>
+            </form>
+         </div>
 
      </div>
 
-  </div>
 
-  <div>
-      <div [hidden]="task._id === null">
-          <button (click)="editorCancelTask()">{{onEdit === false ? "Edit" : "Cancel"}}</button>
-          <button [hidden]="!onEdit" (click)="updateTask()" [disabled]="!isTaskValid()">Update</button>
-          <button (click)="removeTask()">Remove</button>
+
+  <div class="panel-footer">
+      <div [class.hidden]="task._id === null">
+          <button (click)="editorCancelTask()" class="btn btn-default btn-xs">{{onEdit === false ? "Edit" : "Cancel"}}</button>
+          <button [class.hidden]="!onEdit" (click)="updateTask()" [disabled]="!isTaskValid()" class="btn btn-default btn-xs">Update</button>
+          <button (click)="removeTask()" class="btn btn-default btn-xs">Remove</button>
       </div>
-      <div [hidden]="(task._id !== null)">
-          <button  [hidden]="!onEdit" (click)="createTask()" [disabled]="!isTaskValid()">Create</button>
+      <div [class.hidden]="(task._id !== null)">
+          <button  [class.hidden]="!onEdit" (click)="createTask()" [disabled]="!isTaskValid()" class="btn btn-default btn-xs">Create</button>
       </div>
   </div>
 </div>
