@@ -31,6 +31,7 @@ export const userFixtures: IFixture = {
     {
       email: 'admin@test.local',
       password: 'test',
+      role: 'admin',
       profile: {
         firstName: 'Dago',
         lastName: 'Adminman'
@@ -39,6 +40,7 @@ export const userFixtures: IFixture = {
     {
       email: 'teacher@test.local',
       password: 'test',
+      role: 'teacher',
       profile: {
         firstName: 'Daniel',
         lastName: 'Teachman'

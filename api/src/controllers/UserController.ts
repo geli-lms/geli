@@ -30,16 +30,27 @@ export class UserController {
   updateUser(@Param('id') id: string, @Body() user: IUser) {
     return User.find({'role': 'admin'})
       .then((adminUsers) => {
-        console.log('AdminUsers: ' + adminUsers.length);
-        const _id = adminUsers[0]._id;
-        const idTest = adminUsers[0].get('id');
         if (adminUsers.length === 1 &&
             adminUsers[0].get('id') === id &&
             adminUsers[0].role === 'admin' &&
             user.role !== 'admin') {
           throw new HttpError(400, 'There are no other users with admin privileges.');
         } else {
+          return User.find({ $and: [{'email': user.email}, {'_id': { $ne: user._id }}]});
+        }
+      })
+      .then((emailInUse) => {
+        if (emailInUse.length > 0) {
+          throw new HttpError(400, 'This mail address is already in use.');
+        } else if (typeof user.username !== 'undefined') {
+          return User.find({ $and: [{'username': user.username}, {'_id': { $ne: user._id }}]});
+        }
+      })
+      .then((usernameInUse) => {
+        if (typeof usernameInUse === 'undefined' || usernameInUse.length === 0) {
           return User.findByIdAndUpdate(id, user, {'new': true});
+        } else {
+          throw new HttpError(400, 'This username is already in use.');
         }
       })
       .then((savedUser) => savedUser.toObject());

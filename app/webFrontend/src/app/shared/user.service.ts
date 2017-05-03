@@ -1,10 +1,14 @@
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
+import {JwtHelper} from 'angular2-jwt';
 
 @Injectable()
 export class UserService {
     userName: string;
     userRole: string;
+    token: string;
+
+    constructor(private jwtHelper: JwtHelper) {}
 
     isStudent(): boolean {
         return this.userRole === 'student';
@@ -27,5 +31,16 @@ export class UserService {
     getCurrentUserName(): string {
         this.userName = localStorage.getItem('currentUser');
         return this.userName;
+    }
+
+    getCurrentToken(): string {
+      this.token = localStorage.getItem('currentUserToken');
+      return this.token;
+    }
+
+    getCurrentUserId(): string {
+      const token = this.getCurrentToken();
+      const decodedToken = this.jwtHelper.decodeToken(token);
+      return decodedToken._id;
     }
 }
