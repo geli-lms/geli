@@ -3,14 +3,18 @@ import {Http, Headers, Response} from '@angular/http';
 import 'rxjs/add/operator/map';
 import {BackendService} from './backend.service';
 import {UserService} from './user.service';
+import {JwtHelper} from 'angular2-jwt';
 
 @Injectable()
 export class AuthenticationService {
 
   private token: string;
   private isLoggedIn = false;
+  private jwtHelper = new JwtHelper();
 
-  constructor(private http: Http, private backendService: BackendService, private userService: UserService) {
+  constructor(private http: Http,
+              private backendService: BackendService,
+              private userService: UserService) {
     // set token if saved in local storage
     // var currentUser = JSON.parse(localStorage.getItem('currentUser'));
     this.token = localStorage.getItem('currentUserToken');
@@ -23,7 +27,7 @@ export class AuthenticationService {
 
     return new Promise((resolve, reject) => {
 
-      this.backendService.post('user/login', {email: username, password: password})
+      this.backendService.post('auth/login', {email: username, password: password})
         .subscribe(
           (response: any) => {
             console.log(response);
@@ -72,15 +76,18 @@ export class AuthenticationService {
     localStorage.removeItem('currentUserRole');
   }
 
-  register(username: string, password: string, prename: string, surname: string) {
+  register(prename: string, surname: string, username: string, email: string, password: string) {
 
     return new Promise((resolve, reject) => {
 
-      this.backendService.post('user/register', {
-        email: username,
+      this.backendService.post('auth/register', {
+        email: email,
+        username: username,
         password: password,
-        firstName: prename,
-        lastName: surname
+        profile: {
+          firstName: prename,
+          lastName: surname
+        },
       })
         .subscribe(
           (json: any) => {
@@ -100,5 +107,9 @@ export class AuthenticationService {
 
   getToken() {
     return this.token;
+  }
+
+  getDecodedToken() {
+    return this.jwtHelper.decodeToken(this.token);
   }
 }
