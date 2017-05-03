@@ -42,7 +42,7 @@ export class DashboardComponent implements OnInit {
 
   apply(courseId: string) {
     console.log('apply');
-    this.courseService.enrollStudent(courseId, {'_id': localStorage.getItem('currentUserId')});
+    this.courseService.enrollStudent(courseId, {'_id': this.userService.getCurrentUserId()});
   }
 
   goToInfo(course: string) {
