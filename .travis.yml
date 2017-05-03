@@ -66,6 +66,10 @@ script:
   - cd ../..
 
 after_script:
+  # install travis dependencies
+  - cd .travis
+  - npm install
+  - npm prune
   # add coveralls calls here
   # - coveralls stuff
   # run license checker (nlf) on branch develop
