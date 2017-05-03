@@ -37,7 +37,7 @@ export class RegisterComponent implements OnInit {
                                             this.registerForm.value.password).then(
             (val) => {
                 console.log('register done...' + val);
-                this.message = "We've sent an activation link to your email."
+                this.message = `We've sent an activation link to your email.`;
                 // window.location.href = '../';
             }, (error) => {
                 console.log('registration failed');

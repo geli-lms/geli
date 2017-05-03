@@ -100,8 +100,7 @@ export class AuthenticationService {
     });
 
     }
-  activate(token: string)
-  {
+  activate(token: string) {
     return new Promise((resolve, reject) => {
 
       this.backendService.post('auth/activate',  {authenticationToken: token} )

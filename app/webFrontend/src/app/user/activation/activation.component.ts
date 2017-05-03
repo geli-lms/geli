@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {ActivatedRoute} from "@angular/router";
-import {AuthenticationService} from "../../shared/authentification.service";
-import {isSuccess} from "@angular/http/src/http_utils";
+import {ActivatedRoute} from '@angular/router';
+import {AuthenticationService} from '../../shared/authentification.service';
 
 @Component({
   selector: 'app-activation',
@@ -15,19 +14,18 @@ export class ActivationComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
               private auth: AuthenticationService) {
-    this.status = "Activating accout...";
+    this.status = 'Activating accout...';
     this.success = false;
     this.route.params.subscribe(params => {
-      console.log("Token: " + params["token"]);
-      auth.activate(params["token"])
-        .then(val =>{
-          this.status = "Successfully activated your account.";
+      auth.activate(params['token'])
+        .then(val => {
+          this.status = 'Successfully activated your account.';
           this.success = true;
       })
-        .catch(val =>{
-          this.status = "Failed to activate your account.";
+        .catch(val => {
+          this.status = 'Failed to activate your account.';
       });
-    })
+    });
   }
 
   ngOnInit() {
