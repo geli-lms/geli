@@ -33,6 +33,7 @@ cache:
   directories:
     - api/node_modules
     - app/webFrontend/node_modules
+    - .travis/node_modules
 
 before_script:
   # required for chrome to start properly
