@@ -25,10 +25,14 @@ services:
 
 branches:
   only:
-    # - master
     - develop
-    # Only for dev 
+    # Only for development purposes
     # - feature/14-travis-new
+
+cache:
+  directories:
+    - api/node_modules
+    - app/webFrontend/node_modules
 
 before_script:
   # required for chrome to start properly
@@ -39,10 +43,12 @@ install:
   # install api and return back to root for following steps
   - cd api
   - npm install
+  - npm prune          # remove not (anymore) in package.json required packages (to keep the cache clean)
   - cd ..
   # install frontend and return back to root for following steps
   - cd app/webFrontend
   - npm install
+  - npm prune          # remove not (anymore) in package.json required packages (to keep the cache clean)
   - cd ../..
 
 script:
@@ -62,8 +68,9 @@ script:
 notifications:
   webhooks:
     urls:
-      - https://webhooks.gitter.im/e/foobar
+      - $GITTER_WEBHOOK_NOTIFY
     on_success: change  # options: [always|never|change] default: always
     on_failure: always  # options: [always|never|change] default: always
-    on_start: false     # default: false
-
+    on_start: never     # options: [always|never|change] default: always
+    on_cancel: always   # options: [always|never|change] default: always
+    on_error: always    # options: [always|never|chnage] default: always
