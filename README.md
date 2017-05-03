@@ -1,23 +1,37 @@
 # Great E-Learning Informatics (geli)
 
+[![NodeJS Version](https://img.shields.io/badge/nodeJS-7.9-blue.svg)](https://nodejs.org/en)
+[![MongoDB Version](https://img.shields.io/badge/mongoDB-3.4-blue.svg)](https://www.mongodb.com/download-center#community)
+
+![GitHub release](https://img.shields.io/github/release/h-da/geli.svg)
 [![Build Status](https://travis-ci.org/h-da/geli.svg?branch=develop)](https://travis-ci.org/h-da/geli)
 
-## Communication
+![license](https://img.shields.io/github/license/h-da/geli.svg)
+![Github Releases](https://img.shields.io/github/downloads/h-da/geli/latest/total.svg)
+[![Gitter chat](https://badges.gitter.im/h-da/geli.png)](https://gitter.im/mpse-geli/Lobby)
 
-- [geli gitter channel](https://gitter.im/mpse-geli/)
+---
 
-## Requirements
+This project aims to develop a Open-Source platform for E-Learning in computer science.
+We want to have an API, so Apps and other "Frontends" can be added easily.
 
-- [Node.js | 7.9](https://nodejs.org/en/)
-- [MongoDB | 3.4.3](https://www.mongodb.com/download-center#community)
+This project is mainly developed by master-students of the University of Applied Science in Darmstadt, Germany.
+If you want to support this project, just say hello on Gitter.
 
-# Vagrant
+---
+
+# Usage with Vagrant
 To use Vagrant for the development download VirtualBox, install it and then do the same with vagrant.
 After that open the e.g. __git bash__ _AS ADMIN_ and go to the project root. Now run `vagrant up`.
 
 After everything is installed and all npm dependencies are downloaded you can connect to the VirtualBox
 via `vagrant ssh`. The Ports 4200 and 27017 are forwarded to your host system. Just type localhost:4200 in your
 browser.
+
+## Start services
+To start the backend ssh into the VM with `vagrant ssh` and run the commands seen under [Run app](#run-app).
+
+To start the frontend ssh into VM with a second shell and run the commands seen under [Development server](#development-server).
 
 # Usage with Docker
 You need `docker` and `docker-compose`.
@@ -38,6 +52,10 @@ You can access the web frontend on your host machine at `http://localhost:4200`.
 The API will be proxied to `http://localhost:4200/api` and MongoDB is accessible at `localhost:27017`.
 
 # Backend
+
+```diff
+- This content may not be up to date... we try to update it asap.
+```
 
 ## Installation
 
@@ -68,6 +86,9 @@ npm test
 ```
 
 # Frontend
+```diff
+- This content may not be up to date... we try to update it asap.
+```
 ## Getting started
 
 ## Angular CLI (globally required):
@@ -112,4 +133,6 @@ Before running the tests make sure you are serving the app via `ng serve`.
 
 To get more help on the `angular-cli` use `ng --help` or go check out the [Angular-CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
 
+# Contributuion
 
+Please have a look at [CONTRIBUTING.md](.github/CONTRIBUTING.md)
