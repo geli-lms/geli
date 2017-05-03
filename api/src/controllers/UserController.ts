@@ -3,31 +3,20 @@ import {Request, Response} from 'express';
 import {Body, Post, JsonController, Req, Res, HttpError, UseBefore} from 'routing-controllers';
 import {json as bodyParserJson} from 'body-parser';
 import passportLoginMiddleware from '../security/passportLoginMiddleware';
+import {JwtUtils} from '../security/JwtUtils';
 
-import config from '../config/main';
 import {IUser} from '../models/IUser';
 import {IUserModel, User} from '../models/User';
 
 @JsonController('/user')
 export class UserController {
-
-    static generateToken(user: IUser) {
-        return sign(
-            {_id: user._id},
-            config.secret,
-            {
-                expiresIn: 10080 // in seconds
-            }
-        );
-    }
-
-    @Post('/login')
+   @Post('/login')
     @UseBefore(bodyParserJson(), passportLoginMiddleware) // We need body-parser for passport to find the credentials
     postLogin(@Req() request: Request) {
         const user = <IUserModel>(<any>request).user;
 
         return {
-            token: 'JWT ' + UserController.generateToken(user),
+            token: 'JWT ' + JwtUtils.generateToken(user),
             user: user.toObject()
         };
     }
@@ -45,7 +34,7 @@ export class UserController {
             })
             .then((savedUser) => {
                 return {
-                    token: 'JWT ' + UserController.generateToken(savedUser),
+                    token: 'JWT ' + JwtUtils.generateToken(savedUser),
                     user: savedUser.toObject()
                 };
             });
