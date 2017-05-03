@@ -51,6 +51,11 @@ install:
   - npm install
   - npm prune          # remove not (anymore) in package.json required packages (to keep the cache clean)
   - cd ../..
+  # install travis dependencies
+  - cd .travis
+  - npm install
+  - npm prune
+  - cd ..
 
 script:
   # run backend-tests and return back to root for following steps
@@ -67,11 +72,6 @@ script:
   - cd ../..
 
 after_script:
-  # install travis dependencies
-  - cd .travis/
-  - npm install
-  - npm prune
-  - cd ../
   # add coveralls calls here
   # - coveralls stuff
   # run license checker (nlf) on branch develop
