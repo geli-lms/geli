@@ -21,14 +21,16 @@ const BUILD = "build";
 const GENERATE_DOC = "generate:doc";
 const PRETEST = "pretest";
 const RUN_TESTS = "run:tests";
+const LOAD_FIXTURES = "load:fixtures";
 const TEST = "test";
 const REMAP_COVERAGE = "remap:coverage";
 
 const TS_SRC_GLOB = "./src/**/*.ts";
 const TS_TEST_GLOB = "./test/**/*.ts";
+const TS_FIXTURES_GLOB = "./fixtures/**/*.ts";
 const JS_TEST_GLOB = "./build/test/**/*.js";
 const JS_SRC_GLOB = "./build/src/**/*.js";
-const TS_GLOB = [TS_SRC_GLOB, TS_TEST_GLOB];
+const TS_GLOB = [TS_SRC_GLOB, TS_TEST_GLOB, TS_FIXTURES_GLOB];
 
 const tsProject = typescript.createProject("tsconfig.json");
 
@@ -139,6 +141,10 @@ gulp.task("watch", [BUILD], function() {
         watch: ["src/*", "test/*"],
         tasks: [BUILD]
     });
+});
+
+gulp.task(LOAD_FIXTURES, [BUILD], function () {
+  require(__dirname + '/build/fixtures/load');
 });
 
 gulp.task("debug", [BUILD], function () {

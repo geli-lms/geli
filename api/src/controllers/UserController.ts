@@ -1,24 +1,12 @@
-import {sign} from 'jsonwebtoken';
 import {Body, JsonController, HttpError, UseBefore, Get, Param, Put} from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 
-import config from '../config/main';
 import {IUser} from '../models/IUser';
 import {User} from '../models/User';
 
 @JsonController('/user')
 @UseBefore(passportJwtMiddleware)
 export class UserController {
-
-  static generateToken(user: IUser) {
-    return sign(
-      {_id: user._id},
-      config.secret,
-      {
-        expiresIn: 10080 // in seconds
-      }
-    );
-  }
 
   @Get('/')
   getUsers() {
@@ -28,7 +16,8 @@ export class UserController {
 
   @Get('/roles')
   getRoles() {
-    return User.schema.path('role').enumValues;
+    // TODO: Fix any cast
+    return (<any>User.schema.path('role')).enumValues;
   }
 
   @Get('/:id')

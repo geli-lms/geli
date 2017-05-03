@@ -6,7 +6,7 @@ dist: trusty
 sudo: required
 language: node_js
 node_js:
-  - "7"
+  - "7.9.0"
 
 addons:
   apt:
@@ -38,6 +38,8 @@ before_script:
   # required for chrome to start properly
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
+  # required for MongoDB to have time to start up
+  - sleep 15
 
 install:
   # install api and return back to root for following steps
@@ -53,7 +55,7 @@ install:
 
 script:
   # run backend-tests and return back to root for following steps
-  - cd api 
+  - cd api
   # - npm run tslint      # run linter | included in command test
   - npm run test        # run backend test
   - cd ..

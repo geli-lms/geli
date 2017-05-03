@@ -15,35 +15,41 @@ import passportJwtStrategy from './security/passportJwtStrategy';
  */
 export class Server {
 
-    private app: Express;
+  public app: Express;
 
-    static setupPassport() {
-        passport.use(passportLoginStrategy);
-        passport.use(passportJwtStrategy);
-    }
+  static setupPassport() {
+    passport.use(passportLoginStrategy);
+    passport.use(passportJwtStrategy);
+  }
 
-    constructor() {
-        // Do not use mpromise
-        (<any>mongoose).Promise = global.Promise;
+  constructor() {
+    // Do not use mpromise
+    (<any>mongoose).Promise = global.Promise;
 
-        mongoose.connect(config.database);
+    mongoose.connect(config.database);
 
-        this.app = createExpressServer({
-            routePrefix: '/api',
-            controllers: [__dirname + '/controllers/*.js'] // register all controller's routes
-        });
+    this.app = createExpressServer({
+      routePrefix: '/api',
+      controllers: [__dirname + '/controllers/*.js'] // register all controller's routes
+    });
 
-        // Request logger
-        this.app.use(morgan('combined'));
+    // Request logger
+    this.app.use(morgan('combined'));
 
-        Server.setupPassport();
-        this.app.use(passport.initialize());
+    Server.setupPassport();
+    this.app.use(passport.initialize());
+  }
 
-        this.app.listen(config.port, () => {
-            winston.log('info', '--> Server successfully started at port %d', config.port);
-        });
-
-    }
+  start() {
+    this.app.listen(config.port, () => {
+      winston.log('info', '--> Server successfully started at port %d', config.port);
+    });
+  }
 }
 
-new Server();
+/**
+ * For testing mocha will start express itself
+ */
+if (process.env.NODE_ENV !== 'test') {
+  new Server().start();
+}
