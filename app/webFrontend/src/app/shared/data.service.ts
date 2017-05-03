@@ -136,4 +136,30 @@ export class TaskService extends DataService {
     });
   }
 
+  /**
+   * Copy of DataService.readSingleItem but without changing this.items
+   * @param id
+   * @returns {Promise<T>}
+   */
+  fetchSingleItem(id: string): Promise<any[]> {
+    return new Promise((resolve, reject) => {
+      this.backendService.get(this.apiPath + id)
+        .subscribe(
+          (responseItems: any) => {
+            if (this.changeProps2Date) {
+              responseItems.forEach(item => {
+                this.changeProps2Date.forEach(prop => {
+                  DataService.changeStringProp2DateProp(item, prop);
+                });
+              });
+            }
+
+            // this.items = responseItems;
+            resolve(responseItems);
+          },
+          error => reject(error)
+        );
+    });
+  }
+
 }

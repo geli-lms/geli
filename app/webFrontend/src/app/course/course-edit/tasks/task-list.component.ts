@@ -15,37 +15,41 @@ export class TaskListComponent implements OnInit {
   constructor(private taskService: TaskService) {
   }
 
-  getTasks() {
+  ngOnInit() {
+    this.loadTasksFromServer();
+    // console.log('courseid:' + this.courseId);
+  }
+
+  loadTasksFromServer() {
     this.taskService.getTasksForCourse(this.courseId).then(tasks => {
       this.tasks = tasks;
     });
   }
 
-  ngOnInit() {
-    this.getTasks();
-    // console.log('courseid:' + this.courseId);
-  }
-
   onRemoveTask(task: any) {
     this.taskService.deleteItem(task).then(tasks => {
       this.tasks = this.taskService.items;
-      // this.getTasks();
     });
   }
 
   onTaskCreated(task: any) {
     this.addingTask = false;
-    this.getTasks();
+    this.loadTasksFromServer();
   }
 
   addTask() {
     this.addingTask = true;
-    const newTask = new Task('Frage hier eingeben.', this.courseId);
-    this.taskService.items.splice(0, 0, newTask); // add item to start
+    const newTask = new Task(this.courseId, 'Frage hier eingeben.');
+    this.tasks.splice(0, 0, newTask); // add item to start
   }
 
-  cancelAddTask() {
+  /*
+  onTaskCancel() {
+    this.cancelTask();
+  }*/
+
+  cancelTask() {
     this.addingTask = false;
-    this.getTasks();
+    this.loadTasksFromServer();
   }
 }

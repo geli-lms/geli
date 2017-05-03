@@ -7,35 +7,54 @@ import {TaskService} from '../../../shared/data.service';
   templateUrl: './task-card.component.html',
   styleUrls: ['./task-card.component.scss']
 })
-// Add task CRUD (for questions only without answers)
+
 export class TaskCardComponent implements OnInit {
   @Input() task: any;
   @Output() onRemoveTask = new EventEmitter();
   @Output() onTaskCreated = new EventEmitter();
+  // @Output() onTaskCancel = new EventEmitter();
 
-  edittedTask: any;
   onEdit: boolean = false;
 
   constructor(private taskService: TaskService) {
   }
 
   ngOnInit() {
-    this.edittedTask = this.task;
     if (this.task._id === null) {
-      this.editTask();
+      this.editorCancelTask();
+    } else {
+      this.answerPreparationAfterLoadingFromServer(); // WORKAROUND get rid of the _id for the answers
     }
   }
 
-  editTask() {
+  answerPreparationAfterLoadingFromServer() {
+    for (const answer of this.task.answers) {
+      delete answer._id;
+    }
+  }
+
+  editorCancelTask() {
+    if (this.onEdit) { // cancel
+      this.taskService.fetchSingleItem(this.task._id).then( // TODO don't use reload from server, use a original copy instead
+        (val) => {
+          this.task = val;
+          this.answerPreparationAfterLoadingFromServer(); // WORKAROUND get rid of the _id for the answers
+
+          // this.onTaskCancel.emit();
+
+        }, (error) => {
+          console.log(error);
+        });
+    } else { // edit
+    }
     this.onEdit = !this.onEdit;
-    this.edittedTask = this.task;
   }
 
   createTask() {
-    this.taskService.createItem(this.edittedTask).then(
+    // this.log(this.task);
+    this.taskService.createItem(this.task).then(
       (val) => {
-        this.task = val;
-        this.edittedTask = val;
+        this.task = val; // get _id
         this.onEdit = false;
         this.onTaskCreated.emit(val);
 
@@ -45,9 +64,9 @@ export class TaskCardComponent implements OnInit {
   }
 
   updateTask() {
-    this.taskService.updateItem(this.edittedTask).then(
+    // this.log(this.task);
+    this.taskService.updateItem(this.task).then(
       (val) => {
-        this.task = this.edittedTask;
         this.onEdit = !this.onEdit;
 
       }, (error) => {
@@ -59,9 +78,18 @@ export class TaskCardComponent implements OnInit {
     this.onRemoveTask.emit(this.task);
   }
 
-  isTaskValid(): boolean {
-    return !(this.edittedTask.name.trim() === '')
-      ;
+  removeAnswer(idx: number) {
+    this.task.answers.splice(idx, 1);
   }
+
+  addAnswer() {
+    this.task.answers.splice(0, 0, { value: false,  text: 'Antwort hier eingeben.'}); // add item to start
+  }
+
+  isTaskValid(): boolean {
+    return this.task.name != null && !(this.task.name.trim() === '');
+  }
+
+  // log(val) { console.log(JSON.stringify(val)); }
 
 }

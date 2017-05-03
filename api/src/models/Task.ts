@@ -4,7 +4,8 @@ import {ITask} from './ITask';
 interface ITaskModel extends ITask, mongoose.Document {
 }
 
-const taskSchema = new mongoose.Schema({
+const taskSchema = new mongoose.Schema(
+      {
         name: {
             type: String
         },
@@ -12,20 +13,20 @@ const taskSchema = new mongoose.Schema({
           type: String
         }
         ,
-      /*
-        courseId: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: Course
+        answers: [
+          {
+            value: Boolean,
+            text: String
           }
-        ,*/
-    }, {
-        timestamps: true,
-        toObject: {
-          transform: function(doc: any, ret: any) {
-            ret._id = doc.id;
+        ]
+      }, {
+          timestamps: true,
+          toObject: {
+            transform: function(doc: any, ret: any) {
+              ret._id = doc.id;
+            }
           }
-        }
-    }
+      }
 
 );
 

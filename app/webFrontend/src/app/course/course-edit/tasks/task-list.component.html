@@ -1,10 +1,10 @@
 
 <div>
   <button [hidden]="addingTask" (click)="addTask()">Add</button>
-  <button [hidden]="!addingTask" (click)="cancelAddTask()">Cancel</button>
+  <button [hidden]="!addingTask" (click)="cancelTask()">Cancel</button>
 </div>
 
 <div class="task-card" *ngFor="let task of tasks">
-   <task-card [task]="task"  (onRemoveTask)="onRemoveTask($event);" (onTaskCreated)="onTaskCreated($event);"></task-card>
+   <task-card [task]="task" (onTaskCancel)="onTaskCancel();" (onRemoveTask)="onRemoveTask($event);" (onTaskCreated)="onTaskCreated($event);"></task-card>
 </div>
 
