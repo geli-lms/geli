@@ -21,7 +21,7 @@ import { AuthGuardService } from './shared/auth-guard.service';
 import { DashboardStudentComponent } from './dashboard/dashboard-student/dashboard-student.component';
 import { DashboardTeacherComponent } from './dashboard/dashboard-teacher/dashboard-teacher.component';
 import { DashboardAdminComponent } from './dashboard/dashboard-admin/dashboard-admin.component';
-import {CourseService, UserDataService} from './shared/data.service';
+import { CourseService, UserDataService } from './shared/data.service';
 import { BackendService } from './shared/backend.service';
 import { CourseComponent } from './course/course.component';
 import { CourseDetailComponent } from './course/course-detail/course-detail.component';
