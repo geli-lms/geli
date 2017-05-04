@@ -1,0 +1,14 @@
+<br>
+
+<div>
+  <button [class.hidden]="addingTask" (click)="addTask()" class="btn btn-primary">Add</button>
+  <button [class.hidden]="!addingTask" (click)="cancelTask()" class="btn btn-danger">Cancel</button>
+</div>
+
+<hr>
+
+<div class="row text-center">
+  <div *ngFor="let task of tasks" class="col-md-4 col-sm-7">
+     <task-card [task]="task" (onTaskCancel)="onTaskCancel();" (onRemoveTask)="onRemoveTask($event);" (onTaskCreated)="onTaskCreated($event);"></task-card>
+  </div>
+</div>

@@ -29,6 +29,8 @@
     <app-members [courseId]="id"></app-members>
   </md-tab>
 
+    <md-tab label="Define Tasks"><app-tasks [courseId]="id"></app-tasks></md-tab>
+
     <md-tab label="Lectures"><app-lecture *ngIf="courseOb" [course]="courseOb"></app-lecture></md-tab>
 
     <md-tab label="Video Upload"><app-upload *ngIf="courseOb" [course]="courseOb"></app-upload></md-tab>

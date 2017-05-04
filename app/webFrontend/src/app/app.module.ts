@@ -21,13 +21,15 @@ import { AuthGuardService } from './shared/auth-guard.service';
 import { DashboardStudentComponent } from './dashboard/dashboard-student/dashboard-student.component';
 import { DashboardTeacherComponent } from './dashboard/dashboard-teacher/dashboard-teacher.component';
 import { DashboardAdminComponent } from './dashboard/dashboard-admin/dashboard-admin.component';
-import { CourseService, UserDataService, LectureService } from './shared/data.service';
+import { CourseService, TaskService, UserDataService, LectureService } from './shared/data.service';
 import { BackendService } from './shared/backend.service';
 import { CourseComponent } from './course/course.component';
 import { CourseDetailComponent } from './course/course-detail/course-detail.component';
 import { CourseEditComponent } from './course/course-edit/course-edit.component';
 import { DataService } from './shared/data.service';
 import { CourseNewComponent } from './course/course-new/course-new.component';
+import { TaskListComponent } from './course/course-edit/tasks/task-list.component';
+import { TaskCardComponent } from './course/course-edit/tasks/task-card.component';
 
 import { ShowProgressService } from './shared/show-progress.service';
 import { UnitComponent } from './course/course-edit/unit/unit.component';
@@ -54,6 +56,8 @@ import { FileSelectDirective } from 'ng2-file-upload';
     DashboardStudentComponent,
     DashboardTeacherComponent,
     DashboardAdminComponent,
+    TaskListComponent,
+    TaskCardComponent,
     CourseComponent,
     CourseDetailComponent,
     CourseEditComponent,
@@ -82,6 +86,7 @@ import { FileSelectDirective } from 'ng2-file-upload';
   providers: [UserService,
               AuthenticationService,
               AuthGuardService,
+              TaskService,
               CourseService,
               UserDataService,
               LectureService,
