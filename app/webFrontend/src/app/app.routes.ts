@@ -9,6 +9,8 @@ import {CourseEditComponent} from './course/course-edit/course-edit.component';
 import {CourseNewComponent} from './course/course-new/course-new.component';
 import {UserRolesComponent} from './admin/user-roles/user-roles.component';
 import {UserEditComponent} from './user/user-edit/user-edit.component';
+import {LectureEditComponent} from './lecture/lecture-edit/lecture-edit.component';
+import {LectureNewComponent} from './lecture/lecture-new/lecture-new.component';
 
 export const routes = [
   {path: '', component: HomescreenComponent, pathMatch: 'full'},
@@ -31,6 +33,18 @@ export const routes = [
     component: CourseDetailComponent,
     canActivate: [AuthGuardService],
     data: {roles: ['student', 'tutor', 'teacher', 'admin']}
+  },
+  {
+    path: 'course/edit/:cid/lecture/edit/:lid',
+    component: LectureEditComponent,
+    canActivate: [AuthGuardService],
+    data: {roles: ['teacher', 'admin']}
+  },
+  {
+    path: 'course/edit/:id/lecture/new',
+    component: LectureNewComponent,
+    canActivate: [AuthGuardService],
+    data: {roles: ['teacher', 'admin']}
   },
   {
     path: 'profile',

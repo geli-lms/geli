@@ -17,11 +17,16 @@ export class CourseController {
       .then((courses) => courses.map((c) => c.toObject({virtuals: true})));
   }
 
-  @Get('/:id')
-  getCourse(@Param('id') id: string) {
-    return Course.findById(id)
-      .then((c) => c.toObject());
-  }
+    @Get('/:id')
+    getCourse(@Param('id') id: string) {
+        return Course.findById(id)
+          .populate('lectures')
+          .populate('courseAdmin')
+          .populate('students')
+          .then((course) => {
+            return course.toObject();
+          });
+    }
 
   @Post('/')
   addCourse(@Body() course: ICourse, @Req() request: Request) {

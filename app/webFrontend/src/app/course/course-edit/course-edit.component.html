@@ -27,5 +27,7 @@
 
     <md-tab label="Course Members">Course Members</md-tab>
 
+    <md-tab label="Lectures"><app-lecture *ngIf="courseOb" [course]="courseOb"></app-lecture></md-tab>
+
 </md-tab-group>
 </md-card>
