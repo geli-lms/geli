@@ -38,18 +38,14 @@ export class CourseEditComponent implements OnInit {
                   this.course = val.name;
                   this.description = val.description;
                   this.courseOb = val;
-                  console.log(this.courseOb);
-                  this.generateForm();
               }, (error) => {
                   console.log(error);
               });
-
-
       });
   }
 
   ngOnInit() {
-
+    this.generateForm();
   }
 
   createCourse() {
@@ -74,5 +70,4 @@ export class CourseEditComponent implements OnInit {
       teacher: '',
     });
   }
-
 }

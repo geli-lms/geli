@@ -9,6 +9,7 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './user/login/login.component';
 import { UserDetailsComponent } from './user/user-details/user-details.component';
 import { MaterialModule } from '@angular/material';
+import { JwtHelper } from 'angular2-jwt';
 
 import { routes } from './app.routes';
 import { UserService } from './shared/user.service';
@@ -20,7 +21,7 @@ import { AuthGuardService } from './shared/auth-guard.service';
 import { DashboardStudentComponent } from './dashboard/dashboard-student/dashboard-student.component';
 import { DashboardTeacherComponent } from './dashboard/dashboard-teacher/dashboard-teacher.component';
 import { DashboardAdminComponent } from './dashboard/dashboard-admin/dashboard-admin.component';
-import {CourseService, TaskService} from './shared/data.service';
+import { CourseService, TaskService, UserDataService, LectureService } from './shared/data.service';
 import { BackendService } from './shared/backend.service';
 import { CourseComponent } from './course/course.component';
 import { CourseDetailComponent } from './course/course-detail/course-detail.component';
@@ -32,9 +33,16 @@ import { TaskCardComponent } from './course/course-edit/tasks/task-card.componen
 
 import { ShowProgressService } from './shared/show-progress.service';
 import { UnitComponent } from './course/course-edit/unit/unit.component';
+import { LectureComponent } from './lecture/lecture.component';
+import { LectureNewComponent } from './lecture/lecture-new/lecture-new.component';
+import { LectureEditComponent } from './lecture/lecture-edit/lecture-edit.component';
+import { UploadComponent } from './upload/upload.component';
 import { ManageContentComponent } from './course/course-edit/manage-content/manage-content.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { UserRolesComponent } from './admin/user-roles/user-roles.component';
+import { UserEditComponent } from './user/user-edit/user-edit.component';
 
+import { FileSelectDirective } from 'ng2-file-upload';
 
 @NgModule({
   declarations: [
@@ -54,7 +62,14 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     CourseEditComponent,
     CourseNewComponent,
     UnitComponent,
-    ManageContentComponent
+    LectureComponent,
+    LectureNewComponent,
+    LectureEditComponent,
+    ManageContentComponent,
+    UserRolesComponent,
+    UserEditComponent,
+    UploadComponent,
+    FileSelectDirective
   ],
   imports: [
     BrowserModule,
@@ -63,7 +78,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     RouterModule.forRoot(routes),
     BrowserAnimationsModule,
     MaterialModule.forRoot(),
-    MaterialModule.forRoot(),
     ReactiveFormsModule
   ],
   providers: [UserService,
@@ -71,9 +85,12 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
               AuthGuardService,
               TaskService,
               CourseService,
+              UserDataService,
+              LectureService,
               BackendService,
               DataService,
-              ShowProgressService],
+              ShowProgressService,
+              JwtHelper],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

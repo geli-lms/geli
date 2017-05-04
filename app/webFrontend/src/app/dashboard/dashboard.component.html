@@ -20,7 +20,7 @@ Available Courses
                 </p>
             </md-card-content>
             <md-card-actions>
-                <button md-button (click)="apply()">Apply</button>
+                <button md-button (click)="apply(course._id)">Apply</button>
                 <button md-button (click)="goToInfo(course.name)">Details</button>
                 <button md-button (click)="editCourse(course._id)" *ngIf="this.userService.isTeacher()">Edit</button>
 
