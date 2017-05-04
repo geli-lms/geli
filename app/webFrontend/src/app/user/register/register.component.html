@@ -1,7 +1,8 @@
 <div class="center-both">
-  <h1>Register</h1>
-  <md-card>
-    <form name="form" class="register-form" (ngSubmit)="register()" [formGroup]="registerForm">
+    <h1>Register</h1>
+    <p [hidden]="message===undefined">{{message}}</p>
+    <md-card>
+        <form name="form" class="register-form" (ngSubmit)="register()" [formGroup]="registerForm">
 
       <md-input-container class="full-width">
         <input mdInput formControlName="firstName" placeholder="First name" />
