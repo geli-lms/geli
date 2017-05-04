@@ -2,10 +2,11 @@ import * as nodemailer from 'nodemailer';
 
 import {IUserModel, User} from '../models/User';
 import config from '../config/main';
+import {Transporter} from 'nodemailer';
 
 class EmailService {
 
-  const transporter = nodemailer.createTransport(
+  readonly transporter: Transporter = nodemailer.createTransport(
     {
       // define endpoint and login-credentials for smtp server
       service: config.mailProvider,
@@ -20,7 +21,7 @@ class EmailService {
 
   constructor() {
 
-  }
+  };
 
   sendActivation (user: IUserModel) {
       if (!user) {
@@ -48,13 +49,13 @@ class EmailService {
           '<p>Your GELI Team.</p>'
       };
 
-      this.transporter.sendMail(message, (error, info) => {
+      this.transporter.sendMail(message, (error: any, info: any) => {
           if (error) {
               console.log('Error occurred');
               console.log(error.message);
           }
       });
     }
-}
+};
 
 export default new EmailService();

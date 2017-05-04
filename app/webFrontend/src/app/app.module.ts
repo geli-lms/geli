@@ -66,7 +66,7 @@ import { FileSelectDirective } from 'ng2-file-upload';
     UserRolesComponent,
     UserEditComponent,
     UploadComponent,
-    FileSelectDirective
+    FileSelectDirective,
     ManageContentComponent,
     ActivationComponent
   ],
