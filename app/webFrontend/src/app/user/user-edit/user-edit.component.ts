@@ -5,7 +5,7 @@ import {UserDataService} from '../../shared/data.service';
 import {UserService} from '../../shared/user.service';
 import {Router} from '@angular/router';
 import {ShowProgressService} from '../../shared/show-progress.service';
-import {IUser} from "../../../../../../shared/models/IUser";
+import {IUser} from '../../../../../../shared/models/IUser';
 
 @Component({
   selector: 'app-user-edit',

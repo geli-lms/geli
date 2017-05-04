@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {UserDataService} from '../../shared/data.service';
 import {Router} from '@angular/router';
 import {UserService} from '../../shared/user.service';
-import {IUser} from "../../../../../../shared/models/IUser";
+import {IUser} from '../../../../../../shared/models/IUser';
 
 @Component({
   selector: 'app-user-details',

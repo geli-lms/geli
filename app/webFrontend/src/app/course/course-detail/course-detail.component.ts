@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import 'rxjs/add/operator/switchMap';
-import {CourseService} from "../../shared/data.service";
-import {ICourse} from "../../../../../../shared/models/ICourse";
+import {CourseService} from '../../shared/data.service';
+import {ICourse} from '../../../../../../shared/models/ICourse';
 
 
 @Component({
