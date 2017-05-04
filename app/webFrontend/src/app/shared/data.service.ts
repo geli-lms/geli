@@ -93,11 +93,22 @@ export class DataService {
   }
 }
 
-
 @Injectable()
 export class CourseService extends DataService {
   constructor(public backendService: BackendService) {
     super('courses/', backendService);
+  }
+
+  enrollStudent(courseId: string, student: any): Promise<any[]> {
+    return new Promise((resolve, reject) => {
+      this.backendService.post(this.apiPath + courseId + '/enroll', JSON.stringify(student))
+        .subscribe(
+          (responseItem: any) => {
+            resolve(responseItem);
+          },
+          error => reject(error)
+        );
+    });
   }
 }
 
@@ -108,3 +119,18 @@ export class LectureService extends DataService {
   }
 }
 
+@Injectable()
+export class UserDataService extends DataService {
+  constructor(public backendService: BackendService) {
+    super('user/', backendService);
+  }
+
+
+  getRoles(): Promise<any[]> {
+    const originalApiPath = this.apiPath;
+    this.apiPath += 'roles';
+    const promise = this.readItems();
+    this.apiPath = originalApiPath;
+    return promise;
+  }
+}
