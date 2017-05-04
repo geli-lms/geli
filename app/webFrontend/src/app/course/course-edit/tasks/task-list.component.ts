@@ -28,7 +28,8 @@ export class TaskListComponent implements OnInit {
 
   onRemoveTask(task: any) {
     this.taskService.deleteItem(task).then(tasks => {
-      this.tasks = this.taskService.items;
+      this.tasks = this.tasks.concat(this.tasks.filter(obj => task._id !== obj._id));
+
     });
   }
 

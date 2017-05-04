@@ -35,10 +35,10 @@ export class TaskCardComponent implements OnInit {
 
   editorCancelTask() {
     if (this.onEdit) { // cancel
-      this.taskService.fetchSingleItem(this.task._id).then( // TODO don't use reload from server, use a original copy instead
+      this.taskService.readSingleItem(this.task._id).then( // TODO don't use reload from server, use a original copy instead
         (val) => {
           this.task = val;
-          this.answerPreparationAfterLoadingFromServer(); // WORKAROUND get rid of the _id for the answers
+          this.answerPreparationAfterLoadingFromServer(); // WORKAROUND get rid of the _id for the answers TODO change
 
           // this.onTaskCancel.emit();
 
