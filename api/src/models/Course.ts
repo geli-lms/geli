@@ -26,13 +26,8 @@ const courseSchema = new mongoose.Schema({
     ],
     students: [
       {
-<<<<<<< HEAD
-        type: String,
-        ref: User
-=======
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
->>>>>>> origin/develop
       }
     ],
     lectures: [
