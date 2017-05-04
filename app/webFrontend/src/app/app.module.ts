@@ -42,6 +42,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MembersComponent} from './course/course-edit/members/members.component';
 import { UserRolesComponent } from './admin/user-roles/user-roles.component';
 import { UserEditComponent } from './user/user-edit/user-edit.component';
+import { ActivationComponent } from './user/activation/activation.component';
 
 import { FileSelectDirective } from 'ng2-file-upload';
 
@@ -72,7 +73,9 @@ import { FileSelectDirective } from 'ng2-file-upload';
     UserRolesComponent,
     UserEditComponent,
     UploadComponent,
-    FileSelectDirective
+    FileSelectDirective,
+    ManageContentComponent,
+    ActivationComponent
   ],
   imports: [
     BrowserModule,

@@ -2,9 +2,17 @@ import * as mongoose from 'mongoose';
 import * as bcrypt from 'bcrypt-nodejs';
 import {IUser} from './IUser';
 import {NativeError} from 'mongoose';
+import * as crypto from 'crypto';
 
 interface IUserModel extends IUser, mongoose.Document {
-  comparePassword: (candidatePassword: string, callback: (error: Error, result: boolean) => void) => void;
+    comparePassword: (candidatePassword: string, callback: (error: Error, result: boolean) => void) => void;
+    authenticationToken: string;
+    resetPasswordToken: string;
+    resetPasswordExpires: Date;
+}
+
+function generateSecureActivationToken() {
+    return crypto.randomBytes(64).toString('base64');
 }
 
 const userSchema = new mongoose.Schema({
@@ -32,6 +40,7 @@ const userSchema = new mongoose.Schema({
       'enum': ['student', 'teacher', 'tutor', 'admin'],
       'default': 'student'
     },
+    authenticationToken: {type: String},
     resetPasswordToken: {type: String},
     resetPasswordExpires: {type: Date}
   },
@@ -47,9 +56,13 @@ const userSchema = new mongoose.Schema({
 function hashPassword(next: (err?: NativeError) => void) {
   const user = this, SALT_FACTOR = 5;
 
-  if (!user.isModified('password')) {
-    return next();
-  }
+    if (user.isNew) {
+        user.authenticationToken = generateSecureActivationToken();
+    }
+
+    if (!user.isModified('password')) {
+      return next();
+    }
 
   // TODO: Refactor to use promises
   bcrypt.genSalt(SALT_FACTOR, function (err, salt) {
