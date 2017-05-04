@@ -1,0 +1,36 @@
+<md-card>
+  <md-card-header>
+    <md-card-title><h2>Edit your profile</h2></md-card-title>
+  </md-card-header>
+  <md-card-content *ngIf="user">
+    <form name="form" class="user-form" (ngSubmit)="onSubmit()" [formGroup]="userForm">
+      <div class="form-group" formGroupName="profile">
+        <md-input-container class="full-width">
+          <input mdInput formControlName="firstName" placeholder="First name"/>
+        </md-input-container>
+        <br/>
+        <md-input-container class="full-width">
+          <input mdInput formControlName="lastName" placeholder="Last name" />
+        </md-input-container>
+        <br/>
+      </div>
+      <md-input-container class="full-width">
+        <input mdInput formControlName="username" placeholder="User name" />
+      </md-input-container>
+      <br/>
+      <md-input-container class="full-width">
+        <input mdInput formControlName="email" placeholder="e-mail" />
+      </md-input-container>
+      <br/>
+
+      <md-input-container class="full-width">
+        <input mdInput type="password" formControlName="password" placeholder="Password">
+      </md-input-container>
+      <br/>
+
+      <button md-raised-button color="accent" class="md-button" type="submit" [disabled]="loading">Save</button>
+      <button md-raised-button color="warn" class="md-button" routerLink="/profile" routerLinkActive="active">Cancel</button>
+
+    </form>
+  </md-card-content>
+</md-card>

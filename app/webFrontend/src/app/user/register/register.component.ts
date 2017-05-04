@@ -15,6 +15,8 @@ export class RegisterComponent implements OnInit {
     error = '';
     registerForm: FormGroup;
 
+    message: string;
+
     constructor(
         private router: Router,
         private authenticationService: AuthenticationService,
@@ -28,24 +30,27 @@ export class RegisterComponent implements OnInit {
 
     register() {
         this.loading = true;
-        this.authenticationService.register(this.registerForm.value.username,
-                                            this.registerForm.value.password,
-                                            this.registerForm.value.firstname,
-                                            this.registerForm.value.lastname).then(
+        this.authenticationService.register(this.registerForm.value.firstName,
+                                            this.registerForm.value.lastName,
+                                            this.registerForm.value.username,
+                                            this.registerForm.value.email,
+                                            this.registerForm.value.password).then(
             (val) => {
                 console.log('register done...' + val);
+                this.message = `We've sent an activation link to your email.`;
                 // window.location.href = '../';
             }, (error) => {
-                console.log('wrong credentials');
+                console.log('registration failed');
                 console.log(error);
             });
     }
 
     generateForm() {
         this.registerForm = this.formBuilder.group({
-            firstname : ['', Validators.required],
-            lastname : ['', Validators.required],
+            firstName : ['', Validators.required],
+            lastName : ['', Validators.required],
             username: ['', Validators.required],
+            email: ['', Validators.required],
             password: ['', Validators.required]
         });
     }
