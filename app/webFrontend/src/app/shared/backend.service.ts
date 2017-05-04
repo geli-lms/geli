@@ -7,49 +7,49 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class BackendService {
 
-    baseURL = '/';
-    apiURL: string = this.baseURL + 'api/';
-    token = '';
+  baseURL = '/';
+  apiURL: string = this.baseURL + 'api/';
+  token = '';
 
-    constructor(private http: Http) {
-        this.token = localStorage.getItem('currentUserToken');
+  constructor(private http: Http) {
+    this.token = localStorage.getItem('currentUserToken');
+  }
+
+  authHeader(): Headers {
+    const headers = new Headers({'Content-Type': 'application/json'});
+    if (this.token !== '') {
+      headers.set('Authorization', this.token);
     }
+    return headers;
+  }
 
-    authHeader(): Headers {
-        const headers = new Headers({'Content-Type': 'application/json'});
-        if (this.token !== '') {
-            headers.set('Authorization', this.token);
-        }
-        return headers;
-    }
+  get(serviceUrl: string): Observable<Response> {
+    return this.http.get(this.apiURL + serviceUrl, {headers: this.authHeader()})
+      .map(response => response.json());
+  }
 
-    get(serviceUrl: string): Observable<Response> {
-        return this.http.get(this.apiURL + serviceUrl, {headers: this.authHeader()})
-            .map(response => response.json());
-    }
+  post(serviceUrl: string, options: any): Observable<Response> {
+    return this.http.post(this.apiURL + serviceUrl, options, {headers: this.authHeader()})
+      .map(response => response.json());
+  }
 
-    post(serviceUrl: string, options: any): Observable<Response> {
-        return this.http.post(this.apiURL + serviceUrl, options, {headers: this.authHeader()})
-            .map(response => response.json());
-    }
+  put(serviceUrl: string, options: any): Observable<Response> {
 
-    put(serviceUrl: string, options: any): Observable<Response> {
+    return this.http.put(this.apiURL + serviceUrl, options, {headers: this.authHeader()})
+      .map(response => response.json());
 
-        return this.http.put(this.apiURL + serviceUrl, options, {headers: this.authHeader()})
-            .map(response => response.json());
+  }
 
-    }
+  delete(serviceUrl: string): Observable<Response> {
 
-    delete(serviceUrl: string): Observable<Response> {
+    return this.http.delete(this.apiURL + serviceUrl, {headers: this.authHeader()})
+      .map(response => response.json());
 
-        return this.http.delete(this.apiURL + serviceUrl, {headers: this.authHeader()})
-            .map(response => response.json());
+  }
 
-    }
-
-    onBeforeUpload(event: any, id: string, extension: string) {
-        event.xhr.setRequestHeader('Authorization', this.token);
-        event.xhr.setRequestHeader('uploadfilename', id + '.' + extension);
-    }
+  onBeforeUpload(event: any, id: string, extension: string) {
+    event.xhr.setRequestHeader('Authorization', this.token);
+    event.xhr.setRequestHeader('uploadfilename', id + '.' + extension);
+  }
 
 }
