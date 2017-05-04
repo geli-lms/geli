@@ -3,11 +3,11 @@ services:
   db:
     image: "mongo:3.4.3"
   api:
-    image: "geli_webserver"
+    image: "hdafbi/geli-api"
     links:
       - "db"
   webserver:
-    image: "geli_api"
+    image: "hdafbi/geli-web-frontend"
     ports:
       - "80:80"
     links:

@@ -7,7 +7,7 @@
     "start": "ng serve --proxy-config local-proxy.conf.json",
     "start-docker-dev": "ng serve --host 0.0.0.0 --proxy-config docker-proxy.conf.json",
     "start-vagrant-dev": "ng serve --host 0.0.0.0 --proxy-config local-proxy.conf.json",
-    "build": "ng build",
+    "build": "ng build --target=production",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
