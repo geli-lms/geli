@@ -23,6 +23,7 @@ export default new LocalStrategy(
         });
 
         if (user.authenticationToken !== undefined) {
+          console.log('Account not activated ' + user.authenticationToken);
           return done(null, false, {message: 'Your account has not been activated yet.'});
         }
 
