@@ -1,4 +1,5 @@
-export class User {
+import {IUser} from "../../../../../shared/models/IUser";
+export class User implements IUser {
   _id: string;
   username: string;
   email: string;

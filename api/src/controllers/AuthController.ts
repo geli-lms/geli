@@ -3,7 +3,7 @@ import {Body, Post, JsonController, Req, Res, HttpError, UseBefore} from 'routin
 import {json as bodyParserJson} from 'body-parser';
 import passportLoginMiddleware from '../security/passportLoginMiddleware';
 
-import {IUser} from '../models/IUser';
+import {IUser} from '../../../shared/models/IUser';
 import {IUserModel, User} from '../models/User';
 import {JwtUtils} from '../security/JwtUtils';
 

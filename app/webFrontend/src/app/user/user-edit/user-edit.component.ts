@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import {MdSnackBar} from '@angular/material';
 import {UserDataService} from '../../shared/data.service';
@@ -6,6 +6,7 @@ import {User} from '../../models/user';
 import {UserService} from '../../shared/user.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ShowProgressService} from '../../shared/show-progress.service';
+import {IUser} from "../../../../../../shared/models/IUser";
 
 @Component({
   selector: 'app-user-edit',
@@ -15,11 +16,10 @@ import {ShowProgressService} from '../../shared/show-progress.service';
 export class UserEditComponent implements OnInit {
 
   id: string;
-  @Input() user: User;
+  user: IUser;
   userForm: FormGroup;
 
-  constructor(private route: ActivatedRoute,
-              private router: Router,
+  constructor(private router: Router,
               private userService: UserService,
               private userDataService: UserDataService,
               private showProgress: ShowProgressService,
@@ -62,10 +62,10 @@ export class UserEditComponent implements OnInit {
     this.navigateBack();
   }
 
-  prepareSaveUser(): User {
+  prepareSaveUser(): IUser {
     const userFormModel = this.userForm.value;
 
-    const saveUser: User = new User();
+    const saveUser: IUser = new User();
     for (const key in userFormModel) {
       if (userFormModel.hasOwnProperty(key)) {
         saveUser[key] = userFormModel[key];
