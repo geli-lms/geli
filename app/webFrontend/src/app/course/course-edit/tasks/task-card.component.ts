@@ -14,7 +14,7 @@ export class TaskCardComponent implements OnInit {
   @Output() onTaskCreated = new EventEmitter();
   // @Output() onTaskCancel = new EventEmitter();
 
-  onEdit: boolean = false;
+  onEdit = false;
 
   constructor(private taskService: TaskService) {
   }

@@ -10,7 +10,7 @@ import {Task} from '../../../models/task';
 export class TaskListComponent implements OnInit {
   @Input() courseId: any;
   tasks: any[];
-  addingTask: boolean = false;
+  addingTask = false;
 
   constructor(private taskService: TaskService) {
   }
