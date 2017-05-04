@@ -5,20 +5,15 @@ interface IUnitModel extends IUnit, mongoose.Document {
 }
 
 const unitSchema = new mongoose.Schema({
-        name: {
+        type: {
             type: String,
-            required: true
+            'enum': ['video', 'text', 'multiple-choice'],
         },
-        description: {
-            type: String
+        filePath: {
+          type: String,
         },
-        children: {
-            type: String,
-            required: true
-        },
-        media: {
-            type: String,
-            required: true
+        fileName: {
+          type: String,
         }
     },
     {

@@ -34,11 +34,13 @@ import { UnitComponent } from './course/course-edit/unit/unit.component';
 import { LectureComponent } from './lecture/lecture.component';
 import { LectureNewComponent } from './lecture/lecture-new/lecture-new.component';
 import { LectureEditComponent } from './lecture/lecture-edit/lecture-edit.component';
+import { UploadComponent } from './upload/upload.component';
 import { ManageContentComponent } from './course/course-edit/manage-content/manage-content.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { UserRolesComponent } from './admin/user-roles/user-roles.component';
 import { UserEditComponent } from './user/user-edit/user-edit.component';
 
+import { FileSelectDirective } from 'ng2-file-upload';
 
 @NgModule({
   declarations: [
@@ -61,7 +63,9 @@ import { UserEditComponent } from './user/user-edit/user-edit.component';
     LectureEditComponent,
     ManageContentComponent,
     UserRolesComponent,
-    UserEditComponent
+    UserEditComponent,
+    UploadComponent,
+    FileSelectDirective
   ],
   imports: [
     BrowserModule,
