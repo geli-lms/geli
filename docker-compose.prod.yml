@@ -1,0 +1,14 @@
+version: "2"
+services:
+  db:
+    image: "mongo:3.4.3"
+  api:
+    image: "geli_webserver"
+    links:
+      - "db"
+  webserver:
+    image: "geli_api"
+    ports:
+      - "80:80"
+    links:
+      - "api"
