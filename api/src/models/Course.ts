@@ -21,19 +21,24 @@ const courseSchema = new mongoose.Schema({
     courseAdmin: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: User
+        ref: 'User'
       }
     ],
     students: [
       {
+<<<<<<< HEAD
         type: String,
         ref: User
+=======
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+>>>>>>> origin/develop
       }
     ],
     lectures: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: Lecture
+        ref: 'Lecture'
       }
     ],
   },
@@ -41,8 +46,7 @@ const courseSchema = new mongoose.Schema({
     timestamps: true,
     toObject: {
       transform: function(doc: any, ret: any) {
-        ret._id = ret.id;
-        delete ret.id;
+        ret._id = ret._id.toString();
       }
     }
   }

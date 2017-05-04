@@ -1,0 +1,14 @@
+<div class="center-both">
+  <h1>Edit Lecture</h1>
+  <md-card>
+    <md-input-container class="full-width">
+      <input mdInput placeholder="Lecture Name" [(ngModel)]="name">
+    </md-input-container>
+    <br/>
+    <md-input-container class="full-width">
+      <textarea mdInput placeholder="Lecture Description" [(ngModel)]="description"></textarea>
+    </md-input-container>
+    <br/>
+    <button md-button class="md-button" (click)="updateLecture()">Update</button>
+  </md-card>
+</div>
