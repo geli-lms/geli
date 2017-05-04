@@ -8,9 +8,7 @@ export class UserService {
     userRole: string;
     token: string;
 
-    constructor(private jwtHelper: JwtHelper) {}
-
-    constructor() {
+    constructor(private jwtHelper: JwtHelper) {
         this.getCurrentUserName();
         this.getCurrentUserRole();
     }
