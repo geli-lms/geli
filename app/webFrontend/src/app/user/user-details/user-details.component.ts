@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {UserDataService} from '../../shared/data.service';
 import {Router} from '@angular/router';
-import {User} from '../../models/user';
 import {UserService} from '../../shared/user.service';
+import {IUser} from '../../../../../../shared/models/IUser';
 
 @Component({
   selector: 'app-user-details',
@@ -11,7 +11,7 @@ import {UserService} from '../../shared/user.service';
 })
 export class UserDetailsComponent implements OnInit {
 
-  user: User;
+  user: IUser;
 
   constructor(private userService: UserService,
               private userDataService: UserDataService,
@@ -24,7 +24,7 @@ export class UserDetailsComponent implements OnInit {
     }
   }
 
-  getProfileUser(): User {
+  getProfileUser(): IUser {
     return this.user;
   }
 

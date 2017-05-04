@@ -1,5 +1,5 @@
 import * as mongoose from 'mongoose';
-import {IUnit} from './IUnit';
+import {IUnit} from '../../../shared/models/IUnit';
 
 interface IUnitModel extends IUnit, mongoose.Document {
 }

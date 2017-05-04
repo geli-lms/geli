@@ -3,7 +3,7 @@ import {Body, Get, Post, Put, Param, Req, JsonController, UseBefore, Delete} fro
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 
 import {Task} from '../models/Task';
-import {ITask} from '../models/ITask';
+import {ITask} from '../../../shared/models/ITask';
 
 @JsonController('/tasks')
 @UseBefore(passportJwtMiddleware)
