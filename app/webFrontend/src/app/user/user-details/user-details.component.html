@@ -1,3 +1,15 @@
-<p>
-  user-details works!
-</p>
+<md-card>
+  <md-card-header>
+    <md-card-title><h2>Profile details</h2></md-card-title>
+  </md-card-header>
+  <md-card-content>
+    <h3>{{user?.profile.firstName}} {{user?.profile.lastName}}</h3>
+    <div>
+      <label>E-Mail: <span>{{user?.email}}</span></label>
+      <label *ngIf="user?.username">Username: <span>{{user?.username}}</span></label>
+    </div>
+  </md-card-content>
+  <md-card-actions align="start">
+    <button md-raised-button color="primary" routerLink="/profile/edit" routerLinkActive="active">Edit profile</button>
+  </md-card-actions>
+</md-card>

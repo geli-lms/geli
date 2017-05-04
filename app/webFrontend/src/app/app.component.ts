@@ -38,6 +38,10 @@ export class AppComponent {
     return this.loggedIn;
   }
 
+  isAdmin(): boolean {
+    return this.userService.isAdmin();
+  }
+
   logout(): void {
     this.loggedIn = false;
     this.authService.logout();

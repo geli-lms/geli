@@ -7,6 +7,8 @@ import {AuthGuardService} from './shared/auth-guard.service';
 import {CourseDetailComponent} from './course/course-detail/course-detail.component';
 import {CourseEditComponent} from './course/course-edit/course-edit.component';
 import {CourseNewComponent} from './course/course-new/course-new.component';
+import {UserRolesComponent} from './admin/user-roles/user-roles.component';
+import {UserEditComponent} from './user/user-edit/user-edit.component';
 import {LectureEditComponent} from './lecture/lecture-edit/lecture-edit.component';
 import {LectureNewComponent} from './lecture/lecture-new/lecture-new.component';
 
@@ -30,7 +32,7 @@ export const routes = [
     path: 'course/detail/:name',
     component: CourseDetailComponent,
     canActivate: [AuthGuardService],
-    data: {roles: ['student', 'teacher', 'admin']}
+    data: {roles: ['student', 'tutor', 'teacher', 'admin']}
   },
   {
     path: 'course/edit/:cid/lecture/edit/:lid',
@@ -48,12 +50,24 @@ export const routes = [
     path: 'profile',
     component: UserDetailsComponent,
     canActivate: [AuthGuardService],
-    data: {roles: ['student', 'teacher', 'admin']}
+    data: {roles: ['student', 'tutor', 'teacher', 'admin']}
+  },
+  {
+    path: 'profile/edit',
+    component: UserEditComponent,
+    canActivate: [AuthGuardService],
+    data: {roles: ['student', 'tutor', 'teacher', 'admin']}
   },
   {
     path: 'dashboard',
     component: DashboardComponent,
     canActivate: [AuthGuardService],
     data: {roles: ['student', 'teacher', 'admin']}
+  },
+  {
+    path: 'admin/users',
+    component: UserRolesComponent,
+    canActivate: [AuthGuardService],
+    data: { roles: ['admin']}
   }
 ];
