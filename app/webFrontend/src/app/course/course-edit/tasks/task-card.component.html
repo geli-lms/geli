@@ -1,0 +1,45 @@
+<div class="panel panel-primary">
+
+  <div class="panel-heading">
+      <div >
+          <p>
+              <span [class.hidden]="onEdit">{{task.name}}</span>
+          </p>
+          <p [class.hidden]="!onEdit">
+              <textarea [(ngModel)]="task.name" class="form-control"></textarea>
+           </p>
+
+      </div>
+  </div>
+      <div highlight="whitesmoke" class="panel-body">
+          <button [class.hidden]="!onEdit || !task._id" (click)="addAnswer()" class="btn btn btn-xs">+</button>
+
+        <div *ngFor="let answer of task.answers; let idx = index;">
+
+              <p align="left">
+                <input [class.hidden]="onEdit" type="checkbox" [(ngModel)]="answer.value" [disabled]="true" name="value_{{idx}}">
+                <span [class.hidden]="onEdit">{{answer.text}}</span>
+              </p>
+        
+            <form class="form-inline">
+              <div class="form-group">
+                  <input [class.hidden]="!onEdit" type="checkbox" [(ngModel)]="answer.value" name="value_{{idx}}" class="form-control"> <input [class.hidden]="!onEdit" [(ngModel)]="answer.text" name="text_{{idx}}" class="form-control"> <button [class.hidden]="!onEdit" (click)="removeAnswer(idx)" class="btn btn btn-xs">-</button>
+              </div>
+            </form>
+         </div>
+
+     </div>
+
+
+
+  <div class="panel-footer">
+      <div [class.hidden]="task._id === null">
+          <button (click)="editorCancelTask()" class="btn btn-default btn-xs">{{onEdit === false ? "Edit" : "Cancel"}}</button>
+          <button [class.hidden]="!onEdit" (click)="updateTask()" [disabled]="!isTaskValid()" class="btn btn-default btn-xs">Update</button>
+          <button (click)="removeTask()" class="btn btn-default btn-xs">Remove</button>
+      </div>
+      <div [class.hidden]="(task._id !== null)">
+          <button  [class.hidden]="!onEdit" (click)="createTask()" [disabled]="!isTaskValid()" class="btn btn-default btn-xs">Create</button>
+      </div>
+  </div>
+</div>

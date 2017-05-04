@@ -7,7 +7,7 @@
 //     use(req: any, res: any, next?: (err?: any) => any): any {
 //         const user = req.user;
 //
-//         User.findById(user._id, function(err, foundUser) {
+//         User.findById(user.courseId, function(err, foundUser) {
 //             console.log(foundUser);
 //             if (err) {
 //                 res.status(422).json({ error: 'No user was found.' });

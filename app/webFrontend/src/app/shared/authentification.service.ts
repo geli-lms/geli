@@ -60,7 +60,7 @@ export class AuthenticationService {
     }
 
     if (json.user) {
-      localStorage.setItem('currentUser', json.user.firstName);
+      localStorage.setItem('currentUser', json.user.profile.firstName);
 
       this.userService.userRole = json.user.role;
     }
@@ -97,15 +97,25 @@ export class AuthenticationService {
             console.log(json);
             // this.setMetaData(json, true);
             resolve();
-
           }, (err) => {
-
             reject(err);
-
           });
-
     });
 
+    }
+  activate(token: string) {
+    return new Promise((resolve, reject) => {
+
+      this.backendService.post('auth/activate',  {authenticationToken: token} )
+        .subscribe(
+          (json: any) => {
+            console.log(json);
+            // this.setMetaData(json, true);
+            resolve();
+          }, (err) => {
+            reject(err);
+          });
+    });
   }
 
   getToken() {

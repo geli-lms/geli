@@ -1,9 +1,10 @@
 import {Request, Response} from 'express';
-import {Body, Post, JsonController, Req, Res, HttpError, UseBefore} from 'routing-controllers';
+import {Body, Post, JsonController, Req, Res, HttpError, UseBefore, BodyParam} from 'routing-controllers';
 import {json as bodyParserJson} from 'body-parser';
 import passportLoginMiddleware from '../security/passportLoginMiddleware';
+import emailService from '../services/EmailService';
 
-import {IUser} from '../models/IUser';
+import {IUser} from '../../../shared/models/IUser';
 import {IUserModel, User} from '../models/User';
 import {JwtUtils} from '../security/JwtUtils';
 
@@ -33,9 +34,29 @@ export class AuthController {
         return new User(user).save();
       })
       .then((savedUser) => {
+        emailService.sendActivation(savedUser);
         return {
           token: 'JWT ' + JwtUtils.generateToken(savedUser),
           user: savedUser.toObject()
+        };
+      });
+  }
+
+  @Post('/activate')
+  postActivation(@BodyParam('authenticationToken') authenticationToken: String) {
+    return User.findOne({authenticationToken: authenticationToken})
+      .then((existingUser) => {
+        if (!existingUser) {
+          throw new HttpError(422, 'could not activate user');
+        }
+
+        existingUser.authenticationToken = undefined;
+        return existingUser.save();
+      })
+      .then((user) => {
+        return {
+          token: 'JWT ' + JwtUtils.generateToken(user),
+          user: user.toObject()
         };
       });
   }
