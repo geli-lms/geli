@@ -1,6 +1,7 @@
 import * as mongoose from 'mongoose';
 import * as bcrypt from 'bcrypt-nodejs';
 import {IUser} from './IUser';
+import {NativeError} from 'mongoose';
 import * as crypto from 'crypto';
 
 interface IUserModel extends IUser, mongoose.Document {
@@ -52,12 +53,10 @@ const userSchema = new mongoose.Schema({
     }
   });
 
-
-// Pre-save of user to database, hash password if password is modified or new
-userSchema.pre('save', function (next) {
+function hashPassword(next: (err?: NativeError) => void) {
   const user = this, SALT_FACTOR = 5;
 
-    if (this.isNew) {
+    if (user.isNew) {
         user.authenticationToken = generateSecureActivationToken();
     }
 
@@ -79,7 +78,14 @@ userSchema.pre('save', function (next) {
       next();
     });
   });
-});
+}
+
+// Pre-save of user to database, hash password if password is modified or new
+userSchema.pre('save', hashPassword);
+
+// TODO: This does not yet work, because the this context id different on update
+// userSchema.pre('update', hashPassword);
+// userSchema.pre('findOneAndUpdate', hashPassword);
 
 // Method to compare password for login
 userSchema.methods.comparePassword = function (candidatePassword: string, callback: (error: Error, result: boolean) => void) {

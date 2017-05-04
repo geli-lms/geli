@@ -1,0 +1,16 @@
+<div class="lecture-wrapper">
+  <div *ngFor="let lecture of course.lectures">
+    <md-card class="unit-card">
+      Name: {{lecture.name}} <br/>
+      Description: {{lecture.description}} <br/>
+      <button md-button (click)="deleteLecture(lecture._id)">Delete</button>
+      <br/>
+      <button md-button (click)="editLecture(lecture._id)">Edit</button>
+      <br/>
+      <button md-button (click)="duplicateLecture(lecture._id)">Duplicate</button>
+    </md-card>
+  </div>
+  <button md-fab class="add-lecture-fab" (click)="createLecture()">
+    <md-icon class="md-24">add</md-icon>
+  </button>
+</div>

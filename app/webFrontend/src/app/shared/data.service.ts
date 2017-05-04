@@ -4,8 +4,6 @@ import {BackendService} from './backend.service';
 @Injectable()
 export class DataService {
 
-  items: any[] = [];
-
   static changeStringProp2DateProp(item: any, prop: string) {
     if (item[prop] !== null) {
       item[prop] = (typeof item[prop] === 'string' ? new Date(item[prop]) : null);
@@ -23,7 +21,6 @@ export class DataService {
       this.backendService.post(this.apiPath, JSON.stringify(createItem))
         .subscribe(
           (responseItem: any) => {
-            this.items.push(responseItem);
             resolve(responseItem);
           },
           error => reject(error)
@@ -44,7 +41,6 @@ export class DataService {
               });
             }
 
-            this.items = responseItems;
             resolve(responseItems);
           },
           error => reject(error)
@@ -69,9 +65,6 @@ export class DataService {
       this.backendService.delete(this.apiPath + deleteItem._id)
         .subscribe(
           () => {
-            this.items = this.items.filter(item => {
-              return item._id !== deleteItem._id;
-            });
             resolve();
           },
           error => reject(error)
@@ -92,7 +85,6 @@ export class DataService {
               });
             }
 
-            this.items = responseItems;
             resolve(responseItems);
           },
           error => reject(error)
@@ -101,11 +93,44 @@ export class DataService {
   }
 }
 
-
 @Injectable()
 export class CourseService extends DataService {
   constructor(public backendService: BackendService) {
     super('courses/', backendService);
   }
+
+  enrollStudent(courseId: string, student: any): Promise<any[]> {
+    return new Promise((resolve, reject) => {
+      this.backendService.post(this.apiPath + courseId + '/enroll', JSON.stringify(student))
+        .subscribe(
+          (responseItem: any) => {
+            resolve(responseItem);
+          },
+          error => reject(error)
+        );
+    });
+  }
 }
 
+@Injectable()
+export class LectureService extends DataService {
+  constructor(public backendService: BackendService) {
+    super('lecture/', backendService);
+  }
+}
+
+@Injectable()
+export class UserDataService extends DataService {
+  constructor(public backendService: BackendService) {
+    super('user/', backendService);
+  }
+
+
+  getRoles(): Promise<any[]> {
+    const originalApiPath = this.apiPath;
+    this.apiPath += 'roles';
+    const promise = this.readItems();
+    this.apiPath = originalApiPath;
+    return promise;
+  }
+}

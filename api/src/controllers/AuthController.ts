@@ -1,26 +1,15 @@
-import {sign} from 'jsonwebtoken';
 import {Request, Response} from 'express';
-import {Body, Post, JsonController, Req, Res, HttpError, UseBefore, BodyParam, Get, Param, Put} from 'routing-controllers';
+import {Body, Post, JsonController, Req, Res, HttpError, UseBefore, BodyParam} from 'routing-controllers';
 import {json as bodyParserJson} from 'body-parser';
 import passportLoginMiddleware from '../security/passportLoginMiddleware';
 import emailService from '../services/EmailService';
 
-import config from '../config/main';
 import {IUser} from '../models/IUser';
 import {IUserModel, User} from '../models/User';
+import {JwtUtils} from '../security/JwtUtils';
 
 @JsonController('/auth')
 export class AuthController {
-
-  static generateToken(user: IUser) {
-    return sign(
-      {_id: user._id},
-      config.secret,
-      {
-        expiresIn: 10080 // in seconds
-      }
-    );
-  }
 
   @Post('/login')
   @UseBefore(bodyParserJson(), passportLoginMiddleware) // We need body-parser for passport to find the credentials
@@ -28,7 +17,7 @@ export class AuthController {
     const user = <IUserModel>(<any>request).user;
 
     return {
-      token: 'JWT ' + AuthController.generateToken(user),
+      token: 'JWT ' + JwtUtils.generateToken(user),
       user: user.toObject()
     };
   }
@@ -47,7 +36,7 @@ export class AuthController {
       .then((savedUser) => {
         emailService.sendActivation(savedUser);
         return {
-          token: 'JWT ' + AuthController.generateToken(savedUser),
+          token: 'JWT ' + JwtUtils.generateToken(savedUser),
           user: savedUser.toObject()
         };
       });
@@ -66,7 +55,7 @@ export class AuthController {
       })
       .then((user) => {
         return {
-          token: 'JWT ' + AuthController.generateToken(user),
+          token: 'JWT ' + JwtUtils.generateToken(user),
           user: user.toObject()
         };
       });
