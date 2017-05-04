@@ -16,7 +16,8 @@ export class UserController {
 
   @Get('/roles')
   getRoles() {
-    // return User.schema.path('role').enumValues;
+    // TODO: Fix any cast
+    return (<any>User.schema.path('role')).enumValues;
   }
 
   @Get('/:id')
@@ -30,9 +31,9 @@ export class UserController {
     return User.find({'role': 'admin'})
       .then((adminUsers) => {
         if (adminUsers.length === 1 &&
-            adminUsers[0].get('id') === id &&
-            adminUsers[0].role === 'admin' &&
-            user.role !== 'admin') {
+          adminUsers[0].get('id') === id &&
+          adminUsers[0].role === 'admin' &&
+          user.role !== 'admin') {
           throw new HttpError(400, 'There are no other users with admin privileges.');
         } else {
           return User.find({ $and: [{'email': user.email}, {'_id': { $ne: user._id }}]});
