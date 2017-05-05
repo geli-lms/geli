@@ -2,7 +2,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {CourseService, UserDataService} from '../../../shared/services/data.service';
 import {ShowProgressService} from '../../../shared/services/show-progress.service';
-import {User} from '../../../models/user';
+import {IUser} from '../../../../../../../shared/models/IUser';
 
 @Component({
   selector: 'app-members',
@@ -12,8 +12,8 @@ import {User} from '../../../models/user';
 export class MembersComponent implements OnInit {
   @Input() courseId;
   course: any;
-  members: User[] = [];
-  users: User[] = [];
+  members: IUser[] = [];
+  users: IUser[] = [];
   filterFirstName = '';
   filterLastName = '';
 

@@ -1,7 +1,7 @@
 import {Body, JsonController, HttpError, UseBefore, Get, Param, Put, Delete} from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 
-import {IUser} from '../models/IUser';
+import {IUser} from '../../../shared/models/IUser';
 import {User} from '../models/User';
 
 @JsonController('/user')

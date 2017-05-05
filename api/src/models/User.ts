@@ -1,6 +1,6 @@
 import * as mongoose from 'mongoose';
 import * as bcrypt from 'bcrypt-nodejs';
-import {IUser} from './IUser';
+import {IUser} from '../../../shared/models/IUser';
 import {NativeError} from 'mongoose';
 import * as crypto from 'crypto';
 

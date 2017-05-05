@@ -1,8 +1,8 @@
 import {Component, OnInit, ViewEncapsulation} from '@angular/core';
 import {UserService} from '../shared/services/user.service';
-import {Course} from '../models/course';
 import {CourseService} from '../shared/services/data.service';
 import {Router} from '@angular/router';
+import {ICourse} from '../../../../../shared/models/ICourse';
 
 @Component({
   selector: 'app-dashboard',
@@ -12,7 +12,7 @@ import {Router} from '@angular/router';
 })
 export class DashboardComponent implements OnInit {
 
-  allCourses: Course[];
+  allCourses: ICourse[];
 
   // UserService for HTML page
   constructor(private userService: UserService,
@@ -25,7 +25,7 @@ export class DashboardComponent implements OnInit {
 
   }
 
-  getAllCourses(): Course[] {
+  getAllCourses(): ICourse[] {
     return this.allCourses;
   }
 
