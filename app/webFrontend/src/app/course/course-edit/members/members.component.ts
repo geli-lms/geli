@@ -1,7 +1,7 @@
 /** Created by Oliver Neff on 14.04.2017. */
 import {Component, Input, OnInit} from '@angular/core';
-import {CourseService, UserDataService} from '../../../shared/data.service';
-import {ShowProgressService} from '../../../shared/show-progress.service';
+import {CourseService, UserDataService} from '../../../shared/services/data.service';
+import {ShowProgressService} from '../../../shared/services/show-progress.service';
 import {User} from '../../../models/user';
 
 @Component({

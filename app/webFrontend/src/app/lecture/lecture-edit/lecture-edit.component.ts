@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {LectureService} from '../../shared/data.service';
-import {ShowProgressService} from '../../shared/show-progress.service';
+import {LectureService} from '../../shared/services/data.service';
+import {ShowProgressService} from '../../shared/services/show-progress.service';
 
 @Component({
   selector: 'app-lecture-edit',

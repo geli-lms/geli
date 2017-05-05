@@ -1,11 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import {MdSnackBar} from '@angular/material';
-import {UserDataService} from '../../shared/data.service';
+import {UserDataService} from '../../shared/services/data.service';
 import {User} from '../../models/user';
-import {UserService} from '../../shared/user.service';
+import {UserService} from '../../shared/services/user.service';
 import {ActivatedRoute, Router} from '@angular/router';
-import {ShowProgressService} from '../../shared/show-progress.service';
+import {ShowProgressService} from '../../shared/services/show-progress.service';
 
 @Component({
   selector: 'app-user-edit',

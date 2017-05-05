@@ -4,14 +4,14 @@ import {DashboardComponent} from './dashboard/dashboard.component';
 import {HomescreenComponent} from './homescreen/homescreen.component';
 import {RegisterComponent} from './user/register/register.component';
 import {ActivationComponent} from './user/activation/activation.component';
-import {AuthGuardService} from './shared/auth-guard.service';
+import {AuthGuardService} from './shared/services/auth-guard.service';
 import {CourseDetailComponent} from './course/course-detail/course-detail.component';
 import {CourseEditComponent} from './course/course-edit/course-edit.component';
 import {CourseNewComponent} from './course/course-new/course-new.component';
-import {UserRolesComponent} from './admin/user-roles/user-roles.component';
 import {UserEditComponent} from './user/user-edit/user-edit.component';
 import {LectureEditComponent} from './lecture/lecture-edit/lecture-edit.component';
 import {LectureNewComponent} from './lecture/lecture-new/lecture-new.component';
+import {SettingsComponent} from './settings/settings.component';
 
 export const routes = [
   {path: '', component: HomescreenComponent, pathMatch: 'full'},
@@ -67,8 +67,8 @@ export const routes = [
     data: {roles: ['student', 'teacher', 'admin']}
   },
   {
-    path: 'admin/users',
-    component: UserRolesComponent,
+    path: 'settings',
+    component: SettingsComponent,
     canActivate: [AuthGuardService],
     data: { roles: ['admin']}
   }

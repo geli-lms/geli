@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import {UserService} from './shared/user.service';
-import {AuthenticationService} from './shared/authentification.service';
-import {ShowProgressService} from './shared/show-progress.service';
+import {UserService} from './shared/services/user.service';
+import {AuthenticationService} from './shared/services/authentification.service';
+import {ShowProgressService} from './shared/services/show-progress.service';
 
 @Component({
   selector: 'app-root',

@@ -1,4 +1,4 @@
-import {Body, JsonController, HttpError, UseBefore, Get, Param, Put} from 'routing-controllers';
+import {Body, JsonController, HttpError, UseBefore, Get, Param, Put, Delete} from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 
 import {IUser} from '../models/IUser';
@@ -54,5 +54,10 @@ export class UserController {
         }
       })
       .then((savedUser) => savedUser.toObject());
+  }
+
+  @Delete('/:id')
+  deleteUser(@Param('id') id: string) {
+    return User.findByIdAndRemove(id);
   }
 }

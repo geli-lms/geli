@@ -1,6 +1,6 @@
 import {Component, OnInit, Input} from '@angular/core';
 import {Router} from '@angular/router';
-import {LectureService, CourseService} from '../shared/data.service';
+import {LectureService, CourseService} from '../shared/services/data.service';
 
 @Component({
   selector: 'app-lecture',
