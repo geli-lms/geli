@@ -26,7 +26,6 @@ import { BackendService } from './shared/backend.service';
 import { CourseComponent } from './course/course.component';
 import { CourseDetailComponent } from './course/course-detail/course-detail.component';
 import { CourseEditComponent } from './course/course-edit/course-edit.component';
-import { DataService } from './shared/data.service';
 import { CourseNewComponent } from './course/course-new/course-new.component';
 import { TaskListComponent } from './course/course-edit/tasks/task-list.component';
 import { TaskCardComponent } from './course/course-edit/tasks/task-card.component';
@@ -43,8 +42,7 @@ import {MembersComponent} from './course/course-edit/members/members.component';
 import { UserRolesComponent } from './admin/user-roles/user-roles.component';
 import { UserEditComponent } from './user/user-edit/user-edit.component';
 import { ActivationComponent } from './user/activation/activation.component';
-
-import { FileSelectDirective } from 'ng2-file-upload';
+import {FileUploadModule} from 'ng2-file-upload/ng2-file-upload';
 
 @NgModule({
   declarations: [
@@ -73,7 +71,6 @@ import { FileSelectDirective } from 'ng2-file-upload';
     UserRolesComponent,
     UserEditComponent,
     UploadComponent,
-    FileSelectDirective,
     ManageContentComponent,
     ActivationComponent
   ],
@@ -84,7 +81,8 @@ import { FileSelectDirective } from 'ng2-file-upload';
     RouterModule.forRoot(routes),
     BrowserAnimationsModule,
     MaterialModule.forRoot(),
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    FileUploadModule
   ],
   providers: [UserService,
               AuthenticationService,
@@ -94,7 +92,6 @@ import { FileSelectDirective } from 'ng2-file-upload';
               UserDataService,
               LectureService,
               BackendService,
-              DataService,
               UserDataService,
               ShowProgressService,
               JwtHelper],

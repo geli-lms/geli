@@ -2,11 +2,13 @@ version: "2"
 services:
   db:
     image: "mongo:3.4.3"
+
   api:
     image: "hdafbi/geli-api"
     links:
       - "db"
-  webserver:
+
+  web-frontend:
     image: "hdafbi/geli-web-frontend"
     ports:
       - "80:80"

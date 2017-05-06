@@ -15,7 +15,7 @@ export class DashboardComponent implements OnInit {
   allCourses: ICourse[];
 
   // UserService for HTML page
-  constructor(private userService: UserService,
+  constructor(public userService: UserService,
               private courseService: CourseService,
               private router: Router) {
     this.getCourses();
