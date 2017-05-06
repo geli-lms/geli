@@ -22,6 +22,7 @@ addons:
 
 services:
   - mongodb
+  - docker
 
 branches:
   only:
@@ -56,16 +57,20 @@ install:
 script:
   # run backend-tests and return back to root for following steps
   - cd api
-  # - npm run tslint      # run linter | included in command test
   - npm run test        # run backend test
   - cd ..
   # run frontend-tests and return back to root for following steps
-  # npm scripts won't work here (dunno why...)
   - cd app/webFrontend
   - npm run lint        # run linter
   # - npm run test        # run test - does not work properly
   - npm run e2e         # run end-to-end-tests
+  - npm run build       # build in prod mode
   - cd ../..
+  - docker build -t hdafbi/geli-api:$TRAVIS_BRANCH -f .docker/api/Dockerfile .
+  - docker build -t hdafbi/geli-web-frontend:$TRAVIS_BRANCH -f .docker/web-frontend/Dockerfile .
+
+after_success:
+  - .travis/docker.sh
 
 notifications:
   webhooks:
