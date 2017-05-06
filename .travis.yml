@@ -66,15 +66,11 @@ script:
   - npm run e2e         # run end-to-end-tests
   - npm run build       # build in prod mode
   - cd ../..
-  - docker build -t hdafbi/geli-api -f .docker/api/Dockerfile .
-  - docker build -t hdafbi/geli-web-frontend -f .docker/web-frontend/Dockerfile .
+  - docker build -t hdafbi/geli-api:$TRAVIS_BRANCH -f .docker/api/Dockerfile .
+  - docker build -t hdafbi/geli-web-frontend:$TRAVIS_BRANCH -f .docker/web-frontend/Dockerfile .
 
 after_success:
-#  - if [ "$TRAVIS_BRANCH" == "master" ]; then
-  - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
-  - docker push hdafbi/geli-api;
-  - docker push hdafbi/geli-web-frontend;
-#    fi
+  - .travis/docker.sh
 
 notifications:
   webhooks:
