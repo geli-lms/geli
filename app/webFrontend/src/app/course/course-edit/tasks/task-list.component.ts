@@ -40,7 +40,7 @@ export class TaskListComponent implements OnInit {
 
   addTask() {
     this.addingTask = true;
-    const newTask = new Task(this.courseId, 'Frage hier eingeben.');
+    const newTask = new Task(this.courseId, null);
     this.tasks.splice(0, 0, newTask); // add item to start
   }
 

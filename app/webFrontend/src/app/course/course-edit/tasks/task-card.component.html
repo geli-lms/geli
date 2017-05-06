@@ -1,45 +1,59 @@
-<div class="panel panel-primary">
 
-  <div class="panel-heading">
-      <div >
-          <p>
-              <span [class.hidden]="onEdit">{{task.name}}</span>
-          </p>
-          <p [class.hidden]="!onEdit">
-              <textarea [(ngModel)]="task.name" class="form-control"></textarea>
-           </p>
+
+<md-card class="card">
+
+  <md-card-header>
+      <div>
+        <md-card-title>
+              <div *ngIf="!onEdit">{{task.name}}</div>
+          <md-input-container *ngIf="onEdit">
+
+            <input mdInput [(ngModel)]="task.name" placeholder="Frage hier eingeben.">
+
+          </md-input-container>
+
+
+        </md-card-title>
 
       </div>
-  </div>
-      <div highlight="whitesmoke" class="panel-body">
-          <button [class.hidden]="!onEdit || !task._id" (click)="addAnswer()" class="btn btn btn-xs">+</button>
+  </md-card-header>
+      <md-card-content>
+
+          <button md-button *ngIf="onEdit && task._id" (click)="addAnswer()">+</button>
 
         <div *ngFor="let answer of task.answers; let idx = index;">
 
-              <p align="left">
-                <input [class.hidden]="onEdit" type="checkbox" [(ngModel)]="answer.value" [disabled]="true" name="value_{{idx}}">
-                <span [class.hidden]="onEdit">{{answer.text}}</span>
-              </p>
-        
-            <form class="form-inline">
-              <div class="form-group">
-                  <input [class.hidden]="!onEdit" type="checkbox" [(ngModel)]="answer.value" name="value_{{idx}}" class="form-control"> <input [class.hidden]="!onEdit" [(ngModel)]="answer.text" name="text_{{idx}}" class="form-control"> <button [class.hidden]="!onEdit" (click)="removeAnswer(idx)" class="btn btn btn-xs">-</button>
-              </div>
-            </form>
+                        <p align="left" *ngIf="!onEdit">
+                          <md-checkbox [(ngModel)]="answer.value" [disabled]="true" name="value_{{idx}}"></md-checkbox>
+                        <span>{{answer.text}}</span>
+                        </p>
+
+                          <table *ngIf="onEdit" cellspacing="0"><tr>
+                               <td>
+                             <md-checkbox [(ngModel)]="answer.value" name="value_{{idx}}"></md-checkbox></td>
+                            <td>
+                              <input [(ngModel)]="answer.text" name="text_{{idx}}" placeholder="Antwort hier eingeben.">
+                            </td>
+                            <td>
+                              <button md-button (click)="removeAnswer(idx)">-</button>
+                            </td>
+                          </tr></table>
+
          </div>
 
-     </div>
+     </md-card-content>
 
 
 
-  <div class="panel-footer">
-      <div [class.hidden]="task._id === null">
-          <button (click)="editorCancelTask()" class="btn btn-default btn-xs">{{onEdit === false ? "Edit" : "Cancel"}}</button>
-          <button [class.hidden]="!onEdit" (click)="updateTask()" [disabled]="!isTaskValid()" class="btn btn-default btn-xs">Update</button>
-          <button (click)="removeTask()" class="btn btn-default btn-xs">Remove</button>
+  <md-card-actions>
+      <div *ngIf="task._id !== null">
+        <button md-button (click)="editorCancelTask()">{{onEdit === false ? "Edit" : "Cancel"}}</button>
+        <button md-button *ngIf="onEdit" (click)="updateTask()" [disabled]="!isTaskValid()">Update</button>
+        <button md-button (click)="removeTask()">Remove</button>
       </div>
-      <div [class.hidden]="(task._id !== null)">
-          <button  [class.hidden]="!onEdit" (click)="createTask()" [disabled]="!isTaskValid()" class="btn btn-default btn-xs">Create</button>
+      <div *ngIf="(task._id === null)">
+        <button md-button *ngIf="onEdit" (click)="createTask()" [disabled]="!isTaskValid()">Create</button>
       </div>
-  </div>
-</div>
+  </md-card-actions>
+</md-card>
+
