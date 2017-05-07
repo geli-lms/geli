@@ -2,6 +2,8 @@ version: "2"
 services:
   db:
     image: "mongo:3.4.3"
+    volumes:
+      - "./persistence:/data/db"
 
   api:
     image: "hdafbi/geli-api"
