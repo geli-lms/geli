@@ -83,7 +83,7 @@ export class TaskCardComponent implements OnInit {
   }
 
   addAnswer() {
-    this.task.answers.splice(0, 0, { value: false,  text: 'Antwort hier eingeben.'}); // add item to start
+    this.task.answers.splice(0, 0, { value: false,  text: ''}); // add item to start
   }
 
   isTaskValid(): boolean {
