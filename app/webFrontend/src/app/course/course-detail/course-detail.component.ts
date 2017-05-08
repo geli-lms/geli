@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import {Course} from '../../models/course';
 import {ActivatedRoute} from '@angular/router';
 import 'rxjs/add/operator/switchMap';
+import {CourseService} from '../../shared/data.service';
+import {ICourse} from '../../../../../../shared/models/ICourse';
 
 
 @Component({
@@ -11,14 +12,22 @@ import 'rxjs/add/operator/switchMap';
 })
 export class CourseDetailComponent implements OnInit {
 
-  course: Course;
+  course: ICourse;
 
-  name: string;
+  id: string;
 
-  constructor(private route: ActivatedRoute) { }
+  constructor(private route: ActivatedRoute,
+              private courseService: CourseService) { }
 
   ngOnInit() {
-    this.route.params.subscribe(params => { this.name = decodeURIComponent(params['name']); });
+    this.route.params.subscribe(params => { this.id = decodeURIComponent(params['id']); });
+    this.getCourse(this.id);
+  }
+
+  getCourse(courseId: string) {
+    this.courseService.readSingleItem(courseId).then((course: any) =>  {
+      this.course = course;
+    });
   }
 
   apply() {

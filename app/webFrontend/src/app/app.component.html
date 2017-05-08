@@ -1,52 +1,53 @@
-<md-toolbar class="toolbar">
+<md-toolbar color="primary">
+  <a routerLink="/" class="logo">geli</a>
 
-    <span *ngIf="!isLoggedIn()"><a routerLink="/" routerLinkActive="active">LEARN IT!</a></span>
-    <span *ngIf="isLoggedIn()"> <a routerLink="/dashboard" routerLinkActive="active">LEARN IT!</a></span>
+  <span class="right-align"></span>
 
-    <span class="right-align"></span>
-
-    <span><button class="login" md-button *ngIf="!isLoggedIn()" routerLink="/login" routerLinkActive="active">Login</button></span>
-
+  <span *ngIf="!isLoggedIn()">
+    <button class="login" md-button routerLink="/login" routerLinkActive="active">Login</button>
+    <button class="register" md-button *ngIf="!isLoggedIn()" routerLink="/register"
+            routerLinkActive="active">Register</button>
     <span class="between-distance" *ngIf="!isLoggedIn()"></span>
+  </span>
 
-    <span><button class="register" md-button *ngIf="!isLoggedIn()" routerLink="/register" routerLinkActive="active">Register</button></span>
-
-    <span class="between-distance" *ngIf="isLoggedIn()"></span>
-
-    <span><button class="dashboard" md-button *ngIf="isLoggedIn()" routerLink="/dashboard" routerLinkActive="active">Dashboard</button></span>
-
-    <span class="between-distance" *ngIf="isLoggedIn()"></span>
-
-    <span><button class="logout" md-button *ngIf="isLoggedIn()" (click)="logout()" routerLink="" routerLinkActive="active">Logout</button></span>
-
-    <button md-icon-button *ngIf="isLoggedIn()" [mdMenuTriggerFor]="menu">
-        <md-icon>more_vert</md-icon>
+  <span *ngIf="isLoggedIn()">
+  <button class="admin" md-button [mdMenuTriggerFor]="adminmenu" *ngIf="isAdmin()">
+    <md-icon>settings</md-icon>
+    <span>Admin</span>
+  </button>
+  <md-menu #adminmenu="mdMenu">
+    <button md-menu-item routerLink="/admin/users" routerLinkActive="active">
+      <span>Users</span>
     </button>
+  </md-menu>
 
-    <md-menu #menu="mdMenu">
-        <button md-menu-item>
-            <md-icon>account_circle</md-icon>
-            <span>Account</span>
-        </button>
-        <button md-menu-item>
-            <md-icon>favorite</md-icon>
-            <span>Favoriten</span>
-        </button>
-        <button md-menu-item>
-            <md-icon>settings</md-icon>
-            <span>Einstellungen</span>
-        </button>
-        <button md-menu-item *ngIf="isLoggedIn()" (click)="logout()" routerLink="" routerLinkActive="active">
-            <md-icon>exit_to_app</md-icon>
-            <span>Logout</span>
-        </button>
-    </md-menu>
+  <button md-button routerLink="/profile">
+      <img class="avatar" src="{{userService.user.getGravatarURL(30)}}">
+      {{ this.userService.user.profile.firstName }}
+  </button>
 
+  <button md-icon-button [mdMenuTriggerFor]="menu">
+    <md-icon>more_vert</md-icon>
+  </button>
+  <md-menu #menu="mdMenu">
+    <!--<button md-menu-item>-->
+    <!--<md-icon>favorite</md-icon>-->
+    <!--<span>Favorites</span>-->
+    <!--</button>-->
+    <!--<button md-menu-item>-->
+    <!--<md-icon>settings</md-icon>-->
+    <!--<span>Settings</span>-->
+    <!--</button>-->
+    <button md-menu-item *ngIf="isLoggedIn()" (click)="logout()" routerLink="" routerLinkActive="active">
+      <md-icon>exit_to_app</md-icon>
+      <span>Logout</span>
+    </button>
+  </md-menu>
+</span>
 </md-toolbar>
+
 <md-progress-bar *ngIf="showProgressBar" mode="indeterminate"></md-progress-bar>
 
-<div id="content">
-
-    <router-outlet></router-outlet>
-
+<div class="{{ 'app-content ' + specialContainerStyle() }}">
+  <router-outlet></router-outlet>
 </div>

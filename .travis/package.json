@@ -1,0 +1,9 @@
+{
+  "name": "geli_travis_dependencies",
+  "description": "These dependencies are only for the travis after_script stuff",
+  "devDependencies": {
+    "nlf": "*",
+    "coveralls": "*"
+  }
+}
+

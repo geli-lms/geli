@@ -1,0 +1,16 @@
+<div class="center-both">
+  <h1>Create Lecture</h1>
+  <md-card>
+    <form class="lecture-form" (ngSubmit)="createLecture()" [formGroup]="newLecture">
+      <md-input-container class="full-width">
+        <input mdInput formControlName="name" placeholder="Lecture Name">
+      </md-input-container>
+      <br/>
+      <md-input-container class="full-width">
+        <textarea mdInput formControlName="description" placeholder="Lecture Description"></textarea>
+      </md-input-container>
+      <br/>
+      <button md-button class="md-button" type="submit">Add</button>
+    </form>
+  </md-card>
+</div>

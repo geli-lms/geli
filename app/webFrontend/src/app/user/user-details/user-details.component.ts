@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import {UserService} from '../../shared/user.service';
+import {IUser} from '../../../../../../shared/models/IUser';
 
 @Component({
   selector: 'app-user-details',
@@ -7,9 +9,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class UserDetailsComponent implements OnInit {
 
-  constructor() { }
+  user: IUser;
+
+  constructor(private userService: UserService) {}
 
   ngOnInit() {
+    this.user = this.userService.user;
   }
-
 }

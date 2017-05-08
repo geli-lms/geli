@@ -1,5 +1,5 @@
 import * as mongoose from 'mongoose';
-import {ILecture} from './ILecture';
+import {ILecture} from '../../../shared/models/ILecture';
 import {Unit} from './Unit';
 
 interface ILectureModel extends ILecture, mongoose.Document {
@@ -16,7 +16,7 @@ const lectureSchema = new mongoose.Schema({
     units: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: Unit
+        ref: 'Unit'
       }
     ]
   },
@@ -24,8 +24,7 @@ const lectureSchema = new mongoose.Schema({
     timestamps: true,
     toObject: {
       transform: function(doc: any, ret: any) {
-        ret._id = ret.id;
-        delete ret.id;
+        ret._id = ret._id.toString();
       }
     }
   }

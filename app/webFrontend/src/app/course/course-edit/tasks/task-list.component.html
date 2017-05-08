@@ -1,0 +1,14 @@
+<br>
+
+<div>
+  <button md-raised-button *ngIf="!addingTask" (click)="addTask()"><md-icon>add_box</md-icon></button>
+  <button md-raised-button *ngIf="addingTask" (click)="cancelTask()">Cancel</button>
+</div>
+
+<hr>
+
+<div>
+  <div *ngFor="let task of tasks">
+     <task-card [task]="task" (onTaskCancel)="onTaskCancel();" (onRemoveTask)="onRemoveTask($event);" (onTaskCreated)="onTaskCreated($event);"></task-card>
+  </div>
+</div>

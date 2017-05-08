@@ -1,0 +1,59 @@
+
+
+<md-card class="card">
+
+  <md-card-header>
+      <div>
+        <md-card-title>
+              <div *ngIf="!onEdit">{{task.name}}</div>
+          <md-input-container *ngIf="onEdit">
+
+            <input mdInput [(ngModel)]="task.name" placeholder="Frage hier eingeben.">
+
+          </md-input-container>
+
+
+        </md-card-title>
+
+      </div>
+  </md-card-header>
+      <md-card-content>
+
+          <button md-button *ngIf="onEdit && task._id" (click)="addAnswer()">+</button>
+
+        <div *ngFor="let answer of task.answers; let idx = index;">
+
+                        <p align="left" *ngIf="!onEdit">
+                          <md-checkbox [(ngModel)]="answer.value" [disabled]="true" name="value_{{idx}}"></md-checkbox>
+                        <span>{{answer.text}}</span>
+                        </p>
+
+                          <table *ngIf="onEdit" cellspacing="0"><tr>
+                               <td>
+                             <md-checkbox [(ngModel)]="answer.value" name="value_{{idx}}"></md-checkbox></td>
+                            <td>
+                              <input [(ngModel)]="answer.text" name="text_{{idx}}" placeholder="Antwort hier eingeben.">
+                            </td>
+                            <td>
+                              <button md-button (click)="removeAnswer(idx)">-</button>
+                            </td>
+                          </tr></table>
+
+         </div>
+
+     </md-card-content>
+
+
+
+  <md-card-actions>
+      <div *ngIf="task._id !== null">
+        <button md-button (click)="editorCancelTask()">{{onEdit === false ? "Edit" : "Cancel"}}</button>
+        <button md-button *ngIf="onEdit" (click)="updateTask()" [disabled]="!isTaskValid()">Update</button>
+        <button md-button (click)="removeTask()">Remove</button>
+      </div>
+      <div *ngIf="(task._id === null)">
+        <button md-button *ngIf="onEdit" (click)="createTask()" [disabled]="!isTaskValid()">Create</button>
+      </div>
+  </md-card-actions>
+</md-card>
+

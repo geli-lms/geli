@@ -1,29 +1,31 @@
-<div class="center-both">
-    <h1>Register</h1>
-    <md-card>
-        <form name="form" class="register-form" (ngSubmit)="register()" [formGroup]="registerForm">
+<md-card class="register-card">
+  <md-card-header>
+    <md-card-title><h1>Register</h1></md-card-title>
+  </md-card-header>
 
-            <md-input-container class="full-width">
-                <input mdInput formControlName="firstname" placeholder="First name">
-            </md-input-container>
-            <br/>
-            <md-input-container class="full-width">
-                <input mdInput formControlName="lastname" placeholder="Last name">
-            </md-input-container>
-            <br/>
+  <md-card-content>
+    <p [hidden]="message===undefined">{{message}}</p>
 
-            <md-input-container class="full-width">
-                <input mdInput formControlName="username" placeholder="User name">
-            </md-input-container>
-            <br/>
+    <form name="form" (ngSubmit)="register()" [formGroup]="registerForm">
+      <md-input-container>
+        <input mdInput formControlName="firstName" placeholder="First name"/>
+      </md-input-container>
+      <md-input-container>
+        <input mdInput formControlName="lastName" placeholder="Last name"/>
+      </md-input-container>
 
-            <md-input-container class="full-width">
-                <input mdInput type="password" formControlName="password" placeholder="Password">
-            </md-input-container>
-            <br/>
+      <md-input-container>
+        <input mdInput formControlName="username" placeholder="User name"/>
+      </md-input-container>
+      <md-input-container>
+        <input mdInput formControlName="email" placeholder="E-Mail"/>
+      </md-input-container>
 
-            <button md-button class="md-button" type="submit" [disabled]="loading">Register</button>
+      <md-input-container>
+        <input mdInput type="password" formControlName="password" placeholder="Password">
+      </md-input-container>
 
-        </form>
-    </md-card>
-</div>
+      <button md-raised-button color="primary" type="submit" [disabled]="loading">Register</button>
+    </form>
+  </md-card-content>
+</md-card>

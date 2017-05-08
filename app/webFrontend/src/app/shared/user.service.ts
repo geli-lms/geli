@@ -1,35 +1,39 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import 'rxjs/add/operator/map';
+import {IUser} from '../../../../../shared/models/IUser';
+import {User} from '../models/User';
 
 @Injectable()
 export class UserService {
-    userName: string;
-    userRole: string;
+  public user: User = null;
 
-    constructor() {
-        this.getCurrentUserName();
-        this.getCurrentUserRole();
-    }
+  constructor() {
+    const storedUser: IUser = JSON.parse(localStorage.getItem('user'));
 
-    isStudent(): boolean {
-        return this.userRole === 'student';
+    if (storedUser) {
+      this.user = new User(storedUser);
     }
+  }
 
-    isTeacher(): boolean {
-        return this.userRole === 'teacher';
-    }
+  setUser(user: IUser) {
+    this.user = new User(user);
+    localStorage.setItem('user', JSON.stringify(this.user));
+  }
 
-    isAdmin(): boolean {
-        return this.userRole === 'admin';
-    }
+  unsetUser() {
+    this.user = null;
+    localStorage.removeItem('user');
+  }
 
-    getCurrentUserRole(): string {
-        this.userRole = localStorage.getItem('currentUserRole');
-        return this.userRole;
-    }
+  isStudent(): boolean {
+    return this.user.role === 'student';
+  }
 
-    getCurrentUserName(): string {
-        this.userName = localStorage.getItem('currentUser');
-        return this.userName;
-    }
+  isTeacher(): boolean {
+    return this.user.role === 'teacher';
+  }
+
+  isAdmin(): boolean {
+    return this.user.role === 'admin';
+  }
 }

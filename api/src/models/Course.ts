@@ -1,5 +1,5 @@
 import * as mongoose from 'mongoose';
-import {ICourse} from './ICourse';
+import {ICourse} from '../../../shared/models/ICourse';
 import {User} from './User';
 import {Lecture} from './Lecture';
 
@@ -21,19 +21,19 @@ const courseSchema = new mongoose.Schema({
     courseAdmin: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: User
+        ref: 'User'
       }
     ],
     students: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: User
+        ref: 'User'
       }
     ],
     lectures: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: Lecture
+        ref: 'Lecture'
       }
     ],
   },
