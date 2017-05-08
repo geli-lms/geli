@@ -120,7 +120,7 @@ export class UserEditComponent implements OnInit {
       const password = group.controls[passwordKey];
       const confirmPassword = group.controls[confirmPasswordKey];
 
-      if(password.value !== confirmPassword.value) {
+      if (password.value !== confirmPassword.value) {
         return {
           mismatchedPasswords: true
         };
