@@ -85,7 +85,7 @@ after_script:
   - .travis/coveralls.sh
   # run license checker
   - .travis/license-crawler.sh
-  # test call for reuquestb.in
+  # test call for requestb.in
   - curl -X POST -d "geli=test" http://requestb.in/vb22eavb
 
 # Configure notifications
