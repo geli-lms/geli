@@ -20,7 +20,9 @@ echo
 
 echo "+ checking if on branch -develop- and no pull-request"
 if [ "$TRAVIS_BRANCH" != "develop" ] || [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
-  echo "+ ERROR: not on branch -develop- and/or a pull request"
+  RED='\033[0;31m'
+  NC='\033[0m'
+  echo -e "${RED}+ ERROR: not on branch -develop- and/or a pull request${NC}"
   exit 1
 fi
 
