@@ -6,6 +6,11 @@
 ![GitHub release](https://img.shields.io/github/release/h-da/geli.svg)
 [![Build Status](https://travis-ci.org/h-da/geli.svg?branch=develop)](https://travis-ci.org/h-da/geli)
 
+API: [![Docker Stars](https://img.shields.io/docker/stars/hdafbi/geli-api.svg)](https://hub.docker.com/r/hdafbi/geli-api/)
+[![Docker Pulls](https://img.shields.io/docker/pulls/hdafbi/geli-api.svg)](https://hub.docker.com/r/hdafbi/geli-api/)   
+Web-Frontend: [![Docker Stars](https://img.shields.io/docker/stars/hdafbi/geli-web-frontend.svg)](https://hub.docker.com/r/hdafbi/geli-web-frontend/)
+[![Docker Pulls](https://img.shields.io/docker/pulls/hdafbi/geli-web-frontend.svg)](https://hub.docker.com/r/hdafbi/geli-web-frontend/)
+
 ![license](https://img.shields.io/github/license/h-da/geli.svg)
 ![Github Releases](https://img.shields.io/github/downloads/h-da/geli/latest/total.svg)
 [![Gitter chat](https://badges.gitter.im/h-da/geli.png)](https://gitter.im/mpse-geli/Lobby)
