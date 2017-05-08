@@ -89,7 +89,6 @@ after_script:
   - echo $TRAVIS_BRANCH
   - echo $TRAVIS_EVENT_TYPE
   - echo $TRAVIS_PULL_REQUEST
-  - curl -X POST -d "fizz=buzz" http://requestb.in/pc64iypc
 
 # Configure notifications
 notifications:
