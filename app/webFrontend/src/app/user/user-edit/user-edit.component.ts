@@ -104,11 +104,26 @@ export class UserEditComponent implements OnInit {
       }),
       username: [''],
       email: ['', Validators.required],
-      password: ['']
-    });
+      oldPassword: [''],
+      password: [''],
+      confirmPassword: ['']
+    }, {validator: this.matchPasswords('password', 'confirmPassword')});
   }
 
   private navigateBack() {
     this.router.navigate(['/profile']);
+  }
+
+  private matchPasswords(passwordKey: string, confirmPasswordKey: string) {
+    return (group: FormGroup): {[key: string]: any} => {
+      let password = group.controls[passwordKey];
+      let confirmPassword = group.controls[confirmPasswordKey];
+
+      if(password.value !== confirmPassword.value) {
+        return {
+          mismatchedPasswords: true
+        }
+      }
+    }
   }
 }
