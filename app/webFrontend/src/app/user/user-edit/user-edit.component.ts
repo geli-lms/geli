@@ -88,6 +88,7 @@ export class UserEditComponent implements OnInit {
         console.log(val);
         this.showProgress.toggleLoadingGlobal(false);
         this.snackBar.open('Profile successfully updated.', '', { duration: 3000 });
+        this.userService.setUser(val);
         this.navigateBack();
       },
       (error) => {

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import {UserService} from './shared/services/user.service';
-import {AuthenticationService} from './shared/services/authentification.service';
+import {AuthenticationService} from './shared/services/authentication.service';
 import {ShowProgressService} from './shared/services/show-progress.service';
 import {Router} from '@angular/router';
 

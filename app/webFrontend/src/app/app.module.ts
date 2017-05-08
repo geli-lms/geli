@@ -13,7 +13,7 @@ import { JwtHelper } from 'angular2-jwt';
 
 import { routes } from './app.routes';
 import { UserService } from './shared/services/user.service';
-import { AuthenticationService } from './shared/services/authentification.service';
+import { AuthenticationService } from './shared/services/authentication.service';
 import { DashboardComponent } from './start/dashboard/dashboard.component';
 import { HomescreenComponent } from './start/homescreen/homescreen.component';
 import { RegisterComponent } from './user/register/register.component';
@@ -44,7 +44,6 @@ import { ActivationComponent } from './user/activation/activation.component';
 import {FileUploadModule} from 'ng2-file-upload/ng2-file-upload';
 import { StartComponent } from './start/start.component';
 
-import { FileSelectDirective } from 'ng2-file-upload';
 import { SettingsComponent } from './settings/settings.component';
 import {AdminComponent} from './admin/admin.component';
 import {DialogModule} from './shared/modules/dialog/dialog.module';
