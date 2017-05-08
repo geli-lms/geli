@@ -29,7 +29,9 @@ fi
 echo "+ checking if nlf is installed"
 cd .travis
 if [ $(npm_package_is_installed nlf) == 0 ]; then
-  echo "+ ERROR: nlf is not installed, please add nlf to the .travis/package.json"
+  RED='\033[0;31m'
+  NC='\033[0m'
+  echo -e "${RED}+ ERROR: nlf is not installed, please add nlf to the .travis/package.json${NC}"
   exit 1
 fi
 cd ..

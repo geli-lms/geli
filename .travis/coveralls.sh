@@ -19,10 +19,12 @@ echo
 echo "+ checking if coveralls is installed"
 cd .travis
 if [ $(npm_package_is_installed coveralls) == 0 ]; then
-  echo "+ ERROR: coveralls is not installed, please add coveralls to the .travis/package.json"
+  RED='\033[0;31m'
+  NC='\033[0m'
+  echo -e "${RED}+ ERROR: coveralls is not installed, please add coveralls to the .travis/package.json${NC}"
   exit 1
 fi
 cd ..
 
 echo "+ sending lcov file to coveralls"
-cat ./coverage/lcov.info | $MODULE_PATH/$BIN_PATH/coveralls.js -v
+cat ../coverage/lcov.info | ../$MODULE_PATH/$BIN_PATH/coveralls.js -v
