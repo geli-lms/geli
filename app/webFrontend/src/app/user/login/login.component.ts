@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
 
-import {AuthenticationService} from '../../shared/authentification.service';
+import {AuthenticationService} from '../../shared/authentication.service';
 import {AuthGuardService} from '../../shared/auth-guard.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 
@@ -34,11 +34,9 @@ export class LoginComponent implements OnInit {
         if (this.authGuard.redirectUrl) {
           this.router.navigate([this.authGuard.redirectUrl]);
         } else {
-          this.router.navigate(['/dashboard']);
+          this.router.navigate(['/']);
         }
-
       }, (error) => {
-        console.log('wrong credentials');
         console.log(error);
       });
   }

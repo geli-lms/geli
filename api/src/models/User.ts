@@ -6,13 +6,10 @@ import * as crypto from 'crypto';
 
 interface IUserModel extends IUser, mongoose.Document {
     comparePassword: (candidatePassword: string, callback: (error: Error, result: boolean) => void) => void;
+    generateActivationToken: () => void;
     authenticationToken: string;
     resetPasswordToken: string;
     resetPasswordExpires: Date;
-}
-
-function generateSecureActivationToken() {
-    return crypto.randomBytes(64).toString('base64');
 }
 
 const userSchema = new mongoose.Schema({
@@ -56,10 +53,6 @@ const userSchema = new mongoose.Schema({
 function hashPassword(next: (err?: NativeError) => void) {
   const user = this, SALT_FACTOR = 5;
 
-    if (user.isNew) {
-        user.authenticationToken = generateSecureActivationToken();
-    }
-
     if (!user.isModified('password')) {
       return next();
     }
@@ -100,6 +93,10 @@ userSchema.methods.comparePassword = function (candidatePassword: string, callba
       return callback(null, isMatch);
     }
   );
+};
+
+userSchema.methods.generateActivationToken = () => {
+  return crypto.randomBytes(64).toString('base64');
 };
 
 

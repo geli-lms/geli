@@ -13,14 +13,14 @@ import { JwtHelper } from 'angular2-jwt';
 
 import { routes } from './app.routes';
 import { UserService } from './shared/user.service';
-import { AuthenticationService } from './shared/authentification.service';
-import { DashboardComponent } from './dashboard/dashboard.component';
-import { HomescreenComponent } from './homescreen/homescreen.component';
+import { AuthenticationService } from './shared/authentication.service';
+import { DashboardComponent } from './start/dashboard/dashboard.component';
+import { HomescreenComponent } from './start/homescreen/homescreen.component';
 import { RegisterComponent } from './user/register/register.component';
 import { AuthGuardService } from './shared/auth-guard.service';
-import { DashboardStudentComponent } from './dashboard/dashboard-student/dashboard-student.component';
-import { DashboardTeacherComponent } from './dashboard/dashboard-teacher/dashboard-teacher.component';
-import { DashboardAdminComponent } from './dashboard/dashboard-admin/dashboard-admin.component';
+import { DashboardStudentComponent } from './start/dashboard/dashboard-student/dashboard-student.component';
+import { DashboardTeacherComponent } from './start/dashboard/dashboard-teacher/dashboard-teacher.component';
+import { DashboardAdminComponent } from './start/dashboard/dashboard-admin/dashboard-admin.component';
 import { CourseService, TaskService, UserDataService, LectureService } from './shared/data.service';
 import { BackendService } from './shared/backend.service';
 import { CourseComponent } from './course/course.component';
@@ -36,13 +36,13 @@ import { LectureComponent } from './lecture/lecture.component';
 import { LectureNewComponent } from './lecture/lecture-new/lecture-new.component';
 import { LectureEditComponent } from './lecture/lecture-edit/lecture-edit.component';
 import { UploadComponent } from './upload/upload.component';
-import { ManageContentComponent } from './course/course-edit/manage-content/manage-content.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MembersComponent} from './course/course-edit/members/members.component';
 import { UserRolesComponent } from './admin/user-roles/user-roles.component';
 import { UserEditComponent } from './user/user-edit/user-edit.component';
 import { ActivationComponent } from './user/activation/activation.component';
 import {FileUploadModule} from 'ng2-file-upload/ng2-file-upload';
+import { StartComponent } from './start/start.component';
 
 @NgModule({
   declarations: [
@@ -62,17 +62,15 @@ import {FileUploadModule} from 'ng2-file-upload/ng2-file-upload';
     CourseEditComponent,
     CourseNewComponent,
     UnitComponent,
-    ManageContentComponent,
     MembersComponent,
     LectureComponent,
     LectureNewComponent,
     LectureEditComponent,
-    ManageContentComponent,
     UserRolesComponent,
     UserEditComponent,
     UploadComponent,
-    ManageContentComponent,
-    ActivationComponent
+    ActivationComponent,
+    StartComponent
   ],
   imports: [
     BrowserModule,
@@ -80,7 +78,7 @@ import {FileUploadModule} from 'ng2-file-upload/ng2-file-upload';
     HttpModule,
     RouterModule.forRoot(routes),
     BrowserAnimationsModule,
-    MaterialModule.forRoot(),
+    MaterialModule,
     ReactiveFormsModule,
     FileUploadModule
   ],
