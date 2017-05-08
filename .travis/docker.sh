@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
+YELLOW='\033[0;33m'
+NC='\033[0m'
 
+echo
+echo "+++ Run docker build and publish. +++"
+echo
 if [ "$TRAVIS_BRANCH" == "master" ] || [ "$TRAVIS_BRANCH" == "develop" ]; then
   if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
     echo "build docker images";
@@ -15,8 +20,8 @@ if [ "$TRAVIS_BRANCH" == "master" ] || [ "$TRAVIS_BRANCH" == "develop" ]; then
     docker push hdafbi/geli-web-frontend;
     docker push hdafbi/geli-web-frontend:$TRAVIS_BRANCH;
   else
-    echo "omit docker build and publish. (pull request: #$TRAVIS_PULL_REQUEST)";
+    echo -e "${YELLOW}+ WARNING: pull request #$TRAVIS_PULL_REQUEST -> skipping docker build and publish${NC}";
   fi
 else
-  echo "omit docker build and publish. (wrong branch: $TRAVIS_BRANCH)";
+  echo -e "${YELLOW}+ WARNING: branch $TRAVIS_BRANCH is not whitelisted -> skipping docker build and publish${NC}";
 fi
