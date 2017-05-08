@@ -3,7 +3,7 @@ export default {
   secret: process.env.SECRET || 'notSoSecret234oi23o423ooqnafsnaaslfj',
 
   // BaseUrl for Webfrontend
-  baseurl: process.env.BASEURL || "http://localhost:4200",
+  baseurl: process.env.BASEURL || 'http://localhost:4200',
 
   // Database connection information
   database: `mongodb://${process.env.DB_HOST || 'localhost'}:27017`,
