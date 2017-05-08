@@ -20,10 +20,10 @@ export class AuthenticationService {
     this.isLoggedIn = this.token !== null;
   }
 
-  login(username: string, password: string) {
+  login(email: string, password: string) {
     return new Promise((resolve, reject) => {
 
-      return this.http.post(AuthenticationService.API_URL + 'auth/login', {email: username, password: password})
+      return this.http.post(AuthenticationService.API_URL + 'auth/login', {email: email, password: password})
         .map(response => response.json())
         .subscribe(
           (response: any) => {
