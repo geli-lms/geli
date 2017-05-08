@@ -8,7 +8,7 @@ import {AuthenticationService} from './authentication.service';
 @Injectable()
 export class BackendService {
 
-  public static readonly API_URL: string = '/api/';
+  public static readonly API_URL = '/api/';
 
   constructor(private http: Http, private authenticationService: AuthenticationService) {
   }

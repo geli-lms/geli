@@ -7,7 +7,7 @@ import {Http} from '@angular/http';
 @Injectable()
 export class AuthenticationService {
 
-  public static readonly API_URL: string = '/api/';
+  public static readonly API_URL = '/api/';
 
   public token: string;
   public isLoggedIn = false;

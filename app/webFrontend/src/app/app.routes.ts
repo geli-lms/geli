@@ -10,7 +10,7 @@ import {UserRolesComponent} from './admin/user-roles/user-roles.component';
 import {UserEditComponent} from './user/user-edit/user-edit.component';
 import {LectureEditComponent} from './lecture/lecture-edit/lecture-edit.component';
 import {LectureNewComponent} from './lecture/lecture-new/lecture-new.component';
-import {StartComponent} from "./start/start.component";
+import {StartComponent} from './start/start.component';
 
 export const routes = [
   {path: '', component: StartComponent, pathMatch: 'full'},
