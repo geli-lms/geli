@@ -1,4 +1,15 @@
-.register-form {
-  margin: 1em;
-  width: 12em;
+:host {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.register-card {
+  width: 100%;
+  max-width: 400px;
+
+  .mat-input-container {
+    width: 100%;
+  }
 }

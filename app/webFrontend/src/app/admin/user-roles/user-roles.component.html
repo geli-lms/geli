@@ -1,37 +1,29 @@
-<md-card>
-  <md-card-header>
-    <md-card-title><h2>User overview</h2></md-card-title>
-    <md-card-subtitle>Number of registered users: {{allUsers?.length}}</md-card-subtitle>
-  </md-card-header>
-  <md-card-content>
-    <table class="table">
-      <thead>
-      <tr>
-        <th>E-Mail</th>
-        <th>Name</th>
-        <th>Role</th>
-        <th>Actions</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr *ngFor="let user of allUsers; let i = index;">
-        <td>{{user.email}}</td>
-        <td>{{user.profile.firstName}} {{user.profile.lastName}}</td>
-        <td>
-          <md-select [(ngModel)]="user.role" name="role" (change)="updateRole(i)">
-            <md-option *ngFor="let role of availableRoles" [value]="role">
-              {{role}}
-            </md-option>
-          </md-select>
-        </td>
-        <td>
-          <button md-raised-button color="primary">Edit</button>
-          <button md-raised-button color="warn" (click)="deleteUser(i)">Delete</button>
-        </td>
-      </tr>
-      </tbody>
-    </table>
-  </md-card-content>
-</md-card>
-<md-card>
-</md-card>
+<h1>User administration</h1>
+
+<table class="table">
+  <thead>
+  <tr>
+    <th>Name</th>
+    <th>E-Mail</th>
+    <th>Role</th>
+    <th>Actions</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let user of allUsers; let i = index;">
+    <td>{{user.profile.firstName}} {{user.profile.lastName}}</td>
+    <td>{{user.email}}</td>
+    <td>
+      <md-select [(ngModel)]="user.role" name="role" (change)="updateRole(i)">
+        <md-option *ngFor="let role of availableRoles" [value]="role">
+          {{role}}
+        </md-option>
+      </md-select>
+    </td>
+    <td>
+      <button md-raised-button color="primary">Edit</button>
+      <button md-raised-button color="warn" (click)="deleteUser(i)">Delete</button>
+    </td>
+  </tr>
+  </tbody>
+</table>

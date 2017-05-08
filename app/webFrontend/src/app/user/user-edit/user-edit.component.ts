@@ -32,7 +32,7 @@ export class UserEditComponent implements OnInit {
   }
 
   getUserData() {
-    this.id = this.userService.getCurrentUserId();
+    this.id = this.userService.user._id;
     this.userDataService.readSingleItem(this.id).then(
       (val: any) => {
         this.user = val;

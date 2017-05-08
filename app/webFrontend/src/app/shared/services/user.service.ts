@@ -1,49 +1,39 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import 'rxjs/add/operator/map';
-import {JwtHelper} from 'angular2-jwt';
+import {IUser} from '../../../../../shared/models/IUser';
+import {User} from '../models/User';
 
 @Injectable()
 export class UserService {
-    userName: string;
-    userRole: string;
-    token: string;
+  public user: User = null;
 
-    constructor(private jwtHelper: JwtHelper) {
-        this.getCurrentUserName();
-        this.getCurrentUserRole();
-    }
+  constructor() {
+    const storedUser: IUser = JSON.parse(localStorage.getItem('user'));
 
-    isStudent(): boolean {
-        return this.userRole === 'student';
+    if (storedUser) {
+      this.user = new User(storedUser);
     }
+  }
 
-    isTeacher(): boolean {
-        return this.userRole === 'teacher';
-    }
+  setUser(user: IUser) {
+    this.user = new User(user);
+    localStorage.setItem('user', JSON.stringify(this.user));
+  }
 
-    isAdmin(): boolean {
-        this.getCurrentUserRole();
-        return this.userRole === 'admin';
-    }
+  unsetUser() {
+    this.user = null;
+    localStorage.removeItem('user');
+  }
 
-    getCurrentUserRole(): string {
-        this.userRole = localStorage.getItem('currentUserRole');
-        return this.userRole;
-    }
+  isStudent(): boolean {
+    return this.user.role === 'student';
+  }
 
-    getCurrentUserName(): string {
-        this.userName = localStorage.getItem('currentUser');
-        return this.userName;
-    }
+  isTeacher(): boolean {
+    return this.user.role === 'teacher';
+  }
 
-    getCurrentToken(): string {
-      this.token = localStorage.getItem('currentUserToken');
-      return this.token;
-    }
-
-    getCurrentUserId(): string {
-      const token = this.getCurrentToken();
-      const decodedToken = this.jwtHelper.decodeToken(token);
-      return decodedToken._id;
-    }
+  isAdmin(): boolean {
+    return this.user.role === 'admin';
+  }
 }
