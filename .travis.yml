@@ -27,6 +27,7 @@ services:
 branches:
   only:
     - develop
+    - master
     # Only for development purposes
     # - feature/14-travis-new
 
@@ -72,13 +73,6 @@ script:
   - npm run e2e         # run end-to-end-tests
   - npm run build       # build in prod mode
   - cd ../..
-  - docker build -t hdafbi/geli-api:latest -f .docker/api/Dockerfile .
-  - docker tag hdafbi/geli-api hdafbi/geli-api:$TRAVIS_BRANCH
-  - docker build -t hdafbi/geli-web-frontend:latest -f .docker/web-frontend/Dockerfile .
-  - docker tag hdafbi/geli-web-frontend hdafbi/geli-web-frontend:$TRAVIS_BRANCH
-
-after_success:
-  - .travis/docker.sh
 
 after_script:
   # add coveralls calls here
@@ -89,6 +83,9 @@ after_script:
   - echo $TRAVIS_BRANCH
   - echo $TRAVIS_EVENT_TYPE
   - echo $TRAVIS_PULL_REQUEST
+
+after_success:
+  - .travis/docker.sh
 
 # Configure notifications
 notifications:
