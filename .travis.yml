@@ -78,10 +78,12 @@ script:
   - docker tag hdafbi/geli-web-frontend hdafbi/geli-web-frontend:$TRAVIS_BRANCH
 
 after_success:
-  - .travis/docker.sh
+  # - .travis/docker.sh
 
 after_script:
   # send required files to coveralls.io
+  - ls -la
+  - ls -la coverage
   - .travis/coveralls.sh
   # run license checker
   - .travis/license-crawler.sh
