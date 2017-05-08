@@ -89,14 +89,16 @@ after_script:
   - echo $TRAVIS_BRANCH
   - echo $TRAVIS_EVENT_TYPE
   - echo $TRAVIS_PULL_REQUEST
+  - curl -X POST -d "geli=test" http://requestb.in/vb22eavb
 
 # Configure notifications
 notifications:
   webhooks:
     urls:
-      - $GITTER_WEBHOOK_NOTIFY
+      - https://webhooks.gitter.im/e/b87037d96d3b84d30875
       # this is just for testing; this url is only 48h active; append ?inspect to the url to see all requests
-      - http://requestb.in/pc64iypc
+      # See calls to the url down there: http://requestb.in/vb22eavb?inspect
+      - http://requestb.in/vb22eavb
     on_success: change  # options: [always|never|change] default: always
     on_failure: always  # options: [always|never|change] default: always
     on_start: never     # options: [always|never|change] default: always
