@@ -57,7 +57,7 @@ install:
   # install travis dependencies
   - cd .travis
   - npm install
-  - npm prune
+  - npm prune          # remove not (anymore) in package.json required packages (to keep the cache clean)
   - cd ..
 
 script:
@@ -81,9 +81,9 @@ after_success:
   - .travis/docker.sh
 
 after_script:
-  # add coveralls calls here
-  # - coveralls stuff
-  # run license checker (nlf) on branch develop
+  # send required files to coveralls.io
+  - .travis/coveralls.sh
+  # run license checker
   - .travis/license-crawler.sh
   # test call for reuquestb.in
   - curl -X POST -d "geli=test" http://requestb.in/vb22eavb
@@ -100,4 +100,4 @@ notifications:
     on_failure: always  # options: [always|never|change] default: always
     on_start: never     # options: [always|never|change] default: always
     on_cancel: always   # options: [always|never|change] default: always
-    on_error: always    # options: [always|never|chnage] default: always
+    on_error: always    # options: [always|never|change] default: always

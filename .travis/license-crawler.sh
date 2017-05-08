@@ -4,7 +4,7 @@
 CSV_FILE="nlf-licenses.csv"
 CSV_FILE_APACHE="nlf-licenses.apache.csv"
 MODULE_PATH=".travis/node_modules"
-NLF_PATH="nlf/bin"
+BIN_PATH="nlf/bin"
 
 # Functions
 function npm_package_is_installed {
@@ -36,14 +36,14 @@ echo + going to folder api
 cd api
 
 echo + crawling licenses from api
-../$MODULE_PATH/$NLF_PATH/nlf-cli.js --csv > ../$CSV_FILE
+../$MODULE_PATH/$BIN_PATH/nlf-cli.js --csv > ../$CSV_FILE
 
 echo + going to folder app/webFrontend
 cd ../app/webFrontend
 
 echo + crawling licenses from app/webFrontend
 # append frontend licenses to existing csv; we have to skip the first line (header)
-../../$MODULE_PATH/$NLF_PATH/nlf-cli.js --csv | awk '{if(NR>1)print}'  >> ../../$CSV_FILE
+../../$MODULE_PATH/$BIN_PATH/nlf-cli.js --csv | awk '{if(NR>1)print}'  >> ../../$CSV_FILE
 
 echo + going back to root folder
 cd ../..
