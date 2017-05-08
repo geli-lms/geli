@@ -84,11 +84,8 @@ after_script:
   # add coveralls calls here
   # - coveralls stuff
   # run license checker (nlf) on branch develop
-  # TODO: we should check if the build was triggered after accepting a PR to dev and only then run
-  - test $TRAVIS_BRANCH = develop -a $TRAVIS_PULL_REQUEST = false && ./.travis/license-crawler.sh
-  - echo $TRAVIS_BRANCH
-  - echo $TRAVIS_EVENT_TYPE
-  - echo $TRAVIS_PULL_REQUEST
+  - .travis/license-crawler.sh
+  # test call for reuquestb.in
   - curl -X POST -d "geli=test" http://requestb.in/vb22eavb
 
 # Configure notifications

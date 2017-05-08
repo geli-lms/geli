@@ -15,10 +15,16 @@ function npm_package_is_installed {
 
 # Begin of code
 echo
-echo +++ Run NLF to search for Apache-Licenses +++
+echo "+++ Run NLF to search for Apache-Licenses +++"
 echo
 
-echo + checking if nlf is installed
+echo "+ checking if on branch -develop- and no pull-request"
+if [ "$TRAVIS_BRANCH" != "develop" ] || [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
+  echo "+ ERROR: not on branch -develop- and/or a pull request"
+  exit 1
+fi
+
+echo "+ checking if nlf is installed"
 cd .travis
 if [ $(npm_package_is_installed nlf) == 0 ]; then
   echo "+ ERROR: nlf is not installed, please add nlf to the .travis/package.json"
