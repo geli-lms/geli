@@ -60,7 +60,7 @@ export class UserRolesComponent implements OnInit {
     this.dialogService
       .delete('user', this.allUsers[userIndex].email)
       .subscribe(res => {
-        if(res) {
+        if (res) {
           this.showProgress.toggleLoadingGlobal(true);
           this.userService.deleteItem(this.allUsers[userIndex]).then(
             (val) => {
@@ -69,7 +69,7 @@ export class UserRolesComponent implements OnInit {
             },
             (error) => {
               this.showProgress.toggleLoadingGlobal(false);
-              this.snackBar.open(error, '', { duration: 3000 })
+              this.snackBar.open(error, '', { duration: 3000 });
             }
           );
         }

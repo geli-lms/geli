@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from  '@angular/router';
+import { Router } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import {MdSnackBar} from '@angular/material';
 import {UserDataService} from '../../shared/services/data.service';
@@ -117,14 +117,14 @@ export class UserEditComponent implements OnInit {
 
   private matchPasswords(passwordKey: string, confirmPasswordKey: string) {
     return (group: FormGroup): {[key: string]: any} => {
-      let password = group.controls[passwordKey];
-      let confirmPassword = group.controls[confirmPasswordKey];
+      const password = group.controls[passwordKey];
+      const confirmPassword = group.controls[confirmPasswordKey];
 
       if(password.value !== confirmPassword.value) {
         return {
           mismatchedPasswords: true
-        }
+        };
       }
-    }
+    };
   }
 }
