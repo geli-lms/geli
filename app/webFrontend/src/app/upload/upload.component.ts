@@ -16,7 +16,7 @@ export class UploadComponent implements OnInit {
     url: '/api/unit',
     headers: [{
       name: 'Authorization',
-      value: localStorage.getItem('currentUserToken'),
+      value: localStorage.getItem('token'),
     }]
   });
 
