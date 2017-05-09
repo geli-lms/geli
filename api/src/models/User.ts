@@ -96,7 +96,7 @@ userSchema.methods.comparePassword = function (candidatePassword: string, callba
 };
 
 userSchema.methods.generateActivationToken = () => {
-  return crypto.randomBytes(64).toString('base64');
+  this.authenticationToken = crypto.randomBytes(64).toString('base64');
 };
 
 
