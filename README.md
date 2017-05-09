@@ -5,7 +5,7 @@
 
 ![GitHub release](https://img.shields.io/github/release/h-da/geli.svg)
 [![Build Status](https://travis-ci.org/h-da/geli.svg?branch=develop)](https://travis-ci.org/h-da/geli)
-![Dependency Checker](https://david-dm.org/h-da/geli.svg)
+[![Dependency Checker](https://david-dm.org/h-da/geli.svg)](https://david-dm.org/h-da/geli)
 
 API: [![Docker Stars](https://img.shields.io/docker/stars/hdafbi/geli-api.svg)](https://hub.docker.com/r/hdafbi/geli-api/)
 [![Docker Pulls](https://img.shields.io/docker/pulls/hdafbi/geli-api.svg)](https://hub.docker.com/r/hdafbi/geli-api/)   
