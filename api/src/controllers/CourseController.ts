@@ -14,6 +14,9 @@ export class CourseController {
   @Get('/')
   getCourses() {
     return Course.find({})
+      .populate('lectures')
+      .populate('courseAdmin')
+      .populate('students')
       .then((courses) => courses.map((c) => c.toObject({virtuals: true})));
   }
 

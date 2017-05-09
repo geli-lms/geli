@@ -82,12 +82,12 @@ export class MembersComponent implements OnInit {
     this.courseService.readSingleItem(this.courseId).then(
       (val: any) => {
         this.course = val;
-        for (let i = this.users.length - 1; i >= 0; i--) {
-          if (this.course.students.includes(this.users[i]._id)) {
-            this.members.push(this.users[i]);
-            this.users.splice(i, 1);
-          }
-        }
+        this.members = this.course.students;
+
+        this.members.forEach(member =>
+          this.users = this.users.filter(function (user) {
+            return user._id !== member._id;
+          }));
         this.sortUsers(this.users);
       }, (error) => {
         console.log(error);
