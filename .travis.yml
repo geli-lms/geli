@@ -76,9 +76,7 @@ script:
 
 after_script:
   # send required files to coveralls.io
-  # - .travis/coveralls.sh
-  - ls -la api
-  - ls -la api/coverage
+  - .travis/coveralls.sh
   # run license checker
   - .travis/license-crawler.sh
 
