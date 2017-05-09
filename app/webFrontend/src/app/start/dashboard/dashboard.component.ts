@@ -38,7 +38,6 @@ export class DashboardComponent implements OnInit {
 
   apply(courseId: string) {
     this.courseService.enrollStudent(courseId, this.userService.user);
-    location.reload();
   }
 
   goToInfo(course: string) {
