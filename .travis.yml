@@ -57,7 +57,7 @@ install:
   # install travis dependencies
   - cd .travis
   - npm install
-  - npm prune
+  - npm prune          # remove not (anymore) in package.json required packages (to keep the cache clean)
   - cd ..
 
 script:
@@ -81,24 +81,18 @@ after_success:
   - .travis/docker.sh
 
 after_script:
-  # add coveralls calls here
-  # - coveralls stuff
-  # run license checker (nlf) on branch develop
-  # TODO: we should check if the build was triggered after accepting a PR to dev and only then run
-  - test $TRAVIS_BRANCH = develop -a $TRAVIS_PULL_REQUEST = false && ./.travis/license-crawler.sh
-  - echo $TRAVIS_BRANCH
-  - echo $TRAVIS_EVENT_TYPE
-  - echo $TRAVIS_PULL_REQUEST
+  # send required files to coveralls.io
+  # - .travis/coveralls.sh
+  # run license checker
+  - .travis/license-crawler.sh
 
 # Configure notifications
 notifications:
   webhooks:
     urls:
-      - $GITTER_WEBHOOK_NOTIFY
-      # this is just for testing; this url is only 48h active; append ?inspect to the url to see all requests
-      - http://requestb.in/pc64iypc
+      - https://webhooks.gitter.im/e/b87037d96d3b84d30875
     on_success: change  # options: [always|never|change] default: always
     on_failure: always  # options: [always|never|change] default: always
     on_start: never     # options: [always|never|change] default: always
     on_cancel: always   # options: [always|never|change] default: always
-    on_error: always    # options: [always|never|chnage] default: always
+    on_error: always    # options: [always|never|change] default: always
