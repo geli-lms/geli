@@ -1,8 +1,9 @@
 {
   "name": "geli-api",
   "version": "0.1.0",
-  "description": "",
-  "homepage": "",
+  "license": "GPLv3",
+  "description": "This is the API-Package.json for geli.",
+  "homepage": "https://github.com/h-da/geli",
   "author": {
     "name": "Lukas Korte",
     "email": "lukas@korte.me"
