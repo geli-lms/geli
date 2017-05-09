@@ -1,5 +1,6 @@
 import {Component, OnInit, Input} from '@angular/core';
 import {Router} from '@angular/router';
+import {MdSnackBar} from '@angular/material';
 import {FileUploader} from 'ng2-file-upload';
 
 @Component({
@@ -16,11 +17,12 @@ export class UploadComponent implements OnInit {
     url: '/api/unit',
     headers: [{
       name: 'Authorization',
-      value: localStorage.getItem('currentUserToken'),
+      value: localStorage.getItem('token'),
     }]
   });
 
-  constructor(private router: Router) {
+  constructor(private router: Router,
+              public snackBar: MdSnackBar) {
   }
 
   ngOnInit() {
@@ -28,9 +30,10 @@ export class UploadComponent implements OnInit {
       form.append('lectureId', this.lectureId);
     };
     this.uploader.onCompleteAll = () => {
+      this.snackBar.open('All items uploaded!', '', { duration: 3000 });
       setTimeout(() => {
         this.uploader.clearQueue();
-      }, 1000);
+      }, 3000);
     };
   }
 
