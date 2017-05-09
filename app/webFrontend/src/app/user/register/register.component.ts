@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {FormControl, Validators, FormGroup, FormBuilder} from '@angular/forms';
-import { AuthenticationService } from '../../shared/authentification.service';
+import { AuthenticationService } from '../../shared/authentication.service';
 import { Router } from '@angular/router';
 
 
@@ -14,6 +14,8 @@ export class RegisterComponent implements OnInit {
     loading = false;
     error = '';
     registerForm: FormGroup;
+
+    message: string;
 
     constructor(
         private router: Router,
@@ -35,9 +37,10 @@ export class RegisterComponent implements OnInit {
                                             this.registerForm.value.password).then(
             (val) => {
                 console.log('register done...' + val);
+                this.message = `We've sent an activation link to your email.`;
                 // window.location.href = '../';
             }, (error) => {
-                console.log('wrong credentials');
+                console.log('registration failed');
                 console.log(error);
             });
     }

@@ -1,8 +1,7 @@
 import {LoginComponent} from './user/login/login.component';
 import {UserDetailsComponent} from './user/user-details/user-details.component';
-import {DashboardComponent} from './dashboard/dashboard.component';
-import {HomescreenComponent} from './homescreen/homescreen.component';
 import {RegisterComponent} from './user/register/register.component';
+import {ActivationComponent} from './user/activation/activation.component';
 import {AuthGuardService} from './shared/auth-guard.service';
 import {CourseDetailComponent} from './course/course-detail/course-detail.component';
 import {CourseEditComponent} from './course/course-edit/course-edit.component';
@@ -11,11 +10,13 @@ import {UserRolesComponent} from './admin/user-roles/user-roles.component';
 import {UserEditComponent} from './user/user-edit/user-edit.component';
 import {LectureEditComponent} from './lecture/lecture-edit/lecture-edit.component';
 import {LectureNewComponent} from './lecture/lecture-new/lecture-new.component';
+import {StartComponent} from './start/start.component';
 
 export const routes = [
-  {path: '', component: HomescreenComponent, pathMatch: 'full'},
+  {path: '', component: StartComponent, pathMatch: 'full'},
   {path: 'login', component: LoginComponent},
   {path: 'register', component: RegisterComponent},
+  {path: 'activate/:token', component: ActivationComponent},
   {
     path: 'course/edit/:id',
     component: CourseEditComponent,
@@ -29,7 +30,7 @@ export const routes = [
     data: {roles: ['teacher', 'admin']}
   },
   {
-    path: 'course/detail/:name',
+    path: 'course/detail/:id',
     component: CourseDetailComponent,
     canActivate: [AuthGuardService],
     data: {roles: ['student', 'tutor', 'teacher', 'admin']}
@@ -57,12 +58,6 @@ export const routes = [
     component: UserEditComponent,
     canActivate: [AuthGuardService],
     data: {roles: ['student', 'tutor', 'teacher', 'admin']}
-  },
-  {
-    path: 'dashboard',
-    component: DashboardComponent,
-    canActivate: [AuthGuardService],
-    data: {roles: ['student', 'teacher', 'admin']}
   },
   {
     path: 'admin/users',

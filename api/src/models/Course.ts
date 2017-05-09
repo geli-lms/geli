@@ -1,5 +1,5 @@
 import * as mongoose from 'mongoose';
-import {ICourse} from './ICourse';
+import {ICourse} from '../../../shared/models/ICourse';
 import {User} from './User';
 import {Lecture} from './Lecture';
 

@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {UserDataService} from '../../shared/data.service';
-import {Router} from '@angular/router';
-import {User} from '../../models/user';
 import {UserService} from '../../shared/user.service';
+import {IUser} from '../../../../../../shared/models/IUser';
 
 @Component({
   selector: 'app-user-details',
@@ -11,31 +9,11 @@ import {UserService} from '../../shared/user.service';
 })
 export class UserDetailsComponent implements OnInit {
 
-  user: User;
+  user: IUser;
 
-  constructor(private userService: UserService,
-              private userDataService: UserDataService,
-              private router: Router) {}
+  constructor(private userService: UserService) {}
 
   ngOnInit() {
-    if (this.router.url === '/profile') {
-      const userId = this.userService.getCurrentUserId();
-      this.loadUser(userId);
-    }
+    this.user = this.userService.user;
   }
-
-  getProfileUser(): User {
-    return this.user;
-  }
-
-  loadUser(userId: string) {
-    this.userDataService.readSingleItem(userId).then(
-      (val: any) => {
-        this.user = val;
-      },
-      (error) => {
-        console.log(error);
-      });
-  }
-
 }
