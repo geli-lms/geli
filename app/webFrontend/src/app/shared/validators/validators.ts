@@ -1,4 +1,4 @@
-import {FormGroup} from "@angular/forms";
+import {FormGroup} from '@angular/forms';
 
 export function matchPasswords(passwordKey: string, confirmPasswordKey: string) {
   return (group: FormGroup): {[key: string]: any} => {

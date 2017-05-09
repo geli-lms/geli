@@ -6,7 +6,7 @@ import {UserDataService} from '../../shared/services/data.service';
 import {IUser} from '../../../../../../shared/models/IUser';
 import {UserService} from '../../shared/services/user.service';
 import {ShowProgressService} from '../../shared/services/show-progress.service';
-import {matchPasswords} from "../../shared/validators/validators";
+import {matchPasswords} from '../../shared/validators/validators';
 
 @Component({
   selector: 'app-user-edit',

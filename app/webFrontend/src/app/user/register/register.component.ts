@@ -4,7 +4,7 @@ import {AuthenticationService} from '../../shared/services/authentication.servic
 import {Router} from '@angular/router';
 import {ShowProgressService} from '../../shared/services/show-progress.service';
 import {MdSnackBar} from '@angular/material';
-import {matchPasswords} from "../../shared/validators/validators";
+import {matchPasswords} from '../../shared/validators/validators';
 
 
 @Component({
@@ -14,7 +14,7 @@ import {matchPasswords} from "../../shared/validators/validators";
 })
 export class RegisterComponent implements OnInit {
   registerForm: FormGroup;
-  registrationDone: boolean = false;
+  registrationDone = false;
 
   constructor(private router: Router,
               private authenticationService: AuthenticationService,

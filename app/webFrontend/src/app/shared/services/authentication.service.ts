@@ -3,7 +3,7 @@ import 'rxjs/add/operator/map';
 import {UserService} from './user.service';
 import {MdSnackBar} from '@angular/material';
 import {Http} from '@angular/http';
-import {IUser} from "../../../../../../shared/models/IUser";
+import {IUser} from '../../../../../../shared/models/IUser';
 
 @Injectable()
 export class AuthenticationService {
