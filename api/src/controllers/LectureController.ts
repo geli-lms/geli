@@ -3,7 +3,7 @@ import {Body, Get, Post, Put, Delete, Param, Req, JsonController, UseBefore} fro
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 
 import {Lecture} from '../models/Lecture';
-import {ILecture} from '../models/ILecture';
+import {ILecture} from '../../../shared/models/ILecture';
 import {Course} from '../models/Course';
 
 @JsonController('/lecture')

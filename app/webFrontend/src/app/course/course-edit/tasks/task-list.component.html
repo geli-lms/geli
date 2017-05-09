@@ -1,14 +1,14 @@
 <br>
 
 <div>
-  <button [class.hidden]="addingTask" (click)="addTask()" class="btn btn-primary">Add</button>
-  <button [class.hidden]="!addingTask" (click)="cancelTask()" class="btn btn-danger">Cancel</button>
+  <button md-raised-button *ngIf="!addingTask" (click)="addTask()"><md-icon>add_box</md-icon></button>
+  <button md-raised-button *ngIf="addingTask" (click)="cancelTask()">Cancel</button>
 </div>
 
 <hr>
 
-<div class="row text-center">
-  <div *ngFor="let task of tasks" class="col-md-4 col-sm-7">
+<div>
+  <div *ngFor="let task of tasks">
      <task-card [task]="task" (onTaskCancel)="onTaskCancel();" (onRemoveTask)="onRemoveTask($event);" (onTaskCreated)="onTaskCreated($event);"></task-card>
   </div>
 </div>

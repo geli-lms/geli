@@ -1,3 +1,8 @@
-FROM node:7.9.0
+FROM nginx:1.13
 
-RUN npm install -g @angular/cli
+# Remove default configuration
+RUN rm /etc/nginx/conf.d/default.conf
+
+COPY .docker/web-frontend/project.conf /etc/nginx/conf.d/project.conf
+
+COPY app/webFrontend/dist /var/www/dist

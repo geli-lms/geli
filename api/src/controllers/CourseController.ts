@@ -3,9 +3,9 @@ import {Body, Get, Post, Put, Param, Req, JsonController, UseBefore} from 'routi
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 
 import {Course} from '../models/Course';
-import {ICourse} from '../models/ICourse';
+import {ICourse} from '../../../shared/models/ICourse';
 import {IUserModel} from '../models/User';
-import {IUser} from '../models/IUser';
+import {IUser} from '../../../shared/models/IUser';
 
 @JsonController('/courses')
 @UseBefore(passportJwtMiddleware)

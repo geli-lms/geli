@@ -5,7 +5,7 @@ import passportJwtMiddleware from '../security/passportJwtMiddleware';
 
 import {Lecture} from '../models/Lecture';
 import {Unit} from '../models/Unit';
-import {IUnit} from '../models/IUnit';
+import {IUnit} from '../../../shared/models/IUnit';
 
 const uploadOptions = {dest: 'uploads/' };
 

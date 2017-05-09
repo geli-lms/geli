@@ -1,5 +1,5 @@
 import * as mongoose from 'mongoose';
-import {ITask} from './ITask';
+import {ITask} from '../../../shared/models/ITask';
 
 interface ITaskModel extends ITask, mongoose.Document {
 }

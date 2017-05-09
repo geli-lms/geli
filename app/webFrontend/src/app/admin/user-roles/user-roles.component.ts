@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import {UserDataService} from '../../shared/data.service';
-import {User} from '../../models/user';
 import {Router} from '@angular/router';
 import {ShowProgressService} from '../../shared/show-progress.service';
 import {MdSnackBar} from '@angular/material';
+import {IUser} from '../../../../../../shared/models/IUser';
 
 @Component({
   selector: 'app-user-roles',
@@ -12,7 +12,7 @@ import {MdSnackBar} from '@angular/material';
 })
 export class UserRolesComponent implements OnInit {
 
-  allUsers: User[];
+  allUsers: IUser[];
   availableRoles: String[];
 
   constructor(private userService: UserDataService,
@@ -25,7 +25,7 @@ export class UserRolesComponent implements OnInit {
     this.getRoles();
   }
 
-  getAllUsers(): User[] {
+  getAllUsers(): IUser[] {
     return this.allUsers;
   }
 

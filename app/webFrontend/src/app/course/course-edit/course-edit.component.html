@@ -1,39 +1,40 @@
+<h1>Edit course</h1>
 
-<md-card>
-<md-tab-group>
-    <md-tab label="General">
-        <md-card>
-            <h1>{{course}}</h1>
-            <form class="course-form" (ngSubmit)="createCourse()">
+<md-tab-group dynamicHeight="true">
+  <md-tab label="General">
+    <form class="course-form" (ngSubmit)="createCourse()">
+      <md-input-container class="full-width">
+        <input async mdInput id="name" placeholder="Course Name" [(ngModel)]="course"
+               [ngModelOptions]="{standalone: true}">
+      </md-input-container>
 
-                <md-input-container dynamicHeight="true" class="full-width">
-                    <input async mdInput id="name" placeholder="Course Name" [(ngModel)]="course" [ngModelOptions]="{standalone: true}">
-                </md-input-container>
-                <br />
-                <md-input-container class="full-width">
-                    <textarea mdInput id="description" placeholder="Course Description" [(ngModel)]="description" [ngModelOptions]="{standalone: true}"></textarea>
-                </md-input-container>
-                <br />
-                <md-checkbox>Course activated?</md-checkbox>
-                <br /> <br />
-                <button md-button class="md-button" type="submit">Save</button>
-            </form>
-        </md-card>
+      <md-input-container class="full-width">
+          <textarea mdInput id="description" placeholder="Course Description" [(ngModel)]="description"
+                    [ngModelOptions]="{standalone: true}"></textarea>
+      </md-input-container>
 
+      <md-slide-toggle>Activate course</md-slide-toggle>
 
-    </md-tab>
-
-    <md-tab label="Manage Content"><app-manage-content [course]="courseOb"></app-manage-content></md-tab>
+      <p>
+        <button md-raised-button color="primary" class="md-button" type="submit">Save</button>
+      </p>
+    </form>
+  </md-tab>
 
   <md-tab label="Course Members">
     <app-members [courseId]="id"></app-members>
   </md-tab>
 
-    <md-tab label="Define Tasks"><app-tasks [courseId]="id"></app-tasks></md-tab>
+  <md-tab label="Define Tasks">
+    <app-tasks [courseId]="id"></app-tasks>
+  </md-tab>
 
-    <md-tab label="Lectures"><app-lecture *ngIf="courseOb" [course]="courseOb"></app-lecture></md-tab>
+  <md-tab label="Lectures">
+    <app-lecture *ngIf="courseOb" [course]="courseOb"></app-lecture>
+  </md-tab>
 
-    <md-tab label="Video Upload"><app-upload *ngIf="courseOb" [course]="courseOb"></app-upload></md-tab>
+  <md-tab label="Video Upload">
+    <app-upload *ngIf="courseOb" [course]="courseOb"></app-upload>
+  </md-tab>
 
 </md-tab-group>
-</md-card>

@@ -4,7 +4,7 @@ import {json as bodyParserJson} from 'body-parser';
 import passportLoginMiddleware from '../security/passportLoginMiddleware';
 import emailService from '../services/EmailService';
 
-import {IUser} from '../models/IUser';
+import {IUser} from '../../../shared/models/IUser';
 import {IUserModel, User} from '../models/User';
 import {JwtUtils} from '../security/JwtUtils';
 
@@ -23,7 +23,7 @@ export class AuthController {
   }
 
   @Post('/register')
-  postRegister(@Body() user: IUser, @Res() res: Response) {
+  postRegister(@Body() user: IUser) {
     return User.findOne({email: user.email})
       .then((existingUser) => {
         // If user is not unique, return error
@@ -31,12 +31,14 @@ export class AuthController {
           throw new HttpError(422, 'That email address is already in use.');
         }
 
-        return new User(user).save();
+        const newUser = new User(user);
+        newUser.generateActivationToken();
+
+        return newUser.save();
       })
       .then((savedUser) => {
         emailService.sendActivation(savedUser);
         return {
-          token: 'JWT ' + JwtUtils.generateToken(savedUser),
           user: savedUser.toObject()
         };
       });

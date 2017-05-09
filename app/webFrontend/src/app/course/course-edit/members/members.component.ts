@@ -2,7 +2,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {CourseService, UserDataService} from '../../../shared/data.service';
 import {ShowProgressService} from '../../../shared/show-progress.service';
-import {User} from '../../../models/user';
+import {IUser} from '../../../../../../../shared/models/IUser';
 
 @Component({
   selector: 'app-members',
@@ -12,10 +12,12 @@ import {User} from '../../../models/user';
 export class MembersComponent implements OnInit {
   @Input() courseId;
   course: any;
-  members: User[] = [];
-  users: User[] = [];
-  filterFirstName = '';
-  filterLastName = '';
+  members: IUser[] = [];
+  users: IUser[] = [];
+  filterFirstNameMember = '';
+  filterLastNameMember = '';
+  filterFirstNameUser = '';
+  filterLastNameUser = '';
 
   constructor(private userService: UserDataService,
               private courseService: CourseService,
@@ -46,17 +48,19 @@ export class MembersComponent implements OnInit {
 
   /**
    * Switch a user from student to member and back and update this course in database.
-   * @param username
-   * @param direction
+   * @param _id Id of an user.
+   * @param direction direction where user to switch.
    */
-  switchUser(username: string, direction: string) {
+  switchUser(id: string, direction: string) {
     if (direction === 'right') {
-      this.members = this.members.concat(this.users.filter(obj => username === obj.username));
-      this.users = this.users.filter(obj => !(username === obj.username));
+      this.members = this.members.concat(this.users.filter(obj => id === obj._id));
+      this.users = this.users.filter(obj => !(id === obj._id));
     } else if (direction === 'left') {
-      this.users = this.users.concat(this.members.filter(obj => username === obj.username));
-      this.members = this.members.filter(obj => !(username === obj.username));
+      this.users = this.users.concat(this.members.filter(obj => id === obj._id));
+      this.members = this.members.filter(obj => !(id === obj._id));
     }
+    this.sortUsers(this.members);
+    this.sortUsers(this.users);
     this.course.students = this.members;
     this.updateMembersInCourse();
   }
@@ -68,6 +72,7 @@ export class MembersComponent implements OnInit {
     this.userService.readItems().then(users => {
       this.users = users.filter(obj => obj.role === 'student');
     });
+    this.sortUsers(this.members);
   }
 
   /**
@@ -83,9 +88,25 @@ export class MembersComponent implements OnInit {
             this.users.splice(i, 1);
           }
         }
+        this.sortUsers(this.users);
       }, (error) => {
         console.log(error);
       });
   }
 
+  /**
+   * Sort an array of users alphabeticaly after firstname and lastname.
+   * @param users An array of users.
+   */
+  sortUsers(users: IUser[]) {
+    users.sort(function (a, b) {
+      if (a.profile.firstName < b.profile.firstName || a.profile.lastName < b.profile.lastName) {
+        return -1;
+      }
+      if (a.profile.firstName > b.profile.firstName || a.profile.lastName < b.profile.lastName) {
+        return 1;
+      }
+      return 0;
+    });
+  }
 }

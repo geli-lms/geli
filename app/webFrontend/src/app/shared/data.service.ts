@@ -1,8 +1,7 @@
 import {Injectable} from '@angular/core';
 import {BackendService} from './backend.service';
 
-@Injectable()
-export class DataService {
+abstract class DataService {
 
   static changeStringProp2DateProp(item: any, prop: string) {
     if (item[prop] !== null) {
