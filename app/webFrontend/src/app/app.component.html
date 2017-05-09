@@ -11,15 +11,6 @@
   </span>
 
   <span *ngIf="isLoggedIn()">
-  <button class="admin" md-button [mdMenuTriggerFor]="adminmenu" *ngIf="isAdmin()">
-    <md-icon>settings</md-icon>
-    <span>Admin</span>
-  </button>
-  <md-menu #adminmenu="mdMenu">
-    <button md-menu-item routerLink="/admin/users" routerLinkActive="active">
-      <span>Users</span>
-    </button>
-  </md-menu>
 
   <button md-button routerLink="/profile">
       <img class="avatar" src="{{userService.user.getGravatarURL(30)}}">
@@ -34,10 +25,10 @@
     <!--<md-icon>favorite</md-icon>-->
     <!--<span>Favorites</span>-->
     <!--</button>-->
-    <!--<button md-menu-item>-->
-    <!--<md-icon>settings</md-icon>-->
-    <!--<span>Settings</span>-->
-    <!--</button>-->
+    <button md-menu-item *ngIf="isLoggedIn() && isAdmin()" routerLink="/settings" routerLinkActive="active">
+      <md-icon>settings</md-icon>
+      <span>Einstellungen</span>
+    </button>
     <button md-menu-item *ngIf="isLoggedIn()" (click)="logout()" routerLink="" routerLinkActive="active">
       <md-icon>exit_to_app</md-icon>
       <span>Logout</span>

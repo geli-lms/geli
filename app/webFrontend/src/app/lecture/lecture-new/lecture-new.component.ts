@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {LectureService} from '../../shared/data.service';
+import {LectureService} from '../../shared/services/data.service';
 import {Router, ActivatedRoute} from '@angular/router';
 
 @Component({

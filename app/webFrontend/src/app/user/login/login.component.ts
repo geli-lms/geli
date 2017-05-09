@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
 
-import {AuthenticationService} from '../../shared/authentication.service';
-import {AuthGuardService} from '../../shared/auth-guard.service';
+import {AuthenticationService} from '../../shared/services/authentication.service';
+import {AuthGuardService} from '../../shared/services/auth-guard.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 
 @Component({

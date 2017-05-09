@@ -1,6 +1,6 @@
 import {Component, OnInit, ViewContainerRef} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {CourseService} from '../../shared/data.service';
+import {CourseService} from '../../shared/services/data.service';
 import {MdSnackBar} from '@angular/material';
 import {Router} from '@angular/router';
 

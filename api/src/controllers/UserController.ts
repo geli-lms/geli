@@ -1,4 +1,4 @@
-import {Body, JsonController, HttpError, UseBefore, Get, Param, Put} from 'routing-controllers';
+import {Body, JsonController, HttpError, UseBefore, Get, Param, Put, Delete} from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 
 import {IUser} from '../../../shared/models/IUser';
@@ -48,11 +48,21 @@ export class UserController {
       })
       .then((usernameInUse) => {
         if (typeof usernameInUse === 'undefined' || usernameInUse.length === 0) {
+          User.findById(id, {'new': true});
           return User.findByIdAndUpdate(id, user, {'new': true});
         } else {
           throw new HttpError(400, 'This username is already in use.');
         }
       })
+      .then((updatedUser) => {
+        updatedUser.markModified('password');
+        return updatedUser.save(user);
+      })
       .then((savedUser) => savedUser.toObject());
+  }
+
+  @Delete('/:id')
+  deleteUser(@Param('id') id: string) {
+    return User.findByIdAndRemove(id);
   }
 }

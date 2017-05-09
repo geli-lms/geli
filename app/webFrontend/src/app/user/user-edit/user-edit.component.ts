@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import {MdSnackBar} from '@angular/material';
-import {UserDataService} from '../../shared/data.service';
-import {UserService} from '../../shared/user.service';
-import {Router} from '@angular/router';
-import {ShowProgressService} from '../../shared/show-progress.service';
+import {UserDataService} from '../../shared/services/data.service';
 import {IUser} from '../../../../../../shared/models/IUser';
+import {UserService} from '../../shared/services/user.service';
+import {ShowProgressService} from '../../shared/services/show-progress.service';
 
 @Component({
   selector: 'app-user-edit',
@@ -88,6 +88,7 @@ export class UserEditComponent implements OnInit {
         console.log(val);
         this.showProgress.toggleLoadingGlobal(false);
         this.snackBar.open('Profile successfully updated.', '', { duration: 3000 });
+        this.userService.setUser(val);
         this.navigateBack();
       },
       (error) => {
@@ -104,11 +105,26 @@ export class UserEditComponent implements OnInit {
       }),
       username: [''],
       email: ['', Validators.required],
-      password: ['']
-    });
+      oldPassword: [''],
+      password: [''],
+      confirmPassword: ['']
+    }, {validator: this.matchPasswords('password', 'confirmPassword')});
   }
 
   private navigateBack() {
     this.router.navigate(['/profile']);
+  }
+
+  private matchPasswords(passwordKey: string, confirmPasswordKey: string) {
+    return (group: FormGroup): {[key: string]: any} => {
+      const password = group.controls[passwordKey];
+      const confirmPassword = group.controls[confirmPasswordKey];
+
+      if (password.value !== confirmPassword.value) {
+        return {
+          mismatchedPasswords: true
+        };
+      }
+    };
   }
 }
