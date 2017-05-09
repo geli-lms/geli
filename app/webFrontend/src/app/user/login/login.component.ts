@@ -15,6 +15,7 @@ import {MdSnackBar} from '@angular/material';
 export class LoginComponent implements OnInit {
   error = '';
   loginForm: FormGroup;
+  loading = false;
 
   constructor(private router: Router,
               private authGuard: AuthGuardService,
@@ -32,6 +33,7 @@ export class LoginComponent implements OnInit {
 
   login() {
     this.showProgress.toggleLoadingGlobal(true);
+    this.loading = true;
     this.authenticationService.login(this.loginForm.value.email, this.loginForm.value.password).then(
       (val) => {
         if (this.authGuard.redirectUrl) {
@@ -40,11 +42,13 @@ export class LoginComponent implements OnInit {
           this.router.navigate(['/']);
         }
         this.showProgress.toggleLoadingGlobal(false);
+        this.loading = false;
         this.snackBar.open('Login successful!');
       }, (error) => {
         console.log(error);
         this.showProgress.toggleLoadingGlobal(false);
         this.snackBar.open('Login failed: ' + error);
+        this.loading = false;
       });
   }
 
