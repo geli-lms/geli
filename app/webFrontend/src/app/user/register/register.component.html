@@ -1,11 +1,19 @@
-<md-card class="register-card">
+<md-card *ngIf="registrationDone">
+  <md-card-header>
+    <md-card-title><h1>Registration was successful</h1></md-card-title>
+  </md-card-header>
+  <md-card-content>
+    <p>We have send you an activation link to your specified mail address.</p>
+  </md-card-content>
+  <md-card-actions align="start">
+    <button md-raised-button color="primary" (click)="navigateFront">Back to frontpage</button>
+  </md-card-actions>
+</md-card>
+<md-card class="register-card" *ngIf="!registrationDone">
   <md-card-header>
     <md-card-title><h1>Register</h1></md-card-title>
   </md-card-header>
-
   <md-card-content>
-    <p *ngIf="message">{{message}}</p>
-
     <form name="form" (ngSubmit)="register()" [formGroup]="registerForm">
       <div class="form-group" formGroupName="profile">
         <md-input-container>

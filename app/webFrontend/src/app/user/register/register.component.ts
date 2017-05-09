@@ -13,11 +13,8 @@ import {matchPasswords} from "../../shared/validators/validators";
   styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent implements OnInit {
-  model: any = {};
-  error = '';
   registerForm: FormGroup;
-
-  message: string;
+  registrationDone: boolean = false;
 
   constructor(private router: Router,
               private authenticationService: AuthenticationService,
@@ -36,8 +33,8 @@ export class RegisterComponent implements OnInit {
     this.authenticationService.register(this.registerForm.value).then(
       (val) => {
         console.log('register done...' + val);
-        this.message = `We've sent an activation link to your email.`;
         this.showProgress.toggleLoadingGlobal(false);
+        this.registrationDone = true;
         // window.location.href = '../';
       }, (error) => {
         console.log('registration failed');
@@ -59,4 +56,7 @@ export class RegisterComponent implements OnInit {
     }, {validator: matchPasswords('password', 'confirmPassword')});
   }
 
+  navigateFront() {
+    this.router.navigate(['/']);
+  }
 }
