@@ -1,11 +1,12 @@
 <br>
 
 <div>
-  <button md-raised-button *ngIf="!addingTask" (click)="addTask()"><md-icon>add_box</md-icon></button>
-  <button md-raised-button *ngIf="addingTask" (click)="cancelTask()">Cancel</button>
+  <button md-raised-button color="primary" *ngIf="!addingTask" (click)="addTask()"><md-icon>playlist_add</md-icon></button>
+  <button md-raised-button color="primary" *ngIf="addingTask" (click)="cancelTask()"><md-icon>undo</md-icon></button>
 </div>
 
 <hr>
+
 
 <div>
   <div *ngFor="let task of tasks">
