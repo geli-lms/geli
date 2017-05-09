@@ -7,12 +7,14 @@
     <p *ngIf="message">{{message}}</p>
 
     <form name="form" (ngSubmit)="register()" [formGroup]="registerForm">
-      <md-input-container>
-        <input mdInput formControlName="firstName" placeholder="First name"/>
-      </md-input-container>
-      <md-input-container>
-        <input mdInput formControlName="lastName" placeholder="Last name"/>
-      </md-input-container>
+      <div class="form-group" formGroupName="profile">
+        <md-input-container>
+          <input mdInput formControlName="firstName" placeholder="First name"/>
+        </md-input-container>
+        <md-input-container>
+          <input mdInput formControlName="lastName" placeholder="Last name"/>
+        </md-input-container>
+      </div>
 
       <md-input-container>
         <input mdInput formControlName="username" placeholder="User name"/>
@@ -26,6 +28,9 @@
       </md-input-container>
       <md-input-container>
         <input mdInput type="password" formControlName="confirmPassword" placeholder="Confirm password" />
+        <div class="form-text error" *ngIf="registerForm.controls.confirmPassword.touched">
+          <div *ngIf="registerForm.hasError('mismatchedPasswords')">Passwords do not match.</div>
+        </div>
       </md-input-container>
 
       <button md-raised-button color="primary" type="submit" [disabled]="loading">Register</button>

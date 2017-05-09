@@ -6,6 +6,7 @@ import {UserDataService} from '../../shared/services/data.service';
 import {IUser} from '../../../../../../shared/models/IUser';
 import {UserService} from '../../shared/services/user.service';
 import {ShowProgressService} from '../../shared/services/show-progress.service';
+import {matchPasswords} from "../../shared/validators/validators";
 
 @Component({
   selector: 'app-user-edit',
@@ -43,7 +44,6 @@ export class UserEditComponent implements OnInit {
           },
           username: this.user.username,
           email: this.user.email,
-          password: this.user.password
         });
       },
       (error) => {
@@ -108,23 +108,10 @@ export class UserEditComponent implements OnInit {
       oldPassword: [''],
       password: [''],
       confirmPassword: ['']
-    }, {validator: this.matchPasswords('password', 'confirmPassword')});
+    }, {validator: matchPasswords('password', 'confirmPassword')});
   }
 
   private navigateBack() {
     this.router.navigate(['/profile']);
-  }
-
-  private matchPasswords(passwordKey: string, confirmPasswordKey: string) {
-    return (group: FormGroup): {[key: string]: any} => {
-      const password = group.controls[passwordKey];
-      const confirmPassword = group.controls[confirmPasswordKey];
-
-      if (password.value !== confirmPassword.value) {
-        return {
-          mismatchedPasswords: true
-        };
-      }
-    };
   }
 }

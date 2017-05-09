@@ -4,6 +4,7 @@ import {AuthenticationService} from '../../shared/services/authentication.servic
 import {Router} from '@angular/router';
 import {ShowProgressService} from '../../shared/services/show-progress.service';
 import {MdSnackBar} from '@angular/material';
+import {matchPasswords} from "../../shared/validators/validators";
 
 
 @Component({
@@ -32,11 +33,7 @@ export class RegisterComponent implements OnInit {
 
   register() {
     this.showProgress.toggleLoadingGlobal(true);
-    this.authenticationService.register(this.registerForm.value.firstName,
-      this.registerForm.value.lastName,
-      this.registerForm.value.username,
-      this.registerForm.value.email,
-      this.registerForm.value.password).then(
+    this.authenticationService.register(this.registerForm.value).then(
       (val) => {
         console.log('register done...' + val);
         this.message = `We've sent an activation link to your email.`;
@@ -51,13 +48,15 @@ export class RegisterComponent implements OnInit {
 
   generateForm() {
     this.registerForm = this.formBuilder.group({
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
+      profile: this.formBuilder.group({
+        firstName: ['', Validators.required],
+        lastName: ['', Validators.required],
+      }),
       username: [''],
       email: ['', Validators.required],
       password: ['', Validators.required],
       confirmPassword: ['', Validators.required]
-    });
+    }, {validator: matchPasswords('password', 'confirmPassword')});
   }
 
 }
