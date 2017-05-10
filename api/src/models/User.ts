@@ -10,6 +10,7 @@ interface IUserModel extends IUser, mongoose.Document {
     authenticationToken: string;
     resetPasswordToken: string;
     resetPasswordExpires: Date;
+    isActive: boolean;
 }
 
 const userSchema = new mongoose.Schema({
@@ -39,7 +40,8 @@ const userSchema = new mongoose.Schema({
     },
     authenticationToken: {type: String},
     resetPasswordToken: {type: String},
-    resetPasswordExpires: {type: Date}
+    resetPasswordExpires: {type: Date},
+    isActive: {type: Boolean, 'default': false}
   },
   {
     timestamps: true,
@@ -54,9 +56,12 @@ const userSchema = new mongoose.Schema({
 function hashPassword(next: (err?: NativeError) => void) {
   const user = this, SALT_FACTOR = 5;
 
-    if (!user.isModified('password')) {
-      return next();
-    }
+  // TODO: does not belong into this Function
+  generateToken(this);
+
+  if (!user.isModified('password')) {
+    return next();
+  }
 
   // TODO: Refactor to use promises
   bcrypt.genSalt(SALT_FACTOR, function (err, salt) {
@@ -72,6 +77,20 @@ function hashPassword(next: (err?: NativeError) => void) {
       next();
     });
   });
+}
+
+function generateToken(user: IUserModel) {
+  // check if user is new and wasn't activated by the creator
+  if (user.isNew && !user.isActive && user.authenticationToken === undefined) {
+    // set new authenticationToken
+    user.authenticationToken = generateSecureToken();
+  }
+}
+
+// returns random 64 byte long base64 encoded Token
+// maybe this could be shortened
+function generateSecureToken() {
+  return crypto.randomBytes(64).toString('base64');
 }
 
 // Pre-save of user to database, hash password if password is modified or new
