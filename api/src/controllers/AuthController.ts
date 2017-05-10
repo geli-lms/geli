@@ -32,7 +32,6 @@ export class AuthController {
         }
 
         const newUser = new User(user);
-        newUser.generateActivationToken();
 
         return newUser.save();
       })
@@ -53,6 +52,7 @@ export class AuthController {
         }
 
         existingUser.authenticationToken = undefined;
+        existingUser.isActive = true;
         return existingUser.save();
       })
       .then((user) => {

@@ -11,6 +11,7 @@ export const userFixtures: IFixture = {
         firstName: 'Tick',
         lastName: 'Studi'
       },
+      isActive: true
     },
     {
       email: 'student2@test.local',
@@ -19,6 +20,7 @@ export const userFixtures: IFixture = {
         firstName: 'Trick',
         lastName: 'Studi'
       },
+      isActive: true
     },
     {
       email: 'student3@test.local',
@@ -27,6 +29,7 @@ export const userFixtures: IFixture = {
         firstName: 'Track',
         lastName: 'Studi'
       },
+      isActive: true
     },
     {
       email: 'admin@test.local',
@@ -36,6 +39,7 @@ export const userFixtures: IFixture = {
         firstName: 'Dago',
         lastName: 'Adminman'
       },
+      isActive: true
     },
     {
       email: 'teacher@test.local',
@@ -45,6 +49,7 @@ export const userFixtures: IFixture = {
         firstName: 'Daniel',
         lastName: 'Teachman'
       },
+      isActive: true
     }
   ]
 };

@@ -22,9 +22,14 @@ export default new LocalStrategy(
           }
         });
 
-        if (user.authenticationToken !== undefined) {
-          console.log('Account not activated ' + user.authenticationToken);
-          return done(null, false, {message: 'Your account has not been activated yet.'});
+        if (!user.isActive || user.authenticationToken !== undefined) {
+          // active = false && no token -> deactivated by admin
+          // existing token -> e-mail not verified
+          if (user.authenticationToken === undefined) {
+            return done(null, false, {message: 'Your account has not been deactivated.'});
+          } else {
+            return done(null, false, {message: 'Your account has not been activated yet.'});
+          }
         }
 
         console.log('logged in');
