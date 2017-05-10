@@ -24,7 +24,7 @@
     "load:fixtures": "gulp load:fixtures"
   },
   "dependencies": {
-    "bcrypt-nodejs": "0.0.3",
+    "bcrypt": "^1.0.2",
     "body-parser": "^1.16.0",
     "crypto": "0.0.3",
     "express": "4.14.0",
@@ -41,7 +41,7 @@
     "winston": "2.3.1"
   },
   "devDependencies": {
-    "@types/bcrypt-nodejs": "0.0.30",
+    "@types/bcrypt": "^1.0.0",
     "@types/body-parser": "0.0.33",
     "@types/chai": "3.4.34",
     "@types/chai-http": "0.0.30",

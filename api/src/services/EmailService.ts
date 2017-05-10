@@ -27,6 +27,9 @@ class EmailService {
       if (!user) {
         throw new Error('user not defined');
       }
+      if (!user.authenticationToken) {
+        throw new Error('this user has no authenticationToken defined');
+      }
 
       const message = {
           // Comma separated list of recipients
@@ -44,7 +47,7 @@ class EmailService {
           // html body
           html: '<p>Hello ' + user.profile.firstName + ',</p><br>' +
           '<p>your account was successfully created. Please use the following link to verify your E-Mail: \n' +
-          `<a href='http://localhost:4200/activate/` + encodeURIComponent(user.authenticationToken) +
+          `<a href='` + config.baseurl + '/activate/' + encodeURIComponent(user.authenticationToken) +
           `'>` + config.baseurl + '/activate/' + encodeURIComponent(user.authenticationToken) + '</a></p><br>' +
           '<p>Your GELI Team.</p>'
       };

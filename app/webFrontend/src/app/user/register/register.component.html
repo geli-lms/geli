@@ -1,18 +1,28 @@
-<md-card class="register-card">
+<md-card *ngIf="registrationDone">
+  <md-card-header>
+    <md-card-title><h1>Registration was successful</h1></md-card-title>
+  </md-card-header>
+  <md-card-content>
+    <p>We have send you an activation link to your specified mail address.</p>
+  </md-card-content>
+  <md-card-actions align="start">
+    <button md-raised-button color="primary" (click)="navigateFront">Back to frontpage</button>
+  </md-card-actions>
+</md-card>
+<md-card class="register-card" *ngIf="!registrationDone">
   <md-card-header>
     <md-card-title><h1>Register</h1></md-card-title>
   </md-card-header>
-
   <md-card-content>
-    <p [hidden]="message===undefined">{{message}}</p>
-
     <form name="form" (ngSubmit)="register()" [formGroup]="registerForm">
-      <md-input-container>
-        <input mdInput formControlName="firstName" placeholder="First name"/>
-      </md-input-container>
-      <md-input-container>
-        <input mdInput formControlName="lastName" placeholder="Last name"/>
-      </md-input-container>
+      <div class="form-group" formGroupName="profile">
+        <md-input-container>
+          <input mdInput formControlName="firstName" placeholder="First name"/>
+        </md-input-container>
+        <md-input-container>
+          <input mdInput formControlName="lastName" placeholder="Last name"/>
+        </md-input-container>
+      </div>
 
       <md-input-container>
         <input mdInput formControlName="username" placeholder="User name"/>
@@ -22,7 +32,13 @@
       </md-input-container>
 
       <md-input-container>
-        <input mdInput type="password" formControlName="password" placeholder="Password">
+        <input mdInput type="password" formControlName="password" placeholder="Password" />
+      </md-input-container>
+      <md-input-container>
+        <input mdInput type="password" formControlName="confirmPassword" placeholder="Confirm password" />
+        <div class="form-text error" *ngIf="registerForm.controls.confirmPassword.touched">
+          <div *ngIf="registerForm.hasError('mismatchedPasswords')">Passwords do not match.</div>
+        </div>
       </md-input-container>
 
       <button md-raised-button color="primary" type="submit" [disabled]="loading">Register</button>

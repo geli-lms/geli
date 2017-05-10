@@ -25,9 +25,9 @@
     <!--<md-icon>favorite</md-icon>-->
     <!--<span>Favorites</span>-->
     <!--</button>-->
-    <button md-menu-item *ngIf="isLoggedIn() && isAdmin()" routerLink="/settings" routerLinkActive="active">
+    <button md-menu-item *ngIf="isLoggedIn() && isAdmin()" routerLink="/admin" routerLinkActive="active">
       <md-icon>settings</md-icon>
-      <span>Einstellungen</span>
+      <span>Admin</span>
     </button>
     <button md-menu-item *ngIf="isLoggedIn()" (click)="logout()" routerLink="" routerLinkActive="active">
       <md-icon>exit_to_app</md-icon>

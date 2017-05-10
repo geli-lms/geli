@@ -38,13 +38,12 @@ import { LectureEditComponent } from './lecture/lecture-edit/lecture-edit.compon
 import { UploadComponent } from './upload/upload.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MembersComponent} from './course/course-edit/members/members.component';
-import { UserRolesComponent } from './admin/user-roles/user-roles.component';
+import { UserAdminComponent } from './admin/user-admin/user-admin.component';
 import { UserEditComponent } from './user/user-edit/user-edit.component';
 import { ActivationComponent } from './user/activation/activation.component';
 import {FileUploadModule} from 'ng2-file-upload/ng2-file-upload';
 import { StartComponent } from './start/start.component';
 
-import { SettingsComponent } from './settings/settings.component';
 import {AdminComponent} from './admin/admin.component';
 import {DialogModule} from './shared/modules/dialog/dialog.module';
 
@@ -70,13 +69,12 @@ import {DialogModule} from './shared/modules/dialog/dialog.module';
     LectureComponent,
     LectureNewComponent,
     LectureEditComponent,
-    UserRolesComponent,
+    UserAdminComponent,
     UserEditComponent,
     UploadComponent,
     ActivationComponent,
     StartComponent,
     AdminComponent,
-    SettingsComponent
   ],
   imports: [
     BrowserModule,

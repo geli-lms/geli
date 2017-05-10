@@ -1,4 +1,4 @@
-<h2>User administration</h2>
+<h2>Users</h2>
 <table class="table">
   <thead>
   <tr>
@@ -20,8 +20,8 @@
       </md-select>
     </td>
     <td>
-      <button md-raised-button color="primary">Edit</button>
-      <button md-raised-button color="warn" (click)="deleteUser(i)">Delete</button>
+      <button md-icon-button><md-icon>edit</md-icon></button>
+      <button md-icon-button (click)="deleteUser(i)"><md-icon>delete</md-icon></button>
     </td>
   </tr>
   </tbody>
