@@ -3,7 +3,7 @@
 [![NodeJS Version](https://img.shields.io/badge/nodeJS-7.9-blue.svg)](https://nodejs.org/en)
 [![MongoDB Version](https://img.shields.io/badge/mongoDB-3.4-blue.svg)](https://www.mongodb.com/download-center#community)
 
-![GitHub release](https://img.shields.io/github/release/h-da/geli.svg)
+[![GitHub release](https://img.shields.io/github/release/h-da/geli.svg)](https://github.com/h-da/geli/releases)
 [![Build Status](https://travis-ci.org/h-da/geli.svg?branch=develop)](https://travis-ci.org/h-da/geli)
 [![Dependency Checker](https://david-dm.org/h-da/geli.svg)](https://david-dm.org/h-da/geli)
 
@@ -12,8 +12,8 @@ API: [![Docker Stars](https://img.shields.io/docker/stars/hdafbi/geli-api.svg)](
 Web-Frontend: [![Docker Stars](https://img.shields.io/docker/stars/hdafbi/geli-web-frontend.svg)](https://hub.docker.com/r/hdafbi/geli-web-frontend/)
 [![Docker Pulls](https://img.shields.io/docker/pulls/hdafbi/geli-web-frontend.svg)](https://hub.docker.com/r/hdafbi/geli-web-frontend/)
 
-![license](https://img.shields.io/github/license/h-da/geli.svg)
-![Github Releases](https://img.shields.io/github/downloads/h-da/geli/latest/total.svg)
+[![license](https://img.shields.io/github/license/h-da/geli.svg)](https://github.com/h-da/geli/blob/develop/LICENSE)
+![Github Downloads](https://img.shields.io/github/downloads/h-da/geli/latest/total.svg)
 [![Gitter chat](https://badges.gitter.im/h-da/geli.png)](https://gitter.im/mpse-geli/Lobby)
 
 ---
@@ -142,3 +142,54 @@ To get more help on the `angular-cli` use `ng --help` or go check out the [Angul
 # Contributuion
 
 Please have a look at [CONTRIBUTING.md](.github/CONTRIBUTING.md)
+
+# Apache-Licensed Software
+This block contains all software-packages that are licensed under the Apache-License.  
+**Last edit: 10.05.2017**
+
+## Api
+- [atob](https://npmjs.com/package/atob)
+- [aws-sign2](https://npmjs.com/package/aws-sign2)
+- [bson](https://npmjs.com/package/bson)
+- [caseless](https://npmjs.com/package/caseless)
+- [ecdsa-sig-formatter](https://npmjs.com/package/ecdsa-sig-formatter)
+- [forever-agent](https://npmjs.com/package/forever-agent)
+- [kareem](https://npmjs.com/package/kareem)
+- [mongodb](https://npmjs.com/package/mongodb)
+- [mongodb-core](https://npmjs.com/package/mongodb-core)
+- [oauth-sign](https://npmjs.com/package/oauth-sign)
+- [pause-stream](https://npmjs.com/package/pause-stream)
+- [rc](https://npmjs.com/package/rc)
+- [reflect-metadata](https://npmjs.com/package/reflect-metadata)
+- [request](https://npmjs.com/package/request)
+- [require_optional](https://npmjs.com/package/require_optional)
+- [spdx-correct](https://npmjs.com/package/spdx-correct)
+- [tslint](https://npmjs.com/package/tslint)
+- [tunnel-agent](https://npmjs.com/package/tunnel-agent)
+- [typedoc](https://npmjs.com/package/typedoc)
+- [typedoc-default-themes](https://npmjs.com/package/typedoc-default-themes)
+- [typescript](https://npmjs.com/package/typescript)
+- [validate-npm-package-license](https://npmjs.com/package/validate-npm-package-license)
+
+## WebFrontend
+- [ansi-html](https://npmjs.com/package/ansi-html)
+- [aws-sign2](https://npmjs.com/package/aws-sign2)
+- [caseless](https://npmjs.com/package/caseless)
+- [forever-agent](https://npmjs.com/package/forever-agent)
+- [jasmine-spec-reporter](https://npmjs.com/package/jasmine-spec-reporter)
+- [less](https://npmjs.com/package/less)
+- [log4js](https://npmjs.com/package/log4js)
+- [material-design-icons](https://npmjs.com/package/material-design-icons)
+- [oauth-sign](https://npmjs.com/package/oauth-sign)
+- [rc](https://npmjs.com/package/rc)
+- [reflect-metadata](https://npmjs.com/package/reflect-metadata)
+- [request](https://npmjs.com/package/request)
+- [rx](https://npmjs.com/package/rx)
+- [rxjs](https://npmjs.com/package/rxjs)
+- [selenium-webdriver](https://npmjs.com/package/selenium-webdriver)
+- [spdx-correct](https://npmjs.com/package/spdx-correct)
+- [tsickle](https://npmjs.com/package/tsickle)
+- [tslint](https://npmjs.com/package/tslint)
+- [tunnel-agent](https://npmjs.com/package/tunnel-agent)
+- [typescript](https://npmjs.com/package/typescript)
+- [validate-npm-package-license](https://npmjs.com/package/validate-npm-package-license)
