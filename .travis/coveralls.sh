@@ -29,4 +29,7 @@ fi
 cd ..
 
 echo "+ sending lcov file to coveralls"
-cat coverage/lcov.info | $MODULE_PATH/$BIN_PATH/coveralls.js -v
+cat api/coverage/lcov.info | $MODULE_PATH/$BIN_PATH/coveralls.js -v
+
+echo "+ INFO: Currently only the api-coverdata are generated and send"
+
