@@ -6,7 +6,7 @@
     <p>We have send you an activation link to your specified mail address.</p>
   </md-card-content>
   <md-card-actions align="start">
-    <button md-raised-button color="primary" (click)="navigateFront">Back to frontpage</button>
+    <button md-raised-button color="primary" routerLink="/" routerLinkActive="active">Back to frontpage</button>
   </md-card-actions>
 </md-card>
 <md-card class="register-card" *ngIf="!registrationDone">

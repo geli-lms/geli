@@ -19,6 +19,7 @@ export class RegisterComponent implements OnInit {
   constructor(private router: Router,
               private authenticationService: AuthenticationService,
               private showProgress: ShowProgressService,
+              private snackBar: MdSnackBar,
               private formBuilder: FormBuilder) {
   }
 
@@ -40,6 +41,7 @@ export class RegisterComponent implements OnInit {
         console.log('registration failed');
         console.log(error);
         this.showProgress.toggleLoadingGlobal(false);
+        this.snackBar.open('Registration failed', '', { duration: 3000 });
       });
   }
 
@@ -54,9 +56,5 @@ export class RegisterComponent implements OnInit {
       password: ['', Validators.required],
       confirmPassword: ['', Validators.required]
     }, {validator: matchPasswords('password', 'confirmPassword')});
-  }
-
-  navigateFront() {
-    this.router.navigate(['/']);
   }
 }
