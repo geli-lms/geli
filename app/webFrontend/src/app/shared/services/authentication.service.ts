@@ -14,8 +14,7 @@ export class AuthenticationService {
   public isLoggedIn = false;
 
   constructor(private http: Http,
-              private userService: UserService,
-              private snackBar: MdSnackBar) {
+              private userService: UserService) {
     this.token = localStorage.getItem('token');
 
     this.isLoggedIn = this.token !== null;
@@ -33,10 +32,8 @@ export class AuthenticationService {
             this.isLoggedIn = true;
             localStorage.setItem('token', this.token);
 
-            this.snackBar.open('Successfully logged in!', '', {  duration: 2000 });
             resolve();
           }, (err) => {
-            this.snackBar.open('Error logging in!');
             reject(err);
           });
     });

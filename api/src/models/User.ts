@@ -1,16 +1,16 @@
 import * as mongoose from 'mongoose';
-import * as bcrypt from 'bcrypt-nodejs';
+import * as bcrypt from 'bcrypt';
 import {IUser} from '../../../shared/models/IUser';
 import {NativeError} from 'mongoose';
 import * as crypto from 'crypto';
 
 interface IUserModel extends IUser, mongoose.Document {
-    comparePassword: (candidatePassword: string, callback: (error: Error, result: boolean) => void) => void;
-    generateActivationToken: () => void;
-    authenticationToken: string;
-    resetPasswordToken: string;
-    resetPasswordExpires: Date;
-    isActive: boolean;
+  isValidPassword: (candidatePassword: string) => Promise<boolean>;
+  generateActivationToken: () => void;
+  authenticationToken: string;
+  resetPasswordToken: string;
+  resetPasswordExpires: Date;
+  isActive: boolean;
 }
 
 const userSchema = new mongoose.Schema({
@@ -62,20 +62,12 @@ function hashPassword(next: (err?: NativeError) => void) {
     return next();
   }
 
-  // TODO: Refactor to use promises
-  bcrypt.genSalt(SALT_FACTOR, function (err, salt) {
-    if (err) {
-      return next(err);
-    }
-
-    bcrypt.hash(user.password, salt, null, function (error, hash) {
-      if (error) {
-        return next(error);
-      }
+  bcrypt.hash(user.password, SALT_FACTOR)
+    .then((hash) => {
       user.password = hash;
-      next();
-    });
-  });
+    })
+    .then(() => next())
+    .catch(next);
 }
 
 function generateToken(user: IUserModel) {
@@ -100,18 +92,8 @@ userSchema.pre('save', hashPassword);
 // userSchema.pre('findOneAndUpdate', hashPassword);
 
 // Method to compare password for login
-userSchema.methods.comparePassword = function (candidatePassword: string, callback: (error: Error, result: boolean) => void) {
-  bcrypt.compare(
-    candidatePassword,
-    this.password,
-    (err, isMatch) => {
-      if (err) {
-        return callback(err, false);
-      }
-
-      return callback(null, isMatch);
-    }
-  );
+userSchema.methods.isValidPassword = function (candidatePassword: string) {
+  return bcrypt.compare(candidatePassword, this.password);
 };
 
 userSchema.methods.generateActivationToken = () => {

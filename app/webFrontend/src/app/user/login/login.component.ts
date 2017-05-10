@@ -43,11 +43,12 @@ export class LoginComponent implements OnInit {
         }
         this.showProgress.toggleLoadingGlobal(false);
         this.loading = false;
-        this.snackBar.open('Login successful!');
+        this.snackBar.open('Login successful', 'Dismiss', {duration: 2000});
       }, (error) => {
         console.log(error);
         this.showProgress.toggleLoadingGlobal(false);
-        this.snackBar.open('Login failed: ' + error);
+        this.snackBar.open('Login failed!', 'Dismiss');
+
         this.loading = false;
       });
   }
@@ -58,6 +59,4 @@ export class LoginComponent implements OnInit {
       password: ['', Validators.required]
     });
   }
-
-
 }
