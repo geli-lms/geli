@@ -1,7 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import {FormControl, Validators, FormGroup, FormBuilder} from '@angular/forms';
-import { AuthenticationService } from '../../shared/services/authentication.service';
-import { Router } from '@angular/router';
+import {Component, OnInit} from '@angular/core';
+import {Validators, FormGroup, FormBuilder} from '@angular/forms';
+import {AuthenticationService} from '../../shared/services/authentication.service';
+import {Router} from '@angular/router';
+import {ShowProgressService} from '../../shared/services/show-progress.service';
+import {MdSnackBar} from '@angular/material';
+import {matchPasswords} from '../../shared/validators/validators';
 
 
 @Component({
@@ -10,49 +13,50 @@ import { Router } from '@angular/router';
   styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent implements OnInit {
-    model: any = {};
-    loading = false;
-    error = '';
-    registerForm: FormGroup;
+  registerForm: FormGroup;
+  registrationDone = false;
 
-    message: string;
+  constructor(private router: Router,
+              private authenticationService: AuthenticationService,
+              private showProgress: ShowProgressService,
+              private formBuilder: FormBuilder) {
+  }
 
-    constructor(
-        private router: Router,
-        private authenticationService: AuthenticationService,
-        private formBuilder: FormBuilder) { }
+  ngOnInit() {
+    // reset login status
+    this.authenticationService.logout();
+    this.generateForm();
+  }
 
-    ngOnInit() {
-        // reset login status
-        this.authenticationService.logout();
-        this.generateForm();
-    }
+  register() {
+    this.showProgress.toggleLoadingGlobal(true);
+    this.authenticationService.register(this.registerForm.value).then(
+      (val) => {
+        console.log('register done...' + val);
+        this.showProgress.toggleLoadingGlobal(false);
+        this.registrationDone = true;
+        // window.location.href = '../';
+      }, (error) => {
+        console.log('registration failed');
+        console.log(error);
+        this.showProgress.toggleLoadingGlobal(false);
+      });
+  }
 
-    register() {
-        this.loading = true;
-        this.authenticationService.register(this.registerForm.value.firstName,
-                                            this.registerForm.value.lastName,
-                                            this.registerForm.value.username,
-                                            this.registerForm.value.email,
-                                            this.registerForm.value.password).then(
-            (val) => {
-                console.log('register done...' + val);
-                this.message = `We've sent an activation link to your email.`;
-                // window.location.href = '../';
-            }, (error) => {
-                console.log('registration failed');
-                console.log(error);
-            });
-    }
+  generateForm() {
+    this.registerForm = this.formBuilder.group({
+      profile: this.formBuilder.group({
+        firstName: ['', Validators.required],
+        lastName: ['', Validators.required],
+      }),
+      username: [''],
+      email: ['', Validators.required],
+      password: ['', Validators.required],
+      confirmPassword: ['', Validators.required]
+    }, {validator: matchPasswords('password', 'confirmPassword')});
+  }
 
-    generateForm() {
-        this.registerForm = this.formBuilder.group({
-            firstName : ['', Validators.required],
-            lastName : ['', Validators.required],
-            username: ['', Validators.required],
-            email: ['', Validators.required],
-            password: ['', Validators.required]
-        });
-    }
-
+  navigateFront() {
+    this.router.navigate(['/']);
+  }
 }

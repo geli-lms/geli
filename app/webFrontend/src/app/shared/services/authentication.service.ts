@@ -3,6 +3,7 @@ import 'rxjs/add/operator/map';
 import {UserService} from './user.service';
 import {MdSnackBar} from '@angular/material';
 import {Http} from '@angular/http';
+import {IUser} from '../../../../../../shared/models/IUser';
 
 @Injectable()
 export class AuthenticationService {
@@ -20,10 +21,10 @@ export class AuthenticationService {
     this.isLoggedIn = this.token !== null;
   }
 
-  login(username: string, password: string) {
+  login(email: string, password: string) {
     return new Promise((resolve, reject) => {
 
-      return this.http.post(AuthenticationService.API_URL + 'auth/login', {email: username, password: password})
+      return this.http.post(AuthenticationService.API_URL + 'auth/login', {email: email, password: password})
         .map(response => response.json())
         .subscribe(
           (response: any) => {
@@ -49,21 +50,13 @@ export class AuthenticationService {
     this.userService.unsetUser();
   }
 
-  register(prename: string, surname: string, username: string, email: string, password: string) {
+  register(user: IUser) {
 
     return new Promise((resolve, reject) => {
 
       return this.http.post(
         AuthenticationService.API_URL + 'auth/register',
-        {
-          email: email,
-          username: username,
-          password: password,
-          profile: {
-            firstName: prename,
-            lastName: surname
-          },
-        }
+        user
       )
         .subscribe(
           (json: any) => {
