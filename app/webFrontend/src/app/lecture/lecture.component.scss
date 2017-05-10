@@ -1,14 +1,20 @@
+:host {
+  position: relative;
+}
+
+.lecture-card {
+  margin-bottom: 20px;
+  position: relative;
+
+  .lecture-menu {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+  }
+}
+
 .add-lecture-fab {
-  position: absolute;
+  position: fixed;
   right: 20px;
   bottom: 20px;
-  background-color: #ffd740;
-}
-
-.lecture-wrapper {
-  min-height: 100px;
-}
-
-.unit-card{
-  margin: .5em;
 }

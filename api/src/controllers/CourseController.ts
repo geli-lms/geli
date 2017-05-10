@@ -17,13 +17,18 @@ export class CourseController {
       .populate('lectures')
       .populate('courseAdmin')
       .populate('students')
-      .then((courses) => courses.map((c) => c.toObject({virtuals: true})));
+      .then((courses) => courses.map((c) => c.toObject()));
   }
 
     @Get('/:id')
     getCourse(@Param('id') id: string) {
         return Course.findById(id)
-          .populate('lectures')
+          .populate({
+            path: 'lectures',
+            populate: {
+              path: 'units'
+            }
+          })
           .populate('courseAdmin')
           .populate('students')
           .then((course) => {

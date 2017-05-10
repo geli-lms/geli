@@ -46,6 +46,7 @@ import { StartComponent } from './start/start.component';
 
 import {AdminComponent} from './admin/admin.component';
 import {DialogModule} from './shared/modules/dialog/dialog.module';
+import { LectureFormComponent } from './lecture/lecture-form/lecture-form.component';
 
 @NgModule({
   declarations: [
@@ -75,6 +76,7 @@ import {DialogModule} from './shared/modules/dialog/dialog.module';
     ActivationComponent,
     StartComponent,
     AdminComponent,
+    LectureFormComponent,
   ],
   imports: [
     BrowserModule,

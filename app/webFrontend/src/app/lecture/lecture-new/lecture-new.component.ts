@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {LectureService} from '../../shared/services/data.service';
 import {Router, ActivatedRoute} from '@angular/router';
+import {ILecture} from '../../../../../../shared/models/ILecture';
 
 @Component({
   selector: 'app-lecture-new',
@@ -9,40 +9,25 @@ import {Router, ActivatedRoute} from '@angular/router';
   styleUrls: ['./lecture-new.component.scss']
 })
 export class LectureNewComponent implements OnInit {
-  newLecture: FormGroup;
-  id: string;
+  courseId: string;
 
   constructor(private route: ActivatedRoute,
               private router: Router,
-              private formBuilder: FormBuilder,
               private lectureService: LectureService) {
 
     this.route.params.subscribe(params => {
-      this.id = params['id'];
+      this.courseId = params['id'];
     });
   }
 
   ngOnInit() {
-    this.generateForm();
   }
 
-  createLecture() {
-    console.log(this.newLecture.value);
-    this.lectureService.createItem({courseId: this.id, lecture: this.newLecture.value})
-      .then((val) => {
-        const url = `/course/edit/${this.id}`;
-        console.log(url);
-        this.router.navigate([url]);
-      }, (error) => {
-        console.log(error);
-      });
+  createLecture(lecture: ILecture) {
+    this.lectureService.createItem({courseId: this.courseId, lecture: lecture})
+      .then(() => {
+        this.router.navigate(['/course', 'detail', this.courseId]);
+      })
+      .catch(console.error);
   }
-
-  generateForm() {
-    this.newLecture = this.formBuilder.group({
-      name: ['', Validators.required],
-      description: ['', Validators.required]
-    });
-  }
-
 }

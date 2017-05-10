@@ -36,7 +36,7 @@ export const routes = [
     data: {roles: ['student', 'tutor', 'teacher', 'admin']}
   },
   {
-    path: 'course/edit/:cid/lecture/edit/:lid',
+    path: 'course/edit/:courseId/lecture/edit/:lectureId',
     component: LectureEditComponent,
     canActivate: [AuthGuardService],
     data: {roles: ['teacher', 'admin']}

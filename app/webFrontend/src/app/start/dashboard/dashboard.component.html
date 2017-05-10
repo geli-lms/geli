@@ -29,10 +29,10 @@
   </md-card>
 </div>
 
-<button md-fab *ngIf="this.userService.isTeacher() || this.userService.isAdmin()" class="add-course-fab"
-        (click)="router.navigate(['/course/new']);">
-  <md-icon class="md-24">add</md-icon>
-</button>
+<a md-fab *ngIf="this.userService.isTeacher() || this.userService.isAdmin()" class="add-course-fab"
+   routerLink="course/new" mdTooltip="Add course" mdTooltipPosition="left">
+  <md-icon>add</md-icon>
+</a>
 
 <!--<app-dashboard-student *ngIf="this.userService.isStudent()"></app-dashboard-student>-->
 <!--<app-dashboard-teacher *ngIf="this.userService.isTeacher()"></app-dashboard-teacher>-->
