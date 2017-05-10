@@ -10,7 +10,7 @@ import {UserEditComponent} from './user/user-edit/user-edit.component';
 import {LectureEditComponent} from './lecture/lecture-edit/lecture-edit.component';
 import {LectureNewComponent} from './lecture/lecture-new/lecture-new.component';
 import {StartComponent} from './start/start.component';
-import {SettingsComponent} from './settings/settings.component';
+import {AdminComponent} from './admin/admin.component';
 
 export const routes = [
   {path: '', component: StartComponent, pathMatch: 'full'},
@@ -60,8 +60,8 @@ export const routes = [
     data: {roles: ['student', 'tutor', 'teacher', 'admin']}
   },
   {
-    path: 'settings',
-    component: SettingsComponent,
+    path: 'admin',
+    component: AdminComponent,
     canActivate: [AuthGuardService],
     data: { roles: ['admin']}
   }

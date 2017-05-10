@@ -7,11 +7,11 @@ import {IUser} from '../../../../../../shared/models/IUser';
 import {DialogService} from '../../shared/services/dialog.service';
 
 @Component({
-  selector: 'app-user-roles',
-  templateUrl: './user-roles.component.html',
-  styleUrls: ['./user-roles.component.scss']
+  selector: 'app-user-admin',
+  templateUrl: './user-admin.component.html',
+  styleUrls: ['./user-admin.component.scss']
 })
-export class UserRolesComponent implements OnInit {
+export class UserAdminComponent implements OnInit {
 
   allUsers: IUser[];
   availableRoles: String[];
