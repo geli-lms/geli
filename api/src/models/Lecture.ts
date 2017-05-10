@@ -23,7 +23,7 @@ const lectureSchema = new mongoose.Schema({
   {
     timestamps: true,
     toObject: {
-      transform: function(doc: any, ret: any) {
+      transform: function (doc: any, ret: any) {
         ret._id = ret._id.toString();
       }
     }

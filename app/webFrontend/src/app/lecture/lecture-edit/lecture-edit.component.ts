@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {LectureService} from '../../shared/services/data.service';
 import {ShowProgressService} from '../../shared/services/show-progress.service';
-import {ILecture} from "../../../../../../shared/models/ILecture";
+import {ILecture} from '../../../../../../shared/models/ILecture';
 
 @Component({
   selector: 'app-lecture-edit',
