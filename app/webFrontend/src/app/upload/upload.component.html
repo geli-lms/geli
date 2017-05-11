@@ -16,6 +16,7 @@
       <span *ngIf="item.isReady">(ready)</span>
       <span *ngIf="item.isUploading">(uploading...)</span>
       <span *ngIf="item.isSuccess">(success!)</span>
+      <md-progress-bar mode="determinate" [value]="item.progress"></md-progress-bar>
     </div>
   </div>
   <div>

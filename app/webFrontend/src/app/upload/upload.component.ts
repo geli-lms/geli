@@ -1,7 +1,7 @@
-import {Component, OnInit, Input} from '@angular/core';
+import {Component, OnInit, Input, ChangeDetectorRef} from '@angular/core';
 import {Router} from '@angular/router';
 import {MdSnackBar} from '@angular/material';
-import {FileUploader} from 'ng2-file-upload';
+import {FileUploader, FileItem} from 'ng2-file-upload';
 
 @Component({
   selector: 'app-upload',
@@ -22,7 +22,11 @@ export class UploadComponent implements OnInit {
   });
 
   constructor(private router: Router,
-              public snackBar: MdSnackBar) {
+              public snackBar: MdSnackBar,
+              private ref: ChangeDetectorRef) {
+    this.uploader.onProgressItem = (fileItem: FileItem, progress: any) => {
+      this.ref.detectChanges();
+    };
   }
 
   ngOnInit() {
