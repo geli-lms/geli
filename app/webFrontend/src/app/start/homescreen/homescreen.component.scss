@@ -1,0 +1,19 @@
+@import '../../../variables';
+
+:host {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+h1 {
+  color: white;
+  text-align: center;
+  text-shadow: 0 0 5px gray;
+}
+
+.logo-font {
+  color: map-get($app-accent, 'default');
+  margin-right: 0.2em;
+}

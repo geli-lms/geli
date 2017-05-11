@@ -1,0 +1,45 @@
+@import '../variables';
+
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+.right-align {
+  flex: 1 1 auto;
+}
+
+.between-distance {
+  flex: .05;
+}
+
+.logo {
+  font-family: Pacifico, cursive;
+  text-decoration: none;
+  color: white;
+  font-size: 28px;
+  margin-bottom: 10px;
+
+  &:hover {
+    color: map-get($app-accent, 'default');
+  }
+}
+
+.avatar {
+  margin-right: 0.2em;
+}
+
+.app-content {
+  position: relative;
+  padding: 20px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.special-style {
+  background-image: url('/assets/people-woman-coffee-meeting.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+}

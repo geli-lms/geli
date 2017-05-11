@@ -1,3 +1,12 @@
+<h1>Profile</h1>
+
+<h2>{{user?.profile.firstName}} {{user?.profile.lastName}}</h2>
 <p>
-  user-details works!
+  <strong>E-Mail: </strong>{{user?.email}}
+</p>
+
+<p>
+  <button md-raised-button color="primary" routerLink="/profile/edit" routerLinkActive="active">
+    <md-icon>edit</md-icon> Edit profile
+  </button>
 </p>

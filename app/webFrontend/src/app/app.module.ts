@@ -9,29 +9,44 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './user/login/login.component';
 import { UserDetailsComponent } from './user/user-details/user-details.component';
 import { MaterialModule } from '@angular/material';
+import { JwtHelper } from 'angular2-jwt';
 
 import { routes } from './app.routes';
-import {UserService} from "./shared/user.service";
-import {AuthenticationService} from "./shared/authentification.service";
-import { DashboardComponent } from './dashboard/dashboard.component';
-import { HomescreenComponent } from './homescreen/homescreen.component';
+import { UserService } from './shared/services/user.service';
+import { AuthenticationService } from './shared/services/authentication.service';
+import { DashboardComponent } from './start/dashboard/dashboard.component';
+import { HomescreenComponent } from './start/homescreen/homescreen.component';
 import { RegisterComponent } from './user/register/register.component';
-import {AuthGuardService} from "./shared/auth-guard.service";
-import { DashboardStudentComponent } from './dashboard/dashboard-student/dashboard-student.component';
-import { DashboardTeacherComponent } from './dashboard/dashboard-teacher/dashboard-teacher.component';
-import { DashboardAdminComponent } from './dashboard/dashboard-admin/dashboard-admin.component';
-import {CourseService} from "./shared/data.service";
-import {BackendService} from "./shared/backend.service";
+import { AuthGuardService } from './shared/services/auth-guard.service';
+import { DashboardStudentComponent } from './start/dashboard/dashboard-student/dashboard-student.component';
+import { DashboardTeacherComponent } from './start/dashboard/dashboard-teacher/dashboard-teacher.component';
+import { DashboardAdminComponent } from './start/dashboard/dashboard-admin/dashboard-admin.component';
+import { CourseService, TaskService, UserDataService, LectureService } from './shared/services/data.service';
+import { BackendService } from './shared/services/backend.service';
 import { CourseComponent } from './course/course.component';
 import { CourseDetailComponent } from './course/course-detail/course-detail.component';
 import { CourseEditComponent } from './course/course-edit/course-edit.component';
-import { DataService } from './shared/data.service';
 import { CourseNewComponent } from './course/course-new/course-new.component';
+import { TaskListComponent } from './course/course-edit/tasks/task-list.component';
+import { TaskCardComponent } from './course/course-edit/tasks/task-card.component';
 
-import { ShowProgressService } from './shared/show-progress.service';
+import { ShowProgressService } from './shared/services/show-progress.service';
 import { UnitComponent } from './course/course-edit/unit/unit.component';
-import { ManageContentComponent } from './course/course-edit/manage-content/manage-content.component';
+import { LectureComponent } from './lecture/lecture.component';
+import { LectureNewComponent } from './lecture/lecture-new/lecture-new.component';
+import { LectureEditComponent } from './lecture/lecture-edit/lecture-edit.component';
+import { UploadComponent } from './upload/upload.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {MembersComponent} from './course/course-edit/members/members.component';
+import { UserAdminComponent } from './admin/user-admin/user-admin.component';
+import { UserEditComponent } from './user/user-edit/user-edit.component';
+import { ActivationComponent } from './user/activation/activation.component';
+import {FileUploadModule} from 'ng2-file-upload/ng2-file-upload';
+import { StartComponent } from './start/start.component';
 
+import {AdminComponent} from './admin/admin.component';
+import {DialogModule} from './shared/modules/dialog/dialog.module';
+import { LectureFormComponent } from './lecture/lecture-form/lecture-form.component';
 
 @NgModule({
   declarations: [
@@ -44,29 +59,47 @@ import { ManageContentComponent } from './course/course-edit/manage-content/mana
     DashboardStudentComponent,
     DashboardTeacherComponent,
     DashboardAdminComponent,
+    TaskListComponent,
+    TaskCardComponent,
     CourseComponent,
     CourseDetailComponent,
     CourseEditComponent,
     CourseNewComponent,
     UnitComponent,
-    ManageContentComponent
+    MembersComponent,
+    LectureComponent,
+    LectureNewComponent,
+    LectureEditComponent,
+    UserAdminComponent,
+    UserEditComponent,
+    UploadComponent,
+    ActivationComponent,
+    StartComponent,
+    AdminComponent,
+    LectureFormComponent,
   ],
   imports: [
     BrowserModule,
     FormsModule,
     HttpModule,
     RouterModule.forRoot(routes),
-    MaterialModule.forRoot(),
-    MaterialModule.forRoot(),
-    ReactiveFormsModule
+    BrowserAnimationsModule,
+    MaterialModule,
+    ReactiveFormsModule,
+    FileUploadModule,
+    DialogModule
   ],
   providers: [UserService,
               AuthenticationService,
               AuthGuardService,
+              TaskService,
               CourseService,
+              UserDataService,
+              LectureService,
               BackendService,
-              DataService,
-              ShowProgressService],
+              UserDataService,
+              ShowProgressService,
+              JwtHelper],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

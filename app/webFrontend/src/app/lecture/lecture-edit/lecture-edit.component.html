@@ -1,0 +1,4 @@
+<h1>Edit Lecture</h1>
+
+<app-lecture-form [model]="lecture" *ngIf="lecture" (onSubmit)="updateLecture($event)"
+                  actionLabel="Update"></app-lecture-form>

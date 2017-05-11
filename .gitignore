@@ -18,6 +18,9 @@ node_modules/
 .settings/
 *.sublime-workspace
 
+# Vagrant
+/.vagrant
+
 # IDE - VSCode
 .vscode/*
 !.vscode/settings.json
@@ -41,3 +44,4 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+*.js

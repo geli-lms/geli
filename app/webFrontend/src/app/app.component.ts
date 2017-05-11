@@ -1,45 +1,50 @@
 import { Component } from '@angular/core';
-import {UserService} from "./shared/user.service";
-import {AuthenticationService} from "./shared/authentification.service";
-import {ShowProgressService} from "./shared/show-progress.service";
+import {UserService} from './shared/services/user.service';
+import {AuthenticationService} from './shared/services/authentication.service';
+import {ShowProgressService} from './shared/services/show-progress.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
   title = 'app works!';
-  loggedIn = false;
-
   showProgressBar = false;
 
-  constructor(private userService: UserService, private authService: AuthenticationService, private showProgress: ShowProgressService) {
-    //localStorage.clear();
-      showProgress.toggleSidenav$.subscribe(
-          toggle => {
-              this.toggleProgressBar();
-          }
-      )
+  constructor(
+    private router: Router,
+    private authenticationService: AuthenticationService,
+    public userService: UserService,
+    private showProgress: ShowProgressService
+  ) {
+    showProgress.toggleSidenav$.subscribe(
+      toggle => {
+        this.toggleProgressBar();
+      }
+    );
   }
 
-  toggleProgressBar(){
-    if(this.showProgressBar == true) {
-      this.showProgressBar = false;
-    } else {
-      this.showProgressBar = true;
-    }
+  isLoggedIn() {
+    return this.authenticationService.isLoggedIn;
   }
 
-  isLoggedIn(): boolean {
-    if (this.userService.getCurrentUserName()) {
-      this.loggedIn = true;
-    }
-    return this.loggedIn;
+  logout() {
+    this.authenticationService.logout();
   }
 
-  logout(): void {
-    this.loggedIn = false;
-    this.authService.logout();
+  toggleProgressBar() {
+    this.showProgressBar = !this.showProgressBar;
+  }
+
+  isAdmin(): boolean {
+    return this.userService.isAdmin();
+  }
+
+  specialContainerStyle(): string {
+    const routeTest = /^(\/|\/login|\/register)$/.test(this.router.url);
+
+    return (routeTest && !this.isLoggedIn()) ? 'special-style' : '';
   }
 }

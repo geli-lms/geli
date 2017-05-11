@@ -1,0 +1,40 @@
+<h1>Available Courses</h1>
+
+<div class="courses">
+  <md-card *ngFor="let course of allCourses" class="course-card">
+    <md-card-header>
+      <md-card-title><h2>{{course.name}}</h2></md-card-title>
+    </md-card-header>
+    <img md-card-image src="/assets/course-header-image.jpg">
+    <md-card-content>
+      <p>
+        {{course.description}}
+      </p>
+    </md-card-content>
+    <md-card-actions>
+      <button md-icon-button *ngIf="this.userService.isStudent()" disabled={{isMemberOfCourse(course.students)}}
+              (click)="apply(course._id)" mdTooltip="Enroll">
+        <md-icon>add_circle_outline</md-icon>
+      </button>
+
+      <button md-icon-button (click)="editCourse(course._id)"
+              *ngIf="this.userService.isTeacher() || this.userService.isAdmin()">
+        <md-icon>mode_edit</md-icon>
+      </button>
+
+      <button md-mini-fab color="primary" class="details-button" (click)="goToInfo(course._id)">
+        <md-icon>arrow_forward</md-icon>
+      </button>
+    </md-card-actions>
+  </md-card>
+</div>
+
+<a md-fab *ngIf="this.userService.isTeacher() || this.userService.isAdmin()" class="add-course-fab"
+   routerLink="course/new" mdTooltip="Add course" mdTooltipPosition="left">
+  <md-icon>add</md-icon>
+</a>
+
+<!--<app-dashboard-student *ngIf="this.userService.isStudent()"></app-dashboard-student>-->
+<!--<app-dashboard-teacher *ngIf="this.userService.isTeacher()"></app-dashboard-teacher>-->
+<!--<app-dashboard-admin *ngIf="this.userService.isAdmin()"></app-dashboard-admin>-->
+
