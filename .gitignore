@@ -45,3 +45,6 @@ testem.log
 .DS_Store
 Thumbs.db
 *.js
+# Do not ignore js files under sub-project-root (gulpfile.js, karma.conf.js, protractor.conf.js, ...)
+!/api/*.js
+!/app/webFrontend/*.js
