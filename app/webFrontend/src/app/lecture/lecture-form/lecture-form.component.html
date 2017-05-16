@@ -1,0 +1,11 @@
+<form [formGroup]="lectureForm" (ngSubmit)="formSubmit()">
+  <md-input-container>
+    <input mdInput formControlName="name" placeholder="Name">
+  </md-input-container>
+
+  <md-input-container>
+    <textarea mdInput formControlName="description" placeholder="Description"></textarea>
+  </md-input-container>
+
+  <button md-raised-button [disabled]="!lectureForm.valid" color="primary" type="submit">{{ actionLabel }}</button>
+</form>

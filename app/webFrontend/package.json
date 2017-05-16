@@ -1,7 +1,13 @@
 {
   "name": "web-frontend",
-  "version": "0.0.0",
-  "license": "MIT",
+  "description": "This is the WebFronted-Package.json for geli.",
+  "homepage": "https://github.com/h-da/geli",
+  "version": "0.1.0",
+  "license": "GPL-3.0",
+  "author": {
+    "name": "Lukas Korte",
+    "email": "lukas@korte.me"
+  },
   "scripts": {
     "ng": "ng",
     "start": "ng serve --proxy-config local-proxy.conf.json",

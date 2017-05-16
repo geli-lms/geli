@@ -1,5 +1,6 @@
 import 'reflect-metadata';
 import {createExpressServer} from 'routing-controllers';
+import * as express from 'express';
 import * as mongoose from 'mongoose';
 import * as morgan from 'morgan';
 import * as winston from 'winston';
@@ -32,6 +33,9 @@ export class Server {
       routePrefix: '/api',
       controllers: [__dirname + '/controllers/*.js'] // register all controller's routes
     });
+
+    // TODO: Needs authentication in the future
+    this.app.use('/api/uploads', express.static('uploads'));
 
     // Request logger
     this.app.use(morgan('combined'));

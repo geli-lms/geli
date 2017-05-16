@@ -1,7 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {LectureService} from '../../shared/data.service';
-import {ShowProgressService} from '../../shared/show-progress.service';
+import {LectureService} from '../../shared/services/data.service';
+import {ShowProgressService} from '../../shared/services/show-progress.service';
+import {ILecture} from '../../../../../../shared/models/ILecture';
 
 @Component({
   selector: 'app-lecture-edit',
@@ -12,9 +13,9 @@ export class LectureEditComponent implements OnInit {
 
   name: string;
   description: string;
-  cid: string;
-  lid: string;
-  lectureOb: any[];
+  courseId: string;
+  lectureId: string;
+  lecture: any[];
 
   constructor(private router: Router,
               private route: ActivatedRoute,
@@ -22,39 +23,25 @@ export class LectureEditComponent implements OnInit {
               private showProgress: ShowProgressService) {
 
     this.route.params.subscribe(params => {
-      this.cid = params['cid'];
-      this.lid = params['lid'];
+      this.courseId = params['courseId'];
+      this.lectureId = params['lectureId'];
     });
-
-    this.lectureService.readSingleItem(this.lid).then(
-      (val: any) => {
-        this.name = val.name;
-        this.description = val.description;
-        this.lectureOb = val;
-      }, (error) => {
-        console.log(error);
-      });
   }
 
   ngOnInit() {
-
+    this.lectureService.readSingleItem(this.lectureId)
+      .then((val: any) => {
+        this.lecture = val;
+      })
+      .catch(console.error);
   }
 
-  updateLecture() {
+  updateLecture(lecture: ILecture) {
     this.showProgress.toggleLoadingGlobal(true);
 
-    this.lectureService.updateItem({'name': this.name, 'description': this.description, '_id': this.lid})
-      .then((val) => {
-        console.log(val);
-        this.showProgress.toggleLoadingGlobal(false);
-      }, (error) => {
-        this.showProgress.toggleLoadingGlobal(false);
-        console.log(error);
-      })
-      .then(() => {
-        const url = `/course/edit/${this.cid}`;
-        this.router.navigate([url]);
-      });
+    this.lectureService.updateItem(lecture)
+      .catch(console.error)
+      .then(() => this.router.navigate(['/course', 'detail', this.courseId]))
+      .then(() => this.showProgress.toggleLoadingGlobal(false));
   }
-
 }

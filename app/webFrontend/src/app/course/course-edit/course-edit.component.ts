@@ -1,9 +1,9 @@
 import {Component, OnInit, ViewContainerRef} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {FormGroup, FormBuilder, Validators} from '@angular/forms';
-import {CourseService} from '../../shared/data.service';
+import {CourseService} from '../../shared/services/data.service';
 import {MdSnackBar} from '@angular/material';
-import {ShowProgressService} from '../../shared/show-progress.service';
+import {ShowProgressService} from '../../shared/services/show-progress.service';
 
 @Component({
   selector: 'app-course-edit',

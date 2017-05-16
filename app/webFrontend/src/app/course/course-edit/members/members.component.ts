@@ -1,7 +1,7 @@
 /** Created by Oliver Neff on 14.04.2017. */
 import {Component, Input, OnInit} from '@angular/core';
-import {CourseService, UserDataService} from '../../../shared/data.service';
-import {ShowProgressService} from '../../../shared/show-progress.service';
+import {CourseService, UserDataService} from '../../../shared/services/data.service';
+import {ShowProgressService} from '../../../shared/services/show-progress.service';
 import {IUser} from '../../../../../../../shared/models/IUser';
 
 @Component({
@@ -82,12 +82,12 @@ export class MembersComponent implements OnInit {
     this.courseService.readSingleItem(this.courseId).then(
       (val: any) => {
         this.course = val;
-        for (let i = this.users.length - 1; i >= 0; i--) {
-          if (this.course.students.includes(this.users[i]._id)) {
-            this.members.push(this.users[i]);
-            this.users.splice(i, 1);
-          }
-        }
+        this.members = this.course.students;
+
+        this.members.forEach(member =>
+          this.users = this.users.filter(function (user) {
+            return user._id !== member._id;
+          }));
         this.sortUsers(this.users);
       }, (error) => {
         console.log(error);

@@ -3,6 +3,7 @@ import 'rxjs/add/operator/map';
 import {UserService} from './user.service';
 import {MdSnackBar} from '@angular/material';
 import {Http} from '@angular/http';
+import {IUser} from '../../../../../../shared/models/IUser';
 
 @Injectable()
 export class AuthenticationService {
@@ -13,17 +14,16 @@ export class AuthenticationService {
   public isLoggedIn = false;
 
   constructor(private http: Http,
-              private userService: UserService,
-              private snackBar: MdSnackBar) {
+              private userService: UserService) {
     this.token = localStorage.getItem('token');
 
     this.isLoggedIn = this.token !== null;
   }
 
-  login(username: string, password: string) {
+  login(email: string, password: string) {
     return new Promise((resolve, reject) => {
 
-      return this.http.post(AuthenticationService.API_URL + 'auth/login', {email: username, password: password})
+      return this.http.post(AuthenticationService.API_URL + 'auth/login', {email: email, password: password})
         .map(response => response.json())
         .subscribe(
           (response: any) => {
@@ -32,10 +32,8 @@ export class AuthenticationService {
             this.isLoggedIn = true;
             localStorage.setItem('token', this.token);
 
-            this.snackBar.open('Successfully logged in!', '', {  duration: 2000 });
             resolve();
           }, (err) => {
-            this.snackBar.open('Error logging in!');
             reject(err);
           });
     });
@@ -49,21 +47,13 @@ export class AuthenticationService {
     this.userService.unsetUser();
   }
 
-  register(prename: string, surname: string, username: string, email: string, password: string) {
+  register(user: IUser) {
 
     return new Promise((resolve, reject) => {
 
       return this.http.post(
         AuthenticationService.API_URL + 'auth/register',
-        {
-          email: email,
-          username: username,
-          password: password,
-          profile: {
-            firstName: prename,
-            lastName: surname
-          },
-        }
+        user
       )
         .subscribe(
           (json: any) => {
