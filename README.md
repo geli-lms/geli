@@ -1,5 +1,7 @@
 # Great E-Learning Informatics (geli)
 
+![Geli-Logo](.var/geli-readme-icon.png)
+
 [![NodeJS Version](https://img.shields.io/badge/nodeJS-7.9-blue.svg)](https://nodejs.org/en)
 [![MongoDB Version](https://img.shields.io/badge/mongoDB-3.4-blue.svg)](https://www.mongodb.com/download-center#community)
 [![GitHub release](https://img.shields.io/github/release/h-da/geli.svg)](https://github.com/h-da/geli/releases)
