@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {TaskService} from '../../../shared/data.service';
+import {TaskService} from '../../../shared/services/data.service';
 import {Task} from '../../../models/task';
 
 @Component({

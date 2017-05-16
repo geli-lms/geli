@@ -2,20 +2,4 @@
 
 <p>{{course?.description}}</p>
 
-<md-card *ngFor="let lecture of course?.lectures;">
-  <md-card-header>
-    <md-card-title><h2>{{lecture.name}}</h2></md-card-title>
-    <md-card-subtitle>{{lecture.description}}</md-card-subtitle>
-  </md-card-header>
-  <md-card-content>
-    <md-card *ngFor="let unit of lecture.units;">
-      <md-card-header>
-        <md-card-title>{{unit._id}}</md-card-title>
-      </md-card-header>
-      <md-card-content>
-        Filename: {{unit.fileName}}
-        Filepath: {{unit.filePath}}
-      </md-card-content>
-    </md-card>
-  </md-card-content>
-</md-card>
+<app-lecture [course]="course" *ngIf="course">

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {AuthenticationService} from '../../shared/authentication.service';
+import {AuthenticationService} from '../../shared/services/authentication.service';
 
 @Component({
   selector: 'app-activation',
@@ -14,7 +14,7 @@ export class ActivationComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
               private auth: AuthenticationService) {
-    this.status = 'Activating accout...';
+    this.status = 'Activating account...';
     this.success = false;
     this.route.params.subscribe(params => {
       auth.activate(params['token'])

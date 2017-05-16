@@ -1,6 +1,11 @@
 import {Component, OnInit, Input} from '@angular/core';
 import {Router} from '@angular/router';
-import {LectureService, CourseService} from '../shared/data.service';
+import {LectureService, CourseService} from '../shared/services/data.service';
+import {DialogService} from '../shared/services/dialog.service';
+import {ILecture} from '../../../../../shared/models/ILecture';
+import {MdSnackBar} from '@angular/material';
+import {ShowProgressService} from '../shared/services/show-progress.service';
+import {UserService} from '../shared/services/user.service';
 
 @Component({
   selector: 'app-lecture',
@@ -13,49 +18,58 @@ export class LectureComponent implements OnInit {
 
   constructor(private router: Router,
               private lectureService: LectureService,
-              private courseService: CourseService) {
+              private courseService: CourseService,
+              private showProgress: ShowProgressService,
+              private snackBar: MdSnackBar,
+              private dialogService: DialogService,
+              public userService: UserService) {
   }
 
   ngOnInit() {
   }
 
   createLecture() {
-    const url = `course/edit/${this.course._id}/lecture/new`;
-    this.router.navigate([url]);
+    this.router.navigate(['/course', 'edit', this.course._id, 'lecture', 'new']);
   }
 
-  duplicateLecture(id: string) {
-    for (const lecture of this.course.lectures) {
-      if (lecture._id === id) {
-        delete lecture._id;
-        this.lectureService.createItem({courseId: this.course._id, lecture: lecture})
-          .then((val) => {
-            this.updateCourseOb();
-            const url = `course/edit/${this.course._id}/lecture/edit/${val._id}`;
-            this.router.navigate([url]);
-          }, (error) => {
-            console.log(error);
-          });
-        break;
-      }
-    }
-  }
+  duplicateLecture(lecture: ILecture) {
+    delete lecture._id;
 
-  editLecture(id: string) {
-    const url = `course/edit/${this.course._id}/lecture/edit/${id}`;
-    this.router.navigate([url]);
-  }
-
-  deleteLecture(id: string) {
-    this.lectureService.deleteItem({courseId: this.course._id, _id: id})
-      .then(() => {
-        this.updateCourseOb();
+    this.lectureService.createItem({courseId: this.course._id, lecture: lecture})
+      .then((val) => {
+        const url = `course/edit/${this.course._id}/lecture/edit/${val._id}`;
+        this.router.navigate([url]);
       }, (error) => {
         console.log(error);
       });
   }
 
-  updateCourseOb() {
+  editLecture(lecture: ILecture) {
+    this.router.navigate(['/course', 'edit', this.course._id, 'lecture', 'edit', lecture._id]);
+  }
+
+  deleteLecture(lecture: ILecture) {
+    this.dialogService
+      .delete('lecture', lecture.name)
+      .subscribe(res => {
+        if (res) {
+          this.showProgress.toggleLoadingGlobal(true);
+          this.lectureService.deleteItem(lecture).then(
+            (val) => {
+              this.showProgress.toggleLoadingGlobal(false);
+              this.snackBar.open('Lecture deleted.', '', {duration: 3000});
+              this.reloadCourse();
+            },
+            (error) => {
+              this.showProgress.toggleLoadingGlobal(false);
+              this.snackBar.open(error, '', {duration: 3000});
+            }
+          );
+        }
+      });
+  }
+
+  reloadCourse() {
     this.courseService.readSingleItem(this.course._id).then(
       (val: any) => {
         this.course = val;

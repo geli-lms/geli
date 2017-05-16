@@ -1,6 +1,6 @@
 import {Component, Input, Output, OnInit, EventEmitter} from '@angular/core';
 
-import {TaskService} from '../../../shared/data.service';
+import {TaskService} from '../../../shared/services/data.service';
 
 @Component({
   selector: 'task-card',

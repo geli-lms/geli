@@ -11,9 +11,23 @@
     </button>
   </div>
   <div>
+    <div *ngFor="let item of uploader.queue">
+      <strong>{{ item?.file?.name }}</strong>
+      <span *ngIf="item.isReady">(ready)</span>
+      <span *ngIf="item.isUploading">(uploading...)</span>
+      <span *ngIf="item.isSuccess">(success!)</span>
+      <md-progress-bar mode="determinate" [value]="item.progress"></md-progress-bar>
+    </div>
+  </div>
+  <div>
     Queue progress:
     <div>
       <md-progress-bar mode="determinate" [value]="uploader.progress"></md-progress-bar>
     </div>
+  </div>
+  <div>
+    <button md-raised-button color="warn" (click)="uploader.clearQueue()">
+      Remove all
+    </button>
   </div>
 </md-card>

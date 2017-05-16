@@ -1,16 +1,38 @@
-<div class="lecture-wrapper">
-  <div *ngFor="let lecture of course.lectures">
-    <md-card class="unit-card">
-      Name: {{lecture.name}} <br/>
-      Description: {{lecture.description}} <br/>
-      <button md-button (click)="deleteLecture(lecture._id)">Delete</button>
-      <br/>
-      <button md-button (click)="editLecture(lecture._id)">Edit</button>
-      <br/>
-      <button md-button (click)="duplicateLecture(lecture._id)">Duplicate</button>
-    </md-card>
-  </div>
-  <button md-fab class="add-lecture-fab" (click)="createLecture()">
-    <md-icon class="md-24">add</md-icon>
+<md-card class="lecture-card" *ngFor="let lecture of course.lectures">
+  <md-menu #lectureMenu="mdMenu">
+    <button md-menu-item (click)="editLecture(lecture)">
+      <md-icon>edit</md-icon>
+      Edit
+    </button>
+    <button md-menu-item (click)="duplicateLecture(lecture)">
+      <md-icon>content_copy</md-icon>
+      Duplicate
+    </button>
+    <button md-menu-item (click)="deleteLecture(lecture)">
+      <md-icon>delete</md-icon>
+      Delete
+    </button>
+  </md-menu>
+
+  <button class="lecture-menu" md-icon-button [mdMenuTriggerFor]="lectureMenu"
+          *ngIf="userService.isAdmin() || userService.isTeacher()">
+    <md-icon>more_vert</md-icon>
   </button>
-</div>
+
+  <md-card-header>
+    <md-card-title><h2>{{lecture.name}}</h2></md-card-title>
+  </md-card-header>
+
+  <md-card-content>
+    <p>{{lecture.description}}</p>
+
+    <div *ngFor="let unit of lecture.units;">
+      <video *ngIf="unit.type === 'video'" src="{{'/api/' + unit.filePath}}" controls></video>
+    </div>
+  </md-card-content>
+</md-card>
+
+<a md-fab class="add-lecture-fab" color="accent" routerLink="{{'/course/edit/'+course._id+'/lecture/new'}}"
+   *ngIf="userService.isAdmin() || userService.isTeacher()" mdTooltip="Add lecture" mdTooltipPosition="left">
+  <md-icon class="md-24">add</md-icon>
+</a>

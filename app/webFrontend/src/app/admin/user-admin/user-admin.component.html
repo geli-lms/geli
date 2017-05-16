@@ -1,11 +1,11 @@
-<h1>User administration</h1>
-
+<h2>Users</h2>
 <table class="table">
   <thead>
   <tr>
     <th>Name</th>
     <th>E-Mail</th>
     <th>Role</th>
+    <th>Actions</th>
   </tr>
   </thead>
   <tbody>
@@ -18,6 +18,10 @@
           {{role}}
         </md-option>
       </md-select>
+    </td>
+    <td>
+      <button md-icon-button><md-icon>edit</md-icon></button>
+      <button md-icon-button (click)="deleteUser(i)"><md-icon>delete</md-icon></button>
     </td>
   </tr>
   </tbody>

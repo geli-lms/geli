@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import 'rxjs/add/operator/map';
-import {IUser} from '../../../../../shared/models/IUser';
-import {User} from '../models/User';
+import {IUser} from '../../../../../../shared/models/IUser';
+import {User} from '../../models/User';
 
 @Injectable()
 export class UserService {
