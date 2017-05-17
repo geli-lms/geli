@@ -130,6 +130,8 @@ Clone this project to a folder you like:
     cd /path/to/project
     git clone git@github.com:h-da/geli.git
 
+Here you should decide if you install everything native on your pc, use [docker](#usage-with-docker) or [vagrant](#usage-with-vagrant). 
+
 Open a Terminal and type following. It will install all dependencies of the api and the web-frontend:
 
     cd /path/to/project/geli
