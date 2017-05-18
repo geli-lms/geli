@@ -5,7 +5,7 @@ import {DialogService} from '../../services/dialog.service';
 
 @NgModule({
   imports: [
-    MaterialModule.forRoot()
+    MaterialModule
   ],
   exports: [
     ConfirmDialog
