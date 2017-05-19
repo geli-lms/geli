@@ -1,9 +1,66 @@
-.layout-column {
-  float: left;
-  margin-left: 50px;
-  width: 225px;
+.fuzzySearch {
+    margin-top: 50px;
+    margin-left: 50px;
+    width: 100%;
 }
 
-.filter-size:first-child {
-  margin-top: 50px;
+.members {
+  margin-left: 40px;
+}
+
+.profile {
+  height: 200px;
+  width: 200px;
+  float: left;
+  margin: 10px;
+  border-radius: 8px;
+  background: no-repeat 75px 15px;
+}
+
+.profile:hover {
+  background-color: cornsilk;
+}
+
+.active {
+  height: 200px;
+  width: 200px;
+  float: left;
+  margin: 10px;
+  border-radius: 8px;
+  color: #ffffff;
+  background: #4490E2;
+}
+
+.bg {
+  left: 45px;
+  width: 160px;
+  height: 160px;
+  position: absolute;
+  background: center;
+  border-radius: 80px;
+}
+
+.info {
+  position: absolute;
+  bottom: 10px;
+  left: -22px;
+}
+
+.userId {
+  opacity: 0.5;
+}
+
+ul {
+  list-style-type: none;
+}
+
+button {
+  width: 184px;
+  margin-left: 10px;
+  margin-bottom: 10px;
+  color: #4490E2;
+}
+
+.del {
+  color: #D64C4C;
 }

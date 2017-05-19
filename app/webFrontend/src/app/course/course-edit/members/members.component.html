@@ -1,63 +1,52 @@
-<div class="layout-column">
-  <h2 align="center"> Students </h2>
-
-  <md-input-container dynamicHeight="true" class="filter-size">
-    <input mdInput id="firstNameUser" placeholder="filter first name" [(ngModel)]="filterFirstNameUser"
+<md-input-container dynamicHeight="true" class="fuzzySearch">
+    <input mdInput class="search" placeholder="Search and add students by name, Id, e-mail" [(ngModel)]="fuzzySearch"
            [ngModelOptions]="{standalone: true}">
-  </md-input-container>
-  <md-input-container dynamicHeight="true" class="filter-size">
-    <input mdInput id="lastNameUster" placeholder="filter last name" [(ngModel)]="filterLastNameUser"
-           [ngModelOptions]="{standalone: true}">
-  </md-input-container>
+</md-input-container>
 
-  <ng-container *ngFor="let user of users">
-    <ng-container
-      *ngIf="user.profile.firstName.toLowerCase().includes(filterFirstNameUser.toLowerCase())
-      && user.profile.lastName.toLowerCase().includes(filterLastNameUser.toLowerCase())">
-      <md-card>
-        <md-card-header>{{user.profile.firstName }} {{user.profile.lastName}}</md-card-header>
-        <md-card-actions>
-          <button md-button class="md-button" (click)="switchUser(user._id,'left')" [disabled]="true"><i
-            class="material-icons md-24">arrow_back</i></button>
-          <button md-button class="md-button" (click)="switchUser(user._id,'right')"><i
-            class="material-icons md-24">arrow_forward</i>
-          </button>
-        </md-card-actions>
-      </md-card>
-      <br>
-    </ng-container>
-  </ng-container>
-</div>
-
-<div class="layout-column">
-  <h2 align="center"> Members </h2>
-
-  <md-input-container dynamicHeight="true" class="filter-size">
-    <input mdInput id="firstNameMember" placeholder="filter first name" [(ngModel)]="filterFirstNameMember"
-           [ngModelOptions]="{standalone: true}">
-  </md-input-container>
-  <md-input-container dynamicHeight="true" class="filter-size">
-    <input mdInput id="lastNameMember" placeholder="filter last name" [(ngModel)]="filterLastNameMember"
-           [ngModelOptions]="{standalone: true}">
-  </md-input-container>
-
+<div class="members" *ngIf="fuzzySearch.length <= 3">
   <ng-container *ngFor="let member of members">
-    <ng-container
-      *ngIf="member.profile.firstName.toLowerCase().includes(filterFirstNameMember.toLowerCase())
-      && member.profile.lastName.toLowerCase().includes(filterLastNameMember.toLowerCase())">
-      <md-card>
-        <md-card-header>
-          <md-card-header>{{member.profile.firstName }} {{member.profile.lastName}}</md-card-header>
-        </md-card-header>
-        <md-card-actions>
-          <button md-button class="md-button" (click)="switchUser(member._id,'left')"><i
-            class="material-icons md-24">arrow_back</i>
-          </button>
-          <button md-button class="md-button" (click)="switchUser(member._id,'right')" [disabled]="true"><i
-            class="material-icons md-24">arrow_forward</i></button>
-        </md-card-actions>
-      </md-card>
-      <br>
-    </ng-container>
+<md-card [ngClass]="
+         (currentMember != null && currentMember._id == member._id) ? 'active':'profile'"
+         (click)="setMember(member)">
+
+  <div class="bg" [ngStyle]="{ 'background-image': 'url(' + member.getGravatarURL(160) + ')'}"> </div>
+
+  <div *ngIf="currentMember != null && currentMember._id == member._id">
+      <button md-raised-button>DETAILS</button>
+      <button md-raised-button>SEND MAIL</button>
+      <button class="del" md-raised-button (click)="switchUser(member._id, 'left')">DELETE</button>
+  </div>
+
+  <ul class="info">
+  <li><b>{{member.profile.firstName}}</b></li>
+    <li><b>{{member.profile.lastName}}</b></li>
+  <li class="userId">{{member.email}}</li>
+  </ul>
+</md-card>
   </ng-container>
 </div>
+
+<div class="users" *ngIf="fuzzySearch.length > 3">
+  <p>In course ({{members.length}})</p>
+  <md-list *ngFor="let member of members" dense>
+    <md-list-item *ngIf="fuzzysearch(fuzzySearch,member)">
+      {{member.profile.firstName}} {{member.profile.lastName}} {{member.email}}
+      <button md-raised-button (click)="switchUser(member._id, 'left')">DELETE</button>
+    </md-list-item>
+  </md-list>
+
+  <p>Not in course ({{users.length}})</p>
+  <md-list *ngFor="let user of users" dense>
+    <md-list-item *ngIf="fuzzysearch(fuzzySearch,user)">
+      {{user.profile.firstName}} {{user.profile.lastName}} {{user.email}}
+      <button md-raised-button (click)="switchUser(user._id, 'right')">ADD</button>
+    </md-list-item>
+  </md-list>
+</div>
+
+<br>
+
+
+  <md-list *ngFor="let user of users" [dragula]='"bag-one"'>
+    <md-list-item>{{user.email}}</md-list-item>
+  </md-list>

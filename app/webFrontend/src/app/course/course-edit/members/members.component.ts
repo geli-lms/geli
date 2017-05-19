@@ -2,7 +2,9 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {CourseService, UserDataService} from '../../../shared/services/data.service';
 import {ShowProgressService} from '../../../shared/services/show-progress.service';
-import {IUser} from '../../../../../../../shared/models/IUser';
+import {User} from '../../../models/User';
+import {Course} from '../../../models/Course';
+import { DragulaService } from 'ng2-dragula';
 
 @Component({
   selector: 'app-members',
@@ -11,17 +13,25 @@ import {IUser} from '../../../../../../../shared/models/IUser';
 })
 export class MembersComponent implements OnInit {
   @Input() courseId;
-  course: any;
-  members: IUser[] = [];
-  users: IUser[] = [];
-  filterFirstNameMember = '';
-  filterLastNameMember = '';
-  filterFirstNameUser = '';
-  filterLastNameUser = '';
+  course: Course;
+  members: User[] = [];
+  users: User[] = [];
+  currentMember: User = null
+  fuzzySearch: String = '';
+  clicked: String
+
+  public setMember = (member) => {
+    this.currentMember = member;
+  }
 
   constructor(private userService: UserDataService,
               private courseService: CourseService,
-              private showProgress: ShowProgressService) {
+              private showProgress: ShowProgressService,
+              private  dragula: DragulaService) {
+
+    dragula.setOptions('bag-one', {
+      revertOnSpill: true
+    });
     this.getStudents();
   }
 
@@ -34,7 +44,7 @@ export class MembersComponent implements OnInit {
   /**
    * Save all students in this course in database.
    */
-  updateMembersInCourse() {
+   updateMembersInCourse() {
     this.showProgress.toggleLoadingGlobal(true);
     this.courseService.updateItem({'students': this.course.students, '_id': this.courseId}).then(
       (val) => {
@@ -81,7 +91,7 @@ export class MembersComponent implements OnInit {
   getCourseMembers() {
     this.courseService.readSingleItem(this.courseId).then(
       (val: any) => {
-        this.course = val;
+        this.course = new Course(val);
         this.members = this.course.students;
 
         this.members.forEach(member =>
@@ -98,7 +108,7 @@ export class MembersComponent implements OnInit {
    * Sort an array of users alphabeticaly after firstname and lastname.
    * @param users An array of users.
    */
-  sortUsers(users: IUser[]) {
+  sortUsers(users: User[]) {
     users.sort(function (a, b) {
       if (a.profile.firstName < b.profile.firstName || a.profile.lastName < b.profile.lastName) {
         return -1;
@@ -108,5 +118,14 @@ export class MembersComponent implements OnInit {
       }
       return 0;
     });
+  }
+
+  fuzzysearch(toSearch: string, user: User): boolean {
+    const lowerToSearch: string = toSearch.toLowerCase();
+    const result =
+      user.profile.firstName.toLowerCase().includes(lowerToSearch) ||
+      user.profile.lastName.toLowerCase().includes(lowerToSearch) ||
+      user.email.toLowerCase().includes(lowerToSearch);
+    return result;
   }
 }
