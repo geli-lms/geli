@@ -18,7 +18,6 @@ export class MembersComponent implements OnInit {
   users: User[] = [];
   currentMember: User = null
   fuzzySearch: String = '';
-  clicked: String
 
   public setMember = (member) => {
     this.currentMember = member;
@@ -30,15 +29,23 @@ export class MembersComponent implements OnInit {
               private  dragula: DragulaService) {
 
     dragula.setOptions('bag-one', {
-      revertOnSpill: true
+      removeOnSpill: false
     });
+    dragula.out.subscribe(value => {
+      const [bagName, e, el] = value;
+      const dataset: string[] = e.dataset.id.split(',');
+      this.switchUser(dataset[0], dataset[1]);
+    });
+
     this.getStudents();
   }
 
   ngOnInit() {
-    console.log('init course members with course id:');
-    console.log(this.courseId);
     this.getCourseMembers();
+  }
+
+  ngOnDestroy() {
+    this.dragula.destroy('bag-one');
   }
 
   /**
@@ -62,7 +69,7 @@ export class MembersComponent implements OnInit {
    * @param direction direction where user to switch.
    */
   switchUser(id: string, direction: string) {
-    if (direction === 'right') {
+      if (direction === 'right') {
       this.members = this.members.concat(this.users.filter(obj => id === obj._id));
       this.users = this.users.filter(obj => !(id === obj._id));
     } else if (direction === 'left') {

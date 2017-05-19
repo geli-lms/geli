@@ -47,6 +47,6 @@
 <br>
 
 
-  <md-list *ngFor="let user of users" [dragula]='"bag-one"'>
-    <md-list-item>{{user.email}}</md-list-item>
+  <md-list [dragula]='"bag-one"'  [dragulaModel]='users'>
+    <md-list-item *ngFor="let user of users" [attr.data-id]="[user._id,'right']" [attr.data-borg]='second'>{{user.profile.firstName}}</md-list-item>
   </md-list>
