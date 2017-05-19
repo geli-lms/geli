@@ -15,6 +15,10 @@
   </md-card-header>
   <md-card-content>
     <form name="form" (ngSubmit)="register()" [formGroup]="registerForm">
+      <md-radio-group formControlName="role" [(ngModel)]="role" [align]="'start'">
+        <md-radio-button value="student">Student</md-radio-button>
+        <md-radio-button value="teacher">Teacher</md-radio-button>
+      </md-radio-group>
       <div class="form-group" formGroupName="profile">
         <md-input-container>
           <input mdInput formControlName="firstName" placeholder="First name"/>
@@ -31,12 +35,14 @@
         <input mdInput formControlName="email" placeholder="E-Mail"/>
       </md-input-container>
 
-      <md-input-container>
-        <input mdInput formControlName="uid" placeholder="Matrikelnummer" />
-      </md-input-container>
-      <md-input-container>
-        <input mdInput formControlName="confirmUid" placeholder="Confirm Matrikelnummer" />
-      </md-input-container>
+      <div *ngIf="role == 'student'">
+        <md-input-container>
+          <input mdInput formControlName="uid" placeholder="Matrikelnummer" />
+        </md-input-container>
+        <md-input-container>
+          <input mdInput formControlName="confirmUid" placeholder="Confirm Matrikelnummer" />
+        </md-input-container>
+      </div>
 
       <md-input-container>
         <input mdInput type="password" formControlName="password" placeholder="Password" />

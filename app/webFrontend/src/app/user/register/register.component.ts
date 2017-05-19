@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {Validators, FormGroup, FormBuilder} from '@angular/forms';
+import {Validators, FormGroup, FormBuilder, FormControl} from '@angular/forms';
 import {AuthenticationService} from '../../shared/services/authentication.service';
 import {Router} from '@angular/router';
 import {ShowProgressService} from '../../shared/services/show-progress.service';
@@ -15,6 +15,7 @@ import {matchPasswords} from '../../shared/validators/validators';
 export class RegisterComponent implements OnInit {
   registerForm: FormGroup;
   registrationDone = false;
+  role;
 
   constructor(private router: Router,
               private authenticationService: AuthenticationService,
@@ -26,6 +27,7 @@ export class RegisterComponent implements OnInit {
   ngOnInit() {
     // reset login status
     this.authenticationService.logout();
+    this.role = 'teacher';
     this.generateForm();
   }
 
@@ -45,8 +47,12 @@ export class RegisterComponent implements OnInit {
       });
   }
 
+  changeType() {
+  }
+
   generateForm() {
     this.registerForm = this.formBuilder.group({
+      role: ['', Validators.required],
       profile: this.formBuilder.group({
         firstName: ['', Validators.required],
         lastName: ['', Validators.required],
