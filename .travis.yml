@@ -28,6 +28,8 @@ branches:
   only:
     - develop
     - master
+    # This matches tags wit a format of v{MAJOR}.{MINOR}.{FIX} were major minor and fix is supposed to be a number.
+    - /^v(\d+).(\d+).(\d+)$/
     # Only for development purposes
     # - feature/14-travis-new
 
