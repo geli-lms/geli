@@ -6,7 +6,7 @@ export interface ICourse {
     name: string;
     active: boolean;
     description: string;
-    courseAdmin: IUser;
+    courseAdmins: IUser[];
     students: IUser[];
     lectures: ILecture[];
 }

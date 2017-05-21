@@ -1,5 +1,7 @@
 import {Injectable} from '@angular/core';
 import {BackendService} from './backend.service';
+import {IUser} from '../../../../../../shared/models/IUser';
+import {ICourse} from '../../../../../../shared/models/ICourse';
 
 abstract class DataService {
 
@@ -108,6 +110,13 @@ export class CourseService extends DataService {
           error => reject(error)
         );
     });
+  }
+
+  addTeacher(course: ICourse, user: IUser) {
+    if (course.courseAdmins.filter(obj => obj._id === user._id).length < 0) {
+      course.courseAdmins.push(user);
+    }
+    return this.updateItem(course);
   }
 }
 
