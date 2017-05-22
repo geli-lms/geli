@@ -12,6 +12,7 @@ export class User implements IUser {
 
   constructor(user: IUser) {
     this._id = user._id;
+    this.uid = user.uid;
     this.username = user.username;
     this.email = user.email;
     this.profile = user.profile;
