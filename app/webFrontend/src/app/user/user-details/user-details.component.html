@@ -4,7 +4,7 @@
 <p>
   <strong>E-Mail:</strong> {{user?.email}}
 </p>
-<p *ngIf="this.userService.isStudent()">
+<p *ngIf="userService.isStudent()">
   <strong>Matrikelnummer:</strong> {{user?.uid}}
 </p>
 
