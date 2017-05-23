@@ -8,17 +8,7 @@ export class Dependency {
   fromLicense: string;
   fromReadme: string;
 
-  constructor(name: string, version: string, directory: string, repository: string, summary: string, fromPackageJson: string, fromLicense: string, fromReadme: string) {
-    this.name = name;
-    this.version = version;
-    this.directory = directory;
-    this.repository = repository;
-    this.summary = summary;
-    this.fromPackageJson = fromPackageJson;
-    this.fromLicense = fromLicense;
-    this.fromReadme = fromReadme;
-  }
-
+  // To be able to sort eg an array
   public static compare(a: Dependency, b: Dependency): number {
     let compare;
 
@@ -32,5 +22,17 @@ export class Dependency {
     compare = a.version.localeCompare(b.version);
 
     return compare;
+  }
+
+  constructor(name: string, version: string, directory: string, repository: string, summary: string,
+              fromPackageJson: string, fromLicense: string, fromReadme: string) {
+    this.name = name;
+    this.version = version;
+    this.directory = directory;
+    this.repository = repository;
+    this.summary = summary;
+    this.fromPackageJson = fromPackageJson;
+    this.fromLicense = fromLicense;
+    this.fromReadme = fromReadme;
   }
 }

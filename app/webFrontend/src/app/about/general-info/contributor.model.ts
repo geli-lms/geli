@@ -5,14 +5,6 @@ export class Contributor {
   to: string;
   githubId: string;
 
-  constructor(firstName: string, name: string, from: string, githubId: string = '', to: string = 'present') {
-    this.firstName = firstName;
-    this.name = name;
-    this.from = from;
-    this.githubId = githubId;
-    this.to = to;
-  }
-
   // To be able to sort eg an array
   public static compare(a: Contributor, b: Contributor): number {
     let compare;
@@ -33,5 +25,13 @@ export class Contributor {
     compare = a.firstName.localeCompare(b.firstName);
 
     return compare;
+  }
+
+  constructor(firstName: string, name: string, from: string, githubId: string = '', to: string = 'present') {
+    this.firstName = firstName;
+    this.name = name;
+    this.from = from;
+    this.githubId = githubId;
+    this.to = to;
   }
 }

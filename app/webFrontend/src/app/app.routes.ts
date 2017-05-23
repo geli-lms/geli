@@ -11,7 +11,7 @@ import {LectureEditComponent} from './lecture/lecture-edit/lecture-edit.componen
 import {LectureNewComponent} from './lecture/lecture-new/lecture-new.component';
 import {StartComponent} from './start/start.component';
 import {AdminComponent} from './admin/admin.component';
-import {AboutComponent} from "./about/about.component";
+import {AboutComponent} from './about/about.component';
 
 export const routes = [
   {path: '', component: StartComponent, pathMatch: 'full'},
