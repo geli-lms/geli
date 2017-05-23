@@ -14,6 +14,11 @@ interface IUserModel extends IUser, mongoose.Document {
 }
 
 const userSchema = new mongoose.Schema({
+    uid: {
+      type: String,
+      lowercase: true,
+      unique: true
+    },
     username: {
       type: String,
       lowercase: true,
