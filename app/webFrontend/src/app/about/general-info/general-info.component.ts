@@ -17,7 +17,7 @@ export class GeneralInfoComponent implements OnInit {
 
   getAllContributors() {
     this.allContributors = [
-      new Contributor('Alexander', 'Eimer', 'SuSe17')
+      new Contributor('Alexander', 'Eimer', 'SuSe17', 'aeimer')
       , new Contributor('Lukas', 'Korte', 'SuSe17')
       , new Contributor('Felix', 'Brucker', 'SuSe17')
       , new Contributor('David', 'Müller', 'SuSe17')
@@ -37,11 +37,13 @@ export class Contributor {
   name: string;
   from: string;
   to: string;
+  githubId: string;
 
-  constructor(firstName: string, name: string, from: string, to: string = 'present') {
+  constructor(firstName: string, name: string, from: string, githubId: string = '', to: string = 'present') {
     this.firstName = firstName;
     this.name = name;
     this.from = from;
+    this.githubId = githubId;
     this.to = to;
   }
 
