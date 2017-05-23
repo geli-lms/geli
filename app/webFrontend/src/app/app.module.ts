@@ -48,6 +48,8 @@ import {AdminComponent} from './admin/admin.component';
 import {DialogModule} from './shared/modules/dialog/dialog.module';
 import { LectureFormComponent } from './lecture/lecture-form/lecture-form.component';
 import { AboutComponent } from './about/about.component';
+import { GeneralInfoComponent } from './about/general-info/general-info.component';
+import { LicensesComponent } from './about/licenses/licenses.component';
 
 @NgModule({
   declarations: [
@@ -79,6 +81,8 @@ import { AboutComponent } from './about/about.component';
     AdminComponent,
     LectureFormComponent,
     AboutComponent,
+    GeneralInfoComponent,
+    LicensesComponent,
   ],
   imports: [
     BrowserModule,

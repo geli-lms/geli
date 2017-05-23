@@ -1,0 +1,22 @@
+.text--uppercase {
+  font-variant: small-caps;
+}
+
+.contributor--section {
+  display: inline-block;
+}
+
+.card--contributor {
+  width: 200px;
+  float: left;
+  margin: 5px;
+
+  &:last-child {
+    clear: both;
+  }
+
+  .mat-card-avatar {
+    background-image: url("http://blog.wiwo.de/look-at-it/files/2014/02/Ballmer_Dev.jpg");
+    background-size: cover;
+  }
+}
