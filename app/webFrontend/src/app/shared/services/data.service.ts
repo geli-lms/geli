@@ -113,8 +113,9 @@ export class CourseService extends DataService {
   }
 
   addTeacher(course: ICourse, user: IUser) {
-    if (course.courseAdmins.filter(obj => obj._id === user._id).length < 0) {
-      course.courseAdmins.push(user);
+    if ((user.role === 'teacher' || user.role === 'admin' || user.role === 'tutor')
+        && course.teachers.filter(obj => obj._id === user._id).length < 0) {
+      course.teachers.push(user);
     }
     return this.updateItem(course);
   }
