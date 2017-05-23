@@ -36,6 +36,11 @@ export class DashboardComponent implements OnInit {
     this.router.navigate([url]);
   }
 
+  showReport(id: string) {
+    const url = '/course/' + id + '/report';
+    this.router.navigate([url]);
+  }
+
   apply(courseId: string) {
     this.courseService.enrollStudent(courseId, this.userService.user);
   }

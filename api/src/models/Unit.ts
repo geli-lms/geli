@@ -14,6 +14,9 @@ const unitSchema = new mongoose.Schema({
     },
     fileName: {
       type: String,
+    },
+    progressable: {
+      type: Boolean
     }
   },
   {
