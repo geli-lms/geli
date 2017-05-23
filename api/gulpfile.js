@@ -101,7 +101,7 @@ gulp.task(GENERATE_DOC, [CLEAN_DOC], function () {
       readme: "readme.md",
       version: true,
       module: "commonjs"
-    }))
+    }));
 });
 
 // Sets up the istanbul coverage
@@ -175,7 +175,7 @@ gulp.task(WATCH_POLL, [BUILD_DEV], function () {
 });
 
 gulp.task(LOAD_FIXTURES, [BUILD], function () {
-  require(__dirname + '/build/fixtures/load');
+  require(__dirname + "/build/fixtures/load");
 });
 
 gulp.task(DEBUG, [BUILD_DEV], function () {
