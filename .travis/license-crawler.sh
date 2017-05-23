@@ -3,6 +3,7 @@
 # Variables
 CSV_FILE="nlf-licenses.csv"
 CSV_FILE_APACHE="nlf-licenses.apache.csv"
+JSON_FILE="nlf-licenses.json"
 MODULE_PATH=".travis/node_modules"
 BIN_PATH="nlf/bin"
 
@@ -40,14 +41,20 @@ echo + going to folder api
 cd api
 
 echo + crawling licenses from api
+echo + ...csv
 ../$MODULE_PATH/$BIN_PATH/nlf-cli.js --csv > ../$CSV_FILE
+echo + ...json
+../$MODULE_PATH/$BIN_PATH/nlf-cli.js --json > $JSON_FILE
 
 echo + going to folder app/webFrontend
 cd ../app/webFrontend
 
 echo + crawling licenses from app/webFrontend
 # append frontend licenses to existing csv; we have to skip the first line (header)
+echo + ...csv
 ../../$MODULE_PATH/$BIN_PATH/nlf-cli.js --csv | awk '{if(NR>1)print}'  >> ../../$CSV_FILE
+echo + ...json
+../../$MODULE_PATH/$BIN_PATH/nlf-cli.js --json > $JSON_FILE
 
 echo + going back to root folder
 cd ../..
