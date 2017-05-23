@@ -22,8 +22,9 @@
         {{contributor.from}} => {{contributor.to}}
       </md-card-subtitle>
     </md-card-header>
-    <md-card-actions *ngIf="contributor.githubId.length > 0;">
-      <a md-button href="https://github.com/{{contributor.githubId}}" target="_blank">
+    <md-card-actions>
+      <a md-button href="https://github.com/{{contributor.githubId}}" target="_blank"
+         [disbled]="contributor.githubId.length">
         <span class="fa fa-github"></span> Github</a>
     </md-card-actions>
   </md-card>
