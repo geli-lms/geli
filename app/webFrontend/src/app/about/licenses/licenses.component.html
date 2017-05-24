@@ -4,10 +4,11 @@
 <p *ngIf="allFrontendDependencies.length === 0">No Dependencies loaded...</p>
 <md-list>
   <md-list-item *ngFor="let dep of allFrontendDependencies;">
+    <md-icon md-list-icon>folder</md-icon>
     <h3 md-line>{{dep.name}}
       <small>{{dep.version}}</small>
     </h3>
-    <p md-line>License: {{dep.summary}}</p>
+    <p md-line>License: {{dep.summary}} {{dep.devDependency ? ' | devDependency' : ''}}</p>
   </md-list-item>
 </md-list>
 
@@ -15,9 +16,10 @@
 <p *ngIf="allApiDependencies.length === 0">No Dependencies loaded...</p>
 <md-list>
   <md-list-item *ngFor="let dep of allApiDependencies;">
+    <md-icon md-list-icon>folder</md-icon>
     <h3 md-line>{{dep.name}}
       <small>{{dep.version}}</small>
     </h3>
-    <p md-line>License: {{dep.summary}}</p>
+    <p md-line>License: {{dep.summary}} {{dep.devDependency ? ' | devDependency' : ''}}</p>
   </md-list-item>
 </md-list>

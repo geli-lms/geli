@@ -5,9 +5,24 @@ export class Contributor {
   to: string;
   githubId: string;
 
+  public static PRESENT = 'present';
+
   // To be able to sort eg an array
   public static compare(a: Contributor, b: Contributor): number {
     let compare;
+
+    // Check for TO
+    compare = a.to.localeCompare(b.to);
+    if (compare !== 0) {
+      // Check if a or b is tagged with "present", if yes these belong to the top
+      if (a.to.localeCompare(this.PRESENT)) {
+        return 1;
+      } else if (b.to.localeCompare(this.PRESENT)) {
+        return -1;
+      } else {
+        return compare;
+      }
+    }
 
     // Check for FROM
     compare = a.from.localeCompare(b.from);

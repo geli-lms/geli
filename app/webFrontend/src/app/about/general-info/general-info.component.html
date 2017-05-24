@@ -12,19 +12,19 @@
 <p>Big thanks to our main contributors:</p>
 
 <div class="contributor--section">
-  <md-card *ngFor="let contributor of allContributors;" class="card--contributor">
+  <md-card *ngFor="let cntbtr of allContributors;" class="card--contributor">
     <md-card-header>
-      <div md-card-avatar></div>
+      <div md-card-avatar style="{{getUserAvatar(cntbtr)}}"></div>
       <md-card-title>
-        {{contributor.firstName}} <span class="text--uppercase">{{contributor.name}}</span>
+        {{cntbtr.firstName}} <span class="text--uppercase">{{cntbtr.name}}</span>
       </md-card-title>
       <md-card-subtitle>
-        {{contributor.from}} => {{contributor.to}}
+        {{cntbtr.from}} => {{cntbtr.to}}
       </md-card-subtitle>
     </md-card-header>
     <md-card-actions>
-      <a md-button href="https://github.com/{{contributor.githubId}}" target="_blank"
-         [disbled]="contributor.githubId.length">
+      <a md-button href="https://github.com/{{cntbtr.githubId}}" target="_blank"
+         [disabled]="cntbtr.githubId.length === 0">
         <span class="fa fa-github"></span> Github</a>
     </md-card-actions>
   </md-card>
