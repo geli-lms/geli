@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {TaskService} from '../../../shared/services/data.service';
-import {Task} from '../../../models/task';
+import {TaskService, UnitService} from '../../../../shared/services/data.service';
+import {Task} from '../../../../models/task';
 
 @Component({
   selector: 'app-tasks',
@@ -9,10 +9,12 @@ import {Task} from '../../../models/task';
 })
 export class TaskListComponent implements OnInit {
   @Input() courseId: any;
+  unitId: string;
   tasks: any[];
   addingTask = false;
 
-  constructor(private taskService: TaskService) {
+  constructor(private taskService: TaskService,
+              private unitService: UnitService) {
   }
 
   ngOnInit() {
@@ -24,6 +26,9 @@ export class TaskListComponent implements OnInit {
     this.taskService.getTasksForCourse(this.courseId).then(tasks => {
       this.tasks = tasks;
     });
+
+    if (this.tasks.length === 0) {
+    }
   }
 
   onRemoveTask(task: any) {

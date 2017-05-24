@@ -2,4 +2,9 @@
 
 <p>{{course?.description}}</p>
 
+<div class="lectures" *ngIf="course">
+  <app-lecture [course]="course" [lecture]="lecture" *ngFor="let lecture of course.lectures"></app-lecture>
+</div>
+<!--
 <app-lecture [course]="course" *ngIf="course">
+-->

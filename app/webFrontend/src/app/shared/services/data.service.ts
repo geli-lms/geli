@@ -135,7 +135,11 @@ export class TaskService extends DataService {
           error => reject(error)
         );
     });
+  }
 
+  getTasksForLecture(id: string): Promise<any[]> {
+    const promise = this.readSingleItem(id);
+    return promise;
   }
 
 }
@@ -147,9 +151,16 @@ export class LectureService extends DataService {
 }
 
 @Injectable()
+export class UnitService extends DataService {
+  constructor(public backendService: BackendService) {
+    super('unit/', backendService);
+  }
+}
+
+@Injectable()
 export class UserDataService extends DataService {
   constructor(public backendService: BackendService) {
-    super('user/', backendService);
+    super('users/', backendService);
   }
 
 

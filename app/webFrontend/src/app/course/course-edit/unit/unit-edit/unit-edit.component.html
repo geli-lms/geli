@@ -1,0 +1,4 @@
+<app-upload *ngIf="course && unitType == 'video'" [course]="course"></app-upload>
+<app-tasks *ngIf="course && unitType == 'task'" [courseId]="course._id"></app-tasks>
+<button md-raised-button color="primary" (click)="done()">Done</button>
+<button md-raised-button color="warn" (click)="done()">Cancel</button>

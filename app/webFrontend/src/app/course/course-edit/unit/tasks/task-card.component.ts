@@ -1,6 +1,6 @@
 import {Component, Input, Output, OnInit, EventEmitter} from '@angular/core';
 
-import {TaskService} from '../../../shared/services/data.service';
+import {TaskService} from '../../../../shared/services/data.service';
 
 @Component({
   selector: 'task-card',
@@ -10,6 +10,7 @@ import {TaskService} from '../../../shared/services/data.service';
 
 export class TaskCardComponent implements OnInit {
   @Input() task: any;
+  @Input() unitId: string;
   @Output() onRemoveTask = new EventEmitter();
   @Output() onTaskCreated = new EventEmitter();
   // @Output() onTaskCancel = new EventEmitter();

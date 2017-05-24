@@ -4,6 +4,7 @@ import passportJwtMiddleware from '../security/passportJwtMiddleware';
 
 import {Task} from '../models/Task';
 import {ITask} from '../../../shared/models/ITask';
+import {Unit} from '../models/units/Unit';
 
 @JsonController('/tasks')
 @UseBefore(passportJwtMiddleware)

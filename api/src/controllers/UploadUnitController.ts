@@ -1,4 +1,4 @@
-import {Body, Get, Put, Post, Delete, Param, JsonController, UseBefore, UploadedFile} from 'routing-controllers';
+import {Body, Put, Post, Delete, Param, JsonController, UseBefore, UploadedFile} from 'routing-controllers';
 import fs = require('fs');
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 
@@ -6,21 +6,16 @@ import {Lecture} from '../models/Lecture';
 import {Unit} from '../models/units/Unit';
 import {IUnit} from '../../../shared/models/units/IUnit';
 import {VideoUnit} from '../models/units/VideoUnit';
+import {UnitController} from './UnitController';
 
 const uploadOptions = {dest: 'uploads/' };
 
-@JsonController('/unit')
+@JsonController('/unit/upload')
 @UseBefore(passportJwtMiddleware)
-export class UnitController {
-
-  @Get('/:id')
-  getUnit(@Param('id') id: string) {
-    return Unit.findById(id)
-      .then((u) => u.toObject());
-  }
+export class UploadUnitController extends UnitController {
 
   @Post('/')
-  addUnit(@UploadedFile('file', { uploadOptions }) file: any, @Body() data: any) {
+  addVideoUnit(@UploadedFile('file', { uploadOptions }) file: any, @Body() data: any) {
     // discard invalid requests
     if (!data.lectureId) {
       return;
@@ -28,23 +23,14 @@ export class UnitController {
     // path for file upload units (for now video only)
     if (file) {
       return new VideoUnit({filePath: file.path, fileName: file.originalname}).save()
-        .then((unit) => this.pushToLecture(data.lectureId, unit));
+      .then((unit) => this.pushToLecture(data.lectureId, unit));
     }
-  }
-
-  protected pushToLecture(lectureId: string, unit: any) {
-    return Lecture.findById(lectureId)
-      .then((lecture) => {
-        lecture.units.push(unit);
-        return lecture.save();
-      })
-      .then((lecture) => lecture.toObject());
   }
 
   @Put('/:id')
   updateUnit(@Param('id') id: string, @Body() unit: IUnit) {
     return Unit.findByIdAndUpdate(id, unit, {'new': true})
-      .then((u) => u.toObject());
+    .then((u) => u.toObject());
   }
 
   @Delete('/:id')

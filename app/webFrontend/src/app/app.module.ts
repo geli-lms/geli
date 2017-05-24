@@ -27,8 +27,8 @@ import { CourseComponent } from './course/course.component';
 import { CourseDetailComponent } from './course/course-detail/course-detail.component';
 import { CourseEditComponent } from './course/course-edit/course-edit.component';
 import { CourseNewComponent } from './course/course-new/course-new.component';
-import { TaskListComponent } from './course/course-edit/tasks/task-list.component';
-import { TaskCardComponent } from './course/course-edit/tasks/task-card.component';
+import { TaskListComponent } from './course/course-edit/unit/tasks/task-list.component';
+import { TaskCardComponent } from './course/course-edit/unit/tasks/task-card.component';
 
 import { ShowProgressService } from './shared/services/show-progress.service';
 import { UnitComponent } from './course/course-edit/unit/unit.component';
@@ -48,6 +48,8 @@ import {AdminComponent} from './admin/admin.component';
 import {DialogModule} from './shared/modules/dialog/dialog.module';
 import { LectureFormComponent } from './lecture/lecture-form/lecture-form.component';
 import { TeacherReportComponent } from './course/teacher-report/teacher-report.component';
+import { UnitMenuComponent } from './shared/components/unit-menu/unit-menu.component';
+import { UnitEditComponent } from './course/course-edit/unit/unit-edit/unit-edit.component';
 
 @NgModule({
   declarations: [
@@ -79,6 +81,8 @@ import { TeacherReportComponent } from './course/teacher-report/teacher-report.c
     AdminComponent,
     LectureFormComponent,
     TeacherReportComponent,
+    UnitMenuComponent,
+    UnitEditComponent,
   ],
   imports: [
     BrowserModule,

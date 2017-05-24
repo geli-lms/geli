@@ -1,16 +1,11 @@
 import * as mongoose from 'mongoose';
-import {IUnit} from '../../../../shared/models/IUnit';
+import {IUnit} from '../../../../shared/models/units/IUnit';
+import {NativeError} from 'mongoose';
 
 interface IUnitModel extends IUnit, mongoose.Document {
 }
 
 const unitSchema = new mongoose.Schema({
-    filePath: {
-      type: String,
-    },
-    fileName: {
-      type: String,
-    },
     progressable: {
       type: Boolean
     }
