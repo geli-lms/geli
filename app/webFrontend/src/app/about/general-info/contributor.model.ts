@@ -4,6 +4,7 @@ export class Contributor {
   from: string;
   to: string;
   githubId: string;
+  position: string;
 
   public static PRESENT = 'present';
 
@@ -42,10 +43,12 @@ export class Contributor {
     return compare;
   }
 
-  constructor(firstName: string, name: string, from: string, githubId: string = '', to: string = 'present') {
+  constructor(firstName: string, name: string, from: string, position: string,
+              githubId: string = '', to: string = 'present') {
     this.firstName = firstName;
     this.name = name;
     this.from = from;
+    this.position = position;
     this.githubId = githubId;
     this.to = to;
   }

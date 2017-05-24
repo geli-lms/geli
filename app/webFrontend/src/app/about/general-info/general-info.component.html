@@ -7,21 +7,22 @@
 <p>This is a <a href="https://github.com/h-da/geli" target="_blank">Open-Source project</a>, so feel free to help us :)
 </p>
 
-<hr>
-
 <p>Big thanks to our main contributors:</p>
 
 <div class="contributor--section">
   <md-card *ngFor="let cntbtr of allContributors;" class="card--contributor">
     <md-card-header>
-      <div md-card-avatar style="{{getUserAvatar(cntbtr)}}"></div>
+      <div md-card-avatar [style]="getUserAvatar(cntbtr)"></div>
       <md-card-title>
         {{cntbtr.firstName}} <span class="text--uppercase">{{cntbtr.name}}</span>
       </md-card-title>
       <md-card-subtitle>
-        {{cntbtr.from}} => {{cntbtr.to}}
+        {{cntbtr.position}}
       </md-card-subtitle>
     </md-card-header>
+    <md-card-content>
+      {{cntbtr.from}} => {{cntbtr.to}}
+    </md-card-content>
     <md-card-actions>
       <a md-button href="https://github.com/{{cntbtr.githubId}}" target="_blank"
          [disabled]="cntbtr.githubId.length === 0">
