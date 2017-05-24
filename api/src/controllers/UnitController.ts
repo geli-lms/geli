@@ -4,7 +4,7 @@ import fs = require('fs');
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 
 import {Lecture} from '../models/Lecture';
-import {Unit} from '../models/Unit';
+import {Unit} from '../models/units/Unit';
 import {IUnit} from '../../../shared/models/IUnit';
 
 const uploadOptions = {dest: 'uploads/' };
