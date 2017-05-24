@@ -3,6 +3,7 @@ import md5 from 'blueimp-md5';
 
 export class User implements IUser {
   _id: any;
+  uid: any;
   username: string;
   email: string;
   password: string;
@@ -11,6 +12,7 @@ export class User implements IUser {
 
   constructor(user: IUser) {
     this._id = user._id;
+    this.uid = user.uid;
     this.username = user.username;
     this.email = user.email;
     this.profile = user.profile;

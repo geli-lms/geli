@@ -18,6 +18,7 @@
     "build": "gulp build",
     "doc": "gulp generate:doc",
     "start": "gulp watch",
+    "start:poll": "gulp watch:poll",
     "test": "gulp test",
     "tslint": "gulp tslint",
     "debug": "gulp debug",

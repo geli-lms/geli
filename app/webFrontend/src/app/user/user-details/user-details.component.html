@@ -2,7 +2,10 @@
 
 <h2>{{user?.profile.firstName}} {{user?.profile.lastName}}</h2>
 <p>
-  <strong>E-Mail: </strong>{{user?.email}}
+  <strong>E-Mail:</strong> {{user?.email}}
+</p>
+<p *ngIf="userService.isStudent()">
+  <strong>Matrikelnummer:</strong> {{user?.uid}}
 </p>
 
 <p>

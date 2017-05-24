@@ -61,6 +61,18 @@ export const routes = [
     data: {roles: ['student', 'tutor', 'teacher', 'admin']}
   },
   {
+    path: 'profile/:id',
+    component: UserDetailsComponent,
+    canActivate: [AuthGuardService],
+    data: {roles: ['student', 'tutor', 'teacher', 'admin']}
+  },
+  {
+    path: 'profile/:id/edit',
+    component: UserEditComponent,
+    canActivate: [AuthGuardService],
+    data: {roles: ['teacher', 'admin']}
+  },
+  {
     path: 'admin',
     component: AdminComponent,
     canActivate: [AuthGuardService],
