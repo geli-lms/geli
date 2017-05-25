@@ -34,12 +34,7 @@
                    (onDone)="onEditDone($event)">
     </app-unit-edit>
   </md-card-content>
-  <md-card-actions *ngIf="userService.isAdmin() || userService.isTeacher()">
+  <md-card-actions *ngIf="(userService.isAdmin() || userService.isTeacher()) && !editMode">
     <app-unit-menu (onAddUnit)="onAddUnit($event)"></app-unit-menu>
   </md-card-actions>
 </md-card>
-
-<a md-fab class="add-lecture-fab" color="accent" routerLink="{{'/course/edit/'+course._id+'/lecture/new'}}"
-   *ngIf="userService.isAdmin() || userService.isTeacher()" mdTooltip="Add lecture" mdTooltipPosition="left">
-  <md-icon class="md-24">add</md-icon>
-</a>

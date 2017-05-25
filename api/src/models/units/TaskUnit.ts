@@ -1,5 +1,9 @@
 import * as mongoose from 'mongoose';
 import {Unit} from './Unit';
+import {ITaskUnit} from '../../../../shared/models/units/ITaskUnit';
+
+interface ITaskUnitModel extends ITaskUnit, mongoose.Document {
+}
 
 const taskUnitSchema = new mongoose.Schema({
   tasks: [
@@ -12,4 +16,4 @@ const taskUnitSchema = new mongoose.Schema({
 
 const TaskUnit = Unit.discriminator('task', taskUnitSchema);
 
-export {TaskUnit}
+export {TaskUnit, ITaskUnitModel}

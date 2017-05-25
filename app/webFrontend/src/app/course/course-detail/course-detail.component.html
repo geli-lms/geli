@@ -4,6 +4,10 @@
 
 <div class="lectures" *ngIf="course">
   <app-lecture [course]="course" [lecture]="lecture" *ngFor="let lecture of course.lectures"></app-lecture>
+  <a md-fab class="add-lecture-fab" color="accent" routerLink="{{'/course/edit/'+course._id+'/lecture/new'}}"
+     *ngIf="userService.isAdmin() || userService.isTeacher()" mdTooltip="Add lecture" mdTooltipPosition="left">
+    <md-icon class="md-24">add</md-icon>
+  </a>
 </div>
 <!--
 <app-lecture [course]="course" *ngIf="course">

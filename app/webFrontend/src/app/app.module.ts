@@ -27,8 +27,7 @@ import { CourseComponent } from './course/course.component';
 import { CourseDetailComponent } from './course/course-detail/course-detail.component';
 import { CourseEditComponent } from './course/course-edit/course-edit.component';
 import { CourseNewComponent } from './course/course-new/course-new.component';
-import { TaskListComponent } from './course/course-edit/unit/tasks/task-list.component';
-import { TaskCardComponent } from './course/course-edit/unit/tasks/task-card.component';
+import { TaskUnitEditComponent } from './course/course-edit/unit/unit-edit/task-unit-edit/task-unit-edit.component';
 
 import { ShowProgressService } from './shared/services/show-progress.service';
 import { UnitComponent } from './course/course-edit/unit/unit.component';
@@ -50,6 +49,7 @@ import { LectureFormComponent } from './lecture/lecture-form/lecture-form.compon
 import { TeacherReportComponent } from './course/teacher-report/teacher-report.component';
 import { UnitMenuComponent } from './shared/components/unit-menu/unit-menu.component';
 import { UnitEditComponent } from './course/course-edit/unit/unit-edit/unit-edit.component';
+import { TaskUnitComponent } from './course/course-edit/unit/task-unit/task-unit.component';
 
 @NgModule({
   declarations: [
@@ -62,8 +62,7 @@ import { UnitEditComponent } from './course/course-edit/unit/unit-edit/unit-edit
     DashboardStudentComponent,
     DashboardTeacherComponent,
     DashboardAdminComponent,
-    TaskListComponent,
-    TaskCardComponent,
+    TaskUnitEditComponent,
     CourseComponent,
     CourseDetailComponent,
     CourseEditComponent,
@@ -83,6 +82,7 @@ import { UnitEditComponent } from './course/course-edit/unit/unit-edit/unit-edit
     TeacherReportComponent,
     UnitMenuComponent,
     UnitEditComponent,
+    TaskUnitComponent,
   ],
   imports: [
     BrowserModule,

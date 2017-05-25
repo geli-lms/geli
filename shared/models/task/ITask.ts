@@ -1,15 +1,9 @@
-import {ICourse} from './ICourse';
+import {IAnswer} from './IAnswer';
 
 export interface ITask {
     _id: any;
     name: string;
-    answers: [
-    {
-      _id: any;
-      value: boolean,
-      text: string
-    }
-    ];
+    answers: IAnswer[];
 }
 /*
 export interface ITaskAnswer {

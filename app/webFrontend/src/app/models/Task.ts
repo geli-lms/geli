@@ -1,21 +1,10 @@
-
 // TODO must related connected to a lecture
 
-export class Task {
+import {ITask} from '../../../../../shared/models/task/ITask';
+import {IAnswer} from '../../../../../shared/models/task/IAnswer';
+export class Task implements ITask {
   _id: any;
   name: string;
-  courseId: string;
-  answers: [
-    {
-      _id: any;
-      value: boolean,
-      text: string
-    }
-    ];
-  constructor(courseId: string, name: string ) {
-    this.name = name;
-    this.courseId = courseId;
-    // this._id = null;
-  }
+  answers: IAnswer[] = [];
 }
 

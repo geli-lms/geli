@@ -1,14 +1,13 @@
-import {Request} from 'express';
-import {Body, Get, Post, Put, Param, Req, JsonController, UseBefore, Delete} from 'routing-controllers';
+import {Body, Post, JsonController, UseBefore} from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
+import {UnitController} from './UnitController';
+import {TaskUnit} from '../models/units/TaskUnit';
+import {ITask} from '../../../shared/models/task/ITask';
+import {ITaskModel, Task} from '../models/Task';
 
-import {Task} from '../models/Task';
-import {ITask} from '../../../shared/models/ITask';
-import {Unit} from '../models/units/Unit';
-
-@JsonController('unit/tasks')
+@JsonController('/unit/tasks')
 @UseBefore(passportJwtMiddleware)
-export class TaskUnitController {
+export class TaskUnitController extends UnitController {
 
   @Post('/')
   addTaskUnit(@Body() data: any) {
@@ -16,6 +15,29 @@ export class TaskUnitController {
     if (!data.lectureId) {
       return;
     }
+
+    if (!data.taskUnit) {
+      return;
+    }
+
+    const tasks: ITask[] = data.taskUnit.tasks;
+    data.taskUnit.tasks = [];
+
+    return Promise.all(tasks.map(this.addTask))
+      .then((savedTasks) => {
+        for (let i = 0; i < savedTasks.length; i++) {
+          const savedTask: ITaskModel = savedTasks[i];
+          data.taskUnit.tasks.push(savedTask._id);
+        }
+
+        return new TaskUnit(data.taskUnit).save();
+      })
+      .then((savedTaskUnit) => {
+        this.pushToLecture(data.lectureId, savedTaskUnit);
+      });
   }
 
+  private addTask(task: ITask) {
+    return new Task(task).save();
+  }
 }

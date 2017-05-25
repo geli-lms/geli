@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {BackendService} from './backend.service';
-import {ITask} from '../../../../../../shared/models/ITask';
+import {ITask} from '../../../../../../shared/models/task/ITask';
 import {ITaskUnit} from '../../../../../../shared/models/units/ITaskUnit';
 
 abstract class DataService {
