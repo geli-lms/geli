@@ -5,11 +5,12 @@ import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import {Lecture} from '../models/Lecture';
 import {Unit} from '../models/units/Unit';
 import {IUnit} from '../../../shared/models/units/IUnit';
-import {VideoUnit} from '../models/units/VideoUnit';
+import {IVideoUnitModel, VideoUnit} from '../models/units/VideoUnit';
+import {IVideoUnit} from '../../../shared/models/units/IVideoUnit';
 
 const uploadOptions = {dest: 'uploads/' };
 
-@JsonController('/unit')
+@JsonController('/units')
 @UseBefore(passportJwtMiddleware)
 export class UnitController {
 
@@ -17,19 +18,6 @@ export class UnitController {
   getUnit(@Param('id') id: string) {
     return Unit.findById(id)
       .then((u) => u.toObject());
-  }
-
-  @Post('/')
-  addUnit(@UploadedFile('file', { uploadOptions }) file: any, @Body() data: any) {
-    // discard invalid requests
-    if (!data.lectureId) {
-      return;
-    }
-    // path for file upload units (for now video only)
-    if (file) {
-      return new VideoUnit({filePath: file.path, fileName: file.originalname}).save()
-        .then((unit) => this.pushToLecture(data.lectureId, unit));
-    }
   }
 
   protected pushToLecture(lectureId: string, unit: any) {
@@ -49,14 +37,14 @@ export class UnitController {
 
   @Delete('/:id')
   deleteUnit(@Param('id') id: string) {
-    return VideoUnit.findById(id).then((unit) => {
+    return Unit.findById(id).then((unit) => {
       if (!unit) {
         throw new Error('No unit found for id');
       }
-      /*
-      if (unit.filePath) {
-        fs.unlinkSync(unit.filePath);
-      }*/
+
+      if (unit instanceof VideoUnit && (<IVideoUnitModel>unit).filePath) {
+        fs.unlinkSync((<IVideoUnitModel>unit).filePath);
+      }
       return Lecture.update({}, {$pull: {units: id}});
     })
     .then(() => Unit.findByIdAndRemove(id))

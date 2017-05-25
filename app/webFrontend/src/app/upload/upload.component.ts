@@ -14,7 +14,7 @@ export class UploadComponent implements OnInit {
 
   lectureId: string;
   uploader: FileUploader = new FileUploader({
-    url: '/api/unit',
+    url: '/api/unit/upload',
     headers: [{
       name: 'Authorization',
       value: localStorage.getItem('token'),

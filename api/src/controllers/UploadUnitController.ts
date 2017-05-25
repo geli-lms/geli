@@ -10,7 +10,7 @@ import {UnitController} from './UnitController';
 
 const uploadOptions = {dest: 'uploads/' };
 
-@JsonController('/unit/upload')
+@JsonController('/units/upload')
 @UseBefore(passportJwtMiddleware)
 export class UploadUnitController extends UnitController {
 
@@ -25,29 +25,5 @@ export class UploadUnitController extends UnitController {
       return new VideoUnit({filePath: file.path, fileName: file.originalname}).save()
       .then((unit) => this.pushToLecture(data.lectureId, unit));
     }
-  }
-
-  @Put('/:id')
-  updateUnit(@Param('id') id: string, @Body() unit: IUnit) {
-    return Unit.findByIdAndUpdate(id, unit, {'new': true})
-    .then((u) => u.toObject());
-  }
-
-  @Delete('/:id')
-  deleteUnit(@Param('id') id: string) {
-    return VideoUnit.findById(id).then((unit) => {
-      if (!unit) {
-        throw new Error('No unit found for id');
-      }
-      /*
-      if (unit.filePath) {
-        fs.unlinkSync(unit.filePath);
-      }*/
-      return Lecture.update({}, {$pull: {units: id}});
-    })
-    .then(() => Unit.findByIdAndRemove(id))
-    .then(() => {
-      return {result: true};
-    });
   }
 }

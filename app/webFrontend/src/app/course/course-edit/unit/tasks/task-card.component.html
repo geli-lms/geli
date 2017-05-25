@@ -11,16 +11,33 @@
 
   </md-card-header>
       <md-card-content>
+        <div class="edit-mode" *ngIf="editMode" >
+          <md-input-container style="width: 100%">
+            <textarea mdInput id="name" placeholder="Frage hier eingeben." [(ngModel)]="task.name"></textarea>
+          </md-input-container>
 
-        <h4 *ngIf="!onEdit">{{task.name}}</h4>
+          <button md-icon-button *ngIf="task._id" (click)="addAnswer()"><md-icon>add</md-icon></button>
 
-        <md-input-container *ngIf="onEdit" style="width: 100%">
+          <table cellspacing="0" cellpadding="2" width="100%"><tr>
+            <td>
+              <md-checkbox [(ngModel)]="answer.value" name="value_{{idx}}"></md-checkbox></td>
+            <td style="width: 100%">
+              <md-input-container style="width: 100%" >
 
-          <textarea mdInput id="name" placeholder="Frage hier eingeben." [(ngModel)]="task.name"></textarea>
+                <textarea mdInput name="text_{{idx}}" placeholder="Antwort hier eingeben." [(ngModel)]="answer.text"></textarea>
 
-        </md-input-container>
+              </md-input-container>
 
-         &nbsp; <button md-icon-button *ngIf="onEdit && task._id" (click)="addAnswer()"><md-icon>add</md-icon></button>
+            </td>
+            <td>
+              <button md-icon-button (click)="removeAnswer(idx)"><md-icon>remove</md-icon></button>
+            </td>
+          </tr></table>
+        </div>
+        <div class="view-mode" *ngIf="!onEdit">
+          <h4>{{task.name}}</h4>
+        </div>
+
 
         <div *ngFor="let answer of task.answers; let idx = index;">
 

@@ -21,7 +21,7 @@ import { AuthGuardService } from './shared/services/auth-guard.service';
 import { DashboardStudentComponent } from './start/dashboard/dashboard-student/dashboard-student.component';
 import { DashboardTeacherComponent } from './start/dashboard/dashboard-teacher/dashboard-teacher.component';
 import { DashboardAdminComponent } from './start/dashboard/dashboard-admin/dashboard-admin.component';
-import { CourseService, TaskService, UserDataService, LectureService } from './shared/services/data.service';
+import {CourseService, TaskService, UserDataService, LectureService, UnitService} from './shared/services/data.service';
 import { BackendService } from './shared/services/backend.service';
 import { CourseComponent } from './course/course.component';
 import { CourseDetailComponent } from './course/course-detail/course-detail.component';
@@ -98,6 +98,7 @@ import { UnitEditComponent } from './course/course-edit/unit/unit-edit/unit-edit
   providers: [UserService,
               AuthenticationService,
               AuthGuardService,
+              UnitService,
               TaskService,
               CourseService,
               UserDataService,

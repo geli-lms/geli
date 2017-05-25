@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import {ICourse} from '../../../../../../../../shared/models/ICourse';
+import {ILecture} from '../../../../../../../../shared/models/ILecture';
 
 @Component({
   selector: 'app-unit-edit',
@@ -10,6 +11,7 @@ export class UnitEditComponent implements OnInit {
 
   @Input() unitType: string;
   @Input() course: ICourse;
+  @Input() lecture: ILecture;
   @Output() onDone = new EventEmitter<boolean>();
 
   constructor() { }

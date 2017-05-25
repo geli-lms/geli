@@ -9,12 +9,11 @@
 
 
 <div>
-  <div *ngFor="let task of tasks">
-     <task-card [task]="task"
-                [unitId]="unitId"
+     <task-card [editMode]="editMode"
+                [lecture]="lecture"
+                [taskUnit]="taskUnit"
                 (onTaskCancel)="onTaskCancel();"
                 (onRemoveTask)="onRemoveTask($event);"
                 (onTaskCreated)="onTaskCreated($event);"
      ></task-card>
-  </div>
 </div>

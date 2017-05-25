@@ -8,6 +8,9 @@ interface IUnitModel extends IUnit, mongoose.Document {
 const unitSchema = new mongoose.Schema({
     progressable: {
       type: Boolean
+    },
+    weight: {
+      type: Number
     }
   },
   {

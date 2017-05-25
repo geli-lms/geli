@@ -1,6 +1,10 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {TaskService, UnitService} from '../../../../shared/services/data.service';
-import {Task} from '../../../../models/task';
+import {Task} from '../../../../models/Task';
+import {ITaskUnit} from '../../../../../../../../shared/models/units/ITaskUnit';
+import {ILecture} from '../../../../../../../../shared/models/ILecture';
+import {TaskUnit} from '../../../../models/TaskUnit';
+import {ITask} from '../../../../../../../../shared/models/ITask';
 
 @Component({
   selector: 'app-tasks',
@@ -9,9 +13,10 @@ import {Task} from '../../../../models/task';
 })
 export class TaskListComponent implements OnInit {
   @Input() courseId: any;
-  unitId: string;
+  @Input() lecture: ILecture;
+  taskUnit: ITaskUnit;
   tasks: any[];
-  addingTask = false;
+  editMode = false;
 
   constructor(private taskService: TaskService,
               private unitService: UnitService) {
@@ -26,9 +31,6 @@ export class TaskListComponent implements OnInit {
     this.taskService.getTasksForCourse(this.courseId).then(tasks => {
       this.tasks = tasks;
     });
-
-    if (this.tasks.length === 0) {
-    }
   }
 
   onRemoveTask(task: any) {
@@ -38,15 +40,18 @@ export class TaskListComponent implements OnInit {
     });
   }
 
-  onTaskCreated(task: any) {
-    this.addingTask = false;
+  onTaskCreated(task: ITask) {
+    this.taskUnit.tasks.push(task);
     this.loadTasksFromServer();
   }
 
   addTask() {
-    this.addingTask = true;
-    const newTask = new Task(this.courseId, null);
-    this.tasks.splice(0, 0, newTask); // add item to start
+    this.editMode = true;
+    if (typeof this.taskUnit === 'undefined') {
+      this.taskUnit = new TaskUnit();
+    }
+    // const newTask = new Task(this.courseId, null);
+    // this.tasks.splice(0, 0, newTask); // add item to start
   }
 
   /*
@@ -55,7 +60,7 @@ export class TaskListComponent implements OnInit {
   }*/
 
   cancelTask() {
-    this.addingTask = false;
+    this.editMode = false;
     this.loadTasksFromServer();
   }
 }

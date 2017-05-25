@@ -1,5 +1,7 @@
 import {Injectable} from '@angular/core';
 import {BackendService} from './backend.service';
+import {ITask} from '../../../../../../shared/models/ITask';
+import {ITaskUnit} from '../../../../../../shared/models/units/ITaskUnit';
 
 abstract class DataService {
 
@@ -137,7 +139,7 @@ export class TaskService extends DataService {
     });
   }
 
-  getTasksForLecture(id: string): Promise<any[]> {
+  getTasksForUnit(id: string): Promise<any[]> {
     const promise = this.readSingleItem(id);
     return promise;
   }
@@ -154,6 +156,14 @@ export class LectureService extends DataService {
 export class UnitService extends DataService {
   constructor(public backendService: BackendService) {
     super('unit/', backendService);
+  }
+
+  addTaskUnit(taskUnit: ITaskUnit, lectureId: string) {
+    const originalApiPath = this.apiPath;
+    this.apiPath += 'tasks';
+    const promise = this.createItem({taskUnit: taskUnit, lectureId: lectureId});
+    this.apiPath = originalApiPath;
+    return promise;
   }
 }
 

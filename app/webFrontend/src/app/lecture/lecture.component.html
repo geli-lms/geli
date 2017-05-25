@@ -27,7 +27,12 @@
     <p>{{lecture.description}}</p>
     <app-unit *ngIf="lecture.units" [units]="lecture.units"></app-unit>
     <p>Unit-Type: {{unitType}}</p>
-    <app-unit-edit *ngIf="unitType && editMode" [course]="course" [unitType]="unitType" (onDone)="onEditDone($event)"></app-unit-edit>
+    <app-unit-edit *ngIf="unitType && editMode"
+                   [course]="course"
+                   [lecture]="lecture"
+                   [unitType]="unitType"
+                   (onDone)="onEditDone($event)">
+    </app-unit-edit>
   </md-card-content>
   <md-card-actions *ngIf="userService.isAdmin() || userService.isTeacher()">
     <app-unit-menu (onAddUnit)="onAddUnit($event)"></app-unit-menu>
