@@ -27,8 +27,6 @@ export class Server {
     // Do not use mpromise
     (<any>mongoose).Promise = global.Promise;
 
-    mongoose.connect(config.database);
-
     this.app = createExpressServer({
       routePrefix: '/api',
       controllers: [__dirname + '/controllers/*.js'] // register all controller's routes
@@ -36,9 +34,6 @@ export class Server {
 
     // TODO: Needs authentication in the future
     this.app.use('/api/uploads', express.static('uploads'));
-
-    // Request logger
-    this.app.use(morgan('combined'));
 
     Server.setupPassport();
     this.app.use(passport.initialize());
@@ -55,5 +50,9 @@ export class Server {
  * For testing mocha will start express itself
  */
 if (process.env.NODE_ENV !== 'test') {
+  // Request logger
+  this.app.use(morgan('combined'));
+
+  mongoose.connect(config.database);
   new Server().start();
 }
