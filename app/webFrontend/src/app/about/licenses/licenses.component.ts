@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {Dependency} from './dependency.model';
-import {DependencysList} from "./dependencys";
+import {DependenciesList} from './dependencies';
 
 @Component({
   selector: 'app-licenses',
@@ -21,7 +21,7 @@ export class LicensesComponent implements OnInit {
   }
 
   getAllFrontendDependencies() {
-    this.allFrontendDependencies = DependencysList.getDependencys()
+    this.allFrontendDependencies = DependenciesList.getDependencys()
       .sort(Dependency.compare);
   }
 

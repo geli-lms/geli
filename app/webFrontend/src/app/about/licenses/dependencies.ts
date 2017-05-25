@@ -1,7 +1,7 @@
-import {Dependency} from "./dependency.model";
+import {Dependency} from './dependency.model';
 
 // Contains all Dependecys
-export class DependencysList {
+export class DependenciesList {
   public static getDependencys(): Dependency[] {
     return [
       new Dependency('@types/bcrypt', '1.0.0', '/vagrant/api/node_modules/@types/bcrypt',
