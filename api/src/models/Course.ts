@@ -36,11 +36,22 @@ const courseSchema = new mongoose.Schema({
         ref: 'Lecture'
       }
     ],
+    enrollType: {
+      type: String,
+      'enum': ['free', 'whitelist'],
+      'default': 'free'
+    },
+    whitelist: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+      }
+    ]
   },
   {
     timestamps: true,
     toObject: {
-      transform: function(doc: any, ret: any) {
+      transform: function (doc: any, ret: any) {
         ret._id = ret._id.toString();
       }
     }
