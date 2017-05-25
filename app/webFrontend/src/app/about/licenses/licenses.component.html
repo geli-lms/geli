@@ -1,25 +1,25 @@
 <h2>Dependencies / Licenses</h2>
 
 <h3>WebFrontend</h3>
-<p *ngIf="allFrontendDependencies.length === 0">No Dependencies loaded...</p>
+<p *ngIf="allFrontendDependencies">No Dependencies loaded...</p>
 <md-list>
   <md-list-item *ngFor="let dep of allFrontendDependencies;">
     <md-icon md-list-icon>folder</md-icon>
     <h3 md-line>{{dep.name}}
       <small>{{dep.version}}</small>
     </h3>
-    <p md-line>License: {{dep.summary}} {{dep.devDependency ? ' | devDependency' : ''}}</p>
+    <p md-line>License: {{dep.summary}} <i *ngIf="dep.devDependency"><small> devDependency</small></i></p>
   </md-list-item>
 </md-list>
 
 <h3>API</h3>
-<p *ngIf="allApiDependencies.length === 0">No Dependencies loaded...</p>
+<p *ngIf="allApiDependencies">No Dependencies loaded...</p>
 <md-list>
   <md-list-item *ngFor="let dep of allApiDependencies;">
     <md-icon md-list-icon>folder</md-icon>
     <h3 md-line>{{dep.name}}
       <small>{{dep.version}}</small>
     </h3>
-    <p md-line>License: {{dep.summary}} {{dep.devDependency ? ' | devDependency' : ''}}</p>
+    <p md-line>License: {{dep.summary}} <i *ngIf="dep.devDependency"><small> devDependency</small></i></p>
   </md-list-item>
 </md-list>

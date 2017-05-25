@@ -16,9 +16,9 @@ export class Contributor {
     compare = a.to.localeCompare(b.to);
     if (compare !== 0) {
       // Check if a or b is tagged with "present", if yes these belong to the top
-      if (a.to.localeCompare(this.PRESENT)) {
+      if (a.to.localeCompare(Contributor.PRESENT)) {
         return 1;
-      } else if (b.to.localeCompare(this.PRESENT)) {
+      } else if (b.to.localeCompare(Contributor.PRESENT)) {
         return -1;
       } else {
         return compare;
@@ -44,7 +44,7 @@ export class Contributor {
   }
 
   constructor(firstName: string, name: string, from: string, position: string,
-              githubId: string = '', to: string = 'present') {
+              githubId: string = '', to: string = Contributor.PRESENT) {
     this.firstName = firstName;
     this.name = name;
     this.from = from;
