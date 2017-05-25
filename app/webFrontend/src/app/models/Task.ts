@@ -4,6 +4,7 @@
 export class Task {
   _id: any;
   name: string;
+  courseId: string;
   answers: [
     {
       _id: any;
@@ -11,5 +12,10 @@ export class Task {
       text: string
     }
     ];
+  constructor(courseId: string, name: string ) {
+    this.name = name;
+    this.courseId = courseId;
+    // this._id = null;
+  }
 }
 
