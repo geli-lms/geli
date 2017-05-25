@@ -48,6 +48,7 @@ Thumbs.db
 # Do not ignore js files under sub-project-root (gulpfile.js, karma.conf.js, protractor.conf.js, ...)
 !/api/*.js
 !/app/webFrontend/*.js
+!/.travis/*.js
 
 # Ignore CSV-Files generated from nlf
 /**/nlf-license*.csv

@@ -1,12 +1,8 @@
 export class Dependency {
   name: string;
   version: string;
-  directory: string;
   repository: string;
-  summary: string;
-  fromPackageJson: string;
-  fromLicense: string;
-  fromReadme: string;
+  license: string;
   devDependency: boolean;
 
   // To be able to sort eg an array
@@ -25,16 +21,11 @@ export class Dependency {
     return compare;
   }
 
-  constructor(name: string, version: string, directory: string, repository: string, summary: string,
-              fromPackageJson: string, fromLicense: string, fromReadme: string, devDependency: boolean = false) {
+  constructor(name: string, version: string, repository: string, license: string, devDependency: boolean = false) {
     this.name = name;
     this.version = version;
-    this.directory = directory;
     this.repository = repository;
-    this.summary = summary;
-    this.fromPackageJson = fromPackageJson;
-    this.fromLicense = fromLicense;
-    this.fromReadme = fromReadme;
+    this.license = license;
     this.devDependency = devDependency;
   }
 }
