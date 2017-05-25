@@ -11,10 +11,6 @@
   float: left;
   margin: 5px;
 
-  &:last-child {
-    clear: both;
-  }
-
   .mat-card-avatar {
     background-image: url("/assets/incognito.png");
     background-size: cover;

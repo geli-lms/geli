@@ -16,12 +16,12 @@ export class Contributor {
     compare = a.to.localeCompare(b.to);
     if (compare !== 0) {
       // Check if a or b is tagged with "present", if yes these belong to the top
-      if (a.to.localeCompare(Contributor.PRESENT)) {
-        return 1;
-      } else if (b.to.localeCompare(Contributor.PRESENT)) {
+      if (a.to === Contributor.PRESENT) {
         return -1;
+      } else if (b.to === Contributor.PRESENT) {
+        return 1;
       } else {
-        return compare;
+        return (compare * -1);
       }
     }
 

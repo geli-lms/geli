@@ -30,9 +30,7 @@ export class GeneralInfoComponent implements OnInit {
       , new Contributor('Bernd', '???', '17SuSe', 'Student')
       , new Contributor('Alexaner', 'Weinfurter', '17SuSe', 'Student')
       , new Contributor('Ken', 'Hasenbank', '17SuSe', 'Student', 'khase')
-      , new Contributor('Thomas', 'Sauer', '17SuSe', 'Initiator', 'thomassss')
-      , new Contributor('Thomas', 'Sauer', '15SuSe', 'Initiator', 'thomassss', '16WiSe')
-      , new Contributor('Thomas', 'Sauer', '15SuSe', 'Initiator', 'thomassss')
+      , new Contributor('Thomas', 'Sauer', '16WiSe', 'Initiator', 'thomassss')
     ];
     this.allContributors.forEach((value, index, array) => {
       value.firstName = value.firstName.trim();
