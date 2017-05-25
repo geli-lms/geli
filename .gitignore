@@ -53,7 +53,7 @@ Thumbs.db
 /**/nlf-license*.csv
 
 # API
-/api/uploads
+/api/uploads/*
 /api/build
 /api/coverage
 /api/docs
@@ -62,4 +62,5 @@ Thumbs.db
 # nothing so far
 
 # Never ignore .gitkeep files
+# Note that the ignore has to look like: /some/path/* and not eg. /some/path
 !/**/.gitkeep
