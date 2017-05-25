@@ -4,8 +4,13 @@ import {ITask} from '../../../../../shared/models/task/ITask';
 export class TaskUnit implements ITaskUnit {
   _id: any;
   type: string;
-  progressable: true;
-  weight: 0;
+  progressable: boolean;
+  weight: number;
 
   tasks: ITask[] = [];
+
+  constructor() {
+    this.progressable = true;
+    this.weight = 0;
+  }
 }
