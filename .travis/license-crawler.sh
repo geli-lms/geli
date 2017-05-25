@@ -1,6 +1,8 @@
 #!/bin/bash
 
 # Variables
+DEBUG=false
+
 CSV_FILE="nlf-licenses"
 FT_APACHE=".apache.csv"
 FT_ALL=".csv"
@@ -25,7 +27,7 @@ echo "+++ Run NLF to search for Apache-Licenses +++"
 echo
 
 echo "+ checking if on branch -develop- and no pull-request"
-if [ "$TRAVIS_BRANCH" != "develop" ] || [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
+if ( [ "$TRAVIS_BRANCH" != "develop" ] || [ "$TRAVIS_PULL_REQUEST" != "false" ] ) && [ ! $DEBUG ]; then
   echo -e "${YELLOW}+ WARNING: not on branch -develop- and/or a pull request${NC}"
   exit 1
 fi
