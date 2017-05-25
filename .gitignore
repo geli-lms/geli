@@ -51,6 +51,7 @@ Thumbs.db
 
 # Ignore CSV-Files generated from nlf
 /**/nlf-license*.csv
+/**/nlf-licenses*.json
 
 # API
 /api/uploads/*
