@@ -1,19 +1,14 @@
-# Great E-Learning Informatics (geli)
+ # Great E-Learning Informatics (geli)
+
+![Geli-Logo](.var/geli-readme-icon.png)
 
 [![NodeJS Version](https://img.shields.io/badge/nodeJS-7.9-blue.svg)](https://nodejs.org/en)
 [![MongoDB Version](https://img.shields.io/badge/mongoDB-3.4-blue.svg)](https://www.mongodb.com/download-center#community)
-
 [![GitHub release](https://img.shields.io/github/release/h-da/geli.svg)](https://github.com/h-da/geli/releases)
 [![Build Status](https://travis-ci.org/h-da/geli.svg?branch=develop)](https://travis-ci.org/h-da/geli)
+
 [![Dependency Checker](https://david-dm.org/h-da/geli.svg)](https://david-dm.org/h-da/geli)
-
-API: [![Docker Stars](https://img.shields.io/docker/stars/hdafbi/geli-api.svg)](https://hub.docker.com/r/hdafbi/geli-api/)
-[![Docker Pulls](https://img.shields.io/docker/pulls/hdafbi/geli-api.svg)](https://hub.docker.com/r/hdafbi/geli-api/)   
-Web-Frontend: [![Docker Stars](https://img.shields.io/docker/stars/hdafbi/geli-web-frontend.svg)](https://hub.docker.com/r/hdafbi/geli-web-frontend/)
-[![Docker Pulls](https://img.shields.io/docker/pulls/hdafbi/geli-web-frontend.svg)](https://hub.docker.com/r/hdafbi/geli-web-frontend/)
-
-[![license](https://img.shields.io/github/license/h-da/geli.svg)](https://github.com/h-da/geli/blob/develop/LICENSE)
-![Github Downloads](https://img.shields.io/github/downloads/h-da/geli/latest/total.svg)
+[![Coverage Status](https://coveralls.io/repos/github/h-da/geli/badge.svg?branch=develop)](https://coveralls.io/github/h-da/geli?branch=develop)
 [![Gitter chat](https://badges.gitter.im/h-da/geli.png)](https://gitter.im/mpse-geli/Lobby)
 
 ---
@@ -26,29 +21,98 @@ If you want to support this project, just say hello on Gitter.
 
 ---
 
-# Usage with Vagrant
+# Workflow
+Our workflow is as following:
+- Create a Ticket for the Issue
+- Create a branch for that ticket with the naming: `feature/{ticket-no}-{description-seperated-by-spaces}`
+- Develop your code
+- Commit and push in regulary intervalls ([How to commit](https://chris.beams.io/posts/git-commit/))
+- Run the tests locally
+- Open a Pull-Request
+- If CI / Coverage give their OK we can merge
+- Thr PR gets merged to `develop`, which will push a new Docker-Image-Version
+- The staging-system will then be updated to the latest Image from Docker-Hub
+- If we have enough features we will merge the `develop` into the `master` branch, which will add a new 'stable' image on Docker-Hub. The livesysten then pulls that new image and starts up with the latest stable version
+
+If we have bugfixes we create a `bugfix/{descriptive-name}` and open a PR, issues are not required for that. But it's important to have a good description of the bugfix in the PR-Comment.
+
+# Docker
+Our complete build-process is running with docker, so here is our [Docker-Hub-Page](https://hub.docker.com/r/hdafbi).
+
+## API-Image
+[![Docker Stars](https://img.shields.io/docker/stars/hdafbi/geli-api.svg)](https://hub.docker.com/r/hdafbi/geli-api/)
+[![Docker Pulls](https://img.shields.io/docker/pulls/hdafbi/geli-api.svg)](https://hub.docker.com/r/hdafbi/geli-api/)   
+
+This is our [image](https://hub.docker.com/r/hdafbi/geli-api) for the API of Geli.
+
+## Web-Frontend-Image
+[![Docker Stars](https://img.shields.io/docker/stars/hdafbi/geli-web-frontend.svg)](https://hub.docker.com/r/hdafbi/geli-web-frontend/)
+[![Docker Pulls](https://img.shields.io/docker/pulls/hdafbi/geli-web-frontend.svg)](https://hub.docker.com/r/hdafbi/geli-web-frontend/)
+
+This is the [image](https://hub.docker.com/r/hdafbi/geli-web-frontend) for the web-frontend of Geli.
+
+---
+
+# Development
+## Tech-Stack
+This project is build on the MEAN _(MongoDB | Express | Angular | NodeJS)_ -Stack.
+So we are currently using the following technologies:
+
+| Software     | Version | Description                                                        |
+|--------------|---------|--------------------------------------------------------------------|
+| MongoDB      | 3.4.3   | A NoSQL-Database - Documentoriented                                |
+| Express      | 4.14.0  | A NodeJS router                                                    |
+| Angular      | 4.0.0   | A JS-Based frontend framework                                      |
+| NodeJS       | 7.9     | A JS-Runtime                                                       |
+| Docker       | -       | A virtualisation software to run our software in dev and on server |
+| Typescript   | 2.2.0   | A object-oriented superset of plain JS                             |
+| ECMAScript 6 | -       | The 2015 released version of JS                                    |
+
+## Commands
+Run the commands for the api or web-frontend either in `api` or `app/webFrontend`.
+- Start the webserver
+  - __API:__ `npm run start`
+  - __FE:__ `npm run start` _(please see docker/vagrant section for specific infos)_
+- Lint
+  - __API:__ `npm run tslint`
+  - __FE:__ `npm run lint`
+- Test
+  - __API:__ `npm run test`
+  - __FE:__
+    - unit-tests: `npm run test`
+    - integration (end2end): `npm run e2e`
+- NG-CLI
+  - You can add modules etc with the `ng`-[command](https://cli.angular.io/).
+
+## Usage with Vagrant
 To use Vagrant for the development download VirtualBox, install it and then do the same with vagrant.
-After that open the e.g. __git bash__ _AS ADMIN_ and go to the project root. Now run `vagrant up`.
+After that open the e.g. `git bash` __AS ADMIN__ and go to the project root. Now run `vagrant up`.
 
 After everything is installed and all npm dependencies are downloaded you can connect to the VirtualBox
-via `vagrant ssh`. The Ports 4200 and 27017 are forwarded to your host system. Just type localhost:4200 in your
-browser.
+via `vagrant ssh`. The Ports 4200 and 27017 are forwarded to your host system. Just type `localhost:4200` in your
+browser and you will (almost) see your local geli-instance.
 
-## Start services
-To start the backend ssh into the VM with `vagrant ssh` and run the commands seen under [Run app](#run-app).
+### Start services
+To start the __backend__ ssh into the VM with `vagrant ssh` and run the following lines. This will lint and compile the code, aswell start the api-webserver.
 
-To start the frontend ssh into VM with a second shell and run the commands seen under [Development server](#development-server).
+    cd api
+    npm run start
 
-# Usage with Docker
+To start the __frontend__ ssh into VM with a __second__ shell (`vagrant ssh`) and run the following commands. This will lint and compile the code, aswell start the frontend-develop-webserver.
+
+    cd app/webFrontend
+    npm run start-vagrant-dev
+
+## Usage with Docker
 You need `docker` and `docker-compose`.
 
-## Installing dependencies
+### Installing dependencies
 You can install dependencies by running the following commands from the project root.
 
     docker-compose run --rm --no-deps api npm install
     docker-compose run --rm --no-deps web-frontend npm install
     
-## Running the application
+### Running the application
 After installing the dependencies you can run the application by executing:
 
     docker-compose up
@@ -57,56 +121,54 @@ You can access the web frontend on your host machine at `http://localhost:4200`.
 
 The API will be proxied to `http://localhost:4200/api` and MongoDB is accessible at `localhost:27017`.
 
-# Backend
+---
 
-```diff
-- This content may not be up to date... we try to update it asap.
-```
-
+# Getting Started
 ## Installation
+Clone this project to a folder you like:
 
-1. Open a Terminal and type following:
+    cd /path/to/project
+    git clone git@github.com:h-da/geli.git
 
-```bash
-cd /path/to/project/api
-npm install
-```
+Here you should decide if you install everything native on your pc, use [docker](#usage-with-docker) or [vagrant](#usage-with-vagrant). 
+
+Open a Terminal and type following. It will install all dependencies of the api and the web-frontend:
+
+    cd /path/to/project/geli
+    cd api
+    npm install
+    cd ../app/webFrontend
+    npm install
 
 ## Run APP
+Run this in one console to start the api:
 
-```bash
-cd /api
-npm start-dev
-```
+    cd api
+    npm run start
 
-or `nodemon -L index.js` to 'poll'. You can use this if you are using vagrant or docker on windows/mac.
+Run this in a nother console to start the frontend:
+
+    cd app/webFrontend
+    npm run start-[docker|vagrant]-dev
 
 ## Testing
+To test and lint the api just call:
 
-1. Copy `config/test.dist.json` to `config/test.json` and change it accordingly.
-2. To execute the tests:
+    cd api
+    npm run test
 
-```bash
-cd /api
-npm test
-```
+To run the unittest of the web-frontend call:
 
-# Frontend
-```diff
-- This content may not be up to date... we try to update it asap.
-```
-## Getting started
+    cd app/webFrontend
+    npm run test
+
+To run the end to end test, which is a integration-test, which tests the compability between the api and the web-fronted just call:
+
+    cd app/webFrontend
+    bpm run e2e
 
 ## Angular CLI (globally required):
-
-Run `npm install -g @angular/cli@latest` to install the latest version of the angular cli globally.
-
-## How to use:
-
-1. Go to `app/webFrontend/`
-2. Run `npm install` in the root folder of the app
-3. Run `npm start` to use angular-cli serve
-
+Run `npm install -g @angular/cli@latest` to install the latest version of the angular cli globally.   
 If you have problems with the angular-cli version try following:
 
 1. Create a new anglular-cli projekt `ng new example-app`
@@ -115,33 +177,21 @@ If you have problems with the angular-cli version try following:
 
 This project was generated with [angular-cli](https://github.com/angular/angular-cli) version 1.0.0-beta.17.
 
-## Development server
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
-
 ## Code scaffolding
-
 Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive/pipe/service/class`.
 
 ## Build
-
 Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
 
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/). 
-Before running the tests make sure you are serving the app via `ng serve`.
-
 ## Further help
-
 To get more help on the `angular-cli` use `ng --help` or go check out the [Angular-CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
 
-# Contributuion
+---
 
+# Contribution
 Please have a look at [CONTRIBUTING.md](.github/CONTRIBUTING.md)
+
+---
 
 # Apache-Licensed Software
 This block contains all software-packages that are licensed under the Apache-License.  
