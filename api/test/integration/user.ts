@@ -10,7 +10,7 @@ import {User} from '../../src/models/User';
 chai.use(chaiHttp);
 chai.should();
 const app = new Server().app;
-const BASE_URL = '/api/user';
+const BASE_URL = '/api/users';
 const fixtureLoader = new FixtureLoader();
 
 describe('User', () => {
