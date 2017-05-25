@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Contributor} from './contributor.model';
 import {DomSanitizer} from "@angular/platform-browser";
+import {ContributorsList} from "./contributors";
 
 @Component({
   selector: 'app-general-info',
@@ -19,19 +20,8 @@ export class GeneralInfoComponent implements OnInit {
   }
 
   getAllContributors() {
-    this.allContributors = [
-      new Contributor('Alexander', 'Eimer', '17SuSe', 'Student', 'aeimer')
-      , new Contributor('Lukas', 'Korte', '17SuSe', 'Student')
-      , new Contributor('Felix', 'Brucker', '17SuSe', 'Student')
-      , new Contributor('David', 'Müller', '17SuSe', 'Lecturer', 'd89')
-      , new Contributor('Ute', 'Trapp', '17SuSe', 'Lecturer', 'utetrapp')
-      , new Contributor('Steffen', 'Großpersky', '17SuSe', 'Student')
-      , new Contributor('Oliver', 'Neff', '17SuSe', 'Student')
-      , new Contributor('Bernd', '???', '17SuSe', 'Student')
-      , new Contributor('Alexaner', 'Weinfurter', '17SuSe', 'Student')
-      , new Contributor('Ken', 'Hasenbank', '17SuSe', 'Student', 'khase')
-      , new Contributor('Thomas', 'Sauer', '16WiSe', 'Initiator', 'thomassss')
-    ];
+    this.allContributors = ContributorsList.getAllContributors();
+    // Cleanup data so can sort perfectly
     this.allContributors.forEach((value, index, array) => {
       value.firstName = value.firstName.trim();
       value.name = value.name.trim();
@@ -39,6 +29,7 @@ export class GeneralInfoComponent implements OnInit {
       value.githubId = value.githubId.replace(' ', '');
       value.to = value.to.replace(' ', '');
     });
+    // Sort contributor
     this.allContributors.sort(Contributor.compare);
   }
 
