@@ -6,20 +6,19 @@ import {Server} from '../../src/server';
 import {FixtureLoader} from '../../fixtures/FixtureLoader';
 import {JwtUtils} from '../../src/security/JwtUtils';
 import {User} from '../../src/models/User';
-import {Course} from '../../src/models/Course';
 
 chai.use(chaiHttp);
 chai.should();
 const app = new Server().app;
-const BASE_URL = '/api/courses';
+const BASE_URL = '/api/user';
 const fixtureLoader = new FixtureLoader();
 
-describe('Course', () => {
+describe('User', () => {
   // Before each test we reset the database
   beforeEach(() => fixtureLoader.load());
 
   describe(`GET ${BASE_URL}`, () => {
-    it('should return all courses', (done) => {
+    it('should return all users', (done) => {
       User.findOne({email: 'student1@test.local'})
         .then((user) => {
           chai.request(app)
@@ -28,13 +27,7 @@ describe('Course', () => {
             .end((err, res) => {
               res.status.should.be.equal(200);
               res.body.should.be.a('array');
-              res.body.length.should.be.eql(2);
-
-              res.body.forEach((course: any) => {
-                course._id.should.be.a('string');
-                course.name.should.be.a('string');
-                course.active.should.be.a('boolean');
-              });
+              res.body.length.should.be.eql(5);
 
               done();
             });
@@ -50,33 +43,6 @@ describe('Course', () => {
           res.status.should.be.equal(401);
           done();
         });
-    });
-  });
-
-  describe(`POST ${BASE_URL}`, () => {
-    it('should add a new course', (done) => {
-
-      User.findOne({email: 'teacher@test.local'})
-        .then((user) => {
-          const testData = {
-            name: 'Test Course',
-            description: 'Test description'
-          };
-
-          chai.request(app)
-            .post(BASE_URL)
-            .set('Authorization', `JWT ${JwtUtils.generateToken(user)}`)
-            .send(testData)
-            .end((err, res) => {
-              res.status.should.be.equal(200);
-
-              res.body.name.should.equal(testData.name);
-              res.body.description.should.equal(testData.description);
-
-              done();
-            });
-        })
-        .catch(done);
     });
   });
 });
