@@ -50,6 +50,7 @@ import { TeacherReportComponent } from './course/teacher-report/teacher-report.c
 import { UnitMenuComponent } from './shared/components/unit-menu/unit-menu.component';
 import { UnitEditComponent } from './course/course-edit/unit/unit-edit/unit-edit.component';
 import { TaskUnitComponent } from './course/course-edit/unit/task-unit/task-unit.component';
+import {GravatarDirective} from './course/course-edit/members/gravatar.directive';
 
 @NgModule({
   declarations: [
@@ -83,6 +84,7 @@ import { TaskUnitComponent } from './course/course-edit/unit/task-unit/task-unit
     UnitMenuComponent,
     UnitEditComponent,
     TaskUnitComponent,
+    GravatarDirective
   ],
   imports: [
     BrowserModule,
