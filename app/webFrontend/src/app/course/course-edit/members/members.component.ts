@@ -1,5 +1,6 @@
 /** Created by Oliver Neff on 14.04.2017. */
 import {Component, Input, OnInit} from '@angular/core';
+import {FormControl} from '@angular/forms';
 import {CourseService, UserDataService} from '../../../shared/services/data.service';
 import {ShowProgressService} from '../../../shared/services/show-progress.service';
 import {User} from '../../../models/User';
@@ -9,7 +10,7 @@ import { DragulaService } from 'ng2-dragula';
 @Component({
   selector: 'app-members',
   templateUrl: './members.component.html',
-  styleUrls: ['./members.component.scss']
+  styleUrls: ['./members.component.scss', '../../../../../node_modules/dragula/dist/dragula.css']
 })
 export class MembersComponent implements OnInit {
   @Input() courseId;
@@ -18,26 +19,30 @@ export class MembersComponent implements OnInit {
   users: User[] = [];
   currentMember: User = null
   fuzzySearch: String = '';
+  userCtrl: FormControl;
+  filteredStates: any;
 
   public setMember = (member) => {
     this.currentMember = member;
   }
-
   constructor(private userService: UserDataService,
               private courseService: CourseService,
               private showProgress: ShowProgressService,
               private  dragula: DragulaService) {
 
     dragula.setOptions('bag-one', {
-      removeOnSpill: false
+      revertOnSpill: true
     });
-    dragula.out.subscribe(value => {
-      const [bagName, e, el] = value;
-      const dataset: string[] = e.dataset.id.split(',');
-      this.switchUser(dataset[0], dataset[1]);
+    dragula.drop.subscribe(value => {
+      this.course.students = this.members;
+      this.updateMembersInCourse();
     });
-
     this.getStudents();
+
+    this.userCtrl = new FormControl();
+    this.filteredStates = this.userCtrl.valueChanges
+      .startWith(null)
+      .map(name => this.filterStates(name));
   }
 
   ngOnInit() {
@@ -127,12 +132,21 @@ export class MembersComponent implements OnInit {
     });
   }
 
+  filterStates(val: string) {
+    return val ? this.users.filter(s => this.fuzzysearch(val, s))
+      .map(e => e.profile.firstName + ' ' + e.profile.lastName + ' ' + e.uid + ' ' + e.email)
+      : [];
+  }
+
   fuzzysearch(toSearch: string, user: User): boolean {
     const lowerToSearch: string = toSearch.toLowerCase();
-    const result =
-      user.profile.firstName.toLowerCase().includes(lowerToSearch) ||
-      user.profile.lastName.toLowerCase().includes(lowerToSearch) ||
-      user.email.toLowerCase().includes(lowerToSearch);
-    return result;
+    const elementsToFind = lowerToSearch.split(' ');
+    const resArray = elementsToFind.filter(e => user.profile.firstName.toLowerCase().includes(e) ||
+      user.profile.lastName.toLowerCase().includes(e) ||
+    user.uid.toLowerCase().includes(e) ||
+    user.email.toLowerCase().includes(e)
+    );
+    console.log(resArray);
+    return resArray.length > 0;
   }
 }

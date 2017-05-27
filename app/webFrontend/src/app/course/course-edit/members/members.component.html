@@ -1,15 +1,20 @@
-<md-input-container dynamicHeight="true" class="fuzzySearch">
-    <input mdInput class="search" placeholder="Search and add students by name, Id, e-mail" [(ngModel)]="fuzzySearch"
-           [ngModelOptions]="{standalone: true}">
+<md-input-container class="fuzzySearch">
+  <input mdInput placeholder="Search and add students by name, Id, e-mail"
+         [mdAutocomplete]="auto" [formControl]="userCtrl" [(ngModel)]="fuzzySearch">
 </md-input-container>
+
+<md-autocomplete #auto="mdAutocomplete">
+  <md-option *ngFor="let state of filteredStates | async" [value]="state">
+    {{ state }}
+  </md-option>
+</md-autocomplete>
 
 <div class="members" *ngIf="fuzzySearch.length <= 3">
   <ng-container *ngFor="let member of members">
-<md-card [ngClass]="
-         (currentMember != null && currentMember._id == member._id) ? 'active':'profile'"
+<md-card [ngClass]="(currentMember != null && currentMember._id == member._id) ? 'active':'profile'"
          (click)="setMember(member)">
 
-  <div class="bg" [ngStyle]="{ 'background-image': 'url(' + member.getGravatarURL(160) + ')'}"> </div>
+  <div class="bg" [grav]="member.email"> </div>
 
   <div *ngIf="currentMember != null && currentMember._id == member._id">
       <button md-raised-button>DETAILS</button>
@@ -27,26 +32,29 @@
 </div>
 
 <div class="users" *ngIf="fuzzySearch.length > 3">
-  <p>In course ({{members.length}})</p>
-  <md-list *ngFor="let member of members" dense>
-    <md-list-item *ngIf="fuzzysearch(fuzzySearch,member)">
-      {{member.profile.firstName}} {{member.profile.lastName}} {{member.email}}
-      <button md-raised-button (click)="switchUser(member._id, 'left')">DELETE</button>
+  <p><b>In course ({{members.length}})</b></p>
+  <md-list class="drop" [dragula]='"bag-one"' [dragulaModel]='members'>
+      <ng-container *ngFor="let member of members">
+        <md-list-item class="list" *ngIf="fuzzysearch(fuzzySearch,member)" [attr.data-id]="[member._id,'right']">
+          <span class="listBg" [grav]="member.email"></span>
+          <span class="firstName">{{member.profile.firstName}}</span>
+          <span class="lastName">{{member.profile.lastName}}</span>
+          <span class="uid">{{member.uid}}</span>
+          <span class="email">{{member.email}}</span>
     </md-list-item>
+          </ng-container>
   </md-list>
 
-  <p>Not in course ({{users.length}})</p>
-  <md-list *ngFor="let user of users" dense>
-    <md-list-item *ngIf="fuzzysearch(fuzzySearch,user)">
-      {{user.profile.firstName}} {{user.profile.lastName}} {{user.email}}
-      <button md-raised-button (click)="switchUser(user._id, 'right')">ADD</button>
-    </md-list-item>
+  <p><b>Not in course ({{users.length}})</b></p>
+  <md-list class="drop" [dragula]='"bag-one"' [dragulaModel]='users'>
+      <ng-container *ngFor="let user of users">
+        <md-list-item class="list" *ngIf="fuzzysearch(fuzzySearch,user)" [attr.data-id]="[user._id,'right']">
+          <span class="listBg" [grav]="user.email"></span>
+          <span class="firstName">{{user.profile.firstName}}</span>
+          <span class="lastName">{{user.profile.lastName}}</span>
+          <span class="uid">{{user.uid}}</span>
+          <span class="email">{{user.email}}</span>
+        </md-list-item>
+      </ng-container>
   </md-list>
 </div>
-
-<br>
-
-
-  <md-list [dragula]='"bag-one"'  [dragulaModel]='users'>
-    <md-list-item *ngFor="let user of users" [attr.data-id]="[user._id,'right']" [attr.data-borg]='second'>{{user.profile.firstName}}</md-list-item>
-  </md-list>
