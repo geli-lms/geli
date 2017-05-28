@@ -5,7 +5,7 @@ import {CourseService, UserDataService} from '../../../shared/services/data.serv
 import {ShowProgressService} from '../../../shared/services/show-progress.service';
 import {User} from '../../../models/User';
 import {Course} from '../../../models/Course';
-import { DragulaService } from 'ng2-dragula';
+import {DragulaService} from 'ng2-dragula';
 
 @Component({
   selector: 'app-members',
@@ -17,14 +17,15 @@ export class MembersComponent implements OnInit {
   course: Course;
   members: User[] = [];
   users: User[] = [];
-  currentMember: User = null
+  currentMember: User = null;
   fuzzySearch: String = '';
   userCtrl: FormControl;
   filteredStates: any;
 
-  public setMember = (member) => {
+  setMember(member: User) {
     this.currentMember = member;
   }
+
   constructor(private userService: UserDataService,
               private courseService: CourseService,
               private showProgress: ShowProgressService,
@@ -56,7 +57,7 @@ export class MembersComponent implements OnInit {
   /**
    * Save all students in this course in database.
    */
-   updateMembersInCourse() {
+  updateMembersInCourse() {
     this.showProgress.toggleLoadingGlobal(true);
     this.courseService.updateItem({'students': this.course.students, '_id': this.courseId}).then(
       (val) => {
@@ -74,7 +75,7 @@ export class MembersComponent implements OnInit {
    * @param direction direction where user to switch.
    */
   switchUser(id: string, direction: string) {
-      if (direction === 'right') {
+    if (direction === 'right') {
       this.members = this.members.concat(this.users.filter(obj => id === obj._id));
       this.users = this.users.filter(obj => !(id === obj._id));
     } else if (direction === 'left') {
@@ -143,8 +144,8 @@ export class MembersComponent implements OnInit {
     const elementsToFind = lowerToSearch.split(' ');
     const resArray = elementsToFind.filter(e => user.profile.firstName.toLowerCase().includes(e) ||
       user.profile.lastName.toLowerCase().includes(e) ||
-    user.uid.toLowerCase().includes(e) ||
-    user.email.toLowerCase().includes(e)
+      user.uid.toLowerCase().includes(e) ||
+      user.email.toLowerCase().includes(e)
     );
     console.log(resArray);
     return resArray.length > 0;
