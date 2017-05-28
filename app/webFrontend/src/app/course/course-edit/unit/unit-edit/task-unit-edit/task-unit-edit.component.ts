@@ -23,7 +23,7 @@ export class TaskUnitEditComponent implements OnInit {
               private snackBar: MdSnackBar) {}
 
   ngOnInit() {
-    this.taskUnit = new TaskUnit();
+    this.taskUnit = new TaskUnit(this.courseId);
     this.loadTasksFromServer();
     // console.log('courseid:' + this.courseId);
   }

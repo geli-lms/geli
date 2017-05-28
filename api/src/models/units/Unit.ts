@@ -6,6 +6,10 @@ interface IUnitModel extends IUnit, mongoose.Document {
 }
 
 const unitSchema = new mongoose.Schema({
+    _course: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Course'
+    },
     progressable: {
       type: Boolean
     },

@@ -14,7 +14,7 @@ export class UploadComponent implements OnInit {
 
   lectureId: string;
   uploader: FileUploader = new FileUploader({
-    url: '/api/unit/upload',
+    url: '/api/units/upload',
     headers: [{
       name: 'Authorization',
       value: localStorage.getItem('token'),
@@ -32,6 +32,7 @@ export class UploadComponent implements OnInit {
   ngOnInit() {
     this.uploader.onBuildItemForm = (fileItem: any, form: any) => {
       form.append('lectureId', this.lectureId);
+      form.append('courseId', this.course._id);
     };
     this.uploader.onCompleteAll = () => {
       this.snackBar.open('All items uploaded!', '', { duration: 3000 });
