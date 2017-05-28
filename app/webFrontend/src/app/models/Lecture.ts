@@ -8,8 +8,7 @@ export class Lecture implements ILecture {
   description: string;
   units: IUnit[];
 
-  constructor();
-  constructor(obj: ILecture);
+  constructor(obj?: ILecture);
   constructor(obj?: any) {
     this._id = obj && obj._id || null;
     this.name = obj && obj.name || '';
