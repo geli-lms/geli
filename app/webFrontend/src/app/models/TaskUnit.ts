@@ -1,7 +1,9 @@
 import {ITaskUnit} from '../../../../../shared/models/units/ITaskUnit';
 import {ITask} from '../../../../../shared/models/task/ITask';
+import {ICourse} from '../../../../../shared/models/ICourse';
 
 export class TaskUnit implements ITaskUnit {
+  _course: any;
   _id: any;
   type: string;
   progressable: boolean;
@@ -9,7 +11,8 @@ export class TaskUnit implements ITaskUnit {
 
   tasks: ITask[] = [];
 
-  constructor() {
+  constructor(_course: ICourse) {
+    this._course = _course;
     this.progressable = true;
     this.weight = 0;
   }

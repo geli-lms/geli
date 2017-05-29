@@ -22,7 +22,7 @@ export class UploadUnitController extends UnitController {
     }
     // path for file upload units (for now video only)
     if (file) {
-      return new VideoUnit({filePath: file.path, fileName: file.originalname}).save()
+      return new VideoUnit({_course: data.courseId, filePath: file.path, fileName: file.originalname}).save()
       .then((unit) => this.pushToLecture(data.lectureId, unit));
     }
   }
