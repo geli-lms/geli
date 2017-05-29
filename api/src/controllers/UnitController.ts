@@ -14,6 +14,14 @@ const uploadOptions = {dest: 'uploads/' };
 @UseBefore(passportJwtMiddleware)
 export class UnitController {
 
+  @Get('units/progressable/course/:id')
+  getProgressableUnitsForCourse(@Param('id') id: string) {
+    return Unit.find({'_course': id})
+    .then((units) => {
+      units.map((unit) => unit.toObject());
+    });
+  }
+
   @Get('/:id')
   getUnit(@Param('id') id: string) {
     return Unit.findById(id)

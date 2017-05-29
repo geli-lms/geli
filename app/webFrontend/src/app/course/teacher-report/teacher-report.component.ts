@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {CourseService} from '../../shared/services/data.service';
+import {CourseService, UnitService} from '../../shared/services/data.service';
 
 @Component({
   selector: 'app-teacher-report',
@@ -8,7 +8,8 @@ import {CourseService} from '../../shared/services/data.service';
 })
 export class TeacherReportComponent implements OnInit {
 
-  constructor(private courseService: CourseService) { }
+  constructor(private courseService: CourseService,
+              private unitService: UnitService) { }
 
   ngOnInit() {
   }

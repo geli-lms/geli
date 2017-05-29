@@ -155,13 +155,21 @@ export class LectureService extends DataService {
 @Injectable()
 export class UnitService extends DataService {
   constructor(public backendService: BackendService) {
-    super('unit/', backendService);
+    super('units/', backendService);
   }
 
   addTaskUnit(taskUnit: ITaskUnit, lectureId: string) {
     const originalApiPath = this.apiPath;
     this.apiPath += 'tasks';
     const promise = this.createItem({taskUnit: taskUnit, lectureId: lectureId});
+    this.apiPath = originalApiPath;
+    return promise;
+  }
+
+  getUnitForCourse(courseId: string) {
+    const originalApiPath = this.apiPath;
+    this.apiPath += 'progressable/course/';
+    const promise = this.readSingleItem(courseId);
     this.apiPath = originalApiPath;
     return promise;
   }
