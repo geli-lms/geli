@@ -155,7 +155,7 @@ export class LectureService extends DataService {
 @Injectable()
 export class UnitService extends DataService {
   constructor(public backendService: BackendService) {
-    super('unit/', backendService);
+    super('units/', backendService);
   }
 
   addTaskUnit(taskUnit: ITaskUnit, lectureId: string) {
@@ -163,6 +163,14 @@ export class UnitService extends DataService {
     this.apiPath += 'tasks';
     const promise = this.createItem({taskUnit: taskUnit, lectureId: lectureId});
     this.apiPath = originalApiPath;
+    return promise;
+  }
+
+  getProgressableUnits(courseId: string) {
+    const originalApiPath = this.apiPath;
+    this.apiPath += 'course/progressable/';
+    const promise = this.readSingleItem(courseId);
+    this. apiPath = originalApiPath;
     return promise;
   }
 }
