@@ -166,6 +166,14 @@ export class UnitService extends DataService {
     return promise;
   }
 
+  getUnitForCourse(courseId: string) {
+    const originalApiPath = this.apiPath;
+    this.apiPath += 'progressable/course/';
+    const promise = this.readSingleItem(courseId);
+    this.apiPath = originalApiPath;
+    return promise;
+  }
+
   getProgressableUnits(courseId: string) {
     const originalApiPath = this.apiPath;
     this.apiPath += 'course/progressable/';
