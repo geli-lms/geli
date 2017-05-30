@@ -5,7 +5,7 @@ import {TaskUnit} from '../models/units/TaskUnit';
 import {ITask} from '../../../shared/models/task/ITask';
 import {ITaskModel, Task} from '../models/Task';
 
-@JsonController('/unit/tasks')
+@JsonController('/units/tasks')
 @UseBefore(passportJwtMiddleware)
 export class TaskUnitController extends UnitController {
 
