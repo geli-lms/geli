@@ -67,7 +67,7 @@ nlf.find({
     data = data.replace(SEARCH_FOR, out);
 
     if (process.env.TRAVIS) {
-      fs.writeFile(PATH_APP_WEB + PATH_APP_WEB_FILE_NAME, data,
+      fs.writeFile(PATH_APP_WEB + PATH_APP_WEB_FILE_NAME, data, 'utf8',
         () => console.log(('+ appWeb: wrote file'))
       );
     } else {
