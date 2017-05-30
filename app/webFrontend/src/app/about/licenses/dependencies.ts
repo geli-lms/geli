@@ -1,11 +1,10 @@
 import {Dependency} from './dependency.model';
 
-// Contains all Dependecys
+// Contains all Dependencies
 export class DependenciesList {
-  public static getDependencys(): Dependency[] {
+  public static getDependencies(): Dependency[] {
     return [
-      // BEGIN_DEPENDENCY_REPLACE
-      // END_DEPENDENCY_REPLACE
+      // DEPENDENCY_REPLACE
     ];
   }
 }

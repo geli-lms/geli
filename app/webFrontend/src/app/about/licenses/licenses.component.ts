@@ -22,7 +22,7 @@ export class LicensesComponent implements OnInit {
   }
 
   getAllFrontendDependencies() {
-    this.allFrontendDependencies = DependenciesList.getDependencys()
+    this.allFrontendDependencies = DependenciesList.getDependencies()
       .sort(Dependency.compare);
   }
 
