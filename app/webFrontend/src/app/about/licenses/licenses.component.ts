@@ -32,4 +32,12 @@ export class LicensesComponent implements OnInit {
         this.allApiDependencies = dependencies.sort(Dependency.compare);
       });
   }
+
+  isApiDependenciesEmpty() {
+    return this.allApiDependencies !== undefined && this.allApiDependencies.length === 0;
+  }
+
+  isFrontendDependenciesEmpty() {
+    return this.allFrontendDependencies !== undefined && this.allFrontendDependencies.length === 0;
+  }
 }
