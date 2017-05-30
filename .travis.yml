@@ -64,7 +64,7 @@ install:
 script:
   # run license checker and write license.json / dependencies.ts
   - cd .travis
-  - node lincense.js
+  - node license.js
   - cd ..
   # run backend-tests and return back to root for following steps
   - cd api
