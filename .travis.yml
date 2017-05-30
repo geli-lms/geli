@@ -62,6 +62,10 @@ install:
   - cd ..
 
 script:
+  # run license checker and write license.json / dependencies.ts
+  - cd .travis
+  - node lincense.js
+  - cd ..
   # run backend-tests and return back to root for following steps
   - cd api
   - npm run test        # run backend test
@@ -77,8 +81,6 @@ script:
 after_script:
   # send required files to coveralls.io
   - .travis/coveralls.sh
-  # run license checker
-  - .travis/license-crawler.sh
 
 after_success:
   - .travis/docker.sh

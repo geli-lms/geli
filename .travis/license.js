@@ -16,24 +16,24 @@ console.log('\n+++ Starting license js\n');
 
 // API
 console.log('+ starting api crawl');
-// nlf.find({
-//   directory: PATH_API,
-//   production: true,
-//   depth: 1
-// }, (err, data) => {
-//   if (err) throw err;
-//   console.log('+ api: polish json');
-//   let json = JSON.stringify(
-//     {data: polishJson(data)}
-//   );
-//
-//   fs.writeFile(
-//     PATH_API + LICENSE_FILE_NAME + '.json',
-//     json,
-//     'utf8',
-//     () => console.log('+ api: wrote json')
-//   );
-// });
+nlf.find({
+  directory: PATH_API,
+  production: true,
+  depth: 1
+}, (err, data) => {
+  if (err) throw err;
+  console.log('+ api: polish json');
+  let json = JSON.stringify(
+    {data: polishJson(data)}
+  );
+
+  fs.writeFile(
+    PATH_API + LICENSE_FILE_NAME + '.json',
+    json,
+    'utf8',
+    () => console.log('+ api: wrote json')
+  );
+});
 
 // WEB_APP
 console.log('+ starting appWeb crawl');
@@ -46,7 +46,7 @@ nlf.find({
   let json = polishJson(data);
 
   let out = '';
-  json.forEach((value, i, arr) => {
+  json.forEach((value, i) => {
     if (i > 0) {
       out += '\n      , ';
     }
@@ -66,9 +66,14 @@ nlf.find({
     data = data.toString();
     data = data.replace(SEARCH_FOR, out);
 
-    fs.writeFile(PATH_APP_WEB + PATH_APP_WEB_FILE_NAME, data,
-      () => console.log(('+ appWeb: wrote file'))
-    );
+    if (process.env.TRAVIS_CI) {
+      fs.writeFile(PATH_APP_WEB + PATH_APP_WEB_FILE_NAME, data,
+        () => console.log(('+ appWeb: wrote file'))
+      );
+    } else {
+      console.warn('+ appWeb: We are not on travis, will only print content:');
+      console.log(data);
+    }
   })
 });
 
