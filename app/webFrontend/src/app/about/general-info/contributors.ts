@@ -1,4 +1,4 @@
-import {Contributor} from "./contributor.model";
+import {Contributor} from './contributor.model';
 
 // This file contains all contributors
 export class ContributorsList {

@@ -1,12 +1,12 @@
 export class Contributor {
+  public static PRESENT = 'present';
+
   firstName: string;
   name: string;
   from: string;
   to: string;
   githubId: string;
   position: string;
-
-  public static PRESENT = 'present';
 
   // To be able to sort eg an array
   public static compare(a: Contributor, b: Contributor): number {

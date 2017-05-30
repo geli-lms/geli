@@ -1,7 +1,6 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
-
 import {GeneralInfoComponent} from './general-info.component';
-import {Contributor} from "./contributor.model";
+import {Contributor} from './contributor.model';
 
 describe('GeneralInfoComponent', () => {
   let component: GeneralInfoComponent;
@@ -25,7 +24,7 @@ describe('GeneralInfoComponent', () => {
   });
 
   it('should compare contributors correct', () => {
-    let testdata = [
+    const testData = [
       { // Exactly the same
         a: new Contributor('Fn', 'Ln', '15SuSe', 'Tester', 'gh', Contributor.PRESENT),
         b: new Contributor('Fn', 'Ln', '15SuSe', 'Tester', 'gh', Contributor.PRESENT),
@@ -83,8 +82,8 @@ describe('GeneralInfoComponent', () => {
       },
     ];
 
-    testdata.forEach((value, index, array) => {
+    testData.forEach((value) => {
       expect(Contributor.compare(value.a, value.b)).toBe(value.res);
-    })
+    });
   });
 });

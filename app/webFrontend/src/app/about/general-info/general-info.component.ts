@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Contributor} from './contributor.model';
-import {DomSanitizer} from "@angular/platform-browser";
-import {ContributorsList} from "./contributors";
+import {DomSanitizer} from '@angular/platform-browser';
+import {ContributorsList} from './contributors';
 
 @Component({
   selector: 'app-general-info',
@@ -35,7 +35,7 @@ export class GeneralInfoComponent implements OnInit {
 
   getUserAvatar(cntbr: Contributor) {
     const GH_ID = '[gh_id]';
-    let style = 'background-image: url(\'https://github.com/' + GH_ID + '.png?size=100\');';
+    const style = 'background-image: url(\'https://github.com/' + GH_ID + '.png?size=100\');';
 
     // If the githubId is set, return bg-image otherwise empty string
     if (cntbr.githubId !== null && cntbr.githubId.length !== 0) {
