@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Dependency} from './dependency.model';
 import {DependenciesList} from './dependencies';
+import {AboutDataService} from '../../shared/services/data.service';
 
 @Component({
   selector: 'app-licenses',
@@ -12,7 +13,7 @@ export class LicensesComponent implements OnInit {
   allFrontendDependencies: Dependency[];
   allApiDependencies: Dependency[];
 
-  constructor() {
+  constructor(private service: AboutDataService) {
   }
 
   ngOnInit() {
@@ -26,9 +27,9 @@ export class LicensesComponent implements OnInit {
   }
 
   getAllApiDependencies() {
-    this.allApiDependencies = [
-      // TODO
-    ].sort(Dependency.compare);
+    this.service.getApiDependencies()
+      .then((dependencies: any) => {
+        this.allApiDependencies = dependencies.sort(Dependency.compare);
+      });
   }
-
 }

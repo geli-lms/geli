@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
 import {BackendService} from './backend.service';
+import {Dependency} from '../../about/licenses/dependency.model';
 
 abstract class DataService {
 
@@ -159,5 +160,33 @@ export class UserDataService extends DataService {
     const promise = this.readItems();
     this.apiPath = originalApiPath;
     return promise;
+  }
+}
+
+@Injectable()
+export class AboutDataService extends DataService {
+  constructor(public backendService: BackendService) {
+    super('about/', backendService);
+  }
+
+  getApiDependencies(): Promise<any[]> {
+    return new Promise((resolve, reject) => {
+      this.backendService.get(this.apiPath + 'dependencies')
+        .subscribe((responseItems: any) => {
+            const out = [];
+            responseItems.data.forEach(item => {
+              out.push(new Dependency(
+                item.name,
+                item.version,
+                item.repository,
+                item.license,
+                item.devDependency)
+              );
+            });
+            resolve(out);
+          },
+          error => reject(error)
+        );
+    });
   }
 }

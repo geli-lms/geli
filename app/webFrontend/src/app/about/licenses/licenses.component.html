@@ -1,7 +1,7 @@
 <h2>Dependencies / Licenses</h2>
 
 <h3>WebFrontend</h3>
-<p *ngIf="allFrontendDependencies">No Dependencies loaded...</p>
+<p *ngIf="allFrontendDependencies == false">No Dependencies found...</p>
 <md-list>
   <md-list-item *ngFor="let dep of allFrontendDependencies;">
     <md-icon md-list-icon>folder</md-icon>
@@ -13,7 +13,7 @@
 </md-list>
 
 <h3>API</h3>
-<p *ngIf="allApiDependencies">No Dependencies loaded...</p>
+<p *ngIf="allApiDependencies == false">No Dependencies found...</p>
 <md-list>
   <md-list-item *ngFor="let dep of allApiDependencies;">
     <md-icon md-list-icon>folder</md-icon>
