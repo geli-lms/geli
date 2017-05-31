@@ -10,6 +10,10 @@ const unitSchema = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Course'
     },
+    title: {
+      type: String,
+      required: true
+    },
     progressable: {
       type: Boolean
     },
