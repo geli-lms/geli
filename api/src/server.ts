@@ -27,8 +27,6 @@ export class Server {
     // Do not use mpromise
     (<any>mongoose).Promise = global.Promise;
 
-    mongoose.connect(config.database);
-
     this.app = createExpressServer({
       routePrefix: '/api',
       controllers: [__dirname + '/controllers/*.js'] // register all controller's routes
@@ -37,14 +35,16 @@ export class Server {
     // TODO: Needs authentication in the future
     this.app.use('/api/uploads', express.static('uploads'));
 
-    // Request logger
-    this.app.use(morgan('combined'));
-
     Server.setupPassport();
     this.app.use(passport.initialize());
   }
 
   start() {
+    mongoose.connect(config.database);
+
+    // Request logger
+    this.app.use(morgan('combined'));
+
     this.app.listen(config.port, () => {
       winston.log('info', '--> Server successfully started at port %d', config.port);
     });
