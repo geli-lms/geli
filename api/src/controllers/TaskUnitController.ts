@@ -1,11 +1,11 @@
-import {Body, Post, JsonController, UseBefore} from 'routing-controllers';
+import {Body, Post, JsonController, UseBefore, BadRequestError} from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import {UnitController} from './UnitController';
 import {TaskUnit} from '../models/units/TaskUnit';
 import {ITask} from '../../../shared/models/task/ITask';
 import {ITaskModel, Task} from '../models/Task';
 
-@JsonController('/unit/tasks')
+@JsonController('/units/tasks')
 @UseBefore(passportJwtMiddleware)
 export class TaskUnitController extends UnitController {
 
@@ -13,11 +13,11 @@ export class TaskUnitController extends UnitController {
   addTaskUnit(@Body() data: any) {
     // discard invalid requests
     if (!data.lectureId) {
-      return;
+      return new BadRequestError('No lecture ID was submitted.');
     }
 
     if (!data.taskUnit) {
-      return;
+      return new BadRequestError('No task unit was submitted.');
     }
 
     const tasks: ITask[] = data.taskUnit.tasks;
