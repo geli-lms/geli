@@ -5,30 +5,23 @@
     <md-input-container class="full-width">
       <input mdInput formControlName="firstName" placeholder="First name"/>
     </md-input-container>
-    <br/>
+
     <md-input-container class="full-width">
       <input mdInput formControlName="lastName" placeholder="Last name"/>
     </md-input-container>
-    <br/>
   </div>
-  <md-input-container class="full-width">
-    <input mdInput formControlName="username" placeholder="User name"/>
-  </md-input-container>
-  <br/>
+
   <md-input-container class="full-width">
     <input mdInput formControlName="email" placeholder="e-mail"/>
   </md-input-container>
-  <br/>
 
   <md-input-container class="full-width">
     <input mdInput formControlName="currentPassword" placeholder="Current password" />
   </md-input-container>
-  <br />
 
   <md-input-container class="full-width">
     <input mdInput type="password" formControlName="password" placeholder="Password" />
   </md-input-container>
-  <br />
 
   <md-input-container class="full-width">
     <input mdInput type="password" formControlName="confirmPassword" placeholder="Confirm password" />
@@ -36,7 +29,6 @@
       <div *ngIf="userForm.hasError('mismatchedPasswords')">Passwords do not match.</div>
     </div>
   </md-input-container>
-  <br/>
 
   <button md-raised-button color="accent" class="md-button" type="submit">Save</button>
   <button md-raised-button color="warn" class="md-button" routerLink="/profile" routerLinkActive="active">Cancel
