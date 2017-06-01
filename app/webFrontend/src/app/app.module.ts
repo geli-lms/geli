@@ -66,7 +66,6 @@ import {LicensesComponent} from './about/licenses/licenses.component';
     DashboardTeacherComponent,
     DashboardAdminComponent,
     TaskListComponent,
-    TaskCardComponent,
     CourseComponent,
     CourseDetailComponent,
     CourseEditComponent,
@@ -98,7 +97,8 @@ import {LicensesComponent} from './about/licenses/licenses.component';
     FileUploadModule,
     DialogModule
   ],
-  providers: [UserService,
+  providers: [
+    UserService,
     AboutDataService,
     AuthenticationService,
     AuthGuardService,
@@ -109,7 +109,8 @@ import {LicensesComponent} from './about/licenses/licenses.component';
     BackendService,
     UserDataService,
     ShowProgressService,
-    JwtHelper],
+    JwtHelper
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {
