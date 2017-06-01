@@ -31,7 +31,6 @@ import {CourseDetailComponent} from './course/course-detail/course-detail.compon
 import {CourseEditComponent} from './course/course-edit/course-edit.component';
 import {CourseNewComponent} from './course/course-new/course-new.component';
 import {TaskListComponent} from './course/course-edit/tasks/task-list.component';
-import {TaskCardComponent} from './course/course-edit/tasks/task-card.component';
 
 import {ShowProgressService} from './shared/services/show-progress.service';
 import {UnitComponent} from './course/course-edit/unit/unit.component';
