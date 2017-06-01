@@ -15,7 +15,7 @@ export class Task {
   constructor(courseId: string, name: string ) {
     this.name = name;
     this.courseId = courseId;
-    this._id = null;
+    // this._id = null;
   }
 }
 
