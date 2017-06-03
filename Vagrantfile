@@ -57,7 +57,8 @@ Vagrant.configure(2) do |config|
   # argument is a set of non-required options.
   # IF NFS CAUSES TROUBLE COMMENT THE "TYPE"-PARAM OUT
   # WINDOWS USER SHOULD INSTALL THE PLUGIN "vagrant-winnfsd"
-  config.vm.synced_folder ".", $vagrant_sync_folder, type: "nfs"
+  # config.vm.synced_folder ".", $vagrant_sync_folder, type: "nfs" # Comment this in to run with nfs
+  config.vm.synced_folder ".", $vagrant_sync_folder
 
   # See https://github.com/npm/npm/issues/7308
   config.vm.provider "virtualbox" do |v|

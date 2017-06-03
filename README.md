@@ -100,7 +100,7 @@ I would suggest you the following plugins for vagrant, to install plugins run `v
 - vagrant-netinfo
   - This plugin can be handy if you want to see all forwarded ports of a box
 
-In the `Vagrantfile` the nfs mount is enabled by default, if that causes problems (eg permission errors on npm install) just comment out the part `, type: "nfs"` in the `Vagrantfile` and `vagrant reload` your box.
+In the `Vagrantfile` the nfs mount can be enabled, this can cause problems (eg permission errors on npm install). If you have problems undo the commenting switch in the `Vagrantfile` and `vagrant reload` your box.
 
 ### Start services
 To start the __backend__ ssh into the VM with `vagrant ssh` and run the following lines. This will lint and compile the code, aswell start the api-webserver.
