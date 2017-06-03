@@ -3,6 +3,7 @@ import config from '../src/config/main';
 
 import {userFixtures} from './userFixtures';
 import {courseFixtures} from './courseFixtures';
+import {taskFixtures} from './taskFixtures';
 import {IFixture} from './IFixture';
 
 
@@ -10,7 +11,8 @@ export class FixtureLoader {
 
   private fixtures: Array<IFixture> = [
     userFixtures,
-    courseFixtures
+    courseFixtures,
+    taskFixtures
   ];
 
   constructor() {
