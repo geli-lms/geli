@@ -2,6 +2,8 @@ import {Injectable} from '@angular/core';
 import {BackendService} from './backend.service';
 import {IUser} from '../../../../../../shared/models/IUser';
 import {ICourse} from '../../../../../../shared/models/ICourse';
+import {User} from '../../models/User';
+import {Course} from '../../models/Course';
 
 abstract class DataService {
 
@@ -119,6 +121,18 @@ export class CourseService extends DataService {
     }
     return this.updateItem(course);
   }
+
+  // TODO: UMBBAUEN und promise returnen
+  getTeachers(courseId: string): Promise<User[]> {
+    return this.readSingleItem(courseId).then(
+      (val: any) => {
+        return val.teachers;
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  }
 }
 
 @Injectable()
@@ -169,5 +183,11 @@ export class UserDataService extends DataService {
     const promise = this.readItems();
     this.apiPath = originalApiPath;
     return promise;
+  }
+
+  getUsersByRole(role: string): Promise<User[]> {
+    return this.readItems().then(
+      users => users.filter(user => user.role === role)
+    );
   }
 }

@@ -55,6 +55,39 @@ export const userFixtures: IFixture = {
         lastName: 'Teachman'
       },
       isActive: true
+    },
+    {
+      username: 'Oberlehrer',
+      email: 'teacher2@test.local',
+      password: 'test',
+      role: 'teacher',
+      profile: {
+        firstName: 'Ober',
+        lastName: 'Lehrer'
+      },
+      isActive: true
+    },
+    {
+      username: 'Streber',
+      email: 'teacher3@test.local',
+      password: 'test',
+      role: 'teacher',
+      profile: {
+        firstName: 'Ober',
+        lastName: 'Streber'
+      },
+      isActive: true
+    },
+    {
+      username: 'Prof',
+      email: 'teacher4@test.local',
+      password: 'test',
+      role: 'teacher',
+      profile: {
+        firstName: 'Severus',
+        lastName: 'Snap'
+      },
+      isActive: true
     }
   ]
 };

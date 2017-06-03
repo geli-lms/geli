@@ -47,6 +47,8 @@ import { StartComponent } from './start/start.component';
 import {AdminComponent} from './admin/admin.component';
 import {DialogModule} from './shared/modules/dialog/dialog.module';
 import { LectureFormComponent } from './lecture/lecture-form/lecture-form.component';
+import { TeachersComponent } from './course/course-edit/teachers/teachers.component';
+import {GravatarDirective} from './shared/directives/gravatar.directive';
 
 @NgModule({
   declarations: [
@@ -77,6 +79,8 @@ import { LectureFormComponent } from './lecture/lecture-form/lecture-form.compon
     StartComponent,
     AdminComponent,
     LectureFormComponent,
+    TeachersComponent,
+    GravatarDirective
   ],
   imports: [
     BrowserModule,
@@ -88,6 +92,9 @@ import { LectureFormComponent } from './lecture/lecture-form/lecture-form.compon
     ReactiveFormsModule,
     FileUploadModule,
     DialogModule
+  ],
+  exports: [
+    GravatarDirective
   ],
   providers: [UserService,
               AuthenticationService,
