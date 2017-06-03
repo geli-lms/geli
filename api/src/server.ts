@@ -40,6 +40,11 @@ export class Server {
   }
 
   start() {
+    mongoose.connect(config.database);
+
+    // Request logger
+    this.app.use(morgan('combined'));
+
     this.app.listen(config.port, () => {
       winston.log('info', '--> Server successfully started at port %d', config.port);
     });
@@ -50,9 +55,5 @@ export class Server {
  * For testing mocha will start express itself
  */
 if (process.env.NODE_ENV !== 'test') {
-  // Request logger
-  this.app.use(morgan('combined'));
-
-  mongoose.connect(config.database);
   new Server().start();
 }
