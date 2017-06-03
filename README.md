@@ -92,6 +92,16 @@ After everything is installed and all npm dependencies are downloaded you can co
 via `vagrant ssh`. The Ports 4200 and 27017 are forwarded to your host system. Just type `localhost:4200` in your
 browser and you will (almost) see your local geli-instance.
 
+I would suggest you the following plugins for vagrant, to install plugins run `vagrant plugin install [packagename]`:
+- vagrant-vbguest
+  - This plugins installs automaticalyl the correct virtualbox-guest-addition on your guest-system
+- vagrant-winnfsd
+  - This plugin enables NFS-mounting for windows systems, which will speed up the filesysystem a lot!
+- vagrant-netinfo
+  - This plugin can be handy if you want to see all forwarded ports of a box
+
+In the `Vagrantfile` the nfs mount is enabled by default, if that causes problems (eg permission errors on npm install) just comment out the part `, type: "nfs"` in the `Vagrantfile` and `vagrant reload` your box.
+
 ### Start services
 To start the __backend__ ssh into the VM with `vagrant ssh` and run the following lines. This will lint and compile the code, aswell start the api-webserver.
 

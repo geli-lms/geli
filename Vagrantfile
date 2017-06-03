@@ -55,7 +55,9 @@ Vagrant.configure(2) do |config|
   # the path on the host to the actual folder. The second argument is
   # the path on the guest to mount the folder. And the optional third
   # argument is a set of non-required options.
-  config.vm.synced_folder ".", $vagrant_sync_folder
+  # IF NFS CAUSES TROUBLE COMMENT THE "TYPE"-PARAM OUT
+  # WINDOWS USER SHOULD INSTALL THE PLUGIN "vagrant-winnfsd"
+  config.vm.synced_folder ".", $vagrant_sync_folder, type: "nfs"
 
   # See https://github.com/npm/npm/issues/7308
   config.vm.provider "virtualbox" do |v|
