@@ -1,6 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {TaskService} from '../../../shared/services/data.service';
-import {Task} from '../../../models/task';
+import {TaskAttestationService} from '../../../shared/services/data.service';
+import {Task} from '../../../models/Task';
 import {MdSnackBar} from '@angular/material';
 
 @Component({
@@ -13,6 +14,7 @@ export class TaskListComponent implements OnInit {
   tasks: any[];
 
   constructor(private taskService: TaskService,
+              private taskAttestationService: TaskAttestationService,
               private snackBar: MdSnackBar
   ) {
   }
@@ -27,7 +29,7 @@ export class TaskListComponent implements OnInit {
       this.tasks = tasks;
 
       for (const task of this.tasks) {
-        this.answerPreparationAfterLoadingFromServer(task); // WORKAROUND get rid of the _id for the answers
+        this.answerPreparationAfterLoadingFromServer(task); // TODO WORKAROUND get rid of the _id for the answers
       }
     });
   }

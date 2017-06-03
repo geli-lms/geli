@@ -3,7 +3,9 @@ import {Body, Get, Post, Put, Param, Req, JsonController, UseBefore, Delete} fro
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 
 import {Task} from '../models/Task';
+import {TaskAttestation} from '../models/TaskAttestation';
 import {ITask} from '../../../shared/models/ITask';
+import {ITaskAttestation} from '../../../shared/models/ITaskAttestation';
 
 @JsonController('/tasks')
 @UseBefore(passportJwtMiddleware)
@@ -18,26 +20,28 @@ export class TaskController {
   @Get('/:id')
   getTask(@Param('id') id: string) {
     return Task.findById(id)
-      .then((t) => t.toObject());
+      .then((task) => task.toObject());
   }
 
   @Post('/')
   addTask(@Body() task: ITask, @Req() request: Request) {
     return new Task(task).save()
-      .then((t) => t.toObject());
+      .then((newTask) => newTask.toObject());
   }
 
   @Put('/:id')
   updateTask(@Param('id') id: string, @Body() task: ITask) {
     return Task.findByIdAndUpdate(id, task, {'new': true})
-      .then((t) => t.toObject());
+      .then((updatedTask) => updatedTask.toObject());
   }
 
   @Delete('/:id')
   deleteTask(@Param('id') id: string, @Body() task: ITask) {
    return Task.findByIdAndRemove(id, task)
-      .then((t) => t.toObject());
+      .then((deletedTask) => deletedTask.toObject());
   }
+
+  // *************
 
   @Get('/course/:courseId')
   getTasksForCourse(@Param('courseId') courseId: string) {

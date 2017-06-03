@@ -2,4 +2,6 @@
 
 <p>{{course?.description}}</p>
 
+<app-task-attestation [taskId]="taskId"></app-task-attestation>
+
 <app-lecture [course]="course" *ngIf="course">

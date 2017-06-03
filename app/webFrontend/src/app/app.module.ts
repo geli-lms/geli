@@ -21,13 +21,14 @@ import { AuthGuardService } from './shared/services/auth-guard.service';
 import { DashboardStudentComponent } from './start/dashboard/dashboard-student/dashboard-student.component';
 import { DashboardTeacherComponent } from './start/dashboard/dashboard-teacher/dashboard-teacher.component';
 import { DashboardAdminComponent } from './start/dashboard/dashboard-admin/dashboard-admin.component';
-import { CourseService, TaskService, UserDataService, LectureService } from './shared/services/data.service';
+import { CourseService, TaskService, TaskAttestationService, UserDataService, LectureService } from './shared/services/data.service';
 import { BackendService } from './shared/services/backend.service';
 import { CourseComponent } from './course/course.component';
 import { CourseDetailComponent } from './course/course-detail/course-detail.component';
 import { CourseEditComponent } from './course/course-edit/course-edit.component';
 import { CourseNewComponent } from './course/course-new/course-new.component';
 import { TaskListComponent } from './course/course-edit/tasks/task-list.component';
+import { TaskAttestationComponent } from './course/course-detail/tasks/task-attestation.component';
 
 import { ShowProgressService } from './shared/services/show-progress.service';
 import { UnitComponent } from './course/course-edit/unit/unit.component';
@@ -59,6 +60,7 @@ import { LectureFormComponent } from './lecture/lecture-form/lecture-form.compon
     DashboardTeacherComponent,
     DashboardAdminComponent,
     TaskListComponent,
+    TaskAttestationComponent,
     CourseComponent,
     CourseDetailComponent,
     CourseEditComponent,
@@ -91,6 +93,7 @@ import { LectureFormComponent } from './lecture/lecture-form/lecture-form.compon
               AuthenticationService,
               AuthGuardService,
               TaskService,
+              TaskAttestationService,
               CourseService,
               UserDataService,
               LectureService,
