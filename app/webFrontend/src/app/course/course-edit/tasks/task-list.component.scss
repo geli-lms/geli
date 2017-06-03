@@ -1,0 +1,50 @@
+
+.add-task-fab {
+  position: fixed;
+  right: 30px;
+  top: 20px;
+}
+
+.info-text {
+  padding: 20px 20px;
+  font-style: italic;
+  color: rgb(224, 224, 224);
+}
+
+.question-answer {
+
+  padding: 20px 20px;
+  clear: both;
+
+  .question {
+    width: 70%;
+  }
+
+  .answer, .actions {
+    display: inline-block;
+  }
+  .answers {
+    padding-top: 20px;
+    padding-left: 20px;
+
+    background-color: whitesmoke;
+  }
+
+  .answer {
+    width: 300px;
+    margin-right: 10px;
+
+    .check-answer {
+      width: 100%;
+      display: flex;
+
+      .mat-input-container {
+        flex-grow: 1;
+      }
+    }
+
+    @media (max-width: 700px) {
+      width: 100%;
+    }
+  }
+}

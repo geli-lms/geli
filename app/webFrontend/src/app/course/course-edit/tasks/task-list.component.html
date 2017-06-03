@@ -1,15 +1,40 @@
-<br>
 
-<div>
-  <button md-raised-button color="primary" *ngIf="!addingTask" (click)="addTask()"><md-icon>playlist_add</md-icon></button>
-  <button md-raised-button color="primary" *ngIf="addingTask" (click)="cancelTask()"><md-icon>undo</md-icon></button>
+<div class="info-text">
+<md-icon>info</md-icon> Add questions with any number of possible answers. Mark the correct answer(s) with the checkbox.
 </div>
 
-<hr>
+<div *ngFor="let task of tasks" class="question-answer">
 
+    <md-input-container md-line class="question">
+      <textarea mdInput id="name" placeholder="Frage hier eingeben." [(ngModel)]="task.name"></textarea>
+    </md-input-container>
 
-<div>
-  <div *ngFor="let task of tasks">
-     <task-card [task]="task" (onTaskCancel)="onTaskCancel();" (onRemoveTask)="onRemoveTask($event);" (onTaskCreated)="onTaskCreated($event);"></task-card>
+  <div class="actions">
+    <button md-icon-button (click)="addAnswerAtEnd(task)"><md-icon color="accent">add</md-icon></button>
+    <button md-icon-button (click)="removeLastAnswer(task)"><md-icon>remove</md-icon></button>
+    <button md-button (click)="updateTask(task)">UPDATE</button>
+    <button md-button (click)="removeTask(task)">DELETE</button>
   </div>
+
+    <div md-line class="answers">
+      <div class="answer" *ngFor="let answer of task.answers; let idx = index;">
+        <div class="check-answer">
+          <md-checkbox [(ngModel)]="answer.value" name="value_{{idx}}"></md-checkbox>
+          <md-input-container>
+            <input mdInput placeholder="Antwort hier eingeben." [(ngModel)]="answer.text">
+          </md-input-container>
+        </div>
+      </div>
+
+    </div>
+
 </div>
+
+<button md-fab class="add-task-fab" (click)="addTask()" mdTooltip="Add task" mdTooltipPosition="right">
+  <md-icon>add</md-icon>
+</button>
+
+
+
+
+
