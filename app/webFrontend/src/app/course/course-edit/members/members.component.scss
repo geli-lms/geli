@@ -66,18 +66,19 @@ button {
 }
 
 .drop {
-  min-height: 80px;
+  min-height: 40px;
   background-color: #fafafa;
 }
 
 .list {
-  height: 60px;
-  padding: 10px;
+  height: 40px;
+  padding-bottom: 10px;
   background-color: #ffffff;
 }
 
 .list:hover {
   background-color: #fafafa;
+  cursor: move;
 }
 
 .listBg {
@@ -86,6 +87,7 @@ button {
   background: center;
   border-radius: 20px;
   background-size: 40px 40px;
+  margin-left: 10px;
 }
 
 .firstName {
@@ -113,17 +115,17 @@ button {
   box-shadow: 0 2px 2px rgba(182, 182, 182, 0.5);
   -webkit-align-items: center;
   align-items: center;
-  display: block;
+  display: inline-block;
   position: relative;
-  min-height: 80px;
-  line-height: 80px;
+  min-height: 40px;
+  line-height: 40px;
   padding: 0 20px;
   border: 1px solid #d8d8d8;
-  margin: 0 30px 10px 0;
+  margin: 0 200px 10px 0;
   background-color: #fff;
   cursor: move;
   border-style: dashed;
-  border-width: 2px;
+  border-width: 1px;
 }
 
 .users {

@@ -61,7 +61,6 @@ export class MembersComponent implements OnInit {
     this.showProgress.toggleLoadingGlobal(true);
     this.courseService.updateItem({'students': this.course.students, '_id': this.courseId}).then(
       (val) => {
-        console.log(val);
         this.showProgress.toggleLoadingGlobal(false);
       }, (error) => {
         this.showProgress.toggleLoadingGlobal(false);
@@ -147,7 +146,6 @@ export class MembersComponent implements OnInit {
       user.uid.toLowerCase().includes(e) ||
       user.email.toLowerCase().includes(e)
     );
-    console.log(resArray);
     return resArray.length > 0;
   }
 }
