@@ -11,7 +11,7 @@ import {matchPasswords} from '../../shared/validators/validators';
 @Component({
   selector: 'app-user-edit',
   templateUrl: './user-edit.component.html',
-  styleUrls: ['./user-edit.component.css']
+  styleUrls: ['./user-edit.component.scss']
 })
 export class UserEditComponent implements OnInit {
 
@@ -42,7 +42,6 @@ export class UserEditComponent implements OnInit {
             firstName: this.user.profile.firstName,
             lastName: this.user.profile.lastName
           },
-          username: this.user.username,
           email: this.user.email,
         });
       },
