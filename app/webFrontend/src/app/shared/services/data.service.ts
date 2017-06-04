@@ -1,5 +1,8 @@
 import {Injectable} from '@angular/core';
 import {BackendService} from './backend.service';
+import {Dependency} from '../../about/licenses/dependency.model';
+import {ITask} from '../../../../../../shared/models/task/ITask';
+import {ITaskUnit} from '../../../../../../shared/models/units/ITaskUnit';
 
 abstract class DataService {
 
@@ -135,7 +138,11 @@ export class TaskService extends DataService {
           error => reject(error)
         );
     });
+  }
 
+  getTasksForUnit(id: string): Promise<any[]> {
+    const promise = this.readSingleItem(id);
+    return promise;
   }
 
 }
@@ -147,9 +154,24 @@ export class LectureService extends DataService {
 }
 
 @Injectable()
+export class UnitService extends DataService {
+  constructor(public backendService: BackendService) {
+    super('unit/', backendService);
+  }
+
+  addTaskUnit(taskUnit: ITaskUnit, lectureId: string) {
+    const originalApiPath = this.apiPath;
+    this.apiPath += 'tasks';
+    const promise = this.createItem({taskUnit: taskUnit, lectureId: lectureId});
+    this.apiPath = originalApiPath;
+    return promise;
+  }
+}
+
+@Injectable()
 export class UserDataService extends DataService {
   constructor(public backendService: BackendService) {
-    super('user/', backendService);
+    super('users/', backendService);
   }
 
 
@@ -159,5 +181,33 @@ export class UserDataService extends DataService {
     const promise = this.readItems();
     this.apiPath = originalApiPath;
     return promise;
+  }
+}
+
+@Injectable()
+export class AboutDataService extends DataService {
+  constructor(public backendService: BackendService) {
+    super('about/', backendService);
+  }
+
+  getApiDependencies(): Promise<any[]> {
+    return new Promise((resolve, reject) => {
+      this.backendService.get(this.apiPath + 'dependencies')
+        .subscribe((responseItems: any) => {
+            const out = [];
+            responseItems.data.forEach(item => {
+              out.push(new Dependency(
+                item.name,
+                item.version,
+                item.repository,
+                item.license,
+                item.devDependency)
+              );
+            });
+            resolve(out);
+          },
+          error => reject(error)
+        );
+    });
   }
 }

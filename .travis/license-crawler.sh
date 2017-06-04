@@ -1,8 +1,12 @@
 #!/bin/bash
 
 # Variables
-CSV_FILE="nlf-licenses.csv"
-CSV_FILE_APACHE="nlf-licenses.apache.csv"
+DEBUG=false
+
+CSV_FILE="nlf-licenses"
+FT_APACHE=".apache.csv"
+FT_ALL=".csv"
+FT_PROD=".prod.csv"
 MODULE_PATH=".travis/node_modules"
 BIN_PATH="nlf/bin"
 
@@ -23,7 +27,7 @@ echo "+++ Run NLF to search for Apache-Licenses +++"
 echo
 
 echo "+ checking if on branch -develop- and no pull-request"
-if [ "$TRAVIS_BRANCH" != "develop" ] || [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
+if ( [ "$TRAVIS_BRANCH" != "develop" ] || [ "$TRAVIS_PULL_REQUEST" != "false" ] ) && [ ! $DEBUG ]; then
   echo -e "${YELLOW}+ WARNING: not on branch -develop- and/or a pull request${NC}"
   exit 1
 fi
@@ -40,14 +44,29 @@ echo + going to folder api
 cd api
 
 echo + crawling licenses from api
-../$MODULE_PATH/$BIN_PATH/nlf-cli.js --csv > ../$CSV_FILE
+echo + ... all
+../$MODULE_PATH/$BIN_PATH/nlf-cli.js --csv > $CSV_FILE$FT_ALL
+echo + ... production only
+../$MODULE_PATH/$BIN_PATH/nlf-cli.js --csv -d > $CSV_FILE$FT_PROD
+
+echo + copy results to project root
+cp $CSV_FILE$FT_ALL ../$CSV_FILE$FT_ALL
+cp $CSV_FILE$FT_PROD ../$CSV_FILE$FT_PROD
 
 echo + going to folder app/webFrontend
 cd ../app/webFrontend
 
 echo + crawling licenses from app/webFrontend
 # append frontend licenses to existing csv; we have to skip the first line (header)
-../../$MODULE_PATH/$BIN_PATH/nlf-cli.js --csv | awk '{if(NR>1)print}'  >> ../../$CSV_FILE
+echo + ... all
+../../$MODULE_PATH/$BIN_PATH/nlf-cli.js --csv > $CSV_FILE$FT_ALL
+# ../../$MODULE_PATH/$BIN_PATH/nlf-cli.js --csv | awk '{if(NR>1)print}'  >> ../../$CSV_FILE
+echo + ... production only
+../../$MODULE_PATH/$BIN_PATH/nlf-cli.js --csv -d > $CSV_FILE$FT_PROD
+
+echo + copy results to project root
+cat $CSV_FILE$FT_ALL >> ../../$CSV_FILE$FT_ALL
+cat $CSV_FILE$FT_PROD >> ../../$CSV_FILE$FT_PROD
 
 echo + going back to root folder
 cd ../..
@@ -57,12 +76,14 @@ echo + Finished crawling
 echo + Printing out found Apache Licenses
 
 # print first line (head => column-titles) of csv
-head -1 $CSV_FILE
+head -1 $CSV_FILE$FT_ALL
 echo "-------------------------------------------------------------------------------------------------------------------"
 
 # print rows which contain apache, with the caseinsensitive flag
-cat $CSV_FILE | grep -i "apache" > $CSV_FILE_APACHE
-cat $CSV_FILE_APACHE
+cat $CSV_FILE$FT_ALL | grep -i "apache" > $CSV_FILE$FT_APACHE
+cat $CSV_FILE$FT_APACHE
 
-echo + we have found $(wc -l $CSV_FILE_APACHE) potential modules with the Apache-License.
+echo
+echo + we have found $(wc -l $CSV_FILE$FT_APACHE) potential modules with the Apache-License.
+echo
 

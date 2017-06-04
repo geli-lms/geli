@@ -4,7 +4,7 @@ import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import {IUser} from '../../../shared/models/IUser';
 import {User} from '../models/User';
 
-@JsonController('/user')
+@JsonController('/users')
 @UseBefore(passportJwtMiddleware)
 export class UserController {
 

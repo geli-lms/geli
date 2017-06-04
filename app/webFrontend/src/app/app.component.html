@@ -33,6 +33,10 @@
       <md-icon>exit_to_app</md-icon>
       <span>Logout</span>
     </button>
+    <button md-menu-item *ngIf="isLoggedIn()" routerLink="/about" routerLinkActive="active">
+      <md-icon>info</md-icon>
+      <span>About</span>
+    </button>
   </md-menu>
 </span>
 </md-toolbar>
