@@ -1,31 +1,32 @@
 import * as mongoose from 'mongoose';
-import {IUnit} from '../../../shared/models/IUnit';
+import {IUnit} from '../../../../shared/models/units/IUnit';
+import {NativeError} from 'mongoose';
 
 interface IUnitModel extends IUnit, mongoose.Document {
 }
 
 const unitSchema = new mongoose.Schema({
-    type: {
-      type: String,
-      'enum': ['video', 'text', 'multiple-choice'],
+    _course: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Course'
     },
-    filePath: {
-      type: String,
+    progressable: {
+      type: Boolean
     },
-    fileName: {
-      type: String,
+    weight: {
+      type: Number
     }
   },
   {
+    discriminatorKey: 'type',
     timestamps: true,
     toObject: {
       transform: function (doc: any, ret: any) {
         ret._id = ret._id.toString();
       }
-    }
+    },
   }
 );
-
 
 const Unit = mongoose.model<IUnitModel>('Unit', unitSchema);
 
