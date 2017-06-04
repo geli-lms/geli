@@ -13,24 +13,24 @@ import {JwtHelper} from 'angular2-jwt';
 
 import {routes} from './app.routes';
 import {UserService} from './shared/services/user.service';
-import {AuthenticationService } from './shared/services/authentication.service';
-import {DashboardComponent } from './start/dashboard/dashboard.component';
-import {HomescreenComponent } from './start/homescreen/homescreen.component';
-import {RegisterComponent } from './user/register/register.component';
-import {AuthGuardService } from './shared/services/auth-guard.service';
-import {DashboardStudentComponent } from './start/dashboard/dashboard-student/dashboard-student.component';
-import {DashboardTeacherComponent } from './start/dashboard/dashboard-teacher/dashboard-teacher.component';
-import {DashboardAdminComponent } from './start/dashboard/dashboard-admin/dashboard-admin.component';
+import {AuthenticationService} from './shared/services/authentication.service';
+import {DashboardComponent} from './start/dashboard/dashboard.component';
+import {HomescreenComponent} from './start/homescreen/homescreen.component';
+import {RegisterComponent} from './user/register/register.component';
+import {AuthGuardService} from './shared/services/auth-guard.service';
+import {DashboardStudentComponent} from './start/dashboard/dashboard-student/dashboard-student.component';
+import {DashboardTeacherComponent} from './start/dashboard/dashboard-teacher/dashboard-teacher.component';
+import {DashboardAdminComponent} from './start/dashboard/dashboard-admin/dashboard-admin.component';
 import {
   CourseService, TaskService, UserDataService, LectureService,
   UnitService, AboutDataService
 } from './shared/services/data.service';
-import { BackendService } from './shared/services/backend.service';
-import { CourseComponent } from './course/course.component';
-import { CourseDetailComponent } from './course/course-detail/course-detail.component';
-import { CourseEditComponent } from './course/course-edit/course-edit.component';
-import { CourseNewComponent } from './course/course-new/course-new.component';
-import { TaskUnitEditComponent } from './course/course-edit/unit/unit-edit/task-unit-edit/task-unit-edit.component';
+import {BackendService} from './shared/services/backend.service';
+import {CourseComponent} from './course/course.component';
+import {CourseDetailComponent} from './course/course-detail/course-detail.component';
+import {CourseEditComponent} from './course/course-edit/course-edit.component';
+import {CourseNewComponent} from './course/course-new/course-new.component';
+import {TaskUnitEditComponent} from './course/course-edit/unit/unit-edit/task-unit-edit/task-unit-edit.component';
 
 import {ShowProgressService} from './shared/services/show-progress.service';
 import {UnitComponent} from './course/course-edit/unit/unit.component';
@@ -48,10 +48,10 @@ import {StartComponent} from './start/start.component';
 
 import {AdminComponent} from './admin/admin.component';
 import {DialogModule} from './shared/modules/dialog/dialog.module';
-import { TeacherReportComponent } from './course/teacher-report/teacher-report.component';
-import { UnitMenuComponent } from './shared/components/unit-menu/unit-menu.component';
-import { UnitEditComponent } from './course/course-edit/unit/unit-edit/unit-edit.component';
-import { TaskUnitComponent } from './course/course-edit/unit/task-unit/task-unit.component';
+import {TeacherReportComponent} from './course/teacher-report/teacher-report.component';
+import {UnitMenuComponent} from './shared/components/unit-menu/unit-menu.component';
+import {UnitEditComponent} from './course/course-edit/unit/unit-edit/unit-edit.component';
+import {TaskUnitComponent} from './course/course-edit/unit/task-unit/task-unit.component';
 import {LectureFormComponent} from './lecture/lecture-form/lecture-form.component';
 import {AboutComponent} from './about/about.component';
 import {GeneralInfoComponent} from './about/general-info/general-info.component';
@@ -104,19 +104,22 @@ import {LicensesComponent} from './about/licenses/licenses.component';
     FileUploadModule,
     DialogModule
   ],
-  providers: [UserService,
-              AuthenticationService,
-              AboutDataService,
-              AuthGuardService,
-              UnitService,
-              TaskService,
-              CourseService,
-              UserDataService,
-              LectureService,
-              BackendService,
-              UserDataService,
-              ShowProgressService,
-              JwtHelper],
+  providers: [
+    UserService,
+    AuthenticationService,
+    AboutDataService,
+    AuthGuardService,
+    UnitService,
+    TaskService,
+    CourseService,
+    UserDataService,
+    LectureService,
+    BackendService,
+    UserDataService,
+    ShowProgressService,
+    JwtHelper
+  ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}
