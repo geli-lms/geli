@@ -177,6 +177,8 @@ To run the end to end test, which is a integration-test, which tests the compabi
     cd app/webFrontend
     bpm run e2e
 
+_NOTE: If you run these commands under Vagrant start `Xvfb` before: `export DISPLAY=:99.0 ; nohup Xvfb :99 &`_
+
 ## Angular CLI (globally required):
 Run `npm install -g @angular/cli@latest` to install the latest version of the angular cli globally.   
 If you have problems with the angular-cli version try following:
