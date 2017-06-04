@@ -1,9 +1,10 @@
-import {Component, OnInit, ViewContainerRef} from '@angular/core';
+import {Component, OnInit, ViewContainerRef, ChangeDetectorRef} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {FormGroup, FormBuilder, Validators} from '@angular/forms';
 import {CourseService} from '../../shared/services/data.service';
 import {MdSnackBar} from '@angular/material';
 import {ShowProgressService} from '../../shared/services/show-progress.service';
+import {FileUploader, FileItem} from 'ng2-file-upload';
 
 @Component({
   selector: 'app-course-edit',
@@ -16,9 +17,8 @@ export class CourseEditComponent implements OnInit {
   description: string;
   newCourse: FormGroup;
   id: string;
-
   courseOb: any[];
-
+  uploader: FileUploader = null;
 
 
   message = 'Course successfully added.';
@@ -28,6 +28,7 @@ export class CourseEditComponent implements OnInit {
               private courseService: CourseService,
               public snackBar: MdSnackBar,
               public viewContainerRef: ViewContainerRef,
+              private ref: ChangeDetectorRef,
               private showProgress: ShowProgressService) {
 
       this.route.params.subscribe(params => {
@@ -46,6 +47,22 @@ export class CourseEditComponent implements OnInit {
 
   ngOnInit() {
     this.generateForm();
+    this.uploader = new FileUploader({
+      url: '/api/courses/' + this.id + '/whitelist',
+      headers: [{
+        name: 'Authorization',
+        value: localStorage.getItem('token'),
+      }]
+    });
+    this.uploader.onProgressItem = (fileItem: FileItem, progress: any) => {
+      this.ref.detectChanges();
+    };
+    this.uploader.onCompleteAll = () => {
+      this.snackBar.open('All items uploaded!', '', { duration: 3000 });
+      setTimeout(() => {
+        this.uploader.clearQueue();
+      }, 3000);
+    };
   }
 
   createCourse() {

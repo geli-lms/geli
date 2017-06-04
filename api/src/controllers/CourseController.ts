@@ -1,11 +1,13 @@
 import {Request} from 'express';
-import {Body, Get, Post, Put, Param, Req, JsonController, UseBefore} from 'routing-controllers';
+import {Body, Get, Post, Put, Param, Req, JsonController, UseBefore, UploadedFile} from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 
 import {Course} from '../models/Course';
 import {ICourse} from '../../../shared/models/ICourse';
 import {IUserModel} from '../models/User';
 import {IUser} from '../../../shared/models/IUser';
+
+const uploadOptions = {dest: 'uploads/'};
 
 @JsonController('/courses')
 @UseBefore(passportJwtMiddleware)
@@ -20,21 +22,21 @@ export class CourseController {
       .then((courses) => courses.map((c) => c.toObject()));
   }
 
-    @Get('/:id')
-    getCourse(@Param('id') id: string) {
-        return Course.findById(id)
-          .populate({
-            path: 'lectures',
-            populate: {
-              path: 'units'
-            }
-          })
-          .populate('courseAdmin')
-          .populate('students')
-          .then((course) => {
-            return course.toObject();
-          });
-    }
+  @Get('/:id')
+  getCourse(@Param('id') id: string) {
+    return Course.findById(id)
+      .populate({
+        path: 'lectures',
+        populate: {
+          path: 'units'
+        }
+      })
+      .populate('courseAdmin')
+      .populate('students')
+      .then((course) => {
+        return course.toObject();
+      });
+  }
 
   @Post('/')
   addCourse(@Body() course: ICourse, @Req() request: Request) {
@@ -52,7 +54,14 @@ export class CourseController {
           c.students.push(user);
         }
         return c.save().then((course) => course.toObject());
-    });
+      });
+  }
+
+
+  @Post('/:id/whitelist')
+  whitelistStudents(@Param('id') id: string, @UploadedFile('file', {uploadOptions}) file: any, @Body() data: any) {
+    console.log('test');
+    return false;
   }
 
 

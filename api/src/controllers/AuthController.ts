@@ -43,6 +43,7 @@ export class AuthController {
       });
   }
 
+  // TODO If activate user and is in playlist add to course.
   @Post('/activate')
   postActivation(@BodyParam('authenticationToken') authenticationToken: String) {
     return User.findOne({authenticationToken: authenticationToken})

@@ -19,6 +19,16 @@
         <button md-raised-button color="primary" class="md-button" type="submit">Save</button>
       </p>
     </form>
+
+    <p>
+      <input type="file" ng2FileSelect [uploader]="uploader" placeholder="Upload files" accept=".csv" />
+      <button md-raised-button color="primary"
+              (click)="uploader.uploadAll()" [disabled]="!uploader.getNotUploadedItems().length">
+        <md-icon>file_upload</md-icon> Upload
+      </button>
+      <md-slide-toggle>mode whitelist</md-slide-toggle>
+    </p>
+
   </md-tab>
 
   <md-tab label="Course Members">
