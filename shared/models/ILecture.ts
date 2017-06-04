@@ -1,4 +1,4 @@
-import {IUnit} from './IUnit';
+import {IUnit} from './units/IUnit';
 export interface ILecture {
     _id: any;
     name: string;

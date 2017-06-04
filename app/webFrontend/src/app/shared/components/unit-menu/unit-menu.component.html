@@ -1,0 +1,7 @@
+<button md-mini-fab mdTooltip="Add unit" [mdMenuTriggerFor]="unitMenu">
+  <md-icon>add</md-icon>
+</button>
+<md-menu #unitMenu="mdMenu">
+  <button md-menu-item (click)="addUnit('video')">Video</button>
+  <button md-menu-item (click)="addUnit('task')">Task</button>
+</md-menu>

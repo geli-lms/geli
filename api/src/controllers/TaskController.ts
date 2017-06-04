@@ -3,6 +3,8 @@ import {Body, Get, Post, Put, Param, Req, JsonController, UseBefore, Delete} fro
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 
 import {Task} from '../models/Task';
+import {ITask} from '../../../shared/models/task/ITask';
+import {Unit} from '../models/units/Unit';
 import {TaskAttestation} from '../models/TaskAttestation';
 import {ITask} from '../../../shared/models/ITask';
 import {ITaskAttestation} from '../../../shared/models/ITaskAttestation';

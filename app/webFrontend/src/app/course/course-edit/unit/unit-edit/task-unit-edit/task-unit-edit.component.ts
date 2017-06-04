@@ -1,25 +1,42 @@
 import {Component, Input, OnInit} from '@angular/core';
+<<<<<<< HEAD:app/webFrontend/src/app/course/course-edit/tasks/task-list.component.ts
 import {TaskService} from '../../../shared/services/data.service';
 import {TaskAttestationService} from '../../../shared/services/data.service';
 import {Task} from '../../../models/Task';
+=======
+import {TaskService, UnitService} from '../../../../../shared/services/data.service';
+import {Task} from '../../../../../models/Task';
+>>>>>>> develop:app/webFrontend/src/app/course/course-edit/unit/unit-edit/task-unit-edit/task-unit-edit.component.ts
 import {MdSnackBar} from '@angular/material';
+import {ITaskUnit} from '../../../../../../../../../shared/models/units/ITaskUnit';
+import {TaskUnit} from '../../../../../models/TaskUnit';
+import {ITask} from '../../../../../../../../../shared/models/task/ITask';
+import {Answer} from '../../../../../models/Answer';
 
 @Component({
-  selector: 'app-tasks',
-  templateUrl: './task-list.component.html',
-  styleUrls: ['./task-list.component.scss']
+  selector: 'app-task-unit-edit',
+  templateUrl: './task-unit-edit.component.html',
+  styleUrls: ['./task-unit-edit.component.scss']
 })
-export class TaskListComponent implements OnInit {
+export class TaskUnitEditComponent implements OnInit {
   @Input() courseId: any;
+  @Input() lectureId: string;
+  taskUnit: ITaskUnit;
   tasks: any[];
 
   constructor(private taskService: TaskService,
+<<<<<<< HEAD:app/webFrontend/src/app/course/course-edit/tasks/task-list.component.ts
               private taskAttestationService: TaskAttestationService,
               private snackBar: MdSnackBar
   ) {
   }
+=======
+              private unitService: UnitService,
+              private snackBar: MdSnackBar) {}
+>>>>>>> develop:app/webFrontend/src/app/course/course-edit/unit/unit-edit/task-unit-edit/task-unit-edit.component.ts
 
   ngOnInit() {
+    this.taskUnit = new TaskUnit(this.courseId);
     this.loadTasksFromServer();
     // console.log('courseid:' + this.courseId);
   }
@@ -34,9 +51,20 @@ export class TaskListComponent implements OnInit {
     });
   }
 
+  addUnit() {
+    this.unitService.addTaskUnit(this.taskUnit, this.lectureId)
+      .then(
+        (task) => {
+          this.snackBar.open('Task created', '', { duration: 3000});
+        },
+        (error) => {
+          console.log(error);
+        });
+  };
+
   addTask() {
-    const newTask = new Task(this.courseId, null);
-    this.createTask(newTask);
+    this.taskUnit.tasks.push(new Task());
+    // this.createTask(newTask);
   }
 
   //  log(val) { console.log(JSON.stringify(val)); }
@@ -60,9 +88,9 @@ export class TaskListComponent implements OnInit {
     }
   }
 
-  addAnswerAtEnd(task: any) {
-    task.answers.push({ value: false,  text: ''}); // add item to end
-}
+  addAnswerAtEnd(task: ITask) {
+    task.answers.push(new Answer()); // add item to end
+  }
 
   removeLastAnswer(task: any) {
     task.answers.pop();

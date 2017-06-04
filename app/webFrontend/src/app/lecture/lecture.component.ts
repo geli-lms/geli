@@ -15,6 +15,9 @@ import {UserService} from '../shared/services/user.service';
 export class LectureComponent implements OnInit {
 
   @Input() course;
+  @Input() lecture;
+  editMode: Boolean = false;
+  unitType: string;
 
   constructor(private router: Router,
               private lectureService: LectureService,
@@ -78,4 +81,12 @@ export class LectureComponent implements OnInit {
       });
   }
 
+  onAddUnit(type: string) {
+    this.editMode = true;
+    this.unitType = type;
+  }
+
+  onEditDone(done: boolean) {
+    this.editMode = false;
+  }
 }
