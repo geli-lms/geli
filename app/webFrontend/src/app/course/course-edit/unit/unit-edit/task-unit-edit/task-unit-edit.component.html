@@ -1,9 +1,9 @@
-
+<div class="task-unit-edit">
 <div class="info-text">
 <md-icon>info</md-icon> Add questions with any number of possible answers. Mark the correct answer(s) with the checkbox.
 </div>
 
-<div *ngFor="let task of tasks" class="question-answer">
+<div *ngFor="let task of taskUnit.tasks" class="question-answer">
 
     <md-input-container md-line class="question">
       <textarea mdInput id="name" placeholder="Frage hier eingeben." [(ngModel)]="task.name"></textarea>
@@ -29,10 +29,13 @@
     </div>
 
 </div>
-
-<button md-fab class="add-task-fab" (click)="addTask()" mdTooltip="Add task" mdTooltipPosition="right">
+<div>
+<button md-raised-button color="primary" class="add-unit" (click)="addUnit()">Save</button>
+</div>
+<button md-mini-fab class="add-task-fab" (click)="addTask()" mdTooltip="Add task" mdTooltipPosition="right">
   <md-icon>add</md-icon>
 </button>
+</div>
 
 
 
