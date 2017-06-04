@@ -1,6 +1,6 @@
 {
   "name": "geli-api",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "license": "GPL-3.0",
   "description": "This is the API-Package.json for geli.",
   "homepage": "https://github.com/h-da/geli",
@@ -29,6 +29,7 @@
     "body-parser": "^1.16.0",
     "crypto": "0.0.3",
     "express": "4.14.0",
+    "fs-extra": "^3.0.1",
     "jsonwebtoken": "^7.3.0",
     "mongoose": "^4.9.5",
     "morgan": "1.7.0",
@@ -47,6 +48,7 @@
     "@types/chai": "3.4.34",
     "@types/chai-http": "0.0.30",
     "@types/express": "4.0.35",
+    "@types/fs-extra": "^3.0.2",
     "@types/jsonwebtoken": "^7.2.0",
     "@types/mocha": "2.2.38",
     "@types/mongoose": "^4.7.11",
