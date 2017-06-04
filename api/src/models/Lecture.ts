@@ -1,6 +1,6 @@
 import * as mongoose from 'mongoose';
 import {ILecture} from '../../../shared/models/ILecture';
-import {Unit} from './Unit';
+import {Unit} from './units/Unit';
 
 interface ILectureModel extends ILecture, mongoose.Document {
 }
