@@ -11,6 +11,7 @@ import {LectureEditComponent} from './lecture/lecture-edit/lecture-edit.componen
 import {LectureNewComponent} from './lecture/lecture-new/lecture-new.component';
 import {StartComponent} from './start/start.component';
 import {AdminComponent} from './admin/admin.component';
+import {AboutComponent} from './about/about.component';
 import {TeacherReportComponent} from './course/teacher-report/teacher-report.component';
 
 export const routes = [
@@ -83,5 +84,10 @@ export const routes = [
     component: AdminComponent,
     canActivate: [AuthGuardService],
     data: { roles: ['admin']}
+  },
+  {
+    path: 'about',
+    component: AboutComponent
+    // ,canActivate: [AuthGuardService] // Not needed, this is public
   }
 ];
