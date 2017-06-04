@@ -1,15 +1,16 @@
-import {Request} from 'express';
-import {Body, Get, Put, Post, Delete, Param, Req, JsonController, UseBefore, UploadedFile} from 'routing-controllers';
+import {Body, Get, Put, Post, Delete, Param, JsonController, UseBefore, UploadedFile} from 'routing-controllers';
 import fs = require('fs');
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 
 import {Lecture} from '../models/Lecture';
-import {Unit} from '../models/Unit';
-import {IUnit} from '../../../shared/models/IUnit';
+import {Unit} from '../models/units/Unit';
+import {IUnit} from '../../../shared/models/units/IUnit';
+import {IVideoUnitModel, VideoUnit} from '../models/units/VideoUnit';
+import {IVideoUnit} from '../../../shared/models/units/IVideoUnit';
 
 const uploadOptions = {dest: 'uploads/' };
 
-@JsonController('/unit')
+@JsonController('/units')
 @UseBefore(passportJwtMiddleware)
 export class UnitController {
 
@@ -19,24 +20,13 @@ export class UnitController {
       .then((u) => u.toObject());
   }
 
-  @Post('/')
-  addUnit(@UploadedFile('file', { uploadOptions }) file: any, @Body() data: any) {
-    // discard invalid requests
-    if (!data.lectureId) {
-      return;
-    }
-    // path for file upload units (for now video only)
-    if (file) {
-      return new Unit({type: 'video', filePath: file.path, fileName: file.originalname}).save()
-        .then((unit) => {
-          return Lecture.findById(data.lectureId).then(lecture => ({lecture, unit}));
-        })
-        .then(({lecture, unit}) => {
-          lecture.units.push(unit);
-          return lecture.save();
-        })
-        .then(lecture => lecture.toObject());
-    }
+  protected pushToLecture(lectureId: string, unit: any) {
+    return Lecture.findById(lectureId)
+      .then((lecture) => {
+        lecture.units.push(unit);
+        return lecture.save();
+      })
+      .then((lecture) => lecture.toObject());
   }
 
   @Put('/:id')
@@ -51,8 +41,9 @@ export class UnitController {
       if (!unit) {
         throw new Error('No unit found for id');
       }
-      if (unit.filePath) {
-        fs.unlinkSync(unit.filePath);
+
+      if (unit instanceof VideoUnit && (<IVideoUnitModel>unit).filePath) {
+        fs.unlinkSync((<IVideoUnitModel>unit).filePath);
       }
       return Lecture.update({}, {$pull: {units: id}});
     })

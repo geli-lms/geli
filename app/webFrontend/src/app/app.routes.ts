@@ -12,6 +12,7 @@ import {LectureNewComponent} from './lecture/lecture-new/lecture-new.component';
 import {StartComponent} from './start/start.component';
 import {AdminComponent} from './admin/admin.component';
 import {AboutComponent} from './about/about.component';
+import {TeacherReportComponent} from './course/teacher-report/teacher-report.component';
 
 export const routes = [
   {path: '', component: StartComponent, pathMatch: 'full'},
@@ -35,6 +36,12 @@ export const routes = [
     component: CourseDetailComponent,
     canActivate: [AuthGuardService],
     data: {roles: ['student', 'tutor', 'teacher', 'admin']}
+  },
+  {
+    path: 'course/:id/report',
+    component: TeacherReportComponent,
+    canActivate: [AuthGuardService],
+    data: {roles: ['teacher', 'admin']}
   },
   {
     path: 'course/edit/:courseId/lecture/edit/:lectureId',
