@@ -8,8 +8,7 @@
   "license": "GPL-3.0",
   "devDependencies": {
     "nlf": "*",
-    "coveralls": "*",
-    "fs-extra": "^3.0.1"
+    "coveralls": "*"
   }
 }
 
