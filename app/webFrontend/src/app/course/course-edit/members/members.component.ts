@@ -3,9 +3,9 @@ import {Component, Input, OnInit} from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {CourseService, UserDataService} from '../../../shared/services/data.service';
 import {ShowProgressService} from '../../../shared/services/show-progress.service';
-import {User} from '../../../models/User';
-import {Course} from '../../../models/Course';
 import {DragulaService} from 'ng2-dragula';
+import {IUser} from '../../../../../../../shared/models/IUser';
+import {ICourse} from '../../../../../../../shared/models/ICourse';
 
 @Component({
   selector: 'app-members',
@@ -14,15 +14,15 @@ import {DragulaService} from 'ng2-dragula';
 })
 export class MembersComponent implements OnInit {
   @Input() courseId;
-  course: Course;
-  members: User[] = [];
-  users: User[] = [];
-  currentMember: User = null;
+  course: ICourse;
+  members: IUser[] = [];
+  users: IUser[] = [];
+  currentMember: IUser = null;
   fuzzySearch: String = '';
   userCtrl: FormControl;
   filteredStates: any;
 
-  setMember(member: User) {
+  setMember(member: IUser) {
     this.currentMember = member;
   }
 
@@ -103,7 +103,7 @@ export class MembersComponent implements OnInit {
   getCourseMembers() {
     this.courseService.readSingleItem(this.courseId).then(
       (val: any) => {
-        this.course = new Course(val);
+        this.course = val;
         this.members = this.course.students;
 
         this.members.forEach(member =>
@@ -120,7 +120,7 @@ export class MembersComponent implements OnInit {
    * Sort an array of users alphabeticaly after firstname and lastname.
    * @param users An array of users.
    */
-  sortUsers(users: User[]) {
+  sortUsers(users: IUser[]) {
     users.sort(function (a, b) {
       if (a.profile.firstName < b.profile.firstName || a.profile.lastName < b.profile.lastName) {
         return -1;
@@ -138,7 +138,7 @@ export class MembersComponent implements OnInit {
       : [];
   }
 
-  fuzzysearch(toSearch: string, user: User): boolean {
+  fuzzysearch(toSearch: string, user: IUser): boolean {
     const lowerToSearch: string = toSearch.toLowerCase();
     const elementsToFind = lowerToSearch.split(' ');
     const resArray = elementsToFind.filter(e => user.profile.firstName.toLowerCase().includes(e) ||
