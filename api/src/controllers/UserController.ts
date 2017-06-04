@@ -4,7 +4,7 @@ import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import {IUser} from '../../../shared/models/IUser';
 import {User} from '../models/User';
 
-@JsonController('/user')
+@JsonController('/users')
 @UseBefore(passportJwtMiddleware)
 export class UserController {
 
@@ -42,16 +42,9 @@ export class UserController {
       .then((emailInUse) => {
         if (emailInUse.length > 0) {
           throw new HttpError(400, 'This mail address is already in use.');
-        } else if (typeof user.username !== 'undefined') {
-          return User.find({ $and: [{'username': user.username}, {'_id': { $ne: user._id }}]});
-        }
-      })
-      .then((usernameInUse) => {
-        if (typeof usernameInUse === 'undefined' || usernameInUse.length === 0) {
+        } else {
           User.findById(id, {'new': true});
           return User.findByIdAndUpdate(id, user, {'new': true});
-        } else {
-          throw new HttpError(400, 'This username is already in use.');
         }
       })
       .then((updatedUser) => {
