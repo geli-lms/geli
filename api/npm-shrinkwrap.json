@@ -1,6 +1,6 @@
 {
   "name": "geli-api",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "dependencies": {
     "@types/bcrypt": {
       "version": "1.0.0",
@@ -51,9 +51,9 @@
       "dev": true
     },
     "@types/fs-extra": {
-      "version": "0.0.33",
-      "from": "@types/fs-extra@0.0.33",
-      "resolved": "https://registry.npmjs.org/@types/fs-extra/-/fs-extra-0.0.33.tgz",
+      "version": "3.0.3",
+      "from": "@types/fs-extra@3.0.3",
+      "resolved": "https://registry.npmjs.org/@types/fs-extra/-/fs-extra-3.0.3.tgz",
       "dev": true
     },
     "@types/handlebars": {
@@ -111,9 +111,9 @@
       "dev": true
     },
     "@types/mongoose": {
-      "version": "4.7.13",
-      "from": "@types/mongoose@>=4.7.11 <5.0.0",
-      "resolved": "https://registry.npmjs.org/@types/mongoose/-/mongoose-4.7.13.tgz",
+      "version": "4.7.14",
+      "from": "@types/mongoose@4.7.14",
+      "resolved": "https://registry.npmjs.org/@types/mongoose/-/mongoose-4.7.14.tgz",
       "dev": true
     },
     "@types/morgan": {
@@ -153,9 +153,9 @@
       "dev": true
     },
     "@types/passport-jwt": {
-      "version": "2.0.19",
-      "from": "@types/passport-jwt@>=2.0.19 <3.0.0",
-      "resolved": "https://registry.npmjs.org/@types/passport-jwt/-/passport-jwt-2.0.19.tgz",
+      "version": "2.0.20",
+      "from": "@types/passport-jwt@2.0.20",
+      "resolved": "https://registry.npmjs.org/@types/passport-jwt/-/passport-jwt-2.0.20.tgz",
       "dev": true
     },
     "@types/passport-local": {
@@ -496,7 +496,7 @@
     },
     "buffer-shims": {
       "version": "1.0.0",
-      "from": "buffer-shims@>=1.0.0 <1.1.0",
+      "from": "buffer-shims@>=1.0.0 <2.0.0",
       "resolved": "https://registry.npmjs.org/buffer-shims/-/buffer-shims-1.0.0.tgz"
     },
     "builtin-modules": {
@@ -1293,10 +1293,9 @@
       "dev": true
     },
     "fs-extra": {
-      "version": "2.1.2",
-      "from": "fs-extra@>=2.0.0 <3.0.0",
-      "resolved": "https://registry.npmjs.org/fs-extra/-/fs-extra-2.1.2.tgz",
-      "dev": true
+      "version": "3.0.1",
+      "from": "fs-extra@3.0.1",
+      "resolved": "https://registry.npmjs.org/fs-extra/-/fs-extra-3.0.1.tgz"
     },
     "fs.realpath": {
       "version": "1.0.0",
@@ -2255,10 +2254,9 @@
       "dev": true
     },
     "jsonfile": {
-      "version": "2.4.0",
-      "from": "jsonfile@>=2.1.0 <3.0.0",
-      "resolved": "https://registry.npmjs.org/jsonfile/-/jsonfile-2.4.0.tgz",
-      "dev": true
+      "version": "3.0.0",
+      "from": "jsonfile@>=3.0.0 <4.0.0",
+      "resolved": "https://registry.npmjs.org/jsonfile/-/jsonfile-3.0.0.tgz"
     },
     "jsonify": {
       "version": "0.0.0",
@@ -3942,16 +3940,34 @@
       "resolved": "https://registry.npmjs.org/typedoc/-/typedoc-0.5.10.tgz",
       "dev": true,
       "dependencies": {
+        "@types/fs-extra": {
+          "version": "0.0.33",
+          "from": "@types/fs-extra@0.0.33",
+          "resolved": "https://registry.npmjs.org/@types/fs-extra/-/fs-extra-0.0.33.tgz",
+          "dev": true
+        },
         "async": {
           "version": "1.5.2",
           "from": "async@>=1.4.0 <2.0.0",
           "resolved": "https://registry.npmjs.org/async/-/async-1.5.2.tgz",
           "dev": true
         },
+        "fs-extra": {
+          "version": "2.1.2",
+          "from": "fs-extra@>=2.0.0 <3.0.0",
+          "resolved": "https://registry.npmjs.org/fs-extra/-/fs-extra-2.1.2.tgz",
+          "dev": true
+        },
         "handlebars": {
           "version": "4.0.5",
           "from": "handlebars@4.0.5",
           "resolved": "https://registry.npmjs.org/handlebars/-/handlebars-4.0.5.tgz",
+          "dev": true
+        },
+        "jsonfile": {
+          "version": "2.4.0",
+          "from": "jsonfile@>=2.1.0 <3.0.0",
+          "resolved": "https://registry.npmjs.org/jsonfile/-/jsonfile-2.4.0.tgz",
           "dev": true
         },
         "source-map": {
@@ -4031,6 +4047,11 @@
       "from": "unique-stream@>=1.0.0 <2.0.0",
       "resolved": "https://registry.npmjs.org/unique-stream/-/unique-stream-1.0.0.tgz",
       "dev": true
+    },
+    "universalify": {
+      "version": "0.1.0",
+      "from": "universalify@>=0.1.0 <0.2.0",
+      "resolved": "https://registry.npmjs.org/universalify/-/universalify-0.1.0.tgz"
     },
     "unpipe": {
       "version": "1.0.0",
