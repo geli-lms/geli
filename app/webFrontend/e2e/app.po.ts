@@ -9,3 +9,13 @@ export class WebFrontendPage {
     return element(by.css('app-root h1')).getText();
   }
 }
+
+export class WebFrontendAbout {
+  navigateTo() {
+    return browser.get('/about');
+  }
+
+  getH1Text() {
+    return element(by.css('app-root h1')).getText();
+  }
+}

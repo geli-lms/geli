@@ -1,0 +1,32 @@
+<h2>General Info</h2>
+
+<p>This app was initialized by <a href="https://github.com/thomasss" target="_blank">Thomas Sauer</a>
+  and brought to a production-ready state by students of the <a href="https://h-da.com" target="_blank">University of
+    Applied Science in Darmstadt (h_da)</a>.</p>
+
+<p>This is a <a href="https://github.com/h-da/geli" target="_blank">Open-Source project</a>, so feel free to help us :)
+</p>
+
+<p>Big thanks to our main contributors:</p>
+
+<div class="contributor--section">
+  <md-card *ngFor="let cntbtr of allContributors;" class="card--contributor">
+    <md-card-header>
+      <div md-card-avatar [style]="getUserAvatar(cntbtr)"></div>
+      <md-card-title>
+        {{cntbtr.firstName}} <span class="text--uppercase">{{cntbtr.name}}</span>
+      </md-card-title>
+      <md-card-subtitle>
+        {{cntbtr.position}}
+      </md-card-subtitle>
+    </md-card-header>
+    <md-card-content>
+      {{cntbtr.from}} => {{cntbtr.to}}
+    </md-card-content>
+    <md-card-actions>
+      <a md-button href="https://github.com/{{cntbtr.githubId}}" target="_blank"
+         [disabled]="cntbtr.githubId.length === 0">
+        <span class="fa fa-github"></span> Github</a>
+    </md-card-actions>
+  </md-card>
+</div>
