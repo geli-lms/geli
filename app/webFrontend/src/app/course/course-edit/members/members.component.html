@@ -19,7 +19,7 @@
   <div *ngIf="currentMember != null && currentMember._id == member._id">
       <button md-raised-button>DETAILS</button>
       <button md-raised-button>SEND MAIL</button>
-      <button class="del" md-raised-button (click)="switchUser(member._id, 'left')">DELETE</button>
+      <button class="del" md-raised-button (click)="removeUser(member._id)">DELETE</button>
   </div>
 
   <ul class="info">
@@ -35,7 +35,7 @@
   <p><b>In course ({{members.length}})</b></p>
   <md-list class="drop" [dragula]='"bag-one"' [dragulaModel]='members'>
       <ng-container *ngFor="let member of members">
-        <md-list-item class="list" *ngIf="fuzzysearch(fuzzySearch,member)" [attr.data-id]="[member._id,'right']">
+        <md-list-item class="list" *ngIf="fuzzysearch(fuzzySearch,member)" [attr.data-id]="[member._id]">
           <i class="material-icons md-48">drag_handle</i>
           <span class="listBg" [grav]="member.email"></span>
           <span class="firstName">{{member.profile.firstName}}</span>
@@ -49,7 +49,7 @@
   <p><b>Not in course ({{users.length}})</b></p>
   <md-list class="drop" [dragula]='"bag-one"' [dragulaModel]='users'>
       <ng-container *ngFor="let user of users">
-        <md-list-item class="list" *ngIf="fuzzysearch(fuzzySearch,user)" [attr.data-id]="[user._id,'right']">
+        <md-list-item class="list" *ngIf="fuzzysearch(fuzzySearch,user)" [attr.data-id]="[user._id]">
           <i class="material-icons md-48">drag_handle</i>
           <span class="listBg" [grav]="user.email"></span>
           <span class="firstName">{{user.profile.firstName}}</span>

@@ -34,8 +34,7 @@ export class MembersComponent implements OnInit {
     dragula.setOptions('bag-one', {
       revertOnSpill: true
     });
-    dragula.drop.subscribe(value => {
-      this.course.students = this.members;
+    dragula.dragend.subscribe(value => {
       this.updateMembersInCourse();
     });
     this.getStudents();
@@ -59,6 +58,7 @@ export class MembersComponent implements OnInit {
    */
   updateMembersInCourse() {
     this.showProgress.toggleLoadingGlobal(true);
+    this.course.students = this.members;
     this.courseService.updateItem({'students': this.course.students, '_id': this.courseId}).then(
       (val) => {
         this.showProgress.toggleLoadingGlobal(false);
@@ -73,17 +73,11 @@ export class MembersComponent implements OnInit {
    * @param _id Id of an user.
    * @param direction direction where user to switch.
    */
-  switchUser(id: string, direction: string) {
-    if (direction === 'right') {
-      this.members = this.members.concat(this.users.filter(obj => id === obj._id));
-      this.users = this.users.filter(obj => !(id === obj._id));
-    } else if (direction === 'left') {
-      this.users = this.users.concat(this.members.filter(obj => id === obj._id));
-      this.members = this.members.filter(obj => !(id === obj._id));
-    }
+  removeUser(id: string, direction: string) {
+    this.users = this.users.concat(this.members.filter(obj => id === obj._id));
+    this.members = this.members.filter(obj => !(id === obj._id));
     this.sortUsers(this.members);
     this.sortUsers(this.users);
-    this.course.students = this.members;
     this.updateMembersInCourse();
   }
 
