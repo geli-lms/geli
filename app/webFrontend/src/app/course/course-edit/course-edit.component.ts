@@ -48,6 +48,7 @@ export class CourseEditComponent implements OnInit {
   ngOnInit() {
     this.generateForm();
     this.uploader = new FileUploader({
+      allowedMimeType: ['application/vnd.ms-excel'],
       url: '/api/courses/' + this.id + '/whitelist',
       headers: [{
         name: 'Authorization',
