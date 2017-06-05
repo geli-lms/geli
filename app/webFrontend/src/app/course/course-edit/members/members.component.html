@@ -9,7 +9,7 @@
   </md-option>
 </md-autocomplete>
 
-<div class="members" *ngIf="fuzzySearch.length <= 3">
+<div class="members" *ngIf="fuzzySearch.length <= 0">
   <ng-container *ngFor="let member of members">
 <md-card [ngClass]="(currentMember != null && currentMember._id == member._id) ? 'active':'profile'"
          (click)="setMember(member)">
@@ -31,7 +31,7 @@
   </ng-container>
 </div>
 
-<div class="users" *ngIf="fuzzySearch.length > 3">
+<div class="users" *ngIf="fuzzySearch.length > 0">
   <p><b>In course ({{members.length}})</b></p>
   <md-list class="drop" [dragula]='"bag-one"' [dragulaModel]='members'>
       <ng-container *ngFor="let member of members">
