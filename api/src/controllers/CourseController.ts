@@ -3,14 +3,17 @@ import {Body, Get, Post, Put, Param, Req, JsonController, UseBefore, UploadedFil
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 
 import {Course} from '../models/Course';
+import {User} from '../models/User';
 import {ICourse} from '../../../shared/models/ICourse';
 import {IUserModel} from '../models/User';
 import {IUser} from '../../../shared/models/IUser';
-import {ObsCsvParser} from "../common/obsCsvParser";
+import {ObsCsvParser} from '../common/obsCsvParser';
 
 @JsonController('/courses')
 @UseBefore(passportJwtMiddleware)
 export class CourseController {
+
+  parser: ObsCsvParser =  new ObsCsvParser();
 
   @Get('/')
   getCourses() {
@@ -59,14 +62,15 @@ export class CourseController {
 
   @Post('/:id/whitelist')
   whitelistStudents(@Param('id') id: string, @UploadedFile('file') file: any) {
-    console.log(file);
     const mimetype: string = file.mimetype;
-    console.log(mimetype);
     if (mimetype !== 'application/vnd.ms-excel') {
       throw new TypeError ('Wrong MimeType allowed are just csv files.');
     }
-    new ObsCsvParser(file, Course.findById(id));
-    return true;
+    return User.find({})
+      .then((users) => users.map((user) => user.toObject({ virtuals: true})))
+      .then((users) => Course.findById(id).then((course) => {
+      return this.parser.work(file, course, users).save().then((c: any) => c.toObject());
+    }));
   }
 
 
