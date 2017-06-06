@@ -9,9 +9,9 @@
       "dev": true
     },
     "@types/bluebird": {
-      "version": "3.5.4",
+      "version": "3.5.5",
       "from": "@types/bluebird@*",
-      "resolved": "https://registry.npmjs.org/@types/bluebird/-/bluebird-3.5.4.tgz",
+      "resolved": "https://registry.npmjs.org/@types/bluebird/-/bluebird-3.5.5.tgz",
       "dev": true
     },
     "@types/body-parser": {
@@ -52,14 +52,14 @@
     },
     "@types/fs-extra": {
       "version": "3.0.3",
-      "from": "@types/fs-extra@3.0.3",
+      "from": "@types/fs-extra@>=3.0.2 <4.0.0",
       "resolved": "https://registry.npmjs.org/@types/fs-extra/-/fs-extra-3.0.3.tgz",
       "dev": true
     },
     "@types/handlebars": {
-      "version": "4.0.32",
+      "version": "4.0.33",
       "from": "@types/handlebars@>=4.0.31 <5.0.0",
-      "resolved": "https://registry.npmjs.org/@types/handlebars/-/handlebars-4.0.32.tgz",
+      "resolved": "https://registry.npmjs.org/@types/handlebars/-/handlebars-4.0.33.tgz",
       "dev": true
     },
     "@types/highlight.js": {
@@ -69,15 +69,15 @@
       "dev": true
     },
     "@types/jsonwebtoken": {
-      "version": "7.2.0",
+      "version": "7.2.1",
       "from": "@types/jsonwebtoken@>=7.2.0 <8.0.0",
-      "resolved": "https://registry.npmjs.org/@types/jsonwebtoken/-/jsonwebtoken-7.2.0.tgz",
+      "resolved": "https://registry.npmjs.org/@types/jsonwebtoken/-/jsonwebtoken-7.2.1.tgz",
       "dev": true
     },
     "@types/lodash": {
-      "version": "4.14.64",
+      "version": "4.14.65",
       "from": "@types/lodash@>=4.14.37 <5.0.0",
-      "resolved": "https://registry.npmjs.org/@types/lodash/-/lodash-4.14.64.tgz",
+      "resolved": "https://registry.npmjs.org/@types/lodash/-/lodash-4.14.65.tgz",
       "dev": true
     },
     "@types/marked": {
@@ -105,15 +105,15 @@
       "dev": true
     },
     "@types/mongodb": {
-      "version": "2.2.2",
+      "version": "2.2.3",
       "from": "@types/mongodb@*",
-      "resolved": "https://registry.npmjs.org/@types/mongodb/-/mongodb-2.2.2.tgz",
+      "resolved": "https://registry.npmjs.org/@types/mongodb/-/mongodb-2.2.3.tgz",
       "dev": true
     },
     "@types/mongoose": {
-      "version": "4.7.14",
-      "from": "@types/mongoose@4.7.14",
-      "resolved": "https://registry.npmjs.org/@types/mongoose/-/mongoose-4.7.14.tgz",
+      "version": "4.7.15",
+      "from": "@types/mongoose@>=4.7.11 <5.0.0",
+      "resolved": "https://registry.npmjs.org/@types/mongoose/-/mongoose-4.7.15.tgz",
       "dev": true
     },
     "@types/morgan": {
@@ -123,9 +123,9 @@
       "dev": true
     },
     "@types/node": {
-      "version": "7.0.23",
+      "version": "7.0.28",
       "from": "@types/node@*",
-      "resolved": "https://registry.npmjs.org/@types/node/-/node-7.0.23.tgz",
+      "resolved": "https://registry.npmjs.org/@types/node/-/node-7.0.28.tgz",
       "dev": true
     },
     "@types/nodemailer": {
@@ -154,7 +154,7 @@
     },
     "@types/passport-jwt": {
       "version": "2.0.20",
-      "from": "@types/passport-jwt@2.0.20",
+      "from": "@types/passport-jwt@>=2.0.19 <3.0.0",
       "resolved": "https://registry.npmjs.org/@types/passport-jwt/-/passport-jwt-2.0.20.tgz",
       "dev": true
     },
@@ -250,9 +250,9 @@
       "resolved": "https://registry.npmjs.org/append-field/-/append-field-0.1.0.tgz"
     },
     "aproba": {
-      "version": "1.1.1",
+      "version": "1.1.2",
       "from": "aproba@>=1.0.3 <2.0.0",
-      "resolved": "https://registry.npmjs.org/aproba/-/aproba-1.1.1.tgz"
+      "resolved": "https://registry.npmjs.org/aproba/-/aproba-1.1.2.tgz"
     },
     "archy": {
       "version": "1.0.0",
@@ -750,9 +750,9 @@
       "dev": true,
       "dependencies": {
         "lru-cache": {
-          "version": "4.0.2",
+          "version": "4.1.0",
           "from": "lru-cache@>=4.0.1 <5.0.0",
-          "resolved": "https://registry.npmjs.org/lru-cache/-/lru-cache-4.0.2.tgz",
+          "resolved": "https://registry.npmjs.org/lru-cache/-/lru-cache-4.1.0.tgz",
           "dev": true
         }
       }
@@ -1294,7 +1294,7 @@
     },
     "fs-extra": {
       "version": "3.0.1",
-      "from": "fs-extra@3.0.1",
+      "from": "fs-extra@>=3.0.1 <4.0.0",
       "resolved": "https://registry.npmjs.org/fs-extra/-/fs-extra-3.0.1.tgz"
     },
     "fs.realpath": {
@@ -3219,9 +3219,9 @@
       "dev": true
     },
     "readable-stream": {
-      "version": "2.2.9",
+      "version": "2.2.11",
       "from": "readable-stream@>=2.0.6 <3.0.0",
-      "resolved": "https://registry.npmjs.org/readable-stream/-/readable-stream-2.2.9.tgz"
+      "resolved": "https://registry.npmjs.org/readable-stream/-/readable-stream-2.2.11.tgz"
     },
     "readdirp": {
       "version": "2.1.0",
@@ -3413,7 +3413,7 @@
     },
     "safe-buffer": {
       "version": "5.0.1",
-      "from": "safe-buffer@>=5.0.1 <6.0.0",
+      "from": "safe-buffer@>=5.0.1 <5.1.0",
       "resolved": "https://registry.npmjs.org/safe-buffer/-/safe-buffer-5.0.1.tgz"
     },
     "semver": {
@@ -3638,9 +3638,9 @@
       "resolved": "https://registry.npmjs.org/streamsearch/-/streamsearch-0.1.2.tgz"
     },
     "string_decoder": {
-      "version": "1.0.1",
+      "version": "1.0.2",
       "from": "string_decoder@>=1.0.0 <1.1.0",
-      "resolved": "https://registry.npmjs.org/string_decoder/-/string_decoder-1.0.1.tgz"
+      "resolved": "https://registry.npmjs.org/string_decoder/-/string_decoder-1.0.2.tgz"
     },
     "string-length": {
       "version": "1.0.1",
@@ -3997,9 +3997,9 @@
       "dev": true
     },
     "uglify-js": {
-      "version": "2.8.27",
+      "version": "2.8.28",
       "from": "uglify-js@>=2.6.0 <3.0.0",
-      "resolved": "https://registry.npmjs.org/uglify-js/-/uglify-js-2.8.27.tgz",
+      "resolved": "https://registry.npmjs.org/uglify-js/-/uglify-js-2.8.28.tgz",
       "dev": true,
       "optional": true,
       "dependencies": {
