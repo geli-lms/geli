@@ -1,4 +1,4 @@
-<md-card class="lecture-card" *ngFor="let lecture of course.lectures">
+<md-card class="lecture-card" *ngIf="lecture">
   <md-menu #lectureMenu="mdMenu">
     <button md-menu-item (click)="editLecture(lecture)">
       <md-icon>edit</md-icon>
@@ -25,14 +25,16 @@
 
   <md-card-content>
     <p>{{lecture.description}}</p>
-
-    <div *ngFor="let unit of lecture.units;">
-      <video *ngIf="unit.type === 'video'" src="{{'/api/' + unit.filePath}}" controls></video>
-    </div>
+    <app-unit *ngIf="lecture.units" [units]="lecture.units"></app-unit>
+    <p>Unit-Type: {{unitType}}</p>
+    <app-unit-edit *ngIf="unitType && editMode"
+                   [course]="course"
+                   [lecture]="lecture"
+                   [unitType]="unitType"
+                   (onDone)="onEditDone($event)">
+    </app-unit-edit>
   </md-card-content>
+  <md-card-actions *ngIf="(userService.isAdmin() || userService.isTeacher()) && !editMode">
+    <app-unit-menu (onAddUnit)="onAddUnit($event)"></app-unit-menu>
+  </md-card-actions>
 </md-card>
-
-<a md-fab class="add-lecture-fab" color="accent" routerLink="{{'/course/edit/'+course._id+'/lecture/new'}}"
-   *ngIf="userService.isAdmin() || userService.isTeacher()" mdTooltip="Add lecture" mdTooltipPosition="left">
-  <md-icon class="md-24">add</md-icon>
-</a>

@@ -22,6 +22,11 @@
         <md-icon>mode_edit</md-icon>
       </button>
 
+      <button md-icon-button (click)="showReport(course._id)"
+              *ngIf="this.userService.isTeacher()">
+        <md-icon>show_chart</md-icon>
+      </button>
+
       <button md-mini-fab color="primary" class="details-button" (click)="goToInfo(course._id)">
         <md-icon>arrow_forward</md-icon>
       </button>

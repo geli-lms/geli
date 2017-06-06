@@ -1,7 +1,6 @@
 export interface IUser {
     _id: any;
     uid: string;
-    username: string;
     email: string;
     password: string;
     profile: {

@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {Validators, FormGroup, FormBuilder, FormControl} from '@angular/forms';
+import {Validators, FormGroup, FormBuilder} from '@angular/forms';
 import {AuthenticationService} from '../../shared/services/authentication.service';
 import {Router} from '@angular/router';
 import {ShowProgressService} from '../../shared/services/show-progress.service';
@@ -47,9 +47,6 @@ export class RegisterComponent implements OnInit {
       });
   }
 
-  changeType() {
-  }
-
   generateForm() {
     this.registerForm = this.formBuilder.group({
       role: ['', Validators.required],
@@ -57,7 +54,6 @@ export class RegisterComponent implements OnInit {
         firstName: ['', Validators.required],
         lastName: ['', Validators.required],
       }),
-      username: [''],
       email: ['', Validators.required],
       uid: ['', Validators.required],
       confirmUid: ['', Validators.required],
