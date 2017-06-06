@@ -1,34 +1,56 @@
 /** Created by Oliver Neff on 14.04.2017. */
 import {Component, Input, OnInit} from '@angular/core';
+import {FormControl} from '@angular/forms';
 import {CourseService, UserDataService} from '../../../shared/services/data.service';
 import {ShowProgressService} from '../../../shared/services/show-progress.service';
+import {DragulaService} from 'ng2-dragula';
 import {IUser} from '../../../../../../../shared/models/IUser';
+import {ICourse} from '../../../../../../../shared/models/ICourse';
 
 @Component({
   selector: 'app-members',
   templateUrl: './members.component.html',
-  styleUrls: ['./members.component.scss']
+  styleUrls: ['./members.component.scss', '../../../../../node_modules/dragula/dist/dragula.css']
 })
 export class MembersComponent implements OnInit {
   @Input() courseId;
-  course: any;
+  course: ICourse;
   members: IUser[] = [];
   users: IUser[] = [];
-  filterFirstNameMember = '';
-  filterLastNameMember = '';
-  filterFirstNameUser = '';
-  filterLastNameUser = '';
+  currentMember: IUser = null;
+  fuzzySearch: String = '';
+  userCtrl: FormControl;
+  filteredStates: any;
+
+  setMember(member: IUser) {
+    this.currentMember = member;
+  }
 
   constructor(private userService: UserDataService,
               private courseService: CourseService,
-              private showProgress: ShowProgressService) {
+              private showProgress: ShowProgressService,
+              private  dragula: DragulaService) {
+
+    dragula.setOptions('bag-one', {
+      revertOnSpill: true
+    });
+    dragula.dragend.subscribe(value => {
+      this.updateMembersInCourse();
+    });
     this.getStudents();
+
+    this.userCtrl = new FormControl();
+    this.filteredStates = this.userCtrl.valueChanges
+      .startWith(null)
+      .map(name => this.filterStates(name));
   }
 
   ngOnInit() {
-    console.log('init course members with course id:');
-    console.log(this.courseId);
     this.getCourseMembers();
+  }
+
+  ngOnDestroy() {
+    this.dragula.destroy('bag-one');
   }
 
   /**
@@ -36,9 +58,9 @@ export class MembersComponent implements OnInit {
    */
   updateMembersInCourse() {
     this.showProgress.toggleLoadingGlobal(true);
+    this.course.students = this.members;
     this.courseService.updateItem({'students': this.course.students, '_id': this.courseId}).then(
       (val) => {
-        console.log(val);
         this.showProgress.toggleLoadingGlobal(false);
       }, (error) => {
         this.showProgress.toggleLoadingGlobal(false);
@@ -51,17 +73,11 @@ export class MembersComponent implements OnInit {
    * @param _id Id of an user.
    * @param direction direction where user to switch.
    */
-  switchUser(id: string, direction: string) {
-    if (direction === 'right') {
-      this.members = this.members.concat(this.users.filter(obj => id === obj._id));
-      this.users = this.users.filter(obj => !(id === obj._id));
-    } else if (direction === 'left') {
-      this.users = this.users.concat(this.members.filter(obj => id === obj._id));
-      this.members = this.members.filter(obj => !(id === obj._id));
-    }
+  removeUser(id: string, direction: string) {
+    this.users = this.users.concat(this.members.filter(obj => id === obj._id));
+    this.members = this.members.filter(obj => !(id === obj._id));
     this.sortUsers(this.members);
     this.sortUsers(this.users);
-    this.course.students = this.members;
     this.updateMembersInCourse();
   }
 
@@ -108,5 +124,22 @@ export class MembersComponent implements OnInit {
       }
       return 0;
     });
+  }
+
+  filterStates(val: string) {
+    return val ? this.users.filter(s => this.fuzzysearch(val, s))
+      .map(e => e.profile.firstName + ' ' + e.profile.lastName + ' ' + e.uid + ' ' + e.email)
+      : [];
+  }
+
+  fuzzysearch(toSearch: string, user: IUser): boolean {
+    const lowerToSearch: string = toSearch.toLowerCase();
+    const elementsToFind = lowerToSearch.split(' ');
+    const resArray = elementsToFind.filter(e => user.profile.firstName.toLowerCase().includes(e) ||
+      user.profile.lastName.toLowerCase().includes(e) ||
+      user.uid.toLowerCase().includes(e) ||
+      user.email.toLowerCase().includes(e)
+    );
+    return resArray.length > 0;
   }
 }

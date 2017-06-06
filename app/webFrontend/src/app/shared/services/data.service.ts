@@ -1,7 +1,6 @@
 import {Injectable} from '@angular/core';
 import {BackendService} from './backend.service';
 import {Dependency} from '../../about/licenses/dependency.model';
-import {ITask} from '../../../../../../shared/models/task/ITask';
 import {ITaskUnit} from '../../../../../../shared/models/units/ITaskUnit';
 
 abstract class DataService {
@@ -156,7 +155,7 @@ export class LectureService extends DataService {
 @Injectable()
 export class UnitService extends DataService {
   constructor(public backendService: BackendService) {
-    super('unit/', backendService);
+    super('units/', backendService);
   }
 
   addTaskUnit(taskUnit: ITaskUnit, lectureId: string) {
