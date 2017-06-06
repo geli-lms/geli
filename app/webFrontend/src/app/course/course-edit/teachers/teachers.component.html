@@ -1,0 +1,47 @@
+<!--<div class="teachers">
+div class="bg" [ngStyle]="{ 'background-image': 'url(' + teacher.getGravatarURL(160) + ')'}"> </div
+<md-input-container>
+  <input mdInput placeholder="Search and add students by name, Id, e-mail"
+         [mdAutocomplete]="auto" [formControl]="userCtrl" [(ngModel)]="fuzzySearch">
+</md-input-container>
+
+<md-autocomplete #auto="mdAutocomplete">
+  <md-option *ngFor="let state of filteredStates | async" [value]="state">
+    {{ state }}
+  </md-option>
+</md-autocomplete>-->
+
+<!--<md-grid-list cols="6">-->
+    <!--<md-grid-tile class="tile" *ngFor="let teacher of allTeachers">-->
+      <!--<span class="gravatar" [grav]="teacher.email"></span>-->
+      <!--<span class="firstName">{{teacher.profile.firstName}}</span>-->
+      <!--<span class="lastName">{{teacher.profile.lastName}}</span>-->
+    <!--</md-grid-tile>-->
+<!--</md-grid-list>-->
+<p><b>In course</b></p>
+<md-grid-list cols="6" rowHeight="1:2">
+  <md-grid-tile *ngFor="let teacher of courseTeachers">
+    <div class="tile">
+      <span class="gravatar" [grav]="teacher.email" [size]="200"></span>
+      <span class="firstName">{{teacher.profile.firstName}}</span>
+      <span class="lastName">{{teacher.profile.lastName}}</span>
+    </div>
+  </md-grid-tile>
+</md-grid-list>
+
+<p><b>Not in course</b></p>
+<md-grid-list cols="6" rowHeight="1:2">
+    <md-grid-tile *ngFor="let teacher of allTeachers">
+      <div class="tile">
+        <span class="gravatar" [grav]="teacher.email" [size]="200"></span>
+        <span class="firstName">{{teacher.profile.firstName}}</span>
+        <span class="lastName">{{teacher.profile.lastName}}</span>
+        <div class="buttonLayer">
+          <button md-button class="button">ADD</button>
+        </div>
+      </div>
+    </md-grid-tile>
+</md-grid-list>
+
+
+

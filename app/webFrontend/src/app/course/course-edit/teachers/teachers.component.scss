@@ -1,0 +1,51 @@
+.tile {
+  position: absolute;
+  padding-top: 20px;
+  //padding-left: 40px;
+  //padding-right: 40px;
+  padding-bottom: 20px;
+  border-radius: 8px;
+}
+
+.tile:hover {
+  background-color: #4990E2;
+  color: white;
+}
+
+.gravatar {
+  width: 160px;
+  height: 160px;
+  margin-bottom: 50px;
+  border-radius: 50%;
+  display: block;
+}
+
+.button {
+  background-color: white;
+  color: #4990E2;
+  padding-left: 60%;
+  padding-right: 60%;
+}
+
+.buttonLayer {
+  display: none;
+  position: absolute;
+}
+
+.tile:hover div.buttonLayer{
+  top: 20%;
+  left: 10%;
+  display: block;
+}
+
+.firstName {
+  margin-bottom: 10px;
+  text-align: left;
+  font-weight: bold;
+  display: block;
+}
+
+.lastName {
+  text-align: left;
+  font-weight: bold;
+}
