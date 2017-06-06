@@ -19,14 +19,29 @@ export class TeachersComponent implements OnInit {
 
   constructor(private courseService: CourseService,
               private userService: UserDataService) {
-    ;
-   // this.userCtrl = new FormControl();
+    // this.userCtrl = new FormControl();
 
   }
 
   ngOnInit() {
     this.getAllTeachers();
     this.getCourseTeachers();
+  }
+
+  addTeacher(teacher: User) {
+    this.courseTeachers.push(teacher);
+    const index = this.allTeachers.indexOf(teacher);
+    if (index !== -1) {
+      this.allTeachers.splice(index, 1);
+    }
+  }
+
+  removeTeacher(teacher: User) {
+    const index = this.courseTeachers.indexOf(teacher);
+    if (index !== -1) {
+      this.courseTeachers.splice(index, 1);
+    }
+    this.allTeachers.push(teacher);
   }
 
   getAllTeachers() {

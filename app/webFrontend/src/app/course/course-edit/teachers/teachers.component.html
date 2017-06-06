@@ -25,6 +25,9 @@ div class="bg" [ngStyle]="{ 'background-image': 'url(' + teacher.getGravatarURL(
       <span class="gravatar" [grav]="teacher.email" [size]="200"></span>
       <span class="firstName">{{teacher.profile.firstName}}</span>
       <span class="lastName">{{teacher.profile.lastName}}</span>
+      <div class="buttonLayer">
+        <button md-button class="button" (click)="removeTeacher(teacher)">REMOVE</button>
+      </div>
     </div>
   </md-grid-tile>
 </md-grid-list>
@@ -37,7 +40,7 @@ div class="bg" [ngStyle]="{ 'background-image': 'url(' + teacher.getGravatarURL(
         <span class="firstName">{{teacher.profile.firstName}}</span>
         <span class="lastName">{{teacher.profile.lastName}}</span>
         <div class="buttonLayer">
-          <button md-button class="button">ADD</button>
+          <button md-button class="button" (click)="addTeacher(teacher)">ADD</button>
         </div>
       </div>
     </md-grid-tile>
