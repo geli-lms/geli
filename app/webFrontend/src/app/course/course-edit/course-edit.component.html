@@ -13,6 +13,11 @@
                     [ngModelOptions]="{standalone: true}"></textarea>
       </md-input-container>
 
+      <md-input-container class="full-width">
+        <input async mdInput id="accessKey" placeholder="Access Key" [(ngModel)]="accessKey"
+               [ngModelOptions]="{standalone: true}">
+      </md-input-container>
+
       <md-slide-toggle>Activate course</md-slide-toggle>
 
       <p>
