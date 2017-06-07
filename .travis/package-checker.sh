@@ -1,6 +1,7 @@
 #!/bin/bash
 
 PATH_BIN=".travis/node_modules/.bin/david"
+PATHS_TO_CHECK=(".travis" "api" "app/webFrontend")
 
 RED='\033[0;31m'
 YELLOW='\033[0;33m'
@@ -32,12 +33,10 @@ if [ $(npm_package_is_installed david) == 0 ]; then
 fi
 cd ..
 
-echo "+ checking .travis"
-$PATH_BIN --package .travis/package.json
-
-echo "+ checking api"
-$PATH_BIN --package api/package.json
-
-echo "+ checking app/webFrontend"
-$PATH_BIN --package app/webFrontend/package.json
+for i in "${PATHS_TO_CHECK[@]}"
+do
+  echo "+ checking $i"
+  $PATH_BIN --package $i/package.json
+  echo
+done
 
