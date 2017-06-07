@@ -84,7 +84,7 @@ after_script:
 
 after_success:
   - .travis/docker.sh
-  - .travis/package-checker.js
+  - .travis/package-checker.sh
   - .travis/deploy.sh
 
 # Configure notifications
