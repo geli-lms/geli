@@ -1,34 +1,21 @@
 #!/bin/bash
 
+PATH_BIN=".travis/node_modules/.bin/david"
+
 echo
 echo "+++ David dependency checker +++"
 echo
 
 cd .travis
 npm i david
-ls -la node_modules/.bin
 cd ..
 
 echo "+ checking .travis"
-cd .travis
-pwd
-node_modules/.bin/david
-# david
-echo
-cd ..
+$PATH_BIN --package .travis/package.json
 
 echo "+ checking api"
-cd api
-pwd
-../.travis/node_modules/.bin/david
-# david
-echo
-cd ..
+$PATH_BIN --package api/package.json
 
 echo "+ checking app/webFrontend"
-cd app/webFrontend
-pwd
-../../.travis/node_modules/.bin/david
-# david
-echo
-cd ../..
+$PATH_BIN --package app/webbFrontend/package.json
+
