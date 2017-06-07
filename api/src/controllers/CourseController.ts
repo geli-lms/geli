@@ -1,5 +1,5 @@
 import {Request} from 'express';
-import {Body, Get, Post, Put, Param, Req, JsonController, UseBefore, HttpError} from 'routing-controllers';
+import {Body, Get, Post, Put, Param, Req, JsonController, UseBefore, HttpError, UploadedFile} from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 
 import {Course} from '../models/Course';
