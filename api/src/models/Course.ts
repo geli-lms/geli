@@ -36,6 +36,9 @@ const courseSchema = new mongoose.Schema({
         ref: 'Lecture'
       }
     ],
+    accessKey: {
+      type: String
+    },
     enrollType: {
       type: String,
       'enum': ['free', 'whitelist'],
@@ -53,6 +56,11 @@ const courseSchema = new mongoose.Schema({
     toObject: {
       transform: function (doc: any, ret: any) {
         ret._id = ret._id.toString();
+        ret.hasAccessKey = false;
+        if (ret.accessKey) {
+          delete ret.accessKey;
+          ret.hasAccessKey = true;
+        }
       }
     }
   }
