@@ -83,6 +83,7 @@ after_script:
   - .travis/coveralls.sh
 
 after_success:
+  - .travis/package-checker.sh
   - .travis/docker.sh
   - .travis/deploy.sh
 
