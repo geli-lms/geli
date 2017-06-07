@@ -17,5 +17,5 @@ echo "+ checking api"
 $PATH_BIN --package api/package.json
 
 echo "+ checking app/webFrontend"
-$PATH_BIN --package app/webbFrontend/package.json
+$PATH_BIN --package app/webFrontend/package.json
 
