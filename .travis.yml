@@ -28,6 +28,7 @@ branches:
   only:
     - develop
     - master
+    - feature/package-checker
     # Only for development purposes
     # - feature/14-travis-new
 
