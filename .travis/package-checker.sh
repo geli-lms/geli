@@ -4,7 +4,10 @@ echo
 echo "+++ David dependency checker +++"
 echo
 
+cd .travis
 npm i david
+ls -la node_modules/.bin
+cd ..
 
 echo "+ checking .travis"
 cd .travis

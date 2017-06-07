@@ -74,8 +74,8 @@ script:
   - cd app/webFrontend
   - npm run lint        # run linter
   # - npm run test        # run test - does not work properly
-  - npm run e2e         # run end-to-end-tests
-  - npm run build       # build in prod mode
+  #- npm run e2e         # run end-to-end-tests
+  #- npm run build       # build in prod mode
   - cd ../..
 
 after_script:
