@@ -100,9 +100,11 @@ export class CourseService extends DataService {
     super('courses/', backendService);
   }
 
-  enrollStudent(courseId: string, student: any): Promise<any[]> {
+  enrollStudent(courseId: string, data: any): Promise<any[]> {
+    const student: any = data.user;
+    const accessKey: string = data.accessKey;
     return new Promise((resolve, reject) => {
-      this.backendService.post(this.apiPath + courseId + '/enroll', JSON.stringify(student))
+      this.backendService.post(this.apiPath + courseId + '/enroll', JSON.stringify({user: student, accessKey}))
         .subscribe(
           (responseItem: any) => {
             resolve(responseItem);

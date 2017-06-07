@@ -15,6 +15,7 @@ export class CourseEditComponent implements OnInit {
 
   course: string;
   description: string;
+  accessKey: string;
   newCourse: FormGroup;
   id: string;
   courseOb: any[];
@@ -38,6 +39,7 @@ export class CourseEditComponent implements OnInit {
               (val: any) => {
                   this.course = val.name;
                   this.description = val.description;
+                  this.accessKey = val.hasAccessKey ? '****' : '';
                   this.courseOb = val;
               }, (error) => {
                   console.log(error);
@@ -71,7 +73,11 @@ export class CourseEditComponent implements OnInit {
     console.log(this.description);
     console.log(this.course);
 
-    this.courseService.updateItem({'name': this.course, 'description': this.description, '_id': this.id}).then(
+    const request: any = {'name': this.course, 'description': this.description, '_id': this.id};
+    if (this.accessKey !== '****') {
+      request.accessKey = this.accessKey;
+    }
+    this.courseService.updateItem(request).then(
         (val) => {
             console.log(val);
             this.showProgress.toggleLoadingGlobal(false);
