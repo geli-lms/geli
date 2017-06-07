@@ -85,8 +85,17 @@ function generateSecureToken() {
   return crypto.randomBytes(64).toString('base64');
 }
 
+function removeEmptyUid(next: (err?: NativeError) => void) {
+  if (this.uid.length === 0) {
+    this.uid = undefined;
+  }
+
+  next();
+}
+
 // Pre-save of user to database, hash password if password is modified or new
 userSchema.pre('save', hashPassword);
+userSchema.pre('save', removeEmptyUid);
 
 // TODO: This does not yet work, because the this context id different on update
 // userSchema.pre('update', hashPassword);
