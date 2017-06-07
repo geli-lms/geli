@@ -6,10 +6,6 @@ echo
 echo "+++ David dependency checker +++"
 echo
 
-cd .travis
-npm i david
-cd ..
-
 echo "+ checking .travis"
 $PATH_BIN --package .travis/package.json
 
