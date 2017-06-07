@@ -86,7 +86,7 @@ function generateSecureToken() {
 }
 
 function removeEmptyUid(next: (err?: NativeError) => void) {
-  if (this.uid.length === 0) {
+  if (this.uid != null && this.uid.length === 0) {
     this.uid = undefined;
   }
 
