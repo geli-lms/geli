@@ -7,13 +7,13 @@ echo "+++ Run docker build and publish. +++"
 echo
 if [ "$TRAVIS_BRANCH" == "master" ] || [ "$TRAVIS_BRANCH" == "develop" ]; then
   if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
-    echo "build docker images";
+    echo "+ build docker images";
     docker build -t hdafbi/geli-api:latest -f .docker/api/Dockerfile .
     docker tag hdafbi/geli-api hdafbi/geli-api:$TRAVIS_BRANCH
     docker build -t hdafbi/geli-web-frontend:latest -f .docker/web-frontend/Dockerfile .
     docker tag hdafbi/geli-web-frontend hdafbi/geli-web-frontend:$TRAVIS_BRANCH
 
-    echo "publish docker images";
+    echo "+ publish docker images";
     docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
     docker push hdafbi/geli-api;
     docker push hdafbi/geli-api:$TRAVIS_BRANCH;
