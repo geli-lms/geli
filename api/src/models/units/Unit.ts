@@ -18,6 +18,7 @@ const unitSchema = new mongoose.Schema({
     }
   },
   {
+    collection: 'units',
     discriminatorKey: 'type',
     timestamps: true,
     toObject: {
@@ -27,6 +28,13 @@ const unitSchema = new mongoose.Schema({
     },
   }
 );
+
+function populateUnit(next: (err?: NativeError) => void) {
+  const debug = 0;
+  next();
+}
+
+unitSchema.pre('find', populateUnit);
 
 const Unit = mongoose.model<IUnitModel>('Unit', unitSchema);
 
