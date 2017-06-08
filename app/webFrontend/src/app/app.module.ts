@@ -57,7 +57,9 @@ import {LectureFormComponent} from './lecture/lecture-form/lecture-form.componen
 import {AboutComponent} from './about/about.component';
 import {GeneralInfoComponent} from './about/general-info/general-info.component';
 import {LicensesComponent} from './about/licenses/licenses.component';
-import {GravatarDirective} from './course/course-edit/members/gravatar.directive';
+import {TeachersComponent} from './course/course-edit/teachers/teachers.component';
+import {GravatarDirective} from './shared/directives/gravatar.directive';
+import { CourseUserListComponent } from './course/course-edit/course-user-list/course-user-list.component';
 
 @NgModule({
   declarations: [
@@ -94,7 +96,9 @@ import {GravatarDirective} from './course/course-edit/members/gravatar.directive
     AboutComponent,
     GeneralInfoComponent,
     LicensesComponent,
-    GravatarDirective
+    TeachersComponent,
+    GravatarDirective,
+    CourseUserListComponent,
   ],
   imports: [
     DragulaModule,

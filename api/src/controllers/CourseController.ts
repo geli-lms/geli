@@ -15,7 +15,8 @@ export class CourseController {
   getCourses() {
     return Course.find({})
       .populate('lectures')
-      .populate('courseAdmin')
+      .populate('courseAdmins')
+      .populate('teachers')
       .populate('students')
       .then((courses) => courses.map((c) => c.toObject()));
   }
@@ -29,7 +30,8 @@ export class CourseController {
               path: 'units'
             }
           })
-          .populate('courseAdmin')
+          .populate('courseAdmins')
+          .populate('teachers')
           .populate('students')
           .then((course) => {
             return course.toObject();
@@ -38,11 +40,13 @@ export class CourseController {
 
   @Post('/')
   addCourse(@Body() course: ICourse, @Req() request: Request) {
-    course.courseAdmin = <IUserModel>(<any>request).user;
+    course.courseAdmin = (<IUserModel>(<any>request).user);
 
     return new Course(course).save()
       .then((c) => c.toObject());
   }
+
+
 
   @Post('/:id/enroll')
   enrollStudent(@Param('id') id: string, @Body() data: any) {
