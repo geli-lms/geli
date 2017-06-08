@@ -1,14 +1,15 @@
-import {Body, Get, Put, Post, Delete, Param, JsonController, UseBefore, UploadedFile} from 'routing-controllers';
+import {Body, Get, Put, Delete, Param, JsonController, UseBefore} from 'routing-controllers';
 import fs = require('fs');
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
+import markdownService from '../services/MarkdownService';
 
 import {Lecture} from '../models/Lecture';
 import {Unit} from '../models/units/Unit';
 import {IUnit} from '../../../shared/models/units/IUnit';
 import {IVideoUnitModel, VideoUnit} from '../models/units/VideoUnit';
-import {IVideoUnit} from '../../../shared/models/units/IVideoUnit';
+import {FreeTextUnit, IFreeTextUnitModel} from '../models/units/FreeTextUnit';
 
-const uploadOptions = {dest: 'uploads/' };
+const uploadOptions = {dest: 'uploads/'};
 
 @JsonController('/units')
 @UseBefore(passportJwtMiddleware)
@@ -17,7 +18,13 @@ export class UnitController {
   @Get('/:id')
   getUnit(@Param('id') id: string) {
     return Unit.findById(id)
-      .then((u) => u.toObject());
+      .then((u) => {
+        if (u instanceof FreeTextUnit) {
+          u = (<IFreeTextUnitModel>u);
+          console.log(markdownService.mdToHtml((<IFreeTextUnitModel>u).markdown));
+        }
+        u.toObject();
+      });
   }
 
   protected pushToLecture(lectureId: string, unit: any) {
@@ -47,9 +54,9 @@ export class UnitController {
       }
       return Lecture.update({}, {$pull: {units: id}});
     })
-    .then(() => Unit.findByIdAndRemove(id))
-    .then(() => {
-      return {result: true};
-    });
+      .then(() => Unit.findByIdAndRemove(id))
+      .then(() => {
+        return {result: true};
+      });
   }
 }
