@@ -167,6 +167,10 @@ export class UnitService extends DataService {
     this.apiPath = originalApiPath;
     return promise;
   }
+
+  addFreeTextUnit() {
+    // TODO
+  }
 }
 
 @Injectable()

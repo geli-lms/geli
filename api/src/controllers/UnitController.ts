@@ -1,7 +1,6 @@
 import {Body, Get, Put, Delete, Param, JsonController, UseBefore} from 'routing-controllers';
 import fs = require('fs');
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
-import markdownService from '../services/MarkdownService';
 
 import {Lecture} from '../models/Lecture';
 import {Unit} from '../models/units/Unit';
@@ -18,13 +17,7 @@ export class UnitController {
   @Get('/:id')
   getUnit(@Param('id') id: string) {
     return Unit.findById(id)
-      .then((u) => {
-        if (u instanceof FreeTextUnit) {
-          u = (<IFreeTextUnitModel>u);
-          console.log(markdownService.mdToHtml((<IFreeTextUnitModel>u).markdown));
-        }
-        u.toObject();
-      });
+      .then((u) => u.toObject());
   }
 
   protected pushToLecture(lectureId: string, unit: any) {
