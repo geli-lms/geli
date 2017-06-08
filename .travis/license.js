@@ -12,7 +12,7 @@ const PACKAGE_BLACKLIST = [
 ];
 const SEARCH_FOR = '// DEPENDENCY_REPLACE';
 
-console.log('\n+++ Starting license js\n');
+console.log('\n+++ Starting license js +++\n');
 
 // API
 console.log('+ starting api crawl');

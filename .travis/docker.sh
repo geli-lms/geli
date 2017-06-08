@@ -23,5 +23,17 @@ if [ "$TRAVIS_BRANCH" == "master" ] || [ "$TRAVIS_BRANCH" == "develop" ]; then
     echo -e "${YELLOW}+ WARNING: pull request #$TRAVIS_PULL_REQUEST -> skipping docker build and publish${NC}";
   fi
 else
-  echo -e "${YELLOW}+ WARNING: branch $TRAVIS_BRANCH is not whitelisted -> skipping docker build and publish${NC}";
+  if [ -z ${TRAVIS_TAG+x}  ]; then
+    echo "This is a tagged build: $TRAVIS_TAG";
+    echo "build docker images";
+    docker build -t hdafbi/geli-api:$TRAVIS_TAG -f .docker/api/Dockerfile .
+    docker build -t hdafbi/geli-web-frontend:$TRAVIS_TAG -f .docker/web-frontend/Dockerfile .
+
+    echo "publish docker images";
+    docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
+    docker push hdafbi/geli-api:$TRAVIS_TAG;
+    docker push hdafbi/geli-web-frontend:$TRAVIS_TAG;
+  else
+    echo -e "${YELLOW}+ WARNING: branch $TRAVIS_BRANCH is not whitelisted -> skipping docker build and publish${NC}";
+  fi
 fi
