@@ -1,0 +1,48 @@
+@import "../../../../variables";
+
+:host {
+  min-height: 500px;
+}
+
+.lecture {
+  h2 {
+
+    font-size: 18px;
+    color: rgba(0, 0, 0, 0.50);
+
+    .open-toggle {
+      color: map-get($app-primary, 'default');
+    }
+  }
+
+  .lecture-content {
+    .units {
+
+      .unit {
+        border-bottom: 1px solid map-get($mat-grey, 300);
+        &, &:first-child{
+          border-top: 1px solid map-get($mat-grey, 300);
+        }
+
+        .unit-content {
+          height: 64px;
+          display: flex;
+          align-items: center;
+
+          .unit-type {
+            flex-grow: 1;
+          }
+
+          .unit-actions {
+            .mat-icon {
+              color: map-get($mat-grey, 600);
+            }
+          }
+        }
+      }
+    }
+
+    margin-top: 24px;
+    margin-bottom: 34px;
+  }
+}

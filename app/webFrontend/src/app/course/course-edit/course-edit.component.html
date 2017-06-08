@@ -1,6 +1,11 @@
 <h1>Edit course</h1>
 
 <md-tab-group dynamicHeight="true">
+
+  <md-tab label="Manage content">
+    <app-course-manage-content [course]="courseOb"></app-course-manage-content>
+  </md-tab>
+
   <md-tab label="General">
     <form class="course-form" (ngSubmit)="createCourse()">
       <md-input-container class="full-width">
@@ -25,6 +30,7 @@
       </p>
     </form>
   </md-tab>
+
 
   <md-tab label="Course Members">
     <app-members [courseId]="id"></app-members>

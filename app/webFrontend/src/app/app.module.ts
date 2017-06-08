@@ -58,6 +58,8 @@ import {AboutComponent} from './about/about.component';
 import {GeneralInfoComponent} from './about/general-info/general-info.component';
 import {LicensesComponent} from './about/licenses/licenses.component';
 import {GravatarDirective} from './course/course-edit/members/gravatar.directive';
+import { CourseManageContentComponent } from './course/course-edit/course-manage-content/course-manage-content.component';
+import { MdFabMenuComponent } from './shared/components/md-fab-menu/md-fab-menu.component';
 
 @NgModule({
   declarations: [
@@ -94,7 +96,9 @@ import {GravatarDirective} from './course/course-edit/members/gravatar.directive
     AboutComponent,
     GeneralInfoComponent,
     LicensesComponent,
-    GravatarDirective
+    GravatarDirective,
+    CourseManageContentComponent,
+    MdFabMenuComponent,
   ],
   imports: [
     DragulaModule,
