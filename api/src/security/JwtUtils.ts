@@ -4,8 +4,9 @@ import config from '../config/main';
 
 export class JwtUtils {
   static generateToken(user: IUser) {
+    const data: any = {_id: user._id.toString()};
     return sign(
-      {_id: user._id.toString()},
+      data,
       config.secret,
       {
         expiresIn: 10080 // in seconds

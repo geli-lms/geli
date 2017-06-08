@@ -9,4 +9,5 @@ export interface ICourse {
     courseAdmin: IUser;
     students: IUser[];
     lectures: ILecture[];
+    accessKey: string;
 }

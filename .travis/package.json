@@ -7,8 +7,8 @@
   "description": "These dependencies are only for the travis after_script stuff",
   "license": "GPL-3.0",
   "devDependencies": {
-    "nlf": "*",
-    "coveralls": "*"
+    "coveralls": "*",
+    "david": "*",
+    "nlf": "*"
   }
 }
-
