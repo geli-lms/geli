@@ -15,7 +15,7 @@ import {Answer} from '../../../../../models/Answer';
 export class TaskUnitEditComponent implements OnInit {
   @Input() courseId: any;
   @Input() lectureId: string;
-  taskUnit: ITaskUnit;
+  @Input() model: ITaskUnit;
   tasks: any[];
 
   constructor(private taskService: TaskService,
@@ -23,9 +23,11 @@ export class TaskUnitEditComponent implements OnInit {
               private snackBar: MdSnackBar) {}
 
   ngOnInit() {
-    this.taskUnit = new TaskUnit(this.courseId);
+    if(!this.model) {
+      this.model = new TaskUnit(this.courseId);
+    }
+
     this.loadTasksFromServer();
-    // console.log('courseid:' + this.courseId);
   }
 
   loadTasksFromServer() {
@@ -39,7 +41,7 @@ export class TaskUnitEditComponent implements OnInit {
   }
 
   addUnit() {
-    this.unitService.addTaskUnit(this.taskUnit, this.lectureId)
+    this.unitService.addTaskUnit(this.model, this.lectureId)
       .then(
         (task) => {
           this.snackBar.open('Task created', '', { duration: 3000});
@@ -50,7 +52,7 @@ export class TaskUnitEditComponent implements OnInit {
   };
 
   addTask() {
-    this.taskUnit.tasks.push(new Task());
+    this.model.tasks.push(new Task());
     // this.createTask(newTask);
   }
 

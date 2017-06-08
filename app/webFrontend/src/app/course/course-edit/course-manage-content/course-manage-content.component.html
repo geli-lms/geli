@@ -1,4 +1,4 @@
-<ng-container *ngIf="course">
+<div class="container" *ngIf="course">
   <div class="lecture" *ngFor="let lecture of course.lectures">
     <h2>{{lecture.name}}
       <button class="open-toggle" md-icon-button (click)="openToggleLecture(lecture)">
@@ -21,20 +21,20 @@
             </span>
           </div>
 
-          <app-unit-edit *ngIf="unitEditMode && unitEditElement===unit"
+          <app-unit-form *ngIf="unitEditMode && unitEditElement===unit"
                          [course]="course"
                          [lecture]="lecture"
-                         [unitType]="unit.type"
+                         [type]="unit.type"
                          (onDone)="onEditUnitDone()">
-          </app-unit-edit>
+          </app-unit-form>
         </div>
 
-        <app-unit-edit *ngIf="unitCreateMode && unitCreateType"
+        <app-unit-form *ngIf="unitCreateMode && unitCreateType"
                        [course]="course"
                        [lecture]="lecture"
-                       [unitType]="unitCreateType"
+                       [type]="unitCreateType"
                        (onDone)="onAddUnitDone()">
-        </app-unit-edit>
+        </app-unit-form>
       </div>
 
       <app-lecture-form [model]="lecture" *ngIf="lectureEditMode" (onSubmit)="updateLecture($event)"
@@ -56,9 +56,9 @@
 
   <app-lecture-form *ngIf="lectureCreateMode" (onSubmit)="createLecture($event)" actionLabel="Add"></app-lecture-form>
 
-  <app-md-fab-menu *ngIf="!unitCreateMode && !unitEditMode && !lectureCreateMode && ! lectureEditMode" fabTooltip="Add content">
+  <app-md-fab-menu class="fab" *ngIf="!unitCreateMode && !unitEditMode && !lectureCreateMode && ! lectureEditMode" fabTooltip="Add content">
     <div (click)="onAddUnit('task')">Add tasks</div>
     <div (click)="onAddUnit('video')">Upload videos</div>
     <div (click)="onAddLecture()">Add lecture</div>
   </app-md-fab-menu>
-</ng-container>
+</div>

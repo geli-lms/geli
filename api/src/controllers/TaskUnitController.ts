@@ -16,21 +16,21 @@ export class TaskUnitController extends UnitController {
       return new BadRequestError('No lecture ID was submitted.');
     }
 
-    if (!data.taskUnit) {
+    if (!data.model) {
       return new BadRequestError('No task unit was submitted.');
     }
 
-    const tasks: ITask[] = data.taskUnit.tasks;
-    data.taskUnit.tasks = [];
+    const tasks: ITask[] = data.model.tasks;
+    data.model.tasks = [];
 
     return Promise.all(tasks.map(this.addTask))
       .then((savedTasks) => {
         for (let i = 0; i < savedTasks.length; i++) {
           const savedTask: ITaskModel = savedTasks[i];
-          data.taskUnit.tasks.push(savedTask._id);
+          data.model.tasks.push(savedTask._id);
         }
 
-        return new TaskUnit(data.taskUnit).save();
+        return new TaskUnit(data.model).save();
       })
       .then((savedTaskUnit) => {
         this.pushToLecture(data.lectureId, savedTaskUnit);

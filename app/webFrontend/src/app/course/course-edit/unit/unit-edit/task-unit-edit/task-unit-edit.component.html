@@ -3,7 +3,7 @@
 <md-icon>info</md-icon> Add questions with any number of possible answers. Mark the correct answer(s) with the checkbox.
 </div>
 
-<div *ngFor="let task of taskUnit.tasks" class="question-answer">
+<div *ngFor="let task of model.tasks" class="question-answer">
 
     <md-input-container md-line class="question">
       <textarea mdInput id="name" placeholder="Frage hier eingeben." [(ngModel)]="task.name"></textarea>

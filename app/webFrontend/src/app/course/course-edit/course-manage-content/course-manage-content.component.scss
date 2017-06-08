@@ -1,7 +1,13 @@
 @import "../../../../variables";
 
-:host {
+.container {
   min-height: 500px;
+}
+
+.fab {
+  position: absolute;
+  bottom: 0;
+  right: 0;
 }
 
 .lecture {

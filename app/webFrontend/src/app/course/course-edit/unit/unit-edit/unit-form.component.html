@@ -1,0 +1,8 @@
+<div class="edit-unit">
+  <app-upload *ngIf="course && type == 'video'" [course]="course"></app-upload>
+  <app-task-unit-edit *ngIf="course && type == 'task'" [model]="model" [courseId]="course._id" [lectureId]="lecture._id"></app-task-unit-edit>
+</div>
+<div class="edit-unit-action">
+  <button md-raised-button color="primary" (click)="done()">Done</button>
+  <button md-raised-button color="warn" (click)="done()">Cancel</button>
+</div>
