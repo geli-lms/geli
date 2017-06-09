@@ -16,6 +16,5 @@ export class GravatarDirective {
       + '.jpg?s=' + this.size + ')';
     el.nativeElement.style.width = this.size;
     el.nativeElement.style.height = this.size;
-    console.log(this.size);
   }
 }

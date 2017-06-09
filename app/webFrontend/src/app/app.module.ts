@@ -18,6 +18,7 @@ import {DashboardComponent} from './start/dashboard/dashboard.component';
 import {HomescreenComponent} from './start/homescreen/homescreen.component';
 import {RegisterComponent} from './user/register/register.component';
 import {AuthGuardService} from './shared/services/auth-guard.service';
+import { DragulaModule } from 'ng2-dragula';
 import {DashboardStudentComponent} from './start/dashboard/dashboard-student/dashboard-student.component';
 import {DashboardTeacherComponent} from './start/dashboard/dashboard-teacher/dashboard-teacher.component';
 import {DashboardAdminComponent} from './start/dashboard/dashboard-admin/dashboard-admin.component';
@@ -96,6 +97,7 @@ import {GravatarDirective} from './course/course-edit/members/gravatar.directive
     GravatarDirective
   ],
   imports: [
+    DragulaModule,
     BrowserModule,
     FormsModule,
     HttpModule,
