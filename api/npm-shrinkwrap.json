@@ -99,9 +99,9 @@
       "dev": true
     },
     "@types/mocha": {
-      "version": "2.2.38",
-      "from": "@types/mocha@2.2.38",
-      "resolved": "https://registry.npmjs.org/@types/mocha/-/mocha-2.2.38.tgz",
+      "version": "2.2.41",
+      "from": "@types/mocha@2.2.41",
+      "resolved": "https://registry.npmjs.org/@types/mocha/-/mocha-2.2.41.tgz",
       "dev": true
     },
     "@types/mongodb": {
