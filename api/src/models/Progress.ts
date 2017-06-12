@@ -18,6 +18,7 @@ const progressSchema = new mongoose.Schema({
     }
   },
   {
+    discriminatorKey: 'type',
     timestamps: true,
     toObject: {
       transform: function (doc: any, ret: any) {
