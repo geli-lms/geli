@@ -1,5 +1,5 @@
 import * as mongoose from 'mongoose';
-import {IProgress} from '../../../shared/models/IProgress';
+import {IProgress} from '../../../../shared/models/progress/IProgress';
 
 interface IProgressModel extends IProgress, mongoose.Document {
 }
@@ -18,6 +18,7 @@ const progressSchema = new mongoose.Schema({
     }
   },
   {
+    discriminatorKey: 'type',
     timestamps: true,
     toObject: {
       transform: function (doc: any, ret: any) {
