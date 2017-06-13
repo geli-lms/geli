@@ -33,6 +33,9 @@ const unitSchema = new mongoose.Schema({
   }
 );
 
+function unitPopulate(next: (err?: NativeError) => void) {
+}
+
 unitSchema.virtual('progress', [{
   ref: 'Progress',
   localField: '_id',
