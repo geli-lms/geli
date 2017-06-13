@@ -58,6 +58,7 @@ import {AboutComponent} from './about/about.component';
 import {GeneralInfoComponent} from './about/general-info/general-info.component';
 import {LicensesComponent} from './about/licenses/licenses.component';
 import {GravatarDirective} from './course/course-edit/members/gravatar.directive';
+import {ProgressService} from './shared/services/data/progress.service';
 
 @NgModule({
   declarations: [
@@ -120,6 +121,7 @@ import {GravatarDirective} from './course/course-edit/members/gravatar.directive
     LectureService,
     BackendService,
     UserDataService,
+    ProgressService,
     ShowProgressService,
     JwtHelper
   ],

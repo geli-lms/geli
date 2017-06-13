@@ -23,6 +23,7 @@ export class UserController {
   @Get('/:id')
   getUser(@Param('id') id: string) {
     return User.findById(id)
+      .populate('progress')
       .then((user) => user.toObject());
   }
 

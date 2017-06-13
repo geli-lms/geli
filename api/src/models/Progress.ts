@@ -5,6 +5,10 @@ interface IProgressModel extends IProgress, mongoose.Document {
 }
 
 const progressSchema = new mongoose.Schema({
+    course: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Course'
+    },
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User'
@@ -18,6 +22,7 @@ const progressSchema = new mongoose.Schema({
     }
   },
   {
+    discriminatorKey: 'type',
     timestamps: true,
     toObject: {
       transform: function (doc: any, ret: any) {
