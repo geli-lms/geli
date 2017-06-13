@@ -26,8 +26,7 @@ export class CourseController {
           .populate({
             path: 'lectures',
             populate: {
-              path: 'units',
-              model: 'task'
+              path: 'units'
             }
           })
           .populate('courseAdmin')

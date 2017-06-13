@@ -55,9 +55,10 @@ export class FixtureLoader {
         })
       );
     })
-    .then(() => {
+    .then((course: ICourseModel[]) => {
       return Promise.all(
         unitFixtures.data.map((unitElement) => {
+          unitElement._course = course[0]._id;
           return new unitFixtures.Model(unitElement)
           .save();
         })
@@ -77,13 +78,18 @@ export class FixtureLoader {
     })
     .then((units: IUnitModel[]) => {
       // Creating progress fixtures
-      return userFixtures.Model.find({role: 'student'})
-        .then((users) => {
+      return courseFixtures.Model.findOne({name: 'Introduction to web development'})
+        .then((course) => {
+          return userFixtures.Model.find({role: 'student'})
+            .then((users) => ({course, users}));
+        })
+        .then(({course, users}) => {
           const progressModels: IProgressModel[] = [];
           for (let i = 0; i < users.length; i++) {
             for (let j = 0; j < units.length; j++) {
               progressFixtures.data.map((progress) => {
                 const progressModel: IProgressModel = <IProgressModel>new progressFixtures.Model(progress);
+                progressModel.course = course;
                 progressModel.user = users[i];
                 progressModel.unit = units[j];
                 progressModels[(i * users.length) + j] = progressModel;

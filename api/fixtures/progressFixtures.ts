@@ -12,7 +12,7 @@ export const progressFixtures: IFixture = {
     {
       user: null,
       unit: null,
-      done: false
+      done: true
     }
   ]
 };

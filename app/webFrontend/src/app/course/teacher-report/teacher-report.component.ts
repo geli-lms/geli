@@ -4,6 +4,9 @@ import {User} from '../../models/User';
 import {ICourse} from '../../../../../../shared/models/ICourse';
 import {IUnit} from '../../../../../../shared/models/units/IUnit';
 import {ActivatedRoute} from '@angular/router';
+import {IProgress} from '../../../../../../shared/models/IProgress';
+import {ProgressService} from '../../shared/services/data/progress.service';
+import {IUser} from '../../../../../../shared/models/IUser';
 
 @Component({
   selector: 'app-teacher-report',
@@ -16,15 +19,18 @@ export class TeacherReportComponent implements OnInit {
   course: ICourse;
   students: User[];
   progressableUnits: IUnit[];
+  progress: any;
 
   constructor(private route: ActivatedRoute,
               private courseService: CourseService,
-              private unitService: UnitService) { }
+              private unitService: UnitService,
+              private progressService: ProgressService) { }
 
   ngOnInit() {
     this.route.params.subscribe(params => { this.id = decodeURIComponent(params['id']); });
     this.getCourseAndStudents();
-    this.getProgressableUnits();
+    this.getProgress();
+    // this.getProgressableUnits();
   }
 
   getCourseAndStudents() {
@@ -48,6 +54,13 @@ export class TeacherReportComponent implements OnInit {
         (err) => {
           console.log(err);
         });
+  }
+
+  getProgress() {
+    this.progressService.getCourseProgress(this.id)
+      .then((progress: any) => {
+        this.progress = progress;
+      });
   }
 
 }
