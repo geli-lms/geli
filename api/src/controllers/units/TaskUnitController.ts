@@ -1,9 +1,9 @@
 import {Body, Post, JsonController, UseBefore, BadRequestError} from 'routing-controllers';
-import passportJwtMiddleware from '../security/passportJwtMiddleware';
+import passportJwtMiddleware from '../../security/passportJwtMiddleware';
 import {UnitController} from './UnitController';
-import {TaskUnit} from '../models/units/TaskUnit';
-import {ITask} from '../../../shared/models/task/ITask';
-import {ITaskModel, Task} from '../models/Task';
+import {TaskUnit} from '../../models/units/TaskUnit';
+import {ITask} from '../../../../shared/models/task/ITask';
+import {ITaskModel, Task} from '../../models/Task';
 
 @JsonController('/units/tasks')
 @UseBefore(passportJwtMiddleware)

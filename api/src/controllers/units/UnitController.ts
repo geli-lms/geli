@@ -1,12 +1,11 @@
-import {Body, Get, Put, Post, Delete, Param, JsonController, UseBefore, UploadedFile} from 'routing-controllers';
+import {Body, Get, Put, Delete, Param, JsonController, UseBefore} from 'routing-controllers';
 import fs = require('fs');
-import passportJwtMiddleware from '../security/passportJwtMiddleware';
+import passportJwtMiddleware from '../../security/passportJwtMiddleware';
 
-import {Lecture} from '../models/Lecture';
-import {Unit} from '../models/units/Unit';
-import {IUnit} from '../../../shared/models/units/IUnit';
-import {IVideoUnitModel, VideoUnit} from '../models/units/VideoUnit';
-import {IVideoUnit} from '../../../shared/models/units/IVideoUnit';
+import {Lecture} from '../../models/Lecture';
+import {Unit} from '../../models/units/Unit';
+import {IUnit} from '../../../../shared/models/units/IUnit';
+import {IVideoUnitModel, VideoUnit} from '../../models/units/VideoUnit';
 
 const uploadOptions = {dest: 'uploads/' };
 
