@@ -2,18 +2,18 @@ import {Request} from 'express';
 import {Body, Get, Post, Put, Param, Req, JsonController, UseBefore, HttpError, UploadedFile} from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 
-import {Course} from '../models/Course';
 import {User} from '../models/User';
 import {ICourse} from '../../../shared/models/ICourse';
 import {IUserModel} from '../models/User';
 import {IUser} from '../../../shared/models/IUser';
-import {ObsCsvParser} from '../common/obsCsvParser';
+import {ObsCsvController} from './ObsCsvController';
+import {Course} from '../models/Course';
 
 @JsonController('/courses')
 @UseBefore(passportJwtMiddleware)
 export class CourseController {
 
-  parser: ObsCsvParser =  new ObsCsvParser();
+  parser: ObsCsvController =  new ObsCsvController();
 
   @Get('/')
   getCourses() {
@@ -74,7 +74,8 @@ export class CourseController {
     return User.find({})
       .then((users) => users.map((user) => user.toObject({ virtuals: true})))
       .then((users) => Course.findById(id).then((course) => {
-      return this.parser.work(file, course, users).save().then((c: any) => c.toObject());
+        course = this.parser.updateCourseFromFile(file, course, users);
+      return course.save().then((c: any) => c.toObject());
     }));
   }
 

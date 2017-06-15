@@ -23,6 +23,6 @@ const wUserSchema = new mongoose.Schema({
   }
 );
 
-const wUser = mongoose.model<IWUserModel>('WUser', wUserSchema);
+const WUser = mongoose.model<IWUserModel>('WUser', wUserSchema);
 
-export {IWUser, IWUserModel};
+export {WUser, IWUserModel};
