@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {BackendService} from './backend.service';
 import {Dependency} from '../../about/licenses/dependency.model';
 import {ITaskUnit} from '../../../../../../shared/models/units/ITaskUnit';
+import {IFreeTextUnit} from '../../../../../../shared/models/units/IFreeTextUnit';
 
 abstract class DataService {
 
@@ -168,8 +169,13 @@ export class UnitService extends DataService {
     return promise;
   }
 
-  addFreeTextUnit() {
-    // TODO
+  addFreeTextUnit(freeTextUnit: IFreeTextUnit, lectureId: string) {
+    // TODO ?!
+    const originalApiPath = this.apiPath;
+    this.apiPath += 'freeTexts';
+    const promise = this.createItem({freeTextUnit: freeTextUnit, lectureId: lectureId});
+    this.apiPath = originalApiPath;
+    return promise;
   }
 }
 
