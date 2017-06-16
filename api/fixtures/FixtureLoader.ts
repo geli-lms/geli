@@ -5,6 +5,8 @@ import {userFixtures} from './userFixtures';
 import {courseFixtures} from './courseFixtures';
 import {taskFixtures} from './taskFixtures';
 import {IFixture} from './IFixture';
+import {ICourseModel} from '../src/models/Course';
+import {ILectureModel} from '../src/models/Lecture';
 
 
 export class FixtureLoader {
@@ -34,6 +36,23 @@ export class FixtureLoader {
               )
             )
           )
-        ));
+        ))
+      .then(() => {
+        return Promise.all(
+          lectureFixtures.data.map((element) => {
+            return new lectureFixtures.Model(element)
+              .save()
+              .then((lecture) => {
+                return courseFixtures.Model.findOne({name: 'Introduction to web development'})
+                  .then((course) => ({course, lecture}));
+              })
+              .then(({course, lecture}) => {
+                (<ICourseModel>course).lectures.push((<ILectureModel>lecture));
+                return course.save();
+              });
+          })
+        );
+
+      });
   }
 }

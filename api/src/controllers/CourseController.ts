@@ -1,5 +1,5 @@
 import {Request} from 'express';
-import {Body, Get, Post, Put, Param, Req, JsonController, UseBefore} from 'routing-controllers';
+import {Body, Get, Post, Put, Param, Req, JsonController, UseBefore, HttpError} from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 
 import {Course} from '../models/Course';
@@ -45,9 +45,14 @@ export class CourseController {
   }
 
   @Post('/:id/enroll')
-  enrollStudent(@Param('id') id: string, @Body() user: IUser) {
+  enrollStudent(@Param('id') id: string, @Body() data: any) {
+    const user: IUser = data.user;
+    const accessKey: string = data.accessKey;
     return Course.findById(id)
       .then((c) => {
+        if (c.accessKey && c.accessKey !== accessKey) {
+          throw new HttpError(401, 'Invalid access key.');
+        }
         if (c.students.indexOf(user._id) < 0) {
           c.students.push(user);
         }
