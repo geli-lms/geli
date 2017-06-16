@@ -8,6 +8,7 @@ export const courseFixtures: IFixture = {
     {
       name: 'Introduction to web development',
       description: `Whether you're just getting started with Web development, or are just expanding your horizons into new realms of Web awesomeness, this course should help you get started.`,
+      accessKey: 'test',
       active: true
     },
     {
