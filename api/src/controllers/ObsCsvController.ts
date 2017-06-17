@@ -80,7 +80,8 @@ export class ObsCsvController {
       wUser.firstName = e.firstName;
       wUser.lastName = e.lastName;
       wUser.uid = e.uid;
-      wUser.save().then(user => course.whitelist.push(user.toObject()));
+      wUser.save().then(user => user.toObject());
+      course.whitelist.push(wUser._id);
     });
     console.log(course);
     return course;

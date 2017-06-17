@@ -17,8 +17,7 @@ const wUserSchema = new mongoose.Schema({
 
     uid: {
       type: String,
-      required: true,
-      unique: true
+      required: true
     }
   }
 );
