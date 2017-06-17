@@ -75,7 +75,7 @@ export class CourseController {
       .then((users) => users.map((user) => user.toObject({ virtuals: true})))
       .then((users) => Course.findById(id).then((course) => {
         course = this.parser.updateCourseFromFile(file, course, users);
-      return course.save().then((c: any) => c.toObject());
+        return course.save().then((c) => c.toObject());
     }));
   }
 

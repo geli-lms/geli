@@ -2,11 +2,12 @@
  * Created by olineff on 05.06.2017.
  */
 import {IUser} from '../../../shared/models/IUser';
+import {IWUserModel, WUser} from '../models/WUser';
 import {IWUser} from '../../../shared/models/IWUser';
 
 export class ObsCsvController {
   lines: string[] = [];
-  whitelistUser: IWUser[] = [];
+  whitelistUser: WUser[] = [];
 
   /**
    *
@@ -18,7 +19,8 @@ export class ObsCsvController {
   public updateCourseFromFile(file:  any, course: any, allUsers: any[]): any {
     this.parseFileToWhitelistUser(file);
     course = this.addParsedUsersToCourse(course, allUsers);
-    return this.updateWhitelistUser(course);
+    course = this.updateWhitelistUser(course);
+    return course;
   }
 
   /**
@@ -26,11 +28,10 @@ export class ObsCsvController {
    * @param file
    * @returns {IWUser[]}
    */
-  public parseFileToWhitelistUser(file: any): IWUser[] {
+  public parseFileToWhitelistUser(file: any): any {
     this.whitelistUser = [];
     this.splitByLineBreaks(file.buffer.toString());
     console.log('File was parsed successfully. There where ' + this.whitelistUser.length + ' whitelistUser parsed.');
-    return this.whitelistUser;
   }
 
   /**
@@ -42,7 +43,6 @@ export class ObsCsvController {
     const userLines = this.lines.filter(e => e.split(';').length >= 3);
     userLines.forEach(e =>
       this.whitelistUser.push({
-        _id: null,
         firstName: e.split(';')[0],
         lastName: e.split(';')[1],
         uid: Number(e.split(';')[2]).toString()
@@ -62,7 +62,7 @@ export class ObsCsvController {
         wUser.firstName === user.profile.firstName
         && wUser.lastName === user.profile.lastName
         && wUser.uid === user.uid);
-      foundUsers.forEach(e => course.students.push(e));
+        foundUsers.forEach(e => course.students.push(e));
     });
     return course;
   }
@@ -73,8 +73,13 @@ export class ObsCsvController {
    * @returns {any}
    */
   public updateWhitelistUser(course: any): any {
-    course.whitelist = this.whitelistUser;
+    let wUserModel: IWUserModel = null;
+
+    course.whitelist.forEach((e: any) => WUser.findByIdAndRemove(e._id));
+    this.whitelistUser.forEach(e =>  {
+      wUserModel = e;
+      wUserModel.save().then((wUser) => wUser.toObject());
+    });
     return course;
   }
-
 }

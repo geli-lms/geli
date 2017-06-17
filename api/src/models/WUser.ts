@@ -11,12 +11,12 @@ const wUserSchema = new mongoose.Schema({
     },
 
     lastName: {
-      tye: String,
+      type: String,
       required: true
     },
 
     uid: {
-      typ: String,
+      type: String,
       required: true,
       unique: true
     }
