@@ -22,8 +22,7 @@ export class FreeTextUnitController extends UnitController {
       resolve(new FreeTextUnit(data.freeTextUnit).save());
     })
       .then((savedFreeTextUnit) => {
-        console.log(JSON.stringify(savedFreeTextUnit, null, 4));
-        this.pushToLecture(data.lectureId, savedFreeTextUnit);
+        return this.pushToLecture(data.lectureId, savedFreeTextUnit);
       });
   }
 

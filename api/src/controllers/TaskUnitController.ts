@@ -33,7 +33,7 @@ export class TaskUnitController extends UnitController {
         return new TaskUnit(data.taskUnit).save();
       })
       .then((savedTaskUnit) => {
-        this.pushToLecture(data.lectureId, savedTaskUnit);
+        return this.pushToLecture(data.lectureId, savedTaskUnit);
       });
   }
 
