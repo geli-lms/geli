@@ -7,7 +7,7 @@ import {IWUser} from '../../../shared/models/IWUser';
 
 export class ObsCsvController {
   lines: string[] = [];
-  whitelistUser: WUser[] = [];
+  whitelistUser: {firstName: string, lastName: string, uid: string}[] = [];
 
   /**
    *
@@ -16,7 +16,7 @@ export class ObsCsvController {
    * @param allUsers
    * @returns {any}
    */
-  public updateCourseFromFile(file:  any, course: any, allUsers: any[]): any {
+  public updateCourseFromFile(file: any, course: any, allUsers: any[]): any {
     this.parseFileToWhitelistUser(file);
     course = this.addParsedUsersToCourse(course, allUsers);
     course = this.updateWhitelistUser(course);
@@ -62,7 +62,7 @@ export class ObsCsvController {
         wUser.firstName === user.profile.firstName
         && wUser.lastName === user.profile.lastName
         && wUser.uid === user.uid);
-        foundUsers.forEach(e => course.students.push(e));
+      foundUsers.forEach(e => course.students.push(e));
     });
     return course;
   }
@@ -73,13 +73,16 @@ export class ObsCsvController {
    * @returns {any}
    */
   public updateWhitelistUser(course: any): any {
-    let wUserModel: IWUserModel = null;
-
     course.whitelist.forEach((e: any) => WUser.findByIdAndRemove(e._id));
-    this.whitelistUser.forEach(e =>  {
-      wUserModel = e;
-      wUserModel.save().then((wUser) => wUser.toObject());
+    course.whitelist = [];
+    this.whitelistUser.forEach(e => {
+      const wUser = new WUser();
+      wUser.firstName = e.firstName;
+      wUser.lastName = e.lastName;
+      wUser.uid = e.uid;
+      wUser.save().then(user => course.whitelist.push(user.toObject()));
     });
+    console.log(course);
     return course;
   }
 }

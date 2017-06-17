@@ -5,7 +5,7 @@ interface IWUserModel extends IWUser, mongoose.Document {
 }
 
 const wUserSchema = new mongoose.Schema({
-    fistName: {
+  firstName: {
       type: String,
       required: true
     },
