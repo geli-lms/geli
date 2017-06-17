@@ -1,4 +1,4 @@
-import {ITask} from './ITask';
+import {ITask} from './task/ITask';
 import {IUser} from './IUser';
 
 export interface ITaskAttestation {

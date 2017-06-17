@@ -58,6 +58,7 @@ import {AboutComponent} from './about/about.component';
 import {GeneralInfoComponent} from './about/general-info/general-info.component';
 import {LicensesComponent} from './about/licenses/licenses.component';
 import {GravatarDirective} from './course/course-edit/members/gravatar.directive';
+import {TaskAttestationComponent} from './course/course-detail/tasks/task-attestation.component';
 
 @NgModule({
   declarations: [
@@ -71,7 +72,7 @@ import {GravatarDirective} from './course/course-edit/members/gravatar.directive
     DashboardTeacherComponent,
     DashboardAdminComponent,
     TaskUnitEditComponent,
-    TaskListComponent,
+//    TaskListComponent,
     TaskAttestationComponent,
     CourseComponent,
     CourseDetailComponent,

@@ -7,6 +7,7 @@ import {taskFixtures} from './taskFixtures';
 import {IFixture} from './IFixture';
 import {ICourseModel} from '../src/models/Course';
 import {ILectureModel} from '../src/models/Lecture';
+import {lectureFixtures} from './lectureFixtures';
 
 
 export class FixtureLoader {
