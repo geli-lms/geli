@@ -24,7 +24,7 @@ import {DashboardTeacherComponent} from './start/dashboard/dashboard-teacher/das
 import {DashboardAdminComponent} from './start/dashboard/dashboard-admin/dashboard-admin.component';
 import {
   CourseService, TaskService, UserDataService, LectureService,
-  UnitService, AboutDataService
+  UnitService, AboutDataService, FreeTextService
 } from './shared/services/data.service';
 import {BackendService} from './shared/services/backend.service';
 import {CourseComponent} from './course/course.component';
@@ -59,6 +59,7 @@ import {GeneralInfoComponent} from './about/general-info/general-info.component'
 import {LicensesComponent} from './about/licenses/licenses.component';
 import {GravatarDirective} from './course/course-edit/members/gravatar.directive';
 import {FreeTextUnitFormComponent} from './course/course-edit/unit/unit-edit/free-text-unit-form/free-text-unit-form.component';
+import {FreeTextUnitComponent} from './course/course-edit/unit/free-text-unit/free-text-unit.component';
 
 @NgModule({
   declarations: [
@@ -96,7 +97,8 @@ import {FreeTextUnitFormComponent} from './course/course-edit/unit/unit-edit/fre
     GeneralInfoComponent,
     LicensesComponent,
     GravatarDirective,
-    FreeTextUnitFormComponent
+    FreeTextUnitFormComponent,
+    FreeTextUnitComponent
   ],
   imports: [
     DragulaModule,
@@ -117,6 +119,7 @@ import {FreeTextUnitFormComponent} from './course/course-edit/unit/unit-edit/fre
     AuthGuardService,
     UnitService,
     TaskService,
+    FreeTextService,
     CourseService,
     UserDataService,
     LectureService,

@@ -1,0 +1,18 @@
+import {ICourse} from '../../../../../shared/models/ICourse';
+import {IFreeTextUnit} from '../../../../../shared/models/units/IFreeTextUnit';
+
+export class FreeTextUnit implements IFreeTextUnit {
+  _course: any;
+  _id: any;
+  type: string;
+  progressable: boolean;
+  weight: number;
+
+  markdown: string;
+
+  constructor(_course: ICourse) {
+    this._course = _course;
+    this.progressable = false;
+    this.weight = 0;
+  }
+}

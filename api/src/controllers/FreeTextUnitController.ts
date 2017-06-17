@@ -1,9 +1,9 @@
-import {Body, Post, JsonController, UseBefore, BadRequestError} from 'routing-controllers';
+import {Body, Post, JsonController, UseBefore, BadRequestError, Get, Param} from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import {UnitController} from './UnitController';
 import {FreeTextUnit} from '../models/units/FreeTextUnit';
 
-@JsonController('/units/free-text')
+@JsonController('/units/free-texts')
 @UseBefore(passportJwtMiddleware)
 export class FreeTextUnitController extends UnitController {
 
@@ -22,7 +22,13 @@ export class FreeTextUnitController extends UnitController {
       resolve(new FreeTextUnit(data.freeTextUnit).save());
     })
       .then((savedFreeTextUnit) => {
+        console.log(JSON.stringify(savedFreeTextUnit, null, 4));
         this.pushToLecture(data.lectureId, savedFreeTextUnit);
       });
+  }
+
+  @Get('/course/:courseId')
+  getFreeTextForCourse(@Param('courseId') courseId: string) {
+    return FreeTextUnit.find().where({courseId: courseId}).sort({createdAt: -1});
   }
 }

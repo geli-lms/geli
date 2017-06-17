@@ -148,6 +148,34 @@ export class TaskService extends DataService {
   }
 
 }
+
+@Injectable()
+export class FreeTextService extends DataService {
+  constructor(public backendService: BackendService) {
+    super('units/free-texts/', backendService);
+  }
+
+  // TODO: CHANGE METHOD NAME
+  getStuff(id: string): Promise<any[]> {
+    return new Promise((resolve, reject) => {
+      this.backendService.get(this.apiPath + 'course/' + id)
+        .subscribe((responseItems: any) => {
+            if (this.changeProps2Date) {
+              responseItems.forEach(item => {
+                this.changeProps2Date.forEach(prop => {
+                  DataService.changeStringProp2DateProp(item, prop);
+                });
+              });
+            }
+
+            resolve(responseItems);
+          },
+          error => reject(error)
+        );
+    });
+  }
+}
+
 @Injectable()
 export class LectureService extends DataService {
   constructor(public backendService: BackendService) {
@@ -172,7 +200,7 @@ export class UnitService extends DataService {
   addFreeTextUnit(freeTextUnit: IFreeTextUnit, lectureId: string) {
     // TODO ?!
     const originalApiPath = this.apiPath;
-    this.apiPath += 'freeTexts';
+    this.apiPath += 'free-texts';
     const promise = this.createItem({freeTextUnit: freeTextUnit, lectureId: lectureId});
     this.apiPath = originalApiPath;
     return promise;

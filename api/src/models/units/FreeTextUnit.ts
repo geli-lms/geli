@@ -13,7 +13,7 @@ const freeTextUnitSchema = new mongoose.Schema({
   }
 });
 
-const FreeTextUnit = Unit.discriminator('freeText', freeTextUnitSchema);
+const FreeTextUnit = Unit.discriminator('free-text', freeTextUnitSchema);
 
 function convertMarkdown(doc: IFreeTextUnitModel, next: (err?: NativeError) => void) {
   // TODO
