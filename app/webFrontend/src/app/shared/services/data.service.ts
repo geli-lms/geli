@@ -146,6 +146,7 @@ export class TaskService extends DataService {
   getTasksForUnit(id: string): Promise<any[]> {
     const promise = this.readSingleItem(id);
     return promise;
+  }
 }
 
 @Injectable()

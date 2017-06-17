@@ -15,7 +15,7 @@ export class CourseDetailComponent implements OnInit {
 
   course: ICourse;
 
-  taskId: string = '591db56e169193023ad1f716';
+  // taskId: string = '591db56e169193023ad1f716';
   id: string;
 
   constructor(private router: Router,
