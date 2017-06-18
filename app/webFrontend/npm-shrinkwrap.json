@@ -281,8 +281,7 @@
     "argparse": {
       "version": "1.0.9",
       "from": "argparse@>=1.0.7 <2.0.0",
-      "resolved": "https://registry.npmjs.org/argparse/-/argparse-1.0.9.tgz",
-      "dev": true
+      "resolved": "https://registry.npmjs.org/argparse/-/argparse-1.0.9.tgz"
     },
     "arr-diff": {
       "version": "2.0.0",
@@ -1554,8 +1553,7 @@
     "entities": {
       "version": "1.1.1",
       "from": "entities@>=1.1.1 <1.2.0",
-      "resolved": "https://registry.npmjs.org/entities/-/entities-1.1.1.tgz",
-      "dev": true
+      "resolved": "https://registry.npmjs.org/entities/-/entities-1.1.1.tgz"
     },
     "errno": {
       "version": "0.1.4",
@@ -2984,6 +2982,11 @@
         }
       }
     },
+    "linkify-it": {
+      "version": "2.0.3",
+      "from": "linkify-it@>=2.0.0 <3.0.0",
+      "resolved": "https://registry.npmjs.org/linkify-it/-/linkify-it-2.0.3.tgz"
+    },
     "load-json-file": {
       "version": "1.1.0",
       "from": "load-json-file@>=1.0.0 <2.0.0",
@@ -3145,6 +3148,11 @@
       "resolved": "https://registry.npmjs.org/map-obj/-/map-obj-1.0.1.tgz",
       "dev": true
     },
+    "markdown-it": {
+      "version": "8.3.1",
+      "from": "markdown-it@latest",
+      "resolved": "https://registry.npmjs.org/markdown-it/-/markdown-it-8.3.1.tgz"
+    },
     "matcher-collection": {
       "version": "1.0.4",
       "from": "matcher-collection@>=1.0.0 <2.0.0",
@@ -3161,6 +3169,11 @@
       "from": "math-expression-evaluator@>=1.2.14 <2.0.0",
       "resolved": "https://registry.npmjs.org/math-expression-evaluator/-/math-expression-evaluator-1.2.17.tgz",
       "dev": true
+    },
+    "mdurl": {
+      "version": "1.0.1",
+      "from": "mdurl@>=1.0.1 <2.0.0",
+      "resolved": "https://registry.npmjs.org/mdurl/-/mdurl-1.0.1.tgz"
     },
     "media-typer": {
       "version": "0.3.0",
@@ -4755,8 +4768,7 @@
     "sprintf-js": {
       "version": "1.0.3",
       "from": "sprintf-js@>=1.0.2 <1.1.0",
-      "resolved": "https://registry.npmjs.org/sprintf-js/-/sprintf-js-1.0.3.tgz",
-      "dev": true
+      "resolved": "https://registry.npmjs.org/sprintf-js/-/sprintf-js-1.0.3.tgz"
     },
     "sshpk": {
       "version": "1.13.0",
@@ -5109,6 +5121,11 @@
       "from": "typescript@>=2.2.0 <2.3.0",
       "resolved": "https://registry.npmjs.org/typescript/-/typescript-2.2.2.tgz",
       "dev": true
+    },
+    "uc.micro": {
+      "version": "1.0.3",
+      "from": "uc.micro@>=1.0.3 <2.0.0",
+      "resolved": "https://registry.npmjs.org/uc.micro/-/uc.micro-1.0.3.tgz"
     },
     "uglify-js": {
       "version": "3.0.15",
