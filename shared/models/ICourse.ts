@@ -12,4 +12,5 @@ export interface ICourse {
     lectures: ILecture[];
     accessKey: string;
     whitelist: IWUser[];
+    enrollType: string;
 }

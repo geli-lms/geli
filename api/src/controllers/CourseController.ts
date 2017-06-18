@@ -1,5 +1,16 @@
 import {Request} from 'express';
-import {Body, Get, Post, Put, Param, Req, JsonController, UseBefore, HttpError, UploadedFile} from 'routing-controllers';
+import {
+  Body,
+  Get,
+  Post,
+  Put,
+  Param,
+  Req,
+  JsonController,
+  UseBefore,
+  HttpError,
+  UploadedFile
+} from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 
 import {User} from '../models/User';
@@ -8,12 +19,13 @@ import {IUserModel} from '../models/User';
 import {IUser} from '../../../shared/models/IUser';
 import {ObsCsvController} from './ObsCsvController';
 import {Course} from '../models/Course';
+import {WUser} from '../models/WUser';
 
 @JsonController('/courses')
 @UseBefore(passportJwtMiddleware)
 export class CourseController {
 
-  parser: ObsCsvController =  new ObsCsvController();
+  parser: ObsCsvController = new ObsCsvController();
 
   @Get('/')
   getCourses() {
@@ -57,10 +69,19 @@ export class CourseController {
         if (c.accessKey && c.accessKey !== accessKey) {
           throw new HttpError(401, 'Invalid access key.');
         }
-        if (c.students.indexOf(user._id) < 0) {
-          c.students.push(user);
-        }
-        return c.save().then((course) => course.toObject());
+        return WUser.find(c.whitelist).then((wUsers) => {
+          if (c.enrollType === 'whitelist' &&
+            wUsers.filter(e =>
+            e.firstName === user.profile.firstName
+            && e.lastName === user.profile.lastName
+            && e.uid === user.uid).length <= 0) {
+            throw new HttpError(401, 'Not allowed to join, you are not on whitelist.');
+          }
+          if (c.students.indexOf(user._id) < 0) {
+            c.students.push(user);
+          }
+          return c.save().then((course) => course.toObject());
+        });
       });
   }
 
@@ -69,14 +90,14 @@ export class CourseController {
   whitelistStudents(@Param('id') id: string, @UploadedFile('file') file: any) {
     const mimetype: string = file.mimetype;
     if (mimetype !== 'application/vnd.ms-excel') {
-      throw new TypeError ('Wrong MimeType allowed are just csv files.');
+      throw new TypeError('Wrong MimeType allowed are just csv files.');
     }
     return User.find({})
-      .then((users) => users.map((user) => user.toObject({ virtuals: true})))
+      .then((users) => users.map((user) => user.toObject({virtuals: true})))
       .then((users) => Course.findById(id).then((course) => {
         course = this.parser.updateCourseFromFile(file, course, users);
         return course.save().then((c) => c.toObject());
-    }));
+      }));
   }
 
 

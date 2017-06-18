@@ -16,6 +16,9 @@ export class CourseEditComponent implements OnInit {
   course: string;
   description: string;
   accessKey: string;
+  active = false;
+  mode = false;
+  enrollType: string;
   newCourse: FormGroup;
   id: string;
   courseOb: any[];
@@ -40,6 +43,11 @@ export class CourseEditComponent implements OnInit {
                   this.course = val.name;
                   this.description = val.description;
                   this.accessKey = val.hasAccessKey ? '****' : '';
+                  this.active = val.active;
+                  this.enrollType = val.enrollType;
+                  if (this.enrollType === 'whitelist') {
+                    this.mode = true;
+                  }
                   this.courseOb = val;
               }, (error) => {
                   console.log(error);
@@ -73,7 +81,7 @@ export class CourseEditComponent implements OnInit {
     console.log(this.description);
     console.log(this.course);
 
-    const request: any = {'name': this.course, 'description': this.description, '_id': this.id};
+    const request: any = {'name': this.course, 'description': this.description, '_id': this.id, 'active': this.active, 'enrollType': this.enrollType};
     if (this.accessKey !== '****') {
       request.accessKey = this.accessKey;
     }
@@ -86,6 +94,26 @@ export class CourseEditComponent implements OnInit {
             console.log(error);
         });
   }
+
+  onChangeMode(value) {
+    if (value.checked === true) {
+      this.mode = true;
+      this.enrollType = 'whitelist';
+    } else {
+      this.mode = false;
+      this.enrollType = 'free';
+    }
+  }
+
+  onChangeActive(value) {
+    if (value.checked === true) {
+      this.active = true;
+    } else {
+      this.active = false;
+    }
+  }
+
+
 
   generateForm() {
     this.newCourse = this.formBuilder.group({

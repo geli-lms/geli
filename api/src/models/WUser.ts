@@ -7,17 +7,22 @@ interface IWUserModel extends IWUser, mongoose.Document {
 const wUserSchema = new mongoose.Schema({
   firstName: {
       type: String,
-      required: true
+      lowercase: true,
+      required: true,
+      trim: true
     },
 
     lastName: {
       type: String,
-      required: true
+      lowercase: true,
+      required: true,
+      trim: true
     },
 
     uid: {
       type: String,
-      required: true
+      required: true,
+      trim: true
     }
   }
 );
