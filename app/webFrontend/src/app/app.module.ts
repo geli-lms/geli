@@ -60,6 +60,7 @@ import {LicensesComponent} from './about/licenses/licenses.component';
 import {GravatarDirective} from './course/course-edit/members/gravatar.directive';
 import {FreeTextUnitFormComponent} from './course/course-edit/unit/unit-edit/free-text-unit-form/free-text-unit-form.component';
 import {FreeTextUnitComponent} from './course/course-edit/unit/free-text-unit/free-text-unit.component';
+import {MarkdownService} from './shared/services/markdown.service';
 
 @NgModule({
   declarations: [
@@ -126,6 +127,7 @@ import {FreeTextUnitComponent} from './course/course-edit/unit/free-text-unit/fr
     BackendService,
     UserDataService,
     ShowProgressService,
+    MarkdownService,
     JwtHelper
   ],
   bootstrap: [AppComponent]

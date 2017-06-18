@@ -1,5 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {FreeTextUnit} from '../../../../models/FreeTextUnit';
+import {MarkdownService} from '../../../../shared/services/markdown.service';
 
 @Component({
   selector: 'app-free-text-unit',
@@ -9,9 +10,13 @@ import {FreeTextUnit} from '../../../../models/FreeTextUnit';
 export class FreeTextUnitComponent implements OnInit {
   @Input() freeTextUnit: FreeTextUnit;
 
-  constructor() { }
+  constructor(private mdService: MarkdownService) { }
 
   ngOnInit() {
+  }
+
+  public getMarkdownAsHtml(): string {
+    return this.mdService.render(this.freeTextUnit.markdown);
   }
 
 }
