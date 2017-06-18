@@ -22,7 +22,7 @@ export class GeneralInfoComponent implements OnInit {
   getAllContributors() {
     this.allContributors = ContributorsList.getAllContributors();
     // Cleanup data so can sort perfectly
-    this.allContributors.forEach((value, index, array) => {
+    this.allContributors.forEach((value) => {
       value.firstName = value.firstName.trim();
       value.name = value.name.trim();
       value.from = value.from.replace(' ', '');
