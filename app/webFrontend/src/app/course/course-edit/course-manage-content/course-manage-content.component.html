@@ -1,31 +1,58 @@
-<div class="container" *ngIf="course">
+<div class="container" *ngIf="course" (click)="closeFab()">
   <div class="lecture" *ngFor="let lecture of course.lectures">
     <h2>{{lecture.name}}
-      <button class="open-toggle" md-icon-button (click)="openToggleLecture(lecture)">
+      <button class="open-toggle" (click)="openToggleLecture(lecture)"
+              [class.opened]="openedLecture && lecture._id === openedLecture._id" md-icon-button>
         <md-icon>arrow_drop_down</md-icon>
       </button>
+
+      <button class="lecture-menu-button" md-icon-button [mdMenuTriggerFor]="lectureMenu">
+        <md-icon>more_vert</md-icon>
+      </button>
+
+      <md-menu #lectureMenu="mdMenu">
+        <button md-menu-item md-tooltip="Edit" (click)="onEditLecture(lecture)">
+          <md-icon>edit</md-icon>
+          Edit
+        </button>
+        <button md-menu-item md-tooltip="Duplicate" (click)="duplicateLecture(lecture)">
+          <md-icon>content_copy</md-icon>
+          Duplicate
+        </button>
+        <button md-menu-item md-tooltip="Delete" (click)="deleteLecture(lecture)">
+          <md-icon>delete</md-icon>
+          Delete
+        </button>
+      </md-menu>
     </h2>
 
-    <div class="lecture-content" *ngIf="lecture == openedLecture">
+    <div class="lecture-content" *ngIf="openedLecture && lecture._id === openedLecture._id">
+      <app-lecture-form [model]="lecture" *ngIf="lectureEditMode" (onSubmit)="updateLecture($event)"
+                        [onCancel]="closeEditLecture"
+                        actionLabel="Update"></app-lecture-form>
+
       <div class="units">
         <div class="unit" *ngFor="let unit of lecture.units;">
           <div class="unit-content">
             <span class="unit-type">{{ unit.type }}</span>
+            <span class="unit-date">{{ unit.updatedAt | date:"y-MM-dd" }}</span>
             <span class="unit-actions">
               <button md-icon-button md-tooltip="Edit" (click)="onEditUnit(unit)">
                 <md-icon>edit</md-icon>
               </button>
-              <button md-icon-button md-tooltip="Delete" (click)="deleteUnit(lecture)">
+              <button md-icon-button md-tooltip="Delete" (click)="deleteUnit(unit)">
                 <md-icon>delete</md-icon>
               </button>
             </span>
           </div>
 
-          <app-unit-form *ngIf="unitEditMode && unitEditElement===unit"
+          <app-unit-form *ngIf="unitEditMode && unitEditElement === unit"
                          [course]="course"
                          [lecture]="lecture"
                          [type]="unit.type"
-                         (onDone)="onEditUnitDone()">
+                         [model]="unit"
+                         [onDone]="onEditUnitDone"
+                         [onCancel]="closeEditUnit">
           </app-unit-form>
         </div>
 
@@ -33,32 +60,24 @@
                        [course]="course"
                        [lecture]="lecture"
                        [type]="unitCreateType"
-                       (onDone)="onAddUnitDone()">
+                       [onDone]="onAddUnitDone"
+                       [onCancel]="closeAddUnit">
         </app-unit-form>
       </div>
 
-      <app-lecture-form [model]="lecture" *ngIf="lectureEditMode" (onSubmit)="updateLecture($event)"
-                        actionLabel="Update"></app-lecture-form>
-
-      <div class="lecture-actions">
-        <button md-icon-button md-tooltip="Edit" (click)="onEditLecture()">
-          <md-icon>edit</md-icon>
-        </button>
-        <button md-icon-button md-tooltip="Duplicate" (click)="duplicateLecture(lecture)">
-          <md-icon>content_copy</md-icon>
-        </button>
-        <button md-icon-button md-tooltip="Delete" (click)="deleteLecture(lecture)">
-          <md-icon>delete</md-icon>
-        </button>
-      </div>
+      <p *ngIf="!lecture.units.length">No units added yet.</p>
     </div>
   </div>
 
-  <app-lecture-form *ngIf="lectureCreateMode" (onSubmit)="createLecture($event)" actionLabel="Add"></app-lecture-form>
+  <app-lecture-form *ngIf="lectureCreateMode" (onSubmit)="createLecture($event)" [onCancel]="closeAddLecture"
+                    actionLabel="Add"></app-lecture-form>
 
-  <app-md-fab-menu class="fab" *ngIf="!unitCreateMode && !unitEditMode && !lectureCreateMode && ! lectureEditMode" fabTooltip="Add content">
-    <div (click)="onAddUnit('task')">Add tasks</div>
-    <div (click)="onAddUnit('video')">Upload videos</div>
-    <div (click)="onAddLecture()">Add lecture</div>
-  </app-md-fab-menu>
 </div>
+
+<app-md-fab-menu class="fab" [open]="fabOpen" [onClick]="onFabClick"
+                 [disabled]="unitCreateMode || unitEditMode || lectureCreateMode || lectureEditMode"
+                 fabTooltip="Add content">
+  <div *ngIf="openedLecture" (click)="onAddUnit('task')">Add tasks</div>
+  <div *ngIf="openedLecture" (click)="onAddUnit('video')">Upload videos</div>
+  <div (click)="onAddLecture()">Add lecture</div>
+</app-md-fab-menu>

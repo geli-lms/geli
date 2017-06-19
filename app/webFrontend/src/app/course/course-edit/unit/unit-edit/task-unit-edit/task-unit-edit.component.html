@@ -1,20 +1,26 @@
 <div class="task-unit-edit">
-<div class="info-text">
-<md-icon>info</md-icon> Add questions with any number of possible answers. Mark the correct answer(s) with the checkbox.
-</div>
+  <strong>Tasks</strong>
+  <div class="info-text">
+    <md-icon>info</md-icon>
+    Add questions with any number of possible answers. Mark the correct answer(s) with the checkbox.
+  </div>
 
-<div *ngFor="let task of model.tasks" class="question-answer">
+  <div *ngFor="let task of model.tasks" class="question-answer">
 
     <md-input-container md-line class="question">
       <textarea mdInput id="name" placeholder="Frage hier eingeben." [(ngModel)]="task.name"></textarea>
     </md-input-container>
 
-  <div class="actions">
-    <button md-icon-button (click)="addAnswerAtEnd(task)"><md-icon color="accent">add</md-icon></button>
-    <button md-icon-button (click)="removeLastAnswer(task)"><md-icon>remove</md-icon></button>
-    <button md-button (click)="updateTask(task)">UPDATE</button>
-    <button md-button (click)="removeTask(task)">DELETE</button>
-  </div>
+    <div class="actions">
+      <button md-icon-button (click)="addAnswerAtEnd(task)">
+        <md-icon color="accent">add</md-icon>
+      </button>
+      <button md-icon-button (click)="removeLastAnswer(task)">
+        <md-icon>remove</md-icon>
+      </button>
+      <button md-button (click)="updateTask(task)">UPDATE</button>
+      <button md-button (click)="removeTask(task)">DELETE</button>
+    </div>
 
     <div md-line class="answers">
       <div class="answer" *ngFor="let answer of task.answers; let idx = index;">
@@ -28,13 +34,14 @@
 
     </div>
 
-</div>
-<div>
-<button md-raised-button color="primary" class="add-unit" (click)="addUnit()">Save</button>
-</div>
-<button md-mini-fab class="add-task-fab" (click)="addTask()" mdTooltip="Add task" mdTooltipPosition="right">
-  <md-icon>add</md-icon>
-</button>
+  </div>
+  <p>
+    <button md-button (click)="onCancel()">Cancel</button>
+    <button md-button color="primary" class="add-unit" (click)="addUnit()">Save</button>
+  </p>
+  <button md-mini-fab class="add-task-fab" (click)="addTask()" mdTooltip="Add task" mdTooltipPosition="right">
+    <md-icon>add</md-icon>
+  </button>
 </div>
 
 

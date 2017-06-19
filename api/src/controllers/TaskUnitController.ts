@@ -13,11 +13,11 @@ export class TaskUnitController extends UnitController {
   addTaskUnit(@Body() data: any) {
     // discard invalid requests
     if (!data.lectureId) {
-      return new BadRequestError('No lecture ID was submitted.');
+      throw new BadRequestError('No lecture ID was submitted.');
     }
 
     if (!data.model) {
-      return new BadRequestError('No task unit was submitted.');
+      throw new BadRequestError('No task unit was submitted.');
     }
 
     const tasks: ITask[] = data.model.tasks;
@@ -33,7 +33,7 @@ export class TaskUnitController extends UnitController {
         return new TaskUnit(data.model).save();
       })
       .then((savedTaskUnit) => {
-        this.pushToLecture(data.lectureId, savedTaskUnit);
+        return this.pushToLecture(data.lectureId, savedTaskUnit);
       });
   }
 

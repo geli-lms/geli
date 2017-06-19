@@ -5,28 +5,41 @@
 }
 
 .fab {
-  position: absolute;
+  position: fixed;
   bottom: 0;
   right: 0;
 }
 
 .lecture {
   h2 {
-
     font-size: 18px;
+
     color: rgba(0, 0, 0, 0.50);
 
-    .open-toggle {
-      color: map-get($app-primary, 'default');
+    .lecture-menu-button {
+      float: right;
+    }
+  }
+
+  .open-toggle {
+    color: map-get($app-primary, 'default');
+    transition: transform 0.3s;
+    transform: rotate(-90deg);
+
+    &.opened {
+      transform: rotate(0);
     }
   }
 
   .lecture-content {
+    margin-bottom: 34px;
+
     .units {
+      margin-top: 24px;
 
       .unit {
         border-bottom: 1px solid map-get($mat-grey, 300);
-        &, &:first-child{
+        &, &:first-child {
           border-top: 1px solid map-get($mat-grey, 300);
         }
 
@@ -39,16 +52,15 @@
             flex-grow: 1;
           }
 
-          .unit-actions {
-            .mat-icon {
-              color: map-get($mat-grey, 600);
-            }
+          .unit-date {
+            flex-grow: 0.1;
+          }
+
+          .unit-date, .unit-actions .mat-icon {
+            color: map-get($mat-grey, 600);
           }
         }
       }
     }
-
-    margin-top: 24px;
-    margin-bottom: 34px;
   }
 }

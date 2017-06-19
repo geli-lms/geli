@@ -14,7 +14,9 @@ export class UnitFormComponent implements OnInit {
   @Input() type: string;
   @Input() course: ICourse;
   @Input() lecture: ILecture;
-  @Output() onDone = new EventEmitter<boolean>();
+  @Input() onDone: () => void;
+  @Input() onCancel: () => void;
+  // @Output() onDone = new EventEmitter<boolean>();
 
   constructor() {
   }
@@ -23,6 +25,6 @@ export class UnitFormComponent implements OnInit {
   }
 
   public done() {
-    this.onDone.emit(true);
+    // this.onDone.emit(true);
   }
 }

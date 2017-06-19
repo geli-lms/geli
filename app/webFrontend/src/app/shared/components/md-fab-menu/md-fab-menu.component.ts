@@ -7,16 +7,22 @@ import {Component, Input, OnInit} from '@angular/core';
 })
 export class MdFabMenuComponent implements OnInit {
 
-  @Input() fabTooltip: string;
+  @Input()
+  public fabTooltip: string;
+
+  @Input()
+  public disabled: boolean = false;
+
+  @Input()
   open: boolean = false;
+
+  @Input()
+  onClick: () => void;
+
 
   constructor() {
   }
 
   ngOnInit() {
-  }
-
-  toggleOpen() {
-    this.open = !this.open;
   }
 }

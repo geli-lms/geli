@@ -6,6 +6,7 @@ import {ITaskUnit} from '../../../../../../../../../shared/models/units/ITaskUni
 import {TaskUnit} from '../../../../../models/TaskUnit';
 import {ITask} from '../../../../../../../../../shared/models/task/ITask';
 import {Answer} from '../../../../../models/Answer';
+import {ICourse} from "../../../../../../../../../shared/models/ICourse";
 
 @Component({
   selector: 'app-task-unit-edit',
@@ -13,9 +14,11 @@ import {Answer} from '../../../../../models/Answer';
   styleUrls: ['./task-unit-edit.component.scss']
 })
 export class TaskUnitEditComponent implements OnInit {
-  @Input() courseId: any;
+  @Input() course: ICourse;
   @Input() lectureId: string;
   @Input() model: ITaskUnit;
+  @Input() onDone: () => void;
+  @Input() onCancel: () => void;
   tasks: any[];
 
   constructor(private taskService: TaskService,
@@ -24,14 +27,14 @@ export class TaskUnitEditComponent implements OnInit {
 
   ngOnInit() {
     if(!this.model) {
-      this.model = new TaskUnit(this.courseId);
+      this.model = new TaskUnit(this.course._id);
     }
 
     this.loadTasksFromServer();
   }
 
   loadTasksFromServer() {
-    this.taskService.getTasksForCourse(this.courseId).then(tasks => {
+    this.taskService.getTasksForCourse(this.course._id).then(tasks => {
       this.tasks = tasks;
 
       for (const task of this.tasks) {
@@ -45,6 +48,7 @@ export class TaskUnitEditComponent implements OnInit {
       .then(
         (task) => {
           this.snackBar.open('Task created', '', { duration: 3000});
+          this.onDone();
         },
         (error) => {
           console.log(error);

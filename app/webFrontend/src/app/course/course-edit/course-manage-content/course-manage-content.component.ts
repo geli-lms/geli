@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {ICourse} from "../../../../../../../shared/models/ICourse";
 import {ILecture} from "../../../../../../../shared/models/ILecture";
-import {CourseService, LectureService} from "../../../shared/services/data.service";
+import {CourseService, LectureService, UnitService} from "../../../shared/services/data.service";
 import {ShowProgressService} from "app/shared/services/show-progress.service";
 import {DialogService} from "../../../shared/services/dialog.service";
 import {UserService} from "../../../shared/services/user.service";
@@ -17,12 +17,14 @@ export class CourseManageContentComponent implements OnInit {
 
   constructor(private lectureService: LectureService,
               private courseService: CourseService,
+              private unitService: UnitService,
               private showProgress: ShowProgressService,
               private snackBar: MdSnackBar,
               private dialogService: DialogService,
               public userService: UserService) {
   }
 
+  @Input() course: ICourse;
   openedLecture: ILecture;
   lectureCreateMode: boolean = false;
   lectureEditMode: boolean = false;
@@ -30,7 +32,7 @@ export class CourseManageContentComponent implements OnInit {
   unitCreateType: string;
   unitEditMode: boolean = false;
   unitEditElement: IUnit;
-  @Input() course: ICourse;
+  fabOpen: boolean = false;
 
   ngOnInit() {
   }
@@ -39,7 +41,7 @@ export class CourseManageContentComponent implements OnInit {
     delete lecture._id;
 
     this.lectureService.createItem({courseId: this.course._id, lecture: lecture})
-      .then((val) => {
+      .then(() => {
         this.reloadCourse();
       }, (error) => {
         console.log(error);
@@ -68,21 +70,21 @@ export class CourseManageContentComponent implements OnInit {
 
   deleteUnit(unit: IUnit) {
     this.dialogService
-      .delete('unit (deletion not yet implemented)', unit.type)
+      .delete('unit', unit.type)
       .subscribe(res => {
         if (res) {
-          // this.showProgress.toggleLoadingGlobal(true);
-          // this.unitService.deleteItem(lecture).then(
-          //   (val) => {
-          //     this.showProgress.toggleLoadingGlobal(false);
-          //     this.snackBar.open('Unit deleted.', '', {duration: 3000});
-          //     this.reloadCourse();
-          //   },
-          //   (error) => {
-          //     this.showProgress.toggleLoadingGlobal(false);
-          //     this.snackBar.open(error, '', {duration: 3000});
-          //   }
-          // );
+          this.showProgress.toggleLoadingGlobal(true);
+          this.unitService.deleteItem(unit).then(
+            () => {
+              this.showProgress.toggleLoadingGlobal(false);
+              this.snackBar.open('Unit deleted.', '', {duration: 3000});
+              this.reloadCourse();
+            },
+            (error) => {
+              this.showProgress.toggleLoadingGlobal(false);
+              this.snackBar.open(error, '', {duration: 3000});
+            }
+          );
         }
       });
   }
@@ -117,38 +119,81 @@ export class CourseManageContentComponent implements OnInit {
       });
   }
 
-
-
   onAddLecture() {
+    this.closeAllForms();
+
     this.lectureCreateMode = true
   }
 
-  onEditLecture() {
-    this.lectureEditMode = true
+  closeAddLecture = () => {
+    this.lectureCreateMode = false;
+  };
+
+  onEditLecture(lecture: ILecture) {
+    this.closeAllForms();
+
+    this.lectureEditMode = true;
+    this.openedLecture = lecture;
   }
 
-  onAddUnit(type: string) {
+  closeEditLecture = () => {
+    this.lectureEditMode = false;
+  };
+
+  onAddUnit = (type: string) => {
+    this.closeAllForms();
+
     this.unitCreateMode = true;
     this.unitCreateType = type;
-  }
+  };
 
-  onAddUnitDone() {
+  onAddUnitDone = () => {
+    this.reloadCourse();
+    this.closeAddUnit();
+  };
+
+  closeAddUnit = () => {
     this.unitCreateMode = false;
     this.unitCreateType = null;
-  }
+  };
 
-  onEditUnit(unit: IUnit) {
+  onEditUnit = (unit: IUnit) => {
+    this.closeAllForms();
+
     this.unitEditMode = true;
     this.unitEditElement = unit;
-  }
+  };
 
-  onEditUnitDone() {
+  onEditUnitDone = () => {
+    this.reloadCourse();
+    this.closeEditUnit();
+  };
+
+  closeEditUnit = () => {
     this.unitEditMode = false;
     this.unitEditElement = null;
+  };
+
+  closeFab = () => {
+    this.fabOpen = false;
+  };
+
+  onFabClick = () => {
+    this.fabOpen = !this.fabOpen;
+  };
+
+  private closeAllForms() {
+    this.closeFab();
+    this.closeAddLecture();
+    this.closeEditLecture();
+    this.closeAddUnit();
+    this.closeEditUnit();
   }
 
   openToggleLecture(lecture: ILecture) {
-    if(this.openedLecture === lecture) {
+    this.closeAllForms();
+
+    if(this.openedLecture && this.openedLecture._id === lecture._id) {
       this.openedLecture = null;
     } else {
       this.openedLecture = lecture;

@@ -1,11 +1,11 @@
 <div class="container">
 
 <div class="menu" [class.open]="open">
-  <ng-content></ng-content>
+  <ng-content (click)="console.log('xxx')"></ng-content>
 </div>
 
-<button class="fab" md-fab color="accent" (click)="toggleOpen()"
-        mdTooltip="{{fabTooltip}}" mdTooltipPosition="left">
+<button class="fab" md-fab color="accent" (click)="onClick()"
+        disabled="{{disabled}}" mdTooltip="{{fabTooltip}}" mdTooltipPosition="left">
   <md-icon class="md-24 open-animation" [class.icon-open]="open">add</md-icon>
 </button>
 
