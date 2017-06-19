@@ -57,12 +57,19 @@ export class ObsCsvController {
    */
   public addParsedUsersToCourse(course: any, allUsers: IUser[]): any {
     this.whitelistUser.forEach(wUser => {
+      let foundUser: IUser = null;
       const foundUsers: IUser[] =
         allUsers.filter(user =>
         wUser.firstName === user.profile.firstName
         && wUser.lastName === user.profile.lastName
         && wUser.uid === user.uid);
-      foundUsers.forEach(e => course.students.push(e));
+      if (foundUsers.length > 0) {
+        foundUser = foundUsers[0];
+      }
+      if (foundUser != null && course.students.filter( (e: any) =>
+        e.toString() === foundUser._id.toString()).length <= 0) {
+        course.students.push(foundUser);
+      }
     });
     return course;
   }
@@ -73,7 +80,8 @@ export class ObsCsvController {
    * @returns {any}
    */
   public updateWhitelistUser(course: any): any {
-    course.whitelist.forEach((e: any) => WUser.findByIdAndRemove(e._id));
+    course.whitelist.forEach( (wuser: any) => WUser.findByIdAndRemove(wuser.toString())
+      .then( () => {}));
     course.whitelist = [];
     this.whitelistUser.forEach(e => {
       const wUser = new WUser();
@@ -83,7 +91,6 @@ export class ObsCsvController {
       wUser.save().then(user => user.toObject());
       course.whitelist.push(wUser._id);
     });
-    console.log(course);
     return course;
   }
 }
