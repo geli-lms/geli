@@ -1,7 +1,7 @@
 import {Component, OnInit, Input, EventEmitter, Output} from '@angular/core';
 import {ICourse} from '../../../../../../../../shared/models/ICourse';
 import {ILecture} from '../../../../../../../../shared/models/ILecture';
-import {IUnit} from "../../../../../../../../shared/models/units/IUnit";
+import {IUnit} from '../../../../../../../../shared/models/units/IUnit';
 
 @Component({
   selector: 'app-unit-form',

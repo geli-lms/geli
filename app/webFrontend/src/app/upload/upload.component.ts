@@ -2,9 +2,9 @@ import {Component, OnInit, Input, ChangeDetectorRef} from '@angular/core';
 import {Router} from '@angular/router';
 import {MdSnackBar} from '@angular/material';
 import {FileUploader, FileItem} from 'ng2-file-upload';
-import {ICourse} from "../../../../../shared/models/ICourse";
-import {ILecture} from "../../../../../shared/models/ILecture";
-import {IVideoUnit} from "../../../../../shared/models/units/IVideoUnit";
+import {ICourse} from '../../../../../shared/models/ICourse';
+import {ILecture} from '../../../../../shared/models/ILecture';
+import {IVideoUnit} from '../../../../../shared/models/units/IVideoUnit';
 
 @Component({
   selector: 'app-upload',

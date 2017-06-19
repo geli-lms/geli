@@ -1,12 +1,12 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {ICourse} from "../../../../../../../shared/models/ICourse";
-import {ILecture} from "../../../../../../../shared/models/ILecture";
-import {CourseService, LectureService, UnitService} from "../../../shared/services/data.service";
-import {ShowProgressService} from "app/shared/services/show-progress.service";
-import {DialogService} from "../../../shared/services/dialog.service";
-import {UserService} from "../../../shared/services/user.service";
-import {MdSnackBar} from "@angular/material";
-import {IUnit} from "../../../../../../../shared/models/units/IUnit";
+import {ICourse} from '../../../../../../../shared/models/ICourse';
+import {ILecture} from '../../../../../../../shared/models/ILecture';
+import {CourseService, LectureService, UnitService} from '../../../shared/services/data.service';
+import {ShowProgressService} from 'app/shared/services/show-progress.service';
+import {DialogService} from '../../../shared/services/dialog.service';
+import {UserService} from '../../../shared/services/user.service';
+import {MdSnackBar} from '@angular/material';
+import {IUnit} from '../../../../../../../shared/models/units/IUnit';
 
 @Component({
   selector: 'app-course-manage-content',
@@ -14,6 +14,18 @@ import {IUnit} from "../../../../../../../shared/models/units/IUnit";
   styleUrls: ['./course-manage-content.component.scss']
 })
 export class CourseManageContentComponent implements OnInit {
+
+  @Input() course: ICourse;
+  openedLecture: ILecture;
+  lectureCreateMode = false;
+  lectureEditMode = false;
+  unitCreateMode = false;
+  unitCreateType: string;
+  unitEditMode = false;
+  unitEditElement: IUnit;
+  fabOpen = false;
+
+
 
   constructor(private lectureService: LectureService,
               private courseService: CourseService,
@@ -23,16 +35,6 @@ export class CourseManageContentComponent implements OnInit {
               private dialogService: DialogService,
               public userService: UserService) {
   }
-
-  @Input() course: ICourse;
-  openedLecture: ILecture;
-  lectureCreateMode: boolean = false;
-  lectureEditMode: boolean = false;
-  unitCreateMode: boolean = false;
-  unitCreateType: string;
-  unitEditMode: boolean = false;
-  unitEditElement: IUnit;
-  fabOpen: boolean = false;
 
   ngOnInit() {
   }
@@ -48,7 +50,7 @@ export class CourseManageContentComponent implements OnInit {
       });
   }
 
-  createLecture(lecture:ILecture) {
+  createLecture(lecture: ILecture) {
     this.lectureService.createItem({courseId: this.course._id, lecture: lecture})
       .then(() => {
         this.lectureCreateMode = false;
@@ -122,12 +124,8 @@ export class CourseManageContentComponent implements OnInit {
   onAddLecture() {
     this.closeAllForms();
 
-    this.lectureCreateMode = true
+    this.lectureCreateMode = true;
   }
-
-  closeAddLecture = () => {
-    this.lectureCreateMode = false;
-  };
 
   onEditLecture(lecture: ILecture) {
     this.closeAllForms();
@@ -138,49 +136,53 @@ export class CourseManageContentComponent implements OnInit {
 
   closeEditLecture = () => {
     this.lectureEditMode = false;
-  };
+  }
 
   onAddUnit = (type: string) => {
     this.closeAllForms();
 
     this.unitCreateMode = true;
     this.unitCreateType = type;
-  };
+  }
 
   onAddUnitDone = () => {
     this.reloadCourse();
     this.closeAddUnit();
-  };
+  }
 
   closeAddUnit = () => {
     this.unitCreateMode = false;
     this.unitCreateType = null;
-  };
+  }
 
   onEditUnit = (unit: IUnit) => {
     this.closeAllForms();
 
     this.unitEditMode = true;
     this.unitEditElement = unit;
-  };
+  }
 
   onEditUnitDone = () => {
     this.reloadCourse();
     this.closeEditUnit();
-  };
+  }
 
   closeEditUnit = () => {
     this.unitEditMode = false;
     this.unitEditElement = null;
-  };
+  }
 
   closeFab = () => {
     this.fabOpen = false;
-  };
+  }
 
   onFabClick = () => {
     this.fabOpen = !this.fabOpen;
-  };
+  }
+
+  closeAddLecture = () => {
+    this.lectureCreateMode = false;
+  }
 
   private closeAllForms() {
     this.closeFab();
@@ -193,7 +195,7 @@ export class CourseManageContentComponent implements OnInit {
   openToggleLecture(lecture: ILecture) {
     this.closeAllForms();
 
-    if(this.openedLecture && this.openedLecture._id === lecture._id) {
+    if (this.openedLecture && this.openedLecture._id === lecture._id) {
       this.openedLecture = null;
     } else {
       this.openedLecture = lecture;

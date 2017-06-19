@@ -6,7 +6,7 @@ import {ITaskUnit} from '../../../../../../../../../shared/models/units/ITaskUni
 import {TaskUnit} from '../../../../../models/TaskUnit';
 import {ITask} from '../../../../../../../../../shared/models/task/ITask';
 import {Answer} from '../../../../../models/Answer';
-import {ICourse} from "../../../../../../../../../shared/models/ICourse";
+import {ICourse} from '../../../../../../../../../shared/models/ICourse';
 
 @Component({
   selector: 'app-task-unit-edit',
@@ -26,7 +26,7 @@ export class TaskUnitEditComponent implements OnInit {
               private snackBar: MdSnackBar) {}
 
   ngOnInit() {
-    if(!this.model) {
+    if (!this.model) {
       this.model = new TaskUnit(this.course._id);
     }
 

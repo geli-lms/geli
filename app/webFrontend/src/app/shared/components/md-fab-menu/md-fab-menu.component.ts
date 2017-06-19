@@ -11,10 +11,10 @@ export class MdFabMenuComponent implements OnInit {
   public fabTooltip: string;
 
   @Input()
-  public disabled: boolean = false;
+  public disabled = false;
 
   @Input()
-  open: boolean = false;
+  open = false;
 
   @Input()
   onClick: () => void;
