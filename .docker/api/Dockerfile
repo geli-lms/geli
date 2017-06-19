@@ -10,5 +10,5 @@ EXPOSE 80
 CMD node server.js
 
 COPY api/build/src /usr/src/app/
-COPY api/node_modules /usr/src/app/node_modules
+COPY prodDeps/api/node_modules /usr/src/app/node_modules
 COPY api/nlf-licenses.json /usr/src/app/
