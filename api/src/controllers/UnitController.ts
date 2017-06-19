@@ -1,4 +1,7 @@
-import {Body, Get, Put, Post, Delete, Param, JsonController, UseBefore, UploadedFile} from 'routing-controllers';
+import {
+  Body, Get, Put, Post, Delete, Param, JsonController, UseBefore, UploadedFile,
+  NotFoundError
+} from 'routing-controllers';
 import fs = require('fs');
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 
@@ -39,7 +42,7 @@ export class UnitController {
   deleteUnit(@Param('id') id: string) {
     return Unit.findById(id).then((unit) => {
       if (!unit) {
-        throw new Error('No unit found for id');
+        throw new NotFoundError();
       }
 
       if (unit instanceof VideoUnit && (<IVideoUnitModel>unit).filePath) {
