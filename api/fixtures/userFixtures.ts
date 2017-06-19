@@ -5,7 +5,7 @@ export const userFixtures: IFixture = {
   Model: User,
   data: [
     {
-      uid: '123456',
+      username: 'TStud1',
       email: 'student1@test.local',
       password: 'test',
       profile: {
@@ -15,7 +15,7 @@ export const userFixtures: IFixture = {
       isActive: true
     },
     {
-      uid: '654321',
+      username: 'TStud2',
       email: 'student2@test.local',
       password: 'test',
       profile: {

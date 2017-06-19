@@ -117,25 +117,6 @@ export class CourseService extends DataService {
         );
     });
   }
-
-  addTeacher(course: ICourse, user: IUser) {
-    if ((user.role === 'teacher' || user.role === 'admin' || user.role === 'tutor')
-        && course.teachers.filter(obj => obj._id === user._id).length < 0) {
-      course.teachers.push(user);
-    }
-    return this.updateItem(course);
-  }
-
-  getTeachers(courseId: string): Promise<User[]> {
-    return this.readSingleItem(courseId).then(
-      (val: any) => {
-        return val.teachers;
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
-  }
 }
 
 @Injectable()
@@ -205,39 +186,5 @@ export class UserDataService extends DataService {
     const promise = this.readItems();
     this.apiPath = originalApiPath;
     return promise;
-  }
-
-  getUsersByRole(role: string): Promise<User[]> {
-    return this.readItems().then(
-      users => users.filter(user => user.role === role)
-    );
-  }
-}
-
-@Injectable()
-export class AboutDataService extends DataService {
-  constructor(public backendService: BackendService) {
-    super('about/', backendService);
-  }
-
-  getApiDependencies(): Promise<any[]> {
-    return new Promise((resolve, reject) => {
-      this.backendService.get(this.apiPath + 'dependencies')
-        .subscribe((responseItems: any) => {
-            const out = [];
-            responseItems.data.forEach(item => {
-              out.push(new Dependency(
-                item.name,
-                item.version,
-                item.repository,
-                item.license,
-                item.devDependency)
-              );
-            });
-            resolve(out);
-          },
-          error => reject(error)
-        );
-    });
   }
 }
