@@ -1,0 +1,66 @@
+@import "../../../../variables";
+
+.container {
+  min-height: 500px;
+}
+
+.fab {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+}
+
+.lecture {
+  h2 {
+    font-size: 18px;
+
+    color: rgba(0, 0, 0, 0.50);
+
+    .lecture-menu-button {
+      float: right;
+    }
+  }
+
+  .open-toggle {
+    color: map-get($app-primary, 'default');
+    transition: transform 0.3s;
+    transform: rotate(-90deg);
+
+    &.opened {
+      transform: rotate(0);
+    }
+  }
+
+  .lecture-content {
+    margin-bottom: 34px;
+
+    .units {
+      margin-top: 24px;
+
+      .unit {
+        border-bottom: 1px solid map-get($mat-grey, 300);
+        &, &:first-child {
+          border-top: 1px solid map-get($mat-grey, 300);
+        }
+
+        .unit-content {
+          height: 64px;
+          display: flex;
+          align-items: center;
+
+          .unit-type {
+            flex-grow: 1;
+          }
+
+          .unit-date {
+            flex-grow: 0.1;
+          }
+
+          .unit-date, .unit-actions .mat-icon {
+            color: map-get($mat-grey, 600);
+          }
+        }
+      }
+    }
+  }
+}

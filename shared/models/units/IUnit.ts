@@ -7,4 +7,6 @@ export interface IUnit {
     type: string;
     progressable: boolean;
     weight: number;
+    updatedAt: string;
+    createdAt: string;
 }
