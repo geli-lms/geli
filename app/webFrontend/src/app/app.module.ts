@@ -24,7 +24,7 @@ import {DashboardTeacherComponent} from './start/dashboard/dashboard-teacher/das
 import {DashboardAdminComponent} from './start/dashboard/dashboard-admin/dashboard-admin.component';
 import {
   CourseService, TaskService, UserDataService, LectureService,
-  UnitService
+  UnitService, AboutDataService
 } from './shared/services/data.service';
 import {BackendService} from './shared/services/backend.service';
 import {CourseComponent} from './course/course.component';
@@ -60,6 +60,7 @@ import {LicensesComponent} from './about/licenses/licenses.component';
 import {TeachersComponent} from './course/course-edit/teachers/teachers.component';
 import {GravatarDirective} from './shared/directives/gravatar.directive';
 import { CourseUserListComponent } from './course/course-edit/course-user-list/course-user-list.component';
+
 
 @NgModule({
   declarations: [
@@ -115,6 +116,7 @@ import { CourseUserListComponent } from './course/course-edit/course-user-list/c
   providers: [
     UserService,
     AuthenticationService,
+    AboutDataService,
     AuthGuardService,
     UnitService,
     TaskService,

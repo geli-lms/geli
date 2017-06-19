@@ -188,3 +188,31 @@ export class UserDataService extends DataService {
     return promise;
   }
 }
+
+@Injectable()
+export class AboutDataService extends DataService {
+  constructor(public backendService: BackendService) {
+    super('about/', backendService);
+  }
+
+  getApiDependencies(): Promise<any[]> {
+    return new Promise((resolve, reject) => {
+      this.backendService.get(this.apiPath + 'dependencies')
+        .subscribe((responseItems: any) => {
+            const out = [];
+            responseItems.data.forEach(item => {
+              out.push(new Dependency(
+                item.name,
+                item.version,
+                item.repository,
+                item.license,
+                item.devDependency)
+              );
+            });
+            resolve(out);
+          },
+          error => reject(error)
+        );
+    });
+  }
+}
