@@ -1,6 +1,5 @@
 import {IUser} from '../../../shared/models/IUser';
-import {IWUserModel, WUser} from '../models/WUser';
-import {IWUser} from '../../../shared/models/IWUser';
+import {WUser} from '../models/WUser';
 const fs = require('fs');
 const utf8 = require('to-utf-8');
 const csv = require('fast-csv');
@@ -15,7 +14,7 @@ export class ObsCsvController {
    * @param allUsers Are all users in system.
    * @returns {any} Is the updated course.
    */
-  public updateCourseFromFile(file: any, course: any, allUsers: IUser[]) {
+  public updateCourseFromFile(file: any, course: any, allUsers: any[]) {
     let buffer = '';
     return fs.createReadStream(file.path)
       .pipe(utf8()).pipe(csv())
