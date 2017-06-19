@@ -36,8 +36,6 @@ import {TaskUnitEditComponent} from './course/course-edit/unit/unit-edit/task-un
 import {ShowProgressService} from './shared/services/show-progress.service';
 import {UnitComponent} from './course/course-edit/unit/unit.component';
 import {LectureComponent} from './lecture/lecture.component';
-import {LectureNewComponent} from './lecture/lecture-new/lecture-new.component';
-import {LectureEditComponent} from './lecture/lecture-edit/lecture-edit.component';
 import {UploadComponent} from './upload/upload.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MembersComponent} from './course/course-edit/members/members.component';
@@ -51,7 +49,7 @@ import {AdminComponent} from './admin/admin.component';
 import {DialogModule} from './shared/modules/dialog/dialog.module';
 import {TeacherReportComponent} from './course/teacher-report/teacher-report.component';
 import {UnitMenuComponent} from './shared/components/unit-menu/unit-menu.component';
-import {UnitEditComponent} from './course/course-edit/unit/unit-edit/unit-edit.component';
+import {UnitFormComponent} from './course/course-edit/unit/unit-edit/unit-form.component';
 import {TaskUnitComponent} from './course/course-edit/unit/task-unit/task-unit.component';
 import {LectureFormComponent} from './lecture/lecture-form/lecture-form.component';
 import {AboutComponent} from './about/about.component';
@@ -60,7 +58,8 @@ import {LicensesComponent} from './about/licenses/licenses.component';
 import {TeachersComponent} from './course/course-edit/teachers/teachers.component';
 import {GravatarDirective} from './shared/directives/gravatar.directive';
 import { CourseUserListComponent } from './course/course-edit/course-user-list/course-user-list.component';
-
+import { CourseManageContentComponent } from './course/course-edit/course-manage-content/course-manage-content.component';
+import { MdFabMenuComponent } from './shared/components/md-fab-menu/md-fab-menu.component';
 
 @NgModule({
   declarations: [
@@ -81,8 +80,6 @@ import { CourseUserListComponent } from './course/course-edit/course-user-list/c
     UnitComponent,
     MembersComponent,
     LectureComponent,
-    LectureNewComponent,
-    LectureEditComponent,
     UserAdminComponent,
     UserEditComponent,
     UploadComponent,
@@ -92,7 +89,7 @@ import { CourseUserListComponent } from './course/course-edit/course-user-list/c
     LectureFormComponent,
     TeacherReportComponent,
     UnitMenuComponent,
-    UnitEditComponent,
+    UnitFormComponent,
     TaskUnitComponent,
     AboutComponent,
     GeneralInfoComponent,
@@ -100,6 +97,8 @@ import { CourseUserListComponent } from './course/course-edit/course-user-list/c
     TeachersComponent,
     GravatarDirective,
     CourseUserListComponent,
+    CourseManageContentComponent,
+    MdFabMenuComponent,
   ],
   imports: [
     DragulaModule,
@@ -130,4 +129,5 @@ import { CourseUserListComponent } from './course/course-edit/course-user-list/c
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}

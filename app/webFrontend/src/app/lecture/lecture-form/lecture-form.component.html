@@ -7,5 +7,9 @@
     <textarea mdInput formControlName="description" placeholder="Description"></textarea>
   </md-input-container>
 
-  <button md-raised-button [disabled]="!lectureForm.valid" color="primary" type="submit">{{ actionLabel }}</button>
+
+  <p>
+    <button md-button (click)="onCancel()">Cancel</button>
+    <button md-button [disabled]="!lectureForm.valid" color="primary" type="submit">{{ actionLabel }}</button>
+  </p>
 </form>
