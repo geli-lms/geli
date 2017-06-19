@@ -20,6 +20,7 @@ import {IUser} from '../../../shared/models/IUser';
 import {ObsCsvController} from './ObsCsvController';
 import {Course} from '../models/Course';
 import {WUser} from '../models/WUser';
+const uploadOptions = {dest: 'temp/' };
 
 @JsonController('/courses')
 @UseBefore(passportJwtMiddleware)
@@ -87,7 +88,7 @@ export class CourseController {
 
 
   @Post('/:id/whitelist')
-  whitelistStudents(@Param('id') id: string, @UploadedFile('file') file: any) {
+  whitelistStudents(@Param('id') id: string, @UploadedFile('file', { uploadOptions }) file: any) {
     const mimetype: string = file.mimetype;
     if (mimetype !== 'application/vnd.ms-excel') {
       throw new TypeError('Wrong MimeType allowed are just csv files.');
