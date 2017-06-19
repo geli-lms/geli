@@ -16,6 +16,8 @@ export class LectureFormComponent implements OnInit {
   @Input()
   public actionLabel: string;
 
+  @Input() onCancel: () => void;
+
   @Output()
   onSubmit = new EventEmitter<ILecture>();
 
