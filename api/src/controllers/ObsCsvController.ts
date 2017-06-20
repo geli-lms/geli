@@ -1,5 +1,6 @@
 import {IUser} from '../../../shared/models/IUser';
 import {WUser} from '../models/WUser';
+import {ICourseModel} from '../models/Course';
 const fs = require('fs');
 const utf8 = require('to-utf-8');
 const csv = require('fast-csv');
@@ -14,23 +15,25 @@ export class ObsCsvController {
    * @param allUsers Are all users in system.
    * @returns {any} Is the updated course.
    */
-  public updateCourseFromFile(file: any, course: any, allUsers: any[]) {
+  public updateCourseFromFile(file: any, course: ICourseModel, allUsers: any[]) {
     let buffer = '';
-    return fs.createReadStream(file.path)
-      .pipe(utf8()).pipe(csv())
-      .on('data', (data: any) => {
-          buffer += data + '\n';
-        }
-        // TODO @OliverNeff Valdiation.
-      ).on('end', () => {
-          fs.unlink(file.path);
+    return new Promise(function(resolve: any, reject: any) {
+      fs.createReadStream(file.path)
+        .pipe(utf8()).pipe(csv())
+        .on('data', (data: any) => {
+            buffer += data + '\n';
+          }
+          // TODO @OliverNeff Valdiation.
+        ).on('end', () => {
+          fs.unlinkSync(file.path);
           console.log('File is parsed successfully.');
           this.pushWhitelistUser(buffer);
           course = this.addParsedUsersToCourse(course, allUsers);
           course = this.updateWhitelistUser(course);
-          return course;
+          resolve = course;
         }
       );
+    });
   }
 
   /**
@@ -56,7 +59,7 @@ export class ObsCsvController {
    * @param allUsers Are all users in system.
    * @returns {any} Is the updated course.
    */
-  public addParsedUsersToCourse(course: any, allUsers: IUser[]): any {
+  public addParsedUsersToCourse(course: ICourseModel, allUsers: IUser[]): any {
     this.whitelistUser.forEach(wUser => {
       let foundUser: IUser = null;
       const foundUsers: IUser[] =
@@ -80,7 +83,7 @@ export class ObsCsvController {
    * @param course Is the course to update.
    * @returns {any} Updated course.
    */
-  public updateWhitelistUser(course: any): any {
+  public updateWhitelistUser(course: ICourseModel): any {
     course.whitelist.forEach((wuser: any) => WUser.findByIdAndRemove(wuser.toString())
       .then(() => {
       }));

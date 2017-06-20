@@ -18,9 +18,9 @@ import {ICourse} from '../../../shared/models/ICourse';
 import {IUserModel} from '../models/User';
 import {IUser} from '../../../shared/models/IUser';
 import {ObsCsvController} from './ObsCsvController';
-import {Course} from '../models/Course';
+import {Course, ICourseModel} from '../models/Course';
 import {WUser} from '../models/WUser';
-const uploadOptions = {dest: 'temp/' };
+const uploadOptions = {dest: 'temp/'};
 
 @JsonController('/courses')
 @UseBefore(passportJwtMiddleware)
@@ -88,7 +88,7 @@ export class CourseController {
 
 
   @Post('/:id/whitelist')
-  whitelistStudents(@Param('id') id: string, @UploadedFile('file', { uploadOptions }) file: any) {
+  whitelistStudents(@Param('id') id: string, @UploadedFile('file', {uploadOptions}) file: any) {
     const mimetype: string = file.mimetype;
     if (mimetype !== 'application/vnd.ms-excel') {
       throw new TypeError('Wrong MimeType allowed are just csv files.');
@@ -96,8 +96,9 @@ export class CourseController {
     return User.find({})
       .then((users) => users.map((user) => user.toObject({virtuals: true})))
       .then((users) => Course.findById(id).then((course) => {
-        course = this.parser.updateCourseFromFile(file, course, users);
-        return course.save().then((c) => c.toObject());
+        return this.parser.updateCourseFromFile(file, course, users).then((updaed: ICourseModel) =>
+          updaed.save().then((c: ICourseModel) =>
+            c.toObject()));
       }));
   }
 
