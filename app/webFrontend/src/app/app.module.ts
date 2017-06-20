@@ -97,7 +97,7 @@ import { MdFabMenuComponent } from './shared/components/md-fab-menu/md-fab-menu.
     LicensesComponent,
     GravatarDirective,
     FreeTextUnitFormComponent,
-    FreeTextUnitComponent
+    FreeTextUnitComponent,
     CourseManageContentComponent,
     MdFabMenuComponent,
   ],
