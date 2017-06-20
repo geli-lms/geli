@@ -2,8 +2,6 @@
 YELLOW='\033[0;33m'
 NC='\033[0m'
 
-NPM_PRUNE_API='( cd api && npm prune --production )'
-
 echo
 echo "+++ Run docker build and publish. +++"
 echo
@@ -11,7 +9,7 @@ if [ "$TRAVIS_BRANCH" == "master" ] || [ "$TRAVIS_BRANCH" == "develop" ]; then
   if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
     echo "+ build docker images";
     echo "+ prune dev-dependencies"
-    $NPM_PRUNE_API
+    ( cd api && npm prune --production )
     docker build -t hdafbi/geli-api:latest -f .docker/api/Dockerfile .
     docker tag hdafbi/geli-api hdafbi/geli-api:$TRAVIS_BRANCH
     docker build -t hdafbi/geli-web-frontend:latest -f .docker/web-frontend/Dockerfile .
@@ -31,7 +29,7 @@ else
     echo "+ This is a tagged build: $TRAVIS_TAG";
     echo "+ build docker images";
     echo "+ prune dev-dependencies"
-    $NPM_PRUNE_API
+    ( cd api && npm prune --production )
     docker build -t hdafbi/geli-api:$TRAVIS_TAG -f .docker/api/Dockerfile .
     docker build -t hdafbi/geli-web-frontend:$TRAVIS_TAG -f .docker/web-frontend/Dockerfile .
 
