@@ -18,6 +18,7 @@ import {DashboardComponent} from './start/dashboard/dashboard.component';
 import {HomescreenComponent} from './start/homescreen/homescreen.component';
 import {RegisterComponent} from './user/register/register.component';
 import {AuthGuardService} from './shared/services/auth-guard.service';
+import { DragulaModule } from 'ng2-dragula';
 import {DashboardStudentComponent} from './start/dashboard/dashboard-student/dashboard-student.component';
 import {DashboardTeacherComponent} from './start/dashboard/dashboard-teacher/dashboard-teacher.component';
 import {DashboardAdminComponent} from './start/dashboard/dashboard-admin/dashboard-admin.component';
@@ -35,8 +36,6 @@ import {TaskUnitEditComponent} from './course/course-edit/unit/unit-edit/task-un
 import {ShowProgressService} from './shared/services/show-progress.service';
 import {UnitComponent} from './course/course-edit/unit/unit.component';
 import {LectureComponent} from './lecture/lecture.component';
-import {LectureNewComponent} from './lecture/lecture-new/lecture-new.component';
-import {LectureEditComponent} from './lecture/lecture-edit/lecture-edit.component';
 import {UploadComponent} from './upload/upload.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MembersComponent} from './course/course-edit/members/members.component';
@@ -50,12 +49,15 @@ import {AdminComponent} from './admin/admin.component';
 import {DialogModule} from './shared/modules/dialog/dialog.module';
 import {TeacherReportComponent} from './course/teacher-report/teacher-report.component';
 import {UnitMenuComponent} from './shared/components/unit-menu/unit-menu.component';
-import {UnitEditComponent} from './course/course-edit/unit/unit-edit/unit-edit.component';
+import {UnitFormComponent} from './course/course-edit/unit/unit-edit/unit-form.component';
 import {TaskUnitComponent} from './course/course-edit/unit/task-unit/task-unit.component';
 import {LectureFormComponent} from './lecture/lecture-form/lecture-form.component';
 import {AboutComponent} from './about/about.component';
 import {GeneralInfoComponent} from './about/general-info/general-info.component';
 import {LicensesComponent} from './about/licenses/licenses.component';
+import {GravatarDirective} from './course/course-edit/members/gravatar.directive';
+import { CourseManageContentComponent } from './course/course-edit/course-manage-content/course-manage-content.component';
+import { MdFabMenuComponent } from './shared/components/md-fab-menu/md-fab-menu.component';
 
 @NgModule({
   declarations: [
@@ -76,8 +78,6 @@ import {LicensesComponent} from './about/licenses/licenses.component';
     UnitComponent,
     MembersComponent,
     LectureComponent,
-    LectureNewComponent,
-    LectureEditComponent,
     UserAdminComponent,
     UserEditComponent,
     UploadComponent,
@@ -87,13 +87,17 @@ import {LicensesComponent} from './about/licenses/licenses.component';
     LectureFormComponent,
     TeacherReportComponent,
     UnitMenuComponent,
-    UnitEditComponent,
+    UnitFormComponent,
     TaskUnitComponent,
     AboutComponent,
     GeneralInfoComponent,
     LicensesComponent,
+    GravatarDirective,
+    CourseManageContentComponent,
+    MdFabMenuComponent,
   ],
   imports: [
+    DragulaModule,
     BrowserModule,
     FormsModule,
     HttpModule,

@@ -1,21 +1,20 @@
-/* tslint:disable:no-unused-variable */
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { LectureEditComponent } from './lecture-edit.component';
+import { AccessKeyDialog } from './access-key-dialog.component';
 
-describe('LectureEditComponent', () => {
-  let component: LectureEditComponent;
-  let fixture: ComponentFixture<LectureEditComponent>;
+describe('AccessKeyDialog', () => {
+  let component: AccessKeyDialog;
+  let fixture: ComponentFixture<AccessKeyDialog>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ LectureEditComponent ]
+      declarations: [ AccessKeyDialog ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(LectureEditComponent);
+    fixture = TestBed.createComponent(AccessKeyDialog);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
