@@ -32,14 +32,14 @@ export class MembersComponent implements OnInit {
    *
    * @param members
    */
-  private updateMembers(members: IUser[]): void {
+  updateMembers(members: IUser[]): void {
     this.course.students = members;
   }
 
   /**
    * Save all students in this course in database.
    */
-  private updateCourse(): void {
+  updateCourse(): void {
     this.showProgress.toggleLoadingGlobal(true);
     this.course.students = this.members;
     this.courseService.updateItem({'students': this.course.students, '_id': this.courseId}).then(
@@ -55,7 +55,7 @@ export class MembersComponent implements OnInit {
    * Switch a user from student to member and back and update this course in database.
    * @param id Id of an user.
    */
-  private removeUser(id: string): void {
+  removeUser(id: string): void {
     this.users = this.users.concat(this.members.filter(obj => id === obj._id));
     this.members = this.members.filter(obj => !(id === obj._id));
     SortUtil.sortUsers(this.members);
@@ -66,7 +66,7 @@ export class MembersComponent implements OnInit {
   /**
    * Get all users from api and filter those role student.
    */
-  private getStudents(): void {
+  getStudents(): void {
     this.userService.readItems().then(users => {
       this.users = users.filter(obj => obj.role === 'student');
     });
@@ -76,7 +76,7 @@ export class MembersComponent implements OnInit {
   /**
    * Get this course from api and filter all members from users.
    */
-  private getCourseMembers(): void {
+  getCourseMembers(): void {
     this.courseService.readSingleItem(this.courseId).then(
       (val: any) => {
         this.course = val;

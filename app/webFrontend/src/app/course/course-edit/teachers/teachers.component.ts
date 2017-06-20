@@ -27,14 +27,14 @@ export class TeachersComponent implements OnInit {
     this.getCourseTeachers();
   }
 
-  private updateTeachers(teachers: IUser[]): void {
+   updateTeachers(teachers: IUser[]): void {
     this.course.teachers = teachers;
   }
 
   /**
    * Get all users from api and filter those role student.
    */
-  private getTeachers(): void {
+  getTeachers(): void {
     this.userService.readItems().then(users => {
       this.allTeachers = users.filter(obj => obj.role === 'teacher');
     });
@@ -43,7 +43,7 @@ export class TeachersComponent implements OnInit {
   /**
    * Save all teachers in this course in database.
    */
-  private updateCourse(): void {
+  updateCourse(): void {
     this.showProgress.toggleLoadingGlobal(true);
     // this.course.teachers = this.courseTeachers;
     this.courseService.updateItem(this.course).then(
@@ -58,7 +58,7 @@ export class TeachersComponent implements OnInit {
   /**
    * Get this course from api and filter all teachers from users.
    */
-  private getCourseTeachers(): void {
+  getCourseTeachers(): void {
     this.courseService.readSingleItem(this.courseId).then(
       (val: any) => {
         this.course = val;
@@ -76,7 +76,7 @@ export class TeachersComponent implements OnInit {
   /**
    * @param id Id of an user.
    */
-  private removeUser(id: string): void {
+  removeUser(id: string): void {
     this.allTeachers = this.allTeachers.concat(this.courseTeachers.filter(obj => id === obj._id));
     this.courseTeachers = this.courseTeachers.filter(obj => !(id === obj._id));
     SortUtil.sortUsers(this.courseTeachers);
