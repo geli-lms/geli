@@ -3,6 +3,7 @@ import {IFreeTextUnit} from '../../../../../../../../../shared/models/units/IFre
 import {MdSnackBar} from '@angular/material';
 import {FreeTextService, UnitService} from '../../../../../shared/services/data.service';
 import {FreeTextUnit} from '../../../../../models/FreeTextUnit';
+import {ICourse} from '../../../../../../../../../shared/models/ICourse';
 
 @Component({
   selector: 'app-free-text-unit-form',
@@ -10,8 +11,10 @@ import {FreeTextUnit} from '../../../../../models/FreeTextUnit';
   styleUrls: ['./free-text-unit-form.component.scss']
 })
 export class FreeTextUnitFormComponent implements OnInit {
-  @Input() courseId: any;
+  @Input() course: ICourse;
   @Input() lectureId: string;
+  @Input() onDone: () => void;
+  @Input() onCancel: () => void;
   freeTextUnit: IFreeTextUnit;
 
   constructor(private unitService: UnitService,
@@ -20,12 +23,12 @@ export class FreeTextUnitFormComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.freeTextUnit = new FreeTextUnit(this.courseId);
+    this.freeTextUnit = new FreeTextUnit(this.course._id);
     this.loadMarkdownFromServer();
   }
 
   loadMarkdownFromServer() {
-    this.freeTextService.getStuff(this.courseId).then(unit => {
+    this.freeTextService.getStuff(this.course._id).then(unit => {
       // FIXME: What do I have to do here?
     });
   }
