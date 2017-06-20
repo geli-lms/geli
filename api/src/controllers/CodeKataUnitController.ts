@@ -1,7 +1,7 @@
 import {Body, Post, JsonController, UseBefore, BadRequestError} from 'routing-controllers';
-import passportJwtMiddleware from '../../security/passportJwtMiddleware';
+import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import {UnitController} from './UnitController';
-import {CodeKataUnit} from '../../models/units/CodeKataUnit';
+import {CodeKataUnit} from '../models/units/CodeKataUnit';
 
 @JsonController('/units/codekata')
 @UseBefore(passportJwtMiddleware)

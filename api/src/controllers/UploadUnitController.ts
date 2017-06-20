@@ -1,8 +1,8 @@
 import {Body, Post, JsonController, UseBefore, UploadedFile} from 'routing-controllers';
 import fs = require('fs');
-import passportJwtMiddleware from '../../security/passportJwtMiddleware';
+import passportJwtMiddleware from '../security/passportJwtMiddleware';
 
-import {VideoUnit} from '../../models/units/VideoUnit';
+import {VideoUnit} from '../models/units/VideoUnit';
 import {UnitController} from './UnitController';
 
 const uploadOptions = {dest: 'uploads/' };
