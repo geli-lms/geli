@@ -1,0 +1,10 @@
+<ace-editor class="user-code-editor"
+            #codeEditor
+            [(text)]="code"
+            [mode]="'Javascript'"
+            [readOnly]="false">
+</ace-editor>
+
+<button md-button (click)="validate()">VALIDATE</button>
+<button md-button (click)="save()">Save</button>
+<div>{{logs}}</div>

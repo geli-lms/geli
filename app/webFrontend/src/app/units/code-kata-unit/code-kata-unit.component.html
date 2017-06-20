@@ -1,0 +1,23 @@
+<ace-editor
+  #definitionEditor
+  [(text)]="definition"
+  [mode]="'Javascript'"
+  [readOnly]="true">
+</ace-editor>
+<div>Your code goes here:</div>
+<ace-editor class="user-code-editor"
+  #codeEditor
+  [(text)]="code"
+  [mode]="'Javascript'"
+  [readOnly]="false">
+</ace-editor>
+<div>These tests need to success:</div>
+<ace-editor
+  #testEditor
+  [(text)]="test"
+  [mode]="'Javascript'"
+  [readOnly]="true">
+</ace-editor>
+
+<button md-button (click)="validate()">VALIDATE</button>
+<div>{{logs}}</div>
