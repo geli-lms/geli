@@ -13,9 +13,9 @@ import {SortUtil} from '../../../shared/utils/SortUtil';
 export class TeachersComponent implements OnInit {
 
   @Input() courseId;
-  private course: ICourse;
-  private allTeachers: IUser[] = [];
-  private courseTeachers: IUser[] = [];
+  course: ICourse;
+  allTeachers: IUser[] = [];
+  courseTeachers: IUser[] = [];
 
   constructor(private courseService: CourseService,
               private userService: UserDataService,
