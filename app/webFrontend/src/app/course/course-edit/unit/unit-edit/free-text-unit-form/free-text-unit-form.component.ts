@@ -4,6 +4,7 @@ import {MdSnackBar} from '@angular/material';
 import {FreeTextService, UnitService} from '../../../../../shared/services/data.service';
 import {FreeTextUnit} from '../../../../../models/FreeTextUnit';
 import {ICourse} from '../../../../../../../../../shared/models/ICourse';
+import {ITaskUnit} from '../../../../../../../../../shared/models/units/ITaskUnit';
 
 @Component({
   selector: 'app-free-text-unit-form',
@@ -13,6 +14,7 @@ import {ICourse} from '../../../../../../../../../shared/models/ICourse';
 export class FreeTextUnitFormComponent implements OnInit {
   @Input() course: ICourse;
   @Input() lectureId: string;
+  @Input() model: ITaskUnit;
   @Input() onDone: () => void;
   @Input() onCancel: () => void;
   freeTextUnit: IFreeTextUnit;
@@ -36,7 +38,10 @@ export class FreeTextUnitFormComponent implements OnInit {
   addUnit() {
     this.unitService.addFreeTextUnit(this.freeTextUnit, this.lectureId)
       .then(
-        (unit) => this.snackBar.open('Free text unit saved', '', {duration: 3000}),
+        (unit) => {
+          this.snackBar.open('Free text unit saved', '', {duration: 3000});
+          this.onDone();
+        },
         (error) => console.log(error)
       );
   }
