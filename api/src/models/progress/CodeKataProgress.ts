@@ -1,6 +1,6 @@
 import * as mongoose from 'mongoose';
 import {ICodeKataProgress} from '../../../../shared/models/progress/ICodeKataProgress';
-import {Progress} from "./Progress";
+import {Progress} from './Progress';
 
 interface ICodeKataProgressModel extends ICodeKataProgress, mongoose.Document {
 }
@@ -11,7 +11,6 @@ const codeKataProgressSchema = new mongoose.Schema({
     }
   }
 );
-
 
 const CodeKataProgress = Progress.discriminator('codeKata', codeKataProgressSchema);
 
