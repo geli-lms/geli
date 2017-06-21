@@ -1,6 +1,9 @@
 import {IUser} from '../../../shared/models/IUser';
 import {WUser} from '../models/WUser';
 import {ICourseModel} from '../models/Course';
+import e = require('express');
+import {isNumber} from 'util';
+import {HttpError} from 'routing-controllers';
 const fs = require('fs');
 const utf8 = require('to-utf-8');
 const csv = require('fast-csv');
@@ -15,9 +18,9 @@ export class ObsCsvController {
    * @param allUsers Are all users in system.
    * @returns {any} Is the updated course.
    */
-  public parseFile(file: any, course: ICourseModel)  {
+  public parseFile(file: any, course: ICourseModel) {
     let buffer = '';
-    return new Promise(function(resolve: any, reject: any) {
+    return new Promise(function (resolve: any, reject: any) {
       fs.createReadStream(file.path)
         .pipe(utf8()).pipe(csv())
         .on('data', (data: any) => {
@@ -54,12 +57,29 @@ export class ObsCsvController {
     this.whitelistUser = [];
     const lines = buffer.split(/\r?\n|\r/);
     const userLines = lines.filter(e => e.split(';').length >= 3);
-    userLines.forEach(e =>
-      this.whitelistUser.push({
-        firstName: e.split(';')[0],
-        lastName: e.split(';')[1],
-        uid: Number(e.split(';')[2]).toString()
-      }));
+    userLines.forEach(e => {
+        const firstName = e.split(';')[0];
+        const lastName = e.split(';')[1];
+        const uid = e.split(';')[2];
+        if (firstName.length > 0 && lastName.length > 0 && uid.length > 0) {
+          console.log(Number(firstName));
+          if (!isNaN(Number(firstName))) {
+            throw new HttpError(400, 'firstName was a number.');
+          }
+          if (!isNaN(Number(lastName))) {
+            throw new HttpError(400, 'lastName was a number.');
+          }
+          if (isNaN(Number(uid))) {
+            throw new HttpError(400, 'UID is not a number.');
+          }
+          this.whitelistUser.push({
+            firstName: firstName,
+            lastName: lastName,
+            uid: uid
+          });
+        }
+      }
+    );
     console.log('File was parsed successfully. There where ' + this.whitelistUser.length + ' whitelistUser parsed.');
   }
 

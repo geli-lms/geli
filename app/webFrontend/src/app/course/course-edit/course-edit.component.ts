@@ -68,11 +68,20 @@ export class CourseEditComponent implements OnInit {
     this.uploader.onProgressItem = (fileItem: FileItem, progress: any) => {
       this.ref.detectChanges();
     };
-    this.uploader.onCompleteAll = () => {
-      this.snackBar.open('All items uploaded!', '', { duration: 3000 });
+    this.uploader.onCompleteItem = (item: any, response: any, status: any, headers: any) => {
+      if (status === 200) {
+      const course = JSON.parse(response);
+      this.snackBar.open('Item is uploaded there where ' + course.whitelist.length + ' users parsed!', '', { duration: 5000 });
       setTimeout(() => {
         this.uploader.clearQueue();
       }, 3000);
+      } else {
+        const error = JSON.parse(response);
+        this.snackBar.open('Upload failed with status: ' + status + ' message was: ' + error.message, '', { duration: 10000 });
+        setTimeout(() => {
+          this.uploader.clearQueue();
+        }, 6000);
+      }
     };
   }
 
@@ -81,7 +90,8 @@ export class CourseEditComponent implements OnInit {
     console.log(this.description);
     console.log(this.course);
 
-    const request: any = {'name': this.course, 'description': this.description, '_id': this.id, 'active': this.active, 'enrollType': this.enrollType};
+    const request: any = {
+      'name': this.course, 'description': this.description, '_id': this.id, 'active': this.active, 'enrollType': this.enrollType};
     if (this.accessKey !== '****') {
       request.accessKey = this.accessKey;
     }
