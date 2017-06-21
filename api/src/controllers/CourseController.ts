@@ -73,8 +73,8 @@ export class CourseController {
         return WUser.find(c.whitelist).then((wUsers) => {
           if (c.enrollType === 'whitelist' &&
             wUsers.filter(e =>
-            e.firstName === user.profile.firstName
-            && e.lastName === user.profile.lastName
+            e.firstName === user.profile.firstName.toLowerCase()
+            && e.lastName === user.profile.lastName.toLowerCase()
             && e.uid === user.uid).length <= 0) {
             throw new HttpError(401, 'Not allowed to join, you are not on whitelist.');
           }
@@ -96,8 +96,8 @@ export class CourseController {
     return User.find({})
       .then((users) => users.map((user) => user.toObject({virtuals: true})))
       .then((users) => Course.findById(id).then((course) => {
-        return this.parser.updateCourseFromFile(file, course, users).then((buffer: any) =>
-          this.parser.manageParsedBuffer(buffer, course, users).save().then((c: ICourseModel) =>
+        return this.parser.parseFile(file, course).then((buffer: any) =>
+          this.parser.updateCourseFromBuffer(buffer, course, users).save().then((c: ICourseModel) =>
             c.toObject()));
       }));
   }

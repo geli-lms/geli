@@ -9,13 +9,13 @@ export class ObsCsvController {
   private whitelistUser: { firstName: string, lastName: string, uid: string }[] = [];
 
   /**
-   * Updates a course by adding all parsed whitelist users to it and enroll matched users.
+   * Parse a CSV file from filesystem convert it to uft8 an write it in string buffer.
    * @param file Is a file uploaded by frontend.
    * @param course Is the actual course.
    * @param allUsers Are all users in system.
    * @returns {any} Is the updated course.
    */
-  public updateCourseFromFile(file: any, course: ICourseModel, allUsers: any[])  {
+  public parseFile(file: any, course: ICourseModel)  {
     let buffer = '';
     return new Promise(function(resolve: any, reject: any) {
       fs.createReadStream(file.path)
@@ -33,7 +33,14 @@ export class ObsCsvController {
     });
   }
 
-  public manageParsedBuffer(buffer: string, course: ICourseModel, allUsers: any[]): ICourseModel {
+  /**
+   * Update a given course from parsed string in csv format. Generate whitelist users an add all matched users to course.
+   * @param buffer A string in parsed CSV format.
+   * @param course The course which will be updated.
+   * @param allUsers All users in System.
+   * @returns {any} An updated course model.
+   */
+  public updateCourseFromBuffer(buffer: string, course: ICourseModel, allUsers: any[]): ICourseModel {
     this.pushWhitelistUser(buffer);
     course = this.addParsedUsersToCourse(course, allUsers);
     return this.updateWhitelistUser(course);
@@ -43,7 +50,7 @@ export class ObsCsvController {
    * Push create whitelist users from parsed string and push them to an array of whitelist users.
    * @param buffer Parsed string where users are created from.
    */
-  public pushWhitelistUser(buffer: string) {
+  private pushWhitelistUser(buffer: string) {
     this.whitelistUser = [];
     const lines = buffer.split(/\r?\n|\r/);
     const userLines = lines.filter(e => e.split(';').length >= 3);
@@ -62,7 +69,7 @@ export class ObsCsvController {
    * @param allUsers Are all users in system.
    * @returns {any} Is the updated course.
    */
-  public addParsedUsersToCourse(course: ICourseModel, allUsers: IUser[]): any {
+  private addParsedUsersToCourse(course: ICourseModel, allUsers: IUser[]): ICourseModel {
     this.whitelistUser.forEach(wUser => {
       let foundUser: IUser = null;
       const foundUsers: IUser[] =
@@ -86,7 +93,7 @@ export class ObsCsvController {
    * @param course Is the course to update.
    * @returns {any} Updated course.
    */
-  public updateWhitelistUser(course: ICourseModel): any {
+  private updateWhitelistUser(course: ICourseModel): ICourseModel {
     course.whitelist.forEach((wuser: any) => WUser.findByIdAndRemove(wuser)
       .then(() => {
       }));
