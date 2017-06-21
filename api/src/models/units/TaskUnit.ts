@@ -16,4 +16,4 @@ const taskUnitSchema = new mongoose.Schema({
 
 const TaskUnit = Unit.discriminator('task', taskUnitSchema);
 
-export {TaskUnit, ITaskUnitModel}
+export {TaskUnit, ITaskUnitModel};
