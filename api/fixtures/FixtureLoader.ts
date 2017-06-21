@@ -11,6 +11,7 @@ import {unitFixtures} from './unitFixtures';
 import {IUnitModel} from '../src/models/units/Unit';
 import {progressFixtures} from './progressFixtures';
 import {IProgressModel} from '../src/models/Progress';
+import {ITaskUnitModel} from '../src/models/units/TaskUnit';
 
 export class FixtureLoader {
 
@@ -69,7 +70,7 @@ export class FixtureLoader {
       })
       .then(({lecture, units}) => {
         const lectureModel = <ILectureModel>lecture;
-        units.map((unit: IUnitModel) => {
+        units.map((unit: ITaskUnitModel) => {
           lectureModel.units.push(unit);
         });
         lectureModel.save();

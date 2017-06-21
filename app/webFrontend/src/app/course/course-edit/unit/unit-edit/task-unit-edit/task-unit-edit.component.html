@@ -1,10 +1,12 @@
 <div class="task-unit-edit">
-  <strong>Tasks</strong>
+  <h3>Tasks</h3>
+  <md-input-container>
+    <input mdInput placeholder="Unit-Titel" [(ngModel)]="model.title" />
+  </md-input-container>
   <div class="info-text">
     <md-icon>info</md-icon>
     Add questions with any number of possible answers. Mark the correct answer(s) with the checkbox.
   </div>
-
   <div *ngFor="let task of model.tasks" class="question-answer">
 
     <md-input-container md-line class="question">

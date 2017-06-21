@@ -1,6 +1,4 @@
-<pre>
-  {{progress | json}}
-</pre>
+
 <md-card *ngFor="let student of students">
   <md-card-header>
     <img md-card-avatar src="/">
@@ -8,8 +6,10 @@
     <md-card-subtitle>{{student.email}}</md-card-subtitle>
   </md-card-header>
   <md-card-content>
-    <div class="unit" *ngFor="let progressableUnit of progressableUnits">
-      {{progressableUnit.type}}
+    <div class="progress" *ngFor="let progress of student.progress">
+      {{progress | json}}
+      {{progress.unit.title}}
+      <span *ngIf="progress.done">Done</span>
     </div>
   </md-card-content>
   <md-card-actions align="start">

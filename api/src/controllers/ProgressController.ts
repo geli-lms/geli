@@ -1,29 +1,23 @@
 import * as mongoose from 'mongoose';
 import {Get, JsonController, Param} from 'routing-controllers';
-import {Progress} from '../models/Progress';
+import {IProgressModel, Progress} from '../models/Progress';
 import {Unit} from '../models/units/Unit';
-import {User} from '../models/User';
+import {IUserModel, User} from '../models/User';
+import {IProgress} from '../../../shared/models/IProgress';
+import {CourseController} from './CourseController';
+import {Course} from '../models/Course';
+import {ICourse} from '../../../shared/models/ICourse';
+import {IUnit} from '../../../shared/models/units/IUnit';
+import {IUser} from '../../../shared/models/IUser';
 
 @JsonController('/progress')
 export class ProgressController {
 
   @Get('/courses/:id')
   getCourseProgress(@Param('id') id: string) {
-    return Progress.aggregate([
-      { $match: { 'course': new mongoose.Types.ObjectId(id)}},
-      {
-        $lookup: {
-          from: 'units', localField: 'unit', foreignField: '_id', as: 'unit',
-        }
-      },
-      { $unwind: '$unit' },
-      { $project: {
-        'unit': {
-          '_id': 1
-        },
-        'done': 1
-      }}
-    ]);
+    return Progress.find({'course': id})
+      .populate('unit')
+      .then((progresses) => progresses.map((progress) => progress.toObject({virtuals: true})));
   }
 
   @Get('/users/:id')

@@ -1,8 +1,9 @@
 import {IFixture} from './IFixture';
 import {Unit} from '../src/models/units/Unit';
+import {TaskUnit} from '../src/models/units/TaskUnit';
 
 export const unitFixtures: IFixture = {
-  Model: Unit,
+  Model: TaskUnit,
   data: [
     {
       title: 'AWD - Unit 1',

@@ -17,9 +17,8 @@ export class TeacherReportComponent implements OnInit {
 
   id: string;
   course: ICourse;
-  students: User[];
-  progressableUnits: IUnit[];
-  progress: any;
+  students: IUser[];
+  progressableUnits: IUnit[] = [];
 
   constructor(private route: ActivatedRoute,
               private courseService: CourseService,
@@ -29,8 +28,6 @@ export class TeacherReportComponent implements OnInit {
   ngOnInit() {
     this.route.params.subscribe(params => { this.id = decodeURIComponent(params['id']); });
     this.getCourseAndStudents();
-    this.getProgress();
-    // this.getProgressableUnits();
   }
 
   getCourseAndStudents() {
@@ -39,27 +36,55 @@ export class TeacherReportComponent implements OnInit {
         (course: any) => {
           this.course = course;
           this.students = course.students;
+          for (const lecture of course.lectures) {
+            for (const unit of lecture.units) {
+              if (unit.progressable) {
+                this.progressableUnits.push(unit);
+              }
+            }
+          }
+          console.log('debug');
         },
         (err: any) => {
           console.log(err);
+      })
+      .then(() => {
+        if (this.course) {
+          this.getProgress();
+        }
       });
   }
 
-  getProgressableUnits() {
-    this.unitService.getProgressableUnits(this.id)
-      .then(
-        (progressableUnits) => {
-          this.progressableUnits = progressableUnits;
-        },
-        (err) => {
-          console.log(err);
-        });
-  }
-
   getProgress() {
+    const students = this.students;
+    const progressableUnits = this.progressableUnits;
     this.progressService.getCourseProgress(this.id)
-      .then((progress: any) => {
-        this.progress = progress;
+      .then((progress: any[]) => {
+        for (let i = 0; i < students.length; i++) {
+          if (typeof students[i].progress === 'undefined') {
+            students[i].progress = [];
+          }
+
+          for (let j = 0; j < progressableUnits.length; j++) {
+            let done = false;
+            for (let k = progress.length - 1; k >= 0; k--) {
+              if (students[i]._id === progress[k].user && progressableUnits[j] === progress[k].unit) {
+                students[i].progress.push(progress[k]);
+                done = true;
+                break;
+              }
+            }
+            if (!done) {
+              students[i].progress.push({
+                course: this.id,
+                unit: progressableUnits[j],
+                user: students[i],
+                done: done
+              });
+            }
+          }
+
+        }
       });
   }
 
