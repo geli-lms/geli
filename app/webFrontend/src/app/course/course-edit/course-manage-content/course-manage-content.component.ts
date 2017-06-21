@@ -7,6 +7,7 @@ import {DialogService} from '../../../shared/services/dialog.service';
 import {UserService} from '../../../shared/services/user.service';
 import {MdSnackBar} from '@angular/material';
 import {IUnit} from '../../../../../../../shared/models/units/IUnit';
+import {DragulaService} from "ng2-dragula";
 
 @Component({
   selector: 'app-course-manage-content',
@@ -33,10 +34,21 @@ export class CourseManageContentComponent implements OnInit {
               private showProgress: ShowProgressService,
               private snackBar: MdSnackBar,
               private dialogService: DialogService,
+              private dragulaService: DragulaService,
               public userService: UserService) {
   }
 
   ngOnInit() {
+    this.dragulaService.setOptions('lectures', {
+      moves: (el, container, handle) => {
+        return /(.* )?lecture-drag-handle(.* )?/.test(handle.className);
+      }
+    });
+    this.dragulaService.setOptions('units', {
+      moves: (el, container, handle) => {
+        return /(.* )?unit-drag-handle(.* )?/.test(handle.className);
+      }
+    });
   }
 
   duplicateLecture(lecture: ILecture) {

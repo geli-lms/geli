@@ -10,7 +10,7 @@ import {ICourse} from '../../../../../../../shared/models/ICourse';
 @Component({
   selector: 'app-members',
   templateUrl: './members.component.html',
-  styleUrls: ['./members.component.scss', '../../../../../node_modules/dragula/dist/dragula.css']
+  styleUrls: ['./members.component.scss']
 })
 export class MembersComponent implements OnInit {
   @Input() courseId;

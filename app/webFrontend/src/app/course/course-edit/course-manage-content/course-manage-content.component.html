@@ -1,10 +1,14 @@
-<div class="container" *ngIf="course" (click)="closeFab()">
+<div class="container" *ngIf="course" (click)="closeFab()" [dragula]="'lectures'" [dragulaModel]="course.lectures">
   <div class="lecture" *ngFor="let lecture of course.lectures">
-    <h2>{{lecture.name}}
+    <div class="lecture-header">
+      <md-icon class="lecture-drag-handle">drag_handle</md-icon>
+      <h2>{{lecture.name}}</h2>
       <button class="open-toggle" (click)="openToggleLecture(lecture)"
               [class.opened]="openedLecture && lecture._id === openedLecture._id" md-icon-button>
         <md-icon>arrow_drop_down</md-icon>
       </button>
+
+      <span class="flex-spacer"></span>
 
       <button class="lecture-menu-button" md-icon-button [mdMenuTriggerFor]="lectureMenu">
         <md-icon>more_vert</md-icon>
@@ -24,16 +28,17 @@
           Delete
         </button>
       </md-menu>
-    </h2>
+    </div>
 
     <div class="lecture-content" *ngIf="openedLecture && lecture._id === openedLecture._id">
       <app-lecture-form [model]="lecture" *ngIf="lectureEditMode" (onSubmit)="updateLecture($event)"
                         [onCancel]="closeEditLecture"
                         actionLabel="Update"></app-lecture-form>
 
-      <div class="units">
+      <div class="units" [dragula]="'units'" [dragulaModel]="lecture.units">
         <div class="unit" *ngFor="let unit of lecture.units;">
           <div class="unit-content">
+            <md-icon class="unit-drag-handle">drag_handle</md-icon>
             <span class="unit-type">{{ unit.type }}</span>
             <span class="unit-date">{{ unit.updatedAt | date:"y-MM-dd" }}</span>
             <span class="unit-actions">
