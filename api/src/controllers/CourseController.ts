@@ -96,12 +96,11 @@ export class CourseController {
     return User.find({})
       .then((users) => users.map((user) => user.toObject({virtuals: true})))
       .then((users) => Course.findById(id).then((course) => {
-        return this.parser.updateCourseFromFile(file, course, users).then((updaed: ICourseModel) =>
-          updaed.save().then((c: ICourseModel) =>
+        return this.parser.updateCourseFromFile(file, course, users).then((buffer: any) =>
+          this.parser.manageParsedBuffer(buffer, course, users).save().then((c: ICourseModel) =>
             c.toObject()));
       }));
   }
-
 
   @Put('/:id')
   updateCourse(@Param('id') id: string, @Body() course: ICourse) {

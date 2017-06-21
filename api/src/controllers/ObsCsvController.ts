@@ -15,7 +15,7 @@ export class ObsCsvController {
    * @param allUsers Are all users in system.
    * @returns {any} Is the updated course.
    */
-  public updateCourseFromFile(file: any, course: ICourseModel, allUsers: any[]) {
+  public updateCourseFromFile(file: any, course: ICourseModel, allUsers: any[])  {
     let buffer = '';
     return new Promise(function(resolve: any, reject: any) {
       fs.createReadStream(file.path)
@@ -27,13 +27,16 @@ export class ObsCsvController {
         ).on('end', () => {
           fs.unlinkSync(file.path);
           console.log('File is parsed successfully.');
-          this.pushWhitelistUser(buffer);
-          course = this.addParsedUsersToCourse(course, allUsers);
-          course = this.updateWhitelistUser(course);
-          resolve = course;
+          resolve(buffer);
         }
       );
     });
+  }
+
+  public manageParsedBuffer(buffer: string, course: ICourseModel, allUsers: any[]): ICourseModel {
+    this.pushWhitelistUser(buffer);
+    course = this.addParsedUsersToCourse(course, allUsers);
+    return this.updateWhitelistUser(course);
   }
 
   /**
@@ -84,7 +87,7 @@ export class ObsCsvController {
    * @returns {any} Updated course.
    */
   public updateWhitelistUser(course: ICourseModel): any {
-    course.whitelist.forEach((wuser: any) => WUser.findByIdAndRemove(wuser.toString())
+    course.whitelist.forEach((wuser: any) => WUser.findByIdAndRemove(wuser)
       .then(() => {
       }));
     course.whitelist = [];
