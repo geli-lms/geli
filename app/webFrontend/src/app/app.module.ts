@@ -24,7 +24,7 @@ import {DashboardTeacherComponent} from './start/dashboard/dashboard-teacher/das
 import {DashboardAdminComponent} from './start/dashboard/dashboard-admin/dashboard-admin.component';
 import {
   CourseService, TaskService, UserDataService, LectureService,
-  UnitService, AboutDataService, FreeTextService
+  UnitService, AboutDataService, FreeTextUnitService
 } from './shared/services/data.service';
 import {BackendService} from './shared/services/backend.service';
 import {CourseComponent} from './course/course.component';
@@ -120,7 +120,6 @@ import { MdFabMenuComponent } from './shared/components/md-fab-menu/md-fab-menu.
     AuthGuardService,
     UnitService,
     TaskService,
-    FreeTextService,
     CourseService,
     UserDataService,
     LectureService,
@@ -128,7 +127,8 @@ import { MdFabMenuComponent } from './shared/components/md-fab-menu/md-fab-menu.
     UserDataService,
     ShowProgressService,
     MarkdownService,
-    JwtHelper
+    JwtHelper,
+    FreeTextUnitService
   ],
   bootstrap: [AppComponent]
 })

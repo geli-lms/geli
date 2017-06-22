@@ -21,8 +21,8 @@ const unitSchema = new mongoose.Schema({
     discriminatorKey: 'type',
     timestamps: true,
     toObject: {
-      transform: function (doc: any, ret: any) {
-        ret._id = ret._id.toString();
+      transform: function (doc: IUnitModel, ret: any) {
+        ret._id = doc._id.toString();
       }
     },
   }

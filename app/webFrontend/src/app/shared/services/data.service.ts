@@ -169,14 +169,12 @@ export class UnitService extends DataService {
     this.apiPath = originalApiPath;
     return promise;
   }
+}
 
-  addFreeTextUnit(freeTextUnit: IFreeTextUnit, lectureId: string) {
-    // TODO ?!
-    const originalApiPath = this.apiPath;
-    this.apiPath += 'free-texts';
-    const promise = this.createItem({freeTextUnit: freeTextUnit, lectureId: lectureId});
-    this.apiPath = originalApiPath;
-    return promise;
+@Injectable()
+export class FreeTextUnitService extends DataService {
+  constructor(public backendService: BackendService) {
+    super('units/free-texts/', backendService);
   }
 }
 

@@ -9,7 +9,6 @@ import {Lecture} from '../models/Lecture';
 import {Unit} from '../models/units/Unit';
 import {IUnit} from '../../../shared/models/units/IUnit';
 import {IVideoUnitModel, VideoUnit} from '../models/units/VideoUnit';
-import {FreeTextUnit, IFreeTextUnitModel} from '../models/units/FreeTextUnit';
 
 const uploadOptions = {dest: 'uploads/'};
 

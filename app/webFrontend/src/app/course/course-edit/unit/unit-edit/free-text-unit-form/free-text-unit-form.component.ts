@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {IFreeTextUnit} from '../../../../../../../../../shared/models/units/IFreeTextUnit';
 import {MdSnackBar} from '@angular/material';
-import {UnitService} from '../../../../../shared/services/data.service';
+import {FreeTextUnitService} from '../../../../../shared/services/data.service';
 import {FreeTextUnit} from '../../../../../models/FreeTextUnit';
 import {ICourse} from '../../../../../../../../../shared/models/ICourse';
 
@@ -17,29 +17,26 @@ export class FreeTextUnitFormComponent implements OnInit {
   @Input() onDone: () => void;
   @Input() onCancel: () => void;
 
-  constructor(private unitService: UnitService,
+  constructor(private freeTextUnitService: FreeTextUnitService,
               private snackBar: MdSnackBar) {
   }
 
   ngOnInit() {
-    console.log(this.model);
-    if (this.isNewModelObj()) {
+    if (!this.model) {
       this.model = new FreeTextUnit(this.course._id);
     }
   }
 
   saveUnit() {
-    console.log(this.model);
-
     // If markdown was left empty, define field for db-consistency
-    if (this.model.markdown) {
+    if (typeof this.model.markdown === 'undefined') {
       this.model.markdown = '';
     }
 
     // Checks if we have to create a new unit or update an existing
-    if (this.isNewModelObj()) { // TODO
+    if (this.isModelNewObj()) {
       // Create new one
-      this.unitService.addFreeTextUnit(this.model, this.lectureId)
+      this.freeTextUnitService.createItem({model: this.model, lectureId: this.lectureId})
         .then(
           () => {
             this.snackBar.open('Free text unit saved', '', {duration: 3000});
@@ -49,7 +46,8 @@ export class FreeTextUnitFormComponent implements OnInit {
         );
     } else {
       // Update existing
-      this.unitService.updateItem(this.model)
+      delete this.model._course;
+      this.freeTextUnitService.updateItem(this.model)
         .then(
           () => {
             this.snackBar.open('Free text unit saved', 'Update', {duration: 2000});
@@ -60,7 +58,7 @@ export class FreeTextUnitFormComponent implements OnInit {
     }
   }
 
-  private isNewModelObj(): boolean {
+  private isModelNewObj(): boolean {
     return typeof this.model._id === 'undefined';
   }
 }
