@@ -34,7 +34,11 @@ export class CodeKataUnitFormComponent implements OnInit {
 
   private addUnit() {
     if (this.validate()) {
-      this.unitService.addCodeKataUnit(this.model, this.lectureId)
+      this.unitService.addCodeKataUnit({
+        name: this.generalInfo.form.value.name,
+        description: this.generalInfo.form.value.description,
+        ...this.model
+      }, this.lectureId)
         .then(
           (task) => {
             this.snackBar.open('Code-Kata created', '', { duration: 3000});
