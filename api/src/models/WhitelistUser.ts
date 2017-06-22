@@ -1,10 +1,10 @@
 import * as mongoose from 'mongoose';
-import {IWUser} from '../../../shared/models/IWUser';
+import {IWhitelistUser} from '../../../shared/models/IWhitelistUser';
 
-interface IWUserModel extends IWUser, mongoose.Document {
+interface IWhitelistUserModel extends IWhitelistUser, mongoose.Document {
 }
 
-const wUserSchema = new mongoose.Schema({
+const whitelistUserSchema = new mongoose.Schema({
   firstName: {
       type: String,
       lowercase: true,
@@ -27,6 +27,6 @@ const wUserSchema = new mongoose.Schema({
   }
 );
 
-const WUser = mongoose.model<IWUserModel>('WUser', wUserSchema);
+const WhitelistUser = mongoose.model<IWhitelistUserModel>('WhitelistUser', whitelistUserSchema);
 
-export {WUser, IWUserModel};
+export {WhitelistUser, IWhitelistUserModel};

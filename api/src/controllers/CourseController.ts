@@ -19,7 +19,7 @@ import {IUserModel} from '../models/User';
 import {IUser} from '../../../shared/models/IUser';
 import {ObsCsvController} from './ObsCsvController';
 import {Course, ICourseModel} from '../models/Course';
-import {WUser} from '../models/WUser';
+import {WhitelistUser} from '../models/WhitelistUser';
 const uploadOptions = {dest: 'temp/'};
 
 @JsonController('/courses')
@@ -70,7 +70,7 @@ export class CourseController {
         if (c.accessKey && c.accessKey !== accessKey) {
           throw new HttpError(401, 'Invalid access key.');
         }
-        return WUser.find(c.whitelist).then((wUsers) => {
+        return WhitelistUser.find(c.whitelist).then((wUsers) => {
           if (c.enrollType === 'whitelist' &&
             wUsers.filter(e =>
             e.firstName === user.profile.firstName.toLowerCase()

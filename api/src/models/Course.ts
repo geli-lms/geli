@@ -47,7 +47,7 @@ const courseSchema = new mongoose.Schema({
     whitelist: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'WUser'
+        ref: 'WhitelistUser'
       }
     ]
   },

@@ -1,6 +1,6 @@
 import {IUser} from './IUser';
 import {ILecture} from './ILecture';
-import {IWUser} from './IWUser';
+import {IWhitelistUser} from './IWhitelistUser';
 
 export interface ICourse {
     _id: any;
@@ -11,6 +11,6 @@ export interface ICourse {
     students: IUser[];
     lectures: ILecture[];
     accessKey: string;
-    whitelist: IWUser[];
+    whitelist: IWhitelistUser[];
     enrollType: string;
 }

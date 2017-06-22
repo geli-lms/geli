@@ -1,4 +1,4 @@
-export interface IWUser {
+export interface IWhitelistUser {
   _id: any;
   firstName: string;
   lastName: string;

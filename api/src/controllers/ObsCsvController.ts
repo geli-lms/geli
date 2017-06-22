@@ -1,5 +1,5 @@
 import {IUser} from '../../../shared/models/IUser';
-import {WUser} from '../models/WUser';
+import {WhitelistUser} from '../models/WhitelistUser';
 import {ICourseModel} from '../models/Course';
 import e = require('express');
 import {isNumber} from 'util';
@@ -114,12 +114,12 @@ export class ObsCsvController {
    * @returns {any} Updated course.
    */
   private updateWhitelistUser(course: ICourseModel): ICourseModel {
-    course.whitelist.forEach((wuser: any) => WUser.findByIdAndRemove(wuser)
+    course.whitelist.forEach((wuser: any) => WhitelistUser.findByIdAndRemove(wuser)
       .then(() => {
       }));
     course.whitelist = [];
     this.whitelistUser.forEach(e => {
-      const wUser = new WUser();
+      const wUser = new WhitelistUser();
       wUser.firstName = e.firstName;
       wUser.lastName = e.lastName;
       wUser.uid = e.uid;
