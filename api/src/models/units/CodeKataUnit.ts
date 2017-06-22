@@ -1,7 +1,6 @@
 import * as mongoose from 'mongoose';
 import {Unit} from './Unit';
 import {ICodeKataUnit} from '../../../../shared/models/units/ICodeKataUnit';
-import {NativeError} from "mongoose";
 
 interface ICodeKataModel extends ICodeKataUnit, mongoose.Document {
 }

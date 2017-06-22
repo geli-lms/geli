@@ -173,7 +173,7 @@ export class UnitService extends DataService {
 @Injectable()
 export class CodeKataUnitService extends DataService {
   constructor(public backendService: BackendService) {
-    super('units/codeKata/', backendService);
+    super('units/code-katas/', backendService);
   }
 }
 

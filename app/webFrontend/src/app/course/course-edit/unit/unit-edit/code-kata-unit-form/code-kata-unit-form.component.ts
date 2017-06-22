@@ -21,6 +21,8 @@ export class CodeKataUnitFormComponent implements OnInit {
   @ViewChild(UnitGeneralInfoFormComponent)
   private generalInfo: UnitGeneralInfoFormComponent;
 
+  areaSeperator: string = '//####################';
+
   logs: string;
 
   constructor(private codeKataUnitService: CodeKataUnitService,
@@ -30,6 +32,17 @@ export class CodeKataUnitFormComponent implements OnInit {
   ngOnInit() {
     if (!this.model) {
       this.model = new CodeKataUnit(this.course._id);
+    }
+    else {
+      this.model.code =
+        this.model.definition
+        + "\n\n" + this.areaSeperator + "\n\n"
+        + this.model.code
+        + "\n\n" + this.areaSeperator + "\n\n"
+        + this.model.test;
+
+      this.model.definition = undefined;
+      this.model.test = undefined;
     }
   }
 
