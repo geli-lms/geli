@@ -7,7 +7,7 @@ import {DialogService} from '../../../shared/services/dialog.service';
 import {UserService} from '../../../shared/services/user.service';
 import {MdSnackBar} from '@angular/material';
 import {IUnit} from '../../../../../../../shared/models/units/IUnit';
-import {DragulaService} from "ng2-dragula";
+import {DragulaService} from 'ng2-dragula';
 
 @Component({
   selector: 'app-course-manage-content',

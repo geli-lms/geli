@@ -68,8 +68,12 @@
     display: flex;
     align-items: center;
 
+    .unit-name {
+      flex-grow: 0.7;
+    }
+
     .unit-type {
-      flex-grow: 1;
+      flex-grow: 0.3;
     }
 
     .unit-date {

@@ -16,15 +16,10 @@ export class UnitFormComponent implements OnInit {
   @Input() lecture: ILecture;
   @Input() onDone: () => void;
   @Input() onCancel: () => void;
-  // @Output() onDone = new EventEmitter<boolean>();
 
   constructor() {
   }
 
   ngOnInit() {
-  }
-
-  public done() {
-    // this.onDone.emit(true);
   }
 }

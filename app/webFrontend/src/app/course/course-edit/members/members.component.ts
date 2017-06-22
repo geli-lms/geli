@@ -36,7 +36,7 @@ export class MembersComponent implements OnInit, OnDestroy {
     dragula.dropModel.subscribe((value) => {
       const bagName = value[0];
 
-      if(bagName === 'bag-one') {
+      if (bagName === 'bag-one') {
         this.updateMembersInCourse();
       }
     });

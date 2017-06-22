@@ -40,6 +40,7 @@
           <div class="unit" *ngFor="let unit of lecture.units;">
             <div class="unit-content">
               <md-icon class="unit-drag-handle">drag_handle</md-icon>
+              <span class="unit-name">{{ unit.name }}</span>
               <span class="unit-type">{{ unit.type }}</span>
               <span class="unit-date">{{ unit.updatedAt | date:"y-MM-dd" }}</span>
               <span class="unit-actions">

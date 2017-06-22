@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {TaskService, UnitService} from '../../../../../shared/services/data.service';
 import {Task} from '../../../../../models/Task';
 import {MdSnackBar} from '@angular/material';
@@ -7,6 +7,7 @@ import {TaskUnit} from '../../../../../models/TaskUnit';
 import {ITask} from '../../../../../../../../../shared/models/task/ITask';
 import {Answer} from '../../../../../models/Answer';
 import {ICourse} from '../../../../../../../../../shared/models/ICourse';
+import {UnitGeneralInfoFormComponent} from '../unit-general-info-form/unit-general-info-form.component';
 
 @Component({
   selector: 'app-task-unit-edit',
@@ -14,18 +15,34 @@ import {ICourse} from '../../../../../../../../../shared/models/ICourse';
   styleUrls: ['./task-unit-edit.component.scss']
 })
 export class TaskUnitEditComponent implements OnInit {
-  @Input() course: ICourse;
-  @Input() lectureId: string;
-  @Input() model: ITaskUnit;
-  @Input() onDone: () => void;
-  @Input() onCancel: () => void;
+  @Input()
+  course: ICourse;
+
+  @Input()
+  lectureId: string;
+
+  @Input()
+  model: ITaskUnit;
+
+  @Input()
+  onDone: () => void;
+
+  @Input()
+  onCancel: () => void;
+
+  @ViewChild(UnitGeneralInfoFormComponent)
+  private generalInfo: UnitGeneralInfoFormComponent;
+
   tasks: any[];
 
   constructor(private taskService: TaskService,
               private unitService: UnitService,
-              private snackBar: MdSnackBar) {}
+              private snackBar: MdSnackBar) {
+  }
 
   ngOnInit() {
+    console.log(this.model);
+
     if (!this.model) {
       this.model = new TaskUnit(this.course._id);
     }
@@ -44,10 +61,14 @@ export class TaskUnitEditComponent implements OnInit {
   }
 
   addUnit() {
-    this.unitService.addTaskUnit(this.model, this.lectureId)
+    this.unitService.addTaskUnit({
+      name: this.generalInfo.form.value.name,
+      description: this.generalInfo.form.value.description,
+      ...this.model
+    }, this.lectureId)
       .then(
         (task) => {
-          this.snackBar.open('Task created', '', { duration: 3000});
+          this.snackBar.open('Task created', '', {duration: 3000});
           this.onDone();
         },
         (error) => {
@@ -69,7 +90,7 @@ export class TaskUnitEditComponent implements OnInit {
         task = val; // get _id
         this.tasks.splice(0, 0, task); // add item to start
 
-   //     this.log(val);
+        //     this.log(val);
       }, (error) => {
         console.log(error);
       });
