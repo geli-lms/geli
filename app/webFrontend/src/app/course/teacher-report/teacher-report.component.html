@@ -1,15 +1,19 @@
-
-<md-card *ngFor="let student of students">
+<pre>
+  {{report | json}}
+</pre>
+<md-card *ngFor="let student of report">
   <md-card-header>
     <img md-card-avatar src="/">
     <md-card-title>{{student.profile.firstName}}  {{student.profile.lastName}}</md-card-title>
     <md-card-subtitle>{{student.email}}</md-card-subtitle>
   </md-card-header>
   <md-card-content>
-    <div class="progress" *ngFor="let progress of student.progress">
-      {{progress | json}}
-      {{progress.unit.title}}
-      <span *ngIf="progress.done">Done</span>
+    <div class="progress" *ngFor="let unit of student.units">
+      {{unit.title}}
+      <span *ngIf="unit.done">Done</span>
+    </div>
+    <div>
+      <span></span>
     </div>
   </md-card-content>
   <md-card-actions align="start">

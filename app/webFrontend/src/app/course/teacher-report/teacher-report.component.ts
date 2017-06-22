@@ -19,6 +19,8 @@ export class TeacherReportComponent implements OnInit {
   course: ICourse;
   students: IUser[];
   progressableUnits: IUnit[] = [];
+  progress: IProgress[];
+  report: any[] = [];
 
   constructor(private route: ActivatedRoute,
               private courseService: CourseService,
@@ -56,35 +58,30 @@ export class TeacherReportComponent implements OnInit {
   }
 
   getProgress() {
-    const students = this.students;
-    const progressableUnits = this.progressableUnits;
     this.progressService.getCourseProgress(this.id)
-      .then((progress: any[]) => {
-        for (let i = 0; i < students.length; i++) {
-          if (typeof students[i].progress === 'undefined') {
-            students[i].progress = [];
-          }
-
-          for (let j = 0; j < progressableUnits.length; j++) {
-            let done = false;
-            for (let k = progress.length - 1; k >= 0; k--) {
-              if (students[i]._id === progress[k].user && progressableUnits[j] === progress[k].unit) {
-                students[i].progress.push(progress[k]);
-                done = true;
-                break;
+      .then((progress: any) => {
+        this.progress = progress;
+        this.students.map((student) => {
+          let studentWithUnits: any = student;
+          studentWithUnits.units = [];
+          studentWithUnits.finishCount = 0;
+          this.progressableUnits.map((progressableUnit) => {
+            let unitWithProgress: any = progressableUnit;
+            unitWithProgress.done = false;
+            console.log('unit');
+            for (let i = 0; i < this.progress.length; i++) {
+              console.log('StudentID: ' + studentWithUnits._id + ' ProgressStudentID: ' + this.progress[i].user);
+              console.log('UnitID: ' + unitWithProgress._id + ' ProgressUnitID: ' + this.progress[i].unit._id);
+              if (studentWithUnits._id === this.progress[i].user && unitWithProgress._id === this.progress[i].unit._id) {
+                unitWithProgress.done = true;
+                studentWithUnits.finishCount++;
               }
+              console.log(i);
             }
-            if (!done) {
-              students[i].progress.push({
-                course: this.id,
-                unit: progressableUnits[j],
-                user: students[i],
-                done: done
-              });
-            }
-          }
-
-        }
+            studentWithUnits.units.push(unitWithProgress);
+          });
+          this.report.push(studentWithUnits);
+        });
       });
   }
 
