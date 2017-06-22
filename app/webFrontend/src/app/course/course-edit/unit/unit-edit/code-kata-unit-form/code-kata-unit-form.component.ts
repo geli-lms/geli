@@ -1,4 +1,4 @@
-import {Component, Input, NgModule, OnInit, ViewChild, ViewChild} from '@angular/core';
+import {Component, Input, NgModule, OnInit, ViewChild} from '@angular/core';
 import {UnitService} from '../../../../../shared/services/data.service';
 import {MdSnackBar} from '@angular/material';
 import {ICodeKataUnit} from '../../../../../../../../../shared/models/units/ICodeKataUnit';
