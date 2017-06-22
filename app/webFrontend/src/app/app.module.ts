@@ -24,7 +24,7 @@ import {DashboardTeacherComponent} from './start/dashboard/dashboard-teacher/das
 import {DashboardAdminComponent} from './start/dashboard/dashboard-admin/dashboard-admin.component';
 import {
   CourseService, TaskService, UserDataService, LectureService,
-  UnitService, AboutDataService
+  UnitService, AboutDataService, CodeKataUnitService
 } from './shared/services/data.service';
 import {BackendService} from './shared/services/backend.service';
 import {CourseComponent} from './course/course.component';
@@ -129,7 +129,8 @@ import { UnitGeneralInfoFormComponent } from './course/course-edit/unit/unit-edi
     BackendService,
     UserDataService,
     ShowProgressService,
-    JwtHelper
+    JwtHelper,
+    CodeKataUnitService
   ],
   bootstrap: [AppComponent]
 })

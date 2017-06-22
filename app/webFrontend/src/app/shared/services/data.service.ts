@@ -168,13 +168,12 @@ export class UnitService extends DataService {
     this.apiPath = originalApiPath;
     return promise;
   }
+}
 
-  addCodeKataUnit(codeKataUnit: ICodeKataUnit, lectureId: string) {
-    const originalApiPath = this.apiPath;
-    this.apiPath += 'codekata';
-    const promise = this.createItem({model: codeKataUnit, lectureId: lectureId});
-    this.apiPath = originalApiPath;
-    return promise;
+@Injectable()
+export class CodeKataUnitService extends DataService {
+  constructor(public backendService: BackendService) {
+    super('units/codeKata/', backendService);
   }
 }
 

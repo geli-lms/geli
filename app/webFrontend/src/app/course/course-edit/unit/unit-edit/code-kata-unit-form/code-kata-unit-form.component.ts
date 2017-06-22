@@ -1,5 +1,5 @@
 import {Component, Input, NgModule, OnInit, ViewChild} from '@angular/core';
-import {UnitService} from '../../../../../shared/services/data.service';
+import {CodeKataUnitService} from '../../../../../shared/services/data.service';
 import {MdSnackBar} from '@angular/material';
 import {ICodeKataUnit} from '../../../../../../../../../shared/models/units/ICodeKataUnit';
 import {ICourse} from '../../../../../../../../../shared/models/ICourse';
@@ -23,8 +23,9 @@ export class CodeKataUnitFormComponent implements OnInit {
 
   logs: string;
 
-  constructor(private unitService: UnitService,
-              private snackBar: MdSnackBar) { }
+  constructor(private codeKataUnitService: CodeKataUnitService,
+              private snackBar: MdSnackBar) {
+  }
 
   ngOnInit() {
     if (!this.model) {
@@ -33,26 +34,44 @@ export class CodeKataUnitFormComponent implements OnInit {
   }
 
   private addUnit() {
-    if (this.validate()) {
-      this.unitService.addCodeKataUnit({
-        name: this.generalInfo.form.value.name,
-        description: this.generalInfo.form.value.description,
-        ...this.model
-      }, this.lectureId)
+    if (!this.validate()) {
+      this.snackBar.open('Your code does not validate. Check logs for information', '', {duration: 3000});
+    }
+
+    this.model = {
+      ...this.model,
+      name: this.generalInfo.form.value.name,
+      description: this.generalInfo.form.value.description,
+    };
+
+    if (this.model._id === undefined) {
+      this.codeKataUnitService.createItem({
+        model: this.model,
+        lectureId: this.lectureId,
+      })
         .then(
-          (task) => {
-            this.snackBar.open('Code-Kata created', '', { duration: 3000});
+          () => {
+            this.snackBar.open('Code-Kata created', '', {duration: 3000});
             this.onDone();
           },
           (error) => {
             console.log(error);
           });
     } else {
-      this.snackBar.open('Your code does not validate. Check logs for information', '', { duration: 3000});
+      delete this.model._course;
+      this.codeKataUnitService.updateItem(this.model)
+        .then(
+          () => {
+            this.snackBar.open('Code-Kata updated', '', {duration: 3000});
+            this.onDone();
+          },
+          (error) => {
+            console.log(error);
+          });
     }
   }
 
-  // refactor this to use the same as in code-kata-unit
+// refactor this to use the same as in code-kata-unit
   private validate() {
     const codeToTest: string = this.model.code;
 
@@ -69,7 +88,7 @@ export class CodeKataUnitFormComponent implements OnInit {
       origErrorLogger(msg);
     };
 
-    window.onerror = function(message, url, linenumber) {
+    window.onerror = function (message, url, linenumber) {
       console.log(message);
       console.log(linenumber);
     };
