@@ -1,10 +1,11 @@
-import {Component, OnInit, Input, ChangeDetectorRef} from '@angular/core';
+import {Component, OnInit, Input, ChangeDetectorRef, ViewChild} from '@angular/core';
 import {Router} from '@angular/router';
 import {MdSnackBar} from '@angular/material';
 import {FileUploader, FileItem} from 'ng2-file-upload';
 import {ICourse} from '../../../../../shared/models/ICourse';
 import {ILecture} from '../../../../../shared/models/ILecture';
 import {IVideoUnit} from '../../../../../shared/models/units/IVideoUnit';
+import {UnitGeneralInfoFormComponent} from '../course/course-edit/unit/unit-edit/unit-general-info-form/unit-general-info-form.component';
 
 @Component({
   selector: 'app-upload',
@@ -18,6 +19,9 @@ export class UploadComponent implements OnInit {
   @Input() model: IVideoUnit;
   @Input() onDone: () => void;
   @Input() onCancel: () => void;
+
+  @ViewChild(UnitGeneralInfoFormComponent)
+  private generalInfo: UnitGeneralInfoFormComponent;
 
   uploader: FileUploader = new FileUploader({
     url: '/api/units/upload',
@@ -36,11 +40,14 @@ export class UploadComponent implements OnInit {
 
   ngOnInit() {
     this.uploader.onBuildItemForm = (fileItem: any, form: any) => {
+      form.append('name', this.generalInfo.form.value.name);
+      form.append('description', this.generalInfo.form.value.description);
       form.append('lectureId', this.lecture._id);
       form.append('courseId', this.course._id);
     };
+
     this.uploader.onCompleteAll = () => {
-      this.snackBar.open('All items uploaded!', '', { duration: 3000 });
+      this.snackBar.open('All items uploaded!', '', {duration: 3000});
       this.onDone();
       setTimeout(() => {
         this.uploader.clearQueue();
