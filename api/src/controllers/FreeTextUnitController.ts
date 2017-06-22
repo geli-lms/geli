@@ -25,9 +25,4 @@ export class FreeTextUnitController extends UnitController {
         return this.pushToLecture(data.lectureId, savedFreeTextUnit);
       });
   }
-
-  @Get('/course/:courseId')
-  getFreeTextForCourse(@Param('courseId') courseId: string) {
-    return FreeTextUnit.find().where({courseId: courseId}).sort({createdAt: -1});
-  }
 }
