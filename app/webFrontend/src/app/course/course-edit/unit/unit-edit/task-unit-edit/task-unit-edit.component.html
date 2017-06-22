@@ -1,5 +1,8 @@
 <div class="task-unit-edit">
   <strong>Tasks</strong>
+
+  <app-unit-general-info-form [model]="model"></app-unit-general-info-form>
+
   <div class="info-text">
     <md-icon>info</md-icon>
     Add questions with any number of possible answers. Mark the correct answer(s) with the checkbox.
@@ -36,8 +39,8 @@
 
   </div>
   <p>
-    <button md-button (click)="onCancel()">Cancel</button>
-    <button md-button color="primary" class="add-unit" (click)="addUnit()">Save</button>
+    <button md-button (click)="onCancel()" type="reset">Cancel</button>
+    <button md-button color="primary" class="add-unit" (click)="addUnit()" type="submit">Save</button>
   </p>
   <button md-mini-fab class="add-task-fab" (click)="addTask()" mdTooltip="Add task" mdTooltipPosition="right">
     <md-icon>add</md-icon>

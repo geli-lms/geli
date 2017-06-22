@@ -1,6 +1,5 @@
 import * as mongoose from 'mongoose';
 import {IUnit} from '../../../../shared/models/units/IUnit';
-import {NativeError} from 'mongoose';
 
 interface IUnitModel extends IUnit, mongoose.Document {
 }
@@ -9,6 +8,13 @@ const unitSchema = new mongoose.Schema({
     _course: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Course'
+    },
+    name: {
+      type: String,
+      required: true
+    },
+    description: {
+      type: String
     },
     progressable: {
       type: Boolean
