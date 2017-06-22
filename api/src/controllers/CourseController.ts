@@ -31,26 +31,29 @@ export class CourseController {
   @Get('/')
   getCourses() {
     return Course.find({})
-      .populate('lectures')
-      .populate('courseAdmin')
-      .populate('students')
-      .then((courses) => courses.map((c) => c.toObject()));
+    .populate('lectures')
+    .populate('courseAdmin')
+    .populate('students')
+    .then((courses) => courses.map((c) => c.toObject()));
   }
 
   @Get('/:id')
   getCourse(@Param('id') id: string) {
     return Course.findById(id)
-      .populate({
-        path: 'lectures',
+    .populate({
+      path: 'lectures',
+      populate: {
+        path: 'units',
         populate: {
-          path: 'units'
+          path: 'tasks'
         }
-      })
-      .populate('courseAdmin')
-      .populate('students')
-      .then((course) => {
-        return course.toObject();
-      });
+      }
+    })
+    .populate('courseAdmin')
+    .populate('students')
+    .then((course) => {
+      return course.toObject();
+    });
   }
 
   @Post('/')
@@ -58,7 +61,7 @@ export class CourseController {
     course.courseAdmin = <IUserModel>(<any>request).user;
 
     return new Course(course).save()
-      .then((c) => c.toObject());
+    .then((c) => c.toObject());
   }
 
   @Post('/:id/enroll')
@@ -105,6 +108,6 @@ export class CourseController {
   @Put('/:id')
   updateCourse(@Param('id') id: string, @Body() course: ICourse) {
     return Course.findByIdAndUpdate(id, course, {'new': true})
-      .then((c) => c.toObject());
+    .then((c) => c.toObject());
   }
 }
