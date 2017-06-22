@@ -3,6 +3,8 @@ import {ITask} from '../../../../../shared/models/task/ITask';
 import {ICourse} from '../../../../../shared/models/ICourse';
 
 export class TaskUnit implements ITaskUnit {
+  name: string;
+  description: string;
   updatedAt: string;
   createdAt: string;
   _course: any;
