@@ -1,5 +1,6 @@
 import * as mongoose from 'mongoose';
 import {IUnit} from '../../../../shared/models/units/IUnit';
+import {NativeError} from 'mongoose';
 
 interface IUnitModel extends IUnit, mongoose.Document {
 }

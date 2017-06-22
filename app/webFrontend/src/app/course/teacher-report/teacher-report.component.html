@@ -1,6 +1,3 @@
-<pre>
-  {{report | json}}
-</pre>
 <md-card *ngFor="let student of report">
   <md-card-header>
     <img md-card-avatar src="/">
@@ -9,11 +6,12 @@
   </md-card-header>
   <md-card-content>
     <div class="progress" *ngFor="let unit of student.units">
-      {{unit.title}}
+      {{unit.name}}
       <span *ngIf="unit.done">Done</span>
     </div>
     <div>
-      <span></span>
+      <span>Finished: {{student.finishCount}}</span>
+      <md-progress-bar mode="determinate" [value]="student.finishCount" color="primary"></md-progress-bar>
     </div>
   </md-card-content>
   <md-card-actions align="start">

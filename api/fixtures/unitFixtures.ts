@@ -6,14 +6,14 @@ export const unitFixtures: IFixture = {
   Model: TaskUnit,
   data: [
     {
-      title: 'AWD - Unit 1',
+      name: 'AWD - Unit 1',
       progressable: true,
       weight: 0,
       type: 'task',
       tasks: []
     },
     {
-      title: 'AWD - Unit 2',
+      name: 'AWD - Unit 2',
       progressable: true,
       weight: 1,
       type: 'task',

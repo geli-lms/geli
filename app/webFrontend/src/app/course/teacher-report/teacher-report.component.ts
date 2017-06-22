@@ -62,11 +62,11 @@ export class TeacherReportComponent implements OnInit {
       .then((progress: any) => {
         this.progress = progress;
         this.students.map((student) => {
-          let studentWithUnits: any = student;
+          const studentWithUnits: any = student;
           studentWithUnits.units = [];
           studentWithUnits.finishCount = 0;
           this.progressableUnits.map((progressableUnit) => {
-            let unitWithProgress: any = progressableUnit;
+            const unitWithProgress: any = progressableUnit;
             unitWithProgress.done = false;
             console.log('unit');
             for (let i = 0; i < this.progress.length; i++) {
@@ -75,6 +75,7 @@ export class TeacherReportComponent implements OnInit {
               if (studentWithUnits._id === this.progress[i].user && unitWithProgress._id === this.progress[i].unit._id) {
                 unitWithProgress.done = true;
                 studentWithUnits.finishCount++;
+                break;
               }
               console.log(i);
             }
