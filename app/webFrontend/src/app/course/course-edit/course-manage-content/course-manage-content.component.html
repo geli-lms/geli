@@ -71,13 +71,13 @@
 
   <app-lecture-form *ngIf="lectureCreateMode" (onSubmit)="createLecture($event)" [onCancel]="closeAddLecture"
                     actionLabel="Add"></app-lecture-form>
-
 </div>
 
 <app-md-fab-menu class="fab" [open]="fabOpen" [onClick]="onFabClick"
                  [disabled]="unitCreateMode || unitEditMode || lectureCreateMode || lectureEditMode"
                  fabTooltip="Add content">
   <div *ngIf="openedLecture" (click)="onAddUnit('task')">Add tasks</div>
+  <div *ngIf="openedLecture" (click)="onAddUnit('code-kata')">Add Code-Kata</div>
   <div *ngIf="openedLecture" (click)="onAddUnit('video')">Upload videos</div>
   <div (click)="onAddLecture()">Add lecture</div>
 </app-md-fab-menu>

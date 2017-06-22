@@ -7,6 +7,8 @@ export class CodeKataUnit implements ICodeKataUnit {
   type: string;
   progressable: boolean;
   weight: number;
+  updatedAt: string;
+  createdAt: string;
 
   definition: string;
   code: string;

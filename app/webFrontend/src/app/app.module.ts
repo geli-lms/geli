@@ -58,6 +58,9 @@ import {LicensesComponent} from './about/licenses/licenses.component';
 import {GravatarDirective} from './course/course-edit/members/gravatar.directive';
 import { CourseManageContentComponent } from './course/course-edit/course-manage-content/course-manage-content.component';
 import { MdFabMenuComponent } from './shared/components/md-fab-menu/md-fab-menu.component';
+import {CodeKataComponent} from './course/course-edit/unit/code-kata-unit/code-kata-unit.component';
+import {CodeKataUnitFormComponent} from './course/course-edit/unit/unit-edit/code-kata-unit-form/code-kata-unit-form.component';
+import {AceEditorComponent} from 'ng2-ace-editor';
 
 @NgModule({
   declarations: [
@@ -95,6 +98,9 @@ import { MdFabMenuComponent } from './shared/components/md-fab-menu/md-fab-menu.
     GravatarDirective,
     CourseManageContentComponent,
     MdFabMenuComponent,
+    CodeKataComponent,
+    CodeKataUnitFormComponent,
+    AceEditorComponent
   ],
   imports: [
     DragulaModule,

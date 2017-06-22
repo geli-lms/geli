@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {BackendService} from './backend.service';
 import {Dependency} from '../../about/licenses/dependency.model';
 import {ITaskUnit} from '../../../../../../shared/models/units/ITaskUnit';
+import {ICodeKataUnit} from "../../../../../../shared/models/units/ICodeKataUnit";
 
 abstract class DataService {
 
@@ -164,6 +165,14 @@ export class UnitService extends DataService {
     const originalApiPath = this.apiPath;
     this.apiPath += 'tasks';
     const promise = this.createItem({model: taskUnit, lectureId: lectureId});
+    this.apiPath = originalApiPath;
+    return promise;
+  }
+
+  addCodeKataUnit(codeKataUnit: ICodeKataUnit, lectureId: string) {
+    const originalApiPath = this.apiPath;
+    this.apiPath += 'codekata';
+    const promise = this.createItem({model: codeKataUnit, lectureId: lectureId});
     this.apiPath = originalApiPath;
     return promise;
   }

@@ -11,7 +11,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --proxy-config local-proxy.conf.json",
-    "start-docker-dev": "ng serve --host 0.0.0.0 --proxy-config docker-proxy.conf.json",
+    "start-docker-dev": "ng serve --host 0.0.0.0 --proxy-config docker-proxy.conf.json --poll 3000",
     "start-vagrant-dev": "ng serve --host 0.0.0.0 --proxy-config local-proxy.conf.json --poll 3000",
     "build": "ng build --prod",
     "test": "ng test",
@@ -35,7 +35,7 @@
     "blueimp-md5": "^2.7.0",
     "core-js": "^2.4.1",
     "material-design-icons": "^3.0.1",
-    "ng2-ace-editor": "^0.2.3",
+    "ng2-ace-editor": "https://registry.npmjs.org/ng2-ace-editor/-/ng2-ace-editor-0.2.3.tgz",
     "ng2-dragula": "^1.5.0",
     "ng2-file-upload": "^1.2.1",
     "rxjs": "^5.1.0",

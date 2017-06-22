@@ -3311,7 +3311,7 @@
     },
     "ng2-ace-editor": {
       "version": "0.2.3",
-      "from": "ng2-ace-editor@latest",
+      "from": "https://registry.npmjs.org/ng2-ace-editor/-/ng2-ace-editor-0.2.3.tgz",
       "resolved": "https://registry.npmjs.org/ng2-ace-editor/-/ng2-ace-editor-0.2.3.tgz"
     },
     "ng2-dragula": {

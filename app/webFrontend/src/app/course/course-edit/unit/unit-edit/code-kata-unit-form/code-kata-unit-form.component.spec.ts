@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CodeKataUnitEditComponent } from './code-kata-unit-edit.component';
+import { CodeKataUnitFormComponent } from './code-kata-unit-form.component';
 
-describe('CodeKataUnitEditComponent', () => {
-  let component: CodeKataUnitEditComponent;
-  let fixture: ComponentFixture<CodeKataUnitEditComponent>;
+describe('CodeKataUnitFormComponent', () => {
+  let component: CodeKataUnitFormComponent;
+  let fixture: ComponentFixture<CodeKataUnitFormComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CodeKataUnitEditComponent ]
+      declarations: [ CodeKataUnitFormComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CodeKataUnitEditComponent);
+    fixture = TestBed.createComponent(CodeKataUnitFormComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
