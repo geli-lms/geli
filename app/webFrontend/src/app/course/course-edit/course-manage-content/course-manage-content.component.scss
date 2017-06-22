@@ -2,6 +2,7 @@
 
 .container {
   min-height: 500px;
+  padding-top: 10px;
 }
 
 .fab {
@@ -11,13 +12,28 @@
 }
 
 .lecture {
-  h2 {
-    font-size: 18px;
+  .lecture-header {
+    display: flex;
+    align-items: center;
 
-    color: rgba(0, 0, 0, 0.50);
+    h2, .lecture-menu-button {
+      font-size: 18px;
+      color: rgba(0, 0, 0, 0.50);
+    }
 
-    .lecture-menu-button {
-      float: right;
+    .flex-spacer {
+      flex-grow: 1;
+    }
+  }
+
+  .lecture-drag-handle, .unit-drag-handle {
+    cursor: move;
+    opacity: 0.2;
+    user-select: none;
+    margin-right: 0.5em;
+
+    &:hover {
+      opacity: 1;
     }
   }
 
@@ -36,31 +52,36 @@
 
     .units {
       margin-top: 24px;
+    }
+  }
+}
 
-      .unit {
-        border-bottom: 1px solid map-get($mat-grey, 300);
-        &, &:first-child {
-          border-top: 1px solid map-get($mat-grey, 300);
-        }
+// Needs to be unnested, otherwise style is lost while dragging
+.unit {
+  border-bottom: 1px solid map-get($mat-grey, 300);
+  &, &:first-child {
+    border-top: 1px solid map-get($mat-grey, 300);
+  }
 
-        .unit-content {
-          height: 64px;
-          display: flex;
-          align-items: center;
+  .unit-content {
+    height: 64px;
+    display: flex;
+    align-items: center;
 
-          .unit-type {
-            flex-grow: 1;
-          }
+    .unit-name {
+      flex-grow: 0.7;
+    }
 
-          .unit-date {
-            flex-grow: 0.1;
-          }
+    .unit-type {
+      flex-grow: 0.3;
+    }
 
-          .unit-date, .unit-actions .mat-icon {
-            color: map-get($mat-grey, 600);
-          }
-        }
-      }
+    .unit-date {
+      flex-grow: 0.1;
+    }
+
+    .unit-date, .unit-actions .mat-icon {
+      color: map-get($mat-grey, 600);
     }
   }
 }
