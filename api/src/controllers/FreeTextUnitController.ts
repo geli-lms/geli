@@ -30,6 +30,6 @@ export class FreeTextUnitController extends UnitController {
   @Put('/:id')
   updateUnit(@Param('id') id: string, @Body() unit: IFreeTextUnit) {
     return FreeTextUnit.findByIdAndUpdate(id, unit)
-      .then(u => u.toObject());
+      .then((u) => u.toObject());
   }
 }
