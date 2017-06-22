@@ -1,9 +1,10 @@
-import {Component, Input, NgModule, OnInit} from '@angular/core';
+import {Component, Input, NgModule, OnInit, ViewChild, ViewChild} from '@angular/core';
 import {UnitService} from '../../../../../shared/services/data.service';
 import {MdSnackBar} from '@angular/material';
 import {ICodeKataUnit} from '../../../../../../../../../shared/models/units/ICodeKataUnit';
 import {ICourse} from '../../../../../../../../../shared/models/ICourse';
 import {CodeKataUnit} from '../../../../../models/CodeKataUnit';
+import {UnitGeneralInfoFormComponent} from "../unit-general-info-form/unit-general-info-form.component";
 
 @Component({
   selector: 'app-code-kata-unit-form',
@@ -16,6 +17,9 @@ export class CodeKataUnitFormComponent implements OnInit {
   @Input() model: ICodeKataUnit;
   @Input() onDone: () => void;
   @Input() onCancel: () => void;
+
+  @ViewChild(UnitGeneralInfoFormComponent)
+  private generalInfo: UnitGeneralInfoFormComponent;
 
   logs: string;
 
