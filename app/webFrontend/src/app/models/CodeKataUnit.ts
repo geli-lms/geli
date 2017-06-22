@@ -2,6 +2,8 @@ import {ICodeKataUnit} from '../../../../../shared/models/units/ICodeKataUnit';
 import {ICourse} from '../../../../../shared/models/ICourse';
 
 export class CodeKataUnit implements ICodeKataUnit {
+  name: string;
+  description: string;
   _course: any;
   _id: any;
   type: string;
