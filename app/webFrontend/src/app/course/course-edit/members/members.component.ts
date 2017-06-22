@@ -1,5 +1,4 @@
-/** Created by Oliver Neff on 14.04.2017. */
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, OnDestroy} from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {CourseService, UserDataService} from '../../../shared/services/data.service';
 import {ShowProgressService} from '../../../shared/services/show-progress.service';
@@ -12,7 +11,7 @@ import {ICourse} from '../../../../../../../shared/models/ICourse';
   templateUrl: './members.component.html',
   styleUrls: ['./members.component.scss']
 })
-export class MembersComponent implements OnInit {
+export class MembersComponent implements OnInit, OnDestroy {
   @Input() courseId;
   course: ICourse;
   members: IUser[] = [];
@@ -34,8 +33,12 @@ export class MembersComponent implements OnInit {
     dragula.setOptions('bag-one', {
       revertOnSpill: true
     });
-    dragula.dragend.subscribe(value => {
-      this.updateMembersInCourse();
+    dragula.dropModel.subscribe((value) => {
+      const bagName = value[0];
+
+      if(bagName === 'bag-one') {
+        this.updateMembersInCourse();
+      }
     });
     this.getStudents();
 
