@@ -78,7 +78,13 @@ export class CodeKataUnitFormComponent implements OnInit {
     window.console.log = origLogger;
     window.console.error = origErrorLogger;
 
-    return result === undefined;
+    if (result === true || result === undefined) {
+      return true;
+    }
+    else {
+      console.log(result);
+      return false;
+    }
   }
 
 }
