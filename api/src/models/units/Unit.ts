@@ -1,5 +1,7 @@
 import * as mongoose from 'mongoose';
 import {IUnit} from '../../../../shared/models/units/IUnit';
+import {NativeError} from 'mongoose';
+import {BadRequestError} from 'routing-controllers';
 
 interface IUnitModel extends IUnit, mongoose.Document {
 }
@@ -9,11 +11,7 @@ const unitSchema = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Course'
     },
-    name: {
-      type: String,
-      required: true
-    },
-    description: {
+    title: {
       type: String
     },
     progressable: {
@@ -24,6 +22,7 @@ const unitSchema = new mongoose.Schema({
     }
   },
   {
+    collection: 'units',
     discriminatorKey: 'type',
     timestamps: true,
     toObject: {
@@ -33,6 +32,18 @@ const unitSchema = new mongoose.Schema({
     },
   }
 );
+
+unitSchema.virtual('progress', [{
+  ref: 'Progress',
+  localField: '_id',
+  foreignField: 'unit'
+}]);
+
+function populateUnit(next: (err?: NativeError) => void) {
+  next();
+}
+
+unitSchema.pre('find', populateUnit);
 
 const Unit = mongoose.model<IUnitModel>('Unit', unitSchema);
 
