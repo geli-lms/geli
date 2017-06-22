@@ -14,12 +14,15 @@ export class CodeKataUnitController extends UnitController {
       return new BadRequestError('No lecture ID was submitted.');
     }
 
-    if (!data.codeKataUnit) {
+    if (!data.model) {
       return new BadRequestError('No codekata unit was submitted.');
     }
 
-    return new CodeKataUnit(data.codeKataUnit).save().then((savedCodeKataUnit) => {
-      this.pushToLecture(data.lectureId, savedCodeKataUnit);
-    });
+    return new Promise((resolve) => {
+      resolve(new CodeKataUnit(data.model).save());
+    })
+      .then((savedCodeKataUnit) => {
+        return this.pushToLecture(data.lectureId, savedCodeKataUnit);
+      });
   }
 }

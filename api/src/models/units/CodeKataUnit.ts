@@ -17,6 +17,6 @@ const codeKataSchema = new mongoose.Schema({
   }
 });
 
-const CodeKataUnit = Unit.discriminator('codeKata', codeKataSchema);
+const CodeKataUnit = Unit.discriminator('code-kata', codeKataSchema);
 
 export {CodeKataUnit, ICodeKataModel}
