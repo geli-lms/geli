@@ -2,6 +2,8 @@ import {ICourse} from '../../../../../shared/models/ICourse';
 import {IFreeTextUnit} from '../../../../../shared/models/units/IFreeTextUnit';
 
 export class FreeTextUnit implements IFreeTextUnit {
+  name: string;
+  description: string;
   updatedAt: string;
   createdAt: string;
   _course: any;

@@ -1,4 +1,4 @@
-import {Body, Post, JsonController, UseBefore, BadRequestError, Get, Param, Put} from 'routing-controllers';
+import {Body, Post, JsonController, UseBefore, BadRequestError, Param, Put} from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import {UnitController} from './UnitController';
 import {FreeTextUnit} from '../models/units/FreeTextUnit';
@@ -9,7 +9,7 @@ import {IFreeTextUnit} from '../../../shared/models/units/IFreeTextUnit';
 export class FreeTextUnitController extends UnitController {
 
   @Post('/')
-  addFreeTextUnit(@Body() data: any) {
+  addUnit(@Body() data: any) {
     // discard invalid requests
     if (!data.lectureId) {
       return new BadRequestError('No lecture ID was submitted.');
@@ -30,6 +30,6 @@ export class FreeTextUnitController extends UnitController {
   @Put('/:id')
   updateUnit(@Param('id') id: string, @Body() unit: IFreeTextUnit) {
     return FreeTextUnit.findByIdAndUpdate(id, unit)
-      .then((u) => u.toObject());
+      .then(u => u.toObject());
   }
 }

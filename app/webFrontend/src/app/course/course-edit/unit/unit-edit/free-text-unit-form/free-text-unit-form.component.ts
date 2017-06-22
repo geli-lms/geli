@@ -1,9 +1,10 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {IFreeTextUnit} from '../../../../../../../../../shared/models/units/IFreeTextUnit';
 import {MdSnackBar} from '@angular/material';
 import {FreeTextUnitService} from '../../../../../shared/services/data.service';
 import {FreeTextUnit} from '../../../../../models/FreeTextUnit';
 import {ICourse} from '../../../../../../../../../shared/models/ICourse';
+import {UnitGeneralInfoFormComponent} from '../unit-general-info-form/unit-general-info-form.component';
 
 @Component({
   selector: 'app-free-text-unit-form',
@@ -16,6 +17,9 @@ export class FreeTextUnitFormComponent implements OnInit {
   @Input() model: IFreeTextUnit;
   @Input() onDone: () => void;
   @Input() onCancel: () => void;
+
+  @ViewChild(UnitGeneralInfoFormComponent)
+  private generalInfo: UnitGeneralInfoFormComponent;
 
   constructor(private freeTextUnitService: FreeTextUnitService,
               private snackBar: MdSnackBar) {
@@ -32,6 +36,12 @@ export class FreeTextUnitFormComponent implements OnInit {
     if (typeof this.model.markdown === 'undefined') {
       this.model.markdown = '';
     }
+
+    this.model = {
+      ...this.model,
+      name: this.generalInfo.form.value.name,
+      description: this.generalInfo.form.value.description,
+    };
 
     // Checks if we have to create a new unit or update an existing
     if (this.isModelNewObj()) {
