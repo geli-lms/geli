@@ -1,23 +1,26 @@
-<ace-editor
-  #definitionEditor
-  [(text)]="definition"
-  [mode]="'Javascript'"
-  [readOnly]="true">
-</ace-editor>
-<div>Your code goes here:</div>
-<ace-editor class="user-code-editor"
-  #codeEditor
-  [(text)]="code"
-  [mode]="'Javascript'"
-  [readOnly]="false">
-</ace-editor>
-<div>These tests need to success:</div>
-<ace-editor
-  #testEditor
-  [(text)]="test"
-  [mode]="'Javascript'"
-  [readOnly]="true">
-</ace-editor>
+<div class="code-kata-unit-form">
+  <strong>Code-Kata</strong>
+  <ace-editor
+    #definitionEditor
+    [(text)]="codeKata.definition"
+    [mode]="'Javascript'"
+    [readOnly]="true">
+  </ace-editor>
+  <div>Your code goes here:</div>
+  <ace-editor class="user-code-editor"
+              #codeEditor
+              [(text)]="codeKata.code"
+              [mode]="'Javascript'"
+              [readOnly]="false">
+  </ace-editor>
+  <div>These tests need to success:</div>
+  <ace-editor
+    #testEditor
+    [(text)]="codeKata.test"
+    [mode]="'Javascript'"
+    [readOnly]="true">
+  </ace-editor>
 
-<button md-button (click)="validate()">VALIDATE</button>
-<div>{{logs}}</div>
+  <button md-button (click)="validate()">Validate</button>
+  <div>{{logs}}</div>
+</div>
