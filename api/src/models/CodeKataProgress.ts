@@ -1,5 +1,5 @@
 import * as mongoose from 'mongoose';
-import {ICodeKataProgress} from '../../../../shared/models/progress/ICodeKataProgress';
+import {ICodeKataProgress} from '../../../shared/models/ICodeKataProgress';
 import {Progress} from './Progress';
 
 interface ICodeKataProgressModel extends ICodeKataProgress, mongoose.Document {

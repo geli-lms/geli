@@ -1,5 +1,5 @@
 import * as mongoose from 'mongoose';
-import {IProgress} from '../../../../shared/models/progress/IProgress';
+import {IProgress} from '../../../shared/models/IProgress';
 
 interface IProgressModel extends IProgress, mongoose.Document {
 }

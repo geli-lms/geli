@@ -1,5 +1,6 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
-import {CodeKataUnit} from "../../../../models/CodeKataUnit";
+import {CodeKataUnit} from '../../../../models/CodeKataUnit';
+import {MdSnackBar} from '@angular/material';
 
 @Component({
   selector: 'app-code-kata',
@@ -15,7 +16,8 @@ export class CodeKataComponent implements OnInit {
 
   logs: string;
 
-  constructor() {
+
+  constructor(private snackBar: MdSnackBar) {
     this.logs = null;
   }
 
@@ -34,9 +36,16 @@ export class CodeKataComponent implements OnInit {
     });
   }
 
+  private submitProgress() {
+    if (!this.validate()) {
+      this.snackBar.open('Your code does not validate. Check logs for information', '', {duration: 3000});
+    }
+
+  }
+
   // refactor this to use the same as in code-kata-unit-form
   private validate() {
-    const codeToTest: string = this.codeKata.definition + "\n" + this.codeKata.code + "\n" + this.codeKata.test;
+    const codeToTest: string = this.codeKata.definition + '\n' + this.codeKata.code + '\n' + this.codeKata.test;
 
     this.logs = '';
     (<any>window).geli = {logs: ''};
