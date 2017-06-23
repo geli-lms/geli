@@ -1,5 +1,6 @@
 import * as mongoose from 'mongoose';
 import {IUnit} from '../../../../shared/models/units/IUnit';
+import {NativeError} from 'mongoose';
 
 interface IUnitModel extends IUnit, mongoose.Document {
 }
@@ -24,6 +25,7 @@ const unitSchema = new mongoose.Schema({
     }
   },
   {
+    collection: 'units',
     discriminatorKey: 'type',
     timestamps: true,
     toObject: {
@@ -33,6 +35,18 @@ const unitSchema = new mongoose.Schema({
     },
   }
 );
+
+unitSchema.virtual('progress', [{
+  ref: 'Progress',
+  localField: '_id',
+  foreignField: 'unit'
+}]);
+
+function populateUnit(next: (err?: NativeError) => void) {
+  next();
+}
+
+unitSchema.pre('find', populateUnit);
 
 const Unit = mongoose.model<IUnitModel>('Unit', unitSchema);
 

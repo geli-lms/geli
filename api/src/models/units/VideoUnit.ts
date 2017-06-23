@@ -1,6 +1,7 @@
 import * as mongoose from 'mongoose';
-import {IUnitModel, Unit} from './Unit';
+import {Unit} from './Unit';
 import {IVideoUnit} from '../../../../shared/models/units/IVideoUnit';
+import {NativeError} from 'mongoose';
 
 interface IVideoUnitModel extends IVideoUnit, mongoose.Document {
 }

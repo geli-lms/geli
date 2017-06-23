@@ -47,11 +47,18 @@ const userSchema = new mongoose.Schema({
   {
     timestamps: true,
     toObject: {
+      virtuals: true,
       transform: function (doc: any, ret: any) {
         ret._id = ret._id.toString();
       }
     }
   });
+
+userSchema.virtual('progress', [{
+  ref: 'Progress',
+  localField: '_id',
+  foreignField: 'user'
+}]);
 
 function hashPassword(next: (err?: NativeError) => void) {
   const user = this, SALT_FACTOR = 5;

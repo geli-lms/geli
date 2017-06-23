@@ -55,7 +55,8 @@ import {LectureFormComponent} from './lecture/lecture-form/lecture-form.componen
 import {AboutComponent} from './about/about.component';
 import {GeneralInfoComponent} from './about/general-info/general-info.component';
 import {LicensesComponent} from './about/licenses/licenses.component';
-import {GravatarDirective} from './course/course-edit/members/gravatar.directive';
+import {GravatarDirective} from './shared/directives/gravatar.directive';
+import {ProgressService} from './shared/services/data/progress.service';
 import { CourseManageContentComponent } from './course/course-edit/course-manage-content/course-manage-content.component';
 import { MdFabMenuComponent } from './shared/components/md-fab-menu/md-fab-menu.component';
 import {CodeKataComponent} from './course/course-edit/unit/code-kata-unit/code-kata-unit.component';
@@ -128,6 +129,7 @@ import { UnitGeneralInfoFormComponent } from './course/course-edit/unit/unit-edi
     LectureService,
     BackendService,
     UserDataService,
+    ProgressService,
     ShowProgressService,
     JwtHelper,
     CodeKataUnitService

@@ -4,7 +4,7 @@ import {Dependency} from '../../about/licenses/dependency.model';
 import {ITaskUnit} from '../../../../../../shared/models/units/ITaskUnit';
 import {ICodeKataUnit} from "../../../../../../shared/models/units/ICodeKataUnit";
 
-abstract class DataService {
+export abstract class DataService {
 
   static changeStringProp2DateProp(item: any, prop: string) {
     if (item[prop] !== null) {
@@ -165,6 +165,22 @@ export class UnitService extends DataService {
     const originalApiPath = this.apiPath;
     this.apiPath += 'tasks';
     const promise = this.createItem({model: taskUnit, lectureId: lectureId});
+    this.apiPath = originalApiPath;
+    return promise;
+  }
+
+  getUnitForCourse(courseId: string) {
+    const originalApiPath = this.apiPath;
+    this.apiPath += 'progressable/course/';
+    const promise = this.readSingleItem(courseId);
+    this.apiPath = originalApiPath;
+    return promise;
+  }
+
+  getProgressableUnits(courseId: string) {
+    const originalApiPath = this.apiPath;
+    this.apiPath += 'course/progressable/';
+    const promise = this.readSingleItem(courseId);
     this.apiPath = originalApiPath;
     return promise;
   }
