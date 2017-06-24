@@ -1,4 +1,4 @@
-import {Body, JsonController, HttpError, UseBefore, Get, Param, Put, Delete} from 'routing-controllers';
+import {Body, JsonController, HttpError, UseBefore, Get, Param, Put, Delete, Authorized} from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 
 import {IUser} from '../../../shared/models/IUser';
@@ -14,6 +14,7 @@ export class UserController {
       .then((users) => users.map((user) => user.toObject({ virtuals: true})));
   }
 
+  @Authorized(['admin'])
   @Get('/roles')
   getRoles() {
     // TODO: Fix any cast
@@ -27,6 +28,7 @@ export class UserController {
       .then((user) => user.toObject());
   }
 
+  @Authorized()
   @Put('/:id')
   updateUser(@Param('id') id: string, @Body() user: IUser) {
     return User.find({'role': 'admin'})
