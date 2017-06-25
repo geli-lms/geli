@@ -2,7 +2,6 @@ import {Injectable} from '@angular/core';
 import {BackendService} from './backend.service';
 import {Dependency} from '../../about/licenses/dependency.model';
 import {ITaskUnit} from '../../../../../../shared/models/units/ITaskUnit';
-import {ICodeKataUnit} from "../../../../../../shared/models/units/ICodeKataUnit";
 
 export abstract class DataService {
 

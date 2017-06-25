@@ -115,8 +115,7 @@ export class CodeKataUnitFormComponent implements OnInit {
 
     if (result === true || result === undefined) {
       return true;
-    }
-    else {
+    } else {
       console.log(result);
       return false;
     }
