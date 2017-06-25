@@ -4,7 +4,7 @@ import {MdSnackBar} from '@angular/material';
 import {ICodeKataUnit} from '../../../../../../../../../shared/models/units/ICodeKataUnit';
 import {ICourse} from '../../../../../../../../../shared/models/ICourse';
 import {CodeKataUnit} from '../../../../../models/CodeKataUnit';
-import {UnitGeneralInfoFormComponent} from "../unit-general-info-form/unit-general-info-form.component";
+import {UnitGeneralInfoFormComponent} from '../unit-general-info-form/unit-general-info-form.component';
 
 @Component({
   selector: 'app-code-kata-unit-form',
@@ -21,7 +21,7 @@ export class CodeKataUnitFormComponent implements OnInit {
   @ViewChild(UnitGeneralInfoFormComponent)
   private generalInfo: UnitGeneralInfoFormComponent;
 
-  areaSeperator: string = '//####################';
+  areaSeperator = '//####################';
 
   logs: string;
 
@@ -32,13 +32,12 @@ export class CodeKataUnitFormComponent implements OnInit {
   ngOnInit() {
     if (!this.model) {
       this.model = new CodeKataUnit(this.course._id);
-    }
-    else {
+    } else {
       this.model.code =
         this.model.definition
-        + "\n\n" + this.areaSeperator + "\n\n"
+        + '\n\n' + this.areaSeperator + '\n\n'
         + this.model.code
-        + "\n\n" + this.areaSeperator + "\n\n"
+        + '\n\n' + this.areaSeperator + '\n\n'
         + this.model.test;
 
       this.model.definition = undefined;
