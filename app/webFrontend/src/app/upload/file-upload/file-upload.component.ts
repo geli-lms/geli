@@ -21,7 +21,7 @@ export class FileUploadComponent implements OnInit {
   @Input() onCancel: () => void;
 
   @ViewChild(UnitGeneralInfoFormComponent)
-  private generalInfo: UnitGeneralInfoFormComponent;
+  public generalInfo: UnitGeneralInfoFormComponent;
 
   uploader: FileUploader = new FileUploader({
     url: '/api/units/upload/file',

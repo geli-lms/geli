@@ -21,7 +21,7 @@ export class VideoUploadComponent implements OnInit {
   @Input() onCancel: () => void;
 
   @ViewChild(UnitGeneralInfoFormComponent)
-  private generalInfo: UnitGeneralInfoFormComponent;
+  public generalInfo: UnitGeneralInfoFormComponent;
 
   allowedMimeType: string[] = ['video/mp4', 'video/webm', 'video/ogg'];
   uploader: FileUploader = new FileUploader({
