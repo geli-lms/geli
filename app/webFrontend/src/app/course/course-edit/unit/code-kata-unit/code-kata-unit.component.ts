@@ -69,7 +69,7 @@ export class CodeKataComponent implements OnInit {
     }
   }
 
-  private loadProgress() {
+  loadProgress() {
     this.progressService.getUserProgress(this.userService.user._id)
       .then((progress: any) => {
         for (const prop in progress) {
@@ -82,7 +82,7 @@ export class CodeKataComponent implements OnInit {
   }
 
   // refactor this to use the same as in code-kata-unit-form
-  private validate() {
+  validate() {
     const codeToTest: string = this.codeKata.definition + '\n' + this.progress.code + '\n' + this.codeKata.test;
 
     this.logs = '';

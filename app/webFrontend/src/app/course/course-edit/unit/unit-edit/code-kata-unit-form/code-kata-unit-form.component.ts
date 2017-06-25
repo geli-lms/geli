@@ -45,7 +45,7 @@ export class CodeKataUnitFormComponent implements OnInit {
     }
   }
 
-  private addUnit() {
+  addUnit() {
     if (!this.validate()) {
       this.snackBar.open('Your code does not validate. Check logs for information', '', {duration: 3000});
     }
@@ -84,7 +84,7 @@ export class CodeKataUnitFormComponent implements OnInit {
   }
 
 // refactor this to use the same as in code-kata-unit
-  private validate() {
+  validate() {
     const codeToTest: string = this.model.code;
 
     this.logs = '';
