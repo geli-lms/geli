@@ -1,16 +1,9 @@
-import * as mongoose from 'mongoose';
-import {Get, JsonController, Param} from 'routing-controllers';
-import {IProgressModel, Progress} from '../models/Progress';
-import {Unit} from '../models/units/Unit';
-import {IUserModel, User} from '../models/User';
-import {IProgress} from '../../../shared/models/IProgress';
-import {CourseController} from './CourseController';
-import {Course} from '../models/Course';
-import {ICourse} from '../../../shared/models/ICourse';
-import {IUnit} from '../../../shared/models/units/IUnit';
-import {IUser} from '../../../shared/models/IUser';
+import {Get, JsonController, Param, UseBefore} from 'routing-controllers';
+import {Progress} from '../models/Progress';
+import passportJwtMiddleware from '../security/passportJwtMiddleware';
 
 @JsonController('/progress')
+@UseBefore(passportJwtMiddleware)
 export class ProgressController {
 
   @Get('/courses/:id')
