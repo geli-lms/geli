@@ -1,5 +1,6 @@
-import {BadRequestError, Body, Get, JsonController, Param, Post, UseBefore} from 'routing-controllers';
+import {BadRequestError, Body, Get, JsonController, Param, Post, Put, UseBefore} from 'routing-controllers';
 import {Progress} from '../models/Progress';
+import {IProgress} from "../../../shared/models/IProgress";
 
 @JsonController('/progress')
 // @UseBefore(this.passportJwtMiddleware)
@@ -28,5 +29,11 @@ export class ProgressController {
     return new Promise((resolve) => {
       resolve(new Progress(data).save());
     });
+  }
+
+  @Put('/:id')
+  updateCodeKataUnit(@Param('id') id: string, @Body() unit: IProgress) {
+    return Progress.findByIdAndUpdate(id, unit)
+      .then(u => u.toObject());
   }
 }
