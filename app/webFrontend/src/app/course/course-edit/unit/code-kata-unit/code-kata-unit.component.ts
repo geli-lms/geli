@@ -50,7 +50,7 @@ export class CodeKataComponent implements OnInit {
     });
   }
 
-  private submitProgress() {
+  submitProgress() {
     this.progress.done = this.validate();
     if (!this.progress.done) {
       this.snackBar.open('Your code does not validate.', '', {duration: 3000});
@@ -69,7 +69,7 @@ export class CodeKataComponent implements OnInit {
     }
   }
 
-  loadProgress() {
+  private loadProgress() {
     this.progressService.getUserProgress(this.userService.user._id)
       .then((progress: any) => {
         for (const prop in progress) {
