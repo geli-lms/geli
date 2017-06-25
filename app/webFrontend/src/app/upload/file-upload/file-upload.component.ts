@@ -4,6 +4,7 @@ import {FileUploader, FileItem} from 'ng2-file-upload';
 import {ICourse} from '../../../../../../shared/models/ICourse';
 import {ILecture} from '../../../../../../shared/models/ILecture';
 import {IFileUnit} from '../../../../../../shared/models/units/IFileUnit';
+/* tslint:disable-next-line:max-line-length */
 import {UnitGeneralInfoFormComponent} from '../../course/course-edit/unit/unit-edit/unit-general-info-form/unit-general-info-form.component';
 import {UnitService} from '../../shared/services/data.service';
 
