@@ -61,7 +61,7 @@ import { CourseManageContentComponent } from './course/course-edit/course-manage
 import { MdFabMenuComponent } from './shared/components/md-fab-menu/md-fab-menu.component';
 import {CodeKataComponent} from './course/course-edit/unit/code-kata-unit/code-kata-unit.component';
 import {CodeKataUnitFormComponent} from './course/course-edit/unit/unit-edit/code-kata-unit-form/code-kata-unit-form.component';
-import {AceEditorComponent} from 'ng2-ace-editor';
+import {AceEditorModule} from 'ng2-ace-editor';
 import { UnitGeneralInfoFormComponent } from './course/course-edit/unit/unit-edit/unit-general-info-form/unit-general-info-form.component';
 
 @NgModule({
@@ -102,7 +102,6 @@ import { UnitGeneralInfoFormComponent } from './course/course-edit/unit/unit-edi
     MdFabMenuComponent,
     CodeKataComponent,
     CodeKataUnitFormComponent,
-    AceEditorComponent,
     UnitGeneralInfoFormComponent,
   ],
   imports: [
@@ -115,7 +114,8 @@ import { UnitGeneralInfoFormComponent } from './course/course-edit/unit/unit-edi
     MaterialModule,
     ReactiveFormsModule,
     FileUploadModule,
-    DialogModule
+    DialogModule,
+    AceEditorModule,
   ],
   providers: [
     UserService,
