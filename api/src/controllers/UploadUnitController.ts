@@ -1,11 +1,26 @@
 import {Body, Post, JsonController, UseBefore, UploadedFile, BadRequestError} from 'routing-controllers';
 import fs = require('fs');
+import crypto = require('crypto');
+const multer = require('multer');
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 
 import {VideoUnit} from '../models/units/VideoUnit';
 import {UnitController} from './UnitController';
 
-const uploadOptions = {dest: 'uploads/'};
+const uploadOptions = {
+  storage: multer.diskStorage({
+    destination: (req: any, file: any, cb: any) => {
+      cb(null, 'uploads/');
+    },
+    filename: (req: any, file: any, cb: any) => {
+      const extPos = file.originalname.lastIndexOf('.');
+      const ext = (extPos !== -1) ? `.${file.originalname.substr(extPos + 1).toLowerCase()}` : '';
+      crypto.pseudoRandomBytes(16, (err, raw) => {
+        cb(err, err ? undefined : `${raw.toString('hex')}${ext}`);
+      });
+    }
+  }),
+};
 
 @JsonController('/units/upload')
 @UseBefore(passportJwtMiddleware)
