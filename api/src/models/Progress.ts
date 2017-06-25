@@ -28,6 +28,7 @@ const progressSchema = new mongoose.Schema({
       transform: function (doc: any, ret: any) {
         ret._id = ret._id.toString();
         ret.course = ret.course.toString();
+        ret.unit = ret.unit.toString();
         ret.user = ret.user.toString();
       }
     }
