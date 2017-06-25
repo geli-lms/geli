@@ -9,6 +9,8 @@ import {Express} from 'express';
 import config from './config/main';
 import passportLoginStrategy from './security/passportLoginStrategy';
 import passportJwtStrategy from './security/passportJwtStrategy';
+import {RoleAuthorization} from './security/RoleAuthorization';
+import {CurrentUserDecorator} from './security/CurrentUserDecorator';
 
 /**
  * Root class of your node server.
@@ -29,7 +31,9 @@ export class Server {
 
     this.app = createExpressServer({
       routePrefix: '/api',
-      controllers: [__dirname + '/controllers/*.js'] // register all controller's routes
+      controllers: [__dirname + '/controllers/*.js'], // register all controller's routes
+      authorizationChecker: RoleAuthorization.checkAuthorization,
+      currentUserChecker: CurrentUserDecorator.checkCurrentUser
     });
 
     // TODO: Needs authentication in the future

@@ -3,7 +3,7 @@ import {Progress} from '../models/Progress';
 import {IProgress} from "../../../shared/models/IProgress";
 
 @JsonController('/progress')
-// @UseBefore(this.passportJwtMiddleware)
+@UseBefore(passportJwtMiddleware)
 export class ProgressController {
 
   @Get('/courses/:id')

@@ -1,4 +1,4 @@
-import {Body, JsonController, HttpError, UseBefore, Get, Param, Put, Delete} from 'routing-controllers';
+import {Body, JsonController, HttpError, UseBefore, Get, Param, Put, Delete, Authorized, CurrentUser} from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 
 import {IUser} from '../../../shared/models/IUser';
@@ -14,6 +14,7 @@ export class UserController {
       .then((users) => users.map((user) => user.toObject({ virtuals: true})));
   }
 
+  @Authorized(['admin'])
   @Get('/roles')
   getRoles() {
     // TODO: Fix any cast
@@ -21,12 +22,19 @@ export class UserController {
   }
 
   @Get('/:id')
-  getUser(@Param('id') id: string) {
+  getUser(@Param('id') id: string, @CurrentUser() currentUser?: IUser) {
     return User.findById(id)
       .populate('progress')
-      .then((user) => user.toObject());
+      .then((user) => {
+        user.password = null;
+        if (currentUser._id !== id && currentUser.role !== 'teacher') {
+          user.uid = null;
+        }
+        return user.toObject();
+      });
   }
 
+  @Authorized()
   @Put('/:id')
   updateUser(@Param('id') id: string, @Body() user: IUser) {
     return User.find({'role': 'admin'})
