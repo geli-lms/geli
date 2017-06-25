@@ -1,6 +1,7 @@
 import {BadRequestError, Body, Get, JsonController, Param, Post, Put, UseBefore} from 'routing-controllers';
+import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import {Progress} from '../models/Progress';
-import {IProgress} from "../../../shared/models/IProgress";
+import {IProgress} from '../../../shared/models/IProgress';
 
 @JsonController('/progress')
 @UseBefore(passportJwtMiddleware)
