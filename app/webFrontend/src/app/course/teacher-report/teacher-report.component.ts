@@ -77,7 +77,7 @@ export class TeacherReportComponent implements OnInit {
                 unitWithProgress.done = true;
                 unitWithProgress.progress = this.progress[i];
                 studentWithUnits.finishCount++;
-                this.progress.splice(i, 1)
+                this.progress.splice(i, 1);
                 break;
               }
             }
