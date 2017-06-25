@@ -1,57 +1,68 @@
 import {Component, Input, OnInit} from '@angular/core';
-// <<<<<<< HEAD:app/webFrontend/src/app/course/course-edit/tasks/task-list.component.ts
 import {TaskAttestationService, TaskService, UnitService} from '../../../../../shared/services/data.service';
 import {Task} from '../../../../../models/Task';
-// =======
-// import {TaskService, UnitService} from '../../../../../shared/services/data.service';
-// import {Task} from '../../../../../models/Task';
-// >>>>>>> develop:app/webFrontend/src/app/course/course-edit/unit/unit-edit/task-unit-edit/task-unit-edit.component.ts
 import {MdSnackBar} from '@angular/material';
 import {ITaskUnit} from '../../../../../../../../../shared/models/units/ITaskUnit';
 import {TaskUnit} from '../../../../../models/TaskUnit';
 import {ITask} from '../../../../../../../../../shared/models/task/ITask';
-import {Answer} from '../../../../../models/Answer';
+import {ICourse} from '../../../../../../../../../shared/models/ICourse';
 
 @Component({
   selector: 'app-task-unit-edit',
   templateUrl: './task-unit-edit.component.html',
   styleUrls: ['./task-unit-edit.component.scss']
 })
+
 export class TaskUnitEditComponent implements OnInit {
-  @Input() courseId: any;
+  @Input() course: ICourse;
   @Input() lectureId: string;
-  taskUnit: ITaskUnit;
+  @Input() model: ITaskUnit;
+  @Input() onDone: () => void;
+  @Input() onCancel: () => void;
   tasks: any[];
 
   constructor(private taskService: TaskService,
-// <<<<<<< HEAD:app/webFrontend/src/app/course/course-edit/tasks/task-list.component.ts
               private taskAttestationService: TaskAttestationService,
-// =======
               private unitService: UnitService,
-              private snackBar: MdSnackBar) {}
-// >>>>>>> develop:app/webFrontend/src/app/course/course-edit/unit/unit-edit/task-unit-edit/task-unit-edit.component.ts
+              private snackBar: MdSnackBar) {
+  }
 
   ngOnInit() {
-    this.taskUnit = new TaskUnit(this.courseId);
-    this.loadTasksFromServer();
-    // console.log('courseid:' + this.courseId);
+    if (!this.model) {
+      this.model = new TaskUnit(this.course._id);
+    }
+    for (const task of this.model.tasks) {
+      this.answerPreparationAfterLoadingFromServer(task); // TODO WORKAROUND get rid of the _id for the answers
+    }
+    this.model = this.model;
   }
 
-  loadTasksFromServer() {
-    this.taskService.getTasksForCourse(this.courseId).then(tasks => {
-      this.tasks = tasks;
+  onSave() {
+    if (this.model._id !== undefined) {
+      this.updateTaskUnit();
+    } else {
+      this.addTaskUnit();
+    }
+  };
 
-      for (const task of this.tasks) {
-        this.answerPreparationAfterLoadingFromServer(task); // TODO WORKAROUND get rid of the _id for the answers
-      }
-    });
-  }
-
-  addUnit() {
-    this.unitService.addTaskUnit(this.taskUnit, this.lectureId)
+  addTaskUnit() {
+    this.unitService.addTaskUnit(this.model, this.lectureId)
       .then(
         (task) => {
-          this.snackBar.open('Task created', '', { duration: 3000});
+          this.snackBar.open('Task(s) saved', '', {duration: 3000});
+          this.onDone();
+        },
+        (error) => {
+          console.log(error);
+        });
+  };
+
+  updateTaskUnit() {
+    this.unitService.updateTaskUnit(this.model)
+      .then(
+        (task) => {
+          this.snackBar.open('Task(s) saved', '', {duration: 3000});
+          this.onDone();
         },
         (error) => {
           console.log(error);
@@ -59,12 +70,12 @@ export class TaskUnitEditComponent implements OnInit {
   };
 
   addTask() {
-    this.taskUnit.tasks.push(new Task());
+    this.model.tasks.push(new Task());
     // this.createTask(newTask);
   }
 
   //  log(val) { console.log(JSON.stringify(val)); }
-
+/*
   createTask(task: any) {
     // this.log(this.task);
     this.taskService.createItem(task).then(
@@ -72,12 +83,12 @@ export class TaskUnitEditComponent implements OnInit {
         task = val; // get _id
         this.tasks.splice(0, 0, task); // add item to start
 
-   //     this.log(val);
+        //     this.log(val);
       }, (error) => {
         console.log(error);
       });
   }
-
+*/
   answerPreparationAfterLoadingFromServer(task: any) {
     for (const answer of task.answers) {
       delete answer._id;
@@ -85,13 +96,21 @@ export class TaskUnitEditComponent implements OnInit {
   }
 
   addAnswerAtEnd(task: ITask) {
-    task.answers.push(new Answer()); // add item to end
+    if (task.answers === undefined) {
+      task.answers = [{_id: undefined, value: false, text: ''}];
+    } else {
+      task.answers.push({
+        _id: undefined,
+        value: false,
+        text: ''
+      }); // add item to end
+    }
   }
 
   removeLastAnswer(task: any) {
     task.answers.pop();
   }
-
+/*
   updateTask(task: any) {
     // this.log(this.task);
     this.taskService.updateItem(task).then(
@@ -102,12 +121,8 @@ export class TaskUnitEditComponent implements OnInit {
         console.log(error);
       });
   }
-
+*/
   removeTask(task: any) {
-    this.taskService.deleteItem(task).then(tasks => {
-      this.tasks = (this.tasks.filter(obj => task._id !== obj._id));
-      this.snackBar.open('Task deleted', 'Delete', {duration: 2000});
-
-    });
+      this.model.tasks = (this.model.tasks.filter(obj => task._id !== obj._id));
   }
 }

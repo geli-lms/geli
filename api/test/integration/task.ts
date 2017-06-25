@@ -59,7 +59,7 @@ describe('Task', () => {
           .then((user) => {
             const testData = {
               courseId: '0',
-              name: 'Welches Jahr ist aktuell?',
+              question: 'Welches Jahr ist aktuell?',
               answers: [{
                 value: true,
                 text: '2017'
@@ -76,7 +76,7 @@ describe('Task', () => {
               .end((err, res) => {
                 res.status.should.be.equal(200);
 
-                res.body.name.should.equal(testData.name);
+                res.body.question.should.equal(testData.question);
 
                 done();
               });

@@ -118,11 +118,11 @@ export class CourseService extends DataService {
 }
 
 @Injectable()
-export class TaskService extends DataService {
+export class TaskService extends DataService { // TODO remove
   constructor(public backendService: BackendService) {
-    super('tasks/', backendService);
+    super('/units/tasks/', backendService); // tasks/
   }
-
+/*
   getTasksForCourse(id: string): Promise<any[]> {
     return new Promise((resolve, reject) => {
       this.backendService.get(this.apiPath + 'course/' + id)
@@ -146,13 +146,33 @@ export class TaskService extends DataService {
   getTasksForUnit(id: string): Promise<any[]> {
     const promise = this.readSingleItem(id);
     return promise;
-  }
+  }*/
 }
 
 @Injectable()
 export class TaskAttestationService extends DataService {
   constructor(public backendService: BackendService) {
     super('task_attestations/', backendService);
+  }
+
+  getTaskAttestationForTaskAndUser(taskId: string, userId: string): Promise<any[]> {
+    return new Promise((resolve, reject) => {
+      this.backendService.get(this.apiPath + 'task/' + taskId + '/user/' + userId)
+        .subscribe(
+          (responseItems: any) => {
+            if (this.changeProps2Date) {
+              responseItems.forEach(item => {
+                this.changeProps2Date.forEach(prop => {
+                  DataService.changeStringProp2DateProp(item, prop);
+                });
+              });
+            }
+
+            resolve(responseItems);
+          },
+          error => reject(error)
+        );
+    });
   }
 
   getTaskAttestationsForTask(taskId: string): Promise<any[]> {
@@ -175,25 +195,6 @@ export class TaskAttestationService extends DataService {
     });
   }
 
-  getTaskAttestationForTaskAndUser(taskId: string, userId: string): Promise<any[]> {
-    return new Promise((resolve, reject) => {
-      this.backendService.get(this.apiPath + 'task/' + taskId + '/user/' + userId)
-        .subscribe(
-          (responseItems: any) => {
-            if (this.changeProps2Date) {
-              responseItems.forEach(item => {
-                this.changeProps2Date.forEach(prop => {
-                  DataService.changeStringProp2DateProp(item, prop);
-                });
-              });
-            }
-
-            resolve(responseItems);
-          },
-          error => reject(error)
-        );
-    });
-  }
 
 
   /*
@@ -329,7 +330,15 @@ export class UnitService extends DataService {
   addTaskUnit(taskUnit: ITaskUnit, lectureId: string) {
     const originalApiPath = this.apiPath;
     this.apiPath += 'tasks';
-    const promise = this.createItem({taskUnit: taskUnit, lectureId: lectureId});
+    const promise = this.createItem({model: taskUnit, lectureId: lectureId});
+    this.apiPath = originalApiPath;
+    return promise;
+  }
+
+  updateTaskUnit(taskUnit: ITaskUnit) {
+    const originalApiPath = this.apiPath;
+    this.apiPath += 'tasks/';
+    const promise = this.updateItem(   taskUnit  );
     this.apiPath = originalApiPath;
     return promise;
   }

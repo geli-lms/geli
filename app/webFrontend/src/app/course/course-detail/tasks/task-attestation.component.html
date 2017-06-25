@@ -20,7 +20,7 @@ rrrrrr
     getTasksAttestationsForCourseAndUser(courseId: string, userId: string):
 -->
   <md-input-container md-line class="question">
-    <textarea mdInput readonly id="name" placeholder="Frage" [(ngModel)]="task.name"></textarea>
+    <textarea mdInput readonly id="question" placeholder="Frage" [(ngModel)]="task.question"></textarea>
   </md-input-container>
 
     <div class="actions">
@@ -42,7 +42,7 @@ rrrrrr
         <div *ngFor="let task of tasks" class="question-answer">
 
           !!!!
-         {{task.name}}
+         {{task.question}}
       #####
           <div class="answer" *ngFor="let answer of task.answers; let idx = index;">
             <div class="check-answer">

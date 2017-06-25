@@ -7,8 +7,6 @@ import {CourseDetailComponent} from './course/course-detail/course-detail.compon
 import {CourseEditComponent} from './course/course-edit/course-edit.component';
 import {CourseNewComponent} from './course/course-new/course-new.component';
 import {UserEditComponent} from './user/user-edit/user-edit.component';
-import {LectureEditComponent} from './lecture/lecture-edit/lecture-edit.component';
-import {LectureNewComponent} from './lecture/lecture-new/lecture-new.component';
 import {StartComponent} from './start/start.component';
 import {AdminComponent} from './admin/admin.component';
 import {AboutComponent} from './about/about.component';
@@ -40,18 +38,6 @@ export const routes = [
   {
     path: 'course/:id/report',
     component: TeacherReportComponent,
-    canActivate: [AuthGuardService],
-    data: {roles: ['teacher', 'admin']}
-  },
-  {
-    path: 'course/edit/:courseId/lecture/edit/:lectureId',
-    component: LectureEditComponent,
-    canActivate: [AuthGuardService],
-    data: {roles: ['teacher', 'admin']}
-  },
-  {
-    path: 'course/edit/:id/lecture/new',
-    component: LectureNewComponent,
     canActivate: [AuthGuardService],
     data: {roles: ['teacher', 'admin']}
   },

@@ -1,3 +1,5 @@
-<p>
-  task-unit works!
-</p>
+
+  <div *ngFor="let task of taskUnit.tasks">
+    <app-task [task]="task"></app-task>
+  </div>
+

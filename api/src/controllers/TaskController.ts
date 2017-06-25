@@ -12,43 +12,66 @@ import {ITaskAttestation} from '../../../shared/models/ITaskAttestation';
 @JsonController('/tasks')
 @UseBefore(passportJwtMiddleware)
 export class TaskController {
-
-  @Get('/')
-  getTasks() {
-    return Task.find({}).sort({ createdAt: -1 })
-      .then((tasks) => tasks.map((t) => t.toObject()));
-  }
-
-  @Get('/:id')
-  getTask(@Param('id') id: string) {
-    return Task.findById(id)
-      .then((task) => task.toObject());
-  }
-
-  @Post('/')
-  addTask(@Body() task: ITask, @Req() request: Request) {
-    return new Task(task).save()
-      .then((newTask) => newTask.toObject());
-  }
-
-  @Put('/:id')
-  updateTask(@Param('id') id: string, @Body() task: ITask) {
-    return Task.findByIdAndUpdate(id, task, {'new': true})
-      .then((updatedTask) => updatedTask.toObject());
+/*
+  protected pushToUnit(unitId: string, tasks: any) {
+    return Unit.findById(unitId)
+      .then((unit) => {
+        unit.tasks.push(unit);
+        return unit.save();
+      })
+      .then((unit) => unit.toObject());
   }
 
   @Delete('/:id')
-  deleteTask(@Param('id') id: string, @Body() task: ITask) {
-   return Task.findByIdAndRemove(id, task)
-      .then((deletedTask) => deletedTask.toObject());
-  }
+  deleteTask(@Param('id') id: string) {
+    return Task.findById(id).then((task) => {
+      if (!task) {
+        throw new NotFoundError();
+      }
+    })
+      .then(() => Task.findByIdAndRemove(id))
+      .then(() => {
+        return {result: true};
+      });
+  }*/
 
-  // *************
+  /*
+    @Get('/')
+    getTasks() {
+      return Task.find({}).sort({ createdAt: -1 })
+        .then((tasks) => tasks.map((t) => t.toObject()));
+    }
 
-  @Get('/course/:courseId')
-  getTasksForCourse(@Param('courseId') courseId: string) {
-    return Task.find().where({ courseId: courseId }).sort({ createdAt: -1 })
-      .then((tasks) => tasks.map((t) => t.toObject()));
-  }
+    @Get('/:id')
+    getTask(@Param('id') id: string) {
+      return Task.findById(id)
+        .then((task) => task.toObject());
+    }
 
+    @Post('/')
+    addTask(@Body() task: ITask, @Req() request: Request) {
+      return new Task(task).save()
+        .then((newTask) => newTask.toObject());
+    }
+
+    @Put('/:id')
+    updateTask(@Param('id') id: string, @Body() task: ITask) {
+      return Task.findByIdAndUpdate(id, task, {'new': true})
+        .then((updatedTask) => updatedTask.toObject());
+    }
+
+    @Delete('/:id')
+    deleteTask(@Param('id') id: string, @Body() task: ITask) {
+     return Task.findByIdAndRemove(id, task)
+        .then((deletedTask) => deletedTask.toObject());
+    }
+
+    // *************
+
+    @Get('/course/:courseId')
+    getTasksForCourse(@Param('courseId') courseId: string) {
+      return Task.find().where({ courseId: courseId }).sort({ createdAt: -1 })
+        .then((tasks) => tasks.map((t) => t.toObject()));
+    }
+  */
 }

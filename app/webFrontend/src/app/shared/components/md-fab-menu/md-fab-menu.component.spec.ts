@@ -1,21 +1,20 @@
-/* tslint:disable:no-unused-variable */
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { LectureEditComponent } from './lecture-edit.component';
+import { MdFabMenuComponent } from './md-fab-menu.component';
 
-describe('LectureEditComponent', () => {
-  let component: LectureEditComponent;
-  let fixture: ComponentFixture<LectureEditComponent>;
+describe('MdFabMenuComponent', () => {
+  let component: MdFabMenuComponent;
+  let fixture: ComponentFixture<MdFabMenuComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ LectureEditComponent ]
+      declarations: [ MdFabMenuComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(LectureEditComponent);
+    fixture = TestBed.createComponent(MdFabMenuComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

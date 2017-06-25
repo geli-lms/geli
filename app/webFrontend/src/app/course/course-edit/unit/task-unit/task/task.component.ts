@@ -1,24 +1,26 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {TaskAttestationService, TaskService} from '../../../shared/services/data.service';
+import {TaskAttestationService, TaskService} from '../../../../../shared/services/data.service';
 import {MdSnackBar} from '@angular/material';
-import {UserService} from '../../../shared/services/user.service';
+import {UserService} from '../../../../../shared/services/user.service';
 
 @Component({
-  selector: 'app-task-attestation',
-  templateUrl: './task-attestation.component.html',
-  styleUrls: ['./task-attestation.component.scss']
+  selector: 'app-task',
+  templateUrl: './task.component.html',
+  styleUrls: ['./task.component.scss']
 })
-export class TaskAttestationComponent implements OnInit { // TODO remove
-  @Input() taskId: any;
-  task: any;
+
+// Task attestation
+export class TaskComponent implements OnInit {
+
+  @Input() task: any;
+
   taskOriginal: any;
   tasks: any[] = []; // WORKAROUND with array for {{}}
   ncountOfTaskAttestationsFor: any;
 
-  constructor(private taskService: TaskService,
-              private taskAttestationService: TaskAttestationService,
+  constructor(private taskAttestationService: TaskAttestationService,
               private userService: UserService,
-              private snackBar: MdSnackBar) {  //
+              private snackBar: MdSnackBar) {
   }
 
   ngOnInit() {
@@ -27,13 +29,32 @@ export class TaskAttestationComponent implements OnInit { // TODO remove
   }
 
   loadTaskFromServer() {
-    this.taskService.readSingleItem(this.taskId).then(task => {
-      this.task = task;
-      this.taskOriginal = JSON.parse(JSON.stringify(  this.task)); // WORKAROUND
-        this.answerPreparationAfterLoadingFromServer(this.task);
-      // this.log(this.task);
-      this.tasks.push(this.task);
-    });
+    this.taskOriginal = JSON.parse(JSON.stringify(this.task)); // WORKAROUND deep copy object
+    this.answerPreparationAfterLoadingFromServer(this.task);
+    // this.log(this.task);
+    this.tasks.push(this.task);
+
+    // load existing task attestion for this task
+    this.taskAttestationService.getTaskAttestationsForTask(this.task._id)
+      .then(
+        (taskAttestations) => {
+          const userId = this.userService.user._id;
+         const task = this.task;
+          taskAttestations = (taskAttestations.filter(obj => userId !== obj.userId));
+
+          for (const taskAttestation of taskAttestations) {
+            let i = 0;
+            for (const answer of taskAttestation.answers) {
+              if (i <  task.answers.length) {
+                 task.answers[i++].value = answer.value; // set answer value of already saved task attestation
+              }
+            }
+            break;
+          }
+        },
+        (error) => {
+          console.log(error);
+        });
   }
 
   answerPreparationAfterLoadingFromServer(task: any) {
@@ -51,7 +72,8 @@ export class TaskAttestationComponent implements OnInit { // TODO remove
       if (this.task.answers[i].value !== this.taskOriginal.answers[i].value) {
         correctlyAnswered = false;
         break;
-      };
+      }
+      ;
     }
     // console.log('correctlyAnswered' + correctlyAnswered);
     // save attestation
@@ -67,7 +89,7 @@ export class TaskAttestationComponent implements OnInit { // TODO remove
   }
 
   countOfTaskAttestationsFor(taskId: string) {
-    return this.taskAttestationService.countOfTaskAttestationsFor(taskId).then( (val) => val);
+    return this.taskAttestationService.countOfTaskAttestationsFor(taskId).then((val) => val);
   }
 
   countOfEnrolledStudentsForCourse(courseId: string) {
@@ -75,17 +97,17 @@ export class TaskAttestationComponent implements OnInit { // TODO remove
 
   }
 
-  countOfTaskAttestationCompletedForCourseAndUser(courseId: string, userId: string)  {
+  countOfTaskAttestationCompletedForCourseAndUser(courseId: string, userId: string) {
     return this.taskAttestationService.countOfTaskAttestationCompletedForCourseAndUser(courseId, userId);
 
   }
 
-  countOfTaskAttestationCorrectlyCompletedForCourseAndUser(courseId: string, userId: string)  {
+  countOfTaskAttestationCorrectlyCompletedForCourseAndUser(courseId: string, userId: string) {
     return this.taskAttestationService.countOfTaskAttestationCorrectlyCompletedForCourseAndUser(courseId, userId);
 
   }
 
-  getTasksAttestationsForCourseAndUser(courseId: string, userId: string)  {
+  getTasksAttestationsForCourseAndUser(courseId: string, userId: string) {
     return this.taskAttestationService.getTasksAttestationsForCourseAndUser(courseId, userId);
 
   }
