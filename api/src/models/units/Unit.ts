@@ -1,6 +1,7 @@
 import * as mongoose from 'mongoose';
 import {IUnit} from '../../../../shared/models/units/IUnit';
 import {NativeError} from 'mongoose';
+import {BadRequestError} from 'routing-controllers';
 
 interface IUnitModel extends IUnit, mongoose.Document {
 }
@@ -10,11 +11,7 @@ const unitSchema = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Course'
     },
-    name: {
-      type: String,
-      required: true
-    },
-    description: {
+    title: {
       type: String
     },
     progressable: {
