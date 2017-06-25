@@ -19,9 +19,7 @@ export class FreeTextUnitController extends UnitController {
       return new BadRequestError('No free-text unit was submitted.');
     }
 
-    return new Promise((resolve) => {
-      resolve(new FreeTextUnit(data.model).save());
-    })
+    return new FreeTextUnit(data.model).save()
       .then((savedFreeTextUnit) => {
         return this.pushToLecture(data.lectureId, savedFreeTextUnit);
       });
