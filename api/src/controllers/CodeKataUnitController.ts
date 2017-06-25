@@ -18,11 +18,9 @@ export class CodeKataUnitController extends UnitController {
     if (!data.model) {
       return new BadRequestError('No codekata unit was submitted.');
     }
+    data.model = this.splitCodeAreas(data.model);
 
-    return new Promise((resolve) => {
-      data.model = this.splitCodeAreas(data.model);
-      resolve(new CodeKataUnit(data.model).save());
-    })
+    return new CodeKataUnit(data.model).save()
       .then((savedCodeKataUnit) => {
         return this.pushToLecture(data.lectureId, savedCodeKataUnit);
       });
@@ -40,13 +38,13 @@ export class CodeKataUnitController extends UnitController {
       return unit;
     }
 
-    const seperator: string = '\/\/#+';
-    let firstSeperator: number = this.findFirstIndexOf(unit.code, seperator);
-    let lastSeperator: number = this.findLastIndexOf(unit.code, seperator);
+    const separator = '\/\/#+';
+    const firstSeparator: number = this.findFirstIndexOf(unit.code, separator);
+    const lastSeparator: number = this.findLastIndexOf(unit.code, separator);
 
-    unit.definition = unit.code.substring(0, firstSeperator).trim();
-    unit.test = unit.code.substring(lastSeperator, unit.code.length).trim();
-    unit.code = unit.code.substring(firstSeperator, lastSeperator).trim();
+    unit.definition = unit.code.substring(0, firstSeparator).trim();
+    unit.test = unit.code.substring(lastSeparator, unit.code.length).trim();
+    unit.code = unit.code.substring(firstSeparator, lastSeparator).trim();
 
     unit.code = unit.code.slice(unit.code.search('\n')).trim();
     unit.test = unit.test.slice(unit.test.search('\n')).trim();
@@ -59,18 +57,17 @@ export class CodeKataUnitController extends UnitController {
   }
 
   private findLastIndexOf(source: string, value: string): number {
-    let regex = new RegExp(value, '');
+    const regex = new RegExp(value, '');
     let i: number = -1;
 
     // limit execution time (prevent deadlocks)
     let j = 10;
     while (j > 0) {
       j--;
-      let result = regex.exec(source.slice(++i));
+      const result = regex.exec(source.slice(++i));
       if (result != null) {
         i += result.index;
-      }
-      else {
+      } else {
         i--;
         break;
       }
