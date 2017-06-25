@@ -29,7 +29,7 @@ export class UploadUnitController extends UnitController {
 
   @Authorized(['teacher', 'admin'])
   @Post('/video')
-  addVideoUnit(@UploadedFile('file', {uploadOptions}) file: any, @Body() data: any) {
+  addVideoUnit(@UploadedFile('file', {options: uploadOptions}) file: any, @Body() data: any) {
     // discard invalid requests
     if (!data.lectureId) {
       fs.unlinkSync(file.path);
@@ -72,8 +72,9 @@ export class UploadUnitController extends UnitController {
     }
   }
 
+  @Authorized(['teacher', 'admin'])
   @Post('/file')
-  addFileUnit(@UploadedFile('file', {uploadOptions}) file: any, @Body() data: any) {
+  addFileUnit(@UploadedFile('file', {options: uploadOptions}) file: any, @Body() data: any) {
     // discard invalid requests
     if (!data.lectureId) {
       fs.unlinkSync(file.path);
