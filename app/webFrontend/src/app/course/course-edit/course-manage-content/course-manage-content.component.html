@@ -87,6 +87,7 @@
                  [disabled]="unitCreateMode || unitEditMode || lectureCreateMode || lectureEditMode"
                  fabTooltip="Add content">
   <div *ngIf="openedLecture" (click)="onAddUnit('task')">Add tasks</div>
+  <div *ngIf="openedLecture" (click)="onAddUnit('file')">Upload files</div>
   <div *ngIf="openedLecture" (click)="onAddUnit('video')">Upload videos</div>
   <div (click)="onAddLecture()">Add lecture</div>
 </app-md-fab-menu>
