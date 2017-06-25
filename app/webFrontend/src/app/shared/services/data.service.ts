@@ -329,7 +329,7 @@ export class UnitService extends DataService {
   addTaskUnit(taskUnit: ITaskUnit, lectureId: string) {
     const originalApiPath = this.apiPath;
     this.apiPath += 'tasks';
-    const promise = this.createItem({taskUnit: taskUnit, lectureId: lectureId});
+    const promise = this.createItem({model: taskUnit, lectureId: lectureId});
     this.apiPath = originalApiPath;
     return promise;
   }
