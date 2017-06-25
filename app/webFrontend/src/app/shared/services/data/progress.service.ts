@@ -17,5 +17,17 @@ export class ProgressService extends DataService {
   }
 
   getUserProgress(userId: string) {
+    const originalApiPath = this.apiPath;
+    this.apiPath += 'users/';
+    const promise = this.readSingleItem(userId);
+    this.apiPath = originalApiPath;
+    return promise;
+  }
+}
+
+@Injectable()
+export class CodeKataProgressService extends DataService {
+  constructor(public backendService: BackendService) {
+    super('progress/code-katas/', backendService);
   }
 }

@@ -1,6 +1,10 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {CodeKataUnit} from '../../../../models/CodeKataUnit';
 import {MdSnackBar} from '@angular/material';
+import {ProgressService, CodeKataProgressService} from 'app/shared/services/data/progress.service';
+import {ICodeKataProgress} from '../../../../../../../../shared/models/ICodeKataProgress';
+import {UserService} from '../../../../shared/services/user.service';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'app-code-kata',
@@ -15,13 +19,23 @@ export class CodeKataComponent implements OnInit {
   @ViewChild('testEditor') testEditor;
 
   logs: string;
+  progress: ICodeKataProgress;
 
-
-  constructor(private snackBar: MdSnackBar) {
-    this.logs = null;
+  constructor(private route: ActivatedRoute,
+              private snackBar: MdSnackBar,
+              private progressService: ProgressService,
+              private codeKataProgressService: CodeKataProgressService,
+              private userService: UserService) {
+    this.logs = undefined;
+    this.progress = {course: '', unit: '', user: '', code: '', done: false};
   }
 
   ngOnInit() {
+    this.route.params.subscribe(
+      params => {
+        this.progress.course = decodeURIComponent(params['id']);
+      });
+    this.loadProgress();
   }
 
   ngAfterViewInit() {
@@ -37,15 +51,42 @@ export class CodeKataComponent implements OnInit {
   }
 
   private submitProgress() {
-    if (!this.validate()) {
-      this.snackBar.open('Your code does not validate. Check logs for information', '', {duration: 3000});
+    this.progress.done = this.validate();
+    if (!this.progress.done) {
+      this.snackBar.open('Your code does not validate.', '', {duration: 3000});
     }
 
+    if (!this.progress.user || !this.progress.unit) {
+      this.progress.unit = this.codeKata._id;
+      this.progress.user = this.userService.user._id;
+      this.codeKataProgressService.createItem(this.progress)
+        .then(() => this.snackBar.open('Progress has been saved'))
+        .catch(() => this.snackBar.open('An unknown error occurred'));
+    } else {
+      this.codeKataProgressService.updateItem(this.progress)
+        .then(() => this.snackBar.open('Progress has been updated'))
+        .catch(() => this.snackBar.open('An unknown error occurred'));
+    }
+  }
+
+  private loadProgress() {
+    this.progressService.getUserProgress(this.userService.user._id)
+      .then((progress: any) => {
+        for (const prop in progress) {
+          if (progress[prop].unit === this.codeKata._id) {
+            this.progress = progress[prop];
+            break;
+          }
+        }
+        console.log('progress: ');
+        console.log(this.progress);
+
+      });
   }
 
   // refactor this to use the same as in code-kata-unit-form
   private validate() {
-    const codeToTest: string = this.codeKata.definition + '\n' + this.codeKata.code + '\n' + this.codeKata.test;
+    const codeToTest: string = this.codeKata.definition + '\n' + this.progress.code + '\n' + this.codeKata.test;
 
     this.logs = '';
     (<any>window).geli = {logs: ''};
@@ -75,8 +116,7 @@ export class CodeKataComponent implements OnInit {
 
     if (result === true || result === undefined) {
       return true;
-    }
-    else {
+    } else {
       console.log(result);
       return false;
     }
