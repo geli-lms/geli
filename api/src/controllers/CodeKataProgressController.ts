@@ -1,4 +1,5 @@
 import {BadRequestError, Body, Param, Post, Put, UseBefore} from 'routing-controllers';
+import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import {CodeKataProgress} from '../models/CodeKataProgress';
 import {JsonController} from 'routing-controllers';
 import {ProgressController} from './ProgressController';
@@ -6,7 +7,7 @@ import {ICodeKataProgress} from '../../../shared/models/ICodeKataProgress';
 
 
 @JsonController('/progress/code-katas')
-// @UseBefore(this.passportJwtMiddleware)
+@UseBefore(passportJwtMiddleware)
 export class CodeKataProgressController extends ProgressController {
   @Post('/')
   createProgress(@Body() data: any) {
