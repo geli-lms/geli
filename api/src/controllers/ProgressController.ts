@@ -1,16 +1,8 @@
-import * as mongoose from 'mongoose';
-import {Get, JsonController, Param} from 'routing-controllers';
-import {IProgressModel, Progress} from '../models/Progress';
-import {Unit} from '../models/units/Unit';
-import {IUserModel, User} from '../models/User';
-import {IProgress} from '../../../shared/models/IProgress';
-import {CourseController} from './CourseController';
-import {Course} from '../models/Course';
-import {ICourse} from '../../../shared/models/ICourse';
-import {IUnit} from '../../../shared/models/units/IUnit';
-import {IUser} from '../../../shared/models/IUser';
+import {BadRequestError, Body, Get, JsonController, Param, Post, UseBefore} from 'routing-controllers';
+import {Progress} from '../models/Progress';
 
 @JsonController('/progress')
+// @UseBefore(this.passportJwtMiddleware)
 export class ProgressController {
 
   @Get('/courses/:id')
@@ -24,5 +16,17 @@ export class ProgressController {
   getUserProgress(@Param('id') id: string) {
     return Progress.find({'user': id})
       .then((progresses) => progresses.map((progress) => progress.toObject({virtuals: true})));
+  }
+
+  @Post('/')
+  createProgress(@Body() data: any) {
+    // discard invalid requests
+    if (!data.course || !data.user || !data.unit) {
+      return new BadRequestError('progress need fields course, user and unit');
+    }
+
+    return new Promise((resolve) => {
+      resolve(new Progress(data).save());
+    });
   }
 }
