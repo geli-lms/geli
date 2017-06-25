@@ -1,4 +1,4 @@
-import {Body, Post, JsonController, UseBefore, UploadedFile, BadRequestError} from 'routing-controllers';
+import {Body, Post, JsonController, UseBefore, UploadedFile, BadRequestError, Authorized} from 'routing-controllers';
 import fs = require('fs');
 import crypto = require('crypto');
 const multer = require('multer');
@@ -27,6 +27,7 @@ const uploadOptions = {
 @UseBefore(passportJwtMiddleware)
 export class UploadUnitController extends UnitController {
 
+  @Authorized(['teacher', 'admin'])
   @Post('/video')
   addVideoUnit(@UploadedFile('file', {uploadOptions}) file: any, @Body() data: any) {
     // discard invalid requests

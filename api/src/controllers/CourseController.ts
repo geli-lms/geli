@@ -1,5 +1,5 @@
 import {Request} from 'express';
-import {Body, Get, Post, Put, Param, Req, JsonController, UseBefore, HttpError} from 'routing-controllers';
+import {Body, Get, Post, Put, Param, Req, JsonController, UseBefore, HttpError, Authorized} from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 
 import {Course} from '../models/Course';
@@ -39,6 +39,7 @@ export class CourseController {
     });
   }
 
+  @Authorized(['teacher', 'admin'])
   @Post('/')
   addCourse(@Body() course: ICourse, @Req() request: Request) {
     course.courseAdmin = <IUserModel>(<any>request).user;
@@ -63,6 +64,7 @@ export class CourseController {
     });
   }
 
+  @Authorized(['teacher', 'admin'])
   @Put('/:id')
   updateCourse(@Param('id') id: string, @Body() course: ICourse) {
     return Course.findByIdAndUpdate(id, course, {'new': true})
