@@ -78,9 +78,6 @@ export class CodeKataComponent implements OnInit {
             break;
           }
         }
-        console.log('progress: ');
-        console.log(this.progress);
-
       });
   }
 
