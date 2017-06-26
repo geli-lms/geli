@@ -106,6 +106,7 @@ export class CodeKataComponent implements OnInit {
     console.log((<any>window).geli.logs);
     this.logs = (<any>window).geli.logs;
 
+    // tslint:disable-next-line:no-eval
     const result = eval(codeToTest);
 
     window.console.log = origLogger;
