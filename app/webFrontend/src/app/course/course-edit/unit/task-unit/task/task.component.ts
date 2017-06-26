@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {TaskAttestationService, TaskService} from '../../../../../shared/services/data.service';
+import {TaskAttestationService} from '../../../../../shared/services/data.service';
 import {MdSnackBar} from '@angular/material';
 import {UserService} from '../../../../../shared/services/user.service';
 
