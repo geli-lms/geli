@@ -21,23 +21,26 @@ export class TaskUnitEditComponent implements OnInit {
   @Input() onCancel: () => void;
   tasks: any[];
 
-  constructor(private taskService: TaskService,
-              private taskAttestationService: TaskAttestationService,
-              private unitService: UnitService,
+  constructor(private unitService: UnitService,
               private snackBar: MdSnackBar) {
   }
 
+  /**
+   * If model is not given create a new one.
+   */
   ngOnInit() {
     if (!this.model) {
       this.model = new TaskUnit(this.course._id);
     }
     for (const task of this.model.tasks) {
-      this.answerPreparationAfterLoadingFromServer(task); // TODO WORKAROUND get rid of the _id for the answers
+      this.answerPreparationAfterLoadingFromServer(task); // WORKAROUND get rid of the _id for the answers
     }
-    this.model = this.model;
   }
 
-  onSave() {
+  /**
+   * Save data. Decide if change existing task or create new one is needed
+   */
+  protected onSave() {
     if (this.model._id !== undefined) {
       this.updateTaskUnit();
     } else {
@@ -45,7 +48,7 @@ export class TaskUnitEditComponent implements OnInit {
     }
   };
 
-  addTaskUnit() {
+  private addTaskUnit() {
     this.unitService.addTaskUnit(this.model, this.lectureId)
       .then(
         (task) => {
@@ -57,7 +60,7 @@ export class TaskUnitEditComponent implements OnInit {
         });
   };
 
-  updateTaskUnit() {
+  private updateTaskUnit() {
     this.unitService.updateTaskUnit(this.model)
       .then(
         (task) => {
@@ -69,33 +72,24 @@ export class TaskUnitEditComponent implements OnInit {
         });
   };
 
-  addTask() {
+  /**
+   * Add new task to the array of task in a task unit
+   */
+  private addTask() {
     this.model.tasks.push(new Task());
-    // this.createTask(newTask);
   }
 
-  //  log(val) { console.log(JSON.stringify(val)); }
-/*
-  createTask(task: any) {
-    // this.log(this.task);
-    this.taskService.createItem(task).then(
-      (val) => {
-        task = val; // get _id
-        this.tasks.splice(0, 0, task); // add item to start
-
-        //     this.log(val);
-      }, (error) => {
-        console.log(error);
-      });
-  }
-*/
-  answerPreparationAfterLoadingFromServer(task: any) {
+  private answerPreparationAfterLoadingFromServer(task: any) {
     for (const answer of task.answers) {
       delete answer._id;
     }
   }
 
-  addAnswerAtEnd(task: ITask) {
+  /**
+   * Add new answer to the array of answers in a task
+   */
+  private addAnswerAtEnd(task: ITask) {
+    // create new array
     if (task.answers === undefined) {
       task.answers = [{_id: undefined, value: false, text: ''}];
     } else {
@@ -107,22 +101,17 @@ export class TaskUnitEditComponent implements OnInit {
     }
   }
 
-  removeLastAnswer(task: any) {
+  /**
+   * Remove last answer from the array of answers in a task
+   */
+  private removeLastAnswer(task: any) {
     task.answers.pop();
   }
-/*
-  updateTask(task: any) {
-    // this.log(this.task);
-    this.taskService.updateItem(task).then(
-      (val) => {
-        this.snackBar.open('Task saved', 'Update', {duration: 2000});
 
-      }, (error) => {
-        console.log(error);
-      });
-  }
-*/
-  removeTask(task: any) {
+  /**
+   * Remove task from the array of task in a task unit
+   */
+  private removeTask(task: any) {
       this.model.tasks = (this.model.tasks.filter(obj => task._id !== obj._id));
   }
 }

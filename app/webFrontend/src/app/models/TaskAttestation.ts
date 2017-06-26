@@ -13,7 +13,6 @@ export class TaskAttestation {
     ];
   correctlyAnswered: boolean;
 
-
   constructor(taskId: string, userId: string, task: any, correctlyAnswered: boolean) {
     this.taskId = taskId;
     this.userId = userId;
@@ -22,7 +21,6 @@ export class TaskAttestation {
     this.correctlyAnswered = correctlyAnswered;
 
   }
-
 
 }
 

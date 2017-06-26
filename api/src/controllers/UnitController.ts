@@ -25,15 +25,7 @@ export class UnitController {
     return Unit.findById(id)
       .then((u) => u.toObject());
   }
-/*
-  protected updateToLecture(lectureId: string, unit: any) {
-    return Lecture.findById(lectureId)
-      .then((lecture) => {
-        return lecture.save();
-      })
-      .then((lecture) => lecture.toObject());
-  }
-*/
+
   protected pushToLecture(lectureId: string, unit: any) {
     return Lecture.findById(lectureId)
       .then((lecture) => {
@@ -48,33 +40,6 @@ export class UnitController {
     return Unit.findByIdAndUpdate(id, unit, {'new': true})
       .then((u) => u.toObject());
   }
-
-  /*
-   return Unit.findById(id).then((oldUnit) => {
-   if (!oldUnit) {
-   throw new NotFoundError();
-   }
-   console.log('qqqqqqqq oldUnit qqqqqqqq' + JSON.stringify(oldUnit));
-   console.log('qqqqqqqq unit qqqqqqqq' + JSON.stringify(unit));
-   if (oldUnit instanceof TaskUnit) {
-   (<ITaskUnitModel>oldUnit).tasks.forEach((task: any) => {
-   // if not present in new: delete
-   if (!(<ITaskUnitModel>unit).tasks.some((newTask) => newTask._id === task._id)) {
-   console.log('**********' + task._id);
-   } else {
-   } console.log('****________******' + task._id);
-   });
-   return TaskUnit;
-   }
-   return Unit;
-   }).then((model) => {
-   return model.findByIdAndUpdate(id, unit, {'new': true});
-   }).then((u) => {
-   console.log(u);
-   return u;
-   })
-   .then((u) => u.toObject());
-   }*/
 
   @Delete('/:id')
   deleteUnit(@Param('id') id: string) {
@@ -93,37 +58,21 @@ export class UnitController {
         });
 
         return Promise.all(tasks_to_delete.map(this.task_findByIdAndRemove));
-
-        //  return Promise.all((<ITaskUnitModel>unit).tasks).map(this.task_findByIdAndRemove)).then(() => {
-        //  return {result: true};
-       //   });
-
-        /*
-         console.log('###' + JSON.stringify((<ITaskUnitModel>unit).tasks));
-         for (let i = 0; i < (<ITaskUnitModel>unit).tasks.length; i++) {
-         console.log('_____' + (<ITaskUnitModel>unit).tasks[i]);
-
-         return Task.findByIdAndRemove((<ITaskUnitModel>unit).tasks[i]); // TODO make it as promise
-
-         }*/
-
       }
       return Lecture.update({}, {$pull: {units: id}});
     })
-     // .then(() => {
-     //   if (unit instanceof TaskUnit) {
-     //   } else {
-     //     return {result: true};
-      //  }
-     // })
-        .then(() => Unit.findByIdAndRemove(id))
+      .then(() => Unit.findByIdAndRemove(id))
       .then(() => {
         return {result: true};
       });
   }
 
+  /**
+   * Remove task document
+   * @param taskId Is the document id
+   * @returns {any} Is the removed task.
+   */
   private task_findByIdAndRemove(taskId: any) {
-    console.log('######task_findByIdAndRemove########' + JSON.stringify(taskId));
-    return Task.findByIdAndRemove(taskId);
+     return Task.findByIdAndRemove(taskId);
   }
 }

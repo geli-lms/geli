@@ -18,12 +18,12 @@ import {DashboardComponent} from './start/dashboard/dashboard.component';
 import {HomescreenComponent} from './start/homescreen/homescreen.component';
 import {RegisterComponent} from './user/register/register.component';
 import {AuthGuardService} from './shared/services/auth-guard.service';
-import { DragulaModule } from 'ng2-dragula';
+import {DragulaModule} from 'ng2-dragula';
 import {DashboardStudentComponent} from './start/dashboard/dashboard-student/dashboard-student.component';
 import {DashboardTeacherComponent} from './start/dashboard/dashboard-teacher/dashboard-teacher.component';
 import {DashboardAdminComponent} from './start/dashboard/dashboard-admin/dashboard-admin.component';
 import {
-  CourseService, TaskService, UserDataService, LectureService,
+  CourseService, UserDataService, LectureService,
   UnitService, AboutDataService, TaskAttestationService
 } from './shared/services/data.service';
 import {BackendService} from './shared/services/backend.service';
@@ -57,9 +57,8 @@ import {AboutComponent} from './about/about.component';
 import {GeneralInfoComponent} from './about/general-info/general-info.component';
 import {LicensesComponent} from './about/licenses/licenses.component';
 import {GravatarDirective} from './course/course-edit/members/gravatar.directive';
-import {TaskAttestationComponent} from './course/course-detail/tasks/task-attestation.component';
-import { CourseManageContentComponent } from './course/course-edit/course-manage-content/course-manage-content.component';
-import { MdFabMenuComponent } from './shared/components/md-fab-menu/md-fab-menu.component';
+import {CourseManageContentComponent} from './course/course-edit/course-manage-content/course-manage-content.component';
+import {MdFabMenuComponent} from './shared/components/md-fab-menu/md-fab-menu.component';
 
 @NgModule({
   declarations: [
@@ -73,7 +72,6 @@ import { MdFabMenuComponent } from './shared/components/md-fab-menu/md-fab-menu.
     DashboardTeacherComponent,
     DashboardAdminComponent,
     TaskUnitEditComponent,
-    TaskAttestationComponent,
     CourseComponent,
     CourseDetailComponent,
     CourseEditComponent,
@@ -118,7 +116,6 @@ import { MdFabMenuComponent } from './shared/components/md-fab-menu/md-fab-menu.
     AboutDataService,
     AuthGuardService,
     UnitService,
-    TaskService,
     TaskAttestationService,
     CourseService,
     UserDataService,

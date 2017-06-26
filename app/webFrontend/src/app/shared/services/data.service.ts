@@ -3,7 +3,6 @@ import {BackendService} from './backend.service';
 import {Dependency} from '../../about/licenses/dependency.model';
 import {ITaskUnit} from '../../../../../../shared/models/units/ITaskUnit';
 import {TaskAttestation} from '../../models/TaskAttestation';
-import {Task} from '../../models/Task';
 
 abstract class DataService {
 
@@ -115,17 +114,10 @@ export class CourseService extends DataService {
         );
     });
   }
-}
 
-@Injectable()
-export class TaskService extends DataService { // TODO remove
-  constructor(public backendService: BackendService) {
-    super('/units/tasks/', backendService); // tasks/
-  }
-/*
-  getTasksForCourse(id: string): Promise<any[]> {
+  countOfEnrolledStudentsFor(courseId: string): Promise<any[]> {
     return new Promise((resolve, reject) => {
-      this.backendService.get(this.apiPath + 'course/' + id)
+      this.backendService.get(this.apiPath + courseId)
         .subscribe(
           (responseItems: any) => {
             if (this.changeProps2Date) {
@@ -135,18 +127,12 @@ export class TaskService extends DataService { // TODO remove
                 });
               });
             }
-
-            resolve(responseItems);
+            resolve(responseItems.students.length);
           },
           error => reject(error)
         );
     });
   }
-
-  getTasksForUnit(id: string): Promise<any[]> {
-    const promise = this.readSingleItem(id);
-    return promise;
-  }*/
 }
 
 @Injectable()
@@ -195,122 +181,107 @@ export class TaskAttestationService extends DataService {
     });
   }
 
-
-
-  /*
-  TODO  tests anlegen :
-   + ohne exisitiert
-   + bereits existiert
-   */
-  countOfTaskAttestationsFor(taskId: string): Promise<any[]> {
-    return new Promise((resolve, reject) => {
-    this.getTaskAttestationsForTask(taskId).then(
-      (taskAttestations) => {
-        console.log('countOfTaskAttestationsFor: ' + taskAttestations.length);
-        resolve(taskAttestations.length);
-     //   for (const taskAttestation of taskAttestations) {
-     //   }
-      }, (error) => {
-        console.log('countOfTaskAttestationsFor: error' );
-        // console.log('error: ' + error);
-        reject(error);
-      });
-    });
-  }
-
-  // muss in courseservice realisiert werden auch api
-  countOfEnrolledStudentsForCourse(courseId: string): Promise<any[]> {
-    return new Promise((resolve, reject) => {
-      resolve(12);
-    });
-  }
-
-  countOfTaskAttestationCompletedForCourseAndUser(courseId: string, userId: string): Promise<any[]> {
-    return new Promise((resolve, reject) => {
-      resolve(112);
-    });
-  }
-
-  countOfTaskAttestationCorrectlyCompletedForCourseAndUser(courseId: string, userId: string): Promise<any[]> {
-    return new Promise((resolve, reject) => {
-      resolve(122);
-    });
-  }
-
-  getTasksAttestationsForCourseAndUser(courseId: string, userId: string): Promise<any[]> {
-    return new Promise((resolve, reject) => {
-      resolve(127);
-    });
-  }
-
   saveTaskAsTaskAttestation(taskId: string, userId: string, task: any, correctlyAnswered: boolean): Promise<any[]> {
     return new Promise((resolve, reject) => {
-
-      // console.log('11' + correctlyAnswered);
       const newTaskAttestation = new TaskAttestation(taskId, userId, task, correctlyAnswered);
 
       // add new attestation or change existing attestation
-      // is there already any attestation for this task for given user?
+      // is there already an attestation for this task for given user?
       this.getTaskAttestationForTaskAndUser(taskId, userId).then(
         (oldTaskAttestation) => {
-          console.log('oldTaskAttestation: ' + oldTaskAttestation);
-          // if (oldTaskAttestation == null) {
-          // console.log('null!!!!!!!!!');
-
-          // }
-          if (oldTaskAttestation.length === 0) {
-            console.log('.length == 0');
+              if (oldTaskAttestation.length === 0) {
             this.createItem(newTaskAttestation).then(
               (val) => {
                 resolve(val);
               }, (error2) => {
                 reject(error2);
-                console.log(error2);
               });
           } else {
             for (const answer of newTaskAttestation.answers) {
-              delete answer._id; // TODO WORKAROUND get rid of the _id for the answers
+              delete answer._id; // WORKAROUND get rid of the _id for the answers
             }
-            // console.log(':::::' + JSON.stringify(oldTaskAttestation));
 
             newTaskAttestation._id = oldTaskAttestation[0]._id;
-
-            console.log(':::::' + JSON.stringify(newTaskAttestation));
 
             this.updateItem(newTaskAttestation).then(
               (val) => {
                 resolve(val);
-
-                // console.log('yyyy!!!!!!!!!!!!!');
               }, (error2) => {
-                //   console.log('xxxxx!!!!!!!!!!!!!');
                 reject(error2);
-                //   console.log(error2);
               });
           }
-          // console.log('1!!!!!!!!!!!!!');
-          // console.log(JSON.stringify(oldTaskAttestation));
-          // console.log('2222!!!!!!');
-
 
         }, (error) => {
-          // console.log('22' + correctlyAnswered);
-          console.log('error: ' + error);
-          // console.log('22'  );
-
-          //  console.log(JSON.stringify(error));
-          //  console.log('33'  );
-
-          /*   this.createItem(newTaskAttestation).then(
-           (val) => {
-           resolve(val);
-           }, (error2) => {
-           reject(error2);
-           console.log(error2);
-           });*/
+          reject(error);
         });
     });
   }
+
+  countOfTaskAttestationsFor(taskId: string): Promise<any[]> {
+    return new Promise((resolve, reject) => {
+      this.getTaskAttestationsForTask(taskId).then(
+        (taskAttestations) => {
+      resolve(taskAttestations.length);
+
+        }, (error) => {
+
+          reject(error);
+        });
+    });
+  }
+
+  countOfCorrectlyAnsweredTaskAttestationsFor(taskId: string): Promise<any[]> {
+    return new Promise((resolve, reject) => {
+      this.getTaskAttestationsForTask(taskId).then(
+        (taskAttestations) => {
+
+          let n = 0;
+          for (const taskAttestation of taskAttestations) {
+            if (taskAttestation.correctlyAnswered) {
+              n++;
+            }
+          }
+          resolve(n);
+
+        }, (error) => {
+
+          reject(error);
+        });
+    });
+  }
+
+  /*
+   countOfEnrolledStudentsFor(taskId: string): Promise<any[]> {
+   return new Promise((resolve, reject) => {
+   resolve(12);
+   });
+   }
+
+   // muss in courseservice realisiert werden auch api
+   countOfEnrolledStudentsForCourse(courseId: string): Promise<any[]> {
+   return new Promise((resolve, reject) => {
+   resolve(12);
+   });
+   }
+
+   countOfTaskAttestationCompletedForCourseAndUser(courseId: string, userId: string): Promise<any[]> {
+   return new Promise((resolve, reject) => {
+   resolve(112);
+   });
+   }
+
+   countOfTaskAttestationCorrectlyCompletedForCourseAndUser(courseId: string, userId: string): Promise<any[]> {
+   return new Promise((resolve, reject) => {
+   resolve(122);
+   });
+   }
+
+   getTasksAttestationsForCourseAndUser(courseId: string, userId: string): Promise<any[]> {
+   return new Promise((resolve, reject) => {
+   resolve(127);
+   });
+   }
+   */
 
 }
 
@@ -323,7 +294,7 @@ export class LectureService extends DataService {
 
 @Injectable()
 export class UnitService extends DataService {
-  constructor(public backendService: BackendService) {
+  constructor(public backendService: BackendService, public taskAttestationService: TaskAttestationService) {
     super('units/', backendService);
   }
 
@@ -338,10 +309,55 @@ export class UnitService extends DataService {
   updateTaskUnit(taskUnit: ITaskUnit) {
     const originalApiPath = this.apiPath;
     this.apiPath += 'tasks/';
-    const promise = this.updateItem(   taskUnit  );
+    const promise = this.updateItem(taskUnit);
     this.apiPath = originalApiPath;
     return promise;
   }
+
+  countOfTaskUnitAttestationsFor(taskUnit: ITaskUnit): Promise<any[]> {
+    const tasks_to_add: any = [];
+    for (const task of taskUnit.tasks) {
+      tasks_to_add.push(task._id.toString());
+    }
+    return new Promise((resolve, reject) => {
+      Promise.all(tasks_to_add.map(this.taskAttestationService.countOfTaskAttestationsFor, this))
+        .then(
+          (values) => {
+
+            let n = 0;
+            for (const value of values) {
+              n = n + +value.toString();
+            }
+            resolve(n);
+
+          }, (error) => {
+
+            reject(error);
+          });
+    });
+  }
+
+  /*
+   countOfCorrectlyAnsweredTaskUnitAttestationsFor(taskUnit: ITaskUnit): Promise<any[]> {
+   return new Promise((resolve, reject) => {
+   this.getTaskAttestationsForTask(taskId).then(
+   (taskAttestations) => {
+
+   let n = 0;
+   for (const taskAttestation of taskAttestations) {
+   if (taskAttestation.correctlyAnswered) {
+   n++;
+   }
+   }
+   resolve(n);
+
+   }, (error) => {
+   // console.log('countOfTaskAttestationsFor: error' );
+   // console.log('error: ' + error);
+   reject(error);
+   });
+   });
+   }*/
 }
 
 @Injectable()

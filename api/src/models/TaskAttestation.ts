@@ -30,6 +30,7 @@ const taskAttestationSchema = new mongoose.Schema(
     toObject: {
       transform: function (doc: any, ret: any) {
         ret._id = doc.id;
+        ret.userId = ret.userId.toString();
       }
     }
   }
