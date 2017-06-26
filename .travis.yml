@@ -88,7 +88,9 @@ after_success:
   - .travis/package-checker.sh
   - .travis/docker.sh
   - .travis/deploy.sh
+  - cd api
   - npm run coveralls
+  - cd ..
 
 # Configure notifications
 notifications:
