@@ -1,4 +1,5 @@
 <div *ngFor="let unit of units;">
-  <video *ngIf="unit.type === 'video'" src="{{'/api/' + unit.filePath}}" controls></video>
+  <app-video-unit *ngIf="unit.type === 'video'" [videoUnit]="unit"></app-video-unit>
+  <app-file-unit *ngIf="unit.type === 'file'" [fileUnit]="unit"></app-file-unit>
   <app-task-unit *ngIf="unit.type === 'task'" [taskUnit]="unit"></app-task-unit>
 </div>
