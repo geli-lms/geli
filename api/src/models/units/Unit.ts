@@ -22,6 +22,12 @@ const unitSchema = new mongoose.Schema({
     },
     weight: {
       type: Number
+    },
+    name: {
+      type: String
+    },
+    description: {
+      type: String
     }
   },
   {
@@ -31,6 +37,7 @@ const unitSchema = new mongoose.Schema({
     toObject: {
       transform: function (doc: any, ret: any) {
         ret._id = ret._id.toString();
+        ret._course = ret._course.toString();
       }
     },
   }

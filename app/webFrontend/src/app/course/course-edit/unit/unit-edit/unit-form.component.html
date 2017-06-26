@@ -1,10 +1,16 @@
 <div class="edit-unit">
-  <app-upload *ngIf="course && type == 'video'"
+  <app-video-upload *ngIf="course && type == 'video'"
               [course]="course"
               [model]="model"
               [lecture]="lecture"
               [onDone]="onDone"
-              [onCancel]="onCancel"></app-upload>
+              [onCancel]="onCancel"></app-video-upload>
+  <app-file-upload *ngIf="course && type == 'file'"
+                    [course]="course"
+                    [model]="model"
+                    [lecture]="lecture"
+                    [onDone]="onDone"
+                    [onCancel]="onCancel"></app-file-upload>
   <app-task-unit-edit *ngIf="course && type == 'task'"
                       [course]="course"
                       [model]="model"

@@ -1,12 +1,11 @@
 import * as mongoose from 'mongoose';
-import {Unit} from './Unit';
-import {IVideoUnit} from '../../../../shared/models/units/IVideoUnit';
-import {NativeError} from 'mongoose';
+import {IUnitModel, Unit} from './Unit';
+import {IFileUnit} from '../../../../shared/models/units/IFileUnit';
 
-interface IVideoUnitModel extends IVideoUnit, mongoose.Document {
+interface IFileUnitModel extends IFileUnit, mongoose.Document {
 }
 
-const videoUnitSchema = new mongoose.Schema({
+const fileUnitSchema = new mongoose.Schema({
   files: [
     {
       path: {
@@ -33,6 +32,6 @@ const videoUnitSchema = new mongoose.Schema({
   },
 });
 
-const VideoUnit = Unit.discriminator('video', videoUnitSchema);
+const FileUnit = Unit.discriminator('file', fileUnitSchema);
 
-export {VideoUnit, IVideoUnitModel}
+export {FileUnit, IFileUnitModel}

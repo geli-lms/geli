@@ -36,7 +36,8 @@ import {TaskUnitEditComponent} from './course/course-edit/unit/unit-edit/task-un
 import {ShowProgressService} from './shared/services/show-progress.service';
 import {UnitComponent} from './course/course-edit/unit/unit.component';
 import {LectureComponent} from './lecture/lecture.component';
-import {UploadComponent} from './upload/upload.component';
+import {VideoUploadComponent} from './upload/video-upload/video-upload.component';
+import {FileUploadComponent} from './upload/file-upload/file-upload.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MembersComponent} from './course/course-edit/members/members.component';
 import {UserAdminComponent} from './admin/user-admin/user-admin.component';
@@ -51,6 +52,8 @@ import {TeacherReportComponent} from './course/teacher-report/teacher-report.com
 import {UnitMenuComponent} from './shared/components/unit-menu/unit-menu.component';
 import {UnitFormComponent} from './course/course-edit/unit/unit-edit/unit-form.component';
 import {TaskUnitComponent} from './course/course-edit/unit/task-unit/task-unit.component';
+import {VideoUnitComponent} from './course/course-edit/unit/video-unit/video-unit.component';
+import {FileUnitComponent} from './course/course-edit/unit/file-unit/file-unit.component';
 import {LectureFormComponent} from './lecture/lecture-form/lecture-form.component';
 import {AboutComponent} from './about/about.component';
 import {GeneralInfoComponent} from './about/general-info/general-info.component';
@@ -82,7 +85,8 @@ import { UnitGeneralInfoFormComponent } from './course/course-edit/unit/unit-edi
     LectureComponent,
     UserAdminComponent,
     UserEditComponent,
-    UploadComponent,
+    VideoUploadComponent,
+    FileUploadComponent,
     ActivationComponent,
     StartComponent,
     AdminComponent,
@@ -91,6 +95,8 @@ import { UnitGeneralInfoFormComponent } from './course/course-edit/unit/unit-edi
     UnitMenuComponent,
     UnitFormComponent,
     TaskUnitComponent,
+    VideoUnitComponent,
+    FileUnitComponent,
     AboutComponent,
     GeneralInfoComponent,
     LicensesComponent,
