@@ -18,13 +18,13 @@ import {DashboardComponent} from './start/dashboard/dashboard.component';
 import {HomescreenComponent} from './start/homescreen/homescreen.component';
 import {RegisterComponent} from './user/register/register.component';
 import {AuthGuardService} from './shared/services/auth-guard.service';
-import { DragulaModule } from 'ng2-dragula';
+import {DragulaModule} from 'ng2-dragula';
 import {DashboardStudentComponent} from './start/dashboard/dashboard-student/dashboard-student.component';
 import {DashboardTeacherComponent} from './start/dashboard/dashboard-teacher/dashboard-teacher.component';
 import {DashboardAdminComponent} from './start/dashboard/dashboard-admin/dashboard-admin.component';
 import {
   CourseService, TaskService, UserDataService, LectureService,
-  UnitService, AboutDataService
+  UnitService, AboutDataService, FreeTextUnitService
 } from './shared/services/data.service';
 import {BackendService} from './shared/services/backend.service';
 import {CourseComponent} from './course/course.component';
@@ -60,6 +60,9 @@ import {GeneralInfoComponent} from './about/general-info/general-info.component'
 import {LicensesComponent} from './about/licenses/licenses.component';
 import {GravatarDirective} from './shared/directives/gravatar.directive';
 import {ProgressService} from './shared/services/data/progress.service';
+import {FreeTextUnitFormComponent} from './course/course-edit/unit/unit-edit/free-text-unit-form/free-text-unit-form.component';
+import {FreeTextUnitComponent} from './course/course-edit/unit/free-text-unit/free-text-unit.component';
+import {MarkdownService} from './shared/services/markdown.service';
 import { CourseManageContentComponent } from './course/course-edit/course-manage-content/course-manage-content.component';
 import { MdFabMenuComponent } from './shared/components/md-fab-menu/md-fab-menu.component';
 import { UnitGeneralInfoFormComponent } from './course/course-edit/unit/unit-edit/unit-general-info-form/unit-general-info-form.component';
@@ -101,6 +104,8 @@ import { UnitGeneralInfoFormComponent } from './course/course-edit/unit/unit-edi
     GeneralInfoComponent,
     LicensesComponent,
     GravatarDirective,
+    FreeTextUnitFormComponent,
+    FreeTextUnitComponent,
     CourseManageContentComponent,
     MdFabMenuComponent,
     UnitGeneralInfoFormComponent,
@@ -131,7 +136,9 @@ import { UnitGeneralInfoFormComponent } from './course/course-edit/unit/unit-edi
     UserDataService,
     ProgressService,
     ShowProgressService,
-    JwtHelper
+    MarkdownService,
+    JwtHelper,
+    FreeTextUnitService
   ],
   bootstrap: [AppComponent]
 })
