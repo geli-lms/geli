@@ -1,7 +1,23 @@
-<strong>Videos</strong>
+<strong>Files</strong>
 
 <app-unit-general-info-form [model]="model"></app-unit-general-info-form>
-
+<div *ngIf="model">
+  <span *ngIf="model.files.length">Existing files:</span>
+  <div *ngFor="let file of model.files;">
+    <md-input-container>
+      <input mdInput [(ngModel)]="file.alias" placeholder="File name" size="40">
+    </md-input-container>
+    <button md-icon-button md-tooltip="Delete" (click)="deleteFile(file)">
+      <md-icon>delete</md-icon>
+    </button>
+  </div>
+  <div>
+    <button md-button color="primary" (click)="update()"
+            [disabled]="!generalInfo.form.value.name || hasInvalidFileNames()">
+      Update
+    </button>
+  </div>
+</div>
 <div>
   <input type="file" ng2FileSelect [uploader]="uploader" placeholder="Upload files" multiple/>
   <button md-button color="warn" (click)="uploader.clearQueue()">
@@ -26,7 +42,7 @@
 <p>
   <button md-button (click)="onCancel()">Cancel</button>
   <button md-button color="primary"
-          (click)="uploader.uploadAll()" [disabled]="!uploader.getNotUploadedItems().length">
+          (click)="uploadAll()" [disabled]="(!uploader.getNotUploadedItems().length) || (!generalInfo.form.value.name)">
     Upload
   </button>
 </p>
