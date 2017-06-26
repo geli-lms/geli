@@ -22,7 +22,7 @@
     "test": "gulp test",
     "tslint": "gulp tslint",
     "debug": "gulp debug",
-    "load:fixtures": "gulp load:fixtures"
+    "load:fixtures": "gulp load:fixtures",
 	"coveralls": "npm run cover -- --report lcovonly && cat ./coverage/lcov.info | coveralls"
   },
   "dependencies": {
