@@ -17,6 +17,8 @@ export class LicensesComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.allFrontendDependencies = [];
+    this.allApiDependencies = [];
     this.getAllFrontendDependencies();
     this.getAllApiDependencies();
   }

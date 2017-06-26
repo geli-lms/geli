@@ -13,6 +13,7 @@ import {ITaskUnit} from '../../../shared/models/units/ITaskUnit';
 @UseBefore(passportJwtMiddleware)
 export class TaskUnitController extends UnitController {
 
+  @Authorized(['teacher', 'admin'])
   @Post('/')
   addTaskUnit(@Body() data: any) {
     // discard invalid requests

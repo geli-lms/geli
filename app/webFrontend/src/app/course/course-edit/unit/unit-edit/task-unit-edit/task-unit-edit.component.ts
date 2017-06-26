@@ -6,6 +6,7 @@ import {ITaskUnit} from '../../../../../../../../../shared/models/units/ITaskUni
 import {TaskUnit} from '../../../../../models/TaskUnit';
 import {ITask} from '../../../../../../../../../shared/models/task/ITask';
 import {ICourse} from '../../../../../../../../../shared/models/ICourse';
+import {UnitGeneralInfoFormComponent} from '../unit-general-info-form/unit-general-info-form.component';
 
 @Component({
   selector: 'app-task-unit-edit',
@@ -14,11 +15,24 @@ import {ICourse} from '../../../../../../../../../shared/models/ICourse';
 })
 
 export class TaskUnitEditComponent implements OnInit {
-  @Input() course: ICourse;
-  @Input() lectureId: string;
-  @Input() model: ITaskUnit;
-  @Input() onDone: () => void;
-  @Input() onCancel: () => void;
+  @Input()
+  course: ICourse;
+
+  @Input()
+  lectureId: string;
+
+  @Input()
+  model: ITaskUnit;
+
+  @Input()
+  onDone: () => void;
+
+  @Input()
+  onCancel: () => void;
+
+  @ViewChild(UnitGeneralInfoFormComponent)
+  private generalInfo: UnitGeneralInfoFormComponent;
+
   tasks: any[];
 
   constructor(private unitService: UnitService,
@@ -29,6 +43,8 @@ export class TaskUnitEditComponent implements OnInit {
    * If model is not given create a new one.
    */
   ngOnInit() {
+    console.log(this.model);
+
     if (!this.model) {
       this.model = new TaskUnit(this.course._id);
     }
@@ -48,6 +64,18 @@ export class TaskUnitEditComponent implements OnInit {
     }
   };
 
+      for (const task of this.tasks) {
+        this.answerPreparationAfterLoadingFromServer(task); // WORKAROUND get rid of the _id for the answers
+      }
+    });
+  }
+
+  addUnit() {
+    this.unitService.addTaskUnit({
+      name: this.generalInfo.form.value.name,
+      description: this.generalInfo.form.value.description,
+      ...this.model
+    }, this.lectureId)
   private addTaskUnit() {
     this.unitService.addTaskUnit(this.model, this.lectureId)
       .then(

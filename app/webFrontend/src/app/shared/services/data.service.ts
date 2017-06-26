@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {BackendService} from './backend.service';
 import {Dependency} from '../../about/licenses/dependency.model';
 import {ITaskUnit} from '../../../../../../shared/models/units/ITaskUnit';
+import {IFreeTextUnit} from '../../../../../../shared/models/units/IFreeTextUnit';
 import {TaskAttestation} from '../../models/TaskAttestation';
 
 abstract class DataService {
@@ -361,6 +362,13 @@ export class UnitService extends DataService {
 }
 
 @Injectable()
+export class FreeTextUnitService extends DataService {
+  constructor(public backendService: BackendService) {
+    super('units/free-texts/', backendService);
+  }
+}
+
+@Injectable()
 export class UserDataService extends DataService {
   constructor(public backendService: BackendService) {
     super('users/', backendService);
@@ -386,6 +394,11 @@ export class AboutDataService extends DataService {
     return new Promise((resolve, reject) => {
       this.backendService.get(this.apiPath + 'dependencies')
         .subscribe((responseItems: any) => {
+            if (responseItems.httpCode >= 500) {
+              console.log('API: ' + responseItems.message);
+              return resolve([]);
+            }
+
             const out = [];
             responseItems.data.forEach(item => {
               out.push(new Dependency(

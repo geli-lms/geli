@@ -23,6 +23,8 @@ import {DashboardStudentComponent} from './start/dashboard/dashboard-student/das
 import {DashboardTeacherComponent} from './start/dashboard/dashboard-teacher/dashboard-teacher.component';
 import {DashboardAdminComponent} from './start/dashboard/dashboard-admin/dashboard-admin.component';
 import {
+  CourseService, TaskService, UserDataService, LectureService,
+  UnitService, AboutDataService, FreeTextUnitService
   CourseService, UserDataService, LectureService,
   UnitService, AboutDataService, TaskAttestationService
 } from './shared/services/data.service';
@@ -36,7 +38,8 @@ import {TaskUnitEditComponent} from './course/course-edit/unit/unit-edit/task-un
 import {ShowProgressService} from './shared/services/show-progress.service';
 import {UnitComponent} from './course/course-edit/unit/unit.component';
 import {LectureComponent} from './lecture/lecture.component';
-import {UploadComponent} from './upload/upload.component';
+import {VideoUploadComponent} from './upload/video-upload/video-upload.component';
+import {FileUploadComponent} from './upload/file-upload/file-upload.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MembersComponent} from './course/course-edit/members/members.component';
 import {UserAdminComponent} from './admin/user-admin/user-admin.component';
@@ -51,12 +54,20 @@ import {TeacherReportComponent} from './course/teacher-report/teacher-report.com
 import {UnitMenuComponent} from './shared/components/unit-menu/unit-menu.component';
 import {UnitFormComponent} from './course/course-edit/unit/unit-edit/unit-form.component';
 import {TaskUnitComponent} from './course/course-edit/unit/task-unit/task-unit.component';
+import {VideoUnitComponent} from './course/course-edit/unit/video-unit/video-unit.component';
+import {FileUnitComponent} from './course/course-edit/unit/file-unit/file-unit.component';
 import {TaskComponent} from './course/course-edit/unit/task-unit/task/task.component';
 import {LectureFormComponent} from './lecture/lecture-form/lecture-form.component';
 import {AboutComponent} from './about/about.component';
 import {GeneralInfoComponent} from './about/general-info/general-info.component';
 import {LicensesComponent} from './about/licenses/licenses.component';
 import {GravatarDirective} from './course/course-edit/members/gravatar.directive';
+import {FreeTextUnitFormComponent} from './course/course-edit/unit/unit-edit/free-text-unit-form/free-text-unit-form.component';
+import {FreeTextUnitComponent} from './course/course-edit/unit/free-text-unit/free-text-unit.component';
+import {MarkdownService} from './shared/services/markdown.service';
+import { CourseManageContentComponent } from './course/course-edit/course-manage-content/course-manage-content.component';
+import { MdFabMenuComponent } from './shared/components/md-fab-menu/md-fab-menu.component';
+import { UnitGeneralInfoFormComponent } from './course/course-edit/unit/unit-edit/unit-general-info-form/unit-general-info-form.component';
 import {CourseManageContentComponent} from './course/course-edit/course-manage-content/course-manage-content.component';
 import {MdFabMenuComponent} from './shared/components/md-fab-menu/md-fab-menu.component';
 
@@ -81,7 +92,8 @@ import {MdFabMenuComponent} from './shared/components/md-fab-menu/md-fab-menu.co
     LectureComponent,
     UserAdminComponent,
     UserEditComponent,
-    UploadComponent,
+    VideoUploadComponent,
+    FileUploadComponent,
     ActivationComponent,
     StartComponent,
     AdminComponent,
@@ -90,13 +102,18 @@ import {MdFabMenuComponent} from './shared/components/md-fab-menu/md-fab-menu.co
     UnitMenuComponent,
     UnitFormComponent,
     TaskUnitComponent,
+    VideoUnitComponent,
+    FileUnitComponent,
     TaskComponent,
     AboutComponent,
     GeneralInfoComponent,
     LicensesComponent,
     GravatarDirective,
+    FreeTextUnitFormComponent,
+    FreeTextUnitComponent,
     CourseManageContentComponent,
     MdFabMenuComponent,
+    UnitGeneralInfoFormComponent,
   ],
   imports: [
     DragulaModule,
@@ -123,7 +140,9 @@ import {MdFabMenuComponent} from './shared/components/md-fab-menu/md-fab-menu.co
     BackendService,
     UserDataService,
     ShowProgressService,
-    JwtHelper
+    MarkdownService,
+    JwtHelper,
+    FreeTextUnitService
   ],
   bootstrap: [AppComponent]
 })
