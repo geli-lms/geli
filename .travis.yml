@@ -82,12 +82,13 @@ script:
 
 after_script:
   # send required files to coveralls.io
-  - .travis/coveralls.sh
+  # - .travis/coveralls.sh
 
 after_success:
   - .travis/package-checker.sh
   - .travis/docker.sh
   - .travis/deploy.sh
+  - npm run coveralls
 
 # Configure notifications
 notifications:

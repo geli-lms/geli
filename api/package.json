@@ -23,6 +23,7 @@
     "tslint": "gulp tslint",
     "debug": "gulp debug",
     "load:fixtures": "gulp load:fixtures"
+	"coveralls": "npm run cover -- --report lcovonly && cat ./coverage/lcov.info | coveralls"
   },
   "dependencies": {
     "bcrypt": "^1.0.2",
@@ -60,6 +61,7 @@
     "@types/winston": "2.2.0",
     "chai": "3.5.0",
     "chai-http": "^3.0.0",
+    "coveralls": "^2.13.1",
     "gulp": "3.9.1",
     "gulp-istanbul": "1.1.1",
     "gulp-mocha": "4.3.1",
