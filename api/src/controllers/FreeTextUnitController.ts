@@ -1,4 +1,4 @@
-import {Body, Post, JsonController, UseBefore, BadRequestError, Param, Put} from 'routing-controllers';
+import {Body, Post, JsonController, UseBefore, BadRequestError, Param, Put, Authorized} from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import {UnitController} from './UnitController';
 import {FreeTextUnit} from '../models/units/FreeTextUnit';
