@@ -6,6 +6,7 @@ import {IFreeTextUnit} from '../../../shared/models/units/IFreeTextUnit';
 
 @JsonController('/units/free-texts')
 @UseBefore(passportJwtMiddleware)
+@Authorized('teacher')
 export class FreeTextUnitController extends UnitController {
 
   @Post('/')
