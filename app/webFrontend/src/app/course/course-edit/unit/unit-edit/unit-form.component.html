@@ -17,4 +17,10 @@
                       [lectureId]="lecture._id"
                       [onDone]="onDone"
                       [onCancel]="onCancel"></app-task-unit-edit>
+  <app-free-text-unit-form *ngIf="course && type == 'free-text'"
+                      [course]="course"
+                      [model]="model"
+                      [lectureId]="lecture._id"
+                      [onDone]="onDone"
+                      [onCancel]="onCancel"></app-free-text-unit-form>
 </div>
