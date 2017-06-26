@@ -1,7 +1,4 @@
-import {
-  Body, Get, Put, Post, Delete, Param, JsonController, UseBefore, UploadedFile,
-  NotFoundError
-} from 'routing-controllers';
+import {Body, Get, Put, Delete, Param, JsonController, UseBefore, NotFoundError} from 'routing-controllers';
 import fs = require('fs');
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 
@@ -10,7 +7,6 @@ import {Unit} from '../models/units/Unit';
 import {IUnit} from '../../../shared/models/units/IUnit';
 import {IVideoUnitModel, VideoUnit} from '../models/units/VideoUnit';
 import {IFileUnitModel, FileUnit} from '../models/units/FileUnit';
-import {IVideoUnit} from '../../../shared/models/units/IVideoUnit';
 
 const uploadOptions = {dest: 'uploads/'};
 
@@ -46,7 +42,8 @@ export class UnitController {
           if (!(<IVideoUnitModel>unit).files.some((newFile) => newFile.name === file.name)) {
             try {
               fs.unlinkSync(file.path);
-            } catch (e) {} // silently discard file not found errors
+            } catch (e) {
+            } // silently discard file not found errors
           }
         });
         return VideoUnit;
@@ -57,7 +54,8 @@ export class UnitController {
           if (!(<IFileUnitModel>unit).files.some((newFile) => newFile.name === file.name)) {
             try {
               fs.unlinkSync(file.path);
-            } catch (e) {} // silently discard file not found errors
+            } catch (e) {
+            } // silently discard file not found errors
           }
         });
         return FileUnit;
@@ -78,7 +76,8 @@ export class UnitController {
         (<IVideoUnitModel>unit).files.forEach((file: any) => {
           try {
             fs.unlinkSync(file.path);
-          } catch (e) {} // silently discard file not found errors
+          } catch (e) {
+          } // silently discard file not found errors
         });
       }
 
@@ -86,7 +85,8 @@ export class UnitController {
         (<IFileUnitModel>unit).files.forEach((file: any) => {
           try {
             fs.unlinkSync(file.path);
-          } catch (e) {} // silently discard file not found errors
+          } catch (e) {
+          } // silently discard file not found errors
         });
       }
 
