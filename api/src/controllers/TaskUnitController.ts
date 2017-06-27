@@ -1,6 +1,6 @@
 import {
   Body, Post, JsonController, UseBefore, BadRequestError, Put, Param, Delete,
-  NotFoundError, Authorized
+  NotFoundError
 } from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import {UnitController} from './UnitController';

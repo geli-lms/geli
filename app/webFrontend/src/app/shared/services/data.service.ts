@@ -240,7 +240,6 @@ export class TaskAttestationService extends DataService {
           for (const taskAttestation of taskAttestations) {
             if (taskAttestation.correctlyAnswered) {
               n++;
-              
             }
           }
           resolve(n);
