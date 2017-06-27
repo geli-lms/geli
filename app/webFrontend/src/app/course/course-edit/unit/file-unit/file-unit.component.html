@@ -1,0 +1,6 @@
+<div *ngFor="let file of fileUnit.files;">
+  <a href="{{'/api/uploads/' + file.name}}" download="{{file.alias}}">
+    <img *ngIf="isPicture(file.name)" src="{{'/api/uploads/' + file.name}}" width="400" alt="{{file.alias}}">
+    <span *ngIf="!isPicture(file.name)">{{file.alias}}</span>
+  </a>
+</div>

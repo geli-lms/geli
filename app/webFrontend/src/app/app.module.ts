@@ -18,13 +18,13 @@ import {DashboardComponent} from './start/dashboard/dashboard.component';
 import {HomescreenComponent} from './start/homescreen/homescreen.component';
 import {RegisterComponent} from './user/register/register.component';
 import {AuthGuardService} from './shared/services/auth-guard.service';
-import { DragulaModule } from 'ng2-dragula';
+import {DragulaModule} from 'ng2-dragula';
 import {DashboardStudentComponent} from './start/dashboard/dashboard-student/dashboard-student.component';
 import {DashboardTeacherComponent} from './start/dashboard/dashboard-teacher/dashboard-teacher.component';
 import {DashboardAdminComponent} from './start/dashboard/dashboard-admin/dashboard-admin.component';
 import {
   CourseService, TaskService, UserDataService, LectureService,
-  UnitService, AboutDataService, CodeKataUnitService
+  UnitService, AboutDataService, FreeTextUnitService, CodeKataUnitService
 } from './shared/services/data.service';
 import {BackendService} from './shared/services/backend.service';
 import {CourseComponent} from './course/course.component';
@@ -36,7 +36,8 @@ import {TaskUnitEditComponent} from './course/course-edit/unit/unit-edit/task-un
 import {ShowProgressService} from './shared/services/show-progress.service';
 import {UnitComponent} from './course/course-edit/unit/unit.component';
 import {LectureComponent} from './lecture/lecture.component';
-import {UploadComponent} from './upload/upload.component';
+import {VideoUploadComponent} from './upload/video-upload/video-upload.component';
+import {FileUploadComponent} from './upload/file-upload/file-upload.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MembersComponent} from './course/course-edit/members/members.component';
 import {UserAdminComponent} from './admin/user-admin/user-admin.component';
@@ -51,12 +52,17 @@ import {TeacherReportComponent} from './course/teacher-report/teacher-report.com
 import {UnitMenuComponent} from './shared/components/unit-menu/unit-menu.component';
 import {UnitFormComponent} from './course/course-edit/unit/unit-edit/unit-form.component';
 import {TaskUnitComponent} from './course/course-edit/unit/task-unit/task-unit.component';
+import {VideoUnitComponent} from './course/course-edit/unit/video-unit/video-unit.component';
+import {FileUnitComponent} from './course/course-edit/unit/file-unit/file-unit.component';
 import {LectureFormComponent} from './lecture/lecture-form/lecture-form.component';
 import {AboutComponent} from './about/about.component';
 import {GeneralInfoComponent} from './about/general-info/general-info.component';
 import {LicensesComponent} from './about/licenses/licenses.component';
 import {GravatarDirective} from './shared/directives/gravatar.directive';
 import {CodeKataProgressService, ProgressService} from './shared/services/data/progress.service';
+import {FreeTextUnitFormComponent} from './course/course-edit/unit/unit-edit/free-text-unit-form/free-text-unit-form.component';
+import {FreeTextUnitComponent} from './course/course-edit/unit/free-text-unit/free-text-unit.component';
+import {MarkdownService} from './shared/services/markdown.service';
 import { CourseManageContentComponent } from './course/course-edit/course-manage-content/course-manage-content.component';
 import { MdFabMenuComponent } from './shared/components/md-fab-menu/md-fab-menu.component';
 import {CodeKataComponent} from './course/course-edit/unit/code-kata-unit/code-kata-unit.component';
@@ -85,7 +91,8 @@ import { UnitGeneralInfoFormComponent } from './course/course-edit/unit/unit-edi
     LectureComponent,
     UserAdminComponent,
     UserEditComponent,
-    UploadComponent,
+    VideoUploadComponent,
+    FileUploadComponent,
     ActivationComponent,
     StartComponent,
     AdminComponent,
@@ -94,10 +101,14 @@ import { UnitGeneralInfoFormComponent } from './course/course-edit/unit/unit-edi
     UnitMenuComponent,
     UnitFormComponent,
     TaskUnitComponent,
+    VideoUnitComponent,
+    FileUnitComponent,
     AboutComponent,
     GeneralInfoComponent,
     LicensesComponent,
     GravatarDirective,
+    FreeTextUnitFormComponent,
+    FreeTextUnitComponent,
     CourseManageContentComponent,
     MdFabMenuComponent,
     CodeKataComponent,
@@ -131,6 +142,8 @@ import { UnitGeneralInfoFormComponent } from './course/course-edit/unit/unit-edi
     UserDataService,
     ProgressService,
     ShowProgressService,
+    MarkdownService,
+    FreeTextUnitService,
     JwtHelper,
     CodeKataUnitService,
     CodeKataProgressService,
