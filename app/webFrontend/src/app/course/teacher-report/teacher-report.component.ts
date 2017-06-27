@@ -68,10 +68,7 @@ export class TeacherReportComponent implements OnInit {
           this.progressableUnits.map((progressableUnit) => {
             const unitWithProgress: any = progressableUnit;
             unitWithProgress.done = false;
-            console.log('unit');
             for (let i = 0; i < this.progress.length; i++) {
-              console.log('StudentID: ' + studentWithUnits._id + ' ProgressStudentID: ' + this.progress[i].user);
-              console.log('UnitID: ' + unitWithProgress._id + ' ProgressUnitID: ' + this.progress[i].unit._id);
               if (studentWithUnits._id === this.progress[i].user && unitWithProgress._id === this.progress[i].unit._id) {
                 unitWithProgress.done = true;
                 unitWithProgress.progress = this.progress[i];
@@ -83,9 +80,6 @@ export class TeacherReportComponent implements OnInit {
             studentWithUnits.units.push(unitWithProgress);
           });
           studentWithUnits.completeRate = ((studentWithUnits.finishCount / this.progressableUnits.length) * 100);
-          console.log(studentWithUnits.finishCount);
-          console.log(progressableUnits.length);
-          console.log(studentWithUnits.completeRate);
           this.report.push(studentWithUnits);
         });
       });
