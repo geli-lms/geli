@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import {CourseService, UnitService} from '../../shared/services/data.service';
-import {User} from '../../models/User';
 import {ICourse} from '../../../../../../shared/models/ICourse';
 import {IUnit} from '../../../../../../shared/models/units/IUnit';
 import {ActivatedRoute} from '@angular/router';
@@ -77,7 +76,7 @@ export class TeacherReportComponent implements OnInit {
                 unitWithProgress.done = true;
                 unitWithProgress.progress = this.progress[i];
                 studentWithUnits.finishCount++;
-                this.progress.splice(i, 1)
+                this.progress.splice(i, 1);
                 break;
               }
             }
