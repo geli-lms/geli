@@ -31,7 +31,7 @@ export class TaskUnitEditComponent implements OnInit {
   onCancel: () => void;
 
   @ViewChild(UnitGeneralInfoFormComponent)
-  private generalInfo: UnitGeneralInfoFormComponent;
+  generalInfo: UnitGeneralInfoFormComponent;
 
   tasks: any[];
 
@@ -56,7 +56,7 @@ export class TaskUnitEditComponent implements OnInit {
   /**
    * Save data. Decide if change existing task or create new one is needed
    */
-  protected onSave() {
+  onSave() {
     if (this.model._id !== undefined) {
       this.updateTaskUnit();
     } else {
@@ -95,7 +95,7 @@ export class TaskUnitEditComponent implements OnInit {
   /**
    * Add new task to the array of task in a task unit
    */
-  private addTask() {
+  addTask() {
     this.model.tasks.push(new Task());
   }
 

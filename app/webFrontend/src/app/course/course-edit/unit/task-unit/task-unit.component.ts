@@ -1,6 +1,4 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {MdSnackBar} from '@angular/material';
-import {UserService} from '../../../../shared/services/user.service';
 import {ITaskUnit} from '../../../../../../../../shared/models/units/ITaskUnit';
 import {TaskAttestationService} from '../../../../shared/services/data.service';
 
