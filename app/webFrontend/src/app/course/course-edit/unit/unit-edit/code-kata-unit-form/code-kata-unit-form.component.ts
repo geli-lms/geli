@@ -21,8 +21,9 @@ export class CodeKataUnitFormComponent implements OnInit {
   @ViewChild(UnitGeneralInfoFormComponent)
   private generalInfo: UnitGeneralInfoFormComponent;
 
-  areaSeperator = '//####################';
+  @ViewChild('codeEditor') editor;
 
+  areaSeperator = '//####################';
   logs: string;
 
   constructor(private codeKataUnitService: CodeKataUnitService,
@@ -43,6 +44,10 @@ export class CodeKataUnitFormComponent implements OnInit {
       this.model.definition = undefined;
       this.model.test = undefined;
     }
+
+    this.editor.getEditor().setOptions({
+      enableBasicAutocompletion: true
+    });
   }
 
   addUnit() {
@@ -87,7 +92,7 @@ export class CodeKataUnitFormComponent implements OnInit {
   validate() {
     const codeToTest: string = this.model.code;
 
-    this.logs = '';
+    /* this.logs = '';
     (<any>window).geli = {logs: ''};
     const origLogger = window.console.log;
     window.console.log = function (msg) {
@@ -106,13 +111,13 @@ export class CodeKataUnitFormComponent implements OnInit {
     };
 
     console.log((<any>window).geli.logs);
-    this.logs = (<any>window).geli.logs;
+    this.logs = (<any>window).geli.logs;*/
 
     // tslint:disable-next-line:no-eval
     const result = eval(codeToTest);
 
-    window.console.log = origLogger;
-    window.console.error = origErrorLogger;
+    // window.console.log = origLogger;
+    // window.console.error = origErrorLogger;
 
     if (result === true || result === undefined) {
       return true;

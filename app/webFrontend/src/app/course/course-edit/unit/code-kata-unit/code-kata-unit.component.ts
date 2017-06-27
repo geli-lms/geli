@@ -5,6 +5,7 @@ import {ProgressService, CodeKataProgressService} from 'app/shared/services/data
 import {ICodeKataProgress} from '../../../../../../../../shared/models/ICodeKataProgress';
 import {UserService} from '../../../../shared/services/user.service';
 import {ActivatedRoute} from '@angular/router';
+// import '../../../../../../../node_modules/ace-builds/src-min/ace.js';
 
 @Component({
   selector: 'app-code-kata',
@@ -89,7 +90,7 @@ export class CodeKataComponent implements OnInit {
   validate() {
     const codeToTest: string = this.codeKata.definition + '\n' + this.progress.code + '\n' + this.codeKata.test;
 
-    this.logs = '';
+    /* this.logs = '';
     (<any>window).geli = {logs: ''};
     const origLogger = window.console.log;
     window.console.log = function (msg) {
@@ -105,16 +106,13 @@ export class CodeKataComponent implements OnInit {
     window.onerror = function (message, url, linenumber) {
       console.log(message);
       console.log(linenumber);
-    };
-
-    console.log((<any>window).geli.logs);
-    this.logs = (<any>window).geli.logs;
+    }; */
 
     // tslint:disable-next-line:no-eval
     const result = eval(codeToTest);
 
-    window.console.log = origLogger;
-    window.console.error = origErrorLogger;
+    // window.console.log = origLogger;
+    // window.console.error = origErrorLogger;
 
     if (result === true || result === undefined) {
       return true;

@@ -3,21 +3,24 @@
   <ace-editor
     #definitionEditor
     [(text)]="codeKata.definition"
-    [mode]="'Javascript'"
+    [mode]="'javascript'"
+    [theme]="'github'"
     [readOnly]="true">
   </ace-editor>
   <div>Your code goes here:</div>
   <ace-editor class="user-code-editor"
               #codeEditor
               [(text)]="codeKata.code || progress.code"
-              [mode]="'Javascript'"
+              [mode]="'javascript'"
+              [theme]="'github'"
               [readOnly]="isExampleCode">
   </ace-editor>
   <div>These tests need to success:</div>
   <ace-editor
     #testEditor
     [(text)]="codeKata.test"
-    [mode]="'Javascript'"
+    [mode]="'javascript'"
+    [theme]="'github'"
     [readOnly]="true">
   </ace-editor>
 
