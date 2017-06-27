@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {TaskAttestationService, UnitService} from '../../../../../shared/services/data.service';
 import {Task} from '../../../../../models/Task';
 import {MdSnackBar} from '@angular/material';
@@ -64,20 +64,12 @@ export class TaskUnitEditComponent implements OnInit {
     }
   };
 
-      for (const task of this.tasks) {
-        this.answerPreparationAfterLoadingFromServer(task); // WORKAROUND get rid of the _id for the answers
-      }
-    });
-  }
-
-  addUnit() {
+  addTaskUnit() {
     this.unitService.addTaskUnit({
       name: this.generalInfo.form.value.name,
       description: this.generalInfo.form.value.description,
       ...this.model
-    }, this.lectureId)
-  private addTaskUnit() {
-    this.unitService.addTaskUnit(this.model, this.lectureId)
+    },  this.lectureId)
       .then(
         (task) => {
           this.snackBar.open('Task(s) saved', '', {duration: 3000});

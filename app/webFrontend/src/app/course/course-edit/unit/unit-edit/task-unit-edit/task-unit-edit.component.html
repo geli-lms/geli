@@ -40,7 +40,7 @@
   </div>
   <p>
     <button md-button (click)="onCancel()">Cancel</button>
-    <button md-button color="primary" class="add-unit" (click)="onSave()">Save</button>
+    <button md-button color="primary" class="add-unit" (click)="onSave()" [disabled]="!generalInfo.form.value.name">Save</button>
   </p>
   <button md-mini-fab class="add-task-fab" (click)="addTask()" mdTooltip="Add task" mdTooltipPosition="right">
     <md-icon>add</md-icon>
