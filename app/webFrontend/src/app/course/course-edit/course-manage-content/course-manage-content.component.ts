@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, OnDestroy} from '@angular/core';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
 import {ILecture} from '../../../../../../../shared/models/ILecture';
 import {CourseService, LectureService, UnitService} from '../../../shared/services/data.service';
@@ -7,13 +7,14 @@ import {DialogService} from '../../../shared/services/dialog.service';
 import {UserService} from '../../../shared/services/user.service';
 import {MdSnackBar} from '@angular/material';
 import {IUnit} from '../../../../../../../shared/models/units/IUnit';
+import {DragulaService} from 'ng2-dragula';
 
 @Component({
   selector: 'app-course-manage-content',
   templateUrl: './course-manage-content.component.html',
   styleUrls: ['./course-manage-content.component.scss']
 })
-export class CourseManageContentComponent implements OnInit {
+export class CourseManageContentComponent implements OnInit, OnDestroy {
 
   @Input() course: ICourse;
   openedLecture: ILecture;
@@ -26,17 +27,61 @@ export class CourseManageContentComponent implements OnInit {
   fabOpen = false;
 
 
-
   constructor(private lectureService: LectureService,
               private courseService: CourseService,
               private unitService: UnitService,
               private showProgress: ShowProgressService,
               private snackBar: MdSnackBar,
               private dialogService: DialogService,
+              private dragulaService: DragulaService,
               public userService: UserService) {
   }
 
   ngOnInit() {
+    // Make items only draggable by dragging the handle
+    this.dragulaService.setOptions('lectures', {
+      moves: (el, container, handle) => {
+        console.log();
+        return handle.classList.contains('lecture-drag-handle');
+      }
+    });
+    this.dragulaService.setOptions('units', {
+      moves: (el, container, handle) => {
+        return handle.classList.contains('unit-drag-handle');
+      }
+    });
+
+    this.dragulaService.dropModel.subscribe((value) => {
+      const bagName = value[0];
+
+      switch (bagName) {
+        case 'lectures':
+          this.updateLectureOrder();
+          break;
+        case 'units':
+          this.updateUnitOrder();
+          break;
+      }
+    });
+  }
+
+  ngOnDestroy() {
+    this.dragulaService.destroy('lectures');
+    this.dragulaService.destroy('units');
+  }
+
+  updateLectureOrder() {
+    this.courseService.updateItem({
+      '_id': this.course._id,
+      'lectures': this.course.lectures.map((lecture) => lecture._id)
+    });
+  }
+
+  updateUnitOrder() {
+    this.lectureService.updateItem({
+      '_id': this.openedLecture._id,
+      'units': this.openedLecture.units.map((unit) => unit._id)
+    });
   }
 
   duplicateLecture(lecture: ILecture) {

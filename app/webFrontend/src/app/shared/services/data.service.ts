@@ -6,6 +6,7 @@ import {IUser} from '../../../../../../shared/models/IUser';
 import {ICourse} from '../../../../../../shared/models/ICourse';
 import {User} from '../../models/User';
 import {Course} from '../../models/Course';
+import {IFreeTextUnit} from '../../../../../../shared/models/units/IFreeTextUnit';
 
 abstract class DataService {
 
@@ -151,6 +152,7 @@ export class TaskService extends DataService {
   }
 
 }
+
 @Injectable()
 export class LectureService extends DataService {
   constructor(public backendService: BackendService) {
@@ -170,6 +172,13 @@ export class UnitService extends DataService {
     const promise = this.createItem({model: taskUnit, lectureId: lectureId});
     this.apiPath = originalApiPath;
     return promise;
+  }
+}
+
+@Injectable()
+export class FreeTextUnitService extends DataService {
+  constructor(public backendService: BackendService) {
+    super('units/free-texts/', backendService);
   }
 }
 
@@ -199,6 +208,11 @@ export class AboutDataService extends DataService {
     return new Promise((resolve, reject) => {
       this.backendService.get(this.apiPath + 'dependencies')
         .subscribe((responseItems: any) => {
+            if (responseItems.httpCode >= 500) {
+              console.log('API: ' + responseItems.message);
+              return resolve([]);
+            }
+
             const out = [];
             responseItems.data.forEach(item => {
               out.push(new Dependency(

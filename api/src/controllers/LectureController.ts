@@ -1,5 +1,5 @@
 import {Request} from 'express';
-import {Body, Get, Post, Put, Delete, Param, Req, JsonController, UseBefore} from 'routing-controllers';
+import {Body, Get, Post, Put, Delete, Param, Req, JsonController, UseBefore, Authorized} from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 
 import {Lecture} from '../models/Lecture';
@@ -16,6 +16,7 @@ export class LectureController {
       .then((l) => l.toObject());
   }
 
+  @Authorized(['teacher', 'admin'])
   @Post('/')
   addLecture(@Body() data: any, @Req() request: Request) {
     const lectureI: ILecture = data.lecture;
@@ -31,6 +32,7 @@ export class LectureController {
       .then(({course, lecture}) => lecture.toObject());
   }
 
+  @Authorized(['teacher', 'admin'])
   @Put('/:id')
   updateLecture(@Param('id') id: string, @Body() lecture: ILecture) {
     return Lecture.findByIdAndUpdate(id, lecture, {'new': true})
