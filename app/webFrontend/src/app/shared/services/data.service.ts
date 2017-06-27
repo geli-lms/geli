@@ -236,7 +236,7 @@ export class TaskAttestationService extends DataService {
       this.getTaskAttestationsForTask(taskId).then(
         (taskAttestations) => {
 
-          let n = 0;
+          let n = -1;
           for (const taskAttestation of taskAttestations) {
             if (taskAttestation.correctlyAnswered) {
               n++;

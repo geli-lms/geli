@@ -23,10 +23,9 @@ import {DashboardStudentComponent} from './start/dashboard/dashboard-student/das
 import {DashboardTeacherComponent} from './start/dashboard/dashboard-teacher/dashboard-teacher.component';
 import {DashboardAdminComponent} from './start/dashboard/dashboard-admin/dashboard-admin.component';
 import {
-  CourseService, TaskService, UserDataService, LectureService,
-  UnitService, AboutDataService, FreeTextUnitService
   CourseService, UserDataService, LectureService,
-  UnitService, AboutDataService, TaskAttestationService
+  UnitService, AboutDataService, FreeTextUnitService, TaskAttestationService
+
 } from './shared/services/data.service';
 import {BackendService} from './shared/services/backend.service';
 import {CourseComponent} from './course/course.component';
@@ -68,8 +67,6 @@ import {MarkdownService} from './shared/services/markdown.service';
 import { CourseManageContentComponent } from './course/course-edit/course-manage-content/course-manage-content.component';
 import { MdFabMenuComponent } from './shared/components/md-fab-menu/md-fab-menu.component';
 import { UnitGeneralInfoFormComponent } from './course/course-edit/unit/unit-edit/unit-general-info-form/unit-general-info-form.component';
-import {CourseManageContentComponent} from './course/course-edit/course-manage-content/course-manage-content.component';
-import {MdFabMenuComponent} from './shared/components/md-fab-menu/md-fab-menu.component';
 
 @NgModule({
   declarations: [

@@ -83,9 +83,7 @@ export class UnitController {
           } catch (e) {
           } // silently discard file not found errors
         });
-      // console.log('**********');
-      if (unit instanceof VideoUnit && (<IVideoUnitModel>unit).filePath) {
-        fs.unlinkSync((<IVideoUnitModel>unit).filePath);
+
       } else if (unit instanceof TaskUnit) {
 
         const tasks_to_delete: any = [];
