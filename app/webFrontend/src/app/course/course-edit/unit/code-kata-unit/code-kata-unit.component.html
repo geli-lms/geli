@@ -9,9 +9,9 @@
   <div>Your code goes here:</div>
   <ace-editor class="user-code-editor"
               #codeEditor
-              [(text)]="progress.code"
+              [(text)]="codeKata.code || progress.code"
               [mode]="'Javascript'"
-              [readOnly]="false">
+              [readOnly]="isExampleCode">
   </ace-editor>
   <div>These tests need to success:</div>
   <ace-editor
@@ -21,7 +21,9 @@
     [readOnly]="true">
   </ace-editor>
 
-  <button md-button (click)="validate()">Validate</button>
-  <button md-button color="primary" class="submit-progress" (click)="submitProgress()">Submit</button>
+  <div *ngIf="!isExampleCode">
+    <button md-button (click)="validate()">Validate</button>
+    <button md-button color="primary" class="submit-progress" (click)="submitProgress()">Submit</button>
+  </div>
   <div>{{logs}}</div>
 </div>

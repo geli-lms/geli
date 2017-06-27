@@ -20,6 +20,7 @@ export class CodeKataComponent implements OnInit {
 
   logs: string;
   progress: ICodeKataProgress;
+  isExampleCode = false;
 
   constructor(private route: ActivatedRoute,
               private snackBar: MdSnackBar,
@@ -35,7 +36,10 @@ export class CodeKataComponent implements OnInit {
       params => {
         this.progress.course = decodeURIComponent(params['id']);
       });
-    this.loadProgress();
+    this.isExampleCode = this.codeKata.code !== null;
+    if (!this.isExampleCode) {
+      this.loadProgress();
+    }
   }
 
   ngAfterViewInit() {
