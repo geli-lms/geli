@@ -12,11 +12,11 @@ export class CodeKataUnitController extends UnitController {
   addCodeKataUnit(@Body() data: any) {
     // discard invalid requests
     if (!data.lectureId) {
-      return new BadRequestError('No lecture ID was submitted.');
+      throw new BadRequestError('No lecture ID was submitted.');
     }
 
     if (!data.model) {
-      return new BadRequestError('No codekata unit was submitted.');
+      throw new BadRequestError('No codekata unit was submitted.');
     }
     data.model = this.splitCodeAreas(data.model);
 
