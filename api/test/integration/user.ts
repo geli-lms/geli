@@ -139,11 +139,11 @@ describe('User', () => {
         .catch(done);
     });
 
-    it('should fail with wrong authorization (role edit)', (done) => {
+    it('should fail with wrong authorization (uid)', (done) => {
       User.findOne({email: 'teacher@test.local'})
       .then((user) => {
         const updatedUser = user;
-        updatedUser.uid = '987654';
+        updatedUser.uid = '987456';
         chai.request(app)
         .put(`${BASE_URL}/${user._id}`)
         .set('Authorization', `JWT ${JwtUtils.generateToken(user)}`)
