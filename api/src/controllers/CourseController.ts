@@ -15,7 +15,7 @@ export class CourseController {
   getCourses() {
     return Course.find({})
       .populate('lectures')
-      .populate('courseAdmins')
+      .populate('courseAdmin')
       .populate('teachers')
       .populate('students')
       .then((courses) => courses.map((c) => c.toObject()));
@@ -33,7 +33,7 @@ export class CourseController {
         }
       }
     })
-    .populate('courseAdmins')
+    .populate('courseAdmin')
       .populate('teachers')
     .populate('students')
     .then((course) => {
