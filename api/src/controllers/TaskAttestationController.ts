@@ -4,6 +4,8 @@ import passportJwtMiddleware from '../security/passportJwtMiddleware';
 
 import {TaskAttestation} from '../models/TaskAttestation';
 import {ITaskAttestation} from '../../../shared/models/ITaskAttestation';
+import {Unit} from '../models/units/Unit';
+import {ITaskUnitModel} from '../models/units/TaskUnit';
 
 @JsonController('/task_attestations')
 @UseBefore(passportJwtMiddleware)

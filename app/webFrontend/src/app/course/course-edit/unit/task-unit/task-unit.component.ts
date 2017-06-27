@@ -2,7 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {MdSnackBar} from '@angular/material';
 import {UserService} from '../../../../shared/services/user.service';
 import {ITaskUnit} from '../../../../../../../../shared/models/units/ITaskUnit';
-import {UnitService} from '../../../../shared/services/data.service';
+import {TaskAttestationService} from '../../../../shared/services/data.service';
 
 @Component({
   selector: 'app-task-unit',
@@ -15,14 +15,10 @@ export class TaskUnitComponent implements OnInit {
 
   @Input() taskUnit: ITaskUnit;
 
-  constructor(private unitService: UnitService,
-              private userService: UserService,
-              private snackBar: MdSnackBar) {
+  constructor(private taskAttestationService: TaskAttestationService) {
   }
 
   ngOnInit() {
-  //  this.taskUnit = this.taskUnit;
-    // this.unitService.countOfTaskUnitAttestationsFor(this.taskUnit);
   }
 
 }

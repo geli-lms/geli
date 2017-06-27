@@ -14,8 +14,7 @@ export class FixtureLoader {
 
   private fixtures: Array<IFixture> = [
     userFixtures,
-    courseFixtures,
-    taskFixtures
+    courseFixtures
   ];
 
   constructor() {

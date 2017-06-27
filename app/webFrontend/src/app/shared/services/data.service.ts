@@ -115,25 +115,6 @@ export class CourseService extends DataService {
         );
     });
   }
-
-  countOfEnrolledStudentsFor(courseId: string): Promise<any[]> {
-    return new Promise((resolve, reject) => {
-      this.backendService.get(this.apiPath + courseId)
-        .subscribe(
-          (responseItems: any) => {
-            if (this.changeProps2Date) {
-              responseItems.forEach(item => {
-                this.changeProps2Date.forEach(prop => {
-                  DataService.changeStringProp2DateProp(item, prop);
-                });
-              });
-            }
-            resolve(responseItems.students.length);
-          },
-          error => reject(error)
-        );
-    });
-  }
 }
 
 @Injectable()
@@ -190,7 +171,7 @@ export class TaskAttestationService extends DataService {
       // is there already an attestation for this task for given user?
       this.getTaskAttestationForTaskAndUser(taskId, userId).then(
         (oldTaskAttestation) => {
-              if (oldTaskAttestation.length === 0) {
+          if (oldTaskAttestation.length === 0) {
             this.createItem(newTaskAttestation).then(
               (val) => {
                 resolve(val);
@@ -217,73 +198,6 @@ export class TaskAttestationService extends DataService {
         });
     });
   }
-
-  countOfTaskAttestationsFor(taskId: string): Promise<any[]> {
-    return new Promise((resolve, reject) => {
-      this.getTaskAttestationsForTask(taskId).then(
-        (taskAttestations) => {
-      resolve(taskAttestations.length);
-
-        }, (error) => {
-
-          reject(error);
-        });
-    });
-  }
-
-  countOfCorrectlyAnsweredTaskAttestationsFor(taskId: string): Promise<any[]> {
-    return new Promise((resolve, reject) => {
-      this.getTaskAttestationsForTask(taskId).then(
-        (taskAttestations) => {
-
-          let n = -1;
-          for (const taskAttestation of taskAttestations) {
-            if (taskAttestation.correctlyAnswered) {
-              n++;
-            }
-          }
-          resolve(n);
-
-        }, (error) => {
-
-          reject(error);
-        });
-    });
-  }
-
-  /*
-   countOfEnrolledStudentsFor(taskId: string): Promise<any[]> {
-   return new Promise((resolve, reject) => {
-   resolve(12);
-   });
-   }
-
-   // muss in courseservice realisiert werden auch api
-   countOfEnrolledStudentsForCourse(courseId: string): Promise<any[]> {
-   return new Promise((resolve, reject) => {
-   resolve(12);
-   });
-   }
-
-   countOfTaskAttestationCompletedForCourseAndUser(courseId: string, userId: string): Promise<any[]> {
-   return new Promise((resolve, reject) => {
-   resolve(112);
-   });
-   }
-
-   countOfTaskAttestationCorrectlyCompletedForCourseAndUser(courseId: string, userId: string): Promise<any[]> {
-   return new Promise((resolve, reject) => {
-   resolve(122);
-   });
-   }
-
-   getTasksAttestationsForCourseAndUser(courseId: string, userId: string): Promise<any[]> {
-   return new Promise((resolve, reject) => {
-   resolve(127);
-   });
-   }
-   */
-
 }
 
 @Injectable()
@@ -314,51 +228,6 @@ export class UnitService extends DataService {
     this.apiPath = originalApiPath;
     return promise;
   }
-
-  countOfTaskUnitAttestationsFor(taskUnit: ITaskUnit): Promise<any[]> {
-    const tasks_to_add: any = [];
-    for (const task of taskUnit.tasks) {
-      tasks_to_add.push(task._id.toString());
-    }
-    return new Promise((resolve, reject) => {
-      Promise.all(tasks_to_add.map(this.taskAttestationService.countOfTaskAttestationsFor, this))
-        .then(
-          (values) => {
-
-            let n = 0;
-            for (const value of values) {
-              n = n + +value.toString();
-            }
-            resolve(n);
-
-          }, (error) => {
-
-            reject(error);
-          });
-    });
-  }
-
-  /*
-   countOfCorrectlyAnsweredTaskUnitAttestationsFor(taskUnit: ITaskUnit): Promise<any[]> {
-   return new Promise((resolve, reject) => {
-   this.getTaskAttestationsForTask(taskId).then(
-   (taskAttestations) => {
-
-   let n = 0;
-   for (const taskAttestation of taskAttestations) {
-   if (taskAttestation.correctlyAnswered) {
-   n++;
-   }
-   }
-   resolve(n);
-
-   }, (error) => {
-   // console.log('countOfTaskAttestationsFor: error' );
-   // console.log('error: ' + error);
-   reject(error);
-   });
-   });
-   }*/
 }
 
 @Injectable()
