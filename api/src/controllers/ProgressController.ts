@@ -10,7 +10,6 @@ export class ProgressController {
   @Get('/courses/:id')
   getCourseProgress(@Param('id') id: string) {
     return Progress.find({'course': id})
-      .populate('unit')
       .then((progresses) => progresses.map((progress) => progress.toObject({virtuals: true})));
   }
 

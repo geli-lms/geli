@@ -1,7 +1,6 @@
 <div class="course-header">
   <h1>{{course?.name}}</h1>
   <p>{{course?.description}}</p>
-  <button md-raised-button color="primary" (click)="gotoReport()">View progress report</button>
 </div>
 <div class="lectures" *ngIf="course">
   <app-lecture [course]="course" [lecture]="lecture" *ngFor="let lecture of course.lectures"></app-lecture>

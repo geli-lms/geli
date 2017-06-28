@@ -61,6 +61,7 @@ export class TeacherReportComponent implements OnInit {
     this.progressService.getCourseProgress(this.id)
       .then((progress: any) => {
         this.progress = progress;
+        const localProgress = progress;
         this.students.map((student) => {
           const studentWithUnits: any = student;
           studentWithUnits.units = [];
@@ -68,8 +69,8 @@ export class TeacherReportComponent implements OnInit {
           this.progressableUnits.map((progressableUnit) => {
             const unitWithProgress: any = progressableUnit;
             unitWithProgress.done = false;
-            for (let i = 0; i < this.progress.length; i++) {
-              if (studentWithUnits._id === this.progress[i].user && unitWithProgress._id === this.progress[i].unit._id) {
+            for (let i = 0; i < localProgress.length; i++) {
+              if (studentWithUnits._id === localProgress[i].user && unitWithProgress._id === localProgress[i].unit) {
                 unitWithProgress.done = true;
                 unitWithProgress.progress = this.progress[i];
                 studentWithUnits.finishCount++;

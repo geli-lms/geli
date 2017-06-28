@@ -9,7 +9,7 @@ import {
   Param,
   Post,
   Put,
-  Req,
+  Req, UnauthorizedError,
   UploadedFile,
   UseBefore
 } from 'routing-controllers';
@@ -72,6 +72,20 @@ export class CourseController {
       .populate('teachers')
     .populate('students')
     .then((course) => {
+      if (currentUser.role === 'student' && !this.hasUser(course.students, currentUser)) {
+        throw new UnauthorizedError('You are not a member of this course.');
+      } else if (currentUser.role === 'teacher') {
+        let isCourseAdmin = false;
+        if (typeof course.courseAdmin !== 'undefined') {
+          isCourseAdmin = course.courseAdmin._id.toString() === currentUser._id;
+        }
+
+        const isTeacher = this.hasUser(course.teachers, currentUser);
+        if (!isCourseAdmin && !isTeacher) {
+          throw new UnauthorizedError('You are no a teacher in this course.');
+        }
+      }
+
       course.lectures.forEach((lecture) => {
         lecture.units.forEach((unit) => {
           if (unit.type === 'code-kata' && currentUser.role === 'student') {
@@ -82,6 +96,15 @@ export class CourseController {
       });
       return course.toObject();
     });
+  }
+
+  private hasUser(users: IUser[], currentUser: IUser): boolean {
+    const userFound = users.find(user => user._id.toString() === currentUser._id);
+    if (typeof userFound === 'undefined') {
+      return false;
+    } else {
+      return true;
+    }
   }
 
   @Authorized(['teacher', 'admin'])
