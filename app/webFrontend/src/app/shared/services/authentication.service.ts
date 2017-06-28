@@ -1,9 +1,10 @@
 import {Injectable} from '@angular/core';
+import {Headers} from '@angular/http';
 import 'rxjs/add/operator/map';
 import {UserService} from './user.service';
-import {MdSnackBar} from '@angular/material';
 import {Http} from '@angular/http';
 import {IUser} from '../../../../../../shared/models/IUser';
+import {Router} from '@angular/router';
 
 @Injectable()
 export class AuthenticationService {
@@ -14,6 +15,7 @@ export class AuthenticationService {
   public isLoggedIn = false;
 
   constructor(private http: Http,
+              private router: Router,
               private userService: UserService) {
     this.token = localStorage.getItem('token');
 
@@ -39,12 +41,26 @@ export class AuthenticationService {
     });
   }
 
+  reloadUser() {
+    if (this.userService.user) {
+      return this.http.get(`${AuthenticationService.API_URL}users/${this.userService.user._id}`, { headers: this.authHeader() })
+        .map(response => response.json())
+        .subscribe(
+          (response: any) => {
+            this.userService.setUser(response);
+          }, () => {
+            this.logout();
+          });
+    }
+  }
+
   logout(): void {
     this.token = null;
     this.isLoggedIn = false;
     localStorage.removeItem('token');
 
     this.userService.unsetUser();
+    this.router.navigate(['login']);
   }
 
   register(user: IUser) {
@@ -79,5 +95,13 @@ export class AuthenticationService {
             reject(err);
           });
     });
+  }
+
+  authHeader() {
+    const headers = new Headers({'Content-Type': 'application/json'});
+    if (this.token !== '') {
+      headers.set('Authorization', this.token);
+    }
+    return headers;
   }
 }
