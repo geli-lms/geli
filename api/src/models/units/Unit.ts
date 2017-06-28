@@ -1,6 +1,7 @@
 import * as mongoose from 'mongoose';
 import {IUnit} from '../../../../shared/models/units/IUnit';
 import {NativeError} from 'mongoose';
+import {Progress} from '../Progress';
 
 interface IUnitModel extends IUnit, mongoose.Document {
 }
@@ -48,6 +49,11 @@ function populateUnit(next: (err?: NativeError) => void) {
 }
 
 unitSchema.pre('find', populateUnit);
+
+// Cascade delete
+unitSchema.pre('remove', function(next: () => void) {
+  Progress.remove({'unit': this._id}).exec().then(next).catch(next);
+});
 
 const Unit = mongoose.model<IUnitModel>('Unit', unitSchema);
 

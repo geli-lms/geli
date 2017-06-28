@@ -47,6 +47,7 @@ const userSchema = new mongoose.Schema({
   {
     timestamps: true,
     toObject: {
+      virtuals: true,
       transform: function (doc: any, ret: any) {
         ret._id = ret._id.toString();
       }
