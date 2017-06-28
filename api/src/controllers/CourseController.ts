@@ -27,7 +27,7 @@ import crypto = require('crypto');
 const uploadOptions = {
   storage: multer.diskStorage({
     destination: (req: any, file: any, cb: any) => {
-      cb(null, 'temp/');
+      cb(null, 'tmp/');
     },
     filename: (req: any, file: any, cb: any) => {
       const extPos = file.originalname.lastIndexOf('.');
