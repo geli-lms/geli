@@ -1,10 +1,10 @@
-import {Component, OnInit, ViewContainerRef, ChangeDetectorRef} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {FormGroup, FormBuilder, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CourseService} from '../../shared/services/data.service';
 import {MdSnackBar} from '@angular/material';
 import {ShowProgressService} from '../../shared/services/show-progress.service';
-import {FileUploader, FileItem} from 'ng2-file-upload';
+import {FileUploader} from 'ng2-file-upload';
 
 @Component({
   selector: 'app-course-edit',
@@ -31,7 +31,6 @@ export class CourseEditComponent implements OnInit {
               private formBuilder: FormBuilder,
               private courseService: CourseService,
               public snackBar: MdSnackBar,
-              public viewContainerRef: ViewContainerRef,
               private ref: ChangeDetectorRef,
               private showProgress: ShowProgressService) {
 
@@ -58,17 +57,16 @@ export class CourseEditComponent implements OnInit {
   ngOnInit() {
     this.generateForm();
     this.uploader = new FileUploader({
-      allowedMimeType: ['text/plain'],
       url: '/api/courses/' + this.id + '/whitelist',
       headers: [{
         name: 'Authorization',
         value: localStorage.getItem('token'),
       }]
     });
-    this.uploader.onProgressItem = (fileItem: FileItem, progress: any) => {
+    this.uploader.onProgressItem = () => {
       this.ref.detectChanges();
     };
-    this.uploader.onCompleteItem = (item: any, response: any, status: any, headers: any) => {
+    this.uploader.onCompleteItem = (item: any, response: any, status: any) => {
       if (status === 200) {
       const course = JSON.parse(response);
       this.snackBar.open('Item is uploaded there where ' + course.whitelist.length + ' users parsed!', '', { duration: 5000 });
@@ -116,11 +114,7 @@ export class CourseEditComponent implements OnInit {
   }
 
   onChangeActive(value) {
-    if (value.checked === true) {
-      this.active = true;
-    } else {
-      this.active = false;
-    }
+    this.active = value.checked;
   }
 
 

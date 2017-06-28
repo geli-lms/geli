@@ -1,9 +1,8 @@
 import {IUser} from '../../../shared/models/IUser';
 import {WhitelistUser} from '../models/WhitelistUser';
 import {ICourseModel} from '../models/Course';
-import e = require('express');
-import {isNumber} from 'util';
 import {HttpError} from 'routing-controllers';
+import e = require('express');
 const fs = require('fs');
 const utf8 = require('to-utf-8');
 const csv = require('fast-csv');
@@ -14,11 +13,8 @@ export class ObsCsvController {
   /**
    * Parse a CSV file from filesystem convert it to uft8 an write it in string buffer.
    * @param file Is a file uploaded by frontend.
-   * @param course Is the actual course.
-   * @param allUsers Are all users in system.
-   * @returns {any} Is the updated course.
    */
-  public parseFile(file: any, course: ICourseModel) {
+  public parseFile(file: any) {
     let buffer = '';
     return new Promise(function (resolve: any, reject: any) {
       fs.createReadStream(file.path)
@@ -62,7 +58,6 @@ export class ObsCsvController {
         const lastName = e.split(';')[1];
         const uid = e.split(';')[2];
         if (firstName.length > 0 && lastName.length > 0 && uid.length > 0) {
-          console.log(Number(firstName));
           if (!isNaN(Number(firstName))) {
             throw new HttpError(400, 'firstName was a number.');
           }

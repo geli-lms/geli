@@ -1,18 +1,41 @@
 import {Request} from 'express';
 import {
-  Body, Get, Post, Put, Param, Req, JsonController, UseBefore, HttpError, Authorized,
-  UploadedFile
+  Authorized,
+  Body,
+  Get,
+  HttpError,
+  JsonController,
+  Param,
+  Post,
+  Put,
+  Req,
+  UploadedFile,
+  UseBefore
 } from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 
-import {User} from '../models/User';
+import {IUserModel, User} from '../models/User';
 import {ICourse} from '../../../shared/models/ICourse';
-import {IUserModel} from '../models/User';
 import {IUser} from '../../../shared/models/IUser';
 import {ObsCsvController} from './ObsCsvController';
 import {Course, ICourseModel} from '../models/Course';
 import {WhitelistUser} from '../models/WhitelistUser';
-const uploadOptions = {destination: 'temp/'};
+const multer = require('multer');
+import crypto = require('crypto');
+const uploadOptions = {
+  storage: multer.diskStorage({
+    destination: (req: any, file: any, cb: any) => {
+      cb(null, 'temp/');
+    },
+    filename: (req: any, file: any, cb: any) => {
+      const extPos = file.originalname.lastIndexOf('.');
+      const ext = (extPos !== -1) ? `.${file.originalname.substr(extPos + 1).toLowerCase()}` : '';
+      crypto.pseudoRandomBytes(16, (err, raw) => {
+        cb(err, err ? undefined : `${raw.toString('hex')}${ext}`);
+      });
+    }
+  }),
+};
 
 @JsonController('/courses')
 @UseBefore(passportJwtMiddleware)
@@ -86,14 +109,14 @@ export class CourseController {
   @Authorized(['teacher', 'admin'])
   @Post('/:id/whitelist')
   whitelistStudents(@Param('id') id: string, @UploadedFile('file', {options: uploadOptions}) file: any) {
-    const mimetype: string = file.mimetype;
-    if (mimetype !== 'application/vnd.ms-excel') {
-      throw new TypeError('Wrong MimeType allowed are just csv files.');
+    const name: string = file.originalname;
+    if (!name.endsWith('.csv')) {
+      throw new TypeError('Wrong type allowed are just csv files.');
     }
     return User.find({})
       .then((users) => users.map((user) => user.toObject({virtuals: true})))
       .then((users) => Course.findById(id).then((course) => {
-        return this.parser.parseFile(file, course).then((buffer: any) =>
+        return this.parser.parseFile(file).then((buffer: any) =>
           this.parser.updateCourseFromBuffer(buffer, course, users).save().then((c: ICourseModel) =>
             c.toObject()));
       }));
