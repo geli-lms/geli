@@ -1,6 +1,6 @@
 import * as nodemailer from 'nodemailer';
 
-import {IUserModel, User} from '../models/User';
+import {IUserModel} from '../models/User';
 import config from '../config/main';
 import {Transporter} from 'nodemailer';
 

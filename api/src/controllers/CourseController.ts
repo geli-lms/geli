@@ -1,11 +1,15 @@
 import {Request} from 'express';
-import {Body, Get, Post, Put, Param, Req, JsonController, UseBefore, HttpError, Authorized} from 'routing-controllers';
+import {
+  Body, Get, Post, Put, Param, Req, JsonController, UseBefore, HttpError, Authorized,
+  CurrentUser
+} from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 
 import {Course} from '../models/Course';
 import {ICourse} from '../../../shared/models/ICourse';
 import {IUserModel} from '../models/User';
 import {IUser} from '../../../shared/models/IUser';
+import {ICodeKataUnit} from '../../../shared/models/units/ICodeKataUnit';
 
 @JsonController('/courses')
 @UseBefore(passportJwtMiddleware)
@@ -22,7 +26,7 @@ export class CourseController {
   }
 
   @Get('/:id')
-  getCourse(@Param('id') id: string) {
+  getCourse(@Param('id') id: string, @CurrentUser() currentUser?: IUser) {
     return Course.findById(id)
     .populate({
       path: 'lectures',
@@ -37,6 +41,14 @@ export class CourseController {
       .populate('teachers')
     .populate('students')
     .then((course) => {
+      course.lectures.forEach((lecture) => {
+        lecture.units.forEach((unit) => {
+          if (unit.type === 'code-kata' && currentUser.role === 'student') {
+            // (<ICodeKataUnit>unit).code = 'undefined';
+            (<ICodeKataUnit>unit).code = null;
+          }
+        });
+      });
       return course.toObject();
     });
   }

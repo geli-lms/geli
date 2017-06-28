@@ -1,0 +1,28 @@
+<div class="code-kata-unit-form">
+  <strong>Code-Kata</strong>
+
+  <app-unit-general-info-form [model]="model"></app-unit-general-info-form>
+
+  <div class="info-text">
+    <md-icon>info</md-icon>
+    Separate definition, coding and test areas with "{{areaSeperator}}".
+  </div>
+  <div class="info-text">
+    <md-icon>info</md-icon>
+    Your students can only edit the code area.
+  </div>
+
+  <ace-editor class="user-code-editor"
+              #codeEditor
+              [(text)]="model.code"
+              [mode]="'javascript'"
+              [theme]="'github'"
+              [readOnly]="false">
+  </ace-editor>
+
+  <button md-button (click)="onCancel()">Cancel</button>
+  <button md-button (click)="validate()">Validate</button>
+  <button md-button color="primary" class="add-unit" (click)="addUnit()">Save</button>
+  <div *ngIf="logs!==undefined"><strong>Logs</strong></div>
+  <pre>{{logs}}</pre>
+</div>

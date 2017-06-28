@@ -192,6 +192,13 @@ export class UnitService extends DataService {
 }
 
 @Injectable()
+export class CodeKataUnitService extends DataService {
+  constructor(public backendService: BackendService) {
+    super('units/code-katas/', backendService);
+  }
+}
+
+@Injectable()
 export class FreeTextUnitService extends DataService {
   constructor(public backendService: BackendService) {
     super('units/free-texts/', backendService);
