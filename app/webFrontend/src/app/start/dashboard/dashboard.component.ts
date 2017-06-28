@@ -81,6 +81,13 @@ export class DashboardComponent implements OnInit {
 
   isTeacherOfCourse(course: ICourse): boolean {
     const user = this.userService.user;
-    return (course.teachers.filter(obj => obj._id === user._id).length > 0) || (course.courseAdmin.filter(obj => obj._id === user._id).length > 0);
+    let isTeacher = false;
+    // at the moment the course fixtures don't support references to the corresponding courseAdmin.
+    // The 'undefined' condition fixes problems with that.
+    // TODO: ensure that references to the courseAdmin exist in fixtures
+    if (typeof course.courseAdmin !== 'undefined') {
+      isTeacher = course.courseAdmin._id === user._id;
+    }
+    return (course.teachers.filter(obj => obj._id === user._id).length > 0) || isTeacher;
   }
 }

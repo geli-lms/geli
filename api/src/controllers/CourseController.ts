@@ -44,7 +44,7 @@ export class CourseController {
   @Authorized(['teacher', 'admin'])
   @Post('/')
   addCourse(@Body() course: ICourse, @Req() request: Request) {
-    course.courseAdmin = (<IUserModel[]>(<any>request).user);
+    course.courseAdmin = (<IUserModel>(<any>request).user);
     return new Course(course).save()
     .then((c) => c.toObject());
   }
