@@ -42,6 +42,7 @@ export class LectureController {
   @Delete('/:id')
   deleteLecture(@Param('id') id: string) {
     return Course.update({}, {$pull: {lectures: id}})
-      .then(() => Lecture.findByIdAndRemove(id));
+      .then(() => Lecture.findById(id))
+      .then((lecture) => lecture.remove());
   }
 }

@@ -72,6 +72,14 @@ const courseSchema = new mongoose.Schema({
   }
 );
 
+// Cascade delete
+courseSchema.pre('remove', function(next: () => void) {
+  Lecture.find({'_id': {$in: this.lectures}}).exec()
+    .then((lectures) => Promise.all(lectures.map(lecture => lecture.remove())))
+    .then(next)
+    .catch(next);
+});
+
 
 const Course = mongoose.model<ICourseModel>('Course', courseSchema);
 
