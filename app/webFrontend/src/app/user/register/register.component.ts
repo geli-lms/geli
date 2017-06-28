@@ -33,15 +33,14 @@ export class RegisterComponent implements OnInit {
 
   register() {
     this.showProgress.toggleLoadingGlobal(true);
+    if (this.registerForm.value.role !== 'student') {
+      delete this.registerForm.value.uid;
+    }
     this.authenticationService.register(this.registerForm.value).then(
       (val) => {
-        console.log('register done...' + val);
         this.showProgress.toggleLoadingGlobal(false);
         this.registrationDone = true;
-        // window.location.href = '../';
       }, (error) => {
-        console.log('registration failed');
-        console.log(error);
         this.showProgress.toggleLoadingGlobal(false);
         this.snackBar.open('Registration failed', 'Dismiss');
       });
