@@ -62,7 +62,7 @@ export class MembersComponent implements OnInit {
         SortUtil.sortUsers(this.allStudents);
         SortUtil.sortUsers(this.course.students);
       });
-  };
+  }
 
   /**
    * @param id Id of an user.

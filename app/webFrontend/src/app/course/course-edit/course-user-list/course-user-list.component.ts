@@ -41,7 +41,7 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
     this.dragula.dropModel.subscribe(value => {
       const bagName = value[0];
 
-      if(bagName === this.dragulaBagId) {
+      if (bagName === this.dragulaBagId) {
         this.onDragendUpdate.emit(this.usersInCourse);
       }
     });
