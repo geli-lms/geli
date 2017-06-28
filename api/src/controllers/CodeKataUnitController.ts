@@ -1,4 +1,4 @@
-import {Body, Post, JsonController, UseBefore, BadRequestError, Put, Param} from 'routing-controllers';
+import {Body, Post, JsonController, UseBefore, BadRequestError, Put, Param, Authorized} from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import {UnitController} from './UnitController';
 import {CodeKataUnit} from '../models/units/CodeKataUnit';
@@ -8,6 +8,7 @@ import {ICodeKataUnit} from '../../../shared/models/units/ICodeKataUnit';
 @UseBefore(passportJwtMiddleware)
 export class CodeKataUnitController extends UnitController {
 
+  @Authorized(['admin', 'teacher'])
   @Post('/')
   addCodeKataUnit(@Body() data: any) {
     // discard invalid requests
@@ -26,6 +27,7 @@ export class CodeKataUnitController extends UnitController {
       });
   }
 
+  @Authorized(['admin', 'teacher'])
   @Put('/:id')
   updateCodeKataUnit(@Param('id') id: string, @Body() unit: ICodeKataUnit) {
     unit = this.splitCodeAreas(unit);
