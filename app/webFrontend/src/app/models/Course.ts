@@ -1,6 +1,7 @@
 import {ICourse} from '../../../../../shared/models/ICourse';
 import {IUser} from '../../../../../shared/models/IUser';
 import {ILecture} from '../../../../../shared/models/ILecture';
+import {IWhitelistUser} from '../../../../../shared/models/IWhitelistUser';
 /**
  * Created by Alexander on 23.05.2017.
  */
@@ -13,6 +14,8 @@ export class Course implements ICourse {
   teachers: IUser[];
   students: IUser[];
   lectures: ILecture[];
+  whitelist: IWhitelistUser[];
+  enrollType: string;
   accessKey: string;
 
   public Course(course: ICourse) {
@@ -24,5 +27,7 @@ export class Course implements ICourse {
     this.teachers = course.teachers;
     this.students = course.students;
     this.lectures = course.lectures;
+    this.whitelist = course.whitelist;
+    this.enrollType = course.enrollType;
   }
 }
