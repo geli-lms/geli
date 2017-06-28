@@ -29,19 +29,11 @@ export class MembersComponent implements OnInit {
   }
 
   /**
-   *
-   * @param members
-   */
-  updateMembers(members: IUser[]): void {
-    this.course.students = members;
-  }
-
-  /**
    * Save all students in this course in database.
    */
-  updateCourse(): void {
+  updateCourse(members: IUser[]): void {
     this.showProgress.toggleLoadingGlobal(true);
-    this.course.students = this.members;
+    this.course.students = members;
     this.courseService.updateItem({'students': this.course.students, '_id': this.courseId}).then(
       (val) => {
         this.showProgress.toggleLoadingGlobal(false);
@@ -60,7 +52,7 @@ export class MembersComponent implements OnInit {
     this.members = this.members.filter(obj => !(id === obj._id));
     SortUtil.sortUsers(this.members);
     SortUtil.sortUsers(this.users);
-    this.updateCourse();
+    this.updateCourse(this.members);
   }
 
   /**

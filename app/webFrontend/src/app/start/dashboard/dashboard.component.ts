@@ -79,4 +79,9 @@ export class DashboardComponent implements OnInit {
     return students.filter(obj => obj._id === user._id).length > 0;
   }
 
+  isTeacherOfCourse(course: ICourse): boolean {
+    const user = this.userService.user;
+    return (course.teachers.filter(obj => obj._id === user._id).length > 0 ||
+      course.courseAdmin.filter(obj => obj._id === user._id)) ? true : false;
+  }
 }
