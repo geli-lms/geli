@@ -8,7 +8,7 @@ import {User} from '../../models/User';
 import {Course} from '../../models/Course';
 import {IFreeTextUnit} from '../../../../../../shared/models/units/IFreeTextUnit';
 
-abstract class DataService {
+export abstract class DataService {
 
   static changeStringProp2DateProp(item: any, prop: string) {
     if (item[prop] !== null) {
@@ -172,6 +172,29 @@ export class UnitService extends DataService {
     const promise = this.createItem({model: taskUnit, lectureId: lectureId});
     this.apiPath = originalApiPath;
     return promise;
+  }
+
+  getUnitForCourse(courseId: string) {
+    const originalApiPath = this.apiPath;
+    this.apiPath += 'progressable/course/';
+    const promise = this.readSingleItem(courseId);
+    this.apiPath = originalApiPath;
+    return promise;
+  }
+
+  getProgressableUnits(courseId: string) {
+    const originalApiPath = this.apiPath;
+    this.apiPath += 'course/progressable/';
+    const promise = this.readSingleItem(courseId);
+    this.apiPath = originalApiPath;
+    return promise;
+  }
+}
+
+@Injectable()
+export class CodeKataUnitService extends DataService {
+  constructor(public backendService: BackendService) {
+    super('units/code-katas/', backendService);
   }
 }
 

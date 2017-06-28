@@ -5,9 +5,10 @@ export const userFixtures: IFixture = {
   Model: User,
   data: [
     {
-      username: 'TStud1',
+      uid: '8764684',
       email: 'student1@test.local',
       password: 'test',
+      role: 'student',
       profile: {
         firstName: 'Tick',
         lastName: 'Studi'
@@ -15,9 +16,10 @@ export const userFixtures: IFixture = {
       isActive: true
     },
     {
-      username: 'TStud2',
+      uid: '464864',
       email: 'student2@test.local',
       password: 'test',
+      role: 'student',
       profile: {
         firstName: 'Trick',
         lastName: 'Studi'
@@ -28,6 +30,7 @@ export const userFixtures: IFixture = {
       uid: '321654',
       email: 'student3@test.local',
       password: 'test',
+      role: 'student',
       profile: {
         firstName: 'Track',
         lastName: 'Studi'

@@ -40,10 +40,7 @@ export class UnitController {
         (<IVideoUnitModel>oldUnit).files.forEach((file: any) => {
           // if not present in new: delete
           if (!(<IVideoUnitModel>unit).files.some((newFile) => newFile.name === file.name)) {
-            try {
-              fs.unlinkSync(file.path);
-            } catch (e) {
-            } // silently discard file not found errors
+            fs.unlink(file.path, () => {}); // silently discard file not found errors
           }
         });
         return VideoUnit;
@@ -52,10 +49,7 @@ export class UnitController {
         (<IFileUnitModel>oldUnit).files.forEach((file: any) => {
           // if not present in new: delete
           if (!(<IFileUnitModel>unit).files.some((newFile) => newFile.name === file.name)) {
-            try {
-              fs.unlinkSync(file.path);
-            } catch (e) {
-            } // silently discard file not found errors
+            fs.unlink(file.path, () => {}); // silently discard file not found errors
           }
         });
         return FileUnit;
@@ -72,29 +66,11 @@ export class UnitController {
         throw new NotFoundError();
       }
 
-      if (unit instanceof VideoUnit) {
-        (<IVideoUnitModel>unit).files.forEach((file: any) => {
-          try {
-            fs.unlinkSync(file.path);
-          } catch (e) {
-          } // silently discard file not found errors
+      return Lecture.update({}, {$pull: {units: id}})
+        .then(() => unit.remove())
+        .then(() => {
+          return {result: true};
         });
-      }
-
-      if (unit instanceof FileUnit) {
-        (<IFileUnitModel>unit).files.forEach((file: any) => {
-          try {
-            fs.unlinkSync(file.path);
-          } catch (e) {
-          } // silently discard file not found errors
-        });
-      }
-
-      return Lecture.update({}, {$pull: {units: id}});
-    })
-      .then(() => Unit.findByIdAndRemove(id))
-      .then(() => {
-        return {result: true};
-      });
+    });
   }
 }

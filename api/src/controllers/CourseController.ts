@@ -2,6 +2,7 @@ import {Request} from 'express';
 import {
   Authorized,
   Body,
+  CurrentUser,
   Get,
   HttpError,
   JsonController,
@@ -20,6 +21,7 @@ import {IUser} from '../../../shared/models/IUser';
 import {ObsCsvController} from './ObsCsvController';
 import {Course, ICourseModel} from '../models/Course';
 import {WhitelistUser} from '../models/WhitelistUser';
+import {ICodeKataUnit} from '../../../shared/models/units/ICodeKataUnit';
 const multer = require('multer');
 import crypto = require('crypto');
 const uploadOptions = {
@@ -36,6 +38,7 @@ const uploadOptions = {
     }
   }),
 };
+
 
 @JsonController('/courses')
 @UseBefore(passportJwtMiddleware)
@@ -54,7 +57,7 @@ export class CourseController {
   }
 
   @Get('/:id')
-  getCourse(@Param('id') id: string) {
+  getCourse(@Param('id') id: string, @CurrentUser() currentUser?: IUser) {
     return Course.findById(id)
     .populate({
       path: 'lectures',
@@ -69,6 +72,14 @@ export class CourseController {
       .populate('teachers')
     .populate('students')
     .then((course) => {
+      course.lectures.forEach((lecture) => {
+        lecture.units.forEach((unit) => {
+          if (unit.type === 'code-kata' && currentUser.role === 'student') {
+            // (<ICodeKataUnit>unit).code = 'undefined';
+            (<ICodeKataUnit>unit).code = null;
+          }
+        });
+      });
       return course.toObject();
     });
   }

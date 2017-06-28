@@ -1,6 +1,7 @@
 import * as mongoose from 'mongoose';
 import {Unit} from './Unit';
 import {IVideoUnit} from '../../../../shared/models/units/IVideoUnit';
+import fs = require('fs');
 
 interface IVideoUnitModel extends IVideoUnit, mongoose.Document {
 }
@@ -30,6 +31,14 @@ const videoUnitSchema = new mongoose.Schema({
       ret._course = ret._course.toString();
     }
   },
+});
+
+// Cascade delete
+videoUnitSchema.pre('remove', function(next: () => void) {
+  (<IVideoUnitModel>this).files.forEach((file: any) => {
+    fs.unlink(file.path, () => {}); // silently discard file not found errors
+  });
+  next();
 });
 
 const VideoUnit = Unit.discriminator('video', videoUnitSchema);

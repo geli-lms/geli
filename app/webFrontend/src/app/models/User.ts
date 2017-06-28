@@ -1,5 +1,6 @@
 import {IUser} from '../../../../../shared/models/IUser';
 import md5 from 'blueimp-md5';
+import {IProgress} from '../../../../../shared/models/IProgress';
 
 export class User implements IUser {
   _id: any;
@@ -8,6 +9,7 @@ export class User implements IUser {
   password: string;
   profile: { firstName: string; lastName: string; };
   role: string;
+  progress: IProgress[];
 
   constructor(user: IUser) {
     this._id = user._id;

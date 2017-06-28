@@ -1,3 +1,4 @@
+import {IProgress} from './IProgress';
 export interface IUser {
   _id: any;
   uid: string;
@@ -8,4 +9,5 @@ export interface IUser {
     lastName: string;
   };
   role: string;
+  progress: IProgress[];
 }
