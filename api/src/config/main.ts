@@ -6,7 +6,7 @@ export default {
   baseurl: process.env.BASEURL || 'http://localhost:4200',
 
   // Database connection information
-  database: `mongodb://${process.env.DB_HOST || 'docker-ip'}:27017`,
+  database: `mongodb://${process.env.DB_HOST || 'localhost'}:27017`,
 
   // Setting port for server
   port: process.env.PORT || 3030,
