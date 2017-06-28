@@ -18,10 +18,11 @@ export class CourseController {
   @Get('/')
   getCourses() {
     return Course.find({})
-    .populate('lectures')
-    .populate('courseAdmin')
-    .populate('students')
-    .then((courses) => courses.map((c) => c.toObject()));
+      .populate('lectures')
+      .populate('courseAdmin')
+      .populate('teachers')
+      .populate('students')
+      .then((courses) => courses.map((c) => c.toObject()));
   }
 
   @Get('/:id')
@@ -37,6 +38,7 @@ export class CourseController {
       }
     })
     .populate('courseAdmin')
+      .populate('teachers')
     .populate('students')
     .then((course) => {
       course.lectures.forEach((lecture) => {
@@ -54,7 +56,7 @@ export class CourseController {
   @Authorized(['teacher', 'admin'])
   @Post('/')
   addCourse(@Body() course: ICourse, @Req() request: Request) {
-    course.courseAdmin = <IUserModel>(<any>request).user;
+    course.courseAdmin = (<IUserModel>(<any>request).user);
 
     return new Course(course).save()
     .then((c) => c.toObject());
