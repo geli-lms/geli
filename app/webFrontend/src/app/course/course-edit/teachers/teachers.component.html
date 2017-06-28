@@ -1,0 +1,7 @@
+<app-course-user-list *ngIf="course && allTeachers"
+  [courseId]="courseId"
+  [usersInCourse]="course.teachers"
+  [users]="allTeachers"
+  [dragulaBagId]="'teachers'"
+  (onDragendUpdate)="updateCourseTeachers()"
+  (onRemove)="removeUser($event)"></app-course-user-list>

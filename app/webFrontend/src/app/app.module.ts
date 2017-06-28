@@ -58,14 +58,16 @@ import {LectureFormComponent} from './lecture/lecture-form/lecture-form.componen
 import {AboutComponent} from './about/about.component';
 import {GeneralInfoComponent} from './about/general-info/general-info.component';
 import {LicensesComponent} from './about/licenses/licenses.component';
+import {TeachersComponent} from './course/course-edit/teachers/teachers.component';
+import {CourseUserListComponent} from './course/course-edit/course-user-list/course-user-list.component';
 import {GravatarDirective} from './shared/directives/gravatar.directive';
 import {ProgressService} from './shared/services/data/progress.service';
 import {FreeTextUnitFormComponent} from './course/course-edit/unit/unit-edit/free-text-unit-form/free-text-unit-form.component';
 import {FreeTextUnitComponent} from './course/course-edit/unit/free-text-unit/free-text-unit.component';
 import {MarkdownService} from './shared/services/markdown.service';
-import { CourseManageContentComponent } from './course/course-edit/course-manage-content/course-manage-content.component';
-import { MdFabMenuComponent } from './shared/components/md-fab-menu/md-fab-menu.component';
-import { UnitGeneralInfoFormComponent } from './course/course-edit/unit/unit-edit/unit-general-info-form/unit-general-info-form.component';
+import {CourseManageContentComponent} from './course/course-edit/course-manage-content/course-manage-content.component';
+import {MdFabMenuComponent} from './shared/components/md-fab-menu/md-fab-menu.component';
+import {UnitGeneralInfoFormComponent} from './course/course-edit/unit/unit-edit/unit-general-info-form/unit-general-info-form.component';
 
 @NgModule({
   declarations: [
@@ -103,9 +105,11 @@ import { UnitGeneralInfoFormComponent } from './course/course-edit/unit/unit-edi
     AboutComponent,
     GeneralInfoComponent,
     LicensesComponent,
+    TeachersComponent,
     GravatarDirective,
     FreeTextUnitFormComponent,
     FreeTextUnitComponent,
+    CourseUserListComponent,
     CourseManageContentComponent,
     MdFabMenuComponent,
     UnitGeneralInfoFormComponent,
