@@ -23,8 +23,8 @@ import {DashboardStudentComponent} from './start/dashboard/dashboard-student/das
 import {DashboardTeacherComponent} from './start/dashboard/dashboard-teacher/dashboard-teacher.component';
 import {DashboardAdminComponent} from './start/dashboard/dashboard-admin/dashboard-admin.component';
 import {
-  CourseService, TaskService, UserDataService, LectureService,
-  UnitService, AboutDataService, FreeTextUnitService
+  CourseService, UserDataService, LectureService,
+  UnitService, AboutDataService, FreeTextUnitService, TaskAttestationService
 } from './shared/services/data.service';
 import {BackendService} from './shared/services/backend.service';
 import {CourseComponent} from './course/course.component';
@@ -54,6 +54,7 @@ import {UnitFormComponent} from './course/course-edit/unit/unit-edit/unit-form.c
 import {TaskUnitComponent} from './course/course-edit/unit/task-unit/task-unit.component';
 import {VideoUnitComponent} from './course/course-edit/unit/video-unit/video-unit.component';
 import {FileUnitComponent} from './course/course-edit/unit/file-unit/file-unit.component';
+import {TaskComponent} from './course/course-edit/unit/task-unit/task/task.component';
 import {LectureFormComponent} from './lecture/lecture-form/lecture-form.component';
 import {AboutComponent} from './about/about.component';
 import {GeneralInfoComponent} from './about/general-info/general-info.component';
@@ -61,6 +62,7 @@ import {LicensesComponent} from './about/licenses/licenses.component';
 import {TeachersComponent} from './course/course-edit/teachers/teachers.component';
 import {GravatarDirective} from './shared/directives/gravatar.directive';
 import { CourseUserListComponent } from './course/course-edit/course-user-list/course-user-list.component';
+import {TaskUnitProgressService, ProgressService} from './shared/services/data/progress.service';
 import {FreeTextUnitFormComponent} from './course/course-edit/unit/unit-edit/free-text-unit-form/free-text-unit-form.component';
 import {FreeTextUnitComponent} from './course/course-edit/unit/free-text-unit/free-text-unit.component';
 import {MarkdownService} from './shared/services/markdown.service';
@@ -101,6 +103,7 @@ import { UnitGeneralInfoFormComponent } from './course/course-edit/unit/unit-edi
     TaskUnitComponent,
     VideoUnitComponent,
     FileUnitComponent,
+    TaskComponent,
     AboutComponent,
     GeneralInfoComponent,
     LicensesComponent,
@@ -131,7 +134,9 @@ import { UnitGeneralInfoFormComponent } from './course/course-edit/unit/unit-edi
     AboutDataService,
     AuthGuardService,
     UnitService,
-    TaskService,
+    ProgressService,
+    TaskUnitProgressService,
+    TaskAttestationService,
     CourseService,
     UserDataService,
     LectureService,

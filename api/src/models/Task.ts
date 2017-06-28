@@ -6,13 +6,9 @@ interface ITaskModel extends ITask, mongoose.Document {
 
 const taskSchema = new mongoose.Schema(
   {
-    name: {
+    question: {
       type: String
     },
-    unitId: {
-      type: String
-    }
-    ,
     answers: [
       {
         value: Boolean,
@@ -24,6 +20,10 @@ const taskSchema = new mongoose.Schema(
     toObject: {
       transform: function (doc: any, ret: any) {
         ret._id = doc.id;
+      /*  ret.answers = ret.answers.map((answer: any) => {
+          answer._id = answer._id.toString();
+          return answer;
+        }); */
       }
     }
   }

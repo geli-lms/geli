@@ -7,8 +7,9 @@ import {ICourse} from '../../../../../../shared/models/ICourse';
 import {User} from '../../models/User';
 import {Course} from '../../models/Course';
 import {IFreeTextUnit} from '../../../../../../shared/models/units/IFreeTextUnit';
+import {TaskAttestation} from '../../models/TaskAttestation';
 
-abstract class DataService {
+export abstract class DataService {
 
   static changeStringProp2DateProp(item: any, prop: string) {
     if (item[prop] !== null) {
@@ -121,14 +122,34 @@ export class CourseService extends DataService {
 }
 
 @Injectable()
-export class TaskService extends DataService {
+export class TaskAttestationService extends DataService {
   constructor(public backendService: BackendService) {
-    super('tasks/', backendService);
+    super('task_attestations/', backendService);
   }
-
-  getTasksForCourse(id: string): Promise<any[]> {
+/*
+  getTaskAttestationForTaskAndUser2(val, index, arr): Promise<any[]> {
     return new Promise((resolve, reject) => {
-      this.backendService.get(this.apiPath + 'course/' + id)
+      this.backendService.get(this.apiPath + 'task/' + this.searchTaskId + '/user/' + this.searchTaskId.userId)
+        .subscribe(
+          (responseItems: any) => {
+            if (this.changeProps2Date) {
+              responseItems.forEach(item => {
+                this.changeProps2Date.forEach(prop => {
+                  DataService.changeStringProp2DateProp(item, prop);
+                });
+              });
+            }
+
+            resolve(responseItems);
+          },
+          error => reject(error)
+        );
+    });
+  }*/
+
+  getTaskAttestationsForTaskUnitAndUser(taskUnitId: string, userId: string): Promise<any[]> {
+    return new Promise((resolve, reject) => {
+      this.backendService.get(this.apiPath + 'taskunit/' + taskUnitId + '/user/' + userId)
         .subscribe(
           (responseItems: any) => {
             if (this.changeProps2Date) {
@@ -146,11 +167,81 @@ export class TaskService extends DataService {
     });
   }
 
-  getTasksForUnit(id: string): Promise<any[]> {
-    const promise = this.readSingleItem(id);
-    return promise;
+  getTaskAttestationForTaskAndUser(taskId: string, userId: string): Promise<any[]> {
+    return new Promise((resolve, reject) => {
+      this.backendService.get(this.apiPath + 'task/' + taskId + '/user/' + userId)
+        .subscribe(
+          (responseItems: any) => {
+            if (this.changeProps2Date) {
+              responseItems.forEach(item => {
+                this.changeProps2Date.forEach(prop => {
+                  DataService.changeStringProp2DateProp(item, prop);
+                });
+              });
+            }
+
+            resolve(responseItems);
+          },
+          error => reject(error)
+        );
+    });
   }
 
+  getTaskAttestationsForTask(taskId: string): Promise<any[]> {
+    return new Promise((resolve, reject) => {
+      this.backendService.get(this.apiPath + 'task/' + taskId)
+        .subscribe(
+          (responseItems: any) => {
+            if (this.changeProps2Date) {
+              responseItems.forEach(item => {
+                this.changeProps2Date.forEach(prop => {
+                  DataService.changeStringProp2DateProp(item, prop);
+                });
+              });
+            }
+
+            resolve(responseItems);
+          },
+          error => reject(error)
+        );
+    });
+  }
+
+  saveTaskAsTaskAttestation(taskId: string, userId: string, taskUnit: any, task: any, correctlyAnswered: boolean): Promise<any[]> {
+    return new Promise((resolve, reject) => {
+      const newTaskAttestation = new TaskAttestation(taskId, userId, taskUnit, task, correctlyAnswered);
+
+      // add new attestation or change existing attestation
+      // is there already an attestation for this task for given user?
+      this.getTaskAttestationForTaskAndUser(taskId, userId).then(
+        (oldTaskAttestation) => {
+          if (oldTaskAttestation.length === 0) {
+            this.createItem(newTaskAttestation).then(
+              (val) => {
+                resolve(val);
+              }, (error2) => {
+                reject(error2);
+              });
+          } else {
+            for (const answer of newTaskAttestation.answers) {
+              delete answer._id; // WORKAROUND get rid of the _id for the answers
+            }
+
+            newTaskAttestation._id = oldTaskAttestation[0]._id;
+
+            this.updateItem(newTaskAttestation).then(
+              (val) => {
+                resolve(val);
+              }, (error2) => {
+                reject(error2);
+              });
+          }
+
+        }, (error) => {
+          reject(error);
+        });
+    });
+  }
 }
 
 @Injectable()
@@ -162,7 +253,7 @@ export class LectureService extends DataService {
 
 @Injectable()
 export class UnitService extends DataService {
-  constructor(public backendService: BackendService) {
+  constructor(public backendService: BackendService, public taskAttestationService: TaskAttestationService) {
     super('units/', backendService);
   }
 
@@ -170,6 +261,30 @@ export class UnitService extends DataService {
     const originalApiPath = this.apiPath;
     this.apiPath += 'tasks';
     const promise = this.createItem({model: taskUnit, lectureId: lectureId});
+    this.apiPath = originalApiPath;
+    return promise;
+  }
+
+  updateTaskUnit(taskUnit: ITaskUnit) {
+    const originalApiPath = this.apiPath;
+    this.apiPath += 'tasks/';
+    const promise = this.updateItem(taskUnit);
+    this.apiPath = originalApiPath;
+    return promise;
+  }
+
+  getUnitForCourse(courseId: string) {
+    const originalApiPath = this.apiPath;
+    this.apiPath += 'progressable/course/';
+    const promise = this.readSingleItem(courseId);
+    this.apiPath = originalApiPath;
+    return promise;
+  }
+
+  getProgressableUnits(courseId: string) {
+    const originalApiPath = this.apiPath;
+    this.apiPath += 'course/progressable/';
+    const promise = this.readSingleItem(courseId);
     this.apiPath = originalApiPath;
     return promise;
   }

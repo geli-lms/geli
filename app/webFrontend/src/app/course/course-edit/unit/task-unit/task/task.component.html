@@ -1,0 +1,36 @@
+<div class="question-answer">
+
+  <div *ngFor="let task of tasks" class="question-answer">
+    <!--
+        countOfTaskAttestationsFor(taskId: string):   {{countOfTaskAttestationsFor(task._id)}} <br>
+
+        countOfEnrolledStudentsForCourse(courseId: string): countOfEnrolledStudentsForCourse("12")}} <br>
+
+        countOfTaskAttestationCompletedForCourseAndUser(courseId: string, userId: string):
+
+        countOfTaskAttestationCorrectlyCompletedForCourseAndUser(courseId: string, userId: string):
+
+        getTasksAttestationsForCourseAndUser(courseId: string, userId: string):
+    -->
+    <md-input-container md-line class="question">
+      <textarea mdInput readonly id="question" placeholder="Frage" [(ngModel)]="task.question"></textarea>
+    </md-input-container>
+<!--
+    <div class="actions">
+      <button md-button (click)="saveTaskAsTaskAttestation(task)">Save my answer</button>
+    </div>
+-->
+    <div md-line class="answers">
+      <div class="answer" *ngFor="let answer of task.answers; let idx = index;">
+        <div class="check-answer">
+          <md-checkbox (change)="saveTaskAsTaskAttestation(task)" [(ngModel)]="answer.value" name="value_{{idx}}"></md-checkbox>
+          <md-input-container>
+            <input mdInput readonly placeholder="Antwort" [(ngModel)]="answer.text">
+          </md-input-container>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>

@@ -3,10 +3,11 @@ import config from '../src/config/main';
 
 import {userFixtures} from './userFixtures';
 import {courseFixtures} from './courseFixtures';
-import {lectureFixtures} from './lectureFixtures';
+import {taskFixtures} from './taskFixtures';
 import {IFixture} from './IFixture';
 import {ICourseModel} from '../src/models/Course';
 import {ILectureModel} from '../src/models/Lecture';
+import {lectureFixtures} from './lectureFixtures';
 
 
 export class FixtureLoader {

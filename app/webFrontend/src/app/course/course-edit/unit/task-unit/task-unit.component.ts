@@ -1,16 +1,20 @@
-import { Component, OnInit, Input } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {ITaskUnit} from '../../../../../../../../shared/models/units/ITaskUnit';
+import {TaskAttestationService} from '../../../../shared/services/data.service';
 
 @Component({
   selector: 'app-task-unit',
   templateUrl: './task-unit.component.html',
   styleUrls: ['./task-unit.component.scss']
 })
+
+// Task attestation frame for TaskUnit
 export class TaskUnitComponent implements OnInit {
 
   @Input() taskUnit: ITaskUnit;
 
-  constructor() { }
+  constructor(private taskAttestationService: TaskAttestationService) {
+  }
 
   ngOnInit() {
   }
