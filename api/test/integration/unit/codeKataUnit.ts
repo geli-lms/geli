@@ -61,7 +61,8 @@ describe(`CodeKataUnit ${BASE_URL}`, () => {
 
               done();
             });
-        });
+        })
+        .catch(done);
     });
 
     it('should fail with BadRequest (missing model)', (done) => {
@@ -78,8 +79,10 @@ describe(`CodeKataUnit ${BASE_URL}`, () => {
 
                   done();
                 });
-            });
-        });
+            })
+            .catch(done);
+        })
+        .catch(done);
     });
 
     it('should create a new codeKataUnit', (done) => {
@@ -100,8 +103,10 @@ describe(`CodeKataUnit ${BASE_URL}`, () => {
 
                   done();
                 });
-            });
-        });
+            })
+            .catch(done);
+        })
+        .catch(done);
     });
   });
 });
