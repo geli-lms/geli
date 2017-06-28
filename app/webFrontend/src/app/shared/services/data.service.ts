@@ -5,7 +5,7 @@ import {ITaskUnit} from '../../../../../../shared/models/units/ITaskUnit';
 import {IFreeTextUnit} from '../../../../../../shared/models/units/IFreeTextUnit';
 import {TaskAttestation} from '../../models/TaskAttestation';
 
-abstract class DataService {
+export abstract class DataService {
 
   static changeStringProp2DateProp(item: any, prop: string) {
     if (item[prop] !== null) {
@@ -122,6 +122,46 @@ export class TaskAttestationService extends DataService {
   constructor(public backendService: BackendService) {
     super('task_attestations/', backendService);
   }
+/*
+  getTaskAttestationForTaskAndUser2(val, index, arr): Promise<any[]> {
+    return new Promise((resolve, reject) => {
+      this.backendService.get(this.apiPath + 'task/' + this.searchTaskId + '/user/' + this.searchTaskId.userId)
+        .subscribe(
+          (responseItems: any) => {
+            if (this.changeProps2Date) {
+              responseItems.forEach(item => {
+                this.changeProps2Date.forEach(prop => {
+                  DataService.changeStringProp2DateProp(item, prop);
+                });
+              });
+            }
+
+            resolve(responseItems);
+          },
+          error => reject(error)
+        );
+    });
+  }*/
+
+  getTaskAttestationsForTaskUnitAndUser(taskUnitId: string, userId: string): Promise<any[]> {
+    return new Promise((resolve, reject) => {
+      this.backendService.get(this.apiPath + 'taskunit/' + taskUnitId + '/user/' + userId)
+        .subscribe(
+          (responseItems: any) => {
+            if (this.changeProps2Date) {
+              responseItems.forEach(item => {
+                this.changeProps2Date.forEach(prop => {
+                  DataService.changeStringProp2DateProp(item, prop);
+                });
+              });
+            }
+
+            resolve(responseItems);
+          },
+          error => reject(error)
+        );
+    });
+  }
 
   getTaskAttestationForTaskAndUser(taskId: string, userId: string): Promise<any[]> {
     return new Promise((resolve, reject) => {
@@ -163,9 +203,9 @@ export class TaskAttestationService extends DataService {
     });
   }
 
-  saveTaskAsTaskAttestation(taskId: string, userId: string, task: any, correctlyAnswered: boolean): Promise<any[]> {
+  saveTaskAsTaskAttestation(taskId: string, userId: string, taskUnit: any, task: any, correctlyAnswered: boolean): Promise<any[]> {
     return new Promise((resolve, reject) => {
-      const newTaskAttestation = new TaskAttestation(taskId, userId, task, correctlyAnswered);
+      const newTaskAttestation = new TaskAttestation(taskId, userId, taskUnit, task, correctlyAnswered);
 
       // add new attestation or change existing attestation
       // is there already an attestation for this task for given user?
@@ -225,6 +265,22 @@ export class UnitService extends DataService {
     const originalApiPath = this.apiPath;
     this.apiPath += 'tasks/';
     const promise = this.updateItem(taskUnit);
+    this.apiPath = originalApiPath;
+    return promise;
+  }
+
+  getUnitForCourse(courseId: string) {
+    const originalApiPath = this.apiPath;
+    this.apiPath += 'progressable/course/';
+    const promise = this.readSingleItem(courseId);
+    this.apiPath = originalApiPath;
+    return promise;
+  }
+
+  getProgressableUnits(courseId: string) {
+    const originalApiPath = this.apiPath;
+    this.apiPath += 'course/progressable/';
+    const promise = this.readSingleItem(courseId);
     this.apiPath = originalApiPath;
     return promise;
   }

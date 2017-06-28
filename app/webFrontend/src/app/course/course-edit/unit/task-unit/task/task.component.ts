@@ -2,6 +2,8 @@ import {Component, Input, OnInit} from '@angular/core';
 import {TaskAttestationService} from '../../../../../shared/services/data.service';
 import {MdSnackBar} from '@angular/material';
 import {UserService} from '../../../../../shared/services/user.service';
+import {ITaskUnitProgress} from '../../../../../../../../../shared/models/ITaskUnitProgress';
+import {ProgressService, TaskUnitProgressService} from '../../../../../shared/services/data/progress.service';
 
 @Component({
   selector: 'app-task',
@@ -13,18 +15,21 @@ import {UserService} from '../../../../../shared/services/user.service';
 export class TaskComponent implements OnInit {
 
   @Input() task: any;
-
+  @Input() taskUnit: any;
   taskOriginal: any;
   tasks: any[] = []; // WORKAROUND with array for {{}}
-  ncountOfTaskAttestationsFor: any;
+  progress: ITaskUnitProgress;
 
   constructor(private taskAttestationService: TaskAttestationService,
               private userService: UserService,
+              private progressService: ProgressService,
+              private taskUnitProgressService: TaskUnitProgressService,
               private snackBar: MdSnackBar) {
   }
 
   ngOnInit() {
     this.loadTaskFromServer();
+    this.loadProgress();
   }
 
   /**
@@ -44,13 +49,13 @@ export class TaskComponent implements OnInit {
           taskAttestations = (taskAttestations.filter(obj => userId === obj.userId));
 
           for (const taskAttestation of taskAttestations) {
-              let i = 0;
-              for (const answer of taskAttestation.answers) {
-                if (i < task.answers.length) {
-                  task.answers[i++].value = answer.value; // set answer value of already saved task attestation
-                }
+            let i = 0;
+            for (const answer of taskAttestation.answers) {
+              if (i < task.answers.length) {
+                task.answers[i++].value = answer.value; // set answer value of already saved task attestation
               }
-              break;
+            }
+            break;
           }
         },
         (error) => {
@@ -78,40 +83,77 @@ export class TaskComponent implements OnInit {
         correctlyAnswered = false;
         break;
       }
-      ;
     }
     // save attestation
     const taskId = this.task._id;
     const userId = this.userService.user._id;
-    this.taskAttestationService.saveTaskAsTaskAttestation(taskId, userId, this.task, correctlyAnswered).then(
+    this.taskAttestationService.saveTaskAsTaskAttestation(taskId, userId, this.taskUnit, this.task, correctlyAnswered).then(
       (val) => {
-         this.snackBar.open('Task attestation saved', 'Update', {duration: 2000});
+        this.snackBar.open('Task attestation saved', 'Update', {duration: 2000});
       }, (error) => {
         console.log(error);
+      }).then(() => {
+      this.submitProgress();
+    });
+  }
+
+  validate(): any {
+    return this.taskAttestationService.getTaskAttestationsForTaskUnitAndUser(this.taskUnit._id, this.userService.user._id)
+      .then((saved) => {
+        let done = true;
+        if (saved.length === this.taskUnit.tasks.length) { // are all tasks filled in?
+          for (const taskAttestation of saved) {
+            if (taskAttestation.correctlyAnswered === false) {
+              done = false; // if only one task attestation is wrong, complete progress of taskunit is false
+              break;
+            }
+          }
+        } else {
+          done = false; // if not all false
+        }
+        return done;
+      })
+      .catch((error) => {
+        console.log(error);
+        return false;
       });
   }
-/*
-  countOfTaskAttestationsFor(taskId: string) {
-    return this.taskAttestationService.countOfTaskAttestationsFor(taskId).then((val) => val);
+
+  submitProgress() {
+    this.validate().then((done) => {
+      this.progress.done = done;
+
+      if (!this.progress.user || !this.progress.unit) {
+        this.progress.course = this.taskUnit._course;
+        this.progress.unit = this.taskUnit._id;
+        this.progress.user = this.userService.user._id;
+        this.taskUnitProgressService.createItem(this.progress)
+          .then((saved) => {
+            this.progress = saved;
+          })
+          .catch((error) => console.log(error));
+      } else {
+        this.taskUnitProgressService.updateItem(this.progress)
+          .catch((error) => console.log(error));
+      }
+    });
   }
 
-  countOfEnrolledStudentsForCourse(courseId: string) {
-    return this.taskAttestationService.countOfEnrolledStudentsForCourse(courseId);
+  private loadProgress() {
+    this.progress = {course: '', unit: '', user: '', done: false};
+    const mythis = this;
+    this.progressService.getUserProgress(this.userService.user._id)
+      .then((progress: any) => {
+        for (const prop in progress) {
+          if (progress[prop].unit === mythis.taskUnit._id) {
+            mythis.progress = progress[prop];
+            break;
+          }
+        }
+      }).catch((error) => {
+      console.log(error);
+    });
 
   }
 
-  countOfTaskAttestationCompletedForCourseAndUser(courseId: string, userId: string) {
-    return this.taskAttestationService.countOfTaskAttestationCompletedForCourseAndUser(courseId, userId);
-
-  }
-
-  countOfTaskAttestationCorrectlyCompletedForCourseAndUser(courseId: string, userId: string) {
-    return this.taskAttestationService.countOfTaskAttestationCorrectlyCompletedForCourseAndUser(courseId, userId);
-
-  }
-
-  getTasksAttestationsForCourseAndUser(courseId: string, userId: string) {
-    return this.taskAttestationService.getTasksAttestationsForCourseAndUser(courseId, userId);
-
-  }*/
 }

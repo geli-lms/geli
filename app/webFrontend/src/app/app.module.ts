@@ -25,7 +25,6 @@ import {DashboardAdminComponent} from './start/dashboard/dashboard-admin/dashboa
 import {
   CourseService, UserDataService, LectureService,
   UnitService, AboutDataService, FreeTextUnitService, TaskAttestationService
-
 } from './shared/services/data.service';
 import {BackendService} from './shared/services/backend.service';
 import {CourseComponent} from './course/course.component';
@@ -61,6 +60,7 @@ import {AboutComponent} from './about/about.component';
 import {GeneralInfoComponent} from './about/general-info/general-info.component';
 import {LicensesComponent} from './about/licenses/licenses.component';
 import {GravatarDirective} from './course/course-edit/members/gravatar.directive';
+import {TaskUnitProgressService, ProgressService} from './shared/services/data/progress.service';
 import {FreeTextUnitFormComponent} from './course/course-edit/unit/unit-edit/free-text-unit-form/free-text-unit-form.component';
 import {FreeTextUnitComponent} from './course/course-edit/unit/free-text-unit/free-text-unit.component';
 import {MarkdownService} from './shared/services/markdown.service';
@@ -130,6 +130,8 @@ import { UnitGeneralInfoFormComponent } from './course/course-edit/unit/unit-edi
     AboutDataService,
     AuthGuardService,
     UnitService,
+    ProgressService,
+    TaskUnitProgressService,
     TaskAttestationService,
     CourseService,
     UserDataService,

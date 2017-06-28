@@ -37,7 +37,7 @@ export class TaskAttestationController {
 
   @Delete('/:id')
   deleteTaskAttestation(@Param('id') id: string, @Body() taskAttestation: ITaskAttestation) {
-    return TaskAttestation.findByIdAndRemove(id, taskAttestation)
+    return TaskAttestation.findByIdAndRemove(id)
       .then((deletedTaskAttestation) => deletedTaskAttestation.toObject());
   }
 
@@ -56,4 +56,9 @@ export class TaskAttestationController {
       .then((taskAttestations) => taskAttestations.map((t) => t.toObject()));
   }
 
+  @Get('/taskunit/:taskUnitId/user/:userId')
+  getTaskAttestationsForTaskUnitAndUser(@Param('taskUnitId') taskUnitId: string, @Param('userId') userId: string) {
+    return TaskAttestation.find().where({taskUnitId: taskUnitId, userId: userId })
+      .then((taskAttestations) => taskAttestations.map((t) => t.toObject()));
+  }
 }

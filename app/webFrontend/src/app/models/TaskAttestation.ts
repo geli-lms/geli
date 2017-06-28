@@ -1,5 +1,6 @@
 export class TaskAttestation {
   _id: any;
+  taskUnitId: string;
   taskId: string;
   userId: string;
 
@@ -13,7 +14,8 @@ export class TaskAttestation {
     ];
   correctlyAnswered: boolean;
 
-  constructor(taskId: string, userId: string, task: any, correctlyAnswered: boolean) {
+  constructor(taskId: string, userId: string, taskUnit: any, task: any, correctlyAnswered: boolean) {
+    this.taskUnitId = taskUnit._id;
     this.taskId = taskId;
     this.userId = userId;
     this.question = task.question;

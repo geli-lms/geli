@@ -9,7 +9,6 @@ import {IVideoUnitModel, VideoUnit} from '../models/units/VideoUnit';
 import {IFileUnitModel, FileUnit} from '../models/units/FileUnit';
 import {ITaskUnitModel, TaskUnit} from '../models/units/TaskUnit';
 import {IVideoUnit} from '../../../shared/models/units/IVideoUnit';
-// import {TaskUnit} from "../../../app/webFrontend/src/app/models/TaskUnit";
 import {ITaskModel, Task} from '../models/Task';
 
 const uploadOptions = {dest: 'uploads/'};

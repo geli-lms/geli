@@ -6,6 +6,10 @@ interface ITaskAttestationModel extends ITaskAttestation, mongoose.Document {
 
 const taskAttestationSchema = new mongoose.Schema(
   {
+    taskUnitId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Unit'
+    },
     taskId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Task'
@@ -30,6 +34,8 @@ const taskAttestationSchema = new mongoose.Schema(
     toObject: {
       transform: function (doc: any, ret: any) {
         ret._id = doc.id;
+        ret.taskUnitId = ret.taskUnitId.toString();
+        ret.taskId = ret.taskId.toString();
         ret.userId = ret.userId.toString();
       }
     }
