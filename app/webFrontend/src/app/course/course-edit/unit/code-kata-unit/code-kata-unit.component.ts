@@ -65,12 +65,12 @@ export class CodeKataComponent implements OnInit {
       this.progress.unit = this.codeKata._id;
       this.progress.user = this.userService.user._id;
       this.codeKataProgressService.createItem(this.progress)
-        .then(() => this.snackBar.open('Progress has been saved'))
-        .catch(() => this.snackBar.open('An unknown error occurred'));
+        .then(() => this.snackBar.open('Progress has been saved'), {duration: 3000})
+        .catch(() => this.snackBar.open('An unknown error occurred'), {duration: 3000});
     } else {
       this.codeKataProgressService.updateItem(this.progress)
-        .then(() => this.snackBar.open('Progress has been updated'))
-        .catch(() => this.snackBar.open('An unknown error occurred'));
+        .then(() => this.snackBar.open('Progress has been updated'), {duration: 3000})
+        .catch(() => this.snackBar.open('An unknown error occurred'), {duration: 3000});
     }
   }
 
