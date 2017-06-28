@@ -12,6 +12,7 @@ import {IUnitModel} from '../src/models/units/Unit';
 import {progressFixtures} from './progressFixtures';
 import {IProgressModel} from '../src/models/Progress';
 import {ITaskUnitModel} from '../src/models/units/TaskUnit';
+import {IUserModel} from '../src/models/User';
 
 export class FixtureLoader {
 
@@ -87,6 +88,8 @@ export class FixtureLoader {
         .then(({course, users}) => {
           const progressModels: IProgressModel[] = [];
           for (let i = 0; i < users.length; i++) {
+            (<ICourseModel>course).students.push((<IUserModel[]>users)[i]);
+
             for (let j = 0; j < units.length; j++) {
               progressFixtures.data.map((progress) => {
                 const progressModel: IProgressModel = <IProgressModel>new progressFixtures.Model(progress);
@@ -98,7 +101,8 @@ export class FixtureLoader {
             }
           }
 
-          return progressModels;
+          return course.save()
+            .then(() => progressModels);
         })
         .then((progressModels) => {
           return Promise.all(
