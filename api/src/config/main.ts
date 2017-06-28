@@ -15,10 +15,10 @@ export default {
   // for provider see https://nodemailer.com/smtp/well-known/
   // Use either Provider or SMTPServer/Port
   mailProvider: process.env.MAILPROVIDER || 'debugmail',
-  // mailSMTPServer: process.env.MAILSMTPSERVER || 'undefined',
-  // mailSMTPPort: process.env.MAILSMTPPORT || 25,
+  mailSMTPServer: process.env.MAILSMTPSERVER || undefined,
+  mailSMTPPort: process.env.MAILSMTPPORT || 25,
   mailAuth: {
-    user: process.env.MAILUSER || '',
+    user: process.env.MAILUSER || undefined,
     pass: process.env.MAILPASS || ''
   },
   mailSender: process.env.MAILSENDER || 'no-reply@geli.edu'
