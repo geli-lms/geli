@@ -2,6 +2,10 @@ import {Injectable} from '@angular/core';
 import {BackendService} from './backend.service';
 import {Dependency} from '../../about/licenses/dependency.model';
 import {ITaskUnit} from '../../../../../../shared/models/units/ITaskUnit';
+import {IUser} from '../../../../../../shared/models/IUser';
+import {ICourse} from '../../../../../../shared/models/ICourse';
+import {User} from '../../models/User';
+import {Course} from '../../models/Course';
 import {IFreeTextUnit} from '../../../../../../shared/models/units/IFreeTextUnit';
 import {TaskAttestation} from '../../models/TaskAttestation';
 
