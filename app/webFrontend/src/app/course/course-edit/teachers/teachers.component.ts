@@ -8,80 +8,68 @@ import {SortUtil} from '../../../shared/utils/SortUtil';
 @Component({
   selector: 'app-teachers',
   templateUrl: './teachers.component.html',
-  styleUrls: ['./teachers.component.scss']
 })
 export class TeachersComponent implements OnInit {
 
   @Input() courseId;
   course: ICourse;
   allTeachers: IUser[] = [];
-  courseTeachers: IUser[] = [];
 
   constructor(private courseService: CourseService,
               private userService: UserDataService,
               private showProgress: ShowProgressService) {
-    this.getTeachers();
   }
 
   ngOnInit() {
-    this.getCourseTeachers();
-  }
-
-   updateTeachers(teachers: IUser[]): void {
-    this.course.teachers = teachers;
+    this.getTeachers().then(this.getCourseTeachers);
   }
 
   /**
-   * Get all users from api and filter those role student.
+   * Get all users from api and filter those role teacher.
+   *
+   * TODO: Never load all users!
    */
-  getTeachers(): void {
-    this.userService.readItems().then(users => {
+  getTeachers() {
+    return this.userService.readItems().then(users => {
       this.allTeachers = users.filter(obj => obj.role === 'teacher');
     });
-    SortUtil.sortUsers(this.courseTeachers);
   }
+
   /**
    * Save all teachers in this course in database.
    */
-  updateCourse(): void {
+  updateCourseTeachers(): void {
     this.showProgress.toggleLoadingGlobal(true);
-    // this.course.teachers = this.courseTeachers;
-    this.courseService.updateItem(this.course).then(
-      (val) => {
+
+    this.courseService.updateItem({
+      '_id': this.course._id,
+      'teachers': this.course.teachers.map((user) => user._id)
+    })
+      .then(() => {
         this.showProgress.toggleLoadingGlobal(false);
-      }, (error) => {
-        this.showProgress.toggleLoadingGlobal(false);
-        console.log(error);
       });
   }
 
   /**
    * Get this course from api and filter all teachers from users.
    */
-  getCourseTeachers(): void {
+  getCourseTeachers = () => {
     this.courseService.readSingleItem(this.courseId).then(
       (val: any) => {
         this.course = val;
-        this.courseTeachers = this.course.teachers;
-
-        this.courseTeachers.forEach(member =>
-          this.allTeachers = this.allTeachers.filter(function (user) {
-            return user._id !== member._id;
-          }));
+        this.course.teachers.forEach(member =>
+          this.allTeachers = this.allTeachers.filter(user => user._id !== member._id));
         SortUtil.sortUsers(this.allTeachers);
-      }, (error) => {
-        console.log(error);
+        SortUtil.sortUsers(this.course.teachers);
       });
-  }
+  };
+
   /**
    * @param id Id of an user.
    */
   removeUser(id: string): void {
-    this.allTeachers = this.allTeachers.concat(this.courseTeachers.filter(obj => id === obj._id));
-    this.courseTeachers = this.courseTeachers.filter(obj => !(id === obj._id));
-    SortUtil.sortUsers(this.courseTeachers);
-    SortUtil.sortUsers(this.allTeachers);
-    this.updateCourse();
+    this.allTeachers = this.allTeachers.concat(this.course.teachers.filter(obj => id === obj._id));
+    this.course.teachers = this.course.teachers.filter(obj => id !== obj._id);
+    this.updateCourseTeachers();
   }
-
 }

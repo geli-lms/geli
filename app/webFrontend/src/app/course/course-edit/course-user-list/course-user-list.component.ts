@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, EventEmitter, Output} from '@angular/core';
+import {Component, Input, OnInit, EventEmitter, Output, OnDestroy} from '@angular/core';
 import {DragulaService} from 'ng2-dragula';
 import {IUser} from '../../../../../../../shared/models/IUser';
 import {FormControl} from '@angular/forms';
@@ -6,9 +6,9 @@ import {FormControl} from '@angular/forms';
 @Component({
   selector: 'app-course-user-list',
   templateUrl: './course-user-list.component.html',
-  styleUrls: ['./course-user-list.component.scss', '../../../../../node_modules/dragula/dist/dragula.css']
+  styleUrls: ['./course-user-list.component.scss']
 })
-export class CourseUserListComponent implements OnInit {
+export class CourseUserListComponent implements OnInit, OnDestroy {
 
   @Input() courseId;
   @Input() usersInCourse;
@@ -38,8 +38,12 @@ export class CourseUserListComponent implements OnInit {
     this.dragula.setOptions(this.dragulaBagId, {
       revertOnSpill: true
     });
-    this.dragula.dragend.subscribe(value => {
-      this.onDragendUpdate.emit(this.usersInCourse);
+    this.dragula.dropModel.subscribe(value => {
+      const bagName = value[0];
+
+      if(bagName === this.dragulaBagId) {
+        this.onDragendUpdate.emit(this.usersInCourse);
+      }
     });
   }
 
@@ -53,7 +57,7 @@ export class CourseUserListComponent implements OnInit {
       : [];
   }
 
-  // TODO: bessere Suche (levenshtein)
+  // TODO: do levenshtein in backend
   fuzzysearch(toSearch: string, user: IUser): boolean {
     const lowerToSearch: string = toSearch.toLowerCase();
     const elementsToFind = lowerToSearch.split(' ');
@@ -68,13 +72,9 @@ export class CourseUserListComponent implements OnInit {
   }
 
   /**
-   * @param _id Id of an user.
-   * @param direction direction where user to switch.
+   * @param id
    */
   removeUser(id: string) {
     this.onRemove.emit(id);
   }
-
-
-
 }

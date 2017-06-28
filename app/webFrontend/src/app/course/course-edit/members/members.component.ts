@@ -1,4 +1,3 @@
-/** Created by Oliver Neff on 14.04.2017. */
 import {Component, Input, OnInit} from '@angular/core';
 import {CourseService, UserDataService} from '../../../shared/services/data.service';
 import {ShowProgressService} from '../../../shared/services/show-progress.service';
@@ -9,87 +8,68 @@ import {SortUtil} from '../../../shared/utils/SortUtil';
 @Component({
   selector: 'app-members',
   templateUrl: './members.component.html',
-  styleUrls: ['./members.component.scss']
 })
 export class MembersComponent implements OnInit {
 
   @Input() courseId;
   course: ICourse;
-  members: IUser[] = [];
-  users: IUser[] = [];
+  allStudents: IUser[] = [];
 
-  constructor(private userService: UserDataService,
-              private courseService: CourseService,
+  constructor(private courseService: CourseService,
+              private userService: UserDataService,
               private showProgress: ShowProgressService) {
-    this.getStudents();
   }
 
   ngOnInit() {
-    this.getCourseMembers();
+    this.getStudents().then(this.getCourseStudents);
   }
 
   /**
+   * Get all users from api and filter those role student.
    *
-   * @param members
+   * TODO: Never load all users!
    */
-  updateMembers(members: IUser[]): void {
-    this.course.students = members;
+  getStudents() {
+    return this.userService.readItems().then(users => {
+      this.allStudents = users.filter(obj => obj.role === 'student');
+    });
   }
 
   /**
    * Save all students in this course in database.
    */
-  updateCourse(): void {
+  updateCourseStudents(): void {
     this.showProgress.toggleLoadingGlobal(true);
-    this.course.students = this.members;
-    this.courseService.updateItem({'students': this.course.students, '_id': this.courseId}).then(
-      (val) => {
+
+    this.courseService.updateItem({
+      '_id': this.course._id,
+      'students': this.course.students.map((user) => user._id)
+    })
+      .then(() => {
         this.showProgress.toggleLoadingGlobal(false);
-      }, (error) => {
-        this.showProgress.toggleLoadingGlobal(false);
-        console.log(error);
       });
   }
 
   /**
-   * Switch a user from student to member and back and update this course in database.
-   * @param id Id of an user.
+   * Get this course from api and filter all teachers from users.
    */
-  removeUser(id: string): void {
-    this.users = this.users.concat(this.members.filter(obj => id === obj._id));
-    this.members = this.members.filter(obj => !(id === obj._id));
-    SortUtil.sortUsers(this.members);
-    SortUtil.sortUsers(this.users);
-    this.updateCourse();
-  }
-
-  /**
-   * Get all users from api and filter those role student.
-   */
-  getStudents(): void {
-    this.userService.readItems().then(users => {
-      this.users = users.filter(obj => obj.role === 'student');
-    });
-    SortUtil.sortUsers(this.members);
-  }
-
-  /**
-   * Get this course from api and filter all members from users.
-   */
-  getCourseMembers(): void {
+  getCourseStudents = () => {
     this.courseService.readSingleItem(this.courseId).then(
       (val: any) => {
         this.course = val;
-        this.members = this.course.students;
+        this.course.students.forEach(member =>
+          this.allStudents = this.allStudents.filter(user => user._id !== member._id));
+        SortUtil.sortUsers(this.allStudents);
+        SortUtil.sortUsers(this.course.students);
+      });
+  };
 
-        this.members.forEach(member =>
-          this.users = this.users.filter(function (user) {
-            return user._id !== member._id;
-          }));
-        SortUtil.sortUsers(this.users);
-      }, (error) => {
-        console.log(error);
-      }
-    );
+  /**
+   * @param id Id of an user.
+   */
+  removeUser(id: string): void {
+    this.allStudents = this.allStudents.concat(this.course.students.filter(obj => id === obj._id));
+    this.course.students = this.course.students.filter(obj => id !== obj._id);
+    this.updateCourseStudents();
   }
 }
