@@ -90,33 +90,36 @@ export class CodeKataComponent implements OnInit {
   validate() {
     const codeToTest: string = this.codeKata.definition + '\n' + this.progress.code + '\n' + this.codeKata.test;
 
-    /* this.logs = '';
-    (<any>window).geli = {logs: ''};
+    this.logs = undefined;
+
     const origLogger = window.console.log;
-    window.console.log = function (msg) {
-      (<any>window).geli.logs += msg + '\n';
+    window.console.log = (msg) => {
+      if (this.logs === undefined) {
+        this.logs = '';
+      }
+      this.logs += msg + '\n';
       origLogger(msg);
     };
     const origErrorLogger = window.console.error;
-    window.console.error = function (msg) {
-      (<any>window).geli.logs += msg + '\n';
+    window.console.error = (msg) => {
+      if (this.logs === undefined) {
+        this.logs = '';
+      }
+      this.logs += msg + '\n';
       origErrorLogger(msg);
     };
-
-    window.onerror = function (message, url, linenumber) {
-      console.log(message);
-      console.log(linenumber);
-    }; */
 
     // tslint:disable-next-line:no-eval
     const result = eval(codeToTest);
 
-    // window.console.log = origLogger;
-    // window.console.error = origErrorLogger;
+    window.console.log = origLogger;
+    window.console.error = origErrorLogger;
 
     if (result === true || result === undefined) {
+      this.snackBar.open('Success', '', {duration: 3000});
       return true;
     } else {
+      this.snackBar.open('Your code failed.', '', {duration: 3000});
       console.log(result);
       return false;
     }

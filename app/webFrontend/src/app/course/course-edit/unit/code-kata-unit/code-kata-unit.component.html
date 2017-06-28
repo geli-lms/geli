@@ -28,5 +28,6 @@
     <button md-button (click)="validate()">Validate</button>
     <button md-button color="primary" class="submit-progress" (click)="submitProgress()">Submit</button>
   </div>
-  <div>{{logs}}</div>
+  <div *ngIf="logs!==undefined"><strong>Logs</strong></div>
+  <pre>{{logs}}</pre>
 </div>
