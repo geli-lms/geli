@@ -1,6 +1,7 @@
 import * as mongoose from 'mongoose';
 import {IUnitModel, Unit} from './Unit';
 import {IFileUnit} from '../../../../shared/models/units/IFileUnit';
+import fs = require('fs');
 
 interface IFileUnitModel extends IFileUnit, mongoose.Document {
 }
@@ -30,6 +31,14 @@ const fileUnitSchema = new mongoose.Schema({
       ret._course = ret._course.toString();
     }
   },
+});
+
+// Cascade delete
+fileUnitSchema.pre('remove', function(next: () => void) {
+  (<IFileUnitModel>this).files.forEach((file: any) => {
+    fs.unlink(file.path, () => {}); // silently discard file not found errors
+  });
+  next();
 });
 
 const FileUnit = Unit.discriminator('file', fileUnitSchema);
