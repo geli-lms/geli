@@ -13,12 +13,13 @@ const taskSchema = new mongoose.Schema(
       type: String
     }
     ,
-    answers: [
-      {
+    answers: {
+      type: [{
         value: Boolean,
         text: String
-      }
-    ]
+      }],
+      required: true
+    },
   }, {
     timestamps: true,
     toObject: {

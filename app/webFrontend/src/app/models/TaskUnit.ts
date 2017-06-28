@@ -9,6 +9,7 @@ export class TaskUnit implements ITaskUnit {
   createdAt: string;
   _course: any;
   _id: any;
+  title: string;
   type: string;
   progressable: boolean;
   weight: number;
