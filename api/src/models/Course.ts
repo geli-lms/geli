@@ -18,12 +18,10 @@ const courseSchema = new mongoose.Schema({
     description: {
       type: String
     },
-    courseAdmin: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
-      }
-    ],
+    courseAdmin: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User'
+    },
     teachers: [
       {
         type: mongoose.Schema.Types.ObjectId,
