@@ -58,7 +58,9 @@ import {LectureFormComponent} from './lecture/lecture-form/lecture-form.componen
 import {AboutComponent} from './about/about.component';
 import {GeneralInfoComponent} from './about/general-info/general-info.component';
 import {LicensesComponent} from './about/licenses/licenses.component';
-import {GravatarDirective} from './course/course-edit/members/gravatar.directive';
+import {TeachersComponent} from './course/course-edit/teachers/teachers.component';
+import {GravatarDirective} from './shared/directives/gravatar.directive';
+import { CourseUserListComponent } from './course/course-edit/course-user-list/course-user-list.component';
 import {FreeTextUnitFormComponent} from './course/course-edit/unit/unit-edit/free-text-unit-form/free-text-unit-form.component';
 import {FreeTextUnitComponent} from './course/course-edit/unit/free-text-unit/free-text-unit.component';
 import {MarkdownService} from './shared/services/markdown.service';
@@ -102,9 +104,11 @@ import { UnitGeneralInfoFormComponent } from './course/course-edit/unit/unit-edi
     AboutComponent,
     GeneralInfoComponent,
     LicensesComponent,
+    TeachersComponent,
     GravatarDirective,
     FreeTextUnitFormComponent,
     FreeTextUnitComponent,
+    CourseUserListComponent,
     CourseManageContentComponent,
     MdFabMenuComponent,
     UnitGeneralInfoFormComponent,

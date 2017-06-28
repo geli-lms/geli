@@ -7,6 +7,7 @@ export interface ICourse {
     active: boolean;
     description: string;
     courseAdmin: IUser;
+    teachers: IUser[];
     students: IUser[];
     lectures: ILecture[];
     accessKey: string;

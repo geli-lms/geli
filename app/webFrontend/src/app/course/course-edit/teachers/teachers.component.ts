@@ -1,19 +1,19 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {CourseService, UserDataService} from '../../../shared/services/data.service';
-import {ShowProgressService} from '../../../shared/services/show-progress.service';
 import {IUser} from '../../../../../../../shared/models/IUser';
+import {ShowProgressService} from '../../../shared/services/show-progress.service';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
 import {SortUtil} from '../../../shared/utils/SortUtil';
 
 @Component({
-  selector: 'app-members',
-  templateUrl: './members.component.html',
+  selector: 'app-teachers',
+  templateUrl: './teachers.component.html',
 })
-export class MembersComponent implements OnInit {
+export class TeachersComponent implements OnInit {
 
   @Input() courseId;
   course: ICourse;
-  allStudents: IUser[] = [];
+  allTeachers: IUser[] = [];
 
   constructor(private courseService: CourseService,
               private userService: UserDataService,
@@ -21,29 +21,29 @@ export class MembersComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getStudents().then(this.getCourseStudents);
+    this.getTeachers().then(this.getCourseTeachers);
   }
 
   /**
-   * Get all users from api and filter those role student.
+   * Get all users from api and filter those role teacher.
    *
    * TODO: Never load all users!
    */
-  getStudents() {
+  getTeachers() {
     return this.userService.readItems().then(users => {
-      this.allStudents = users.filter(obj => obj.role === 'student');
+      this.allTeachers = users.filter(obj => obj.role === 'teacher');
     });
   }
 
   /**
-   * Save all students in this course in database.
+   * Save all teachers in this course in database.
    */
-  updateCourseStudents(): void {
+  updateCourseTeachers(): void {
     this.showProgress.toggleLoadingGlobal(true);
 
     this.courseService.updateItem({
       '_id': this.course._id,
-      'students': this.course.students.map((user) => user._id)
+      'teachers': this.course.teachers.map((user) => user._id)
     })
       .then(() => {
         this.showProgress.toggleLoadingGlobal(false);
@@ -53,14 +53,14 @@ export class MembersComponent implements OnInit {
   /**
    * Get this course from api and filter all teachers from users.
    */
-  getCourseStudents = () => {
+  getCourseTeachers = () => {
     this.courseService.readSingleItem(this.courseId).then(
       (val: any) => {
         this.course = val;
-        this.course.students.forEach(member =>
-          this.allStudents = this.allStudents.filter(user => user._id !== member._id));
-        SortUtil.sortUsers(this.allStudents);
-        SortUtil.sortUsers(this.course.students);
+        this.course.teachers.forEach(member =>
+          this.allTeachers = this.allTeachers.filter(user => user._id !== member._id));
+        SortUtil.sortUsers(this.allTeachers);
+        SortUtil.sortUsers(this.course.teachers);
       });
   }
 
@@ -68,8 +68,8 @@ export class MembersComponent implements OnInit {
    * @param id Id of an user.
    */
   removeUser(id: string): void {
-    this.allStudents = this.allStudents.concat(this.course.students.filter(obj => id === obj._id));
-    this.course.students = this.course.students.filter(obj => id !== obj._id);
-    this.updateCourseStudents();
+    this.allTeachers = this.allTeachers.concat(this.course.teachers.filter(obj => id === obj._id));
+    this.course.teachers = this.course.teachers.filter(obj => id !== obj._id);
+    this.updateCourseTeachers();
   }
 }

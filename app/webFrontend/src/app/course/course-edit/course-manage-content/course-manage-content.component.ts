@@ -41,7 +41,6 @@ export class CourseManageContentComponent implements OnInit, OnDestroy {
     // Make items only draggable by dragging the handle
     this.dragulaService.setOptions('lectures', {
       moves: (el, container, handle) => {
-        console.log();
         return handle.classList.contains('lecture-drag-handle');
       }
     });
