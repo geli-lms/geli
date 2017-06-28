@@ -13,5 +13,9 @@ export const lectureFixtures: IFixture = {
       name: 'Lecture2',
       description: 'Description Lecture 2',
     },
+    {
+      name: 'Coding Train',
+      description: 'evaluate your coding skillz',
+    },
   ]
 };

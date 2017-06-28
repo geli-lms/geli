@@ -1,5 +1,6 @@
 import {IUser} from './IUser';
 import {ILecture} from './ILecture';
+import {IWhitelistUser} from './IWhitelistUser';
 
 export interface ICourse {
     _id: any;
@@ -11,4 +12,6 @@ export interface ICourse {
     students: IUser[];
     lectures: ILecture[];
     accessKey: string;
+    whitelist: IWhitelistUser[];
+    enrollType: string;
 }

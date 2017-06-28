@@ -24,7 +24,7 @@ import {DashboardTeacherComponent} from './start/dashboard/dashboard-teacher/das
 import {DashboardAdminComponent} from './start/dashboard/dashboard-admin/dashboard-admin.component';
 import {
   CourseService, TaskService, UserDataService, LectureService,
-  UnitService, AboutDataService, FreeTextUnitService
+  UnitService, AboutDataService, FreeTextUnitService, CodeKataUnitService
 } from './shared/services/data.service';
 import {BackendService} from './shared/services/backend.service';
 import {CourseComponent} from './course/course.component';
@@ -61,10 +61,13 @@ import {LicensesComponent} from './about/licenses/licenses.component';
 import {TeachersComponent} from './course/course-edit/teachers/teachers.component';
 import {CourseUserListComponent} from './course/course-edit/course-user-list/course-user-list.component';
 import {GravatarDirective} from './shared/directives/gravatar.directive';
-import {ProgressService} from './shared/services/data/progress.service';
+import {CodeKataProgressService, ProgressService} from './shared/services/data/progress.service';
 import {FreeTextUnitFormComponent} from './course/course-edit/unit/unit-edit/free-text-unit-form/free-text-unit-form.component';
 import {FreeTextUnitComponent} from './course/course-edit/unit/free-text-unit/free-text-unit.component';
 import {MarkdownService} from './shared/services/markdown.service';
+import {CodeKataComponent} from './course/course-edit/unit/code-kata-unit/code-kata-unit.component';
+import {CodeKataUnitFormComponent} from './course/course-edit/unit/unit-edit/code-kata-unit-form/code-kata-unit-form.component';
+import {AceEditorModule} from 'ng2-ace-editor';
 import {CourseManageContentComponent} from './course/course-edit/course-manage-content/course-manage-content.component';
 import {MdFabMenuComponent} from './shared/components/md-fab-menu/md-fab-menu.component';
 import {UnitGeneralInfoFormComponent} from './course/course-edit/unit/unit-edit/unit-general-info-form/unit-general-info-form.component';
@@ -112,6 +115,8 @@ import {UnitGeneralInfoFormComponent} from './course/course-edit/unit/unit-edit/
     CourseUserListComponent,
     CourseManageContentComponent,
     MdFabMenuComponent,
+    CodeKataComponent,
+    CodeKataUnitFormComponent,
     UnitGeneralInfoFormComponent,
   ],
   imports: [
@@ -124,7 +129,8 @@ import {UnitGeneralInfoFormComponent} from './course/course-edit/unit/unit-edit/
     MaterialModule,
     ReactiveFormsModule,
     FileUploadModule,
-    DialogModule
+    DialogModule,
+    AceEditorModule,
   ],
   providers: [
     UserService,
@@ -141,8 +147,10 @@ import {UnitGeneralInfoFormComponent} from './course/course-edit/unit/unit-edit/
     ProgressService,
     ShowProgressService,
     MarkdownService,
+    FreeTextUnitService,
     JwtHelper,
-    FreeTextUnitService
+    CodeKataUnitService,
+    CodeKataProgressService,
   ],
   bootstrap: [AppComponent]
 })

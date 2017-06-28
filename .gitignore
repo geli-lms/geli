@@ -57,6 +57,7 @@ nohup.out
 
 # API
 /api/uploads/*
+/api/temp/*
 /api/build
 /api/coverage
 /api/docs

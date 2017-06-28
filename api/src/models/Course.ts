@@ -1,5 +1,5 @@
-import * as mongoose from 'mongoose';
 import {ICourse} from '../../../shared/models/ICourse';
+import * as mongoose from 'mongoose';
 import {User} from './User';
 import {Lecture} from './Lecture';
 
@@ -51,7 +51,7 @@ const courseSchema = new mongoose.Schema({
     whitelist: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'WhitelistUser'
       }
     ]
   },

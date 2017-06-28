@@ -18,12 +18,26 @@
                [ngModelOptions]="{standalone: true}">
       </md-input-container>
 
-      <md-slide-toggle>Activate course</md-slide-toggle>
+      <p>
+        <input class="upload" type="file" ng2FileSelect [uploader]="uploader" placeholder="Upload files" accept=".csv" />
+        <button md-raised-button color="primary"
+                (click)="uploader.uploadAll()" [disabled]="!uploader.getNotUploadedItems().length">
+          <md-icon>file_upload</md-icon> Upload
+        </button>
+      </p>
+
+      <md-slide-toggle class="slider" (change)="onChangeMode($event)"
+                       [checked]="mode">Mode {{enrollType}}</md-slide-toggle>
+
+      <md-slide-toggle (change)="onChangeActive($event)"
+                       [checked]="active">Active {{active}}</md-slide-toggle>
 
       <p>
         <button md-raised-button color="primary" class="md-button" type="submit">Save</button>
       </p>
     </form>
+
+
   </md-tab>
 
   <md-tab label="Manage content">
