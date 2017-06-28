@@ -85,6 +85,7 @@ export class CourseManageContentComponent implements OnInit, OnDestroy {
 
   duplicateLecture(lecture: ILecture) {
     delete lecture._id;
+    delete lecture.units;
 
     this.lectureService.createItem({courseId: this.course._id, lecture: lecture})
       .then(() => {
