@@ -1,5 +1,5 @@
-import * as mongoose from 'mongoose';
 import {ICourse} from '../../../shared/models/ICourse';
+import * as mongoose from 'mongoose';
 import {User} from './User';
 import {Lecture} from './Lecture';
 
@@ -18,7 +18,11 @@ const courseSchema = new mongoose.Schema({
     description: {
       type: String
     },
-    courseAdmin: [
+    courseAdmin: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User'
+    },
+    teachers: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
@@ -36,16 +40,43 @@ const courseSchema = new mongoose.Schema({
         ref: 'Lecture'
       }
     ],
+    accessKey: {
+      type: String
+    },
+    enrollType: {
+      type: String,
+      'enum': ['free', 'whitelist'],
+      'default': 'free'
+    },
+    whitelist: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'WhitelistUser'
+      }
+    ]
   },
   {
     timestamps: true,
     toObject: {
-      transform: function(doc: any, ret: any) {
+      transform: function (doc: any, ret: any) {
         ret._id = ret._id.toString();
+        ret.hasAccessKey = false;
+        if (ret.accessKey) {
+          delete ret.accessKey;
+          ret.hasAccessKey = true;
+        }
       }
     }
   }
 );
+
+// Cascade delete
+courseSchema.pre('remove', function(next: () => void) {
+  Lecture.find({'_id': {$in: this.lectures}}).exec()
+    .then((lectures) => Promise.all(lectures.map(lecture => lecture.remove())))
+    .then(next)
+    .catch(next);
+});
 
 
 const Course = mongoose.model<ICourseModel>('Course', courseSchema);

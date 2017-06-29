@@ -1,9 +1,10 @@
-import {Component, OnInit, ViewContainerRef} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {FormGroup, FormBuilder, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CourseService} from '../../shared/services/data.service';
 import {MdSnackBar} from '@angular/material';
 import {ShowProgressService} from '../../shared/services/show-progress.service';
+import {FileUploader} from 'ng2-file-upload';
 
 @Component({
   selector: 'app-course-edit',
@@ -14,11 +15,14 @@ export class CourseEditComponent implements OnInit {
 
   course: string;
   description: string;
+  accessKey: string;
+  active = false;
+  mode = false;
+  enrollType: string;
   newCourse: FormGroup;
   id: string;
-
   courseOb: any[];
-
+  uploader: FileUploader = null;
 
 
   message = 'Course successfully added.';
@@ -27,7 +31,7 @@ export class CourseEditComponent implements OnInit {
               private formBuilder: FormBuilder,
               private courseService: CourseService,
               public snackBar: MdSnackBar,
-              public viewContainerRef: ViewContainerRef,
+              private ref: ChangeDetectorRef,
               private showProgress: ShowProgressService) {
 
       this.route.params.subscribe(params => {
@@ -37,6 +41,12 @@ export class CourseEditComponent implements OnInit {
               (val: any) => {
                   this.course = val.name;
                   this.description = val.description;
+                  this.accessKey = val.hasAccessKey ? '****' : '';
+                  this.active = val.active;
+                  this.enrollType = val.enrollType;
+                  if (this.enrollType === 'whitelist') {
+                    this.mode = true;
+                  }
                   this.courseOb = val;
               }, (error) => {
                   console.log(error);
@@ -46,6 +56,31 @@ export class CourseEditComponent implements OnInit {
 
   ngOnInit() {
     this.generateForm();
+    this.uploader = new FileUploader({
+      url: '/api/courses/' + this.id + '/whitelist',
+      headers: [{
+        name: 'Authorization',
+        value: localStorage.getItem('token'),
+      }]
+    });
+    this.uploader.onProgressItem = () => {
+      this.ref.detectChanges();
+    };
+    this.uploader.onCompleteItem = (item: any, response: any, status: any) => {
+      if (status === 200) {
+      const course = JSON.parse(response);
+      this.snackBar.open('Item is uploaded there where ' + course.whitelist.length + ' users parsed!', '', { duration: 5000 });
+      setTimeout(() => {
+        this.uploader.clearQueue();
+      }, 3000);
+      } else {
+        const error = JSON.parse(response);
+        this.snackBar.open('Upload failed with status: ' + status + ' message was: ' + error.message, '', { duration: 10000 });
+        setTimeout(() => {
+          this.uploader.clearQueue();
+        }, 6000);
+      }
+    };
   }
 
   createCourse() {
@@ -53,7 +88,12 @@ export class CourseEditComponent implements OnInit {
     console.log(this.description);
     console.log(this.course);
 
-    this.courseService.updateItem({'name': this.course, 'description': this.description, '_id': this.id}).then(
+    const request: any = {
+      'name': this.course, 'description': this.description, '_id': this.id, 'active': this.active, 'enrollType': this.enrollType};
+    if (this.accessKey !== '****') {
+      request.accessKey = this.accessKey;
+    }
+    this.courseService.updateItem(request).then(
         (val) => {
             console.log(val);
             this.showProgress.toggleLoadingGlobal(false);
@@ -62,6 +102,22 @@ export class CourseEditComponent implements OnInit {
             console.log(error);
         });
   }
+
+  onChangeMode(value) {
+    if (value.checked === true) {
+      this.mode = true;
+      this.enrollType = 'whitelist';
+    } else {
+      this.mode = false;
+      this.enrollType = 'free';
+    }
+  }
+
+  onChangeActive(value) {
+    this.active = value.checked;
+  }
+
+
 
   generateForm() {
     this.newCourse = this.formBuilder.group({

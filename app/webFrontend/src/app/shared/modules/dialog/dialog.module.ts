@@ -1,23 +1,29 @@
 import { NgModule } from '@angular/core';
 import { MaterialModule } from '@angular/material';
 import {ConfirmDialog} from '../../components/delete-dialog/confirm-dialog.component';
+import {AccessKeyDialog} from '../../components/access-key-dialog/access-key-dialog.component';
 import {DialogService} from '../../services/dialog.service';
+import {FormsModule} from '@angular/forms';
 
 @NgModule({
   imports: [
-    MaterialModule.forRoot()
+    MaterialModule,
+    FormsModule
   ],
   exports: [
-    ConfirmDialog
+    ConfirmDialog,
+    AccessKeyDialog
   ],
   declarations: [
-    ConfirmDialog
+    ConfirmDialog,
+    AccessKeyDialog
   ],
   providers: [
     DialogService
   ],
   entryComponents: [
-    ConfirmDialog
+    ConfirmDialog,
+    AccessKeyDialog
   ]
 })
 export class DialogModule { }

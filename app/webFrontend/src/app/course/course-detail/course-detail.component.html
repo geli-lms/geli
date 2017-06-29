@@ -1,5 +1,7 @@
-<h1>{{course?.name}}</h1>
-
-<p>{{course?.description}}</p>
-
-<app-lecture [course]="course" *ngIf="course">
+<div class="course-header">
+  <h1>{{course?.name}}</h1>
+  <p>{{course?.description}}</p>
+</div>
+<div class="lectures" *ngIf="course">
+  <app-lecture [course]="course" [lecture]="lecture" *ngFor="let lecture of course.lectures"></app-lecture>
+</div>

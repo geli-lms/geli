@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import 'rxjs/add/operator/switchMap';
 import {CourseService} from '../../shared/services/data.service';
 import {ICourse} from '../../../../../../shared/models/ICourse';
+import {UserService} from '../../shared/services/user.service';
+import {MdSnackBar} from '@angular/material';
 
 
 @Component({
@@ -16,8 +18,11 @@ export class CourseDetailComponent implements OnInit {
 
   id: string;
 
-  constructor(private route: ActivatedRoute,
-              private courseService: CourseService) { }
+  constructor(private router: Router,
+              private route: ActivatedRoute,
+              private courseService: CourseService,
+              public userService: UserService,
+              private snackBar: MdSnackBar) { }
 
   ngOnInit() {
     this.route.params.subscribe(params => { this.id = decodeURIComponent(params['id']); });
@@ -25,9 +30,15 @@ export class CourseDetailComponent implements OnInit {
   }
 
   getCourse(courseId: string) {
-    this.courseService.readSingleItem(courseId).then((course: any) =>  {
-      this.course = course;
-    });
+    this.courseService.readSingleItem(courseId).then(
+      (course: any) =>  {
+        this.course = course;
+      },
+      (errorResponse: Response) => {
+        if (errorResponse.status === 401) {
+          this.snackBar.open('You are not authorized to view this course.', '', { duration: 3000 });
+        }
+      });
   }
 
   apply() {

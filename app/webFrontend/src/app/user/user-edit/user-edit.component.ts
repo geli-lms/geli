@@ -11,7 +11,7 @@ import {matchPasswords} from '../../shared/validators/validators';
 @Component({
   selector: 'app-user-edit',
   templateUrl: './user-edit.component.html',
-  styleUrls: ['./user-edit.component.css']
+  styleUrls: ['./user-edit.component.scss']
 })
 export class UserEditComponent implements OnInit {
 
@@ -42,13 +42,12 @@ export class UserEditComponent implements OnInit {
             firstName: this.user.profile.firstName,
             lastName: this.user.profile.lastName
           },
-          username: this.user.username,
           email: this.user.email,
         });
       },
       (error) => {
         console.log(error);
-        this.snackBar.open(error);
+        this.snackBar.open(error, 'Dismiss');
       });
   }
 
@@ -105,7 +104,7 @@ export class UserEditComponent implements OnInit {
       }),
       username: [''],
       email: ['', Validators.required],
-      oldPassword: [''],
+      currentPassword: [''],
       password: [''],
       confirmPassword: ['']
     }, {validator: matchPasswords('password', 'confirmPassword')});

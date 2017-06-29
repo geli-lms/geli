@@ -15,6 +15,7 @@ import {matchPasswords} from '../../shared/validators/validators';
 export class RegisterComponent implements OnInit {
   registerForm: FormGroup;
   registrationDone = false;
+  role;
 
   constructor(private router: Router,
               private authenticationService: AuthenticationService,
@@ -25,21 +26,21 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit() {
     // reset login status
-    this.authenticationService.logout();
+    this.authenticationService.unsetAuthData();
+    this.role = 'teacher';
     this.generateForm();
   }
 
   register() {
     this.showProgress.toggleLoadingGlobal(true);
+    if (this.registerForm.value.role !== 'student') {
+      delete this.registerForm.value.uid;
+    }
     this.authenticationService.register(this.registerForm.value).then(
       (val) => {
-        console.log('register done...' + val);
         this.showProgress.toggleLoadingGlobal(false);
         this.registrationDone = true;
-        // window.location.href = '../';
       }, (error) => {
-        console.log('registration failed');
-        console.log(error);
         this.showProgress.toggleLoadingGlobal(false);
         this.snackBar.open('Registration failed', 'Dismiss');
       });
@@ -47,12 +48,14 @@ export class RegisterComponent implements OnInit {
 
   generateForm() {
     this.registerForm = this.formBuilder.group({
+      role: ['', Validators.required],
       profile: this.formBuilder.group({
         firstName: ['', Validators.required],
         lastName: ['', Validators.required],
       }),
-      username: [''],
       email: ['', Validators.required],
+      uid: [null, Validators.required],
+      confirmUid: [null, Validators.required],
       password: ['', Validators.required],
       confirmPassword: ['', Validators.required]
     }, {validator: matchPasswords('password', 'confirmPassword')});

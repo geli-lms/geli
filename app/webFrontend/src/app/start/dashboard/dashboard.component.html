@@ -13,13 +13,18 @@
     </md-card-content>
     <md-card-actions>
       <button md-icon-button *ngIf="this.userService.isStudent()" disabled={{isMemberOfCourse(course.students)}}
-              (click)="apply(course._id)" mdTooltip="Enroll">
+              (click)="apply(course._id, course.hasAccessKey)" mdTooltip="Enroll">
         <md-icon>add_circle_outline</md-icon>
       </button>
 
       <button md-icon-button (click)="editCourse(course._id)"
               *ngIf="this.userService.isTeacher() || this.userService.isAdmin()">
         <md-icon>mode_edit</md-icon>
+      </button>
+
+      <button md-icon-button (click)="showReport(course._id)"
+              *ngIf="this.userService.isTeacher() || this.userService.isAdmin()">
+        <md-icon>show_chart</md-icon>
       </button>
 
       <button md-mini-fab color="primary" class="details-button" (click)="goToInfo(course._id)">

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {UserService} from './shared/services/user.service';
 import {AuthenticationService} from './shared/services/authentication.service';
 import {ShowProgressService} from './shared/services/show-progress.service';
@@ -9,7 +9,8 @@ import {Router} from '@angular/router';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
+
   title = 'app works!';
   showProgressBar = false;
 
@@ -24,6 +25,10 @@ export class AppComponent {
         this.toggleProgressBar();
       }
     );
+  }
+
+  ngOnInit(): void {
+    this.authenticationService.reloadUser();
   }
 
   isLoggedIn() {

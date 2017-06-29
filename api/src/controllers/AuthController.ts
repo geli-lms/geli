@@ -1,9 +1,8 @@
-import {Request, Response} from 'express';
-import {Body, Post, JsonController, Req, Res, HttpError, UseBefore, BodyParam} from 'routing-controllers';
+import {Request} from 'express';
+import {Body, Post, JsonController, Req, HttpError, UseBefore, BodyParam} from 'routing-controllers';
 import {json as bodyParserJson} from 'body-parser';
 import passportLoginMiddleware from '../security/passportLoginMiddleware';
 import emailService from '../services/EmailService';
-
 import {IUser} from '../../../shared/models/IUser';
 import {IUserModel, User} from '../models/User';
 import {JwtUtils} from '../security/JwtUtils';
@@ -43,6 +42,7 @@ export class AuthController {
       });
   }
 
+  // TODO If activate user and is in playlist add to course.
   @Post('/activate')
   postActivation(@BodyParam('authenticationToken') authenticationToken: String) {
     return User.findOne({authenticationToken: authenticationToken})

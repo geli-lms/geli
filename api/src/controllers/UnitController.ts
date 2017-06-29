@@ -1,15 +1,16 @@
-import {Request} from 'express';
-import {Body, Get, Put, Post, Delete, Param, Req, JsonController, UseBefore, UploadedFile} from 'routing-controllers';
+import {Body, Get, Put, Delete, Param, JsonController, UseBefore, NotFoundError} from 'routing-controllers';
 import fs = require('fs');
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 
 import {Lecture} from '../models/Lecture';
-import {Unit} from '../models/Unit';
-import {IUnit} from '../../../shared/models/IUnit';
+import {Unit} from '../models/units/Unit';
+import {IUnit} from '../../../shared/models/units/IUnit';
+import {IVideoUnitModel, VideoUnit} from '../models/units/VideoUnit';
+import {IFileUnitModel, FileUnit} from '../models/units/FileUnit';
 
-const uploadOptions = {dest: 'uploads/' };
+const uploadOptions = {dest: 'uploads/'};
 
-@JsonController('/unit')
+@JsonController('/units')
 @UseBefore(passportJwtMiddleware)
 export class UnitController {
 
@@ -19,29 +20,42 @@ export class UnitController {
       .then((u) => u.toObject());
   }
 
-  @Post('/')
-  addUnit(@UploadedFile('file', { uploadOptions }) file: any, @Body() data: any) {
-    // discard invalid requests
-    if (!data.lectureId) {
-      return;
-    }
-    // path for file upload units (for now video only)
-    if (file) {
-      return new Unit({type: 'video', filePath: file.path, fileName: file.originalname}).save()
-        .then((unit) => {
-          return Lecture.findById(data.lectureId).then(lecture => ({lecture, unit}));
-        })
-        .then(({lecture, unit}) => {
-          lecture.units.push(unit);
-          return lecture.save();
-        })
-        .then(lecture => lecture.toObject());
-    }
+  protected pushToLecture(lectureId: string, unit: any) {
+    return Lecture.findById(lectureId)
+      .then((lecture) => {
+        lecture.units.push(unit);
+        return lecture.save();
+      })
+      .then((lecture) => lecture.toObject());
   }
 
   @Put('/:id')
   updateUnit(@Param('id') id: string, @Body() unit: IUnit) {
-    return Unit.findByIdAndUpdate(id, unit, {'new': true})
+    return Unit.findById(id).then((oldUnit) => {
+      if (!oldUnit) {
+        throw new NotFoundError();
+      }
+      // pre update: delete removed files
+      if (oldUnit instanceof VideoUnit) {
+        (<IVideoUnitModel>oldUnit).files.forEach((file: any) => {
+          // if not present in new: delete
+          if (!(<IVideoUnitModel>unit).files.some((newFile) => newFile.name === file.name)) {
+            fs.unlink(file.path, () => {}); // silently discard file not found errors
+          }
+        });
+        return VideoUnit;
+      }
+      if (oldUnit instanceof FileUnit) {
+        (<IFileUnitModel>oldUnit).files.forEach((file: any) => {
+          // if not present in new: delete
+          if (!(<IFileUnitModel>unit).files.some((newFile) => newFile.name === file.name)) {
+            fs.unlink(file.path, () => {}); // silently discard file not found errors
+          }
+        });
+        return FileUnit;
+      }
+      return Unit;
+    }).then((model) => model.findByIdAndUpdate(id, unit, {'new': true}))
       .then((u) => u.toObject());
   }
 
@@ -49,16 +63,14 @@ export class UnitController {
   deleteUnit(@Param('id') id: string) {
     return Unit.findById(id).then((unit) => {
       if (!unit) {
-        throw new Error('No unit found for id');
+        throw new NotFoundError();
       }
-      if (unit.filePath) {
-        fs.unlinkSync(unit.filePath);
-      }
-      return Lecture.update({}, {$pull: {units: id}});
-    })
-    .then(() => Unit.findByIdAndRemove(id))
-    .then(() => {
-      return {result: true};
+
+      return Lecture.update({}, {$pull: {units: id}})
+        .then(() => unit.remove())
+        .then(() => {
+          return {result: true};
+        });
     });
   }
 }

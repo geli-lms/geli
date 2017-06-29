@@ -1,0 +1,17 @@
+<div class="free-text-unit-edit">
+  <app-unit-general-info-form [model]="model"></app-unit-general-info-form>
+
+  <div class="info-text">
+    <md-icon>info</md-icon>
+    Add Markdown to add text to this Course.
+  </div>
+
+  <md-input-container>
+    <textarea mdInput id="markdown" placeholder="Add Markdown here" cols="50" rows="6"
+              [(ngModel)]="model.markdown"></textarea>
+  </md-input-container>
+
+  <div>
+    <button md-raised-button color="primary" class="add-unit" (click)="saveUnit()">Save</button>
+  </div>
+</div>

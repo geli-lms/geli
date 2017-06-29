@@ -13,24 +13,43 @@
                     [ngModelOptions]="{standalone: true}"></textarea>
       </md-input-container>
 
-      <md-slide-toggle>Activate course</md-slide-toggle>
+      <md-input-container class="full-width">
+        <input async mdInput id="accessKey" placeholder="Access Key" [(ngModel)]="accessKey"
+               [ngModelOptions]="{standalone: true}">
+      </md-input-container>
+
+      <p>
+        <input class="upload" type="file" ng2FileSelect [uploader]="uploader" placeholder="Upload files" accept=".csv" />
+        <button md-raised-button color="primary"
+                (click)="uploader.uploadAll()" [disabled]="!uploader.getNotUploadedItems().length">
+          <md-icon>file_upload</md-icon> Upload
+        </button>
+      </p>
+
+      <md-slide-toggle class="slider" (change)="onChangeMode($event)"
+                       [checked]="mode">Mode {{enrollType}}</md-slide-toggle>
+
+      <md-slide-toggle (change)="onChangeActive($event)"
+                       [checked]="active">Active {{active}}</md-slide-toggle>
 
       <p>
         <button md-raised-button color="primary" class="md-button" type="submit">Save</button>
       </p>
     </form>
+
+
+  </md-tab>
+
+  <md-tab label="Manage content">
+    <app-course-manage-content [course]="courseOb"></app-course-manage-content>
   </md-tab>
 
   <md-tab label="Course Members">
     <app-members [courseId]="id"></app-members>
   </md-tab>
 
-  <md-tab label="Define Tasks">
-    <app-tasks [courseId]="id"></app-tasks>
-  </md-tab>
-
-  <md-tab label="Video Upload">
-    <app-upload *ngIf="courseOb" [course]="courseOb"></app-upload>
+  <md-tab label="Course Teachers">
+  <app-teachers [courseId]="id"></app-teachers>
   </md-tab>
 
 </md-tab-group>

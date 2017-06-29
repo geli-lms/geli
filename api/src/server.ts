@@ -9,6 +9,8 @@ import {Express} from 'express';
 import config from './config/main';
 import passportLoginStrategy from './security/passportLoginStrategy';
 import passportJwtStrategy from './security/passportJwtStrategy';
+import {RoleAuthorization} from './security/RoleAuthorization';
+import {CurrentUserDecorator} from './security/CurrentUserDecorator';
 
 /**
  * Root class of your node server.
@@ -27,24 +29,26 @@ export class Server {
     // Do not use mpromise
     (<any>mongoose).Promise = global.Promise;
 
-    mongoose.connect(config.database);
-
     this.app = createExpressServer({
       routePrefix: '/api',
-      controllers: [__dirname + '/controllers/*.js'] // register all controller's routes
+      controllers: [__dirname + '/controllers/*.js'], // register all controller's routes
+      authorizationChecker: RoleAuthorization.checkAuthorization,
+      currentUserChecker: CurrentUserDecorator.checkCurrentUser
     });
 
     // TODO: Needs authentication in the future
     this.app.use('/api/uploads', express.static('uploads'));
-
-    // Request logger
-    this.app.use(morgan('combined'));
 
     Server.setupPassport();
     this.app.use(passport.initialize());
   }
 
   start() {
+    mongoose.connect(config.database);
+
+    // Request logger
+    this.app.use(morgan('combined'));
+
     this.app.listen(config.port, () => {
       winston.log('info', '--> Server successfully started at port %d', config.port);
     });

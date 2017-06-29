@@ -1,0 +1,18 @@
+.text--uppercase {
+  font-variant: small-caps;
+}
+
+.contributor--section {
+  display: inline-block;
+}
+
+.card--contributor {
+  width: 250px;
+  float: left;
+  margin: 5px;
+
+  .mat-card-avatar {
+    background-image: url("/assets/incognito.png");
+    background-size: cover;
+  }
+}
