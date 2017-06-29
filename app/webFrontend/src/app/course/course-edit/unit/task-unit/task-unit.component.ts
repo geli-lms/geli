@@ -1,8 +1,8 @@
 import {Component, OnInit, Input} from '@angular/core';
-import {MdSnackBar} from "@angular/material";
-import {ActivatedRoute} from "@angular/router";
-import {ProgressService} from "../../../../shared/services/data/progress.service";
-import {IProgress} from "../../../../../../../../shared/models/IProgress";
+import {MdSnackBar} from '@angular/material';
+import {ActivatedRoute} from '@angular/router';
+import {ProgressService} from '../../../../shared/services/data/progress.service';
+import {IProgress} from '../../../../../../../../shared/models/IProgress';
 
 @Component({
   selector: 'app-task-unit',
@@ -14,7 +14,7 @@ export class TaskUnitComponent implements OnInit {
   @Input() taskUnit: any;
 
   progress: IProgress;
-  validationMode: boolean = false;
+  validationMode = false;
   courseId: string;
 
   constructor(private route: ActivatedRoute, private progressService: ProgressService, private snackBar: MdSnackBar) {
@@ -30,7 +30,7 @@ export class TaskUnitComponent implements OnInit {
       if (value && value.length > 0) {
         this.progress = (<IProgress>value[0]);
       }
-      console.log(this.progress)
+      console.log(this.progress);
     });
   }
 
@@ -38,13 +38,13 @@ export class TaskUnitComponent implements OnInit {
     this.taskUnit.tasks.forEach((task) => {
       task.answers.forEach((answer) => {
         answer.userAnswer = null;
-      })
+      });
     });
     this.validationMode = false;
   }
 
   isAnswerCorrect(answer) {
-    return ((typeof answer.value === 'undefined' || !answer.value) && !answer.userAnswer) || (answer.value && answer.userAnswer)
+    return ((typeof answer.value === 'undefined' || !answer.value) && !answer.userAnswer) || (answer.value && answer.userAnswer);
   }
 
   validate() {
@@ -72,7 +72,7 @@ export class TaskUnitComponent implements OnInit {
       this.progressService.createItem(progress)
         .then((savedProgress) => {
           this.progress = savedProgress;
-          this.snackBar.open('Progress has been saved', '', {duration: 3000})
+          this.snackBar.open('Progress has been saved', '', {duration: 3000});
         })
         .catch(() => this.snackBar.open('An unknown error occurred', '', {duration: 3000}));
     }

@@ -5,7 +5,7 @@ import {
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import {Progress} from '../models/Progress';
 import {IProgress} from '../../../shared/models/IProgress';
-import {IUser} from "../../../shared/models/IUser";
+import {IUser} from '../../../shared/models/IUser';
 
 @JsonController('/progress')
 @UseBefore(passportJwtMiddleware)
