@@ -8,7 +8,7 @@ import {ICodeKataProgress} from '../../../shared/models/ICodeKataProgress';
 
 @JsonController('/progress/code-katas')
 @UseBefore(passportJwtMiddleware)
-export class CodeKataProgressController extends ProgressController {
+export class CodeKataProgressController {
   @Post('/')
   createProgress(@Body() data: any) {
     // discard invalid requests
