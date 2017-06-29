@@ -42,7 +42,7 @@ export class AuthenticationService {
   }
 
   reloadUser() {
-    if (this.userService.user) {
+    if (this.isLoggedIn && this.userService.user) {
       return this.http.get(`${AuthenticationService.API_URL}users/${this.userService.user._id}`, { headers: this.authHeader() })
         .map(response => response.json())
         .subscribe(
@@ -54,12 +54,16 @@ export class AuthenticationService {
     }
   }
 
-  logout(): void {
+  unsetAuthData() {
     this.token = null;
     this.isLoggedIn = false;
     localStorage.removeItem('token');
 
     this.userService.unsetUser();
+  }
+
+  logout(): void {
+    this.unsetAuthData();
     this.router.navigate(['login']);
   }
 

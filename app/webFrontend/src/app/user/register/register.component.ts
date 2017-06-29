@@ -26,7 +26,7 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit() {
     // reset login status
-    this.authenticationService.logout();
+    this.authenticationService.unsetAuthData();
     this.role = 'teacher';
     this.generateForm();
   }
