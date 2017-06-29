@@ -1,11 +1,21 @@
-import {BadRequestError, Body, Get, JsonController, Param, Post, Put, UseBefore} from 'routing-controllers';
+import {
+  BadRequestError, Body, CurrentUser, Get, JsonController, Param, Post, Put,
+  UseBefore
+} from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import {Progress} from '../models/Progress';
 import {IProgress} from '../../../shared/models/IProgress';
+import {IUser} from "../../../shared/models/IUser";
 
 @JsonController('/progress')
 @UseBefore(passportJwtMiddleware)
 export class ProgressController {
+
+  @Get('/units/:id')
+  getUnitProgress(@Param('id') id: string) {
+    return Progress.find({'unit': id})
+      .then((progresses) => progresses.map((progress) => progress.toObject({virtuals: true})));
+  }
 
   @Get('/courses/:id')
   getCourseProgress(@Param('id') id: string) {
@@ -20,15 +30,16 @@ export class ProgressController {
   }
 
   @Post('/')
-  createProgress(@Body() data: any) {
+  createProgress(@Body() data: any, @CurrentUser() currentUser?: IUser) {
     // discard invalid requests
-    if (!data.course || !data.user || !data.unit) {
-      return new BadRequestError('progress need fields course, user and unit');
+    if (!data.course || !data.unit || !currentUser) {
+      throw new BadRequestError('progress need fields course, user and unit');
     }
 
-    return new Promise((resolve) => {
-      resolve(new Progress(data).save());
-    });
+    data.user = currentUser;
+
+    return new Progress(data).save()
+      .then((progress) => progress.toObject());
   }
 
   @Put('/:id')

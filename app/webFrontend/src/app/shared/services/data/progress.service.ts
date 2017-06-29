@@ -8,6 +8,14 @@ export class ProgressService extends DataService {
     super('progress/', backendService);
   }
 
+  getUnitProgress(unitId: string) {
+    const originalApiPath = this.apiPath;
+    this.apiPath += 'units/';
+    const promise = this.readSingleItem(unitId);
+    this.apiPath = originalApiPath;
+    return promise;
+  }
+
   getCourseProgress(courseId: string) {
     const originalApiPath = this.apiPath;
     this.apiPath += 'courses/';
