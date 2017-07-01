@@ -108,7 +108,14 @@ userSchema.methods.isValidPassword = function (candidatePassword: string) {
 };
 
 userSchema.methods.generateActivationToken = () => {
-  this.authenticationToken = crypto.randomBytes(64).toString('base64');
+  this.authenticationToken = generateSecureToken();
+};
+userSchema.methods.generatePasswordResetToken = () => {
+  this.authenticationToken = generateSecureToken();
+  this.resetPasswordExpires = new Date().setTime(
+    (new Date()).getTime()
+    // Add 24h
+    + (24 * 60 * 60 * 1000));
 };
 
 
