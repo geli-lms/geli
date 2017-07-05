@@ -36,9 +36,8 @@ export class AuthController {
       })
       .then((savedUser) => {
         emailService.sendActivation(savedUser);
-        return {
-          user: savedUser.toObject()
-        };
+
+        return {success: true};
       });
   }
 
@@ -77,7 +76,8 @@ export class AuthController {
         existingUser.markModified('password');
         return existingUser.save();
       })
-      .then((user) => {
+      .then((savedUser) => {
+
         return {success: true};
       });
   }
@@ -90,10 +90,17 @@ export class AuthController {
           throw new HttpError(422, 'could not reset users password');
         }
 
-        existingUser.generateActivationToken();
+        const expires = new Date();
+        expires.setTime((new Date()).getTime()
+          // Add 24h
+          + (24 * 60 * 60 * 1000));
+
+        existingUser.resetPasswordExpires = expires;
         return existingUser.save();
       })
       .then((user) => {
+        emailService.sendPasswordReset(user);
+
         return {success: true};
       });
   }

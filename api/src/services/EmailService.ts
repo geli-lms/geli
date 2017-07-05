@@ -60,6 +60,13 @@ class EmailService {
   }
 
   public sendPasswordReset(user: IUserModel) {
+    if (!user) {
+      throw new Error('user not defined');
+    }
+    if (!user.resetPasswordToken) {
+      throw new Error('this user has no resetPasswordToken defined');
+    }
+
     const message: SendMailOptions = {};
 
     message.to = user.profile.firstName + ' ' + user.profile.lastName + '<' + user.email + '>';
