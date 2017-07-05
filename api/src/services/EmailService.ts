@@ -26,7 +26,7 @@ class EmailService {
     }
 
     if (config.mailAuth.user === undefined) {
-      this.mailTransportConfig.tls = { rejectUnauthorized: false };
+      this.mailTransportConfig.tls = {rejectUnauthorized: false};
     } else {
       this.mailTransportConfig.auth = config.mailAuth;
     }
