@@ -101,6 +101,22 @@ export class AuthenticationService {
     });
   }
 
+  requestReset(email: string) {
+    return new Promise((resolve, reject) => {
+
+      return this.http.post(
+        AuthenticationService.API_URL + 'auth/requestreset',
+        {email: email}
+      )
+        .subscribe(
+          (json: any) => {
+            resolve();
+          }, (err) => {
+            reject(err);
+          });
+    });
+  }
+
   authHeader() {
     const headers = new Headers({'Content-Type': 'application/json'});
     if (this.token !== '') {
