@@ -4,7 +4,7 @@ import {AuthenticationService} from '../../shared/services/authentication.servic
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ShowProgressService} from '../../shared/services/show-progress.service';
 import {MdSnackBar} from '@angular/material';
-import {ActivatedRoute, Router} from "@angular/router";
+import {ActivatedRoute, Router} from '@angular/router';
 import {isNullOrUndefined} from 'util';
 import {matchPasswords} from '../../shared/validators/validators';
 
@@ -26,7 +26,7 @@ export class ResetComponent implements OnInit {
               private showProgress: ShowProgressService,
               private snackBar: MdSnackBar,
               private formBuilder: FormBuilder,
-              private route: ActivatedRoute,) {
+              private route: ActivatedRoute) {
     this.route.params.subscribe(params => {
       if (!isNullOrUndefined(params['token'])) {
         this.token = params['token'];
