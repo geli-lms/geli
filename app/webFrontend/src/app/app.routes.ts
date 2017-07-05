@@ -19,6 +19,7 @@ export const routes = [
   {path: 'register', component: RegisterComponent},
   {path: 'activate/:token', component: ActivationComponent},
   {path: 'reset', component: ResetComponent},
+  {path: 'reset/:token', component: ResetComponent},
   {
     path: 'course/edit/:id',
     component: CourseEditComponent,
