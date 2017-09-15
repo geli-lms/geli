@@ -2,14 +2,13 @@ import {Request} from 'express';
 import {
   Authorized,
   Body,
-  CurrentUser,
+  CurrentUser, ForbiddenError,
   Get,
-  HttpError,
   JsonController,
   Param,
   Post,
   Put,
-  Req, UnauthorizedError,
+  Req,
   UploadedFile,
   UseBefore
 } from 'routing-controllers';
@@ -73,7 +72,7 @@ export class CourseController {
     .populate('students')
     .then((course) => {
       if (currentUser.role === 'student' && !this.hasUser(course.students, currentUser)) {
-        throw new UnauthorizedError('You are not a member of this course.');
+        throw new ForbiddenError('You are not a member of this course.');
       } else if (currentUser.role === 'teacher') {
         let isCourseAdmin = false;
         if (typeof course.courseAdmin !== 'undefined') {
@@ -82,7 +81,7 @@ export class CourseController {
 
         const isTeacher = this.hasUser(course.teachers, currentUser);
         if (!isCourseAdmin && !isTeacher) {
-          throw new UnauthorizedError('You are no a teacher in this course.');
+          throw new ForbiddenError('You are no a teacher in this course.');
         }
       }
 
@@ -123,7 +122,7 @@ export class CourseController {
     return Course.findById(id)
       .then((c) => {
         if (c.accessKey && c.accessKey !== accessKey) {
-          throw new HttpError(401, 'Invalid access key.');
+          throw new ForbiddenError('Invalid access key.');
         }
         return WhitelistUser.find(c.whitelist).then((wUsers) => {
           if (c.enrollType === 'whitelist' &&
@@ -131,7 +130,7 @@ export class CourseController {
             e.firstName === user.profile.firstName.toLowerCase()
             && e.lastName === user.profile.lastName.toLowerCase()
             && e.uid === user.uid).length <= 0) {
-            throw new HttpError(401, 'Not allowed to join, you are not on whitelist.');
+            throw new ForbiddenError('Not allowed to join, you are not on whitelist.');
           }
           if (c.students.indexOf(user._id) < 0) {
             c.students.push(user);

@@ -16,8 +16,12 @@
   </div>
   <div class="content">
     <div class="unit-progress" *ngFor="let unit of student.units">
-      {{unit.name}}
-      <span *ngIf="unit.done">Done</span>
+      <h3 class="unit-name">{{unit.name}}</h3>
+      <span *ngIf="unit.progress?.done"><md-icon>check</md-icon>Done</span>
+      <button class="open-toggle" (click)="openToggleLecture(lecture)"
+              [class.opened]="openedLecture && lecture._id === openedLecture._id" md-icon-button>
+        <md-icon>arrow_drop_down</md-icon>
+      </button>
     </div>
     <div>
 

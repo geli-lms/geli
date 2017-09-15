@@ -3,6 +3,7 @@ import * as bcrypt from 'bcrypt';
 import {IUser} from '../../../shared/models/IUser';
 import {NativeError} from 'mongoose';
 import * as crypto from 'crypto';
+import has = Reflect.has;
 
 interface IUserModel extends IUser, mongoose.Document {
   isValidPassword: (candidatePassword: string) => Promise<boolean>;
@@ -98,9 +99,21 @@ function removeEmptyUid(next: (err?: NativeError) => void) {
 userSchema.pre('save', hashPassword);
 userSchema.pre('save', removeEmptyUid);
 
-// TODO: This does not yet work, because the this context id different on update
-// userSchema.pre('update', hashPassword);
-// userSchema.pre('findOneAndUpdate', hashPassword);
+// TODO: Move shared code of save and findOneAndUpdate hook to one function
+userSchema.pre('findOneAndUpdate', function (next) {
+  const SALT_FACTOR = 5;
+  const newPassword = this.getUpdate().password;
+  if (newPassword) {
+    bcrypt.hash(newPassword, SALT_FACTOR)
+    .then((hash) => {
+      this.findOneAndUpdate({}, {password: hash});
+    })
+    .then(() => next())
+    .catch(next);
+  } else {
+    next();
+  }
+});
 
 // Method to compare password for login
 userSchema.methods.isValidPassword = function (candidatePassword: string) {
