@@ -42,7 +42,7 @@ describe('User', () => {
         .get(BASE_URL)
         .set('Authorization', 'JWT asdf')
         .end((err, res) => {
-          res.status.should.be.equal(401);
+          res.status.should.be.equal(403);
           done();
         });
     });
@@ -56,7 +56,7 @@ describe('User', () => {
             .get(ROLE_URL)
             .set('Authorization', `JWT ${JwtUtils.generateToken(user)}`)
             .end((err, res) => {
-              res.status.should.be.equal(401);
+              res.status.should.be.equal(403);
               done();
             });
         })
@@ -130,7 +130,7 @@ describe('User', () => {
             .set('Authorization', `JWT ${JwtUtils.generateToken(user)}`)
             .send(updatedUser)
             .end((err, res) => {
-              res.status.should.be.equal(401);
+              res.status.should.be.equal(403);
               res.body.name.should.be.equal('UnauthorizedError');
               res.body.message.should.be.equal('Only users with admin privileges can change roles');
               done();
@@ -149,7 +149,7 @@ describe('User', () => {
         .set('Authorization', `JWT ${JwtUtils.generateToken(user)}`)
         .send(updatedUser)
         .end((err, res) => {
-          res.status.should.be.equal(401);
+          res.status.should.be.equal(403);
           res.body.name.should.be.equal('UnauthorizedError');
           res.body.message.should.be.equal('Only users with admin privileges can change uids');
           done();
