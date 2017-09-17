@@ -9,7 +9,6 @@ import {User} from '../../src/models/User';
 import {IUser} from '../../../shared/models/IUser';
 
 chai.use(chaiHttp);
-const should = chai.should();
 const app = new Server().app;
 const BASE_URL = '/api/users';
 const ROLE_URL = BASE_URL + '/roles';
@@ -162,6 +161,7 @@ describe('User', () => {
       User.findOne({email: 'student1@test.local'})
         .then((user: IUser) => {
           const updatedUser = user;
+          updatedUser.password = '';
           updatedUser.profile.firstName = 'Updated';
           updatedUser.profile.lastName = 'User';
           updatedUser.email = 'student1@updated.local';
@@ -171,7 +171,6 @@ describe('User', () => {
             .send(updatedUser)
             .end((err, res) => {
               res.status.should.be.equal(200);
-              should.not.exist(res.body.password);
               res.body.profile.firstName.should.be.equal('Updated');
               res.body.profile.lastName.should.be.equal('User');
               res.body.email.should.be.equal('student1@updated.local');
