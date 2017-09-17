@@ -103,7 +103,7 @@ userSchema.pre('save', removeEmptyUid);
 userSchema.pre('findOneAndUpdate', function (next) {
   const SALT_FACTOR = 5;
   const newPassword = this.getUpdate().password;
-  if (newPassword) {
+  if (typeof newPassword !== 'undefined') {
     bcrypt.hash(newPassword, SALT_FACTOR)
     .then((hash) => {
       this.findOneAndUpdate({}, {password: hash});
@@ -117,6 +117,9 @@ userSchema.pre('findOneAndUpdate', function (next) {
 
 // Method to compare password for login
 userSchema.methods.isValidPassword = function (candidatePassword: string) {
+  if (typeof  candidatePassword === 'undefined') {
+    candidatePassword = '';
+  }
   return bcrypt.compare(candidatePassword, this.password);
 };
 
