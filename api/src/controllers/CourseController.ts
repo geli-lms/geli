@@ -123,7 +123,7 @@ export class CourseController {
     return Course.findById(id)
       .then((c) => {
         if (c.accessKey && c.accessKey !== accessKey) {
-          throw new HttpError(401, 'Invalid access key.');
+          throw new HttpError(403, 'Invalid access key.');
         }
         return WhitelistUser.find(c.whitelist).then((wUsers) => {
           if (c.enrollType === 'whitelist' &&
@@ -131,7 +131,7 @@ export class CourseController {
             e.firstName === user.profile.firstName.toLowerCase()
             && e.lastName === user.profile.lastName.toLowerCase()
             && e.uid === user.uid).length <= 0) {
-            throw new HttpError(401, 'Not allowed to join, you are not on whitelist.');
+            throw new HttpError(403, 'Not allowed to join, you are not on whitelist.');
           }
           if (c.students.indexOf(user._id) < 0) {
             c.students.push(user);
