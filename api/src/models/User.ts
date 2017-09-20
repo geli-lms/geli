@@ -108,12 +108,27 @@ userSchema.pre('save', generateActivationToken);
 userSchema.pre('save', generatePasswordResetToken);
 userSchema.pre('save', removeEmptyUid);
 
-// TODO: This does not yet work, because the this context id different on update
-// userSchema.pre('update', hashPassword);
-// userSchema.pre('findOneAndUpdate', hashPassword);
+// TODO: Move shared code of save and findOneAndUpdate hook to one function
+userSchema.pre('findOneAndUpdate', function (next) {
+  const SALT_FACTOR = 5;
+  const newPassword = this.getUpdate().password;
+  if (typeof newPassword !== 'undefined') {
+    bcrypt.hash(newPassword, SALT_FACTOR)
+    .then((hash) => {
+      this.findOneAndUpdate({}, {password: hash});
+    })
+    .then(() => next())
+    .catch(next);
+  } else {
+    next();
+  }
+});
 
 // Method to compare password for login
 userSchema.methods.isValidPassword = function (candidatePassword: string) {
+  if (typeof  candidatePassword === 'undefined') {
+    candidatePassword = '';
+  }
   return bcrypt.compare(candidatePassword, this.password);
 };
 
