@@ -9,7 +9,6 @@ import {User} from '../../src/models/User';
 import {IUser} from '../../../shared/models/IUser';
 
 chai.use(chaiHttp);
-const should = chai.should();
 const app = new Server().app;
 const BASE_URL = '/api/users';
 const ROLE_URL = BASE_URL + '/roles';
@@ -130,8 +129,8 @@ describe('User', () => {
             .set('Authorization', `JWT ${JwtUtils.generateToken(user)}`)
             .send(updatedUser)
             .end((err, res) => {
-              res.status.should.be.equal(401);
-              res.body.name.should.be.equal('UnauthorizedError');
+              res.status.should.be.equal(403);
+              res.body.name.should.be.equal('ForbiddenError');
               res.body.message.should.be.equal('Only users with admin privileges can change roles');
               done();
             });
@@ -149,8 +148,8 @@ describe('User', () => {
         .set('Authorization', `JWT ${JwtUtils.generateToken(user)}`)
         .send(updatedUser)
         .end((err, res) => {
-          res.status.should.be.equal(401);
-          res.body.name.should.be.equal('UnauthorizedError');
+          res.status.should.be.equal(403);
+          res.body.name.should.be.equal('ForbiddenError');
           res.body.message.should.be.equal('Only users with admin privileges can change uids');
           done();
         });
@@ -162,6 +161,7 @@ describe('User', () => {
       User.findOne({email: 'student1@test.local'})
         .then((user: IUser) => {
           const updatedUser = user;
+          updatedUser.password = '';
           updatedUser.profile.firstName = 'Updated';
           updatedUser.profile.lastName = 'User';
           updatedUser.email = 'student1@updated.local';
@@ -171,7 +171,6 @@ describe('User', () => {
             .send(updatedUser)
             .end((err, res) => {
               res.status.should.be.equal(200);
-              should.not.exist(res.body.password);
               res.body.profile.firstName.should.be.equal('Updated');
               res.body.profile.lastName.should.be.equal('User');
               res.body.email.should.be.equal('student1@updated.local');
