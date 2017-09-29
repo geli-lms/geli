@@ -22,7 +22,6 @@ export class ObsCsvController {
         .on('data', (data: any) => {
             buffer += data + '\n';
           }
-          // TODO @OliverNeff Valdiation.
         ).on('end', () => {
           fs.unlinkSync(file.path);
           console.log('File is parsed successfully.');
@@ -52,20 +51,22 @@ export class ObsCsvController {
   private pushWhitelistUser(buffer: string) {
     this.whitelistUser = [];
     const lines = buffer.split(/\r?\n|\r/);
+    let actualLine = 0;
     const userLines = lines.filter(e => e.split(';').length >= 3);
     userLines.forEach(e => {
-        const firstName = e.split(';')[0];
-        const lastName = e.split(';')[1];
+        actualLine++;
+        const lastName = e.split(';')[0];
+        const firstName = e.split(';')[1];
         const uid = e.split(';')[2];
         if (firstName.length > 0 && lastName.length > 0 && uid.length > 0) {
           if (!isNaN(Number(firstName))) {
-            throw new HttpError(400, 'firstName was a number.');
+            throw new HttpError(400, 'First name was a number in line ' + actualLine + '.');
           }
           if (!isNaN(Number(lastName))) {
-            throw new HttpError(400, 'lastName was a number.');
+            throw new HttpError(400, 'Last name was a number in line ' + actualLine + '.');
           }
           if (isNaN(Number(uid))) {
-            throw new HttpError(400, 'UID is not a number.');
+            throw new HttpError(400, 'UID is not a number ' + actualLine + '.');
           }
           this.whitelistUser.push({
             firstName: firstName,
@@ -75,7 +76,7 @@ export class ObsCsvController {
         }
       }
     );
-    console.log('File was parsed successfully. There where ' + this.whitelistUser.length + ' whitelistUser parsed.');
+    console.log('File was parsed successfully. There where ' + this.whitelistUser.length + ' user parsed in whitelist.');
   }
 
   /**

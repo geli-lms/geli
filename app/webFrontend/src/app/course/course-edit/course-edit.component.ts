@@ -69,13 +69,13 @@ export class CourseEditComponent implements OnInit {
     this.uploader.onCompleteItem = (item: any, response: any, status: any) => {
       if (status === 200) {
       const course = JSON.parse(response);
-      this.snackBar.open('Item is uploaded there where ' + course.whitelist.length + ' users parsed!', '', { duration: 5000 });
+      this.snackBar.open('Item is uploaded there where ' + course.whitelist.length + ' users parsed!', '', { duration: 10000 });
       setTimeout(() => {
         this.uploader.clearQueue();
       }, 3000);
       } else {
         const error = JSON.parse(response);
-        this.snackBar.open('Upload failed with status: ' + status + ' message was: ' + error.message, '', { duration: 10000 });
+        this.snackBar.open('Upload failed with status ' + status + ' message was: ' + error.message, '', { duration: 20000 });
         setTimeout(() => {
           this.uploader.clearQueue();
         }, 6000);
