@@ -1,5 +1,8 @@
 import {Request} from 'express';
-import {Body, Post, JsonController, Req, HttpError, UseBefore, BodyParam, ForbiddenError} from 'routing-controllers';
+import {
+  Body, Post, JsonController, Req, HttpError, UseBefore, BodyParam, ForbiddenError,
+  InternalServerError
+} from 'routing-controllers';
 import {json as bodyParserJson} from 'body-parser';
 import passportLoginMiddleware from '../security/passportLoginMiddleware';
 import emailService from '../services/EmailService';
@@ -35,9 +38,13 @@ export class AuthController {
         return newUser.save();
       })
       .then((savedUser) => {
-        emailService.sendActivation(savedUser);
-
-        return {success: true};
+        emailService.sendActivation(savedUser)
+          .then(() => {
+            return {success: true};
+          })
+          .catch((err) => {
+            throw new InternalServerError('Could not send E-Mail');
+          });
       });
   }
 
@@ -99,9 +106,13 @@ export class AuthController {
         return existingUser.save();
       })
       .then((user) => {
-        emailService.sendPasswordReset(user);
-
-        return {success: true};
+        return emailService.sendPasswordReset(user)
+          .then(() => {
+            return {success: true};
+          })
+          .catch((err) => {
+            throw new InternalServerError('Could not send E-Mail');
+          });
       });
   }
 }
