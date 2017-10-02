@@ -1,5 +1,6 @@
 import {User} from '../models/User';
 import {Strategy as LocalStrategy} from 'passport-local';
+import {isNullOrUndefined} from 'util';
 
 export default new LocalStrategy(
   {
@@ -10,6 +11,13 @@ export default new LocalStrategy(
       .then((user) => {
         if (!user) {
           return done(null, false, {message: 'Your login details could not be verified. Please try again.'});
+        }
+
+        // dismiss password reset process
+        if (!isNullOrUndefined(user.resetPasswordToken)) {
+          user.resetPasswordToken = undefined;
+          user.resetPasswordExpires = undefined;
+          user.save();
         }
 
         user.isValidPassword(password)

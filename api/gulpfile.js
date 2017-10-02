@@ -184,6 +184,6 @@ gulp.task(DEBUG, [BUILD_DEV], function () {
     script: "build/src/server.js",
     watch: ["src/*", "test/*"],
     tasks: [BUILD_DEV],
-    nodeArgs: ["--debug-brk=9000"]
+    nodeArgs: ["--debug=9000"]
   });
 });

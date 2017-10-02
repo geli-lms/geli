@@ -3,10 +3,10 @@ import * as bcrypt from 'bcrypt';
 import {IUser} from '../../../shared/models/IUser';
 import {NativeError} from 'mongoose';
 import * as crypto from 'crypto';
+import {isNullOrUndefined} from 'util';
 
 interface IUserModel extends IUser, mongoose.Document {
   isValidPassword: (candidatePassword: string) => Promise<boolean>;
-  generateActivationToken: () => void;
   authenticationToken: string;
   resetPasswordToken: string;
   resetPasswordExpires: Date;
@@ -57,9 +57,6 @@ const userSchema = new mongoose.Schema({
 function hashPassword(next: (err?: NativeError) => void) {
   const user = this, SALT_FACTOR = 5;
 
-  // TODO: does not belong into this Function
-  generateToken(this);
-
   if (!user.isModified('password')) {
     return next();
   }
@@ -72,12 +69,23 @@ function hashPassword(next: (err?: NativeError) => void) {
     .catch(next);
 }
 
-function generateToken(user: IUserModel) {
+function generateActivationToken(next: (err?: NativeError) => void) {
   // check if user is new and wasn't activated by the creator
-  if (user.isNew && !user.isActive && user.authenticationToken === undefined) {
+  if (this.isNew && !this.isActive && isNullOrUndefined(this.authenticationToken)) {
     // set new authenticationToken
-    user.authenticationToken = generateSecureToken();
+    this.authenticationToken = generateSecureToken();
   }
+
+  next();
+}
+
+function generatePasswordResetToken(next: (err?: NativeError) => void) {
+  // check if passwordReset is requested -> (resetPasswordExpires is set)
+  if (!isNullOrUndefined(this.resetPasswordExpires) && isNullOrUndefined(this.resetPasswordToken)) {
+    this.resetPasswordToken = generateSecureToken();
+  }
+
+  next();
 }
 
 // returns random 64 byte long base64 encoded Token
@@ -96,21 +104,33 @@ function removeEmptyUid(next: (err?: NativeError) => void) {
 
 // Pre-save of user to database, hash password if password is modified or new
 userSchema.pre('save', hashPassword);
+userSchema.pre('save', generateActivationToken);
+userSchema.pre('save', generatePasswordResetToken);
 userSchema.pre('save', removeEmptyUid);
 
-// TODO: This does not yet work, because the this context id different on update
-// userSchema.pre('update', hashPassword);
-// userSchema.pre('findOneAndUpdate', hashPassword);
+// TODO: Move shared code of save and findOneAndUpdate hook to one function
+userSchema.pre('findOneAndUpdate', function (next) {
+  const SALT_FACTOR = 5;
+  const newPassword = this.getUpdate().password;
+  if (typeof newPassword !== 'undefined') {
+    bcrypt.hash(newPassword, SALT_FACTOR)
+    .then((hash) => {
+      this.findOneAndUpdate({}, {password: hash});
+    })
+    .then(() => next())
+    .catch(next);
+  } else {
+    next();
+  }
+});
 
 // Method to compare password for login
 userSchema.methods.isValidPassword = function (candidatePassword: string) {
+  if (typeof  candidatePassword === 'undefined') {
+    candidatePassword = '';
+  }
   return bcrypt.compare(candidatePassword, this.password);
 };
-
-userSchema.methods.generateActivationToken = () => {
-  this.authenticationToken = crypto.randomBytes(64).toString('base64');
-};
-
 
 const User = mongoose.model<IUserModel>('User', userSchema);
 
