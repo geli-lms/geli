@@ -1,7 +1,9 @@
-<md-toolbar color="primary">
+<md-toolbar color="primary" [ngClass]="{'warning': hasWarning()}">
   <a routerLink="/" class="logo">geli</a>
 
-  <span class="right-align"></span>
+  <span class="right-align">
+    <a *ngIf="hasWarning()">{{info.nonProductionWarning}}</a>
+  </span>
 
   <span *ngIf="!isLoggedIn()">
     <button class="login" md-button routerLink="/login" routerLinkActive="active">Login</button>
