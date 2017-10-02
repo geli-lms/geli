@@ -24,7 +24,7 @@ import {DashboardTeacherComponent} from './start/dashboard/dashboard-teacher/das
 import {DashboardAdminComponent} from './start/dashboard/dashboard-admin/dashboard-admin.component';
 import {
   CourseService, TaskService, UserDataService, LectureService,
-  UnitService, AboutDataService, FreeTextUnitService, CodeKataUnitService
+  UnitService, AboutDataService, FreeTextUnitService, CodeKataUnitService, InfoService
 } from './shared/services/data.service';
 import {BackendService} from './shared/services/backend.service';
 import {CourseComponent} from './course/course.component';
@@ -153,6 +153,7 @@ import {ResetComponent} from './user/reset/reset.component';
     JwtHelper,
     CodeKataUnitService,
     CodeKataProgressService,
+    InfoService,
   ],
   bootstrap: [AppComponent]
 })
