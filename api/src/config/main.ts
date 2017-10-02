@@ -21,5 +21,7 @@ export default {
     user: process.env.MAILUSER || undefined,
     pass: process.env.MAILPASS || ''
   },
-  mailSender: process.env.MAILSENDER || 'no-reply@geli.edu'
+  mailSender: process.env.MAILSENDER || 'no-reply@geli.edu',
+
+  nonProductionWarning: process.env.NONPRODUCTIONWARNING || undefined
 };
