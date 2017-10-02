@@ -71,11 +71,13 @@ import {AceEditorModule} from 'ng2-ace-editor';
 import {CourseManageContentComponent} from './course/course-edit/course-manage-content/course-manage-content.component';
 import {MdFabMenuComponent} from './shared/components/md-fab-menu/md-fab-menu.component';
 import {UnitGeneralInfoFormComponent} from './course/course-edit/unit/unit-edit/unit-general-info-form/unit-general-info-form.component';
+import {ResetComponent} from './user/reset/reset.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
+    ResetComponent,
     UserDetailsComponent,
     DashboardComponent,
     HomescreenComponent,

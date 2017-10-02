@@ -11,12 +11,15 @@ import {StartComponent} from './start/start.component';
 import {AdminComponent} from './admin/admin.component';
 import {AboutComponent} from './about/about.component';
 import {TeacherReportComponent} from './course/teacher-report/teacher-report.component';
+import {ResetComponent} from './user/reset/reset.component';
 
 export const routes = [
   {path: '', component: StartComponent, pathMatch: 'full'},
   {path: 'login', component: LoginComponent},
   {path: 'register', component: RegisterComponent},
   {path: 'activate/:token', component: ActivationComponent},
+  {path: 'reset', component: ResetComponent},
+  {path: 'reset/:token', component: ResetComponent},
   {
     path: 'course/edit/:id',
     component: CourseEditComponent,
