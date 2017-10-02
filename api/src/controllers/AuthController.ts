@@ -38,13 +38,13 @@ export class AuthController {
         return newUser.save();
       })
       .then((savedUser) => {
-        emailService.sendActivation(savedUser)
-          .then(() => {
-            return {success: true};
-          })
-          .catch((err) => {
-            throw new InternalServerError('Could not send E-Mail');
-          });
+        return emailService.sendActivation(savedUser);
+      })
+      .then(() => {
+        return {success: true};
+      })
+      .catch((err) => {
+        throw new InternalServerError('Could not send E-Mail');
       });
   }
 
@@ -84,7 +84,6 @@ export class AuthController {
         return existingUser.save();
       })
       .then((savedUser) => {
-
         return {success: true};
       });
   }
@@ -106,13 +105,13 @@ export class AuthController {
         return existingUser.save();
       })
       .then((user) => {
-        return emailService.sendPasswordReset(user)
-          .then(() => {
-            return {success: true};
-          })
-          .catch((err) => {
-            throw new InternalServerError('Could not send E-Mail');
-          });
+        return emailService.sendPasswordReset(user);
+      })
+      .then(() => {
+        return {success: true};
+      })
+      .catch((err) => {
+        throw new InternalServerError('Could not send E-Mail');
       });
   }
 }
