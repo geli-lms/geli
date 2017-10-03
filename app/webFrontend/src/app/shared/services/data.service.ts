@@ -217,7 +217,7 @@ export class UserDataService extends DataService {
 }
 
 @Injectable()
-export class InfoService extends DataService {
+export class APIInfoService extends DataService {
   constructor(public backendService: BackendService) {
     super('/', backendService);
   }

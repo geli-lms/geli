@@ -1,11 +1,11 @@
 import {Get, JsonController} from 'routing-controllers';
-import {Info} from '../models/Info';
+import {APIInfo} from '../models/APIInfo';
 
 @JsonController('/')
-export class AboutController {
+export class APIInfoController {
 
   @Get()
   getDependencies() {
-    return new Info('up');
+    return new APIInfo('up');
   }
 }

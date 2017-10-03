@@ -3,8 +3,8 @@ import {UserService} from './shared/services/user.service';
 import {AuthenticationService} from './shared/services/authentication.service';
 import {ShowProgressService} from './shared/services/show-progress.service';
 import {Router} from '@angular/router';
-import {InfoService} from './shared/services/data.service';
-import {Info} from './models/Info';
+import {APIInfoService} from './shared/services/data.service';
+import {APIInfo} from './models/APIInfo';
 import {isNullOrUndefined} from 'util';
 
 @Component({
@@ -16,14 +16,14 @@ export class AppComponent implements OnInit {
 
   title = 'app works!';
   showProgressBar = false;
-  info: Info;
+  apiInfo: APIInfo;
 
   constructor(
     private router: Router,
     private authenticationService: AuthenticationService,
     public userService: UserService,
     private showProgress: ShowProgressService,
-    private infoService: InfoService
+    private apiInfoService: APIInfoService
   ) {
     showProgress.toggleSidenav$.subscribe(
       toggle => {
@@ -34,15 +34,15 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.authenticationService.reloadUser();
-    this.infoService.readItems()
+    this.apiInfoService.readItems()
       .then((info: any) => {
-        this.info = info;
+        this.apiInfo = info;
       })
       .catch((err) => console.log(err));
   }
 
   hasWarning() {
-    return !isNullOrUndefined(this.info) && !isNullOrUndefined(this.info.nonProductionWarning);
+    return !isNullOrUndefined(this.apiInfo) && !isNullOrUndefined(this.apiInfo.nonProductionWarning);
   }
 
   isLoggedIn() {
