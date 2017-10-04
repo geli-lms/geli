@@ -50,6 +50,7 @@ const userSchema = new mongoose.Schema({
       virtuals: true,
       transform: function (doc: any, ret: any) {
         ret._id = ret._id.toString();
+        delete ret.password;
       }
     }
   });
