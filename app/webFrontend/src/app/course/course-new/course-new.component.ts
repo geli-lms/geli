@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewContainerRef} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CourseService} from '../../shared/services/data.service';
 import {MdSnackBar} from '@angular/material';
@@ -11,32 +11,24 @@ import {Router} from '@angular/router';
 })
 export class CourseNewComponent implements OnInit {
     newCourse: FormGroup;
-    teacher: String;
-
     id: string;
 
     constructor(private router: Router,
                 private formBuilder: FormBuilder,
                 private courseService: CourseService,
-                public snackBar: MdSnackBar,
-                public viewContainerRef: ViewContainerRef) { }
+                public snackBar: MdSnackBar) { }
 
     ngOnInit() {
         this.generateForm();
     }
 
     createCourse() {
-        this.newCourse.patchValue({
-            teacher: this.teacher
-        });
-        console.log(this.newCourse.value);
         this.courseService.createItem(this.newCourse.value).then(
             (val) => {
                 const url = '/course/edit/' + val._id;
-                console.log(url);
                 this.router.navigate([url]);
             }, (error) => {
-                console.log(error);
+                this.snackBar.open('Error creating course', 'Dismiss');
             });
     }
 
@@ -44,7 +36,6 @@ export class CourseNewComponent implements OnInit {
         this.newCourse = this.formBuilder.group({
             name: ['', Validators.required],
             description: ['', Validators.required],
-            teacher: ''
         });
     }
 

@@ -35,7 +35,7 @@ export class AuthController {
           throw new BadRequestError('That email address is already in use');
         }
 
-        if(user.role !== 'teacher' && user.role !== 'student') {
+        if (user.role !== 'teacher' && user.role !== 'student') {
           throw new BadRequestError('You can only sign up as student or teacher');
         }
 
@@ -55,7 +55,7 @@ export class AuthController {
       })
       .then(() => {
         return null;
-      })
+      });
   }
 
   // TODO If activate user and is in playlist add to course.

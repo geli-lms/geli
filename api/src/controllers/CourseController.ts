@@ -53,6 +53,7 @@ export class CourseController {
     // TODO: Do not send lectures when student has no access
       .populate('lectures')
       .populate('teachers')
+      .populate('courseAdmin')
       .populate('students');
 
     return courseQuery
@@ -124,8 +125,8 @@ export class CourseController {
 
   @Authorized(['teacher', 'admin'])
   @Post('/')
-  addCourse(@Body() course: ICourse, @Req() request: Request) {
-    course.courseAdmin = (<IUserModel>(<any>request).user);
+  addCourse(@Body() course: ICourse, @Req() request: Request, @CurrentUser() currentUser: IUser) {
+    course.courseAdmin = currentUser;
 
     return new Course(course).save()
       .then((c) => c.toObject());
@@ -200,6 +201,6 @@ export class CourseController {
       course,
       {'new': true}
     )
-      .then((c) => c.toObject());
+      .then((c) => c ? c.toObject() : undefined);
   }
 }
