@@ -1,7 +1,7 @@
 import {Request} from 'express';
 import {
   Body, Post, JsonController, Req, HttpError, UseBefore, BodyParam, ForbiddenError,
-  InternalServerError
+  InternalServerError, BadRequestError, OnUndefined
 } from 'routing-controllers';
 import {json as bodyParserJson} from 'body-parser';
 import passportLoginMiddleware from '../security/passportLoginMiddleware';
@@ -9,6 +9,7 @@ import emailService from '../services/EmailService';
 import {IUser} from '../../../shared/models/IUser';
 import {IUserModel, User} from '../models/User';
 import {JwtUtils} from '../security/JwtUtils';
+import config from '../config/main';
 
 @JsonController('/auth')
 export class AuthController {
@@ -25,12 +26,21 @@ export class AuthController {
   }
 
   @Post('/register')
+  @OnUndefined(204)
   postRegister(@Body() user: IUser) {
     return User.findOne({email: user.email})
       .then((existingUser) => {
         // If user is not unique, return error
         if (existingUser) {
-          throw new HttpError(422, 'That email address is already in use.');
+          throw new BadRequestError('That email address is already in use');
+        }
+
+        if(user.role !== 'teacher' && user.role !== 'student') {
+          throw new BadRequestError('You can only sign up as student or teacher');
+        }
+
+        if (user.role === 'teacher' && (typeof user.email !== 'string' || !user.email.match(config.teacherMailRegex))) {
+          throw new BadRequestError('You are not allowed to register as teacher');
         }
 
         const newUser = new User(user);
@@ -38,14 +48,14 @@ export class AuthController {
         return newUser.save();
       })
       .then((savedUser) => {
-        return emailService.sendActivation(savedUser);
+        return emailService.sendActivation(savedUser)
+          .catch(() => {
+            throw new InternalServerError('Could not send E-Mail');
+          });
       })
       .then(() => {
-        return {success: true};
+        return null;
       })
-      .catch((err) => {
-        throw new InternalServerError('Could not send E-Mail');
-      });
   }
 
   // TODO If activate user and is in playlist add to course.
