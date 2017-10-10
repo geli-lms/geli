@@ -25,7 +25,7 @@ if [ "$TRAVIS_BRANCH" == "master" ] || [ "$TRAVIS_BRANCH" == "develop" ]; then
     echo -e "${YELLOW}+ WARNING: pull request #$TRAVIS_PULL_REQUEST -> skipping docker build and publish${NC}";
   fi
 else
-  if [ -n "$TRAVIS_TAG" ]; then
+  if [ -n "{$TRAVIS_TAG}" ]; then
     echo "+ This is a tagged build: $TRAVIS_TAG";
     echo "+ build docker images";
     echo "+ prune dev-dependencies"
