@@ -3,10 +3,6 @@
     <md-card>
         <form class="course-form" (ngSubmit)="createCourse()" [formGroup]="newCourse">
             <md-input-container class="full-width">
-                <input mdInput placeholder="Teacher" disabled value="{{teacher}}">
-            </md-input-container>
-            <br/>
-            <md-input-container class="full-width">
                 <input mdInput formControlName="name" placeholder="Course Name">
             </md-input-container>
             <br/>
