@@ -13,9 +13,11 @@ export class UserController {
 
   @Get('/')
   @Authorized(['teacher', 'admin'])
-  getUsers() {
+  getUsers(@CurrentUser() currentUser?: IUser) {
     return User.find({})
-      .then((users) => users.map((user) => user.toObject({ virtuals: true})));
+      .then((users) => {
+        return users.map((user) => this.cleanUserObject(null, user, currentUser));
+      });
   }
 
   @Authorized(['admin'])
@@ -61,16 +63,24 @@ export class UserController {
         } else if (user.uid !== oldUser.uid && currentUser.role !== 'admin') {
           throw new ForbiddenError('Only users with admin privileges can change uids');
         } else {
+          if (oldUser.uid && user.uid === null) {
+            user.uid = oldUser.uid;
+          }
+
           return oldUser.isValidPassword(user.currentPassword);
         }
       })
       .then((isValidPassword) => {
-        if (!isValidPassword && user.password.length > 0) {
-          throw new BadRequestError('You must specify your current password if you want to set a new password.');
-        } else {
-          if (user.password.length === 0) {
-            delete user.password;
+        if (typeof user.password !== 'undefined') {
+          if (!isValidPassword && user.password.length > 0) {
+            throw new BadRequestError('You must specify your current password if you want to set a new password.');
+          } else {
+            if (user.password === 0) {
+              delete user.password;
+            }
+            return User.findOneAndUpdate({'_id': id}, user, {new: true});
           }
+        } else {
           return User.findOneAndUpdate({'_id': id}, user, {new: true});
         }
       })
@@ -80,8 +90,8 @@ export class UserController {
   }
 
   private cleanUserObject(id: string, user: IUserModel, currentUser?: IUser) {
-    user.password = null;
-    if (currentUser._id !== id && currentUser.role !== 'teacher') {
+    user.password = '';
+    if (currentUser._id !== id && (currentUser.role !== <string>'teacher' || currentUser.role !== <string>'admin')) {
       user.uid = null;
     }
     return user.toObject({virtuals: true});
