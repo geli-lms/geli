@@ -2,7 +2,7 @@
   "name": "geli-web-frontend",
   "description": "This is the WebFronted-Package.json for geli.",
   "homepage": "https://github.com/h-da/geli",
-  "version": "0.2.0",
+  "version": "0.2.2",
   "license": "GPL-3.0",
   "author": {
     "name": "Lukas Korte",
