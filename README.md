@@ -64,7 +64,7 @@ the Angular development server and be available at
 The default configuration should already enable you to start developing.
 
 For more information on how to configure e.g. e-mail see 
-[docs/development/configuration](docs/configuration.md).
+[docs/development/configuration](docs/development/configuration.md).
 
 
 ### Commands
@@ -82,11 +82,6 @@ For more information on how to configure e.g. e-mail see
   - __End to end tests__: `npm run e2e`
   - __[Angular CLI](https://cli.angular.io/)__: `npm run ng`
     (Be sure to pass flags with additional dashes. E.g.: `npm run ng build -- --prod`)
-
-
-### Configuration
-
-See [docs/configuration](docs/configuration.md).
 
 
 ## Contributing
