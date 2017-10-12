@@ -1,5 +1,9 @@
 # Development configuration
 
+This guide will show some development specific configuration options. For a full list of all 
+available options see [here](../configuration.md).
+
+
 ## E-mail
 
 When you whish to use the mailing service while developing we recommend using the Debugmail.io 
@@ -8,7 +12,7 @@ service.
 It acts as an dummy SMTP Server and in it's online "inbox" you see which Mails would have been 
 submitted on an actual SMTP server.
 
-a Big advantage is that you dont have to use real (not even valid) addresses and it works just fine 
+A big advantage is that you dont have to use real (not even valid) addresses and it works just fine 
 with our fixture users.
 
 To do so just [sign-up](https://debugmail.io/sign-up), create a new project and pass the shown 

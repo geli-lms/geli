@@ -50,6 +50,14 @@ You have multiple options for running the project for development purposes.
 - [Locally](docs/development/running-locally.md)
 <!--- Needs to be updated: - [Vagrant](docs/development/running-with-vagrant.md) --->
 
+After successfully starting, the web frontend will be available at 
+[http://localhost:4200](http://localhost:4200).
+
+The API will be available at [http://localhost:3030](http://localhost:3030). To avoid 
+[CORS](https://en.wikipedia.org/wiki/Cross-origin_resource_sharing) the API will also be proxied by 
+the Angular development server and be available at 
+[http://localhost:4200/api](http://localhost:4200/api).
+
 
 ### Configuration
 

@@ -24,20 +24,19 @@ Install Dependencies:
 
 ## Running the API server
 
-First start MongoDB. When you are using the default port (27017) no further configuration
-is needed and you can start up the API server:
+First start MongoDB so that it is listening on `localhost:27017`. Then you can start up the API server:
 
     cd api
     npm run start
-    cd ..
 
 
 ## Running the web frontend
 
     cd app/webFrontend
     npm run start
-    cd ..
 
 
 Both commands will automatically watch for filesystem changes and recompile the code
 once you change it.
+
+For more information continue reading the main [README](../../README.md).
