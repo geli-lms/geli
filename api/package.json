@@ -2,12 +2,8 @@
   "name": "geli-api",
   "version": "0.2.2",
   "license": "GPL-3.0",
+  "repository": "h-da/geli",
   "description": "This is the API-Package.json for geli.",
-  "homepage": "https://github.com/h-da/geli",
-  "author": {
-    "name": "Lukas Korte",
-    "email": "lukas@korte.me"
-  },
   "main": "build/index.js",
   "keywords": [
     "Node",
@@ -22,7 +18,7 @@
     "start:inspect": "gulp inspect",
     "start:poll": "gulp watch:poll",
     "test": "gulp test",
-    "tslint": "gulp tslint",
+    "lint": "gulp tslint",
     "debug": "gulp debug",
     "load:fixtures": "gulp load:fixtures"
   },
