@@ -61,6 +61,7 @@ nohup.out
 /api/build
 /api/coverage
 /api/docs
+docker-compose.override.yml
 
 # Web Frontend
 # nothing so far

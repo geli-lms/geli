@@ -4,6 +4,7 @@ import {IUser} from '../../../shared/models/IUser';
 import {NativeError} from 'mongoose';
 import * as crypto from 'crypto';
 import {isNullOrUndefined} from 'util';
+import { isEmail } from 'validator';
 
 interface IUserModel extends IUser, mongoose.Document {
   isValidPassword: (candidatePassword: string) => Promise<boolean>;
@@ -24,7 +25,8 @@ const userSchema = new mongoose.Schema({
       type: String,
       lowercase: true,
       unique: true,
-      required: true
+      required: true,
+      validate: [ isEmail, 'invalid email' ]
     },
     password: {
       type: String,
