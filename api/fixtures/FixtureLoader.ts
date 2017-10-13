@@ -25,7 +25,7 @@ export class FixtureLoader {
     (<any>mongoose).Promise = global.Promise;
 
     if (!mongoose.connection.readyState) {
-      mongoose.connect(config.database);
+      mongoose.connect(config.database, {useMongoClient: true});
     }
   }
 
