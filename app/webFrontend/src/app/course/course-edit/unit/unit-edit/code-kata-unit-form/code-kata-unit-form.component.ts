@@ -1,6 +1,6 @@
-import {Component, Input, NgModule, OnInit, ViewChild} from '@angular/core';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {CodeKataUnitService} from '../../../../../shared/services/data.service';
-import {MdSnackBar} from '@angular/material';
+import {MatSnackBar} from '@angular/material';
 import {ICodeKataUnit} from '../../../../../../../../../shared/models/units/ICodeKataUnit';
 import {ICourse} from '../../../../../../../../../shared/models/ICourse';
 import {CodeKataUnit} from '../../../../../models/CodeKataUnit';
@@ -27,7 +27,7 @@ export class CodeKataUnitFormComponent implements OnInit {
   logs: string;
 
   constructor(private codeKataUnitService: CodeKataUnitService,
-              private snackBar: MdSnackBar) {
+              private snackBar: MatSnackBar) {
   }
 
   ngOnInit() {

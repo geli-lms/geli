@@ -1,7 +1,7 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {TaskService, UnitService} from '../../../../../shared/services/data.service';
 import {Task} from '../../../../../models/Task';
-import {MdSnackBar} from '@angular/material';
+import {MatSnackBar} from '@angular/material';
 import {ITaskUnit} from '../../../../../../../../../shared/models/units/ITaskUnit';
 import {TaskUnit} from '../../../../../models/TaskUnit';
 import {ITask} from '../../../../../../../../../shared/models/task/ITask';
@@ -37,7 +37,7 @@ export class TaskUnitEditComponent implements OnInit {
 
   constructor(private taskService: TaskService,
               private unitService: UnitService,
-              private snackBar: MdSnackBar) {
+              private snackBar: MatSnackBar) {
   }
 
   ngOnInit() {

@@ -1,19 +1,19 @@
-<md-card class="login-card">
-  <md-card-header>
-    <md-card-title><h1>Login</h1></md-card-title>
-  </md-card-header>
+<mat-card class="login-card">
+  <mat-card-header>
+    <mat-card-title><h1>Login</h1></mat-card-title>
+  </mat-card-header>
 
-  <md-card-content>
+  <mat-card-content>
     <form name="form" (ngSubmit)="login()" [formGroup]="loginForm">
-      <md-input-container>
-        <input mdInput formControlName="email" placeholder="Mail address">
-      </md-input-container>
-      <md-input-container>
-        <input mdInput type="password" formControlName="password" placeholder="Password">
-      </md-input-container>
+      <mat-form-field>
+        <input matInput formControlName="email" placeholder="Mail address">
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput type="password" formControlName="password" placeholder="Password">
+      </mat-form-field>
 
-      <button md-raised-button color="primary" class="md-button" type="submit" [disabled]="loading">Login</button>
-      <button md-raised-button class="md-button" type="button" routerLink="/reset" routerLinkActive="active">forgot password</button>
+      <button mat-raised-button color="primary" class="mat-button" type="submit" [disabled]="loading">Login</button>
+      <button mat-raised-button class="mat-button" type="button" routerLink="/reset" routerLinkActive="active">forgot password</button>
     </form>
-  </md-card-content>
-</md-card>
+  </mat-card-content>
+</mat-card>

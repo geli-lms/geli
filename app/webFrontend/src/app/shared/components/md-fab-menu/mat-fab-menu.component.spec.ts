@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MdFabMenuComponent } from './md-fab-menu.component';
+import { MatFabMenuComponent } from './mat-fab-menu.component';
 
-describe('MdFabMenuComponent', () => {
-  let component: MdFabMenuComponent;
-  let fixture: ComponentFixture<MdFabMenuComponent>;
+describe('MatFabMenuComponent', () => {
+  let component: MatFabMenuComponent;
+  let fixture: ComponentFixture<MatFabMenuComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ MdFabMenuComponent ]
+      declarations: [ MatFabMenuComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(MdFabMenuComponent);
+    fixture = TestBed.createComponent(MatFabMenuComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

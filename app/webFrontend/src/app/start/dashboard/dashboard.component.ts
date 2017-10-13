@@ -1,5 +1,5 @@
 import {Component, OnInit, ViewEncapsulation} from '@angular/core';
-import {MdDialog, MdSnackBar} from '@angular/material';
+import {MatDialog, MatSnackBar} from '@angular/material';
 import {UserService} from '../../shared/services/user.service';
 import {CourseService} from '../../shared/services/data.service';
 import {Router} from '@angular/router';
@@ -21,8 +21,8 @@ export class DashboardComponent implements OnInit {
   constructor(public userService: UserService,
               private courseService: CourseService,
               private router: Router,
-              private dialog: MdDialog,
-              private snackBar: MdSnackBar) {
+              private dialog: MatDialog,
+              private snackBar: MatSnackBar) {
   }
 
   ngOnInit() {

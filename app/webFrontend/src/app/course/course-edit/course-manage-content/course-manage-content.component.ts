@@ -5,7 +5,7 @@ import {CourseService, LectureService, UnitService} from '../../../shared/servic
 import {ShowProgressService} from 'app/shared/services/show-progress.service';
 import {DialogService} from '../../../shared/services/dialog.service';
 import {UserService} from '../../../shared/services/user.service';
-import {MdSnackBar} from '@angular/material';
+import {MatSnackBar} from '@angular/material';
 import {IUnit} from '../../../../../../../shared/models/units/IUnit';
 import {DragulaService} from 'ng2-dragula';
 
@@ -31,7 +31,7 @@ export class CourseManageContentComponent implements OnInit, OnDestroy {
               private courseService: CourseService,
               private unitService: UnitService,
               private showProgress: ShowProgressService,
-              private snackBar: MdSnackBar,
+              private snackBar: MatSnackBar,
               private dialogService: DialogService,
               private dragulaService: DragulaService,
               public userService: UserService) {

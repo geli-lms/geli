@@ -1,6 +1,6 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {CodeKataUnit} from '../../../../models/CodeKataUnit';
-import {MdSnackBar} from '@angular/material';
+import {MatSnackBar} from '@angular/material';
 import {ProgressService, CodeKataProgressService} from 'app/shared/services/data/progress.service';
 import {ICodeKataProgress} from '../../../../../../../../shared/models/ICodeKataProgress';
 import {UserService} from '../../../../shared/services/user.service';
@@ -24,7 +24,7 @@ export class CodeKataComponent implements OnInit {
   isExampleCode = false;
 
   constructor(private route: ActivatedRoute,
-              private snackBar: MdSnackBar,
+              private snackBar: MatSnackBar,
               private progressService: ProgressService,
               private codeKataProgressService: CodeKataProgressService,
               private userService: UserService) {

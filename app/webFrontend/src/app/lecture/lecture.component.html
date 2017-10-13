@@ -1,10 +1,10 @@
-<md-card class="lecture-card" *ngIf="lecture">
-  <md-card-header>
-    <md-card-title><h2>{{lecture.name}}</h2></md-card-title>
-  </md-card-header>
+<mat-card class="lecture-card" *ngIf="lecture">
+  <mat-card-header>
+    <mat-card-title><h2>{{lecture.name}}</h2></mat-card-title>
+  </mat-card-header>
 
-  <md-card-content>
+  <mat-card-content>
     <p>{{lecture.description}}</p>
     <app-unit *ngIf="lecture.units" [units]="lecture.units"></app-unit>
-  </md-card-content>
-</md-card>
+  </mat-card-content>
+</mat-card>
