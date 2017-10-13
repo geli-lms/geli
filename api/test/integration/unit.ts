@@ -21,8 +21,7 @@ describe('Unit', () => {
 
   describe(`POST ${BASE_URL}`, () => {
     it('should upload a video and return the created unit', (done) => {
-      this.timeout(10000);
-      return User.findOne({email: 'teacher@test.local'})
+      User.findOne({email: 'teacher@test.local'})
       .then((user) => {
         return Course.findOne({name: 'Introduction to web development'})
         .then((course) => ({user, course}));
@@ -45,6 +44,6 @@ describe('Unit', () => {
         });
       })
       .catch(done);
-    });
+    }).timeout(10000);
   });
 });
