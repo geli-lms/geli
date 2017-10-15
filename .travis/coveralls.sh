@@ -2,7 +2,8 @@
 
 # Variables
 MODULE_PATH=".travis/node_modules"
-BIN_PATH="coveralls/bin"
+# BIN_PATH="coveralls/bin"
+BIN_PATH=".bin"
 
 RED='\033[0;31m'
 YELLOW='\033[0;33m'
@@ -29,7 +30,7 @@ fi
 cd ..
 
 echo "+ sending lcov file to coveralls"
-sed -i 's/bin\///g' ./coverage/lcov.info && cat ./coverage/lcov.info | ./node_modules/.bin/coveralls
+sed -i 's/bin\///g' api/coverage/lcov.info && cat api/coverage/lcov.info | $MODULE_PATH/$BIN_PATH/coveralls
 # cat api/coverage/lcov.info | $MODULE_PATH/$BIN_PATH/coveralls.js -v
 
 echo "+ INFO: Currently only the api-coverdata are generated and send"
