@@ -156,7 +156,7 @@ gulp.task(TEST, function (callback) {
 });
 
 gulp.task(TEST_NATIVE, function (callback) {
-  runSequence(BUILD, CLEAN_COVERAGE, PRETEST, callback);
+  runSequence(BUILD, CLEAN_COVERAGE, callback);
 });
 
 // Runs the build task and starts the server every time changes are detected.
