@@ -25,7 +25,6 @@ const PRETEST = "pretest";
 const RUN_TESTS = "run:tests";
 const LOAD_FIXTURES = "load:fixtures";
 const TEST = "test";
-const TEST_NATIVE = "test:native";
 const REMAP_COVERAGE = "remap:coverage";
 const WATCH = "watch";
 const WATCH_POLL = "watch:poll";
@@ -152,10 +151,6 @@ gulp.task(REMAP_COVERAGE, function () {
 
 // Runs all required steps for testing in sequence.
 gulp.task(TEST, function (callback) {
-  runSequence(BUILD, CLEAN_COVERAGE, PRETEST, RUN_TESTS, REMAP_COVERAGE, callback);
-});
-
-gulp.task(TEST_NATIVE, function (callback) {
   runSequence(BUILD, CLEAN_COVERAGE, callback);
 });
 

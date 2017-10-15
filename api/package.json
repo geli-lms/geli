@@ -17,7 +17,7 @@
     "start:debug": "gulp debug",
     "start:inspect": "gulp inspect",
     "start:poll": "gulp watch:poll",
-    "pretest": "gulp test:native",
+    "pretest": "gulp test",
     "test": "istanbul cover --report json node_modules/mocha/bin/_mocha",
     "posttest": "gulp remap:coverage",
     "lint": "gulp tslint",
