@@ -4,7 +4,7 @@ import 'rxjs/add/operator/switchMap';
 import {CourseService} from '../../shared/services/data.service';
 import {ICourse} from '../../../../../../shared/models/ICourse';
 import {UserService} from '../../shared/services/user.service';
-import {MdSnackBar} from '@angular/material';
+import {MatSnackBar} from '@angular/material';
 
 
 @Component({
@@ -22,7 +22,7 @@ export class CourseDetailComponent implements OnInit {
               private route: ActivatedRoute,
               private courseService: CourseService,
               public userService: UserService,
-              private snackBar: MdSnackBar) { }
+              private snackBar: MatSnackBar) { }
 
   ngOnInit() {
     this.route.params.subscribe(params => { this.id = decodeURIComponent(params['id']); });

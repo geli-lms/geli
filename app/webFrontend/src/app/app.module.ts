@@ -8,7 +8,6 @@ import {RouterModule} from '@angular/router';
 import {AppComponent} from './app.component';
 import {LoginComponent} from './user/login/login.component';
 import {UserDetailsComponent} from './user/user-details/user-details.component';
-import {MaterialModule} from '@angular/material';
 import {JwtHelper} from 'angular2-jwt';
 
 import {routes} from './app.routes';
@@ -47,7 +46,7 @@ import {FileUploadModule} from 'ng2-file-upload/ng2-file-upload';
 import {StartComponent} from './start/start.component';
 
 import {AdminComponent} from './admin/admin.component';
-import {DialogModule} from './shared/modules/dialog/dialog.module';
+import {DialogModule} from './shared/modules/dialog.module';
 import {TeacherReportComponent} from './course/teacher-report/teacher-report.component';
 import {UnitMenuComponent} from './shared/components/unit-menu/unit-menu.component';
 import {UnitFormComponent} from './course/course-edit/unit/unit-edit/unit-form.component';
@@ -69,9 +68,11 @@ import {CodeKataComponent} from './course/course-edit/unit/code-kata-unit/code-k
 import {CodeKataUnitFormComponent} from './course/course-edit/unit/unit-edit/code-kata-unit-form/code-kata-unit-form.component';
 import {AceEditorModule} from 'ng2-ace-editor';
 import {CourseManageContentComponent} from './course/course-edit/course-manage-content/course-manage-content.component';
-import {MdFabMenuComponent} from './shared/components/md-fab-menu/md-fab-menu.component';
+import {MatFabMenuComponent} from './shared/components/md-fab-menu/mat-fab-menu.component';
 import {UnitGeneralInfoFormComponent} from './course/course-edit/unit/unit-edit/unit-general-info-form/unit-general-info-form.component';
 import {ResetComponent} from './user/reset/reset.component';
+import {MATERIAL_COMPATIBILITY_MODE} from '@angular/material';
+import {MaterialImportModule} from './shared/modules/material-import.module';
 
 @NgModule({
   declarations: [
@@ -116,25 +117,26 @@ import {ResetComponent} from './user/reset/reset.component';
     FreeTextUnitComponent,
     CourseUserListComponent,
     CourseManageContentComponent,
-    MdFabMenuComponent,
+    MatFabMenuComponent,
     CodeKataComponent,
     CodeKataUnitFormComponent,
     UnitGeneralInfoFormComponent,
   ],
   imports: [
+    MaterialImportModule,
     DragulaModule,
     BrowserModule,
     FormsModule,
     HttpModule,
     RouterModule.forRoot(routes),
     BrowserAnimationsModule,
-    MaterialModule,
     ReactiveFormsModule,
     FileUploadModule,
     DialogModule,
     AceEditorModule,
   ],
   providers: [
+    {provide: MATERIAL_COMPATIBILITY_MODE, useValue: true},
     UserService,
     AuthenticationService,
     AboutDataService,

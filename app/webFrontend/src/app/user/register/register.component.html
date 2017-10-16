@@ -1,57 +1,57 @@
-<md-card *ngIf="registrationDone">
-  <md-card-header>
-    <md-card-title><h1>Registration was successful</h1></md-card-title>
-  </md-card-header>
-  <md-card-content>
+<mat-card *ngIf="registrationDone">
+  <mat-card-header>
+    <mat-card-title><h1>Registration was successful</h1></mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
     <p>We have send you an activation link to your specified mail address.</p>
-  </md-card-content>
-  <md-card-actions align="start">
-    <button md-raised-button color="primary" routerLink="/" routerLinkActive="active">Back to frontpage</button>
-  </md-card-actions>
-</md-card>
-<md-card class="register-card" *ngIf="!registrationDone">
-  <md-card-header>
-    <md-card-title><h1>Register</h1></md-card-title>
-  </md-card-header>
-  <md-card-content>
+  </mat-card-content>
+  <mat-card-actions align="start">
+    <button mat-raised-button color="primary" routerLink="/" routerLinkActive="active">Back to frontpage</button>
+  </mat-card-actions>
+</mat-card>
+<mat-card class="register-card" *ngIf="!registrationDone">
+  <mat-card-header>
+    <mat-card-title><h1>Register</h1></mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
     <form name="form" (ngSubmit)="register()" [formGroup]="registerForm">
-      <md-radio-group formControlName="role" [(ngModel)]="role" [align]="'start'">
-        <md-radio-button value="student">Student</md-radio-button>
-        <md-radio-button value="teacher">Teacher</md-radio-button>
-      </md-radio-group>
+      <mat-radio-group formControlName="role" [(ngModel)]="role" [align]="'start'">
+        <mat-radio-button value="student">Student</mat-radio-button>
+        <mat-radio-button value="teacher">Teacher</mat-radio-button>
+      </mat-radio-group>
       <div class="form-group" formGroupName="profile">
-        <md-input-container>
-          <input mdInput formControlName="firstName" placeholder="First name"/>
-        </md-input-container>
-        <md-input-container>
-          <input mdInput formControlName="lastName" placeholder="Last name"/>
-        </md-input-container>
+        <mat-form-field>
+          <input matInput formControlName="firstName" placeholder="First name"/>
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput formControlName="lastName" placeholder="Last name"/>
+        </mat-form-field>
       </div>
 
-      <md-input-container>
-        <input mdInput formControlName="email" placeholder="E-Mail"/>
-      </md-input-container>
+      <mat-form-field>
+        <input matInput formControlName="email" placeholder="E-Mail"/>
+      </mat-form-field>
 
       <div *ngIf="role == 'student'">
-        <md-input-container>
-          <input mdInput formControlName="uid" placeholder="Matrikelnummer" />
-        </md-input-container>
-        <md-input-container>
-          <input mdInput formControlName="confirmUid" placeholder="Confirm Matrikelnummer" />
-        </md-input-container>
+        <mat-form-field>
+          <input matInput formControlName="uid" placeholder="Matrikelnummer" />
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput formControlName="confirmUid" placeholder="Confirm Matrikelnummer" />
+        </mat-form-field>
       </div>
 
-      <md-input-container>
-        <input mdInput type="password" formControlName="password" placeholder="Password" />
-      </md-input-container>
-      <md-input-container>
-        <input mdInput type="password" formControlName="confirmPassword" placeholder="Confirm password" />
+      <mat-form-field>
+        <input matInput type="password" formControlName="password" placeholder="Password" />
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput type="password" formControlName="confirmPassword" placeholder="Confirm password" />
         <div class="form-text error" *ngIf="registerForm.controls.confirmPassword.touched">
           <div *ngIf="registerForm.hasError('mismatchedPasswords')">Passwords do not match.</div>
         </div>
-      </md-input-container>
+      </mat-form-field>
 
-      <button md-raised-button color="primary" type="submit" [disabled]="loading">Register</button>
+      <button mat-raised-button color="primary" type="submit" [disabled]="loading">Register</button>
     </form>
-  </md-card-content>
-</md-card>
+  </mat-card-content>
+</mat-card>

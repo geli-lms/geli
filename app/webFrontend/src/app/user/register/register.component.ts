@@ -3,7 +3,7 @@ import {Validators, FormGroup, FormBuilder} from '@angular/forms';
 import {AuthenticationService} from '../../shared/services/authentication.service';
 import {Router} from '@angular/router';
 import {ShowProgressService} from '../../shared/services/show-progress.service';
-import {MdSnackBar} from '@angular/material';
+import {MatSnackBar} from '@angular/material';
 import {matchPasswords} from '../../shared/validators/validators';
 
 
@@ -20,7 +20,7 @@ export class RegisterComponent implements OnInit {
   constructor(private router: Router,
               private authenticationService: AuthenticationService,
               private showProgress: ShowProgressService,
-              private snackBar: MdSnackBar,
+              private snackBar: MatSnackBar,
               private formBuilder: FormBuilder) {
   }
 

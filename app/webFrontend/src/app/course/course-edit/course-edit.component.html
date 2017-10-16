@@ -1,55 +1,55 @@
 <h1>Edit course</h1>
 
-<md-tab-group dynamicHeight="true">
-  <md-tab label="General">
+<mat-tab-group dynamicHeight="true">
+  <mat-tab label="General">
     <form class="course-form" (ngSubmit)="createCourse()">
-      <md-input-container class="full-width">
-        <input async mdInput id="name" placeholder="Course Name" [(ngModel)]="course"
+      <mat-form-field class="full-width">
+        <input async matInput id="name" placeholder="Course Name" [(ngModel)]="course"
                [ngModelOptions]="{standalone: true}">
-      </md-input-container>
+      </mat-form-field>
 
-      <md-input-container class="full-width">
-          <textarea mdInput id="description" placeholder="Course Description" [(ngModel)]="description"
+      <mat-form-field class="full-width">
+          <textarea matInput id="description" placeholder="Course Description" [(ngModel)]="description"
                     [ngModelOptions]="{standalone: true}"></textarea>
-      </md-input-container>
+      </mat-form-field>
 
-      <md-input-container class="full-width">
-        <input async mdInput id="accessKey" placeholder="Access Key" [(ngModel)]="accessKey"
+      <mat-form-field class="full-width">
+        <input async matInput id="accessKey" placeholder="Access Key" [(ngModel)]="accessKey"
                [ngModelOptions]="{standalone: true}">
-      </md-input-container>
+      </mat-form-field>
 
       <p>
         <input class="upload" type="file" ng2FileSelect [uploader]="uploader" placeholder="Upload files" accept=".csv" />
-        <button md-raised-button color="primary"
+        <button mat-raised-button color="primary"
                 (click)="uploader.uploadAll()" [disabled]="!uploader.getNotUploadedItems().length">
-          <md-icon>file_upload</md-icon> Upload
+          <mat-icon>file_upload</mat-icon> Upload
         </button>
       </p>
 
-      <md-slide-toggle class="slider" (change)="onChangeMode($event)"
-                       [checked]="mode">Mode {{enrollType}}</md-slide-toggle>
+      <mat-slide-toggle class="slider" (change)="onChangeMode($event)"
+                       [checked]="mode">Mode {{enrollType}}</mat-slide-toggle>
 
-      <md-slide-toggle (change)="onChangeActive($event)"
-                       [checked]="active">Active {{active}}</md-slide-toggle>
+      <mat-slide-toggle (change)="onChangeActive($event)"
+                       [checked]="active">Active {{active}}</mat-slide-toggle>
 
       <p>
-        <button md-raised-button color="primary" class="md-button" type="submit">Save</button>
+        <button mat-raised-button color="primary" class="mat-button" type="submit">Save</button>
       </p>
     </form>
 
 
-  </md-tab>
+  </mat-tab>
 
-  <md-tab label="Manage content">
+  <mat-tab label="Manage content">
     <app-course-manage-content [course]="courseOb"></app-course-manage-content>
-  </md-tab>
+  </mat-tab>
 
-  <md-tab label="Course Members">
+  <mat-tab label="Course Members">
     <app-members [courseId]="id"></app-members>
-  </md-tab>
+  </mat-tab>
 
-  <md-tab label="Course Teachers">
+  <mat-tab label="Course Teachers">
   <app-teachers [courseId]="id"></app-teachers>
-  </md-tab>
+  </mat-tab>
 
-</md-tab-group>
+</mat-tab-group>

@@ -1,15 +1,15 @@
 import { Observable } from 'rxjs/Rx';
 import { Injectable } from '@angular/core';
-import { MdDialog, MdDialogRef } from '@angular/material';
+import { MatDialog, MatDialogRef } from '@angular/material';
 import {ConfirmDialog} from '../components/delete-dialog/confirm-dialog.component';
 
 @Injectable()
 export class DialogService {
 
-  constructor(private dialog: MdDialog) { }
+  constructor(private dialog: MatDialog) { }
 
   public confirm(title: string, message: string, confirmText: string = 'Confirm'): Observable<boolean> {
-    let dialogRef: MdDialogRef<ConfirmDialog>;
+    let dialogRef: MatDialogRef<ConfirmDialog>;
 
     dialogRef = this.dialog.open(ConfirmDialog);
     dialogRef.componentInstance.title = title;

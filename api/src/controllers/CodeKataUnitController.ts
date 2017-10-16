@@ -60,7 +60,7 @@ export class CodeKataUnitController extends UnitController {
 
   private findLastIndexOf(source: string, value: string): number {
     const regex = new RegExp(value, '');
-    let i: number = -1;
+    let i = -1;
 
     // limit execution time (prevent deadlocks)
     let j = 10;

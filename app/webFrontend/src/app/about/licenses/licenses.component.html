@@ -2,24 +2,24 @@
 
 <h3>WebFrontend <small><span class="badge">{{allFrontendDependencies?.length}}</span></small></h3>
 <p *ngIf="isFrontendDependenciesEmpty()">No Dependencies found...</p>
-<md-list>
-  <md-list-item *ngFor="let dep of allFrontendDependencies;">
-    <md-icon md-list-icon>folder</md-icon>
-    <h3 md-line>{{dep.name}}
+<mat-list>
+  <mat-list-item *ngFor="let dep of allFrontendDependencies;">
+    <mat-icon mat-list-icon>folder</mat-icon>
+    <h3 matLine>{{dep.name}}
       <small>{{dep.version}}</small>
     </h3>
-    <p md-line>License: {{dep.license}} <i *ngIf="dep.devDependency"><small> devDependency</small></i></p>
-  </md-list-item>
-</md-list>
+    <p matLine>License: {{dep.license}} <i *ngIf="dep.devDependency"><small> devDependency</small></i></p>
+  </mat-list-item>
+</mat-list>
 
 <h3>API <small><span class="badge">{{allApiDependencies?.length}}</span></small></h3>
 <p *ngIf="isApiDependenciesEmpty()">No Dependencies found...</p>
-<md-list>
-  <md-list-item *ngFor="let dep of allApiDependencies;">
-    <md-icon md-list-icon>folder</md-icon>
-    <h3 md-line>{{dep.name}}
+<mat-list>
+  <mat-list-item *ngFor="let dep of allApiDependencies;">
+    <mat-icon mat-list-icon>folder</mat-icon>
+    <h3 matLine>{{dep.name}}
       <small>{{dep.version}}</small>
     </h3>
-    <p md-line>License: {{dep.license}} <i *ngIf="dep.devDependency"><small> devDependency</small></i></p>
-  </md-list-item>
-</md-list>
+    <p matLine>License: {{dep.license}} <i *ngIf="dep.devDependency"><small> devDependency</small></i></p>
+  </mat-list-item>
+</mat-list>
