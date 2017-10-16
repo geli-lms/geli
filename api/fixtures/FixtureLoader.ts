@@ -1,24 +1,47 @@
 import * as mongoose from 'mongoose';
 import config from '../src/config/main';
 
-import {userFixtures} from './userFixtures';
+import {studentFixtures} from './UserFixtures/studentFixtures';
 import {courseFixtures} from './courseFixtures';
-import {lectureFixtures} from './lectureFixtures';
+import {lectureFixtures1} from './lectureFixtures/1-lectureFixtures';
 import {IFixture} from './IFixture';
-import {ICourseModel} from '../src/models/Course';
+import {Course, ICourseModel} from '../src/models/Course';
 import {ILectureModel} from '../src/models/Lecture';
-import {unitFixtures} from './unitFixtures';
+import {adminFixtures} from './UserFixtures/adminFixtures';
+import {teacherFixtures} from './UserFixtures/teacherFixtures';
+import {tutorFixtures} from './UserFixtures/tutorFixtures';
+import {lectureFixtures2} from './lectureFixtures/2-lectureFixtures';
+import {freeTextFixture1u1} from './unitFixtures/1-1-freeTextFixture';
+import {freeTextFixture1u2} from './unitFixtures/1-2-freeTextFixture';
+import {codeKataFixture2u1} from './unitFixtures/2-1-codeKataFixtures';
 import {IUnitModel} from '../src/models/units/Unit';
-import {progressFixtures} from './progressFixtures';
-import {IProgressModel} from '../src/models/Progress';
-import {ITaskUnitModel} from '../src/models/units/TaskUnit';
-import {IUserModel} from '../src/models/User';
 
 export class FixtureLoader {
 
-  private fixtures: Array<IFixture> = [
-    userFixtures,
-    courseFixtures
+  private user: Array<IFixture> = [
+    adminFixtures,
+    teacherFixtures,
+    tutorFixtures,
+    studentFixtures,
+  ];
+
+  private courses: Array<IFixture> = [
+    courseFixtures,
+  ];
+
+  private lectures: Array<IFixture> = [
+    lectureFixtures1,
+    lectureFixtures2,
+  ];
+
+  private units = [
+    [
+      [freeTextFixture1u1],
+      [freeTextFixture1u2],
+    ],
+    [
+      [codeKataFixture2u1],
+    ]
   ];
 
   constructor() {
@@ -32,85 +55,73 @@ export class FixtureLoader {
   load() {
     return mongoose.connection.dropDatabase()
     .then(() =>
+      // Load users to Database
       Promise.all(
-        this.fixtures.map((modelFixtures) =>
+        this.user.map((userFixtures) =>
           Promise.all(
-            modelFixtures.data.map((element) =>
-              new modelFixtures.Model(element).save()
+            userFixtures.data.map((user) =>
+              new userFixtures.Model(user).save()
             )
           )
         )
       ))
-    .then(() => {
-      return Promise.all(
-        lectureFixtures.data.map((element) => {
-          return new lectureFixtures.Model(element)
-          .save()
-          .then((lecture) => {
-            return courseFixtures.Model.findOne({name: 'Introduction to web development'})
-            .then((course) => ({course, lecture}));
-          })
-          .then(({course, lecture}) => {
-            (<ICourseModel>course).lectures.push((<ILectureModel>lecture));
-            return course.save();
-          });
-        })
-      );
-    })
-    .then((course: ICourseModel[]) => {
-      return Promise.all(
-        unitFixtures.data.map((unitElement) => {
-          unitElement._course = course[0]._id;
-          return new unitFixtures.Model(unitElement)
-          .save();
-        })
+    .then(() =>
+      // Load courses
+      Promise.all(
+        this.courses.map((courseFixtures) =>
+          Promise.all(
+            courseFixtures.data.map((course) =>
+              new courseFixtures.Model(course).save()
+            )
+          )
+        )
       )
-      .then((units: IUnitModel[]) => {
-        return lectureFixtures.Model.findOne({name: 'Lecture 1'})
-        .then((lecture) => ({lecture, units}));
-      })
-      .then(({lecture, units}) => {
-        const lectureModel = <ILectureModel>lecture;
-        units.map((unit: ITaskUnitModel) => {
-          lectureModel.units.push(unit);
-        });
-        lectureModel.save();
-        return units;
-      });
-    })
-    .then((units: IUnitModel[]) => {
-      // Creating progress fixtures
-      return courseFixtures.Model.findOne({name: 'Introduction to web development'})
-        .then((course) => {
-          return userFixtures.Model.find({role: 'student'})
-            .then((users) => ({course, users}));
-        })
-        .then(({course, users}) => {
-          const progressModels: IProgressModel[] = [];
-          for (let i = 0; i < users.length; i++) {
-            (<ICourseModel>course).students.push((<IUserModel[]>users)[i]);
+    )
+    .then(() => Course.find())
+    .then((courses: ICourseModel[]) =>
+      Promise.all(courses.map((course: ICourseModel, courseIndex: number) => {
+        const courseLectures: IFixture = this.lectures[courseIndex];
+        // save all lectures
+        return Promise.all(courseLectures.data.map((lecture: ILectureModel, lectureIndex: number) =>  {
+          const lect: ILectureModel = <ILectureModel> new courseLectures.Model(lecture);
+          const lectureUnits: IFixture[] = this.units[courseIndex][lectureIndex];
 
-            for (let j = 0; j < units.length; j++) {
-              progressFixtures.data.map((progress) => {
-                const progressModel: IProgressModel = <IProgressModel>new progressFixtures.Model(progress);
-                progressModel.course = course;
-                progressModel.user = users[i];
-                progressModel.unit = units[j];
-                progressModels[(i * users.length) + j] = progressModel;
-              });
-            }
-          }
-
-          return course.save()
-            .then(() => progressModels);
-        })
-        .then((progressModels) => {
-          return Promise.all(
-            progressModels.map((progressModel) => {
-              return progressModel.save();
+          return Promise.all(lectureUnits.map((unitFixtures) =>
+            // save Units
+            Promise.all(unitFixtures.data.map((unit: IUnitModel) => {
+              unit._course = course._id;
+              return new unitFixtures.Model(unit).save();
+            }))
+            // push units to lecture
+            .then((savedUnits: IUnitModel[]) => {
+              lect.units = lect.units.concat(savedUnits);
+              return savedUnits.length;
             })
-          );
+          ))
+          .then(() => lect.save());
+        }))
+        // push lectures to course
+        .then((savedLectures: ILectureModel[]) => {
+          course.lectures = course.lectures.concat(savedLectures);
+          return course.save();
         });
-    });
+      }))
+    );
   }
 }
+
+/*
+          const lect: ILectureModel = <ILectureModel> new courseLectures.Model(lecture);
+          const lectureUnits: IFixture[] = this.units[courseIndex][lectureIndex];
+          // saving Units
+          return Promise.all(lectureUnits.map((unitFixtures) =>
+            Promise.all(unitFixtures.data.map((unit) =>
+              new unitFixtures.Model(unit).save()
+            ))
+            // push units to lecture
+            .then((savedUnits: IUnitModel[]) => {
+              lect.units = lect.units.concat(savedUnits);
+            })
+          ))
+          .then(() => lect.save);
+ */
