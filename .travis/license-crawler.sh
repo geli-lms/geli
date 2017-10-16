@@ -8,7 +8,7 @@ FT_APACHE=".apache.csv"
 FT_ALL=".csv"
 FT_PROD=".prod.csv"
 MODULE_PATH=".travis/node_modules"
-BIN_PATH="nlf/bin"
+BIN_PATH=".bin"
 
 RED='\033[0;31m'
 YELLOW='\033[0;33m'
@@ -45,9 +45,9 @@ cd api
 
 echo + crawling licenses from api
 echo + ... all
-../$MODULE_PATH/$BIN_PATH/nlf-cli.js --csv > $CSV_FILE$FT_ALL
+../$MODULE_PATH/$BIN_PATH/nlf --csv > $CSV_FILE$FT_ALL
 echo + ... production only
-../$MODULE_PATH/$BIN_PATH/nlf-cli.js --csv -d > $CSV_FILE$FT_PROD
+../$MODULE_PATH/$BIN_PATH/nlf --csv -d > $CSV_FILE$FT_PROD
 
 echo + copy results to project root
 cp $CSV_FILE$FT_ALL ../$CSV_FILE$FT_ALL
@@ -59,10 +59,10 @@ cd ../app/webFrontend
 echo + crawling licenses from app/webFrontend
 # append frontend licenses to existing csv; we have to skip the first line (header)
 echo + ... all
-../../$MODULE_PATH/$BIN_PATH/nlf-cli.js --csv > $CSV_FILE$FT_ALL
+../../$MODULE_PATH/$BIN_PATH/nlf --csv > $CSV_FILE$FT_ALL
 # ../../$MODULE_PATH/$BIN_PATH/nlf-cli.js --csv | awk '{if(NR>1)print}'  >> ../../$CSV_FILE
 echo + ... production only
-../../$MODULE_PATH/$BIN_PATH/nlf-cli.js --csv -d > $CSV_FILE$FT_PROD
+../../$MODULE_PATH/$BIN_PATH/nlf --csv -d > $CSV_FILE$FT_PROD
 
 echo + copy results to project root
 cat $CSV_FILE$FT_ALL >> ../../$CSV_FILE$FT_ALL
