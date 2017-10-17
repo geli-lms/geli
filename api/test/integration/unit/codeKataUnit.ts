@@ -50,7 +50,7 @@ describe(`CodeKataUnit ${BASE_URL}`, () => {
     });
 
     it('should fail with BadRequest (missing lectureId)', (done) => {
-      User.findOne({email: 'teacher@test.local'})
+      User.findOne({email: 'teacher1@test.local'})
         .then((user: IUser) => {
           chai.request(app)
             .post(BASE_URL)
@@ -66,7 +66,7 @@ describe(`CodeKataUnit ${BASE_URL}`, () => {
     });
 
     it('should fail with BadRequest (missing model)', (done) => {
-      User.findOne({email: 'teacher@test.local'})
+      User.findOne({email: 'teacher1@test.local'})
         .then((user: IUser) => {
           Lecture.findOne({name: 'Coding Train'})
             .then((lecture: ILecture) => {
@@ -86,7 +86,7 @@ describe(`CodeKataUnit ${BASE_URL}`, () => {
     });
 
     it('should create a new codeKataUnit', (done) => {
-      User.findOne({email: 'teacher@test.local'})
+      User.findOne({email: 'teacher1@test.local'})
         .then((user: IUser) => {
           Lecture.findOne({name: 'Coding Train'})
             .then((lecture: ILecture) => {
