@@ -9,6 +9,8 @@ import {IUser} from '../../../../shared/models/IUser';
 import {User} from '../../../src/models/User';
 import {Lecture} from '../../../src/models/Lecture';
 import {ILecture} from '../../../../shared/models/ILecture';
+import {ICourse} from '../../../../shared/models/ICourse';
+import {Course} from '../../../src/models/Course';
 
 chai.use(chaiHttp);
 chai.should();
@@ -19,6 +21,7 @@ const fixtureLoader = new FixtureLoader();
 describe(`CodeKataUnit ${BASE_URL}`, () => {
   // Before each test we reset the database
   const model = {
+      _course: '',
       name: 'Search and Replace',
       description: '...',
       progressable: true,
@@ -88,21 +91,25 @@ describe(`CodeKataUnit ${BASE_URL}`, () => {
     it('should create a new codeKataUnit', (done) => {
       User.findOne({email: 'teacher1@test.local'})
         .then((user: IUser) => {
-          Lecture.findOne({name: 'Coding Train'})
-            .then((lecture: ILecture) => {
-              chai.request(app)
-                .post(BASE_URL)
-                .set('Authorization', `JWT ${JwtUtils.generateToken(user)}`)
-                .send({lectureId: lecture._id, model: model})
-                .end((err, res) => {
-                  res.status.should.be.equal(200);
+          Course.findOne({name: 'Introduction to web development'})
+            .then((course: ICourse) => {
+              model._course = course._id;
+              Lecture.findOne({name: 'Coding Train'})
+                .then((lecture: ILecture) => {
+                  chai.request(app)
+                    .post(BASE_URL)
+                    .set('Authorization', `JWT ${JwtUtils.generateToken(user)}`)
+                    .send({lectureId: lecture._id, model: model})
+                    .end((err, res) => {
+                      res.status.should.be.equal(200);
 
-                  res.body.name.should.equal(lecture.name);
-                  res.body.description.should.equal(lecture.description);
-                  res.body.units.length.should.equal(lecture.units.length + 1);
-
-                  done();
-                });
+                      res.body.name.should.equal(lecture.name);
+                      res.body.description.should.equal(lecture.description);
+                      res.body.units.length.should.equal(lecture.units.length + 1);
+                      done();
+                    });
+                })
+                .catch(done);
             })
             .catch(done);
         })
