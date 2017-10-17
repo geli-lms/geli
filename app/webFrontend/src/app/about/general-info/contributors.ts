@@ -15,7 +15,7 @@ export class ContributorsList {
       , new Contributor('Patrick', 'Skowronek', '17WiSe', 'Student', 'PatrickSkowronek')
       , new Contributor('Henrik', 'Ochs', '17WiSe', 'Student', 'HPunktOchs')
       , new Contributor('Patrick', 'Schmelmer', '17WiSe', 'Student', 'shelmz')
-      , new Contributor('Michael', '???', '17WiSe', 'Student', 'micpah')
+      , new Contributor('Michael', 'Pahlke', '17WiSe', 'Student', 'micpah')
 
       , new Contributor('Felix', 'Brucker', '17SuSe', 'Student', 'felixbrucker', '17WiSe')
       , new Contributor('Alexander', 'Eimer', '17SuSe', 'Student', 'aeimer', '17WiSe')
