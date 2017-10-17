@@ -1,25 +1,19 @@
 import {Body, Post, JsonController, UseBefore, BadRequestError, Authorized} from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
-import {UnitController} from './UnitController';
+import {UnitBaseController} from './UnitBaseController';
 import {TaskUnit} from '../models/units/TaskUnit';
 import {ITask} from '../../../shared/models/task/ITask';
 import {ITaskModel, Task} from '../models/Task';
 
 @JsonController('/units/tasks')
 @UseBefore(passportJwtMiddleware)
-export class TaskUnitController extends UnitController {
+export class TaskUnitController extends UnitBaseController {
 
   @Authorized(['teacher', 'admin'])
   @Post('/')
   addTaskUnit(@Body() data: any) {
     // discard invalid requests
-    if (!data.lectureId) {
-      throw new BadRequestError('No lecture ID was submitted.');
-    }
-
-    if (!data.model) {
-      throw new BadRequestError('No task unit was submitted.');
-    }
+    this.checkPostParam(data);
 
     const tasks: ITask[] = data.model.tasks;
     data.model.tasks = [];

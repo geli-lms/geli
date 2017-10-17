@@ -1,24 +1,19 @@
 import {Body, Post, JsonController, UseBefore, BadRequestError, Put, Param, Authorized} from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
-import {UnitController} from './UnitController';
+import {UnitBaseController} from './UnitBaseController';
 import {CodeKataUnit} from '../models/units/CodeKataUnit';
 import {ICodeKataUnit} from '../../../shared/models/units/ICodeKataUnit';
 
 @JsonController('/units/code-katas')
 @UseBefore(passportJwtMiddleware)
-export class CodeKataUnitController extends UnitController {
+export class CodeKataUnitController extends UnitBaseController {
 
   @Authorized(['admin', 'teacher'])
   @Post('/')
   addCodeKataUnit(@Body() data: any) {
     // discard invalid requests
-    if (!data.lectureId) {
-      throw new BadRequestError('No lecture ID was submitted.');
-    }
+    this.checkPostParam(data);
 
-    if (!data.model) {
-      throw new BadRequestError('No codekata unit was submitted.');
-    }
     data.model = this.splitCodeAreas(data.model);
 
     return new CodeKataUnit(data.model).save()

@@ -6,7 +6,7 @@ import passportJwtMiddleware from '../security/passportJwtMiddleware';
 
 import {VideoUnit, IVideoUnitModel} from '../models/units/VideoUnit';
 import {FileUnit, IFileUnitModel} from '../models/units/FileUnit';
-import {UnitController} from './UnitController';
+import {UnitBaseController} from './UnitBaseController';
 
 const uploadOptions = {
   storage: multer.diskStorage({
@@ -25,7 +25,7 @@ const uploadOptions = {
 
 @JsonController('/units/upload')
 @UseBefore(passportJwtMiddleware)
-export class UploadUnitController extends UnitController {
+export class UploadUnitController extends UnitBaseController {
 
   @Authorized(['teacher', 'admin'])
   @Post('/video')
