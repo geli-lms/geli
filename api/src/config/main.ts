@@ -22,5 +22,5 @@ export default {
     pass: process.env.MAILPASS || ''
   },
   mailSender: process.env.MAILSENDER || 'no-reply@geli.edu',
-  teacherMailRegex: process.env.TEACHER_MAIL_REGEX || '@h-da.de$',
+  teacherMailRegex: process.env.TEACHER_MAIL_REGEX || '^.+@.+\..+$',
 };
