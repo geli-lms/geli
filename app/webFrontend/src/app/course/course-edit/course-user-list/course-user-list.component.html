@@ -36,7 +36,7 @@
   <md-list class="drop" [dragula]='dragulaBagId' [dragulaModel]='usersInCourse'>
     <div *ngFor="let member of usersInCourse">
       <md-list-item class="list" *ngIf="fuzzysearch(fuzzySearch,member)" [attr.data-id]="[member._id]">
-        <i class="material-icons md-48">drag_handle</i>
+        <md-icon class="user-drag-handle">drag_handle</md-icon>
         <span class="listBg" [grav]="member.email"></span>
         <span class="firstName">{{member.profile.firstName}}</span>
         <span class="lastName">{{member.profile.lastName}}</span>
@@ -50,7 +50,7 @@
   <md-list class="drop" [dragula]='dragulaBagId' [dragulaModel]='users'>
     <div *ngFor="let user of users">
       <md-list-item class="list" *ngIf="fuzzysearch(fuzzySearch,user)" [attr.data-id]="[user._id]">
-        <i class="material-icons md-48">drag_handle</i>
+        <md-icon class="member-drag-handle">drag_handle</md-icon>
         <span class="listBg" [grav]="user.email"></span>
         <span class="firstName">{{user.profile.firstName}}</span>
         <span class="lastName">{{user.profile.lastName}}</span>

@@ -4,6 +4,17 @@
   width: 100%;
 }
 
+.user-drag-handle, .member-drag-handle {
+  cursor: move;
+  opacity: 0.2;
+  user-select: none;
+  margin-right: 0.5em;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
 .members {
   margin-left: 40px;
 }
@@ -78,7 +89,6 @@ button {
 
 .list:hover {
   background-color: #fafafa;
-  cursor: move;
 }
 
 .listBg {

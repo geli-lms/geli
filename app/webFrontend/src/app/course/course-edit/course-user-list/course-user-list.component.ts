@@ -35,8 +35,11 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    // Make items only draggable by dragging the handle
     this.dragula.setOptions(this.dragulaBagId, {
-      revertOnSpill: true
+    moves: (el, container, handle) => {
+      return handle.classList.contains('user-drag-handle') || handle.classList.contains('member-drag-handle');
+    }
     });
     this.dragula.dropModel.subscribe(value => {
       const bagName = value[0];
