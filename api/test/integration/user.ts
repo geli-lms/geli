@@ -28,7 +28,7 @@ describe('User', () => {
             .end((err, res) => {
               res.status.should.be.equal(200);
               res.body.should.be.a('array');
-              res.body.length.should.be.equal(8);
+              res.body.length.should.be.equal(10);
 
               done();
             });
