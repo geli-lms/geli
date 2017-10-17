@@ -42,46 +42,46 @@ export class FixtureLoader {
   ];
 
   private lectures: Array<IFixture> = [
-    dumpTestLectureFixtures,
-    webDevelopmentLectureFixtures,
-    advancedWebDevelopmentLectureFixtures,
-    computerGraphicsLectureFixtures,
-    randomLectureFixtures,
-    mpseLectureFixtures,
+    /*course 1 lectures*/ dumpTestLectureFixtures,
+    /*course 2 lectures*/ webDevelopmentLectureFixtures,
+    /*course 3 lectures*/ advancedWebDevelopmentLectureFixtures,
+    /*course 4 lectures*/ computerGraphicsLectureFixtures,
+    /*course 5 lectures*/ randomLectureFixtures,
+    /*course 6 lectures*/ mpseLectureFixtures,
   ];
 
   private units = [
     [ // dumpTestLectureFixtures
-      [loremFreeTextFixture],
-      [dummyFreeTextFixture, randomFreeTextFixture],
-      [dummyFreeTextFixture],
+      /*lecture 1 units*/ [loremFreeTextFixture],
+      /*lecture 2 units*/ [dummyFreeTextFixture, randomFreeTextFixture],
+      /*lecture 3 units*/ [dummyFreeTextFixture],
     ],
     [ // webDevelopmentLectureFixtures
-      [randomFreeTextFixture],
-      [simpleCodeKataFixture],
-      [dummyFreeTextFixture],
+      /*lecture 1 units*/ [randomFreeTextFixture],
+      /*lecture 2 units*/ [simpleCodeKataFixture],
+      /*lecture 3 units*/ [dummyFreeTextFixture],
     ],
     [ // advancedWebDevelopmentLectureFixtures
-      [loremFreeTextFixture],
-      [hardCodeKataFixture],
-      [randomFreeTextFixture],
+      /*lecture 1 units*/ [loremFreeTextFixture],
+      /*lecture 2 units*/ [hardCodeKataFixture],
+      /*lecture 3 units*/ [randomFreeTextFixture],
     ],
     [ // computerGraphicsLectureFixtures
-      [loremFreeTextFixture],
-      [dummyFreeTextFixture],
-      [randomFreeTextFixture],
-      [dummyFreeTextFixture],
+      /*lecture 1 units*/ [loremFreeTextFixture],
+      /*lecture 2 units*/ [dummyFreeTextFixture],
+      /*lecture 3 units*/ [randomFreeTextFixture],
+      /*lecture 4 units*/ [dummyFreeTextFixture],
     ],
     [ // randomLectureFixtures
-      [randomFreeTextFixture],
-      [randomFreeTextFixture],
-      [loremFreeTextFixture],
-      [randomFreeTextFixture],
+      /*lecture 1 units*/ [randomFreeTextFixture],
+      /*lecture 2 units*/ [randomFreeTextFixture],
+      /*lecture 3 units*/ [loremFreeTextFixture],
+      /*lecture 4 units*/ [randomFreeTextFixture],
     ],
     [ // mpseLectureFixtures
-      [mpseIntFreeTextFixture],
-      [readmeFreeTextFixture],
-      [studentFreeTextFixture, studentCodeKataFixture],
+      /*lecture 1 units*/ [mpseIntFreeTextFixture],
+      /*lecture 2 units*/ [readmeFreeTextFixture],
+      /*lecture 3 units*/ [studentFreeTextFixture, studentCodeKataFixture],
     ],
   ];
 
