@@ -3,18 +3,13 @@ import {IFixture} from '../IFixture';
 import {FreeTextUnit} from '../../src/models/units/FreeTextUnit';
 
 // TODO: Load this fixtures
-export const dummyFreeTextFixture: IFixture = {
+export const studentFreeTextFixture: IFixture = {
   Model: FreeTextUnit,
   data: [
     {
-      name: 'markdown 1',
-      description: '...',
-      markdown: '# Einleitung\nDies ist ein Dummytext. Er dient zum Testen.\nHier sollte kein Umbruch sein\n\nHier schon.\n## H2\nDummy text'
+      name: 'Number one',
+      description: 'Ken Hasenbank',
+      markdown: '### Ouch \nTook me a bunch of brain cells coding this....'
     },
-    {
-      name: 'markdown 2',
-      description: '...',
-      markdown: '   \n   echo "Hello World"\n   \nThis should be a code above'
-    }
   ]
 };

@@ -3,7 +3,7 @@ import {IFixture} from '../IFixture';
 import {FreeTextUnit} from '../../src/models/units/FreeTextUnit';
 
 // TODO: Load this fixtures
-export const freeTextFixture1u1: IFixture = {
+export const dummyFreeTextFixture: IFixture = {
   Model: FreeTextUnit,
   data: [
     {

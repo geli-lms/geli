@@ -2,7 +2,7 @@
 import {IFixture} from '../IFixture';
 import {Lecture} from '../../src/models/Lecture';
 
-export const lectureFixtures1: IFixture = {
+export const dumpTestLectureFixtures: IFixture = {
   Model: Lecture,
   data: [
     {
@@ -12,6 +12,10 @@ export const lectureFixtures1: IFixture = {
     {
       name: 'Lecture2',
       description: 'Description Lecture 2',
+    },
+    {
+      name: 'Lecture3',
+      description: 'Description Lecture 3',
     },
   ]
 };

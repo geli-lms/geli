@@ -2,12 +2,24 @@
 import {IFixture} from '../IFixture';
 import {Lecture} from '../../src/models/Lecture';
 
-export const lectureFixtures2: IFixture = {
+export const randomLectureFixtures: IFixture = {
   Model: Lecture,
   data: [
     {
-      name: 'Coding Train',
-      description: 'evaluate your coding skillz',
+      name: 'articulatory',
+      description: 'aglet shit',
+    },
+    {
+      name: 'bryologist',
+      description: 'estivate gonzales',
+    },
+    {
+      name: 'songfulness',
+      description: 'osculate gizz',
+    },
+    {
+      name: 'hamiltonian',
+      description: 'whinge words',
     },
   ]
 };
