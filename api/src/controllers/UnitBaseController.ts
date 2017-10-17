@@ -1,4 +1,4 @@
-import {Body, Get, Put, Delete, Param, JsonController, UseBefore, NotFoundError} from 'routing-controllers';
+import {Body, Get, Put, Delete, Param, JsonController, UseBefore, NotFoundError, BadRequestError} from 'routing-controllers';
 import fs = require('fs');
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 
@@ -12,7 +12,7 @@ const uploadOptions = {dest: 'uploads/'};
 
 @JsonController('/units')
 @UseBefore(passportJwtMiddleware)
-export class UnitController {
+export class UnitBaseController {
 
   @Get('/:id')
   getUnit(@Param('id') id: string) {
@@ -27,6 +27,20 @@ export class UnitController {
         return lecture.save();
       })
       .then((lecture) => lecture.toObject());
+  }
+
+  protected checkPostParam(data: any) {
+    if (!data.lectureId) {
+      throw new BadRequestError('No lecture ID was submitted.');
+    }
+
+    if (!data.model) {
+      throw new BadRequestError('No unit was submitted.');
+    }
+
+    if (!data.model._course) {
+      throw new BadRequestError('Unit has no _course set');
+    }
   }
 
   @Put('/:id')
