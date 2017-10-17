@@ -5,7 +5,7 @@ export const teacherFixtures: IFixture = {
   Model: User,
   data: [
     {
-      email: 'teacher@test.local',
+      email: 'teacher1@test.local',
       password: 'test',
       role: 'teacher',
       profile: {
