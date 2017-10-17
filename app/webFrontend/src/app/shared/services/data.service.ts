@@ -218,7 +218,8 @@ export class UserDataService extends DataService {
 @Injectable()
 export class APIInfoService extends DataService {
   constructor(public backendService: BackendService) {
-    super('/', backendService);
+    // use root route
+    super('', backendService);
   }
 }
 
