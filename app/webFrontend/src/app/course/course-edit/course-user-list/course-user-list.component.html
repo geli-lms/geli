@@ -34,7 +34,7 @@
 <div class="users" *ngIf="fuzzySearch.length > 0">
   <p><b>In course ({{usersInCourse.length}})</b></p>
   <md-list class="drop" [dragula]='dragulaBagId' [dragulaModel]='usersInCourse'>
-    <ng-container *ngFor="let member of usersInCourse">
+    <div *ngFor="let member of usersInCourse">
       <md-list-item class="list" *ngIf="fuzzysearch(fuzzySearch,member)" [attr.data-id]="[member._id]">
         <i class="material-icons md-48">drag_handle</i>
         <span class="listBg" [grav]="member.email"></span>
@@ -43,12 +43,12 @@
         <span class="uid">{{member.uid}}</span>
         <span class="email">{{member.email}}</span>
       </md-list-item>
-    </ng-container>
+    </div>
   </md-list>
 
   <p><b>Not in course ({{users.length}})</b></p>
   <md-list class="drop" [dragula]='dragulaBagId' [dragulaModel]='users'>
-    <ng-container *ngFor="let user of users">
+    <div *ngFor="let user of users">
       <md-list-item class="list" *ngIf="fuzzysearch(fuzzySearch,user)" [attr.data-id]="[user._id]">
         <i class="material-icons md-48">drag_handle</i>
         <span class="listBg" [grav]="user.email"></span>
@@ -57,6 +57,6 @@
         <span class="uid">{{user.uid}}</span>
         <span class="email">{{user.email}}</span>
       </md-list-item>
-    </ng-container>
+    </div>
   </md-list>
 </div>
