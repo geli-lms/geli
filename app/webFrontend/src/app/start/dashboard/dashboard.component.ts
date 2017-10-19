@@ -81,14 +81,9 @@ export class DashboardComponent implements OnInit {
       course.teachers.filter(teacher => teacher._id === this.userService.user._id).length;
   }
 
-  goToInfo(course: string) {
-    const url = '/course/detail/' + course;
-    this.router.navigate([url]);
-  }
-
-  isMemberOfCourse(students: IUser[]) {
+  isMemberOfCourse(course: ICourse) {
     const user = this.userService.user;
-    return students.filter(obj => obj._id === user._id).length > 0;
+    return this.userService.isStudent() &&
+      course.students.filter(obj => obj._id === user._id).length > 0;
   }
-
 }
