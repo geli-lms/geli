@@ -25,10 +25,12 @@ const PRETEST = "pretest";
 const RUN_TESTS = "run:tests";
 const LOAD_FIXTURES = "load:fixtures";
 const TEST = "test";
+const TEST_NATIVE = "test:native";
 const REMAP_COVERAGE = "remap:coverage";
 const WATCH = "watch";
 const WATCH_POLL = "watch:poll";
 const DEBUG = "debug";
+const INSPECT = "inspect";
 
 const TS_SRC_GLOB = "./src/**/*.ts";
 const TS_TEST_GLOB = "./test/**/*.ts";
@@ -153,6 +155,10 @@ gulp.task(TEST, function (callback) {
   runSequence(BUILD, CLEAN_COVERAGE, PRETEST, RUN_TESTS, REMAP_COVERAGE, callback);
 });
 
+gulp.task(TEST_NATIVE, function (callback) {
+  runSequence(BUILD, CLEAN_COVERAGE, callback);
+});
+
 // Runs the build task and starts the server every time changes are detected.
 gulp.task(WATCH, [BUILD_DEV], function () {
   return nodemon({
@@ -185,5 +191,15 @@ gulp.task(DEBUG, [BUILD_DEV], function () {
     watch: ["src/*", "test/*"],
     tasks: [BUILD_DEV],
     nodeArgs: ["--debug=9000"]
+  });
+});
+
+gulp.task(INSPECT, [BUILD_DEV], function () {
+  return nodemon({
+    ext: "ts js json",
+    script: "build/src/server.js",
+    watch: ["src/*", "test/*"],
+    tasks: [BUILD_DEV],
+    nodeArgs: ["--inspect=*:9229"]
   });
 });

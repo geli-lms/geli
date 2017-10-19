@@ -14,12 +14,16 @@ export default {
   // Email configuration
   // for provider see https://nodemailer.com/smtp/well-known/
   // Use either Provider or SMTPServer/Port
-  mailProvider: process.env.MAILPROVIDER || 'debugmail',
+  mailProvider: process.env.MAILPROVIDER || 'DebugMail',
   mailSMTPServer: process.env.MAILSMTPSERVER || undefined,
   mailSMTPPort: process.env.MAILSMTPPORT || 25,
   mailAuth: {
     user: process.env.MAILUSER || undefined,
     pass: process.env.MAILPASS || ''
   },
-  mailSender: process.env.MAILSENDER || 'no-reply@geli.edu'
+  mailSender: process.env.MAILSENDER || 'no-reply@geli.edu',
+
+  teacherMailRegex: process.env.TEACHER_MAIL_REGEX || '^.+@.+\..+$',
+
+  nonProductionWarning: process.env.NONPRODUCTIONWARNING || undefined,
 };

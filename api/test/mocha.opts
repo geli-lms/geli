@@ -1,0 +1,4 @@
+build/test/**/*.js
+--recursive
+--reporter spec
+

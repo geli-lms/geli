@@ -1,229 +1,89 @@
- # Great E-Learning Informatics (geli)
+ # geli
 
-![Geli-Logo](.var/geli-readme-icon.png)
+![geli-Logo](.var/geli-readme-icon.png)
 
-[![NodeJS Version](https://img.shields.io/badge/nodeJS-7.9-blue.svg)](https://nodejs.org/en)
-[![MongoDB Version](https://img.shields.io/badge/mongoDB-3.4-blue.svg)](https://www.mongodb.com/download-center#community)
 [![GitHub release](https://img.shields.io/github/release/h-da/geli.svg)](https://github.com/h-da/geli/releases)
 [![Build Status](https://travis-ci.org/h-da/geli.svg?branch=develop)](https://travis-ci.org/h-da/geli)
-
 [![Coverage Status](https://coveralls.io/repos/github/h-da/geli/badge.svg?branch=develop)](https://coveralls.io/github/h-da/geli?branch=develop)
 [![Uptime Robot ratio](https://img.shields.io/uptimerobot/ratio/m779032297-cd1143fdc10b510896f2a344.svg)](https://stats.uptimerobot.com/mq8EDc8lx)
 [![Gitter chat](https://badges.gitter.im/h-da/geli.png)](https://gitter.im/mpse-geli/Lobby)
 
----
+geli is an open source e-learning platform. Try the [demo](https://demo.geli.fbi.h-da.de/)!
 
-This project aims to develop a Open-Source platform for E-Learning in computer science.
-We want to have an API, so Apps and other "Frontends" can be added easily.
+The project is mainly developed by Computer Science Master's students at the 
+[University of Applied Sciences in Darmstadt, Germany](https://www.fbi.h-da.de).
 
-This project is mainly developed by master-students of the University of Applied Science in Darmstadt, Germany.
-If you want to support this project, just say hello on Gitter.
+If you need help using or want to support the project, just say hello on 
+[Gitter](https://gitter.im/mpse-geli/Lobby).
 
----
 
-# Workflow
-Our workflow is as following:
-- Create a Ticket for the Issue
-- Create a branch for that ticket with the naming: `feature/{ticket-no}-{description-seperated-by-spaces}`
-- Develop your code
-- Commit and push in regulary intervalls ([How to commit](https://chris.beams.io/posts/git-commit/))
-- Run the tests locally
-- Open a Pull-Request
-- If CI / Coverage give their OK we can merge
-- Thr PR gets merged to `develop`, which will push a new Docker-Image-Version
-- The staging-system will then be updated to the latest Image from Docker-Hub
-- If we have enough features we will merge the `develop` into the `master` branch, which will add a new 'stable' image on Docker-Hub. The livesysten then pulls that new image and starts up with the latest stable version
+## Usage
 
-If we have bugfixes we create a `bugfix/{descriptive-name}` and open a PR, issues are not required for that. But it's important to have a good description of the bugfix in the PR-Comment.
+Your best option for running the project is by using our Docker images:
 
-# Docker
-Our complete build-process is running with docker, so here is our [Docker-Hub-Page](https://hub.docker.com/r/hdafbi).
+- [API](https://hub.docker.com/r/hdafbi/geli-api)
+- [Web frontend](https://hub.docker.com/r/hdafbi/geli-web-frontend)
 
-## API-Image
-[![Docker Stars](https://img.shields.io/docker/stars/hdafbi/geli-api.svg)](https://hub.docker.com/r/hdafbi/geli-api/)
-[![Docker Pulls](https://img.shields.io/docker/pulls/hdafbi/geli-api.svg)](https://hub.docker.com/r/hdafbi/geli-api/)   
+Have a look at the sample [docker-compose file](docker-compose.prod.yml) on how 
+to wire things together.
 
-This is our [image](https://hub.docker.com/r/hdafbi/geli-api) for the API of Geli.
+For a list of all configuration options see [docs/configuration](docs/configuration.md).
 
-## Web-Frontend-Image
-[![Docker Stars](https://img.shields.io/docker/stars/hdafbi/geli-web-frontend.svg)](https://hub.docker.com/r/hdafbi/geli-web-frontend/)
-[![Docker Pulls](https://img.shields.io/docker/pulls/hdafbi/geli-web-frontend.svg)](https://hub.docker.com/r/hdafbi/geli-web-frontend/)
 
-This is the [image](https://hub.docker.com/r/hdafbi/geli-web-frontend) for the web-frontend of Geli.
+## Development
 
----
+The codebase is written entirely in [TypeScript](https://www.typescriptlang.org/).
 
-# Development
-## Tech-Stack
-This project is build on the MEAN _(MongoDB | Express | Angular | NodeJS)_ -Stack.
-So we are currently using the following technologies:
+The API is based on [Node.js](https://nodejs.org) together with [Express](http://expressjs.com), 
+[routing controllers](https://github.com/pleerock/routing-controllers) and 
+[MongoDB](https://www.mongodb.com).
 
-| Software     | Version | Description                                                        |
-|--------------|---------|--------------------------------------------------------------------|
-| MongoDB      | 3.4.3   | A NoSQL-Database - Documentoriented                                |
-| Express      | 4.14.0  | A NodeJS router                                                    |
-| Angular      | 4.0.0   | A JS-Based frontend framework                                      |
-| NodeJS       | 7.9     | A JS-Runtime                                                       |
-| Docker       | -       | A virtualisation software to run our software in dev and on server |
-| Typescript   | 2.2.0   | A object-oriented superset of plain JS                             |
-| ECMAScript 6 | -       | The 2015 released version of JS                                    |
+The web frontend is built with [Angular](https://angular.io/) 4 and 
+[Angular Material](https://material.angular.io/) components.
 
-## Commands
-Run the commands for the api or web-frontend either in `api` or `app/webFrontend`.
-- Start the webserver
-  - __API:__ `npm run start`
-  - __FE:__ `npm run start` _(please see docker/vagrant section for specific infos)_
-- Lint
-  - __API:__ `npm run tslint`
-  - __FE:__ `npm run lint`
-- Test
-  - __API:__ `npm run test`
-  - __FE:__
-    - unit-tests: `npm run test`
-    - integration (end2end): `npm run e2e`
-- NG-CLI
-  - You can add modules etc with the `ng`-[command](https://cli.angular.io/).
 
-## Usage with Vagrant
-To use Vagrant for the development download VirtualBox, install it and then do the same with vagrant.
-After that open the e.g. `git bash` __AS ADMIN__ and go to the project root. Now run `vagrant up`.
+### Running
 
-After everything is installed and all npm dependencies are downloaded you can connect to the VirtualBox
-via `vagrant ssh`. The Ports 4200 and 27017 are forwarded to your host system. Just type `localhost:4200` in your
-browser and you will (almost) see your local geli-instance.
+You have multiple options for running the project for development purposes.
 
-I would suggest you the following plugins for vagrant, to install plugins run `vagrant plugin install [packagename]`:
-- vagrant-vbguest
-  - This plugins installs automaticalyl the correct virtualbox-guest-addition on your guest-system
-- vagrant-winnfsd
-  - This plugin enables NFS-mounting for windows systems, which will speed up the filesysystem a lot!
-- vagrant-netinfo
-  - This plugin can be handy if you want to see all forwarded ports of a box
+- [Docker](docs/development/running-with-docker.md)
+- [Locally](docs/development/running-locally.md)
+<!--- Needs to be updated: - [Vagrant](docs/development/running-with-vagrant.md) --->
 
-In the `Vagrantfile` the nfs mount can be enabled, this can cause problems (eg permission errors on npm install). If you have problems undo the commenting switch in the `Vagrantfile` and `vagrant reload` your box.
+After successfully starting, the web frontend will be available at 
+[http://localhost:4200](http://localhost:4200).
 
-### Start services
-To start the __backend__ ssh into the VM with `vagrant ssh` and run the following lines. This will lint and compile the code, aswell start the api-webserver.
+The API will be available at [http://localhost:3030](http://localhost:3030). To avoid 
+[CORS](https://en.wikipedia.org/wiki/Cross-origin_resource_sharing) the API will also be proxied by 
+the Angular development server and be available at 
+[http://localhost:4200/api](http://localhost:4200/api).
 
-    cd api
-    npm run start
 
-To start the __frontend__ ssh into VM with a __second__ shell (`vagrant ssh`) and run the following commands. This will lint and compile the code, aswell start the frontend-develop-webserver.
+### Configuration
 
-    cd app/webFrontend
-    npm run start-vagrant-dev
+The default configuration should already enable you to start developing.
 
-## Usage with Docker
-You need `docker` and `docker-compose`.
+For more information on how to configure e.g. e-mail see 
+[docs/development/configuration](docs/development/configuration.md).
 
-### Installing dependencies
-You can install dependencies by running the following commands from the project root.
 
-    docker-compose run --rm --no-deps api npm install
-    docker-compose run --rm --no-deps web-frontend npm install
-    
-### Running the application
-After installing the dependencies you can run the application by executing:
+### Commands
 
-    docker-compose up
-    
-You can access the web frontend on your host machine at `http://localhost:4200`.
+#### API & web frontend
+  - __Running__: `npm run start`
+  - __Linting__: `npm run lint`
+  - __Testing__: `npm run test`
+  
+#### API
+  - __Loading fixtures__ (sample data): `npm run load:fixtures`
+  - __[Debugging](https://nodejs.org/en/docs/inspector/)__: `npm run start:inspect`
+  
+#### Web frontend
+  - __End to end tests__: `npm run e2e`
+  - __[Angular CLI](https://cli.angular.io/)__: `npm run ng`
+    (Be sure to pass flags with additional dashes. E.g.: `npm run ng build -- --prod`)
 
-The API will be proxied to `http://localhost:4200/api` and MongoDB is accessible at `localhost:27017`.
 
----
+## Contributing
 
-# Getting Started
-## Installation
-Clone this project to a folder you like:
-
-    cd /path/to/project
-    git clone git@github.com:h-da/geli.git
-
-Here you should decide if you install everything native on your pc, use [docker](#usage-with-docker) or [vagrant](#usage-with-vagrant). 
-
-Open a Terminal and type following. It will install all dependencies of the api and the web-frontend:
-
-    cd /path/to/project/geli
-    cd api
-    npm install
-    cd ../app/webFrontend
-    npm install
-
-## Run APP
-Run this in one console to start the api:
-
-    cd api
-    npm run start
-
-Run this in a nother console to start the frontend:
-
-    cd app/webFrontend
-    npm run start-[docker|vagrant]-dev
-    
-## Local development settings
-### E-Mail service
-When you whish to use the mailing service while developing we recommend using the Debugmail.io service.
-It acts as an dummy SMTP Server and in it's online "inbox" you see which Mails would have been submitted on an actual SMTP server.
-a Big advantage is that you dont have to use real (not even valid) addresses and it works just fine with our fixture users.
-
-To do so just sign-up at their <a href="https://debugmail.io/sign-up" target="_blank">site</a> create a new project and pass the shown credentials to the API by overwriting the following environmentvariables:
-```
-      - "MAILPROVIDER=debugmail"
-      - "MAILUSER=yourUsername"
-      - "MAILPASS=someValidPassword"
-```
-You don't have to explicitly set the mailprovider when using debugmail since it is the default setting.
-
-If you dont wan't to use debugmail you can use any service compatible with the npm package [Nodemailer](https://nodemailer.com/) or just use plain SMTP and set the following variables:
-```
-      - "MAILSMTPSERVER=smtp.yourserver.domain"
-      - "MAILSMTPPORT=25"
-      - "MAILUSER=yourUsername"
-      - "MAILPASS=someValidPassword"
-```
-
-Manual configuration of smtp server and port will overwrite the settings from mailprovider.
-
-## Testing
-To test and lint the api just call:
-
-    cd api
-    npm run test
-
-To run the unittest of the web-frontend call:
-
-    cd app/webFrontend
-    npm run test
-
-To run the end to end test, which is a integration-test, which tests the compability between the api and the web-fronted just call:
-
-    cd app/webFrontend
-    bpm run e2e
-
-_NOTE: If you run these commands under Vagrant start `Xvfb` before: `export DISPLAY=:99.0 ; nohup Xvfb :99 &`_
-
-## Angular CLI (globally required):
-Run `npm install -g @angular/cli@latest` to install the latest version of the angular cli globally.   
-If you have problems with the angular-cli version try following:
-
-1. Create a new anglular-cli projekt `ng new example-app`
-2. Copy the folder ´/src´ from this project to the new project
-3. Run `ng serve`
-
-This project was generated with [angular-cli](https://github.com/angular/angular-cli) version 1.0.0-beta.17.
-
-## Code scaffolding
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive/pipe/service/class`.
-
-## Build
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
-
-## Further help
-To get more help on the `angular-cli` use `ng --help` or go check out the [Angular-CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
-
----
-
-# Contribution
-Please have a look at [CONTRIBUTING.md](.github/CONTRIBUTING.md)
-
+Please have a look at our [contributing guide](.github/CONTRIBUTING.md).

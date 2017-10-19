@@ -1,14 +1,31 @@
 # How to Contribute?
 
-Please just chat with us on gitter :)
+## Project members
 
-But in generall you have to follow these steps:
+- Create a Ticket for the Issue
+- Create a branch for that ticket with the naming: 
+  `feature/{ticket-no}-{description-seperated-by-spaces}`
+- Develop your code
+- Commit and push in regular intervalls
+- Run the tests locally
+- Open a Pull-Request
+- If CI/Coverage give their OK we can merge
+- Thr PR gets merged to `develop`, which will push a new Docker-Image-Version
+- The staging-system will then be updated to the latest Image from Docker-Hub
+- If we have enough features we will merge the `develop` into the `master` branch, which will add 
+  a new 'stable' image on Docker-Hub. 
+  The livesysten then pulls that new image and starts up with the latest stable version
 
-1. Fork it
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create new Pull Request
+If we have bugfixes we create a `bugfix/{descriptive-name}` and open a PR, issues are not required 
+for that. But it's important to have a good description of the bugfix in the PR-Comment.
 
-Please note that we only accept PRs with a running CI and properly written tests!
 
+## Branching model
+
+We are using a slightly modified [GitFlow](https://datasift.github.io/gitflow/IntroducingGitFlow.html) branching strategy.
+
+
+## Commit messages
+
+Please adhere to the principles described [here](https://chris.beams.io/posts/git-commit/) for 
+writing commit messages.

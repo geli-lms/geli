@@ -60,13 +60,25 @@ export class DashboardComponent implements OnInit {
   }
 
   enrollCallback(courseId: string, accessKey: string) {
-    this.courseService.enrollStudent(courseId, {user: this.userService.user, accessKey}).then((res) => {
-      this.snackBar.open('Successfully enrolled', '', { duration: 5000 });
+    this.courseService.enrollStudent(courseId, {
+      user: this.userService.user,
+      accessKey
+    }).then((res) => {
+      this.snackBar.open('Successfully enrolled', '', {duration: 5000});
       // reload courses to update enrollment status
       this.getCourses();
     }).catch((err) => {
-      this.snackBar.open(`${err.statusText}: ${JSON.parse(err._body).message}`, '', { duration: 5000 });
+      this.snackBar.open(`${err.statusText}: ${JSON.parse(err._body).message}`, '', {duration: 5000});
     });
+  }
+
+  isCourseTeacherOrAdmin(course: ICourse) {
+    if (this.userService.isAdmin()) {
+      return true;
+    }
+
+    return (course.courseAdmin && course.courseAdmin._id === this.userService.user._id) ||
+      course.teachers.filter(teacher => teacher._id === this.userService.user._id).length;
   }
 
   goToInfo(course: string) {
