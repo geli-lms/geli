@@ -49,7 +49,14 @@ export class CourseController {
 
   @Get('/')
   getCourses(@CurrentUser() currentUser: IUser) {
-    const courseQuery = Course.find(this.userReadConditions(currentUser))
+    const conditions = this.userReadConditions(currentUser);
+
+    if (conditions.$or) {
+      // Everyone is allowed to see free courses in overview
+      conditions.$or.push({enrollType: 'free'});
+    }
+
+    const courseQuery = Course.find(conditions)
     // TODO: Do not send lectures when student has no access
       .populate('lectures')
       .populate('teachers')
@@ -92,6 +99,10 @@ export class CourseController {
       .populate('teachers')
       .populate('students')
       .then((course) => {
+        if (!course) {
+          throw new NotFoundError();
+        }
+
         course.lectures.forEach((lecture) => {
           lecture.units.forEach((unit) => {
             if (unit.type === 'code-kata' && currentUser.role === 'student') {
@@ -110,8 +121,7 @@ export class CourseController {
       return conditions;
     }
 
-    // Everyone is allowed to see free courses
-    conditions.$or = [{enrollType: 'free'}];
+    conditions.$or = [];
 
     if (currentUser.role === 'student') {
       conditions.$or.push({students: currentUser._id});
