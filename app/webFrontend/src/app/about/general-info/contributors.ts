@@ -10,7 +10,6 @@ export class ContributorsList {
       , new Contributor('David', 'Müller', '17SuSe', 'Lecturer', 'd89')
       // Students
       , new Contributor('Andreas', 'Schroll', '17WiSe', 'Student', 'AndreasSchroll')
-      , new Contributor('Jonas', 'Hess', '17WiSe', 'Student', 'JonasPHess')
       , new Contributor('Sinisa', 'Jovanovic', '17WiSe', 'Student', 'jsinisa')
       , new Contributor('Patrick', 'Skowronek', '17WiSe', 'Student', 'PatrickSkowronek')
       , new Contributor('Henrik', 'Ochs', '17WiSe', 'Student', 'HPunktOchs')
