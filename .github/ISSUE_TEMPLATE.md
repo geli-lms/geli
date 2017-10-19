@@ -9,9 +9,6 @@
 ### so that:
 
 
-## Storypoints:
-
-
 ## Acceptance criteria:
 
 
