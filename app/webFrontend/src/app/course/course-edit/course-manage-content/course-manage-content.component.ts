@@ -1,13 +1,19 @@
 import {Component, Input, OnInit, OnDestroy} from '@angular/core';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
 import {ILecture} from '../../../../../../../shared/models/ILecture';
-import {CourseService, LectureService, UnitService} from '../../../shared/services/data.service';
+import {
+  CodeKataUnitService, CourseService, FreeTextUnitService, LectureService,
+  UnitService
+} from '../../../shared/services/data.service';
 import {ShowProgressService} from 'app/shared/services/show-progress.service';
 import {DialogService} from '../../../shared/services/dialog.service';
 import {UserService} from '../../../shared/services/user.service';
 import {MdSnackBar} from '@angular/material';
 import {IUnit} from '../../../../../../../shared/models/units/IUnit';
 import {DragulaService} from 'ng2-dragula';
+import {Lecture} from '../../../models/Lecture';
+import {IFreeTextUnit} from '../../../../../../../shared/models/units/IFreeTextUnit';
+import {FreeTextUnit} from '../../../models/FreeTextUnit';
 
 @Component({
   selector: 'app-course-manage-content',
@@ -34,6 +40,8 @@ export class CourseManageContentComponent implements OnInit, OnDestroy {
               private snackBar: MdSnackBar,
               private dialogService: DialogService,
               private dragulaService: DragulaService,
+              private freeTextUnitService: FreeTextUnitService,
+              private codeKataUnitService: CodeKataUnitService,
               public userService: UserService) {
   }
 
@@ -84,15 +92,31 @@ export class CourseManageContentComponent implements OnInit, OnDestroy {
   }
 
   duplicateLecture(lecture: ILecture) {
+    const units = lecture.units;
     delete lecture._id;
     delete lecture.units;
-
     this.lectureService.createItem({courseId: this.course._id, lecture: lecture})
-      .then(() => {
+      .then((newLecture) => {
+        // at first delete the units' IDs to ensure that they are saved as new units in the mongodb
+        units.forEach((unit) => {
+          delete unit._id;
+          switch (unit.type) {
+            case 'free-text':
+              this.freeTextUnitService.createItem({lectureId: newLecture._id, model: unit});
+              break;
+            case 'code-kata':
+              this.codeKataUnitService.createItem({lectureId: newLecture._id, model: unit});
+              break;
+            case 'task':
+              break;
+            default:
+          }
+        });
         this.reloadCourse();
       }, (error) => {
         console.log(error);
-      });
+      }
+    );
   }
 
   createLecture(lecture: ILecture) {
