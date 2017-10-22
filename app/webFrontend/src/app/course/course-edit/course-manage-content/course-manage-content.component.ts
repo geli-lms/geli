@@ -14,6 +14,9 @@ import {DragulaService} from 'ng2-dragula';
 import {Lecture} from '../../../models/Lecture';
 import {IFreeTextUnit} from '../../../../../../../shared/models/units/IFreeTextUnit';
 import {FreeTextUnit} from '../../../models/FreeTextUnit';
+import {forEach} from '@angular/router/src/utils/collection';
+import {ITaskUnit} from '../../../../../../../shared/models/units/ITaskUnit';
+import {TaskUnit} from '../../../models/TaskUnit';
 
 @Component({
   selector: 'app-course-manage-content',
@@ -92,22 +95,43 @@ export class CourseManageContentComponent implements OnInit, OnDestroy {
   }
 
   duplicateLecture(lecture: ILecture) {
+    // const copy = JSON.parse(JSON.stringify(lecture));
+    // this.deleteObjectIds(copy);
+    // const lect: ILecture = copy;
+    // console.log(copy);
+    // this.lectureService.createItem({courseId: this.course._id, lecture: lect}).then(() => {
+    //   this.reloadCourse();
+    // }, (error) => {
+    //   console.log(error);
+    // });
     const units = lecture.units;
     delete lecture._id;
     delete lecture.units;
     this.lectureService.createItem({courseId: this.course._id, lecture: lecture})
       .then((newLecture) => {
         // at first delete the units' IDs to ensure that they are saved as new units in the mongodb
-        units.forEach((unit) => {
+        units.forEach((unit: any) => {
           delete unit._id;
           switch (unit.type) {
             case 'free-text':
-              this.freeTextUnitService.createItem({lectureId: newLecture._id, model: unit});
+                this.freeTextUnitService.createItem({lectureId: newLecture._id, model: unit});
               break;
             case 'code-kata':
-              this.codeKataUnitService.createItem({lectureId: newLecture._id, model: unit});
+                this.codeKataUnitService.createItem({lectureId: newLecture._id, model: unit});
               break;
             case 'task':
+                delete unit._id;
+                unit.tasks.forEach(task => {
+                  delete task._id;
+                  task.answers.forEach(answer => {
+                    delete answer._id;
+                  });
+                });
+                this.unitService.addTaskUnit(unit, newLecture._id);
+              break;
+            case 'video':
+              break;
+            case 'file':
               break;
             default:
           }
@@ -117,6 +141,24 @@ export class CourseManageContentComponent implements OnInit, OnDestroy {
         console.log(error);
       }
     );
+  }
+
+  deleteObjectIds(object: any) {
+    if (object != null && typeof(object) !== 'string' && typeof(object) !== 'boolean' && typeof(object) !== 'number') {
+      // object.length is undefined, if the object isn't an array.
+      // go through all properties recursively and delete all _ids
+      if (typeof(object.length) === 'undefined') {
+        delete object._id;
+        Object.keys(object).forEach(key => {
+          this.deleteObjectIds(object[key]);
+        } );
+      } else {
+        // iterate through all sub-objects
+        for (let i = 0; i < object.length; i++) {
+          this.deleteObjectIds(object[i]);
+        }
+      }
+    }
   }
 
   createLecture(lecture: ILecture) {
