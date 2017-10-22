@@ -1,12 +1,12 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
-import {TaskService, UnitService} from '../../../../../shared/services/data.service';
-import {Task} from '../../../../../models/Task';
+import {TaskService, UnitService} from '../../../shared/services/data.service';
+import {Task} from '../../../models/Task';
 import {MdSnackBar} from '@angular/material';
-import {ITaskUnit} from '../../../../../../../../../shared/models/units/ITaskUnit';
-import {TaskUnit} from '../../../../../models/TaskUnit';
-import {ITask} from '../../../../../../../../../shared/models/task/ITask';
-import {Answer} from '../../../../../models/Answer';
-import {ICourse} from '../../../../../../../../../shared/models/ICourse';
+import {ITaskUnit} from '../../../../../../../shared/models/units/ITaskUnit';
+import {TaskUnit} from '../../../models/TaskUnit';
+import {ITask} from '../../../../../../../shared/models/task/ITask';
+import {Answer} from '../../../models/Answer';
+import {ICourse} from '../../../../../../../shared/models/ICourse';
 import {UnitGeneralInfoFormComponent} from '../unit-general-info-form/unit-general-info-form.component';
 
 @Component({

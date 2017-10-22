@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {FreeTextUnit} from '../../../../models/FreeTextUnit';
-import {MarkdownService} from '../../../../shared/services/markdown.service';
+import {FreeTextUnit} from '../../models/FreeTextUnit';
+import {MarkdownService} from '../../shared/services/markdown.service';
 
 @Component({
   selector: 'app-free-text-unit',

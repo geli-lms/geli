@@ -1,9 +1,9 @@
-import {Component, Input, NgModule, OnInit, ViewChild} from '@angular/core';
-import {CodeKataUnitService} from '../../../../../shared/services/data.service';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {CodeKataUnitService} from '../../../shared/services/data.service';
 import {MdSnackBar} from '@angular/material';
-import {ICodeKataUnit} from '../../../../../../../../../shared/models/units/ICodeKataUnit';
-import {ICourse} from '../../../../../../../../../shared/models/ICourse';
-import {CodeKataUnit} from '../../../../../models/CodeKataUnit';
+import {ICodeKataUnit} from '../../../../../../../shared/models/units/ICodeKataUnit';
+import {ICourse} from '../../../../../../../shared/models/ICourse';
+import {CodeKataUnit} from '../../../models/CodeKataUnit';
 import {UnitGeneralInfoFormComponent} from '../unit-general-info-form/unit-general-info-form.component';
 
 @Component({

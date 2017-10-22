@@ -1,8 +1,8 @@
 import {Component, OnInit, Input} from '@angular/core';
 import {MdSnackBar} from '@angular/material';
 import {ActivatedRoute} from '@angular/router';
-import {ProgressService} from '../../../../shared/services/data/progress.service';
-import {IProgress} from '../../../../../../../../shared/models/IProgress';
+import {ProgressService} from '../../shared/services/data/progress.service';
+import {IProgress} from '../../../../../../shared/models/IProgress';
 
 @Component({
   selector: 'app-task-unit',

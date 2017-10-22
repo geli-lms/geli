@@ -1,9 +1,9 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
-import {CodeKataUnit} from '../../../../models/CodeKataUnit';
+import {CodeKataUnit} from '../../models/CodeKataUnit';
 import {MdSnackBar} from '@angular/material';
 import {ProgressService, CodeKataProgressService} from 'app/shared/services/data/progress.service';
-import {ICodeKataProgress} from '../../../../../../../../shared/models/ICodeKataProgress';
-import {UserService} from '../../../../shared/services/user.service';
+import {ICodeKataProgress} from '../../../../../../shared/models/ICodeKataProgress';
+import {UserService} from '../../shared/services/user.service';
 import {ActivatedRoute} from '@angular/router';
 // import '../../../../../../../node_modules/ace-builds/src-min/ace.js';
 

@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import {IFileUnit} from '../../../../../../../../shared/models/units/IFileUnit';
+import {IFileUnit} from '../../../../../../shared/models/units/IFileUnit';
 
 @Component({
   selector: 'app-file-unit',

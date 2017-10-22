@@ -1,9 +1,9 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
-import {IFreeTextUnit} from '../../../../../../../../../shared/models/units/IFreeTextUnit';
+import {IFreeTextUnit} from '../../../../../../../shared/models/units/IFreeTextUnit';
 import {MdSnackBar} from '@angular/material';
-import {FreeTextUnitService} from '../../../../../shared/services/data.service';
-import {FreeTextUnit} from '../../../../../models/FreeTextUnit';
-import {ICourse} from '../../../../../../../../../shared/models/ICourse';
+import {FreeTextUnitService} from '../../../shared/services/data.service';
+import {FreeTextUnit} from '../../../models/FreeTextUnit';
+import {ICourse} from '../../../../../../../shared/models/ICourse';
 import {UnitGeneralInfoFormComponent} from '../unit-general-info-form/unit-general-info-form.component';
 
 @Component({

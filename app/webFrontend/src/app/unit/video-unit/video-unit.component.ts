@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import {IVideoUnit} from '../../../../../../../../shared/models/units/IVideoUnit';
+import {IVideoUnit} from '../../../../../../shared/models/units/IVideoUnit';
 
 @Component({
   selector: 'app-video-unit',
