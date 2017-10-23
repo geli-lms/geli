@@ -2,15 +2,15 @@
 
 ## Project members
 
-- Create a Ticket for the Issue
-- Create a branch for that ticket with the naming: 
-  `feature/{ticket-no}-{description-seperated-by-spaces}`
+- Create an issue
+- Create a branch for that issue with the naming: 
+  `feature/{ticket-no}-{description-separated-by-dashes}`
 - Develop your code
 - Commit and push in regular intervalls
 - Run the tests locally
 - Open a Pull-Request
 - If CI/Coverage give their OK we can merge
-- Thr PR gets merged to `develop`, which will push a new Docker-Image-Version
+- The PR gets merged to `develop`, which will push a new Docker-Image-Version with the tag `develop` and `latest`
 - The staging-system will then be updated to the latest Image from Docker-Hub
 - If we have enough features we will merge the `develop` into the `master` branch, which will add 
   a new 'stable' image on Docker-Hub. 
