@@ -1,0 +1,37 @@
+<md-card *ngIf="hasToken === false" class="reset-card">
+  <md-card-header>
+    <md-card-title><h1>Request password reset</h1></md-card-title>
+  </md-card-header>
+
+  <md-card-content>
+    <form name="form" (ngSubmit)="requestReset()" [formGroup]="resetForm">
+      <md-input-container>
+        <input mdInput formControlName="email" placeholder="Mail address">
+      </md-input-container>
+
+      <button md-raised-button color="primary" class="md-button" type="submit" [disabled]="loading">Submit</button>
+      <br>
+    </form>
+  </md-card-content>
+</md-card>
+<md-card *ngIf="hasToken === true" class="reset-card">
+  <md-card-header>
+    <md-card-title><h1>Reset Password</h1></md-card-title>
+  </md-card-header>
+
+  <md-card-content>
+    <form name="form" (ngSubmit)="reset()" [formGroup]="resetForm">
+      <md-input-container>
+        <input mdInput type="password" formControlName="password" placeholder="Password"/>
+      </md-input-container>
+      <md-input-container>
+        <input mdInput type="password" formControlName="confirmPassword" placeholder="Confirm password"/>
+        <div class="form-text error" *ngIf="resetForm.controls.confirmPassword.touched">
+          <div *ngIf="resetForm.hasError('mismatchedPasswords')">Passwords do not match.</div>
+        </div>
+      </md-input-container>
+
+      <button md-raised-button color="primary" type="submit" [disabled]="loading">Reset</button>
+    </form>
+  </md-card-content>
+</md-card>
