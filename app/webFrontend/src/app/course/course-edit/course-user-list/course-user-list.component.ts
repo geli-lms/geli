@@ -30,8 +30,8 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
   constructor(private dragula: DragulaService) {
     this.userCtrl = new FormControl();
     this.filteredStates = this.userCtrl.valueChanges
-      .startWith(null)
-      .map(name => this.filterStates(name));
+    .startWith(null)
+    .map(name => this.filterStates(name));
   }
 
   ngOnInit() {

@@ -1,5 +1,7 @@
 import {Component, OnInit, Input} from '@angular/core';
 import {UserService} from '../shared/services/user.service';
+import {ICourse} from '../../../../../shared/models/ICourse';
+import {ILecture} from '../../../../../shared/models/ILecture';
 
 @Component({
   selector: 'app-lecture',
@@ -8,8 +10,8 @@ import {UserService} from '../shared/services/user.service';
 })
 export class LectureComponent implements OnInit {
 
-  @Input() course;
-  @Input() lecture;
+  @Input() course: ICourse;
+  @Input() lecture: ILecture;
 
   constructor(public userService: UserService) {
   }

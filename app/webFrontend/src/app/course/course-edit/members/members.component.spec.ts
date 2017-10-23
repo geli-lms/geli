@@ -13,7 +13,7 @@ describe('MembersComponent', () => {
     TestBed.configureTestingModule({
       declarations: [MembersComponent]
     })
-      .compileComponents();
+    .compileComponents();
   }));
 
   beforeEach(() => {

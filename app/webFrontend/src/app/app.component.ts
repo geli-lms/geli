@@ -18,13 +18,11 @@ export class AppComponent implements OnInit {
   showProgressBar = false;
   apiInfo: APIInfo;
 
-  constructor(
-    private router: Router,
-    private authenticationService: AuthenticationService,
-    public userService: UserService,
-    private showProgress: ShowProgressService,
-    private apiInfoService: APIInfoService
-  ) {
+  constructor(private router: Router,
+              private authenticationService: AuthenticationService,
+              public userService: UserService,
+              private showProgress: ShowProgressService,
+              private apiInfoService: APIInfoService) {
     showProgress.toggleSidenav$.subscribe(
       toggle => {
         this.toggleProgressBar();
@@ -35,10 +33,10 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     this.authenticationService.reloadUser();
     this.apiInfoService.readItems()
-      .then((info: any) => {
-        this.apiInfo = info;
-      })
-      .catch((err) => console.log(err));
+    .then((info: any) => {
+      this.apiInfo = info;
+    })
+    .catch((err) => console.log(err));
   }
 
   hasWarning() {

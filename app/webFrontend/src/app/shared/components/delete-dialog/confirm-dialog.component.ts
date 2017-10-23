@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { MdDialogRef } from '@angular/material';
+import {Component} from '@angular/core';
+import {MdDialogRef} from '@angular/material';
 
 @Component({
   selector: 'app-delete-dialog',
@@ -12,6 +12,7 @@ export class ConfirmDialog {
   public message: string;
   public confirmText: string;
 
-  constructor(public dialogRef: MdDialogRef<ConfirmDialog>) { }
+  constructor(public dialogRef: MdDialogRef<ConfirmDialog>) {
+  }
 
 }

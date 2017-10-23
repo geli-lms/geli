@@ -10,7 +10,7 @@ describe('GeneralInfoComponent', () => {
     TestBed.configureTestingModule({
       declarations: [GeneralInfoComponent]
     })
-      .compileComponents();
+    .compileComponents();
   }));
 
   beforeEach(() => {
