@@ -114,21 +114,21 @@ export class CourseManageContentComponent implements OnInit, OnDestroy {
           delete unit._id;
           switch (unit.type) {
             case 'free-text':
-                this.freeTextUnitService.createItem({lectureId: newLecture._id, model: unit});
+              this.freeTextUnitService.createItem({lectureId: newLecture._id, model: unit});
               break;
             case 'code-kata':
-                this.codeKataUnitService.createItem({lectureId: newLecture._id, model: unit});
+              this.codeKataUnitService.createItem({lectureId: newLecture._id, model: unit});
               break;
             case 'task':
-                delete unit._id;
-                unit.tasks.forEach(task => {
-                  delete task._id;
-                  task.answers.forEach(answer => {
-                    delete answer._id;
-                  });
+              unit.tasks.forEach(task => {
+                delete task._id;
+                task.answers.forEach(answer => {
+                  delete answer._id;
                 });
-                this.unitService.addTaskUnit(unit, newLecture._id);
+              });
+              this.unitService.addTaskUnit(unit, newLecture._id);
               break;
+              // TODO: implement duplication of video + file units.
             case 'video':
               break;
             case 'file':
