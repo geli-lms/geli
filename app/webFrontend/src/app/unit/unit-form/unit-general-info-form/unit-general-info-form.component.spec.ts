@@ -1,6 +1,6 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { UnitGeneralInfoFormComponent } from './unit-general-info-form.component';
+import {UnitGeneralInfoFormComponent} from './unit-general-info-form.component';
 
 describe('UnitGeneralInfoFormComponent', () => {
   let component: UnitGeneralInfoFormComponent;
@@ -8,7 +8,7 @@ describe('UnitGeneralInfoFormComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ UnitGeneralInfoFormComponent ]
+      declarations: [UnitGeneralInfoFormComponent]
     })
     .compileComponents();
   }));

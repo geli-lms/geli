@@ -22,7 +22,8 @@ export class CourseComponent {
   constructor(public userService: UserService,
               private router: Router,
               private dialog: MdDialog,
-              private snackBar: MdSnackBar) {}
+              private snackBar: MdSnackBar) {
+  }
 
   editCourse(id: string) {
     const url = '/course/' + id + '/edit';

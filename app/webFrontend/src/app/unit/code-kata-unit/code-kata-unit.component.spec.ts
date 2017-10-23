@@ -1,6 +1,6 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { CodeKataComponent } from './code-kata-unit.component';
+import {CodeKataComponent} from './code-kata-unit.component';
 
 describe('CodeKataComponent', () => {
   let component: CodeKataComponent;
@@ -8,7 +8,7 @@ describe('CodeKataComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CodeKataComponent ]
+      declarations: [CodeKataComponent]
     })
     .compileComponents();
   }));

@@ -61,7 +61,6 @@ export class TaskUnitComponent implements OnInit {
       });
     });
 
-
     if (!this.progress && done) {
       const progress = {
         unit: this.taskUnit._id,
@@ -70,11 +69,11 @@ export class TaskUnitComponent implements OnInit {
       };
 
       this.progressService.createItem(progress)
-        .then((savedProgress) => {
-          this.progress = savedProgress;
-          this.snackBar.open('Progress has been saved', '', {duration: 3000});
-        })
-        .catch(() => this.snackBar.open('An unknown error occurred', '', {duration: 3000}));
+      .then((savedProgress) => {
+        this.progress = savedProgress;
+        this.snackBar.open('Progress has been saved', '', {duration: 3000});
+      })
+      .catch(() => this.snackBar.open('An unknown error occurred', '', {duration: 3000}));
     }
   }
 }

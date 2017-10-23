@@ -44,35 +44,35 @@ export class ResetComponent implements OnInit {
     this.showProgress.toggleLoadingGlobal(true);
     this.loading = true;
     this.authenticationService.requestReset(this.resetForm.value.email)
-      .then(
-        (val) => {
-          this.snackBar.open('Check your mails', 'Dismiss');
-        }, (error) => {
-          console.log(error);
-          this.snackBar.open('Request failed', 'Dismiss');
-        })
-      .then(() => {
-        this.showProgress.toggleLoadingGlobal(false);
-        this.loading = false;
-      });
+    .then(
+      (val) => {
+        this.snackBar.open('Check your mails', 'Dismiss');
+      }, (error) => {
+        console.log(error);
+        this.snackBar.open('Request failed', 'Dismiss');
+      })
+    .then(() => {
+      this.showProgress.toggleLoadingGlobal(false);
+      this.loading = false;
+    });
   }
 
   reset() {
     this.showProgress.toggleLoadingGlobal(true);
     this.loading = true;
     this.authenticationService.resetPassword(this.token, this.resetForm.value.password)
-      .then(
-        (val) => {
-          this.router.navigate(['/login']);
-          this.snackBar.open('Your password has been reset', 'Dismiss');
-        }, (error) => {
-          console.log(error);
-          this.snackBar.open('Your password could not be reset', 'Dismiss');
-        })
-      .then(() => {
-        this.showProgress.toggleLoadingGlobal(false);
-        this.loading = false;
-      });
+    .then(
+      (val) => {
+        this.router.navigate(['/login']);
+        this.snackBar.open('Your password has been reset', 'Dismiss');
+      }, (error) => {
+        console.log(error);
+        this.snackBar.open('Your password could not be reset', 'Dismiss');
+      })
+    .then(() => {
+      this.showProgress.toggleLoadingGlobal(false);
+      this.loading = false;
+    });
   }
 
   generateForm() {

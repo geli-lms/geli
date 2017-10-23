@@ -1,5 +1,5 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
 import {LoginComponent} from './login/login.component';
 import {RegisterComponent} from './register/register.component';
 import {ActivationComponent} from './activation/activation.component';
@@ -21,4 +21,5 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
     ResetComponent,
   ]
 })
-export class AuthModule { }
+export class AuthModule {
+}

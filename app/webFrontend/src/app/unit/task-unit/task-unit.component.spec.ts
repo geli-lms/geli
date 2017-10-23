@@ -1,6 +1,6 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { TaskUnitComponent } from './task-unit.component';
+import {TaskUnitComponent} from './task-unit.component';
 
 describe('TaskUnitComponent', () => {
   let component: TaskUnitComponent;
@@ -8,7 +8,7 @@ describe('TaskUnitComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ TaskUnitComponent ]
+      declarations: [TaskUnitComponent]
     })
     .compileComponents();
   }));

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import {Component, OnInit, Input} from '@angular/core';
 import {IFileUnit} from '../../../../../../shared/models/units/IFileUnit';
 
 @Component({
@@ -10,7 +10,8 @@ export class FileUnitComponent implements OnInit {
 
   @Input() fileUnit: IFileUnit;
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit() {
   }

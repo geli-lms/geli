@@ -32,8 +32,8 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
               private dialogService: DialogService) {
     this.userCtrl = new FormControl();
     this.filteredStates = this.userCtrl.valueChanges
-      .startWith(null)
-      .map(name => this.filterStates(name));
+    .startWith(null)
+    .map(name => this.filterStates(name));
   }
 
   ngOnInit() {

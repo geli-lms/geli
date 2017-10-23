@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import {NgModule} from '@angular/core';
 import {LoginComponent} from './auth/login/login.component';
 import {RegisterComponent} from './auth/register/register.component';
 import {ActivationComponent} from './auth/activation/activation.component';
@@ -28,7 +28,7 @@ const routes: Routes = [
     path: 'admin',
     component: AdminComponent,
     canActivate: [AuthGuardService],
-    data: { roles: ['admin']}
+    data: {roles: ['admin']}
   },
   {
     path: 'about',
@@ -36,9 +36,9 @@ const routes: Routes = [
   }
 ];
 
-
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {
+}

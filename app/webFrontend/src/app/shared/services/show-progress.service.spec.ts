@@ -1,7 +1,7 @@
 /* tslint:disable:no-unused-variable */
 
-import { TestBed, async, inject } from '@angular/core/testing';
-import { ShowProgressService } from './show-progress.service';
+import {TestBed, async, inject} from '@angular/core/testing';
+import {ShowProgressService} from './show-progress.service';
 
 describe('ShowProgressService', () => {
   beforeEach(() => {

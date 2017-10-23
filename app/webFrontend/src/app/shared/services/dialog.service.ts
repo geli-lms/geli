@@ -1,12 +1,13 @@
-import { Observable } from 'rxjs/Rx';
-import { Injectable } from '@angular/core';
-import { MdDialog, MdDialogRef } from '@angular/material';
+import {Observable} from 'rxjs/Rx';
+import {Injectable} from '@angular/core';
+import {MdDialog, MdDialogRef} from '@angular/material';
 import {ConfirmDialog} from '../components/delete-dialog/confirm-dialog.component';
 
 @Injectable()
 export class DialogService {
 
-  constructor(private dialog: MdDialog) { }
+  constructor(private dialog: MdDialog) {
+  }
 
   public confirm(title: string, message: string, confirmText: string = 'Confirm'): Observable<boolean> {
     let dialogRef: MdDialogRef<ConfirmDialog>;
@@ -21,8 +22,8 @@ export class DialogService {
 
   public delete(itemType: string, itemName): Observable<boolean> {
     return this.confirm('Delete ' + itemType,
-                        'Are you sure you want to delete the ' + itemType + ' ' + itemName,
-                        'Delete');
+      'Are you sure you want to delete the ' + itemType + ' ' + itemName,
+      'Delete');
   }
 
   public remove(itemType: string, itemName: string, removeFrom: string): Observable<boolean> {

@@ -45,9 +45,9 @@ export class TeachersComponent implements OnInit {
       '_id': this.course._id,
       'teachers': this.course.teachers.map((user) => user._id)
     })
-      .then(() => {
-        this.showProgress.toggleLoadingGlobal(false);
-      });
+    .then(() => {
+      this.showProgress.toggleLoadingGlobal(false);
+    });
   }
 
   /**

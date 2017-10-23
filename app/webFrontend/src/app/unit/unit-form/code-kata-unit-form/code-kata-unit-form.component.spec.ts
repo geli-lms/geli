@@ -1,6 +1,6 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { CodeKataUnitFormComponent } from './code-kata-unit-form.component';
+import {CodeKataUnitFormComponent} from './code-kata-unit-form.component';
 
 describe('CodeKataUnitFormComponent', () => {
   let component: CodeKataUnitFormComponent;
@@ -8,7 +8,7 @@ describe('CodeKataUnitFormComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CodeKataUnitFormComponent ]
+      declarations: [CodeKataUnitFormComponent]
     })
     .compileComponents();
   }));

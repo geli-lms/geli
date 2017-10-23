@@ -1,6 +1,6 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { FileUnitComponent } from './file-unit.component';
+import {FileUnitComponent} from './file-unit.component';
 
 describe('FileUnitComponent', () => {
   let component: FileUnitComponent;
@@ -8,7 +8,7 @@ describe('FileUnitComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ FileUnitComponent ]
+      declarations: [FileUnitComponent]
     })
     .compileComponents();
   }));

@@ -10,7 +10,8 @@ import {MarkdownService} from '../../shared/services/markdown.service';
 export class FreeTextUnitComponent implements OnInit {
   @Input() freeTextUnit: FreeTextUnit;
 
-  constructor(private mdService: MarkdownService) { }
+  constructor(private mdService: MarkdownService) {
+  }
 
   ngOnInit() {
   }

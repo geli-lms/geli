@@ -13,6 +13,6 @@ export class MarkdownService {
       // MarkdownIt Options
       // TODO
     })
-      .render(markdown);
+    .render(markdown);
   }
 }

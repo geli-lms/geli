@@ -1,5 +1,5 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
 import {MembersComponent} from './members/members.component';
 import {CourseUserListComponent} from './course-user-list/course-user-list.component';
 import {CourseManageContentComponent} from './course-manage-content/course-manage-content.component';
@@ -45,4 +45,5 @@ import {UnitFormModule} from '../../unit/unit-form/unit-form.module';
     MdFabMenuComponent,
   ]
 })
-export class CourseEditModule { }
+export class CourseEditModule {
+}

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import {Component, OnInit, Input} from '@angular/core';
 import {IUnit} from '../../../../../shared/models/units/IUnit';
 
 @Component({
@@ -10,7 +10,8 @@ export class UnitComponent implements OnInit {
 
   @Input() units: IUnit[];
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit() {
   }

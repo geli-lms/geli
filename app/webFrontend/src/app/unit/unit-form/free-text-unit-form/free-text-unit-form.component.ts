@@ -47,24 +47,24 @@ export class FreeTextUnitFormComponent implements OnInit {
     if (this.isModelNewObj()) {
       // Create new one
       this.freeTextUnitService.createItem({model: this.model, lectureId: this.lectureId})
-        .then(
-          () => {
-            this.snackBar.open('Free text unit saved', '', {duration: 3000});
-            this.onDone();
-          },
-          error => console.log(error)
-        );
+      .then(
+        () => {
+          this.snackBar.open('Free text unit saved', '', {duration: 3000});
+          this.onDone();
+        },
+        error => console.log(error)
+      );
     } else {
       // Update existing
       delete this.model._course;
       this.freeTextUnitService.updateItem(this.model)
-        .then(
-          () => {
-            this.snackBar.open('Free text unit saved', 'Update', {duration: 2000});
-            this.onDone();
-          },
-          error => console.log(error)
-        );
+      .then(
+        () => {
+          this.snackBar.open('Free text unit saved', 'Update', {duration: 2000});
+          this.onDone();
+        },
+        error => console.log(error)
+      );
     }
   }
 

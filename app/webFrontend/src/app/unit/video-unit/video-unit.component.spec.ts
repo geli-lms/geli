@@ -1,6 +1,6 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { VideoUnitComponent } from './video-unit.component';
+import {VideoUnitComponent} from './video-unit.component';
 
 describe('VideoUnitComponent', () => {
   let component: VideoUnitComponent;
@@ -8,7 +8,7 @@ describe('VideoUnitComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ VideoUnitComponent ]
+      declarations: [VideoUnitComponent]
     })
     .compileComponents();
   }));
