@@ -1,5 +1,5 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
 import {CodeKataUnitFormComponent} from './code-kata-unit-form/code-kata-unit-form.component';
 import {FreeTextUnitFormComponent} from './free-text-unit-form/free-text-unit-form.component';
 import {TaskUnitEditComponent} from './task-unit-edit/task-unit-edit.component';
@@ -39,4 +39,5 @@ import {FileUploadModule} from 'ng2-file-upload';
     VideoUploadComponent
   ]
 })
-export class UnitFormModule { }
+export class UnitFormModule {
+}

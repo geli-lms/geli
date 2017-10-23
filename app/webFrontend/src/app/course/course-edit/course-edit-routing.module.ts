@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {CourseEditComponent} from './course-edit.component';
 import {AuthGuardService} from '../../shared/services/auth-guard.service';
@@ -21,4 +21,5 @@ const routes: Routes = [
     RouterModule
   ]
 })
-export class CourseEditRoutingModule { }
+export class CourseEditRoutingModule {
+}

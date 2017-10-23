@@ -1,6 +1,6 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { FreeTextUnitFormComponent } from './free-text-unit-form.component';
+import {FreeTextUnitFormComponent} from './free-text-unit-form.component';
 
 describe('FreeTextUnitFormComponent', () => {
   let component: FreeTextUnitFormComponent;
@@ -8,7 +8,7 @@ describe('FreeTextUnitFormComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ FreeTextUnitFormComponent ]
+      declarations: [FreeTextUnitFormComponent]
     })
     .compileComponents();
   }));

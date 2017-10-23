@@ -6,7 +6,6 @@ import {ShowProgressService} from '../../shared/services/show-progress.service';
 import {MdSnackBar} from '@angular/material';
 import {matchPasswords} from '../../shared/validators/validators';
 
-
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',

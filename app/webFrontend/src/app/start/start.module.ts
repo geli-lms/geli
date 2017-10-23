@@ -1,5 +1,5 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
 import {StartComponent} from './start.component';
 import {DashboardComponent} from './dashboard/dashboard.component';
 import {HomescreenComponent} from './homescreen/homescreen.component';
@@ -34,4 +34,5 @@ import {CourseModule} from '../course/course.module';
     DashboardAdminComponent,
   ]
 })
-export class StartModule { }
+export class StartModule {
+}

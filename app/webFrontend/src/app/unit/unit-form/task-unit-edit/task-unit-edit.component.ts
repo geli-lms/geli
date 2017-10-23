@@ -66,14 +66,14 @@ export class TaskUnitEditComponent implements OnInit {
       description: this.generalInfo.form.value.description,
       ...this.model
     }, this.lectureId)
-      .then(
-        (task) => {
-          this.snackBar.open('Task created', '', {duration: 3000});
-          this.onDone();
-        },
-        (error) => {
-          console.log(error);
-        });
+    .then(
+      (task) => {
+        this.snackBar.open('Task created', '', {duration: 3000});
+        this.onDone();
+      },
+      (error) => {
+        console.log(error);
+      });
   };
 
   addTask() {

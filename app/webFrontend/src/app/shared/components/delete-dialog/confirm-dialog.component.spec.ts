@@ -1,6 +1,6 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { ConfirmDialog } from './confirm-dialog.component';
+import {ConfirmDialog} from './confirm-dialog.component';
 
 describe('ConfirmDialog', () => {
   let component: ConfirmDialog;
@@ -8,7 +8,7 @@ describe('ConfirmDialog', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ConfirmDialog ]
+      declarations: [ConfirmDialog]
     })
     .compileComponents();
   }));

@@ -22,10 +22,10 @@
   <md-card-content>
     <form name="form" (ngSubmit)="reset()" [formGroup]="resetForm">
       <md-input-container>
-        <input mdInput type="password" formControlName="password" placeholder="Password" />
+        <input mdInput type="password" formControlName="password" placeholder="Password"/>
       </md-input-container>
       <md-input-container>
-        <input mdInput type="password" formControlName="confirmPassword" placeholder="Confirm password" />
+        <input mdInput type="password" formControlName="confirmPassword" placeholder="Confirm password"/>
         <div class="form-text error" *ngIf="resetForm.controls.confirmPassword.touched">
           <div *ngIf="resetForm.hasError('mismatchedPasswords')">Passwords do not match.</div>
         </div>

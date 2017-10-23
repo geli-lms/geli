@@ -34,18 +34,18 @@
 
       <div *ngIf="role == 'student'">
         <md-input-container>
-          <input mdInput formControlName="uid" placeholder="Matrikelnummer" />
+          <input mdInput formControlName="uid" placeholder="Matrikelnummer"/>
         </md-input-container>
         <md-input-container>
-          <input mdInput formControlName="confirmUid" placeholder="Confirm Matrikelnummer" />
+          <input mdInput formControlName="confirmUid" placeholder="Confirm Matrikelnummer"/>
         </md-input-container>
       </div>
 
       <md-input-container>
-        <input mdInput type="password" formControlName="password" placeholder="Password" />
+        <input mdInput type="password" formControlName="password" placeholder="Password"/>
       </md-input-container>
       <md-input-container>
-        <input mdInput type="password" formControlName="confirmPassword" placeholder="Confirm password" />
+        <input mdInput type="password" formControlName="confirmPassword" placeholder="Confirm password"/>
         <div class="form-text error" *ngIf="registerForm.controls.confirmPassword.touched">
           <div *ngIf="registerForm.hasError('mismatchedPasswords')">Passwords do not match.</div>
         </div>

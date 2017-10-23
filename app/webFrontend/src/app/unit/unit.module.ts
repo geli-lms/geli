@@ -1,5 +1,5 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
 import {AceEditorModule} from 'ng2-ace-editor';
 import {TaskUnitComponent} from './task-unit/task-unit.component';
 import {VideoUnitComponent} from './video-unit/video-unit.component';
@@ -29,8 +29,7 @@ import {UnitComponent} from './unit.component';
     TaskUnitComponent,
     VideoUnitComponent,
   ],
-  providers: [
-  ],
+  providers: [],
   exports: [
     UnitComponent,
     CodeKataComponent,
@@ -40,4 +39,5 @@ import {UnitComponent} from './unit.component';
     VideoUnitComponent,
   ],
 })
-export class UnitModule { }
+export class UnitModule {
+}

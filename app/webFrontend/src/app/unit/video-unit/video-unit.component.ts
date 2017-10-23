@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import {Component, OnInit, Input} from '@angular/core';
 import {IVideoUnit} from '../../../../../../shared/models/units/IVideoUnit';
 
 @Component({
@@ -10,7 +10,8 @@ export class VideoUnitComponent implements OnInit {
 
   @Input() videoUnit: IVideoUnit;
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit() {
   }

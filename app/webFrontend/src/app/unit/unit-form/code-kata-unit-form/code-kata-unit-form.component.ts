@@ -66,25 +66,25 @@ export class CodeKataUnitFormComponent implements OnInit {
         model: this.model,
         lectureId: this.lectureId,
       })
-        .then(
-          () => {
-            this.snackBar.open('Code-Kata created', '', {duration: 3000});
-            this.onDone();
-          },
-          (error) => {
-            console.log(error);
-          });
+      .then(
+        () => {
+          this.snackBar.open('Code-Kata created', '', {duration: 3000});
+          this.onDone();
+        },
+        (error) => {
+          console.log(error);
+        });
     } else {
       delete this.model._course;
       this.codeKataUnitService.updateItem(this.model)
-        .then(
-          () => {
-            this.snackBar.open('Code-Kata updated', '', {duration: 3000});
-            this.onDone();
-          },
-          (error) => {
-            console.log(error);
-          });
+      .then(
+        () => {
+          this.snackBar.open('Code-Kata updated', '', {duration: 3000});
+          this.onDone();
+        },
+        (error) => {
+          console.log(error);
+        });
     }
   }
 

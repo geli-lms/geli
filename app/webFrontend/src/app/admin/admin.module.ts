@@ -1,5 +1,5 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
 import {MaterialModule} from '@angular/material';
 import {UserAdminComponent} from './user-admin/user-admin.component';
 import {AdminComponent} from './admin.component';
@@ -17,4 +17,5 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
     UserAdminComponent
   ]
 })
-export class AdminModule { }
+export class AdminModule {
+}

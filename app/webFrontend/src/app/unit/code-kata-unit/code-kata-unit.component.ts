@@ -5,6 +5,7 @@ import {ProgressService, CodeKataProgressService} from 'app/shared/services/data
 import {ICodeKataProgress} from '../../../../../../shared/models/ICodeKataProgress';
 import {UserService} from '../../shared/services/user.service';
 import {ActivatedRoute} from '@angular/router';
+
 // import '../../../../../../../node_modules/ace-builds/src-min/ace.js';
 
 @Component({
@@ -65,25 +66,25 @@ export class CodeKataComponent implements OnInit {
       this.progress.unit = this.codeKata._id;
       this.progress.user = this.userService.user._id;
       this.codeKataProgressService.createItem(this.progress)
-        .then(() => this.snackBar.open('Progress has been saved', '', {duration: 3000}))
-        .catch(() => this.snackBar.open('An unknown error occurred', '', {duration: 3000}));
+      .then(() => this.snackBar.open('Progress has been saved', '', {duration: 3000}))
+      .catch(() => this.snackBar.open('An unknown error occurred', '', {duration: 3000}));
     } else {
       this.codeKataProgressService.updateItem(this.progress)
-        .then(() => this.snackBar.open('Progress has been updated', '', {duration: 3000}))
-        .catch(() => this.snackBar.open('An unknown error occurred', '', {duration: 3000}));
+      .then(() => this.snackBar.open('Progress has been updated', '', {duration: 3000}))
+      .catch(() => this.snackBar.open('An unknown error occurred', '', {duration: 3000}));
     }
   }
 
   private loadProgress() {
     this.progressService.getUserProgress(this.userService.user._id)
-      .then((progress: any) => {
-        for (const prop in progress) {
-          if (progress[prop].unit === this.codeKata._id) {
-            this.progress = progress[prop];
-            break;
-          }
+    .then((progress: any) => {
+      for (const prop in progress) {
+        if (progress[prop].unit === this.codeKata._id) {
+          this.progress = progress[prop];
+          break;
         }
-      });
+      }
+    });
   }
 
   // refactor this to use the same as in code-kata-unit-form

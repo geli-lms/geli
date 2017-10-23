@@ -14,7 +14,7 @@
     <md-card [ngClass]="(currentMember != null && currentMember._id == user._id) ? 'active':'profile'"
              (click)="setMember(user)">
 
-      <div class="bg" [grav]="user.email"> </div>
+      <div class="bg" [grav]="user.email"></div>
 
       <div *ngIf="currentMember != null && currentMember._id == user._id">
         <button md-raised-button>DETAILS</button>

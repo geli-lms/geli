@@ -1,9 +1,9 @@
 /* tslint:disable:no-unused-variable */
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import { DebugElement } from '@angular/core';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import {By} from '@angular/platform-browser';
+import {DebugElement} from '@angular/core';
 
-import { ResetComponent } from './reset.component';
+import {ResetComponent} from './reset.component';
 
 describe('ResetComponent', () => {
   let component: ResetComponent;
@@ -11,7 +11,7 @@ describe('ResetComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ResetComponent ]
+      declarations: [ResetComponent]
     })
     .compileComponents();
   }));

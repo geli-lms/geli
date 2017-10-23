@@ -1,5 +1,5 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {CourseRoutingModule} from './course-routing.module';
 import {CourseComponent} from './course.component';
@@ -26,10 +26,10 @@ import {SharedModule} from '../shared/shared.module';
     CourseNewComponent,
     TeacherReportComponent,
   ],
-  providers: [
-  ],
+  providers: [],
   exports: [
     CourseComponent
   ]
 })
-export class CourseModule { }
+export class CourseModule {
+}

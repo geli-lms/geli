@@ -1,4 +1,5 @@
 import {IUser} from '../../../../../../shared/models/IUser';
+
 /**
  * Created by Alexander on 08.06.2017.
  */
