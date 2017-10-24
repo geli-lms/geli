@@ -26,7 +26,7 @@ export class DialogService {
       message += ' from this ' + opFrom;
     }
     message += '?';
-    return this.confirm(op, message, op);
+    return this.confirm(op + ' ' + itemType, message, op);
   }
 
   public confirmDelete(itemType: string, itemName, removeFrom?: string): Observable<boolean> {
