@@ -29,7 +29,7 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
   }
 
   constructor(private dragula: DragulaService,
-              private dialogService: DialogService) {
+              public dialogService: DialogService) {
     this.userCtrl = new FormControl();
     this.filteredStates = this.userCtrl.valueChanges
     .startWith(null)
@@ -73,15 +73,12 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
     return resArray.length > 0;
   }
 
-  /**
-   * @param id
-   */
-  removeUser(id: string) {
+  removeUser() {
     this.dialogService
-      .remove(this.usersInCourse[id].role, this.usersInCourse[id].email, 'course')
-      .subscribe((res) => {
+      .confirmRemove(this.currentMember.role, this.currentMember.email, 'course')
+      .subscribe(res => {
         if (res) {
-          this.onRemove.emit(id);
+          this.onRemove.emit(this.currentMember._id);
         }
       });
   }
