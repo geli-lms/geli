@@ -17,7 +17,7 @@
       <div class="bg" [grav]="user.email"></div>
 
       <div *ngIf="currentMember != null && currentMember._id == user._id">
-        <button md-raised-button>DETAILS</button>
+        <button md-raised-button routerLink="/profile/{{user._id}}">DETAILS</button>
         <button md-raised-button>SEND MAIL</button>
         <button class="del" md-raised-button (click)="removeUser(user._id)">DELETE</button>
       </div>
