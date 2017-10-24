@@ -20,17 +20,20 @@ export class DialogService {
     return dialogRef.afterClosed();
   }
 
-  public confirmDelete(itemType: string, itemName): Observable<boolean> {
-    return this.confirm('Delete ' + itemType,
-      'Are you sure you want to confirmDelete the ' + itemType + ' ' + itemName,
-      'Delete');
+  private confirmOperation(op: string, itemType: string, itemName: string, opFrom?: string): Observable<boolean> {
+    let message = 'Are you sure you want to ' + op.toLowerCase() + ' the ' + itemType + ' ' + itemName;
+    if (opFrom) {
+      message += ' from this ' + opFrom;
+    }
+    message += '?';
+    return this.confirm(op, message, op);
   }
 
-  public confirmRemove(itemType: string, itemName: string, removeFrom: string): Observable<boolean> {
-    const message = 'Are you sure yo want to remove the ' + itemType
-      + ' ' + itemName + ' from this ' + removeFrom + '?';
-    return this.confirm('Remove' + itemType,
-      message,
-      'Remove');
+  public confirmDelete(itemType: string, itemName, removeFrom?: string): Observable<boolean> {
+    return this.confirmOperation('Delete ', itemType, itemName, removeFrom);
+  }
+
+  public confirmRemove(itemType: string, itemName: string, removeFrom?: string): Observable<boolean> {
+    return this.confirmOperation('Remove', itemType, itemName, removeFrom);
   }
 }
