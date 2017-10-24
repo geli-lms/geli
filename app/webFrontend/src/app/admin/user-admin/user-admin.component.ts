@@ -59,7 +59,7 @@ export class UserAdminComponent implements OnInit {
 
   deleteUser(userIndex: number) {
     this.dialogService
-    .delete('user', this.allUsers[userIndex].email)
+    .confirmDelete('user', this.allUsers[userIndex].email)
     .subscribe(res => {
       if (res) {
         this.showProgress.toggleLoadingGlobal(true);
