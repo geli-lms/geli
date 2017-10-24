@@ -68,6 +68,10 @@ export class FreeTextUnitFormComponent implements OnInit {
     }
   }
 
+  onTabChange($event: any) {
+    console.log($event);
+  }
+
   private isModelNewObj(): boolean {
     return typeof this.model._id === 'undefined';
   }
