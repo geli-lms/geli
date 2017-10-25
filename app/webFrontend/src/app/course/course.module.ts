@@ -7,13 +7,11 @@ import {CourseDetailComponent} from './course-detail/course-detail.component';
 import {CourseNewComponent} from './course-new/course-new.component';
 import {LectureModule} from '../lecture/lecture.module';
 import {TeacherReportComponent} from './teacher-report/teacher-report.component';
-import {MaterialModule} from '@angular/material';
 import {SharedModule} from '../shared/shared.module';
 
 @NgModule({
   imports: [
     CommonModule,
-    MaterialModule,
     FormsModule,
     ReactiveFormsModule,
     CourseRoutingModule,

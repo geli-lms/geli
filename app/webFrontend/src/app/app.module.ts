@@ -3,7 +3,6 @@ import {NgModule} from '@angular/core';
 import {HttpModule} from '@angular/http';
 
 import {AppComponent} from './app.component';
-import {MaterialModule} from '@angular/material';
 import {JwtHelper} from 'angular2-jwt';
 
 import {UserService} from './shared/services/user.service';
@@ -27,7 +26,6 @@ import {AuthModule} from './auth/auth.module';
 import {AboutModule} from './about/about.module';
 import {AdminModule} from './admin/admin.module';
 import {MATERIAL_COMPATIBILITY_MODE} from '@angular/material';
-import {MaterialImportModule} from './shared/modules/material-import.module';
 
 @NgModule({
   declarations: [
@@ -35,12 +33,10 @@ import {MaterialImportModule} from './shared/modules/material-import.module';
   ],
   imports: [
     AdminModule,
-    MaterialImportModule,
     BrowserModule,
     HttpModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    MaterialModule,
     StartModule,
     UserModule,
     AuthModule,

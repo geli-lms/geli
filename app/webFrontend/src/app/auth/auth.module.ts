@@ -4,13 +4,13 @@ import {LoginComponent} from './login/login.component';
 import {RegisterComponent} from './register/register.component';
 import {ActivationComponent} from './activation/activation.component';
 import {ResetComponent} from './reset/reset.component';
-import {MaterialModule} from '@angular/material';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {SharedModule} from '../shared/shared.module';
 
 @NgModule({
   imports: [
     CommonModule,
-    MaterialModule,
+    SharedModule,
     FormsModule,
     ReactiveFormsModule,
   ],

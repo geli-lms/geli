@@ -7,15 +7,15 @@ import {FileUnitComponent} from './file-unit/file-unit.component';
 import {FreeTextUnitComponent} from './free-text-unit/free-text-unit.component';
 import {CodeKataComponent} from './code-kata-unit/code-kata-unit.component';
 
-import {MaterialModule} from '@angular/material';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {FileUploadModule} from 'ng2-file-upload';
 import {UnitComponent} from './unit.component';
+import {SharedModule} from '../shared/shared.module';
 
 @NgModule({
   imports: [
     CommonModule,
-    MaterialModule,
+    SharedModule,
     FormsModule,
     ReactiveFormsModule,
     FileUploadModule,
