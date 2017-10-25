@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import {NgModule} from '@angular/core';
 import {
   MatAutocompleteModule,
   MatButtonModule, MatCardModule, MatCheckboxModule, MatDialogModule, MatFormFieldModule, MatIconModule, MatInputModule, MatListModule,
@@ -51,4 +51,5 @@ import {
     MatTooltipModule
   ]
 })
-export class MaterialImportModule { }
+export class MaterialImportModule {
+}

@@ -8,7 +8,7 @@ describe('MatFabMenuComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ MatFabMenuComponent ]
+      declarations: [MatFabMenuComponent]
     })
     .compileComponents();
   }));

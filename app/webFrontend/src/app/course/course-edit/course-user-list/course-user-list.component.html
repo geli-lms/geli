@@ -12,7 +12,7 @@
 <div class="members" *ngIf="fuzzySearch.length <= 0">
   <ng-container *ngFor="let user of usersInCourse">
     <mat-card [ngClass]="(currentMember != null && currentMember._id == user._id) ? 'active':'profile'"
-             (click)="setMember(user)">
+              (click)="setMember(user)">
 
       <div class="bg" [grav]="user.email"></div>
 

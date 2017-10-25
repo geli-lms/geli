@@ -180,53 +180,53 @@ export class CourseManageContentComponent implements OnInit, OnDestroy {
 
   closeEditLecture = () => {
     this.lectureEditMode = false;
-  }
+  };
 
   onAddUnit = (type: string) => {
     this.closeAllForms();
 
     this.unitCreateMode = true;
     this.unitCreateType = type;
-  }
+  };
 
   onAddUnitDone = () => {
     this.reloadCourse();
     this.closeAddUnit();
-  }
+  };
 
   closeAddUnit = () => {
     this.unitCreateMode = false;
     this.unitCreateType = null;
-  }
+  };
 
   onEditUnit = (unit: IUnit) => {
     this.closeAllForms();
 
     this.unitEditMode = true;
     this.unitEditElement = unit;
-  }
+  };
 
   onEditUnitDone = () => {
     this.reloadCourse();
     this.closeEditUnit();
-  }
+  };
 
   closeEditUnit = () => {
     this.unitEditMode = false;
     this.unitEditElement = null;
-  }
+  };
 
   closeFab = () => {
     this.fabOpen = false;
-  }
+  };
 
   onFabClick = () => {
     this.fabOpen = !this.fabOpen;
-  }
+  };
 
   closeAddLecture = () => {
     this.lectureCreateMode = false;
-  }
+  };
 
   private closeAllForms() {
     this.closeFab();

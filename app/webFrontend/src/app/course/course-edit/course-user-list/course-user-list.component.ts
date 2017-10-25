@@ -75,11 +75,11 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
 
   removeUser() {
     this.dialogService
-      .confirmRemove(this.currentMember.role, this.currentMember.email, 'course')
-      .subscribe(res => {
-        if (res) {
-          this.onRemove.emit(this.currentMember._id);
-        }
-      });
+    .confirmRemove(this.currentMember.role, this.currentMember.email, 'course')
+    .subscribe(res => {
+      if (res) {
+        this.onRemove.emit(this.currentMember._id);
+      }
+    });
   }
 }
