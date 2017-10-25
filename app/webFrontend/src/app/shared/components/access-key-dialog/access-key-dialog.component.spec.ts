@@ -1,6 +1,6 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { AccessKeyDialog } from './access-key-dialog.component';
+import {AccessKeyDialog} from './access-key-dialog.component';
 
 describe('AccessKeyDialog', () => {
   let component: AccessKeyDialog;
@@ -8,7 +8,7 @@ describe('AccessKeyDialog', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AccessKeyDialog ]
+      declarations: [AccessKeyDialog]
     })
     .compileComponents();
   }));

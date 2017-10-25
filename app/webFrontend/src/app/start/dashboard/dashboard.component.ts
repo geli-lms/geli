@@ -4,8 +4,6 @@ import {UserService} from '../../shared/services/user.service';
 import {CourseService} from '../../shared/services/data.service';
 import {Router} from '@angular/router';
 import {ICourse} from '../../../../../../shared/models/ICourse';
-import {IUser} from '../../../../../../shared/models/IUser';
-import {AccessKeyDialog} from '../../shared/components/access-key-dialog/access-key-dialog.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -35,31 +33,7 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  editCourse(id: string) {
-    const url = '/course/edit/' + id;
-    this.router.navigate([url]);
-  }
-
-  showReport(id: string) {
-    const url = '/course/' + id + '/report';
-    this.router.navigate([url]);
-  }
-
-  apply(courseId: string, hasAccessKey: Boolean) {
-    if (hasAccessKey) {
-      // open dialog for accesskey
-      const dialogRef = this.dialog.open(AccessKeyDialog);
-      dialogRef.afterClosed().subscribe(result => {
-        if (result) {
-          this.enrollCallback(courseId, result);
-        }
-      });
-    } else {
-      this.enrollCallback(courseId, null);
-    }
-  }
-
-  enrollCallback(courseId: string, accessKey: string) {
+  enrollCallback({courseId, accessKey}) {
     this.courseService.enrollStudent(courseId, {
       user: this.userService.user,
       accessKey
@@ -71,24 +45,4 @@ export class DashboardComponent implements OnInit {
       this.snackBar.open(`${err.statusText}: ${JSON.parse(err._body).message}`, '', {duration: 5000});
     });
   }
-
-  isCourseTeacherOrAdmin(course: ICourse) {
-    if (this.userService.isAdmin()) {
-      return true;
-    }
-
-    return (course.courseAdmin && course.courseAdmin._id === this.userService.user._id) ||
-      course.teachers.filter(teacher => teacher._id === this.userService.user._id).length;
-  }
-
-  goToInfo(course: string) {
-    const url = '/course/detail/' + course;
-    this.router.navigate([url]);
-  }
-
-  isMemberOfCourse(students: IUser[]) {
-    const user = this.userService.user;
-    return students.filter(obj => obj._id === user._id).length > 0;
-  }
-
 }

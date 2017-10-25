@@ -16,15 +16,15 @@
   </md-input-container>
 
   <md-input-container class="full-width">
-    <input mdInput type="password" formControlName="currentPassword" placeholder="Current password" />
+    <input mdInput type="password" formControlName="currentPassword" placeholder="Current password"/>
   </md-input-container>
 
   <md-input-container class="full-width">
-    <input mdInput type="password" formControlName="password" placeholder="Password" />
+    <input mdInput type="password" formControlName="password" placeholder="Password"/>
   </md-input-container>
 
   <md-input-container class="full-width">
-    <input mdInput type="password" formControlName="confirmPassword" placeholder="Confirm password" />
+    <input mdInput type="password" formControlName="confirmPassword" placeholder="Confirm password"/>
     <div class="form-text error" *ngIf="userForm?.controls.confirmPassword.touched">
       <div *ngIf="userForm.hasError('mismatchedPasswords')">Passwords do not match.</div>
     </div>

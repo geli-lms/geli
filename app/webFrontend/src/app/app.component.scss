@@ -6,7 +6,12 @@
   min-height: 100%;
 }
 
+.warning {
+  background: #b53f3f;
+}
+
 .right-align {
+  text-align: center;
   flex: 1 1 auto;
 }
 
