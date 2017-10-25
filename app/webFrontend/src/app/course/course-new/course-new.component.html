@@ -3,11 +3,11 @@
   <md-card>
     <form class="course-form" (ngSubmit)="createCourse()" [formGroup]="newCourse">
       <md-input-container class="full-width">
-        <input mdInput formControlName="name" placeholder="Course Name">
+        <input mdInput formControlName="name" mdTooltip="test test" placeholder="Course Name">
       </md-input-container>
       <br/>
       <md-input-container class="full-width">
-        <textarea mdInput formControlName="description" placeholder="Course Description"></textarea>
+        <textarea mdInput formControlName="description" mdTooltip="test test" placeholder="Course Description"></textarea>
       </md-input-container>
       <br/>
       <button md-button class="md-button" type="submit">Add</button>
