@@ -36,11 +36,10 @@ export class DashboardComponent implements OnInit {
     this.ACourses = [];
     this.courseService.readItems().then(courses => {
       this.allCourses = courses;
-      for(let course of courses) {
-        if(this.isMemberOfCourse(course) || this.isCourseTeacherOrAdmin(course)) {
+      for (const course of courses) {
+        if (this.isMemberOfCourse(course) || this.isCourseTeacherOrAdmin(course)) {
           this.myCourses.push(course);
-        }
-        else {
+        } else {
           this.ACourses.push(course);
         }
       }
