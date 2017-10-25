@@ -1,8 +1,5 @@
-<h1>Available Courses</h1>
-
-<div class="courses">
-  <app-course *ngFor="let course of allCourses" [course]="course" (onEnroll)="enrollCallback($event)"></app-course>
-</div>
+<app-course-container [title]="'My Courses'" [courses]="myCourses"></app-course-container>
+<app-course-container [title]="'Aviable Courses'" [courses]="ACourses"></app-course-container>
 
 <a md-fab *ngIf="userService.isTeacher() || userService.isAdmin()" class="add-course-fab"
    routerLink="course/new" mdTooltip="Add course" mdTooltipPosition="left">
