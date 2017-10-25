@@ -76,6 +76,10 @@ button {
   color: #D64C4C;
 }
 
+.users {
+  margin-left: 50px;
+}
+
 .drop {
   min-height: 40px;
   background-color: #fafafa;
@@ -85,59 +89,76 @@ button {
   height: 40px;
   padding-bottom: 10px;
   background-color: #ffffff;
+  .firstName {
+    width: 120px;
+    padding-left: 20px;
+    display: inline-block;
+  }
+
+  .lastName {
+    width: 120px;
+  }
+
+  .uid {
+    width: 80px;
+  }
+
+  .email {
+    width: 80px;
+  }
+
+  .listBg {
+    height: 40px;
+    width: 40px;
+    background: center;
+    border-radius: 20px;
+    background-size: 40px 40px;
+    margin-left: 10px;
+  }
 }
 
 .list:hover {
   background-color: #fafafa;
 }
 
-.listBg {
-  height: 40px;
-  width: 40px;
-  background: center;
-  border-radius: 20px;
-  background-size: 40px 40px;
-  margin-left: 10px;
-}
-
-.firstName {
-  padding-left: 30px;
-  display: inline-block;
-}
-
-.lastName {
-  padding-left: 3px;
-}
-
-.uid {
-  padding-left: 40px;
-}
-
-.email {
-  padding-left: 40px;
-}
-
 .gu-mirror {
-  position: fixed !important;
   z-index: 9999 !important;
   opacity: 1;
   list-style-type: none;
   box-shadow: 0 2px 2px rgba(182, 182, 182, 0.5);
-  -webkit-align-items: center;
-  align-items: center;
   display: inline-block;
-  position: relative;
-  min-height: 40px;
-  line-height: 40px;
-  padding: 0 20px;
   border: 1px solid #d8d8d8;
-  margin: 0 200px 10px 0;
   background-color: #fff;
   cursor: move;
   border-style: dashed;
   border-width: 1px;
-}
 
-.users {
-  margin-left: 50px;
+  .user-drag-handle, .member-drag-handle {
+    padding-left: 15px;
+    padding-top: 15px;
+    width: 60px;
+  }
+
+  .firstName {
+    padding-top: 16px;
+    position: fixed;
+  }
+
+  .lastName {
+    padding-top: 16px;
+    padding-left: 140px;
+    position: fixed;
+  }
+
+  .uid {
+    padding-top: 16px;
+    padding-left: 260px;
+    position: fixed;
+  }
+
+  .email {
+    padding-top: 16px;
+    padding-left: 340px;
+    position: fixed;
+  }
 }
