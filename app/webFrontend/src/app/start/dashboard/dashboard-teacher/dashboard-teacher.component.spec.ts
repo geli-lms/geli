@@ -1,9 +1,9 @@
 /* tslint:disable:no-unused-variable */
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import { DebugElement } from '@angular/core';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import {By} from '@angular/platform-browser';
+import {DebugElement} from '@angular/core';
 
-import { DashboardTeacherComponent } from './dashboard-teacher.component';
+import {DashboardTeacherComponent} from './dashboard-teacher.component';
 
 describe('DashboardTeacherComponent', () => {
   let component: DashboardTeacherComponent;
@@ -11,7 +11,7 @@ describe('DashboardTeacherComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DashboardTeacherComponent ]
+      declarations: [DashboardTeacherComponent]
     })
     .compileComponents();
   }));

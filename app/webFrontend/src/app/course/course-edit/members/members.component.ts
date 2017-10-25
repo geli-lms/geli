@@ -45,9 +45,9 @@ export class MembersComponent implements OnInit {
       '_id': this.course._id,
       'students': this.course.students.map((user) => user._id)
     })
-      .then(() => {
-        this.showProgress.toggleLoadingGlobal(false);
-      });
+    .then(() => {
+      this.showProgress.toggleLoadingGlobal(false);
+    });
   }
 
   /**

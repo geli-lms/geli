@@ -16,15 +16,15 @@
   </mat-form-field>
 
   <mat-form-field class="full-width">
-    <input matInput type="password" formControlName="currentPassword" placeholder="Current password" />
+    <input matInput type="password" formControlName="currentPassword" placeholder="Current password"/>
   </mat-form-field>
 
   <mat-form-field class="full-width">
-    <input matInput type="password" formControlName="password" placeholder="Password" />
+    <input matInput type="password" formControlName="password" placeholder="Password"/>
   </mat-form-field>
 
   <mat-form-field class="full-width">
-    <input matInput type="password" formControlName="confirmPassword" placeholder="Confirm password" />
+    <input matInput type="password" formControlName="confirmPassword" placeholder="Confirm password"/>
     <div class="form-text error" *ngIf="userForm?.controls.confirmPassword.touched">
       <div *ngIf="userForm.hasError('mismatchedPasswords')">Passwords do not match.</div>
     </div>

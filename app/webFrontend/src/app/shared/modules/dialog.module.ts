@@ -1,5 +1,5 @@
-import { NgModule } from '@angular/core';
-import {ConfirmDialog} from '../components/delete-dialog/confirm-dialog.component';
+import {NgModule} from '@angular/core';
+import {ConfirmDialog} from '../components/confirm-dialog/confirm-dialog.component';
 import {AccessKeyDialog} from '../components/access-key-dialog/access-key-dialog.component';
 import {DialogService} from '../services/dialog.service';
 import {FormsModule} from '@angular/forms';
@@ -26,4 +26,5 @@ import {MatFormFieldModule} from '@angular/material';
     AccessKeyDialog
   ]
 })
-export class DialogModule { }
+export class DialogModule {
+}

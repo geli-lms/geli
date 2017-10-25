@@ -19,7 +19,6 @@ export class MatFabMenuComponent implements OnInit {
   @Input()
   onClick: () => void;
 
-
   constructor() {
   }
 

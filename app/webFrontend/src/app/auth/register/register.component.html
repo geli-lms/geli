@@ -1,0 +1,54 @@
+<mat-card *ngIf="registrationDone">
+  <mat-card-header>
+    <mat-card-title><h1>Registration was successful</h1></mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <p>We have send you an activation link to your specified mail address.</p>
+  </mat-card-content>
+  <mat-card-actions align="start">
+    <button mat-raised-button color="primary" routerLink="/" routerLinkActive="active">Back to frontpage</button>
+  </mat-card-actions>
+</mat-card>
+<mat-card class="register-card" *ngIf="!registrationDone">
+  <mat-card-header>
+    <mat-card-title><h1>Register</h1></mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <form name="form" (ngSubmit)="register()" [formGroup]="registerForm">
+      <mat-radio-group formControlName="role" [(ngModel)]="role" [align]="'start'">
+        <mat-radio-button value="student">Student</mat-radio-button>
+        <mat-radio-button value="teacher">Teacher</mat-radio-button>
+      </mat-radio-group>
+      <div class="form-group" formGroupName="profile">
+        <mat-form-field>
+          <input matInput formControlName="firstName" placeholder="First name"/>
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput formControlName="lastName" placeholder="Last name"/>
+        </mat-form-field>
+      </div>
+
+      <mat-form-field>
+        <input matInput formControlName="email" placeholder="E-Mail"/>
+      </mat-form-field>
+
+      <div *ngIf="role == 'student'">
+        <mat-input-container>
+          <input matInput formControlName="uid" placeholder="Matrikelnummer"/>
+        </mat-input-container>
+      </div>
+
+      <mat-form-field>
+        <input matInput type="password" formControlName="password" placeholder="Password"/>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput type="password" formControlName="confirmPassword" placeholder="Confirm password"/>
+        <div class="form-text error" *ngIf="registerForm.controls.confirmPassword.touched">
+          <div *ngIf="registerForm.hasError('mismatchedPasswords')">Passwords do not match.</div>
+        </div>
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" type="submit" [disabled]="loading">Register</button>
+    </form>
+  </mat-card-content>
+</mat-card>

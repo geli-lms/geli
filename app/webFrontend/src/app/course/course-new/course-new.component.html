@@ -1,16 +1,16 @@
 <div class="center-both">
-    <h1>Create Course</h1>
-    <mat-card>
-        <form class="course-form" (ngSubmit)="createCourse()" [formGroup]="newCourse">
-            <mat-form-field class="full-width">
-                <input matInput formControlName="name" placeholder="Course Name">
-            </mat-form-field>
-            <br/>
-            <mat-form-field class="full-width">
-                <textarea matInput formControlName="description" placeholder="Course Description"></textarea>
-            </mat-form-field>
-            <br/>
-            <button mat-button class="mat-button" type="submit">Add</button>
-        </form>
-    </mat-card>
+  <h1>Create Course</h1>
+  <mat-card>
+    <form class="course-form" (ngSubmit)="createCourse()" [formGroup]="newCourse">
+      <mat-form-field class="full-width">
+        <input matInput formControlName="name" placeholder="Course Name">
+      </mat-form-field>
+      <br/>
+      <mat-form-field class="full-width">
+        <textarea matInput formControlName="description" placeholder="Course Description"></textarea>
+      </mat-form-field>
+      <br/>
+      <button mat-button class="mat-button" type="submit">Add</button>
+    </form>
+  </mat-card>
 </div>

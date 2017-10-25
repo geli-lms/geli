@@ -1,40 +1,10 @@
 <h1>Available Courses</h1>
 
 <div class="courses">
-  <mat-card *ngFor="let course of allCourses" class="course-card">
-    <mat-card-header>
-      <mat-card-title><h2>{{course.name}}</h2></mat-card-title>
-    </mat-card-header>
-    <img mat-card-image src="/assets/course-header-image.jpg">
-    <mat-card-content>
-      <p>
-        {{course.description}}
-      </p>
-    </mat-card-content>
-    <mat-card-actions>
-      <button mat-icon-button *ngIf="this.userService.isStudent()" disabled={{isMemberOfCourse(course.students)}}
-              (click)="apply(course._id, course.hasAccessKey)" matTooltip="Enroll">
-        <mat-icon>add_circle_outline</mat-icon>
-      </button>
-
-      <button mat-icon-button (click)="editCourse(course._id)"
-              *ngIf="this.isCourseTeacherOrAdmin(course)">
-        <mat-icon>mode_edit</mat-icon>
-      </button>
-
-      <button mat-icon-button (click)="showReport(course._id)"
-              *ngIf="this.isCourseTeacherOrAdmin(course)">
-        <mat-icon>show_chart</mat-icon>
-      </button>
-
-      <button mat-mini-fab color="primary" class="details-button" (click)="goToInfo(course._id)">
-        <mat-icon>arrow_forward</mat-icon>
-      </button>
-    </mat-card-actions>
-  </mat-card>
+  <app-course *ngFor="let course of allCourses" [course]="course" (onEnroll)="enrollCallback($event)"></app-course>
 </div>
 
-<a mat-fab *ngIf="this.userService.isTeacher() || this.userService.isAdmin()" class="add-course-fab"
+<a mat-fab *ngIf="userService.isTeacher() || userService.isAdmin()" class="add-course-fab"
    routerLink="course/new" matTooltip="Add course" matTooltipPosition="left">
   <mat-icon>add</mat-icon>
 </a>

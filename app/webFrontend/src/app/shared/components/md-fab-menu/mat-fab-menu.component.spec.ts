@@ -1,6 +1,6 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { MatFabMenuComponent } from './mat-fab-menu.component';
+import {MatFabMenuComponent} from './mat-fab-menu.component';
 
 describe('MatFabMenuComponent', () => {
   let component: MatFabMenuComponent;

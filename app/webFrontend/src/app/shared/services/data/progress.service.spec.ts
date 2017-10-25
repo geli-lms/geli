@@ -1,6 +1,6 @@
-import { TestBed, inject } from '@angular/core/testing';
+import {TestBed, inject} from '@angular/core/testing';
 
-import { ProgressService } from './progress.service';
+import {ProgressService} from './progress.service';
 
 describe('ProgressService', () => {
   beforeEach(() => {

@@ -10,33 +10,34 @@ import {Router} from '@angular/router';
   styleUrls: ['./course-new.component.scss']
 })
 export class CourseNewComponent implements OnInit {
-    newCourse: FormGroup;
-    id: string;
+  newCourse: FormGroup;
+  id: string;
 
-    constructor(private router: Router,
-                private formBuilder: FormBuilder,
-                private courseService: CourseService,
-                public snackBar: MatSnackBar) { }
+  constructor(private router: Router,
+              private formBuilder: FormBuilder,
+              private courseService: CourseService,
+              public snackBar: MatSnackBar) {
+  }
 
-    ngOnInit() {
-        this.generateForm();
-    }
+  ngOnInit() {
+    this.generateForm();
+  }
 
-    createCourse() {
-        this.courseService.createItem(this.newCourse.value).then(
-            (val) => {
-                const url = '/course/edit/' + val._id;
-                this.router.navigate([url]);
-            }, (error) => {
-                this.snackBar.open('Error creating course', 'Dismiss');
-            });
-    }
+  createCourse() {
+    this.courseService.createItem(this.newCourse.value).then(
+      (val) => {
+        const url = '/course/edit/' + val._id;
+        this.router.navigate([url]);
+      }, (error) => {
+        this.snackBar.open('Error creating course', 'Dismiss');
+      });
+  }
 
-    generateForm() {
-        this.newCourse = this.formBuilder.group({
-            name: ['', Validators.required],
-            description: ['', Validators.required],
-        });
-    }
+  generateForm() {
+    this.newCourse = this.formBuilder.group({
+      name: ['', Validators.required],
+      description: ['', Validators.required],
+    });
+  }
 
 }

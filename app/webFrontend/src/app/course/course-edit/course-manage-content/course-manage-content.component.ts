@@ -26,7 +26,6 @@ export class CourseManageContentComponent implements OnInit, OnDestroy {
   unitEditElement: IUnit;
   fabOpen = false;
 
-
   constructor(private lectureService: LectureService,
               private courseService: CourseService,
               private unitService: UnitService,
@@ -88,73 +87,73 @@ export class CourseManageContentComponent implements OnInit, OnDestroy {
     delete lecture.units;
 
     this.lectureService.createItem({courseId: this.course._id, lecture: lecture})
-      .then(() => {
-        this.reloadCourse();
-      }, (error) => {
-        console.log(error);
-      });
+    .then(() => {
+      this.reloadCourse();
+    }, (error) => {
+      console.log(error);
+    });
   }
 
   createLecture(lecture: ILecture) {
     this.lectureService.createItem({courseId: this.course._id, lecture: lecture})
-      .then(() => {
-        this.lectureCreateMode = false;
-        return this.reloadCourse();
-      })
-      .catch(console.error);
+    .then(() => {
+      this.lectureCreateMode = false;
+      return this.reloadCourse();
+    })
+    .catch(console.error);
   }
 
   updateLecture(lecture: ILecture) {
     this.showProgress.toggleLoadingGlobal(true);
 
     this.lectureService.updateItem(lecture)
-      .then(() => {
-        this.lectureEditMode = false;
-      })
-      .catch(console.error)
-      .then(() => this.showProgress.toggleLoadingGlobal(false));
+    .then(() => {
+      this.lectureEditMode = false;
+    })
+    .catch(console.error)
+    .then(() => this.showProgress.toggleLoadingGlobal(false));
   }
 
   deleteUnit(unit: IUnit) {
     this.dialogService
-      .delete('unit', unit.type)
-      .subscribe(res => {
-        if (res) {
-          this.showProgress.toggleLoadingGlobal(true);
-          this.unitService.deleteItem(unit).then(
-            () => {
-              this.showProgress.toggleLoadingGlobal(false);
-              this.snackBar.open('Unit deleted.', '', {duration: 3000});
-              this.reloadCourse();
-            },
-            (error) => {
-              this.showProgress.toggleLoadingGlobal(false);
-              this.snackBar.open(error, '', {duration: 3000});
-            }
-          );
-        }
-      });
+    .confirmDelete('unit', unit.type)
+    .subscribe(res => {
+      if (res) {
+        this.showProgress.toggleLoadingGlobal(true);
+        this.unitService.deleteItem(unit).then(
+          () => {
+            this.showProgress.toggleLoadingGlobal(false);
+            this.snackBar.open('Unit deleted.', '', {duration: 3000});
+            this.reloadCourse();
+          },
+          (error) => {
+            this.showProgress.toggleLoadingGlobal(false);
+            this.snackBar.open(error, '', {duration: 3000});
+          }
+        );
+      }
+    });
   }
 
   deleteLecture(lecture: ILecture) {
     this.dialogService
-      .delete('lecture', lecture.name)
-      .subscribe(res => {
-        if (res) {
-          this.showProgress.toggleLoadingGlobal(true);
-          this.lectureService.deleteItem(lecture).then(
-            (val) => {
-              this.showProgress.toggleLoadingGlobal(false);
-              this.snackBar.open('Lecture deleted.', '', {duration: 3000});
-              this.reloadCourse();
-            },
-            (error) => {
-              this.showProgress.toggleLoadingGlobal(false);
-              this.snackBar.open(error, '', {duration: 3000});
-            }
-          );
-        }
-      });
+    .confirmDelete('lecture', lecture.name)
+    .subscribe(res => {
+      if (res) {
+        this.showProgress.toggleLoadingGlobal(true);
+        this.lectureService.deleteItem(lecture).then(
+          (val) => {
+            this.showProgress.toggleLoadingGlobal(false);
+            this.snackBar.open('Lecture deleted.', '', {duration: 3000});
+            this.reloadCourse();
+          },
+          (error) => {
+            this.showProgress.toggleLoadingGlobal(false);
+            this.snackBar.open(error, '', {duration: 3000});
+          }
+        );
+      }
+    });
   }
 
   reloadCourse() {

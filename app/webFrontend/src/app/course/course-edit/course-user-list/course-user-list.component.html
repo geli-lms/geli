@@ -14,12 +14,12 @@
     <mat-card [ngClass]="(currentMember != null && currentMember._id == user._id) ? 'active':'profile'"
              (click)="setMember(user)">
 
-      <div class="bg" [grav]="user.email"> </div>
+      <div class="bg" [grav]="user.email"></div>
 
       <div *ngIf="currentMember != null && currentMember._id == user._id">
         <button mat-raised-button>DETAILS</button>
         <button mat-raised-button>SEND MAIL</button>
-        <button class="del" mat-raised-button (click)="removeUser(user._id)">DELETE</button>
+        <button class="del" mat-raised-button (click)="removeUser()">REMOVE</button>
       </div>
 
       <ul class="info">
