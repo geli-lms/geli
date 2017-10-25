@@ -1,8 +1,8 @@
-<h1>{{title}}</h1>
+<div class="title-header"><h1>{{title}}</h1>
+  <button class="open-toggle" (click)="changeExpand()" [class.opened]="expand === true" md-icon-button>
+    <md-icon>arrow_drop_down</md-icon>
+  </button></div>
 
-<button class="open-toggle" (click)="changeExpand()" [class.opened]="expand === true" md-icon-button>
-  <md-icon>arrow_drop_down</md-icon>
-</button>
 
 <div class="courses" *ngIf="expand === true">
   <p *ngIf="!courses.length">No courses added yet.</p>
