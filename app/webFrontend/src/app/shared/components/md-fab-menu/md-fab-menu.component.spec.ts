@@ -1,6 +1,6 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { MdFabMenuComponent } from './md-fab-menu.component';
+import {MdFabMenuComponent} from './md-fab-menu.component';
 
 describe('MdFabMenuComponent', () => {
   let component: MdFabMenuComponent;
@@ -8,7 +8,7 @@ describe('MdFabMenuComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ MdFabMenuComponent ]
+      declarations: [MdFabMenuComponent]
     })
     .compileComponents();
   }));

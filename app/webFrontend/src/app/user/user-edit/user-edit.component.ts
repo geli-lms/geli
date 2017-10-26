@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import {Component, OnInit} from '@angular/core';
+import {Router} from '@angular/router';
+import {FormGroup, FormBuilder, Validators} from '@angular/forms';
 import {MdSnackBar} from '@angular/material';
 import {UserDataService} from '../../shared/services/data.service';
 import {IUser} from '../../../../../../shared/models/IUser';
@@ -86,7 +86,7 @@ export class UserEditComponent implements OnInit {
       (val) => {
         console.log(val);
         this.showProgress.toggleLoadingGlobal(false);
-        this.snackBar.open('Profile successfully updated.', '', { duration: 3000 });
+        this.snackBar.open('Profile successfully updated.', '', {duration: 3000});
         this.userService.setUser(val);
         this.navigateBack();
       },
@@ -99,8 +99,8 @@ export class UserEditComponent implements OnInit {
   generateForm() {
     this.userForm = this.formBuilder.group({
       profile: this.formBuilder.group({
-        firstName : ['', Validators.required],
-        lastName : ['', Validators.required],
+        firstName: ['', Validators.required],
+        lastName: ['', Validators.required],
       }),
       username: [''],
       email: ['', Validators.required],
