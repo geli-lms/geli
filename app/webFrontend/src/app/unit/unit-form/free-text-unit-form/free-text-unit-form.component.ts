@@ -5,6 +5,7 @@ import {FreeTextUnitService} from '../../../shared/services/data.service';
 import {FreeTextUnit} from '../../../models/FreeTextUnit';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
 import {UnitGeneralInfoFormComponent} from '../unit-general-info-form/unit-general-info-form.component';
+import {MarkdownService} from '../../../shared/services/markdown.service';
 
 @Component({
   selector: 'app-free-text-unit-form',
@@ -21,8 +22,11 @@ export class FreeTextUnitFormComponent implements OnInit {
   @ViewChild(UnitGeneralInfoFormComponent)
   private generalInfo: UnitGeneralInfoFormComponent;
 
+  private renderedMd: string;
+
   constructor(private freeTextUnitService: FreeTextUnitService,
-              private snackBar: MdSnackBar) {
+              private snackBar: MdSnackBar,
+              private mdService: MarkdownService) {
   }
 
   ngOnInit() {
@@ -69,7 +73,10 @@ export class FreeTextUnitFormComponent implements OnInit {
   }
 
   onTabChange($event: any) {
-    console.log($event);
+    if ($event.index === 1) {
+      // We are on the preview tab
+      this.renderedMd = this.mdService.render(this.model.markdown);
+    }
   }
 
   private isModelNewObj(): boolean {

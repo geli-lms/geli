@@ -1,11 +1,13 @@
 <div class="free-text-unit-edit">
   <app-unit-general-info-form [model]="model"></app-unit-general-info-form>
 
-  <md-tab-group (selectedTabChange)="onTabChange($event)">
+  <md-tab-group (selectChange)="onTabChange($event)">
     <md-tab label="Write">
       <p class="info-text">
         <md-icon>info</md-icon>
         Add Markdown to add text to this Course.
+        A Cheatsheet you can find
+        <a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet" target="_blank">here</a>.
       </p>
 
       <md-input-container>
@@ -13,10 +15,8 @@
                   [(ngModel)]="model.markdown"></textarea>
       </md-input-container>
     </md-tab>
-    <md-tab label="Preview" (click)="onTabChange($event)">
-      <p>
-        Ausgabe
-      </p>
+    <md-tab label="Preview">
+      <p [innerHTML]="this.renderedMd"></p>
     </md-tab>
   </md-tab-group>
 
