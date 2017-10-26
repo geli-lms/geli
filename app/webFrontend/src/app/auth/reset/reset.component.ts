@@ -43,7 +43,7 @@ export class ResetComponent implements OnInit {
   requestReset() {
     this.showProgress.toggleLoadingGlobal(true);
     this.loading = true;
-    this.authenticationService.requestReset(this.resetForm.value.email)
+    this.authenticationService.requestReset(this.resetForm.value.email.replace(/\s/g, '').toLowerCase())
     .then(
       (val) => {
         this.snackBar.open('Check your mails', 'Dismiss');

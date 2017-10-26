@@ -34,6 +34,7 @@ export class LoginComponent implements OnInit {
   login() {
     this.showProgress.toggleLoadingGlobal(true);
     this.loading = true;
+    this.loginForm.value.email = this.loginForm.value.email.replace(/\s/g, '').toLowerCase();
     this.authenticationService.login(this.loginForm.value.email, this.loginForm.value.password).then(
       (val) => {
         if (this.authGuard.redirectUrl) {
