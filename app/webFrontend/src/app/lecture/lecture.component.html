@@ -5,6 +5,11 @@
 
   <md-card-content>
     <p>{{lecture.description}}</p>
-    <app-unit *ngIf="lecture.units" [units]="lecture.units"></app-unit>
+    <button class="toggle" (click)="changeExpanded()" [class.opened]="expanded === true" md-icon-button>
+      <md-icon>arrow_drop_down</md-icon>
+    </button>
+    <div *ngIf="expanded === true" >
+      <app-unit *ngIf="lecture.units" [units]="lecture.units"></app-unit>
+    </div>
   </md-card-content>
 </md-card>

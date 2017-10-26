@@ -1,3 +1,5 @@
+@import "/../../variables";
+
 :host {
   position: relative;
 }
@@ -5,4 +7,13 @@
 .lecture-card {
   margin-bottom: 20px;
   position: relative;
+}
+
+.toggle {
+  color: map-get($app-primary,'default');
+  transition: transform 0.3s;
+  transform: rotate(-90deg);
+  &.opened {
+    transform: rotate(0);
+  }
 }
