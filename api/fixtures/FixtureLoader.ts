@@ -109,9 +109,9 @@ export class FixtureLoader {
     .then(() =>
       // Load courses
       Promise.all(
-        this.courses.map((courseFixtures) =>
+        this.courses.map((courseFixturesVar) =>
           Promise.all(
-            courseFixtures.data.map((course) => {
+            courseFixturesVar.data.map((course) => {
               // add random teacher as course admin
               // add 2-10 random students
               const tmp = <ICourseModel>course;
@@ -123,7 +123,7 @@ export class FixtureLoader {
                   tmp.students = tmp.students.concat(results[1]);
                   return tmp;
                 })
-                .then(() => new courseFixtures.Model(tmp).save());
+                .then(() => new courseFixturesVar.Model(tmp).save());
             })
           )
         )
