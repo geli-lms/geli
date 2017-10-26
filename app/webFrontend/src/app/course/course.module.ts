@@ -8,6 +8,7 @@ import {CourseNewComponent} from './course-new/course-new.component';
 import {LectureModule} from '../lecture/lecture.module';
 import {TeacherReportComponent} from './teacher-report/teacher-report.component';
 import {SharedModule} from '../shared/shared.module';
+import {CourseContainerComponent} from './course-container/course-container.component';
 
 @NgModule({
   imports: [
@@ -23,10 +24,12 @@ import {SharedModule} from '../shared/shared.module';
     CourseDetailComponent,
     CourseNewComponent,
     TeacherReportComponent,
+    CourseContainerComponent,
   ],
   providers: [],
   exports: [
-    CourseComponent
+    CourseComponent,
+    CourseContainerComponent
   ]
 })
 export class CourseModule {
