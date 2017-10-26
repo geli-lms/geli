@@ -21,7 +21,7 @@ describe('Unit', () => {
 
   describe(`POST ${BASE_URL}`, () => {
     it('should upload a video and return the created unit', (done) => {
-      User.findOne({email: 'teacher@test.local'})
+      User.findOne({email: 'teacher1@test.local'})
       .then((user) => {
         return Course.findOne({name: 'Introduction to web development'})
         .then((course) => ({user, course}));
