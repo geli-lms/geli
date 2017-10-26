@@ -12,6 +12,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {AceEditorModule} from 'ng2-ace-editor';
 import {FileUploadModule} from 'ng2-file-upload';
 import {UnitModule} from '../unit.module';
+import { FreeTextUnitEditorComponent } from './free-text-unit-form/free-text-unit-editor/free-text-unit-editor.component';
 
 @NgModule({
   imports: [
@@ -30,7 +31,8 @@ import {UnitModule} from '../unit.module';
     UnitFormComponent,
     UnitGeneralInfoFormComponent,
     FileUploadComponent,
-    VideoUploadComponent
+    VideoUploadComponent,
+    FreeTextUnitEditorComponent
   ],
   exports: [
     CodeKataUnitFormComponent,

@@ -5,7 +5,6 @@ import {FreeTextUnitService} from '../../../shared/services/data.service';
 import {FreeTextUnit} from '../../../models/FreeTextUnit';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
 import {UnitGeneralInfoFormComponent} from '../unit-general-info-form/unit-general-info-form.component';
-import {FreeTextUnitCoreComponent} from '../../free-text-unit/free-text-unit-core/free-text-unit-core.component';
 
 @Component({
   selector: 'app-free-text-unit-form',
@@ -21,8 +20,6 @@ export class FreeTextUnitFormComponent implements OnInit {
 
   @ViewChild(UnitGeneralInfoFormComponent)
   private generalInfo: UnitGeneralInfoFormComponent;
-  @ViewChild(FreeTextUnitCoreComponent)
-  private freeTextCore: FreeTextUnitCoreComponent;
 
   constructor(private freeTextUnitService: FreeTextUnitService,
               private snackBar: MdSnackBar) {
@@ -71,11 +68,8 @@ export class FreeTextUnitFormComponent implements OnInit {
     }
   }
 
-  onTabChange($event: any) {
-    if ($event.index === 1) {
-      // We are on the preview tab
-      this.freeTextCore.renderHtml();
-    }
+  openFullscreen(): void {
+    console.log("TODO: OPEN DIALOG")
   }
 
   private isModelNewObj(): boolean {
