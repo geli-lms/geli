@@ -1,7 +1,7 @@
-import {IFixture} from './IFixture';
-import {CodeKataUnit} from '../src/models/units/CodeKataUnit';
+import {IFixture} from '../IFixture';
+import {CodeKataUnit} from '../../src/models/units/CodeKataUnit';
 
-export const codeKataUnitFixtures: IFixture = {
+export const simpleCodeKataFixture: IFixture = {
   Model: CodeKataUnit,
   data: [
     {
