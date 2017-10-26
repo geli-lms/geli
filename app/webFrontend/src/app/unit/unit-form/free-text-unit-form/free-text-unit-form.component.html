@@ -9,6 +9,12 @@
         A Cheatsheet you can find
         <a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet" target="_blank">here</a>.
       </p>
+      <p>
+        <button md-raised-button color="secondary" (click)="openFullscreen()"
+                md-tooltip="Open markdown-editor as fullscreen">
+          Fullscreen
+        </button>
+      </p>
 
       <md-input-container>
         <textarea mdInput id="markdown" placeholder="Add Markdown here" cols="50" rows="6"
@@ -16,7 +22,7 @@
       </md-input-container>
     </md-tab>
     <md-tab label="Preview">
-      <p [innerHTML]="this.renderedMd"></p>
+      <app-free-text-unit-core [markdown]="this.model.markdown"></app-free-text-unit-core>
     </md-tab>
   </md-tab-group>
 

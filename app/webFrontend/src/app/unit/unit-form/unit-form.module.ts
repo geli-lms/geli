@@ -11,6 +11,7 @@ import {MaterialModule} from '@angular/material';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {AceEditorModule} from 'ng2-ace-editor';
 import {FileUploadModule} from 'ng2-file-upload';
+import {UnitModule} from '../unit.module';
 
 @NgModule({
   imports: [
@@ -19,7 +20,8 @@ import {FileUploadModule} from 'ng2-file-upload';
     ReactiveFormsModule,
     MaterialModule,
     AceEditorModule,
-    FileUploadModule
+    FileUploadModule,
+    UnitModule
   ],
   declarations: [
     CodeKataUnitFormComponent,

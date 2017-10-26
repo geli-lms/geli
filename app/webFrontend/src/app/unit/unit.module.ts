@@ -5,6 +5,7 @@ import {TaskUnitComponent} from './task-unit/task-unit.component';
 import {VideoUnitComponent} from './video-unit/video-unit.component';
 import {FileUnitComponent} from './file-unit/file-unit.component';
 import {FreeTextUnitComponent} from './free-text-unit/free-text-unit.component';
+import {FreeTextUnitCoreComponent} from './free-text-unit/free-text-unit-core/free-text-unit-core.component';
 import {CodeKataComponent} from './code-kata-unit/code-kata-unit.component';
 
 import {MaterialModule} from '@angular/material';
@@ -26,6 +27,7 @@ import {UnitComponent} from './unit.component';
     CodeKataComponent,
     FileUnitComponent,
     FreeTextUnitComponent,
+    FreeTextUnitCoreComponent,
     TaskUnitComponent,
     VideoUnitComponent,
   ],
@@ -35,6 +37,7 @@ import {UnitComponent} from './unit.component';
     CodeKataComponent,
     FileUnitComponent,
     FreeTextUnitComponent,
+    FreeTextUnitCoreComponent,
     TaskUnitComponent,
     VideoUnitComponent,
   ],
