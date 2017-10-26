@@ -14,33 +14,33 @@
 
   <span *ngIf="isLoggedIn()">
 
-  <button md-button routerLink="/profile">
-      <img class="avatar" src="{{userService.user.getGravatarURL(30)}}">
-      {{ this.userService.user.profile.firstName }}
-  </button>
+    <button md-button routerLink="/profile">
+        <img class="avatar" src="{{userService.user.getGravatarURL(30)}}">
+        {{ this.userService.user.profile.firstName }}
+    </button>
 
-  <button md-icon-button [mdMenuTriggerFor]="menu">
-    <md-icon>more_vert</md-icon>
-  </button>
-  <md-menu #menu="mdMenu">
-    <!--<button md-menu-item>-->
-    <!--<md-icon>favorite</md-icon>-->
-    <!--<span>Favorites</span>-->
-    <!--</button>-->
-    <button md-menu-item *ngIf="isLoggedIn() && isAdmin()" routerLink="/admin" routerLinkActive="active">
-      <md-icon>settings</md-icon>
-      <span>Admin</span>
+    <button md-icon-button [mdMenuTriggerFor]="menu">
+      <md-icon>more_vert</md-icon>
     </button>
-    <button md-menu-item *ngIf="isLoggedIn()" routerLink="/about" routerLinkActive="active">
-      <md-icon>info</md-icon>
-      <span>About</span>
-    </button>
-    <button md-menu-item *ngIf="isLoggedIn()" (click)="logout()" routerLink="" routerLinkActive="active">
-      <md-icon>exit_to_app</md-icon>
-      <span>Logout</span>
-    </button>
-  </md-menu>
-</span>
+    <md-menu #menu="mdMenu">
+      <!--<button md-menu-item>-->
+      <!--<md-icon>favorite</md-icon>-->
+      <!--<span>Favorites</span>-->
+      <!--</button>-->
+      <button md-menu-item *ngIf="isLoggedIn() && isAdmin()" routerLink="/admin" routerLinkActive="active">
+        <md-icon>settings</md-icon>
+        <span>Admin</span>
+      </button>
+      <button md-menu-item *ngIf="isLoggedIn()" routerLink="/about" routerLinkActive="active">
+        <md-icon>info</md-icon>
+        <span>About</span>
+      </button>
+      <button md-menu-item *ngIf="isLoggedIn()" (click)="logout()" routerLink="" routerLinkActive="active">
+        <md-icon>exit_to_app</md-icon>
+        <span>Logout</span>
+      </button>
+    </md-menu>
+  </span>
 </md-toolbar>
 
 <md-progress-bar *ngIf="showProgressBar" mode="indeterminate"></md-progress-bar>
