@@ -45,14 +45,20 @@ export class CodeKataComponent implements OnInit {
   }
 
   ngAfterViewInit() {
+    this.setOptions();
+  }
+
+  setOptions() {
     this.definitionEditor.setOptions({
-      maxLines: Infinity
+      maxLines: Infinity,
     });
     this.codeEditor.setOptions({
-      maxLines: Infinity
+      maxLines: Infinity,
+      firstLineNumber: this.codeKata.definition.split('\n').length || 1,
     });
     this.testEditor.setOptions({
-      maxLines: Infinity
+      maxLines: Infinity,
+      firstLineNumber: (this.codeKata.definition.split('\n').length + this.progress.code.split('\n').length) || 1,
     });
   }
 
@@ -87,6 +93,10 @@ export class CodeKataComponent implements OnInit {
     });
   }
 
+  onUserInput() {
+    this.setOptions();
+  }
+
   // refactor this to use the same as in code-kata-unit-form
   validate() {
     const codeToTest: string = this.codeKata.definition + '\n' + this.progress.code + '\n' + this.codeKata.test;
@@ -109,6 +119,7 @@ export class CodeKataComponent implements OnInit {
       this.logs += msg + '\n';
       origErrorLogger(msg);
     };
+
 
     // tslint:disable-next-line:no-eval
     const result = eval(codeToTest);
