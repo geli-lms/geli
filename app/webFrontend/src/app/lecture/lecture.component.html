@@ -1,13 +1,14 @@
 <md-card class="lecture-card" *ngIf="lecture">
-  <md-card-header>
+  <md-card-header class="clickable" (click)="changeExpanded()">
     <md-card-title><h2>{{lecture.name}}</h2></md-card-title>
+    <span class="fill-space"></span>
+    <button class="toggle" (click)="changeExpanded()" [class.opened]="expanded === true" md-icon-button>
+      <md-icon>arrow_drop_down</md-icon>
+    </button>
   </md-card-header>
 
   <md-card-content>
     <p>{{lecture.description}}</p>
-    <button class="toggle" (click)="changeExpanded()" [class.opened]="expanded === true" md-icon-button>
-      <md-icon>arrow_drop_down</md-icon>
-    </button>
     <div *ngIf="expanded === true" >
       <app-unit *ngIf="lecture.units" [units]="lecture.units"></app-unit>
     </div>
