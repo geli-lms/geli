@@ -1,11 +1,12 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {IFreeTextUnit} from '../../../../../../../shared/models/units/IFreeTextUnit';
-import {MdSnackBar} from '@angular/material';
+import {MdDialog, MdSnackBar} from '@angular/material';
 import {FreeTextUnitService} from '../../../shared/services/data.service';
 import {FreeTextUnit} from '../../../models/FreeTextUnit';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
 import {UnitGeneralInfoFormComponent} from '../unit-general-info-form/unit-general-info-form.component';
 import {FreeTextUnitEditorComponent} from "./free-text-unit-editor/free-text-unit-editor.component";
+import {FreeTextUnitEditorDialog} from "./free-text-unit-editor/free-text-unit-editor-dialog/free-text-unit-editor.dialog";
 
 @Component({
   selector: 'app-free-text-unit-form',
@@ -25,7 +26,8 @@ export class FreeTextUnitFormComponent implements OnInit {
   private freeTextEditor: FreeTextUnitEditorComponent;
 
   constructor(private freeTextUnitService: FreeTextUnitService,
-              private snackBar: MdSnackBar) {
+              private snackBar: MdSnackBar,
+              public dialog: MdDialog) {
   }
 
   ngOnInit() {
@@ -73,7 +75,20 @@ export class FreeTextUnitFormComponent implements OnInit {
   }
 
   openFullscreen(): void {
-    console.log("TODO: OPEN DIALOG")
+    // TODO: Max-Width/-Height comes with later Material version
+    // maxWidth: '100vw',
+    // maxHeight: '100vh',
+    let dialogRef = this.dialog.open(FreeTextUnitEditorDialog, {
+      width: '94vw',
+      height: '94vh',
+      data: {
+        markdown: this.freeTextEditor.markdown ? this.freeTextEditor.markdown : ''
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.model.markdown = result;
+    });
   }
 
   private isModelNewObj(): boolean {

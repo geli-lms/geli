@@ -4,10 +4,9 @@
   <app-free-text-unit-editor [(markdown)]="this.model.markdown"></app-free-text-unit-editor>
 
   <div>
-      <button md-raised-button color="secondary" (click)="openFullscreen()"
-              md-tooltip="Open markdown-editor as fullscreen">
+      <button md-button md-raised-button color="secondary" (click)="openFullscreen()" md-tooltip="Open markdown-editor as fullscreen">
         Fullscreen
       </button>
-    <button md-raised-button color="primary" class="add-unit" (click)="saveUnit()">Save</button>
+    <button md-button md-raised-button color="primary" class="add-unit" (click)="saveUnit()">Save</button>
   </div>
 </div>
