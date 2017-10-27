@@ -5,6 +5,7 @@ import {FreeTextUnitService} from '../../../shared/services/data.service';
 import {FreeTextUnit} from '../../../models/FreeTextUnit';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
 import {UnitGeneralInfoFormComponent} from '../unit-general-info-form/unit-general-info-form.component';
+import {FreeTextUnitEditorComponent} from "./free-text-unit-editor/free-text-unit-editor.component";
 
 @Component({
   selector: 'app-free-text-unit-form',
@@ -20,6 +21,8 @@ export class FreeTextUnitFormComponent implements OnInit {
 
   @ViewChild(UnitGeneralInfoFormComponent)
   private generalInfo: UnitGeneralInfoFormComponent;
+  @ViewChild(FreeTextUnitEditorComponent)
+  private freeTextEditor: FreeTextUnitEditorComponent;
 
   constructor(private freeTextUnitService: FreeTextUnitService,
               private snackBar: MdSnackBar) {
@@ -41,6 +44,7 @@ export class FreeTextUnitFormComponent implements OnInit {
       ...this.model,
       name: this.generalInfo.form.value.name,
       description: this.generalInfo.form.value.description,
+      markdown: this.freeTextEditor.markdown
     };
 
     // Checks if we have to create a new unit or update an existing
