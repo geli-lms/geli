@@ -14,11 +14,11 @@
 
   <span *ngIf="isLoggedIn()">
 
-  <button md-button routerLink="/profile">
-      <img class="avatar" src="{{userService.user.getGravatarURL(30)}}">
-      {{ this.userService.user.profile.firstName }}
-  </button>
-
+    <button md-button routerLink="/profile">
+        <img class="avatar" src="{{userService.user.getGravatarURL(30)}}">
+        {{ this.userService.user.profile.firstName }}
+    </button>
+  </span>
   <button md-icon-button [mdMenuTriggerFor]="menu">
     <md-icon>more_vert</md-icon>
   </button>
@@ -31,7 +31,7 @@
       <md-icon>settings</md-icon>
       <span>Admin</span>
     </button>
-    <button md-menu-item *ngIf="isLoggedIn()" routerLink="/about" routerLinkActive="active">
+    <button md-menu-item routerLink="/about" routerLinkActive="active">
       <md-icon>info</md-icon>
       <span>About</span>
     </button>
@@ -40,7 +40,6 @@
       <span>Logout</span>
     </button>
   </md-menu>
-</span>
 </md-toolbar>
 
 <md-progress-bar *ngIf="showProgressBar" mode="indeterminate"></md-progress-bar>
