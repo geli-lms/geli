@@ -6,6 +6,7 @@ import {ActivationComponent} from './activation/activation.component';
 import {ResetComponent} from './reset/reset.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {SharedModule} from '../shared/shared.module';
+import {RouterModule} from '@angular/router';
 
 @NgModule({
   imports: [
@@ -13,6 +14,7 @@ import {SharedModule} from '../shared/shared.module';
     SharedModule,
     FormsModule,
     ReactiveFormsModule,
+    RouterModule
   ],
   declarations: [
     LoginComponent,

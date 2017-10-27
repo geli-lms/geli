@@ -5,6 +5,7 @@ import {LectureComponent} from './lecture.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {UnitModule} from '../unit/unit.module';
 import {SharedModule} from '../shared/shared.module';
+import {RouterModule} from '@angular/router';
 
 @NgModule({
   imports: [
@@ -12,7 +13,8 @@ import {SharedModule} from '../shared/shared.module';
     FormsModule,
     ReactiveFormsModule,
     SharedModule,
-    UnitModule
+    UnitModule,
+    RouterModule
   ],
   declarations: [
     LectureComponent,

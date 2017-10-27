@@ -11,6 +11,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {FileUploadModule} from 'ng2-file-upload';
 import {UnitComponent} from './unit.component';
 import {SharedModule} from '../shared/shared.module';
+import {RouterModule} from '@angular/router';
 
 @NgModule({
   imports: [
@@ -19,7 +20,8 @@ import {SharedModule} from '../shared/shared.module';
     FormsModule,
     ReactiveFormsModule,
     FileUploadModule,
-    AceEditorModule
+    AceEditorModule,
+    RouterModule
   ],
   declarations: [
     UnitComponent,
