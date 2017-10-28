@@ -2,6 +2,7 @@ import {Component, Input, OnInit, EventEmitter, Output, OnDestroy} from '@angula
 import {DragulaService} from 'ng2-dragula';
 import {IUser} from '../../../../../../../shared/models/IUser';
 import {FormControl} from '@angular/forms';
+import {DialogService} from '../../../shared/services/dialog.service';
 
 @Component({
   selector: 'app-course-user-list',
@@ -11,8 +12,8 @@ import {FormControl} from '@angular/forms';
 export class CourseUserListComponent implements OnInit, OnDestroy {
 
   @Input() courseId;
-  @Input() usersInCourse;
-  @Input() users;
+  @Input() usersInCourse: IUser[];
+  @Input() users: IUser[];
   @Input() dragulaBagId;
 
   currentMember: IUser = null;
@@ -27,7 +28,8 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
     this.currentMember = member;
   }
 
-  constructor(private dragula: DragulaService) {
+  constructor(private dragula: DragulaService,
+              public dialogService: DialogService) {
     this.userCtrl = new FormControl();
     this.filteredStates = this.userCtrl.valueChanges
     .startWith(null)
@@ -71,10 +73,13 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
     return resArray.length > 0;
   }
 
-  /**
-   * @param id
-   */
-  removeUser(id: string) {
-    this.onRemove.emit(id);
+  removeUser() {
+    this.dialogService
+      .confirmRemove(this.currentMember.role, this.currentMember.email, 'course')
+      .subscribe(res => {
+        if (res) {
+          this.onRemove.emit(this.currentMember._id);
+        }
+      });
   }
 }

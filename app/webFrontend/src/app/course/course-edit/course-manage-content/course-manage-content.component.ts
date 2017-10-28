@@ -116,7 +116,7 @@ export class CourseManageContentComponent implements OnInit, OnDestroy {
 
   deleteUnit(unit: IUnit) {
     this.dialogService
-    .delete('unit', unit.type)
+    .confirmDelete('unit', unit.type)
     .subscribe(res => {
       if (res) {
         this.showProgress.toggleLoadingGlobal(true);
@@ -137,7 +137,7 @@ export class CourseManageContentComponent implements OnInit, OnDestroy {
 
   deleteLecture(lecture: ILecture) {
     this.dialogService
-    .delete('lecture', lecture.name)
+    .confirmDelete('lecture', lecture.name)
     .subscribe(res => {
       if (res) {
         this.showProgress.toggleLoadingGlobal(true);
