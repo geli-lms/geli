@@ -24,6 +24,27 @@ export class CodeKataUnitFormComponent implements OnInit {
   @ViewChild('codeEditor') editor;
 
   areaSeperator = '//####################';
+
+  // Example code Kata
+  example = {
+    definition: '// Task: Manipulate the targetSet, so it only contains the values "Hello" and "CodeKata"' +
+      '\n' +
+      '\nlet targetSet = new Set(["Hello", "there"]);',
+    code: 'targetSet.add("CodeKata");' +
+      '\ntargetSet.delete("there");',
+    test: 'validate();' +
+      '\n' +
+      '\nfunction validate() {' +
+      '\n\tlet result = targetSet.has("Hello") && targetSet.has("CodeKata") && targetSet.size === 2;' +
+      '\n\tif (result === true) {' +
+      '\n\t\tconsole.log("Well done, you solved this Kata");' +
+      '\n\t} else {' +
+      '\n\t\tconsole.log("Sorry mate, you need to try harder");' +
+      '\n\t}' +
+      '\n\treturn result;' +
+      '\n}'
+  };
+
   logs: string;
 
   constructor(private codeKataUnitService: CodeKataUnitService,
@@ -33,6 +54,12 @@ export class CodeKataUnitFormComponent implements OnInit {
   ngOnInit() {
     if (!this.model) {
       this.model = new CodeKataUnit(this.course._id);
+      this.model.code =
+        this.example.definition
+        + '\n\n' + this.areaSeperator + '\n\n'
+        + this.example.code
+        + '\n\n' + this.areaSeperator + '\n\n'
+        + this.example.test;
     } else {
       this.model.code =
         this.model.definition
@@ -40,7 +67,6 @@ export class CodeKataUnitFormComponent implements OnInit {
         + this.model.code
         + '\n\n' + this.areaSeperator + '\n\n'
         + this.model.test;
-
       this.model.definition = undefined;
       this.model.test = undefined;
     }
