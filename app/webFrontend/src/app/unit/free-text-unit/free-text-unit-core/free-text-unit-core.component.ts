@@ -8,7 +8,7 @@ import {MarkdownService} from '../../../shared/services/markdown.service';
 })
 export class FreeTextUnitCoreComponent implements OnInit {
   @Input() markdown: string;
-  private renderedHtml: string;
+  renderedHtml: string;
 
   constructor(private mdService: MarkdownService) {
   }
