@@ -1,4 +1,7 @@
 let dbName = process.env.DB_NAME || 'geli';
+if (process.env.NODE_ENV === 'test') {
+  dbName = 'test';
+}
 export default {
   // Secret key for JWT signing and encryption
   secret: process.env.SECRET || 'notSoSecret234oi23o423ooqnafsnaaslfj',
