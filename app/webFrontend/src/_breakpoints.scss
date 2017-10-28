@@ -1,0 +1,22 @@
+$bp-width_sm: 50em;
+$bp-width_md: 75em;
+$bp-width_bg: 100em;
+
+@mixin bp-sm {
+  @media only screen and (max-width: $bp-width_sm) {
+    @content;
+  }
+}
+
+@mixin bp-md {
+  @media only screen and (max-width: $bp-width_md) {
+    @content;
+  }
+}
+
+@mixin bp-bg {
+  @media only screen and (max-width: $bp-width_bg) {
+    @content;
+  }
+}
+
