@@ -72,25 +72,25 @@ export class CodeKataComponent implements OnInit {
       this.progress.unit = this.codeKata._id;
       this.progress.user = this.userService.user._id;
       this.codeKataProgressService.createItem(this.progress)
-      .then(() => this.snackBar.open('Progress has been saved', '', {duration: 3000}))
-      .catch(() => this.snackBar.open('An unknown error occurred', '', {duration: 3000}));
+        .then(() => this.snackBar.open('Progress has been saved', '', {duration: 3000}))
+        .catch(() => this.snackBar.open('An unknown error occurred', '', {duration: 3000}));
     } else {
       this.codeKataProgressService.updateItem(this.progress)
-      .then(() => this.snackBar.open('Progress has been updated', '', {duration: 3000}))
-      .catch(() => this.snackBar.open('An unknown error occurred', '', {duration: 3000}));
+        .then(() => this.snackBar.open('Progress has been updated', '', {duration: 3000}))
+        .catch(() => this.snackBar.open('An unknown error occurred', '', {duration: 3000}));
     }
   }
 
   private loadProgress() {
     this.progressService.getUserProgress(this.userService.user._id)
-    .then((progress: any) => {
-      for (const prop in progress) {
-        if (progress[prop].unit === this.codeKata._id) {
-          this.progress = progress[prop];
-          break;
+      .then((progress: any) => {
+        for (const prop in progress) {
+          if (progress[prop].unit === this.codeKata._id) {
+            this.progress = progress[prop];
+            break;
+          }
         }
-      }
-    });
+      });
   }
 
   onUserInput() {
@@ -111,21 +111,21 @@ export class CodeKataComponent implements OnInit {
       this.logs += msg + '\n';
       origLogger(msg);
     };
-    const origErrorLogger = window.console.error;
-    window.console.error = (msg) => {
-      if (this.logs === undefined) {
-        this.logs = '';
-      }
-      this.logs += msg + '\n';
-      origErrorLogger(msg);
-    };
 
+    let result = false;
+    try {
+      // tslint:disable-next-line:no-eval
+      result = eval(codeToTest);
+    } catch (e) {
+      const err = e.constructor('Error in Evaled Script: ' + e.message);
+      err.lineNumber = e.lineNumber - err.lineNumber;
 
-    // tslint:disable-next-line:no-eval
-    const result = eval(codeToTest);
+      const msg = 'Error: ' + e.message; //  + ' (line: ' + err.lineNumber + ')';
+      console.log(msg);
+      console.error(err);
+    }
 
     window.console.log = origLogger;
-    window.console.error = origErrorLogger;
 
     if (result === true || result === undefined) {
       this.snackBar.open('Success', '', {duration: 3000});

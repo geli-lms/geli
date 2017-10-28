@@ -102,20 +102,21 @@ export class CodeKataUnitFormComponent implements OnInit {
       this.logs += msg + '\n';
       origLogger(msg);
     };
-    const origErrorLogger = window.console.error;
-    window.console.error = (msg) => {
-      if (this.logs === undefined) {
-        this.logs = '';
-      }
-      this.logs += msg + '\n';
-      origErrorLogger(msg);
-    };
 
-    // tslint:disable-next-line:no-eval
-    const result = eval(codeToTest);
+    let result = false;
+    try {
+      // tslint:disable-next-line:no-eval
+      result = eval(codeToTest);
+    } catch (e) {
+      const err = e.constructor('Error in Evaled Script: ' + e.message);
+      err.lineNumber = e.lineNumber - err.lineNumber;
+
+      const msg = 'Error: ' + e.message; //  + ' (line: ' + err.lineNumber + ')';
+      console.log(msg);
+      console.error(err);
+    }
 
     window.console.log = origLogger;
-    window.console.error = origErrorLogger;
 
     if (result === true || result === undefined) {
       this.snackBar.open('Success', '', {duration: 3000});
