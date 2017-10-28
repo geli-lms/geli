@@ -60,6 +60,8 @@ export class CodeKataUnitFormComponent implements OnInit {
         + this.example.code
         + '\n\n' + this.areaSeperator + '\n\n'
         + this.example.test;
+      this.model.definition = undefined;
+      this.model.test = undefined;
     } else {
       this.model.code =
         this.model.definition
