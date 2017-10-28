@@ -6,7 +6,7 @@
     </div>
     <div class="profile">
       <span class="user-icon" [grav]="student.email"></span>
-      <h3 class="name">{{student.profile.firstName}} {{student.profile.lastName}}</h3>
+      <h3 class="name"><a [routerLink]="['/profile', student._id]">{{student.profile.firstName}} {{student.profile.lastName}}</a></h3>
       <div class="user-data">
         <label>E-Mail:</label>
         <span>{{student.email}}</span>

@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {IUser} from '../../../../../../shared/models/IUser';
 import {UserDataService} from '../../shared/services/data.service';
 import {ActivatedRoute} from '@angular/router';
+import {UserService} from '../../shared/services/user.service';
 
 @Component({
   selector: 'app-user-details',
@@ -14,12 +15,17 @@ export class UserDetailsComponent implements OnInit {
   user: IUser;
 
   constructor(private route: ActivatedRoute,
+              public userService: UserService,
               public userDataService: UserDataService) {
   }
 
   ngOnInit() {
     this.route.params.subscribe(params => {
       this.userId = decodeURIComponent(params['id']);
+
+      if (this.userId === 'undefined') {
+        this.userId = this.userService.user._id;
+      }
     });
     this.getUserData();
   }

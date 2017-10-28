@@ -1,0 +1,17 @@
+<md-tab-group (selectChange)="changedTab($event)">
+  <md-tab label="Upload image">
+    <input type="file" ng2FileSelect [uploader]="uploader" placeholder="Upload picture"/>
+    <button md-raised-button color="primary">Upload picture</button>
+  </md-tab>
+  <md-tab id="webcam-tab" label="Take webcam picture">
+    <div class="camera">
+      <video #webcam>No video stream is available.</video>
+      <button md-raised-button color="primary">Take picture</button>
+    </div>
+    <div class="preview">
+      <img id="picture">
+    </div>
+    <canvas id="canvas"></canvas>
+  </md-tab>
+  <button md-raised-button color="warn">Cancel</button>
+</md-tab-group>
