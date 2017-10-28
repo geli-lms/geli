@@ -12,7 +12,8 @@ export class FreeTextUnitEditorComponent implements OnInit {
   @ViewChild(FreeTextUnitCoreComponent)
   private freeTextCore: FreeTextUnitCoreComponent;
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit() {
   }

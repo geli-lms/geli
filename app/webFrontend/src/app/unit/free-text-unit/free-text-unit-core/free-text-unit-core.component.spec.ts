@@ -1,6 +1,6 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { FreeTextUnitCoreComponent } from './free-text-unit-core.component';
+import {FreeTextUnitCoreComponent} from './free-text-unit-core.component';
 
 describe('FreeTextUnitCoreComponent', () => {
   let component: FreeTextUnitCoreComponent;
@@ -8,9 +8,9 @@ describe('FreeTextUnitCoreComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ FreeTextUnitCoreComponent ]
+      declarations: [FreeTextUnitCoreComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

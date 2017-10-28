@@ -1,6 +1,6 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { FreeTextUnitEditorDialog } from './free-text-unit-editor.dialog';
+import {FreeTextUnitEditorDialog} from './free-text-unit-editor.dialog';
 
 describe('FreeTextUnitEditorDialog', () => {
   let component: FreeTextUnitEditorDialog;
@@ -8,9 +8,9 @@ describe('FreeTextUnitEditorDialog', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ FreeTextUnitEditorDialog ]
+      declarations: [FreeTextUnitEditorDialog]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

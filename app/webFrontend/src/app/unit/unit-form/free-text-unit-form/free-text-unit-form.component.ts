@@ -5,8 +5,8 @@ import {FreeTextUnitService} from '../../../shared/services/data.service';
 import {FreeTextUnit} from '../../../models/FreeTextUnit';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
 import {UnitGeneralInfoFormComponent} from '../unit-general-info-form/unit-general-info-form.component';
-import {FreeTextUnitEditorComponent} from "./free-text-unit-editor/free-text-unit-editor.component";
-import {FreeTextUnitEditorDialog} from "./free-text-unit-editor/free-text-unit-editor-dialog/free-text-unit-editor.dialog";
+import {FreeTextUnitEditorComponent} from './free-text-unit-editor/free-text-unit-editor.component';
+import {FreeTextUnitEditorDialog} from './free-text-unit-editor/free-text-unit-editor-dialog/free-text-unit-editor.dialog';
 
 @Component({
   selector: 'app-free-text-unit-form',
@@ -53,24 +53,24 @@ export class FreeTextUnitFormComponent implements OnInit {
     if (this.isModelNewObj()) {
       // Create new one
       this.freeTextUnitService.createItem({model: this.model, lectureId: this.lectureId})
-      .then(
-        () => {
-          this.snackBar.open('Free text unit saved', '', {duration: 3000});
-          this.onDone();
-        },
-        error => console.log(error)
-      );
+        .then(
+          () => {
+            this.snackBar.open('Free text unit saved', '', {duration: 3000});
+            this.onDone();
+          },
+          error => console.log(error)
+        );
     } else {
       // Update existing
       delete this.model._course;
       this.freeTextUnitService.updateItem(this.model)
-      .then(
-        () => {
-          this.snackBar.open('Free text unit saved', 'Update', {duration: 2000});
-          this.onDone();
-        },
-        error => console.log(error)
-      );
+        .then(
+          () => {
+            this.snackBar.open('Free text unit saved', 'Update', {duration: 2000});
+            this.onDone();
+          },
+          error => console.log(error)
+        );
     }
   }
 
@@ -78,7 +78,7 @@ export class FreeTextUnitFormComponent implements OnInit {
     // TODO: Max-Width/-Height comes with later Material version
     // maxWidth: '100vw',
     // maxHeight: '100vh',
-    let dialogRef = this.dialog.open(FreeTextUnitEditorDialog, {
+    const dialogRef = this.dialog.open(FreeTextUnitEditorDialog, {
       width: '94vw',
       height: '94vh',
       data: {

@@ -13,7 +13,8 @@ import {AceEditorModule} from 'ng2-ace-editor';
 import {FileUploadModule} from 'ng2-file-upload';
 import {UnitModule} from '../unit.module';
 import {FreeTextUnitEditorComponent} from './free-text-unit-form/free-text-unit-editor/free-text-unit-editor.component';
-import {FreeTextUnitEditorDialog} from './free-text-unit-form/free-text-unit-editor/free-text-unit-editor-dialog/free-text-unit-editor.dialog';
+import {FreeTextUnitEditorDialog} from
+  './free-text-unit-form/free-text-unit-editor/free-text-unit-editor-dialog/free-text-unit-editor.dialog';
 
 @NgModule({
   imports: [

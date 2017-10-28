@@ -10,7 +10,8 @@ export class FreeTextUnitCoreComponent implements OnInit {
   @Input() markdown: string;
   private renderedHtml: string;
 
-  constructor(private mdService: MarkdownService) {}
+  constructor(private mdService: MarkdownService) {
+  }
 
   ngOnInit() {
     this.renderHtml();

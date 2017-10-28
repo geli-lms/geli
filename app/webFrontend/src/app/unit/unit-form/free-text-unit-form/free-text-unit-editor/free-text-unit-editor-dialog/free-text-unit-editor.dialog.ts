@@ -1,6 +1,6 @@
 import {Component, Inject, OnInit, ViewChild} from '@angular/core';
-import {MD_DIALOG_DATA, MdDialogRef} from "@angular/material";
-import {FreeTextUnitEditorComponent} from "../free-text-unit-editor.component";
+import {MD_DIALOG_DATA, MdDialogRef} from '@angular/material';
+import {FreeTextUnitEditorComponent} from '../free-text-unit-editor.component';
 
 @Component({
   selector: 'app-free-text-unit-editor-dialog',
