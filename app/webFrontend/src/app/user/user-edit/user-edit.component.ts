@@ -7,6 +7,7 @@ import {IUser} from '../../../../../../shared/models/IUser';
 import {UserService} from '../../shared/services/user.service';
 import {ShowProgressService} from '../../shared/services/show-progress.service';
 import {matchPasswords} from '../../shared/validators/validators';
+import {DialogService} from '../../shared/services/dialog.service';
 
 @Component({
   selector: 'app-user-edit',
@@ -24,6 +25,7 @@ export class UserEditComponent implements OnInit {
               private userDataService: UserDataService,
               private showProgress: ShowProgressService,
               private formBuilder: FormBuilder,
+              public dialogService: DialogService,
               public snackBar: MdSnackBar) {
     this.generateForm();
     this.getUserData();
@@ -108,6 +110,15 @@ export class UserEditComponent implements OnInit {
       password: [''],
       confirmPassword: ['']
     }, {validator: matchPasswords('password', 'confirmPassword')});
+  }
+
+  openAddPictureDialog() {
+    this.dialogService.upload(this.user)
+      .subscribe(res => {
+      if (res) {
+        const debug = 0;
+      }
+    });
   }
 
   private navigateBack() {

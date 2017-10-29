@@ -91,20 +91,21 @@ button {
 }
 
 .firstName {
-  padding-left: 30px;
+  padding-left: 5%;
   display: inline-block;
+  flex: 1;
 }
 
 .lastName {
-  padding-left: 3px;
+  flex: 1;
 }
 
 .uid {
-  padding-left: 40px;
+  flex: 1;
 }
 
 .email {
-  padding-left: 40px;
+  flex: 1;
 }
 
 .gu-mirror {

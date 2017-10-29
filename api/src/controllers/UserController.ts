@@ -1,6 +1,6 @@
 import {
   Body, JsonController, UseBefore, Get, Param, Put, Delete, Authorized, CurrentUser,
-  BadRequestError, ForbiddenError
+  BadRequestError, ForbiddenError, UploadedFile
 } from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 
@@ -54,7 +54,6 @@ export class UserController {
           throw new BadRequestError('This mail address is already in use.');
         } else {
           return User.findById(id);
-          // return User.findByIdAndUpdate(id, user, {'new': true});
         }
       })
       .then((oldUser: IUserModel) => {
@@ -101,5 +100,10 @@ export class UserController {
   @Delete('/:id')
   deleteUser(@Param('id') id: string) {
     return User.findByIdAndRemove(id);
+  }
+
+  @Put(':id/picture')
+  addUserPicture(@UploadedFile('file') file: any, @Param('id') id: string) {
+    const debug = 0;
   }
 }

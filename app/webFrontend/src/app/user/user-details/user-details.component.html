@@ -1,5 +1,6 @@
 <h1>Profile</h1>
-
+<app-user-profile [user]="user" [userId]="userId"></app-user-profile>
+<span class="user-icon" [grav]="user?.email"></span>
 <h2>{{user?.profile.firstName}} {{user?.profile.lastName}}</h2>
 <p>
   <strong>E-Mail:</strong> {{user?.email}}
@@ -8,8 +9,8 @@
   <strong>Matrikelnummer:</strong> {{user?.uid}}
 </p>
 
-<p>
-  <button md-raised-button color="primary" routerLink="/profile/edit" routerLinkActive="active">
+<p *ngIf="userService.user._id === userId || userService.isAdmin()">
+  <button md-raised-button color="primary" routerLink="/profile/{{user?._id}}/edit" routerLinkActive="active">
     <md-icon>edit</md-icon>
     Edit profile
   </button>

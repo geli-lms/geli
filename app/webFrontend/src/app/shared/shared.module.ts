@@ -15,7 +15,7 @@ import {UnitMenuComponent} from './components/unit-menu/unit-menu.component';
   ],
   declarations: [
     GravatarDirective,
-    UnitMenuComponent,
+    UnitMenuComponent
   ],
   exports: [
     GravatarDirective,
