@@ -28,7 +28,7 @@ export class FreeTextUnitEditorComponent implements OnInit {
 
   ngAfterViewInit() {
     this.editor.setOptions({
-      maxLines: 100
+      maxLines: 9999
     });
   }
 
