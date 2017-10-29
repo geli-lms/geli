@@ -10,7 +10,7 @@ describe('FreeTextUnitFormComponent', () => {
     TestBed.configureTestingModule({
       declarations: [FreeTextUnitFormComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
