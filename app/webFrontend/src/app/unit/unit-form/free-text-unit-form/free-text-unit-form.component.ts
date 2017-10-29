@@ -37,17 +37,19 @@ export class FreeTextUnitFormComponent implements OnInit {
   }
 
   saveUnit() {
-    // If markdown was left empty, define field for db-consistency
-    if (typeof this.model.markdown === 'undefined') {
-      this.model.markdown = '';
-    }
-
     this.model = {
       ...this.model,
       name: this.generalInfo.form.value.name,
       description: this.generalInfo.form.value.description,
       markdown: this.freeTextEditor.markdown
     };
+
+    console.log(this.model.markdown);
+
+    // If markdown was left empty, define field for db-consistency
+    if (typeof this.model.markdown === 'undefined') {
+      this.model.markdown = '';
+    }
 
     // Checks if we have to create a new unit or update an existing
     if (this.isModelNewObj()) {

@@ -3,12 +3,3 @@
   // Every toolbar row uses a flexbox row layout.
   flex: 1 1 auto;
 }
-
-// Should work but doesn't..
-app-free-text-unit-editor .mat-tab-body md-input-container.mat-input-container {
-  width: 100%;
-
-  textarea.mat-input-element {
-    height: 20rem;
-  }
-}
