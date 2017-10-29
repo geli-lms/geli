@@ -11,6 +11,7 @@ import {MaterialModule} from '@angular/material';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {FileUploadModule} from 'ng2-file-upload';
 import {UnitComponent} from './unit.component';
+import {RouterModule} from '@angular/router';
 
 @NgModule({
   imports: [
@@ -19,7 +20,8 @@ import {UnitComponent} from './unit.component';
     FormsModule,
     ReactiveFormsModule,
     FileUploadModule,
-    AceEditorModule
+    AceEditorModule,
+    RouterModule
   ],
   declarations: [
     UnitComponent,

@@ -30,8 +30,10 @@ fi
 cd ..
 
 echo "+ sending lcov file to coveralls"
-sed -i 's/bin\///g' api/coverage/lcov.info && cat api/coverage/lcov.info | $MODULE_PATH/$BIN_PATH/coveralls
-# cat api/coverage/lcov.info | $MODULE_PATH/$BIN_PATH/coveralls.js -v
+# since we are using typescript and remap our coverage data to the ts files we need to remove the "build" part of all paths
+# this could easily be done with some sed magic
+# search for "api/build/src" and replace it with "api/src"
+sed "s/api\/build\/src/api\/src/g" api/coverage/lcov.info | $MODULE_PATH/$BIN_PATH/coveralls -v
 
 echo "+ INFO: Currently only the api-coverdata are generated and send"
 
