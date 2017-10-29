@@ -5,6 +5,7 @@ import {MaterialModule} from '@angular/material';
 import {GravatarDirective} from './directives/gravatar.directive';
 import {DialogModule} from './modules/dialog/dialog.module';
 import {UnitMenuComponent} from './components/unit-menu/unit-menu.component';
+import { UserImageDirective } from './directives/user-image.directive';
 
 @NgModule({
   imports: [
@@ -15,12 +16,14 @@ import {UnitMenuComponent} from './components/unit-menu/unit-menu.component';
   ],
   declarations: [
     GravatarDirective,
-    UnitMenuComponent
+    UnitMenuComponent,
+    UserImageDirective
   ],
   exports: [
     GravatarDirective,
     DialogModule,
-    UnitMenuComponent
+    UnitMenuComponent,
+    UserImageDirective
   ]
 })
 export class SharedModule {

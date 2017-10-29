@@ -30,10 +30,13 @@
     </div>
   </md-input-container>
 
-  <button md-raised-button color="primary" class="md-button" (click)="openAddPictureDialog()">Add picture</button>
-
   <button md-raised-button color="accent" class="md-button" type="submit">Save</button>
   <button md-raised-button color="warn" class="md-button" routerLink="/profile" routerLinkActive="active">
     Cancel
   </button>
 </form>
+<p>
+  <button md-raised-button color="primary" class="md-button" (click)="openAddPictureDialog()">
+    Upload new picture
+  </button>
+</p>

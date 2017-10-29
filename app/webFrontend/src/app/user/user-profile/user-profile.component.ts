@@ -1,6 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {IUser} from '../../../../../../shared/models/IUser';
 import {UserService} from '../../shared/services/user.service';
+import {IFile} from '../../../../../../shared/models/IFile';
 
 @Component({
   selector: 'app-user-profile',
@@ -12,12 +13,26 @@ export class UserProfileComponent implements OnInit {
   @Input() userId: String;
   @Input() user: IUser;
 
+  picture: IFile;
+
   constructor(public userService: UserService) { }
 
   ngOnInit() {
+    if (this.hasCustomPicture()) {
+      this.picture = this.user.profile.picture;
+    }
   }
 
   isCurrentProfile() {
     return this.userId === this.user._id;
+  }
+
+  hasCustomPicture() {
+    return this.user.profile.hasOwnProperty('picture');
+  }
+
+  canSeeUid() {
+    return (this.userService.isAdmin() || this.userService.isTeacher() ||
+      this.userService.user._id === this.user._id) && this.user.uid;
   }
 }
