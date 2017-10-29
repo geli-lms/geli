@@ -50,14 +50,14 @@ export class CodeKataComponent implements OnInit {
 
   setOptions() {
     this.definitionEditor.setOptions({
-      maxLines: Infinity,
+      maxLines: 9999,
     });
     this.codeEditor.setOptions({
-      maxLines: Infinity,
+      maxLines: 9999,
       firstLineNumber: this.codeKata.definition.split('\n').length || 1,
     });
     this.testEditor.setOptions({
-      maxLines: Infinity,
+      maxLines: 9999,
       firstLineNumber: (this.codeKata.definition.split('\n').length + this.progress.code.split('\n').length) || 1,
     });
   }
