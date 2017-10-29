@@ -71,7 +71,7 @@
         <input mdInput type="password" formControlName="password" placeholder="Password"/>
         <div *ngIf="registerForm.controls.password.touched">
           <small *ngIf="registerForm.controls.password.hasError('required')" class="text-danger">Password is required</small>
-          <small *ngIf="registerForm.controls.password.hasError('minlength') || registerForm.controls.password.hasError('pattern')" class="text-danger">Password must have at least 8 characters which contain one special character or digit</small>
+          <small *ngIf="registerForm.controls.password.hasError('pattern')" class="text-danger">Password must have at least 8 characters which contain one special character or digit</small>
         </div>
       </md-input-container>
       <md-input-container>
