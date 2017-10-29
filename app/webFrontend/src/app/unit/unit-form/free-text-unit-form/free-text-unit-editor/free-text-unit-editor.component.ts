@@ -3,7 +3,7 @@ import {FreeTextUnitCoreComponent} from '../../../free-text-unit/free-text-unit-
 import {AceEditorComponent} from 'ng2-ace-editor/dist';
 import 'brace';
 import 'brace/mode/markdown';
-import 'brace/theme/github'
+import 'brace/theme/github';
 
 
 @Component({
