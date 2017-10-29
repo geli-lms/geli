@@ -1,10 +1,11 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, ViewEncapsulation} from '@angular/core';
 import {MarkdownService} from '../../../shared/services/markdown.service';
 
 @Component({
   selector: 'app-free-text-unit-core',
   templateUrl: './free-text-unit-core.component.html',
-  styleUrls: ['./free-text-unit-core.component.scss']
+  styleUrls: ['./free-text-unit-core.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class FreeTextUnitCoreComponent implements OnInit {
   @Input() markdown: string;
