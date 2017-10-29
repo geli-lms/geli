@@ -1,5 +1,5 @@
 <md-input-container class="fuzzySearch">
-  <input mdInput placeholder="Search and add {{dragulaBagId}} by name, Id, e-mail"
+  <input mdInput placeholder="Search and add {{role}}s by name, Id, e-mail"
          [mdAutocomplete]="auto" [formControl]="userCtrl" [(ngModel)]="fuzzySearch">
 </md-input-container>
 
@@ -32,7 +32,7 @@
 </div>
 
 <div class="users" *ngIf="fuzzySearch.length > 0">
-  <p><b>In course ({{usersInCourse.length}})</b></p>
+  <p><strong>In course ({{usersInCourse.length}})</strong></p>
   <md-list class="drop" [dragula]='dragulaBagId' [dragulaModel]='usersInCourse'>
     <div *ngFor="let member of usersInCourse">
       <md-list-item class="list" *ngIf="fuzzysearch(fuzzySearch,member)" [attr.data-id]="[member._id]">
@@ -46,7 +46,7 @@
     </div>
   </md-list>
 
-  <p><b>Not in course ({{users.length}})</b></p>
+  <p><strong>Not in course ({{users.length}})</strong></p>
   <md-list class="drop" [dragula]='dragulaBagId' [dragulaModel]='users'>
     <div *ngFor="let user of users">
       <md-list-item class="list" *ngIf="fuzzysearch(fuzzySearch,user)" [attr.data-id]="[user._id]">

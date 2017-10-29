@@ -15,6 +15,7 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
   @Input() usersInCourse: IUser[];
   @Input() users: IUser[];
   @Input() dragulaBagId;
+  @Input() role;
 
   currentMember: IUser = null;
   fuzzySearch: String = '';
