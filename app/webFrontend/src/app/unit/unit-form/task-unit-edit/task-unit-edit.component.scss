@@ -1,3 +1,5 @@
+@import '../../../../breakpoints';
+
 .task-unit-edit {
   position: relative;
 }
@@ -46,8 +48,8 @@
       }
     }
 
-    @media (max-width: 700px) {
-      width: 100%;
+    @include bp--sm {
+    	width: 100%;
     }
   }
 }
