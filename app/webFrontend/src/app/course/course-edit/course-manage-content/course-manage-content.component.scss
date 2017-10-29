@@ -16,7 +16,9 @@
     display: flex;
     align-items: center;
 
+
     h2, .lecture-menu-button {
+      cursor: pointer;
       font-size: 18px;
       color: rgba(0, 0, 0, 0.50);
     }
