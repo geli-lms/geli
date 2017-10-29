@@ -74,7 +74,7 @@ export class CodeKataUnitFormComponent implements OnInit {
     }
 
     this.editor.getEditor().setOptions({
-      enableBasicAutocompletion: true
+      maxLines: 9999,
     });
   }
 
