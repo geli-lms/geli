@@ -1,22 +1,31 @@
-$bp-width_sm: 50em;
-$bp-width_md: 75em;
-$bp-width_bg: 100em;
+/*
+How to use the breakpoints:
+div {
+  // Some normal code
+  @include bp--sm {
+    // special code for small devices
+  }
+}
+*/
 
-@mixin bp-sm {
-  @media only screen and (max-width: $bp-width_sm) {
+$bp_width--sm: 50em;
+$bp_width--md: 75em;
+$bp_width--bg: 100em;
+
+@mixin bp--sm {
+  @media only screen and (max-width: $bp_width--sm) {
     @content;
   }
 }
 
-@mixin bp-md {
-  @media only screen and (max-width: $bp-width_md) {
+@mixin bp--md {
+  @media only screen and (max-width: $bp_width--md) {
     @content;
   }
 }
 
-@mixin bp-bg {
-  @media only screen and (max-width: $bp-width_bg) {
+@mixin bp--bg {
+  @media only screen and (max-width: $bp_width--bg) {
     @content;
   }
 }
-
