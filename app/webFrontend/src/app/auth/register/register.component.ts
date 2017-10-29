@@ -50,12 +50,13 @@ export class RegisterComponent implements OnInit {
     this.registerForm = this.formBuilder.group({
       role: ['', Validators.required],
       profile: this.formBuilder.group({
-        firstName: ['', Validators.required],
-        lastName: ['', Validators.required],
+        firstName: ['', Validators.compose([Validators.required, Validators.minLength(2)])],
+        lastName: ['', Validators.compose([Validators.required, Validators.minLength(2)])],
       }),
-      email: ['', Validators.required],
+      email: ['', Validators.compose([Validators.required, Validators.email])],
       uid: [null, Validators.required],
-      password: ['', Validators.required],
+      password: ['', Validators.compose([Validators.required,
+        Validators.minLength(8), Validators.pattern(/^(?=.*[a-zA-Z])(?=.*[!@#$&*0-9])$/)])],
       confirmPassword: ['', Validators.required]
     }, {validator: matchPasswords('password', 'confirmPassword')});
   }
