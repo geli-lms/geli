@@ -58,10 +58,10 @@ export class RegisterComponent implements OnInit {
       /*
        *Regex for password validation:
        * (?=.*[a-zA-Z]) --> searchs for at least one uppercase or lowercase letter
-       * (?=.*[$%&§!?*()|0-9]) --> searchs for at least one special character or digit
+       * (?=.*[$%&§=#!?*()|0-9]) --> searchs for at least one special character or digit
        * .{8,} ensures, that the password has 8 or more characters
        */
-      password: ['', Validators.compose([Validators.required, Validators.pattern('^(?=.*[a-zA-Z])(?=.*[$%&§!?*()|0-9]).{8,}$')])],
+      password: ['', Validators.compose([Validators.required, Validators.pattern('^(?=.*[a-zA-Z])(?=.*[$%&§=#!?*()|0-9]).{8,}$')])],
       confirmPassword: ['', Validators.required]
     }, {validator: matchPasswords('password', 'confirmPassword')});
   }
