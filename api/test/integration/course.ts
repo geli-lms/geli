@@ -1,15 +1,12 @@
-import {ICourse} from '../../../shared/models/ICourse';
-
 process.env.NODE_ENV = 'test';
 
 import * as chai from 'chai';
-import chaiHttp = require('chai-http');
 import {Server} from '../../src/server';
 import {FixtureLoader} from '../../fixtures/FixtureLoader';
 import {JwtUtils} from '../../src/security/JwtUtils';
 import {User} from '../../src/models/User';
 import {Course} from '../../src/models/Course';
-import {set} from 'mongoose';
+import chaiHttp = require('chai-http');
 
 chai.use(chaiHttp);
 chai.should();
@@ -81,6 +78,105 @@ describe('Course', () => {
             });
         })
         .catch(done);
+    });
+  });
+
+
+  describe(`GET ${BASE_URL} :id`, () => {
+    it('should get course with given id', (done) => {
+      User.findOne({email: 'teacher1@test.local'}).then((user) => {
+        const testData = new Course({
+          name: 'Test Course',
+          description: 'Test description',
+          active: true
+        });
+        testData.teachers.push(user);
+        testData.save((error, course) => {
+          chai.request(app)
+            .get(`${BASE_URL}/${course._id}`)
+            .set('Authorization', `JWT ${JwtUtils.generateToken(user)}`)
+            .end((err, res) => {
+              res.should.have.status(200);
+              res.body.name.should.be.equal(testData.name);
+              res.body.description.should.be.equal(testData.description);
+              res.body.active.should.be.equal(testData.active);
+              done();
+            });
+        });
+      }).catch(done);
+    });
+
+    it('should not get course not a teacher of course', (done) => {
+      User.findOne({email: 'teacher1@test.local'}).then((user) => {
+        const testData = new Course({
+          name: 'Test Course',
+          description: 'Test description',
+          active: true
+        });
+        testData.save((error, course) => {
+          chai.request(app)
+            .get(`${BASE_URL}/${course._id}`)
+            .set('Authorization', `JWT ${JwtUtils.generateToken(user)}`)
+            .end((err, res) => {
+              res.should.have.status(404);
+              done();
+            });
+        });
+      }).catch(done);
+    });
+  });
+
+  describe(`PUT ${BASE_URL} :id`, () => {
+    it('change added course', (done) => {
+      User.findOne({email: 'teacher1@test.local'}).then((user) => {
+        const testDataUpdate = new Course({
+          name: 'Test Course Update',
+          description: 'Test description update',
+          active: true
+        });
+        const testData = new Course(
+          {
+            name: 'Test Course',
+            description: 'Test description',
+            active: false
+          });
+        testData.teachers.push(user);
+        testData.save((error, course) => {
+          testDataUpdate._id = course._id;
+          chai.request(app)
+            .put(`${BASE_URL}/${testDataUpdate._id}`)
+            .set('Authorization', `JWT ${JwtUtils.generateToken(user)}`)
+            .send(testDataUpdate)
+            .end((err, res) => {
+              res.should.have.status(200);
+              res.body.name.should.be.eq(testDataUpdate.name);
+              res.body.description.should.be.eq(testDataUpdate.description);
+              res.body.active.should.be.eq(testDataUpdate.active);
+              done();
+            });
+        }).catch(done);
+      });
+    });
+
+    it('should not change course not a teacher of course', (done) => {
+      User.findOne({email: 'teacher1@test.local'}).then((user) => {
+        const testData = new Course(
+          {
+            name: 'Test Course',
+            description: 'Test description',
+            active: false
+          });
+        testData.save((error, course) => {
+          chai.request(app)
+            .put(`${BASE_URL}/${course._id}`)
+            .set('Authorization', `JWT ${JwtUtils.generateToken(user)}`)
+            .send(course)
+            .end((err, res) => {
+              res.should.have.status(404);
+              done();
+            });
+        });
+      }).catch(done);
     });
   });
 });
