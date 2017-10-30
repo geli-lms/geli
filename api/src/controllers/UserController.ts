@@ -1,11 +1,29 @@
 import {
   Body, JsonController, UseBefore, Get, Param, Put, Delete, Authorized, CurrentUser,
-  BadRequestError, ForbiddenError, UploadedFile
+  BadRequestError, ForbiddenError, UploadedFile, Post
 } from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
+import fs = require('fs');
+import crypto = require('crypto');
 
 import {IUser} from '../../../shared/models/IUser';
 import {IUserModel, User} from '../models/User';
+const multer = require('multer');
+
+const uploadOptions = {
+  storage: multer.diskStorage({
+    destination: (req: any, file: any, cb: any) => {
+      cb(null, 'uploads/users/');
+    },
+    filename: (req: any, file: any, cb: any) => {
+      const extPos = file.originalname.lastIndexOf('.');
+      const ext = (extPos !== -1) ? `.${file.originalname.substr(extPos + 1).toLowerCase()}` : '';
+      crypto.pseudoRandomBytes(16, (err, raw) => {
+        cb(err, err ? undefined : `${raw.toString('hex')}${ext}`);
+      });
+    }
+  }),
+};
 
 @JsonController('/users')
 @UseBefore(passportJwtMiddleware)
@@ -33,6 +51,30 @@ export class UserController {
       .populate('progress')
       .then((user) => {
         return this.cleanUserObject(id, user, currentUser);
+      });
+  }
+
+  @Post('/:id/picture')
+  addUserPicture(@UploadedFile('file', {options: uploadOptions}) file: any, @Param('id') id: string, @Body() data: any,
+                 @CurrentUser() currentUser: IUser) {
+    return User.findById(id)
+      .then((user: IUserModel) => {
+        if (user.profile.hasOwnProperty('picture')) {
+          fs.unlink(user.profile.picture.path);
+        }
+
+        user.profile.picture = {
+          path: file.path,
+          name: file.filename,
+          alias: file.originalname
+        };
+        return user.save();
+      })
+      .then((user) => {
+        return this.cleanUserObject(id, user, currentUser);
+      })
+      .catch((error) => {
+        throw new BadRequestError(error);
       });
   }
 
@@ -100,10 +142,5 @@ export class UserController {
   @Delete('/:id')
   deleteUser(@Param('id') id: string) {
     return User.findByIdAndRemove(id);
-  }
-
-  @Put(':id/picture')
-  addUserPicture(@UploadedFile('file') file: any, @Param('id') id: string) {
-    const debug = 0;
   }
 }

@@ -116,7 +116,8 @@ export class UserEditComponent implements OnInit {
     this.dialogService.upload(this.user)
       .subscribe(res => {
       if (res) {
-        const debug = 0;
+        this.snackBar.open('User image successfully uploaded.', '', {duration: 3000});
+        this.navigateBack();
       }
     });
   }

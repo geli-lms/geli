@@ -4,15 +4,7 @@
       <md-progress-bar mode="determinate" [value]="student.completeRate" color="primary"></md-progress-bar>
       <span class="progress-text">{{student.finishCount}} von {{student.units.length}} Aufgaben erledigt</span>
     </div>
-    <div class="profile">
-      <span class="user-icon" [grav]="student.email"></span>
-      <h3 class="name"><a [routerLink]="['/profile', student._id]">{{student.profile.firstName}} {{student.profile.lastName}}</a></h3>
-      <div class="user-data">
-        <label>E-Mail:</label>
-        <span>{{student.email}}</span>
-        <span>Matrikelnummer: {{student.uid}}</span>
-      </div>
-    </div>
+    <app-user-profile [user]="student" [userId]="this.userService.user._id"></app-user-profile>
   </div>
   <div class="content">
     <div class="unit-progress" *ngFor="let unit of student.units">

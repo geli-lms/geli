@@ -1,5 +1,5 @@
 <div class="profile" *ngIf="user">
-  <span class="user-icon" [grav]="user.email"></span>
+  <span class="user-icon" user-image [user-image]="user" [size]="50"></span>
   <h3 class="name">
     <a *ngIf="!isCurrentProfile()" [routerLink]="['/profile', user._id]" routerLinkActive="active">
       <span>{{user.profile.firstName}} {{user.profile.lastName}}</span>
@@ -7,9 +7,9 @@
     <span *ngIf="isCurrentProfile()">{{user.profile.firstName}} {{user.profile.lastName}}</span>
   </h3>
   <div class="user-data">
-    <span>E-Mail: {{user.email}}</span>
-    <span *ngIf="userService.isTeacher() || userService.isAdmin() || userService.user._id === user._id">
-      Matrikelnummer: {{user.uid}}
+    <span><strong>E-Mail:</strong> {{user.email}}</span>
+    <span *ngIf="canSeeUid()">
+      <strong>Matrikelnummer:</strong> {{user.uid}}
     </span>
   </div>
 </div>
