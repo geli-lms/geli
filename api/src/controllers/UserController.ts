@@ -130,17 +130,32 @@ export class UserController {
       });
   }
 
+  @Authorized('admin')
+  @Delete('/:id')
+  deleteUser(@Param('id') id: string) {
+    return User.find({'role': 'admin'})
+    .then((adminUsers) => {
+      if (adminUsers.length === 1 &&
+        adminUsers[0].get('id') === id &&
+        adminUsers[0].role === 'admin') {
+        throw new BadRequestError('There are no other users with admin privileges.');
+      } else {
+        return User.findByIdAndRemove(id);
+      }
+    })
+    .then(() => {
+      return {result: true};
+    })
+    .catch((err) => {
+      throw err;
+    });
+  }
+
   private cleanUserObject(id: string, user: IUserModel, currentUser?: IUser) {
     user.password = '';
     if (currentUser._id !== id && (currentUser.role !== <string>'teacher' || currentUser.role !== <string>'admin')) {
       user.uid = null;
     }
     return user.toObject({virtuals: true});
-  }
-
-  @Authorized('admin')
-  @Delete('/:id')
-  deleteUser(@Param('id') id: string) {
-    return User.findByIdAndRemove(id);
   }
 }

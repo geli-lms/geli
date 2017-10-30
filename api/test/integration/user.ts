@@ -180,4 +180,36 @@ describe('User', () => {
         .catch(done);
     });
   });
+
+  describe(`DELETE ${BASE_URL}`, () => {
+    it('should fail to delete the only admin', (done) => {
+      User.findOne({email: 'admin@test.local'})
+        .then((user: IUser) => {
+          chai.request(app)
+            .del(`${BASE_URL}/${user._id}`)
+            .set('Authorization', `JWT ${JwtUtils.generateToken(user)}`)
+            .end((err, res) => {
+              res.status.should.be.equal(400);
+              res.body.name.should.be.equal('BadRequestError');
+              res.body.message.should.be.equal('There are no other users with admin privileges.');
+              done();
+            });
+        })
+        .catch(done);
+    });
+
+    it('should fail to delete (wrong role)', (done) => {
+      User.findOne({email: 'teacher1@test.local'})
+        .then((user: IUser) => {
+          chai.request(app)
+            .del(`${BASE_URL}/${user._id}`)
+            .set('Authorization', `JWT ${JwtUtils.generateToken(user)}`)
+            .end((err, res) => {
+              res.status.should.be.equal(401);
+              done();
+            });
+        })
+        .catch(done);
+    });
+  });
 });
