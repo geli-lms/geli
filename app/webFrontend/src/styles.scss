@@ -24,6 +24,18 @@ body, html {
   margin: 0;
   padding: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
+  font-size: 15px;
+}
+
+body {
+  background-color: lighten($app-primary, 38.5%);
+}
+
+app-root {
+  min-width: 22rem;
+  max-width: 130rem;
+  margin: auto;
+  background-color: #fff;
 }
 
 .logo-font {
