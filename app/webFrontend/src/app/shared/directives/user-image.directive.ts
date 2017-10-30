@@ -6,7 +6,7 @@ import md5 from 'blueimp-md5';
 export class UserImageDirective implements OnInit {
 
   @Input('user-image') user: IUser;
-  @Input('size') size: number = 160;
+  @Input('size') size = 160;
 
   @HostBinding('style.backgroundImage')
   backgroundImage: string;

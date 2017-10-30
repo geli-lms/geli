@@ -7,8 +7,8 @@ import md5 from 'blueimp-md5';
 @Directive({selector: '[grav]'})
 export class GravatarDirective implements OnInit {
 
-  @Input('grav') email: string = '';
-  @Input('size') size: number = 30;
+  @Input('grav') email = '';
+  @Input('size') size = 30;
 
   @HostBinding('style.backgroundImage')
   backgroundImage: string;
