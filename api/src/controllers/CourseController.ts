@@ -50,10 +50,14 @@ export class CourseController {
   @Get('/')
   getCourses(@CurrentUser() currentUser: IUser) {
     const conditions = this.userReadConditions(currentUser);
-
+    conditions.$and = [];
     if (conditions.$or) {
       // Everyone is allowed to see free courses in overview
       conditions.$or.push({enrollType: 'free'});
+    }
+
+    if (currentUser.role === 'student') {
+      conditions.$and.push({active: true});
     }
 
     const courseQuery = Course.find(conditions)
@@ -198,7 +202,6 @@ export class CourseController {
   @Put('/:id')
   updateCourse(@Param('id') id: string, @Body() course: ICourse, @CurrentUser() currentUser: IUser) {
     const conditions: any = {_id: id};
-
     if (currentUser.role !== 'admin') {
       conditions.$or = [
         {teachers: currentUser._id},

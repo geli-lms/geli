@@ -1,3 +1,5 @@
+import {ICourse} from '../../../shared/models/ICourse';
+
 process.env.NODE_ENV = 'test';
 
 import * as chai from 'chai';
@@ -28,12 +30,13 @@ describe('Course', () => {
             .end((err, res) => {
               res.status.should.be.equal(200);
               res.body.should.be.a('array');
-              res.body.length.should.be.eql(6);
+              res.body.length.should.be.eql(5);
 
               res.body.forEach((course: any) => {
                 course._id.should.be.a('string');
                 course.name.should.be.a('string');
                 course.active.should.be.a('boolean');
+                course.active.should.be.equal(true);
               });
 
               done();
