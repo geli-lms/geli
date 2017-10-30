@@ -9,6 +9,7 @@ import {FixtureLoader} from '../../fixtures/FixtureLoader';
 import {JwtUtils} from '../../src/security/JwtUtils';
 import {User} from '../../src/models/User';
 import {Course} from '../../src/models/Course';
+import {set} from 'mongoose';
 
 chai.use(chaiHttp);
 chai.should();
@@ -21,7 +22,7 @@ describe('Course', () => {
   beforeEach(() => fixtureLoader.load());
 
   describe(`GET ${BASE_URL}`, () => {
-    it('should return all courses', (done) => {
+    it('should return all active courses', (done) => {
       User.findOne({email: 'student1@test.local'})
         .then((user) => {
           chai.request(app)
