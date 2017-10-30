@@ -11,14 +11,11 @@
 </md-card>
 <md-card class="register-card" *ngIf="!registrationDone">
   <md-card-header>
-    <md-card-title><h1>Register</h1></md-card-title>
+    <md-card-title><h1>Register {{role}}</h1></md-card-title>
   </md-card-header>
   <md-card-content>
     <form name="form" (ngSubmit)="register()" [formGroup]="registerForm">
-      <md-radio-group formControlName="role" [(ngModel)]="role" [align]="'start'">
-        <md-radio-button value="student">Student</md-radio-button>
-        <md-radio-button value="teacher">Teacher</md-radio-button>
-      </md-radio-group>
+      <input type='hidden' formControlName="role" value="{{role}}"/>
       <div class="form-group" formGroupName="profile">
         <md-input-container>
           <input mdInput formControlName="firstName" placeholder="First name"/>
@@ -50,5 +47,7 @@
 
       <button md-raised-button color="primary" type="submit" [disabled]="loading">Register</button>
     </form>
+    <div *ngIf="role=='student'"> teacher? click <a href="javascript:void(0)" (click)="changeRole('teacher')">here</a>.</div>
+    <div *ngIf="role=='teacher'"><a href="javascript:void(0)" (click)="changeRole('student')">back</a> </div>
   </md-card-content>
 </md-card>
