@@ -1,0 +1,13 @@
+@import '../../../../breakpoints';
+
+
+md-input-container {
+  width: 60%;
+  @include bp--sm {
+    width: 100%;
+  }
+}
+
+.btn-wrapper {
+  padding-top: 1em;
+}
