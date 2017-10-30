@@ -16,11 +16,10 @@ const uploadOptions = {
       cb(null, 'uploads/users/');
     },
     filename: (req: any, file: any, cb: any) => {
+      const id = req.params.id;
       const extPos = file.originalname.lastIndexOf('.');
       const ext = (extPos !== -1) ? `.${file.originalname.substr(extPos + 1).toLowerCase()}` : '';
-      crypto.pseudoRandomBytes(16, (err, raw) => {
-        cb(err, err ? undefined : `${raw.toString('hex')}${ext}`);
-      });
+      cb(null, id + ext);
     }
   }),
 };

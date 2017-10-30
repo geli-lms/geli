@@ -114,10 +114,12 @@ export class UserEditComponent implements OnInit {
 
   openAddPictureDialog() {
     this.dialogService.upload(this.user)
-      .subscribe(res => {
-      if (res) {
-        this.snackBar.open('User image successfully uploaded.', '', {duration: 3000});
-        this.navigateBack();
+      .subscribe((response) => {
+      if (response) {
+        if (response.success) {
+          this.userService.setUser(response.user);
+          this.snackBar.open('User image successfully uploaded.', '', {duration: 3000});
+        }
       }
     });
   }

@@ -31,8 +31,10 @@ export class UploadDialog implements OnInit {
       }]
     });
     this.uploader.onCompleteItem = (item: any, response: any, status: any, headers: any) => {
-      this.stopWebcam();
-      return this.dialogRef.close(true);
+      if (this.mediastream) {
+        this.stopWebcam();
+      }
+      return this.dialogRef.close({success: true, user: response});
     };
   }
 

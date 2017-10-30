@@ -278,6 +278,8 @@ describe('User', () => {
           .attach('file', fs.readFileSync('test/resources/test.png'), 'test.png')
           .end((err, res) => {
             res.status.should.be.equal(200);
+            res.body.profile.filename.should.be.equal(user._id + '.png');
+
             done();
           });
       })
