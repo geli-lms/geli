@@ -3,7 +3,8 @@
 // Plus imports for other components in your app.
 
 // Custom global geli stuff
-@import "global-hacks";
+@import 'global-hacks';
+@import 'breakpoints';
 
 // Include the common styles for Angular Material. We include this here so that you only
 // have to load a single css file for Angular Material in your app.
@@ -31,14 +32,20 @@ body, html {
 }
 
 body {
-  background-color: lighten($app-primary, 38.5%);
+  @include bp(4k) {
+    background-color: lighten(map-get($app-primary, 'default'), 38.5%);
+  }
 }
 
 app-root {
-  min-width: 22rem;
-  max-width: 130rem;
+  min-width: $bp_width--xs;
+  max-width: $bp_width--4k;
   margin: auto;
   background-color: #fff;
+
+  @include bp(4k) {s
+    box-shadow: 0px 0px 54px 5px rgba(0,0,0,0.75);
+  }
 }
 
 .logo-font {
