@@ -54,13 +54,13 @@ export class UserController {
       });
   }
 
-  @Post('/:id/picture')
+  @Post('/picture/:id')
   addUserPicture(@UploadedFile('file', {options: uploadOptions}) file: any, @Param('id') id: string, @Body() data: any,
                  @CurrentUser() currentUser: IUser) {
     return User.findById(id)
       .then((user: IUserModel) => {
-        if (user.profile.hasOwnProperty('picture')) {
-          fs.unlink(user.profile.picture.path);
+        if (user.profile.hasOwnProperty('picture') && typeof user.profile.picture.path !== 'undefined') {
+          fs.unlinkSync(user.profile.picture.path);
         }
 
         user.profile.picture = {
@@ -116,7 +116,7 @@ export class UserController {
           if (!isValidPassword && user.password.length > 0) {
             throw new BadRequestError('You must specify your current password if you want to set a new password.');
           } else {
-            if (user.password === 0) {
+            if (user.password.length === 0) {
               delete user.password;
             }
             return User.findOneAndUpdate({'_id': id}, user, {new: true});

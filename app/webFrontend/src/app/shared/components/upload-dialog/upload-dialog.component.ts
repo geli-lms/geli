@@ -24,7 +24,7 @@ export class UploadDialog implements OnInit {
 
   ngOnInit() {
     this.uploader = new FileUploader({
-      url: '/api/users/' + this.user._id + '/picture',
+      url: '/api/users/picture/' + this.user._id,
       headers: [{
         name: 'Authorization',
         value: localStorage.getItem('token')

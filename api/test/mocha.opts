@@ -1,4 +1,5 @@
 build/test/**/*.js
 --recursive
 --reporter spec
+--timeout 10000
 
