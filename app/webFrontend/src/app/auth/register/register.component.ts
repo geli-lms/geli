@@ -30,8 +30,8 @@ export class RegisterComponent implements OnInit {
     this.generateForm();
   }
 
-  changeRole(role){
-      this.role=role;
+  changeRole(role) {
+      this.role = role;
   }
 
   register() {
