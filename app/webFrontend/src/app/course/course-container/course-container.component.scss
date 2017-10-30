@@ -8,6 +8,7 @@
 
 .title-header {
   display: flex;
+  cursor: pointer;
   align-items: center;
 
   .flex-spacer {
@@ -15,9 +16,17 @@
   }
 }
 
+.badge {
+  background-color: blue;
+  border-radius: 50 deg;
+  color: white;
+  font-size: 15pt;
+}
+
 .open-toggle {
   color: map-get($app-primary, 'default');
   transition: transform 0.3s;
+  float: right;
   transform: rotate(-90deg);
   &.opened {
     transform: rotate(0);
