@@ -1,3 +1,4 @@
+/* tslint:disable:max-line-length */
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {CodeKataUnitFormComponent} from './code-kata-unit-form/code-kata-unit-form.component';
@@ -10,6 +11,9 @@ import {VideoUploadComponent} from '../../upload/video-upload/video-upload.compo
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {AceEditorModule} from 'ng2-ace-editor';
 import {FileUploadModule} from 'ng2-file-upload';
+import {UnitModule} from '../unit.module';
+import {FreeTextUnitEditorComponent} from './free-text-unit-form/free-text-unit-editor/free-text-unit-editor.component';
+import {FreeTextUnitEditorDialog} from './free-text-unit-form/free-text-unit-editor/free-text-unit-editor-dialog/free-text-unit-editor.dialog';
 import {SharedModule} from '../../shared/shared.module';
 
 @NgModule({
@@ -19,7 +23,8 @@ import {SharedModule} from '../../shared/shared.module';
     ReactiveFormsModule,
     SharedModule,
     AceEditorModule,
-    FileUploadModule
+    FileUploadModule,
+    UnitModule
   ],
   declarations: [
     CodeKataUnitFormComponent,
@@ -28,7 +33,9 @@ import {SharedModule} from '../../shared/shared.module';
     UnitFormComponent,
     UnitGeneralInfoFormComponent,
     FileUploadComponent,
-    VideoUploadComponent
+    VideoUploadComponent,
+    FreeTextUnitEditorComponent,
+    FreeTextUnitEditorDialog
   ],
   exports: [
     CodeKataUnitFormComponent,
@@ -36,7 +43,10 @@ import {SharedModule} from '../../shared/shared.module';
     TaskUnitEditComponent,
     UnitFormComponent,
     UnitGeneralInfoFormComponent,
-    VideoUploadComponent
+    VideoUploadComponent,
+  ],
+  entryComponents: [
+    FreeTextUnitEditorDialog
   ]
 })
 export class UnitFormModule {

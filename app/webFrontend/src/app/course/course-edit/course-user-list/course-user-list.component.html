@@ -1,5 +1,5 @@
 <mat-form-field class="fuzzySearch">
-  <input matInput placeholder="Search and add teachers by name, Id, e-mail"
+  <input matInput placeholder="Search and add {{role}}s by name, Id, e-mail"
          [matAutocomplete]="auto" [formControl]="userCtrl" [(ngModel)]="fuzzySearch">
 </mat-form-field>
 
@@ -32,31 +32,31 @@
 </div>
 
 <div class="users" *ngIf="fuzzySearch.length > 0">
-  <p><b>In course ({{usersInCourse.length}})</b></p>
+  <p><strong>In course ({{usersInCourse.length}})</strong></p>
   <mat-list class="drop" [dragula]='dragulaBagId' [dragulaModel]='usersInCourse'>
-    <ng-container *ngFor="let member of usersInCourse">
+    <div *ngFor="let member of usersInCourse">
       <mat-list-item class="list" *ngIf="fuzzysearch(fuzzySearch,member)" [attr.data-id]="[member._id]">
-        <i class="material-icons md-48">drag_handle</i>
+        <md-icon class="user-drag-handle">drag_handle</md-icon>
         <span class="listBg" [grav]="member.email"></span>
         <span class="firstName">{{member.profile.firstName}}</span>
         <span class="lastName">{{member.profile.lastName}}</span>
         <span class="uid">{{member.uid}}</span>
-        <span class="email">{{member.email}}</span>
+        <span class="email"><a href="mailto:{{member.email}}">{{member.email}}</a></span>
       </mat-list-item>
-    </ng-container>
+    </div>
   </mat-list>
 
-  <p><b>Not in course ({{users.length}})</b></p>
+  <p><strong>Not in course ({{users.length}})</strong></p>
   <mat-list class="drop" [dragula]='dragulaBagId' [dragulaModel]='users'>
-    <ng-container *ngFor="let user of users">
+    <div *ngFor="let user of users">
       <mat-list-item class="list" *ngIf="fuzzysearch(fuzzySearch,user)" [attr.data-id]="[user._id]">
-        <i class="material-icons md-48">drag_handle</i>
+        <md-icon class="member-drag-handle">drag_handle</md-icon>
         <span class="listBg" [grav]="user.email"></span>
         <span class="firstName">{{user.profile.firstName}}</span>
         <span class="lastName">{{user.profile.lastName}}</span>
         <span class="uid">{{user.uid}}</span>
-        <span class="email">{{user.email}}</span>
+        <span  class="email"><a href="mailto:{{user.email}}">{{user.email}}</a></span>
       </mat-list-item>
-    </ng-container>
+    </div>
   </mat-list>
 </div>

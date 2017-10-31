@@ -1,17 +1,13 @@
 <div class="free-text-unit-edit">
   <app-unit-general-info-form [model]="model"></app-unit-general-info-form>
 
-  <div class="info-text">
-    <mat-icon>info</mat-icon>
-    Add Markdown to add text to this Course.
-  </div>
+  <app-free-text-unit-editor [(markdown)]="this.model.markdown"></app-free-text-unit-editor>
 
-  <mat-form-field>
-    <textarea matInput id="markdown" placeholder="Add Markdown here" cols="50" rows="6"
-              [(ngModel)]="model.markdown"></textarea>
-  </mat-form-field>
-
-  <div>
-    <button mat-raised-button color="primary" class="add-unit" (click)="saveUnit()">Save</button>
+  <div class="btn-wrapper">
+    <button mat-button mat-raised-button color="secondary" (click)="openFullscreen()"
+            mat-tooltip="Open markdown-editor as fullscreen">
+      Fullscreen
+    </button>
+    <button mat-button mat-raised-button color="primary" class="add-unit" (click)="saveUnit()">Save</button>
   </div>
 </div>

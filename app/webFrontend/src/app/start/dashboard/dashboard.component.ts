@@ -15,7 +15,7 @@ export class DashboardComponent implements OnInit {
 
   allCourses: ICourse[];
   myCourses: ICourse[];
-  ACourses: ICourse[];
+  availableCourses: ICourse[];
 
   // UserService for HTML page
   constructor(public userService: UserService,
@@ -27,20 +27,20 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
     this.myCourses = [];
-    this.ACourses = [];
+    this.availableCourses = [];
     this.getCourses();
   }
 
   getCourses() {
     this.myCourses = [];
-    this.ACourses = [];
+    this.availableCourses = [];
     this.courseService.readItems().then(courses => {
       this.allCourses = courses;
       for (const course of courses) {
         if (this.isMemberOfCourse(course) || this.isCourseTeacherOrAdmin(course)) {
           this.myCourses.push(course);
         } else {
-          this.ACourses.push(course);
+          this.availableCourses.push(course);
         }
       }
     });
