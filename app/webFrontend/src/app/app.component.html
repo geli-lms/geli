@@ -1,7 +1,7 @@
 <md-toolbar color="primary" [ngClass]="{'warning': hasWarning()}">
   <a routerLink="/" class="logo">geli</a>
 
-  <a href="http://www.fbi.h-da.de" [ngStyle]="{}" class="host-logo"></a>
+  <a href="http://www.fbi.h-da.de" class="host-logo"></a>
 
   <span class="right-align">
     <a *ngIf="hasWarning()">{{apiInfo.nonProductionWarning}}</a>
