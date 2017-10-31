@@ -19,19 +19,34 @@ $app-theme: mat-light-theme($app-primary, $app-accent, $app-warn);
 // that you are using.
 @include angular-material-theme($app-theme);
 
+* {
+  box-sizing: border-box;
+}
+
 html {
   height: 100%;
+  font-size: 10px;
+
+  @media only screen and (min-width: $bp_width--md) {
+    font-size: 12px;
+  }
+
+  @media only screen and (min-width: $bp_width--4k) {
+    font-size: 16px;
+  }
 }
 
 body, html {
   height: 100%;
   margin: 0;
   padding: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
-  font-size: 15px;
 }
 
 body {
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  font-size: 1.5rem;
+  line-height: 1.8rem;
+
   @include bp(4k) {
     background-color: lighten(map-get($app-primary, 'default'), 38.5%);
   }
@@ -43,7 +58,7 @@ app-root {
   margin: auto;
   background-color: #fff;
 
-  @include bp(4k) {s
+  @include bp(4k) {
     box-shadow: 0px 0px 54px 5px rgba(0,0,0,0.75);
   }
 }

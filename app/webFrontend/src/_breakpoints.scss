@@ -2,19 +2,18 @@
 // @import '(../)breakpoints';
 // div {
 //   // the mobile code
-//   
+//
 //   @include bp(md) {
 //     // special code for bigger devices
 //   }
 // }
 
-// With a base font-size of 15px we have
-$bp_width--xs: 35rem;   // 330px => app-root min-width
-$bp_width--sm: 35rem;   // 525px
-$bp_width--md: 50rem;   // 750px
-$bp_width--bg: 65rem;   // 975px
-$bp_width--mg: 80rem;   // 1200px
-$bp_width--4k: 170rem;  // 2550px => app-root max-width
+$bp_width--xs: 330px;   // app-root min-width
+$bp_width--sm: 525px;
+$bp_width--md: 750px;
+$bp_width--bg: 975px;
+$bp_width--mg: 1200px;
+$bp_width--4k: 2500px;  // app-root max-width
 
 $breakpoints: (
   sm: $bp_width--sm, // Small
