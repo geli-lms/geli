@@ -17,10 +17,15 @@
 }
 
 .badge {
-  background-color: blue;
-  border-radius: 50 deg;
+  background-color: map-get($app-primary, 'default');
+  border-radius: 50%;
   color: white;
-  font-size: 15pt;
+  font-size: 10pt;
+  padding: 5px 5px 5px 5px;
+  width: 16px;
+  margin-left: 5px;
+  margin-right: 2px;
+  text-align: center;
 }
 
 .open-toggle {
