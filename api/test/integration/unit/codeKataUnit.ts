@@ -161,7 +161,6 @@ describe(`CodeKataUnit ${BASE_URL}`, () => {
           CodeKataUnit.findOne({name: 'Search and Replace'})
             .then((kata: ICodeKataModel) => {
               kata.test += '\n// Test if we can edit a Kata';
-              console.log(kata);
               chai.request(app)
                 .put(BASE_URL + '/' + kata.id)
                 .set('Authorization', `JWT ${JwtUtils.generateToken(user)}`)
