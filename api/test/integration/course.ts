@@ -43,6 +43,31 @@ describe('Course', () => {
         .catch(done);
     });
 
+
+    it('should return all courses', (done) => {
+      User.findOne({email: 'teacher1@test.local'})
+        .then((user) => {
+          chai.request(app)
+            .get(BASE_URL)
+            .set('Authorization', `JWT ${JwtUtils.generateToken(user)}`)
+            .end((err, res) => {
+              res.status.should.be.equal(200);
+              res.body.should.be.a('array');
+              res.body.length.should.be.eql(6);
+
+              res.body.forEach((course: any) => {
+                course._id.should.be.a('string');
+                course.name.should.be.a('string');
+                course.active.should.be.a('boolean');
+                course.active.should.be.oneOf([true, false]);
+              });
+
+              done();
+            });
+        })
+        .catch(done);
+    });
+
     it('should fail with wrong authorization', (done) => {
       chai.request(app)
         .get(BASE_URL)
