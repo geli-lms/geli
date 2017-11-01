@@ -47,7 +47,7 @@
 
       <button md-raised-button color="primary" type="submit" [disabled]="loading">Register</button>
     </form>
-    <div class="div-change-role" *ngIf="role=='student'">Not a student? click <a href="javascript:void(0)" (click)="changeRole('teacher')">here</a>.</div>
-    <div class="div-change-role" *ngIf="role=='teacher'"><a href="javascript:void(0)" (click)="changeRole('student')">back</a> </div>
+    <div class="div-change-role" *ngIf="role=='student'">Not a student? Click <a href="javascript:void(0)" (click)="changeRole('teacher')">here.<i class="material-icons">arrow_forward</i></a></div>
+    <div class="div-change-role" *ngIf="role=='teacher'"><a href="javascript:void(0)" (click)="changeRole('student')"><i class="material-icons">arrow_back</i>Back</a> </div>
   </md-card-content>
 </md-card>
