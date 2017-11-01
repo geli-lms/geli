@@ -14,6 +14,8 @@ import {ICourse} from '../../../../../../shared/models/ICourse';
 export class DashboardComponent implements OnInit {
 
   allCourses: ICourse[];
+  myCourses: ICourse[];
+  availableCourses: ICourse[];
 
   // UserService for HTML page
   constructor(public userService: UserService,
@@ -24,25 +26,42 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.myCourses = [];
+    this.availableCourses = [];
     this.getCourses();
   }
 
   getCourses() {
+    this.myCourses = [];
+    this.availableCourses = [];
     this.courseService.readItems().then(courses => {
       this.allCourses = courses;
+      for (const course of courses) {
+        if (this.isMemberOfCourse(course) || this.isCourseTeacherOrAdmin(course)) {
+          this.myCourses.push(course);
+        } else {
+          this.availableCourses.push(course);
+        }
+      }
     });
   }
 
-  enrollCallback({courseId, accessKey}) {
-    this.courseService.enrollStudent(courseId, {
-      user: this.userService.user,
-      accessKey
-    }).then((res) => {
-      this.snackBar.open('Successfully enrolled', '', {duration: 5000});
-      // reload courses to update enrollment status
+  enrollCallback() {
       this.getCourses();
-    }).catch((err) => {
-      this.snackBar.open(`${err.statusText}: ${JSON.parse(err._body).message}`, '', {duration: 5000});
-    });
+  }
+
+  isCourseTeacherOrAdmin(course: ICourse) {
+    if (this.userService.isAdmin()) {
+      return true;
+    }
+
+    return (course.courseAdmin && course.courseAdmin._id === this.userService.user._id) ||
+      course.teachers.filter(teacher => teacher._id === this.userService.user._id).length;
+  }
+
+  isMemberOfCourse(course: ICourse) {
+    const user = this.userService.user;
+    return this.userService.isStudent() &&
+      course.students.filter(obj => obj._id === user._id).length > 0;
   }
 }
