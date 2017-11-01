@@ -123,9 +123,8 @@ export class CourseController {
     conditions.$or = [];
 
     if (currentUser.role === 'student') {
+      conditions.active = true;
       conditions.$or.push({students: currentUser._id});
-      conditions.$and = [];
-      conditions.$and.push({active: true});
     } else {
       conditions.$or.push({teachers: currentUser._id});
       conditions.$or.push({courseAdmin: currentUser._id});
