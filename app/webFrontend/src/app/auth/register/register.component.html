@@ -19,32 +19,64 @@
       <div class="form-group" formGroupName="profile">
         <md-input-container>
           <input mdInput formControlName="firstName" placeholder="First name"/>
+          <div *ngIf="registerForm.get('profile').get('firstName').touched">
+            <small *ngIf="registerForm.get('profile').get('firstName').hasError('required')" class="text-danger">First
+              name is required
+            </small>
+            <small *ngIf="registerForm.get('profile').get('firstName').hasError('minlength')" class="text-danger">
+              Minimum length is 2
+            </small>
+          </div>
         </md-input-container>
         <md-input-container>
           <input mdInput formControlName="lastName" placeholder="Last name"/>
+          <div *ngIf="registerForm.get('profile').get('lastName').touched">
+            <small *ngIf="registerForm.get('profile').get('lastName').hasError('required')" class="text-danger">Last
+              name is required
+            </small>
+            <small *ngIf="registerForm.get('profile').get('lastName').hasError('minlength')" class="text-danger">Minimum
+              length is 2
+            </small>
+          </div>
         </md-input-container>
+
       </div>
 
       <md-input-container>
         <input mdInput formControlName="email" placeholder="E-Mail"/>
+        <div *ngIf="registerForm.controls.email.touched">
+          <small *ngIf="registerForm.controls.email.hasError('required')" class="text-danger">Email is required</small>
+          <small *ngIf="registerForm.controls.email.hasError('email') && !registerForm.controls.email.hasError('required')" class="text-danger">Please use an email with the
+            format john@doe.com
+          </small>
+        </div>
       </md-input-container>
+
 
       <div *ngIf="role == 'student'">
         <md-input-container>
-          <input mdInput formControlName="uid" placeholder="Matrikelnummer"/>
+          <input mdInput formControlName="uid" placeholder="Matriculation number"/>
+          <div *ngIf="registerForm.controls.uid.touched">
+            <small *ngIf="registerForm.controls.uid.hasError('required')" class="text-danger">Matriculation number is
+              required
+            </small>
+          </div>
         </md-input-container>
       </div>
 
       <md-input-container>
         <input mdInput type="password" formControlName="password" placeholder="Password"/>
+        <div *ngIf="registerForm.controls.password.touched">
+          <small *ngIf="registerForm.controls.password.hasError('required')" class="text-danger">Password is required</small>
+          <small *ngIf="registerForm.controls.password.hasError('pattern')" class="text-danger">Password must have at least 8 characters which contain one special character or digit</small>
+        </div>
       </md-input-container>
       <md-input-container>
         <input mdInput type="password" formControlName="confirmPassword" placeholder="Confirm password"/>
-        <div class="form-text error" *ngIf="registerForm.controls.confirmPassword.touched">
-          <div *ngIf="registerForm.hasError('mismatchedPasswords')">Passwords do not match.</div>
+        <div *ngIf="registerForm.controls.confirmPassword.touched">
+          <small *ngIf="registerForm.hasError('mismatchedPasswords')" class="text-danger">Passwords do not match.</small>
         </div>
       </md-input-container>
-
       <button md-raised-button color="primary" type="submit" [disabled]="loading">Register</button>
     </form>
     <div class="div-change-role" *ngIf="role=='student'">Not a student? Click <a href="javascript:void(0)" (click)="changeRole('teacher')">here.<i class="material-icons">arrow_forward</i></a></div>
