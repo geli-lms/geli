@@ -26,7 +26,7 @@ const userSchema = new mongoose.Schema({
       lowercase: true,
       unique: true,
       required: true,
-      validate: [ isEmail, 'invalid email' ]
+      validate: [{ validator: (value: any) => isEmail(value), msg: 'Invalid email.' }]
     },
     password: {
       type: String,
@@ -34,7 +34,12 @@ const userSchema = new mongoose.Schema({
     },
     profile: {
       firstName: {type: String},
-      lastName: {type: String}
+      lastName: {type: String},
+      picture: {
+        path: {type: String},
+        name: {type: String},
+        alias: {type: String}
+      }
     },
     role: {
       type: String,
