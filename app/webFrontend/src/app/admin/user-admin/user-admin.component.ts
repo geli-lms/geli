@@ -88,7 +88,8 @@ export class UserAdminComponent implements OnInit {
           this.userService.updateItem(user).then(
             (val) => {
               this.showProgress.toggleLoadingGlobal(false);
-              this.snackBar.open('Password for user ' + this.allUsers[userIndex].email + ' successfully updated', '', {duration: 3000});
+              this.dialogService.info('Password successfully updated', 'Password for user ' + this.allUsers[userIndex].email + ' was updated to: \'' + user.password + '\'')
+                .subscribe(() => this.snackBar.open('Password updated', '', {duration: 3000}));
             },
             (error) => {
               this.showProgress.toggleLoadingGlobal(false);
