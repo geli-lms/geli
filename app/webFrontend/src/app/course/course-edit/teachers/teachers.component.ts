@@ -4,6 +4,7 @@ import {IUser} from '../../../../../../../shared/models/IUser';
 import {ShowProgressService} from '../../../shared/services/show-progress.service';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
 import {SortUtil} from '../../../shared/utils/SortUtil';
+import {User} from "../../../models/User";
 
 @Component({
   selector: 'app-teachers',
@@ -32,6 +33,7 @@ export class TeachersComponent implements OnInit {
   getTeachers() {
     return this.userService.readItems().then(users => {
       this.allTeachers = users.filter(obj => obj.role === 'teacher');
+      this.allTeachers = this.allTeachers.map(data => new User(data));
     });
   }
 
@@ -59,6 +61,8 @@ export class TeachersComponent implements OnInit {
         this.course = val;
         this.course.teachers.forEach(member =>
           this.allTeachers = this.allTeachers.filter(user => user._id !== member._id));
+        this.course.teachers = this.course.teachers.map(data => new User(data));
+
         SortUtil.sortUsers(this.allTeachers);
         SortUtil.sortUsers(this.course.teachers);
       });

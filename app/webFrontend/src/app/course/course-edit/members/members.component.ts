@@ -4,6 +4,7 @@ import {ShowProgressService} from '../../../shared/services/show-progress.servic
 import {IUser} from '../../../../../../../shared/models/IUser';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
 import {SortUtil} from '../../../shared/utils/SortUtil';
+import {User} from '../../../models/User';
 
 @Component({
   selector: 'app-members',
@@ -30,9 +31,11 @@ export class MembersComponent implements OnInit {
    * TODO: Never load all users!
    */
   getStudents() {
-    return this.userService.readItems().then(users => {
-      this.allStudents = users.filter(obj => obj.role === 'student');
-    });
+    return this.userService.readItems()
+      .then(users => {
+        this.allStudents = users.filter(obj => obj.role === 'student');
+        this.allStudents = this.allStudents.map(data => new User(data));
+      });
   }
 
   /**
@@ -59,6 +62,8 @@ export class MembersComponent implements OnInit {
         this.course = val;
         this.course.students.forEach(member =>
           this.allStudents = this.allStudents.filter(user => user._id !== member._id));
+        this.course.students = this.course.students.map(data => new User(data));
+
         SortUtil.sortUsers(this.allStudents);
         SortUtil.sortUsers(this.course.students);
       });
