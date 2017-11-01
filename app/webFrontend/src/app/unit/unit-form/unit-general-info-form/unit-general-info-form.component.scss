@@ -3,7 +3,7 @@
 
 md-input-container {
   width: 100%;
-  
+
   @include bp(md) {
     width: 60%;
   }

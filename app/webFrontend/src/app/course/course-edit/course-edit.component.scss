@@ -1,15 +1,32 @@
+@import '../../../breakpoints';
+
 .course-form {
-  margin-top: 50px;
-  margin-left: 50px;
-  width: 500px;
+  margin-top: 10px;
 }
 
-.full-width {
+.mat-input-container {
   width: 100%;
+
+  @include bp(md) {
+    width: 60%;
+  }
 }
 
 .upload {
   min-width: 250px;
+  width: 100%;
+
+  + button {
+    margin-top: 10px;
+  }
+
+  @include bp(sm) {
+    width: auto;
+
+    + button {
+      margin-top: 0;
+    }
+  }
 }
 
 .slider {
