@@ -28,7 +28,7 @@ describe('Course', () => {
             .end((err, res) => {
               res.status.should.be.equal(200);
               res.body.should.be.a('array');
-              res.body.length.should.be.eql(2);
+              res.body.length.should.be.eql(6);
 
               res.body.forEach((course: any) => {
                 course._id.should.be.a('string');
@@ -56,7 +56,7 @@ describe('Course', () => {
   describe(`POST ${BASE_URL}`, () => {
     it('should add a new course', (done) => {
 
-      User.findOne({email: 'teacher@test.local'})
+      User.findOne({email: 'teacher1@test.local'})
         .then((user) => {
           const testData = {
             name: 'Test Course',

@@ -1,0 +1,14 @@
+<div class="title-header" (click)="changeExpand()"><h1>{{title}}</h1>
+
+  <div class="badge">{{courses.length}}</div>
+
+  <button class="open-toggle" [class.opened]="expand === true" md-icon-button>
+    <md-icon>arrow_drop_down</md-icon>
+  </button></div>
+
+
+<div class="courses" *ngIf="expand === true">
+  <p *ngIf="!courses.length">No courses added yet.</p>
+  <app-course *ngFor="let course of courses" [course]="course" (onEnroll)="enrollCallback($event)"></app-course>
+</div>
+

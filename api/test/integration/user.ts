@@ -20,7 +20,7 @@ describe('User', () => {
 
   describe(`GET ${BASE_URL}`, () => {
     it('should return all users', (done) => {
-      User.findOne({email: 'teacher@test.local'})
+      User.findOne({email: 'teacher1@test.local'})
         .then((user) => {
           chai.request(app)
             .get(BASE_URL)
@@ -28,7 +28,7 @@ describe('User', () => {
             .end((err, res) => {
               res.status.should.be.equal(200);
               res.body.should.be.a('array');
-              res.body.length.should.be.equal(8);
+              res.body.length.should.be.equal(40);
 
               done();
             });
@@ -104,7 +104,7 @@ describe('User', () => {
       User.findOne({email: 'admin@test.local'})
         .then((user) => {
           const updatedUser = user;
-          updatedUser.email = 'teacher@test.local';
+          updatedUser.email = 'teacher1@test.local';
           chai.request(app)
             .put(`${BASE_URL}/${user._id}`)
             .set('Authorization', `JWT ${JwtUtils.generateToken(user)}`)
@@ -120,7 +120,7 @@ describe('User', () => {
     });
 
     it('should fail with wrong authorization (role edit)', (done) => {
-      User.findOne({email: 'teacher@test.local'})
+      User.findOne({email: 'teacher1@test.local'})
         .then((user) => {
           const updatedUser = user;
           updatedUser.role = 'admin';
@@ -139,7 +139,7 @@ describe('User', () => {
     });
 
     it('should fail with wrong authorization (uid)', (done) => {
-      User.findOne({email: 'teacher@test.local'})
+      User.findOne({email: 'teacher1@test.local'})
       .then((user) => {
         const updatedUser = user;
         updatedUser.uid = '987456';

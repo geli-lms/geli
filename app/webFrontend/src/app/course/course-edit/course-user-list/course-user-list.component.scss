@@ -4,6 +4,17 @@
   width: 100%;
 }
 
+.user-drag-handle, .member-drag-handle {
+  cursor: move;
+  opacity: 0.2;
+  user-select: none;
+  margin-right: 0.5em;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
 .members {
   margin-left: 40px;
 }
@@ -71,63 +82,56 @@ button {
 }
 
 .list {
-  height: 40px;
   padding-bottom: 10px;
   background-color: #ffffff;
-}
 
-.list:hover {
-  background-color: #fafafa;
-  cursor: move;
-}
+  .listBg {
+    height: 40px;
+    width: 40px;
+    background: center;
+    border-radius: 20px;
+    background-size: 40px 40px;
+    margin-left: 10px;
+  }
 
-.listBg {
-  height: 40px;
-  width: 40px;
-  background: center;
-  border-radius: 20px;
-  background-size: 40px 40px;
-  margin-left: 10px;
-}
+  .firstName {
+    padding-left: 5%;
+    display: inline-block;
+    flex: 1;
+  }
 
-.firstName {
-  padding-left: 30px;
-  display: inline-block;
-}
+  .lastName {
+    flex: 1;
+  }
 
-.lastName {
-  padding-left: 3px;
-}
+  .uid {
+    flex: 1;
+  }
 
-.uid {
-  padding-left: 40px;
-}
-
-.email {
-  padding-left: 40px;
+  .email {
+    flex: 1;
+  }
 }
 
 .gu-mirror {
-  position: fixed !important;
   z-index: 9999 !important;
   opacity: 1;
-  list-style-type: none;
   box-shadow: 0 2px 2px rgba(182, 182, 182, 0.5);
-  -webkit-align-items: center;
-  align-items: center;
   display: inline-block;
-  position: relative;
-  min-height: 40px;
-  line-height: 40px;
-  padding: 0 20px;
   border: 1px solid #d8d8d8;
-  margin: 0 200px 10px 0;
   background-color: #fff;
   cursor: move;
   border-style: dashed;
   border-width: 1px;
-}
 
-.users {
-  margin-left: 50px;
+  .user-drag-handle, .member-drag-handle {
+    padding-top: 15px;
+    padding-left: 15px;
+    width: 60px;
+  }
+
+  .firstName {
+    padding-left: 5%;
+    display: inline-block;
+  }
 }
