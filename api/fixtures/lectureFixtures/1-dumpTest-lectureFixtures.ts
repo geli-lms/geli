@@ -1,8 +1,8 @@
 /* tslint:disable:max-line-length */
-import {IFixture} from './IFixture';
-import {Lecture} from '../src/models/Lecture';
+import {IFixture} from '../IFixture';
+import {Lecture} from '../../src/models/Lecture';
 
-export const lectureFixtures: IFixture = {
+export const dumpTestLectureFixtures: IFixture = {
   Model: Lecture,
   data: [
     {
@@ -14,8 +14,8 @@ export const lectureFixtures: IFixture = {
       description: 'Description Lecture 2',
     },
     {
-      name: 'Coding Train',
-      description: 'evaluate your coding skillz',
+      name: 'Lecture3',
+      description: 'Description Lecture 3',
     },
   ]
 };
