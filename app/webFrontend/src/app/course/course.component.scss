@@ -4,6 +4,13 @@
   margin-bottom: 20px;
 
   .details-button {
-    float: right;
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+  }
+
+  .spacer {
+    height: 40px;
+    display: block;
   }
 }
