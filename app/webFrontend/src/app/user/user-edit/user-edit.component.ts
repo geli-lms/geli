@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {FormGroup, FormBuilder, Validators} from '@angular/forms';
 import {MdSnackBar} from '@angular/material';
 import {UserDataService} from '../../shared/services/data.service';
@@ -21,6 +21,7 @@ export class UserEditComponent implements OnInit {
   userForm: FormGroup;
 
   constructor(private router: Router,
+              private route: ActivatedRoute,
               private userService: UserService,
               private userDataService: UserDataService,
               private showProgress: ShowProgressService,
@@ -28,10 +29,17 @@ export class UserEditComponent implements OnInit {
               public dialogService: DialogService,
               public snackBar: MdSnackBar) {
     this.generateForm();
-    this.getUserData();
   }
 
   ngOnInit() {
+    this.route.params.subscribe(params => {
+      this.id = decodeURIComponent(params['id']);
+
+      if (this.id === 'undefined') {
+        this.id = this.userService.user._id;
+      }
+    });
+    this.getUserData();
   }
 
   getUserData() {
