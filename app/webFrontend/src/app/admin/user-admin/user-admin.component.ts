@@ -100,9 +100,9 @@ export class UserAdminComponent implements OnInit {
       });
   }
 
-  function generatePass(length: number): string {
+  generatePass(length: number): string {
     let pass = "";
-    const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!?/$%&()[]{}";
+    const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
     for (let i = 0; i < length; i++) {
       pass += alphabet.charAt(Math.floor(Math.random() * alphabet.length));
