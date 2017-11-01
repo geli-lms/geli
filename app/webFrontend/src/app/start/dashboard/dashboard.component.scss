@@ -4,17 +4,8 @@
   flex-wrap: wrap;
 }
 
-.course-card {
-  width: 400px;
-  margin-right: 20px;
-
-  .details-button {
-    float: right;
-  }
-}
-
 .add-course-fab {
-  position: absolute;
+  position: fixed;
   right: 20px;
   bottom: 20px;
 }
