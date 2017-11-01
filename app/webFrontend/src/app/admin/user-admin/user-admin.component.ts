@@ -88,7 +88,9 @@ export class UserAdminComponent implements OnInit {
           this.userService.updateItem(user).then(
             (val) => {
               this.showProgress.toggleLoadingGlobal(false);
-              this.dialogService.info('Password successfully updated', 'Password for user ' + this.allUsers[userIndex].email + ' was updated to: \'' + user.password + '\'')
+              this.dialogService.info(
+                'Password successfully updated',
+                'Password for user ' + this.allUsers[userIndex].email + ' was updated to: \'' + user.password + '\'')
                 .subscribe(() => this.snackBar.open('Password updated', '', {duration: 3000}));
             },
             (error) => {
@@ -101,8 +103,8 @@ export class UserAdminComponent implements OnInit {
   }
 
   generatePass(length: number): string {
-    let pass = "";
-    const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    let pass = '';
+    const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 
     for (let i = 0; i < length; i++) {
       pass += alphabet.charAt(Math.floor(Math.random() * alphabet.length));

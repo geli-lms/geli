@@ -4,7 +4,7 @@ import {MdDialog, MdDialogRef} from '@angular/material';
 import {ConfirmDialog} from '../components/confirm-dialog/confirm-dialog.component';
 import {IUser} from '../../../../../../shared/models/IUser';
 import {UploadDialog} from '../components/upload-dialog/upload-dialog.component';
-import {InfoDialog} from "../components/info-dialog/info-dialog.component";
+import {InfoDialog} from '../components/info-dialog/info-dialog.component';
 
 @Injectable()
 export class DialogService {
