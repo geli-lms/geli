@@ -212,6 +212,14 @@ export class UserDataService extends DataService {
     this.apiPath = originalApiPath;
     return promise;
   }
+
+  addPicture(data: any): Promise<any[]> {
+    const originalApiPath = this.apiPath;
+    this.apiPath += 'picture/';
+    const promise = this.updateItem(data);
+    this.apiPath = originalApiPath;
+    return promise;
+  }
 }
 
 @Injectable()
