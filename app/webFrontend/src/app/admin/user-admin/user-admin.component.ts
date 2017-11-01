@@ -83,7 +83,7 @@ export class UserAdminComponent implements OnInit {
       .subscribe(res => {
         if (res) {
           const user = this.allUsers[userIndex];
-          user.password = 'haha';
+          user.password = this.generatePass(12);
           this.showProgress.toggleLoadingGlobal(true);
           this.userService.updateItem(user).then(
             (val) => {
@@ -97,5 +97,16 @@ export class UserAdminComponent implements OnInit {
           );
         }
       });
+  }
+
+  function generatePass(length: number): string {
+    let pass = "";
+    const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!?/$%&()[]{}";
+
+    for (let i = 0; i < length; i++) {
+      pass += alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+    }
+
+    return pass;
   }
 }
