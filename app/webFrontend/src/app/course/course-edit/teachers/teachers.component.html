@@ -2,6 +2,7 @@
                       [courseId]="courseId"
                       [usersInCourse]="course.teachers"
                       [users]="allTeachers"
+                      [role]="'teacher'"
                       [dragulaBagId]="'teachers'"
                       (onDragendUpdate)="updateCourseTeachers()"
                       (onRemove)="removeUser($event)"></app-course-user-list>

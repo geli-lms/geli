@@ -9,8 +9,7 @@
     </p>
   </md-card-content>
   <md-card-actions>
-    <button md-icon-button *ngIf="this.userService.isStudent()"
-            disabled={{isMemberOfCourse(course)}}
+    <button md-icon-button *ngIf="this.userService.isStudent() && !this.isMemberOfCourse(course)"
             (click)="apply(course._id, course.hasAccessKey)" mdTooltip="Enroll">
       <md-icon>add_circle_outline</md-icon>
     </button>
