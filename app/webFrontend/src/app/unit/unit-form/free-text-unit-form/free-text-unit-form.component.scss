@@ -1,14 +1,11 @@
-// TODO: MOVE THIS MIXIN TO A "SHARED" FILE WHICH WE INCLUDE HERE
-@mixin bp-small {
-  @media only screen and (max-width: 50rem) {
-    @content;
-  }
-}
+@import '../../../../breakpoints';
+
 
 md-input-container {
-  width: 60%;
-  @include bp-small {
-    width: 100%;
+  width: 100%;
+  
+  @include bp(md) {
+    width: 60%;
   }
 }
 
