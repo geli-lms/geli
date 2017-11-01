@@ -5,8 +5,10 @@ import {ProgressService, CodeKataProgressService} from 'app/shared/services/data
 import {ICodeKataProgress} from '../../../../../../shared/models/ICodeKataProgress';
 import {UserService} from '../../shared/services/user.service';
 import {ActivatedRoute} from '@angular/router';
-
-// import '../../../../../../../node_modules/ace-builds/src-min/ace.js';
+import {AceEditorComponent} from 'ng2-ace-editor/dist';
+import 'brace';
+import 'brace/mode/javascript';
+import 'brace/theme/github';
 
 @Component({
   selector: 'app-code-kata',
@@ -16,9 +18,12 @@ import {ActivatedRoute} from '@angular/router';
 export class CodeKataComponent implements OnInit {
   @Input() codeKata: CodeKataUnit;
 
-  @ViewChild('definitionEditor') definitionEditor;
-  @ViewChild('codeEditor') codeEditor;
-  @ViewChild('testEditor') testEditor;
+  @ViewChild('definitionEditor')
+  definitionEditor: AceEditorComponent;
+  @ViewChild('codeEditor')
+  codeEditor: AceEditorComponent;
+  @ViewChild('testEditor')
+  testEditor: AceEditorComponent;
 
   logs: string;
   progress: ICodeKataProgress;

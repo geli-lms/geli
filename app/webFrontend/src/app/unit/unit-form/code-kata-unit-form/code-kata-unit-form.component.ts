@@ -5,6 +5,10 @@ import {ICodeKataUnit} from '../../../../../../../shared/models/units/ICodeKataU
 import {ICourse} from '../../../../../../../shared/models/ICourse';
 import {CodeKataUnit} from '../../../models/CodeKataUnit';
 import {UnitGeneralInfoFormComponent} from '../unit-general-info-form/unit-general-info-form.component';
+import {AceEditorComponent} from 'ng2-ace-editor/dist';
+import 'brace';
+import 'brace/mode/javascript';
+import 'brace/theme/github';
 
 @Component({
   selector: 'app-code-kata-unit-form',
@@ -21,7 +25,8 @@ export class CodeKataUnitFormComponent implements OnInit {
   @ViewChild(UnitGeneralInfoFormComponent)
   private generalInfo: UnitGeneralInfoFormComponent;
 
-  @ViewChild('codeEditor') editor;
+  @ViewChild('codeEditor')
+  editor: AceEditorComponent;
 
   areaSeperator = '//####################';
 
