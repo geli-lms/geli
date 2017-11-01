@@ -76,4 +76,26 @@ export class UserAdminComponent implements OnInit {
       }
     });
   }
+
+  resetUserPassword(userIndex: number) {
+    this.dialogService
+      .confirmUpdate('property', 'password', this.allUsers[userIndex].email)
+      .subscribe(res => {
+        if (res) {
+          const user = this.allUsers[userIndex];
+          user.password = 'haha';
+          this.showProgress.toggleLoadingGlobal(true);
+          this.userService.updateItem(user).then(
+            (val) => {
+              this.showProgress.toggleLoadingGlobal(false);
+              this.snackBar.open('Password for user ' + this.allUsers[userIndex].email + ' successfully updated', '', {duration: 3000});
+            },
+            (error) => {
+              this.showProgress.toggleLoadingGlobal(false);
+              this.snackBar.open(JSON.parse(error._body).message, '', {duration: 3000});
+            }
+          );
+        }
+      });
+  }
 }
