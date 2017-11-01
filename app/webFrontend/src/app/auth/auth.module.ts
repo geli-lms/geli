@@ -6,6 +6,7 @@ import {ActivationComponent} from './activation/activation.component';
 import {ResetComponent} from './reset/reset.component';
 import {MaterialModule} from '@angular/material';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {RouterModule} from '@angular/router';
 
 @NgModule({
   imports: [
@@ -13,6 +14,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
     MaterialModule,
     FormsModule,
     ReactiveFormsModule,
+    RouterModule
   ],
   declarations: [
     LoginComponent,

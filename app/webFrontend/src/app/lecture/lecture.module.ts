@@ -5,6 +5,7 @@ import {LectureComponent} from './lecture.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MaterialModule} from '@angular/material';
 import {UnitModule} from '../unit/unit.module';
+import {RouterModule} from '@angular/router';
 
 @NgModule({
   imports: [
@@ -12,7 +13,8 @@ import {UnitModule} from '../unit/unit.module';
     FormsModule,
     ReactiveFormsModule,
     MaterialModule,
-    UnitModule
+    UnitModule,
+    RouterModule
   ],
   declarations: [
     LectureComponent,
