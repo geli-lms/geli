@@ -56,4 +56,10 @@
 
 .mat-toolbar {
   height: 5rem;
+
+  @include bp(4k) {
+    .g_toolbar_elem {
+      margin-top: 1rem;
+    }
+  }
 }

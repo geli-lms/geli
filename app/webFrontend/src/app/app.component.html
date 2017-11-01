@@ -1,25 +1,25 @@
 <md-toolbar color="primary" [ngClass]="{'warning': hasWarning()}">
   <a routerLink="/" class="logo">geli</a>
 
-  <span class="right-align">
+  <span class="right-align g_toolbar_elem">
     <a *ngIf="hasWarning()">{{apiInfo.nonProductionWarning}}</a>
   </span>
 
-  <span *ngIf="!isLoggedIn()">
+  <span *ngIf="!isLoggedIn()" class="g_toolbar_elem">
     <button class="login" md-button routerLink="/login" routerLinkActive="active">Login</button>
     <button class="register" md-button *ngIf="!isLoggedIn()" routerLink="/register"
             routerLinkActive="active">Register</button>
     <span class="between-distance" *ngIf="!isLoggedIn()"></span>
   </span>
 
-  <span *ngIf="isLoggedIn()">
+  <span *ngIf="isLoggedIn()" class="g_toolbar_elem">
 
     <button md-button routerLink="/profile">
         <img class="avatar" src="{{userService.user.getUserImageURL(30)}}" width="30" height="30">
         {{ this.userService.user.profile.firstName }}
     </button>
   </span>
-  <button md-icon-button [mdMenuTriggerFor]="menu">
+  <button md-icon-button [mdMenuTriggerFor]="menu" class="g_toolbar_elem">
     <md-icon>more_vert</md-icon>
   </button>
   <md-menu #menu="mdMenu">
