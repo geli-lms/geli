@@ -26,9 +26,9 @@ export class CourseNewComponent implements OnInit {
   createCourse() {
     this.courseService.createItem(this.newCourse.value).then(
       (val) => {
-        this.snackBar.open('Course created', 'Dismiss');
-        const url = '/course/' + val._id + '/edit';
-        this.router.navigate([url]);
+        this.snackBar.open('Course created', 'Dismiss', {duration: 5000});
+        //const url = '/course/' + val._id + '/edit';
+        //this.router.navigate([url]);
       }, (error) => {
         this.snackBar.open('Error creating course', 'Dismiss');
       });
