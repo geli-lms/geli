@@ -22,7 +22,6 @@ export class LectureComponent implements OnInit {
   }
 
   changeExpanded(): void {
-    console.log("hier");
     this.expanded = !this.expanded;
   }
 }
