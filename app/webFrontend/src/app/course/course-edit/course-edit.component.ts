@@ -97,8 +97,10 @@ export class CourseEditComponent implements OnInit {
       (val) => {
         console.log(val);
         this.showProgress.toggleLoadingGlobal(false);
+        this.snackBar.open('Saved successfully', 'Dismiss');
       }, (error) => {
         this.showProgress.toggleLoadingGlobal(false);
+        this.snackBar.open('Saving failed', 'Dismiss');
         console.log(error);
       });
   }
