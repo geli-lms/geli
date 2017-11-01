@@ -1,12 +1,12 @@
 import {Body, Post, JsonController, UseBefore, UploadedFile, BadRequestError, Authorized} from 'routing-controllers';
 import fs = require('fs');
 import crypto = require('crypto');
-const multer = require('multer');
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 
 import {VideoUnit, IVideoUnitModel} from '../models/units/VideoUnit';
 import {FileUnit, IFileUnitModel} from '../models/units/FileUnit';
 import {UnitBaseController} from './UnitBaseController';
+const multer = require('multer');
 
 const uploadOptions = {
   storage: multer.diskStorage({

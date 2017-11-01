@@ -14,17 +14,17 @@
     <md-card [ngClass]="(currentMember != null && currentMember._id == user._id) ? 'active':'profile'"
              (click)="setMember(user)">
 
-      <div class="bg" [grav]="user.email"></div>
+      <div class="bg" user-image [user-image]="user" [size]="160"></div>
 
       <div *ngIf="currentMember != null && currentMember._id == user._id">
-        <button md-raised-button>DETAILS</button>
+        <button md-raised-button routerLink="/profile/{{user._id}}" routerLinkActive="active">DETAILS</button>
         <button md-raised-button>SEND MAIL</button>
         <button class="del" md-raised-button (click)="removeUser()">REMOVE</button>
       </div>
 
       <ul class="info">
-        <li><b>{{user.profile.firstName}}</b></li>
-        <li><b>{{user.profile.lastName}}</b></li>
+        <li><strong>{{user.profile.firstName}}</strong></li>
+        <li><strong>{{user.profile.lastName}}</strong></li>
         <li class="userId">{{user.uid}}</li>
       </ul>
     </md-card>

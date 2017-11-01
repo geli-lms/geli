@@ -1,14 +1,13 @@
-/**
- * Created by olineff on 27.05.2017.
- */
 import {Directive, HostBinding, Input, OnInit} from '@angular/core';
+import {IUser} from '../../../../../../shared/models/IUser';
 import md5 from 'blueimp-md5';
+import {User} from '../../models/User';
 
-@Directive({selector: '[grav]'})
-export class GravatarDirective implements OnInit {
+@Directive({selector: '[user-image]'})
+export class UserImageDirective implements OnInit {
 
-  @Input('grav') email = '';
-  @Input('size') size = 30;
+  @Input('user-image') user: User;
+  @Input('size') size = 160;
 
   @HostBinding('style.backgroundImage')
   backgroundImage: string;
@@ -22,14 +21,14 @@ export class GravatarDirective implements OnInit {
   @HostBinding('style.border-radius')
   borderRadius: string;
 
-  constructor() {}
+  constructor() {
+  }
 
   ngOnInit(): void {
-    this.backgroundImage = 'url(' + 'https://www.gravatar.com/avatar/'
-      + md5(this.email.toLowerCase())
-      + '.jpg?s=' + this.size + ')';
+    this.backgroundImage = `url(${this.user.getUserImageURL()})`;
     this.width = this.size.toString() + 'px';
     this.height = this.size.toString() + 'px';
     this.borderRadius = (this.size / 2).toString() + 'px';
   }
+
 }
