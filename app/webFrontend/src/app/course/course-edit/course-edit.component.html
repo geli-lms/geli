@@ -4,23 +4,23 @@
   <md-tab label="General">
     <form class="course-form" (ngSubmit)="createCourse()">
       <md-input-container class="full-width">
-        <input async mdInput id="name" placeholder="Course Name" [(ngModel)]="course"
+        <input async mdInput id="name" mdTooltip="please enter the course name" placeholder="Course Name" [(ngModel)]="course"
                [ngModelOptions]="{standalone: true}">
       </md-input-container>
 
       <md-input-container class="full-width">
-          <textarea mdInput id="description" placeholder="Course Description" [(ngModel)]="description"
+          <textarea mdInput id="description" mdTooltip="please describe your course" placeholder="Course Description" [(ngModel)]="description"
                     [ngModelOptions]="{standalone: true}"></textarea>
       </md-input-container>
 
       <md-input-container class="full-width">
-        <input async mdInput id="accessKey" placeholder="Access Key" [(ngModel)]="accessKey"
+        <input async mdInput id="accessKey" dTooltip="please enter your access key for the course" placeholder="Access Key" [(ngModel)]="accessKey"
                [ngModelOptions]="{standalone: true}">
       </md-input-container>
 
       <p>
         <input class="upload" type="file" ng2FileSelect [uploader]="uploader" placeholder="Upload files" accept=".csv"/>
-        <button md-raised-button color="primary"
+        <button md-raised-button color="primary" mdTooltip="upload your OBS csv file with your course members"
                 (click)="uploader.uploadAll()" [disabled]="!uploader.getNotUploadedItems().length">
           <md-icon>file_upload</md-icon>
           Upload
