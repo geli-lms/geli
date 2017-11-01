@@ -4,7 +4,7 @@ import {IUser} from '../../../../../../../shared/models/IUser';
 import {ShowProgressService} from '../../../shared/services/show-progress.service';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
 import {SortUtil} from '../../../shared/utils/SortUtil';
-import {User} from "../../../models/User";
+import {User} from '../../../models/User';
 
 @Component({
   selector: 'app-teachers',
