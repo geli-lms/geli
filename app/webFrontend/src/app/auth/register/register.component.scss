@@ -9,8 +9,17 @@
   width: 100%;
   max-width: 400px;
 
+  .title {
+    text-transform: capitalize;
+  }
+
   .mat-input-container,
   .mat-radio-group {
     width: 100%;
+  }
+
+  .div-change-role{
+    margin-top: 10px;
+    font-size: x-small;
   }
 }
