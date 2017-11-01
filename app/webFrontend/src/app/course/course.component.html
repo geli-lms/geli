@@ -23,7 +23,7 @@
             *ngIf="isCourseTeacherOrAdmin(course)">
       <md-icon>show_chart</md-icon>
     </button>
-
+    <span *ngIf="this.isMemberOfCourse(course)"class="spacer"></span>
     <button md-mini-fab *ngIf="isCourseTeacherOrAdmin(course) || isMemberOfCourse(course)"
             color="primary" class="details-button" [routerLink]="['course', course._id]">
       <md-icon>arrow_forward</md-icon>

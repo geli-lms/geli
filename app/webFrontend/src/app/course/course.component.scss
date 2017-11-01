@@ -17,7 +17,14 @@
   height: 100%;
 
   .details-button {
-    float: right;
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+  }
+
+  .spacer {
+    height: 40px;
+    display: block;
   }
 
   @include bp(sm) {
