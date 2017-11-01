@@ -17,9 +17,10 @@ const uploadOptions = {
     },
     filename: (req: any, file: any, cb: any) => {
       const id = req.params.id;
+      const randomness = '-' + (Math.floor(Math.random() * 8999) + 1000);
       const extPos = file.originalname.lastIndexOf('.');
       const ext = (extPos !== -1) ? `.${file.originalname.substr(extPos + 1).toLowerCase()}` : '';
-      cb(null, id + ext);
+      cb(null, id + randomness + ext);
     }
   }),
 };
@@ -58,7 +59,7 @@ export class UserController {
                  @CurrentUser() currentUser: IUser) {
     return User.findById(id)
       .then((user: IUserModel) => {
-        if (user.profile.hasOwnProperty('picture') && typeof user.profile.picture.path !== 'undefined') {
+        if (user.profile.picture && user.profile.picture.path && fs.existsSync(user.profile.picture.path)) {
           fs.unlinkSync(user.profile.picture.path);
         }
 
@@ -144,9 +145,6 @@ export class UserController {
     })
     .then(() => {
       return {result: true};
-    })
-    .catch((err) => {
-      throw err;
     });
   }
 

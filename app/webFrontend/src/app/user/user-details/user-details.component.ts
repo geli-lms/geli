@@ -3,6 +3,7 @@ import {IUser} from '../../../../../../shared/models/IUser';
 import {UserDataService} from '../../shared/services/data.service';
 import {ActivatedRoute} from '@angular/router';
 import {UserService} from '../../shared/services/user.service';
+import {User} from '../../models/User';
 
 @Component({
   selector: 'app-user-details',
@@ -33,7 +34,7 @@ export class UserDetailsComponent implements OnInit {
   getUserData() {
     this.userDataService.readSingleItem(this.userId)
       .then((user: any) => {
-        this.user = user;
+        this.user = new User(user);
       })
       .catch((error: any) => {
       });

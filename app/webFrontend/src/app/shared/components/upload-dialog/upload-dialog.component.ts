@@ -30,11 +30,11 @@ export class UploadDialog implements OnInit {
         value: localStorage.getItem('token')
       }]
     });
+
     this.uploader.onCompleteItem = (item: any, response: any, status: any, headers: any) => {
-      if (this.mediastream) {
-        this.stopWebcam();
-      }
-      return this.dialogRef.close({success: true, user: response});
+      this.stopWebcam();
+
+      return this.dialogRef.close({success: true, user: JSON.parse(response)});
     };
   }
 
@@ -62,7 +62,9 @@ export class UploadDialog implements OnInit {
   }
 
   private stopWebcam() {
-    this.mediastream.stop();
+    if (this.mediastream) {
+      this.mediastream.stop();
+    }
   }
 
   public takePicture() {
@@ -86,7 +88,6 @@ export class UploadDialog implements OnInit {
     const imageData = this.previewPicture.nativeElement.src;
     this.convertToFile(imageData, 'webcam.png', 'image/png')
     .then((file) => {
-      console.log(file);
       const fileItem = new FileItem(this.uploader, file, {});
       this.uploader.queue.push(fileItem);
       fileItem.upload();

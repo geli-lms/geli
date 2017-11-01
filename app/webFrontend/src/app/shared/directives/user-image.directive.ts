@@ -1,11 +1,12 @@
 import {Directive, HostBinding, Input, OnInit} from '@angular/core';
 import {IUser} from '../../../../../../shared/models/IUser';
 import md5 from 'blueimp-md5';
+import {User} from '../../models/User';
 
 @Directive({selector: '[user-image]'})
 export class UserImageDirective implements OnInit {
 
-  @Input('user-image') user: IUser;
+  @Input('user-image') user: User;
   @Input('size') size = 160;
 
   @HostBinding('style.backgroundImage')
@@ -24,17 +25,7 @@ export class UserImageDirective implements OnInit {
   }
 
   ngOnInit(): void {
-    let backgroundImageUrl = 'url(';
-    if (this.user.profile.hasOwnProperty('picture')) {
-      backgroundImageUrl += '/api/uploads/users/'
-        + this.user.profile.picture.name;
-    } else {
-      backgroundImageUrl += 'https://www.gravatar.com/avatar/'
-        + md5(this.user.email.toLowerCase())
-        + '.jpg?s=' + this.size;
-    }
-    backgroundImageUrl += ')';
-    this.backgroundImage = backgroundImageUrl;
+    this.backgroundImage = `url(${this.user.getUserImageURL()})`;
     this.width = this.size.toString() + 'px';
     this.height = this.size.toString() + 'px';
     this.borderRadius = (this.size / 2).toString() + 'px';

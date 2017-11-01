@@ -21,11 +21,11 @@ export class User implements IUser {
   }
 
   getGravatarURL(size: number = 80) {
-    return 'https://www.gravatar.com/avatar/' + md5(this.email.toLowerCase()) + '.jpg?s=' + size;
+    return `https://www.gravatar.com/avatar/${md5(this.email.toLowerCase())}.jpg?s=${size}&d=retro`;
   }
 
   getUserImageURL(size: number = 80) {
-    if (this.profile.hasOwnProperty('picture')) {
+    if (this.profile && this.profile.picture) {
       return 'api/uploads/users/' + this.profile.picture.name;
     } else {
       return this.getGravatarURL(size);
