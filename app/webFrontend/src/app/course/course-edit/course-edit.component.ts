@@ -97,11 +97,11 @@ export class CourseEditComponent implements OnInit {
       (val) => {
         console.log(val);
         this.showProgress.toggleLoadingGlobal(false);
-        this.snackBar.open('Saved successfully','', {duration: 5000});
+        this.snackBar.open('Saved successfully', '', {duration: 5000});
       }, (error) => {
         this.showProgress.toggleLoadingGlobal(false);
         const errormessage = JSON.parse(error._body).message;
-        this.snackBar.open('Saving failed' + errormessage, 'Dismiss');
+        this.snackBar.open('Saving course failed ' + errormessage, 'Dismiss');
         console.log(error);
       });
   }

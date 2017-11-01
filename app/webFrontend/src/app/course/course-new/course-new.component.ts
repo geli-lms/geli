@@ -31,7 +31,7 @@ export class CourseNewComponent implements OnInit {
         this.router.navigate([url]);
       }, (error) => {
         const errormessage = JSON.parse(error._body).message;
-        this.snackBar.open('Error creating course' + errormessage, 'Dismiss');
+        this.snackBar.open('Error creating course ' + errormessage, 'Dismiss');
       });
   }
 
