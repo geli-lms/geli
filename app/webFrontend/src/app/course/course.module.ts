@@ -10,6 +10,7 @@ import {TeacherReportComponent} from './teacher-report/teacher-report.component'
 import {MaterialModule} from '@angular/material';
 import {SharedModule} from '../shared/shared.module';
 import {CourseContainerComponent} from './course-container/course-container.component';
+import {UserModule} from '../user/user.module';
 
 @NgModule({
   imports: [
@@ -19,7 +20,8 @@ import {CourseContainerComponent} from './course-container/course-container.comp
     ReactiveFormsModule,
     CourseRoutingModule,
     LectureModule,
-    SharedModule
+    SharedModule,
+    UserModule
   ],
   declarations: [
     CourseComponent,
