@@ -100,7 +100,8 @@ export class CourseEditComponent implements OnInit {
         this.snackBar.open('Saved successfully', '', {duration: 5000});
       }, (error) => {
         this.showProgress.toggleLoadingGlobal(false);
-        const errormessage = JSON.parse(error._body).message;
+        // Mongodb uses the error field errmsg
+        const errormessage = JSON.parse(error._body).message || JSON.parse(error._body).errmsg;
         this.snackBar.open('Saving course failed ' + errormessage, 'Dismiss');
         console.log(error);
       });

@@ -30,7 +30,8 @@ export class CourseNewComponent implements OnInit {
         const url = '/course/' + val._id + '/edit';
         this.router.navigate([url]);
       }, (error) => {
-        const errormessage = JSON.parse(error._body).message;
+        // Mongodb uses the error field errmsg
+        const errormessage = JSON.parse(error._body).message || JSON.parse(error._body).errmsg;
         this.snackBar.open('Error creating course ' + errormessage, 'Dismiss');
       });
   }
