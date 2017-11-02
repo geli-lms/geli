@@ -9,7 +9,7 @@ import {DialogService} from '../../shared/services/dialog.service';
 @Component({
   selector: 'app-user-admin',
   templateUrl: './user-admin.component.html',
-  styleUrls: ['./user-admin.component.scss']
+  styleUrls: ['./user-admin.component.scss'],
 })
 export class UserAdminComponent implements OnInit {
 

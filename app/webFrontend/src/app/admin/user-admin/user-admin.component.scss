@@ -1,7 +1,14 @@
 table {
   width: 100%;
+  overflow-x: scroll;
+  word-break: break-all;
 
   thead {
     text-align: left;
+  }
+
+
+  td:not(:last-child) {
+    padding-right: 0.5em;
   }
 }
