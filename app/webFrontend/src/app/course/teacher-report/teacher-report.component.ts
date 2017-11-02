@@ -6,6 +6,7 @@ import {ActivatedRoute} from '@angular/router';
 import {IProgress} from '../../../../../../shared/models/IProgress';
 import {ProgressService} from '../../shared/services/data/progress.service';
 import {IUser} from '../../../../../../shared/models/IUser';
+import {UserService} from '../../shared/services/user.service';
 
 @Component({
   selector: 'app-teacher-report',
@@ -24,7 +25,8 @@ export class TeacherReportComponent implements OnInit {
   constructor(private route: ActivatedRoute,
               private courseService: CourseService,
               private unitService: UnitService,
-              private progressService: ProgressService) {
+              private progressService: ProgressService,
+              private userService: UserService) {
   }
 
   ngOnInit() {
