@@ -35,9 +35,11 @@ export class CodeKataUnitFormComponent implements OnInit {
     definition: '// Task: Manipulate the targetSet, so it only contains the values "Hello" and "CodeKata"' +
       '\n' +
       '\nlet targetSet = new Set(["Hello", "there"]);',
-    code: 'targetSet.add("CodeKata");' +
+    code: '// This is your code to validate this section. Only course Teachers and Admins can see this' +
+      '\ntargetSet.add("CodeKata");' +
       '\ntargetSet.delete("there");',
-    test: 'validate();' +
+    test: '// This is the Test Section use the validate function to test the students code' +
+      '\nvalidate();' +
       '\n' +
       '\nfunction validate() {' +
       '\n\tlet result = targetSet.has("Hello") && targetSet.has("CodeKata") && targetSet.size === 2;' +
@@ -61,9 +63,9 @@ export class CodeKataUnitFormComponent implements OnInit {
       this.model = new CodeKataUnit(this.course._id);
       this.model.code =
         this.example.definition
-        + '\n\n' + this.areaSeperator + '\n\n'
+        + '\n\n' + this.areaSeperator + ((this.example.code.startsWith('//')) ? '\n' : '\n\n')
         + this.example.code
-        + '\n\n' + this.areaSeperator + '\n\n'
+        + '\n\n' + this.areaSeperator + ((this.example.test.startsWith('//')) ? '\n' : '\n\n')
         + this.example.test;
       this.model.definition = undefined;
       this.model.test = undefined;
