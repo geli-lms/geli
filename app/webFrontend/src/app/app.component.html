@@ -1,8 +1,8 @@
 <md-toolbar color="primary" [ngClass]="{'warning': hasWarning()}">
   <a routerLink="/" class="logo">geli</a>
 
-  <span class="right-align">
-    <a *ngIf="hasWarning()">{{apiInfo.nonProductionWarning}}</a>
+  <span class="non-production-warning">
+    <a *ngIf="hasWarning()" title="{{apiInfo.nonProductionWarning}}">{{apiInfo.nonProductionWarning}}</a>
   </span>
 
   <span *ngIf="!isLoggedIn()">
@@ -15,7 +15,7 @@
   <span *ngIf="isLoggedIn()">
 
     <button md-button routerLink="/profile">
-        <img class="avatar" src="{{userService.user.getGravatarURL(30)}}">
+        <img class="avatar" src="{{userService.user.getUserImageURL(30)}}" width="30" height="30">
         {{ this.userService.user.profile.firstName }}
     </button>
   </span>

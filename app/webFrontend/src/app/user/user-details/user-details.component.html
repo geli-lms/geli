@@ -1,15 +1,7 @@
 <h1>Profile</h1>
-
-<h2>{{user?.profile.firstName}} {{user?.profile.lastName}}</h2>
-<p>
-  <strong>E-Mail:</strong> {{user?.email}}
-</p>
-<p *ngIf="userService.isStudent()">
-  <strong>Matrikelnummer:</strong> {{user?.uid}}
-</p>
-
-<p>
-  <button md-raised-button color="primary" routerLink="/profile/edit" routerLinkActive="active">
+<app-user-profile *ngIf="user" [user]="user" [userId]="this.userService.user._id"></app-user-profile>
+<p *ngIf="userService.user._id === userId || userService.isAdmin()">
+  <button md-raised-button color="primary" routerLink="/profile/{{user?._id}}/edit" routerLinkActive="active">
     <md-icon>edit</md-icon>
     Edit profile
   </button>
