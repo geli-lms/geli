@@ -41,9 +41,9 @@
   </div>
 </div>
 <p>
-  <button md-button (click)="onCancel()">Cancel</button>
-  <button md-button color="primary"
+  <button md-raised-button color="primary"
           (click)="uploadAll()" [disabled]="(!uploader.getNotUploadedItems().length) || (!generalInfo.form.value.name)">
     Upload
   </button>
+  <button md-button color ="warn" (click)="onCancel()">Cancel</button>
 </p>

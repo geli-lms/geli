@@ -1,4 +1,5 @@
 @import "../../../../variables";
+@import "../../../shared";
 
 .container {
   min-height: 500px;
@@ -36,16 +37,6 @@
 
     &:hover {
       opacity: 1;
-    }
-  }
-
-  .open-toggle {
-    color: map-get($app-primary, 'default');
-    transition: transform 0.3s;
-    transform: rotate(-90deg);
-
-    &.opened {
-      transform: rotate(0);
     }
   }
 

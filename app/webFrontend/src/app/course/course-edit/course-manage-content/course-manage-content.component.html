@@ -4,7 +4,7 @@
       <div class="lecture-header">
         <md-icon class="lecture-drag-handle">drag_handle</md-icon>
         <h2 (click)="openToggleLecture(lecture)">{{lecture.name}}</h2>
-        <button class="open-toggle" (click)="openToggleLecture(lecture)"
+        <button class="toggle" (click)="openToggleLecture(lecture)"
                 [class.opened]="openedLecture && lecture._id === openedLecture._id" md-icon-button>
           <md-icon>arrow_drop_down</md-icon>
         </button>

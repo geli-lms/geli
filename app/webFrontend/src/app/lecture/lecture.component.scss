@@ -1,5 +1,5 @@
 @import "/../../variables";
-
+@import "/../shared";
 :host {
   position: relative;
 }
@@ -9,21 +9,7 @@
   position: relative;
 }
 
-.toggle {
-  align-items: center;
-  color: map-get($app-primary,'default');
-  float: right;
-  transition: transform 0.3s;
-  transform: rotate(-90deg);
-  &.opened {
-    transform: rotate(0);
-  }
-}
-
 .fill-space {
   flex: 1 1 auto;
 }
 
-.clickable {
-  cursor: pointer;
-}

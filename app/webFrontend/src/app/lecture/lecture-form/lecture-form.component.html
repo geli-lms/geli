@@ -9,7 +9,7 @@
 
 
   <p>
-    <button md-button (click)="onCancel()">Cancel</button>
-    <button md-button [disabled]="!lectureForm.valid" color="primary" type="submit">{{ actionLabel }}</button>
+    <button md-raised-button [disabled]="!lectureForm.valid" color="primary" type="submit">{{ actionLabel }}</button>
+    <button md-button color="warn" (click)="onCancel()">Cancel</button>
   </p>
 </form>
