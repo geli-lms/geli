@@ -5,44 +5,49 @@
     <div class="tab-content">
       <form class="course-form" (ngSubmit)="createCourse()">
         <md-input-container class="full-width">
-          <input async mdInput id="name" mdTooltip="please enter the course name"
-                 placeholder="Course Name" [(ngModel)]="course"
-                 [ngModelOptions]="{standalone: true}">
-
-        </md-input-container>
-
-        <md-input-container class="full-width">
-          <textarea mdInput id="description" mdTooltip="please describe your course"
-                    placeholder="Course Description" [(ngModel)]="description"
-                    [ngModelOptions]="{standalone: true}"></textarea>
-        </md-input-container>
-
-        <md-input-container class="full-width">
-          <input mdTooltip="please enter your access key for the course" async mdInput
-                 id="accessKey"
-                 placeholder="Access Key" [(ngModel)]="accessKey"
+          <input async mdInput id="name" placeholder="Name" [(ngModel)]="course"
                  [ngModelOptions]="{standalone: true}">
         </md-input-container>
 
-        <p>
-          <input class="upload" type="file" ng2FileSelect [uploader]="uploader"
-                 placeholder="Upload files" accept=".csv"/>
-          <button md-raised-button color="primary"
-                  mdTooltip="upload your OBS csv file with your course members"
-                  (click)="uploader.uploadAll()"
-                  [disabled]="!uploader.getNotUploadedItems().length">
-            <md-icon>file_upload</md-icon>
-            Upload
-          </button>
-        </p>
+        <md-input-container class="full-width">
+        <textarea mdInput id="description" placeholder="Description" [(ngModel)]="description"
+                  [ngModelOptions]="{standalone: true}"></textarea>
+        </md-input-container>
+
+        <md-input-container class="full-width">
+          <input async mdInput id="accessKey" placeholder="Access Key" [(ngModel)]="accessKey"
+                 [ngModelOptions]="{standalone: true}">
+        </md-input-container>
 
         <md-slide-toggle class="slider" (change)="onChangeMode($event)"
-                         [checked]="mode">Mode {{enrollType}}
+                         [checked]="mode">
+          <span *ngIf="enrollType === 'free' && !accessKey">Everyone can enroll</span>
+          <span
+            *ngIf="enrollType === 'free' && accessKey">Everyone can enroll using the access key</span>
+          <span *ngIf="enrollType === 'whitelist'">Only whitelisted members can enroll</span>
         </md-slide-toggle>
 
-        <md-slide-toggle (change)="onChangeActive($event)"
-                         [checked]="active">Active {{active}}
-        </md-slide-toggle>
+        <div class="csv-upload" *ngIf="enrollType === 'whitelist'">
+          <p>Upload your OBS csv file with your course members for whitelisting students.</p>
+          <p>
+            <input class="upload" type="file" ng2FileSelect [uploader]="uploader"
+                   placeholder="Upload files" accept=".csv"/>
+            <button md-raised-button color="primary"
+                    (click)="uploader.uploadAll()"
+                    [disabled]="!uploader.getNotUploadedItems().length">
+              <md-icon>file_upload</md-icon>
+              Upload
+            </button>
+          </p>
+        </div>
+
+        <p>
+          <md-slide-toggle (change)="onChangeActive($event)"
+                           [checked]="active">
+            <span *ngIf="active">Course can be seen by students</span>
+            <span *ngIf="!active">Course cannot be seen by students</span>
+          </md-slide-toggle>
+        </p>
 
         <p>
           <button md-raised-button color="primary" class="md-button" type="submit">Save</button>
