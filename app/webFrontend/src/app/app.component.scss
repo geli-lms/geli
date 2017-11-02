@@ -27,10 +27,11 @@
   font-family: Pacifico, cursive;
   text-decoration: none;
   color: white;
-  font-size: 2.5rem;
-  margin-bottom: .5rem;
+  font-size: 28px;
+  margin-bottom: 10px;
 
   @include bp(4k) {
+    font-size: 2.5rem;
     margin-bottom: 0;
   }
 
@@ -58,9 +59,8 @@
 }
 
 .mat-toolbar {
-  height: 5rem;
-
   @include bp(4k) {
+    height: 5rem;
     .g_toolbar_elem {
       margin-top: 1rem;
     }
