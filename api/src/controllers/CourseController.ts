@@ -1,6 +1,6 @@
 import {Request} from 'express';
 import {
-  Authorized, BadRequestError,
+  Authorized,
   Body,
   CurrentUser, ForbiddenError,
   Get,
@@ -14,11 +14,11 @@ import {
 } from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 
-import {IUserModel, User} from '../models/User';
 import {ICourse} from '../../../shared/models/ICourse';
 import {IUser} from '../../../shared/models/IUser';
 import {ObsCsvController} from './ObsCsvController';
 import {Course, ICourseModel} from '../models/Course';
+import {User} from '../models/User';
 import {WhitelistUser} from '../models/WhitelistUser';
 import {ICodeKataUnit} from '../../../shared/models/units/ICodeKataUnit';
 

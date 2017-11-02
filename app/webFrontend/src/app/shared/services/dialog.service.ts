@@ -40,7 +40,7 @@ export class DialogService {
   }
 
   public upload(user: IUser) {
-    let dialogRef: MdDialogRef<UploadDialog>;
+    let dialogRef: MatDialogRef<UploadDialog>;
 
     dialogRef = this.dialog.open(UploadDialog);
     dialogRef.componentInstance.user = user;

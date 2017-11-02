@@ -1,6 +1,4 @@
 import {Directive, HostBinding, Input, OnInit} from '@angular/core';
-import {IUser} from '../../../../../../shared/models/IUser';
-import md5 from 'blueimp-md5';
 import {User} from '../../models/User';
 
 @Directive({selector: '[user-image]'})

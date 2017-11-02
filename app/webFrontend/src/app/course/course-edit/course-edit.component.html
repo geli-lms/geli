@@ -19,13 +19,13 @@
                  [ngModelOptions]="{standalone: true}">
         </mat-form-field>
 
-        <md-slide-toggle class="slider" (change)="onChangeMode($event)"
+        <mat-slide-toggle class="slider" (change)="onChangeMode($event)"
                          [checked]="mode">
           <span *ngIf="enrollType === 'free' && !accessKey">Everyone can enroll</span>
           <span
             *ngIf="enrollType === 'free' && accessKey">Everyone can enroll using the access key</span>
           <span *ngIf="enrollType === 'whitelist'">Only whitelisted members can enroll</span>
-        </md-slide-toggle>
+        </mat-slide-toggle>
 
         <div class="csv-upload" *ngIf="enrollType === 'whitelist'">
           <p>Upload your OBS csv file with your course members for whitelisting students.</p>
