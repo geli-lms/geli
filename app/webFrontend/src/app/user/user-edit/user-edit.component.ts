@@ -93,10 +93,13 @@ export class UserEditComponent implements OnInit {
     this.showProgress.toggleLoadingGlobal(true);
     this.userDataService.updateItem(this.user).then(
       (val) => {
-        console.log(val);
         this.showProgress.toggleLoadingGlobal(false);
         this.snackBar.open('Profile successfully updated.', '', {duration: 3000});
-        this.userService.setUser(val);
+
+        if (this.userService.isLoggedInUser(val)) {
+          this.userService.setUser(val);
+        }
+
         this.navigateBack();
       },
       (error) => {
@@ -132,6 +135,10 @@ export class UserEditComponent implements OnInit {
   }
 
   private navigateBack() {
-    this.router.navigate(['/profile']);
+    if (this.userService.isLoggedInUser(this.user)) {
+      this.router.navigate(['/profile']);
+    } else {
+      this.router.navigate(['/profile', this.user._id]);
+    }
   }
 }
