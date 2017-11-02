@@ -1,7 +1,3 @@
-let dbName = process.env.DB_NAME || 'geli';
-if (process.env.NODE_ENV === 'test') {
-  dbName = 'test';
-}
 export default {
   // Secret key for JWT signing and encryption
   secret: process.env.SECRET || 'notSoSecret234oi23o423ooqnafsnaaslfj',
@@ -10,7 +6,7 @@ export default {
   baseurl: process.env.BASEURL || 'http://localhost:4200',
 
   // Database connection information
-  database: `mongodb://${process.env.DB_HOST || 'localhost'}:27017/${dbName}`,
+  database: `mongodb://${process.env.DB_HOST || 'localhost'}:27017/${process.env.DB_NAME || 'geli'}`,
 
   // Setting port for server
   port: process.env.PORT || 3030,
