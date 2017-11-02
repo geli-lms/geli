@@ -53,7 +53,7 @@
 
 
       <div *ngIf="role == 'student'">
-        <md-input-container>l
+        <md-input-container>
           <input mdInput formControlName="uid" placeholder="Matriculation number"/>
           <div *ngIf="registerForm.controls.uid.touched">
             <small *ngIf="registerForm.controls.uid.hasError('required')" class="text-danger">Matriculation number is
