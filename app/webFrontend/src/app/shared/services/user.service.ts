@@ -36,4 +36,8 @@ export class UserService {
   isAdmin(): boolean {
     return this.user.role === 'admin';
   }
+
+  isLoggedInUser(user: IUser): boolean {
+    return this.user._id === user._id;
+  }
 }
