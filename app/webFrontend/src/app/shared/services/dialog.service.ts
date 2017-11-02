@@ -2,6 +2,8 @@ import {Observable} from 'rxjs/Rx';
 import {Injectable} from '@angular/core';
 import {MatDialog, MatDialogRef} from '@angular/material';
 import {ConfirmDialog} from '../components/confirm-dialog/confirm-dialog.component';
+import {IUser} from '../../../../../../shared/models/IUser';
+import {UploadDialog} from '../components/upload-dialog/upload-dialog.component';
 
 @Injectable()
 export class DialogService {
@@ -35,5 +37,14 @@ export class DialogService {
 
   public confirmRemove(itemType: string, itemName: string, removeFrom?: string): Observable<boolean> {
     return this.confirmOperation('Remove', itemType, itemName, removeFrom);
+  }
+
+  public upload(user: IUser) {
+    let dialogRef: MdDialogRef<UploadDialog>;
+
+    dialogRef = this.dialog.open(UploadDialog);
+    dialogRef.componentInstance.user = user;
+
+    return dialogRef.afterClosed();
   }
 }

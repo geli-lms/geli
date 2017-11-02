@@ -2,57 +2,75 @@
 
 <mat-tab-group dynamicHeight="true">
   <mat-tab label="General">
-    <form class="course-form" (ngSubmit)="createCourse()">
-      <mat-form-field class="full-width">
-        <input async matInput id="name" placeholder="Course Name" [(ngModel)]="course"
-               [ngModelOptions]="{standalone: true}">
-      </mat-form-field>
+    <div class="tab-content">
+      <form class="course-form" (ngSubmit)="createCourse()">
+        <mat-form-field class="full-width">
+          <input async matInput id="name" placeholder="Name" [(ngModel)]="course"
+                 [ngModelOptions]="{standalone: true}">
+        </mat-form-field>
 
-      <mat-form-field class="full-width">
-          <textarea matInput id="description" placeholder="Course Description" [(ngModel)]="description"
-                    [ngModelOptions]="{standalone: true}"></textarea>
-      </mat-form-field>
+        <mat-form-field class="full-width">
+        <textarea matInput id="description" placeholder="Description" [(ngModel)]="description"
+                  [ngModelOptions]="{standalone: true}"></textarea>
+        </mat-form-field>
 
-      <mat-form-field class="full-width">
-        <input async matInput id="accessKey" placeholder="Access Key" [(ngModel)]="accessKey"
-               [ngModelOptions]="{standalone: true}">
-      </mat-form-field>
+        <mat-form-field class="full-width">
+          <input async matInput id="accessKey" placeholder="Access Key" [(ngModel)]="accessKey"
+                 [ngModelOptions]="{standalone: true}">
+        </mat-form-field>
 
-      <p>
-        <input class="upload" type="file" ng2FileSelect [uploader]="uploader" placeholder="Upload files" accept=".csv"/>
-        <button mat-raised-button color="primary"
-                (click)="uploader.uploadAll()" [disabled]="!uploader.getNotUploadedItems().length">
-          <mat-icon>file_upload</mat-icon>
-          Upload
-        </button>
-      </p>
+        <md-slide-toggle class="slider" (change)="onChangeMode($event)"
+                         [checked]="mode">
+          <span *ngIf="enrollType === 'free' && !accessKey">Everyone can enroll</span>
+          <span
+            *ngIf="enrollType === 'free' && accessKey">Everyone can enroll using the access key</span>
+          <span *ngIf="enrollType === 'whitelist'">Only whitelisted members can enroll</span>
+        </md-slide-toggle>
 
-      <mat-slide-toggle class="slider" (change)="onChangeMode($event)"
-                        [checked]="mode">Mode {{enrollType}}
-      </mat-slide-toggle>
+        <div class="csv-upload" *ngIf="enrollType === 'whitelist'">
+          <p>Upload your OBS csv file with your course members for whitelisting students.</p>
+          <p>
+            <input class="upload" type="file" ng2FileSelect [uploader]="uploader"
+                   placeholder="Upload files" accept=".csv"/>
+            <button mat-raised-button color="primary"
+                    (click)="uploader.uploadAll()"
+                    [disabled]="!uploader.getNotUploadedItems().length">
+              <mat-icon>file_upload</mat-icon>
+              Upload
+            </button>
+          </p>
+        </div>
 
-      <mat-slide-toggle (change)="onChangeActive($event)"
-                        [checked]="active">Active {{active}}
-      </mat-slide-toggle>
+        <p>
+          <mat-slide-toggle (change)="onChangeActive($event)"
+                           [checked]="active">
+            <span *ngIf="active">Course can be seen by students</span>
+            <span *ngIf="!active">Course cannot be seen by students</span>
+          </mat-slide-toggle>
+        </p>
 
-      <p>
-        <button mat-raised-button color="primary" class="mat-button" type="submit">Save</button>
-      </p>
-    </form>
-
-
+        <p>
+          <button mat-raised-button color="primary" class="mat-button" type="submit">Save</button>
+        </p>
+      </form>
+    </div>
   </mat-tab>
 
-  <mat-tab label="Manage content">
-    <app-course-manage-content [course]="courseOb"></app-course-manage-content>
+  <mat-tab label="Content">
+    <div class="tab-content">
+      <app-course-manage-content [course]="courseOb"></app-course-manage-content>
+    </div>
   </mat-tab>
 
-  <mat-tab label="Course Members">
-    <app-members [courseId]="id"></app-members>
+  <mat-tab label="Members">
+    <div class="tab-content">
+      <app-members [courseId]="id"></app-members>
+    </div>
   </mat-tab>
 
-  <mat-tab label="Course Teachers">
-    <app-teachers [courseId]="id"></app-teachers>
+  <mat-tab label="Teachers">
+    <div class="tab-content">
+      <app-teachers [courseId]="id"></app-teachers>
+    </div>
   </mat-tab>
-
 </mat-tab-group>

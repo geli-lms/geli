@@ -11,7 +11,7 @@ export const courseFixtures: IFixture = {
       courseAdmin: null,
       teachers: [],
       students: [],
-      active: true
+      active: false
     },
     {
       name: 'Introduction to web development',

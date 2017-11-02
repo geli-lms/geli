@@ -13,7 +13,9 @@
               [(text)]="codeKata.code || progress.code"
               [mode]="'javascript'"
               [theme]="'github'"
-              [readOnly]="isExampleCode">
+              [readOnly]="isExampleCode"
+              [durationBeforeCallback]="333"
+              (textChanged)="onUserInput()">
   </ace-editor>
   <div>These tests need to success:</div>
   <ace-editor

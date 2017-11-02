@@ -1,9 +1,15 @@
 @import "../../../variables";
+@import "../../../breakpoints";
 
 .courses {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   flex-wrap: wrap;
+  margin: -8px;
+
+  @include bp(sm) {
+    flex-direction: row;
+  }
 }
 
 .title-header {
@@ -20,9 +26,9 @@
   background-color: map-get($app-primary, 'default');
   border-radius: 50%;
   color: white;
-  font-size: 10pt;
-  padding: 5px 5px 5px 5px;
-  width: 16px;
+  width: 1.6em;
+  height: 1.6em;
+  line-height: 1.6em;
   margin-left: 5px;
   margin-right: 2px;
   text-align: center;

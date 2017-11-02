@@ -10,7 +10,7 @@
   </thead>
   <tbody>
   <tr *ngFor="let user of allUsers; let i = index;">
-    <td>{{user.profile.firstName}} {{user.profile.lastName}}</td>
+    <td><a [routerLink]="['/profile', user._id]">{{user.profile.firstName}} {{user.profile.lastName}}</a></td>
     <td>{{user.email}}</td>
     <td>
       <mat-select [(ngModel)]="user.role" name="role" (change)="updateRole(i)">

@@ -30,7 +30,13 @@
     </div>
   </mat-form-field>
 
-  <button mat-raised-button color="accent" class="mat-button" type="submit">Save</button>
-  <button mat-raised-button color="warn" class="mat-button" routerLink="/profile" routerLinkActive="active">Cancel
+  <button mat-raised-button color="primary" class="mat-button" type="submit" [disabled]="!userForm?.valid">Save</button>
+  <button mat-button class="mat-button" routerLink="/profile" routerLinkActive="active">
+    Cancel
   </button>
 </form>
+<p>
+  <button md-raised-button color="accent" class="md-button" (click)="openAddPictureDialog()">
+    Upload new picture
+  </button>
+</p>

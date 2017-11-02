@@ -4,6 +4,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {GravatarDirective} from './directives/gravatar.directive';
 import {DialogModule} from './modules/dialog.module';
 import {UnitMenuComponent} from './components/unit-menu/unit-menu.component';
+import {UserImageDirective} from './directives/user-image.directive';
 import {MaterialImportModule} from './modules/material-import.module';
 
 @NgModule({
@@ -16,12 +17,14 @@ import {MaterialImportModule} from './modules/material-import.module';
   declarations: [
     GravatarDirective,
     UnitMenuComponent,
+    UserImageDirective
   ],
   exports: [
     GravatarDirective,
     DialogModule,
+    UnitMenuComponent,
+    UserImageDirective,
     MaterialImportModule,
-    UnitMenuComponent
   ]
 })
 export class SharedModule {
