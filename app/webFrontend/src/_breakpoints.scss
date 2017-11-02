@@ -8,19 +8,25 @@
 //   }
 // }
 
-$bp_width--xs: 320px;   // app-root min-width
-$bp_width--sm: 525px;
-$bp_width--md: 750px;
-$bp_width--bg: 975px;
-$bp_width--mg: 1200px;
-$bp_width--4k: 2560px;  // app-root max-width
+$base_font_size: 1em;
+$line_height--base: 1.5;
+$line_height--header: 1.25; // Currently not in use
+
+$bp_width--xs:  20em;  // 320px => app-root min-width
+$bp_width--sm:  32em;  // 512px
+$bp_width--md:  48em;  // 768px
+$bp_width--lg:  60em;  // 960px
+$bp_width--xl:  75em;  // 1200px
+$bp_width--xxl: 120em; // 1920px
+$bp_width--4k:  160em; // 2560px => app-root max-width
 
 $breakpoints: (
-  sm: $bp_width--sm, // Small
-  md: $bp_width--md, // Medium
-  bg: $bp_width--bg, // Big
-  mg: $bp_width--mg, // Mega
-  4k: $bp_width--4k, // 4k-Viewports
+  sm:  $bp_width--sm,  // Small
+  md:  $bp_width--md,  // Medium
+  lg:  $bp_width--lg,  // Large
+  xl:  $bp_width--xl,  // X Large
+  xxl: $bp_width--xxl, // XX Large
+  4k:  $bp_width--4k,  // 4k-Viewports
 );
 
 @mixin bp($breakpoint) {
