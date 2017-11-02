@@ -40,9 +40,11 @@
     "zone.js": "^0.8.18"
   },
   "devDependencies": {
+    "@angular-devkit/schematics": "0.0.35",
     "@angular/cli": "1.4.9",
     "@angular/compiler-cli": "^4.4.6",
-    "@types/jasmine": "^2.5.45",
+    "@schematics/angular": "^0.1.0",
+    "@types/jasmine": "2.5.45",
     "@types/node": "~8.0.47",
     "codelyzer": "~4.0.0",
     "jasmine-core": "~2.8.0",
