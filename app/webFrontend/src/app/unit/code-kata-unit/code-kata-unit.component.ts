@@ -59,11 +59,11 @@ export class CodeKataComponent implements OnInit {
     });
     this.codeEditor.setOptions({
       maxLines: 9999,
-      firstLineNumber: this.codeKata.definition.split('\n').length || 1,
+      firstLineNumber: (this.codeKata.definition.split('\n').length || 0) + 1,
     });
     this.testEditor.setOptions({
       maxLines: 9999,
-      firstLineNumber: (this.codeKata.definition.split('\n').length + this.progress.code.split('\n').length) || 1,
+      firstLineNumber: ((this.codeKata.definition.split('\n').length + this.progress.code.split('\n').length) || 0) + 1,
     });
   }
 
