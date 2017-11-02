@@ -39,6 +39,7 @@ export class RegisterComponent implements OnInit {
     if (this.registerForm.value.role !== 'student') {
       delete this.registerForm.value.uid;
     }
+    this.registerForm.value.role = this.role;
     this.registerForm.value.email = this.registerForm.value.email.replace(/\s/g, '').toLowerCase();
     this.authenticationService.register(this.registerForm.value).then(
       (val) => {
