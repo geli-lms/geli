@@ -26,31 +26,31 @@ export class AuthenticationService {
     return new Promise((resolve, reject) => {
 
       return this.http.post(AuthenticationService.API_URL + 'auth/login', {email: email, password: password})
-        .map(response => response.json())
-        .subscribe(
-          (response: any) => {
-            this.userService.setUser(response.user);
-            this.token = response.token;
-            this.isLoggedIn = true;
-            localStorage.setItem('token', this.token);
+      .map(response => response.json())
+      .subscribe(
+        (response: any) => {
+          this.userService.setUser(response.user);
+          this.token = response.token;
+          this.isLoggedIn = true;
+          localStorage.setItem('token', this.token);
 
-            resolve();
-          }, (err) => {
-            reject(err);
-          });
+          resolve();
+        }, (err) => {
+          reject(err);
+        });
     });
   }
 
   reloadUser() {
     if (this.isLoggedIn && this.userService.user) {
-      return this.http.get(`${AuthenticationService.API_URL}users/${this.userService.user._id}`, { headers: this.authHeader() })
-        .map(response => response.json())
-        .subscribe(
-          (response: any) => {
-            this.userService.setUser(response);
-          }, () => {
-            this.logout();
-          });
+      return this.http.get(`${AuthenticationService.API_URL}users/${this.userService.user._id}`, {headers: this.authHeader()})
+      .map(response => response.json())
+      .subscribe(
+        (response: any) => {
+          this.userService.setUser(response);
+        }, () => {
+          this.logout();
+        });
     }
   }
 
@@ -75,12 +75,12 @@ export class AuthenticationService {
         AuthenticationService.API_URL + 'auth/register',
         user
       )
-        .subscribe(
-          (json: any) => {
-            resolve();
-          }, (err) => {
-            reject(err);
-          });
+      .subscribe(
+        (json: any) => {
+          resolve();
+        }, (err) => {
+          reject(err);
+        });
     });
 
   }
@@ -92,12 +92,12 @@ export class AuthenticationService {
         AuthenticationService.API_URL + 'auth/activate',
         {authenticationToken: token}
       )
-        .subscribe(
-          (json: any) => {
-            resolve();
-          }, (err) => {
-            reject(err);
-          });
+      .subscribe(
+        (json: any) => {
+          resolve();
+        }, (err) => {
+          reject(err);
+        });
     });
   }
 
@@ -108,12 +108,12 @@ export class AuthenticationService {
         AuthenticationService.API_URL + 'auth/requestreset',
         {email: email}
       )
-        .subscribe(
-          (json: any) => {
-            resolve();
-          }, (err) => {
-            reject(err);
-          });
+      .subscribe(
+        (json: any) => {
+          resolve();
+        }, (err) => {
+          reject(err);
+        });
     });
   }
 
@@ -127,12 +127,12 @@ export class AuthenticationService {
           newPassword: newPassword
         }
       )
-        .subscribe(
-          (json: any) => {
-            resolve();
-          }, (err) => {
-            reject(err);
-          });
+      .subscribe(
+        (json: any) => {
+          resolve();
+        }, (err) => {
+          reject(err);
+        });
     });
   }
 

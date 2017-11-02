@@ -25,14 +25,14 @@ export class LicensesComponent implements OnInit {
 
   getAllFrontendDependencies() {
     this.allFrontendDependencies = DependenciesList.getDependencies()
-      .sort(Dependency.compare);
+    .sort(Dependency.compare);
   }
 
   getAllApiDependencies() {
     this.service.getApiDependencies()
-      .then((dependencies: any) => {
-        this.allApiDependencies = dependencies.sort(Dependency.compare);
-      });
+    .then((dependencies: any) => {
+      this.allApiDependencies = dependencies.sort(Dependency.compare);
+    });
   }
 
   isApiDependenciesEmpty() {

@@ -8,5 +8,7 @@ import {MdDialogRef} from '@angular/material';
 })
 export class AccessKeyDialog {
   public accessKey: string;
-  constructor(public dialogRef: MdDialogRef<AccessKeyDialog>) {}
+
+  constructor(public dialogRef: MdDialogRef<AccessKeyDialog>) {
+  }
 }

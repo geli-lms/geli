@@ -1,9 +1,9 @@
 /* tslint:disable:no-unused-variable */
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import { DebugElement } from '@angular/core';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import {By} from '@angular/platform-browser';
+import {DebugElement} from '@angular/core';
 
-import { HomescreenComponent } from './homescreen.component';
+import {HomescreenComponent} from './homescreen.component';
 
 describe('HomescreenComponent', () => {
   let component: HomescreenComponent;
@@ -11,7 +11,7 @@ describe('HomescreenComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ HomescreenComponent ]
+      declarations: [HomescreenComponent]
     })
     .compileComponents();
   }));

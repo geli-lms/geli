@@ -2,54 +2,75 @@
 
 <md-tab-group dynamicHeight="true">
   <md-tab label="General">
-    <form class="course-form" (ngSubmit)="createCourse()">
-      <md-input-container class="full-width">
-        <input async mdInput id="name" placeholder="Course Name" [(ngModel)]="course"
-               [ngModelOptions]="{standalone: true}">
-      </md-input-container>
+    <div class="tab-content">
+      <form class="course-form" (ngSubmit)="createCourse()">
+        <md-input-container class="full-width">
+          <input async mdInput id="name" placeholder="Name" [(ngModel)]="course"
+                 [ngModelOptions]="{standalone: true}">
+        </md-input-container>
 
-      <md-input-container class="full-width">
-          <textarea mdInput id="description" placeholder="Course Description" [(ngModel)]="description"
-                    [ngModelOptions]="{standalone: true}"></textarea>
-      </md-input-container>
+        <md-input-container class="full-width">
+        <textarea mdInput id="description" placeholder="Description" [(ngModel)]="description"
+                  [ngModelOptions]="{standalone: true}"></textarea>
+        </md-input-container>
 
-      <md-input-container class="full-width">
-        <input async mdInput id="accessKey" placeholder="Access Key" [(ngModel)]="accessKey"
-               [ngModelOptions]="{standalone: true}">
-      </md-input-container>
+        <md-input-container class="full-width">
+          <input async mdInput id="accessKey" placeholder="Access Key" [(ngModel)]="accessKey"
+                 [ngModelOptions]="{standalone: true}">
+        </md-input-container>
 
-      <p>
-        <input class="upload" type="file" ng2FileSelect [uploader]="uploader" placeholder="Upload files" accept=".csv" />
-        <button md-raised-button color="primary"
-                (click)="uploader.uploadAll()" [disabled]="!uploader.getNotUploadedItems().length">
-          <md-icon>file_upload</md-icon> Upload
-        </button>
-      </p>
+        <md-slide-toggle class="slider" (change)="onChangeMode($event)"
+                         [checked]="mode">
+          <span *ngIf="enrollType === 'free' && !accessKey">Everyone can enroll</span>
+          <span
+            *ngIf="enrollType === 'free' && accessKey">Everyone can enroll using the access key</span>
+          <span *ngIf="enrollType === 'whitelist'">Only whitelisted members can enroll</span>
+        </md-slide-toggle>
 
-      <md-slide-toggle class="slider" (change)="onChangeMode($event)"
-                       [checked]="mode">Mode {{enrollType}}</md-slide-toggle>
+        <div class="csv-upload" *ngIf="enrollType === 'whitelist'">
+          <p>Upload your OBS csv file with your course members for whitelisting students.</p>
+          <p>
+            <input class="upload" type="file" ng2FileSelect [uploader]="uploader"
+                   placeholder="Upload files" accept=".csv"/>
+            <button md-raised-button color="primary"
+                    (click)="uploader.uploadAll()"
+                    [disabled]="!uploader.getNotUploadedItems().length">
+              <md-icon>file_upload</md-icon>
+              Upload
+            </button>
+          </p>
+        </div>
 
-      <md-slide-toggle (change)="onChangeActive($event)"
-                       [checked]="active">Active {{active}}</md-slide-toggle>
+        <p>
+          <md-slide-toggle (change)="onChangeActive($event)"
+                           [checked]="active">
+            <span *ngIf="active">Course can be seen by students</span>
+            <span *ngIf="!active">Course cannot be seen by students</span>
+          </md-slide-toggle>
+        </p>
 
-      <p>
-        <button md-raised-button color="primary" class="md-button" type="submit">Save</button>
-      </p>
-    </form>
-
-
+        <p>
+          <button md-raised-button color="primary" class="md-button" type="submit">Save</button>
+        </p>
+      </form>
+    </div>
   </md-tab>
 
-  <md-tab label="Manage content">
-    <app-course-manage-content [course]="courseOb"></app-course-manage-content>
+  <md-tab label="Content">
+    <div class="tab-content">
+      <app-course-manage-content [course]="courseOb"></app-course-manage-content>
+    </div>
   </md-tab>
 
-  <md-tab label="Course Members">
-    <app-members [courseId]="id"></app-members>
+  <md-tab label="Members">
+    <div class="tab-content">
+      <app-members [courseId]="id"></app-members>
+    </div>
   </md-tab>
 
-  <md-tab label="Course Teachers">
-  <app-teachers [courseId]="id"></app-teachers>
+  <md-tab label="Teachers">
+    <div class="tab-content">
+      <app-teachers [courseId]="id"></app-teachers>
+    </div>
   </md-tab>
-
 </md-tab-group>

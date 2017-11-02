@@ -10,7 +10,7 @@
   </thead>
   <tbody>
   <tr *ngFor="let user of allUsers; let i = index;">
-    <td>{{user.profile.firstName}} {{user.profile.lastName}}</td>
+    <td><a [routerLink]="['/profile', user._id]">{{user.profile.firstName}} {{user.profile.lastName}}</a></td>
     <td>{{user.email}}</td>
     <td>
       <md-select [(ngModel)]="user.role" name="role" (change)="updateRole(i)">
@@ -20,8 +20,12 @@
       </md-select>
     </td>
     <td>
-      <button md-icon-button><md-icon>edit</md-icon></button>
-      <button md-icon-button (click)="deleteUser(i)"><md-icon>delete</md-icon></button>
+      <button md-icon-button>
+        <md-icon>edit</md-icon>
+      </button>
+      <button md-icon-button (click)="deleteUser(i)">
+        <md-icon>delete</md-icon>
+      </button>
     </td>
   </tr>
   </tbody>

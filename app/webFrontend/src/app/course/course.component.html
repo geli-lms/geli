@@ -1,2 +1,32 @@
+<md-card *ngIf="course" class="course-card">
+  <md-card-header>
+    <md-card-title><h2 title="{{course.name}}">{{course.name}}</h2></md-card-title>
+  </md-card-header>
+  <img md-card-image src="/assets/course-header-image.jpg">
+  <md-card-content>
+    <p>
+      {{course.description}}
+    </p>
+  </md-card-content>
+  <md-card-actions>
+    <button md-icon-button *ngIf="this.userService.isStudent() && !this.isMemberOfCourse(course)"
+            (click)="apply(course._id, course.hasAccessKey)" mdTooltip="Enroll">
+      <md-icon>add_circle_outline</md-icon>
+    </button>
 
+    <button md-icon-button (click)="editCourse(course._id)"
+            *ngIf="isCourseTeacherOrAdmin(course)">
+      <md-icon>mode_edit</md-icon>
+    </button>
 
+    <button md-icon-button (click)="showReport(course._id)"
+            *ngIf="isCourseTeacherOrAdmin(course)">
+      <md-icon>show_chart</md-icon>
+    </button>
+
+    <button md-mini-fab *ngIf="isCourseTeacherOrAdmin(course) || isMemberOfCourse(course)"
+            color="primary" class="details-button" [routerLink]="['course', course._id]">
+      <md-icon>arrow_forward</md-icon>
+    </button>
+  </md-card-actions>
+</md-card>

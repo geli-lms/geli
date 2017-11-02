@@ -24,7 +24,6 @@ export class CourseEditComponent implements OnInit {
   courseOb: any[];
   uploader: FileUploader = null;
 
-
   message = 'Course successfully added.';
 
   constructor(private route: ActivatedRoute,
@@ -34,24 +33,24 @@ export class CourseEditComponent implements OnInit {
               private ref: ChangeDetectorRef,
               private showProgress: ShowProgressService) {
 
-      this.route.params.subscribe(params => {
-          this.id = params['id'];
+    this.route.params.subscribe(params => {
+      this.id = params['id'];
 
-          this.courseService.readSingleItem(this.id).then(
-              (val: any) => {
-                  this.course = val.name;
-                  this.description = val.description;
-                  this.accessKey = val.hasAccessKey ? '****' : '';
-                  this.active = val.active;
-                  this.enrollType = val.enrollType;
-                  if (this.enrollType === 'whitelist') {
-                    this.mode = true;
-                  }
-                  this.courseOb = val;
-              }, (error) => {
-                  console.log(error);
-              });
-      });
+      this.courseService.readSingleItem(this.id).then(
+        (val: any) => {
+          this.course = val.name;
+          this.description = val.description;
+          this.accessKey = val.hasAccessKey ? '****' : '';
+          this.active = val.active;
+          this.enrollType = val.enrollType;
+          if (this.enrollType === 'whitelist') {
+            this.mode = true;
+          }
+          this.courseOb = val;
+        }, (error) => {
+          console.log(error);
+        });
+    });
   }
 
   ngOnInit() {
@@ -68,14 +67,14 @@ export class CourseEditComponent implements OnInit {
     };
     this.uploader.onCompleteItem = (item: any, response: any, status: any) => {
       if (status === 200) {
-      const course = JSON.parse(response);
-      this.snackBar.open('Item is uploaded there where ' + course.whitelist.length + ' users parsed!', '', { duration: 10000 });
-      setTimeout(() => {
-        this.uploader.clearQueue();
-      }, 3000);
+        const course = JSON.parse(response);
+        this.snackBar.open('Item is uploaded there where ' + course.whitelist.length + ' users parsed!', '', {duration: 10000});
+        setTimeout(() => {
+          this.uploader.clearQueue();
+        }, 3000);
       } else {
         const error = JSON.parse(response);
-        this.snackBar.open('Upload failed with status ' + status + ' message was: ' + error.message, '', { duration: 20000 });
+        this.snackBar.open('Upload failed with status ' + status + ' message was: ' + error.message, '', {duration: 20000});
         setTimeout(() => {
           this.uploader.clearQueue();
         }, 6000);
@@ -89,18 +88,23 @@ export class CourseEditComponent implements OnInit {
     console.log(this.course);
 
     const request: any = {
-      'name': this.course, 'description': this.description, '_id': this.id, 'active': this.active, 'enrollType': this.enrollType};
+      'name': this.course, 'description': this.description, '_id': this.id, 'active': this.active, 'enrollType': this.enrollType
+    };
     if (this.accessKey !== '****') {
       request.accessKey = this.accessKey;
     }
     this.courseService.updateItem(request).then(
-        (val) => {
-            console.log(val);
-            this.showProgress.toggleLoadingGlobal(false);
-        }, (error) => {
-            this.showProgress.toggleLoadingGlobal(false);
-            console.log(error);
-        });
+      (val) => {
+        console.log(val);
+        this.showProgress.toggleLoadingGlobal(false);
+        this.snackBar.open('Saved successfully', '', {duration: 5000});
+      }, (error) => {
+        this.showProgress.toggleLoadingGlobal(false);
+        // Mongodb uses the error field errmsg
+        const errormessage = JSON.parse(error._body).message || JSON.parse(error._body).errmsg;
+        this.snackBar.open('Saving course failed ' + errormessage, 'Dismiss');
+        console.log(error);
+      });
   }
 
   onChangeMode(value) {
@@ -116,8 +120,6 @@ export class CourseEditComponent implements OnInit {
   onChangeActive(value) {
     this.active = value.checked;
   }
-
-
 
   generateForm() {
     this.newCourse = this.formBuilder.group({

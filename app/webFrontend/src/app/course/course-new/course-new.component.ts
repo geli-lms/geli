@@ -10,33 +10,37 @@ import {Router} from '@angular/router';
   styleUrls: ['./course-new.component.scss']
 })
 export class CourseNewComponent implements OnInit {
-    newCourse: FormGroup;
-    id: string;
+  newCourse: FormGroup;
+  id: string;
 
-    constructor(private router: Router,
-                private formBuilder: FormBuilder,
-                private courseService: CourseService,
-                public snackBar: MdSnackBar) { }
+  constructor(private router: Router,
+              private formBuilder: FormBuilder,
+              private courseService: CourseService,
+              public snackBar: MdSnackBar) {
+  }
 
-    ngOnInit() {
-        this.generateForm();
-    }
+  ngOnInit() {
+    this.generateForm();
+  }
 
-    createCourse() {
-        this.courseService.createItem(this.newCourse.value).then(
-            (val) => {
-                const url = '/course/edit/' + val._id;
-                this.router.navigate([url]);
-            }, (error) => {
-                this.snackBar.open('Error creating course', 'Dismiss');
-            });
-    }
+  createCourse() {
+    this.courseService.createItem(this.newCourse.value).then(
+      (val) => {
+        this.snackBar.open('Course created', 'Dismiss', {duration: 5000});
+        const url = '/course/' + val._id + '/edit';
+        this.router.navigate([url]);
+      }, (error) => {
+        // Mongodb uses the error field errmsg
+        const errormessage = JSON.parse(error._body).message || JSON.parse(error._body).errmsg;
+        this.snackBar.open('Error creating course ' + errormessage, 'Dismiss');
+      });
+  }
 
-    generateForm() {
-        this.newCourse = this.formBuilder.group({
-            name: ['', Validators.required],
-            description: ['', Validators.required],
-        });
-    }
+  generateForm() {
+    this.newCourse = this.formBuilder.group({
+      name: ['', Validators.required],
+      description: ['', Validators.required],
+    });
+  }
 
 }

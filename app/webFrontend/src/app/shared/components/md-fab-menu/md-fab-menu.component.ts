@@ -19,7 +19,6 @@ export class MdFabMenuComponent implements OnInit {
   @Input()
   onClick: () => void;
 
-
   constructor() {
   }
 

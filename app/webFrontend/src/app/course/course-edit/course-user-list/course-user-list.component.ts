@@ -2,6 +2,7 @@ import {Component, Input, OnInit, EventEmitter, Output, OnDestroy} from '@angula
 import {DragulaService} from 'ng2-dragula';
 import {IUser} from '../../../../../../../shared/models/IUser';
 import {FormControl} from '@angular/forms';
+import {DialogService} from '../../../shared/services/dialog.service';
 
 @Component({
   selector: 'app-course-user-list',
@@ -11,9 +12,10 @@ import {FormControl} from '@angular/forms';
 export class CourseUserListComponent implements OnInit, OnDestroy {
 
   @Input() courseId;
-  @Input() usersInCourse;
-  @Input() users;
+  @Input() usersInCourse: IUser[];
+  @Input() users: IUser[];
   @Input() dragulaBagId;
+  @Input() role;
 
   currentMember: IUser = null;
   fuzzySearch: String = '';
@@ -27,16 +29,20 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
     this.currentMember = member;
   }
 
-  constructor(private dragula: DragulaService) {
+  constructor(private dragula: DragulaService,
+              public dialogService: DialogService) {
     this.userCtrl = new FormControl();
     this.filteredStates = this.userCtrl.valueChanges
-      .startWith(null)
-      .map(name => this.filterStates(name));
+    .startWith(null)
+    .map(name => this.filterStates(name));
   }
 
   ngOnInit() {
+    // Make items only draggable by dragging the handle
     this.dragula.setOptions(this.dragulaBagId, {
-      revertOnSpill: true
+    moves: (el, container, handle) => {
+      return handle.classList.contains('user-drag-handle') || handle.classList.contains('member-drag-handle');
+    }
     });
     this.dragula.dropModel.subscribe(value => {
       const bagName = value[0];
@@ -71,10 +77,13 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
     return resArray.length > 0;
   }
 
-  /**
-   * @param id
-   */
-  removeUser(id: string) {
-    this.onRemove.emit(id);
+  removeUser() {
+    this.dialogService
+      .confirmRemove(this.currentMember.role, this.currentMember.email, 'course')
+      .subscribe(res => {
+        if (res) {
+          this.onRemove.emit(this.currentMember._id);
+        }
+      });
   }
 }

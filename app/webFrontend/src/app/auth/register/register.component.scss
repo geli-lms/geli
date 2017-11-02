@@ -1,0 +1,28 @@
+:host {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.register-card {
+  width: 100%;
+  max-width: 400px;
+
+  .title {
+    text-transform: capitalize;
+  }
+
+  .mat-input-container{
+    width: 100%;
+  }
+
+  .div-change-role{
+    margin-top: 10px;
+    font-size: small;
+    .material-icons{
+      font-size: small;
+      vertical-align: middle;
+    }
+  }
+}

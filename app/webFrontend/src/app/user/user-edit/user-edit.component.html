@@ -16,21 +16,27 @@
   </md-input-container>
 
   <md-input-container class="full-width">
-    <input mdInput type="password" formControlName="currentPassword" placeholder="Current password" />
+    <input mdInput type="password" formControlName="currentPassword" placeholder="Current password"/>
   </md-input-container>
 
   <md-input-container class="full-width">
-    <input mdInput type="password" formControlName="password" placeholder="Password" />
+    <input mdInput type="password" formControlName="password" placeholder="Password"/>
   </md-input-container>
 
   <md-input-container class="full-width">
-    <input mdInput type="password" formControlName="confirmPassword" placeholder="Confirm password" />
+    <input mdInput type="password" formControlName="confirmPassword" placeholder="Confirm password"/>
     <div class="form-text error" *ngIf="userForm?.controls.confirmPassword.touched">
       <div *ngIf="userForm.hasError('mismatchedPasswords')">Passwords do not match.</div>
     </div>
   </md-input-container>
 
-  <button md-raised-button color="accent" class="md-button" type="submit">Save</button>
-  <button md-raised-button color="warn" class="md-button" routerLink="/profile" routerLinkActive="active">Cancel
+  <button md-raised-button color="primary" class="md-button" type="submit" [disabled]="!userForm?.valid">Save</button>
+  <button md-button class="md-button" routerLink="/profile" routerLinkActive="active">
+    Cancel
   </button>
 </form>
+<p>
+  <button md-raised-button color="accent" class="md-button" (click)="openAddPictureDialog()">
+    Upload new picture
+  </button>
+</p>

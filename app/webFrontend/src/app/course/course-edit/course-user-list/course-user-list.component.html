@@ -1,5 +1,5 @@
 <md-input-container class="fuzzySearch">
-  <input mdInput placeholder="Search and add teachers by name, Id, e-mail"
+  <input mdInput placeholder="Search and add {{role}}s by name, Id, e-mail"
          [mdAutocomplete]="auto" [formControl]="userCtrl" [(ngModel)]="fuzzySearch">
 </md-input-container>
 
@@ -14,17 +14,17 @@
     <md-card [ngClass]="(currentMember != null && currentMember._id == user._id) ? 'active':'profile'"
              (click)="setMember(user)">
 
-      <div class="bg" [grav]="user.email"> </div>
+      <div class="bg" user-image [user-image]="user" [size]="160"></div>
 
       <div *ngIf="currentMember != null && currentMember._id == user._id">
-        <button md-raised-button>DETAILS</button>
+        <button md-raised-button routerLink="/profile/{{user._id}}" routerLinkActive="active">DETAILS</button>
         <button md-raised-button>SEND MAIL</button>
-        <button class="del" md-raised-button (click)="removeUser(user._id)">DELETE</button>
+        <button class="del" md-raised-button (click)="removeUser()">REMOVE</button>
       </div>
 
       <ul class="info">
-        <li><b>{{user.profile.firstName}}</b></li>
-        <li><b>{{user.profile.lastName}}</b></li>
+        <li><strong>{{user.profile.firstName}}</strong></li>
+        <li><strong>{{user.profile.lastName}}</strong></li>
         <li class="userId">{{user.uid}}</li>
       </ul>
     </md-card>
@@ -32,31 +32,31 @@
 </div>
 
 <div class="users" *ngIf="fuzzySearch.length > 0">
-  <p><b>In course ({{usersInCourse.length}})</b></p>
+  <p><strong>In course ({{usersInCourse.length}})</strong></p>
   <md-list class="drop" [dragula]='dragulaBagId' [dragulaModel]='usersInCourse'>
-    <ng-container *ngFor="let member of usersInCourse">
+    <div *ngFor="let member of usersInCourse">
       <md-list-item class="list" *ngIf="fuzzysearch(fuzzySearch,member)" [attr.data-id]="[member._id]">
-        <i class="material-icons md-48">drag_handle</i>
+        <md-icon class="user-drag-handle">drag_handle</md-icon>
         <span class="listBg" [grav]="member.email"></span>
         <span class="firstName">{{member.profile.firstName}}</span>
         <span class="lastName">{{member.profile.lastName}}</span>
         <span class="uid">{{member.uid}}</span>
-        <span class="email">{{member.email}}</span>
+        <span class="email"><a href="mailto:{{member.email}}">{{member.email}}</a></span>
       </md-list-item>
-    </ng-container>
+    </div>
   </md-list>
 
-  <p><b>Not in course ({{users.length}})</b></p>
+  <p><strong>Not in course ({{users.length}})</strong></p>
   <md-list class="drop" [dragula]='dragulaBagId' [dragulaModel]='users'>
-    <ng-container *ngFor="let user of users">
+    <div *ngFor="let user of users">
       <md-list-item class="list" *ngIf="fuzzysearch(fuzzySearch,user)" [attr.data-id]="[user._id]">
-        <i class="material-icons md-48">drag_handle</i>
+        <md-icon class="member-drag-handle">drag_handle</md-icon>
         <span class="listBg" [grav]="user.email"></span>
         <span class="firstName">{{user.profile.firstName}}</span>
         <span class="lastName">{{user.profile.lastName}}</span>
         <span class="uid">{{user.uid}}</span>
-        <span class="email">{{user.email}}</span>
+        <span  class="email"><a href="mailto:{{user.email}}">{{user.email}}</a></span>
       </md-list-item>
-    </ng-container>
+    </div>
   </md-list>
 </div>

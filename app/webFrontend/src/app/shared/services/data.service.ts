@@ -20,76 +20,76 @@ export abstract class DataService {
   createItem(createItem: any): Promise<any> {
     return new Promise((resolve, reject) => {
       this.backendService.post(this.apiPath, JSON.stringify(createItem))
-        .subscribe(
-          (responseItem: any) => {
-            resolve(responseItem);
-          },
-          error => reject(error)
-        );
+      .subscribe(
+        (responseItem: any) => {
+          resolve(responseItem);
+        },
+        error => reject(error)
+      );
     });
   }
 
   readItems(): Promise<any[]> {
     return new Promise((resolve, reject) => {
       this.backendService.get(this.apiPath)
-        .subscribe(
-          (responseItems: any) => {
-            if (this.changeProps2Date) {
-              responseItems.forEach(item => {
-                this.changeProps2Date.forEach(prop => {
-                  DataService.changeStringProp2DateProp(item, prop);
-                });
+      .subscribe(
+        (responseItems: any) => {
+          if (this.changeProps2Date) {
+            responseItems.forEach(item => {
+              this.changeProps2Date.forEach(prop => {
+                DataService.changeStringProp2DateProp(item, prop);
               });
-            }
+            });
+          }
 
-            resolve(responseItems);
-          },
-          error => reject(error)
-        );
+          resolve(responseItems);
+        },
+        error => reject(error)
+      );
     });
   }
 
   updateItem(updateItem: any): Promise<any> {
     return new Promise((resolve, reject) => {
       this.backendService.put(this.apiPath + updateItem._id, JSON.stringify(updateItem))
-        .subscribe(
-          (res) => {
-            resolve(res);
-          },
-          error => reject(error)
-        );
+      .subscribe(
+        (res) => {
+          resolve(res);
+        },
+        error => reject(error)
+      );
     });
   }
 
   deleteItem(deleteItem: any): Promise<any> {
     return new Promise((resolve, reject) => {
       this.backendService.delete(this.apiPath + deleteItem._id)
-        .subscribe(
-          () => {
-            resolve();
-          },
-          error => reject(error)
-        );
+      .subscribe(
+        () => {
+          resolve();
+        },
+        error => reject(error)
+      );
     });
   }
 
   readSingleItem(id: string): Promise<any[]> {
     return new Promise((resolve, reject) => {
       this.backendService.get(this.apiPath + id)
-        .subscribe(
-          (responseItems: any) => {
-            if (this.changeProps2Date) {
-              responseItems.forEach(item => {
-                this.changeProps2Date.forEach(prop => {
-                  DataService.changeStringProp2DateProp(item, prop);
-                });
+      .subscribe(
+        (responseItems: any) => {
+          if (this.changeProps2Date) {
+            responseItems.forEach(item => {
+              this.changeProps2Date.forEach(prop => {
+                DataService.changeStringProp2DateProp(item, prop);
               });
-            }
+            });
+          }
 
-            resolve(responseItems);
-          },
-          error => reject(error)
-        );
+          resolve(responseItems);
+        },
+        error => reject(error)
+      );
     });
   }
 }
@@ -104,12 +104,12 @@ export class CourseService extends DataService {
     const accessKey: string = data.accessKey;
     return new Promise((resolve, reject) => {
       this.backendService.post(this.apiPath + courseId + '/enroll', JSON.stringify({accessKey}))
-        .subscribe(
-          (responseItem: any) => {
-            resolve(responseItem);
-          },
-          error => reject(error)
-        );
+      .subscribe(
+        (responseItem: any) => {
+          resolve(responseItem);
+        },
+        error => reject(error)
+      );
     });
   }
 }
@@ -123,20 +123,20 @@ export class TaskService extends DataService {
   getTasksForCourse(id: string): Promise<any[]> {
     return new Promise((resolve, reject) => {
       this.backendService.get(this.apiPath + 'course/' + id)
-        .subscribe(
-          (responseItems: any) => {
-            if (this.changeProps2Date) {
-              responseItems.forEach(item => {
-                this.changeProps2Date.forEach(prop => {
-                  DataService.changeStringProp2DateProp(item, prop);
-                });
+      .subscribe(
+        (responseItems: any) => {
+          if (this.changeProps2Date) {
+            responseItems.forEach(item => {
+              this.changeProps2Date.forEach(prop => {
+                DataService.changeStringProp2DateProp(item, prop);
               });
-            }
+            });
+          }
 
-            resolve(responseItems);
-          },
-          error => reject(error)
-        );
+          resolve(responseItems);
+        },
+        error => reject(error)
+      );
     });
   }
 
@@ -205,11 +205,18 @@ export class UserDataService extends DataService {
     super('users/', backendService);
   }
 
-
   getRoles(): Promise<any[]> {
     const originalApiPath = this.apiPath;
     this.apiPath += 'roles';
     const promise = this.readItems();
+    this.apiPath = originalApiPath;
+    return promise;
+  }
+
+  addPicture(data: any): Promise<any[]> {
+    const originalApiPath = this.apiPath;
+    this.apiPath += 'picture/';
+    const promise = this.updateItem(data);
     this.apiPath = originalApiPath;
     return promise;
   }
@@ -232,26 +239,26 @@ export class AboutDataService extends DataService {
   getApiDependencies(): Promise<any[]> {
     return new Promise((resolve, reject) => {
       this.backendService.get(this.apiPath + 'dependencies')
-        .subscribe((responseItems: any) => {
-            if (responseItems.httpCode >= 500) {
-              console.log('API: ' + responseItems.message);
-              return resolve([]);
-            }
+      .subscribe((responseItems: any) => {
+          if (responseItems.httpCode >= 500) {
+            console.log('API: ' + responseItems.message);
+            return resolve([]);
+          }
 
-            const out = [];
-            responseItems.data.forEach(item => {
-              out.push(new Dependency(
-                item.name,
-                item.version,
-                item.repository,
-                item.license,
-                item.devDependency)
-              );
-            });
-            resolve(out);
-          },
-          error => reject(error)
-        );
+          const out = [];
+          responseItems.data.forEach(item => {
+            out.push(new Dependency(
+              item.name,
+              item.version,
+              item.repository,
+              item.license,
+              item.devDependency)
+            );
+          });
+          resolve(out);
+        },
+        error => reject(error)
+      );
     });
   }
 }

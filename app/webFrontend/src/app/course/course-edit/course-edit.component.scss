@@ -1,11 +1,17 @@
+.tab-content {
+  padding-top: 1.5em;
+}
+
 .course-form {
-  margin-top: 50px;
-  margin-left: 50px;
-  width: 500px;
+  max-width: 700px;
 }
 
 .full-width {
   width: 100%;
+}
+
+.csv-upload {
+  margin-bottom: 2em;
 }
 
 .upload {
