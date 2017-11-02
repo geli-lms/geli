@@ -1,7 +1,11 @@
 @import '../../../breakpoints';
 
+.tab-content {
+  padding-top: 1.5em;
+}
+
 .course-form {
-  margin-top: 10px;
+  max-width: 700px;
 }
 
 .mat-input-container {

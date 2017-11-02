@@ -1,8 +1,8 @@
 <md-toolbar color="primary" [ngClass]="{'warning': hasWarning()}">
   <a routerLink="/" class="logo">geli</a>
 
-  <span class="right-align g_toolbar_elem">
-    <a *ngIf="hasWarning()">{{apiInfo.nonProductionWarning}}</a>
+  <span class="non-production-warning g_toolbar_elem">
+    <a *ngIf="hasWarning()" title="{{apiInfo.nonProductionWarning}}">{{apiInfo.nonProductionWarning}}</a>
   </span>
 
   <span *ngIf="!isLoggedIn()" class="g_toolbar_elem">
