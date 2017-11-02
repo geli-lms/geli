@@ -5,7 +5,7 @@ import {ICodeKataUnit} from '../../../../../../../shared/models/units/ICodeKataU
 import {ICourse} from '../../../../../../../shared/models/ICourse';
 import {CodeKataUnit} from '../../../models/CodeKataUnit';
 import {UnitGeneralInfoFormComponent} from '../unit-general-info-form/unit-general-info-form.component';
-import {AceEditorComponent} from 'ng2-ace-editor/dist';
+import {AceEditorComponent} from 'ng2-ace-editor';
 import 'brace';
 import 'brace/mode/javascript';
 import 'brace/theme/github';
