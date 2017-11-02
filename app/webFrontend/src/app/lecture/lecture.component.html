@@ -1,10 +1,7 @@
-<md-card class="lecture-card" *ngIf="lecture">
-  <md-card-header>
-    <md-card-title><h2>{{lecture.name}}</h2></md-card-title>
-  </md-card-header>
+<ng-container class="lecture-container" *ngIf="lecture">
 
-  <md-card-content>
+    <h2>{{lecture.name}}</h2>
+
     <p>{{lecture.description}}</p>
     <app-unit *ngIf="lecture.units" [units]="lecture.units"></app-unit>
-  </md-card-content>
-</md-card>
+</ng-container>

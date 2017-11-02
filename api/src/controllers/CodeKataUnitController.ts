@@ -1,4 +1,4 @@
-import {Body, Post, JsonController, UseBefore, BadRequestError, Put, Param, Authorized} from 'routing-controllers';
+import {Body, Post, JsonController, UseBefore, Put, Param, Authorized} from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import {UnitBaseController} from './UnitBaseController';
 import {CodeKataUnit} from '../models/units/CodeKataUnit';
@@ -26,7 +26,7 @@ export class CodeKataUnitController extends UnitBaseController {
   @Put('/:id')
   updateCodeKataUnit(@Param('id') id: string, @Body() unit: ICodeKataUnit) {
     unit = this.splitCodeAreas(unit);
-    return CodeKataUnit.findByIdAndUpdate(id, unit)
+    return CodeKataUnit.findByIdAndUpdate(id, unit, {new: true})
       .then(u => u.toObject());
   }
 

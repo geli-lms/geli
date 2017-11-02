@@ -1,10 +1,10 @@
 import * as chai from 'chai';
-import chaiHttp = require('chai-http');
 import {Server} from '../../src/server';
 import {FixtureLoader} from '../../fixtures/FixtureLoader';
 import {JwtUtils} from '../../src/security/JwtUtils';
 import {User} from '../../src/models/User';
 import {Course} from '../../src/models/Course';
+import chaiHttp = require('chai-http');
 
 chai.use(chaiHttp);
 chai.should();
@@ -17,8 +17,33 @@ describe('Course', () => {
   beforeEach(() => fixtureLoader.load());
 
   describe(`GET ${BASE_URL}`, () => {
-    it('should return all courses', (done) => {
+    it('should return all active courses', (done) => {
       User.findOne({email: 'student1@test.local'})
+        .then((user) => {
+          chai.request(app)
+            .get(BASE_URL)
+            .set('Authorization', `JWT ${JwtUtils.generateToken(user)}`)
+            .end((err, res) => {
+              res.status.should.be.equal(200);
+              res.body.should.be.a('array');
+              res.body.length.should.be.eql(5);
+
+              res.body.forEach((course: any) => {
+                course._id.should.be.a('string');
+                course.name.should.be.a('string');
+                course.active.should.be.a('boolean');
+                course.active.should.be.equal(true);
+              });
+
+              done();
+            });
+        })
+        .catch(done);
+    });
+
+
+    it('should return all courses', (done) => {
+      User.findOne({email: 'teacher1@test.local'})
         .then((user) => {
           chai.request(app)
             .get(BASE_URL)
@@ -32,6 +57,7 @@ describe('Course', () => {
                 course._id.should.be.a('string');
                 course.name.should.be.a('string');
                 course.active.should.be.a('boolean');
+                course.active.should.be.oneOf([true, false]);
               });
 
               done();
@@ -75,6 +101,105 @@ describe('Course', () => {
             });
         })
         .catch(done);
+    });
+  });
+
+
+  describe(`GET ${BASE_URL} :id`, () => {
+    it('should get course with given id', (done) => {
+      User.findOne({email: 'teacher1@test.local'}).then((user) => {
+        const testData = new Course({
+          name: 'Test Course',
+          description: 'Test description',
+          active: true
+        });
+        testData.teachers.push(user);
+        testData.save((error, course) => {
+          chai.request(app)
+            .get(`${BASE_URL}/${course._id}`)
+            .set('Authorization', `JWT ${JwtUtils.generateToken(user)}`)
+            .end((err, res) => {
+              res.should.have.status(200);
+              res.body.name.should.be.equal(testData.name);
+              res.body.description.should.be.equal(testData.description);
+              res.body.active.should.be.equal(testData.active);
+              done();
+            });
+        });
+      }).catch(done);
+    });
+
+    it('should not get course not a teacher of course', (done) => {
+      User.findOne({email: 'teacher1@test.local'}).then((user) => {
+        const testData = new Course({
+          name: 'Test Course',
+          description: 'Test description',
+          active: true
+        });
+        testData.save((error, course) => {
+          chai.request(app)
+            .get(`${BASE_URL}/${course._id}`)
+            .set('Authorization', `JWT ${JwtUtils.generateToken(user)}`)
+            .end((err, res) => {
+              res.should.have.status(404);
+              done();
+            });
+        });
+      }).catch(done);
+    });
+  });
+
+  describe(`PUT ${BASE_URL} :id`, () => {
+    it('change added course', (done) => {
+      User.findOne({email: 'teacher1@test.local'}).then((user) => {
+        const testDataUpdate = new Course({
+          name: 'Test Course Update',
+          description: 'Test description update',
+          active: true
+        });
+        const testData = new Course(
+          {
+            name: 'Test Course',
+            description: 'Test description',
+            active: false
+          });
+        testData.teachers.push(user);
+        testData.save((error, course) => {
+          testDataUpdate._id = course._id;
+          chai.request(app)
+            .put(`${BASE_URL}/${testDataUpdate._id}`)
+            .set('Authorization', `JWT ${JwtUtils.generateToken(user)}`)
+            .send(testDataUpdate)
+            .end((err, res) => {
+              res.should.have.status(200);
+              res.body.name.should.be.eq(testDataUpdate.name);
+              res.body.description.should.be.eq(testDataUpdate.description);
+              res.body.active.should.be.eq(testDataUpdate.active);
+              done();
+            });
+        }).catch(done);
+      });
+    });
+
+    it('should not change course not a teacher of course', (done) => {
+      User.findOne({email: 'teacher1@test.local'}).then((user) => {
+        const testData = new Course(
+          {
+            name: 'Test Course',
+            description: 'Test description',
+            active: false
+          });
+        testData.save((error, course) => {
+          chai.request(app)
+            .put(`${BASE_URL}/${course._id}`)
+            .set('Authorization', `JWT ${JwtUtils.generateToken(user)}`)
+            .send(course)
+            .end((err, res) => {
+              res.should.have.status(404);
+              done();
+            });
+        });
+      }).catch(done);
     });
   });
 });
