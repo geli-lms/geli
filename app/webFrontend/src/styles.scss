@@ -39,13 +39,9 @@ body {
   line-height: $line_height--base;
   background-color: lighten(map-get($app-primary, 'default'), 38.5%);
 
-  @include bp(md) {
+  @include bp(xl) {
     font-size: $base_font_size * 1.2;
     line-height: $line_height--base * 1.2;
-  }
-  @include bp(xl) {
-    font-size: $base_font_size * 1.4;
-    line-height: $line_height--base * 1.4;
   }
   @include bp(4k) {
     font-size: $base_font_size * 1.6;

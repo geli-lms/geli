@@ -38,5 +38,9 @@
 }
 
 .slider {
-  min-width: 250px;
+  width: 100%;
+
+  @include bp(md) {
+    width: 60%;
+  }
 }
