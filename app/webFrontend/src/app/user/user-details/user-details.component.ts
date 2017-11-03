@@ -35,7 +35,7 @@ export class UserDetailsComponent implements OnInit {
     let link = '/profile';
 
     if (!this.userService.isLoggedInUser(this.user)) {
-      link += this.user._id;
+      link += `/${this.user._id}`;
     }
 
     link += '/edit';
