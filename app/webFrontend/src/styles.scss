@@ -62,6 +62,10 @@ app-root {
   }
 }
 
+h1, h2, h3, h4, h5, h6 {
+  line-height: $line_height--header;
+}
+
 .logo-font {
   font-family: Pacifico, cursive;
 }
