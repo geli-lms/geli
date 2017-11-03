@@ -31,6 +31,18 @@ export class UserDetailsComponent implements OnInit {
     this.getUserData();
   }
 
+  getEditLink() {
+    let link = '/profile';
+
+    if (!this.userService.isLoggedInUser(this.user)) {
+      link += this.user._id;
+    }
+
+    link += '/edit';
+
+    return link;
+  }
+
   getUserData() {
     this.userDataService.readSingleItem(this.userId)
       .then((user: any) => {

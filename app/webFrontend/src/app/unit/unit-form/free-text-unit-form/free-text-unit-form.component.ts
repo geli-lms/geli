@@ -44,8 +44,6 @@ export class FreeTextUnitFormComponent implements OnInit {
       markdown: this.freeTextEditor.markdown
     };
 
-    console.log(this.model.markdown);
-
     // If markdown was left empty, define field for db-consistency
     if (typeof this.model.markdown === 'undefined') {
       this.model.markdown = '';
@@ -89,7 +87,9 @@ export class FreeTextUnitFormComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      this.model.markdown = result;
+      if (typeof result !== 'undefined') {
+        this.model.markdown = result;
+      }
     });
   }
 
