@@ -66,22 +66,29 @@ export class CodeKataComponent implements OnInit {
     });
   }
 
-  submitProgress() {
+  async submitProgress() {
     this.progress.done = this.validate();
     if (!this.progress.done) {
       this.snackBar.open('Your code does not validate.', '', {duration: 3000});
     }
 
-    if (!this.progress.user || !this.progress.unit) {
+    if (!this.progress._id) {
       this.progress.unit = this.codeKata._id;
       this.progress.user = this.userService.user._id;
-      this.codeKataProgressService.createItem(this.progress)
-        .then(() => this.snackBar.open('Progress has been saved', '', {duration: 3000}))
-        .catch(() => this.snackBar.open('An unknown error occurred', '', {duration: 3000}));
+      try {
+        const item = await this.progressService.createItem(this.progress);
+        this.snackBar.open('Progress has been saved', '', {duration: 3000});
+        this.progress._id = item._id;
+      } catch (err) {
+        this.snackBar.open(`An error occurred: ${JSON.parse(err._body).message}`, '', {duration: 3000});
+      }
     } else {
-      this.codeKataProgressService.updateItem(this.progress)
-        .then(() => this.snackBar.open('Progress has been updated', '', {duration: 3000}))
-        .catch(() => this.snackBar.open('An unknown error occurred', '', {duration: 3000}));
+      try {
+        await this.progressService.updateItem(this.progress);
+        this.snackBar.open('Progress has been updated', '', {duration: 3000});
+      } catch (err) {
+        this.snackBar.open(`An error occurred: ${JSON.parse(err._body).message}`, '', {duration: 3000})
+      }
     }
   }
 
