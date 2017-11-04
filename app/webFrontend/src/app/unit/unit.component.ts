@@ -40,10 +40,10 @@ export class UnitComponent implements OnInit {
       return '';
     }
     if (diffInHours <= 3) {
-      return 'orange';
+      return 'red';
     }
     if (diffInHours <= 24) {
-      return 'red';
+      return 'orange';
     }
 
     return '';
