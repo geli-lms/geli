@@ -8,7 +8,7 @@
     </mat-card-subtitle>
     <span *ngIf="unit.progressable && unit.deadline"
           class="deadline {{selectColorForDeadline(unit.deadline)}}"
-          mat-tooltip="{{getFormattedDeadline(unit.deadline)}}">
+          matTooltip="{{getFormattedDeadline(unit.deadline)}}">
       {{getDeadlineDiffText(unit.deadline)}}<strong>{{getDeadlineDiffTime(unit.deadline)}}</strong>
     </span>
     <mat-card-content>
