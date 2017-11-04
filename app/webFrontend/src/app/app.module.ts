@@ -3,7 +3,6 @@ import {NgModule} from '@angular/core';
 import {HttpModule} from '@angular/http';
 
 import {AppComponent} from './app.component';
-import {MatDatepickerModule} from '@angular/material';
 import {JwtHelper} from 'angular2-jwt';
 
 import {UserService} from './shared/services/user.service';
@@ -38,7 +37,6 @@ import {MATERIAL_COMPATIBILITY_MODE} from '@angular/material';
     HttpModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    MatDatepickerModule,
     StartModule,
     UserModule,
     AuthModule,
