@@ -13,7 +13,8 @@
     text-transform: capitalize;
   }
 
-  .mat-input-container{
+  .mat-form-field,
+  .mat-radio-group {
     width: 100%;
   }
 

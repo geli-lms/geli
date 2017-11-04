@@ -9,16 +9,16 @@
           [class.correct]="validationMode && isAnswerCorrect(answer)"
           [class.incorrect]="validationMode && !isAnswerCorrect(answer)">
 
-        <md-checkbox [disabled]="validationMode" [(ngModel)]="answer.userAnswer">
+        <mat-checkbox [disabled]="validationMode" [(ngModel)]="answer.userAnswer">
           <span class="answer-text">{{answer.text}}</span>
-        </md-checkbox>
+        </mat-checkbox>
       </li>
     </ul>
   </div>
 </div>
 
 <p>
-  <button md-button [disabled]="validationMode" (click)="validate()">Submit answers</button>
-  <button md-button (click)="reset()">Reset</button>
-  <span *ngIf="progress && progress.done" class="progress-done"><md-icon>check</md-icon>You have completed this task.</span>
+  <button mat-button [disabled]="validationMode" (click)="validate()">Submit answers</button>
+  <button mat-button (click)="reset()">Reset</button>
+  <span *ngIf="progress && progress.done" class="progress-done"><mat-icon>check</mat-icon>You have completed this task.</span>
 </p>

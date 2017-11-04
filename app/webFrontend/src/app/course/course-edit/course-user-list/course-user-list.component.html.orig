@@ -32,9 +32,14 @@
 </div>
 
 <div class="users" *ngIf="fuzzySearch.length > 0">
+<<<<<<< HEAD
   <span>In Course</span>
   <div class="badge">{{usersInCourse.length}}</div>
+  <md-list class="drop" [dragula]='dragulaBagId' [dragulaModel]='usersInCourse'>
+=======
+  <p><strong>In course ({{usersInCourse.length}})</strong></p>
   <mat-list class="drop" [dragula]='dragulaBagId' [dragulaModel]='usersInCourse'>
+>>>>>>> origin/develop
     <div *ngFor="let member of usersInCourse">
       <mat-list-item class="list" *ngIf="fuzzysearch(fuzzySearch,member)" [attr.data-id]="[member._id]">
         <mat-icon class="user-drag-handle">drag_handle</mat-icon>
@@ -47,9 +52,14 @@
     </div>
   </mat-list>
 
+<<<<<<< HEAD
   <span>Not in Course</span>
   <div class="badge">{{users.length}}</div>
+  <md-list class="drop" [dragula]='dragulaBagId' [dragulaModel]='users'>
+=======
+  <p><strong>Not in course ({{users.length}})</strong></p>
   <mat-list class="drop" [dragula]='dragulaBagId' [dragulaModel]='users'>
+>>>>>>> origin/develop
     <div *ngFor="let user of users">
       <mat-list-item class="list" *ngIf="fuzzysearch(fuzzySearch,user)" [attr.data-id]="[user._id]">
         <mat-icon class="member-drag-handle">drag_handle</mat-icon>

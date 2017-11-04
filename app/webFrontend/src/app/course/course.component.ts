@@ -3,7 +3,7 @@ import 'rxjs/add/operator/switchMap';
 import {UserService} from '../shared/services/user.service';
 import {ICourse} from '../../../../../shared/models/ICourse';
 import {Router} from '@angular/router';
-import {MdDialog, MdSnackBar} from '@angular/material';
+import {MatDialog, MatSnackBar} from '@angular/material';
 import {AccessKeyDialog} from '../shared/components/access-key-dialog/access-key-dialog.component';
 
 @Component({
@@ -21,8 +21,8 @@ export class CourseComponent {
 
   constructor(public userService: UserService,
               private router: Router,
-              private dialog: MdDialog,
-              private snackBar: MdSnackBar) {
+              private dialog: MatDialog,
+              private snackBar: MatSnackBar) {
   }
 
   editCourse(id: string) {
