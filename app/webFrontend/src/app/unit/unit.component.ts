@@ -30,7 +30,7 @@ export class UnitComponent implements OnInit {
   }
 
   private getFormattedDeadline(deadline: string) {
-    return moment(deadline).format('YYYY-MM-DD HH:mm');
+    return moment(deadline).format('DD.MM.YYYY HH:mm');
   }
 
   private selectColorForDeadline(deadline: string) {
