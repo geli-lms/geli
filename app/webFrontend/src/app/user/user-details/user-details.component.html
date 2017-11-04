@@ -1,7 +1,11 @@
 <h1>Profile</h1>
-<app-user-profile *ngIf="user" [user]="user" [userId]="this.userService.user._id"></app-user-profile>
-<p *ngIf="userService.user._id === userId || userService.isAdmin()">
-  <button md-raised-button color="primary" routerLink="/profile/{{user?._id}}/edit" routerLinkActive="active">
+
+<app-user-profile *ngIf="user" [user]="user"
+                  [userId]="this.userService.user._id"></app-user-profile>
+
+<p *ngIf="user && (userService.isLoggedInUser(user) || userService.isAdmin())">
+  <button md-raised-button color="primary"
+          routerLink="{{ getEditLink() }}">
     <md-icon>edit</md-icon>
     Edit profile
   </button>
