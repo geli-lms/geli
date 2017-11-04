@@ -6,4 +6,10 @@
   <md-input-container>
     <textarea mdInput formControlName="description" placeholder="Description" rows="4"></textarea>
   </md-input-container>
+
+  <mat-input-container>
+    <input matInput formControlName="deadline" [matDatepicker]="myDatepicker" placeholder="Optional deadline">
+    <mat-datepicker-toggle [for]="myDatepicker"></mat-datepicker-toggle>
+    <mat-datepicker #myDatepicker></mat-datepicker>
+  </mat-input-container>
 </form>

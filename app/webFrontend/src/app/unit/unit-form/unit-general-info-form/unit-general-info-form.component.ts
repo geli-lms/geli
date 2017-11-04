@@ -10,7 +10,7 @@ import {IUnit} from '../../../../../../../shared/models/units/IUnit';
 export class UnitGeneralInfoFormComponent implements OnInit {
 
   @Input()
-  public model: IUnit;
+  public model: any;
 
   public form: FormGroup;
 
@@ -20,7 +20,8 @@ export class UnitGeneralInfoFormComponent implements OnInit {
   ngOnInit() {
     this.form = this.formBuilder.group({
       name: [this.model ? this.model.name : '', Validators.required],
-      description: [this.model ? this.model.description : '', Validators.required]
+      description: [this.model ? this.model.description : '', Validators.required],
+      deadline: [this.model ? this.model.deadline : '']
     });
   }
 }
