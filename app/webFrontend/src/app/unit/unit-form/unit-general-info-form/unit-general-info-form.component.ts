@@ -1,6 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {IUnit} from '../../../../../../../shared/models/units/IUnit';
 
 @Component({
   selector: 'app-unit-general-info-form',
