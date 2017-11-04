@@ -4,7 +4,6 @@ import {
 } from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import fs = require('fs');
-import crypto = require('crypto');
 
 import {IUser} from '../../../shared/models/IUser';
 import {IUserModel, User} from '../models/User';

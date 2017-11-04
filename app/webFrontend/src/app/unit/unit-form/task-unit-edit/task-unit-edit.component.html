@@ -4,34 +4,34 @@
   <app-unit-general-info-form [model]="model"></app-unit-general-info-form>
 
   <div class="info-text">
-    <md-icon>info</md-icon>
+    <mat-icon>info</mat-icon>
     Add questions with any number of possible answers. Mark the correct answer(s) with the checkbox.
   </div>
 
   <div *ngFor="let task of model.tasks" class="question-answer">
 
-    <md-input-container md-line class="question">
-      <textarea mdInput id="name" placeholder="Frage hier eingeben." [(ngModel)]="task.name"></textarea>
-    </md-input-container>
+    <mat-form-field matLine class="question">
+      <textarea matInput id="name" placeholder="Frage hier eingeben." [(ngModel)]="task.name"></textarea>
+    </mat-form-field>
 
     <div class="actions">
-      <button md-icon-button (click)="addAnswerAtEnd(task)">
-        <md-icon color="accent">add</md-icon>
+      <button mat-icon-button (click)="addAnswerAtEnd(task)">
+        <mat-icon color="accent">add</mat-icon>
       </button>
-      <button md-icon-button (click)="removeLastAnswer(task)">
-        <md-icon>remove</md-icon>
+      <button mat-icon-button (click)="removeLastAnswer(task)">
+        <mat-icon>remove</mat-icon>
       </button>
-      <button md-button (click)="updateTask(task)">UPDATE</button>
-      <button md-button (click)="removeTask(task)">DELETE</button>
+      <button mat-button (click)="updateTask(task)">UPDATE</button>
+      <button mat-button (click)="removeTask(task)">DELETE</button>
     </div>
 
-    <div md-line class="answers">
+    <div matLine class="answers">
       <div class="answer" *ngFor="let answer of task.answers; let idx = index;">
         <div class="check-answer">
-          <md-checkbox [(ngModel)]="answer.value" name="value_{{idx}}"></md-checkbox>
-          <md-input-container>
-            <input mdInput placeholder="Antwort hier eingeben." [(ngModel)]="answer.text">
-          </md-input-container>
+          <mat-checkbox [(ngModel)]="answer.value" name="value_{{idx}}"></mat-checkbox>
+          <mat-form-field>
+            <input matInput placeholder="Antwort hier eingeben." [(ngModel)]="answer.text">
+          </mat-form-field>
         </div>
       </div>
 
@@ -39,11 +39,11 @@
 
   </div>
   <p>
-    <button md-button (click)="onCancel()" type="reset">Cancel</button>
-    <button md-button color="primary" class="add-unit" (click)="addUnit()" type="submit">Save</button>
+    <button mat-button (click)="onCancel()" type="reset">Cancel</button>
+    <button mat-button color="primary" class="add-unit" (click)="addUnit()" type="submit">Save</button>
   </p>
-  <button md-mini-fab class="add-task-fab" (click)="addTask()" mdTooltip="Add task" mdTooltipPosition="right">
-    <md-icon>add</md-icon>
+  <button mat-mini-fab class="add-task-fab" (click)="addTask()" matTooltip="Add task" matTooltipPosition="right">
+    <mat-icon>add</mat-icon>
   </button>
 </div>
 

@@ -5,7 +5,7 @@ import {AuthenticationService} from '../../shared/services/authentication.servic
 import {AuthGuardService} from '../../shared/services/auth-guard.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ShowProgressService} from '../../shared/services/show-progress.service';
-import {MdSnackBar} from '@angular/material';
+import {MatSnackBar} from '@angular/material';
 
 @Component({
   templateUrl: './login.component.html',
@@ -21,7 +21,7 @@ export class LoginComponent implements OnInit {
               private authGuard: AuthGuardService,
               private authenticationService: AuthenticationService,
               private showProgress: ShowProgressService,
-              private snackBar: MdSnackBar,
+              private snackBar: MatSnackBar,
               private formBuilder: FormBuilder) {
   }
 
