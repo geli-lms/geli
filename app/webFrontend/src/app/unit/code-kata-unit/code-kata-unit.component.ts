@@ -1,7 +1,7 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {CodeKataUnit} from '../../models/CodeKataUnit';
 import {MdSnackBar} from '@angular/material';
-import {ProgressService, CodeKataProgressService} from 'app/shared/services/data/progress.service';
+import {ProgressService} from 'app/shared/services/data/progress.service';
 import {ICodeKataProgress} from '../../../../../../shared/models/ICodeKataProgress';
 import {UserService} from '../../shared/services/user.service';
 import {ActivatedRoute} from '@angular/router';
@@ -26,13 +26,12 @@ export class CodeKataComponent implements OnInit {
   testEditor: AceEditorComponent;
 
   logs: string;
-  progress: ICodeKataProgress;
+  progress: any;
   isExampleCode = false;
 
   constructor(private route: ActivatedRoute,
               private snackBar: MdSnackBar,
               private progressService: ProgressService,
-              private codeKataProgressService: CodeKataProgressService,
               private userService: UserService) {
     this.logs = undefined;
     this.progress = {course: '', unit: '', user: '', code: '', done: false};
