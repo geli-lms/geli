@@ -1,7 +1,7 @@
-<md-tab-group (selectChange)="onTabChange($event)">
-  <md-tab label="Write">
+<mat-tab-group (selectChange)="onTabChange($event)">
+  <mat-tab label="Write">
     <p class="info-text">
-      <md-icon>info</md-icon>
+      <mat-icon>info</mat-icon>
       Add Markdown to add text to this Course.
       A Cheatsheet you can find
       <a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet" target="_blank">here</a>.
@@ -13,8 +13,8 @@
                 [theme]="'github'"
                 [autoUpdateContent]="true">
     </ace-editor>
-  </md-tab>
-  <md-tab label="Preview">
+  </mat-tab>
+  <mat-tab label="Preview">
     <app-free-text-unit-core [markdown]="this.markdown"></app-free-text-unit-core>
-  </md-tab>
-</md-tab-group>
+  </mat-tab>
+</mat-tab-group>

@@ -1,5 +1,5 @@
 import {Component, OnInit, Input} from '@angular/core';
-import {MdSnackBar} from '@angular/material';
+import {MatSnackBar} from '@angular/material';
 import {ActivatedRoute} from '@angular/router';
 import {ProgressService} from '../../shared/services/data/progress.service';
 import {IProgress} from '../../../../../../shared/models/IProgress';
@@ -17,7 +17,9 @@ export class TaskUnitComponent implements OnInit {
   validationMode = false;
   courseId: string;
 
-  constructor(private route: ActivatedRoute, private progressService: ProgressService, private snackBar: MdSnackBar) {
+  constructor(private route: ActivatedRoute,
+              private progressService: ProgressService,
+              private snackBar: MatSnackBar) {
   }
 
   ngOnInit() {

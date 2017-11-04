@@ -4,9 +4,9 @@
                   [userId]="this.userService.user._id"></app-user-profile>
 
 <p *ngIf="user && (userService.isLoggedInUser(user) || userService.isAdmin())">
-  <button md-raised-button color="primary"
+  <button mat-raised-button color="primary"
           routerLink="{{ getEditLink() }}">
-    <md-icon>edit</md-icon>
+    <mat-icon>edit</mat-icon>
     Edit profile
   </button>
 </p>

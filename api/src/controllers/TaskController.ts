@@ -1,5 +1,5 @@
 import {Request} from 'express';
-import {Body, Get, Post, Put, Param, Req, JsonController, UseBefore, Delete} from 'routing-controllers';
+import {Body, Get, Post, Put, Param, Req, JsonController, UseBefore, Delete, NotFoundError} from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 
 import {Task} from '../models/Task';
@@ -35,9 +35,19 @@ export class TaskController {
   }
 
   @Delete('/:id')
-  deleteTask(@Param('id') id: string, @Body() task: ITask) {
-   return Task.findByIdAndRemove(id, task)
-      .then((t) => t.toObject());
+  deleteTask(@Param('id') id: string) {
+   return Task.findById(id)
+      .then((task) => {
+        if (!task) {
+          throw new NotFoundError();
+        }
+
+        return Unit.update({}, {$pull: {tasks: id}})
+          .then(() => task.remove())
+          .then(() => {
+            return {result: true};
+          });
+      });
   }
 
   @Get('/course/:courseId')

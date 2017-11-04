@@ -4,15 +4,15 @@
 <div *ngIf="model">
   <span *ngIf="model.files.length">Existing videos:</span>
   <div *ngFor="let file of model.files;">
-    <md-input-container>
-      <input mdInput [(ngModel)]="file.alias" placeholder="File name" size="40">
-    </md-input-container>
-    <button md-icon-button md-tooltip="Delete" (click)="deleteFile(file)">
-      <md-icon>delete</md-icon>
+    <mat-form-field>
+      <input matInput [(ngModel)]="file.alias" placeholder="File name" size="40">
+    </mat-form-field>
+    <button mat-icon-button matTooltip="Delete" (click)="deleteFile(file)">
+      <mat-icon>delete</mat-icon>
     </button>
   </div>
   <div>
-    <button md-button color="primary" (click)="update()"
+    <button mat-button color="primary" (click)="update()"
             [disabled]="!generalInfo.form.value.name || hasInvalidFileNames()">
       Update
     </button>
@@ -21,7 +21,7 @@
 <div>
   <input type="file" ng2FileSelect [uploader]="uploader" placeholder="Upload files" multiple
          [accept]="allowedMimeType.toString()"/>
-  <button md-button color="warn" (click)="uploader.clearQueue()">
+  <button mat-button color="warn" (click)="uploader.clearQueue()">
     Remove all
   </button>
 </div>
@@ -31,18 +31,18 @@
     <span *ngIf="item.isReady">(ready)</span>
     <span *ngIf="item.isUploading">(uploading...)</span>
     <span *ngIf="item.isSuccess">(success!)</span>
-    <md-progress-bar mode="determinate" [value]="item.progress"></md-progress-bar>
+    <mat-progress-bar mode="determinate" [value]="item.progress"></mat-progress-bar>
   </div>
 </div>
 <div>
   Queue progress:
   <div>
-    <md-progress-bar mode="determinate" [value]="uploader.progress"></md-progress-bar>
+    <mat-progress-bar mode="determinate" [value]="uploader.progress"></mat-progress-bar>
   </div>
 </div>
 <p>
-  <button md-button (click)="onCancel()">Cancel</button>
-  <button md-button color="primary"
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button mat-button color="primary"
           (click)="uploadAll()" [disabled]="(!uploader.getNotUploadedItems().length) || (!generalInfo.form.value.name)">
     Upload
   </button>

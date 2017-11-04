@@ -1,11 +1,11 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {CodeKataUnit} from '../../models/CodeKataUnit';
-import {MdSnackBar} from '@angular/material';
+import {MatSnackBar} from '@angular/material';
 import {ProgressService} from 'app/shared/services/data/progress.service';
 import {ICodeKataProgress} from '../../../../../../shared/models/ICodeKataProgress';
 import {UserService} from '../../shared/services/user.service';
 import {ActivatedRoute} from '@angular/router';
-import {AceEditorComponent} from 'ng2-ace-editor/dist';
+import {AceEditorComponent} from 'ng2-ace-editor';
 import 'brace';
 import 'brace/mode/javascript';
 import 'brace/theme/github';
@@ -30,7 +30,7 @@ export class CodeKataComponent implements OnInit {
   isExampleCode = false;
 
   constructor(private route: ActivatedRoute,
-              private snackBar: MdSnackBar,
+              private snackBar: MatSnackBar,
               private progressService: ProgressService,
               private userService: UserService) {
     this.logs = undefined;
