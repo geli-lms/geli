@@ -1,5 +1,11 @@
+@import "../../../../variables";
+
 .fuzzySearch {
   width: 100%;
+}
+
+.left {
+  float: left;
 }
 
 .user-drag-handle, .member-drag-handle {
@@ -105,6 +111,18 @@ button {
   .email {
     flex: 1;
   }
+}
+
+.badge {
+  display: inline-block;
+  background-color: map-get($app-primary, 'default');
+  border-radius: 50%;
+  color: white;
+  width: 1.6em;
+  height: 1.6em;
+  line-height: 1.6em;
+  margin-left: 5px;
+  text-align: center;
 }
 
 .gu-mirror {
