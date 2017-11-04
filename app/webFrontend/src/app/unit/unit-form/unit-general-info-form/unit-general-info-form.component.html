@@ -7,9 +7,9 @@
     <textarea matInput formControlName="description" placeholder="Description" rows="4"></textarea>
   </mat-form-field>
 
-  <mat-form-field>
-    <input matInput formControlName="deadline" [matDatepicker]="myDatepicker" placeholder="Optional deadline">
-    <mat-datepicker-toggle [for]="myDatepicker"></mat-datepicker-toggle>
-    <mat-datepicker #myDatepicker></mat-datepicker>
+  <mat-form-field *ngIf="model.progressable">
+    <input matInput formControlName="deadline" [matDatepicker]="deadlineDatepicker" placeholder="Optional deadline">
+    <mat-datepicker-toggle matSuffix [for]="deadlineDatepicker"></mat-datepicker-toggle>
+    <mat-datepicker #deadlineDatepicker></mat-datepicker>
   </mat-form-field>
 </form>
