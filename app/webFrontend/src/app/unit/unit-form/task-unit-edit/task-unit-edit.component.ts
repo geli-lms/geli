@@ -64,6 +64,7 @@ export class TaskUnitEditComponent implements OnInit {
     this.unitService.addTaskUnit({
       name: this.generalInfo.form.value.name,
       description: this.generalInfo.form.value.description,
+      deadline: this.generalInfo.form.value.deadline,
       ...this.model
     }, this.lectureId)
     .then(
