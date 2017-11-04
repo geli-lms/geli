@@ -4,11 +4,11 @@
   <app-unit-general-info-form [model]="model"></app-unit-general-info-form>
 
   <div class="info-text">
-    <md-icon>info</md-icon>
+    <mat-icon>info</mat-icon>
     Separate definition, coding and test areas with "{{areaSeperator}}".
   </div>
   <div class="info-text">
-    <md-icon>info</md-icon>
+    <mat-icon>info</mat-icon>
     Your students can only edit the code area.
   </div>
 
@@ -20,9 +20,9 @@
               [readOnly]="false">
   </ace-editor>
 
-  <button md-button (click)="onCancel()">Cancel</button>
-  <button md-button (click)="validate()">Validate</button>
-  <button md-button color="primary" class="add-unit" (click)="addUnit()">Save</button>
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button mat-button (click)="validate()">Validate</button>
+  <button mat-button color="primary" class="add-unit" (click)="addUnit()">Save</button>
   <div *ngIf="logs!==undefined"><strong>Logs</strong></div>
   <pre>{{logs}}</pre>
 </div>

@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {UserDataService} from '../../shared/services/data.service';
 import {Router} from '@angular/router';
 import {ShowProgressService} from '../../shared/services/show-progress.service';
-import {MdSnackBar} from '@angular/material';
+import {MatSnackBar} from '@angular/material';
 import {IUser} from '../../../../../../shared/models/IUser';
 import {DialogService} from '../../shared/services/dialog.service';
 
@@ -19,7 +19,7 @@ export class UserAdminComponent implements OnInit {
   constructor(private userService: UserDataService,
               private router: Router,
               private showProgress: ShowProgressService,
-              public  snackBar: MdSnackBar,
+              public  snackBar: MatSnackBar,
               public  dialogService: DialogService) {
   }
 

@@ -5,11 +5,10 @@ import {CourseUserListComponent} from './course-user-list/course-user-list.compo
 import {CourseManageContentComponent} from './course-manage-content/course-manage-content.component';
 import {CourseEditComponent} from './course-edit.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {MaterialModule} from '@angular/material';
 import {FileUploadModule} from 'ng2-file-upload';
 import {TeachersComponent} from './teachers/teachers.component';
 import {DragulaModule} from 'ng2-dragula';
-import {MdFabMenuComponent} from '../../shared/components/md-fab-menu/md-fab-menu.component';
+import {MatFabMenuComponent} from '../../shared/components/mat-fab-menu/mat-fab-menu.component';
 import {SharedModule} from '../../shared/shared.module';
 import {CourseEditRoutingModule} from './course-edit-routing.module';
 import {LectureModule} from '../../lecture/lecture.module';
@@ -20,7 +19,6 @@ import {UnitFormModule} from '../../unit/unit-form/unit-form.module';
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    MaterialModule,
     DragulaModule,
     FileUploadModule,
     SharedModule,
@@ -34,7 +32,7 @@ import {UnitFormModule} from '../../unit/unit-form/unit-form.module';
     CourseUserListComponent,
     MembersComponent,
     TeachersComponent,
-    MdFabMenuComponent,
+    MatFabMenuComponent,
   ],
   exports: [
     CourseEditComponent,
@@ -42,7 +40,7 @@ import {UnitFormModule} from '../../unit/unit-form/unit-form.module';
     CourseUserListComponent,
     MembersComponent,
     TeachersComponent,
-    MdFabMenuComponent,
+    MatFabMenuComponent,
   ]
 })
 export class CourseEditModule {

@@ -1,6 +1,6 @@
 import {Observable} from 'rxjs/Rx';
 import {Injectable} from '@angular/core';
-import {MdDialog, MdDialogRef} from '@angular/material';
+import {MatDialog, MatDialogRef} from '@angular/material';
 import {ConfirmDialog} from '../components/confirm-dialog/confirm-dialog.component';
 import {IUser} from '../../../../../../shared/models/IUser';
 import {UploadDialog} from '../components/upload-dialog/upload-dialog.component';
@@ -8,11 +8,11 @@ import {UploadDialog} from '../components/upload-dialog/upload-dialog.component'
 @Injectable()
 export class DialogService {
 
-  constructor(private dialog: MdDialog) {
+  constructor(private dialog: MatDialog) {
   }
 
   public confirm(title: string, message: string, confirmText: string = 'Confirm'): Observable<boolean> {
-    let dialogRef: MdDialogRef<ConfirmDialog>;
+    let dialogRef: MatDialogRef<ConfirmDialog>;
 
     dialogRef = this.dialog.open(ConfirmDialog);
     dialogRef.componentInstance.title = title;
@@ -40,7 +40,7 @@ export class DialogService {
   }
 
   public upload(user: IUser) {
-    let dialogRef: MdDialogRef<UploadDialog>;
+    let dialogRef: MatDialogRef<UploadDialog>;
 
     dialogRef = this.dialog.open(UploadDialog);
     dialogRef.componentInstance.user = user;
