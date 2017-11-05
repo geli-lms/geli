@@ -63,9 +63,9 @@ export class CodeKataUnitFormComponent implements OnInit {
       this.model = new CodeKataUnit(this.course._id);
       this.model.code =
         this.example.definition
-        + '\n\n' + this.areaSeperator + ((this.example.code.startsWith('//')) ? '\n' : '\n\n')
+        + '\n\n' + this.areaSeperator + ' code-section' + ((this.example.code.startsWith('//')) ? '\n' : '\n\n')
         + this.example.code
-        + '\n\n' + this.areaSeperator + ((this.example.test.startsWith('//')) ? '\n' : '\n\n')
+        + '\n\n' + this.areaSeperator + ' test-section' + ((this.example.test.startsWith('//')) ? '\n' : '\n\n')
         + this.example.test;
       this.model.definition = undefined;
       this.model.test = undefined;
