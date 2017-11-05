@@ -1,11 +1,11 @@
 import {Component, Input, OnInit} from '@angular/core';
 
 @Component({
-  selector: 'app-md-fab-menu',
-  templateUrl: './md-fab-menu.component.html',
-  styleUrls: ['./md-fab-menu.component.scss']
+  selector: 'app-mat-fab-menu',
+  templateUrl: './mat-fab-menu.component.html',
+  styleUrls: ['./mat-fab-menu.component.scss']
 })
-export class MdFabMenuComponent implements OnInit {
+export class MatFabMenuComponent implements OnInit {
 
   @Input()
   public fabTooltip: string;

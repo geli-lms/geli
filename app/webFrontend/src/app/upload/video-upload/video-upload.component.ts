@@ -1,5 +1,5 @@
 import {Component, OnInit, Input, ChangeDetectorRef, ViewChild} from '@angular/core';
-import {MdSnackBar} from '@angular/material';
+import {MatSnackBar} from '@angular/material';
 import {FileUploader, FileItem} from 'ng2-file-upload';
 import {ICourse} from '../../../../../../shared/models/ICourse';
 import {ILecture} from '../../../../../../shared/models/ILecture';
@@ -36,7 +36,7 @@ export class VideoUploadComponent implements OnInit {
   first = true;
   error = false;
 
-  constructor(public snackBar: MdSnackBar,
+  constructor(public snackBar: MatSnackBar,
               private unitService: UnitService,
               private ref: ChangeDetectorRef) {
     this.uploader.onProgressItem = (fileItem: FileItem, progress: any) => {

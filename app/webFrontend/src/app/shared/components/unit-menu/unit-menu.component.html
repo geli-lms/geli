@@ -1,9 +1,9 @@
-<button md-mini-fab mdTooltip="Add unit" [mdMenuTriggerFor]="unitMenu">
-  <md-icon>add</md-icon>
+<button mat-mini-fab matTooltip="Add unit" [matMenuTriggerFor]="unitMenu">
+  <mat-icon>add</mat-icon>
 </button>
-<md-menu #unitMenu="mdMenu">
-  <button md-menu-item (click)="addUnit('video')">Video</button>
-  <button md-menu-item (click)="addUnit('task')">Task</button>
-  <button md-menu-item (click)="addUnit('code-kata')">Code-Kata</button>
-  <button md-menu-item (click)="addUnit('free-text')">Free text</button>
-</md-menu>
+<mat-menu #unitMenu="matMenu">
+  <button mat-menu-item (click)="addUnit('video')">Video</button>
+  <button mat-menu-item (click)="addUnit('task')">Task</button>
+  <button mat-menu-item (click)="addUnit('code-kata')">Code-Kata</button>
+  <button mat-menu-item (click)="addUnit('free-text')">Free text</button>
+</mat-menu>

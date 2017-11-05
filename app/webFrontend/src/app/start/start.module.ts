@@ -6,14 +6,14 @@ import {HomescreenComponent} from './homescreen/homescreen.component';
 import {DashboardStudentComponent} from './dashboard/dashboard-student/dashboard-student.component';
 import {DashboardTeacherComponent} from './dashboard/dashboard-teacher/dashboard-teacher.component';
 import {DashboardAdminComponent} from './dashboard/dashboard-admin/dashboard-admin.component';
-import {MaterialModule} from '@angular/material';
 import {RouterModule} from '@angular/router';
 import {CourseModule} from '../course/course.module';
+import {SharedModule} from '../shared/shared.module';
 
 @NgModule({
   imports: [
     CommonModule,
-    MaterialModule,
+    SharedModule,
     RouterModule,
     CourseModule,
   ],

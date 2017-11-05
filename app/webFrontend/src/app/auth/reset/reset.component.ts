@@ -3,7 +3,7 @@ import {Component, OnInit} from '@angular/core';
 import {AuthenticationService} from '../../shared/services/authentication.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ShowProgressService} from '../../shared/services/show-progress.service';
-import {MdSnackBar} from '@angular/material';
+import {MatSnackBar} from '@angular/material';
 import {ActivatedRoute, Router} from '@angular/router';
 import {isNullOrUndefined} from 'util';
 import {matchPasswords} from '../../shared/validators/validators';
@@ -24,7 +24,7 @@ export class ResetComponent implements OnInit {
   constructor(private router: Router,
               private authenticationService: AuthenticationService,
               private showProgress: ShowProgressService,
-              private snackBar: MdSnackBar,
+              private snackBar: MatSnackBar,
               private formBuilder: FormBuilder,
               private route: ActivatedRoute) {
     this.route.params.subscribe(params => {
