@@ -75,7 +75,7 @@ export class ProgressController {
     const unit: any = await ProgressController.getUnit(data.unit);
     ProgressController.checkDeadline(unit);
     const progressClass = ProgressController.getProgressClassForType(data.type);
-    const updatedProgress = await progressClass.findByIdAndUpdate(id, data);
+    const updatedProgress = await progressClass.findByIdAndUpdate(id, data, {'new': true});
 
     return updatedProgress.toObject();
   }
