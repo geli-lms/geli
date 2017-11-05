@@ -64,7 +64,7 @@ export class ProgressController {
 
     data.user = currentUser;
 
-    const progressClass = ProgressController.getProgressClassForType(data.type);
+    const progressClass = ProgressController.getProgressClassForType(unit.type);
     const progress = await new progressClass(data).save();
 
     return progress.toObject();
@@ -74,7 +74,7 @@ export class ProgressController {
   async updateProgress(@Param('id') id: string, @Body() data: any) {
     const unit: any = await ProgressController.getUnit(data.unit);
     ProgressController.checkDeadline(unit);
-    const progressClass = ProgressController.getProgressClassForType(data.type);
+    const progressClass = ProgressController.getProgressClassForType(unit.type);
     const updatedProgress = await progressClass.findByIdAndUpdate(id, data, {'new': true});
 
     return updatedProgress.toObject();
