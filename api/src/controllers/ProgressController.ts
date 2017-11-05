@@ -1,5 +1,5 @@
 import {
-  BadRequestError, Body, CurrentUser, Get, JsonController, Param, Post, Put,
+  BadRequestError, Body, CurrentUser, Get, InternalServerError, JsonController, Param, Post, Put,
   UseBefore
 } from 'routing-controllers';
 import * as moment from 'moment';
@@ -23,16 +23,16 @@ export class ProgressController {
   }
 
   private static getProgressClassForType(type: string) {
-    let progressClass = null;
-    switch (type) {
-      case 'code-kata':
-        progressClass = CodeKataProgress;
-        break;
-      default:
-        progressClass = Progress;
+    const classMappings: any = {
+      'code-kata': CodeKataProgress,
+      'task': Progress,
+    };
+    const hasNoProgressClass = Object.keys(classMappings).indexOf(type) === -1 ;
+    if (hasNoProgressClass) {
+      throw new InternalServerError(`No progress class for type ${type} available`);
     }
 
-    return progressClass;
+    return classMappings[type];
   }
 
   @Get('/units/:id')

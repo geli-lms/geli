@@ -110,7 +110,7 @@ describe('ProgressController', () => {
         done: true,
       };
 
-      return new Promise((resolve, reject) => {
+      return new Promise((resolve) => {
         chai.request(app)
           .post(BASE_URL)
           .set('Authorization', `JWT ${JwtUtils.generateToken(student)}`)
@@ -244,7 +244,7 @@ describe('ProgressController', () => {
         done: true,
       };
 
-      return new Promise((resolve, reject) => {
+      return new Promise((resolve) => {
         chai.request(app)
           .put(`${BASE_URL}/${progress._id.toString()}`)
           .set('Authorization', `JWT ${JwtUtils.generateToken(student)}`)
@@ -262,14 +262,14 @@ describe('ProgressController', () => {
 });
 
 function getProgressClassForType(type: string) {
-  let progressClass = null;
-  switch (type) {
-    case 'code-kata':
-      progressClass = CodeKataProgress;
-      break;
-    default:
-      progressClass = Progress;
+  const classMappings: any = {
+    'code-kata': CodeKataProgress,
+    'task': Progress,
+  };
+  const hasNoProgressClass = Object.keys(classMappings).indexOf(type) === -1 ;
+  if (hasNoProgressClass) {
+    throw new Error(`No progress class for type ${type} available`);
   }
 
-  return progressClass;
+  return classMappings[type];
 }
