@@ -16,6 +16,15 @@ export class RegisterComponent implements OnInit {
   registrationDone = false;
   role;
 
+  private trimFormFields() {
+    this.registerForm.value.email = this.registerForm.value.email.trim();
+    this.registerForm.value.profile.firstName = this.registerForm.value.profile.firstName.trim();
+    this.registerForm.value.profile.lastName = this.registerForm.value.profile.lastName.trim();
+    if (this.registerForm.value.uid) {
+      this.registerForm.value.uid = this.registerForm.value.uid.trim();
+    }
+  }
+
   constructor(private router: Router,
               private authenticationService: AuthenticationService,
               private showProgress: ShowProgressService,
@@ -36,11 +45,12 @@ export class RegisterComponent implements OnInit {
 
   register() {
     this.showProgress.toggleLoadingGlobal(true);
+    this.registerForm.value.role = this.role;
     if (this.registerForm.value.role !== 'student') {
       delete this.registerForm.value.uid;
     }
-    this.registerForm.value.role = this.role;
     this.registerForm.value.email = this.registerForm.value.email.replace(/\s/g, '').toLowerCase();
+    this.trimFormFields();
     this.authenticationService.register(this.registerForm.value).then(
       (val) => {
         this.showProgress.toggleLoadingGlobal(false);
