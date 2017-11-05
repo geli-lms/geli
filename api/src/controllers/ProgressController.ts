@@ -5,10 +5,8 @@ import {
 import * as moment from 'moment';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import {Progress} from '../models/Progress';
-import {IProgress} from '../../../shared/models/IProgress';
 import {IUser} from '../../../shared/models/IUser';
 import {Unit} from '../models/units/Unit';
-import {CodeKataUnit} from '../../../app/webFrontend/src/app/models/CodeKataUnit';
 import {CodeKataProgress} from '../models/CodeKataProgress';
 
 @JsonController('/progress')
