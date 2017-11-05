@@ -107,7 +107,8 @@ export class CodeKataUnitFormComponent implements OnInit {
           this.onDone();
         },
         (error) => {
-          console.log(error);
+          const message = JSON.parse(error._body).message;
+          this.snackBar.open('Failed to create Code-Kata => ' + message, '', {duration: 3000});
         });
     } else {
       delete this.model._course;
@@ -118,7 +119,8 @@ export class CodeKataUnitFormComponent implements OnInit {
           this.onDone();
         },
         (error) => {
-          console.log(error);
+          const message = JSON.parse(error._body).message;
+          this.snackBar.open('Failed to update Code-Kata => ' + message, '', {duration: 3000});
         });
     }
   }
