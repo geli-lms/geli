@@ -50,6 +50,7 @@ nohup.out
 !/api/*.js
 !/app/webFrontend/*.js
 !/.travis/*.js
+!/api/test/mocha.env.js
 
 # Ignore CSV-Files generated from nlf
 /**/nlf-license*.csv
