@@ -205,6 +205,25 @@ export class UserDataService extends DataService {
     super('users/', backendService);
   }
 
+  searchUsers(role: string, query: string): Promise<any[]> {
+    const originalApiPath = this.apiPath;
+    this.apiPath += role + '/';
+    this.apiPath += 'search/';
+    this.apiPath += '?query=' + query;
+    const promise = this.readItems();
+    this.apiPath = originalApiPath;
+    return promise;
+  }
+
+  countUsers(role: string, query: string): Promise<any[]> {
+    const originalApiPath = this.apiPath;
+    this.apiPath += role + '/';
+    this.apiPath += 'count/';
+    const promise = this.readItems();
+    this.apiPath = originalApiPath;
+    return promise;
+  }
+
   getRoles(): Promise<any[]> {
     const originalApiPath = this.apiPath;
     this.apiPath += 'roles';
