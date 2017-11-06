@@ -6,6 +6,9 @@ import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import {Progress} from '../models/Progress';
 import {IProgress} from '../../../shared/models/IProgress';
 import {IUser} from '../../../shared/models/IUser';
+import {Unit} from '../models/units/Unit';
+import * as mongoose from 'mongoose';
+import ObjectId = mongoose.Types.ObjectId;
 
 @JsonController('/progress')
 @UseBefore(passportJwtMiddleware)
@@ -19,8 +22,22 @@ export class ProgressController {
 
   @Get('/courses/:id')
   getCourseProgress(@Param('id') id: string) {
+    return Unit.aggregate([
+      { $match: { $and: [{ _course: new ObjectId(id) }, { progressable: true }]}},
+      { $lookup: {
+        from: 'progress',
+        localField: '_id',
+        foreignField: 'unit',
+        as: 'progress_data'
+      }}
+    ])
+      .then((result) => {
+        const debug = 0;
+      });
+    /*
     return Progress.find({'course': id})
       .then((progresses) => progresses.map((progress) => progress.toObject({virtuals: true})));
+      */
   }
 
   @Get('/users/:id')
