@@ -1,12 +1,12 @@
 process.env.NODE_ENV = 'test';
 
 import * as chai from 'chai';
-import chaiHttp = require('chai-http');
 import {Server} from '../../src/server';
 import {FixtureLoader} from '../../fixtures/FixtureLoader';
 import {JwtUtils} from '../../src/security/JwtUtils';
 import {User} from '../../src/models/User';
 import {IUser} from '../../../shared/models/IUser';
+import chaiHttp = require('chai-http');
 import fs = require('fs');
 
 chai.use(chaiHttp);
@@ -155,6 +155,40 @@ describe('User', () => {
                 done();
               });
           })
+      });
+
+      it('should search for a student', (done) => {
+        User.findOne({email: 'teacher1@test.local'})
+          .then((user) => {
+            const newUser: IUser = new User({
+              uid: '123456',
+              email: 'test@local.tv',
+              password: 'test',
+              profile: {
+                firstName: 'Max',
+                lastName: 'Mustermann'
+              },
+              role: 'student'
+            });
+            User.create(newUser).then((createdUser) => {
+              chai.request(app)
+                .get(`${BASE_URL}/student/search`)
+                .query({query: newUser.uid +
+                ' ' + newUser.email +
+                ' ' + newUser.profile.firstName +
+                ' ' + newUser.profile.lastName})
+                .set('Authorization', `JWT ${JwtUtils.generateToken(user)}`)
+                .end((err, res) => {
+                  res.status.should.be.equal(200);
+                  res.body.length.should.be.greaterThan(0);
+                  res.body[0]._doc.profile.firstName.should.be.equal(newUser.profile.firstName);
+                  res.body[0]._doc.profile.firstName.should.be.equal(newUser.profile.firstName);
+                  res.body[0]._doc.uid.should.be.equal(newUser.uid);
+                  res.body[0]._doc.email.should.be.equal(newUser.email);
+                  done();
+                });
+              });
+          });
       });
     });
 

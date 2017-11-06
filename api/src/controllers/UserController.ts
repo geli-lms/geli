@@ -65,8 +65,7 @@ export class UserController {
     return User.find(conditions, {score: {$meta: 'textScore'}})
       .where({role: role})
       .sort({score: {$meta: 'textScore'}})
-      .limit(20)
-      .catch((err) => {console.log(err)});
+      .limit(20);
   }
 
   @Get('/:role/count')
