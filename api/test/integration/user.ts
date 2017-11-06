@@ -95,246 +95,308 @@ describe('User', () => {
         })
         .catch(done);
     });
-  });
 
-  describe(`PUT ${BASE_URL}`, () => {
-    it('should fail with bad request (admin privileges)', (done) => {
-      User.findOne({email: 'admin@test.local'})
-        .then((user) => {
-          const updatedUser = user;
-          updatedUser.role = 'teacher';
-          chai.request(app)
-            .put(`${BASE_URL}/${user._id}`)
-            .set('Authorization', `JWT ${JwtUtils.generateToken(user)}`)
-            .send(updatedUser)
-            .end((err, res) => {
-              res.status.should.be.equal(400);
-              res.body.name.should.be.equal('BadRequestError');
-              res.body.message.should.be.equal('There are no other users with admin privileges.');
-              done();
+    describe(`GET ${BASE_URL} :role`, () => {
+      it('should get amount of students', (done) => {
+        User.findOne({email: 'teacher1@test.local'})
+          .then((user) => {
+            User.count({role: 'student'}).then((students) => {
+              chai.request(app)
+                .get(`${BASE_URL}/student/count`)
+                .set('Authorization', `JWT ${JwtUtils.generateToken(user)}`)
+                .end((err, res) => {
+                  res.status.should.be.equal(200);
+                  res.body.should.be.equal(students);
+                  done();
+                });
             });
-        })
-        .catch(done);
-    });
+          })
+      });
 
-    it('should fail with bad request (email)', (done) => {
-      User.findOne({email: 'admin@test.local'})
-        .then((user) => {
-          const updatedUser = user;
-          updatedUser.email = 'teacher1@test.local';
-          chai.request(app)
-            .put(`${BASE_URL}/${user._id}`)
-            .set('Authorization', `JWT ${JwtUtils.generateToken(user)}`)
-            .send(updatedUser)
-            .end((err, res) => {
-              res.status.should.be.equal(400);
-              res.body.name.should.be.equal('BadRequestError');
-              res.body.message.should.be.equal('This mail address is already in use.');
-              done();
+      it('should fail get amount of admins', (done) => {
+        User.findOne({email: 'teacher1@test.local'})
+          .then((user) => {
+            User.count({role: 'student'}).then((students) => {
+              chai.request(app)
+                .get(`${BASE_URL}/admin/count`)
+                .set('Authorization', `JWT ${JwtUtils.generateToken(user)}`)
+                .end((err, res) => {
+                  res.status.should.be.equal(500);
+                  done();
+                });
             });
-        })
-        .catch(done);
-    });
+          })
+      });
 
-    it('should fail with wrong authorization (role edit)', (done) => {
-      User.findOne({email: 'teacher1@test.local'})
-        .then((user) => {
-          const updatedUser = user;
-          updatedUser.role = 'admin';
-          chai.request(app)
-            .put(`${BASE_URL}/${user._id}`)
-            .set('Authorization', `JWT ${JwtUtils.generateToken(user)}`)
-            .send(updatedUser)
-            .end((err, res) => {
-              res.status.should.be.equal(403);
-              res.body.name.should.be.equal('ForbiddenError');
-              res.body.message.should.be.equal('Only users with admin privileges can change roles');
-              done();
+      it('should get amount of teachers', (done) => {
+        User.findOne({email: 'teacher1@test.local'})
+          .then((user) => {
+            User.count({role: 'teacher'}).then((teachers) => {
+              chai.request(app)
+                .get(`${BASE_URL}/teacher/count`)
+                .set('Authorization', `JWT ${JwtUtils.generateToken(user)}`)
+                .end((err, res) => {
+                  res.status.should.be.equal(200);
+                  res.body.should.be.equal(teachers);
+                  done();
+                });
             });
-        })
-        .catch(done);
+          })
+      });
+
+      it('should fail with no authorization', (done) => {
+        User.findOne({email: 'teacher1@test.local'})
+          .then((user) => {
+            chai.request(app)
+              .get(`${BASE_URL}/teacher/count`)
+              .set('Authorization', `JWT xxr`)
+              .end((err, res) => {
+                res.status.should.be.equal(401);
+                done();
+              });
+          })
+      });
     });
 
-    it('should fail with wrong authorization (uid)', (done) => {
-      User.findOne({email: 'teacher1@test.local'})
-      .then((user) => {
-        const updatedUser = user;
-        updatedUser.uid = '987456';
-        chai.request(app)
-        .put(`${BASE_URL}/${user._id}`)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(user)}`)
-        .send(updatedUser)
-        .end((err, res) => {
-          res.status.should.be.equal(403);
-          res.body.name.should.be.equal('ForbiddenError');
-          res.body.message.should.be.equal('Only users with admin privileges can change uids');
-          done();
-        });
-      })
-      .catch(done);
+    describe(`PUT ${BASE_URL}`, () => {
+      it('should fail with bad request (admin privileges)', (done) => {
+        User.findOne({email: 'admin@test.local'})
+          .then((user) => {
+            const updatedUser = user;
+            updatedUser.role = 'teacher';
+            chai.request(app)
+              .put(`${BASE_URL}/${user._id}`)
+              .set('Authorization', `JWT ${JwtUtils.generateToken(user)}`)
+              .send(updatedUser)
+              .end((err, res) => {
+                res.status.should.be.equal(400);
+                res.body.name.should.be.equal('BadRequestError');
+                res.body.message.should.be.equal('There are no other users with admin privileges.');
+                done();
+              });
+          })
+          .catch(done);
+      });
+
+      it('should fail with bad request (email)', (done) => {
+        User.findOne({email: 'admin@test.local'})
+          .then((user) => {
+            const updatedUser = user;
+            updatedUser.email = 'teacher1@test.local';
+            chai.request(app)
+              .put(`${BASE_URL}/${user._id}`)
+              .set('Authorization', `JWT ${JwtUtils.generateToken(user)}`)
+              .send(updatedUser)
+              .end((err, res) => {
+                res.status.should.be.equal(400);
+                res.body.name.should.be.equal('BadRequestError');
+                res.body.message.should.be.equal('This mail address is already in use.');
+                done();
+              });
+          })
+          .catch(done);
+      });
+
+      it('should fail with wrong authorization (role edit)', (done) => {
+        User.findOne({email: 'teacher1@test.local'})
+          .then((user) => {
+            const updatedUser = user;
+            updatedUser.role = 'admin';
+            chai.request(app)
+              .put(`${BASE_URL}/${user._id}`)
+              .set('Authorization', `JWT ${JwtUtils.generateToken(user)}`)
+              .send(updatedUser)
+              .end((err, res) => {
+                res.status.should.be.equal(403);
+                res.body.name.should.be.equal('ForbiddenError');
+                res.body.message.should.be.equal('Only users with admin privileges can change roles');
+                done();
+              });
+          })
+          .catch(done);
+      });
+
+      it('should fail with wrong authorization (uid)', (done) => {
+        User.findOne({email: 'teacher1@test.local'})
+          .then((user) => {
+            const updatedUser = user;
+            updatedUser.uid = '987456';
+            chai.request(app)
+              .put(`${BASE_URL}/${user._id}`)
+              .set('Authorization', `JWT ${JwtUtils.generateToken(user)}`)
+              .send(updatedUser)
+              .end((err, res) => {
+                res.status.should.be.equal(403);
+                res.body.name.should.be.equal('ForbiddenError');
+                res.body.message.should.be.equal('Only users with admin privileges can change uids');
+                done();
+              });
+          })
+          .catch(done);
+      });
+
+      it('should fail with missing password', (done) => {
+        User.findOne({email: 'student1@test.local'})
+          .then((user: IUser) => {
+            const updatedUser = user;
+            updatedUser.password = '1234';
+            chai.request(app)
+              .put(`${BASE_URL}/${user._id}`)
+              .set('Authorization', `JWT ${JwtUtils.generateToken(user)}`)
+              .send(updatedUser)
+              .end((err, res) => {
+                res.status.should.be.equal(400);
+                res.body.name.should.be.equal('BadRequestError');
+                res.body.message.should.be.equal('You must specify your current password if you want to set a new password.');
+
+                done();
+              });
+          })
+          .catch(done);
+      });
+
+      it('should update user data', (done) => {
+        User.findOne({email: 'student1@test.local'})
+          .then((user: IUser) => {
+            const updatedUser = user;
+            updatedUser.password = '';
+            updatedUser.profile.firstName = 'Updated';
+            updatedUser.profile.lastName = 'User';
+            updatedUser.email = 'student1@updated.local';
+            chai.request(app)
+              .put(`${BASE_URL}/${user._id}`)
+              .set('Authorization', `JWT ${JwtUtils.generateToken(user)}`)
+              .send(updatedUser)
+              .end((err, res) => {
+                res.status.should.be.equal(200);
+                res.body.profile.firstName.should.be.equal('Updated');
+                res.body.profile.lastName.should.be.equal('User');
+                res.body.email.should.be.equal('student1@updated.local');
+                done();
+              });
+          })
+          .catch(done);
+      });
+
+      it('should update user base data without password', (done) => {
+        User.findOne({email: 'student2@test.local'})
+          .then((user: IUser) => {
+            const updatedUser = user;
+            updatedUser.password = undefined;
+            updatedUser.profile.firstName = 'Updated';
+            updatedUser.profile.lastName = 'User';
+            updatedUser.email = 'student2@updated.local';
+            chai.request(app)
+              .put(`${BASE_URL}/${user._id}`)
+              .set('Authorization', `JWT ${JwtUtils.generateToken(user)}`)
+              .send(updatedUser)
+              .end((err, res) => {
+                res.status.should.be.equal(200);
+                res.body.profile.firstName.should.be.equal('Updated');
+                res.body.profile.lastName.should.be.equal('User');
+                res.body.email.should.be.equal('student2@updated.local');
+                done();
+              });
+          })
+          .catch(done);
+      });
+
+      it('should keep a existing uid', (done) => {
+        User.findOne({email: 'admin@test.local'})
+          .then((user: IUser) => {
+            return User.findOne({email: 'student1@test.local'}).then(student => ({user, student}));
+          })
+          .then(({user, student}) => {
+            const updatedUser = student;
+            updatedUser.uid = null;
+            updatedUser.password = '';
+            updatedUser.profile.firstName = 'Updated';
+            updatedUser.profile.lastName = 'User';
+            updatedUser.email = 'student3@updated.local';
+            chai.request(app)
+              .put(`${BASE_URL}/${student._id}`)
+              .set('Authorization', `JWT ${JwtUtils.generateToken(user)}`)
+              .send(updatedUser)
+              .end((err, res) => {
+                res.status.should.be.equal(200);
+                res.body.profile.firstName.should.be.equal('Updated');
+                res.body.profile.lastName.should.be.equal('User');
+                res.body.email.should.be.equal('student3@updated.local');
+                done();
+              });
+          })
+          .catch(done);
+      });
     });
 
-    it('should fail with missing password', (done) => {
-      User.findOne({email: 'student1@test.local'})
-        .then((user: IUser) => {
-          const updatedUser = user;
-          updatedUser.password = '1234';
-          chai.request(app)
-            .put(`${BASE_URL}/${user._id}`)
-            .set('Authorization', `JWT ${JwtUtils.generateToken(user)}`)
-            .send(updatedUser)
-            .end((err, res) => {
-              res.status.should.be.equal(400);
-              res.body.name.should.be.equal('BadRequestError');
-              res.body.message.should.be.equal('You must specify your current password if you want to set a new password.');
+    describe(`POST ${BASE_URL}/picture`, () => {
+      it('should upload a new user picture', (done) => {
+        User.findOne({email: 'admin@test.local'})
+          .then((user: IUser) => {
+            chai.request(app)
+              .post(`${BASE_URL}/picture/${user._id}`)
+              .set('Authorization', `JWT ${JwtUtils.generateToken(user)}`)
+              .attach('file', fs.readFileSync('test/resources/test.png'), 'test.png')
+              .end((err, res) => {
+                res.status.should.be.equal(200);
+                res.body.profile.picture.name.should.match(new RegExp(`${user._id}-[0-9]{4}.png`));
 
-              done();
-            });
-        })
-        .catch(done);
+                done();
+              });
+          })
+          .catch(done);
+      });
     });
 
-    it('should update user data', (done) => {
-      User.findOne({email: 'student1@test.local'})
-        .then((user: IUser) => {
-          const updatedUser = user;
-          updatedUser.password = '';
-          updatedUser.profile.firstName = 'Updated';
-          updatedUser.profile.lastName = 'User';
-          updatedUser.email = 'student1@updated.local';
-          chai.request(app)
-            .put(`${BASE_URL}/${user._id}`)
-            .set('Authorization', `JWT ${JwtUtils.generateToken(user)}`)
-            .send(updatedUser)
-            .end((err, res) => {
-              res.status.should.be.equal(200);
-              res.body.profile.firstName.should.be.equal('Updated');
-              res.body.profile.lastName.should.be.equal('User');
-              res.body.email.should.be.equal('student1@updated.local');
-              done();
-            });
-        })
-        .catch(done);
-    });
+    describe(`DELETE ${BASE_URL}`, () => {
+      it('should fail to delete the only admin', (done) => {
+        User.findOne({email: 'admin@test.local'})
+          .then((user: IUser) => {
+            chai.request(app)
+              .del(`${BASE_URL}/${user._id}`)
+              .set('Authorization', `JWT ${JwtUtils.generateToken(user)}`)
+              .end((err, res) => {
+                res.status.should.be.equal(400);
+                res.body.name.should.be.equal('BadRequestError');
+                res.body.message.should.be.equal('There are no other users with admin privileges.');
+                done();
+              });
+          })
+          .catch(done);
+      });
 
-    it('should update user base data without password', (done) => {
-      User.findOne({email: 'student2@test.local'})
-      .then((user: IUser) => {
-        const updatedUser = user;
-        updatedUser.password = undefined;
-        updatedUser.profile.firstName = 'Updated';
-        updatedUser.profile.lastName = 'User';
-        updatedUser.email = 'student2@updated.local';
-        chai.request(app)
-        .put(`${BASE_URL}/${user._id}`)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(user)}`)
-        .send(updatedUser)
-        .end((err, res) => {
-          res.status.should.be.equal(200);
-          res.body.profile.firstName.should.be.equal('Updated');
-          res.body.profile.lastName.should.be.equal('User');
-          res.body.email.should.be.equal('student2@updated.local');
-          done();
-        });
-      })
-      .catch(done);
-    });
+      it('should fail to delete (wrong role)', (done) => {
+        User.findOne({email: 'teacher1@test.local'})
+          .then((user: IUser) => {
+            chai.request(app)
+              .del(`${BASE_URL}/${user._id}`)
+              .set('Authorization', `JWT ${JwtUtils.generateToken(user)}`)
+              .end((err, res) => {
+                res.status.should.be.equal(403);
+                done();
+              });
+          })
+          .catch(done);
+      });
 
-    it('should keep a existing uid', (done) => {
-      User.findOne({email: 'admin@test.local'})
-      .then((user: IUser) => {
-        return User.findOne({email: 'student1@test.local'}).then(student => ({user, student}));
-      })
-        .then(({user, student}) => {
-        const updatedUser = student;
-        updatedUser.uid = null;
-        updatedUser.password = '';
-        updatedUser.profile.firstName = 'Updated';
-        updatedUser.profile.lastName = 'User';
-        updatedUser.email = 'student3@updated.local';
-        chai.request(app)
-        .put(`${BASE_URL}/${student._id}`)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(user)}`)
-        .send(updatedUser)
-        .end((err, res) => {
-          res.status.should.be.equal(200);
-          res.body.profile.firstName.should.be.equal('Updated');
-          res.body.profile.lastName.should.be.equal('User');
-          res.body.email.should.be.equal('student3@updated.local');
-          done();
-        });
-      })
-      .catch(done);
-    });
-  });
+      it('should delete student1@test.local', (done) => {
+        User.findOne({email: 'admin@test.local'})
+          .then((user: IUser) => {
+            return User.findOne({email: 'student1@test.local'}).then(student => ({user, student}));
+          })
+          .then(({user, student}) => {
+            chai.request(app)
+              .del(`${BASE_URL}/${student._id}`)
+              .set('Authorization', `JWT ${JwtUtils.generateToken(user)}`)
+              .end((err, res) => {
+                res.status.should.be.equal(200);
+                res.body.result.should.be.equal(true);
 
-  describe(`POST ${BASE_URL}/picture`, () => {
-    it('should upload a new user picture', (done) => {
-      User.findOne({email: 'admin@test.local'})
-      .then((user: IUser) => {
-        chai.request(app)
-          .post(`${BASE_URL}/picture/${user._id}`)
-          .set('Authorization', `JWT ${JwtUtils.generateToken(user)}`)
-          .attach('file', fs.readFileSync('test/resources/test.png'), 'test.png')
-          .end((err, res) => {
-            res.status.should.be.equal(200);
-            res.body.profile.picture.name.should.match(new RegExp(`${user._id}-[0-9]{4}.png`));
-
-            done();
-          });
-      })
-      .catch(done);
-    });
-  });
-
-  describe(`DELETE ${BASE_URL}`, () => {
-    it('should fail to delete the only admin', (done) => {
-      User.findOne({email: 'admin@test.local'})
-        .then((user: IUser) => {
-          chai.request(app)
-            .del(`${BASE_URL}/${user._id}`)
-            .set('Authorization', `JWT ${JwtUtils.generateToken(user)}`)
-            .end((err, res) => {
-              res.status.should.be.equal(400);
-              res.body.name.should.be.equal('BadRequestError');
-              res.body.message.should.be.equal('There are no other users with admin privileges.');
-              done();
-            });
-        })
-        .catch(done);
-    });
-
-    it('should fail to delete (wrong role)', (done) => {
-      User.findOne({email: 'teacher1@test.local'})
-        .then((user: IUser) => {
-          chai.request(app)
-            .del(`${BASE_URL}/${user._id}`)
-            .set('Authorization', `JWT ${JwtUtils.generateToken(user)}`)
-            .end((err, res) => {
-              res.status.should.be.equal(403);
-              done();
-            });
-        })
-        .catch(done);
-    });
-
-    it('should delete student1@test.local', (done) => {
-      User.findOne({email: 'admin@test.local'})
-        .then((user: IUser) => {
-          return User.findOne({email: 'student1@test.local'}).then(student => ({user, student}));
-        })
-        .then(({user, student}) => {
-          chai.request(app)
-            .del(`${BASE_URL}/${student._id}`)
-            .set('Authorization', `JWT ${JwtUtils.generateToken(user)}`)
-            .end((err, res) => {
-              res.status.should.be.equal(200);
-              res.body.result.should.be.equal(true);
-
-              done();
-            });
-        })
-        .catch(done);
+                done();
+              });
+          })
+          .catch(done);
+      });
     });
   });
 });

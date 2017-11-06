@@ -1,12 +1,13 @@
 import {
-  Body, JsonController, UseBefore, Get, Param, Put, Delete, Authorized, CurrentUser,
+  Body, JsonController, UseBefore, Get, Param, QueryParam, Put, Delete, Authorized, CurrentUser,
   BadRequestError, ForbiddenError, UploadedFile, Post
 } from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import fs = require('fs');
-
 import {IUser} from '../../../shared/models/IUser';
 import {IUserModel, User} from '../models/User';
+import {isNullOrUndefined} from 'util';
+
 const multer = require('multer');
 
 const uploadOptions = {
@@ -24,6 +25,10 @@ const uploadOptions = {
   }),
 };
 
+function escapeRegex(text: string) {
+  return text.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+};
+
 @JsonController('/users')
 @UseBefore(passportJwtMiddleware)
 export class UserController {
@@ -35,6 +40,42 @@ export class UserController {
       .then((users) => {
         return users.map((user) => this.cleanUserObject(null, user, currentUser));
       });
+  }
+
+  @Get('/:role/search')
+  @Authorized(['teacher', 'admin'])
+  searchUser(@Param('role') role: string, @QueryParam('query') query: string, @CurrentUser() currentUser?: IUser) {
+    if (role !== 'student' && role !== 'teacher') {
+      throw new Error('Method not allowed for this role.');
+    }
+    if (isNullOrUndefined(query) || query.length <= 0) {
+      throw Error('No given query.');
+    }
+    const conditions: any = {};
+    const escaped = escapeRegex(query).split(' ');
+    conditions.$or = [];
+    conditions.$or.push({$text: {$search: query}});
+    escaped.forEach(elem => {
+      const re = new RegExp(elem, 'ig');
+      conditions.$or.push({uid: {$regex: re}});
+      conditions.$or.push({email: {$regex: re}});
+      conditions.$or.push({'profile.firstName': {$regex: re}});
+      conditions.$or.push({'profile.lastName': {$regex: re}})
+    });
+    return User.find(conditions, {score: {$meta: 'textScore'}})
+      .where({role: role})
+      .sort({score: {$meta: 'textScore'}})
+      .limit(20)
+      .catch((err) => {console.log(err)});
+  }
+
+  @Get('/:role/count')
+  @Authorized(['teacher', 'admin'])
+  searchCountUsers(@Param('role') role: string, @QueryParam('query') query: string, @CurrentUser() currentUser?: IUser) {
+    if (role !== 'student' && role !== 'teacher') {
+      throw new Error('Method not allowed for this role.');
+    }
+    return User.count({role: role});
   }
 
   @Authorized(['admin'])
@@ -87,7 +128,7 @@ export class UserController {
           user.role !== 'admin') {
           throw new BadRequestError('There are no other users with admin privileges.');
         } else {
-          return User.find({ $and: [{'email': user.email}, {'_id': { $ne: user._id }}]});
+          return User.find({$and: [{'email': user.email}, {'_id': {$ne: user._id}}]});
         }
       })
       .then((emailInUse) => {
@@ -133,18 +174,18 @@ export class UserController {
   @Delete('/:id')
   deleteUser(@Param('id') id: string) {
     return User.find({'role': 'admin'})
-    .then((adminUsers) => {
-      if (adminUsers.length === 1 &&
-        adminUsers[0].get('id') === id &&
-        adminUsers[0].role === 'admin') {
-        throw new BadRequestError('There are no other users with admin privileges.');
-      } else {
-        return User.findByIdAndRemove(id);
-      }
-    })
-    .then(() => {
-      return {result: true};
-    });
+      .then((adminUsers) => {
+        if (adminUsers.length === 1 &&
+          adminUsers[0].get('id') === id &&
+          adminUsers[0].role === 'admin') {
+          throw new BadRequestError('There are no other users with admin privileges.');
+        } else {
+          return User.findByIdAndRemove(id);
+        }
+      })
+      .then(() => {
+        return {result: true};
+      });
   }
 
   private cleanUserObject(id: string, user: IUserModel, currentUser?: IUser) {
