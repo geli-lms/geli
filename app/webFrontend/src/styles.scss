@@ -23,10 +23,6 @@ $app-theme: mat-light-theme($app-primary, $app-accent, $app-warn);
   box-sizing: border-box;
 }
 
-html {
-  height: 100%;
-}
-
 body, html {
   height: 100%;
   margin: 0;
@@ -40,12 +36,14 @@ body {
   background-color: lighten(map-get($app-primary, 'default'), 38.5%);
 
   @include bp(xl) {
-    font-size: $base_font_size * 1.2;
-    line-height: $line_height--base * 1.2;
+    $factor: 1.2;
+    font-size: $base_font_size * $factor;
+    line-height: $line_height--base * $factor;
   }
   @include bp(4k) {
-    font-size: $base_font_size * 1.6;
-    line-height: $line_height--base * 1.6;
+    $factor: 1.4;
+    font-size: $base_font_size * $factor;
+    line-height: $line_height--base * $factor;
   }
 }
 
@@ -58,7 +56,7 @@ app-root {
     margin: 0 8%;
   }
   @include bp(4k) {
-    margin: 0 16%;
+    margin: 0 14%;
   }
 }
 
