@@ -66,7 +66,7 @@ export class TeachersComponent implements OnInit {
         SortUtil.sortUsers(this.allTeachers);
         SortUtil.sortUsers(this.course.teachers);
       });
-  }
+  };
 
   /**
    * @param id Id of an user.

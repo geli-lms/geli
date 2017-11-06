@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CourseService} from '../../shared/services/data.service';
-import {MdSnackBar} from '@angular/material';
+import {MatSnackBar} from '@angular/material';
 import {Router} from '@angular/router';
 
 @Component({
@@ -16,7 +16,7 @@ export class CourseNewComponent implements OnInit {
   constructor(private router: Router,
               private formBuilder: FormBuilder,
               private courseService: CourseService,
-              public snackBar: MdSnackBar) {
+              public snackBar: MatSnackBar) {
   }
 
   ngOnInit() {

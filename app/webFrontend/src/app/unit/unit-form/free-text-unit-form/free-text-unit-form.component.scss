@@ -1,9 +1,9 @@
 @import '../../../../breakpoints';
 
 
-md-input-container {
+mat-form-field {
   width: 100%;
-  
+
   @include bp(md) {
     width: 60%;
   }

@@ -1,8 +1,7 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {FileItem, FileUploader} from 'ng2-file-upload';
 import {IUser} from '../../../../../../../shared/models/IUser';
-import {MdDialogRef} from '@angular/material';
-import {UserDataService} from '../../services/data.service';
+import {MatDialogRef} from '@angular/material';
 
 @Component({
   selector: 'app-upload-dialog',
@@ -20,7 +19,7 @@ export class UploadDialog implements OnInit {
 
   public pictureTaken: boolean;
 
-  constructor(public dialogRef: MdDialogRef<UploadDialog>) { }
+  constructor(public dialogRef: MatDialogRef<UploadDialog>) { }
 
   ngOnInit() {
     this.uploader = new FileUploader({
