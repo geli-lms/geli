@@ -101,7 +101,9 @@ export class FixtureLoader {
         this.user.map((userFixtures) =>
           Promise.all(
             userFixtures.data.map((user) =>
-              new userFixtures.Model(user).save()
+              new userFixtures.Model(user).save().then(() => {
+              userFixtures.Model.ensureIndexes();
+              })
             )
           )
         )
