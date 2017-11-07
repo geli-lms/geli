@@ -3,6 +3,17 @@
   width: 100%;
 }
 
+.opacity {
+  background-color: #000;
+  opacity: .33;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  border-radius: 8px;
+}
+
 .user-drag-handle, .member-drag-handle {
   cursor: move;
   opacity: 0.2;

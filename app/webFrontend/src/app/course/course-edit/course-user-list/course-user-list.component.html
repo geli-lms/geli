@@ -16,17 +16,19 @@
 
       <div class="bg" user-image [user-image]="user" [size]="160"></div>
 
+      <ul class="info" ng-class="{opacity: currentMember != null && currentMember._id == user._id}">
+        <li><strong>{{user.profile.firstName}}</strong></li>
+        <li><strong>{{user.profile.lastName}}</strong></li>
+        <li class="userId">{{user.uid}}</li>
+      </ul>
+
+      <div class="opacity" *ngIf="currentMember != null && currentMember._id == user._id"></div>
+
       <div *ngIf="currentMember != null && currentMember._id == user._id">
         <button mat-raised-button routerLink="/profile/{{user._id}}" routerLinkActive="active">DETAILS</button>
         <button mat-raised-button>SEND MAIL</button>
         <button class="del" mat-raised-button (click)="removeUser()">REMOVE</button>
       </div>
-
-      <ul class="info">
-        <li><strong>{{user.profile.firstName}}</strong></li>
-        <li><strong>{{user.profile.lastName}}</strong></li>
-        <li class="userId">{{user.uid}}</li>
-      </ul>
     </mat-card>
   </ng-container>
 </div>

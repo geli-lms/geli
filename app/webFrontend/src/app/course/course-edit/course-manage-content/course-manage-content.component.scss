@@ -1,4 +1,5 @@
 @import "../../../../variables";
+@import "../../../../breakpoints";
 
 .container {
   min-height: 500px;
@@ -6,8 +7,12 @@
 
 .fab {
   position: fixed;
-  bottom: 0;
-  right: 0;
+  bottom: 1ex;
+  right: 1ex;
+
+  @include bp(xxl) {
+    position: absolute;
+  }
 }
 
 .lecture {
