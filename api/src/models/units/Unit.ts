@@ -50,6 +50,22 @@ function populateUnit(next: (err?: NativeError) => void) {
 
 unitSchema.pre('find', populateUnit);
 
+unitSchema.methods.serialize = function() {
+  const obj = this.toObject();
+
+  // remove unwanted informations
+  // mongo properties
+  delete obj._id;
+  delete obj.createdAt;
+  delete obj.__v;
+  delete obj.updatedAt;
+
+  // custom properties
+  delete obj._course;
+
+  return obj;
+}
+
 // Cascade delete
 unitSchema.pre('remove', function(next: () => void) {
   Progress.remove({'unit': this._id}).exec().then(next).catch(next);

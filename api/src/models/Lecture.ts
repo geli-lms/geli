@@ -40,6 +40,31 @@ lectureSchema.pre('remove', function(next: () => void) {
     .catch(next);
 });
 
+lectureSchema.methods.serialize = function() {
+  const obj = this.toObject();
+
+  // remove unwanted informations
+  // mongo properties
+  delete obj._id;
+  delete obj.createdAt;
+  delete obj.__v;
+  delete obj.updatedAt;
+
+  // "populate" lectures
+  const units: Array<mongoose.Types.ObjectId>  = obj.units;
+  obj.units = [];
+
+  return Promise.all(units.map((unitId) => {
+    return Unit.findById(unitId).then((unit) => {
+      return unit.serialize();
+    });
+  }))
+    .then((serializedLectures) => {
+      obj.units = serializedLectures;
+      return obj;
+    });
+}
+
 
 const Lecture = mongoose.model<ILectureModel>('Lecture', lectureSchema);
 
