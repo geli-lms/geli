@@ -78,7 +78,7 @@ export class ResetComponent implements OnInit {
   generateForm() {
     if (this.hasToken) {
       this.resetForm = this.formBuilder.group({
-        password: ['', Validators.required],
+        password: ['',  Validators.compose([Validators.required, Validators.pattern('^(?=.*[a-zA-Z])(?=.*[$%&§=#!?*()|0-9]).{8,}$')])],
         confirmPassword: ['', Validators.required]
       }, {validator: matchPasswords('password', 'confirmPassword')});
     } else {

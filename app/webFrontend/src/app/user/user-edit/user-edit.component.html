@@ -21,12 +21,15 @@
 
   <mat-form-field class="full-width">
     <input matInput type="password" formControlName="password" placeholder="Password"/>
+    <div class="form-text error" *ngIf="userForm?.controls.password.touched">
+      <small *ngIf="userForm.controls.password.hasError('pattern')">Password must have at least 8 characters which contain one special character or digit</small>
+    </div>
   </mat-form-field>
 
   <mat-form-field class="full-width">
     <input matInput type="password" formControlName="confirmPassword" placeholder="Confirm password"/>
     <div class="form-text error" *ngIf="userForm?.controls.confirmPassword.touched">
-      <div *ngIf="userForm.hasError('mismatchedPasswords')">Passwords do not match.</div>
+      <small *ngIf="userForm.hasError('mismatchedPasswords')">Passwords do not match.</small>
     </div>
   </mat-form-field>
 

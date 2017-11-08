@@ -117,7 +117,7 @@ export class UserEditComponent implements OnInit {
       username: [''],
       email: ['', Validators.required],
       currentPassword: [''],
-      password: [''],
+      password: ['', Validators.pattern('^(?=.*[a-zA-Z])(?=.*[$%&§=#!?*()|0-9]).{8,}$')],
       confirmPassword: ['']
     }, {validator: matchPasswords('password', 'confirmPassword')});
   }

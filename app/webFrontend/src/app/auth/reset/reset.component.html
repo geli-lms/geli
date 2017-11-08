@@ -23,11 +23,15 @@
     <form name="form" (ngSubmit)="reset()" [formGroup]="resetForm">
       <mat-form-field>
         <input matInput type="password" formControlName="password" placeholder="Password"/>
+        <div class="form-text error" *ngIf="resetForm?.controls.password.touched">
+          <small *ngIf="resetForm.controls.password.hasError('required')" class="text-danger">Password is required</small>
+          <small *ngIf="resetForm.controls.password.hasError('pattern')">Password must have at least 8 characters which contain one special character or digit</small>
+        </div>
       </mat-form-field>
       <mat-form-field>
         <input matInput type="password" formControlName="confirmPassword" placeholder="Confirm password"/>
         <div class="form-text error" *ngIf="resetForm.controls.confirmPassword.touched">
-          <div *ngIf="resetForm.hasError('mismatchedPasswords')">Passwords do not match.</div>
+          <small *ngIf="resetForm.hasError('mismatchedPasswords')">Passwords do not match.</small>
         </div>
       </mat-form-field>
 
