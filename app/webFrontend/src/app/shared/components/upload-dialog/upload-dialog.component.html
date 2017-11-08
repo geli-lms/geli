@@ -1,8 +1,8 @@
-<mat-tab-group (selectChange)="changedTab($event)">
+<mat-tab-group *ngIf="!showProgressBar" (selectChange)="changedTab($event)">
   <mat-tab label="Upload image">
     <div class="tab-content">
-      <input type="file" ng2FileSelect [uploader]="uploader" placeholder="Upload picture"/>
-      <button mat-raised-button color="primary" (click)="uploader.uploadAll()">Upload picture</button>
+      <input type="file" name="fileupload" ng2FileSelect [uploader]="uploader" placeholder="Upload picture"/>
+      <button mat-raised-button color="primary" (click)="uploadImage()">Upload picture</button>
       <button mat-raised-button color="warn" (click)="cancel()">Cancel</button>
     </div>
   </mat-tab>
@@ -23,3 +23,7 @@
     </div>
   </mat-tab>
 </mat-tab-group>
+<div *ngIf="showProgressBar">
+  <h2>Uploading...</h2>
+  <mat-progress-bar mode="determinate" [value]="uploader.progress"></mat-progress-bar>
+</div>

@@ -18,6 +18,7 @@ export class UploadDialog implements OnInit {
   mediastream: MediaStreamTrack;
 
   public pictureTaken: boolean;
+  showProgressBar = false;
 
   constructor(public dialogRef: MatDialogRef<UploadDialog>) { }
 
@@ -83,7 +84,15 @@ export class UploadDialog implements OnInit {
     this.pictureTaken = true;
   }
 
+  public uploadImage(){
+    this.dialogRef.disableClose = true;
+    this.showProgressBar = true;
+    this.uploader.uploadAll();
+  }
+
   public addImage() {
+    this.dialogRef.disableClose = true;
+    this.showProgressBar = true;
     const imageData = this.previewPicture.nativeElement.src;
     this.convertToFile(imageData, 'webcam.png', 'image/png')
     .then((file) => {
