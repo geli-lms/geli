@@ -115,6 +115,7 @@ export class UploadDialog implements OnInit {
 
   public cancel() {
     this.stopWebcam();
+    this.uploader.cancelAll();
     this.dialogRef.close(false);
   }
 
