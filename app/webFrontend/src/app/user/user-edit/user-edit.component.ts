@@ -104,7 +104,7 @@ export class UserEditComponent implements OnInit {
       },
       (error) => {
         this.showProgress.toggleLoadingGlobal(false);
-        this.snackBar.open(JSON.parse(error._body).message, 'Dismiss');
+        this.snackBar.open(error.json().message, 'Dismiss');
       });
   }
 

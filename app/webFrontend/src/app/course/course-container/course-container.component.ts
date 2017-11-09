@@ -2,6 +2,7 @@ import {Component, EventEmitter, Input, Output, OnInit, ViewEncapsulation} from 
 import {MatDialog, MatSnackBar} from '@angular/material';
 import {UserService} from '../../shared/services/user.service';
 import {CourseService} from '../../shared/services/data.service';
+import {BadgeComponent} from '../../shared/components/badge/badge.component'
 import {Router} from '@angular/router';
 import {ICourse} from '../../../../../../shared/models/ICourse';
 
