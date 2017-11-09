@@ -3,6 +3,7 @@ import {DragulaService} from 'ng2-dragula';
 import {IUser} from '../../../../../../../shared/models/IUser';
 import {FormControl} from '@angular/forms';
 import {DialogService} from '../../../shared/services/dialog.service';
+import 'rxjs/add/operator/startWith'
 
 @Component({
   selector: 'app-course-user-list',
