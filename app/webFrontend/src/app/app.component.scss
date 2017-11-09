@@ -1,5 +1,6 @@
 @import '../variables';
 @import '../breakpoints';
+@import '../typography';
 
 :host {
   display: flex;
@@ -24,7 +25,7 @@
 }
 
 .logo {
-  font-family: Pacifico, cursive;
+  font-family: $font-logo;
   text-decoration: none;
   color: white;
   font-size: 28px;
@@ -60,7 +61,8 @@
 .mat-toolbar {
   @include bp(max) {
     height: 5rem;
-    .g_toolbar_elem {
+
+    .g-toolbar-elem {
       margin-top: 1rem;
     }
   }

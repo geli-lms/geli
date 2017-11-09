@@ -4,6 +4,6 @@ video {
   max-width: 100%;
 
   @include bp(md) {
-    width: $bp_width--lg;
+    width: $bp-width--lg;
   }
 }

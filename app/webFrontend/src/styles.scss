@@ -5,6 +5,7 @@
 // Custom global geli stuff
 @import 'global-hacks';
 @import 'breakpoints';
+@import 'typography';
 
 // Include the common styles for Angular Material. We include this here so that you only
 // have to load a single css file for Angular Material in your app.
@@ -30,21 +31,7 @@ body, html {
 }
 
 body {
-  font-family: Roboto, "Helvetica Neue", sans-serif;
-  font-size: $base_font_size;
-  line-height: $line_height--base;
   background-color: lighten(map-get($app-primary, 'default'), 38.5%);
-
-  @include bp(xl) {
-    $factor: 1.2;
-    font-size: $base_font_size * $factor;
-    line-height: $line_height--base * $factor;
-  }
-  @include bp(max) {
-    $factor: 1.4;
-    font-size: $base_font_size * $factor;
-    line-height: $line_height--base * $factor;
-  }
 }
 
 app-root {
@@ -58,15 +45,6 @@ app-root {
   @include bp(max) {
     margin: 0 14%;
   }
-}
-
-h1, h2, h3, h4, h5, h6 {
-  line-height: $line_height--header;
-  font-weight: 300;
-}
-
-.logo-font {
-  font-family: Pacifico, cursive;
 }
 
 .avatar {

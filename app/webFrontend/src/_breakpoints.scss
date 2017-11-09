@@ -8,26 +8,22 @@
 //   }
 // }
 
-$base_font_size: 1em;
-$line_height--base: 1.5;
-$line_height--header: 1.25;
-
 // the px values are calculated on a user-agent font-size of 16px
-$bp_width--xs:  20em;  // 320px => app-root min-width
-$bp_width--sm:  32em;  // 512px
-$bp_width--md:  48em;  // 768px
-$bp_width--lg:  60em;  // 960px
-$bp_width--xl:  75em;  // 1200px
-$bp_width--xxl: 121em; // 1936px
-$bp_width--max:  160em; // 2560px => app-root max-width
+$bp-width--xs:  20em;  // 320px => app-root min-width
+$bp-width--sm:  32em;  // 512px
+$bp-width--md:  48em;  // 768px
+$bp-width--lg:  60em;  // 960px
+$bp-width--xl:  75em;  // 1200px
+$bp-width--xxl: 121em; // 1936px
+$bp-width--max:  160em; // 2560px => app-root max-width
 
 $breakpoints: (
-  sm:  $bp_width--sm,  // Small
-  md:  $bp_width--md,  // Medium
-  lg:  $bp_width--lg,  // Large
-  xl:  $bp_width--xl,  // X Large
-  xxl: $bp_width--xxl, // XX Large
-  max: $bp_width--max,  // 4k-Viewports
+  sm: $bp-width--sm,  // Small
+  md: $bp-width--md,  // Medium
+  lg: $bp-width--lg,  // Large
+  xl: $bp-width--xl,  // X Large
+  xxl: $bp-width--xxl, // XX Large
+  max: $bp-width--max,  // 4k-Viewports
 );
 
 @mixin bp($breakpoint) {
