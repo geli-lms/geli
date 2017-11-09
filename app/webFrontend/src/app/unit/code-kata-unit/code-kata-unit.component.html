@@ -7,7 +7,8 @@
     [theme]="'github'"
     [readOnly]="true">
   </ace-editor>
-  <div>Your code goes here:</div>
+  <div *ngIf="!isExampleCode">Your code goes here:</div>
+  <div *ngIf="isExampleCode">This is the provided example solution:</div>
   <ace-editor class="user-code-editor"
               #codeEditor
               [(text)]="codeKata.code || progress.code"
