@@ -1,9 +1,7 @@
 import * as chai from 'chai';
 import {Server} from '../../src/server';
 import {FixtureLoader} from '../../fixtures/FixtureLoader';
-import {JwtUtils} from '../../src/security/JwtUtils';
 import {User} from '../../src/models/User';
-import {Course} from '../../src/models/Course';
 import chaiHttp = require('chai-http');
 
 chai.use(chaiHttp);
