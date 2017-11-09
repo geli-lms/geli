@@ -20,7 +20,7 @@
 </div>
 <div>
   <input type="file" ng2FileSelect [uploader]="uploader" placeholder="Upload files" multiple/>
-  <button mat-button color="warn" (click)="uploader.clearQueue()">
+  <button *ngIf="uploader.queue.length" mat-button color="warn" (click)="uploader.clearQueue()">
     Remove all
   </button>
 </div>
@@ -33,7 +33,7 @@
     <mat-progress-bar mode="determinate" [value]="item.progress"></mat-progress-bar>
   </div>
 </div>
-<div>
+<div >
   Queue progress:
   <div>
     <mat-progress-bar mode="determinate" [value]="uploader.progress"></mat-progress-bar>
