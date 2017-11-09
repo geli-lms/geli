@@ -84,7 +84,7 @@ export class UploadDialog implements OnInit {
     this.pictureTaken = true;
   }
 
-  public uploadImage(){
+  public uploadImage() {
     this.dialogRef.disableClose = true;
     this.showProgressBar = true;
     this.uploader.uploadAll();
