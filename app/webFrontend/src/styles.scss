@@ -3,9 +3,8 @@
 // Plus imports for other components in your app.
 
 // Custom global geli stuff
-@import 'global-hacks';
-@import 'breakpoints';
-@import 'typography';
+@import 'styles/global-hacks';
+@import 'styles/typography';
 
 // Include the common styles for Angular Material. We include this here so that you only
 // have to load a single css file for Angular Material in your app.

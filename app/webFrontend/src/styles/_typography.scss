@@ -1,15 +1,3 @@
-@import 'breakpoints';
-
-// FONT VARS
-$font-body: Roboto, "Helvetica Neue", sans-serif;
-$font-header: Raleway, $font-body;
-$font-logo: Pacifico, cursive;
-
-// GENERAL VARS
-$base-font-size: 1em;
-$line-height--base: 1.5;
-$line-height--header: 1.25;
-
 // STYLES
 body {
   font-family: $font-body;

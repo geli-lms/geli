@@ -1,4 +1,4 @@
-@import '../../../../breakpoints';
+@import '../../../../variables';
 
 .task-unit-edit {
   position: relative;
@@ -55,7 +55,7 @@
     @include bp(md) {
       width: 48%;
     }
-    
+
     @include bp(xl) {
       width: 32%;
     }
