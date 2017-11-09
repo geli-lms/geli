@@ -13,7 +13,7 @@ export class CodeKataProgressController {
   createProgress(@Body() data: any) {
     // discard invalid requests
     if (!data.course || !data.user || !data.unit) {
-      return new BadRequestError('progress need fields course, user and unit');
+      throw new BadRequestError('progress need fields course, user and unit');
     }
 
     return new CodeKataProgress(data).save();
