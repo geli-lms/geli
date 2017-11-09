@@ -79,12 +79,12 @@ export class CodeKataComponent implements OnInit {
       this.codeKataProgressService.createItem(this.progress)
         .then(() => this.snackBar.open('Progress has been saved', '', {duration: 3000}))
         .catch((error) => this.snackBar.open('An error occurred => ' +
-          JSON.parse(error._body).message, '', {duration: 3000}));
+          error.json().message, '', {duration: 3000}));
     } else {
       this.codeKataProgressService.updateItem(this.progress)
         .then(() => this.snackBar.open('Progress has been updated', '', {duration: 3000}))
         .catch((error) => this.snackBar.open('An error occurred => ' +
-          JSON.parse(error._body).message, '', {duration: 3000}));
+          error.json().message, '', {duration: 3000}));
     }
   }
 
