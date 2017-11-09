@@ -35,6 +35,4 @@ export class UserProfileComponent implements OnInit {
     return (this.userService.isAdmin() || this.userService.isTeacher() ||
       this.userService.user._id === this.user._id) && this.user.uid;
   }
-
-
 }
