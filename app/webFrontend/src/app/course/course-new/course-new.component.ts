@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CourseService} from '../../shared/services/data.service';
-import {MdSnackBar} from '@angular/material';
+import {MatSnackBar} from '@angular/material';
 import {Router} from '@angular/router';
 
 @Component({
@@ -16,7 +16,7 @@ export class CourseNewComponent implements OnInit {
   constructor(private router: Router,
               private formBuilder: FormBuilder,
               private courseService: CourseService,
-              public snackBar: MdSnackBar) {
+              public snackBar: MatSnackBar) {
   }
 
   ngOnInit() {
@@ -26,10 +26,13 @@ export class CourseNewComponent implements OnInit {
   createCourse() {
     this.courseService.createItem(this.newCourse.value).then(
       (val) => {
-        const url = '/course/edit/' + val._id;
+        this.snackBar.open('Course created', 'Dismiss', {duration: 5000});
+        const url = '/course/' + val._id + '/edit';
         this.router.navigate([url]);
       }, (error) => {
-        this.snackBar.open('Error creating course', 'Dismiss');
+        // Mongodb uses the error field errmsg
+        const errormessage = JSON.parse(error._body).message || JSON.parse(error._body).errmsg;
+        this.snackBar.open('Error creating course ' + errormessage, 'Dismiss');
       });
   }
 

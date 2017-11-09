@@ -6,7 +6,8 @@ import config from '../config/main';
 export default new JwtStrategy(
   {
     // Telling Passport to check authorization headers for JWT
-    jwtFromRequest: ExtractJwt.fromAuthHeader(),
+    // TODO: Replace with bearer method to be compliant to RFC 6750
+    jwtFromRequest: ExtractJwt.fromAuthHeaderWithScheme('jwt'),
     // Telling Passport where to find the secret
     secretOrKey: config.secret
   },

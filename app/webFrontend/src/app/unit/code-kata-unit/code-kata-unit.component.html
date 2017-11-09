@@ -13,7 +13,9 @@
               [(text)]="codeKata.code || progress.code"
               [mode]="'javascript'"
               [theme]="'github'"
-              [readOnly]="isExampleCode">
+              [readOnly]="isExampleCode"
+              [durationBeforeCallback]="333"
+              (textChanged)="onUserInput()">
   </ace-editor>
   <div>These tests need to success:</div>
   <ace-editor
@@ -25,8 +27,8 @@
   </ace-editor>
 
   <div *ngIf="!isExampleCode">
-    <button md-button (click)="validate()">Validate</button>
-    <button md-button color="primary" class="submit-progress" (click)="submitProgress()">Submit</button>
+    <button mat-button (click)="validate()">Validate</button>
+    <button mat-button color="primary" class="submit-progress" (click)="submitProgress()">Submit</button>
   </div>
   <div *ngIf="logs!==undefined"><strong>Logs</strong></div>
   <pre>{{logs}}</pre>

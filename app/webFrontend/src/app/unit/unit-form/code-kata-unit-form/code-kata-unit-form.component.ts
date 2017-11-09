@@ -1,10 +1,14 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {CodeKataUnitService} from '../../../shared/services/data.service';
-import {MdSnackBar} from '@angular/material';
+import {MatSnackBar} from '@angular/material';
 import {ICodeKataUnit} from '../../../../../../../shared/models/units/ICodeKataUnit';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
 import {CodeKataUnit} from '../../../models/CodeKataUnit';
 import {UnitGeneralInfoFormComponent} from '../unit-general-info-form/unit-general-info-form.component';
+import {AceEditorComponent} from 'ng2-ace-editor';
+import 'brace';
+import 'brace/mode/javascript';
+import 'brace/theme/github';
 
 @Component({
   selector: 'app-code-kata-unit-form',
@@ -21,18 +25,50 @@ export class CodeKataUnitFormComponent implements OnInit {
   @ViewChild(UnitGeneralInfoFormComponent)
   private generalInfo: UnitGeneralInfoFormComponent;
 
-  @ViewChild('codeEditor') editor;
+  @ViewChild('codeEditor')
+  editor: AceEditorComponent;
 
   areaSeperator = '//####################';
+
+  // Example code Kata
+  example = {
+    definition: '// Task: Manipulate the targetSet, so it only contains the values "Hello" and "CodeKata"' +
+      '\n' +
+      '\nlet targetSet = new Set(["Hello", "there"]);',
+    code: '// This is your code to validate this section. Only course Teachers and Admins can see this' +
+      '\ntargetSet.add("CodeKata");' +
+      '\ntargetSet.delete("there");',
+    test: '// This is the Test Section use the validate function to test the students code' +
+      '\nvalidate();' +
+      '\n' +
+      '\nfunction validate() {' +
+      '\n\tlet result = targetSet.has("Hello") && targetSet.has("CodeKata") && targetSet.size === 2;' +
+      '\n\tif (result === true) {' +
+      '\n\t\tconsole.log("Well done, you solved this Kata");' +
+      '\n\t} else {' +
+      '\n\t\tconsole.log("Sorry mate, you need to try harder");' +
+      '\n\t}' +
+      '\n\treturn result;' +
+      '\n}'
+  };
+
   logs: string;
 
   constructor(private codeKataUnitService: CodeKataUnitService,
-              private snackBar: MdSnackBar) {
+              private snackBar: MatSnackBar) {
   }
 
   ngOnInit() {
     if (!this.model) {
       this.model = new CodeKataUnit(this.course._id);
+      this.model.code =
+        this.example.definition
+        + '\n\n' + this.areaSeperator + ((this.example.code.startsWith('//')) ? '\n' : '\n\n')
+        + this.example.code
+        + '\n\n' + this.areaSeperator + ((this.example.test.startsWith('//')) ? '\n' : '\n\n')
+        + this.example.test;
+      this.model.definition = undefined;
+      this.model.test = undefined;
     } else {
       this.model.code =
         this.model.definition
@@ -40,13 +76,12 @@ export class CodeKataUnitFormComponent implements OnInit {
         + this.model.code
         + '\n\n' + this.areaSeperator + '\n\n'
         + this.model.test;
-
       this.model.definition = undefined;
       this.model.test = undefined;
     }
 
     this.editor.getEditor().setOptions({
-      enableBasicAutocompletion: true
+      maxLines: 9999,
     });
   }
 
@@ -102,20 +137,21 @@ export class CodeKataUnitFormComponent implements OnInit {
       this.logs += msg + '\n';
       origLogger(msg);
     };
-    const origErrorLogger = window.console.error;
-    window.console.error = (msg) => {
-      if (this.logs === undefined) {
-        this.logs = '';
-      }
-      this.logs += msg + '\n';
-      origErrorLogger(msg);
-    };
 
-    // tslint:disable-next-line:no-eval
-    const result = eval(codeToTest);
+    let result = false;
+    try {
+      // tslint:disable-next-line:no-eval
+      result = eval(codeToTest);
+    } catch (e) {
+      const err = e.constructor('Error in Evaled Script: ' + e.message);
+      err.lineNumber = e.lineNumber - err.lineNumber;
+
+      const msg = 'Error: ' + e.message; //  + ' (line: ' + err.lineNumber + ')';
+      console.log(msg);
+      console.error(err);
+    }
 
     window.console.log = origLogger;
-    window.console.error = origErrorLogger;
 
     if (result === true || result === undefined) {
       this.snackBar.open('Success', '', {duration: 3000});

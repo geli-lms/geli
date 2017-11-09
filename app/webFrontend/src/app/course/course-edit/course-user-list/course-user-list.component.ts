@@ -3,6 +3,7 @@ import {DragulaService} from 'ng2-dragula';
 import {IUser} from '../../../../../../../shared/models/IUser';
 import {FormControl} from '@angular/forms';
 import {DialogService} from '../../../shared/services/dialog.service';
+import 'rxjs/add/operator/startWith'
 
 @Component({
   selector: 'app-course-user-list',
@@ -79,11 +80,11 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
 
   removeUser() {
     this.dialogService
-      .confirmRemove(this.currentMember.role, this.currentMember.email, 'course')
-      .subscribe(res => {
-        if (res) {
-          this.onRemove.emit(this.currentMember._id);
-        }
-      });
+    .confirmRemove(this.currentMember.role, this.currentMember.email, 'course')
+    .subscribe(res => {
+      if (res) {
+        this.onRemove.emit(this.currentMember._id);
+      }
+    });
   }
 }

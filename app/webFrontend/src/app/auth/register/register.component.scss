@@ -9,8 +9,21 @@
   width: 100%;
   max-width: 400px;
 
-  .mat-input-container,
+  .title {
+    text-transform: capitalize;
+  }
+
+  .mat-form-field,
   .mat-radio-group {
     width: 100%;
+  }
+
+  .div-change-role{
+    margin-top: 10px;
+    font-size: small;
+    .material-icons{
+      font-size: small;
+      vertical-align: middle;
+    }
   }
 }

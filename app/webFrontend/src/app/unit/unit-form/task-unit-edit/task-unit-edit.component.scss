@@ -1,3 +1,5 @@
+@import '../../../../breakpoints';
+
 .task-unit-edit {
   position: relative;
 }
@@ -34,20 +36,20 @@
   }
 
   .answer {
-    width: 300px;
+    width: 100%;
     margin-right: 10px;
 
     .check-answer {
       width: 100%;
       display: flex;
 
-      .mat-input-container {
+      .mat-form-field {
         flex-grow: 1;
       }
     }
 
-    @media (max-width: 700px) {
-      width: 100%;
+    @include bp(md) {
+      width: 300px;
     }
   }
 }

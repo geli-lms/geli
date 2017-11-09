@@ -3,8 +3,6 @@ import {NgModule} from '@angular/core';
 import {HttpModule} from '@angular/http';
 
 import {AppComponent} from './app.component';
-import {MaterialModule} from '@angular/material';
-import {JwtHelper} from 'angular2-jwt';
 
 import {UserService} from './shared/services/user.service';
 import {AuthenticationService} from './shared/services/authentication.service';
@@ -37,7 +35,6 @@ import {AdminModule} from './admin/admin.module';
     HttpModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    MaterialModule,
     StartModule,
     UserModule,
     AuthModule,
@@ -60,7 +57,6 @@ import {AdminModule} from './admin/admin.module';
     ShowProgressService,
     MarkdownService,
     FreeTextUnitService,
-    JwtHelper,
     CodeKataUnitService,
     CodeKataProgressService,
     APIInfoService,

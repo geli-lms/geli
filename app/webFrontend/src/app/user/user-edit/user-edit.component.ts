@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {FormGroup, FormBuilder, Validators} from '@angular/forms';
-import {MdSnackBar} from '@angular/material';
+import {MatSnackBar} from '@angular/material';
 import {UserDataService} from '../../shared/services/data.service';
 import {IUser} from '../../../../../../shared/models/IUser';
 import {UserService} from '../../shared/services/user.service';
@@ -21,21 +21,28 @@ export class UserEditComponent implements OnInit {
   userForm: FormGroup;
 
   constructor(private router: Router,
+              private route: ActivatedRoute,
               private userService: UserService,
               private userDataService: UserDataService,
               private showProgress: ShowProgressService,
               private formBuilder: FormBuilder,
               public dialogService: DialogService,
-              public snackBar: MdSnackBar) {
+              public snackBar: MatSnackBar) {
     this.generateForm();
-    this.getUserData();
   }
 
   ngOnInit() {
+    this.route.params.subscribe(params => {
+      this.id = decodeURIComponent(params['id']);
+
+      if (this.id === 'undefined') {
+        this.id = this.userService.user._id;
+      }
+    });
+    this.getUserData();
   }
 
   getUserData() {
-    this.id = this.userService.user._id;
     this.userDataService.readSingleItem(this.id).then(
       (val: any) => {
         this.user = val;
@@ -86,10 +93,13 @@ export class UserEditComponent implements OnInit {
     this.showProgress.toggleLoadingGlobal(true);
     this.userDataService.updateItem(this.user).then(
       (val) => {
-        console.log(val);
         this.showProgress.toggleLoadingGlobal(false);
         this.snackBar.open('Profile successfully updated.', '', {duration: 3000});
-        this.userService.setUser(val);
+
+        if (this.userService.isLoggedInUser(val)) {
+          this.userService.setUser(val);
+        }
+
         this.navigateBack();
       },
       (error) => {
@@ -125,6 +135,10 @@ export class UserEditComponent implements OnInit {
   }
 
   private navigateBack() {
-    this.router.navigate(['/profile']);
+    if (this.userService.isLoggedInUser(this.user)) {
+      this.router.navigate(['/profile']);
+    } else {
+      this.router.navigate(['/profile', this.user._id]);
+    }
   }
 }

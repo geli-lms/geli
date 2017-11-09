@@ -1,9 +1,9 @@
 <app-course-container [title]="'My Courses'" [courses]="myCourses" [expand]="true" (onEnroll)="enrollCallback()"></app-course-container>
 <app-course-container [title]="'Available Courses'" [courses]="availableCourses" [expand]="false" (onEnroll)="enrollCallback()"></app-course-container>
 
-<a md-fab *ngIf="userService.isTeacher() || userService.isAdmin()" class="add-course-fab"
-   routerLink="course/new" mdTooltip="Add course" mdTooltipPosition="left">
-  <md-icon>add</md-icon>
+<a mat-fab *ngIf="userService.isTeacher() || userService.isAdmin()" class="add-course-fab"
+   routerLink="course/new" matTooltip="Add course" matTooltipPosition="left">
+  <mat-icon>add</mat-icon>
 </a>
 
 <!--<app-dashboard-student *ngIf="this.userService.isStudent()"></app-dashboard-student>-->

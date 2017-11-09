@@ -2,41 +2,41 @@
 
 <form name="form" class="user-form" (ngSubmit)="onSubmit()" [formGroup]="userForm">
   <div class="form-group" formGroupName="profile">
-    <md-input-container class="full-width">
-      <input mdInput formControlName="firstName" placeholder="First name"/>
-    </md-input-container>
+    <mat-form-field class="full-width">
+      <input matInput formControlName="firstName" placeholder="First name"/>
+    </mat-form-field>
 
-    <md-input-container class="full-width">
-      <input mdInput formControlName="lastName" placeholder="Last name"/>
-    </md-input-container>
+    <mat-form-field class="full-width">
+      <input matInput formControlName="lastName" placeholder="Last name"/>
+    </mat-form-field>
   </div>
 
-  <md-input-container class="full-width">
-    <input mdInput formControlName="email" placeholder="e-mail"/>
-  </md-input-container>
+  <mat-form-field class="full-width">
+    <input matInput formControlName="email" placeholder="e-mail"/>
+  </mat-form-field>
 
-  <md-input-container class="full-width">
-    <input mdInput type="password" formControlName="currentPassword" placeholder="Current password"/>
-  </md-input-container>
+  <mat-form-field class="full-width">
+    <input matInput type="password" formControlName="currentPassword" placeholder="Current password"/>
+  </mat-form-field>
 
-  <md-input-container class="full-width">
-    <input mdInput type="password" formControlName="password" placeholder="Password"/>
-  </md-input-container>
+  <mat-form-field class="full-width">
+    <input matInput type="password" formControlName="password" placeholder="Password"/>
+  </mat-form-field>
 
-  <md-input-container class="full-width">
-    <input mdInput type="password" formControlName="confirmPassword" placeholder="Confirm password"/>
+  <mat-form-field class="full-width">
+    <input matInput type="password" formControlName="confirmPassword" placeholder="Confirm password"/>
     <div class="form-text error" *ngIf="userForm?.controls.confirmPassword.touched">
       <div *ngIf="userForm.hasError('mismatchedPasswords')">Passwords do not match.</div>
     </div>
-  </md-input-container>
+  </mat-form-field>
 
-  <button md-raised-button color="accent" class="md-button" type="submit">Save</button>
-  <button md-raised-button color="warn" class="md-button" routerLink="/profile" routerLinkActive="active">
+  <button mat-raised-button color="primary" class="mat-button" type="submit" [disabled]="!userForm?.valid">Save</button>
+  <button mat-button class="mat-button" routerLink="/profile" routerLinkActive="active">
     Cancel
   </button>
 </form>
 <p>
-  <button md-raised-button color="primary" class="md-button" (click)="openAddPictureDialog()">
+  <button mat-raised-button color="accent" class="mat-button" (click)="openAddPictureDialog()">
     Upload new picture
   </button>
 </p>

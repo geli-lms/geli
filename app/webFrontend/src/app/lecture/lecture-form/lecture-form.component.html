@@ -1,15 +1,15 @@
 <form [formGroup]="lectureForm" (ngSubmit)="formSubmit()">
-  <md-input-container>
-    <input mdInput formControlName="name" placeholder="Name">
-  </md-input-container>
+  <mat-form-field>
+    <input matInput formControlName="name" placeholder="Name">
+  </mat-form-field>
 
-  <md-input-container>
-    <textarea mdInput formControlName="description" placeholder="Description"></textarea>
-  </md-input-container>
+  <mat-form-field>
+    <textarea matInput formControlName="description" placeholder="Description"></textarea>
+  </mat-form-field>
 
 
   <p>
-    <button md-raised-button [disabled]="!lectureForm.valid" color="primary" type="submit">{{ actionLabel }}</button>
-    <button md-button color="secondary" (click)="onCancel()">Cancel</button>
+    <button mat-raised-button [disabled]="!lectureForm.valid" color="primary" type="submit">{{ actionLabel }}</button>
+    <button mat-button color="secondary" (click)="onCancel()">Cancel</button>
   </p>
 </form>

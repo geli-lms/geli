@@ -3,7 +3,7 @@ import {Validators, FormGroup, FormBuilder} from '@angular/forms';
 import {AuthenticationService} from '../../shared/services/authentication.service';
 import {Router} from '@angular/router';
 import {ShowProgressService} from '../../shared/services/show-progress.service';
-import {MdSnackBar} from '@angular/material';
+import {MatSnackBar} from '@angular/material';
 import {matchPasswords} from '../../shared/validators/validators';
 
 @Component({
@@ -16,26 +16,41 @@ export class RegisterComponent implements OnInit {
   registrationDone = false;
   role;
 
+  private trimFormFields() {
+    this.registerForm.value.email = this.registerForm.value.email.trim();
+    this.registerForm.value.profile.firstName = this.registerForm.value.profile.firstName.trim();
+    this.registerForm.value.profile.lastName = this.registerForm.value.profile.lastName.trim();
+    if (this.registerForm.value.uid) {
+      this.registerForm.value.uid = this.registerForm.value.uid.trim();
+    }
+  }
+
   constructor(private router: Router,
               private authenticationService: AuthenticationService,
               private showProgress: ShowProgressService,
-              private snackBar: MdSnackBar,
+              private snackBar: MatSnackBar,
               private formBuilder: FormBuilder) {
   }
 
   ngOnInit() {
     // reset login status
     this.authenticationService.unsetAuthData();
-    this.role = 'teacher';
+    this.role = 'student';
     this.generateForm();
+  }
+
+  changeRole(role) {
+      this.role = role;
   }
 
   register() {
     this.showProgress.toggleLoadingGlobal(true);
+    this.registerForm.value.role = this.role;
     if (this.registerForm.value.role !== 'student') {
       delete this.registerForm.value.uid;
     }
     this.registerForm.value.email = this.registerForm.value.email.replace(/\s/g, '').toLowerCase();
+    this.trimFormFields();
     this.authenticationService.register(this.registerForm.value).then(
       (val) => {
         this.showProgress.toggleLoadingGlobal(false);
