@@ -9,7 +9,7 @@ services:
     volumes:
       - ".:/usr/src"
     working_dir: "/usr/src/api"
-    command: "npm run start:poll"
+    command: "npm run start:poll load:fixtures"
     environment:
       - "DB_HOST=db"
     ports:

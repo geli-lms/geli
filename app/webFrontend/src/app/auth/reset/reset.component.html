@@ -25,7 +25,7 @@
         <input matInput type="password" formControlName="password" placeholder="Password"/>
         <div class="form-text error" *ngIf="resetForm?.controls.password.touched">
           <small *ngIf="resetForm.controls.password.hasError('required')" class="text-danger">Password is required</small>
-          <small *ngIf="resetForm.controls.password.hasError('pattern')">Password must have at least 8 characters which contain one special character or digit</small>
+          <small *ngIf="resetForm.controls.password.hasError('pattern')">{{passwordPatternText}}</small>
         </div>
       </mat-form-field>
       <mat-form-field>
