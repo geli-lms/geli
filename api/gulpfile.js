@@ -200,6 +200,6 @@ gulp.task(INSPECT, [BUILD_DEV], function () {
     script: "build/src/server.js",
     watch: ["src/*", "test/*"],
     tasks: [BUILD_DEV],
-    nodeArgs: ["--inspect=*:9229"]
+    nodeArgs: ["--inspect=0.0.0.0:9229"]
   });
 });

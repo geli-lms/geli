@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {IUser} from '../../../../../../shared/models/IUser';
 import {UserService} from '../../shared/services/user.service';
 import {IFile} from '../../../../../../shared/models/IFile';
+import {User} from '../../models/User';
 
 @Component({
   selector: 'app-user-profile',
@@ -11,7 +11,7 @@ import {IFile} from '../../../../../../shared/models/IFile';
 export class UserProfileComponent implements OnInit {
 
   @Input() userId: String;
-  @Input() user: IUser;
+  @Input() user: User;
 
   picture: IFile;
 

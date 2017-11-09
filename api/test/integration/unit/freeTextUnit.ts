@@ -1,5 +1,3 @@
-process.env.NODE_ENV = 'test';
-
 import * as chai from 'chai';
 import chaiHttp = require('chai-http');
 import {Server} from '../../../src/server';
