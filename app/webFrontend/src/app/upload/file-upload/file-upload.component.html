@@ -26,14 +26,14 @@
 </div>
 <div>
   <div *ngFor="let item of uploader.queue">
-    <strong>{{ item?.file?.name }}</strong>
+    <strong class="uploadQueue">{{ item?.file?.name }}</strong>
     <span *ngIf="item.isReady">(ready)</span>
     <span *ngIf="item.isUploading">(uploading...)</span>
     <span *ngIf="item.isSuccess">(success!)</span>
-    <mat-progress-bar mode="determinate" [value]="item.progress"></mat-progress-bar>
+    <mat-progress-bar *ngIf="item.isUploading" mode="determinate" [value]="item.progress"></mat-progress-bar>
   </div>
 </div>
-<div >
+<div *ngIf="showQueueBar">
   Queue progress:
   <div>
     <mat-progress-bar mode="determinate" [value]="uploader.progress"></mat-progress-bar>
