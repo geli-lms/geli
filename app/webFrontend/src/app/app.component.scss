@@ -7,6 +7,20 @@
   min-height: 100%;
 }
 
+.host-logo {
+  background-image: url("../assets/logo/fbi-logo.svg");
+  background-repeat: no-repeat;
+  background-position-x: 15px;
+  height: 90%;
+  width: 100%;
+  margin-left: 15px;
+  border-left: solid white 1px;
+
+  &:hover {
+    border-color: map-get($app-accent, 'default');
+  }
+}
+
 .warning {
   background: #b53f3f;
 }
