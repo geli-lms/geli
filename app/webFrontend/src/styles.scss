@@ -40,7 +40,7 @@ body {
     font-size: $base_font_size * $factor;
     line-height: $line_height--base * $factor;
   }
-  @include bp(4k) {
+  @include bp(max) {
     $factor: 1.4;
     font-size: $base_font_size * $factor;
     line-height: $line_height--base * $factor;
@@ -55,13 +55,14 @@ app-root {
   @include bp(xxl) {
     margin: 0 8%;
   }
-  @include bp(4k) {
+  @include bp(max) {
     margin: 0 14%;
   }
 }
 
 h1, h2, h3, h4, h5, h6 {
   line-height: $line_height--header;
+  font-weight: 300;
 }
 
 .logo-font {
