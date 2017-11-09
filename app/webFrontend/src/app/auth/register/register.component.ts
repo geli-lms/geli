@@ -5,7 +5,7 @@ import {Router} from '@angular/router';
 import {ShowProgressService} from '../../shared/services/show-progress.service';
 import {MatSnackBar} from '@angular/material';
 import {matchPasswords} from '../../shared/validators/validators';
-import {pwPattern} from '../../../environments/environment';
+import {pwPattern} from '../password';
 
 @Component({
   selector: 'app-register',
