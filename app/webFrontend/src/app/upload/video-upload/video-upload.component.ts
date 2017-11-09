@@ -21,7 +21,7 @@ export class VideoUploadComponent implements OnInit {
   @Input() onDone: () => void;
   @Input() onCancel: () => void;
 
-  showQueueBar = false; // hides the man upload queue bar
+  showQueueBar = false; // hides the main upload queue bar
 
   @ViewChild(UnitGeneralInfoFormComponent)
   public generalInfo: UnitGeneralInfoFormComponent;
@@ -92,7 +92,6 @@ export class VideoUploadComponent implements OnInit {
     if (this.model) {
       // add to model currently editing
       this.first = false;
-
       this.uploader.onBuildItemForm = (fileItem: any, form: any) => {
         form.append('name', this.generalInfo.form.value.name);
         form.append('description', this.generalInfo.form.value.description);
