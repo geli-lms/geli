@@ -18,9 +18,20 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
   @Input() role;
 
   currentMember: IUser = null;
-  fuzzySearch: String = '';
+  search = '';
   userCtrl: FormControl;
   filteredStates: any;
+
+  set searchString(search: string) {
+    console.log('set search');
+    // TODO search for users.
+    this.search = search;
+  }
+
+  get searchString(): string {
+    return this.search;
+  }
+
 
   @Output() onDragendUpdate = new EventEmitter<IUser[]>();
   @Output() onRemove = new EventEmitter<String>();
@@ -36,6 +47,7 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
     .startWith(null)
     .map(name => this.filterStates(name));
   }
+
 
   ngOnInit() {
     // Make items only draggable by dragging the handle
@@ -56,6 +68,8 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.dragula.destroy(this.dragulaBagId);
   }
+
+
 
   filterStates(val: string) {
     return val ? this.users.filter(s => this.fuzzysearch(val, s))
