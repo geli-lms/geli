@@ -21,12 +21,12 @@ $line-height--header: 1.25;
 
 // BREAKPOINT VARS
 // the px values are calculated on a user-agent font-size of 16px
-$bp-width--xs:  20em;  // 320px => app-root min-width
-$bp-width--sm:  32em;  // 512px
-$bp-width--md:  48em;  // 768px
-$bp-width--lg:  60em;  // 960px
-$bp-width--xl:  75em;  // 1200px
+$bp-width--xs: 20em; // 320px => app-root min-width
+$bp-width--sm: 32em; // 512px
+$bp-width--md: 48em; // 768px
+$bp-width--lg: 60em; // 960px
+$bp-width--xl: 75em; // 1200px
 $bp-width--xxl: 121em; // 1936px
-$bp-width--max:  160em; // 2560px => app-root max-width
+$bp-width--max: 160em; // 2560px => app-root max-width
 
 @import 'styles/breakpoints';
