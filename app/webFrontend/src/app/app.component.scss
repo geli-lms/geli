@@ -30,6 +30,11 @@
   font-size: 28px;
   margin-bottom: 10px;
 
+  @include bp(4k) {
+    font-size: 2.5rem;
+    margin-bottom: 0;
+  }
+
   &:hover {
     color: map-get($app-accent, 'default');
   }
@@ -48,7 +53,15 @@
 }
 
 .special-style {
-  background-image: url('/assets/people-woman-coffee-meeting.jpg');
+  background: url('/assets/people-woman-coffee-meeting.jpg') no-repeat;
   background-size: cover;
-  background-repeat: no-repeat;
+}
+
+.mat-toolbar {
+  @include bp(4k) {
+    height: 5rem;
+    .g_toolbar_elem {
+      margin-top: 1rem;
+    }
+  }
 }

@@ -22,7 +22,11 @@
   clear: both;
 
   .question {
-    width: 70%;
+    width: 100%;
+
+    @include bp(md) {
+      width: 60%;
+    }
   }
 
   .answer, .actions {
@@ -49,7 +53,11 @@
     }
 
     @include bp(md) {
-      width: 300px;
+      width: 48%;
+    }
+    
+    @include bp(xl) {
+      width: 32%;
     }
   }
 }

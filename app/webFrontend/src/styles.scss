@@ -23,10 +23,6 @@ $app-theme: mat-light-theme($app-primary, $app-accent, $app-warn);
   box-sizing: border-box;
 }
 
-html {
-  height: 100%;
-}
-
 body, html {
   height: 100%;
   margin: 0;
@@ -35,21 +31,37 @@ body, html {
 
 body {
   font-family: Roboto, "Helvetica Neue", sans-serif;
+  font-size: $base_font_size;
+  line-height: $line_height--base;
+  background-color: lighten(map-get($app-primary, 'default'), 38.5%);
 
+  @include bp(xl) {
+    $factor: 1.2;
+    font-size: $base_font_size * $factor;
+    line-height: $line_height--base * $factor;
+  }
   @include bp(4k) {
-    background-color: lighten(map-get($app-primary, 'default'), 38.5%);
+    $factor: 1.4;
+    font-size: $base_font_size * $factor;
+    line-height: $line_height--base * $factor;
   }
 }
 
 app-root {
-  min-width: $bp_width--xs;
-  max-width: $bp_width--4k;
-  margin: auto;
+  margin: 0 auto;
   background-color: #fff;
+  box-shadow: 0 0 54px 5px rgba(0, 0, 0, 0.75);
 
-  @include bp(4k) {
-    box-shadow: 0px 0px 54px 5px rgba(0,0,0,0.75);
+  @include bp(xxl) {
+    margin: 0 8%;
   }
+  @include bp(4k) {
+    margin: 0 14%;
+  }
+}
+
+h1, h2, h3, h4, h5, h6 {
+  line-height: $line_height--header;
 }
 
 .logo-font {
@@ -61,6 +73,9 @@ app-root {
 }
 
 .loading-container {
+  position: absolute;
+  top: 0;
+  bottom: 0;
   height: 100%;
   width: 100%;
   display: flex;
