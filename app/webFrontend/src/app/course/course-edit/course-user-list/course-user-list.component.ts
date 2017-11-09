@@ -73,11 +73,10 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
 
   filterStates(val: string) {
     return val ? this.users.filter(s => this.fuzzysearch(val, s))
-      .map(e => e.profile.firstName + ' ' + e.profile.lastName + ' ' + e.email)
+        .map(e => e.profile.firstName + ' ' + e.profile.lastName + ' ' + e.email)
       : [];
   }
 
-  // TODO: do levenshtein in backend
   fuzzysearch(toSearch: string, user: IUser): boolean {
     const lowerToSearch: string = toSearch.toLowerCase();
     const elementsToFind = lowerToSearch.split(' ');

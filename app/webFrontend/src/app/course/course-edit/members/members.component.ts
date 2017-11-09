@@ -14,7 +14,7 @@ export class MembersComponent implements OnInit {
 
   @Input() courseId;
   course: ICourse;
-  allStudents: IUser[] = [];
+  foundStudents: IUser[] = [];
 
   constructor(private courseService: CourseService,
               private userService: UserDataService,
@@ -22,21 +22,25 @@ export class MembersComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getStudents().then(this.getCourseStudents);
+    this.initCourseStudentsOnInit();
   }
 
   /**
-   * Get all users from api and filter those role student.
-   *
-   * TODO: Never load all users!
+   * Get this course from api and filter all teachers from users.
    */
-  getStudents() {
-    return this.userService.readItems()
-      .then(users => {
-        this.allStudents = users.filter(obj => obj.role === 'student');
-        this.allStudents = this.allStudents.map(data => new User(data));
+  initCourseStudentsOnInit = () => {
+    this.courseService.readSingleItem(this.courseId).then(
+      (val: any) => {
+        this.course = val;
+        this.course.students.forEach(member =>
+          this.foundStudents = this.foundStudents.filter(user => user._id !== member._id));
+        this.course.students = this.course.students.map(data => new User(data));
+
+        SortUtil.sortUsers(this.foundStudents);
+        SortUtil.sortUsers(this.course.students);
       });
-  }
+  };
+
 
   /**
    * Save all students in this course in database.
@@ -54,26 +58,10 @@ export class MembersComponent implements OnInit {
   }
 
   /**
-   * Get this course from api and filter all teachers from users.
-   */
-  getCourseStudents = () => {
-    this.courseService.readSingleItem(this.courseId).then(
-      (val: any) => {
-        this.course = val;
-        this.course.students.forEach(member =>
-          this.allStudents = this.allStudents.filter(user => user._id !== member._id));
-        this.course.students = this.course.students.map(data => new User(data));
-
-        SortUtil.sortUsers(this.allStudents);
-        SortUtil.sortUsers(this.course.students);
-      });
-  };
-
-  /**
    * @param id Id of an user.
    */
   removeUser(id: string): void {
-    this.allStudents = this.allStudents.concat(this.course.students.filter(obj => id === obj._id));
+    this.foundStudents = this.foundStudents.concat(this.course.students.filter(obj => id === obj._id));
     this.course.students = this.course.students.filter(obj => id !== obj._id);
     this.updateCourseStudents();
   }
