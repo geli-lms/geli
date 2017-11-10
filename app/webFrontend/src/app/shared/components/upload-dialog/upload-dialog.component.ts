@@ -19,6 +19,8 @@ export class UploadDialog implements OnInit {
 
   public pictureTaken: boolean;
 
+  allowedMimeType: string[] = ['image/png', 'image/jpeg'];
+
   constructor(public dialogRef: MatDialogRef<UploadDialog>) { }
 
   ngOnInit() {
@@ -26,8 +28,9 @@ export class UploadDialog implements OnInit {
       url: '/api/users/picture/' + this.user._id,
       headers: [{
         name: 'Authorization',
-        value: localStorage.getItem('token')
-      }]
+        value: localStorage.getItem('token'),
+      }],
+      allowedMimeType: this.allowedMimeType
     });
 
     this.uploader.onCompleteItem = (item: any, response: any, status: any, headers: any) => {
