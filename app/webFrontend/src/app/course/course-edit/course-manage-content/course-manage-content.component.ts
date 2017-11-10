@@ -148,6 +148,7 @@ export class CourseManageContentComponent implements OnInit, OnDestroy {
             this.showProgress.toggleLoadingGlobal(false);
             this.snackBar.open('Lecture deleted.', '', {duration: 3000});
             this.lectureEditMode = false;
+            this.openedLecture = null;
             this.reloadCourse();
           },
           (error) => {
