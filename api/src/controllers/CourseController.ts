@@ -1,6 +1,6 @@
 import {Request} from 'express';
 import {
-  Authorized,
+  Authorized, BadRequestError,
   Body,
   CurrentUser, ForbiddenError,
   Get,
@@ -137,9 +137,15 @@ export class CourseController {
   @Post('/')
   addCourse(@Body() course: ICourse, @Req() request: Request, @CurrentUser() currentUser: IUser) {
     course.courseAdmin = currentUser;
-
-    return new Course(course).save()
-      .then((c) => c.toObject());
+    return Course.findOne({name: course.name})
+      .then((existingCourse) => {
+        if (existingCourse) {
+          throw new BadRequestError('duplicate course name');
+        }
+        console.log('ERRORLOG: ', course.name);
+        return new Course(course).save()
+          .then((c) => c.toObject());
+      });
   }
 
   @Authorized(['student'])
