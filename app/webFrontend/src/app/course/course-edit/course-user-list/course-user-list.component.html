@@ -31,11 +31,11 @@
   </ng-container>
 </div>
 
-<div class="users" *ngIf="fuzzySearch.length > 0">
+<div class="users" *ngIf="search.length > 0">
   <div class="titleHeader"><h2>In course</h2><app-badge [displayNumber]="usersInCourse.length"></app-badge></div>
   <mat-list class="drop" [dragula]='dragulaBagId' [dragulaModel]='usersInCourse'>
     <div *ngFor="let member of usersInCourse">
-      <mat-list-item class="list" *ngIf="fuzzysearch(search,member)" [attr.data-id]="[member._id]">
+      <mat-list-item class="list" *ngIf="searchUsers(search,member)" [attr.data-id]="[member._id]">
         <mat-icon class="user-drag-handle">drag_handle</mat-icon>
         <span class="listBg" [grav]="member.email"></span>
         <span class="firstName">{{member.profile.firstName}}</span>
@@ -49,7 +49,7 @@
   <div class="titleHeader"><h2>Not in course</h2><app-badge [displayNumber]="users.length"></app-badge></div>
   <mat-list class="drop" [dragula]='dragulaBagId' [dragulaModel]='users'>
     <div *ngFor="let user of users">
-      <mat-list-item class="list" *ngIf="fuzzysearch(search,user)" [attr.data-id]="[user._id]">
+      <mat-list-item class="list" *ngIf="searchUsers(search,user)" [attr.data-id]="[user._id]">
         <mat-icon class="member-drag-handle">drag_handle</mat-icon>
         <span class="listBg" [grav]="user.email"></span>
         <span class="firstName">{{user.profile.firstName}}</span>

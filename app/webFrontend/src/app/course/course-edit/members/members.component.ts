@@ -35,9 +35,6 @@ export class MembersComponent implements OnInit {
         this.course.students.forEach(member =>
           this.foundStudents = this.foundStudents.filter(user => user._id !== member._id));
         this.course.students = this.course.students.map(data => new User(data));
-
-        SortUtil.sortUsers(this.foundStudents);
-        SortUtil.sortUsers(this.course.students);
       });
   };
 
@@ -60,7 +57,7 @@ export class MembersComponent implements OnInit {
   /**
    * @param id Id of an user.
    */
-  removeUser(id: string): void {
+  updateUser(id: string): void {
     this.foundStudents = this.foundStudents.concat(this.course.students.filter(obj => id === obj._id));
     this.course.students = this.course.students.filter(obj => id !== obj._id);
     this.updateCourseStudents();

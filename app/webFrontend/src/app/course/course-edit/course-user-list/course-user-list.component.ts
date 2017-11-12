@@ -23,19 +23,19 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
   userCtrl: FormControl;
   filteredStates: any;
 
-  set searchString(search: string) {
-    console.log('set search');
-    // TODO search for users.
-    this.search = search;
-  }
-
-  get searchString(): string {
-    return this.search;
-  }
+  // set searchString(search: string) {
+  //   console.log('set search');
+  //   // TODO search for users.
+  //   this.search = search;
+  // }
+  //
+  // get searchString(): string {
+  //   return this.search;
+  // }
 
 
   @Output() onDragendUpdate = new EventEmitter<IUser[]>();
-  @Output() onRemove = new EventEmitter<String>();
+  @Output() onUpdate = new EventEmitter<String>();
 
   setMember(member: IUser) {
     this.currentMember = member;
@@ -43,10 +43,6 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
 
   constructor(private dragula: DragulaService,
               public dialogService: DialogService) {
-    this.userCtrl = new FormControl();
-    this.filteredStates = this.userCtrl.valueChanges
-    .startWith(null)
-    .map(name => this.filterStates(name));
   }
 
 
@@ -64,21 +60,24 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
         this.onDragendUpdate.emit(this.usersInCourse);
       }
     });
+    this.userCtrl = new FormControl();
+    this.filteredStates = this.userCtrl.valueChanges
+      .startWith(null)
+      .map(name => this.filterStates(name));
   }
 
   ngOnDestroy() {
     this.dragula.destroy(this.dragulaBagId);
   }
 
-
-
   filterStates(val: string) {
-    return val ? this.users.filter(s => this.fuzzysearch(val, s))
+    // TODO Call userService or read from foundUsers.
+    return val ? this.users.filter(s => this.searchUsers(val, s))
         .map(e => e.profile.firstName + ' ' + e.profile.lastName + ' ' + e.email)
       : [];
   }
 
-  fuzzysearch(toSearch: string, user: IUser): boolean {
+  searchUsers(toSearch: string, user: IUser): boolean {
     const lowerToSearch: string = toSearch.toLowerCase();
     const elementsToFind = lowerToSearch.split(' ');
     if (user.uid === undefined) {
@@ -91,12 +90,12 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
     return resArray.length > 0;
   }
 
-  removeUser() {
+  updateUser() {
     this.dialogService
     .confirmRemove(this.currentMember.role, this.currentMember.email, 'course')
     .subscribe(res => {
       if (res) {
-        this.onRemove.emit(this.currentMember._id);
+        this.onUpdate.emit(this.currentMember._id);
       }
     });
   }

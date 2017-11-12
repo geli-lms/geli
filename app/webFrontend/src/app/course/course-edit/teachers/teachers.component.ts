@@ -35,9 +35,6 @@ export class TeachersComponent implements OnInit {
         this.course.teachers.forEach(member =>
           this.foundTeachers = this.foundTeachers.filter(user => user._id !== member._id));
         this.course.teachers = this.course.teachers.map(data => new User(data));
-
-        SortUtil.sortUsers(this.foundTeachers);
-        SortUtil.sortUsers(this.course.teachers);
       });
   };
 
@@ -59,7 +56,7 @@ export class TeachersComponent implements OnInit {
   /**
    * @param id Id of an user.
    */
-  removeUser(id: string): void {
+  updateUser(id: string): void {
     this.foundTeachers = this.foundTeachers.concat(this.course.teachers.filter(obj => id === obj._id));
     this.course.teachers = this.course.teachers.filter(obj => id !== obj._id);
     this.updateCourseTeachers();
