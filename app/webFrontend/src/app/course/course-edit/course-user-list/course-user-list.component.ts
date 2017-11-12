@@ -4,6 +4,8 @@ import {IUser} from '../../../../../../../shared/models/IUser';
 import {FormControl} from '@angular/forms';
 import {DialogService} from '../../../shared/services/dialog.service';
 import 'rxjs/add/operator/startWith'
+import {UserService} from '../../../shared/services/user.service';
+import {UserDataService} from '../../../shared/services/data.service';
 
 @Component({
   selector: 'app-course-user-list',
@@ -23,15 +25,26 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
   userCtrl: FormControl;
   filteredStates: any;
 
-  // set searchString(search: string) {
-  //   console.log('set search');
-  //   // TODO search for users.
-  //   this.search = search;
-  // }
-  //
-  // get searchString(): string {
-  //   return this.search;
-  // }
+  set searchString(search: string) {
+    if (search !== '') {
+      console.log('Set ' + search);
+      this.userService.searchUsers(this.role, search).then( (found) => {
+        if (found) {
+          const idList: string[] = this.usersInCourse.map((u) => u._id);
+          this.users = found.filter(user => idList.includes(user.id));
+        } else {
+          this.users = [];
+        }
+      });
+      this.search = search;
+    } else {
+      this.search = search;
+    }
+  }
+
+  get searchString(): string {
+    return this.search;
+  }
 
 
   @Output() onDragendUpdate = new EventEmitter<IUser[]>();
@@ -42,6 +55,7 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
   }
 
   constructor(private dragula: DragulaService,
+              private userService: UserDataService,
               public dialogService: DialogService) {
   }
 
@@ -49,9 +63,9 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
   ngOnInit() {
     // Make items only draggable by dragging the handle
     this.dragula.setOptions(this.dragulaBagId, {
-    moves: (el, container, handle) => {
-      return handle.classList.contains('user-drag-handle') || handle.classList.contains('member-drag-handle');
-    }
+      moves: (el, container, handle) => {
+        return handle.classList.contains('user-drag-handle') || handle.classList.contains('member-drag-handle');
+      }
     });
     this.dragula.dropModel.subscribe(value => {
       const bagName = value[0];
@@ -92,11 +106,11 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
 
   updateUser() {
     this.dialogService
-    .confirmRemove(this.currentMember.role, this.currentMember.email, 'course')
-    .subscribe(res => {
-      if (res) {
-        this.onUpdate.emit(this.currentMember._id);
-      }
-    });
+      .confirmRemove(this.currentMember.role, this.currentMember.email, 'course')
+      .subscribe(res => {
+        if (res) {
+          this.onUpdate.emit(this.currentMember._id);
+        }
+      });
   }
 }

@@ -17,7 +17,6 @@ export class TeachersComponent implements OnInit {
   foundTeachers: IUser[] = [];
 
   constructor(private courseService: CourseService,
-              private userService: UserDataService,
               private showProgress: ShowProgressService) {
   }
 

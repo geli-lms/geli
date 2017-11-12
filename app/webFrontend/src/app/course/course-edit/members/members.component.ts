@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {CourseService, UserDataService} from '../../../shared/services/data.service';
+import {CourseService} from '../../../shared/services/data.service';
 import {ShowProgressService} from '../../../shared/services/show-progress.service';
 import {IUser} from '../../../../../../../shared/models/IUser';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
@@ -17,7 +17,6 @@ export class MembersComponent implements OnInit {
   foundStudents: IUser[] = [];
 
   constructor(private courseService: CourseService,
-              private userService: UserDataService,
               private showProgress: ShowProgressService) {
   }
 

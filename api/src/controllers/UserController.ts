@@ -65,7 +65,9 @@ export class UserController {
     return User.find(conditions, {score: {$meta: 'textScore'}})
       .where({role: role})
       .sort({score: {$meta: 'textScore'}})
-      .limit(20);
+      .limit(20).then(users => {
+        return users.map((user) => this.cleanUserObject(null, user, currentUser));
+    });
   }
 
   @Get('/:role/count')
