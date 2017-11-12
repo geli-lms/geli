@@ -125,6 +125,11 @@ button {
   text-align: center;
 }
 
+.titleHeader {
+  display: flex;
+  align-items: center;
+}
+
 .gu-mirror {
   z-index: 9999 !important;
   opacity: 1;

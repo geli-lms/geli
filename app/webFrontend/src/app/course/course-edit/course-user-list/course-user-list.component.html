@@ -31,9 +31,8 @@
   </ng-container>
 </div>
 
-<div class="users" *ngIf="search.length > 0">
-  <span>In Course</span>
-  <div class="badge">{{usersInCourse.length}}</div>
+<div class="users" *ngIf="fuzzySearch.length > 0">
+  <div class="titleHeader"><h2>In course</h2><app-badge [displayNumber]="usersInCourse.length"></app-badge></div>
   <mat-list class="drop" [dragula]='dragulaBagId' [dragulaModel]='usersInCourse'>
     <div *ngFor="let member of usersInCourse">
       <mat-list-item class="list" *ngIf="fuzzysearch(search,member)" [attr.data-id]="[member._id]">
@@ -47,8 +46,7 @@
     </div>
   </mat-list>
 
-  <span>Not in Course</span>
-  <div class="badge">{{users.length}}</div>
+  <div class="titleHeader"><h2>Not in course</h2><app-badge [displayNumber]="users.length"></app-badge></div>
   <mat-list class="drop" [dragula]='dragulaBagId' [dragulaModel]='users'>
     <div *ngFor="let user of users">
       <mat-list-item class="list" *ngIf="fuzzysearch(search,user)" [attr.data-id]="[user._id]">
