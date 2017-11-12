@@ -58,7 +58,10 @@ export class DashboardTeacherComponent implements OnInit {
   }
 
   filterMyCourses(course: ICourse) {
-    return course.teachers.filter(teacher => teacher._id === this.userService.user._id);
+    return (course.teachers.filter(teacher => teacher._id === this.userService.user._id).length);
   }
 
+  enrollCallback() {
+    this.onEnroll.emit();
+  }
 }

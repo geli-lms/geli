@@ -63,5 +63,9 @@ export class DashboardAdminComponent implements OnInit {
     return course.teachers.filter(teacher => teacher._id === this.userService.user._id);
   }
 
+  enrollCallback() {
+    this.onEnroll.emit();
+  }
+
 
 }

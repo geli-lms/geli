@@ -51,4 +51,8 @@ export class DashboardStudentComponent implements OnInit {
     const user = this.userService.user;
     return course.students.filter(obj => obj._id === user._id).length > 0;
   }
+
+  enrollCallback() {
+    this.onEnroll.emit();
+  }
 }
