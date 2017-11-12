@@ -54,8 +54,7 @@ export class CourseComponent {
       return true;
     }
 
-    return (course.courseAdmin && course.courseAdmin._id === this.userService.user._id) ||
-      course.teachers.filter(teacher => teacher._id === this.userService.user._id).length;
+    return ( course.teachers.filter(teacher => teacher._id === this.userService.user._id))
   }
 
   isMemberOfCourse(course: ICourse) {
