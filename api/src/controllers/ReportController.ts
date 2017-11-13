@@ -7,10 +7,10 @@ import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import {IProgressModel, Progress} from '../models/Progress';
 import {IProgress} from '../../../shared/models/IProgress';
 import {IUser} from '../../../shared/models/IUser';
-import {Unit} from '../models/units/Unit';
+import {IUnitModel, Unit} from '../models/units/Unit';
 import * as mongoose from 'mongoose';
 import ObjectId = mongoose.Types.ObjectId;
-import {Course} from '../models/Course';
+import {Course, ICourseModel} from '../models/Course';
 import {Lecture} from '../models/Lecture';
 
 @JsonController('/report')
@@ -26,14 +26,25 @@ export class ReportController {
 
   @Get('/courses/:id')
   getCourseProgress(@Param('id') id: string) {
-    return Course.aggregate([
-      {$match: {_id: new ObjectId(id)}},
-      {$unwind: { path: '$lectures', preserveNullAndEmptyArrays: true }},
-      {$lookup: { from: 'lectures', localField: 'lectures', foreignField: '_id', as: 'lectures'}},
-      {$lookup: { from: 'units', localField: 'lectures.units', foreignField: '_id', as: 'units'}}
-    ])
-    .then((courseBaseData) => {
-      return courseBaseData;
+    return Course.findOne({_id: id})
+    .populate({
+      path: 'lectures',
+      populate: {
+        path: 'units',
+        match: { progressable: { $eq: true }}
+      }
+    })
+    .populate('students')
+    .then((course: ICourseModel) => {
+      course.lectures = course.lectures.filter((lecture) => {
+        return lecture.units.length > 0 ? true : false;
+      });
+      course.lectures.map((lecture) => {
+        lecture.units.map((unit: IUnitModel) => {
+          return unit.populate('progress');
+        });
+      });
+      return course.toObject();
     });
   }
 

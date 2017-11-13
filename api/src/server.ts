@@ -11,6 +11,7 @@ import passportLoginStrategy from './security/passportLoginStrategy';
 import passportJwtStrategy from './security/passportJwtStrategy';
 import {RoleAuthorization} from './security/RoleAuthorization';
 import {CurrentUserDecorator} from './security/CurrentUserDecorator';
+import {mongo} from 'mongoose';
 
 /**
  * Root class of your node server.
@@ -44,6 +45,7 @@ export class Server {
   }
 
   start() {
+    mongoose.set('debug', true);
     mongoose.connect(config.database, {useMongoClient: true});
 
     // Request logger
