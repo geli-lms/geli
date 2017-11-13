@@ -26,4 +26,6 @@ export default {
   teacherMailRegex: process.env.TEACHER_MAIL_REGEX || '^.+@.+\..+$',
 
   nonProductionWarning: process.env.NONPRODUCTIONWARNING || undefined,
+
+  sentryDsn: process.env.SENTRY_DSN,
 };
