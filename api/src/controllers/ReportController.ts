@@ -26,7 +26,7 @@ export class ReportController {
 
   @Get('/courses/:id')
   getCourseProgress(@Param('id') id: string) {
-    return Course.findOne({_id: id})
+    const coursePromise = Course.findOne({_id: id})
     .populate({
       path: 'lectures',
       populate: {
@@ -35,6 +35,22 @@ export class ReportController {
       }
     })
     .populate('students')
+    .exec();
+
+    // TODO: Add group by unit for progress objects
+    const progressPromise = Progress.aggregate([
+      {$match: { course: new ObjectId(id) }}
+    ]).exec();
+    const promises: Promise<any>[] = [
+      coursePromise,
+      progressPromise
+    ];
+
+    return Promise.all(promises)
+      .then(([course, progresses]) => {
+        const debug = 0;
+      })
+    /*
     .then((course: ICourseModel) => {
       course.lectures = course.lectures.filter((lecture) => {
         return lecture.units.length > 0 ? true : false;
@@ -45,7 +61,7 @@ export class ReportController {
         });
       });
       return course.toObject();
-    });
+    });*/
   }
 
   @Get('/users/:id')
