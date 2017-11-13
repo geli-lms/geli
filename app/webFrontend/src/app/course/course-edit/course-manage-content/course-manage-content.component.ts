@@ -124,6 +124,8 @@ export class CourseManageContentComponent implements OnInit, OnDestroy {
           () => {
             this.showProgress.toggleLoadingGlobal(false);
             this.snackBar.open('Unit deleted.', '', {duration: 3000});
+            this.unitEditMode = false;
+            this.unitEditElement = null;
             this.reloadCourse();
           },
           (error) => {
@@ -145,6 +147,8 @@ export class CourseManageContentComponent implements OnInit, OnDestroy {
           (val) => {
             this.showProgress.toggleLoadingGlobal(false);
             this.snackBar.open('Lecture deleted.', '', {duration: 3000});
+            this.lectureEditMode = false;
+            this.openedLecture = null;
             this.reloadCourse();
           },
           (error) => {
