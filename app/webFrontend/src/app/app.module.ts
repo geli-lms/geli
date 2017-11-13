@@ -3,7 +3,6 @@ import {NgModule} from '@angular/core';
 import {HttpModule} from '@angular/http';
 
 import {AppComponent} from './app.component';
-import {JwtHelper} from 'angular2-jwt';
 
 import {UserService} from './shared/services/user.service';
 import {AuthenticationService} from './shared/services/authentication.service';
@@ -25,7 +24,6 @@ import {UserModule} from './user/user.module';
 import {AuthModule} from './auth/auth.module';
 import {AboutModule} from './about/about.module';
 import {AdminModule} from './admin/admin.module';
-import {MATERIAL_COMPATIBILITY_MODE} from '@angular/material';
 
 @NgModule({
   declarations: [
@@ -44,7 +42,6 @@ import {MATERIAL_COMPATIBILITY_MODE} from '@angular/material';
     SharedModule
   ],
   providers: [
-    {provide: MATERIAL_COMPATIBILITY_MODE, useValue: true},
     UserService,
     AuthenticationService,
     AboutDataService,
@@ -60,7 +57,6 @@ import {MATERIAL_COMPATIBILITY_MODE} from '@angular/material';
     ShowProgressService,
     MarkdownService,
     FreeTextUnitService,
-    JwtHelper,
     CodeKataUnitService,
     APIInfoService,
   ],
