@@ -3,7 +3,6 @@ import {CourseService} from '../../../shared/services/data.service';
 import {ShowProgressService} from '../../../shared/services/show-progress.service';
 import {IUser} from '../../../../../../../shared/models/IUser';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
-import {SortUtil} from '../../../shared/utils/SortUtil';
 import {User} from '../../../models/User';
 
 @Component({

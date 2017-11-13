@@ -66,7 +66,7 @@ export class UserController {
       .where({role: role})
       .sort({score: {$meta: 'textScore'}})
       .limit(20).then(users => {
-        return users.map((user) => this.cleanUserObject(null, user, currentUser));
+        return users.map((user) => user.toObject({virtuals: true}));
     });
   }
 

@@ -11,12 +11,12 @@
 
 <div class="members" *ngIf="search.length <= 0">
   <ng-container *ngFor="let user of usersInCourse">
-    <mat-card [ngClass]="(currentMember != null && currentMember._id == user._id) ? 'active':'profile'"
+    <mat-card [ngClass]="(currentUser != null && currentUser._id == user._id) ? 'active':'profile'"
               (click)="setMember(user)">
 
       <div class="bg" user-image [user-image]="user" [size]="160"></div>
 
-      <div *ngIf="currentMember != null && currentMember._id == user._id">
+      <div *ngIf="currentUser != null && currentUser._id == user._id">
         <button mat-raised-button routerLink="/profile/{{user._id}}" routerLinkActive="active">DETAILS</button>
         <button mat-raised-button>SEND MAIL</button>
         <button class="del" mat-raised-button (click)="removeUser()">REMOVE</button>

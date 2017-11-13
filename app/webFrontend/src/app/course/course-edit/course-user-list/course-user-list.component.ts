@@ -20,18 +20,19 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
   @Input() dragulaBagId;
   @Input() role;
 
-  currentMember: IUser = null;
+  currentUser: IUser = null;
   search = '';
   userCtrl: FormControl;
   filteredStates: any;
 
   set searchString(search: string) {
+    console.log(this.currentUser);
     if (search !== '') {
       console.log('Set ' + search);
       this.userService.searchUsers(this.role, search).then( (found) => {
         if (found) {
           const idList: string[] = this.usersInCourse.map((u) => u._id);
-          this.users = found.filter(user => idList.includes(user.id));
+          this.users = found.filter(user => idList.indexOf(user._id) >= 0);
         } else {
           this.users = [];
         }
@@ -50,8 +51,8 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
   @Output() onDragendUpdate = new EventEmitter<IUser[]>();
   @Output() onUpdate = new EventEmitter<String>();
 
-  setMember(member: IUser) {
-    this.currentMember = member;
+  setCurrentUser(user: IUser) {
+    this.currentUser = user;
   }
 
   constructor(private dragula: DragulaService,
@@ -106,10 +107,10 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
 
   updateUser() {
     this.dialogService
-      .confirmRemove(this.currentMember.role, this.currentMember.email, 'course')
+      .confirmRemove(this.currentUser.role, this.currentUser.email, 'course')
       .subscribe(res => {
         if (res) {
-          this.onUpdate.emit(this.currentMember._id);
+          this.onUpdate.emit(this.currentUser._id);
         }
       });
   }
