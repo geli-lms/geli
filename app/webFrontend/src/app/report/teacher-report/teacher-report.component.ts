@@ -20,7 +20,7 @@ export class TeacherReportComponent implements OnInit {
   students: User[];
   progressableUnits: IUnit[] = [];
   progress: IProgress[];
-  report: any;
+  report: any[] = [];
 
   constructor(private route: ActivatedRoute,
               private courseService: CourseService,
@@ -33,8 +33,8 @@ export class TeacherReportComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.id = decodeURIComponent(params['id']);
     });
-    // this.getCourseAndStudents();
-    this.getReport();
+    this.getCourseAndStudents();
+    // this.getReport();
   }
 
   getReport() {
@@ -42,6 +42,9 @@ export class TeacherReportComponent implements OnInit {
       .then((report) => {
         const debug = 0;
         this.report = report;
+      })
+      .catch((error) => {
+        const debug = 0;
       });
   }
 

@@ -24,6 +24,7 @@ import {UserModule} from './user/user.module';
 import {AuthModule} from './auth/auth.module';
 import {AboutModule} from './about/about.module';
 import {AdminModule} from './admin/admin.module';
+import {ReportService} from './shared/services/data/report.service';
 
 @NgModule({
   declarations: [
@@ -60,6 +61,7 @@ import {AdminModule} from './admin/admin.module';
     CodeKataUnitService,
     CodeKataProgressService,
     APIInfoService,
+    ReportService,
   ],
   bootstrap: [AppComponent]
 })

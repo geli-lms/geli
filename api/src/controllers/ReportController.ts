@@ -11,11 +11,12 @@ import {Unit} from '../models/units/Unit';
 import * as mongoose from 'mongoose';
 import ObjectId = mongoose.Types.ObjectId;
 import {Course} from '../models/Course';
+import {Lecture} from '../models/Lecture';
 
-@JsonController('/progress')
+@JsonController('/report')
 @UseBefore(passportJwtMiddleware)
 @Authorized(['teacher', 'admin'])
-export class ProgressController {
+export class ReportController {
 
   @Get('/units/:id')
   getUnitProgress(@Param('id') id: string) {
@@ -25,8 +26,15 @@ export class ProgressController {
 
   @Get('/courses/:id')
   getCourseProgress(@Param('id') id: string) {
-    return Progress.find({'course': id})
-      .then((progresses) => progresses.map((progress) => progress.toObject({virtuals: true})));
+    return Course.aggregate([
+      {$match: {_id: new ObjectId(id)}},
+      {$unwind: { path: '$lectures', preserveNullAndEmptyArrays: true }},
+      {$lookup: { from: 'lectures', localField: 'lectures', foreignField: '_id', as: 'lectures'}},
+      {$lookup: { from: 'units', localField: 'lectures.units', foreignField: '_id', as: 'units'}}
+    ])
+    .then((courseBaseData) => {
+      return courseBaseData;
+    });
   }
 
   @Get('/users/:id')

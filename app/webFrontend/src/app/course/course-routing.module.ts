@@ -3,7 +3,8 @@ import {RouterModule, Routes} from '@angular/router';
 import {AuthGuardService} from '../shared/services/auth-guard.service';
 import {CourseNewComponent} from './course-new/course-new.component';
 import {CourseDetailComponent} from './course-detail/course-detail.component';
-import {TeacherReportComponent} from './teacher-report/teacher-report.component';
+import {TeacherReportComponent} from '../report/teacher-report/teacher-report.component';
+import {ReportComponent} from '../report/report.component';
 
 const routes: Routes = [
   {
@@ -24,7 +25,7 @@ const routes: Routes = [
   },
   {
     path: ':id/report',
-    component: TeacherReportComponent,
+    component: ReportComponent,
     canActivate: [AuthGuardService],
     data: {roles: ['teacher', 'admin']}
   },
