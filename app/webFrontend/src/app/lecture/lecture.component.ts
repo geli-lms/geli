@@ -12,10 +12,16 @@ export class LectureComponent implements OnInit {
 
   @Input() course: ICourse;
   @Input() lecture: ILecture;
+  expanded: boolean;
 
   constructor(public userService: UserService) {
+    this.expanded = true;
   }
 
   ngOnInit() {
+  }
+
+  changeExpanded(): void {
+    this.expanded = !this.expanded;
   }
 }

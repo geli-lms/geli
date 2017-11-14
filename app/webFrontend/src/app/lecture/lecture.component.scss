@@ -1,3 +1,5 @@
+@import "/../../variables";
+@import "/../shared";
 :host {
   position: relative;
 }
@@ -6,3 +8,8 @@
   margin-bottom: 20px;
   position: relative;
 }
+
+.fill-space {
+  flex: 1 1 auto;
+}
+

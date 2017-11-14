@@ -9,7 +9,7 @@
 
 
   <p>
-    <button mat-button (click)="onCancel()">Cancel</button>
-    <button mat-button [disabled]="!lectureForm.valid" color="primary" type="submit">{{ actionLabel }}</button>
+    <button mat-raised-button [disabled]="!lectureForm.valid" color="primary" type="submit">{{ actionLabel }}</button>
+    <button mat-button color="secondary" (click)="onCancel()">Cancel</button>
   </p>
 </form>

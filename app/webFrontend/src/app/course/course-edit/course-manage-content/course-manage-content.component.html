@@ -3,12 +3,11 @@
     <div class="lecture" *ngFor="let lecture of course.lectures">
       <div class="lecture-header">
         <mat-icon class="lecture-drag-handle">drag_handle</mat-icon>
-        <h2>{{lecture.name}}</h2>
-        <button class="open-toggle" (click)="openToggleLecture(lecture)"
+        <h2 (click)="openToggleLecture(lecture)">{{lecture.name}}</h2>
+        <button class="toggle" (click)="openToggleLecture(lecture)"
                 [class.opened]="openedLecture && lecture._id === openedLecture._id" mat-icon-button>
           <mat-icon>arrow_drop_down</mat-icon>
         </button>
-
         <span class="flex-spacer"></span>
 
         <button class="lecture-menu-button" mat-icon-button [matMenuTriggerFor]="lectureMenu">

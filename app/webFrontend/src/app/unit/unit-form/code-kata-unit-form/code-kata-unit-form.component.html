@@ -20,9 +20,9 @@
               [readOnly]="false">
   </ace-editor>
 
-  <button mat-button (click)="onCancel()">Cancel</button>
-  <button mat-button (click)="validate()">Validate</button>
-  <button mat-button color="primary" class="add-unit" (click)="addUnit()">Save</button>
+  <button mat-button color ="secondary" (click)="validate()">Validate</button>
+  <button mat-raised-button color="primary" class="add-unit" (click)="addUnit()">Save</button>
+  <button mat-button color = "secondary" (click)="onCancel()">Cancel</button>
   <div *ngIf="logs!==undefined"><strong>Logs</strong></div>
   <pre>{{logs}}</pre>
 </div>

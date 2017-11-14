@@ -1,7 +1,15 @@
-<ng-container class="lecture-container" *ngIf="lecture">
-
-    <h2>{{lecture.name}}</h2>
-
+<mat-card class="lecture-card" *ngIf="lecture">
+  <mat-card-header class="clickable" (click)="changeExpanded()">
+    <mat-card-title><h2>{{lecture.name}}</h2></mat-card-title>
+    <span class="fill-space"></span>
+    <button class="toggle" (click)="changeExpanded()" [class.opened]="expanded === true" mat-icon-button>
+      <mat-icon>arrow_drop_down</mat-icon>
+    </button>
+  </mat-card-header>
+  <mat-card-content>
     <p>{{lecture.description}}</p>
-    <app-unit *ngIf="lecture.units" [units]="lecture.units"></app-unit>
-</ng-container>
+    <div *ngIf="expanded == true" >
+      <app-unit *ngIf="lecture.units" [units]="lecture.units"></app-unit>
+    </div>
+  </mat-card-content>
+</mat-card>

@@ -41,9 +41,9 @@
   </div>
 </div>
 <p>
-  <button mat-button (click)="onCancel()">Cancel</button>
-  <button mat-button color="primary"
+  <button mat-raised-button color="primary"
           (click)="uploadAll()" [disabled]="(!uploader.getNotUploadedItems().length) || (!generalInfo.form.value.name)">
     Upload
   </button>
+  <button mat-button color ="secondary" (click)="onCancel()">Cancel</button>
 </p>
