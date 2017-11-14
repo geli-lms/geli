@@ -75,20 +75,22 @@ export class CodeKataComponent implements OnInit {
     if (!this.progress._id) {
       this.progress.unit = this.codeKata._id;
       this.progress.user = this.userService.user._id;
-      try {
-        const item = await this.progressService.createItem(this.progress);
-        this.snackBar.open('Progress has been saved', '', {duration: 3000});
-        this.progress._id = item._id;
-      } catch (err) {
-        this.snackBar.open(`An error occurred: ${err.json().message}`, '', {duration: 3000});
-      }
+      this.progressService.createItem(this.progress)
+        .then((item) => {
+          this.snackBar.open('Progress has been saved', '', {duration: 3000});
+          this.progress._id = item._id;
+        })
+        .catch((err) => {
+          this.snackBar.open(`An error occurred: ${err.json().message}`, '', {duration: 3000});
+        });
     } else {
-      try {
-        await this.progressService.updateItem(this.progress);
-        this.snackBar.open('Progress has been updated', '', {duration: 3000});
-      } catch (err) {
-        this.snackBar.open(`An error occurred: ${err.json().message}`, '', {duration: 3000})
-      }
+      this.progressService.updateItem(this.progress)
+        .then(() => {
+          this.snackBar.open('Progress has been updated', '', {duration: 3000});
+        })
+        .catch((err) => {
+          this.snackBar.open(`An error occurred: ${err.json().message}`, '', {duration: 3000})
+        });
     }
   }
 
