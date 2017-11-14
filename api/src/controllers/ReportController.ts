@@ -87,7 +87,11 @@ export class ReportController {
               });
 
               progressStats.nothing = courseObj.students.length - progressStats.done - progressStats.tried;
-              unit.progressData = progressStats;
+              unit.progressData = [
+                { name: 'nothing', value: progressStats.nothing },
+                { name: 'tried', value: progressStats.tried },
+                { name: 'done', value: progressStats.done }
+              ];
               unitProgressData.splice(progressIndex, 1);
             }
           })

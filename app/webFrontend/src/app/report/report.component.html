@@ -6,11 +6,15 @@
       <mat-card-title>{{unit.name}}</mat-card-title>
     </mat-card-header>
     <mat-card-content>
-      <!-- TODO: Add chart display -->
+      <div>
+        <ngx-charts-pie-chart
+          [results]="unit.progressData"
+          [doughnut]="true">
+        </ngx-charts-pie-chart>
+      </div>
     </mat-card-content>
     <mat-card-actions align="start">
-      <button mat-button (click)="onAction1">Action1</button>
-
+      <a class="link"><mat-icon>arrow_forward</mat-icon>ABC</a>
     </mat-card-actions>
   </mat-card>
 </div>
