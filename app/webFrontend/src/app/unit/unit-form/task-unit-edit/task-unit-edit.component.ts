@@ -43,8 +43,6 @@ export class TaskUnitEditComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this.model);
-
     if (!this.model) {
       this.model = new TaskUnit(this.course._id);
       this.add = true;
