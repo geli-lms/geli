@@ -15,10 +15,24 @@
         </mat-form-field>
 
         <mat-form-field class="full-width">
-          <input async matInput id="accessKey" placeholder="Access Key" [(ngModel)]="accessKey"
-                 [ngModelOptions]="{standalone: true}">
+          <mat-select name="courseTypes" placeholder="Please select your course type" id="courseTypes" [(ngModel)]="enrollType" (change)="selectType($event)">
+            <mat-option *ngFor="let enrollType of enrollTypes" [value]="enrollType">{{enrollType}}</mat-option>
+          </mat-select><br>
         </mat-form-field>
 
+
+        <p *ngIf="enrollType === 'free'">The course is free and accessible for everyone</p>
+
+
+        <mat-form-field class="full-width" *ngIf="enrollType === 'accesskey'">
+          <p>Enter a accesskey for the students</p>
+          <p>
+          <input async matInput id="accessKey" placeholder="Access Key" [(ngModel)]="accessKey"
+                 [ngModelOptions]="{standalone: true}">
+          </p>
+        </mat-form-field>
+
+        <!--
         <mat-slide-toggle class="slider" (change)="onChangeMode($event)"
                          [checked]="mode">
           <span *ngIf="enrollType === 'free' && !accessKey">Everyone can enroll</span>
@@ -26,6 +40,7 @@
             *ngIf="enrollType === 'free' && accessKey">Everyone can enroll using the access key</span>
           <span *ngIf="enrollType === 'whitelist'">Only whitelisted members can enroll</span>
         </mat-slide-toggle>
+        -->
 
         <div class="csv-upload" *ngIf="enrollType === 'whitelist'">
           <p>Upload your OBS csv file with your course members for whitelisting students.</p>
