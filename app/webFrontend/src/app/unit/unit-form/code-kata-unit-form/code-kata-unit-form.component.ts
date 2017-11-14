@@ -94,6 +94,7 @@ export class CodeKataUnitFormComponent implements OnInit {
       ...this.model,
       name: this.generalInfo.form.value.name,
       description: this.generalInfo.form.value.description,
+      deadline: this.generalInfo.form.value.deadline,
     };
 
     if (this.model._id === undefined) {

@@ -15,7 +15,7 @@ import {BackendService} from './shared/services/backend.service';
 
 import {ShowProgressService} from './shared/services/show-progress.service';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {CodeKataProgressService, ProgressService} from './shared/services/data/progress.service';
+import {ProgressService} from './shared/services/data/progress.service';
 import {MarkdownService} from './shared/services/markdown.service';
 import {AppRoutingModule} from './app-routing.module';
 import {StartModule} from './start/start.module';
@@ -58,7 +58,6 @@ import {AdminModule} from './admin/admin.module';
     MarkdownService,
     FreeTextUnitService,
     CodeKataUnitService,
-    CodeKataProgressService,
     APIInfoService,
   ],
   bootstrap: [AppComponent]
