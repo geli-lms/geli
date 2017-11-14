@@ -1,26 +1,46 @@
 import {
   Authorized,
-  BadRequestError, Body, CurrentUser, Get, JsonController, Param, Post, Put,
+  BadRequestError, Body, CurrentUser, Get, InternalServerError, JsonController, Param, Post, Put,
   UseBefore
 } from 'routing-controllers';
+import * as moment from 'moment';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import {IProgressModel, Progress} from '../models/Progress';
-import {IProgress} from '../../../shared/models/IProgress';
 import {IUser} from '../../../shared/models/IUser';
 import {Unit} from '../models/units/Unit';
-import * as mongoose from 'mongoose';
-import ObjectId = mongoose.Types.ObjectId;
-import {Course} from '../models/Course';
+import {CodeKataProgress} from '../models/CodeKataProgress';
 
 @JsonController('/progress')
 @UseBefore(passportJwtMiddleware)
 @Authorized(['teacher', 'admin'])
 export class ProgressController {
+  private static async getUnit(unitId: string) {
+    return (await Unit.findById(unitId)).toObject();
+  }
+
+  private static checkDeadline(unit: any) {
+    if (unit.deadline && moment(unit.deadline).isBefore()) {
+      throw new BadRequestError('Past deadline, no further update possible');
+    }
+  }
+
+  private static getProgressClassForType(type: string) {
+    const classMappings: any = {
+      'code-kata': CodeKataProgress,
+      'task': Progress,
+    };
+    const hasNoProgressClass = Object.keys(classMappings).indexOf(type) === -1 ;
+    if (hasNoProgressClass) {
+      throw new InternalServerError(`No progress class for type ${type} available`);
+    }
+
+    return classMappings[type];
+  }
 
   @Get('/units/:id')
   getUnitProgress(@Param('id') id: string) {
     return Progress.find({'unit': id})
-    .then((progresses) => progresses.map((progress) => progress.toObject({virtuals: true})));
+      .then((progresses) => progresses.map((progress) => progress.toObject({virtuals: true})));
   }
 
   @Get('/courses/:id')
@@ -32,25 +52,33 @@ export class ProgressController {
   @Get('/users/:id')
   getUserProgress(@Param('id') id: string) {
     return Progress.find({'user': id})
-    .then((progresses) => progresses.map((progress) => progress.toObject({virtuals: true})));
+      .then((progresses) => progresses.map((progress) => progress.toObject({virtuals: true})));
   }
 
   @Post('/')
-  createProgress(@Body() data: any, @CurrentUser() currentUser?: IUser) {
+  async createProgress(@Body() data: any, @CurrentUser() currentUser?: IUser) {
     // discard invalid requests
     if (!data.course || !data.unit || !currentUser) {
       throw new BadRequestError('progress need fields course, user and unit');
     }
+    const unit: any = await ProgressController.getUnit(data.unit);
+    ProgressController.checkDeadline(unit);
 
     data.user = currentUser;
 
-    return new Progress(data).save()
-    .then((progress) => progress.toObject());
+    const progressClass = ProgressController.getProgressClassForType(unit.type);
+    const progress = await new progressClass(data).save();
+
+    return progress.toObject();
   }
 
   @Put('/:id')
-  updateCodeKataUnit(@Param('id') id: string, @Body() unit: IProgress) {
-    return Progress.findByIdAndUpdate(id, unit)
-    .then(u => u.toObject());
+  async updateProgress(@Param('id') id: string, @Body() data: any) {
+    const unit: any = await ProgressController.getUnit(data.unit);
+    ProgressController.checkDeadline(unit);
+    const progressClass = ProgressController.getProgressClassForType(unit.type);
+    const updatedProgress = await progressClass.findByIdAndUpdate(id, data, {'new': true});
+
+    return updatedProgress.toObject();
   }
 }

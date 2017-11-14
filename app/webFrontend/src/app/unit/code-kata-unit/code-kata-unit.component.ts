@@ -1,7 +1,7 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {CodeKataUnit} from '../../models/CodeKataUnit';
 import {MatSnackBar} from '@angular/material';
-import {ProgressService, CodeKataProgressService} from 'app/shared/services/data/progress.service';
+import {ProgressService} from 'app/shared/services/data/progress.service';
 import {ICodeKataProgress} from '../../../../../../shared/models/ICodeKataProgress';
 import {UserService} from '../../shared/services/user.service';
 import {ActivatedRoute} from '@angular/router';
@@ -26,13 +26,12 @@ export class CodeKataComponent implements OnInit {
   testEditor: AceEditorComponent;
 
   logs: string;
-  progress: ICodeKataProgress;
+  progress: any;
   isExampleCode = false;
 
   constructor(private route: ActivatedRoute,
               private snackBar: MatSnackBar,
               private progressService: ProgressService,
-              private codeKataProgressService: CodeKataProgressService,
               private userService: UserService) {
     this.logs = undefined;
     this.progress = {course: '', unit: '', user: '', code: '', done: false};
@@ -67,24 +66,31 @@ export class CodeKataComponent implements OnInit {
     });
   }
 
-  submitProgress() {
+  async submitProgress() {
     this.progress.done = this.validate();
     if (!this.progress.done) {
       this.snackBar.open('Your code does not validate.', '', {duration: 3000});
     }
 
-    if (!this.progress.user || !this.progress.unit) {
+    if (!this.progress._id) {
       this.progress.unit = this.codeKata._id;
       this.progress.user = this.userService.user._id;
-      this.codeKataProgressService.createItem(this.progress)
-        .then(() => this.snackBar.open('Progress has been saved', '', {duration: 3000}))
-        .catch((error) => this.snackBar.open('An error occurred => ' +
-          error.json().message, '', {duration: 3000}));
+      this.progressService.createItem(this.progress)
+        .then((item) => {
+          this.snackBar.open('Progress has been saved', '', {duration: 3000});
+          this.progress._id = item._id;
+        })
+        .catch((err) => {
+          this.snackBar.open(`An error occurred: ${err.json().message}`, '', {duration: 3000});
+        });
     } else {
-      this.codeKataProgressService.updateItem(this.progress)
-        .then(() => this.snackBar.open('Progress has been updated', '', {duration: 3000}))
-        .catch((error) => this.snackBar.open('An error occurred => ' +
-          error.json().message, '', {duration: 3000}));
+      this.progressService.updateItem(this.progress)
+        .then(() => {
+          this.snackBar.open('Progress has been updated', '', {duration: 3000});
+        })
+        .catch((err) => {
+          this.snackBar.open(`An error occurred: ${err.json().message}`, '', {duration: 3000})
+        });
     }
   }
 
