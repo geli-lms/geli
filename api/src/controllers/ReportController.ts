@@ -39,7 +39,8 @@ export class ReportController {
 
     // TODO: Add group by unit for progress objects
     const progressPromise = Progress.aggregate([
-      {$match: { course: new ObjectId(id) }}
+      {$match: { course: new ObjectId(id) }},
+      {$group: { _id: '$unit', progresses: { $push: '$$ROOT' }}}
     ]).exec();
     const promises: Promise<any>[] = [
       coursePromise,
