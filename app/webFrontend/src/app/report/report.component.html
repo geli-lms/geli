@@ -1,6 +1,16 @@
-<p>
-  report works!
-</p>
-<pre>
-  {{ report | json }}
-</pre>
+<h2>Report for {{report?.name}}</h2>
+<div *ngFor="let lecture of report?.lectures">
+  <h3>{{lecture.name}}</h3>
+  <mat-card *ngFor="let unit of lecture.units">
+    <mat-card-header>
+      <mat-card-title>{{unit.name}}</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <!-- TODO: Add chart display -->
+    </mat-card-content>
+    <mat-card-actions align="start">
+      <button mat-button (click)="onAction1">Action1</button>
+
+    </mat-card-actions>
+  </mat-card>
+</div>

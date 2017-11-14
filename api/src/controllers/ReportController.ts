@@ -12,6 +12,7 @@ import * as mongoose from 'mongoose';
 import ObjectId = mongoose.Types.ObjectId;
 import {Course, ICourseModel} from '../models/Course';
 import {Lecture} from '../models/Lecture';
+import {ILecture} from '../../../shared/models/ILecture';
 
 @JsonController('/report')
 @UseBefore(passportJwtMiddleware)
@@ -27,42 +28,79 @@ export class ReportController {
   @Get('/courses/:id')
   getCourseProgress(@Param('id') id: string) {
     const coursePromise = Course.findOne({_id: id})
+    .select({
+      name: 1,
+      lectures: 1,
+      students: 1
+    })
     .populate({
       path: 'lectures',
       populate: {
-        path: 'units',
-        match: { progressable: { $eq: true }}
+        path: 'units'
+      },
+      select: {
+        name: 1,
+        units: 1
       }
     })
     .populate('students')
     .exec();
 
-    // TODO: Add group by unit for progress objects
     const progressPromise = Progress.aggregate([
       {$match: { course: new ObjectId(id) }},
       {$group: { _id: '$unit', progresses: { $push: '$$ROOT' }}}
     ]).exec();
+
     const promises: Promise<any>[] = [
       coursePromise,
       progressPromise
     ];
 
     return Promise.all(promises)
-      .then(([course, progresses]) => {
-        const debug = 0;
-      })
-    /*
-    .then((course: ICourseModel) => {
-      course.lectures = course.lectures.filter((lecture) => {
-        return lecture.units.length > 0 ? true : false;
-      });
-      course.lectures.map((lecture) => {
-        lecture.units.map((unit: IUnitModel) => {
-          return unit.populate('progress');
+      .then(([course, unitProgressData]) => {
+        const courseObj = course.toObject();
+        courseObj.lectures = courseObj.lectures.filter((lecture: ILecture) => {
+          lecture.units = lecture.units.filter((unit) => {
+            return unit.progressable;
+          });
+          return lecture.units.length > 0;
         });
+        courseObj.lectures.map((lecture: ILecture) => {
+          lecture.units.map((unit) => {
+            const progressIndex = unitProgressData.findIndex((unitProgress: any) => {
+              return unitProgress._id.toString() === unit._id.toString();
+            });
+
+            if (progressIndex > -1) {
+              const progressStats = {
+                nothing: 0,
+                tried: 0,
+                done: 0
+              };
+              const unitProgressObj = unitProgressData[progressIndex];
+              unitProgressObj.progresses.forEach((progressObj: IProgress) => {
+                if (progressObj.done) {
+                  progressStats.done++;
+                } else {
+                  progressStats.tried++;
+                }
+              });
+
+              progressStats.nothing = courseObj.students.length - progressStats.done - progressStats.tried;
+              unit.progressData = progressStats;
+              unitProgressData.splice(progressIndex, 1);
+            }
+          })
+        });
+
+        return courseObj;
+      })
+      .then((courseWithProgress) => {
+        return courseWithProgress;
+      })
+      .catch((err) => {
+        console.log(err);
       });
-      return course.toObject();
-    });*/
   }
 
   @Get('/users/:id')

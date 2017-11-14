@@ -33,6 +33,7 @@ export class ReportComponent implements OnInit {
         this.report = report;
       })
       .catch((err) => {
+        console.log(err);
       });
   }
 }
