@@ -43,7 +43,7 @@ export class CourseContainerComponent implements OnInit {
   enrollCallback({courseId, accessKey}) {
     this.courseService.enrollStudent(courseId, {
       user: this.userService.user,
-      accessKey: accessKey
+      accessKey
     }).then((res) => {
       this.snackBar.open('Successfully enrolled', '', {duration: 5000});
       // reload courses to update enrollment status
