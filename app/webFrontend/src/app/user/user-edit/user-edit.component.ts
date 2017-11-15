@@ -31,6 +31,10 @@ export class UserEditComponent implements OnInit {
     this.generateForm();
   }
 
+  userIsAdmin() : boolean {
+    return this.userService.isAdmin();
+  }
+
   ngOnInit() {
     this.route.params.subscribe(params => {
       this.id = decodeURIComponent(params['id']);
