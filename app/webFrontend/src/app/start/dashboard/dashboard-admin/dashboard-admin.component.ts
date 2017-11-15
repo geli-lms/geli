@@ -1,34 +1,17 @@
-import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import {ICourse} from '../../../../../../../shared/models/ICourse';
-import {MatDialog, MatSnackBar} from '@angular/material';
-import {UserService} from '../../../shared/services/user.service';
-import {Router} from '@angular/router';
+import {Component} from '@angular/core';
+import {DashboardBaseComponent} from '../dashboard-base-component';
 
 @Component({
   selector: 'app-dashboard-admin',
   templateUrl: './dashboard-admin.component.html',
   styleUrls: ['./dashboard-admin.component.scss']
 })
-export class DashboardAdminComponent implements OnInit {
+export class DashboardAdminComponent extends DashboardBaseComponent {
 
-  @Input()
-  allCourses: ICourse[];
-
-  @Output()
-  onEnroll = new EventEmitter();
-
-  constructor(public userService: UserService,
-              private router: Router,
-              private dialog: MatDialog,
-              private snackBar: MatSnackBar) {
+  constructor() {
+    super();
   }
 
   ngOnInit() {
   }
-
-  enrollCallback() {
-    this.onEnroll.emit();
-  }
-
-
 }
