@@ -1,0 +1,3 @@
+<div *ngFor="let file of videoUnit.files;">
+  <video src="{{'/api/uploads/' + file.name}}" controls></video>
+</div>

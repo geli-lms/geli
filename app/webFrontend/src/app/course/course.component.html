@@ -1,2 +1,32 @@
+<mat-card *ngIf="course" class="course-card">
+  <mat-card-header>
+    <mat-card-title><h2 title="{{course.name}}">{{course.name}}</h2></mat-card-title>
+  </mat-card-header>
+  <img mat-card-image src="/assets/course-header-image.jpg">
+  <mat-card-content>
+    <p>
+      {{course.description}}
+    </p>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-icon-button *ngIf="this.userService.isStudent() && !this.isMemberOfCourse(course)"
+            (click)="apply(course._id, course.hasAccessKey)" matTooltip="Enroll">
+      <mat-icon>add_circle_outline</mat-icon>
+    </button>
 
+    <button mat-icon-button (click)="editCourse(course._id)"
+            *ngIf="isCourseTeacherOrAdmin(course)">
+      <mat-icon>mode_edit</mat-icon>
+    </button>
 
+    <button mat-icon-button (click)="showReport(course._id)"
+            *ngIf="isCourseTeacherOrAdmin(course)">
+      <mat-icon>show_chart</mat-icon>
+    </button>
+
+    <button mat-mini-fab *ngIf="isCourseTeacherOrAdmin(course) || isMemberOfCourse(course)"
+            color="primary" class="details-button" [routerLink]="['course', course._id]">
+      <mat-icon>arrow_forward</mat-icon>
+    </button>
+  </mat-card-actions>
+</mat-card>

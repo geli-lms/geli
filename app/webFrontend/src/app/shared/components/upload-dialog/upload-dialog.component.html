@@ -1,0 +1,30 @@
+<mat-tab-group *ngIf="!showProgressBar" (selectChange)="changedTab($event)">
+  <mat-tab label="Upload image">
+    <div class="tab-content">
+      <input type="file" name="fileupload" ng2FileSelect [uploader]="uploader" placeholder="Upload picture"/>
+      <button mat-raised-button color="primary" disabled="{{!uploader.queue.length}}" (click)="uploadImage()">Upload picture</button>
+      <button mat-raised-button color="warn" (click)="cancel()">Cancel</button>
+    </div>
+  </mat-tab>
+  <mat-tab id="webcam-tab" label="Take webcam picture">
+    <div class="tab-content">
+      <div class="camera">
+        <video #webcam>No video stream is available.</video>
+      </div>
+      <p>
+        <button mat-raised-button color="primary" (click)="takePicture()">Take picture</button>
+      </p>
+      <div class="preview">
+        <h3 *ngIf="pictureTaken">Preview image</h3>
+        <img #preview>
+      </div>
+      <button mat-raised-button color="accent" disabled="{{!pictureTaken}}" (click)="addImage()">Upload picture</button>
+      <button mat-raised-button color="warn" (click)="cancel()">Cancel</button>
+    </div>
+  </mat-tab>
+</mat-tab-group>
+<div *ngIf="showProgressBar">
+  <h2>Uploading...</h2>
+  <mat-progress-bar mode="determinate" [value]="uploader.progress"></mat-progress-bar>
+  <button mat-raised-button class="btn-cancel-upload" color="warn" (click)="cancel()">Cancel</button>
+</div>

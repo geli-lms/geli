@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import { DataService } from '../data.service';
+import {Injectable} from '@angular/core';
+import {DataService} from '../data.service';
 import {BackendService} from '../backend.service';
 
 @Injectable()
@@ -30,12 +30,5 @@ export class ProgressService extends DataService {
     const promise = this.readSingleItem(userId);
     this.apiPath = originalApiPath;
     return promise;
-  }
-}
-
-@Injectable()
-export class CodeKataProgressService extends DataService {
-  constructor(public backendService: BackendService) {
-    super('progress/code-katas/', backendService);
   }
 }

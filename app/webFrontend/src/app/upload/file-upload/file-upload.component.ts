@@ -1,11 +1,11 @@
 import {Component, OnInit, Input, ChangeDetectorRef, ViewChild} from '@angular/core';
-import {MdSnackBar} from '@angular/material';
+import {MatSnackBar} from '@angular/material';
 import {FileUploader, FileItem} from 'ng2-file-upload';
 import {ICourse} from '../../../../../../shared/models/ICourse';
 import {ILecture} from '../../../../../../shared/models/ILecture';
 import {IFileUnit} from '../../../../../../shared/models/units/IFileUnit';
 /* tslint:disable-next-line:max-line-length */
-import {UnitGeneralInfoFormComponent} from '../../course/course-edit/unit/unit-edit/unit-general-info-form/unit-general-info-form.component';
+import {UnitGeneralInfoFormComponent} from '../../unit/unit-form/unit-general-info-form/unit-general-info-form.component';
 import {UnitService} from '../../shared/services/data.service';
 
 @Component({
@@ -34,7 +34,7 @@ export class FileUploadComponent implements OnInit {
   first = true;
   error = false;
 
-  constructor(public snackBar: MdSnackBar,
+  constructor(public snackBar: MatSnackBar,
               private unitService: UnitService,
               private ref: ChangeDetectorRef) {
     this.uploader.onProgressItem = (fileItem: FileItem, progress: any) => {

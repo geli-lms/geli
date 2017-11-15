@@ -1,0 +1,15 @@
+:host {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.reset-card {
+  width: 100%;
+  max-width: 400px;
+
+  .mat-form-field {
+    width: 100%;
+  }
+}

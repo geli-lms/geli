@@ -1,0 +1,22 @@
+<div *ngFor="let unit of units;">
+  <mat-card class="unit-card">
+    <mat-card-title class="unit-card-title">
+      {{unit.name}}
+    </mat-card-title>
+    <mat-card-subtitle class="unit-card-subtitle">
+      {{unit.description}}
+    </mat-card-subtitle>
+    <span *ngIf="unit.progressable && unit.deadline"
+          class="deadline {{selectColorForDeadline(unit.deadline)}}"
+          matTooltip="{{getFormattedDeadline(unit.deadline)}}">
+      {{getDeadlineDiffText(unit.deadline)}}<strong>{{getDeadlineDiffTime(unit.deadline)}}</strong>
+    </span>
+    <mat-card-content>
+      <app-video-unit *ngIf="unit.type === 'video'" [videoUnit]="unit"></app-video-unit>
+      <app-file-unit *ngIf="unit.type === 'file'" [fileUnit]="unit"></app-file-unit>
+      <app-task-unit *ngIf="unit.type === 'task'" [taskUnit]="unit"></app-task-unit>
+      <app-code-kata *ngIf="unit.type === 'code-kata'" [codeKata]="unit"></app-code-kata>
+      <app-free-text-unit *ngIf="unit.type === 'free-text'" [freeTextUnit]="unit"></app-free-text-unit>
+    </mat-card-content>
+  </mat-card>
+</div>

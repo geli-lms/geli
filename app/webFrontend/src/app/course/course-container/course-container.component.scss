@@ -1,0 +1,33 @@
+@import "../../../variables";
+@import "../../../breakpoints";
+
+.courses {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  margin: -8px;
+
+  @include bp(sm) {
+    flex-direction: row;
+  }
+}
+
+.title-header {
+  display: flex;
+  cursor: pointer;
+  align-items: center;
+
+  .flex-spacer {
+    flex-grow: 1;
+  }
+}
+
+.open-toggle {
+  color: map-get($app-primary, 'default');
+  transition: transform 0.3s;
+  float: right;
+  transform: rotate(-90deg);
+  &.opened {
+    transform: rotate(0);
+  }
+}

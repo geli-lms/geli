@@ -1,26 +1,18 @@
 <div class="progress-container" *ngFor="let student of report">
   <div class="header">
     <div class="progress-bar">
-      <md-progress-bar mode="determinate" [value]="student.completeRate" color="primary"></md-progress-bar>
+      <mat-progress-bar mode="determinate" [value]="student.completeRate" color="primary"></mat-progress-bar>
       <span class="progress-text">{{student.finishCount}} von {{student.units.length}} Aufgaben erledigt</span>
     </div>
-    <div class="profile">
-      <span class="user-icon" [grav]="student.email"></span>
-      <h3 class="name">{{student.profile.firstName}} {{student.profile.lastName}}</h3>
-      <div class="user-data">
-        <label>E-Mail:</label>
-        <span>{{student.email}}</span>
-        <span>Matrikelnummer: {{student.uid}}</span>
-      </div>
-    </div>
+    <app-user-profile [user]="student" [userId]="this.userService.user._id"></app-user-profile>
   </div>
   <div class="content">
     <div class="unit-progress" *ngFor="let unit of student.units">
       <h3 class="unit-name">{{unit.name}}</h3>
-      <span *ngIf="unit.progress?.done"><md-icon>check</md-icon>Done</span>
+      <span *ngIf="unit.progress?.done"><mat-icon>check</mat-icon>Done</span>
       <button class="open-toggle" (click)="openToggleLecture(lecture)"
-              [class.opened]="openedLecture && lecture._id === openedLecture._id" md-icon-button>
-        <md-icon>arrow_drop_down</md-icon>
+              [class.opened]="openedLecture && lecture._id === openedLecture._id" mat-icon-button>
+        <mat-icon>arrow_drop_down</mat-icon>
       </button>
     </div>
     <div>

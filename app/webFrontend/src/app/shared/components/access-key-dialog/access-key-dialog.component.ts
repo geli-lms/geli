@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {MdDialogRef} from '@angular/material';
+import {MatDialogRef} from '@angular/material';
 
 @Component({
   selector: 'access-key-dialog',
@@ -8,5 +8,7 @@ import {MdDialogRef} from '@angular/material';
 })
 export class AccessKeyDialog {
   public accessKey: string;
-  constructor(public dialogRef: MdDialogRef<AccessKeyDialog>) {}
+
+  constructor(public dialogRef: MatDialogRef<AccessKeyDialog>) {
+  }
 }

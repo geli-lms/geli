@@ -2,7 +2,6 @@
 
 .container {
   min-height: 500px;
-  padding-top: 10px;
 }
 
 .fab {
@@ -69,15 +68,15 @@
     align-items: center;
 
     .unit-name {
-      flex-grow: 0.7;
+      flex: 1;
     }
 
     .unit-type {
-      flex-grow: 0.3;
+      flex: 1;
     }
 
     .unit-date {
-      flex-grow: 0.1;
+      flex: 1;
     }
 
     .unit-date, .unit-actions .mat-icon {

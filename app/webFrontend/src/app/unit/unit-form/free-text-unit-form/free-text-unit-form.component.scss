@@ -1,0 +1,14 @@
+@import '../../../../breakpoints';
+
+
+mat-form-field {
+  width: 100%;
+
+  @include bp(md) {
+    width: 60%;
+  }
+}
+
+.btn-wrapper {
+  padding-top: 1em;
+}

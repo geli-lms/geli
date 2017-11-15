@@ -1,3 +1,4 @@
+// tslint:disable:max-line-length
 import {Dependency} from './dependency.model';
 
 // Contains all Dependencies

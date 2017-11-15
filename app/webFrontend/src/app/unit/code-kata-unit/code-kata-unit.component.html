@@ -1,0 +1,36 @@
+<div class="code-kata-unit-form">
+  <strong>Code-Kata</strong>
+  <ace-editor
+    #definitionEditor
+    [(text)]="codeKata.definition"
+    [mode]="'javascript'"
+    [theme]="'github'"
+    [readOnly]="true">
+  </ace-editor>
+  <div *ngIf="!isExampleCode">Your code goes here:</div>
+  <div *ngIf="isExampleCode">This is the provided example solution:</div>
+  <ace-editor class="user-code-editor"
+              #codeEditor
+              [(text)]="codeKata.code || progress.code"
+              [mode]="'javascript'"
+              [theme]="'github'"
+              [readOnly]="isExampleCode"
+              [durationBeforeCallback]="333"
+              (textChanged)="onUserInput()">
+  </ace-editor>
+  <div>These tests need to success:</div>
+  <ace-editor
+    #testEditor
+    [(text)]="codeKata.test"
+    [mode]="'javascript'"
+    [theme]="'github'"
+    [readOnly]="true">
+  </ace-editor>
+
+  <div *ngIf="!isExampleCode">
+    <button mat-button (click)="validate()">Validate</button>
+    <button mat-button color="primary" class="submit-progress" (click)="submitProgress()">Submit</button>
+  </div>
+  <div *ngIf="logs!==undefined"><strong>Logs</strong></div>
+  <pre>{{logs}}</pre>
+</div>

@@ -1,11 +1,28 @@
 import {
   Body, JsonController, UseBefore, Get, Param, Put, Delete, Authorized, CurrentUser,
-  BadRequestError, ForbiddenError
+  BadRequestError, ForbiddenError, UploadedFile, Post
 } from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
+import fs = require('fs');
 
 import {IUser} from '../../../shared/models/IUser';
 import {IUserModel, User} from '../models/User';
+const multer = require('multer');
+
+const uploadOptions = {
+  storage: multer.diskStorage({
+    destination: (req: any, file: any, cb: any) => {
+      cb(null, 'uploads/users/');
+    },
+    filename: (req: any, file: any, cb: any) => {
+      const id = req.params.id;
+      const randomness = '-' + (Math.floor(Math.random() * 8999) + 1000);
+      const extPos = file.originalname.lastIndexOf('.');
+      const ext = (extPos !== -1) ? `.${file.originalname.substr(extPos + 1).toLowerCase()}` : '';
+      cb(null, id + randomness + ext);
+    }
+  }),
+};
 
 @JsonController('/users')
 @UseBefore(passportJwtMiddleware)
@@ -36,6 +53,30 @@ export class UserController {
       });
   }
 
+  @Post('/picture/:id')
+  addUserPicture(@UploadedFile('file', {options: uploadOptions}) file: any, @Param('id') id: string, @Body() data: any,
+                 @CurrentUser() currentUser: IUser) {
+    return User.findById(id)
+      .then((user: IUserModel) => {
+        if (user.profile.picture && user.profile.picture.path && fs.existsSync(user.profile.picture.path)) {
+          fs.unlinkSync(user.profile.picture.path);
+        }
+
+        user.profile.picture = {
+          path: file.path,
+          name: file.filename,
+          alias: file.originalname
+        };
+        return user.save();
+      })
+      .then((user) => {
+        return this.cleanUserObject(id, user, currentUser);
+      })
+      .catch((error) => {
+        throw new BadRequestError(error);
+      });
+  }
+
   @Put('/:id')
   updateUser(@Param('id') id: string, @Body() user: any, @CurrentUser() currentUser?: IUser) {
     return User.find({'role': 'admin'})
@@ -54,7 +95,6 @@ export class UserController {
           throw new BadRequestError('This mail address is already in use.');
         } else {
           return User.findById(id);
-          // return User.findByIdAndUpdate(id, user, {'new': true});
         }
       })
       .then((oldUser: IUserModel) => {
@@ -75,7 +115,7 @@ export class UserController {
           if (!isValidPassword && user.password.length > 0) {
             throw new BadRequestError('You must specify your current password if you want to set a new password.');
           } else {
-            if (user.password === 0) {
+            if (user.password.length === 0) {
               delete user.password;
             }
             return User.findOneAndUpdate({'_id': id}, user, {new: true});
@@ -89,17 +129,29 @@ export class UserController {
       });
   }
 
+  @Authorized('admin')
+  @Delete('/:id')
+  deleteUser(@Param('id') id: string) {
+    return User.find({'role': 'admin'})
+    .then((adminUsers) => {
+      if (adminUsers.length === 1 &&
+        adminUsers[0].get('id') === id &&
+        adminUsers[0].role === 'admin') {
+        throw new BadRequestError('There are no other users with admin privileges.');
+      } else {
+        return User.findByIdAndRemove(id);
+      }
+    })
+    .then(() => {
+      return {result: true};
+    });
+  }
+
   private cleanUserObject(id: string, user: IUserModel, currentUser?: IUser) {
     user.password = '';
     if (currentUser._id !== id && (currentUser.role !== <string>'teacher' || currentUser.role !== <string>'admin')) {
       user.uid = null;
     }
     return user.toObject({virtuals: true});
-  }
-
-  @Authorized('admin')
-  @Delete('/:id')
-  deleteUser(@Param('id') id: string) {
-    return User.findByIdAndRemove(id);
   }
 }

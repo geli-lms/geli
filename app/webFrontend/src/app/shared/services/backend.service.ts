@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
-import {Http, Headers, Response} from '@angular/http';
+import {Http, Response} from '@angular/http';
 
-import {Observable} from 'rxjs/Rx';
+import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/observable/throw';
@@ -22,32 +22,32 @@ export class BackendService {
     }
 
     return Observable.throw(err);
-  }
+  };
 
   get(serviceUrl: string): Observable<Response> {
     return this.http.get(BackendService.API_URL + serviceUrl, {headers: this.authenticationService.authHeader()})
-      .catch(this.handleUnauthorized)
-      .map(response => response.json());
+    .catch(this.handleUnauthorized)
+    .map(response => response.json());
   }
 
   post(serviceUrl: string, options: any): Observable<Response> {
     return this.http.post(BackendService.API_URL + serviceUrl, options, {headers: this.authenticationService.authHeader()})
-      .catch(this.handleUnauthorized)
-      .map(response => response.json());
+    .catch(this.handleUnauthorized)
+    .map(response => response.json());
   }
 
   put(serviceUrl: string, options: any): Observable<Response> {
 
     return this.http.put(BackendService.API_URL + serviceUrl, options, {headers: this.authenticationService.authHeader()})
-      .catch(this.handleUnauthorized)
-      .map(response => response.json());
+    .catch(this.handleUnauthorized)
+    .map(response => response.json());
 
   }
 
   delete(serviceUrl: string): Observable<Response> {
     return this.http.delete(BackendService.API_URL + serviceUrl, {headers: this.authenticationService.authHeader()})
-      .catch(this.handleUnauthorized)
-      .map(response => response.json());
+    .catch(this.handleUnauthorized)
+    .map(response => response.json());
 
   }
 
