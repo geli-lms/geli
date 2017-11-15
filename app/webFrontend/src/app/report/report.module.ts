@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { ReportComponent } from './report.component';
 import {SharedModule} from '../shared/shared.module';
 import {NgxChartsModule} from '@swimlane/ngx-charts';
+import { UnitReportComponent } from './unit-report/unit-report.component';
+import { UserReportComponent } from './user-report/user-report.component';
 
 @NgModule({
   imports: [
@@ -10,6 +12,6 @@ import {NgxChartsModule} from '@swimlane/ngx-charts';
     SharedModule,
     NgxChartsModule
   ],
-  declarations: [ReportComponent]
+  declarations: [ReportComponent, UnitReportComponent, UserReportComponent]
 })
 export class ReportModule { }

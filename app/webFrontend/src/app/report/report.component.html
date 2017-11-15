@@ -7,14 +7,15 @@
     </mat-card-header>
     <mat-card-content>
       <div>
-        <ngx-charts-pie-chart
+        <ngx-charts-advanced-pie-chart
+          [view]="[800, 200]"
           [results]="unit.progressData"
-          [doughnut]="true">
-        </ngx-charts-pie-chart>
+          [scheme]="diagramColors">
+        </ngx-charts-advanced-pie-chart>
       </div>
     </mat-card-content>
     <mat-card-actions align="start">
-      <a class="link"><mat-icon>arrow_forward</mat-icon>ABC</a>
+      <span><mat-icon>arrow_forward</mat-icon><a class="link">Show unit details</a></span>
     </mat-card-actions>
   </mat-card>
 </div>

@@ -13,7 +13,10 @@ export class ReportComponent implements OnInit {
 
   private id: string;
 
-  public report: any
+  public report: any;
+  public diagramColors = {
+    domain: ['#A10A28', '#C7B42C', '#5AA454']
+  };
 
   constructor(
     public userService: UserService,
