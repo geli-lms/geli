@@ -6,6 +6,7 @@ import {DialogModule} from './modules/dialog.module';
 import {UnitMenuComponent} from './components/unit-menu/unit-menu.component';
 import {UserImageDirective} from './directives/user-image.directive';
 import {MaterialImportModule} from './modules/material-import.module';
+import { BadgeComponent } from './components/badge/badge.component';
 
 @NgModule({
   imports: [
@@ -18,6 +19,7 @@ import {MaterialImportModule} from './modules/material-import.module';
     GravatarDirective,
     UnitMenuComponent,
     UserImageDirective,
+    BadgeComponent
   ],
   exports: [
     GravatarDirective,
@@ -25,6 +27,7 @@ import {MaterialImportModule} from './modules/material-import.module';
     UnitMenuComponent,
     UserImageDirective,
     MaterialImportModule,
+    BadgeComponent
   ]
 })
 export class SharedModule {
