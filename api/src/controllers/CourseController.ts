@@ -66,8 +66,6 @@ export class CourseController {
       .then(courses => courses.map(course => {
         const courseObject: any = course.toObject();
 
-        throw new Error('Hello sentry!');
-
         if (currentUser.role === 'student') {
           delete courseObject.courseAdmin;
 

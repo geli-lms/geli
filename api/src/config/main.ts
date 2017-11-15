@@ -28,4 +28,5 @@ export default {
   nonProductionWarning: process.env.NONPRODUCTIONWARNING || undefined,
 
   sentryDsn: process.env.SENTRY_DSN,
+  sentryDsnPublic: process.env.SENTRY_DSN_PUBLIC,
 };

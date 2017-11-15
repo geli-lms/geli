@@ -1,9 +1,10 @@
 import {BrowserModule} from '@angular/platform-browser';
-import {NgModule} from '@angular/core';
+import {ErrorHandler, NgModule} from '@angular/core';
 import {HttpModule} from '@angular/http';
 
 import {AppComponent} from './app.component';
 
+import {RavenErrorHandler} from './shared/services/raven-error-handler.service';
 import {UserService} from './shared/services/user.service';
 import {AuthenticationService} from './shared/services/authentication.service';
 import {AuthGuardService} from './shared/services/auth-guard.service';
@@ -59,6 +60,11 @@ import {AdminModule} from './admin/admin.module';
     FreeTextUnitService,
     CodeKataUnitService,
     APIInfoService,
+    RavenErrorHandler,
+    {
+      provide: ErrorHandler,
+      useExisting: RavenErrorHandler
+    },
   ],
   bootstrap: [AppComponent]
 })
