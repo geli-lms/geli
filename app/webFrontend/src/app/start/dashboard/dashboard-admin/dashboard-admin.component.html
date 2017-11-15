@@ -1,3 +1,6 @@
-<p>
-  dashboard-admin works!
-</p>
+<app-course-container [title]="'Courses'" [courses]="allCourses" [expand]="true" (onEnroll)="enrollCallback()"></app-course-container>
+
+<a mat-fab class="add-course-fab"
+   routerLink="course/new" matTooltip="Add course" matTooltipPosition="left">
+  <mat-icon>add</mat-icon>
+</a>
