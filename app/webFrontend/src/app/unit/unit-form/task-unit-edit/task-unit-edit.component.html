@@ -15,12 +15,6 @@
     </mat-form-field>
 
     <div class="actions">
-      <button mat-icon-button (click)="addAnswerAtEnd(task)">
-        <mat-icon color="accent">add</mat-icon>
-      </button>
-      <button mat-icon-button (click)="removeLastAnswer(task)">
-        <mat-icon>remove</mat-icon>
-      </button>
       <button mat-button (click)="updateTask(task)">UPDATE</button>
       <button mat-button (click)="removeTask(task)">DELETE</button>
     </div>
@@ -34,17 +28,24 @@
           </mat-form-field>
         </div>
       </div>
-
+      <button mat-icon-button (click)="addAnswerAtEnd(task)" matTooltip="Add answer" matTooltipPosition="right">
+        <mat-icon color="accent">add</mat-icon>
+      </button>
+      <button mat-icon-button (click)="removeLastAnswer(task)" matTooltip="Remove last answer" matTooltipPosition="right">
+        <mat-icon>remove</mat-icon>
+      </button>
     </div>
 
   </div>
   <p>
+    <button mat-mini-fab (click)="addTask()" matTooltip="Add task" matTooltipPosition="right">
+      <mat-icon>add</mat-icon>
+    </button>
+  </p>
+  <p>
     <button mat-button (click)="onCancel()" type="reset">Cancel</button>
     <button mat-button color="primary" class="add-unit" (click)="addUnit()" type="submit">Save</button>
   </p>
-  <button mat-mini-fab class="add-task-fab" (click)="addTask()" matTooltip="Add task" matTooltipPosition="right">
-    <mat-icon>add</mat-icon>
-  </button>
 </div>
 
 
