@@ -7,6 +7,7 @@ import {Unit} from '../models/units/Unit';
 import {IUnit} from '../../../shared/models/units/IUnit';
 import {IVideoUnitModel, VideoUnit} from '../models/units/VideoUnit';
 import {IFileUnitModel, FileUnit} from '../models/units/FileUnit';
+import {TaskUnit} from '../models/units/TaskUnit';
 
 const uploadOptions = {dest: 'uploads/'};
 
@@ -67,6 +68,9 @@ export class UnitBaseController {
           }
         });
         return FileUnit;
+      }
+      if (oldUnit instanceof TaskUnit) {
+        return TaskUnit;
       }
       return Unit;
     }).then((model) => model.findByIdAndUpdate(id, unit, {'new': true}))

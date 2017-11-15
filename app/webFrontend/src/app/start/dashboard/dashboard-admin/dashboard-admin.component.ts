@@ -1,71 +1,17 @@
-import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import {ICourse} from '../../../../../../../shared/models/ICourse';
-import {MatDialog, MatSnackBar} from '@angular/material';
-import {UserService} from '../../../shared/services/user.service';
-import {Router} from '@angular/router';
+import {Component} from '@angular/core';
+import {DashboardBaseComponent} from '../dashboard-base-component';
 
 @Component({
   selector: 'app-dashboard-admin',
   templateUrl: './dashboard-admin.component.html',
   styleUrls: ['./dashboard-admin.component.scss']
 })
-export class DashboardAdminComponent implements OnInit {
+export class DashboardAdminComponent extends DashboardBaseComponent {
 
-  @Input()
-  allCourses: ICourse[];
-
-  myCourses: ICourse[];
-  availableCourses: ICourse[];
-  furtherCourses: ICourse[];
-
-  @Output()
-  onEnroll = new EventEmitter();
-
-  constructor(public userService: UserService,
-              private router: Router,
-              private dialog: MatDialog,
-              private snackBar: MatSnackBar) {
-    this.myCourses = [];
-    this.furtherCourses = [];
-    this.availableCourses = [];
+  constructor() {
+    super();
   }
 
   ngOnInit() {
-
   }
-
-  ngOnChanges() {
-    this.sortCourses();
-  }
-
-  sortCourses() {
-    this.myCourses = [];
-    this.furtherCourses = [];
-    this.availableCourses = [];
-
-
-    for (const course of this.allCourses) {
-      if (this.filterAdminCourses(course)) {
-        this.myCourses.push(course);
-      } else if (this.filterMyCourses(course)) {
-        this.furtherCourses.push(course);
-      } else {
-        this.availableCourses.push(course);
-      }
-    }
-  }
-
-  filterAdminCourses(course: ICourse) {
-    return (course.courseAdmin._id === this.userService.user._id);
-  }
-
-  filterMyCourses(course: ICourse) {
-    return course.teachers.filter(teacher => teacher._id === this.userService.user._id);
-  }
-
-  enrollCallback() {
-    this.onEnroll.emit();
-  }
-
-
 }

@@ -30,6 +30,8 @@ export class TaskUnitEditComponent implements OnInit {
   @Input()
   onCancel: () => void;
 
+  add = false;
+
   @ViewChild(UnitGeneralInfoFormComponent)
   private generalInfo: UnitGeneralInfoFormComponent;
 
@@ -41,10 +43,9 @@ export class TaskUnitEditComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this.model);
-
     if (!this.model) {
       this.model = new TaskUnit(this.course._id);
+      this.add = true;
     }
 
     this.loadTasksFromServer();
@@ -60,15 +61,22 @@ export class TaskUnitEditComponent implements OnInit {
     });
   }
 
-  addUnit() {
-    this.unitService.addTaskUnit({
+  saveUnit() {
+    const taskToSend = {
+      ...this.model,
       name: this.generalInfo.form.value.name,
       description: this.generalInfo.form.value.description,
-      ...this.model
-    }, this.lectureId)
-    .then(
+      deadline: this.generalInfo.form.value.deadline,
+    };
+    let taskPromise = null;
+    if (this.add) {
+      taskPromise = this.unitService.addTaskUnit(taskToSend, this.lectureId)
+    } else {
+      taskPromise = this.unitService.updateItem(taskToSend);
+    }
+    taskPromise.then(
       (task) => {
-        this.snackBar.open('Task created', '', {duration: 3000});
+        this.snackBar.open(`Task ${this.add ? 'created' : 'updated'}`, '', {duration: 3000});
         this.onDone();
       },
       (error) => {

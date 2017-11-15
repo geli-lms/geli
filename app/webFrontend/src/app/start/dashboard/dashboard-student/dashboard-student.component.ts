@@ -1,31 +1,21 @@
-import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
+import {Component} from '@angular/core';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
-import {MatDialog, MatSnackBar} from '@angular/material';
 import {UserService} from '../../../shared/services/user.service';
-import {Router} from '@angular/router';
+import {DashboardBaseComponent} from '../dashboard-base-component';
+
 
 @Component({
   selector: 'app-dashboard-student',
   templateUrl: './dashboard-student.component.html',
   styleUrls: ['./dashboard-student.component.scss']
 })
-export class DashboardStudentComponent implements OnInit {
-
-  @Input()
-  allCourses: ICourse[];
+export class DashboardStudentComponent extends DashboardBaseComponent {
 
   myCourses: ICourse[];
   availableCourses: ICourse[];
 
-  @Output()
-  onEnroll = new EventEmitter();
-
-  constructor(public userService: UserService,
-              private router: Router,
-              private dialog: MatDialog,
-              private snackBar: MatSnackBar) {
-    this.myCourses = [];
-    this.availableCourses = [];
+  constructor(public userService: UserService) {
+    super();
   }
 
   ngOnInit() {
@@ -52,7 +42,4 @@ export class DashboardStudentComponent implements OnInit {
     return course.students.filter(obj => obj._id === user._id).length > 0;
   }
 
-  enrollCallback() {
-    this.onEnroll.emit();
-  }
 }

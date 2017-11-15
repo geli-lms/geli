@@ -6,6 +6,11 @@
     <mat-card-subtitle class="unit-card-subtitle">
       {{unit.description}}
     </mat-card-subtitle>
+    <span *ngIf="unit.progressable && unit.deadline"
+          class="deadline {{selectColorForDeadline(unit.deadline)}}"
+          matTooltip="{{getFormattedDeadline(unit.deadline)}}">
+      {{getDeadlineDiffText(unit.deadline)}}<strong>{{getDeadlineDiffTime(unit.deadline)}}</strong>
+    </span>
     <mat-card-content>
       <app-video-unit *ngIf="unit.type === 'video'" [videoUnit]="unit"></app-video-unit>
       <app-file-unit *ngIf="unit.type === 'file'" [fileUnit]="unit"></app-file-unit>

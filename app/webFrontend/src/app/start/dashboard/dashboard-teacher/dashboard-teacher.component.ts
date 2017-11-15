@@ -1,36 +1,21 @@
-import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
+import {Component} from '@angular/core';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
-import {MatDialog, MatSnackBar} from '@angular/material';
 import {UserService} from '../../../shared/services/user.service';
-import {Router} from '@angular/router';
+import {DashboardBaseComponent} from '../dashboard-base-component';
 
 @Component({
   selector: 'app-dashboard-teacher',
   templateUrl: './dashboard-teacher.component.html',
   styleUrls: ['./dashboard-teacher.component.scss']
 })
-export class DashboardTeacherComponent implements OnInit {
-
-  @Input()
-  allCourses: ICourse[];
+export class DashboardTeacherComponent extends DashboardBaseComponent {
 
   myCourses: ICourse[];
   furtherCourses: ICourse[];
   availableCourses: ICourse[];
 
-  @Output()
-  onEnroll = new EventEmitter();
-
-  constructor(public userService: UserService,
-              private router: Router,
-              private dialog: MatDialog,
-              private snackBar: MatSnackBar) {
-    this.myCourses = [];
-    this.furtherCourses = [];
-    this.availableCourses = [];
-  }
-
-  ngOnInit() {
+  constructor(public userService: UserService) {
+    super();
   }
 
   ngOnChanges() {
@@ -59,9 +44,5 @@ export class DashboardTeacherComponent implements OnInit {
 
   filterMyCourses(course: ICourse) {
     return (course.teachers.filter(teacher => teacher._id === this.userService.user._id).length);
-  }
-
-  enrollCallback() {
-    this.onEnroll.emit();
   }
 }
