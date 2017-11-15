@@ -7,13 +7,6 @@ import {UserReportComponent} from './user-report/user-report.component';
 
 const routes: Routes = [
   {
-    path: '',
-    pathMatch: 'full',
-    component: ReportComponent,
-    canActivate: [AuthGuardService],
-    data: {roles: ['teacher', 'admin']}
-  },
-  {
     path: 'unit/:id',
     component: UnitReportComponent,
     canActivate: [AuthGuardService],
@@ -22,6 +15,13 @@ const routes: Routes = [
   {
     path: 'user/:id',
     component: UserReportComponent,
+    canActivate: [AuthGuardService],
+    data: {roles: ['teacher', 'admin']}
+  },
+  {
+    path: '',
+    pathMatch: 'full',
+    component: ReportComponent,
     canActivate: [AuthGuardService],
     data: {roles: ['teacher', 'admin']}
   }

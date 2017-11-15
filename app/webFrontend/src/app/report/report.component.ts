@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import {ReportService} from '../shared/services/data/report.service';
 import {UserService} from '../shared/services/user.service';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
   selector: 'app-report',
@@ -21,6 +21,7 @@ export class ReportComponent implements OnInit {
   constructor(
     public userService: UserService,
     private route: ActivatedRoute,
+    private router: Router,
     private reportService: ReportService) { }
 
   ngOnInit() {
@@ -38,5 +39,9 @@ export class ReportComponent implements OnInit {
       .catch((err) => {
         console.log(err);
       });
+  }
+
+  public gotoUnitDetails(unitId: string) {
+    this.router.navigate(['unit', unitId], { relativeTo: this.route});
   }
 }

@@ -15,7 +15,10 @@
       </div>
     </mat-card-content>
     <mat-card-actions align="start">
-      <span><mat-icon>arrow_forward</mat-icon><a class="link">Show unit details</a></span>
+      <span>
+        <mat-icon>arrow_forward</mat-icon>
+        <button mat-button class="link" (click)="gotoUnitDetails(unit._id)">Show unit details</button>
+      </span>
     </mat-card-actions>
   </mat-card>
 </div>
