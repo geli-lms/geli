@@ -17,7 +17,7 @@ import {MaterialImportModule} from './modules/material-import.module';
   declarations: [
     GravatarDirective,
     UnitMenuComponent,
-    UserImageDirective
+    UserImageDirective,
   ],
   exports: [
     GravatarDirective,

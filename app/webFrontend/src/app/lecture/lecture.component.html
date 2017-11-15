@@ -1,8 +1,8 @@
 <mat-card class="lecture-card" *ngIf="lecture">
   <mat-card-header class="clickable" (click)="changeExpanded()">
-    <mat-card-title><h2>{{lecture.name}}</h2></mat-card-title>
+    <mat-card-title><h1>{{lecture.name}}</h1></mat-card-title>
     <span class="fill-space"></span>
-    <button class="toggle" (click)="changeExpanded()" [class.opened]="expanded === true" mat-icon-button>
+    <button class="toggle" onclick="changeExpanded()" [class.opened]="expanded === true" mat-icon-button>
       <mat-icon>arrow_drop_down</mat-icon>
     </button>
   </mat-card-header>
