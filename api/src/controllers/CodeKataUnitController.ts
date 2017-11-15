@@ -37,7 +37,6 @@ export class CodeKataUnitController extends UnitBaseController {
       throw new BadRequestError('A Kata must at least contain 3 areas');
     }
 
-    console.log(unit);
     if (!unit.test.match(new RegExp('function(.|\t)*validate\\(\\)(.|\n|\t)*{(.|\n|\t)*}', 'gmi'))) {
       throw new BadRequestError('The test section must contain a validate function');
     }
