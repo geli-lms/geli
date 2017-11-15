@@ -31,7 +31,7 @@ export class UserEditComponent implements OnInit {
     this.generateForm();
   }
 
-  userIsAdmin() : boolean {
+  userIsAdmin(): boolean {
     return this.userService.isAdmin();
   }
 
