@@ -11,7 +11,7 @@
   <div *ngFor="let task of model.tasks" class="question-answer">
 
     <mat-form-field matLine class="question">
-      <textarea matInput id="name" placeholder="Frage hier eingeben." [(ngModel)]="task.name"></textarea>
+      <textarea matInput id="name" placeholder="Enter question here" [(ngModel)]="task.name"></textarea>
     </mat-form-field>
 
     <div class="actions">
@@ -24,7 +24,7 @@
         <div class="check-answer">
           <mat-checkbox [(ngModel)]="answer.value" name="value_{{idx}}"></mat-checkbox>
           <mat-form-field>
-            <input matInput placeholder="Antwort hier eingeben." [(ngModel)]="answer.text">
+            <input matInput placeholder="Enter answer here" [(ngModel)]="answer.text">
           </mat-form-field>
         </div>
       </div>
