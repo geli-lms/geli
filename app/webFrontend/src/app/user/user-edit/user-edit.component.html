@@ -14,7 +14,7 @@
   <mat-form-field class="full-width">
     <input matInput formControlName="email" placeholder="e-mail"/>
   </mat-form-field>
-  <div *ngIf="!userService.isAdmin()">
+  <div *ngIf="!this.userService.isAdmin()">
     <mat-form-field class="full-width">
       <input matInput type="password" formControlName="currentPassword" placeholder="Current password"/>
     </mat-form-field>
