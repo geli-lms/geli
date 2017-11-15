@@ -41,11 +41,11 @@ export class CourseComponent {
       const dialogRef = this.dialog.open(AccessKeyDialog);
       dialogRef.afterClosed().subscribe(result => {
         if (result) {
-          this.onEnroll.emit({'courseId': courseId, 'result': result});
+          this.onEnroll.emit({'courseId': courseId, 'accessKey': result});
         }
       });
     } else {
-      this.onEnroll.emit({'courseId': courseId, 'result': null});
+      this.onEnroll.emit({'courseId': courseId, 'accessKey': null});
     }
   }
 
