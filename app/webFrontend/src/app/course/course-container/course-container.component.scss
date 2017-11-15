@@ -22,18 +22,6 @@
   }
 }
 
-.badge {
-  background-color: map-get($app-primary, 'default');
-  border-radius: 50%;
-  color: white;
-  width: 1.6em;
-  height: 1.6em;
-  line-height: 1.6em;
-  margin-left: 5px;
-  margin-right: 2px;
-  text-align: center;
-}
-
 .open-toggle {
   color: map-get($app-primary, 'default');
   transition: transform 0.3s;
