@@ -4,6 +4,8 @@ import {NativeError} from 'mongoose';
 import {Progress} from '../Progress';
 
 interface IUnitModel extends IUnit, mongoose.Document {
+  export: () => Promise<IUnit>;
+  import: (IUnit) => (void);
 }
 
 const unitSchema = new mongoose.Schema({
@@ -50,7 +52,7 @@ function populateUnit(next: (err?: NativeError) => void) {
 
 unitSchema.pre('find', populateUnit);
 
-unitSchema.methods.serialize = function() {
+unitSchema.methods.export = function() {
   const obj = this.toObject();
 
   // remove unwanted informations
@@ -65,6 +67,8 @@ unitSchema.methods.serialize = function() {
 
   return obj;
 }
+
+
 
 // Cascade delete
 unitSchema.pre('remove', function(next: () => void) {

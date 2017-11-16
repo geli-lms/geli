@@ -60,8 +60,8 @@ lectureSchema.methods.export = function() {
       return unit.export();
     });
   }))
-    .then((serializedLectures) => {
-      obj.units = serializedLectures;
+    .then((exportedUnits) => {
+      obj.units = exportedUnits;
       return obj;
     });
 }
