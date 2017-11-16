@@ -1,4 +1,7 @@
-<h1>Edit course</h1>
+<div class="course-header">
+  <h1>Edit course</h1>
+  <a  [routerLink]="['/course', id]" class="md-raised md-primary course-link">Go to course</a>
+</div>
 
 <mat-tab-group dynamicHeight="true">
   <mat-tab label="General">
@@ -49,9 +52,12 @@
         </p>
 
         <p>
-          <button mat-raised-button color="primary" class="mat-button" type="submit">Save</button>
-        </p>
+        <button mat-raised-button color="primary" class="mat-button" type="submit">Save</button>
+      </p>
       </form>
+      <p>
+        <a [routerLink]="['/course', id]" class="md-raised md-primary">go to course view</a>
+      </p>
     </div>
   </mat-tab>
 
