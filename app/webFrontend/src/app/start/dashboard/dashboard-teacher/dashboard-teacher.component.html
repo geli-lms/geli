@@ -1,3 +1,9 @@
-<p>
-  dashboard-teacher works!
-</p>
+<app-course-container [title]="'My Created Courses'" [courses]="myCourses" [expand]="true" (onEnroll)="enrollCallback()"></app-course-container>
+<app-course-container [title]="'My Teacher Courses'" [courses]="furtherCourses" [expand]="true" (onEnroll)="enrollCallback()"></app-course-container>
+<app-course-container [title]="'Available Courses'" [courses]="availableCourses" [expand]="false" (onEnroll)="enrollCallback()"></app-course-container>
+
+
+<a mat-fab class="add-course-fab"
+   routerLink="course/new" matTooltip="Add course" matTooltipPosition="left">
+  <mat-icon>add</mat-icon>
+</a>
