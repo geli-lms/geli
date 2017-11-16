@@ -3,7 +3,7 @@ import {ITask} from '../../../shared/models/task/ITask';
 
 interface ITaskModel extends ITask, mongoose.Document {
   export: () => Promise<ITask>;
-  import: (ITask) => (void);
+  import: (task: ITask) => (ITask);
 }
 
 const taskSchema = new mongoose.Schema(
@@ -49,6 +49,10 @@ taskSchema.methods.export = function() {
 
   return obj;
 };
+
+taskSchema.methods.import = function(task: ITask) {
+  return new Task(task).save();
+}
 
 const Task = mongoose.model<ITaskModel>('Task', taskSchema);
 
