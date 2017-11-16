@@ -1,9 +1,12 @@
 import * as mongoose from 'mongoose';
 import {ILecture} from '../../../shared/models/ILecture';
 import {Unit} from './units/Unit';
+import {IUnit} from '../../../shared/models/units/IUnit';
+import {InternalServerError} from 'routing-controllers';
 
 interface ILectureModel extends ILecture, mongoose.Document {
   export: () => Promise<ILecture>;
+  import: (courseId: String) => Promise<ILecture>;
 }
 
 const lectureSchema = new mongoose.Schema({
@@ -64,7 +67,33 @@ lectureSchema.methods.export = function() {
       obj.units = exportedUnits;
       return obj;
     });
-}
+};
+
+lectureSchema.methods.import = function(courseId: String) {
+  // import lectures
+  const units: Array<IUnit>  = this.units;
+  this.units = [];
+
+  return this.save()
+    .then((savedLecture) => {
+      const lectureId = savedLecture._id;
+
+      return Promise.all(units.map((unit) => {
+        return new Unit(unit).import(courseId, lectureId);
+      }))
+        .then((importedUnits) => {
+          savedLecture.lectures.concat(importedUnits);
+          return savedLecture.save();
+        });
+    })
+    .then((importedLecture) => {
+      console.log(importedLecture);
+      return importedLecture.toObject();
+    })
+    .catch((err) => {
+      throw new InternalServerError(err);
+    });
+};
 
 
 const Lecture = mongoose.model<ILectureModel>('Lecture', lectureSchema);

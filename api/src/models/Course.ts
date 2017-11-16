@@ -3,9 +3,12 @@ import * as mongoose from 'mongoose';
 import {User} from './User';
 import {Lecture} from './Lecture';
 import {ILecture} from '../../../shared/models/ILecture';
+import {InternalServerError} from 'routing-controllers';
+import {IUser} from '../../../shared/models/IUser';
 
 interface ICourseModel extends ICourse, mongoose.Document {
   export: () => Promise<ICourse>;
+  import: (admin: IUser) => Promise<ICourse>;
 }
 
 const courseSchema = new mongoose.Schema({
@@ -110,16 +113,34 @@ courseSchema.methods.export = function() {
   });
 };
 
-courseSchema.methods.deserialize = function(course: ICourse) {
-  const lectures: Array<ILecture>  = course.lectures;
-  delete course.lectures;
+courseSchema.methods.import = function(admin: IUser) {
+  // set Admin
+  this.courseAdmin = admin;
 
-  return new Course(course).save()
-    .then((savedCourse) => {
-      console.log(savedCourse);
-      return savedCourse;
+  // import lectures
+  const lectures: Array<ILecture>  = this.lectures;
+  this.lectures = [];
+
+  return this.save()
+    .then((savedcourse) => {
+      const courseId = savedcourse._id;
+
+      return Promise.all(lectures.map((lecture) => {
+        return new Lecture(lecture).import(courseId);
+      }))
+      .then((importedLectures) => {
+        savedcourse.lectures.concat(importedLectures);
+        return savedcourse.save();
+      });
     })
-}
+    .then((importedCourse) => {
+      console.log(importedCourse);
+      return importedCourse.toObject();
+    })
+    .catch((err) => {
+      throw new InternalServerError(err);
+    });
+};
 
 const Course = mongoose.model<ICourseModel>('Course', courseSchema);
 
