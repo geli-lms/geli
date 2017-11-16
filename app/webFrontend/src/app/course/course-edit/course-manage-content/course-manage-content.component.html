@@ -1,6 +1,8 @@
 <div class="container" *ngIf="course">
   <div class="lectures" (click)="closeFab()" [dragula]="'lectures'" [dragulaModel]="course.lectures">
-    <div class="lecture" *ngFor="let lecture of course.lectures">
+    <div class="lecture" *ngFor="let lecture of course.lectures" [dragula]="'units'"
+         [dragulaModel]="lecture.units"
+         [attr.data-lecture-id]="lecture._id">
       <div class="lecture-header">
         <mat-icon class="lecture-drag-handle">drag_handle</mat-icon>
         <h2>{{lecture.name}}</h2>
