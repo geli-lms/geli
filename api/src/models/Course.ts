@@ -134,7 +134,6 @@ courseSchema.methods.import = function(admin: IUser) {
       });
     })
     .then((importedCourse) => {
-      console.log(importedCourse);
       return importedCourse.toObject();
     })
     .catch((err) => {
