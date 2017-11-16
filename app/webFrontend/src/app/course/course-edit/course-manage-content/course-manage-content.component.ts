@@ -120,17 +120,18 @@ export class CourseManageContentComponent implements OnInit, OnDestroy {
     .subscribe(res => {
       if (res) {
         this.showProgress.toggleLoadingGlobal(true);
-        this.unitService.deleteItem(unit).then(
-          () => {
-            this.showProgress.toggleLoadingGlobal(false);
-            this.snackBar.open('Unit deleted.', '', {duration: 3000});
-            this.reloadCourse();
-          },
-          (error) => {
-            this.showProgress.toggleLoadingGlobal(false);
-            this.snackBar.open(error, '', {duration: 3000});
-          }
-        );
+        this.unitService.deleteItem(unit)
+        .then(() => {
+          this.snackBar.open('Unit deleted.', '', {duration: 3000});
+          this.closeEditUnit();
+          this.reloadCourse();
+        })
+        .catch((error) => {
+          this.snackBar.open(error, '', {duration: 3000});
+        })
+        .then(() => {
+          this.showProgress.toggleLoadingGlobal(false);
+        });
       }
     });
   }
@@ -141,28 +142,34 @@ export class CourseManageContentComponent implements OnInit, OnDestroy {
     .subscribe(res => {
       if (res) {
         this.showProgress.toggleLoadingGlobal(true);
-        this.lectureService.deleteItem(lecture).then(
-          (val) => {
-            this.showProgress.toggleLoadingGlobal(false);
+        this.lectureService.deleteItem(lecture)
+        .then((val) => {
             this.snackBar.open('Lecture deleted.', '', {duration: 3000});
+            this.closeEditUnit();
+            this.closeEditLecture();
             this.reloadCourse();
-          },
-          (error) => {
-            this.showProgress.toggleLoadingGlobal(false);
-            this.snackBar.open(error, '', {duration: 3000});
-          }
-        );
+        })
+        .catch((error) => {
+          this.snackBar.open(error, '', {duration: 3000});
+        })
+        .then(() => {
+          this.showProgress.toggleLoadingGlobal(false);
+        });
       }
     });
   }
 
   reloadCourse() {
-    this.courseService.readSingleItem(this.course._id).then(
-      (val: any) => {
-        this.course = val;
-      }, (error) => {
-        console.log(error);
-      });
+    this.courseService.readSingleItem(this.course._id)
+    .then((val: any) => {
+      this.course = val;
+    })
+    .catch((error) => {
+      console.log(error);
+    })
+    .then(() => {
+      this.showProgress.toggleLoadingGlobal(false)
+    });
   }
 
   onAddLecture() {
