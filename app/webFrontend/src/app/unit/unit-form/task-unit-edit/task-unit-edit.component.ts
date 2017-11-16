@@ -58,7 +58,7 @@ export class TaskUnitEditComponent implements OnInit {
     if (this.add) {
       taskPromise = this.unitService.addTaskUnit(taskToSend, this.lectureId)
     } else {
-      taskPromise = this.unitService.updateItem(taskToSend);
+      taskPromise = this.unitService.updateTaskUnit(taskToSend);
     }
     taskPromise.then(
       (task) => {

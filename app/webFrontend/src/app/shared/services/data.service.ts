@@ -168,6 +168,14 @@ export class UnitService extends DataService {
     return promise;
   }
 
+  updateTaskUnit(taskUnit: ITaskUnit) {
+    const originalApiPath = this.apiPath;
+    this.apiPath += 'tasks/';
+    const promise =  this.updateItem(taskUnit);
+    this.apiPath = originalApiPath;
+    return promise;
+  }
+
   getUnitForCourse(courseId: string) {
     const originalApiPath = this.apiPath;
     this.apiPath += 'progressable/course/';
