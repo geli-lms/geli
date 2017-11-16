@@ -79,7 +79,7 @@ lectureSchema.methods.import = function(courseId: String) {
       const lectureId = savedLecture._id;
 
       return Promise.all(units.map((unit) => {
-        return new Unit(unit).import(courseId, lectureId);
+        return new Unit(unit).import(courseId);
       }))
         .then((importedUnits) => {
           savedLecture.lectures.concat(importedUnits);
