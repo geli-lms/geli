@@ -44,6 +44,6 @@ export class CourseDetailComponent implements OnInit {
   }
 
   apply() {
-    console.log('apply');
+    // FIXME: Useless function?! REMOVE?
   }
 }

@@ -40,7 +40,9 @@ export class AppComponent implements OnInit {
       this.ravenErrorHandler.setup(info.sentryDsn);
       this.apiInfo = info;
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      // FIXME: Add Snackbar here
+    });
   }
 
   hasWarning() {

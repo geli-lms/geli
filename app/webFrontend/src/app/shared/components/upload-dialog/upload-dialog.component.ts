@@ -56,7 +56,7 @@ export class UploadDialog implements OnInit {
         nativeVideo.play();
       })
       .catch(error => {
-        console.log(error);
+        // FIXME: Add snackbar here
       });
     }
   }

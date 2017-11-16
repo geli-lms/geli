@@ -80,7 +80,7 @@ export class TaskUnitEditComponent implements OnInit {
         this.onDone();
       },
       (error) => {
-        console.log(error);
+        // FIXME: Add snackbar here
       });
   };
 
@@ -88,8 +88,6 @@ export class TaskUnitEditComponent implements OnInit {
     this.model.tasks.push(new Task());
     // this.createTask(newTask);
   }
-
-  //  log(val) { console.log(JSON.stringify(val)); }
 
   createTask(task: any) {
     // this.log(this.task);
@@ -100,7 +98,7 @@ export class TaskUnitEditComponent implements OnInit {
 
         //     this.log(val);
       }, (error) => {
-        console.log(error);
+        // FIXME: Add snackbar here
       });
   }
 
@@ -125,7 +123,7 @@ export class TaskUnitEditComponent implements OnInit {
         this.snackBar.open('Task saved', 'Update', {duration: 2000});
 
       }, (error) => {
-        console.log(error);
+        // FIXME: Add snackbar here
       });
   }
 

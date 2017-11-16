@@ -1,3 +1,5 @@
+// tslint:disable:no-console
+
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {CodeKataUnit} from '../../models/CodeKataUnit';
 import {MatSnackBar} from '@angular/material';

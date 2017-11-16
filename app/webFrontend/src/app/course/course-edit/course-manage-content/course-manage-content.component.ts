@@ -90,7 +90,7 @@ export class CourseManageContentComponent implements OnInit, OnDestroy {
     .then(() => {
       this.reloadCourse();
     }, (error) => {
-      console.log(error);
+      // FIXME: Add snackbar here
     });
   }
 
@@ -165,7 +165,7 @@ export class CourseManageContentComponent implements OnInit, OnDestroy {
       this.course = val;
     })
     .catch((error) => {
-      console.log(error);
+      // FIXME: Add snackbar here
     })
     .then(() => {
       this.showProgress.toggleLoadingGlobal(false)

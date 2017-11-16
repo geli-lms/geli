@@ -49,10 +49,9 @@ export class TeacherReportComponent implements OnInit {
             }
           }
         }
-        console.log('debug');
       },
       (err: any) => {
-        console.log(err);
+        // FIXME: Add snackbar here
       })
     .then(() => {
       if (this.course) {

@@ -42,7 +42,7 @@ export class LoginComponent implements OnInit {
         this.loading = false;
         this.snackBar.open('Login successful', 'Dismiss', {duration: 2000});
       }, (error) => {
-        console.log(error);
+        // FIXME: Add snackbar here
         this.showProgress.toggleLoadingGlobal(false);
         this.snackBar.open('Login failed!', 'Dismiss');
 

@@ -51,7 +51,7 @@ export class ResetComponent implements OnInit {
       (val) => {
         this.snackBar.open('Check your mails', 'Dismiss');
       }, (error) => {
-        console.log(error);
+        // FIXME: Add snackbar here
         this.snackBar.open('Request failed', 'Dismiss');
       })
     .then(() => {
@@ -69,7 +69,7 @@ export class ResetComponent implements OnInit {
         this.router.navigate(['/login']);
         this.snackBar.open('Your password has been reset', 'Dismiss');
       }, (error) => {
-        console.log(error);
+        // FIXME: Add snackbar here
         this.snackBar.open('Your password could not be reset', 'Dismiss');
       })
     .then(() => {
