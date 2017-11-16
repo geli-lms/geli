@@ -9,6 +9,6 @@
       Fullscreen
     </button>
     <button mat-button (click)="validate()">Validate</button>
-    <app-button-save-cancel (save)="saveUnit()" (cancle) ="onCancel()"></app-button-save-cancel>
+    <app-button-save-cancel (save)="saveUnit($event)" (cancel)="onCancel($event)"></app-button-save-cancel>
   </div>
 </div>

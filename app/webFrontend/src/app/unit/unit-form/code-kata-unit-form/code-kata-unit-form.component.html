@@ -21,7 +21,7 @@
   </ace-editor>
 
   <button mat-button (click)="validate()">Validate</button>
-  <app-button-save-cancel (save)="addUnit()" (cancle) ="onCancel()"></app-button-save-cancel>
+  <app-button-save-cancel (save)="addUnit($event)" (cancel) ="onCancel($event)"></app-button-save-cancel>
   <div *ngIf="logs!==undefined"><strong>Logs</strong></div>
   <pre>{{logs}}</pre>
 </div>

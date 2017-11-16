@@ -48,10 +48,8 @@
             <span *ngIf="!active">Course cannot be seen by students</span>
           </mat-slide-toggle>
         </p>
-
         <p>
-          <button mat-raised-button color="primary" class="mat-button" type="submit">Save</button>
-          <app-button-save-cancel (save)="addUnit()" (cancle) ="onCancel()"></app-button-save-cancel>
+          <app-button-save-cancel (save)="addUnit($event)" (cancel)="cancel($event)"></app-button-save-cancel>
         </p>
       </form>
     </div>

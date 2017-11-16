@@ -39,7 +39,7 @@
 
   </div>
   <p>
-    <app-button-save-cancel (save)="saveUnit()" (cancle) ="onCancel()"></app-button-save-cancel>
+    <app-button-save-cancel (save)="saveUnit($event)" (cancel)="onCancel($event)"></app-button-save-cancel>
   </p>
   <button mat-mini-fab class="add-task-fab" (click)="addTask()" matTooltip="Add task" matTooltipPosition="right">
     <mat-icon>add</mat-icon>

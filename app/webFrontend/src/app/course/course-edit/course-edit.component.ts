@@ -82,6 +82,10 @@ export class CourseEditComponent implements OnInit {
     };
   }
 
+  cancel() {
+  // redirect to dashboard.
+  }
+
   createCourse() {
     this.showProgress.toggleLoadingGlobal(true);
     console.log(this.description);
