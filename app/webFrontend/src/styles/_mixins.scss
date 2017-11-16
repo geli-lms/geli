@@ -8,3 +8,13 @@
     margin: 0 14%;
   }
 }
+
+@mixin globalFabBtn() {
+  position: fixed;
+  bottom: 1ex;
+  right: 1ex;
+
+  @include bp(xxl) {
+    position: absolute;
+  }
+}

@@ -5,13 +5,7 @@
 }
 
 .fab {
-  position: fixed;
-  bottom: 1ex;
-  right: 1ex;
-
-  @include bp(xxl) {
-    position: absolute;
-  }
+  @include globalFabBtn;
 }
 
 .lecture {
