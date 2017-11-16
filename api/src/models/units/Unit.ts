@@ -5,7 +5,7 @@ import {Progress} from '../Progress';
 
 interface IUnitModel extends IUnit, mongoose.Document {
   export: () => Promise<IUnit>;
-  import: (IUnit) => (void);
+  import: (courseId: string) => Promise<IUnit>;
 }
 
 const unitSchema = new mongoose.Schema({
@@ -66,6 +66,11 @@ unitSchema.methods.export = function() {
   delete obj._course;
 
   return obj;
+}
+
+unitSchema.methods.import = function(courseId: string) {
+  this._course = courseId;
+  return new Unit(this).save();
 }
 
 // Cascade delete

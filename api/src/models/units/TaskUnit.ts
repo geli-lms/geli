@@ -5,7 +5,7 @@ import {Task} from '../Task';
 
 interface ITaskUnitModel extends ITaskUnit, mongoose.Document {
   export: () => Promise<ITaskUnit>;
-  import: (ITaskUnit) => (void);
+  import: (courseId: string) => Promise<ITaskUnit>;
 }
 
 const taskUnitSchema = new mongoose.Schema({
@@ -40,7 +40,7 @@ taskUnitSchema.methods.export = function() {
 
   // custom properties
   delete obj._course;
-  
+
   // "populate" tasks
   const tasks: Array<mongoose.Types.ObjectId>  = obj.tasks;
   obj.tasks = [];
@@ -54,6 +54,14 @@ taskUnitSchema.methods.export = function() {
     obj.tasks = exportedTasks;
     return obj;
   });
+}
+
+taskUnitSchema.methods.import = function(courseId: string) {
+  this._course = courseId;
+  this.tasks.forEach((task) => {
+    task.import();
+  });
+  return new TaskUnit(this).save();
 }
 
 const TaskUnit = Unit.discriminator('task', taskUnitSchema);
