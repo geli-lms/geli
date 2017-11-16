@@ -3,17 +3,6 @@ body {
   font-family: $font-body;
   font-size: $base-font-size;
   line-height: $line-height--base;
-
-  @include bp(xl) {
-    $factor: 1.2;
-    font-size: $base-font-size * $factor;
-    line-height: $line-height--base * $factor;
-  }
-  @include bp(max) {
-    $factor: 1.4;
-    font-size: $base-font-size * $factor;
-    line-height: $line-height--base * $factor;
-  }
 }
 
 h1, h2, h3, h4, h5, h6 {
