@@ -38,6 +38,9 @@ taskUnitSchema.methods.export = function() {
   delete obj.__v;
   delete obj.updatedAt;
 
+  // custom properties
+  delete obj._course;
+  
   // "populate" tasks
   const tasks: Array<mongoose.Types.ObjectId>  = obj.tasks;
   obj.tasks = [];
