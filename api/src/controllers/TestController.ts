@@ -12,11 +12,10 @@ export class TestController {
   @Get('/')
   testget() {
     return Course.findOne({name: 'Introduction to web development'})
-      .then((course) => course.serialize());
+      .then((course) => course.export());
   }
 
   @Post('/')
   testpost(@Body() body: any) {
-    return new Course().deserialize(body).then((course) => course.toObject());
   }
 }

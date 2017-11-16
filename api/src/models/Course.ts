@@ -5,6 +5,7 @@ import {Lecture} from './Lecture';
 import {ILecture} from '../../../shared/models/ILecture';
 
 interface ICourseModel extends ICourse, mongoose.Document {
+  export: () => Promise<ICourse>;
 }
 
 const courseSchema = new mongoose.Schema({
@@ -79,7 +80,7 @@ courseSchema.pre('remove', function(next: () => void) {
     .catch(next);
 });
 
-courseSchema.methods.serialize = function() {
+courseSchema.methods.export = function() {
   const obj = this.toObject();
 
   // remove unwanted informations
@@ -100,7 +101,7 @@ courseSchema.methods.serialize = function() {
 
   return Promise.all(lectures.map((lectureId) => {
     return Lecture.findById(lectureId).then((lecture) => {
-      return lecture.serialize();
+      return lecture.export();
     });
   }))
   .then((serializedLectures) => {
