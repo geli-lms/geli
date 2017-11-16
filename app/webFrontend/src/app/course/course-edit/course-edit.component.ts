@@ -111,7 +111,7 @@ export class CourseEditComponent implements OnInit {
   }
 
 
-  GetCourseValue(){
+  GetCourseValue() {
     this.mode = true;
   }
 
