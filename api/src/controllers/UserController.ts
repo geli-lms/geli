@@ -48,6 +48,7 @@ export class UserController {
     if (role !== 'student' && role !== 'teacher') {
       throw new Error('Method not allowed for this role.');
     }
+    query = query.trim();
     if (isNullOrUndefined(query) || query.length <= 0) {
       throw Error('No given query.');
     }
