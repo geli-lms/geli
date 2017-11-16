@@ -35,8 +35,6 @@ export class TaskUnitEditComponent implements OnInit {
   @ViewChild(UnitGeneralInfoFormComponent)
   private generalInfo: UnitGeneralInfoFormComponent;
 
-  tasks: any[];
-
   constructor(private taskService: TaskService,
               private unitService: UnitService,
               private snackBar: MatSnackBar) {
@@ -47,18 +45,6 @@ export class TaskUnitEditComponent implements OnInit {
       this.model = new TaskUnit(this.course._id);
       this.add = true;
     }
-
-    this.loadTasksFromServer();
-  }
-
-  loadTasksFromServer() {
-    this.taskService.getTasksForCourse(this.course._id).then(tasks => {
-      this.tasks = tasks;
-
-      for (const task of this.tasks) {
-        this.answerPreparationAfterLoadingFromServer(task); // WORKAROUND get rid of the _id for the answers
-      }
-    });
   }
 
   saveUnit() {
@@ -86,28 +72,6 @@ export class TaskUnitEditComponent implements OnInit {
 
   addTask() {
     this.model.tasks.push(new Task());
-    // this.createTask(newTask);
-  }
-
-  //  log(val) { console.log(JSON.stringify(val)); }
-
-  createTask(task: any) {
-    // this.log(this.task);
-    this.taskService.createItem(task).then(
-      (val) => {
-        task = val; // get _id
-        this.tasks.splice(0, 0, task); // add item to start
-
-        //     this.log(val);
-      }, (error) => {
-        console.log(error);
-      });
-  }
-
-  answerPreparationAfterLoadingFromServer(task: any) {
-    for (const answer of task.answers) {
-      delete answer._id;
-    }
   }
 
   addAnswerAtEnd(task: ITask) {
@@ -119,11 +83,9 @@ export class TaskUnitEditComponent implements OnInit {
   }
 
   updateTask(task: any) {
-    // this.log(this.task);
     this.taskService.updateItem(task).then(
       (val) => {
         this.snackBar.open('Task saved', 'Update', {duration: 2000});
-
       }, (error) => {
         console.log(error);
       });
@@ -133,7 +95,6 @@ export class TaskUnitEditComponent implements OnInit {
     this.taskService.deleteItem(task).then(tasks => {
       this.tasks = (this.tasks.filter(obj => task._id !== obj._id));
       this.snackBar.open('Task deleted', 'Delete', {duration: 2000});
-
     });
   }
 }
