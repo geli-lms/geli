@@ -82,7 +82,7 @@ export class TaskUnitEditComponent implements OnInit {
           this.onDone();
         },
         (error) => {
-          console.log(error);
+          // FIXME: Add snackbar here
         });
     }
   };
