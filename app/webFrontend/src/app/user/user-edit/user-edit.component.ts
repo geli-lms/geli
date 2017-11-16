@@ -8,6 +8,7 @@ import {UserService} from '../../shared/services/user.service';
 import {ShowProgressService} from '../../shared/services/show-progress.service';
 import {matchPasswords} from '../../shared/validators/validators';
 import {DialogService} from '../../shared/services/dialog.service';
+import {pwPattern} from '../../auth/password';
 
 @Component({
   selector: 'app-user-edit',
@@ -19,6 +20,7 @@ export class UserEditComponent implements OnInit {
   id: string;
   user: IUser;
   userForm: FormGroup;
+  passwordPatternText: string;
 
   constructor(private router: Router,
               private route: ActivatedRoute,
@@ -32,6 +34,7 @@ export class UserEditComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.passwordPatternText = pwPattern.text;
     this.route.params.subscribe(params => {
       this.id = decodeURIComponent(params['id']);
 
@@ -104,7 +107,7 @@ export class UserEditComponent implements OnInit {
       },
       (error) => {
         this.showProgress.toggleLoadingGlobal(false);
-        this.snackBar.open(JSON.parse(error._body).message, 'Dismiss');
+        this.snackBar.open(error.json().message, 'Dismiss');
       });
   }
 
@@ -117,7 +120,7 @@ export class UserEditComponent implements OnInit {
       username: [''],
       email: ['', Validators.required],
       currentPassword: [''],
-      password: [''],
+      password: ['', Validators.pattern(pwPattern.pattern)],
       confirmPassword: ['']
     }, {validator: matchPasswords('password', 'confirmPassword')});
   }
