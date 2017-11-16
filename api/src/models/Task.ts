@@ -43,10 +43,12 @@ taskSchema.methods.export = function() {
   delete obj.updatedAt;
 
   // custom properties
-  delete obj._course;
+  obj.answers.forEach(answer => {
+    delete answer._id;
+  });
 
   return obj;
-}
+};
 
 const Task = mongoose.model<ITaskModel>('Task', taskSchema);
 

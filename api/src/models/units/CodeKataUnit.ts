@@ -22,22 +22,6 @@ const codeKataSchema = new mongoose.Schema({
   },
 });
 
-codeKataSchema.methods.export = function() {
-  const obj = this.toObject();
-
-  // remove unwanted informations
-  // mongo properties
-  delete obj._id;
-  delete obj.createdAt;
-  delete obj.__v;
-  delete obj.updatedAt;
-
-  // custom properties
-  delete obj._course;
-
-  return obj;
-}
-
 const CodeKataUnit = Unit.discriminator('code-kata', codeKataSchema);
 
 export {CodeKataUnit, ICodeKataModel}

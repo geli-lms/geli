@@ -94,42 +94,7 @@ export class CourseManageContentComponent implements OnInit, OnDestroy {
   }
 
   duplicateLecture(lecture: ILecture) {
-    delete lecture._id;
-    delete lecture.units;
-    this.lectureService.createItem({courseId: this.course._id, lecture: lecture})
-      .then((newLecture) => {
-        // at first delete the units' IDs to ensure that they are saved as new units in the mongodb
-        units.forEach((unit: any) => {
-          delete unit._id;
-          switch (unit.type) {
-            case 'free-text':
-              this.freeTextUnitService.createItem({lectureId: newLecture._id, model: unit});
-              break;
-            case 'code-kata':
-              this.codeKataUnitService.createItem({lectureId: newLecture._id, model: unit});
-              break;
-            case 'task':
-              unit.tasks.forEach(task => {
-                delete task._id;
-                task.answers.forEach(answer => {
-                  delete answer._id;
-                });
-              });
-              this.unitService.addTaskUnit(unit, newLecture._id);
-              break;
-              // TODO: implement duplication of video + file units.
-            case 'video':
-              break;
-            case 'file':
-              break;
-            default:
-          }
-        });
-        this.reloadCourse();
-      }, (error) => {
-        console.log(error);
-      }
-    );
+
   }
 
   deleteObjectIds(object: any) {

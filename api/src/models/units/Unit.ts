@@ -68,8 +68,6 @@ unitSchema.methods.export = function() {
   return obj;
 }
 
-
-
 // Cascade delete
 unitSchema.pre('remove', function(next: () => void) {
   Progress.remove({'unit': this._id}).exec().then(next).catch(next);

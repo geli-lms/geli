@@ -20,6 +20,14 @@ const taskUnitSchema = new mongoose.Schema({
   },
 });
 
+// Cascade delete
+taskUnitSchema.pre('remove', function(next: () => void) {
+  Task.find({'_id': {$in: this.tasks}}).exec()
+    .then((tasks) => Promise.all(tasks.map(task => task.remove())))
+    .then(next)
+    .catch(next);
+});
+
 taskUnitSchema.methods.export = function() {
   const obj = this.toObject();
 
@@ -30,19 +38,20 @@ taskUnitSchema.methods.export = function() {
   delete obj.__v;
   delete obj.updatedAt;
 
-  // custom properties
-  delete obj._course;
+  // "populate" tasks
+  const tasks: Array<mongoose.Types.ObjectId>  = obj.tasks;
+  obj.tasks = [];
 
-  return obj;
+  return Promise.all(tasks.map((taskId) => {
+    return Task.findById(taskId).then((task) => {
+      return task.export();
+    });
+  }))
+  .then((exportedTasks) => {
+    obj.tasks = exportedTasks;
+    return obj;
+  });
 }
-
-// Cascade delete
-taskUnitSchema.pre('remove', function(next: () => void) {
-  Task.find({'_id': {$in: this.tasks}}).exec()
-    .then((tasks) => Promise.all(tasks.map(task => task.remove())))
-    .then(next)
-    .catch(next);
-});
 
 const TaskUnit = Unit.discriminator('task', taskUnitSchema);
 

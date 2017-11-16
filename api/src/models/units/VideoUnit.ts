@@ -35,22 +35,6 @@ const videoUnitSchema = new mongoose.Schema({
   },
 });
 
-videoUnitSchema.methods.export = function() {
-  const obj = this.toObject();
-
-  // remove unwanted informations
-  // mongo properties
-  delete obj._id;
-  delete obj.createdAt;
-  delete obj.__v;
-  delete obj.updatedAt;
-
-  // custom properties
-  delete obj._course;
-
-  return obj;
-}
-
 // Cascade delete
 videoUnitSchema.pre('remove', function(next: () => void) {
   (<IVideoUnitModel>this).files.forEach((file: any) => {

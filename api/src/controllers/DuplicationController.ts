@@ -25,46 +25,14 @@ export class DuplicationController {
   @Post('/lecture/:id')
   duplicateLecture(@Body() data: any, @Req() request: Request) {
     // TODO
-    const lectureId = data.model.lectureId;
   }
 
   @Post('/unit/:id')
   duplicateUnit(@Body() data: any, @Req() request: Request) {
     // TODO
-    const unit: IUnit = data.model.unit;
-    const lectureId: string = data.model.lectureId;
-    this.duplicateUnit(unit)
-      .then(newUnit => {
-        Lecture.findById(lectureId)
-          .then(lecture => {
-            lecture.units.push(unit);
-        });
-      });
   }
 
-  duplicateUnit(unit: IUnit): Promise<any> {
-    delete unit._id;
-    switch (unit.type) {
-      case 'free-text':
-        return new FreeTextUnit(unit).save();
-      case 'code-kata':
-        return new CodeKataUnit(unit).save();
-      case 'task':
-        if (unit instanceof ITaskUnit) {
-          unit.tasks.forEach((task: ITask) => {
-            delete task._id;
-          });
-          return new TaskUnit(unit).save().then((taskUnit: any) => {
-            taskUnit.tasks.forEach((task: any) => {
-              task.unitId = taskUnit._id;
-            })
-          });
-        }
-        break;
-      case 'video':
-        return new VideoUnit(unit).save();
-      case 'file':
-        return new FileUnit(unit).save();
-    }
+  duplicateUnit(unit: IUnit) {
+    // TODO
   }
 }
