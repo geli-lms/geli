@@ -11,16 +11,10 @@
   <div *ngFor="let task of model.tasks" class="question-answer">
 
     <mat-form-field matLine class="question">
-      <textarea matInput id="name" placeholder="Frage hier eingeben." [(ngModel)]="task.name"></textarea>
+      <textarea matInput id="name" placeholder="Enter question here" [(ngModel)]="task.name"></textarea>
     </mat-form-field>
 
     <div class="actions">
-      <button mat-icon-button (click)="addAnswerAtEnd(task)">
-        <mat-icon color="accent">add</mat-icon>
-      </button>
-      <button mat-icon-button (click)="removeLastAnswer(task)">
-        <mat-icon>remove</mat-icon>
-      </button>
       <button mat-button (click)="removeTask(task)">DELETE</button>
     </div>
 
@@ -29,24 +23,28 @@
         <div class="check-answer">
           <mat-checkbox [(ngModel)]="answer.value" name="value_{{idx}}"></mat-checkbox>
           <mat-form-field>
-            <input matInput placeholder="Antwort hier eingeben." [(ngModel)]="answer.text">
+            <input matInput placeholder="Enter answer here" [(ngModel)]="answer.text">
           </mat-form-field>
         </div>
       </div>
-
+      <button mat-icon-button (click)="addAnswerAtEnd(task)" matTooltip="Add answer" matTooltipPosition="right">
+        <mat-icon color="accent">add</mat-icon>
+      </button>
+      <button mat-icon-button (click)="removeLastAnswer(task)" matTooltip="Remove last answer" matTooltipPosition="right">
+        <mat-icon>remove</mat-icon>
+      </button>
     </div>
 
   </div>
-  <p>
-    <button mat-button (click)="onCancel()" type="reset">Cancel</button>
-    <button mat-button color="primary" class="add-unit" (click)="saveUnit()" type="submit">Save</button>
-  </p>
-  <button mat-mini-fab class="add-task-fab" (click)="addTask()" matTooltip="Add task" matTooltipPosition="right">
-    <mat-icon>add</mat-icon>
-  </button>
+
+  <mat-toolbar class="bottom-toolbar">
+    <mat-toolbar-row>
+      <button mat-button (click)="onCancel()" type="reset">Cancel</button>
+      <button mat-button color="primary" class="add-unit" (click)="saveUnit()" type="submit">Save</button>
+      <span class="toolbar-fill"></span>
+      <button mat-mini-fab (click)="addTask()" matTooltip="Add task" matTooltipPosition="right">
+        <mat-icon>add</mat-icon>
+      </button>
+    </mat-toolbar-row>
+  </mat-toolbar>
 </div>
-
-
-
-
-
