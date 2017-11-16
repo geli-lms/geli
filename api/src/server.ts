@@ -11,6 +11,13 @@ import passportLoginStrategy from './security/passportLoginStrategy';
 import passportJwtStrategy from './security/passportJwtStrategy';
 import {RoleAuthorization} from './security/RoleAuthorization';
 import {CurrentUserDecorator} from './security/CurrentUserDecorator';
+import * as Raven from 'raven';
+
+if (config.sentryDsn) {
+  Raven.config(config.sentryDsn, {
+    autoBreadcrumbs: true
+  }).install();
+}
 
 /**
  * Root class of your node server.
@@ -35,6 +42,13 @@ export class Server {
       authorizationChecker: RoleAuthorization.checkAuthorization,
       currentUserChecker: CurrentUserDecorator.checkCurrentUser
     });
+
+    if (config.sentryDsn) {
+      // The request handler must be the first middleware on the app
+      this.app.use(Raven.requestHandler());
+      // The error handler must be before any other error middleware
+      this.app.use(Raven.errorHandler());
+    }
 
     // TODO: Needs authentication in the future
     this.app.use('/api/uploads', express.static('uploads'));

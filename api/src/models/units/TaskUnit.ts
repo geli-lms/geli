@@ -12,7 +12,10 @@ const taskUnitSchema = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Task'
     }
-  ]
+  ],
+  deadline: {
+    type: String
+  },
 });
 
 // Cascade delete
