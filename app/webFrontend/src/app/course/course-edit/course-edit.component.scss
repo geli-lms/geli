@@ -21,3 +21,14 @@
 .slider {
   min-width: 250px;
 }
+
+.course-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+
+  h1 {
+    margin: 0;
+  }
+}

@@ -115,6 +115,7 @@ export class CourseEditComponent implements OnInit {
     this.mode = true;
   }
 
+
   onChangeMode(value) {
     if (value.checked === true) {
       this.mode = true;
