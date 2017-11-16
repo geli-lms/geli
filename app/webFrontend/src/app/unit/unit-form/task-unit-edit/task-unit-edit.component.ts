@@ -93,7 +93,7 @@ export class TaskUnitEditComponent implements OnInit {
 
   removeTask(task: any) {
     this.taskService.deleteItem(task).then(tasks => {
-      this.tasks = (this.tasks.filter(obj => task._id !== obj._id));
+      this.model.tasks = this.model.tasks.filter(obj => task._id !== obj._id);
       this.snackBar.open('Task deleted', 'Delete', {duration: 2000});
     });
   }
