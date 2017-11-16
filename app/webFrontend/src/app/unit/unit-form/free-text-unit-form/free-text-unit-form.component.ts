@@ -58,7 +58,9 @@ export class FreeTextUnitFormComponent implements OnInit {
             this.snackBar.open('Free text unit saved', '', {duration: 3000});
             this.onDone();
           },
-          error => {}
+          error => {
+            // FIXME: Add snackbar here
+          }
         );
     } else {
       // Update existing
