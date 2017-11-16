@@ -26,22 +26,14 @@ body, html {
   height: 100%;
   margin: 0;
   padding: 0;
-}
-
-body {
-  background-color: lighten(map-get($app-primary, 'default'), 38.5%);
+  background-color: #ffffff;
 }
 
 app-root {
-  margin: 0 auto;
-  background-color: #fff;
-  box-shadow: 0 0 54px 5px rgba(0, 0, 0, 0.75);
-
-  @include bp(xxl) {
-    margin: 0 8%;
-  }
-  @include bp(max) {
-    margin: 0 14%;
+  > .mat-toolbar .mat-toolbar-row,
+  > .app-content {
+    @include maxSideMargin;
+    width: auto;
   }
 }
 

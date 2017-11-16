@@ -1,1 +1,10 @@
 @import 'breakpoints';
+
+@mixin maxSideMargin() {
+  @include bp(xxl) {
+    margin: 0 8%;
+  }
+  @include bp(max) {
+    margin: 0 14%;
+  }
+}
