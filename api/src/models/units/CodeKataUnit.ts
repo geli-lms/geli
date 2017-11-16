@@ -14,7 +14,10 @@ const codeKataSchema = new mongoose.Schema({
   },
   test: {
     type: String
-  }
+  },
+  deadline: {
+    type: String
+  },
 });
 
 const CodeKataUnit = Unit.discriminator('code-kata', codeKataSchema);

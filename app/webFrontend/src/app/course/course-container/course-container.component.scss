@@ -21,6 +21,10 @@
   }
 }
 
+.subtitle {
+  padding-left: 1em;
+}
+
 .open-toggle {
   color: map-get($app-primary, 'default');
   transition: transform 0.3s;
