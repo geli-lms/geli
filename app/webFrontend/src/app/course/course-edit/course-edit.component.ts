@@ -48,7 +48,7 @@ export class CourseEditComponent implements OnInit {
           }
           this.courseOb = val;
         }, (error) => {
-          // FIXME: Add snackbar here
+          this.snackBar.open('Couldn\'t load Course-Item', '', {duration: 3000});
         });
     });
   }

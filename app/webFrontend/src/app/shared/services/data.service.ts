@@ -241,7 +241,7 @@ export class AboutDataService extends DataService {
       this.backendService.get(this.apiPath + 'dependencies')
       .subscribe((responseItems: any) => {
           if (responseItems.httpCode >= 500) {
-            // FIXME: Add snackbar here
+            // FIXME: Just return, right?
             return resolve([]);
           }
 

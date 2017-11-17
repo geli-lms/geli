@@ -7,6 +7,7 @@ import {IProgress} from '../../../../../../shared/models/IProgress';
 import {ProgressService} from '../../shared/services/data/progress.service';
 import {UserService} from '../../shared/services/user.service';
 import {User} from '../../models/User';
+import {MatSnackBar} from "@angular/material";
 
 @Component({
   selector: 'app-teacher-report',
@@ -26,7 +27,8 @@ export class TeacherReportComponent implements OnInit {
               private courseService: CourseService,
               private unitService: UnitService,
               private progressService: ProgressService,
-              private userService: UserService) {
+              private userService: UserService,
+              private snackBar: MatSnackBar) {
   }
 
   ngOnInit() {
@@ -51,7 +53,7 @@ export class TeacherReportComponent implements OnInit {
         }
       },
       (err: any) => {
-        // FIXME: Add snackbar here
+        this.snackBar.open('Couldn\'t read course', '', {duration: 3000});
       })
     .then(() => {
       if (this.course) {

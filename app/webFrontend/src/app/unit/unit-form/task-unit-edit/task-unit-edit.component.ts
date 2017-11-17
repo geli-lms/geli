@@ -137,8 +137,6 @@ export class TaskUnitEditComponent implements OnInit {
       (val) => {
         task = val; // get _id
         this.tasks.splice(0, 0, task); // add item to start
-
-        //     this.log(val);
       }, (error) => {
         // FIXME: Add snackbar here
       });

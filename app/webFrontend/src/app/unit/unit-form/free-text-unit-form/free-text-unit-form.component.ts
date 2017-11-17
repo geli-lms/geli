@@ -59,7 +59,7 @@ export class FreeTextUnitFormComponent implements OnInit {
             this.onDone();
           },
           error => {
-            // FIXME: Add snackbar here
+            this.snackBar.open('Couldn\'t save unit', '', {duration: 3000});
           }
         );
     } else {
@@ -72,7 +72,7 @@ export class FreeTextUnitFormComponent implements OnInit {
             this.onDone();
           },
           error => {
-            // FIXME: Add snackbar here
+            this.snackBar.open('Couldn\'t update unit', '', {duration: 3000});
           }
         );
     }
