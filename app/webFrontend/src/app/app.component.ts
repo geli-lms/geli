@@ -7,7 +7,7 @@ import {APIInfoService} from './shared/services/data.service';
 import {APIInfo} from './models/APIInfo';
 import {isNullOrUndefined} from 'util';
 import {RavenErrorHandler} from './shared/services/raven-error-handler.service';
-import {MatSnackBar} from "@angular/material";
+import {MatSnackBar} from '@angular/material';
 
 @Component({
   selector: 'app-root',

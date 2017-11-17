@@ -7,7 +7,7 @@ import {IProgress} from '../../../../../../shared/models/IProgress';
 import {ProgressService} from '../../shared/services/data/progress.service';
 import {UserService} from '../../shared/services/user.service';
 import {User} from '../../models/User';
-import {MatSnackBar} from "@angular/material";
+import {MatSnackBar} from '@angular/material';
 
 @Component({
   selector: 'app-teacher-report',
