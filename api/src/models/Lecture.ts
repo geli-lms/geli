@@ -65,6 +65,7 @@ lectureSchema.methods.export = function() {
   }))
     .then((exportedUnits) => {
       obj.units = exportedUnits;
+      console.log(obj);
       return obj;
     });
 };
@@ -82,7 +83,7 @@ lectureSchema.methods.import = function(courseId: String) {
         return new Unit(unit).import(courseId);
       }))
         .then((importedUnits) => {
-          savedLecture.lectures.concat(importedUnits);
+          savedLecture.units.concat(importedUnits);
           return savedLecture.save();
         });
     })

@@ -4,7 +4,7 @@ import {IFreeTextUnit} from '../../../../shared/models/units/IFreeTextUnit';
 
 interface IFreeTextUnitModel extends IFreeTextUnit, mongoose.Document {
   export: () => Promise<IFreeTextUnit>;
-  import: (IFreeTextUnit) => (void);
+  import: (IFreeTextUnit) => (IFreeTextUnit);
 }
 
 const freeTextUnitSchema = new mongoose.Schema({

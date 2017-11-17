@@ -1,5 +1,8 @@
 import {Request} from 'express';
-import {Body, Get, Post, Put, Delete, Param, Req, JsonController, UseBefore, Authorized} from 'routing-controllers';
+import {
+  Body, Get, Post, Put, Delete, Param, Req, JsonController, UseBefore, Authorized,
+  BadRequestError
+} from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import {FreeTextUnit} from '../models/units/FreeTextUnit';
 import {TaskUnit} from '../models/units/TaskUnit';
@@ -9,7 +12,8 @@ import {VideoUnit} from '../models/units/VideoUnit';
 import {IUnit} from '../../../shared/models/units/IUnit';
 import {ITaskUnit} from '../../../shared/models/units/ITaskUnit';
 import {ITask} from '../../../shared/models/task/ITask';
-import {Lecture} from '../models/Lecture';
+import {ILectureModel, Lecture} from '../models/Lecture';
+import {ILecture} from '../../../shared/models/ILecture';
 
 
 @JsonController('/duplicate')
@@ -23,8 +27,21 @@ export class DuplicationController {
   }
 
   @Post('/lecture/:id')
-  duplicateLecture(@Body() data: any, @Req() request: Request) {
-    // TODO
+  duplicateLecture(@Param('id') id: string, @Body() data: any, @Req() request: Request) {
+    const courseId = data.courseId;
+    console.log('courseid: ' + courseId);
+    console.log('lectureID: ' + id);
+    return Lecture.findById(id)
+      .then(lecture => {
+        console.log('lecture = ' + lecture);
+        return lecture.export();
+      }).then(exportedLecture => {
+        console.log('exportedLecture = ' + exportedLecture);
+        return new Lecture(exportedLecture).import(courseId);
+      });
+    // .catch((error) => {
+    //     throw new BadRequestError(error);
+    //   });
   }
 
   @Post('/unit/:id')
@@ -32,7 +49,4 @@ export class DuplicationController {
     // TODO
   }
 
-  duplicateUnit(unit: IUnit) {
-    // TODO
-  }
 }
