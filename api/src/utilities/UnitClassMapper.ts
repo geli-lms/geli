@@ -3,37 +3,37 @@ import {Progress} from '../models/Progress';
 import {InternalServerError} from 'routing-controllers';
 import {IUnit} from '../../../shared/models/units/IUnit';
 import {CodeKataUnit} from '../models/units/CodeKataUnit';
-import {ITaskUnitModel} from '../models/units/TaskUnit';
+import {TaskUnit} from '../models/units/TaskUnit';
 import {FileUnit} from '../models/units/FileUnit';
 import {FreeTextUnit} from '../models/units/FreeTextUnit';
-import {IVideoUnitModel} from '../models/units/VideoUnit';
+import {VideoUnit} from '../models/units/VideoUnit';
 
 export class UnitClassMapper {
 
   private static classMappings: any = {
     'free-text' :
       {
-  //      mongooseClass: FreeTextUnit,
+        mongooseClass: FreeTextUnit,
         progressClass: null,
       },
     'file' :
       {
-  //      mongooseClass: FileUnit,
+        mongooseClass: FileUnit,
         progressClass: null,
       },
     'video' :
       {
-   //     mongooseClass: VideoUnit,
+        mongooseClass: VideoUnit,
         progressClass: null,
       },
     'code-kata' :
       {
-   //     mongooseClass: CodeKataUnit,
+        mongooseClass: CodeKataUnit,
         progressClass: CodeKataProgress,
       },
     'task' :
       {
-   //     mongooseClass: TaskUnit,
+        mongooseClass: TaskUnit,
         progressClass: Progress,
       },
   };
@@ -43,17 +43,19 @@ export class UnitClassMapper {
     if (hasNoProgressClass) {
       throw new InternalServerError(`No classmapping for type ${unit.type} available`);
     }
+
+    return this.classMappings[unit.type];
   }
 
-//  public static getMongooseClassForUnit(unit: IUnit) {
-//    const classMapping = this.getClassMappingForUnit(unit);
-//
-//    return classMapping.mongooseClass;
-//  }
+  public static getMongooseClassForUnit(unit: IUnit) {
+    const classMapping = this.getClassMappingForUnit(unit);
+
+    return classMapping.mongooseClass;
+  }
 
   public static getProgressClassForUnit(unit: IUnit) {
     const classMapping = this.getClassMappingForUnit(unit);
-    if (!classMapping.progressClass) {
+    if (!classMapping) {
       throw new InternalServerError(`No progress class for type ${unit.type} available`);
     }
 
