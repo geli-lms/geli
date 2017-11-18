@@ -30,9 +30,11 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
       this.userService.searchUsers(this.role, search).then( (found) => {
         if (found) {
           const idList: string[] = this.dragableUsersInCourse.map((u) => u._id);
-          this.dragableUsers = found.filter(user => idList.indexOf(user._id) >= 0);
+          this.dragableUsers = found.filter(user => idList.indexOf(user._id) < 0);
+          this.dragableUsersInCourse = found.filter(user => idList.indexOf(user._id) >= 0);
         } else {
           this.dragableUsers = [];
+          this.dragableUsersInCourse = [];
         }
       });
       this.search = search;
@@ -86,6 +88,7 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
     // TODO Call userService or read from foundUsers.
     return val ? this.dragableUsers.filter(s => this.searchUsers(val, s))
         .map(e => e.profile.firstName + ' ' + e.profile.lastName + ' ' + e.email)
+        .slice(0 , 3)
       : [];
   }
 
