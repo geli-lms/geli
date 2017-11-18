@@ -6,6 +6,7 @@ import {DialogService} from '../../../shared/services/dialog.service';
 import 'rxjs/add/operator/startWith'
 import {UserService} from '../../../shared/services/user.service';
 import {UserDataService} from '../../../shared/services/data.service';
+import {ICourse} from '../../../../../../../shared/models/ICourse';
 
 @Component({
   selector: 'app-course-user-list',
@@ -15,6 +16,7 @@ import {UserDataService} from '../../../shared/services/data.service';
 export class CourseUserListComponent implements OnInit, OnDestroy {
 
   @Input() courseId;
+  @Input() course: ICourse;
   @Input() dragableUsersInCourse: IUser[];
   @Input() dragableUsers: IUser[];
   @Input() dragulaBagId;
@@ -26,12 +28,14 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
   filteredStates: any;
 
   set searchString(search: string) {
-    if (search !== '') {
-      this.userService.searchUsers(this.role, search).then( (found) => {
+    if (search !== '' && this.course) {
+      this.userService.searchUsers(this.role, search).then((found) => {
         if (found) {
           const idList: string[] = this.dragableUsersInCourse.map((u) => u._id);
-          this.dragableUsers = found.filter(user => idList.indexOf(user._id) < 0);
-          this.dragableUsersInCourse = found.filter(user => idList.indexOf(user._id) >= 0);
+          this.dragableUsers = found.filter(user => (idList.indexOf(user._id) < 0
+            && this.course.courseAdmin._id !== user._id));
+          this.dragableUsersInCourse = found.filter(user => (idList.indexOf(user._id) >= 0
+            && this.course.courseAdmin._id !== user._id));
         } else {
           this.dragableUsers = [];
           this.dragableUsersInCourse = [];
@@ -88,7 +92,7 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
     // TODO Call userService or read from foundUsers.
     return val ? this.dragableUsers.filter(s => this.searchUsers(val, s))
         .map(e => e.profile.firstName + ' ' + e.profile.lastName + ' ' + e.email)
-        .slice(0 , 3)
+        .slice(0, 3)
       : [];
   }
 
