@@ -75,7 +75,7 @@ unitSchema.methods.import = function(unit: IUnit, courseId: string) {
   this._course = courseId;
 
 
-  //const mongooseClass = UnitClassMapper.getMongooseClassForUnit(unit);
+  // const mongooseClass = UnitClassMapper.getMongooseClassForUnit(unit);
 
   return new Unit(unit).save()
   .catch((err: Error) => {
