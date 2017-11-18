@@ -13,6 +13,7 @@ import {SharedModule} from '../../shared/shared.module';
 import {CourseEditRoutingModule} from './course-edit-routing.module';
 import {LectureModule} from '../../lecture/lecture.module';
 import {UnitFormModule} from '../../unit/unit-form/unit-form.module';
+import { WhitelistEditComponent } from './members/whitelist-edit/whitelist-edit.component';
 
 @NgModule({
   imports: [
@@ -33,6 +34,7 @@ import {UnitFormModule} from '../../unit/unit-form/unit-form.module';
     MembersComponent,
     TeachersComponent,
     MatFabMenuComponent,
+    WhitelistEditComponent,
   ],
   exports: [
     CourseEditComponent,
