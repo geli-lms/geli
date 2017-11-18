@@ -12,7 +12,7 @@
 <div class="members" *ngIf="search.length <= 0">
   <ng-container *ngFor="let user of dragableUsersInCourse">
     <mat-card [ngClass]="(currentUser != null && currentUser._id == user._id) ? 'active':'profile'"
-              (click)="setMember(user)">
+              (click)="setCurrentUser(user)">
 
       <div class="bg" user-image [user-image]="user" [size]="160"></div>
 

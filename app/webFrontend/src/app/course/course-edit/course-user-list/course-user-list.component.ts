@@ -26,9 +26,7 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
   filteredStates: any;
 
   set searchString(search: string) {
-    console.log(this.currentUser);
     if (search !== '') {
-      console.log('Set ' + search);
       this.userService.searchUsers(this.role, search).then( (found) => {
         if (found) {
           const idList: string[] = this.dragableUsersInCourse.map((u) => u._id);
@@ -46,7 +44,6 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
   get searchString(): string {
     return this.search;
   }
-
 
   @Output() onDragendUpdate = new EventEmitter<IUser[]>();
   @Output() onUpdate = new EventEmitter<String>();
@@ -105,7 +102,7 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
     return resArray.length > 0;
   }
 
-  updateUser() {
+  removeUser() {
     this.dialogService
       .confirmRemove(this.currentUser.role, this.currentUser.email, 'course')
       .subscribe(res => {
