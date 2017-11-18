@@ -89,24 +89,10 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
   }
 
   filterStates(val: string) {
-    // TODO Call userService or read from foundUsers.
-    return val ? this.dragableUsers.filter(s => this.searchUsers(val, s))
+    return val ? this.dragableUsers.concat(this.dragableUsers)
         .map(e => e.profile.firstName + ' ' + e.profile.lastName + ' ' + e.email)
         .slice(0, 3)
       : [];
-  }
-
-  searchUsers(toSearch: string, user: IUser): boolean {
-    const lowerToSearch: string = toSearch.toLowerCase();
-    const elementsToFind = lowerToSearch.split(' ');
-    if (user.uid === undefined) {
-      user.uid = '';
-    }
-    const resArray = elementsToFind.filter(e => user.profile.firstName.toLowerCase().includes(e) ||
-      user.profile.lastName.toLowerCase().includes(e) ||
-      user.email.toLowerCase().includes(e)
-    );
-    return resArray.length > 0;
   }
 
   removeUser() {
