@@ -33,6 +33,10 @@ export class UserEditComponent implements OnInit {
     this.generateForm();
   }
 
+  userIsAdmin(): boolean {
+    return this.userService.isAdmin();
+  }
+
   ngOnInit() {
     this.passwordPatternText = pwPattern.text;
     this.route.params.subscribe(params => {

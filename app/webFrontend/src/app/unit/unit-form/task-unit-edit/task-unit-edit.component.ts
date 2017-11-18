@@ -62,27 +62,69 @@ export class TaskUnitEditComponent implements OnInit {
   }
 
   saveUnit() {
-    const taskToSend = {
+    this.model = {
       ...this.model,
       name: this.generalInfo.form.value.name,
       description: this.generalInfo.form.value.description,
       deadline: this.generalInfo.form.value.deadline,
     };
-    let taskPromise = null;
-    if (this.add) {
-      taskPromise = this.unitService.addTaskUnit(taskToSend, this.lectureId)
-    } else {
-      taskPromise = this.unitService.updateItem(taskToSend);
+
+    if (this.isTaskUnitValid()) {
+      let taskPromise = null;
+      if (this.add) {
+        taskPromise = this.unitService.addTaskUnit(this.model, this.lectureId)
+      } else {
+        taskPromise = this.unitService.updateItem(this.model);
+      }
+      taskPromise.then(
+        (task) => {
+          this.snackBar.open(`Task ${this.add ? 'created' : 'updated'}`, '', {duration: 3000});
+          this.onDone();
+        },
+        (error) => {
+          console.log(error);
+        });
     }
-    taskPromise.then(
-      (task) => {
-        this.snackBar.open(`Task ${this.add ? 'created' : 'updated'}`, '', {duration: 3000});
-        this.onDone();
-      },
-      (error) => {
-        console.log(error);
-      });
   };
+
+  isTaskUnitValid() {
+    const taskUnit = this.model;
+
+    if (taskUnit.name === null || taskUnit.name.trim() === '') {
+      this.snackBar.open('Task not valid: Name is required', '', {duration: 3000});
+      return false
+    } else if (taskUnit.tasks.length === 0) {
+      this.snackBar.open('Task not valid: At least one question is required', '', {duration: 3000});
+      return false
+    } else {
+      for (const task of taskUnit.tasks) {
+        if (task.name === undefined || task.name.trim() === '') {
+          this.snackBar.open('Task not valid: Every question requires some text', '', {duration: 3000});
+          return false
+        } else if (task.answers.length < 2) {
+          this.snackBar.open('Task not valid: Every question requires at least two answers', '', {duration: 3000});
+          return false
+        } else {
+          let noAnswersChecked = true;
+
+          for (const answer of task.answers) {
+            if (noAnswersChecked) {
+              noAnswersChecked = !answer.value
+            }
+            if (answer.text === undefined || answer.text.trim() === '') {
+              this.snackBar.open('Task not valid: Every answer requires some text', '', {duration: 3000});
+              return false
+            }
+          }
+          if (noAnswersChecked) {
+            this.snackBar.open('Task not valid: Every question requires at least one checked answer', '', {duration: 3000});
+            return false
+          }
+        }
+      }
+    }
+    return true
+  }
 
   addTask() {
     this.model.tasks.push(new Task());
