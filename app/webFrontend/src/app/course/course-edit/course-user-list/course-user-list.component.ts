@@ -15,8 +15,8 @@ import {UserDataService} from '../../../shared/services/data.service';
 export class CourseUserListComponent implements OnInit, OnDestroy {
 
   @Input() courseId;
-  @Input() usersInCourse: IUser[];
-  @Input() users: IUser[];
+  @Input() dragableUsersInCourse: IUser[];
+  @Input() dragableUsers: IUser[];
   @Input() dragulaBagId;
   @Input() role;
 
@@ -31,10 +31,10 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
       console.log('Set ' + search);
       this.userService.searchUsers(this.role, search).then( (found) => {
         if (found) {
-          const idList: string[] = this.usersInCourse.map((u) => u._id);
-          this.users = found.filter(user => idList.indexOf(user._id) >= 0);
+          const idList: string[] = this.dragableUsersInCourse.map((u) => u._id);
+          this.dragableUsers = found.filter(user => idList.indexOf(user._id) >= 0);
         } else {
-          this.users = [];
+          this.dragableUsers = [];
         }
       });
       this.search = search;
@@ -72,7 +72,7 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
       const bagName = value[0];
 
       if (bagName === this.dragulaBagId) {
-        this.onDragendUpdate.emit(this.usersInCourse);
+        this.onDragendUpdate.emit(this.dragableUsersInCourse);
       }
     });
     this.userCtrl = new FormControl();
@@ -87,7 +87,7 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
 
   filterStates(val: string) {
     // TODO Call userService or read from foundUsers.
-    return val ? this.users.filter(s => this.searchUsers(val, s))
+    return val ? this.dragableUsers.filter(s => this.searchUsers(val, s))
         .map(e => e.profile.firstName + ' ' + e.profile.lastName + ' ' + e.email)
       : [];
   }

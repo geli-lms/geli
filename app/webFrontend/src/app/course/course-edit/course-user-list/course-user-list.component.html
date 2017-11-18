@@ -10,7 +10,7 @@
 </mat-autocomplete>
 
 <div class="members" *ngIf="search.length <= 0">
-  <ng-container *ngFor="let user of usersInCourse">
+  <ng-container *ngFor="let user of dragableUsersInCourse">
     <mat-card [ngClass]="(currentUser != null && currentUser._id == user._id) ? 'active':'profile'"
               (click)="setMember(user)">
 
@@ -32,9 +32,9 @@
 </div>
 
 <div class="users" *ngIf="search.length > 0">
-  <div class="titleHeader"><h2>In course</h2><app-badge [displayNumber]="usersInCourse.length"></app-badge></div>
-  <mat-list class="drop" [dragula]='dragulaBagId' [dragulaModel]='usersInCourse'>
-    <div *ngFor="let member of usersInCourse">
+  <div class="titleHeader"><h2>In course</h2><app-badge [displayNumber]="dragableUsersInCourse.length"></app-badge></div>
+  <mat-list class="drop" [dragula]='dragulaBagId' [dragulaModel]="dragableUsersInCourse">
+    <div *ngFor="let member of dragableUsersInCourse">
       <mat-list-item class="list" *ngIf="searchUsers(search,member)" [attr.data-id]="[member._id]">
         <mat-icon class="user-drag-handle">drag_handle</mat-icon>
         <span class="listBg" [grav]="member.email"></span>
@@ -46,9 +46,9 @@
     </div>
   </mat-list>
 
-  <div class="titleHeader"><h2>Not in course</h2><app-badge [displayNumber]="users.length"></app-badge></div>
-  <mat-list class="drop" [dragula]='dragulaBagId' [dragulaModel]='users'>
-    <div *ngFor="let user of users">
+  <div class="titleHeader"><h2>Not in course</h2><app-badge [displayNumber]="dragableUsers.length"></app-badge></div>
+  <mat-list class="drop" [dragula]='dragulaBagId' [dragulaModel]="dragableUsers">
+    <div *ngFor="let user of dragableUsers">
       <mat-list-item class="list" *ngIf="searchUsers(search,user)" [attr.data-id]="[user._id]">
         <mat-icon class="member-drag-handle">drag_handle</mat-icon>
         <span class="listBg" [grav]="user.email"></span>
