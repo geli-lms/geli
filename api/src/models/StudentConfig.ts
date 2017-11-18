@@ -5,17 +5,16 @@ interface IStudentConfigModel extends IStudentConfig, mongoose.Document {
 }
 
 const studentConfigSchema = new mongoose.Schema({
-  _user: {
+  user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'
   },
-  lastVisitedCourse: {
+  lastVisitedCourses: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Course'
-  }
+  }]
 });
 
-
-const StudentConfig = mongoose.model<IStudentConfigModel>('StudentCofig', studentConfigSchema);
+const StudentConfig = mongoose.model<IStudentConfigModel>('StudentConfig', studentConfigSchema);
 
 export {StudentConfig, studentConfigSchema};

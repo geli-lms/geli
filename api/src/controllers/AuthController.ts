@@ -7,7 +7,7 @@ import {json as bodyParserJson} from 'body-parser';
 import passportLoginMiddleware from '../security/passportLoginMiddleware';
 import emailService from '../services/EmailService';
 import {IUser} from '../../../shared/models/IUser';
-import {IStudentConfig} from "../../../shared/models/IStudentConfig";
+import {StudentConfig} from '../models/StudentConfig';
 import {IUserModel, User} from '../models/User';
 import {JwtUtils} from '../security/JwtUtils';
 import config from '../config/main';
@@ -50,8 +50,6 @@ export class AuthController {
         }
 
         const newUser = new User(user);
-        const studentConfig = new Studen;
-
         return newUser.save();
       })
       .then((savedUser) => {
