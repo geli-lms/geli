@@ -6,7 +6,7 @@ import {InternalServerError} from 'routing-controllers';
 
 interface ILectureModel extends ILecture, mongoose.Document {
   export: () => Promise<ILecture>;
-  import: (courseId: String) => Promise<ILecture>;
+  import: (lecture: ILecture, courseId: String) => Promise<ILecture>;
 }
 
 const lectureSchema = new mongoose.Schema({
@@ -69,17 +69,17 @@ lectureSchema.methods.export = function() {
     });
 };
 
-lectureSchema.methods.import = function(courseId: string) {
+lectureSchema.methods.import = function(lecture: ILecture, courseId: string) {
   // import lectures
-  const units: Array<IUnit>  = this.units;
-  this.units = [];
+  const units: Array<IUnit>  = lecture.units;
+  lecture.units = [];
 
-  return this.save()
+  return new Lecture(lecture).save()
     .then((savedLecture: ILectureModel) => {
       const lectureId = savedLecture._id;
 
       return Promise.all(units.map((unit: IUnit) => {
-        return new Unit(unit).import(courseId);
+        return new Unit().import(unit, courseId);
       }))
         .then((importedUnits: IUnit[]) => {
           savedLecture.units.concat(importedUnits);

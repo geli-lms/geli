@@ -8,7 +8,7 @@ import {IUser} from '../../../shared/models/IUser';
 
 interface ICourseModel extends ICourse, mongoose.Document {
   export: () => Promise<ICourse>;
-  import: (admin: IUser) => Promise<ICourse>;
+  import: (course: ICourse, admin: IUser) => Promise<ICourse>;
 }
 
 const courseSchema = new mongoose.Schema({
@@ -113,20 +113,20 @@ courseSchema.methods.export = function() {
   });
 };
 
-courseSchema.methods.import = function(admin: IUser) {
+courseSchema.methods.import = function(course: ICourse, admin: IUser) {
   // set Admin
-  this.courseAdmin = admin;
+  course.courseAdmin = admin;
 
   // import lectures
-  const lectures: Array<ILecture>  = this.lectures;
-  this.lectures = [];
+  const lectures: Array<ILecture>  = course.lectures;
+  course.lectures = [];
 
-  return this.save()
+  return new Course(course).save()
     .then((savedcourse: ICourseModel) => {
       const courseId = savedcourse._id;
 
       return Promise.all(lectures.map((lecture: ILecture) => {
-        return new Lecture(lecture).import(courseId);
+        return new Lecture().import(lecture, courseId);
       }))
       .then((importedLectures: ILecture[]) => {
         savedcourse.lectures.concat(importedLectures);
