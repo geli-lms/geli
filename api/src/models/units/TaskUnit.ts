@@ -1,7 +1,8 @@
 import * as mongoose from 'mongoose';
 import {Unit} from './Unit';
 import {ITaskUnit} from '../../../../shared/models/units/ITaskUnit';
-import {Task} from '../Task';
+import {ITaskModel, Task} from '../Task';
+import {ITask} from '../../../../shared/models/task/ITask';
 
 interface ITaskUnitModel extends ITaskUnit, mongoose.Document {
   export: () => Promise<ITaskUnit>;
@@ -58,7 +59,7 @@ taskUnitSchema.methods.export = function() {
 
 taskUnitSchema.methods.import = function(courseId: string) {
   this._course = courseId;
-  this.tasks.forEach((task) => {
+  this.tasks.forEach((task: ITaskModel) => {
     task.import();
   });
   return new TaskUnit(this).save();

@@ -4,7 +4,7 @@ import {ICodeKataUnit} from '../../../../shared/models/units/ICodeKataUnit';
 
 interface ICodeKataModel extends ICodeKataUnit, mongoose.Document {
   export: () => Promise<ICodeKataUnit>;
-  import: (ICodeKataUnit) => (void);
+  import: (courseId: string) => Promise<ICodeKataUnit>;
 }
 
 const codeKataSchema = new mongoose.Schema({

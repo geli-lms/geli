@@ -5,7 +5,7 @@ import fs = require('fs');
 
 interface IFileUnitModel extends IFileUnit, mongoose.Document {
   export: () => Promise<IFileUnit>;
-  import: (IFileUnit) => (void);
+  import: (courseId: string) => Promise<IFileUnit>;
 }
 
 const fileUnitSchema = new mongoose.Schema({
