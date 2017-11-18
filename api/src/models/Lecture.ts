@@ -87,11 +87,12 @@ lectureSchema.methods.import = function(lecture: ILecture, courseId: string) {
         });
     })
     .then((importedLecture: ILectureModel) => {
-      console.log(importedLecture);
       return importedLecture.toObject();
     })
-    .catch((err: any) => {
-      throw new InternalServerError(err);
+    .catch((err: Error) => {
+      const newError = new InternalServerError('Failed to import lecture');
+      newError.stack += '\nCaused by: ' + err.stack;
+      throw newError;
     });
 };
 

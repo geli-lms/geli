@@ -136,8 +136,10 @@ courseSchema.methods.import = function(course: ICourse, admin: IUser) {
     .then((importedCourse: ICourseModel) => {
       return importedCourse.toObject();
     })
-    .catch((err: any) => {
-      throw new InternalServerError(err);
+    .catch((err: Error) => {
+      const newError = new InternalServerError('Failed to import course');
+      newError.stack += '\nCaused by: ' + err.stack;
+      throw newError;
     });
 };
 
