@@ -69,13 +69,10 @@ unitSchema.methods.export = function() {
   delete obj._course;
 
   return obj;
-}
+};
 
 unitSchema.methods.import = function(unit: IUnit, courseId: string) {
   this._course = courseId;
-
-
-  // const mongooseClass = UnitClassMapper.getMongooseClassForUnit(unit);
 
   return new Unit(unit).save()
   .catch((err: Error) => {
@@ -83,7 +80,7 @@ unitSchema.methods.import = function(unit: IUnit, courseId: string) {
     newError.stack += '\nCaused by: ' + err.stack;
     throw newError;
   });
-}
+};
 
 // Cascade delete
 unitSchema.pre('remove', function(next: () => void) {
