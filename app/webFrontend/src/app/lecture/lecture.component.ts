@@ -2,6 +2,7 @@ import {Component, OnInit, Input} from '@angular/core';
 import {UserService} from '../shared/services/user.service';
 import {ICourse} from '../../../../../shared/models/ICourse';
 import {ILecture} from '../../../../../shared/models/ILecture';
+import {MatExpansionModule} from '@angular/material/expansion';
 
 @Component({
   selector: 'app-lecture',

@@ -28,6 +28,7 @@
     "@angular/platform-browser-dynamic": "^5.0.0",
     "@angular/router": "^5.0.0",
     "@ngx-translate/core": "^8.0.0",
+    "angular-material-expansion-panel": "^0.7.2",
     "blueimp-md5": "^2.10.0",
     "core-js": "^2.5.1",
     "markdown-it": "^8.4.0",
