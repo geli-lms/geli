@@ -28,11 +28,16 @@ export class AuthController {
   @Post('/register')
   @OnUndefined(204)
   postRegister(@Body() user: IUser) {
-    return User.findOne({email: user.email})
+    return User.findOne({$or: [{email: user.email}, {uid: user.uid}]})
       .then((existingUser) => {
         // If user is not unique, return error
         if (existingUser) {
-          throw new BadRequestError('That email address is already in use');
+          if (user.role === 'student' && existingUser.uid === user.uid) {
+            throw new BadRequestError('That matriculation number is already in use');
+          }
+          if (existingUser.email === user.email) {
+            throw new BadRequestError('That email address is already in use');
+          }
         }
 
         if (user.role !== 'teacher' && user.role !== 'student') {

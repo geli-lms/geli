@@ -1,16 +1,52 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
+import {ICourse} from '../../../../../../../shared/models/ICourse';
+import {UserService} from '../../../shared/services/user.service';
+import {DashboardBaseComponent} from '../dashboard-base-component';
 
 @Component({
   selector: 'app-dashboard-teacher',
   templateUrl: './dashboard-teacher.component.html',
   styleUrls: ['./dashboard-teacher.component.scss']
 })
-export class DashboardTeacherComponent implements OnInit {
+export class DashboardTeacherComponent extends DashboardBaseComponent {
 
-  constructor() {
+  myCourses: ICourse[];
+  furtherCourses: ICourse[];
+  inactiveCourses: ICourse[];
+  availableCourses: ICourse[];
+
+  constructor(public userService: UserService) {
+    super();
   }
 
-  ngOnInit() {
+  ngOnChanges() {
+    this.sortCourses();
   }
 
+  sortCourses() {
+    this.myCourses = [];
+    this.availableCourses = [];
+    this.furtherCourses = [];
+    this.inactiveCourses = [];
+
+    for (const course of this.allCourses) {
+      if ((this.filterMyCourses(course) || this.filterAdminCourses(course)) && !course.active) {
+        this.inactiveCourses.push(course);
+      } else if (this.filterAdminCourses(course)) {
+        this.myCourses.push(course);
+      } else if (this.filterMyCourses(course)) {
+        this.furtherCourses.push(course);
+      } else {
+        this.availableCourses.push(course);
+      }
+    }
+  }
+
+  filterAdminCourses(course: ICourse) {
+    return (course.courseAdmin._id === this.userService.user._id);
+  }
+
+  filterMyCourses(course: ICourse) {
+    return (course.teachers.filter(teacher => teacher._id === this.userService.user._id).length);
+  }
 }
