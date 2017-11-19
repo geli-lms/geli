@@ -4,7 +4,6 @@ import {IUser} from '../../../../../../../shared/models/IUser';
 import {FormControl} from '@angular/forms';
 import {DialogService} from '../../../shared/services/dialog.service';
 import 'rxjs/add/operator/startWith'
-import {UserService} from '../../../shared/services/user.service';
 import {UserDataService} from '../../../shared/services/data.service';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
 
@@ -40,8 +39,8 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
           this.dragableUsers = [];
           this.dragableUsersInCourse = [];
         }
+        this.search = search;
       });
-      this.search = search;
     } else {
       this.search = search;
     }
@@ -51,7 +50,7 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
     return this.search;
   }
 
-  @Output() onDragendUpdate = new EventEmitter<IUser[]>();
+  @Output() onDragendUpdate = new EventEmitter<IUser>();
   @Output() onUpdate = new EventEmitter<String>();
 
   setCurrentUser(user: IUser) {
@@ -72,10 +71,11 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
       }
     });
     this.dragula.dropModel.subscribe(value => {
-      const bagName = value[0];
-
+      const [bagName, el, target, source] = value;
+      const draggedUser: IUser = this.dragableUsers.concat(this.dragableUsersInCourse)
+        .find((user: IUser) => user._id === el.children[0].getAttribute('item-id'));
       if (bagName === this.dragulaBagId) {
-        this.onDragendUpdate.emit(this.dragableUsersInCourse);
+        this.onDragendUpdate.emit(draggedUser);
       }
     });
     this.userCtrl = new FormControl();

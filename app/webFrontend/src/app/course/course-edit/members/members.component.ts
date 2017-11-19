@@ -4,6 +4,7 @@ import {ShowProgressService} from '../../../shared/services/show-progress.servic
 import {IUser} from '../../../../../../../shared/models/IUser';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
 import {User} from '../../../models/User';
+import {isNullOrUndefined} from 'util';
 
 @Component({
   selector: 'app-members',
@@ -50,6 +51,23 @@ export class MembersComponent implements OnInit {
     .then(() => {
       this.showProgress.toggleLoadingGlobal(false);
     });
+  }
+
+  isUserInCourse(user: IUser) {
+    return !isNullOrUndefined(this.course.students.find((elem: IUser) => elem._id === user._id));
+  }
+
+  updateCoure(draggedUser: IUser) {
+    if (this.isUserInCourse(draggedUser)) { // remove from course
+      const idList: string[] = this.course.students.map((u) => u._id);
+      const index: number = idList.indexOf(draggedUser._id);
+      if (index !== -1) {
+        this.course.students.splice(index, 1);
+      }
+    } else { // add to course
+      this.course.students.push(draggedUser);
+    }
+    this.updateCourseStudents();
   }
 
   /**

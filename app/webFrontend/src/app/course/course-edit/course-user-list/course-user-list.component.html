@@ -35,7 +35,7 @@
   <div class="titleHeader"><h2>In course</h2><app-badge [displayNumber]="dragableUsersInCourse.length"></app-badge></div>
   <mat-list class="drop" [dragula]='dragulaBagId' [dragulaModel]="dragableUsersInCourse">
     <div *ngFor="let member of dragableUsersInCourse">
-      <mat-list-item class="list">
+      <mat-list-item class="list" [attr.item-id]="member._id">
         <mat-icon class="user-drag-handle">drag_handle</mat-icon>
         <!--<span class="listBg" user-image [user-image]="member" [size]="32"></span>-->
         <span class="firstName">{{member.profile.firstName}}</span>
@@ -49,7 +49,7 @@
   <div class="titleHeader"><h2>Not in course</h2><app-badge [displayNumber]="dragableUsers.length"></app-badge></div>
   <mat-list class="drop" [dragula]='dragulaBagId' [dragulaModel]="dragableUsers">
     <div *ngFor="let user of dragableUsers">
-      <mat-list-item class="list">
+      <mat-list-item class="list" [attr.item-id]="user._id">
         <mat-icon class="member-drag-handle">drag_handle</mat-icon>
         <!--<span class="listBg" user-image  [user-image]="user" [size]="32"></span>-->
         <span class="firstName">{{user.profile.firstName}}</span>
