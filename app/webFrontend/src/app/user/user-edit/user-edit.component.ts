@@ -31,11 +31,18 @@ export class UserEditComponent implements OnInit {
     this.generateForm();
   }
 
-  userIsAdmin(): boolean {
-    return this.userService.isAdmin();
+  hidePwFields() {
+    if(this.user) {
+      if(this.userService.user._id == this.user._id) {
+        return true;
+      }
+    } else {
+      return false;
+    }
   }
 
   ngOnInit() {
+    console.log("ngOnInit");
     this.route.params.subscribe(params => {
       this.id = decodeURIComponent(params['id']);
 
@@ -44,12 +51,14 @@ export class UserEditComponent implements OnInit {
       }
     });
     this.getUserData();
+    console.log("user data hier");
   }
 
   getUserData() {
     this.userDataService.readSingleItem(this.id).then(
       (val: any) => {
-        this.user = val;
+         this.user = val;
+        console.log("user wird gesetzt");
         this.userForm.patchValue({
           profile: {
             firstName: this.user.profile.firstName,
