@@ -8,6 +8,18 @@
   float: left;
 }
 
+.open-toggle {
+  width: 2.5rem;
+  height: 100%;
+  color: map-get($app-primary, 'default');
+  transition: transform 0.3s;
+  transform: rotate(-90deg);
+
+  &.opened {
+    transform: rotate(0);
+  }
+}
+
 .user-drag-handle, .member-drag-handle {
   cursor: move;
   opacity: 0.2;

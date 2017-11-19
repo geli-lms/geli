@@ -1,6 +1,7 @@
 <app-course-user-list *ngIf="course && foundStudents"
                       [courseId]="courseId"
                       [course] = "course"
+                      [users]="course.students"
                       [dragableUsersInCourse]="course.students"
                       [dragableUsers]="foundStudents"
                       [role]="'student'"
