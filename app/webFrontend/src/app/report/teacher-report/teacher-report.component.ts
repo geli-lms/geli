@@ -2,11 +2,13 @@ import {Component, OnInit} from '@angular/core';
 import {CourseService, UnitService} from '../../shared/services/data.service';
 import {ICourse} from '../../../../../../shared/models/ICourse';
 import {IUnit} from '../../../../../../shared/models/units/IUnit';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {IProgress} from '../../../../../../shared/models/IProgress';
 import {ProgressService} from '../../shared/services/data/progress.service';
 import {UserService} from '../../shared/services/user.service';
 import {User} from '../../models/User';
+import {ShowProgressService} from '../../shared/services/show-progress.service';
+import {ReportService} from '../../shared/services/data/report.service';
 
 @Component({
   selector: 'app-teacher-report',
@@ -18,87 +20,32 @@ export class TeacherReportComponent implements OnInit {
   id: string;
   course: ICourse;
   students: User[];
-  progressableUnits: IUnit[] = [];
   progress: IProgress[];
-  report: any[] = [];
+  report: any;
+
+  public diagramColors = {
+    domain: ['#A10A28', '#C7B42C', '#5AA454']
+  };
 
   constructor(private route: ActivatedRoute,
-              private courseService: CourseService,
-              private unitService: UnitService,
-              private progressService: ProgressService,
-              private userService: UserService) {
+              private router: Router,
+              private reportService: ReportService,
+              private showProgress: ShowProgressService) {
   }
 
   ngOnInit() {
-    this.route.params.subscribe(params => {
+    this.route.parent.params.subscribe(params => {
       this.id = decodeURIComponent(params['id']);
     });
-    this.getCourseAndStudents();
-    // this.getReport();
+    this.getReport();
   }
 
   getReport() {
-    this.progressService.getCourseProgress(this.id)
+    this.reportService.getCourseResults(this.id)
       .then((report) => {
-        const debug = 0;
-        this.report = report;
+        this.report = report.map((studentReport) => new User(studentReport));
       })
-      .catch((error) => {
-        const debug = 0;
-      });
-  }
-
-  getCourseAndStudents() {
-    this.courseService.readSingleItem(this.id)
-    .then(
-      (course: any) => {
-        this.course = course;
-        this.students = course.students.map((student) => new User(student));
-        for (const lecture of course.lectures) {
-          for (const unit of lecture.units) {
-            if (unit.progressable) {
-              this.progressableUnits.push(unit);
-            }
-          }
-        }
-        console.log('debug');
-      },
-      (err: any) => {
-        console.log(err);
+      .catch((err) => {
       })
-    .then(() => {
-      if (this.course) {
-        this.getProgress();
-      }
-    });
   }
-
-  getProgress() {
-    const progressableUnits = this.progressableUnits;
-    this.progressService.getCourseProgress(this.id)
-    .then((progress: any) => {
-      this.students.map((student) => {
-        const studentWithUnits: any = student;
-        studentWithUnits.units = [];
-        studentWithUnits.finishCount = 0;
-        this.progressableUnits.map((progressableUnit) => {
-          const unitWithProgress: any = progressableUnit;
-          for (let i = 0; i < progress.length; i++) {
-            if (studentWithUnits._id === progress[i].user && unitWithProgress._id === progress[i].unit) {
-              unitWithProgress.progress = progress[i];
-              if (unitWithProgress.progress.done) {
-                studentWithUnits.finishCount++;
-              }
-              progress.splice(i, 1);
-              break;
-            }
-          }
-          studentWithUnits.units.push(unitWithProgress);
-        });
-        studentWithUnits.completeRate = ((studentWithUnits.finishCount / this.progressableUnits.length) * 100);
-        this.report.push(studentWithUnits);
-      });
-    });
-  }
-
 }

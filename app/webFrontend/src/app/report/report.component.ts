@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import {ReportService} from '../shared/services/data/report.service';
 import {UserService} from '../shared/services/user.service';
 import {ActivatedRoute, Router} from '@angular/router';
+import {CourseService} from '../shared/services/data.service';
 
 @Component({
   selector: 'app-report',
@@ -11,37 +11,28 @@ import {ActivatedRoute, Router} from '@angular/router';
 })
 export class ReportComponent implements OnInit {
 
-  private id: string;
-
-  public report: any;
-  public diagramColors = {
-    domain: ['#A10A28', '#C7B42C', '#5AA454']
-  };
+  public courseId: string;
+  public courseName: string;
 
   constructor(
     public userService: UserService,
     private route: ActivatedRoute,
     private router: Router,
-    private reportService: ReportService) { }
+    private courseService: CourseService) { }
 
   ngOnInit() {
     this.route.params.subscribe(params => {
-      this.id = decodeURIComponent(params['id']);
+      this.courseId = decodeURIComponent(params['id']);
     });
-    this.getReport();
+    this.getCourseData();
   }
 
-  private getReport() {
-    this.reportService.getCourseProgress(this.id)
-      .then((report) => {
-        this.report = report;
+  private getCourseData() {
+    this.courseService.readSingleItem(this.courseId)
+      .then((course: any) => {
+        this.courseName = course.name;
       })
       .catch((err) => {
-        console.log(err);
       });
-  }
-
-  public gotoUnitDetails(unitId: string) {
-    this.router.navigate(['unit', unitId], { relativeTo: this.route});
   }
 }

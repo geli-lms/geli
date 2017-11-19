@@ -1,17 +1,16 @@
-<div *ngIf="report">
-  <pre>
-  </pre>
-</div>
 <div class="progress-container" *ngFor="let student of report">
   <div class="header">
     <div class="progress-bar">
-      <mat-progress-bar mode="determinate" [value]="student.completeRate" color="primary"></mat-progress-bar>
-      <span class="progress-text">{{student.finishCount}} von {{student.units.length}} Aufgaben erledigt</span>
+      <ngx-charts-bar-horizontal-stacked
+        [view]="[800, 40]"
+        [results]="student.progress.stats"
+        [scheme]="diagramColors">
+      </ngx-charts-bar-horizontal-stacked>
     </div>
     <app-user-profile [user]="student" [userId]="this.userService.user._id"></app-user-profile>
   </div>
   <div class="content">
-    <div class="unit-progress" *ngFor="let unit of student.units">
+    <div class="unit-progress" *ngFor="let unit of student.progress?.units">
       <h3 class="unit-name">{{unit.name}}</h3>
       <span *ngIf="unit.progress?.done"><mat-icon>check</mat-icon>Done</span>
       <button class="open-toggle" (click)="openToggleLecture(lecture)"

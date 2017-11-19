@@ -8,9 +8,17 @@ export class ReportService extends DataService {
     super('report/', backendService);
   }
 
-  getCourseProgress(courseId: string) {
+  getCourseOverview(courseId: string) {
     const originalApiPath = this.apiPath;
-    this.apiPath += 'courses/';
+    this.apiPath += 'overview/courses/';
+    const promise = this.readSingleItem(courseId);
+    this.apiPath = originalApiPath;
+    return promise;
+  }
+
+  getCourseResults(courseId: string) {
+    const originalApiPath = this.apiPath;
+    this.apiPath += 'result/courses/';
     const promise = this.readSingleItem(courseId);
     this.apiPath = originalApiPath;
     return promise;

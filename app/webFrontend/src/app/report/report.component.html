@@ -1,24 +1,10 @@
-<h2>Report for {{report?.name}}</h2>
-<div *ngFor="let lecture of report?.lectures">
-  <h3>{{lecture.name}}</h3>
-  <mat-card *ngFor="let unit of lecture.units">
-    <mat-card-header>
-      <mat-card-title>{{unit.name}}</mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-      <div>
-        <ngx-charts-advanced-pie-chart
-          [view]="[800, 200]"
-          [results]="unit.progressData"
-          [scheme]="diagramColors">
-        </ngx-charts-advanced-pie-chart>
-      </div>
-    </mat-card-content>
-    <mat-card-actions align="start">
-      <span>
-        <mat-icon>arrow_forward</mat-icon>
-        <button mat-button class="link" (click)="gotoUnitDetails(unit._id)">Show unit details</button>
-      </span>
-    </mat-card-actions>
-  </mat-card>
+<h2>Report for {{courseName}}</h2>
+<mat-toolbar>
+  <mat-toolbar-row>
+    <button mat-button routerLink="." routerLinkActive="active">Overview</button>
+    <button mat-button routerLink="user/all" routerLinkActive="active">User results</button>
+  </mat-toolbar-row>
+</mat-toolbar>
+<div>
+  <router-outlet></router-outlet>
 </div>

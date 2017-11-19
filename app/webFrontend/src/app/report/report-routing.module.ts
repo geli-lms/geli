@@ -4,27 +4,43 @@ import {AuthGuardService} from '../shared/services/auth-guard.service';
 import {ReportComponent} from './report.component';
 import {UnitReportComponent} from './unit-report/unit-report.component';
 import {UserReportComponent} from './user-report/user-report.component';
+import {ReportOverviewComponent} from './report-overview/report-overview.component';
+import {TeacherReportComponent} from './teacher-report/teacher-report.component';
 
 const routes: Routes = [
   {
-    path: 'unit/:id',
-    component: UnitReportComponent,
-    canActivate: [AuthGuardService],
-    data: {roles: ['teacher', 'admin']}
-  },
-  {
-    path: 'user/:id',
-    component: UserReportComponent,
-    canActivate: [AuthGuardService],
-    data: {roles: ['teacher', 'admin']}
-  },
-  {
     path: '',
-    pathMatch: 'full',
     component: ReportComponent,
     canActivate: [AuthGuardService],
-    data: {roles: ['teacher', 'admin']}
-  }
+    data: {roles: ['teacher', 'admin']},
+    children: [
+      {
+        path: '',
+        pathMatch: 'full',
+        component: ReportOverviewComponent,
+        canActivate: [AuthGuardService],
+        data: {roles: ['teacher', 'admin']}
+      },
+      {
+        path: 'unit/:id',
+        component: UnitReportComponent,
+        canActivate: [AuthGuardService],
+        data: {roles: ['teacher', 'admin']}
+      },
+      {
+        path: 'user/all',
+        component: TeacherReportComponent,
+        canActivate: [AuthGuardService],
+        data: {roles: ['teacher', 'admin']}
+      },
+      {
+        path: 'user/:id',
+        component: UserReportComponent,
+        canActivate: [AuthGuardService],
+        data: {roles: ['teacher', 'admin']}
+      }
+    ]
+  },
 ];
 
 @NgModule({
