@@ -32,6 +32,20 @@ else
     ( cd api && npm prune --production )
     docker build -t hdafbi/geli-api:$TRAVIS_TAG -f .docker/api/Dockerfile .
     docker build -t hdafbi/geli-web-frontend:$TRAVIS_TAG -f .docker/web-frontend/Dockerfile .
+    
+    echo "+ retrieve semver-parts"
+    . ./semver.sh
+    local MAJOR=0
+    local MINOR=0
+    local PATCH=0
+    local SPECIAL=""
+    semverParseIntro $TRAVIS_TAG MAJOR MINOR PATCH SPECIAL
+
+    echo "+ tag images"
+    docker tag hdafbi/geli-api hdafbi/geli-api:$MAJOR
+    docker tag hdafbi/geli-web-frontend hdafbi/geli-web-frontend:$MAJOR
+    docker tag hdafbi/geli-api hdafbi/geli-api:$MAJOR.$MINOR
+    docker tag hdafbi/geli-web-frontend hdafbi/geli-web-frontend:$MAJOR.$MINOR
 
     echo "+ publish docker images";
     docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
