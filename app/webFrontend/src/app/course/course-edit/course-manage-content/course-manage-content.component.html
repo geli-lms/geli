@@ -20,6 +20,10 @@
             <mat-icon>edit</mat-icon>
             Edit
           </button>
+          <button mat-menu-item (click)="exportLecture(lecture)">
+            <mat-icon>file_download</mat-icon>
+            Export
+          </button>
           <button mat-menu-item (click)="duplicateLecture(lecture)">
             <mat-icon>content_copy</mat-icon>
             Duplicate
@@ -46,6 +50,9 @@
               <span class="unit-actions">
               <button mat-icon-button matTooltip="Edit" (click)="onEditUnit(unit)">
                 <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button matTooltip="Export" (click)="onExportUnit(unit)">
+                <mat-icon>file_download</mat-icon>
               </button>
               <button mat-icon-button matTooltip="Delete" (click)="deleteUnit(unit)">
                 <mat-icon>delete</mat-icon>
