@@ -31,7 +31,7 @@
   </ng-container>
 </div>
 
-<div class="users" *ngIf="search.length > 0">
+<div class="users" *ngIf="search.length > 0 && finishRestCall">
   <div class="titleHeader"><h2>In course</h2><app-badge [displayNumber]="dragableUsersInCourse.length"></app-badge></div>
   <mat-list class="drop" [dragula]='dragulaBagId' [dragulaModel]="dragableUsersInCourse">
     <div *ngFor="let member of dragableUsersInCourse">

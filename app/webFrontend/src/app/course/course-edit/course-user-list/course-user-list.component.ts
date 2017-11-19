@@ -17,8 +17,8 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
 
   @Input() courseId;
   @Input() course: ICourse;
-  @Input() dragableUsersInCourse: User[];
-  @Input() dragableUsers: User[];
+  @Input() dragableUsersInCourse: User[] = [];
+  @Input() dragableUsers: User[] = [];
   @Input() dragulaBagId;
   @Input() role;
 
@@ -26,9 +26,12 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
   search = '';
   userCtrl: FormControl;
   filteredStates: any;
+  finishRestCall = false;
 
   set searchString(search: string) {
-    if (search !== '' && this.course) {
+    this.search = search;
+    this.finishRestCall = false;
+    if (search !== '') {
       this.userService.searchUsers(this.role, search).then((found) => {
         if (found) {
           const idList: string[] = this.dragableUsersInCourse.map((u) => u._id);
@@ -40,10 +43,8 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
           this.dragableUsers = [];
           this.dragableUsersInCourse = [];
         }
-        this.search = search;
+        this.finishRestCall = true;
       });
-    } else {
-      this.search = search;
     }
   }
 
