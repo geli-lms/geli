@@ -7,6 +7,7 @@ import {DialogService} from '../../../shared/services/dialog.service';
 import 'rxjs/add/operator/startWith'
 import {UserDataService} from '../../../shared/services/data.service';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
+import {isNullOrUndefined} from 'util';
 
 @Component({
   selector: 'app-course-user-list',
@@ -28,6 +29,7 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
   userCtrl: FormControl;
   filteredStates: any;
   finishRestCall = false;
+  fieldsToShow = new Map<string, boolean>();
 
   set searchString(search: string) {
     this.search = search;
@@ -93,8 +95,12 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
     this.dragula.destroy(this.dragulaBagId);
   }
 
-  toggle() {
-    return null;
+  toggle(name: string) {
+    if (this.fieldsToShow.get(name)) {
+      this.fieldsToShow.set(name, false);
+    } else {
+      this.fieldsToShow.set(name, true);
+    }
   }
 
   filterStates(val: string) {
