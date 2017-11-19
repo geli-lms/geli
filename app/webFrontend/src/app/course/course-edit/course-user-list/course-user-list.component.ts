@@ -1,6 +1,7 @@
 import {Component, Input, OnInit, EventEmitter, Output, OnDestroy} from '@angular/core';
 import {DragulaService} from 'ng2-dragula';
 import {IUser} from '../../../../../../../shared/models/IUser';
+import {User} from '../../../models/User';
 import {FormControl} from '@angular/forms';
 import {DialogService} from '../../../shared/services/dialog.service';
 import 'rxjs/add/operator/startWith'
@@ -16,8 +17,8 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
 
   @Input() courseId;
   @Input() course: ICourse;
-  @Input() dragableUsersInCourse: IUser[];
-  @Input() dragableUsers: IUser[];
+  @Input() dragableUsersInCourse: User[];
+  @Input() dragableUsers: User[];
   @Input() dragulaBagId;
   @Input() role;
 
@@ -32,9 +33,9 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
         if (found) {
           const idList: string[] = this.dragableUsersInCourse.map((u) => u._id);
           this.dragableUsers = found.filter(user => (idList.indexOf(user._id) < 0
-            && this.course.courseAdmin._id !== user._id));
+            && this.course.courseAdmin._id !== user._id)).map(data => new User(data));
           this.dragableUsersInCourse = found.filter(user => (idList.indexOf(user._id) >= 0
-            && this.course.courseAdmin._id !== user._id));
+            && this.course.courseAdmin._id !== user._id)).map(data => new User(data));
         } else {
           this.dragableUsers = [];
           this.dragableUsersInCourse = [];
