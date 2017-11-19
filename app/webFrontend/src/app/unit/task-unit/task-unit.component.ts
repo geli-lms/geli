@@ -75,7 +75,9 @@ export class TaskUnitComponent implements OnInit {
         this.progress = savedProgress;
         this.snackBar.open('Progress has been saved', '', {duration: 3000});
       })
-      .catch(() => this.snackBar.open('An unknown error occurred', '', {duration: 3000}));
+      .catch((err) => {
+        this.snackBar.open(`An error occurred: ${err.json().message}`, '', {duration: 3000})
+      });
     }
   }
 }
