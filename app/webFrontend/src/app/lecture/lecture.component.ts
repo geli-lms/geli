@@ -2,7 +2,6 @@ import {Component, OnInit, Input} from '@angular/core';
 import {UserService} from '../shared/services/user.service';
 import {ICourse} from '../../../../../shared/models/ICourse';
 import {ILecture} from '../../../../../shared/models/ILecture';
-import {MatExpansionModule} from '@angular/material/expansion';
 
 @Component({
   selector: 'app-lecture',
@@ -13,10 +12,15 @@ export class LectureComponent implements OnInit {
 
   @Input() course: ICourse;
   @Input() lecture: ILecture;
-
+  opened: boolean;
   constructor(public userService: UserService) {
+    this.opened = true;
   }
 
   ngOnInit() {
+  }
+
+  toggleOpen() {
+    this.opened = !this.opened;
   }
 }
