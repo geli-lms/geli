@@ -30,6 +30,7 @@ export class TeacherReportComponent implements OnInit {
   constructor(private route: ActivatedRoute,
               private router: Router,
               private reportService: ReportService,
+              private userService: UserService,
               private showProgress: ShowProgressService) {
   }
 
