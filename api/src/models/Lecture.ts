@@ -1,12 +1,12 @@
 import * as mongoose from 'mongoose';
 import {ILecture} from '../../../shared/models/ILecture';
-import {Unit} from './units/Unit';
+import {IUnitModel, Unit} from './units/Unit';
 import {IUnit} from '../../../shared/models/units/IUnit';
 import {InternalServerError} from 'routing-controllers';
 
 interface ILectureModel extends ILecture, mongoose.Document {
   export: () => Promise<ILecture>;
-  import: (courseId: String) => Promise<ILecture>;
+  import: (lecture: ILecture, courseId: String) => Promise<ILecture>;
 }
 
 const lectureSchema = new mongoose.Schema({
@@ -58,41 +58,41 @@ lectureSchema.methods.export = function() {
   const units: Array<mongoose.Types.ObjectId>  = obj.units;
   obj.units = [];
 
-  return Promise.all(units.map((unitId) => {
-    return Unit.findById(unitId).then((unit) => {
+  return Promise.all(units.map((unitId: mongoose.Types.ObjectId) => {
+    return Unit.findById(unitId).then((unit: IUnitModel) => {
       return unit.export();
     });
   }))
-    .then((exportedUnits) => {
+    .then((exportedUnits: IUnit[]) => {
       obj.units = exportedUnits;
-      console.log(obj);
       return obj;
     });
 };
 
-lectureSchema.methods.import = function(courseId: String) {
+lectureSchema.methods.import = function(lecture: ILecture, courseId: string) {
   // import lectures
-  const units: Array<IUnit>  = this.units;
-  this.units = [];
+  const units: Array<IUnit>  = lecture.units;
+  lecture.units = [];
 
-  return this.save()
-    .then((savedLecture) => {
+  return new Lecture(lecture).save()
+    .then((savedLecture: ILectureModel) => {
       const lectureId = savedLecture._id;
 
-      return Promise.all(units.map((unit) => {
-        return new Unit(unit).import(courseId);
+      return Promise.all(units.map((unit: IUnit) => {
+        return new Unit().import(unit, courseId);
       }))
-        .then((importedUnits) => {
+        .then((importedUnits: IUnit[]) => {
           savedLecture.units.concat(importedUnits);
           return savedLecture.save();
         });
     })
-    .then((importedLecture) => {
-      console.log(importedLecture);
+    .then((importedLecture: ILectureModel) => {
       return importedLecture.toObject();
     })
-    .catch((err) => {
-      throw new InternalServerError(err);
+    .catch((err: Error) => {
+      const newError = new InternalServerError('Failed to import lecture');
+      newError.stack += '\nCaused by: ' + err.stack;
+      throw newError;
     });
 };
 

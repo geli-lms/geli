@@ -3,7 +3,7 @@ import {ITask} from '../../../shared/models/task/ITask';
 
 interface ITaskModel extends ITask, mongoose.Document {
   export: () => Promise<ITask>;
-  import: (task: ITask) => (ITask);
+  import: (task: ITask) => Promise<ITask>;
 }
 
 const taskSchema = new mongoose.Schema(
@@ -43,15 +43,15 @@ taskSchema.methods.export = function() {
   delete obj.updatedAt;
 
   // custom properties
-  obj.answers.forEach(answer => {
+  obj.answers.forEach((answer: any) => {
     delete answer._id;
   });
 
   return obj;
 };
 
-taskSchema.methods.import = function(task: ITask) {
-  return new Task(task).save();
+taskSchema.methods.import = function() {
+  return this.save();
 }
 
 const Task = mongoose.model<ITaskModel>('Task', taskSchema);

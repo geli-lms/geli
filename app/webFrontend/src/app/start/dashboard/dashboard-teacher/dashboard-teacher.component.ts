@@ -12,6 +12,7 @@ export class DashboardTeacherComponent extends DashboardBaseComponent {
 
   myCourses: ICourse[];
   furtherCourses: ICourse[];
+  inactiveCourses: ICourse[];
   availableCourses: ICourse[];
 
   constructor(public userService: UserService) {
@@ -26,9 +27,12 @@ export class DashboardTeacherComponent extends DashboardBaseComponent {
     this.myCourses = [];
     this.availableCourses = [];
     this.furtherCourses = [];
+    this.inactiveCourses = [];
 
     for (const course of this.allCourses) {
-      if (this.filterAdminCourses(course)) {
+      if ((this.filterMyCourses(course) || this.filterAdminCourses(course)) && !course.active) {
+        this.inactiveCourses.push(course);
+      } else if (this.filterAdminCourses(course)) {
         this.myCourses.push(course);
       } else if (this.filterMyCourses(course)) {
         this.furtherCourses.push(course);

@@ -1,14 +1,14 @@
 import {ICourse} from '../../../shared/models/ICourse';
 import * as mongoose from 'mongoose';
 import {User} from './User';
-import {Lecture} from './Lecture';
+import {ILectureModel, Lecture} from './Lecture';
 import {ILecture} from '../../../shared/models/ILecture';
 import {InternalServerError} from 'routing-controllers';
 import {IUser} from '../../../shared/models/IUser';
 
 interface ICourseModel extends ICourse, mongoose.Document {
   export: () => Promise<ICourse>;
-  import: (admin: IUser) => Promise<ICourse>;
+  import: (course: ICourse, admin: IUser) => Promise<ICourse>;
 }
 
 const courseSchema = new mongoose.Schema({
@@ -102,42 +102,44 @@ courseSchema.methods.export = function() {
   const lectures: Array<mongoose.Types.ObjectId>  = obj.lectures;
   obj.lectures = [];
 
-  return Promise.all(lectures.map((lectureId) => {
-    return Lecture.findById(lectureId).then((lecture) => {
+  return Promise.all(lectures.map((lectureId: mongoose.Types.ObjectId) => {
+    return Lecture.findById(lectureId).then((lecture: ILectureModel) => {
       return lecture.export();
     });
   }))
-  .then((serializedLectures) => {
-    obj.lectures = serializedLectures;
+  .then((exportedLectures: ILecture[]) => {
+    obj.lectures = exportedLectures;
     return obj;
   });
 };
 
-courseSchema.methods.import = function(admin: IUser) {
+courseSchema.methods.import = function(course: ICourse, admin: IUser) {
   // set Admin
-  this.courseAdmin = admin;
+  course.courseAdmin = admin;
 
   // import lectures
-  const lectures: Array<ILecture>  = this.lectures;
-  this.lectures = [];
+  const lectures: Array<ILecture>  = course.lectures;
+  course.lectures = [];
 
-  return this.save()
-    .then((savedcourse) => {
+  return new Course(course).save()
+    .then((savedcourse: ICourseModel) => {
       const courseId = savedcourse._id;
 
-      return Promise.all(lectures.map((lecture) => {
-        return new Lecture(lecture).import(courseId);
+      return Promise.all(lectures.map((lecture: ILecture) => {
+        return new Lecture().import(lecture, courseId);
       }))
-      .then((importedLectures) => {
+      .then((importedLectures: ILecture[]) => {
         savedcourse.lectures.concat(importedLectures);
         return savedcourse.save();
       });
     })
-    .then((importedCourse) => {
+    .then((importedCourse: ICourseModel) => {
       return importedCourse.toObject();
     })
-    .catch((err) => {
-      throw new InternalServerError(err);
+    .catch((err: Error) => {
+      const newError = new InternalServerError('Failed to import course');
+      newError.stack += '\nCaused by: ' + err.stack;
+      throw newError;
     });
 };
 
