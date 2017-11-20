@@ -5,6 +5,7 @@ import {NativeError} from 'mongoose';
 import * as crypto from 'crypto';
 import {isNullOrUndefined} from 'util';
 import { isEmail } from 'validator';
+import * as pwPattern from '../../../shared/validators/password';
 
 interface IUserModel extends IUser, mongoose.Document {
   isValidPassword: (candidatePassword: string) => Promise<boolean>;
@@ -30,7 +31,8 @@ const userSchema = new mongoose.Schema({
     },
     password: {
       type: String,
-      required: true
+      required: true,
+      validate: new RegExp(pwPattern.pwPattern.pattern)
     },
     profile: {
       firstName: {type: String},
