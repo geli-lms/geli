@@ -79,12 +79,11 @@ export class FreeTextUnitFormComponent implements OnInit {
   }
 
   openFullscreen(): void {
-    // TODO: Max-Width/-Height comes with later Material version
-    // maxWidth: '100vw',
-    // maxHeight: '100vh',
     const dialogRef = this.dialog.open(FreeTextUnitEditorDialog, {
       width: '94vw',
       height: '94vh',
+      maxWidth: '100vw',
+      maxHeight: '100vh',
       data: {
         markdown: this.freeTextEditor.markdown ? this.freeTextEditor.markdown : ''
       }
