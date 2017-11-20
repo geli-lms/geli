@@ -5,7 +5,7 @@ import fs = require('fs');
 
 interface IVideoUnitModel extends IVideoUnit, mongoose.Document {
   export: () => Promise<IVideoUnit>;
-  import: (courseId: string) => Promise<IVideoUnit>;
+  import: (unit: IVideoUnit, courseId: string) => Promise<IVideoUnit>;
 }
 
 const videoUnitSchema = new mongoose.Schema({

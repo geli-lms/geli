@@ -32,16 +32,16 @@ export class DuplicationController {
     console.log('courseid: ' + courseId);
     console.log('lectureID: ' + id);
     return Lecture.findById(id)
-      .then(lecture => {
+      .then((lecture: ILecture) => {
         console.log('lecture = ' + lecture);
-        return lecture.export();
-      }).then(exportedLecture => {
+        return new Lecture(lecture).export();
+      }).then((exportedLecture: ILecture) => {
         console.log('exportedLecture = ' + exportedLecture);
-        return new Lecture(exportedLecture).import(courseId);
+        return new Lecture().import(exportedLecture, courseId);
+      })
+    .catch((error) => {
+        throw new BadRequestError(error);
       });
-    // .catch((error) => {
-    //     throw new BadRequestError(error);
-    //   });
   }
 
   @Post('/unit/:id')

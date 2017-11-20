@@ -3,6 +3,7 @@ import {ILecture} from '../../../shared/models/ILecture';
 import {IUnitModel, Unit} from './units/Unit';
 import {IUnit} from '../../../shared/models/units/IUnit';
 import {InternalServerError} from 'routing-controllers';
+import {Course} from './Course';
 
 interface ILectureModel extends ILecture, mongoose.Document {
   export: () => Promise<ILecture>;
@@ -78,13 +79,20 @@ lectureSchema.methods.import = function(lecture: ILecture, courseId: string) {
     .then((savedLecture: ILectureModel) => {
       const lectureId = savedLecture._id;
 
+      Course.findById(courseId).then(course => {
+        course.lectures.push(savedLecture);
+        course.save();
+      });
       return Promise.all(units.map((unit: IUnit) => {
         return new Unit().import(unit, courseId);
       }))
         .then((importedUnits: IUnit[]) => {
-          savedLecture.units.concat(importedUnits);
+          // savedLecture.units.concat(importedUnits);
+          importedUnits.forEach((importedUnit) => {
+            savedLecture.units.push(importedUnit);
+          });
           return savedLecture.save();
-        });
+        })
     })
     .then((importedLecture: ILectureModel) => {
       return importedLecture.toObject();
