@@ -1,11 +1,9 @@
 #!/bin/bash
 
-PATH_BIN=".travis/node_modules/.bin/david"
-PATHS_TO_CHECK=(".travis" "api" "app/webFrontend")
+# Import shared vars
+. ./_shared-vars.sh
 
-RED='\033[0;31m'
-YELLOW='\033[0;33m'
-NC='\033[0m'
+PATHS_TO_CHECK=(".travis" "api" "app/webFrontend")
 
 # Functions
 function npm_package_is_installed {
@@ -36,7 +34,7 @@ cd ..
 for i in "${PATHS_TO_CHECK[@]}"
 do
   echo "+ checking $i"
-  $PATH_BIN --package $i/package.json
+  ${BIN_PATH_FULL}/david --package $i/package.json
   echo
 done
 

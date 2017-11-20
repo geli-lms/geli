@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# DECALRE COLORS
+RED='\033[0;31m'
+YELLOW='\033[0;33m'
+NC='\033[0m'
+
+# DECALRE PATHS
+MODULE_PATH=".travis/node_modules"
+BIN_PATH=".bin"
+BIN_PATH_FULL=${MODULE_PATH}/${BIN_PATH}
