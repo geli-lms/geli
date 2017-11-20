@@ -12,8 +12,3 @@ fi
 MODULE_PATH="${DIR}/node_modules"
 BIN_PATH=".bin"
 BIN_PATH_FULL="${MODULE_PATH}/${BIN_PATH}"
-
-echo $DIR
-echo $MODULE_PATH
-echo $BIN_PATH
-echo $BIN_PATH_FULL
