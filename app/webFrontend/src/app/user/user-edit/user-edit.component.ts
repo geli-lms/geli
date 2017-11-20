@@ -33,12 +33,11 @@ export class UserEditComponent implements OnInit {
     this.generateForm();
   }
 
-  hidePwFields() {
+  showPwFields() {
     if (this.user) {
       if (this.userService.user._id === this.user._id) {
         return true;
       }
-    } else {
       return false;
     }
   }
@@ -57,7 +56,7 @@ export class UserEditComponent implements OnInit {
   getUserData() {
     this.userDataService.readSingleItem(this.id).then(
       (val: any) => {
-         this.user = val;
+        this.user = val;
         this.userForm.patchValue({
           profile: {
             firstName: this.user.profile.firstName,
