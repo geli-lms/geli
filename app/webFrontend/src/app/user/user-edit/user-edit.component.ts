@@ -8,7 +8,7 @@ import {UserService} from '../../shared/services/user.service';
 import {ShowProgressService} from '../../shared/services/show-progress.service';
 import {matchPasswords} from '../../shared/validators/validators';
 import {DialogService} from '../../shared/services/dialog.service';
-import {pwPattern} from '../../../../../../shared/validators/password'
+import {pwPattern} from '../../shared/validators/password'
 
 @Component({
   selector: 'app-user-edit',
