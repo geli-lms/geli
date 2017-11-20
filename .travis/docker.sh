@@ -23,16 +23,12 @@ if [ "$TRAVIS_BRANCH" == "master" ] || [ "$TRAVIS_BRANCH" == "develop" ]; then
     echo "+ prune dev-dependencies"
     ( cd api && npm prune --production )
     docker build -t hdafbi/geli-api:latest -f .docker/api/Dockerfile .
-    docker tag hdafbi/geli-api hdafbi/geli-api:$TRAVIS_BRANCH
     docker build -t hdafbi/geli-web-frontend:latest -f .docker/web-frontend/Dockerfile .
-    docker tag hdafbi/geli-web-frontend hdafbi/geli-web-frontend:$TRAVIS_BRANCH
-
+    
     echo "+ publish docker images";
     docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
-    docker push hdafbi/geli-api;
-    docker push hdafbi/geli-api:$TRAVIS_BRANCH;
-    docker push hdafbi/geli-web-frontend;
-    docker push hdafbi/geli-web-frontend:$TRAVIS_BRANCH;
+    tag_and_push_api_and_web "latest"
+    tag_and_push_api_and_web ${TRAVIS_BRANCH}
   else
     echo -e "${YELLOW}+ WARNING: pull request #$TRAVIS_PULL_REQUEST -> skipping docker build and publish${NC}";
   fi
@@ -47,21 +43,20 @@ else
     
     echo "+ publish docker images";
     docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
-    docker push hdafbi/geli-api:$TRAVIS_TAG;
-    docker push hdafbi/geli-web-frontend:$TRAVIS_TAG;
-    
+    tag_and_push_api_and_web ${TRAVIS_TAG}
+
     echo "+ retrieve semver-parts of tag"
     . ${DIR}/_semver.sh
     MAJOR=0;MINOR=0;PATCH=0;SPECIAL=""
     semverParseInto ${TRAVIS_TAG} MAJOR MINOR PATCH SPECIAL
 
     if [ -z "${SPECIAL}" ]; then
-        echo "+ tag ${TRAVIS_TAG} has special-part ${SPECIAL}"
-        echo "+ will NOT tag Major ${MAJOR} and Minor ${MAJOR}.${MINOR}, only the full tag"
+        echo "${YELLOW}+ WARNING: tag ${TRAVIS_TAG} has special-part ${SPECIAL}${NC}"
+        echo "${YELLOW}+ WARNING: will NOT tag Major ${MAJOR} and Minor ${MAJOR}.${MINOR}, only the full tag${NC}"
     else
         echo "+ tag images"
-        REAL_MAJOR=$MAJOR
-        REAL_MINOR=$MAJOR.$MINOR
+        REAL_MAJOR="v$MAJOR"
+        REAL_MINOR="v$MAJOR.$MINOR"
         if [ "there isnt a higher version of this major" = "" ]; then
             # TODO: Check Docker api for versions
             echo "+ => Major: ${REAL_MAJOR}"
