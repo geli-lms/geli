@@ -1,4 +1,7 @@
-import {Body, Get, Put, Delete, Param, JsonController, UseBefore, NotFoundError, BadRequestError} from 'routing-controllers';
+import {
+  Body, Get, Put, Delete, Param, JsonController, UseBefore, NotFoundError, BadRequestError, Post,
+  Authorized, UploadedFile
+} from 'routing-controllers';
 import fs = require('fs');
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 
@@ -21,27 +24,18 @@ export class UnitBaseController {
       .then((u) => u.toObject());
   }
 
-  protected pushToLecture(lectureId: string, unit: any) {
-    return Lecture.findById(lectureId)
-      .then((lecture) => {
-        lecture.units.push(unit);
-        return lecture.save();
+  @Post()
+  @Authorized(['teacher', 'admin'])
+  addUnit(@UploadedFile('file', {options: uploadOptions}) file: any, @Body() data: any) {
+    // discard invalid requests
+    this.checkPostParam(data);
+    Unit.create(data.model)
+      .then((createdUnit) => {
+        return this.pushToLecture(data.lectureId, createdUnit);
       })
-      .then((lecture) => lecture.toObject());
-  }
-
-  protected checkPostParam(data: any) {
-    if (!data.lectureId) {
-      throw new BadRequestError('No lecture ID was submitted.');
-    }
-
-    if (!data.model) {
-      throw new BadRequestError('No unit was submitted.');
-    }
-
-    if (!data.model._course) {
-      throw new BadRequestError('Unit has no _course set');
-    }
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   @Put('/:id')
@@ -90,5 +84,28 @@ export class UnitBaseController {
           return {result: true};
         });
     });
+  }
+
+  protected pushToLecture(lectureId: string, unit: any) {
+    return Lecture.findById(lectureId)
+    .then((lecture) => {
+      lecture.units.push(unit);
+      return lecture.save();
+    })
+    .then((lecture) => lecture.toObject());
+  }
+
+  protected checkPostParam(data: any) {
+    if (!data.lectureId) {
+      throw new BadRequestError('No lecture ID was submitted.');
+    }
+
+    if (!data.model) {
+      throw new BadRequestError('No unit was submitted.');
+    }
+
+    if (!data.model._course) {
+      throw new BadRequestError('Unit has no _course set');
+    }
   }
 }

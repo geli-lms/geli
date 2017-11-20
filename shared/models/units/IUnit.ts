@@ -5,7 +5,7 @@ export interface IUnit {
     _course: any;
     name: string;
     description: string;
-    type: string;
+    unitType: string;
     progressable: boolean;
     weight: number;
     updatedAt: string;
