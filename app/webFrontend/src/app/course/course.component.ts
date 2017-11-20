@@ -5,7 +5,6 @@ import {ICourse} from '../../../../../shared/models/ICourse';
 import {Router} from '@angular/router';
 import {MatDialog, MatSnackBar} from '@angular/material';
 import {AccessKeyDialog} from '../shared/components/access-key-dialog/access-key-dialog.component';
-import {MatExpansionModule} from '@angular/material/expansion';
 
 @Component({
   selector: 'app-course',

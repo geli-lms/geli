@@ -6,7 +6,6 @@ import {ICourse} from '../../../../../../shared/models/ICourse';
 import {UserService} from '../../shared/services/user.service';
 import {MatSnackBar} from '@angular/material';
 
-
 @Component({
   selector: 'app-course-detail',
   templateUrl: './course-detail.component.html',

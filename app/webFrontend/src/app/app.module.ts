@@ -22,7 +22,6 @@ import {UserModule} from './user/user.module';
 import {AuthModule} from './auth/auth.module';
 import {AboutModule} from './about/about.module';
 import {AdminModule} from './admin/admin.module';
-import {MatExpansionModule} from '@angular/material/expansion';
 
 @NgModule({
   declarations: [
@@ -39,7 +38,6 @@ import {MatExpansionModule} from '@angular/material/expansion';
     AuthModule,
     AboutModule,
     SharedModule,
-    MatExpansionModule
   ],
   providers: [
     UserService,
