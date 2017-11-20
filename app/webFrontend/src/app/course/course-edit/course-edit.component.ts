@@ -107,6 +107,10 @@ export class CourseEditComponent implements OnInit {
       });
   }
 
+  onExport() {
+    this.snackBar.open('Not jet implemented', '', {duration: 3000});
+  }
+
   onChangeMode(value) {
     if (value.checked === true) {
       this.mode = true;

@@ -55,7 +55,7 @@ export class UnitClassMapper {
 
   public static getProgressClassForUnit(unit: IUnit) {
     const classMapping = this.getClassMappingForUnit(unit);
-    if (!classMapping) {
+    if (!classMapping || classMapping.progressClass === null) {
       throw new InternalServerError(`No progress class for type ${unit.type} available`);
     }
 

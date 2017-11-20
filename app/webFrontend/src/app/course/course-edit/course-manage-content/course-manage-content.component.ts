@@ -105,6 +105,10 @@ export class CourseManageContentComponent implements OnInit, OnDestroy {
     });
   }
 
+  exportLecture(lecture: ILecture) {
+    this.snackBar.open('Not jet implemented', '', {duration: 3000});
+  }
+
   deleteObjectIds(object: any) {
     if (object != null && typeof(object) !== 'string' && typeof(object) !== 'boolean' && typeof(object) !== 'number') {
       // object.length is undefined, if the object isn't an array.
@@ -240,6 +244,10 @@ export class CourseManageContentComponent implements OnInit, OnDestroy {
 
     this.unitEditMode = true;
     this.unitEditElement = unit;
+  };
+
+  onExportUnit = (unit: IUnit) => {
+    this.snackBar.open('Not jet implemented', '', {duration: 3000});
   };
 
   onEditUnitDone = () => {
