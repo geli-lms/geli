@@ -1,5 +1,5 @@
 import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CourseService} from '../../shared/services/data.service';
 import {MatSnackBar} from '@angular/material';
@@ -31,7 +31,8 @@ export class CourseEditComponent implements OnInit {
               private courseService: CourseService,
               public snackBar: MatSnackBar,
               private ref: ChangeDetectorRef,
-              private showProgress: ShowProgressService) {
+              private showProgress: ShowProgressService,
+              private router: Router) {
 
     this.route.params.subscribe(params => {
       this.id = params['id'];
@@ -83,7 +84,7 @@ export class CourseEditComponent implements OnInit {
   }
 
   cancel() {
-  // redirect to dashboard.
+    this.router.navigate(['/']);
   }
 
   createCourse() {
