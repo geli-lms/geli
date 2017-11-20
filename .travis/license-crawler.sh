@@ -1,7 +1,11 @@
 #!/bin/bash
 
+# Path to this file
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+# Path the script was called from
+IPWD="$(pwd)"
 # Import shared vars
-. ./_shared-vars.sh
+. ${DIR}/_shared-vars.sh
 
 # Variables
 DEBUG=false
@@ -30,21 +34,21 @@ if ( [ "$TRAVIS_BRANCH" != "develop" ] || [ "$TRAVIS_PULL_REQUEST" != "false" ] 
 fi
 
 echo "+ checking if nlf is installed"
-cd .travis
+cd ${DIR}
 if [ $(npm_package_is_installed nlf) == 0 ]; then
   echo -e "${RED}+ ERROR: nlf is not installed, please add nlf to the .travis/package.json${NC}"
   exit 1
 fi
-cd ..
+cd ${IPWD}
 
 echo + going to folder api
 cd api
 
 echo + crawling licenses from api
 echo + ... all
-../${BIN_PATH_FULL}/nlf --csv > $CSV_FILE$FT_ALL
+${BIN_PATH_FULL}/nlf --csv > $CSV_FILE$FT_ALL
 echo + ... production only
-../${BIN_PATH_FULL}/nlf --csv -d > $CSV_FILE$FT_PROD
+${BIN_PATH_FULL}/nlf --csv -d > $CSV_FILE$FT_PROD
 
 echo + copy results to project root
 cp $CSV_FILE$FT_ALL ../$CSV_FILE$FT_ALL
@@ -56,10 +60,10 @@ cd ../app/webFrontend
 echo + crawling licenses from app/webFrontend
 # append frontend licenses to existing csv; we have to skip the first line (header)
 echo + ... all
-../../${BIN_PATH_FULL}/nlf --csv > $CSV_FILE$FT_ALL
+${BIN_PATH_FULL}/nlf --csv > $CSV_FILE$FT_ALL
 # ../../${BIN_PATH_FULL}/nlf-cli.js --csv | awk '{if(NR>1)print}'  >> ../../$CSV_FILE
 echo + ... production only
-../../${BIN_PATH_FULL}/nlf --csv -d > $CSV_FILE$FT_PROD
+${BIN_PATH_FULL}/nlf --csv -d > $CSV_FILE$FT_PROD
 
 echo + copy results to project root
 cat $CSV_FILE$FT_ALL >> ../../$CSV_FILE$FT_ALL

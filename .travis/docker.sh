@@ -1,7 +1,11 @@
 #!/usr/bin/env bash
 
+# Path to this file
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+# Path the script was called from
+IPWD="$(pwd)"
 # Import shared vars
-. ./_shared-vars.sh
+. ${DIR}/_shared-vars.sh
 
 function tag_and_push_api_and_web {
     docker tag hdafbi/geli-api hdafbi/geli-api:${1}
@@ -48,10 +52,7 @@ else
     
     echo "+ retrieve semver-parts of tag"
     . ./_semver.sh
-    MAJOR=0
-    MINOR=0
-    PATCH=0
-    SPECIAL=""
+    MAJOR=0;MINOR=0;PATCH=0;SPECIAL=""
     semverParseInto $TRAVIS_TAG MAJOR MINOR PATCH SPECIAL
 
     if [ -z "${SPECIAL}" ]; then
@@ -61,8 +62,11 @@ else
         echo "+ tag images"
         REAL_MAJOR=$MAJOR
         REAL_MINOR=$MAJOR.$MINOR
-        echo "+ => Major: ${REAL_MAJOR}"
-        tag_and_push_api_and_web REAL_MAJOR
+        if [ "there isnt a higher version of this major" = "" ]; then
+            # TODO: Check Docker api for versions
+            echo "+ => Major: ${REAL_MAJOR}"
+            tag_and_push_api_and_web REAL_MAJOR
+        fi
         echo "+ => Minor: ${REAL_MINOR}"
         tag_and_push_api_and_web REAL_MINOR
     fi

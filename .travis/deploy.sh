@@ -1,7 +1,11 @@
 #!/usr/bin/env bash
 
+# Path to this file
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+# Path the script was called from
+IPWD="$(pwd)"
 # Import shared vars
-. ./_shared-vars.sh
+. ${DIR}/_shared-vars.sh
 
 echo
 echo "+++ Run automate deployment script. +++"

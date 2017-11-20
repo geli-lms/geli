@@ -1,7 +1,11 @@
 #!/bin/bash
 
+# Path to this file
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+# Path the script was called from
+IPWD="$(pwd)"
 # Import shared vars
-. ./_shared-vars.sh
+. ${DIR}/_shared-vars.sh
 
 PATHS_TO_CHECK=(".travis" "api" "app/webFrontend")
 
@@ -24,12 +28,12 @@ echo
 # fi
 
 echo "+ checking if david is installed"
-cd .travis
+cd ${DIR}
 if [ $(npm_package_is_installed david) == 0 ]; then
   echo -e "${RED}+ ERROR: david is not installed, please add david to the .travis/package.json${NC}"
   exit 1
 fi
-cd ..
+cd ${IPWD}
 
 for i in "${PATHS_TO_CHECK[@]}"
 do

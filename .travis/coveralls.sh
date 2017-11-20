@@ -1,7 +1,11 @@
 #!/bin/bash
 
+# Path to this file
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+# Path the script was called from
+IPWD="$(pwd)"
 # Import shared vars
-. ./_shared-vars.sh
+. ${DIR}/_shared-vars.sh
 
 # Functions
 function npm_package_is_installed {
@@ -16,12 +20,12 @@ echo "+++ Run coveralls send +++"
 echo
 
 echo "+ checking if coveralls is installed"
-cd .travis
+cd ${DIR}
 if [ $(npm_package_is_installed coveralls) == 0 ]; then
   echo -e "${RED}+ ERROR: coveralls is not installed, please add coveralls to the .travis/package.json${NC}"
   exit 1
 fi
-cd ..
+cd ${IPWD}
 
 echo "+ sending lcov file to coveralls"
 # since we are using typescript and remap our coverage data to the ts files we need to remove the "build" part of all paths
