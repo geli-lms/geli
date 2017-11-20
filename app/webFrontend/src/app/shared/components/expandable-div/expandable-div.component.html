@@ -1,6 +1,8 @@
 <div class="clickable" (click)="notify()">
-  <h1 style="display: inline-block">{{title}}</h1>
-  <button class="toggle" [class.opened] = "opened" mat-icon-button>
-    <mat-icon>arrow_drop_down</mat-icon>
-  </button>
+  <h1>{{title}}
+    <button class="toggle" [class.opened] = "opened" mat-icon-button>
+      <mat-icon>arrow_drop_down</mat-icon>
+    </button>
+  </h1>
+
 </div>
