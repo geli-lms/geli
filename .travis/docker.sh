@@ -51,9 +51,9 @@ else
     docker push hdafbi/geli-web-frontend:$TRAVIS_TAG;
     
     echo "+ retrieve semver-parts of tag"
-    . ./_semver.sh
+    . ${DIR}/_semver.sh
     MAJOR=0;MINOR=0;PATCH=0;SPECIAL=""
-    semverParseInto $TRAVIS_TAG MAJOR MINOR PATCH SPECIAL
+    semverParseInto ${TRAVIS_TAG} MAJOR MINOR PATCH SPECIAL
 
     if [ -z "${SPECIAL}" ]; then
         echo "+ tag ${TRAVIS_TAG} has special-part ${SPECIAL}"
