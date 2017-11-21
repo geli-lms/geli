@@ -6,5 +6,6 @@
                       [dragableUsers]="foundTeachers"
                       [role]="'teacher'"
                       [dragulaBagId]="'teachers'"
+                      (onSearch)="search($event)"
                       (onDragendUpdate)="updateCoure($event)"
                       (onUpdate)="updateUser($event)"></app-course-user-list>

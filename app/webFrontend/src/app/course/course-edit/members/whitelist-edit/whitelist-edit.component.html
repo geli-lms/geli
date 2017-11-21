@@ -1,3 +1,27 @@
-<p>
-  whitelist-edit works!
-</p>
+<div class="titleHeader"><h2>Whitelist</h2>
+  <app-badge [displayNumber]="0"></app-badge>
+  <button class="open-toggle" (click)="toggle()"
+          [class.opened]="isToggled" mat-icon-button>
+    <mat-icon>arrow_drop_down</mat-icon>
+  </button>
+</div>
+
+<ng-container *ngIf="isToggled">
+
+
+</ng-container>
+
+<mat-form-field class="full-width">
+  <input async matInput id="firstName" placeholder="Last name" [(ngModel)]="whitelistUser.firstName"
+         [ngModelOptions]="{standalone: true}" required="">
+</mat-form-field>
+
+<mat-form-field class="full-width">
+  <input async matInput id="lastName" placeholder="First name" [(ngModel)]="whitelistUser.lastName"
+         [ngModelOptions]="{standalone: true}" required="">
+</mat-form-field>
+
+<mat-form-field class="full-width">
+  <input async matInput id="uid" placeholder="User identification" [(ngModel)]="whitelistUser.uid"
+         [ngModelOptions]="{standalone: true}"required="">
+</mat-form-field>

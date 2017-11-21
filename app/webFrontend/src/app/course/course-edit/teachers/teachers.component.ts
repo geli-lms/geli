@@ -78,4 +78,8 @@ export class TeachersComponent implements OnInit {
     this.course.teachers = this.course.teachers.filter(obj => id !== obj._id);
     this.updateCourseTeachers();
   }
+
+  search(search: string): void {
+    // Do nothing
+    }
 }

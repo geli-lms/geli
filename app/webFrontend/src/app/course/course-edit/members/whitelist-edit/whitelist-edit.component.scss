@@ -1,0 +1,18 @@
+@import "../../../../../variables";
+
+.titleHeader {
+  display: flex;
+  align-items: center;
+}
+
+.open-toggle {
+  width: 2.5rem;
+  height: 100%;
+  color: map-get($app-primary, 'default');
+  transition: transform 0.3s;
+  transform: rotate(-90deg);
+
+  &.opened {
+    transform: rotate(0);
+  }
+}

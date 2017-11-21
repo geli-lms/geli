@@ -7,7 +7,6 @@ import {DialogService} from '../../../shared/services/dialog.service';
 import 'rxjs/add/operator/startWith'
 import {UserDataService} from '../../../shared/services/data.service';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
-import {isNullOrUndefined} from 'util';
 
 @Component({
   selector: 'app-course-user-list',
@@ -24,6 +23,10 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
   @Input() dragulaBagId;
   @Input() role;
 
+  @Output() onDragendUpdate = new EventEmitter<IUser>();
+  @Output() onUpdate = new EventEmitter<String>();
+  @Output() onSearch = new EventEmitter<String>();
+
   currentUser: IUser = null;
   search = '';
   userCtrl: FormControl;
@@ -33,6 +36,7 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
 
   set searchString(search: string) {
     this.search = search;
+    this.onSearch.emit(search);
     this.finishRestCall = false;
     if (search !== '') {
       this.userService.searchUsers(this.role, search).then((found) => {
@@ -54,9 +58,6 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
   get searchString(): string {
     return this.search;
   }
-
-  @Output() onDragendUpdate = new EventEmitter<IUser>();
-  @Output() onUpdate = new EventEmitter<String>();
 
   setCurrentUser(user: IUser) {
     this.currentUser = user;

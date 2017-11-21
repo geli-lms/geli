@@ -15,6 +15,7 @@ export class MembersComponent implements OnInit {
   @Input() courseId;
   course: ICourse;
   foundStudents: IUser[] = [];
+  showWhitelists =  false;
 
   constructor(private courseService: CourseService,
               private showProgress: ShowProgressService) {
@@ -77,5 +78,13 @@ export class MembersComponent implements OnInit {
     this.foundStudents = this.foundStudents.concat(this.course.students.filter(obj => id === obj._id));
     this.course.students = this.course.students.filter(obj => id !== obj._id);
     this.updateCourseStudents();
+  }
+
+  search(search: string): void {
+    if (search.length > 0) {
+      this.showWhitelists = true;
+    } else {
+      this.showWhitelists = false;
+    }
   }
 }
