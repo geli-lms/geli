@@ -3,7 +3,7 @@ import 'rxjs/add/operator/switchMap';
 import {UserService} from '../shared/services/user.service';
 import {ICourse} from '../../../../../shared/models/ICourse';
 import {Router} from '@angular/router';
-import {MdDialog, MdSnackBar} from '@angular/material';
+import {MatDialog, MatSnackBar} from '@angular/material';
 import {AccessKeyDialog} from '../shared/components/access-key-dialog/access-key-dialog.component';
 
 @Component({
@@ -21,8 +21,8 @@ export class CourseComponent {
 
   constructor(public userService: UserService,
               private router: Router,
-              private dialog: MdDialog,
-              private snackBar: MdSnackBar) {
+              private dialog: MatDialog,
+              private snackBar: MatSnackBar) {
   }
 
   editCourse(id: string) {
@@ -50,12 +50,18 @@ export class CourseComponent {
   }
 
   isCourseTeacherOrAdmin(course: ICourse) {
+    if (this.userService.isStudent()) {
+      return false;
+    }
     if (this.userService.isAdmin()) {
       return true;
     }
 
-    return (course.courseAdmin && course.courseAdmin._id === this.userService.user._id) ||
-      course.teachers.filter(teacher => teacher._id === this.userService.user._id).length;
+    if (course.courseAdmin._id === this.userService.user._id) {
+      return true;
+    }
+
+    return ( course.teachers.filter(teacher => teacher._id === this.userService.user._id).length)
   }
 
   isMemberOfCourse(course: ICourse) {

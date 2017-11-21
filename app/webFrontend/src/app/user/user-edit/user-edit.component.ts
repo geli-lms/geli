@@ -1,13 +1,14 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {FormGroup, FormBuilder, Validators} from '@angular/forms';
-import {MdSnackBar} from '@angular/material';
+import {MatSnackBar} from '@angular/material';
 import {UserDataService} from '../../shared/services/data.service';
 import {IUser} from '../../../../../../shared/models/IUser';
 import {UserService} from '../../shared/services/user.service';
 import {ShowProgressService} from '../../shared/services/show-progress.service';
 import {matchPasswords} from '../../shared/validators/validators';
 import {DialogService} from '../../shared/services/dialog.service';
+import {pwPattern} from '../../auth/password';
 
 @Component({
   selector: 'app-user-edit',
@@ -19,6 +20,7 @@ export class UserEditComponent implements OnInit {
   id: string;
   user: IUser;
   userForm: FormGroup;
+  passwordPatternText: string;
 
   constructor(private router: Router,
               private route: ActivatedRoute,
@@ -27,11 +29,16 @@ export class UserEditComponent implements OnInit {
               private showProgress: ShowProgressService,
               private formBuilder: FormBuilder,
               public dialogService: DialogService,
-              public snackBar: MdSnackBar) {
+              public snackBar: MatSnackBar) {
     this.generateForm();
   }
 
+  userIsAdmin(): boolean {
+    return this.userService.isAdmin();
+  }
+
   ngOnInit() {
+    this.passwordPatternText = pwPattern.text;
     this.route.params.subscribe(params => {
       this.id = decodeURIComponent(params['id']);
 
@@ -104,7 +111,7 @@ export class UserEditComponent implements OnInit {
       },
       (error) => {
         this.showProgress.toggleLoadingGlobal(false);
-        this.snackBar.open(JSON.parse(error._body).message, 'Dismiss');
+        this.snackBar.open(error.json().message, 'Dismiss');
       });
   }
 
@@ -117,7 +124,7 @@ export class UserEditComponent implements OnInit {
       username: [''],
       email: ['', Validators.required],
       currentPassword: [''],
-      password: [''],
+      password: ['', Validators.pattern(pwPattern.pattern)],
       confirmPassword: ['']
     }, {validator: matchPasswords('password', 'confirmPassword')});
   }

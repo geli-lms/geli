@@ -1,7 +1,8 @@
 import {Component, EventEmitter, Input, Output, OnInit, ViewEncapsulation} from '@angular/core';
-import {MdDialog, MdSnackBar} from '@angular/material';
+import {MatDialog, MatSnackBar} from '@angular/material';
 import {UserService} from '../../shared/services/user.service';
 import {CourseService} from '../../shared/services/data.service';
+import {BadgeComponent} from '../../shared/components/badge/badge.component'
 import {Router} from '@angular/router';
 import {ICourse} from '../../../../../../shared/models/ICourse';
 
@@ -26,8 +27,8 @@ export class CourseContainerComponent implements OnInit {
   constructor(public userService: UserService,
               private courseService: CourseService,
               private router: Router,
-              private dialog: MdDialog,
-              private snackBar: MdSnackBar) {
+              private dialog: MatDialog,
+              private snackBar: MatSnackBar) {
 
   }
 

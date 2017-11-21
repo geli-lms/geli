@@ -1,9 +1,15 @@
 <form [formGroup]="form">
-  <md-input-container>
-    <input mdInput required formControlName="name" placeholder="Name">
-  </md-input-container>
+  <mat-form-field>
+    <input matInput required formControlName="name" placeholder="Name">
+  </mat-form-field>
 
-  <md-input-container>
-    <textarea mdInput formControlName="description" placeholder="Description" rows="4"></textarea>
-  </md-input-container>
+  <mat-form-field>
+    <textarea matInput formControlName="description" placeholder="Description" rows="4"></textarea>
+  </mat-form-field>
+
+  <mat-form-field *ngIf="model.progressable">
+    <input matInput formControlName="deadline" [matDatepicker]="deadlineDatepicker" placeholder="Optional deadline">
+    <mat-datepicker-toggle matSuffix [for]="deadlineDatepicker"></mat-datepicker-toggle>
+    <mat-datepicker #deadlineDatepicker></mat-datepicker>
+  </mat-form-field>
 </form>

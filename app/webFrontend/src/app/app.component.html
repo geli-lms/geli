@@ -1,48 +1,50 @@
-<md-toolbar color="primary" [ngClass]="{'warning': hasWarning()}">
-  <a routerLink="/" class="logo">geli</a>
+<mat-toolbar color="primary" [ngClass]="{'warning': hasWarning()}">
+  <mat-toolbar-row>
+    <a routerLink="/" class="logo">geli</a>
 
-  <span class="non-production-warning">
+    <span class="non-production-warning">
     <a *ngIf="hasWarning()" title="{{apiInfo.nonProductionWarning}}">{{apiInfo.nonProductionWarning}}</a>
   </span>
 
-  <span *ngIf="!isLoggedIn()">
-    <button class="login" md-button routerLink="/login" routerLinkActive="active">Login</button>
-    <button class="register" md-button *ngIf="!isLoggedIn()" routerLink="/register"
+    <span *ngIf="!isLoggedIn()">
+    <button class="login" mat-button routerLink="/login" routerLinkActive="active">Login</button>
+    <button class="register" mat-button *ngIf="!isLoggedIn()" routerLink="/register"
             routerLinkActive="active">Register</button>
     <span class="between-distance" *ngIf="!isLoggedIn()"></span>
   </span>
 
-  <span *ngIf="isLoggedIn()">
+    <span *ngIf="isLoggedIn()">
 
-    <button md-button routerLink="/profile">
+    <button mat-button routerLink="/profile">
         <img class="avatar" src="{{userService.user.getUserImageURL(30)}}" width="30" height="30">
         {{ this.userService.user.profile.firstName }}
     </button>
   </span>
-  <button md-icon-button [mdMenuTriggerFor]="menu">
-    <md-icon>more_vert</md-icon>
-  </button>
-  <md-menu #menu="mdMenu">
-    <!--<button md-menu-item>-->
-    <!--<md-icon>favorite</md-icon>-->
-    <!--<span>Favorites</span>-->
-    <!--</button>-->
-    <button md-menu-item *ngIf="isLoggedIn() && isAdmin()" routerLink="/admin" routerLinkActive="active">
-      <md-icon>settings</md-icon>
-      <span>Admin</span>
+    <button mat-icon-button [matMenuTriggerFor]="menu">
+      <mat-icon>more_vert</mat-icon>
     </button>
-    <button md-menu-item routerLink="/about" routerLinkActive="active">
-      <md-icon>info</md-icon>
-      <span>About</span>
-    </button>
-    <button md-menu-item *ngIf="isLoggedIn()" (click)="logout()" routerLink="" routerLinkActive="active">
-      <md-icon>exit_to_app</md-icon>
-      <span>Logout</span>
-    </button>
-  </md-menu>
-</md-toolbar>
+    <mat-menu #menu="matMenu">
+      <!--<button mat-menu-item>-->
+      <!--<mat-icon>favorite</mat-icon>-->
+      <!--<span>Favorites</span>-->
+      <!--</button>-->
+      <button mat-menu-item *ngIf="isLoggedIn() && isAdmin()" routerLink="/admin" routerLinkActive="active">
+        <mat-icon>settings</mat-icon>
+        <span>Admin</span>
+      </button>
+      <button mat-menu-item routerLink="/about" routerLinkActive="active">
+        <mat-icon>info</mat-icon>
+        <span>About</span>
+      </button>
+      <button mat-menu-item *ngIf="isLoggedIn()" (click)="logout()" routerLink="" routerLinkActive="active">
+        <mat-icon>exit_to_app</mat-icon>
+        <span>Logout</span>
+      </button>
+    </mat-menu>
+  </mat-toolbar-row>
+</mat-toolbar>
 
-<md-progress-bar *ngIf="showProgressBar" mode="indeterminate"></md-progress-bar>
+<mat-progress-bar *ngIf="showProgressBar" [mode]="indeterminate"></mat-progress-bar>
 
 <div class="{{ 'app-content ' + specialContainerStyle() }}">
   <router-outlet></router-outlet>

@@ -1,8 +1,10 @@
-<md-toolbar md-dialog-title role="header">
-  <span>Fullscreen Mode</span>
-  <span class="toolbar-fill"></span>
-  <button md-mini-fab color="primary" (click)="onCloseClick()" md-tooltip="Quit Fullscreen">
-    <md-icon>close</md-icon>
-  </button>
-</md-toolbar>
+<mat-toolbar matDialogTitle role="header">
+  <mat-toolbar-row>
+    <span>Fullscreen Mode</span>
+    <span class="toolbar-fill"></span>
+    <button mat-mini-fab color="primary" (click)="onCloseClick()" matTooltip="Quit Fullscreen">
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-toolbar-row>
+</mat-toolbar>
 <app-free-text-unit-editor [(markdown)]="data.markdown"></app-free-text-unit-editor>

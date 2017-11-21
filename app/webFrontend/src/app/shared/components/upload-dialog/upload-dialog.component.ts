@@ -1,8 +1,7 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {FileItem, FileUploader} from 'ng2-file-upload';
 import {IUser} from '../../../../../../../shared/models/IUser';
-import {MdDialogRef} from '@angular/material';
-import {UserDataService} from '../../services/data.service';
+import {MatDialogRef} from '@angular/material';
 
 @Component({
   selector: 'app-upload-dialog',
@@ -19,8 +18,9 @@ export class UploadDialog implements OnInit {
   mediastream: MediaStreamTrack;
 
   public pictureTaken: boolean;
+  showProgressBar = false;
 
-  constructor(public dialogRef: MdDialogRef<UploadDialog>) { }
+  constructor(public dialogRef: MatDialogRef<UploadDialog>) { }
 
   ngOnInit() {
     this.uploader = new FileUploader({
@@ -84,7 +84,15 @@ export class UploadDialog implements OnInit {
     this.pictureTaken = true;
   }
 
+  public uploadImage() {
+    this.dialogRef.disableClose = true;
+    this.showProgressBar = true;
+    this.uploader.uploadAll();
+  }
+
   public addImage() {
+    this.dialogRef.disableClose = true;
+    this.showProgressBar = true;
     const imageData = this.previewPicture.nativeElement.src;
     this.convertToFile(imageData, 'webcam.png', 'image/png')
     .then((file) => {
@@ -107,6 +115,7 @@ export class UploadDialog implements OnInit {
 
   public cancel() {
     this.stopWebcam();
+    this.uploader.cancelAll();
     this.dialogRef.close(false);
   }
 

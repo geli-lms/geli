@@ -29,8 +29,8 @@
     display: inline-block;
   }
   .answers {
-    padding-top: 20px;
-    padding-left: 20px;
+    padding-top: 7px;
+    padding-left: 15px;
 
     background-color: whitesmoke;
   }
@@ -43,7 +43,12 @@
       width: 100%;
       display: flex;
 
-      .mat-input-container {
+      .mat-checkbox {
+        margin-left: 14px;
+        margin-right: 6px;
+        margin-top: 18px;
+      }
+      .mat-form-field {
         flex-grow: 1;
       }
     }
@@ -51,5 +56,15 @@
     @include bp(md) {
       width: 300px;
     }
+  }
+}
+
+.bottom-toolbar {
+  background-color: white;
+
+  .toolbar-fill {
+    // This fills the remaining space, by using flexbox.
+    // Every toolbar row uses a flexbox row layout.
+    flex: 1 1 auto;
   }
 }

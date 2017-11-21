@@ -3,4 +3,5 @@ export interface IAPIInfo {
   nonProductionWarning: string;
   build_timestamp: Date;
   commit_hash: string;
+  sentryDsn: string;
 }

@@ -1,25 +1,25 @@
-<md-input-container class="fuzzySearch">
-  <input mdInput placeholder="Search and add {{role}}s by name, Id, e-mail"
-         [mdAutocomplete]="auto" [formControl]="userCtrl" [(ngModel)]="fuzzySearch">
-</md-input-container>
+<mat-form-field class="fuzzySearch">
+  <input matInput placeholder="Search and add {{role}}s by name, Id, e-mail"
+         [matAutocomplete]="auto" [formControl]="userCtrl" [(ngModel)]="fuzzySearch">
+</mat-form-field>
 
-<md-autocomplete #auto="mdAutocomplete">
-  <md-option *ngFor="let state of filteredStates | async" [value]="state">
+<mat-autocomplete #auto="matAutocomplete">
+  <mat-option *ngFor="let state of filteredStates | async" [value]="state">
     {{ state }}
-  </md-option>
-</md-autocomplete>
+  </mat-option>
+</mat-autocomplete>
 
 <div class="members" *ngIf="fuzzySearch.length <= 0">
   <ng-container *ngFor="let user of usersInCourse">
-    <md-card [ngClass]="(currentMember != null && currentMember._id == user._id) ? 'active':'profile'"
-             (click)="setMember(user)">
+    <mat-card [ngClass]="(currentMember != null && currentMember._id == user._id) ? 'active':'profile'"
+              (click)="setMember(user)">
 
       <div class="bg" user-image [user-image]="user" [size]="160"></div>
 
       <div *ngIf="currentMember != null && currentMember._id == user._id">
-        <button md-raised-button routerLink="/profile/{{user._id}}" routerLinkActive="active">DETAILS</button>
-        <button md-raised-button>SEND MAIL</button>
-        <button class="del" md-raised-button (click)="removeUser()">REMOVE</button>
+        <button mat-raised-button routerLink="/profile/{{user._id}}" routerLinkActive="active">DETAILS</button>
+        <button mat-raised-button>SEND MAIL</button>
+        <button class="del" mat-raised-button (click)="removeUser()">REMOVE</button>
       </div>
 
       <ul class="info">
@@ -27,36 +27,36 @@
         <li><strong>{{user.profile.lastName}}</strong></li>
         <li class="userId">{{user.uid}}</li>
       </ul>
-    </md-card>
+    </mat-card>
   </ng-container>
 </div>
 
 <div class="users" *ngIf="fuzzySearch.length > 0">
-  <p><strong>In course ({{usersInCourse.length}})</strong></p>
-  <md-list class="drop" [dragula]='dragulaBagId' [dragulaModel]='usersInCourse'>
+  <div class="titleHeader"><h2>In course</h2><app-badge [displayNumber]="usersInCourse.length"></app-badge></div>
+  <mat-list class="drop" [dragula]='dragulaBagId' [dragulaModel]='usersInCourse'>
     <div *ngFor="let member of usersInCourse">
-      <md-list-item class="list" *ngIf="fuzzysearch(fuzzySearch,member)" [attr.data-id]="[member._id]">
-        <md-icon class="user-drag-handle">drag_handle</md-icon>
+      <mat-list-item class="list" *ngIf="fuzzysearch(fuzzySearch,member)" [attr.data-id]="[member._id]">
+        <mat-icon class="user-drag-handle">drag_handle</mat-icon>
         <span class="listBg" [grav]="member.email"></span>
         <span class="firstName">{{member.profile.firstName}}</span>
         <span class="lastName">{{member.profile.lastName}}</span>
         <span class="uid">{{member.uid}}</span>
         <span class="email"><a href="mailto:{{member.email}}">{{member.email}}</a></span>
-      </md-list-item>
+      </mat-list-item>
     </div>
-  </md-list>
+  </mat-list>
 
-  <p><strong>Not in course ({{users.length}})</strong></p>
-  <md-list class="drop" [dragula]='dragulaBagId' [dragulaModel]='users'>
+  <div class="titleHeader"><h2>Not in course</h2><app-badge [displayNumber]="users.length"></app-badge></div>
+  <mat-list class="drop" [dragula]='dragulaBagId' [dragulaModel]='users'>
     <div *ngFor="let user of users">
-      <md-list-item class="list" *ngIf="fuzzysearch(fuzzySearch,user)" [attr.data-id]="[user._id]">
-        <md-icon class="member-drag-handle">drag_handle</md-icon>
+      <mat-list-item class="list" *ngIf="fuzzysearch(fuzzySearch,user)" [attr.data-id]="[user._id]">
+        <mat-icon class="member-drag-handle">drag_handle</mat-icon>
         <span class="listBg" [grav]="user.email"></span>
         <span class="firstName">{{user.profile.firstName}}</span>
         <span class="lastName">{{user.profile.lastName}}</span>
         <span class="uid">{{user.uid}}</span>
         <span  class="email"><a href="mailto:{{user.email}}">{{user.email}}</a></span>
-      </md-list-item>
+      </mat-list-item>
     </div>
-  </md-list>
+  </mat-list>
 </div>

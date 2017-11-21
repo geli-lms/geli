@@ -70,7 +70,7 @@ describe('User', () => {
             .get(ROLE_URL)
             .set('Authorization', `JWT ${JwtUtils.generateToken(user)}`)
             .end((err, res) => {
-              res.status.should.be.equal(401);
+              res.status.should.be.equal(403);
               done();
             });
         })
@@ -309,7 +309,7 @@ describe('User', () => {
             .del(`${BASE_URL}/${user._id}`)
             .set('Authorization', `JWT ${JwtUtils.generateToken(user)}`)
             .end((err, res) => {
-              res.status.should.be.equal(401);
+              res.status.should.be.equal(403);
               done();
             });
         })

@@ -2,7 +2,7 @@ import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CourseService} from '../../shared/services/data.service';
-import {MdSnackBar} from '@angular/material';
+import {MatSnackBar} from '@angular/material';
 import {ShowProgressService} from '../../shared/services/show-progress.service';
 import {FileUploader} from 'ng2-file-upload';
 
@@ -29,7 +29,7 @@ export class CourseEditComponent implements OnInit {
   constructor(private route: ActivatedRoute,
               private formBuilder: FormBuilder,
               private courseService: CourseService,
-              public snackBar: MdSnackBar,
+              public snackBar: MatSnackBar,
               private ref: ChangeDetectorRef,
               private showProgress: ShowProgressService) {
 
@@ -101,7 +101,7 @@ export class CourseEditComponent implements OnInit {
       }, (error) => {
         this.showProgress.toggleLoadingGlobal(false);
         // Mongodb uses the error field errmsg
-        const errormessage = JSON.parse(error._body).message || JSON.parse(error._body).errmsg;
+        const errormessage = error.json().message || error.json().errmsg;
         this.snackBar.open('Saving course failed ' + errormessage, 'Dismiss');
         console.log(error);
       });
