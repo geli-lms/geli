@@ -1,5 +1,3 @@
-// tslint:disable:no-console
-
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {CodeKataUnit} from '../../models/CodeKataUnit';
 import {MatSnackBar} from '@angular/material';
@@ -136,6 +134,7 @@ export class CodeKataComponent implements OnInit {
       err.lineNumber = e.lineNumber - err.lineNumber;
 
       const msg = 'Error: ' + e.message; //  + ' (line: ' + err.lineNumber + ')';
+      // tslint:disable-next-line:no-console
       console.log(msg);
       console.error(err);
     }
@@ -147,6 +146,7 @@ export class CodeKataComponent implements OnInit {
       return true;
     } else {
       this.snackBar.open('Your code failed.', '', {duration: 3000});
+      // tslint:disable-next-line:no-console
       console.log(result);
       return false;
     }
