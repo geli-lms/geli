@@ -39,7 +39,7 @@
 
   <mat-toolbar class="bottom-toolbar">
     <mat-toolbar-row>
-      <app-button-save-cancel (save)="saveUnit($event)" (cancel)="onCancel($event)"></app-button-save-cancel>
+      <app-button-save-cancel (save)="saveUnit()" (cancel)="onCancel()"></app-button-save-cancel>
       <span class="toolbar-fill"></span>
       <button mat-mini-fab (click)="addTask()" matTooltip="Add task" matTooltipPosition="right">
         <mat-icon>add</mat-icon>
