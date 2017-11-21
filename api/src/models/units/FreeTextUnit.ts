@@ -14,16 +14,17 @@ const freeTextUnitSchema = new mongoose.Schema({
   }
 });
 
-// freeTextUnitSchema.methods.import = function(unit: IFreeTextUnit, courseId: string) {
-//   this._course = courseId;
-//
-//   return new FreeTextUnit(unit).save()
-//     .catch((err: Error) => {
-//       const newError = new InternalServerError('Failed to import course');
-//       newError.stack += '\nCaused by: ' + err.stack;
-//       throw newError;
-//     });
-// };
+
+freeTextUnitSchema.statics.import = function(unit: IFreeTextUnit, courseId: string) {
+  unit._course = courseId;
+
+  return new FreeTextUnit(unit).save()
+    .catch((err: Error) => {
+      const newError = new InternalServerError('Failed to import freetextunit');
+      newError.stack += '\nCaused by: ' + err.stack;
+      throw newError;
+    });
+};
 
 const FreeTextUnit = Unit.discriminator('free-text', freeTextUnitSchema);
 

@@ -2,6 +2,7 @@ import * as mongoose from 'mongoose';
 import {IUnitModel, Unit} from './Unit';
 import {IFileUnit} from '../../../../shared/models/units/IFileUnit';
 import fs = require('fs');
+import {InternalServerError} from 'routing-controllers';
 
 interface IFileUnitModel extends IFileUnit, mongoose.Document {
   export: () => Promise<IFileUnit>;
@@ -42,6 +43,18 @@ fileUnitSchema.pre('remove', function(next: () => void) {
   });
   next();
 });
+
+fileUnitSchema.statics.import = function(unit: IFileUnit, courseId: string) {
+  unit._course = courseId;
+
+  return new FileUnit(unit).save()
+    .catch((err: Error) => {
+      const newError = new InternalServerError('Failed to import fileunit');
+      newError.stack += '\nCaused by: ' + err.stack;
+      throw newError;
+    });
+};
+
 
 const FileUnit = Unit.discriminator('file', fileUnitSchema);
 

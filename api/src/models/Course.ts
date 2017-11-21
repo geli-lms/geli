@@ -113,7 +113,10 @@ courseSchema.methods.export = function() {
   });
 };
 
-courseSchema.methods.import = function(course: ICourse, admin: IUser) {
+// TODO: beim import status immer auf inaktiv setzen (nicht sichtbar für studis)
+// TODO: prüfen ob course mit dem namen schon existiert, dann copy an namen anhängen
+
+courseSchema.statics.import = function(course: ICourse, admin: IUser) {
   // set Admin
   course.courseAdmin = admin;
 
@@ -129,7 +132,6 @@ courseSchema.methods.import = function(course: ICourse, admin: IUser) {
         return new Lecture().import(lecture, courseId);
       }))
       .then((importedLectures: ILecture[]) => {
-        savedcourse.lectures.concat(importedLectures);
         return savedcourse.save();
       });
     })

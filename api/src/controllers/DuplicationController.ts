@@ -23,7 +23,7 @@ export class DuplicationController {
 
   @Post('/course/:id')
   duplicateCourse(@Body() data: any, @Req() request: Request) {
-    // TODO
+    // TODO: status auf nicht sichtbar für students
   }
 
   @Post('/lecture/:id')

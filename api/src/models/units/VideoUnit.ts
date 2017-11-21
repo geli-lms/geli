@@ -2,6 +2,7 @@ import * as mongoose from 'mongoose';
 import {Unit} from './Unit';
 import {IVideoUnit} from '../../../../shared/models/units/IVideoUnit';
 import fs = require('fs');
+import {InternalServerError} from 'routing-controllers';
 
 interface IVideoUnitModel extends IVideoUnit, mongoose.Document {
   export: () => Promise<IVideoUnit>;
@@ -42,6 +43,17 @@ videoUnitSchema.pre('remove', function(next: () => void) {
   });
   next();
 });
+
+videoUnitSchema.statics.import = function(unit: IVideoUnit, courseId: string) {
+  unit._course = courseId;
+
+  return new VideoUnit(unit).save()
+    .catch((err: Error) => {
+      const newError = new InternalServerError('Failed to import videounit');
+      newError.stack += '\nCaused by: ' + err.stack;
+      throw newError;
+    });
+};
 
 const VideoUnit = Unit.discriminator('video', videoUnitSchema);
 

@@ -4,6 +4,9 @@ import {IUnitModel, Unit} from './units/Unit';
 import {IUnit} from '../../../shared/models/units/IUnit';
 import {InternalServerError} from 'routing-controllers';
 import {Course} from './Course';
+import {FreeTextUnit} from './units/FreeTextUnit';
+import {IFreeTextUnit} from '../../../shared/models/units/IFreeTextUnit';
+import {UnitClassMapper} from '../utilities/UnitClassMapper';
 
 interface ILectureModel extends ILecture, mongoose.Document {
   export: () => Promise<ILecture>;
@@ -84,8 +87,13 @@ lectureSchema.methods.import = function(lecture: ILecture, courseId: string) {
         course.save();
       });
       return Promise.all(units.map((unit: IUnit) => {
-        return new Unit().import(unit, courseId);
+        const unitTypeClass = UnitClassMapper.getMongooseClassForUnit(unit);
+        return unitTypeClass.import(unit, courseId);
+        //  if (unit.type === 'free-text') {
+        //    return FreeTextUnit.import(<IFreeTextUnit> unit, courseId);
+        // }
       }))
+      // TODO: in die unit implementierung auslagern
         .then((importedUnits: IUnit[]) => {
           // savedLecture.units.concat(importedUnits);
           importedUnits.forEach((importedUnit) => {
@@ -99,7 +107,7 @@ lectureSchema.methods.import = function(lecture: ILecture, courseId: string) {
     })
     .catch((err: Error) => {
       const newError = new InternalServerError('Failed to import lecture');
-      newError.stack += '\nCaused by: ' + err.stack;
+      newError.stack += '\nCaused by: ' + err.message + '\n' + err.stack;
       throw newError;
     });
 };
