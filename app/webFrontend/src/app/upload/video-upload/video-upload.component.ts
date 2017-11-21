@@ -26,7 +26,7 @@ export class VideoUploadComponent implements OnInit {
 
   allowedMimeType: string[] = ['video/mp4', 'video/webm', 'video/ogg'];
   uploader: FileUploader = new FileUploader({
-    url: '/api/units/upload/video',
+    url: '/api/units',
     headers: [{
       name: 'Authorization',
       value: localStorage.getItem('token'),

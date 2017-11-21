@@ -25,7 +25,7 @@ export class FileUploadComponent implements OnInit {
   public generalInfo: UnitGeneralInfoFormComponent;
 
   uploader: FileUploader = new FileUploader({
-    url: '/api/units/upload/file',
+    url: '/api/units',
     headers: [{
       name: 'Authorization',
       value: localStorage.getItem('token'),

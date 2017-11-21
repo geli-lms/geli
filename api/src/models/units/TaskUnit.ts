@@ -7,21 +7,37 @@ import {NativeError} from 'mongoose';
 interface ITaskUnitModel extends ITaskUnit, mongoose.Document {
 }
 
-const taskUnitSchema = new mongoose.Schema({
-  tasks: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Task'
+const taskSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String
+    },
+    unitId: {
+      type: String
     }
-  ],
+    ,
+    answers: {
+      type: [{
+        value: Boolean,
+        text: String
+      }],
+      required: true
+    },
+  }, {
+    timestamps: true,
+    toObject: {
+      transform: function (doc: any, ret: any) {
+        ret._id = doc.id;
+      }
+    }
+  }
+);
+
+const taskUnitSchema = new mongoose.Schema({
+  tasks: [taskSchema],
   deadline: {
     type: String
   },
-});
-
-taskUnitSchema.path('tasks').validate((value: any) => {
-  const debug = 0;
-  return true;
 });
 
 function cascadeDelete(next: (err?: NativeError) => void) {
