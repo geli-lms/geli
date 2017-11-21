@@ -3,6 +3,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CourseService} from '../../shared/services/data.service';
 import {MatSnackBar} from '@angular/material';
 import {Router} from '@angular/router';
+import {TitleService} from '../../shared/services/title.service';
 
 @Component({
   selector: 'app-course-new',
@@ -16,10 +17,12 @@ export class CourseNewComponent implements OnInit {
   constructor(private router: Router,
               private formBuilder: FormBuilder,
               private courseService: CourseService,
-              public snackBar: MatSnackBar) {
+              public snackBar: MatSnackBar,
+              private titleService: TitleService) {
   }
 
   ngOnInit() {
+    this.titleService.setTitle('New Course');
     this.generateForm();
   }
 

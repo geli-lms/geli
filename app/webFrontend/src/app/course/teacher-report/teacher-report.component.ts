@@ -7,6 +7,7 @@ import {IProgress} from '../../../../../../shared/models/IProgress';
 import {ProgressService} from '../../shared/services/data/progress.service';
 import {UserService} from '../../shared/services/user.service';
 import {User} from '../../models/User';
+import {TitleService} from '../../shared/services/title.service';
 
 @Component({
   selector: 'app-teacher-report',
@@ -26,10 +27,12 @@ export class TeacherReportComponent implements OnInit {
               private courseService: CourseService,
               private unitService: UnitService,
               private progressService: ProgressService,
-              private userService: UserService) {
+              private userService: UserService,
+              private titleService: TitleService) {
   }
 
   ngOnInit() {
+    this.titleService.setTitle('Course Report');
     this.route.params.subscribe(params => {
       this.id = decodeURIComponent(params['id']);
     });
@@ -50,6 +53,7 @@ export class TeacherReportComponent implements OnInit {
           }
         }
         console.log('debug');
+        this.titleService.setTitleCut(['Course Report: ', this.course.name]);
       },
       (err: any) => {
         console.log(err);

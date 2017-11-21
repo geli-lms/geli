@@ -8,6 +8,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {isNullOrUndefined} from 'util';
 import {matchPasswords} from '../../shared/validators/validators';
 import {pwPattern} from '../password';
+import {TitleService} from '../../shared/services/title.service';
 
 @Component({
   templateUrl: './reset.component.html',
@@ -28,7 +29,8 @@ export class ResetComponent implements OnInit {
               private showProgress: ShowProgressService,
               private snackBar: MatSnackBar,
               private formBuilder: FormBuilder,
-              private route: ActivatedRoute) {
+              private route: ActivatedRoute,
+              private titleService: TitleService) {
     this.route.params.subscribe(params => {
       if (!isNullOrUndefined(params['token'])) {
         this.token = params['token'];
@@ -39,6 +41,7 @@ export class ResetComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.titleService.setTitle('Reset Password');
     this.passwordPatternText = pwPattern.text;
     this.generateForm();
   }

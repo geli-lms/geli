@@ -5,6 +5,7 @@ import {CourseService} from '../../shared/services/data.service';
 import {MatSnackBar} from '@angular/material';
 import {ShowProgressService} from '../../shared/services/show-progress.service';
 import {FileUploader} from 'ng2-file-upload';
+import {TitleService} from '../../shared/services/title.service';
 
 @Component({
   selector: 'app-course-edit',
@@ -31,7 +32,8 @@ export class CourseEditComponent implements OnInit {
               private courseService: CourseService,
               public snackBar: MatSnackBar,
               private ref: ChangeDetectorRef,
-              private showProgress: ShowProgressService) {
+              private showProgress: ShowProgressService,
+              private titleService: TitleService) {
 
     this.route.params.subscribe(params => {
       this.id = params['id'];
@@ -47,6 +49,7 @@ export class CourseEditComponent implements OnInit {
             this.mode = true;
           }
           this.courseOb = val;
+          this.titleService.setTitleCut(['Edit Course: ', this.course]);
         }, (error) => {
           console.log(error);
         });
@@ -54,6 +57,7 @@ export class CourseEditComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.titleService.setTitle('Edit Course');
     this.generateForm();
     this.uploader = new FileUploader({
       url: '/api/courses/' + this.id + '/whitelist',

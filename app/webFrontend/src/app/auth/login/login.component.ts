@@ -6,6 +6,7 @@ import {AuthGuardService} from '../../shared/services/auth-guard.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ShowProgressService} from '../../shared/services/show-progress.service';
 import {MatSnackBar} from '@angular/material';
+import {TitleService} from '../../shared/services/title.service';
 
 @Component({
   templateUrl: './login.component.html',
@@ -22,10 +23,12 @@ export class LoginComponent implements OnInit {
               private authenticationService: AuthenticationService,
               private showProgress: ShowProgressService,
               private snackBar: MatSnackBar,
-              private formBuilder: FormBuilder) {
+              private formBuilder: FormBuilder,
+              private titleService: TitleService) {
   }
 
   ngOnInit() {
+    this.titleService.setTitle('Login');
     // reset login status
     this.authenticationService.logout();
     this.generateForm();

@@ -9,8 +9,15 @@ import {UserService} from './shared/services/user.service';
 import {AuthenticationService} from './shared/services/authentication.service';
 import {AuthGuardService} from './shared/services/auth-guard.service';
 import {
-  CourseService, TaskService, UserDataService, LectureService,
-  UnitService, AboutDataService, FreeTextUnitService, CodeKataUnitService, APIInfoService
+  AboutDataService,
+  APIInfoService,
+  CodeKataUnitService,
+  CourseService,
+  FreeTextUnitService,
+  LectureService,
+  TaskService,
+  UnitService,
+  UserDataService
 } from './shared/services/data.service';
 import {BackendService} from './shared/services/backend.service';
 
@@ -25,6 +32,7 @@ import {UserModule} from './user/user.module';
 import {AuthModule} from './auth/auth.module';
 import {AboutModule} from './about/about.module';
 import {AdminModule} from './admin/admin.module';
+import {TitleService} from './shared/services/title.service';
 
 @NgModule({
   declarations: [
@@ -60,6 +68,7 @@ import {AdminModule} from './admin/admin.module';
     FreeTextUnitService,
     CodeKataUnitService,
     APIInfoService,
+    TitleService,
     RavenErrorHandler,
     {
       provide: ErrorHandler,

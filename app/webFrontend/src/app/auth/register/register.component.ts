@@ -6,6 +6,7 @@ import {ShowProgressService} from '../../shared/services/show-progress.service';
 import {MatSnackBar} from '@angular/material';
 import {matchPasswords} from '../../shared/validators/validators';
 import {pwPattern} from '../password';
+import {TitleService} from '../../shared/services/title.service';
 
 @Component({
   selector: 'app-register',
@@ -31,10 +32,12 @@ export class RegisterComponent implements OnInit {
               private authenticationService: AuthenticationService,
               private showProgress: ShowProgressService,
               private snackBar: MatSnackBar,
-              private formBuilder: FormBuilder) {
+              private formBuilder: FormBuilder,
+              private titleService: TitleService) {
   }
 
   ngOnInit() {
+    this.titleService.setTitle('Register');
     // reset login status
     this.authenticationService.unsetAuthData();
     this.role = 'student';
