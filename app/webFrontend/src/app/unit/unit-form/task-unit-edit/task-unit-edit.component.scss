@@ -29,8 +29,8 @@
     display: inline-block;
   }
   .answers {
-    padding-top: 20px;
-    padding-left: 20px;
+    padding-top: 7px;
+    padding-left: 15px;
 
     background-color: whitesmoke;
   }
@@ -43,6 +43,11 @@
       width: 100%;
       display: flex;
 
+      .mat-checkbox {
+        margin-left: 14px;
+        margin-right: 6px;
+        margin-top: 18px;
+      }
       .mat-form-field {
         flex-grow: 1;
       }
