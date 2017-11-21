@@ -3,7 +3,6 @@ import {IUnit} from '../../../../shared/models/units/IUnit';
 import {NativeError} from 'mongoose';
 import {Progress} from '../Progress';
 import {InternalServerError} from 'routing-controllers';
-import {CodeKataUnit} from './CodeKataUnit';
 import {UnitClassMapper} from '../../utilities/UnitClassMapper';
 
 interface IUnitModel extends IUnit, mongoose.Document {
@@ -72,8 +71,8 @@ unitSchema.methods.export = function() {
 };
 
 unitSchema.methods.import = function(unit: IUnit, courseId: string) {
- // this._course = mongoose.Types.ObjectId(courseId);
   unit._course = courseId;
+
   return new Unit(unit).save()
   .catch((err: Error) => {
     const newError = new InternalServerError('Failed to import course');
