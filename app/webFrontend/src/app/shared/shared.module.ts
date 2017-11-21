@@ -7,7 +7,7 @@ import {UnitMenuComponent} from './components/unit-menu/unit-menu.component';
 import {UserImageDirective} from './directives/user-image.directive';
 import {MaterialImportModule} from './modules/material-import.module';
 import { BadgeComponent } from './components/badge/badge.component';
-import {ButtonSaveCancelComponent} from "./components/button-save-cancel/button-save-cancel.component";
+import {ButtonSaveCancelComponent} from './components/button-save-cancel/button-save-cancel.component';
 
 @NgModule({
   imports: [
