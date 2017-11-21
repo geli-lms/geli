@@ -125,14 +125,14 @@ courseSchema.statics.import = function(course: ICourse, admin: IUser) {
   course.lectures = [];
 
   return new Course(course).save()
-    .then((savedcourse: ICourseModel) => {
-      const courseId = savedcourse._id;
+    .then((savedCourse: ICourseModel) => {
+      const courseId = savedCourse._id;
 
       return Promise.all(lectures.map((lecture: ILecture) => {
         return new Lecture().import(lecture, courseId);
       }))
       .then((importedLectures: ILecture[]) => {
-        return savedcourse.save();
+        return savedCourse.save();
       });
     })
     .then((importedCourse: ICourseModel) => {

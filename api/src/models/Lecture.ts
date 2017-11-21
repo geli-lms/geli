@@ -88,19 +88,19 @@ lectureSchema.methods.import = function(lecture: ILecture, courseId: string) {
       });
       return Promise.all(units.map((unit: IUnit) => {
         const unitTypeClass = UnitClassMapper.getMongooseClassForUnit(unit);
-        return unitTypeClass.import(unit, courseId);
-        //  if (unit.type === 'free-text') {
-        //    return FreeTextUnit.import(<IFreeTextUnit> unit, courseId);
-        // }
+        return unitTypeClass.import(unit, courseId, lectureId);
       }))
-      // TODO: in die unit implementierung auslagern
-        .then((importedUnits: IUnit[]) => {
-          // savedLecture.units.concat(importedUnits);
-          importedUnits.forEach((importedUnit) => {
-            savedLecture.units.push(importedUnit);
-          });
-          return savedLecture.save();
+        .then(() => {
+          return savedLecture;
         })
+      // TODO: in die unit implementierung auslagern
+      //   .then((importedUnits: IUnit[]) => {
+      //     // savedLecture.units.concat(importedUnits);
+      //     importedUnits.forEach((importedUnit) => {
+      //       savedLecture.units.push(importedUnit);
+      //     });
+      //     return savedLecture.save();
+      //   })
     })
     .then((importedLecture: ILectureModel) => {
       return importedLecture.toObject();
