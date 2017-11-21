@@ -35,20 +35,11 @@
         <mat-icon>remove</mat-icon>
       </button>
     </div>
-
   </div>
-  <p>
-    <app-button-save-cancel (save)="saveUnit($event)" (cancel)="onCancel($event)"></app-button-save-cancel>
-  </p>
-  <button mat-mini-fab class="add-task-fab" (click)="addTask()" matTooltip="Add task" matTooltipPosition="right">
-    <mat-icon>add</mat-icon>
-  </button>
-</div>
 
   <mat-toolbar class="bottom-toolbar">
     <mat-toolbar-row>
-      <button mat-button (click)="onCancel()" type="reset">Cancel</button>
-      <button mat-button color="primary" class="add-unit" (click)="saveUnit()" type="submit">Save</button>
+      <app-button-save-cancel (save)="saveUnit($event)" (cancel)="onCancel($event)"></app-button-save-cancel>
       <span class="toolbar-fill"></span>
       <button mat-mini-fab (click)="addTask()" matTooltip="Add task" matTooltipPosition="right">
         <mat-icon>add</mat-icon>
