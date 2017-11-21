@@ -37,11 +37,16 @@
     padding-left: 15px;
 
     background-color: whitesmoke;
+
+    .btn-wrapper {
+      display: inline-block;
+      min-height: 4em;
+    }
   }
 
   .answer {
     width: 100%;
-    margin-right: 10px;
+    padding-right: 10px;
 
     .check-answer {
       width: 100%;
@@ -58,11 +63,11 @@
     }
 
     @include bp(md) {
-      width: 48%;
+      width: 50%;
     }
 
     @include bp(xl) {
-      width: 32%;
+      width: 33.33%;
     }
   }
 }
