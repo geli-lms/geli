@@ -38,6 +38,13 @@
   margin-right: 0.2em;
 }
 
+.app-wrapper {
+  position: relative;
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+}
+
 .app-content {
   position: relative;
   padding: 20px;

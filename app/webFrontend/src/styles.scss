@@ -28,7 +28,7 @@ body, html {
   background-color: #ffffff;
 }
 
-app-root {
+app-root > .app-wrapper {
   > .mat-toolbar .mat-toolbar-row,
   > .app-content {
     @include maxSideMargin;

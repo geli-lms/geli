@@ -1,51 +1,53 @@
-<mat-toolbar color="primary" [ngClass]="{'warning': hasWarning()}">
-  <mat-toolbar-row>
-    <a routerLink="/" class="logo">geli</a>
+<div class="{{ 'app-wrapper ' + specialContainerStyle() }}">
+  <mat-toolbar color="primary" [ngClass]="{'warning': hasWarning()}">
+    <mat-toolbar-row>
+      <a routerLink="/" class="logo">geli</a>
 
-    <span class="non-production-warning">
-      <a *ngIf="hasWarning()" title="{{apiInfo.nonProductionWarning}}">{{apiInfo.nonProductionWarning}}</a>
-    </span>
+      <span class="non-production-warning">
+        <a *ngIf="hasWarning()" title="{{apiInfo.nonProductionWarning}}">{{apiInfo.nonProductionWarning}}</a>
+      </span>
 
-    <span *ngIf="!isLoggedIn()">
-      <button class="login" mat-button routerLink="/login" routerLinkActive="active">Login</button>
-      <button class="register" mat-button *ngIf="!isLoggedIn()" routerLink="/register"
-              routerLinkActive="active">Register</button>
-      <span class="between-distance" *ngIf="!isLoggedIn()"></span>
-    </span>
+      <span *ngIf="!isLoggedIn()">
+        <button class="login" mat-button routerLink="/login" routerLinkActive="active">Login</button>
+        <button class="register" mat-button *ngIf="!isLoggedIn()" routerLink="/register"
+                routerLinkActive="active">Register</button>
+        <span class="between-distance" *ngIf="!isLoggedIn()"></span>
+      </span>
 
-    <span *ngIf="isLoggedIn()">
+      <span *ngIf="isLoggedIn()">
 
-      <button mat-button routerLink="/profile">
-        <img class="avatar" src="{{userService.user.getUserImageURL(30)}}" width="30" height="30">
-        {{ this.userService.user.profile.firstName }}
+        <button mat-button routerLink="/profile">
+          <img class="avatar" src="{{userService.user.getUserImageURL(30)}}" width="30" height="30">
+          {{ this.userService.user.profile.firstName }}
+        </button>
+      </span>
+      <button mat-icon-button [matMenuTriggerFor]="menu">
+        <mat-icon>more_vert</mat-icon>
       </button>
-    </span>
-    <button mat-icon-button [matMenuTriggerFor]="menu">
-      <mat-icon>more_vert</mat-icon>
-    </button>
-    <mat-menu #menu="matMenu">
-      <!--<button mat-menu-item>-->
-      <!--<mat-icon>favorite</mat-icon>-->
-      <!--<span>Favorites</span>-->
-      <!--</button>-->
-      <button mat-menu-item *ngIf="isLoggedIn() && isAdmin()" routerLink="/admin" routerLinkActive="active">
-        <mat-icon>settings</mat-icon>
-        <span>Admin</span>
-      </button>
-      <button mat-menu-item routerLink="/about" routerLinkActive="active">
-        <mat-icon>info</mat-icon>
-        <span>About</span>
-      </button>
-      <button mat-menu-item *ngIf="isLoggedIn()" (click)="logout()" routerLink="" routerLinkActive="active">
-        <mat-icon>exit_to_app</mat-icon>
-        <span>Logout</span>
-      </button>
-    </mat-menu>
-  </mat-toolbar-row>
-</mat-toolbar>
+      <mat-menu #menu="matMenu">
+        <!--<button mat-menu-item>-->
+        <!--<mat-icon>favorite</mat-icon>-->
+        <!--<span>Favorites</span>-->
+        <!--</button>-->
+        <button mat-menu-item *ngIf="isLoggedIn() && isAdmin()" routerLink="/admin" routerLinkActive="active">
+          <mat-icon>settings</mat-icon>
+          <span>Admin</span>
+        </button>
+        <button mat-menu-item routerLink="/about" routerLinkActive="active">
+          <mat-icon>info</mat-icon>
+          <span>About</span>
+        </button>
+        <button mat-menu-item *ngIf="isLoggedIn()" (click)="logout()" routerLink="" routerLinkActive="active">
+          <mat-icon>exit_to_app</mat-icon>
+          <span>Logout</span>
+        </button>
+      </mat-menu>
+    </mat-toolbar-row>
+  </mat-toolbar>
 
-<mat-progress-bar *ngIf="showProgressBar" [mode]="indeterminate"></mat-progress-bar>
+  <mat-progress-bar *ngIf="showProgressBar" [mode]="indeterminate"></mat-progress-bar>
 
-<div class="{{ 'app-content ' + specialContainerStyle() }}">
-  <router-outlet></router-outlet>
+  <div class="app-content">
+    <router-outlet></router-outlet>
+  </div>
 </div>
