@@ -81,7 +81,6 @@ lectureSchema.methods.import = function(lecture: ILecture, courseId: string) {
   return new Lecture(lecture).save()
     .then((savedLecture: ILectureModel) => {
       const lectureId = savedLecture._id;
-
       Course.findById(courseId).then(course => {
         course.lectures.push(savedLecture);
         course.save();
@@ -93,14 +92,6 @@ lectureSchema.methods.import = function(lecture: ILecture, courseId: string) {
         .then(() => {
           return savedLecture;
         })
-      // TODO: in die unit implementierung auslagern
-      //   .then((importedUnits: IUnit[]) => {
-      //     // savedLecture.units.concat(importedUnits);
-      //     importedUnits.forEach((importedUnit) => {
-      //       savedLecture.units.push(importedUnit);
-      //     });
-      //     return savedLecture.save();
-      //   })
     })
     .then((importedLecture: ILectureModel) => {
       return importedLecture.toObject();

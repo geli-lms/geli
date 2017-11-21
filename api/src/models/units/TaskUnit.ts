@@ -4,6 +4,7 @@ import {ITaskUnit} from '../../../../shared/models/units/ITaskUnit';
 import {ITaskModel, Task} from '../Task';
 import {ITask} from '../../../../shared/models/task/ITask';
 import {InternalServerError} from 'routing-controllers';
+import {ILectureModel, Lecture} from '../Lecture';
 
 interface ITaskUnitModel extends ITaskUnit, mongoose.Document {
   export: () => Promise<ITaskUnit>;
@@ -58,7 +59,7 @@ taskUnitSchema.methods.export = function() {
   });
 }
 
-taskUnitSchema.statics.import = function(taskUnit: ITaskUnit, courseId: string) {
+taskUnitSchema.statics.import = function(taskUnit: ITaskUnit, courseId: string, lectureId: string) {
   taskUnit._course = courseId;
 
   const tasks: Array<ITask>  = taskUnit.tasks;
@@ -74,6 +75,16 @@ taskUnitSchema.statics.import = function(taskUnit: ITaskUnit, courseId: string) 
         .then((importedUnits: ITask[]) => {
           savedTaskUnit.tasks.concat(importedUnits);
           return savedTaskUnit.save();
+        });
+    })
+    .then((savedUnit: ITaskUnitModel) => {
+      return Lecture.findById(lectureId)
+        .then((lecture: ILectureModel) => {
+          lecture.units.push(savedUnit);
+          return lecture.save()
+            .then(updatedLecture => {
+              return savedUnit;
+            });
         });
     })
     .then((importedTaskUnit: ITaskUnitModel) => {

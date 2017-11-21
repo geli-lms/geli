@@ -77,8 +77,8 @@ unitSchema.methods.export = function() {
 unitSchema.statics.import = function(unit: IUnit, courseId: string, lectureId: string) {
   unit._course = courseId;
   return new Unit(unit).save()
-    .then((savedUnit: IUnit) => {
-      Lecture.findById(lectureId)
+    .then((savedUnit: IUnitModel) => {
+      return Lecture.findById(lectureId)
         .then((lecture: ILectureModel) => {
           lecture.units.push(savedUnit);
           return lecture.save()

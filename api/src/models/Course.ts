@@ -76,14 +76,14 @@ const courseSchema = new mongoose.Schema({
 );
 
 // Cascade delete
-courseSchema.pre('remove', function(next: () => void) {
+courseSchema.pre('remove', function (next: () => void) {
   Lecture.find({'_id': {$in: this.lectures}}).exec()
     .then((lectures) => Promise.all(lectures.map(lecture => lecture.remove())))
     .then(next)
     .catch(next);
 });
 
-courseSchema.methods.export = function() {
+courseSchema.methods.export = function () {
   const obj = this.toObject();
 
   // remove unwanted informations
@@ -99,7 +99,7 @@ courseSchema.methods.export = function() {
   delete obj.teachers;
 
   // "populate" lectures
-  const lectures: Array<mongoose.Types.ObjectId>  = obj.lectures;
+  const lectures: Array<mongoose.Types.ObjectId> = obj.lectures;
   obj.lectures = [];
 
   return Promise.all(lectures.map((lectureId: mongoose.Types.ObjectId) => {
@@ -107,36 +107,44 @@ courseSchema.methods.export = function() {
       return lecture.export();
     });
   }))
-  .then((exportedLectures: ILecture[]) => {
-    obj.lectures = exportedLectures;
-    return obj;
-  });
+    .then((exportedLectures: ILecture[]) => {
+      obj.lectures = exportedLectures;
+      return obj;
+    });
 };
 
-// TODO: beim import status immer auf inaktiv setzen (nicht sichtbar für studis)
-// TODO: prüfen ob course mit dem namen schon existiert, dann copy an namen anhängen
-
-courseSchema.statics.import = function(course: ICourse, admin: IUser) {
+courseSchema.statics.import = function (course: ICourse, admin: IUser) {
   // set Admin
   course.courseAdmin = admin;
 
+  // course shouldn't be visible for students after import
+  course.active = false;
+
   // import lectures
-  const lectures: Array<ILecture>  = course.lectures;
+  const lectures: Array<ILecture> = course.lectures;
   course.lectures = [];
 
-  return new Course(course).save()
-    .then((savedCourse: ICourseModel) => {
-      const courseId = savedCourse._id;
+  return Course.findOne({name: course.name}).then(val => {
+    if (val !== null) {
+      course.name = course.name + ' (copy)';
+    }
+    return course;
+  })
+    .then(() => {
+      return new Course(course).save()
+        .then((savedCourse: ICourseModel) => {
+          const courseId = savedCourse._id;
 
-      return Promise.all(lectures.map((lecture: ILecture) => {
-        return new Lecture().import(lecture, courseId);
-      }))
-      .then((importedLectures: ILecture[]) => {
-        return savedCourse.save();
-      });
-    })
-    .then((importedCourse: ICourseModel) => {
-      return importedCourse.toObject();
+          return Promise.all(lectures.map((lecture: ILecture) => {
+            return new Lecture().import(lecture, courseId);
+          }))
+            .then((importedLectures: ILecture[]) => {
+              return savedCourse.save();
+            });
+        })
+        .then((importedCourse: ICourseModel) => {
+          return importedCourse.toObject();
+        })
     })
     .catch((err: Error) => {
       const newError = new InternalServerError('Failed to import course');

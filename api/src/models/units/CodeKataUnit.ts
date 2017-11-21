@@ -2,10 +2,11 @@ import * as mongoose from 'mongoose';
 import {Unit} from './Unit';
 import {ICodeKataUnit} from '../../../../shared/models/units/ICodeKataUnit';
 import {InternalServerError} from 'routing-controllers';
+import {ILectureModel, Lecture} from '../Lecture';
 
 interface ICodeKataModel extends ICodeKataUnit, mongoose.Document {
   export: () => Promise<ICodeKataUnit>;
-  import: (unit: ICodeKataUnit, courseId: string) => Promise<ICodeKataUnit>;
+  import: (unit: ICodeKataUnit, courseId: string, lectureId: string) => Promise<ICodeKataUnit>;
 }
 
 const codeKataSchema = new mongoose.Schema({
@@ -23,10 +24,20 @@ const codeKataSchema = new mongoose.Schema({
   },
 });
 
-codeKataSchema.statics.import = function(unit: ICodeKataUnit, courseId: string) {
+codeKataSchema.statics.import = function(unit: ICodeKataUnit, courseId: string, lectureId: string) {
   unit._course = courseId;
 
   return new CodeKataUnit(unit).save()
+    .then((savedUnit: ICodeKataModel) => {
+      return Lecture.findById(lectureId)
+        .then((lecture: ILectureModel) => {
+          lecture.units.push(savedUnit);
+          return lecture.save()
+            .then(updatedLecture => {
+              return savedUnit;
+            });
+        });
+    })
     .catch((err: Error) => {
       const newError = new InternalServerError('Failed to import course');
       newError.stack += '\nCaused by: ' + err.stack;
