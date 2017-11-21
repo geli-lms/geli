@@ -5,6 +5,7 @@ import {Router} from '@angular/router';
 import {ShowProgressService} from '../../shared/services/show-progress.service';
 import {MatSnackBar} from '@angular/material';
 import {matchPasswords} from '../../shared/validators/validators';
+import {pwPattern} from '../password';
 
 @Component({
   selector: 'app-register',
@@ -15,6 +16,7 @@ export class RegisterComponent implements OnInit {
   registerForm: FormGroup;
   registrationDone = false;
   role;
+  passwordPatternText: string;
 
   private trimFormFields() {
     this.registerForm.value.email = this.registerForm.value.email.trim();
@@ -36,6 +38,7 @@ export class RegisterComponent implements OnInit {
     // reset login status
     this.authenticationService.unsetAuthData();
     this.role = 'student';
+    this.passwordPatternText = pwPattern.text;
     this.generateForm();
   }
 
@@ -76,7 +79,7 @@ export class RegisterComponent implements OnInit {
        * (?=.*[$%&§=#!?*()|0-9]) --> searchs for at least one special character or digit
        * .{8,} ensures, that the password has 8 or more characters
        */
-      password: ['', Validators.compose([Validators.required, Validators.pattern('^(?=.*[a-zA-Z])(?=.*[$%&§=#!?*()|0-9]).{8,}$')])],
+      password: ['', Validators.compose([Validators.required, Validators.pattern(pwPattern.pattern)])],
       confirmPassword: ['', Validators.required]
     }, {validator: matchPasswords('password', 'confirmPassword')});
   }

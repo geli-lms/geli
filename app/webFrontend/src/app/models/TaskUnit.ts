@@ -15,6 +15,7 @@ export class TaskUnit implements ITaskUnit {
   weight: number;
 
   tasks: ITask[] = [];
+  deadline: string;
 
   constructor(_course: ICourse) {
     this._course = _course;

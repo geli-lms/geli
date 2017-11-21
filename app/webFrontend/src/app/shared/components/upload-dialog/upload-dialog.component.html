@@ -34,3 +34,8 @@
     </div>
   </mat-tab>
 </mat-tab-group>
+<div *ngIf="showProgressBar">
+  <h2>Uploading...</h2>
+  <mat-progress-bar mode="determinate" [value]="uploader.progress"></mat-progress-bar>
+  <button mat-raised-button class="btn-cancel-upload" color="warn" (click)="cancel()">Cancel</button>
+</div>
