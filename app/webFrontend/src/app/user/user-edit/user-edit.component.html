@@ -18,30 +18,9 @@
     <mat-form-field class="full-width">
       <input matInput type="password" formControlName="currentPassword" placeholder="Current password"/>
     </mat-form-field>
-  <mat-form-field class="full-width">
-    <input matInput type="password" formControlName="currentPassword" placeholder="Current password"/>
-  </mat-form-field>
 
-  <mat-form-field class="full-width">
-    <input matInput type="password" formControlName="password" placeholder="Password"/>
-    <div class="form-text error" *ngIf="userForm?.controls.password.touched">
-      <small *ngIf="userForm.controls.password.hasError('pattern')">{{passwordPatternText}}</small>
-    </div>
-  </mat-form-field>
+    <app-password-input  [form]="userForm"></app-password-input>
 
-  <mat-form-field class="full-width">
-    <input matInput type="password" formControlName="confirmPassword" placeholder="Confirm password"/>
-    <div class="form-text error" *ngIf="userForm?.controls.confirmPassword.touched">
-      <small *ngIf="userForm.hasError('mismatchedPasswords')">Passwords do not match.</small>
-    </div>
-  </mat-form-field>
-
-    <mat-form-field class="full-width">
-      <input matInput type="password" formControlName="confirmPassword" placeholder="Confirm password"/>
-      <div class="form-text error" *ngIf="userForm?.controls.confirmPassword.touched">
-        <div *ngIf="userForm.hasError('mismatchedPasswords')">Passwords do not match.</div>
-      </div>
-    </mat-form-field>
   </div>
   <button mat-raised-button color="primary" class="mat-button" type="submit" [disabled]="!userForm?.valid">Save</button>
   <button mat-button class="mat-button" routerLink="/profile" routerLinkActive="active">

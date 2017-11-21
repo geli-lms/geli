@@ -21,6 +21,7 @@ export class UserEditComponent implements OnInit {
   user: IUser;
   userForm: FormGroup;
   passwordPatternText: string;
+  changePassword = false;
 
   constructor(private router: Router,
               private route: ActivatedRoute,
@@ -123,10 +124,8 @@ export class UserEditComponent implements OnInit {
       }),
       username: [''],
       email: ['', Validators.required],
-      currentPassword: [''],
-      password: ['', Validators.pattern(pwPattern.pattern)],
-      confirmPassword: ['']
-    }, {validator: matchPasswords('password', 'confirmPassword')});
+      currentPassword: ['']
+    });
   }
 
   openAddPictureDialog() {
