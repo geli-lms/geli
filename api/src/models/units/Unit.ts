@@ -72,8 +72,8 @@ unitSchema.methods.export = function() {
 };
 
 unitSchema.methods.import = function(unit: IUnit, courseId: string) {
-  this._course = courseId;
-
+ // this._course = mongoose.Types.ObjectId(courseId);
+  unit._course = courseId;
   return new Unit(unit).save()
   .catch((err: Error) => {
     const newError = new InternalServerError('Failed to import course');
