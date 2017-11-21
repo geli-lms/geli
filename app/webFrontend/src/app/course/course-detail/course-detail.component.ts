@@ -42,8 +42,4 @@ export class CourseDetailComponent implements OnInit {
         }
       });
   }
-
-  apply() {
-    // FIXME: Useless function?! REMOVE?
-  }
 }

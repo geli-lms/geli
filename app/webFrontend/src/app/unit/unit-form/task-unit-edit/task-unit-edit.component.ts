@@ -82,7 +82,7 @@ export class TaskUnitEditComponent implements OnInit {
           this.onDone();
         },
         (error) => {
-          // FIXME: Add snackbar here
+          this.snackBar.open(`Couldn\'t ${this.add ? 'create' : 'update'} task`, '', {duration: 3000});
         });
     }
   };
@@ -138,7 +138,7 @@ export class TaskUnitEditComponent implements OnInit {
         task = val; // get _id
         this.tasks.splice(0, 0, task); // add item to start
       }, (error) => {
-        // FIXME: Add snackbar here
+        this.snackBar.open('Couldn\'t create task', '', {duration: 3000});
       });
   }
 
@@ -163,7 +163,7 @@ export class TaskUnitEditComponent implements OnInit {
         this.snackBar.open('Task saved', 'Update', {duration: 2000});
 
       }, (error) => {
-        // FIXME: Add snackbar here
+        // THIS METHOD WILL BE REMOVED ANYWAY
       });
   }
 
