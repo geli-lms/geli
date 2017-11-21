@@ -25,3 +25,8 @@
   <input async matInput id="uid" placeholder="User identification" [(ngModel)]="whitelistUser.uid"
          [ngModelOptions]="{standalone: true}"required="">
 </mat-form-field>
+
+<button class="mat-mini-fab" mat-fab color="accent" (click)="onClick()"
+        matTooltip="Add course">
+  <mat-icon class="md-24 open-animation" [class.icon-open]="open">add</mat-icon>
+</button>

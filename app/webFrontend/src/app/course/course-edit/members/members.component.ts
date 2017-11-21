@@ -5,6 +5,7 @@ import {IUser} from '../../../../../../../shared/models/IUser';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
 import {User} from '../../../models/User';
 import {isNullOrUndefined} from 'util';
+import {MatDialog} from '@angular/material';
 
 @Component({
   selector: 'app-members',
