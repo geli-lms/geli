@@ -29,13 +29,7 @@
 
         <div class="csv-upload" *ngIf="enrollType === 'whitelist'">
           <p>Upload your OBS csv file with your course members for whitelisting students.</p>
-          <input class="upload" id="fileToUpload" type="file" style="display:none;" ng2FileSelect [uploader]="uploader"
-                   placeholder="Upload csv" accept=".csv"/>
-          <div class="uploadButton" onclick="document.getElementById('fileToUpload').click()">
-            <button mat-button color="primary">
-              Choose File
-            </button>
-          </div>
+          <app-upload-button></app-upload-button>
           <button mat-raised-button color="primary"
                   (click)="uploader.uploadAll()"
                   [disabled]="!uploader.getNotUploadedItems().length">

@@ -7,19 +7,23 @@ import {UnitMenuComponent} from './components/unit-menu/unit-menu.component';
 import {UserImageDirective} from './directives/user-image.directive';
 import {MaterialImportModule} from './modules/material-import.module';
 import { BadgeComponent } from './components/badge/badge.component';
+import { UploadButtonComponent } from './components/upload-button/upload-button.component';
+import {FileUploadModule} from 'ng2-file-upload';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    MaterialImportModule
+    MaterialImportModule,
+    FileUploadModule
   ],
   declarations: [
     GravatarDirective,
     UnitMenuComponent,
     UserImageDirective,
-    BadgeComponent
+    BadgeComponent,
+    UploadButtonComponent
   ],
   exports: [
     GravatarDirective,
@@ -27,7 +31,8 @@ import { BadgeComponent } from './components/badge/badge.component';
     UnitMenuComponent,
     UserImageDirective,
     MaterialImportModule,
-    BadgeComponent
+    BadgeComponent,
+    UploadButtonComponent
   ]
 })
 export class SharedModule {
