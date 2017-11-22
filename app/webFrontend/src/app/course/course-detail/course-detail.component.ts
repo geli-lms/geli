@@ -4,7 +4,9 @@ import 'rxjs/add/operator/switchMap';
 import {CourseService} from '../../shared/services/data.service';
 import {ICourse} from '../../../../../../shared/models/ICourse';
 import {UserService} from '../../shared/services/user.service';
-import {MatSnackBar} from '@angular/material';
+import {MatSnackBar, MatDialog} from '@angular/material';
+import {UnitSelectorComponent} from './unit-selector/unit-selector.component';
+
 
 @Component({
   selector: 'app-course-detail',
@@ -21,7 +23,8 @@ export class CourseDetailComponent implements OnInit {
               private route: ActivatedRoute,
               private courseService: CourseService,
               public userService: UserService,
-              private snackBar: MatSnackBar) {
+              private snackBar: MatSnackBar,
+              private dialog: MatDialog) {
   }
 
   ngOnInit() {
@@ -41,6 +44,12 @@ export class CourseDetailComponent implements OnInit {
           this.snackBar.open('You are not authorized to view this course.', '', {duration: 3000});
         }
       });
+  }
+
+  openDownloadDialog() {
+    this.dialog.open(UnitSelectorComponent, {
+      data: {}
+    });
   }
 
   apply() {

@@ -10,6 +10,7 @@ import {TeacherReportComponent} from './teacher-report/teacher-report.component'
 import {SharedModule} from '../shared/shared.module';
 import {CourseContainerComponent} from './course-container/course-container.component';
 import {UserModule} from '../user/user.module';
+import {UnitSelectorComponent} from './course-detail/unit-selector/unit-selector.component';
 
 @NgModule({
   imports: [
@@ -27,11 +28,13 @@ import {UserModule} from '../user/user.module';
     CourseNewComponent,
     TeacherReportComponent,
     CourseContainerComponent,
+    UnitSelectorComponent,
   ],
   providers: [],
   exports: [
     CourseComponent,
-    CourseContainerComponent
+    CourseContainerComponent,
+    UnitSelectorComponent
   ]
 })
 export class CourseModule {
