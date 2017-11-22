@@ -21,10 +21,12 @@ export class VideoUploadComponent implements OnInit {
   @Input() onDone: () => void;
   @Input() onCancel: () => void;
 
+  showQueueBar = false; // hides the main upload queue bar
+
   @ViewChild(UnitGeneralInfoFormComponent)
   public generalInfo: UnitGeneralInfoFormComponent;
 
-  allowedMimeType: string[] = ['video/mp4', 'video/webm', 'video/ogg'];
+  allowedMimeType: string[] = ['video/mp4', 'video/webm', 'video/ogg', 'video/avi'];
   uploader: FileUploader = new FileUploader({
     url: '/api/units/upload/video',
     headers: [{
@@ -86,6 +88,7 @@ export class VideoUploadComponent implements OnInit {
   }
 
   uploadAll() {
+    this.showQueueBar = true; // unhides the main upload queue bar
     if (this.model) {
       // add to model currently editing
       this.first = false;

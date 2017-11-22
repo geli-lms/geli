@@ -1,8 +1,19 @@
-<mat-tab-group *ngIf="!showProgressBar" (selectChange)="changedTab($event)">
+<mat-tab-group (selectChange)="changedTab($event)">
   <mat-tab label="Upload image">
     <div class="tab-content">
-      <input type="file" name="fileupload" ng2FileSelect [uploader]="uploader" placeholder="Upload picture"/>
-      <button mat-raised-button color="primary" disabled="{{!uploader.queue.length}}" (click)="uploadImage()">Upload picture</button>
+      <input id="fileToUpload" type="file" style="display:none;" ng2FileSelect [uploader]="uploader" placeholder="Upload picture"
+             [accept]="allowedMimeType.toString()"/>
+      <div class="uploadButton" onclick="document.getElementById('fileToUpload').click()">
+        <button mat-button color="primary">
+          Choose File
+        </button>
+      </div>
+
+      <button mat-raised-button color="primary"
+              (click)="uploader.uploadAll()"
+              [disabled]="!uploader.getNotUploadedItems().length">
+        Upload picture
+      </button>
       <button mat-raised-button color="warn" (click)="cancel()">Cancel</button>
     </div>
   </mat-tab>
@@ -18,7 +29,7 @@
         <h3 *ngIf="pictureTaken">Preview image</h3>
         <img #preview>
       </div>
-      <button mat-raised-button color="accent" disabled="{{!pictureTaken}}" (click)="addImage()">Upload picture</button>
+      <button mat-raised-button color="accent" (click)="addImage()">Upload picture</button>
       <button mat-raised-button color="warn" (click)="cancel()">Cancel</button>
     </div>
   </mat-tab>

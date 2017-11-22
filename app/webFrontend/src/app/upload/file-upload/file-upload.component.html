@@ -11,7 +11,7 @@
       <mat-icon>delete</mat-icon>
     </button>
   </div>
-  <div>
+  <div class="updateButton">
     <button mat-button color="primary" (click)="update()"
             [disabled]="!generalInfo.form.value.name || hasInvalidFileNames()">
       Update
@@ -19,21 +19,26 @@
   </div>
 </div>
 <div>
-  <input type="file" ng2FileSelect [uploader]="uploader" placeholder="Upload files" multiple/>
-  <button mat-button color="warn" (click)="uploader.clearQueue()">
+  <input id="fileToUpload" type="file" style="display:none;" ng2FileSelect [uploader]="uploader" placeholder="Upload files" multiple/>
+  <div class="uploadButton" onclick="document.getElementById('fileToUpload').click()">
+    <button mat-raised-button color="primary">
+      Choose File(s)
+    </button>
+  </div>
+  <button *ngIf="uploader.queue.length" mat-button color="warn" (click)="uploader.clearQueue()">
     Remove all
   </button>
 </div>
 <div>
-  <div *ngFor="let item of uploader.queue">
+  <div *ngFor="let item of uploader.queue" class="uploadQueue">
     <strong>{{ item?.file?.name }}</strong>
-    <span *ngIf="item.isReady">(ready)</span>
+    <span *ngIf="item.isReady">(waiting for upload)</span>
     <span *ngIf="item.isUploading">(uploading...)</span>
-    <span *ngIf="item.isSuccess">(success!)</span>
-    <mat-progress-bar mode="determinate" [value]="item.progress"></mat-progress-bar>
+    <span *ngIf="item.isSuccess">(upload successfull!)</span>
+    <mat-progress-bar *ngIf="item.isUploading" mode="determinate" [value]="item.progress"></mat-progress-bar>
   </div>
 </div>
-<div>
+<div *ngIf="showQueueBar">
   Queue progress:
   <div>
     <mat-progress-bar mode="determinate" [value]="uploader.progress"></mat-progress-bar>

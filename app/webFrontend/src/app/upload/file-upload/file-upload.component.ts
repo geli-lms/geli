@@ -21,6 +21,8 @@ export class FileUploadComponent implements OnInit {
   @Input() onDone: () => void;
   @Input() onCancel: () => void;
 
+  showQueueBar = false; // hides the main upload queue bar
+
   @ViewChild(UnitGeneralInfoFormComponent)
   public generalInfo: UnitGeneralInfoFormComponent;
 
@@ -84,6 +86,7 @@ export class FileUploadComponent implements OnInit {
   }
 
   uploadAll() {
+    this.showQueueBar = true; // unhides the main upload queue bar
     if (this.model) {
       // add to model currently editing
       this.first = false;
