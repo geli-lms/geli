@@ -5,6 +5,7 @@ import {CourseService} from '../../shared/services/data.service';
 import {MatSnackBar} from '@angular/material';
 import {ShowProgressService} from '../../shared/services/show-progress.service';
 import {FileUploader} from 'ng2-file-upload';
+import {ENROLL_TYPES, ENROLL_TYPE_WHITELIST, ENROLL_TYPE_FREE, ENROLL_TYPE_ACCESSKEY} from '../../../../../../shared/models/ICourse';
 
 @Component({
   selector: 'app-course-edit',
@@ -23,6 +24,8 @@ export class CourseEditComponent implements OnInit {
   id: string;
   courseOb: any[];
   uploader: FileUploader = null;
+  enrollTypes =  ENROLL_TYPES;
+
 
   message = 'Course successfully added.';
 
@@ -107,6 +110,12 @@ export class CourseEditComponent implements OnInit {
       });
   }
 
+
+  GetCourseValue() {
+    this.mode = true;
+  }
+
+
   onChangeMode(value) {
     if (value.checked === true) {
       this.mode = true;
@@ -114,6 +123,19 @@ export class CourseEditComponent implements OnInit {
     } else {
       this.mode = false;
       this.enrollType = 'free';
+    }
+  }
+
+  selectType(event) {
+    console.log(event);
+    if (event.value === ENROLL_TYPE_WHITELIST) {
+      this.enrollType = event.value;
+    }
+    if (event.value === ENROLL_TYPE_FREE) {
+      this.enrollType = event.value;
+    }
+    if (event.value === ENROLL_TYPE_ACCESSKEY) {
+      this.enrollType = event.value;
     }
   }
 
