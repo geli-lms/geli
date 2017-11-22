@@ -31,6 +31,9 @@ import {UnitSelectorComponent} from './course-detail/unit-selector/unit-selector
     UnitSelectorComponent,
   ],
   providers: [],
+  entryComponents: [
+    UnitSelectorComponent
+  ],
   exports: [
     CourseComponent,
     CourseContainerComponent,
