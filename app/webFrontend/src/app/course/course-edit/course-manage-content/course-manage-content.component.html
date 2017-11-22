@@ -1,8 +1,6 @@
 <div class="container" *ngIf="course">
   <div class="lectures" (click)="closeFab()" [dragula]="'lectures'" [dragulaModel]="course.lectures">
-    <div class="lecture" *ngFor="let lecture of course.lectures" [dragula]="'units'"
-         [dragulaModel]="lecture.units"
-         [attr.data-lecture-id]="lecture._id">
+    <div class="lecture" *ngFor="let lecture of course.lectures">
       <div class="lecture-header">
         <mat-icon class="lecture-drag-handle">drag_handle</mat-icon>
         <h2>{{lecture.name}}</h2>
@@ -64,6 +62,8 @@
                            [onCancel]="closeEditUnit">
             </app-unit-form>
           </div>
+
+          <p *ngIf="!lecture.units.length">No units added yet.</p>
         </div>
 
         <app-unit-form *ngIf="unitCreateMode && unitCreateType"
@@ -73,8 +73,12 @@
                        [onDone]="onAddUnitDone"
                        [onCancel]="closeAddUnit">
         </app-unit-form>
-
-        <p *ngIf="!lecture.units.length">No units added yet.</p>
+      </div>
+      <div class="unit-drop-target"
+          *ngIf="openedLecture && (lecture._id !== openedLecture._id || !lecture.units.length) && isDraggingUnit()"
+          dragula="units"
+          [dragulaModel]="lecture.units"
+          [attr.data-lecture-id]="lecture._id">
       </div>
     </div>
   </div>

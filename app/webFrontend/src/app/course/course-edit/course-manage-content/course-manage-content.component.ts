@@ -69,6 +69,10 @@ export class CourseManageContentComponent implements OnInit, OnDestroy {
     });
   }
 
+  isDraggingUnit() {
+    return this.dragulaService.find('units').drake.dragging;
+  }
+
   ngOnDestroy() {
     this.dragulaService.destroy('lectures');
     this.dragulaService.destroy('units');
