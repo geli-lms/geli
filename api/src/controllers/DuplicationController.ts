@@ -37,7 +37,7 @@ export class DuplicationController {
         return new Lecture(lecture).export();
       }).then((exportedLecture: ILecture) => {
         console.log('exportedLecture = ' + exportedLecture);
-        return new Lecture().import(exportedLecture, courseId);
+        return Lecture.import(exportedLecture, courseId);
       })
     .catch((error) => {
         throw new BadRequestError(error);

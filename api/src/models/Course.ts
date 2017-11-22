@@ -136,7 +136,7 @@ courseSchema.statics.import = function (course: ICourse, admin: IUser) {
           const courseId = savedCourse._id;
 
           return Promise.all(lectures.map((lecture: ILecture) => {
-            return new Lecture().import(lecture, courseId);
+            return Lecture.import(lecture, courseId);
           }))
             .then((importedLectures: ILecture[]) => {
               return savedCourse.save();

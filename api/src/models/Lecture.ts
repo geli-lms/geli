@@ -73,7 +73,7 @@ lectureSchema.methods.export = function() {
     });
 };
 
-lectureSchema.methods.import = function(lecture: ILecture, courseId: string) {
+lectureSchema.statics.import = function(lecture: ILecture, courseId: string) {
   // import lectures
   const units: Array<IUnit>  = lecture.units;
   lecture.units = [];
