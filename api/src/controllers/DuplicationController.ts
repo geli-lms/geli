@@ -6,9 +6,10 @@ import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import {IUnit} from '../../../shared/models/units/IUnit';
 import {Lecture} from '../models/Lecture';
 import {ILecture} from '../../../shared/models/ILecture';
-import {Unit} from '../models/units/Unit';
+import {IUnitModel, Unit} from '../models/units/Unit';
 import {ICourse} from '../../../shared/models/ICourse';
 import {Course} from '../models/Course';
+import {UnitClassMapper} from '../utilities/UnitClassMapper';
 
 
 @JsonController('/duplicate')
@@ -18,7 +19,7 @@ export class DuplicationController {
 
   @Post('/course/:id')
   duplicateCourse(@Param('id') id: string, @Body() data: any, @Req() request: Request) {
-    const courseAdmin = data.admin;
+    const courseAdmin = data.courseAdmin;
     return Course.findById(id)
       .then((course: ICourse) => {
         return new Course(course).export();
@@ -53,10 +54,11 @@ export class DuplicationController {
     const courseId = data.courseId;
     const lectureId = data.lectureId;
     return Unit.findById(id)
-      .then((unit: IUnit) => {
-        return new Unit(unit).export();
+      .then((unit: IUnitModel) => {
+        return unit.export();
       }).then((exportedUnit: IUnit) => {
-        return Unit.import(exportedUnit, courseId, lectureId);
+        const unitTypeClass = UnitClassMapper.getMongooseClassForUnit(exportedUnit);
+        return unitTypeClass.import(exportedUnit, courseId, lectureId);
       })
       .catch((err: Error) => {
         const newError = new InternalServerError('Failed to duplicate unit');
