@@ -148,7 +148,7 @@ courseSchema.statics.import = function (course: ICourse, admin: IUser) {
     })
     .catch((err: Error) => {
       const newError = new InternalServerError('Failed to import course');
-      newError.stack += '\nCaused by: ' + err.stack;
+      newError.stack += '\nCaused by: ' + err.message + '\n' + err.stack;
       throw newError;
     });
 };
