@@ -72,8 +72,8 @@ taskUnitSchema.statics.import = function(taskUnit: ITaskUnit, courseId: string, 
       return Promise.all(tasks.map((task: ITask) => {
         return Task.import(task, taskUnitId);
       }))
-        .then((importedUnits: ITask[]) => {
-          savedTaskUnit.tasks.concat(importedUnits);
+        .then((importedTasks: ITask[]) => {
+          savedTaskUnit.tasks = savedTaskUnit.tasks.concat(importedTasks);
           return savedTaskUnit.save();
         });
     })
