@@ -2,7 +2,7 @@ import {Component, Input, OnInit, OnDestroy} from '@angular/core';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
 import {ILecture} from '../../../../../../../shared/models/ILecture';
 import {
-  CodeKataUnitService, CourseService, FreeTextUnitService, LectureService,
+  CodeKataUnitService, CourseService, DuplicationService, FreeTextUnitService, LectureService,
   UnitService
 } from '../../../shared/services/data.service';
 import {ShowProgressService} from 'app/shared/services/show-progress.service';
@@ -44,6 +44,7 @@ export class CourseManageContentComponent implements OnInit, OnDestroy {
               private dragulaService: DragulaService,
               private freeTextUnitService: FreeTextUnitService,
               private codeKataUnitService: CodeKataUnitService,
+              private duplicationService: DuplicationService,
               public userService: UserService) {
   }
 
@@ -94,7 +95,14 @@ export class CourseManageContentComponent implements OnInit, OnDestroy {
   }
 
   duplicateLecture(lecture: ILecture) {
-
+    this.duplicationService.duplicateLecture(lecture, this.course._id)
+      .then(() => {
+        this.snackBar.open('Unit duplicated.', '', {duration: 3000});
+        this.reloadCourse();
+      })
+      .catch((error) => {
+      this.snackBar.open(error, '', {duration: 3000});
+    });
   }
 
   exportLecture(lecture: ILecture) {

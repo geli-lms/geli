@@ -4,6 +4,7 @@ import {ITaskUnit} from '../../../../shared/models/units/ITaskUnit';
 import {ITaskModel, Task} from '../Task';
 import {ITask} from '../../../../shared/models/task/ITask';
 import {InternalServerError} from 'routing-controllers';
+import {ILectureModel, Lecture} from '../Lecture';
 
 interface ITaskUnitModel extends ITaskUnit, mongoose.Document {
   export: () => Promise<ITaskUnit>;
@@ -58,7 +59,7 @@ taskUnitSchema.methods.export = function() {
   });
 }
 
-taskUnitSchema.methods.import = function(taskUnit: ITaskUnit, courseId: string) {
+taskUnitSchema.statics.import = function(taskUnit: ITaskUnit, courseId: string, lectureId: string) {
   taskUnit._course = courseId;
 
   const tasks: Array<ITask>  = taskUnit.tasks;
@@ -69,18 +70,28 @@ taskUnitSchema.methods.import = function(taskUnit: ITaskUnit, courseId: string) 
       const taskUnitId = savedTaskUnit._id;
 
       return Promise.all(tasks.map((task: ITask) => {
-        return new Task().import(task);
+        return new Task().import(task, taskUnitId);
       }))
         .then((importedUnits: ITask[]) => {
           savedTaskUnit.tasks.concat(importedUnits);
           return savedTaskUnit.save();
         });
     })
+    .then((savedUnit: ITaskUnitModel) => {
+      return Lecture.findById(lectureId)
+        .then((lecture: ILectureModel) => {
+          lecture.units.push(savedUnit);
+          return lecture.save()
+            .then(updatedLecture => {
+              return savedUnit;
+            });
+        });
+    })
     .then((importedTaskUnit: ITaskUnitModel) => {
       return importedTaskUnit.toObject();
     })
     .catch((err: Error) => {
-      const newError = new InternalServerError('Failed to import course');
+      const newError = new InternalServerError('Failed to import taskunit');
       newError.stack += '\nCaused by: ' + err.stack;
       throw newError;
     });

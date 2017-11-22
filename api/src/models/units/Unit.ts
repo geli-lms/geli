@@ -5,10 +5,13 @@ import {Progress} from '../Progress';
 import {InternalServerError} from 'routing-controllers';
 import {CodeKataUnit} from './CodeKataUnit';
 import {UnitClassMapper} from '../../utilities/UnitClassMapper';
+import {FreeTextUnit} from './FreeTextUnit';
+import {ILectureModel, Lecture} from '../Lecture';
+import {ILecture} from '../../../../shared/models/ILecture';
 
 interface IUnitModel extends IUnit, mongoose.Document {
   export: () => Promise<IUnit>;
-  import: (unit: IUnit, courseId: string) => Promise<IUnit>;
+  import: (unit: IUnit, courseId: string, lectureId: string) => Promise<IUnit>;
 }
 
 const unitSchema = new mongoose.Schema({
@@ -71,12 +74,21 @@ unitSchema.methods.export = function() {
   return obj;
 };
 
-unitSchema.methods.import = function(unit: IUnit, courseId: string) {
-  this._course = courseId;
-
+unitSchema.statics.import = function(unit: IUnit, courseId: string, lectureId: string) {
+  unit._course = courseId;
   return new Unit(unit).save()
+    .then((savedUnit: IUnitModel) => {
+      return Lecture.findById(lectureId)
+        .then((lecture: ILectureModel) => {
+          lecture.units.push(savedUnit);
+          return lecture.save()
+            .then(updatedLecture => {
+              return savedUnit;
+            });
+        });
+    })
   .catch((err: Error) => {
-    const newError = new InternalServerError('Failed to import course');
+    const newError = new InternalServerError('Failed to import unit');
     newError.stack += '\nCaused by: ' + err.stack;
     throw newError;
   });
