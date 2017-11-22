@@ -3,5 +3,5 @@ import {ICourse} from './ICourse';
 
 export interface IStudentConfig {
   user: IUser;
-  lastVisitedCourse: ICourse;
+  lastVisitedCourses: ICourse[];
 }
