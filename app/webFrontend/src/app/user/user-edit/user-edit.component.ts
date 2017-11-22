@@ -35,8 +35,13 @@ export class UserEditComponent implements OnInit {
     this.generateForm();
   }
 
-  userIsAdmin(): boolean {
-    return this.userService.isAdmin();
+  showPwFields() {
+    if (this.user) {
+      if (this.userService.user._id === this.user._id) {
+        return true;
+      }
+      return false;
+    }
   }
 
   ngOnInit() {
@@ -44,7 +49,6 @@ export class UserEditComponent implements OnInit {
     this.passwordPatternText = pwPattern.text;
     this.route.params.subscribe(params => {
       this.id = decodeURIComponent(params['id']);
-
       if (this.id === 'undefined') {
         this.id = this.userService.user._id;
       }
@@ -90,13 +94,11 @@ export class UserEditComponent implements OnInit {
         saveIUser[key] = userFormModel[key];
       }
     }
-
     for (const key in this.user) {
       if (typeof saveIUser[key] === 'undefined') {
         saveIUser[key] = this.user[key];
       }
     }
-
     return saveIUser;
   }
 
@@ -110,7 +112,6 @@ export class UserEditComponent implements OnInit {
         if (this.userService.isLoggedInUser(val)) {
           this.userService.setUser(val);
         }
-
         this.navigateBack();
       },
       (error) => {
