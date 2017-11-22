@@ -107,6 +107,10 @@ export class CourseEditComponent implements OnInit {
       });
   }
 
+  deleteCourse() {
+
+  }
+
   onChangeMode(value) {
     if (value.checked === true) {
       this.mode = true;
