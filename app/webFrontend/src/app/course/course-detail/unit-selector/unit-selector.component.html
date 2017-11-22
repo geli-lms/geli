@@ -1,5 +1,7 @@
-<p>
-  unit-selector works!
-</p>
-
-<div>{{course._id}}</div>
+<h2>{{course.name}}</h2>
+<mat-list *ngFor=" let lecture of course.lectures">
+  <mat-list-item class="lecture">{{lecture.name}}</mat-list-item>
+  <mat-list *ngFor=" let unit of lecture.units">
+    <mat-list-item class = "unit">{{unit.name}}</mat-list-item>
+  </mat-list>
+</mat-list>
