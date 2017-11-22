@@ -38,7 +38,7 @@ export class UserController {
   }
 
   @Authorized(['admin'])
-  @Get('/roles')
+  @Get('/roles/')
   getRoles() {
     // TODO: Fix any cast
     return (<any>User.schema.path('role')).enumValues;

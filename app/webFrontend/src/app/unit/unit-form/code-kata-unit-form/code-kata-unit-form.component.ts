@@ -1,5 +1,5 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
-import {CodeKataUnitService} from '../../../shared/services/data.service';
+import {CodeKataUnitService, UnitService} from '../../../shared/services/data.service';
 import {MatSnackBar} from '@angular/material';
 import {ICodeKataUnit} from '../../../../../../../shared/models/units/ICodeKataUnit';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
@@ -55,6 +55,7 @@ export class CodeKataUnitFormComponent implements OnInit {
   logs: string;
 
   constructor(private codeKataUnitService: CodeKataUnitService,
+              private unitService: UnitService,
               private snackBar: MatSnackBar) {
   }
 
@@ -98,9 +99,9 @@ export class CodeKataUnitFormComponent implements OnInit {
     };
 
     if (this.model._id === undefined) {
-      this.codeKataUnitService.createItem({
+      this.unitService.createItem({
         model: this.model,
-        lectureId: this.lectureId,
+        lectureId: this.lectureId
       })
       .then(
         () => {

@@ -21,21 +21,21 @@ export class UnitBaseController {
   @Get('/:id')
   getUnit(@Param('id') id: string) {
     return Unit.findById(id)
-      .then((u) => u.toObject());
+    .then((u) => u.toObject());
   }
 
-  @Post()
   @Authorized(['teacher', 'admin'])
-  addUnit(@UploadedFile('file', {options: uploadOptions}) file: any, @Body() data: any) {
+  @Post('/')
+  addUnit(@Body() data: any) {
     // discard invalid requests
     this.checkPostParam(data);
-    Unit.create(data.model)
-      .then((createdUnit) => {
-        return this.pushToLecture(data.lectureId, createdUnit);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    return Unit.create(data.model)
+    .then((createdUnit) => {
+      return this.pushToLecture(data.lectureId, createdUnit);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
   }
 
   @Put('/:id')
