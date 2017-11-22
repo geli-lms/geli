@@ -27,14 +27,16 @@ if [ "$TRAVIS_BRANCH" == "master" ] || [ "$TRAVIS_BRANCH" == "develop" ]; then
     
     echo "+ publish docker images";
     docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
+    echo "+ => tagged: latest"
     tag_and_push_api_and_web "latest"
+    echo "+ => tagged: ${TRAVIS_BRANCH}"
     tag_and_push_api_and_web ${TRAVIS_BRANCH}
   else
     echo -e "${YELLOW}+ WARNING: pull request #$TRAVIS_PULL_REQUEST -> skipping docker build and publish${NC}";
   fi
 else
   if [ -n "${TRAVIS_TAG}" ]; then
-    echo "+ This is a tagged build: $TRAVIS_TAG";
+    echo "+ this is a tagged build: $TRAVIS_TAG";
     echo "+ build docker images";
     echo "+ prune dev-dependencies"
     ( cd api && npm prune --production )
@@ -43,26 +45,29 @@ else
     
     echo "+ publish docker images";
     docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
+    echo "+ => tagged: ${TRAVIS_TAG}"
     tag_and_push_api_and_web ${TRAVIS_TAG}
 
     echo "+ retrieve semver-parts of tag"
     . ${DIR}/_semver.sh
     MAJOR=0;MINOR=0;PATCH=0;SPECIAL=""
     semverParseInto ${TRAVIS_TAG} MAJOR MINOR PATCH SPECIAL
+    REAL_MAJOR="v${MAJOR}"
+    REAL_MINOR="v${MAJOR}.${MINOR}"
+    REAL_PATCH="v${MAJOR}.${MINOR}.${PATCH}"
 
-    if [ -z "${SPECIAL}" ]; then
-        echo "${YELLOW}+ WARNING: tag ${TRAVIS_TAG} has special-part ${SPECIAL}${NC}"
-        echo "${YELLOW}+ WARNING: will NOT tag Major ${MAJOR} and Minor ${MAJOR}.${MINOR}, only the full tag${NC}"
+    if [ "${SPECIAL}" ]; then
+        echo -e "${YELLOW}+ WARNING: tag '${TRAVIS_TAG}' has special-part '${SPECIAL}'${NC}"
+        echo -e "${YELLOW}+ WARNING: will NOT tag Major '${REAL_MAJOR}' and Minor '${REAL_MINOR}', only the full tag '${TRAVIS_TAG}'${NC}"
     else
         echo "+ tag images"
-        REAL_MAJOR="v$MAJOR"
-        REAL_MINOR="v$MAJOR.$MINOR"
+        echo -e "${YELLOW}+ WARNING: Major tagging is currently not implemented, will skip major tagging"
         if [ "there isnt a higher version of this major" = "" ]; then
             # TODO: Check Docker api for versions
-            echo "+ => Major: ${REAL_MAJOR}"
+            echo "+ => tagged Major: ${REAL_MAJOR}"
             tag_and_push_api_and_web REAL_MAJOR
         fi
-        echo "+ => Minor: ${REAL_MINOR}"
+        echo "+ => tagged Minor: ${REAL_MINOR}"
         tag_and_push_api_and_web REAL_MINOR
     fi
   else
