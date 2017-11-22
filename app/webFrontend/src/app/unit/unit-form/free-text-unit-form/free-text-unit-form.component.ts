@@ -1,7 +1,7 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {IFreeTextUnit} from '../../../../../../../shared/models/units/IFreeTextUnit';
 import {MatDialog, MatSnackBar} from '@angular/material';
-import {FreeTextUnitService} from '../../../shared/services/data.service';
+import {FreeTextUnitService, UnitService} from '../../../shared/services/data.service';
 import {FreeTextUnit} from '../../../models/FreeTextUnit';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
 import {UnitGeneralInfoFormComponent} from '../unit-general-info-form/unit-general-info-form.component';
@@ -26,6 +26,7 @@ export class FreeTextUnitFormComponent implements OnInit {
   private freeTextEditor: FreeTextUnitEditorComponent;
 
   constructor(private freeTextUnitService: FreeTextUnitService,
+              private unitService: UnitService,
               private snackBar: MatSnackBar,
               public dialog: MatDialog) {
   }
@@ -52,7 +53,7 @@ export class FreeTextUnitFormComponent implements OnInit {
     // Checks if we have to create a new unit or update an existing
     if (this.isModelNewObj()) {
       // Create new one
-      this.freeTextUnitService.createItem({model: this.model, lectureId: this.lectureId})
+      this.unitService.createItem({model: this.model, lectureId: this.lectureId})
         .then(
           () => {
             this.snackBar.open('Free text unit saved', '', {duration: 3000});
