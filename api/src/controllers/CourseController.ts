@@ -2,7 +2,7 @@ import {Request} from 'express';
 import {
   Authorized,
   Body,
-  CurrentUser, ForbiddenError,
+  CurrentUser, Delete, ForbiddenError,
   Get,
   JsonController, NotFoundError,
   Param,
@@ -204,7 +204,6 @@ export class CourseController {
         {courseAdmin: currentUser._id}
       ];
     }
-
     return Course.findOneAndUpdate(
       conditions,
       course,
@@ -212,4 +211,13 @@ export class CourseController {
     )
       .then((c) => c ? c.toObject() : undefined);
   }
+
+@Authorized(['teacher', 'admin'])
+@Delete('/:id')
+  deleteCourse(@Param('id') id: string) {
+  const conditions: any = {_id: id};
+  return Course.findOneAndRemove(conditions).then((c) => { console.log('What is ', c.toObject()); });
 }
+
+}
+

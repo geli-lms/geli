@@ -202,4 +202,36 @@ describe('Course', () => {
       }).catch(done);
     });
   });
+
+  describe(`DELETE ${BASE_URL}`, () => {
+    it('should delete the Course', (done) => {
+    User.findOne({email: 'teacher1@test.local'}).then((user) => {
+      const testData = new Course(
+        {
+          name: 'Test Course',
+          description: 'Test description',
+          courseAdmin: user._id,
+          active: true
+        });
+      testData.save((error, course) => {
+        chai.request(app)
+          .del(`${BASE_URL}/${course._id}`)
+          .set('Authorization', `JWT ${JwtUtils.generateToken(user)}`)
+          .end((err, res) => {
+          console.log('End Test');
+            res.status.should.be.equal(200);
+            res.body.result.should.be.equal(true);
+            done();
+          });
+      }).catch(done);
+    });
+  });
 });
+
+
+
+
+
+});
+
+
