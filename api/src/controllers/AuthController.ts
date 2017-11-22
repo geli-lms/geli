@@ -33,10 +33,10 @@ export class AuthController {
         // If user is not unique, return error
         if (existingUser) {
           if (user.role === 'student' && existingUser.uid === user.uid) {
-            throw new BadRequestError('That matriculation number is already in use');
+            throw new BadRequestError('duplicate uid');
           }
           if (existingUser.email === user.email) {
-            throw new BadRequestError('That email address is already in use');
+            throw new BadRequestError('duplicate mail');
           }
         }
 
@@ -45,7 +45,7 @@ export class AuthController {
         }
 
         if (user.role === 'teacher' && (typeof user.email !== 'string' || !user.email.match(config.teacherMailRegex))) {
-          throw new BadRequestError('You are not allowed to register as teacher');
+          throw new BadRequestError('no teacher');
         }
 
         const newUser = new User(user);

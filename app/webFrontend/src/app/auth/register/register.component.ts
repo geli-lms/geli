@@ -14,6 +14,8 @@ export class RegisterComponent implements OnInit {
   registerForm: FormGroup;
   registrationDone = false;
   role;
+  uidError = null;
+  mailError = null;
 
   private trimFormFields() {
     this.registerForm.value.email = this.registerForm.value.email.trim();
@@ -42,7 +44,13 @@ export class RegisterComponent implements OnInit {
       this.role = role;
   }
 
+  clearAllErrors(){
+    this.mailError = null;
+    this.uidError = null;
+  }
+
   register() {
+    this.clearAllErrors();
     this.showProgress.toggleLoadingGlobal(true);
     this.registerForm.value.role = this.role;
     if (this.registerForm.value.role !== 'student') {
@@ -55,8 +63,25 @@ export class RegisterComponent implements OnInit {
         this.showProgress.toggleLoadingGlobal(false);
         this.registrationDone = true;
       }, (error) => {
+        const errormessage = error.json().message || error.json().errmsg;
+        switch (errormessage) {
+          case 'duplicate mail': {
+            this.mailError = 'That email address is already in use';
+            break;
+          }
+          case 'no teacher': {
+            this.mailError = 'You are not allowed to register as teacher';
+            break;
+          }
+          case 'duplicate uid': {
+            this.uidError = 'That matriculation number is already in use';
+            break;
+          }
+          default: {
+            this.snackBar.open('Registration failed', 'Dismiss');
+          }
+        }
         this.showProgress.toggleLoadingGlobal(false);
-        this.snackBar.open('Registration failed', 'Dismiss');
       });
   }
 
