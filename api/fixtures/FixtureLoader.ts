@@ -27,6 +27,7 @@ import {mpseIntFreeTextFixture} from './unitFixtures/mpseIntFreeTextFixture';
 import {studentFreeTextFixture} from './unitFixtures/studentFreeTextFixture';
 import {hardCodeKataFixture} from './unitFixtures/hardCodeKataFixtures';
 import {studentCodeKataFixture} from './unitFixtures/studentCodeKataFixtures';
+import {whitelistUserFixtures} from './WhitelistUserFixtures/whitelistUserFixtures';
 
 export class FixtureLoader {
 
@@ -85,6 +86,10 @@ export class FixtureLoader {
     ],
   ];
 
+  private whitelistUsers = [
+    whitelistUserFixtures,
+  ];
+
   constructor() {
     (<any>mongoose).Promise = global.Promise;
 
@@ -95,80 +100,90 @@ export class FixtureLoader {
 
   load() {
     return mongoose.connection.dropDatabase()
-    .then(() =>
-      // Load users to Database
-      Promise.all(
-        this.user.map((userFixtures) =>
-          Promise.all(
-            userFixtures.data.map((user) =>
-              new userFixtures.Model(user).save().then(() => {
-              userFixtures.Model.ensureIndexes();
+      .then(() =>
+        // Load users to Database
+        Promise.all(
+          this.user.map((userFixtures) =>
+            Promise.all(
+              userFixtures.data.map((user) =>
+                new userFixtures.Model(user).save().then(() => {
+                  userFixtures.Model.ensureIndexes();
+                })
+              )
+            )
+          )
+        ))
+      .then(() => Promise.all(
+        // Load whitelist user to Database
+        this.whitelistUsers.map((wUserFixtures) =>
+          Promise.all(wUserFixtures.data.map((whitelistUser) =>
+            new wUserFixtures.Model(whitelistUser.save().then(() => {
+              wUserFixtures.Model.ensureIndexes();
+            }))
+          ))
+        )
+      ))
+      .then(() =>
+        // Load courses
+        Promise.all(
+          this.courses.map((courseFixturesVar) =>
+            Promise.all(
+              courseFixturesVar.data.map((course) => {
+                // add random teacher as course admin
+                // add 2-10 random students
+                const tmp = <ICourseModel>course;
+                return Promise.all([this.getRandomTeacher(), this.getRandomStudents(2, 10)])
+                  .then((results) => {
+                    // does this make any difference? do we need both? is one deprecated?
+                    tmp.courseAdmin = results[0];
+                    tmp.teachers = tmp.teachers.concat(results[0]);
+                    tmp.students = tmp.students.concat(results[1]);
+                    return tmp;
+                  })
+                  .then(() => new courseFixturesVar.Model(tmp).save());
               })
             )
           )
         )
-      ))
-    .then(() =>
-      // Load courses
-      Promise.all(
-        this.courses.map((courseFixturesVar) =>
-          Promise.all(
-            courseFixturesVar.data.map((course) => {
-              // add random teacher as course admin
-              // add 2-10 random students
-              const tmp = <ICourseModel>course;
-              return Promise.all([this.getRandomTeacher(), this.getRandomStudents(2, 10)])
-                .then((results) => {
-                  // does this make any difference? do we need both? is one deprecated?
-                  tmp.courseAdmin = results[0];
-                  tmp.teachers = tmp.teachers.concat(results[0]);
-                  tmp.students = tmp.students.concat(results[1]);
-                  return tmp;
-                })
-                .then(() => new courseFixturesVar.Model(tmp).save());
-            })
-          )
-        )
       )
-    )
-    .then((neastedCourseList) => {
-      // unwind neasted list
-      const courses: ICourseModel[] = [];
-      neastedCourseList.map((courseList) =>
-        courseList.map((course) =>
-          courses.push(<ICourseModel>course))
-      );
-      return courses;
-    })
-    .then((courses: ICourseModel[]) =>
-      Promise.all(courses.map((course: ICourseModel, courseIndex: number) => {
-        const courseLectures: IFixture = this.lectures[courseIndex];
-        // save all lectures
-        return Promise.all(courseLectures.data.map((lecture: ILectureModel, lectureIndex: number) =>  {
-          const lect: ILectureModel = <ILectureModel> new courseLectures.Model(lecture);
-          const lectureUnits: IFixture[] = this.units[courseIndex][lectureIndex];
+      .then((neastedCourseList) => {
+        // unwind neasted list
+        const courses: ICourseModel[] = [];
+        neastedCourseList.map((courseList) =>
+          courseList.map((course) =>
+            courses.push(<ICourseModel>course))
+        );
+        return courses;
+      })
+      .then((courses: ICourseModel[]) =>
+        Promise.all(courses.map((course: ICourseModel, courseIndex: number) => {
+          const courseLectures: IFixture = this.lectures[courseIndex];
+          // save all lectures
+          return Promise.all(courseLectures.data.map((lecture: ILectureModel, lectureIndex: number) => {
+            const lect: ILectureModel = <ILectureModel> new courseLectures.Model(lecture);
+            const lectureUnits: IFixture[] = this.units[courseIndex][lectureIndex];
 
-          return Promise.all(lectureUnits.map((unitFixtures) =>
-            // save Units
-            Promise.all(unitFixtures.data.map((unit: IUnitModel) => {
-              unit._course = course._id;
-              return new unitFixtures.Model(unit).save();
-            }))
-            // push units to lecture
-            .then((savedUnits: IUnitModel[]) => {
-              lect.units = lect.units.concat(savedUnits);
-              return savedUnits.length;
-            })
-          ))
-          .then(() => lect.save());
+            return Promise.all(lectureUnits.map((unitFixtures) =>
+              // save Units
+              Promise.all(unitFixtures.data.map((unit: IUnitModel) => {
+                unit._course = course._id;
+                return new unitFixtures.Model(unit).save();
+              }))
+              // push units to lecture
+                .then((savedUnits: IUnitModel[]) => {
+                  lect.units = lect.units.concat(savedUnits);
+                  return savedUnits.length;
+                })
+            ))
+              .then(() => lect.save());
+          }))
+          // push lectures to course
+            .then((savedLectures: ILectureModel[]) => {
+              course.lectures = course.lectures.concat(savedLectures);
+              return course.save();
+            });
         }))
-        // push lectures to course
-        .then((savedLectures: ILectureModel[]) => {
-          course.lectures = course.lectures.concat(savedLectures);
-          return course.save();
-        });
-      }))
-    );
+      );
   }
 
   getRandomTeacher() {
@@ -207,14 +222,14 @@ export class FixtureLoader {
     if (isNullOrUndefined(role)) {
       return User.find();
     }
-    return User.find({role:  role});
+    return User.find({role: role});
   }
 
   getRandomNumber(start: number, end: number): number {
     return Math.floor(Math.random() * end) + start;
   }
 
-  shuffleArray (array: Array<any>) {
+  shuffleArray(array: Array<any>) {
     let tmp;
     let current;
     let top = array.length;
