@@ -1,7 +1,12 @@
 <h2>{{course.name}}</h2>
 <ng-container *ngIf="!course.lectures.length">No lectures to download!</ng-container>
-<div class="layout">All<span class="spacer"></span><mat-checkbox class="chkbox" (change)="selectAll()"></mat-checkbox></div>
-<mat-dialog-content class="layout">
+
+
+<mat-dialog-content>
+  <p class="layout"> All
+    <span class="spacer"></span>
+    <mat-checkbox class="chkbox" (change)="selectAll()"></mat-checkbox>
+  </p>
   <mat-list *ngFor=" let lecture of course.lectures">
     <app-lecture-checkbox [lecture]= "lecture"></app-lecture-checkbox>
   </mat-list>
