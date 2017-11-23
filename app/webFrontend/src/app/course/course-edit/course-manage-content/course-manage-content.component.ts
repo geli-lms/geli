@@ -2,7 +2,7 @@ import {Component, Input, OnInit, OnDestroy} from '@angular/core';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
 import {ILecture} from '../../../../../../../shared/models/ILecture';
 import {
-  CourseService, DuplicationService, LectureService,
+  CourseService, DuplicationService, ExportService, ImportService, LectureService,
   UnitService
 } from '../../../shared/services/data.service';
 import {ShowProgressService} from 'app/shared/services/show-progress.service';
@@ -37,6 +37,8 @@ export class CourseManageContentComponent implements OnInit, OnDestroy {
               private dialogService: DialogService,
               private dragulaService: DragulaService,
               private duplicationService: DuplicationService,
+              private exportService: ExportService,
+              private importService: ImportService,
               public userService: UserService) {
   }
 
