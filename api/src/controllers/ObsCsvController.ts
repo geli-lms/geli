@@ -24,7 +24,6 @@ export class ObsCsvController {
           }
         ).on('end', () => {
           fs.unlinkSync(file.path);
-          console.log('File is parsed successfully.');
           resolve(buffer);
         }
       );
@@ -76,7 +75,6 @@ export class ObsCsvController {
         }
       }
     );
-    console.log('File was parsed successfully. There where ' + this.whitelistUser.length + ' user parsed in whitelist.');
   }
 
   /**
