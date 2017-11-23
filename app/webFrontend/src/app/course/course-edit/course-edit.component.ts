@@ -49,7 +49,7 @@ export class CourseEditComponent implements OnInit {
           }
           this.courseOb = val;
         }, (error) => {
-          console.log(error);
+          this.snackBar.open('Couldn\'t load Course-Item', '', {duration: 3000});
         });
     });
   }
@@ -89,8 +89,6 @@ export class CourseEditComponent implements OnInit {
 
   createCourse() {
     this.showProgress.toggleLoadingGlobal(true);
-    console.log(this.description);
-    console.log(this.course);
 
     const request: any = {
       'name': this.course, 'description': this.description, '_id': this.id, 'active': this.active, 'enrollType': this.enrollType
@@ -100,7 +98,6 @@ export class CourseEditComponent implements OnInit {
     }
     this.courseService.updateItem(request).then(
       (val) => {
-        console.log(val);
         this.showProgress.toggleLoadingGlobal(false);
         this.snackBar.open('Saved successfully', '', {duration: 5000});
       }, (error) => {
@@ -108,7 +105,6 @@ export class CourseEditComponent implements OnInit {
         // Mongodb uses the error field errmsg
         const errormessage = error.json().message || error.json().errmsg;
         this.snackBar.open('Saving course failed ' + errormessage, 'Dismiss');
-        console.log(error);
       });
   }
 

@@ -8,7 +8,6 @@
 //         const user = req.user;
 //
 //         User.findById(user.courseId, function(err, foundUser) {
-//             console.log(foundUser);
 //             if (err) {
 //                 res.status(422).json({ error: 'No user was found.' });
 //                 return next(err);
