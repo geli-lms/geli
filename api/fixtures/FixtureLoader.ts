@@ -117,12 +117,12 @@ export class FixtureLoader {
         // Load whitelist user to Database
         this.whitelistUsers.map((wUserFixtures) =>
           Promise.all(wUserFixtures.data.map((whitelistUser) =>
-            new wUserFixtures.Model(whitelistUser.save().then(() => {
+            new wUserFixtures.Model(whitelistUser).save().then(() => {
               wUserFixtures.Model.ensureIndexes();
             }))
           ))
         )
-      ))
+      )
       .then(() =>
         // Load courses
         Promise.all(
