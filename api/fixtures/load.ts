@@ -1,3 +1,5 @@
+// tslint:disable:no-console
+
 import {FixtureLoader} from './FixtureLoader';
 import * as mongoose from 'mongoose';
 
