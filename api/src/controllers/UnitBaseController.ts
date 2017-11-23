@@ -50,7 +50,7 @@ export class UnitBaseController {
       return this.pushToLecture(data.lectureId, createdUnit);
     })
     .catch((err) => {
-      console.log(err);
+      throw new BadRequestError(err);
     });
   }
 
@@ -104,11 +104,14 @@ export class UnitBaseController {
 
   protected pushToLecture(lectureId: string, unit: any) {
     return Lecture.findById(lectureId)
-    .then((lecture) => {
-      lecture.units.push(unit);
-      return lecture.save();
-    })
-    .then((lecture) => lecture.toObject());
+      .then((lecture) => {
+        lecture.units.push(unit);
+        return lecture.save();
+      })
+      .then((lecture) => lecture.toObject())
+      .catch((err) => {
+        throw new BadRequestError(err);
+      });
   }
 
   protected checkPostParam(data: any, file?: any) {

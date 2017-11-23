@@ -58,6 +58,7 @@ export class Server {
   }
 
   start() {
+    mongoose.set('debug', true);
     mongoose.connect(config.database, {useMongoClient: true});
 
     // Request logger
