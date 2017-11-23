@@ -32,7 +32,6 @@ export class TaskUnitComponent implements OnInit {
       if (value && value.length > 0) {
         this.progress = (<IProgress>value[0]);
       }
-      console.log(this.progress);
     });
   }
 

@@ -3,15 +3,11 @@ import {IUnit} from '../../../../shared/models/units/IUnit';
 import {NativeError} from 'mongoose';
 import {Progress} from '../Progress';
 import {InternalServerError} from 'routing-controllers';
-import {CodeKataUnit} from './CodeKataUnit';
-import {UnitClassMapper} from '../../utilities/UnitClassMapper';
-import {FreeTextUnit} from './FreeTextUnit';
+
 import {ILectureModel, Lecture} from '../Lecture';
-import {ILecture} from '../../../../shared/models/ILecture';
 
 interface IUnitModel extends IUnit, mongoose.Document {
-  export: () => Promise<IUnit>;
-  import: (unit: IUnit, courseId: string, lectureId: string) => Promise<IUnit>;
+  exportJSON: () => Promise<IUnit>;
 }
 
 const unitSchema = new mongoose.Schema({
@@ -58,7 +54,7 @@ function populateUnit(next: (err?: NativeError) => void) {
 
 unitSchema.pre('find', populateUnit);
 
-unitSchema.methods.export = function() {
+unitSchema.methods.exportJSON = function() {
   const obj = this.toObject();
 
   // remove unwanted informations
@@ -74,24 +70,21 @@ unitSchema.methods.export = function() {
   return obj;
 };
 
-unitSchema.statics.import = function(unit: IUnit, courseId: string, lectureId: string) {
+unitSchema.statics.importJSON = async function(unit: IUnit, courseId: string, lectureId: string) {
   unit._course = courseId;
-  return new Unit(unit).save()
-    .then((savedUnit: IUnitModel) => {
-      return Lecture.findById(lectureId)
-        .then((lecture: ILectureModel) => {
-          lecture.units.push(savedUnit);
-          return lecture.save()
-            .then(updatedLecture => {
-              return savedUnit;
-            });
-        });
-    })
-  .catch((err: Error) => {
+
+  try {
+    const savedUnit = await new Unit(unit).save();
+    const lecture = await Lecture.findById(lectureId);
+    lecture.units.push(savedUnit);
+    await lecture.save();
+
+    return savedUnit.toObject();
+  } catch (err) {
     const newError = new InternalServerError('Failed to import unit');
-    newError.stack += '\nCaused by: ' + err.stack;
+    newError.stack += '\nCaused by: ' + err.message + '\n' + err.stack;
     throw newError;
-  });
+  }
 };
 
 // Cascade delete

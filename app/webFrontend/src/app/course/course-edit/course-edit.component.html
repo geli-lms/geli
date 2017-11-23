@@ -4,7 +4,7 @@
   <mat-tab label="General">
     <div class="tab-content">
       <form class="course-form" (ngSubmit)="createCourse()">
-        <mat-form-field class="full-width">
+        <mat-form-field>
           <input async matInput id="name" placeholder="Name" [(ngModel)]="course"
                  [ngModelOptions]="{standalone: true}">
         </mat-form-field>
@@ -14,7 +14,7 @@
                   [ngModelOptions]="{standalone: true}"></textarea>
         </mat-form-field>
 
-        <mat-form-field class="full-width">
+        <mat-form-field>
           <input async matInput id="accessKey" placeholder="Access Key" [(ngModel)]="accessKey"
                  [ngModelOptions]="{standalone: true}">
         </mat-form-field>
@@ -44,8 +44,7 @@
         <p>
           <mat-slide-toggle (change)="onChangeActive($event)"
                            [checked]="active">
-            <span *ngIf="active">Course can be seen by students</span>
-            <span *ngIf="!active">Course cannot be seen by students</span>
+            <span>Course can be seen by students</span>
           </mat-slide-toggle>
         </p>
 

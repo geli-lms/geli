@@ -4,13 +4,10 @@ import {IUnitModel, Unit} from './units/Unit';
 import {IUnit} from '../../../shared/models/units/IUnit';
 import {InternalServerError} from 'routing-controllers';
 import {Course} from './Course';
-import {FreeTextUnit} from './units/FreeTextUnit';
-import {IFreeTextUnit} from '../../../shared/models/units/IFreeTextUnit';
 import {UnitClassMapper} from '../utilities/UnitClassMapper';
 
 interface ILectureModel extends ILecture, mongoose.Document {
-  export: () => Promise<ILecture>;
-  import: (lecture: ILecture, courseId: String) => Promise<ILecture>;
+  exportJSON: () => Promise<ILecture>;
 }
 
 const lectureSchema = new mongoose.Schema({
@@ -48,7 +45,7 @@ lectureSchema.pre('remove', function(next: () => void) {
     .catch(next);
 });
 
-lectureSchema.methods.export = function() {
+lectureSchema.methods.exportJSON = async function() {
   const obj = this.toObject();
 
   // remove unwanted informations
@@ -62,45 +59,37 @@ lectureSchema.methods.export = function() {
   const units: Array<mongoose.Types.ObjectId>  = obj.units;
   obj.units = [];
 
-  return Promise.all(units.map((unitId: mongoose.Types.ObjectId) => {
+  obj.units = await Promise.all(units.map((unitId: mongoose.Types.ObjectId) => {
     return Unit.findById(unitId).then((unit: IUnitModel) => {
-      return unit.export();
+      return unit.exportJSON();
     });
-  }))
-    .then((exportedUnits: IUnit[]) => {
-      obj.units = exportedUnits;
-      return obj;
-    });
+  }));
+  return obj;
 };
 
-lectureSchema.statics.import = function(lecture: ILecture, courseId: string) {
-  // import lectures
+lectureSchema.statics.importJSON = async function(lecture: ILecture, courseId: string) {
+  // importTest lectures
   const units: Array<IUnit>  = lecture.units;
   lecture.units = [];
 
-  return new Lecture(lecture).save()
-    .then((savedLecture: ILectureModel) => {
-      const lectureId = savedLecture._id;
-      Course.findById(courseId).then(course => {
-        course.lectures.push(savedLecture);
-        course.save();
-      });
-      return Promise.all(units.map((unit: IUnit) => {
-        const unitTypeClass = UnitClassMapper.getMongooseClassForUnit(unit);
-        return unitTypeClass.import(unit, courseId, lectureId);
-      }))
-        .then(() => {
-          return savedLecture;
-        })
-    })
-    .then((importedLecture: ILectureModel) => {
-      return importedLecture.toObject();
-    })
-    .catch((err: Error) => {
-      const newError = new InternalServerError('Failed to import lecture');
-      newError.stack += '\nCaused by: ' + err.message + '\n' + err.stack;
-      throw newError;
-    });
+  try {
+    const savedLecture = await new Lecture(lecture).save();
+
+    const course = await Course.findById(courseId);
+    course.lectures.push(savedLecture);
+    await course.save();
+
+    await Promise.all(units.map((unit: IUnit) => {
+      const unitTypeClass = UnitClassMapper.getMongooseClassForUnit(unit);
+      return unitTypeClass.importJSON(unit, courseId, savedLecture._id);
+    }));
+
+    return (await Course.findById(savedLecture._id)).toObject();
+  } catch (err) {
+    const newError = new InternalServerError('Failed to import lecture');
+    newError.stack += '\nCaused by: ' + err.message + '\n' + err.stack;
+    throw newError;
+  }
 };
 
 

@@ -6,8 +6,7 @@ import {InternalServerError} from 'routing-controllers';
 import {ILectureModel, Lecture} from '../Lecture';
 
 interface IVideoUnitModel extends IVideoUnit, mongoose.Document {
-  export: () => Promise<IVideoUnit>;
-  import: (unit: IVideoUnit, courseId: string, lectureId: string) => Promise<IVideoUnit>;
+  exportJSON: () => Promise<IVideoUnit>;
 }
 
 const videoUnitSchema = new mongoose.Schema({
@@ -45,25 +44,21 @@ videoUnitSchema.pre('remove', function(next: () => void) {
   next();
 });
 
-videoUnitSchema.statics.import = function(unit: IVideoUnit, courseId: string, lectureId: string) {
+videoUnitSchema.statics.importJSON = async function(unit: IVideoUnit, courseId: string, lectureId: string) {
   unit._course = courseId;
 
-  return new VideoUnit(unit).save()
-    .then((savedUnit: IVideoUnitModel) => {
-      return Lecture.findById(lectureId)
-        .then((lecture: ILectureModel) => {
-          lecture.units.push(savedUnit);
-          return lecture.save()
-            .then(updatedLecture => {
-              return savedUnit;
-            });
-        });
-    })
-    .catch((err: Error) => {
-      const newError = new InternalServerError('Failed to import videounit');
-      newError.stack += '\nCaused by: ' + err.stack;
-      throw newError;
-    });
+  try {
+    const savedVideo = await new VideoUnit(unit).save();
+    const lecture = await Lecture.findById(lectureId);
+    lecture.units.push(<IVideoUnitModel>savedVideo);
+    await lecture.save();
+
+    return savedVideo.toObject();
+  } catch (err) {
+    const newError = new InternalServerError('Failed to import video');
+    newError.stack += '\nCaused by: ' + err.message + '\n' + err.stack;
+    throw newError;
+  }
 };
 
 const VideoUnit = Unit.discriminator('video', videoUnitSchema);

@@ -1,4 +1,4 @@
-@import '../../../../breakpoints';
+@import '../../../../variables';
 
 .task-unit-edit {
   position: relative;
@@ -22,34 +22,52 @@
   clear: both;
 
   .question {
-    width: 70%;
+    width: 100%;
+
+    @include bp(md) {
+      width: 60%;
+    }
   }
 
   .answer, .actions {
     display: inline-block;
   }
   .answers {
-    padding-top: 20px;
-    padding-left: 20px;
+    padding-top: 7px;
+    padding-left: 15px;
 
     background-color: whitesmoke;
+
+    .btn-wrapper {
+      display: inline-block;
+      min-height: 4em;
+    }
   }
 
   .answer {
     width: 100%;
-    margin-right: 10px;
+    padding-right: 10px;
 
     .check-answer {
       width: 100%;
       display: flex;
 
+      .mat-checkbox {
+        margin-left: 14px;
+        margin-right: 6px;
+        margin-top: 18px;
+      }
       .mat-form-field {
         flex-grow: 1;
       }
     }
 
     @include bp(md) {
-      width: 300px;
+      width: 50%;
+    }
+
+    @include bp(xl) {
+      width: 33.33%;
     }
   }
 }

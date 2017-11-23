@@ -3,8 +3,7 @@ import {ITask} from '../../../shared/models/task/ITask';
 import {InternalServerError} from 'routing-controllers';
 
 interface ITaskModel extends ITask, mongoose.Document {
-  export: () => Promise<ITask>;
-  import: (task: ITask, unitId: string) => Promise<ITask>;
+  exportJSON: () => Promise<ITask>;
 }
 
 const taskSchema = new mongoose.Schema(
@@ -33,7 +32,7 @@ const taskSchema = new mongoose.Schema(
   }
 );
 
-taskSchema.methods.export = function() {
+taskSchema.methods.exportJSON = function() {
   const obj = this.toObject();
 
   // remove unwanted informations
@@ -51,7 +50,7 @@ taskSchema.methods.export = function() {
   return obj;
 };
 
-taskSchema.statics.import = function(task: ITask, unitId: string) {
+taskSchema.statics.importJSON = function(task: ITask, unitId: string) {
   return new Task(task).save()
     .catch((err: Error) => {
       const newError = new InternalServerError('Failed to import task');

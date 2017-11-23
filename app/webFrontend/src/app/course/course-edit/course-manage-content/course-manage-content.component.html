@@ -101,10 +101,12 @@
 <app-mat-fab-menu class="fab" [open]="fabOpen" [onClick]="onFabClick"
                   [disabled]="unitCreateMode || unitEditMode || lectureCreateMode || lectureEditMode"
                   fabTooltip="Add content">
+  <div *ngIf="openedLecture" (click)="onImportUnit()">Import unit</div>
   <div *ngIf="openedLecture" (click)="onAddUnit('task')">Add tasks</div>
   <div *ngIf="openedLecture" (click)="onAddUnit('file')">Upload files</div>
   <div *ngIf="openedLecture" (click)="onAddUnit('code-kata')">Add Code-Kata</div>
   <div *ngIf="openedLecture" (click)="onAddUnit('video')">Upload videos</div>
   <div *ngIf="openedLecture" (click)="onAddUnit('free-text')">Add free text</div>
+  <div (click)="onImportLecture()">Import lecture</div>
   <div (click)="onAddLecture()">Add lecture</div>
 </app-mat-fab-menu>

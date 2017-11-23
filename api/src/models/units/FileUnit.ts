@@ -6,8 +6,7 @@ import {InternalServerError} from 'routing-controllers';
 import {ILectureModel, Lecture} from '../Lecture';
 
 interface IFileUnitModel extends IFileUnit, mongoose.Document {
-  export: () => Promise<IFileUnit>;
-  import: (unit: IFileUnit, courseId: string, lectureId: string) => Promise<IFileUnit>;
+  exportJSON: () => Promise<IFileUnit>;
 }
 
 const fileUnitSchema = new mongoose.Schema({
@@ -45,25 +44,21 @@ fileUnitSchema.pre('remove', function(next: () => void) {
   next();
 });
 
-fileUnitSchema.statics.import = function(unit: IFileUnit, courseId: string, lectureId: string) {
+fileUnitSchema.statics.importJSON = async function(unit: IFileUnit, courseId: string, lectureId: string) {
   unit._course = courseId;
 
-  return new FileUnit(unit).save()
-    .then((savedUnit: IFileUnitModel) => {
-      return Lecture.findById(lectureId)
-        .then((lecture: ILectureModel) => {
-          lecture.units.push(savedUnit);
-          return lecture.save()
-            .then(updatedLecture => {
-              return savedUnit;
-            });
-        });
-    })
-    .catch((err: Error) => {
-      const newError = new InternalServerError('Failed to import fileunit');
-      newError.stack += '\nCaused by: ' + err.stack;
-      throw newError;
-    });
+  try {
+    const savedFile = await new FileUnit(unit).save();
+    const lecture = await Lecture.findById(lectureId);
+    lecture.units.push(<IFileUnitModel>savedFile);
+    await lecture.save();
+
+    return savedFile.toObject();
+  } catch (err) {
+    const newError = new InternalServerError('Failed to import file');
+    newError.stack += '\nCaused by: ' + err.message + '\n' + err.stack;
+    throw newError;
+  }
 };
 
 

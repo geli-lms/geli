@@ -1,5 +1,5 @@
 // How to use the breakpoints:
-// @import '(../)breakpoints';
+// @import '(../)variables';
 // div {
 //   // the mobile code
 //
@@ -8,19 +8,13 @@
 //   }
 // }
 
-$bp_width--xs: 320px;   // app-root min-width
-$bp_width--sm: 525px;
-$bp_width--md: 750px;
-$bp_width--bg: 975px;
-$bp_width--mg: 1200px;
-$bp_width--4k: 2500px;  // app-root max-width
-
 $breakpoints: (
-  sm: $bp_width--sm, // Small
-  md: $bp_width--md, // Medium
-  bg: $bp_width--bg, // Big
-  mg: $bp_width--mg, // Mega
-  4k: $bp_width--4k, // 4k-Viewports
+  sm: $bp-width--sm, // Small
+  md: $bp-width--md, // Medium
+  lg: $bp-width--lg, // Large
+  xl: $bp-width--xl, // X Large
+  xxl: $bp-width--xxl, // XX Large
+  max: $bp-width--max, // 4k-Viewports
 );
 
 @mixin bp($breakpoint) {
@@ -28,9 +22,7 @@ $breakpoints: (
     @media (min-width: #{map-get($breakpoints, $breakpoint)}) {
       @content;
     }
-  }
-
-  @else {
+  } @else {
     @warn "Unfortunately, no value could be retrieved from `#{$breakpoint}`. "
         + "Please make sure it is defined in `$breakpoints` map.";
   }
