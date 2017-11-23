@@ -9,6 +9,7 @@ import {ReportRoutingModule} from './report-routing.module';
 import { ReportOverviewComponent } from './report-overview/report-overview.component';
 import {TeacherReportComponent} from './teacher-report/teacher-report.component';
 import {UserModule} from '../user/user.module';
+import {ProgressModule} from '../progress/progress.module';
 
 @NgModule({
   imports: [
@@ -16,7 +17,8 @@ import {UserModule} from '../user/user.module';
     SharedModule,
     NgxChartsModule,
     ReportRoutingModule,
-    UserModule
+    UserModule,
+    ProgressModule
   ],
   declarations: [
     ReportComponent,
