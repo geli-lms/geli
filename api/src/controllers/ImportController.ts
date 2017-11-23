@@ -11,18 +11,18 @@ import {IUser} from '../../../shared/models/IUser';
 export class ImportController {
 
   @Post('/course')
-  async importCourse(@Body body: any, @CurrentUser() user: IUser) {
+  async importCourse(@Body() body: any, @CurrentUser() user: IUser) {
     return Course.prototype.importJSON(body, user);
   }
 
   @Post('/lecture/:course')
-  async importLecture(@Body body: any,
+  async importLecture(@Body() body: any,
                       @Param('course') courseId: string) {
     return Lecture.prototype.importJSON(body, courseId);
   }
 
   @Post('/unit/:course/:lecture')
-  async importUnit(@Body body: any,
+  async importUnit(@Body() body: any,
                    @Param('course') courseId: string,
                    @Param('lecture') lectureId: string) {
     return Unit.prototype.importJSON(body, courseId, lectureId);
