@@ -7,8 +7,7 @@ import {Course} from './Course';
 import {UnitClassMapper} from '../utilities/UnitClassMapper';
 
 interface ILectureModel extends ILecture, mongoose.Document {
-  export: () => Promise<ILecture>;
-  import: (lecture: ILecture, courseId: String) => Promise<ILecture>;
+  exportJSON: () => Promise<ILecture>;
 }
 
 const lectureSchema = new mongoose.Schema({
@@ -46,7 +45,7 @@ lectureSchema.pre('remove', function(next: () => void) {
     .catch(next);
 });
 
-lectureSchema.methods.export = function() {
+lectureSchema.methods.exportJSON = function() {
   const obj = this.toObject();
 
   // remove unwanted informations
@@ -62,7 +61,7 @@ lectureSchema.methods.export = function() {
 
   return Promise.all(units.map((unitId: mongoose.Types.ObjectId) => {
     return Unit.findById(unitId).then((unit: IUnitModel) => {
-      return unit.export();
+      return unit.exportJSON();
     });
   }))
     .then((exportedUnits: IUnit[]) => {
@@ -71,8 +70,8 @@ lectureSchema.methods.export = function() {
     });
 };
 
-lectureSchema.statics.import = function(lecture: ILecture, courseId: string) {
-  // import lectures
+lectureSchema.statics.importJSON = function(lecture: ILecture, courseId: string) {
+  // importTest lectures
   const units: Array<IUnit>  = lecture.units;
   lecture.units = [];
 
@@ -85,7 +84,7 @@ lectureSchema.statics.import = function(lecture: ILecture, courseId: string) {
       });
       return Promise.all(units.map((unit: IUnit) => {
         const unitTypeClass = UnitClassMapper.getMongooseClassForUnit(unit);
-        return unitTypeClass.import(unit, courseId, lectureId);
+        return unitTypeClass.importJSON(unit, courseId, lectureId);
       }))
         .then(() => {
           return savedLecture;
@@ -95,7 +94,7 @@ lectureSchema.statics.import = function(lecture: ILecture, courseId: string) {
       return importedLecture.toObject();
     })
     .catch((err: Error) => {
-      const newError = new InternalServerError('Failed to import lecture');
+      const newError = new InternalServerError('Failed to importTest lecture');
       newError.stack += '\nCaused by: ' + err.message + '\n' + err.stack;
       throw newError;
     });

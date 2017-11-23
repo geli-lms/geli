@@ -5,8 +5,7 @@ import {InternalServerError} from 'routing-controllers';
 import {ILectureModel, Lecture} from '../Lecture';
 
 interface IFreeTextUnitModel extends IFreeTextUnit, mongoose.Document {
-  export: () => Promise<IFreeTextUnit>;
-  import: (unit: IFreeTextUnit, courseId: string, lectureId: string) => Promise<IFreeTextUnit>;
+  exportJSON: () => Promise<IFreeTextUnit>;
 }
 
 const freeTextUnitSchema = new mongoose.Schema({
@@ -16,7 +15,7 @@ const freeTextUnitSchema = new mongoose.Schema({
 });
 
 
-freeTextUnitSchema.statics.import = function(unit: IFreeTextUnit, courseId: string, lectureId: string) {
+freeTextUnitSchema.statics.importJSON = function(unit: IFreeTextUnit, courseId: string, lectureId: string) {
   unit._course = courseId;
 
   return new FreeTextUnit(unit).save()
@@ -31,7 +30,7 @@ freeTextUnitSchema.statics.import = function(unit: IFreeTextUnit, courseId: stri
         });
     })
     .catch((err: Error) => {
-      const newError = new InternalServerError('Failed to import freetextunit');
+      const newError = new InternalServerError('Failed to importTest freetextunit');
       newError.stack += '\nCaused by: ' + err.stack;
       throw newError;
     });

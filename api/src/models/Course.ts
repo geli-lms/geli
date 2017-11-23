@@ -7,8 +7,7 @@ import {InternalServerError} from 'routing-controllers';
 import {IUser} from '../../../shared/models/IUser';
 
 interface ICourseModel extends ICourse, mongoose.Document {
-  export: () => Promise<ICourse>;
-  import: (course: ICourse, admin: IUser) => Promise<ICourse>;
+  exportJSON: () => Promise<ICourse>;
 }
 
 const courseSchema = new mongoose.Schema({
@@ -83,7 +82,7 @@ courseSchema.pre('remove', function (next: () => void) {
     .catch(next);
 });
 
-courseSchema.methods.export = function () {
+courseSchema.methods.exportJSON = function () {
   const obj = this.toObject();
 
   // remove unwanted informations
@@ -104,7 +103,7 @@ courseSchema.methods.export = function () {
 
   return Promise.all(lectures.map((lectureId: mongoose.Types.ObjectId) => {
     return Lecture.findById(lectureId).then((lecture: ILectureModel) => {
-      return lecture.export();
+      return lecture.exportJSON();
     });
   }))
     .then((exportedLectures: ILecture[]) => {
@@ -113,14 +112,14 @@ courseSchema.methods.export = function () {
     });
 };
 
-courseSchema.statics.import = function (course: ICourse, admin: IUser) {
+courseSchema.statics.importJSON = function (course: ICourse, admin: IUser) {
   // set Admin
   course.courseAdmin = admin;
 
-  // course shouldn't be visible for students after import
+  // course shouldn't be visible for students after importTest
   course.active = false;
 
-  // import lectures
+  // importTest lectures
   const lectures: Array<ILecture> = course.lectures;
   course.lectures = [];
 
@@ -136,7 +135,7 @@ courseSchema.statics.import = function (course: ICourse, admin: IUser) {
           const courseId = savedCourse._id;
 
           return Promise.all(lectures.map((lecture: ILecture) => {
-            return Lecture.import(lecture, courseId);
+            return Lecture.prototype.importJSON(lecture, courseId);
           }))
             .then((importedLectures: ILecture[]) => {
               return savedCourse.save();
@@ -147,7 +146,7 @@ courseSchema.statics.import = function (course: ICourse, admin: IUser) {
         })
     })
     .catch((err: Error) => {
-      const newError = new InternalServerError('Failed to import course');
+      const newError = new InternalServerError('Failed to importTest course');
       newError.stack += '\nCaused by: ' + err.message + '\n' + err.stack;
       throw newError;
     });

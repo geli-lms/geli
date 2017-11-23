@@ -5,8 +5,7 @@ import {InternalServerError} from 'routing-controllers';
 import {ILectureModel, Lecture} from '../Lecture';
 
 interface ICodeKataModel extends ICodeKataUnit, mongoose.Document {
-  export: () => Promise<ICodeKataUnit>;
-  import: (unit: ICodeKataUnit, courseId: string, lectureId: string) => Promise<ICodeKataUnit>;
+  exportJSON: () => Promise<ICodeKataUnit>;
 }
 
 const codeKataSchema = new mongoose.Schema({
@@ -24,7 +23,7 @@ const codeKataSchema = new mongoose.Schema({
   },
 });
 
-codeKataSchema.statics.import = function(unit: ICodeKataUnit, courseId: string, lectureId: string) {
+codeKataSchema.statics.importJSON = function(unit: ICodeKataUnit, courseId: string, lectureId: string) {
   unit._course = courseId;
 
   return new CodeKataUnit(unit).save()
@@ -39,7 +38,7 @@ codeKataSchema.statics.import = function(unit: ICodeKataUnit, courseId: string, 
         });
     })
     .catch((err: Error) => {
-      const newError = new InternalServerError('Failed to import course');
+      const newError = new InternalServerError('Failed to importTest course');
       newError.stack += '\nCaused by: ' + err.stack;
       throw newError;
     });

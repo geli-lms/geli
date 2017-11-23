@@ -7,8 +7,7 @@ import {InternalServerError} from 'routing-controllers';
 import {ILectureModel, Lecture} from '../Lecture';
 
 interface IUnitModel extends IUnit, mongoose.Document {
-  export: () => Promise<IUnit>;
-  import: (unit: IUnit, courseId: string, lectureId: string) => Promise<IUnit>;
+  exportJSON: () => Promise<IUnit>;
 }
 
 const unitSchema = new mongoose.Schema({
@@ -55,7 +54,7 @@ function populateUnit(next: (err?: NativeError) => void) {
 
 unitSchema.pre('find', populateUnit);
 
-unitSchema.methods.export = function() {
+unitSchema.methods.exportJSON = function() {
   const obj = this.toObject();
 
   // remove unwanted informations
@@ -71,7 +70,7 @@ unitSchema.methods.export = function() {
   return obj;
 };
 
-unitSchema.statics.import = function(unit: IUnit, courseId: string, lectureId: string) {
+unitSchema.statics.importJSON = function(unit: IUnit, courseId: string, lectureId: string) {
   unit._course = courseId;
   return new Unit(unit).save()
     .then((savedUnit: IUnitModel) => {
@@ -85,7 +84,7 @@ unitSchema.statics.import = function(unit: IUnit, courseId: string, lectureId: s
         });
     })
   .catch((err: Error) => {
-    const newError = new InternalServerError('Failed to import unit');
+    const newError = new InternalServerError('Failed to importTest unit');
     newError.stack += '\nCaused by: ' + err.stack;
     throw newError;
   });

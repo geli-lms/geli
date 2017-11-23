@@ -7,8 +7,7 @@ import {InternalServerError} from 'routing-controllers';
 import {ILectureModel, Lecture} from '../Lecture';
 
 interface ITaskUnitModel extends ITaskUnit, mongoose.Document {
-  export: () => Promise<ITaskUnit>;
-  import: (taskUnit: ITaskUnit, courseId: string) => Promise<ITaskUnit>;
+  exportJSON: () => Promise<ITaskUnit>;
 }
 
 const taskUnitSchema = new mongoose.Schema({
@@ -31,7 +30,7 @@ taskUnitSchema.pre('remove', function(next: () => void) {
     .catch(next);
 });
 
-taskUnitSchema.methods.export = function() {
+taskUnitSchema.methods.exportJSON = function() {
   const obj = this.toObject();
 
   // remove unwanted informations
@@ -50,7 +49,7 @@ taskUnitSchema.methods.export = function() {
 
   return Promise.all(tasks.map((taskId) => {
     return Task.findById(taskId).then((task) => {
-      return task.export();
+      return task.exportJSON();
     });
   }))
   .then((exportedTasks) => {
@@ -59,7 +58,7 @@ taskUnitSchema.methods.export = function() {
   });
 }
 
-taskUnitSchema.statics.import = function(taskUnit: ITaskUnit, courseId: string, lectureId: string) {
+taskUnitSchema.statics.importJSON = function(taskUnit: ITaskUnit, courseId: string, lectureId: string) {
   taskUnit._course = courseId;
 
   const tasks: Array<ITask>  = taskUnit.tasks;
@@ -70,7 +69,7 @@ taskUnitSchema.statics.import = function(taskUnit: ITaskUnit, courseId: string, 
       const taskUnitId = savedTaskUnit._id;
 
       return Promise.all(tasks.map((task: ITask) => {
-        return Task.import(task, taskUnitId);
+        return Task.prototype.importJSON(task, taskUnitId);
       }))
         .then((importedTasks: ITask[]) => {
           savedTaskUnit.tasks = savedTaskUnit.tasks.concat(importedTasks);
@@ -91,7 +90,7 @@ taskUnitSchema.statics.import = function(taskUnit: ITaskUnit, courseId: string, 
       return importedTaskUnit.toObject();
     })
     .catch((err: Error) => {
-      const newError = new InternalServerError('Failed to import taskunit');
+      const newError = new InternalServerError('Failed to importTest taskunit');
       newError.stack += '\nCaused by: ' + err.message + '\n' + err.stack;
       throw newError;
     });

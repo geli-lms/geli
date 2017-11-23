@@ -6,8 +6,7 @@ import {InternalServerError} from 'routing-controllers';
 import {ILectureModel, Lecture} from '../Lecture';
 
 interface IVideoUnitModel extends IVideoUnit, mongoose.Document {
-  export: () => Promise<IVideoUnit>;
-  import: (unit: IVideoUnit, courseId: string, lectureId: string) => Promise<IVideoUnit>;
+  exportJSON: () => Promise<IVideoUnit>;
 }
 
 const videoUnitSchema = new mongoose.Schema({
@@ -45,7 +44,7 @@ videoUnitSchema.pre('remove', function(next: () => void) {
   next();
 });
 
-videoUnitSchema.statics.import = function(unit: IVideoUnit, courseId: string, lectureId: string) {
+videoUnitSchema.statics.importJSON = function(unit: IVideoUnit, courseId: string, lectureId: string) {
   unit._course = courseId;
 
   return new VideoUnit(unit).save()
