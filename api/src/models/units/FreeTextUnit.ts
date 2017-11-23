@@ -15,25 +15,21 @@ const freeTextUnitSchema = new mongoose.Schema({
 });
 
 
-freeTextUnitSchema.statics.importJSON = function(unit: IFreeTextUnit, courseId: string, lectureId: string) {
+freeTextUnitSchema.statics.importJSON = async function(unit: IFreeTextUnit, courseId: string, lectureId: string) {
   unit._course = courseId;
 
-  return new FreeTextUnit(unit).save()
-    .then((savedUnit: IFreeTextUnitModel) => {
-      return Lecture.findById(lectureId)
-        .then((lecture: ILectureModel) => {
-          lecture.units.push(savedUnit);
-          return lecture.save()
-            .then(updatedLecture => {
-              return savedUnit;
-            });
-        });
-    })
-    .catch((err: Error) => {
-      const newError = new InternalServerError('Failed to importTest freetextunit');
-      newError.stack += '\nCaused by: ' + err.stack;
-      throw newError;
-    });
+  try {
+    const savedFreeText = await new FreeTextUnit(unit).save();
+    const lecture = await Lecture.findById(lectureId);
+    lecture.units.push(<IFreeTextUnitModel>savedFreeText);
+    await lecture.save();
+
+    return savedFreeText.toObject();
+  } catch (err) {
+    const newError = new InternalServerError('Failed to import free-text');
+    newError.stack += '\nCaused by: ' + err.message + '\n' + err.stack;
+    throw newError;
+  }
 };
 
 const FreeTextUnit = Unit.discriminator('free-text', freeTextUnitSchema);

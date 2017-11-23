@@ -53,7 +53,7 @@ taskSchema.methods.exportJSON = function() {
 taskSchema.statics.importJSON = function(task: ITask, unitId: string) {
   return new Task(task).save()
     .catch((err: Error) => {
-      const newError = new InternalServerError('Failed to importTest task');
+      const newError = new InternalServerError('Failed to import task');
       newError.stack += '\nCaused by: ' + err.message + '\n' + err.stack;
       throw newError;
     });

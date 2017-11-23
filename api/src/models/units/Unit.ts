@@ -70,24 +70,21 @@ unitSchema.methods.exportJSON = function() {
   return obj;
 };
 
-unitSchema.statics.importJSON = function(unit: IUnit, courseId: string, lectureId: string) {
+unitSchema.statics.importJSON = async function(unit: IUnit, courseId: string, lectureId: string) {
   unit._course = courseId;
-  return new Unit(unit).save()
-    .then((savedUnit: IUnitModel) => {
-      return Lecture.findById(lectureId)
-        .then((lecture: ILectureModel) => {
-          lecture.units.push(savedUnit);
-          return lecture.save()
-            .then(updatedLecture => {
-              return savedUnit;
-            });
-        });
-    })
-  .catch((err: Error) => {
-    const newError = new InternalServerError('Failed to importTest unit');
-    newError.stack += '\nCaused by: ' + err.stack;
+
+  try {
+    const savedUnit = await new Unit(unit).save();
+    const lecture = await Lecture.findById(lectureId);
+    lecture.units.push(savedUnit);
+    await lecture.save();
+
+    return savedUnit.toObject();
+  } catch (err) {
+    const newError = new InternalServerError('Failed to import unit');
+    newError.stack += '\nCaused by: ' + err.message + '\n' + err.stack;
     throw newError;
-  });
+  }
 };
 
 // Cascade delete

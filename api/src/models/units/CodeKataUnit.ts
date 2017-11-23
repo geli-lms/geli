@@ -23,25 +23,21 @@ const codeKataSchema = new mongoose.Schema({
   },
 });
 
-codeKataSchema.statics.importJSON = function(unit: ICodeKataUnit, courseId: string, lectureId: string) {
+codeKataSchema.statics.importJSON = async function(unit: ICodeKataUnit, courseId: string, lectureId: string) {
   unit._course = courseId;
 
-  return new CodeKataUnit(unit).save()
-    .then((savedUnit: ICodeKataModel) => {
-      return Lecture.findById(lectureId)
-        .then((lecture: ILectureModel) => {
-          lecture.units.push(savedUnit);
-          return lecture.save()
-            .then(updatedLecture => {
-              return savedUnit;
-            });
-        });
-    })
-    .catch((err: Error) => {
-      const newError = new InternalServerError('Failed to importTest course');
-      newError.stack += '\nCaused by: ' + err.stack;
-      throw newError;
-    });
+  try {
+    const savedKata = await new CodeKataUnit(unit).save();
+    const lecture = await Lecture.findById(lectureId);
+    lecture.units.push(<ICodeKataModel>savedKata);
+    await lecture.save();
+
+    return savedKata;
+  } catch (err) {
+    const newError = new InternalServerError('Failed to import code-kata');
+    newError.stack += '\nCaused by: ' + err.message + '\n' + err.stack;
+    throw newError;
+  }
 };
 
 const CodeKataUnit = Unit.discriminator('code-kata', codeKataSchema);

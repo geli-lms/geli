@@ -58,42 +58,28 @@ taskUnitSchema.methods.exportJSON = function() {
   });
 }
 
-taskUnitSchema.statics.importJSON = function(taskUnit: ITaskUnit, courseId: string, lectureId: string) {
+taskUnitSchema.statics.importJSON = async function(taskUnit: ITaskUnit, courseId: string, lectureId: string) {
   taskUnit._course = courseId;
 
   const tasks: Array<ITask>  = taskUnit.tasks;
   taskUnit.tasks = [];
 
-  return new TaskUnit(taskUnit).save()
-    .then((savedTaskUnit: ITaskUnitModel) => {
-      const taskUnitId = savedTaskUnit._id;
+  try {
+  const savedTaskUnit = await new TaskUnit(taskUnit).save();
+  taskUnit.tasks = await Promise.all(tasks.map((task: ITask) => {
+    return Task.prototype.importJSON(task, savedTaskUnit._id);
+  }));
 
-      return Promise.all(tasks.map((task: ITask) => {
-        return Task.prototype.importJSON(task, taskUnitId);
-      }))
-        .then((importedTasks: ITask[]) => {
-          savedTaskUnit.tasks = savedTaskUnit.tasks.concat(importedTasks);
-          return savedTaskUnit.save();
-        });
-    })
-    .then((savedUnit: ITaskUnitModel) => {
-      return Lecture.findById(lectureId)
-        .then((lecture: ILectureModel) => {
-          lecture.units.push(savedUnit);
-          return lecture.save()
-            .then(updatedLecture => {
-              return savedUnit;
-            });
-        });
-    })
-    .then((importedTaskUnit: ITaskUnitModel) => {
-      return importedTaskUnit.toObject();
-    })
-    .catch((err: Error) => {
-      const newError = new InternalServerError('Failed to importTest taskunit');
-      newError.stack += '\nCaused by: ' + err.message + '\n' + err.stack;
-      throw newError;
-    });
+  const lecture = await Lecture.findById(lectureId);
+  lecture.units.push(<ITaskUnitModel>savedTaskUnit);
+  await lecture.save();
+
+  return savedTaskUnit.toObject();
+  } catch (err) {
+    const newError = new InternalServerError('Failed to import tasks');
+    newError.stack += '\nCaused by: ' + err.message + '\n' + err.stack;
+    throw newError;
+  }
 }
 
 const TaskUnit = Unit.discriminator('task', taskUnitSchema);

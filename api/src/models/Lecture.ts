@@ -45,7 +45,7 @@ lectureSchema.pre('remove', function(next: () => void) {
     .catch(next);
 });
 
-lectureSchema.methods.exportJSON = function() {
+lectureSchema.methods.exportJSON = async function() {
   const obj = this.toObject();
 
   // remove unwanted informations
@@ -59,45 +59,37 @@ lectureSchema.methods.exportJSON = function() {
   const units: Array<mongoose.Types.ObjectId>  = obj.units;
   obj.units = [];
 
-  return Promise.all(units.map((unitId: mongoose.Types.ObjectId) => {
+  obj.units = await Promise.all(units.map((unitId: mongoose.Types.ObjectId) => {
     return Unit.findById(unitId).then((unit: IUnitModel) => {
       return unit.exportJSON();
     });
-  }))
-    .then((exportedUnits: IUnit[]) => {
-      obj.units = exportedUnits;
-      return obj;
-    });
+  }));
+  return obj;
 };
 
-lectureSchema.statics.importJSON = function(lecture: ILecture, courseId: string) {
+lectureSchema.statics.importJSON = async function(lecture: ILecture, courseId: string) {
   // importTest lectures
   const units: Array<IUnit>  = lecture.units;
   lecture.units = [];
 
-  return new Lecture(lecture).save()
-    .then((savedLecture: ILectureModel) => {
-      const lectureId = savedLecture._id;
-      Course.findById(courseId).then(course => {
-        course.lectures.push(savedLecture);
-        course.save();
-      });
-      return Promise.all(units.map((unit: IUnit) => {
-        const unitTypeClass = UnitClassMapper.getMongooseClassForUnit(unit);
-        return unitTypeClass.importJSON(unit, courseId, lectureId);
-      }))
-        .then(() => {
-          return savedLecture;
-        })
-    })
-    .then((importedLecture: ILectureModel) => {
-      return importedLecture.toObject();
-    })
-    .catch((err: Error) => {
-      const newError = new InternalServerError('Failed to importTest lecture');
-      newError.stack += '\nCaused by: ' + err.message + '\n' + err.stack;
-      throw newError;
-    });
+  try {
+    const savedLecture = await new Lecture(lecture).save();
+
+    const course = await Course.findById(courseId);
+    course.lectures.push(savedLecture);
+    await course.save();
+
+    await Promise.all(units.map((unit: IUnit) => {
+      const unitTypeClass = UnitClassMapper.getMongooseClassForUnit(unit);
+      return unitTypeClass.importJSON(unit, courseId, savedLecture._id);
+    }));
+
+    return (await Course.findById(savedLecture._id)).toObject();
+  } catch (err) {
+    const newError = new InternalServerError('Failed to import lecture');
+    newError.stack += '\nCaused by: ' + err.message + '\n' + err.stack;
+    throw newError;
+  }
 };
 
 
