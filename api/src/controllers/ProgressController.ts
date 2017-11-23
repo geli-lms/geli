@@ -12,7 +12,6 @@ import {CodeKataProgress} from '../models/CodeKataProgress';
 
 @JsonController('/progress')
 @UseBefore(passportJwtMiddleware)
-@Authorized(['teacher', 'admin'])
 export class ProgressController {
   private static async getUnit(unitId: string) {
     return (await Unit.findById(unitId)).toObject();
