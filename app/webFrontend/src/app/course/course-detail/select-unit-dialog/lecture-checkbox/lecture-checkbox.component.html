@@ -1,4 +1,7 @@
 <mat-list-item class="lecture">{{lecture.name}}
   <span class="spacer"></span>
   <mat-checkbox [value]="chkbox" class="chkbox"></mat-checkbox>
+  <mat-list *ngFor=" let unit of this.lecture.units">
+    <app-unit-checkbox [unit]= "unit"></app-unit-checkbox>
+  </mat-list>
 </mat-list-item>

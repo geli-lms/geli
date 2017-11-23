@@ -4,9 +4,6 @@
 <mat-dialog-content class="layout">
   <mat-list *ngFor=" let lecture of course.lectures">
     <app-lecture-checkbox [lecture]= "lecture"></app-lecture-checkbox>
-    <mat-list *ngFor=" let unit of lecture.units">
-      <app-unit-checkbox [unit]= "unit"></app-unit-checkbox>
-    </mat-list>
   </mat-list>
 </mat-dialog-content>
 <mat-dialog-actions>
