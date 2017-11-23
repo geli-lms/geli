@@ -61,7 +61,7 @@ export class WitelistController {
 
   @Delete('/:id')
   @Authorized(['teacher', 'admin'])
-  deleteWhitelistUser(@Param('id') id: string,  @Body() whitelistUser: IWhitelistUser) {
-    WhitelistUser.findOneAndRemove(whitelistUser);
+  deleteWhitelistUser(@Param('id') id: string) {
+    return WhitelistUser.findByIdAndRemove(id);
   }
 }
