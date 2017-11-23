@@ -14,6 +14,11 @@ export class SelectUnitDialogComponent {
   constructor(public dialogRef: MatDialogRef<SelectUnitDialogComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any) {
     this.course = data.course;
+
+  }
+
+  selectAll() {
+    console.log('Selected All');
   }
 
   onNoClick(): void {
