@@ -136,7 +136,7 @@ courseSchema.statics.import = function (course: ICourse, admin: IUser) {
           const courseId = savedCourse._id;
 
           return Promise.all(lectures.map((lecture: ILecture) => {
-            return new Lecture().import(lecture, courseId);
+            return Lecture.import(lecture, courseId);
           }))
             .then((importedLectures: ILecture[]) => {
               return savedCourse.save();
@@ -148,7 +148,7 @@ courseSchema.statics.import = function (course: ICourse, admin: IUser) {
     })
     .catch((err: Error) => {
       const newError = new InternalServerError('Failed to import course');
-      newError.stack += '\nCaused by: ' + err.stack;
+      newError.stack += '\nCaused by: ' + err.message + '\n' + err.stack;
       throw newError;
     });
 };

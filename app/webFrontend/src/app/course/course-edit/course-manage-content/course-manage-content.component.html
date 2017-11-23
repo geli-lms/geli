@@ -51,12 +51,20 @@
               <button mat-icon-button matTooltip="Edit" (click)="onEditUnit(unit)">
                 <mat-icon>edit</mat-icon>
               </button>
+              <button class="unit-menu-button" mat-icon-button [matMenuTriggerFor]="unitMenu">
+                <mat-icon>more_vert</mat-icon>
+              </button>
+                <mat-menu #unitMenu="matMenu">
               <button mat-icon-button matTooltip="Export" (click)="onExportUnit(unit)">
                 <mat-icon>file_download</mat-icon>
               </button>
               <button mat-icon-button matTooltip="Delete" (click)="deleteUnit(unit)">
                 <mat-icon>delete</mat-icon>
               </button>
+              <button mat-icon-button matTooltip="Duplicate" (click)="duplicateUnit(unit)">
+                <mat-icon>content_copy</mat-icon>
+              </button>
+                  </mat-menu>
             </span>
             </div>
 

@@ -1,19 +1,15 @@
 import {Request} from 'express';
 import {
-  Body, Get, Post, Put, Delete, Param, Req, JsonController, UseBefore, Authorized,
-  BadRequestError
+  Body, Post, Param, Req, JsonController, UseBefore, Authorized, InternalServerError
 } from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
-import {FreeTextUnit} from '../models/units/FreeTextUnit';
-import {TaskUnit} from '../models/units/TaskUnit';
-import {CodeKataUnit} from '../models/units/CodeKataUnit';
-import {FileUnit} from '../models/units/FileUnit';
-import {VideoUnit} from '../models/units/VideoUnit';
 import {IUnit} from '../../../shared/models/units/IUnit';
-import {ITaskUnit} from '../../../shared/models/units/ITaskUnit';
-import {ITask} from '../../../shared/models/task/ITask';
-import {ILectureModel, Lecture} from '../models/Lecture';
+import {Lecture} from '../models/Lecture';
 import {ILecture} from '../../../shared/models/ILecture';
+import {IUnitModel, Unit} from '../models/units/Unit';
+import {ICourse} from '../../../shared/models/ICourse';
+import {Course} from '../models/Course';
+import {UnitClassMapper} from '../utilities/UnitClassMapper';
 
 
 @JsonController('/duplicate')
@@ -22,31 +18,53 @@ import {ILecture} from '../../../shared/models/ILecture';
 export class DuplicationController {
 
   @Post('/course/:id')
-  duplicateCourse(@Body() data: any, @Req() request: Request) {
-    // TODO: status auf nicht sichtbar für students
+  duplicateCourse(@Param('id') id: string, @Body() data: any, @Req() request: Request) {
+    const courseAdmin = data.courseAdmin;
+    return Course.findById(id)
+      .then((course: ICourse) => {
+        return new Course(course).export();
+      }).then((exportedCourse: ICourse) => {
+        return Course.import(exportedCourse, courseAdmin);
+      })
+      .catch((err: Error) => {
+        const newError = new InternalServerError('Failed to duplicate course');
+        newError.stack += '\nCaused by: ' + err.message + '\n' + err.stack;
+        throw newError;
+      });
   }
 
   @Post('/lecture/:id')
   duplicateLecture(@Param('id') id: string, @Body() data: any, @Req() request: Request) {
     const courseId = data.courseId;
-    console.log('courseid: ' + courseId);
-    console.log('lectureID: ' + id);
     return Lecture.findById(id)
       .then((lecture: ILecture) => {
-        console.log('lecture = ' + lecture);
         return new Lecture(lecture).export();
       }).then((exportedLecture: ILecture) => {
-        console.log('exportedLecture = ' + exportedLecture);
-        return new Lecture().import(exportedLecture, courseId);
+        return Lecture.import(exportedLecture, courseId);
       })
-    .catch((error) => {
-        throw new BadRequestError(error);
+      .catch((err: Error) => {
+        const newError = new InternalServerError('Failed to duplicate lecture');
+        newError.stack += '\nCaused by: ' + err.message + '\n' + err.stack;
+        throw newError;
       });
   }
 
   @Post('/unit/:id')
-  duplicateUnit(@Body() data: any, @Req() request: Request) {
-    // TODO
+  duplicateUnit(@Param('id') id: string, @Body() data: any, @Req() request: Request) {
+    const courseId = data.courseId;
+    const lectureId = data.lectureId;
+    return Unit.findById(id)
+      .then((unit: IUnitModel) => {
+        return unit.export();
+      }).then((exportedUnit: IUnit) => {
+        const unitTypeClass = UnitClassMapper.getMongooseClassForUnit(exportedUnit);
+        return unitTypeClass.import(exportedUnit, courseId, lectureId);
+      })
+      .catch((err: Error) => {
+        const newError = new InternalServerError('Failed to duplicate unit');
+        newError.stack += '\nCaused by: ' + err.message + '\n' + err.stack;
+        throw newError;
+      });
   }
 
 }

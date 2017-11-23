@@ -89,12 +89,23 @@ export class CourseManageContentComponent implements OnInit, OnDestroy {
   duplicateLecture(lecture: ILecture) {
     this.duplicationService.duplicateLecture(lecture, this.course._id)
       .then(() => {
-        this.snackBar.open('Unit duplicated.', '', {duration: 3000});
+        this.snackBar.open('Lecture duplicated.', '', {duration: 3000});
         this.reloadCourse();
       })
       .catch((error) => {
       this.snackBar.open(error, '', {duration: 3000});
     });
+  }
+
+  duplicateUnit(unit: IUnit) {
+    this.duplicationService.duplicateUnit(unit, this.openedLecture._id , this.course._id)
+      .then(() => {
+      this.snackBar.open('Unit duplicated.', '', {duration: 3000});
+      this.reloadCourse();
+    })
+      .catch((error) => {
+        this.snackBar.open(error, '', {duration: 3000});
+      });
   }
 
   exportLecture(lecture: ILecture) {
@@ -138,6 +149,8 @@ export class CourseManageContentComponent implements OnInit, OnDestroy {
     .catch(console.error)
     .then(() => this.showProgress.toggleLoadingGlobal(false));
   }
+
+
 
   deleteUnit(unit: IUnit) {
     this.dialogService

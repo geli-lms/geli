@@ -70,10 +70,10 @@ taskUnitSchema.statics.import = function(taskUnit: ITaskUnit, courseId: string, 
       const taskUnitId = savedTaskUnit._id;
 
       return Promise.all(tasks.map((task: ITask) => {
-        return new Task().import(task, taskUnitId);
+        return Task.import(task, taskUnitId);
       }))
-        .then((importedUnits: ITask[]) => {
-          savedTaskUnit.tasks.concat(importedUnits);
+        .then((importedTasks: ITask[]) => {
+          savedTaskUnit.tasks = savedTaskUnit.tasks.concat(importedTasks);
           return savedTaskUnit.save();
         });
     })
@@ -92,7 +92,7 @@ taskUnitSchema.statics.import = function(taskUnit: ITaskUnit, courseId: string, 
     })
     .catch((err: Error) => {
       const newError = new InternalServerError('Failed to import taskunit');
-      newError.stack += '\nCaused by: ' + err.stack;
+      newError.stack += '\nCaused by: ' + err.message + '\n' + err.stack;
       throw newError;
     });
 }

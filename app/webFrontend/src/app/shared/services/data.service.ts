@@ -4,6 +4,8 @@ import {Dependency} from '../../about/licenses/dependency.model';
 import {ITaskUnit} from '../../../../../../shared/models/units/ITaskUnit';
 import {ILecture} from '../../../../../../shared/models/ILecture';
 import {IUnit} from '../../../../../../shared/models/units/IUnit';
+import {IUser} from '../../../../../../shared/models/IUser';
+import {ICourse} from '../../../../../../shared/models/ICourse';
 
 export abstract class DataService {
 
@@ -102,6 +104,18 @@ export class DuplicationService extends DataService {
     super('duplicate/', backendService);
   }
 
+  duplicateCourse(course: ICourse, courseAdmin: IUser): Promise<any[]> {
+    return new Promise((resolve, reject) => {
+      this.backendService.post(this.apiPath + 'course/' + course._id, JSON.stringify({courseAdmin: courseAdmin}))
+        .subscribe(
+          (responseItem: any) => {
+            resolve(responseItem);
+          },
+          error => reject(error)
+        );
+    });
+  }
+
   duplicateLecture(lecture: ILecture, courseId: string): Promise<any[]> {
     return new Promise((resolve, reject) => {
       this.backendService.post(this.apiPath + 'lecture/' + lecture._id, JSON.stringify({courseId: courseId}))
@@ -114,17 +128,17 @@ export class DuplicationService extends DataService {
     });
   }
 
-  // duplicateUnit(unit: IUnit, lectureId: string): Promise<any[]> {
-  //   return new Promise((resolve, reject) => {
-  //     this.backendService.post(this.apiPath + 'unit/' + unit._id, JSON.stringify({model: unit, courseId: lectureId}))
-  //       .subscribe(
-  //         (responseItem: any) => {
-  //           resolve(responseItem);
-  //         },
-  //         error => reject(error)
-  //       );
-  //   });
-  // }
+  duplicateUnit(unit: IUnit, lectureId: string, courseId: string): Promise<any[]> {
+    return new Promise((resolve, reject) => {
+      this.backendService.post(this.apiPath + 'unit/' + unit._id, JSON.stringify({courseId: courseId , lectureId: lectureId}))
+        .subscribe(
+          (responseItem: any) => {
+            resolve(responseItem);
+          },
+          error => reject(error)
+        );
+    });
+  }
 }
 
 
