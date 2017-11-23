@@ -27,8 +27,17 @@ const whitelistUserSchema = new mongoose.Schema({
       trim: true,
       index: true
     }
-  }
-);
+  },
+  {
+    timestamps: true,
+    toObject: {
+      virtuals: true,
+      transform: function (doc: any, ret: any) {
+        ret._id = ret._id.toString();
+        delete ret.password;
+      }
+    }
+  });
 
 whitelistUserSchema.index({
   firstName: 'text',

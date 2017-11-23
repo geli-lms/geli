@@ -6,11 +6,12 @@ import {IWhitelistUser} from '../../../shared/models/IWhitelistUser';
 
 function escapeRegex(text: string) {
   return text.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
-};
+}
 
 @JsonController('/whitelist')
 @UseBefore(passportJwtMiddleware)
 export class WitelistController {
+
   @Get('/search')
   @Authorized(['teacher', 'admin'])
   searchUser(@QueryParam('query') query: string) {
@@ -25,9 +26,8 @@ export class WitelistController {
     escaped.forEach(elem => {
       const re = new RegExp(elem, 'ig');
       conditions.$or.push({uid: {$regex: re}});
-      conditions.$or.push({email: {$regex: re}});
-      conditions.$or.push({'profile.firstName': {$regex: re}});
-      conditions.$or.push({'profile.lastName': {$regex: re}})
+      conditions.$or.push({firstName: {$regex: re}});
+      conditions.$or.push({lastName: {$regex: re}})
     });
     return WhitelistUser.find(conditions, {score: {$meta: 'textScore'}})
       .sort({score: {$meta: 'textScore'}})
@@ -38,8 +38,8 @@ export class WitelistController {
 
   @Get('/count')
   @Authorized(['teacher', 'admin'])
-  searchCountUsers(@Param('role') role: string, @QueryParam('query') query: string) {
-    return WhitelistUser.count({role: role});
+  searchCountUsers() {
+    return WhitelistUser.count({});
   }
 
   @Post('/')
@@ -56,7 +56,7 @@ export class WitelistController {
       whitelistUser,
       {'new': true}
     )
-      .then((c) => c ? c.toObject() : undefined);
+      .then((w) => w ? w.toObject({}) : undefined);
   }
 
   @Delete('/:id')
