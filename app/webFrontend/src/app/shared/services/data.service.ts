@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {BackendService} from './backend.service';
 import {Dependency} from '../../about/licenses/dependency.model';
 import {ITaskUnit} from '../../../../../../shared/models/units/ITaskUnit';
+import construct = Reflect.construct;
 
 export abstract class DataService {
 
@@ -236,6 +237,30 @@ export class UserDataService extends DataService {
     const originalApiPath = this.apiPath;
     this.apiPath += 'picture/';
     const promise = this.updateItem(data);
+    this.apiPath = originalApiPath;
+    return promise;
+  }
+}
+
+@Injectable()
+export  class  WhitelistUserService extends DataService {
+  constructor(public backendService: BackendService) {
+    super('whitelist', backendService);
+  }
+
+  searchWhitelistUsers(query: string): Promise<any[]> {
+    const originalApiPath = this.apiPath;
+    this.apiPath += 'search/';
+    this.apiPath += '?query=' + query;
+    const promise = this.readItems();
+    this.apiPath = originalApiPath;
+    return promise;
+  }
+
+  countWhitelistUsers(): Promise<any[]> {
+    const originalApiPath = this.apiPath;
+    this.apiPath += 'count/';
+    const promise = this.readItems();
     this.apiPath = originalApiPath;
     return promise;
   }
