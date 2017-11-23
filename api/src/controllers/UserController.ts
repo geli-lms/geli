@@ -44,7 +44,7 @@ export class UserController {
 
   @Get('/:role/search')
   @Authorized(['teacher', 'admin'])
-  searchUser(@Param('role') role: string, @QueryParam('query') query: string, @CurrentUser() currentUser?: IUser) {
+  searchUser(@Param('role') role: string, @QueryParam('query') query: string) {
     if (role !== 'student' && role !== 'teacher') {
       throw new Error('Method not allowed for this role.');
     }
