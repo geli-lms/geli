@@ -12,18 +12,18 @@ export class ExportController {
   @Get('/course/:id')
   async exportCourse(@Param('id') id: string) {
     const course = await Course.findById(id);
-    return course.export();
+    return course.exportJSON();
   }
 
   @Get('/lecture/:id')
   async exportLecture(@Param('id') id: string) {
     const lecture = await Lecture.findById(id);
-    return lecture.export();
+    return lecture.exportJSON();
   }
 
   @Get('/unit/:id')
   async exportUnit(@Param('id') id: string) {
     const unit = await Unit.findById(id);
-    return unit.export();
+    return unit.exportJSON();
   }
 }

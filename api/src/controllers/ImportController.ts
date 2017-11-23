@@ -12,19 +12,19 @@ export class ImportController {
 
   @Post('/course')
   async importCourse(@Body body: any, @CurrentUser() user: IUser) {
-    return Course.prototype.import(body, user);
+    return Course.prototype.importJSON(body, user);
   }
 
   @Post('/lecture/:course')
   async importLecture(@Body body: any,
                       @Param('course') courseId: string) {
-    return Lecture.prototype.import(body, courseId);
+    return Lecture.prototype.importJSON(body, courseId);
   }
 
   @Post('/unit/:course/:lecture')
   async importUnit(@Body body: any,
                    @Param('course') courseId: string,
                    @Param('lecture') lectureId: string) {
-    return Unit.prototype.import(body, courseId, lectureId);
+    return Unit.prototype.importJSON(body, courseId, lectureId);
   }
 }

@@ -22,9 +22,9 @@ export class DuplicationController {
     const courseAdmin = data.courseAdmin;
     return Course.findById(id)
       .then((course: ICourse) => {
-        return new Course(course).export();
+        return new Course(course).exportJSON();
       }).then((exportedCourse: ICourse) => {
-        return Course.import(exportedCourse, courseAdmin);
+        return Course.prototype.importJSON(exportedCourse, courseAdmin);
       })
       .catch((err: Error) => {
         const newError = new InternalServerError('Failed to duplicate course');
@@ -38,9 +38,9 @@ export class DuplicationController {
     const courseId = data.courseId;
     return Lecture.findById(id)
       .then((lecture: ILecture) => {
-        return new Lecture(lecture).export();
+        return new Lecture(lecture).exportJSON();
       }).then((exportedLecture: ILecture) => {
-        return Lecture.import(exportedLecture, courseId);
+        return Lecture.prototype.importJSON(exportedLecture, courseId);
       })
       .catch((err: Error) => {
         const newError = new InternalServerError('Failed to duplicate lecture');
@@ -55,10 +55,10 @@ export class DuplicationController {
     const lectureId = data.lectureId;
     return Unit.findById(id)
       .then((unit: IUnitModel) => {
-        return unit.export();
+        return unit.exportJSON();
       }).then((exportedUnit: IUnit) => {
         const unitTypeClass = UnitClassMapper.getMongooseClassForUnit(exportedUnit);
-        return unitTypeClass.import(exportedUnit, courseId, lectureId);
+        return unitTypeClass.prototype.importJSON(exportedUnit, courseId, lectureId);
       })
       .catch((err: Error) => {
         const newError = new InternalServerError('Failed to duplicate unit');
