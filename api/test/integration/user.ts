@@ -180,10 +180,10 @@ describe('User', () => {
               .end((err, res) => {
                 res.status.should.be.equal(200);
                 res.body.length.should.be.greaterThan(0);
-                res.body[0]._doc.profile.firstName.should.be.equal(newUser.profile.firstName);
-                res.body[0]._doc.profile.firstName.should.be.equal(newUser.profile.firstName);
-                res.body[0]._doc.uid.should.be.equal(newUser.uid);
-                res.body[0]._doc.email.should.be.equal(newUser.email);
+                res.body[0].profile.firstName.should.be.equal(newUser.profile.firstName);
+                res.body[0].profile.firstName.should.be.equal(newUser.profile.firstName);
+                res.body[0].uid.should.be.equal(newUser.uid);
+                res.body[0].email.should.be.equal(newUser.email);
                 done();
               });
           });
@@ -216,10 +216,10 @@ describe('User', () => {
               .end((err, res) => {
                 res.status.should.be.equal(200);
                 res.body.length.should.be.greaterThan(0);
-                res.body[0]._doc.profile.firstName.should.be.equal(newUser.profile.firstName);
-                res.body[0]._doc.profile.firstName.should.be.equal(newUser.profile.firstName);
-                res.body[0]._doc.uid.should.be.equal(newUser.uid);
-                res.body[0]._doc.email.should.be.equal(newUser.email);
+                res.body[0].profile.firstName.should.be.equal(newUser.profile.firstName);
+                res.body[0].profile.firstName.should.be.equal(newUser.profile.firstName);
+                res.body[0].uid.should.be.equal(newUser.uid);
+                res.body[0].email.should.be.equal(newUser.email);
                 done();
               });
           });
