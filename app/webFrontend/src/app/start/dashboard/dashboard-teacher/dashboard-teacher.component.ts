@@ -61,7 +61,7 @@ export class DashboardTeacherComponent extends DashboardBaseComponent {
     this.fabOpen = !this.fabOpen;
   };
 
-  onImportLecture = () => {
+  onImportCourse = () => {
     this.snackBar.open('Not jet implemented', '', {duration: 3000});
   };
 }
