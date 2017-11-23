@@ -10,6 +10,8 @@ import {TeacherReportComponent} from './teacher-report/teacher-report.component'
 import {SharedModule} from '../shared/shared.module';
 import {CourseContainerComponent} from './course-container/course-container.component';
 import {UserModule} from '../user/user.module';
+import {DuplicationService, ExportService, ImportService} from '../shared/services/data.service';
+import {SaveFileService} from '../shared/services/save-file.service';
 
 @NgModule({
   imports: [
@@ -28,7 +30,12 @@ import {UserModule} from '../user/user.module';
     TeacherReportComponent,
     CourseContainerComponent,
   ],
-  providers: [],
+  providers: [
+    ImportService,
+    ExportService,
+    DuplicationService,
+    SaveFileService,
+  ],
   exports: [
     CourseComponent,
     CourseContainerComponent

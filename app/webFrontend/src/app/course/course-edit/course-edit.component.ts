@@ -1,10 +1,12 @@
 import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {CourseService} from '../../shared/services/data.service';
+import {CourseService, ExportService} from '../../shared/services/data.service';
 import {MatSnackBar} from '@angular/material';
 import {ShowProgressService} from '../../shared/services/show-progress.service';
 import {FileUploader} from 'ng2-file-upload';
+import {SaveFileService} from '../../shared/services/save-file.service';
+import {ICourse} from '../../../../../../shared/models/ICourse';
 
 @Component({
   selector: 'app-course-edit',
@@ -21,7 +23,7 @@ export class CourseEditComponent implements OnInit {
   enrollType: string;
   newCourse: FormGroup;
   id: string;
-  courseOb: any[];
+  courseOb: ICourse;
   uploader: FileUploader = null;
 
   message = 'Course successfully added.';
@@ -31,6 +33,8 @@ export class CourseEditComponent implements OnInit {
               private courseService: CourseService,
               public snackBar: MatSnackBar,
               private ref: ChangeDetectorRef,
+              private exportService: ExportService,
+              private saveFileService: SaveFileService,
               private showProgress: ShowProgressService) {
 
     this.route.params.subscribe(params => {
@@ -103,8 +107,14 @@ export class CourseEditComponent implements OnInit {
       });
   }
 
-  onExport() {
-    this.snackBar.open('Not jet implemented', '', {duration: 3000});
+  async onExport() {
+    try {
+      const courseJSON = await this.exportService.exportCourse(this.courseOb);
+
+      this.saveFileService.save(this.courseOb.name, JSON.stringify(courseJSON, null, 2));
+    } catch (err) {
+      this.snackBar.open('Export course failed ' + err.json().message, 'Dismiss');
+    }
   }
 
   onChangeMode(value) {

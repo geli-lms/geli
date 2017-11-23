@@ -11,6 +11,7 @@ import {UserService} from '../../../shared/services/user.service';
 import {MatSnackBar} from '@angular/material';
 import {IUnit} from '../../../../../../../shared/models/units/IUnit';
 import {DragulaService} from 'ng2-dragula';
+import {SaveFileService} from '../../../shared/services/save-file.service';
 
 @Component({
   selector: 'app-course-manage-content',
@@ -18,7 +19,6 @@ import {DragulaService} from 'ng2-dragula';
   styleUrls: ['./course-manage-content.component.scss']
 })
 export class CourseManageContentComponent implements OnInit, OnDestroy {
-
   @Input() course: ICourse;
   openedLecture: ILecture;
   lectureCreateMode = false;
@@ -39,6 +39,7 @@ export class CourseManageContentComponent implements OnInit, OnDestroy {
               private duplicationService: DuplicationService,
               private exportService: ExportService,
               private importService: ImportService,
+              private saveFileService: SaveFileService,
               public userService: UserService) {
   }
 
@@ -110,8 +111,14 @@ export class CourseManageContentComponent implements OnInit, OnDestroy {
     });
   }
 
-  exportLecture(lecture: ILecture) {
-    this.snackBar.open('Not jet implemented', '', {duration: 3000});
+  async exportLecture(lecture: ILecture) {
+    try {
+      const lectureJSON = await this.exportService.exportLecture(lecture);
+
+      this.saveFileService.save(lecture.name, JSON.stringify(lectureJSON, null, 2));
+    } catch (err) {
+      this.snackBar.open('Export lecture failed ' + err.json().message, 'Dismiss');
+    }
   }
 
   deleteObjectIds(object: any) {
@@ -261,8 +268,14 @@ export class CourseManageContentComponent implements OnInit, OnDestroy {
     this.unitEditElement = unit;
   };
 
-  onExportUnit = (unit: IUnit) => {
-    this.snackBar.open('Not jet implemented', '', {duration: 3000});
+  onExportUnit = async (unit: IUnit) => {
+    try {
+      const unitJSON = await this.exportService.exportUnit(unit);
+
+      this.saveFileService.save(unit.name, JSON.stringify(unitJSON, null, 2));
+    } catch (err) {
+      this.snackBar.open('Export unit failed ' + err.json().message, 'Dismiss');
+    }
   };
 
   onEditUnitDone = () => {
