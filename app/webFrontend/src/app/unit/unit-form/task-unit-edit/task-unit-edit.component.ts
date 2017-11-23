@@ -82,7 +82,7 @@ export class TaskUnitEditComponent implements OnInit {
           this.onDone();
         },
         (error) => {
-          console.log(error);
+          this.snackBar.open(`Couldn\'t ${this.add ? 'create' : 'update'} task`, '', {duration: 3000});
         });
     }
   };
@@ -131,18 +131,14 @@ export class TaskUnitEditComponent implements OnInit {
     // this.createTask(newTask);
   }
 
-  //  log(val) { console.log(JSON.stringify(val)); }
-
   createTask(task: any) {
     // this.log(this.task);
     this.taskService.createItem(task).then(
       (val) => {
         task = val; // get _id
         this.tasks.splice(0, 0, task); // add item to start
-
-        //     this.log(val);
       }, (error) => {
-        console.log(error);
+        this.snackBar.open('Couldn\'t create task', '', {duration: 3000});
       });
   }
 
@@ -167,7 +163,7 @@ export class TaskUnitEditComponent implements OnInit {
         this.snackBar.open('Task saved', 'Update', {duration: 2000});
 
       }, (error) => {
-        console.log(error);
+        // THIS METHOD WILL BE REMOVED ANYWAY
       });
   }
 

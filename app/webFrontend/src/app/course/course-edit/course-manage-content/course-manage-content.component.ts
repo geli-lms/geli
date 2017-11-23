@@ -99,13 +99,13 @@ export class CourseManageContentComponent implements OnInit, OnDestroy {
 
   duplicateUnit(unit: IUnit) {
     this.duplicationService.duplicateUnit(unit, this.openedLecture._id , this.course._id)
-      .then(() => {
+    .then(() => {
       this.snackBar.open('Unit duplicated.', '', {duration: 3000});
       this.reloadCourse();
     })
-      .catch((error) => {
-        this.snackBar.open(error, '', {duration: 3000});
-      });
+    .catch((error) => {
+      this.snackBar.open(error, '', {duration: 3000});
+    });
   }
 
   exportLecture(lecture: ILecture) {
@@ -203,7 +203,7 @@ export class CourseManageContentComponent implements OnInit, OnDestroy {
       this.course = val;
     })
     .catch((error) => {
-      console.log(error);
+      this.snackBar.open('Couldn\'t reload Course', '', {duration: 3000});
     })
     .then(() => {
       this.showProgress.toggleLoadingGlobal(false)
