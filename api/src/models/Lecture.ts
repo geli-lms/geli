@@ -4,8 +4,6 @@ import {IUnitModel, Unit} from './units/Unit';
 import {IUnit} from '../../../shared/models/units/IUnit';
 import {InternalServerError} from 'routing-controllers';
 import {Course} from './Course';
-import {FreeTextUnit} from './units/FreeTextUnit';
-import {IFreeTextUnit} from '../../../shared/models/units/IFreeTextUnit';
 import {UnitClassMapper} from '../utilities/UnitClassMapper';
 
 interface ILectureModel extends ILecture, mongoose.Document {

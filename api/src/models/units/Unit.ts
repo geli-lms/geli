@@ -3,11 +3,8 @@ import {IUnit} from '../../../../shared/models/units/IUnit';
 import {NativeError} from 'mongoose';
 import {Progress} from '../Progress';
 import {InternalServerError} from 'routing-controllers';
-import {CodeKataUnit} from './CodeKataUnit';
-import {UnitClassMapper} from '../../utilities/UnitClassMapper';
-import {FreeTextUnit} from './FreeTextUnit';
+
 import {ILectureModel, Lecture} from '../Lecture';
-import {ILecture} from '../../../../shared/models/ILecture';
 
 interface IUnitModel extends IUnit, mongoose.Document {
   export: () => Promise<IUnit>;
