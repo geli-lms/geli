@@ -4,7 +4,7 @@ import {AuthenticationService} from '../../shared/services/authentication.servic
 import {Router} from '@angular/router';
 import {ShowProgressService} from '../../shared/services/show-progress.service';
 import {MatSnackBar} from '@angular/material';
-import  {errorCodes} from '../../shared/validators/errorCodes';
+import {errorCodes} from '../../../../../../api/src/config/errorCodes';
 
 @Component({
   selector: 'app-register',
@@ -75,7 +75,7 @@ export class RegisterComponent implements OnInit {
             break;
           }
           case errorCodes.duplicateUid.code: {
-            this.mailError = errorCodes.duplicateUid.text;
+            this.uidError = errorCodes.duplicateUid.text;
             break;
           }
           default: {

@@ -3,7 +3,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CourseService} from '../../shared/services/data.service';
 import {MatSnackBar} from '@angular/material';
 import {Router} from '@angular/router';
-import {errorCodes} from '../../shared/validators/errorCodes';
+import {errorCodes} from '../../../../../../api/src/config/errorCodes';
 
 @Component({
   selector: 'app-course-new',

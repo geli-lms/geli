@@ -1,7 +1,7 @@
 import { Component, OnInit,  Input} from '@angular/core';
 import {Validators, FormGroup, FormControl} from '@angular/forms';
 import {matchPasswords} from '../../validators/validators';
-import {errorCodes} from '../../validators/errorCodes';
+import {errorCodes} from '../../../../../../../api/src/config/errorCodes';
 
 
 @Component({
