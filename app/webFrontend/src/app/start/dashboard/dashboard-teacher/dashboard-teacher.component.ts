@@ -2,6 +2,7 @@ import {Component} from '@angular/core';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
 import {UserService} from '../../../shared/services/user.service';
 import {DashboardBaseComponent} from '../dashboard-base-component';
+import {MatSnackBar} from '@angular/material';
 
 @Component({
   selector: 'app-dashboard-teacher',
@@ -14,8 +15,10 @@ export class DashboardTeacherComponent extends DashboardBaseComponent {
   furtherCourses: ICourse[];
   inactiveCourses: ICourse[];
   availableCourses: ICourse[];
+  fabOpen = false;
 
-  constructor(public userService: UserService) {
+  constructor(public userService: UserService,
+              private snackBar: MatSnackBar) {
     super();
   }
 
@@ -49,4 +52,16 @@ export class DashboardTeacherComponent extends DashboardBaseComponent {
   filterMyCourses(course: ICourse) {
     return (course.teachers.filter(teacher => teacher._id === this.userService.user._id).length);
   }
+
+  closeFab = () => {
+    this.fabOpen = false;
+  };
+
+  onFabClick = () => {
+    this.fabOpen = !this.fabOpen;
+  };
+
+  onImportCourse = () => {
+    this.snackBar.open('Not jet implemented', '', {duration: 3000});
+  };
 }

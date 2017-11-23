@@ -6,7 +6,8 @@ import {DialogModule} from './modules/dialog.module';
 import {UnitMenuComponent} from './components/unit-menu/unit-menu.component';
 import {UserImageDirective} from './directives/user-image.directive';
 import {MaterialImportModule} from './modules/material-import.module';
-import { BadgeComponent } from './components/badge/badge.component';
+import {BadgeComponent} from './components/badge/badge.component';
+import {MatFabMenuComponent} from './components/mat-fab-menu/mat-fab-menu.component';
 
 @NgModule({
   imports: [
@@ -19,7 +20,8 @@ import { BadgeComponent } from './components/badge/badge.component';
     GravatarDirective,
     UnitMenuComponent,
     UserImageDirective,
-    BadgeComponent
+    BadgeComponent,
+    MatFabMenuComponent,
   ],
   exports: [
     GravatarDirective,
@@ -27,7 +29,8 @@ import { BadgeComponent } from './components/badge/badge.component';
     UnitMenuComponent,
     UserImageDirective,
     MaterialImportModule,
-    BadgeComponent
+    BadgeComponent,
+    MatFabMenuComponent,
   ]
 })
 export class SharedModule {

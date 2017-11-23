@@ -2,7 +2,7 @@ import {Component, Input, OnInit, OnDestroy} from '@angular/core';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
 import {ILecture} from '../../../../../../../shared/models/ILecture';
 import {
-  CodeKataUnitService, CourseService, DuplicationService, FreeTextUnitService, LectureService,
+  CourseService, DuplicationService, ExportService, ImportService, LectureService,
   UnitService
 } from '../../../shared/services/data.service';
 import {ShowProgressService} from 'app/shared/services/show-progress.service';
@@ -11,12 +11,6 @@ import {UserService} from '../../../shared/services/user.service';
 import {MatSnackBar} from '@angular/material';
 import {IUnit} from '../../../../../../../shared/models/units/IUnit';
 import {DragulaService} from 'ng2-dragula';
-import {Lecture} from '../../../models/Lecture';
-import {IFreeTextUnit} from '../../../../../../../shared/models/units/IFreeTextUnit';
-import {FreeTextUnit} from '../../../models/FreeTextUnit';
-import {forEach} from '@angular/router/src/utils/collection';
-import {ITaskUnit} from '../../../../../../../shared/models/units/ITaskUnit';
-import {TaskUnit} from '../../../models/TaskUnit';
 
 @Component({
   selector: 'app-course-manage-content',
@@ -42,9 +36,9 @@ export class CourseManageContentComponent implements OnInit, OnDestroy {
               private snackBar: MatSnackBar,
               private dialogService: DialogService,
               private dragulaService: DragulaService,
-              private freeTextUnitService: FreeTextUnitService,
-              private codeKataUnitService: CodeKataUnitService,
               private duplicationService: DuplicationService,
+              private exportService: ExportService,
+              private importService: ImportService,
               public userService: UserService) {
   }
 
@@ -97,10 +91,21 @@ export class CourseManageContentComponent implements OnInit, OnDestroy {
   duplicateLecture(lecture: ILecture) {
     this.duplicationService.duplicateLecture(lecture, this.course._id)
       .then(() => {
-        this.snackBar.open('Unit duplicated.', '', {duration: 3000});
+        this.snackBar.open('Lecture duplicated.', '', {duration: 3000});
         this.reloadCourse();
       })
       .catch((error) => {
+      this.snackBar.open(error, '', {duration: 3000});
+    });
+  }
+
+  duplicateUnit(unit: IUnit) {
+    this.duplicationService.duplicateUnit(unit, this.openedLecture._id , this.course._id)
+    .then(() => {
+      this.snackBar.open('Unit duplicated.', '', {duration: 3000});
+      this.reloadCourse();
+    })
+    .catch((error) => {
       this.snackBar.open(error, '', {duration: 3000});
     });
   }
@@ -146,6 +151,8 @@ export class CourseManageContentComponent implements OnInit, OnDestroy {
     .catch(console.error)
     .then(() => this.showProgress.toggleLoadingGlobal(false));
   }
+
+
 
   deleteUnit(unit: IUnit) {
     this.dialogService
@@ -198,12 +205,16 @@ export class CourseManageContentComponent implements OnInit, OnDestroy {
       this.course = val;
     })
     .catch((error) => {
-      console.log(error);
+      this.snackBar.open('Couldn\'t reload Course', '', {duration: 3000});
     })
     .then(() => {
       this.showProgress.toggleLoadingGlobal(false)
     });
   }
+
+  onImportLecture = () => {
+    this.snackBar.open('Not jet implemented', '', {duration: 3000});
+  };
 
   onAddLecture() {
     this.closeAllForms();
@@ -220,6 +231,10 @@ export class CourseManageContentComponent implements OnInit, OnDestroy {
 
   closeEditLecture = () => {
     this.lectureEditMode = false;
+  };
+
+  onImportUnit = () => {
+    this.snackBar.open('Not jet implemented', '', {duration: 3000});
   };
 
   onAddUnit = (type: string) => {

@@ -4,6 +4,8 @@ import {Dependency} from '../../about/licenses/dependency.model';
 import {ITaskUnit} from '../../../../../../shared/models/units/ITaskUnit';
 import {ILecture} from '../../../../../../shared/models/ILecture';
 import {IUnit} from '../../../../../../shared/models/units/IUnit';
+import {IUser} from '../../../../../../shared/models/IUser';
+import {ICourse} from '../../../../../../shared/models/ICourse';
 
 export abstract class DataService {
 
@@ -97,9 +99,107 @@ export abstract class DataService {
 }
 
 @Injectable()
+export class ExportService extends DataService {
+  constructor(public backendService: BackendService) {
+    super('export/', backendService);
+  }
+
+  exportCourse(course: ICourse): Promise<any[]> {
+    return new Promise((resolve, reject) => {
+      this.backendService.get(this.apiPath + 'course/' + course._id)
+        .subscribe(
+          (responseItem: any) => {
+            resolve(responseItem);
+          },
+          error => reject(error)
+        );
+    });
+  }
+
+  exportLecture(lecture: ILecture): Promise<any[]> {
+    return new Promise((resolve, reject) => {
+      this.backendService.get(this.apiPath + 'lecture/' + lecture._id)
+        .subscribe(
+          (responseItem: any) => {
+            resolve(responseItem);
+          },
+          error => reject(error)
+        );
+    });
+  }
+
+  exportUnit(unit: IUnit): Promise<any[]> {
+    return new Promise((resolve, reject) => {
+      this.backendService.get(this.apiPath + 'unit/' + unit._id)
+        .subscribe(
+          (responseItem: any) => {
+            resolve(responseItem);
+          },
+          error => reject(error)
+        );
+    });
+  }
+}
+
+@Injectable()
+export class ImportService extends DataService {
+  constructor(public backendService: BackendService) {
+    super('import/', backendService);
+  }
+
+  importCourse(course: ICourse): Promise<any[]> {
+    return new Promise((resolve, reject) => {
+      this.backendService.post(this.apiPath + 'course/', JSON.stringify(course))
+        .subscribe(
+          (responseItem: any) => {
+            resolve(responseItem);
+          },
+          error => reject(error)
+        );
+    });
+  }
+
+  importLecture(lecture: ILecture, course: ICourse): Promise<any[]> {
+    return new Promise((resolve, reject) => {
+      this.backendService.post(this.apiPath + 'course/' + course._id, JSON.stringify(lecture))
+        .subscribe(
+          (responseItem: any) => {
+            resolve(responseItem);
+          },
+          error => reject(error)
+        );
+    });
+  }
+
+  importUnit(unit: IUnit, lecture: ILecture, course: ICourse): Promise<any[]> {
+    return new Promise((resolve, reject) => {
+      this.backendService.post(this.apiPath + 'unit/' + course._id + '/' + lecture._id, JSON.stringify(unit))
+        .subscribe(
+          (responseItem: any) => {
+            resolve(responseItem);
+          },
+          error => reject(error)
+        );
+    });
+  }
+}
+
+@Injectable()
 export class DuplicationService extends DataService {
   constructor(public backendService: BackendService) {
     super('duplicate/', backendService);
+  }
+
+  duplicateCourse(course: ICourse, courseAdmin: IUser): Promise<any[]> {
+    return new Promise((resolve, reject) => {
+      this.backendService.post(this.apiPath + 'course/' + course._id, JSON.stringify({courseAdmin: courseAdmin}))
+        .subscribe(
+          (responseItem: any) => {
+            resolve(responseItem);
+          },
+          error => reject(error)
+        );
+    });
   }
 
   duplicateLecture(lecture: ILecture, courseId: string): Promise<any[]> {
@@ -114,17 +214,17 @@ export class DuplicationService extends DataService {
     });
   }
 
-  // duplicateUnit(unit: IUnit, lectureId: string): Promise<any[]> {
-  //   return new Promise((resolve, reject) => {
-  //     this.backendService.post(this.apiPath + 'unit/' + unit._id, JSON.stringify({model: unit, courseId: lectureId}))
-  //       .subscribe(
-  //         (responseItem: any) => {
-  //           resolve(responseItem);
-  //         },
-  //         error => reject(error)
-  //       );
-  //   });
-  // }
+  duplicateUnit(unit: IUnit, lectureId: string, courseId: string): Promise<any[]> {
+    return new Promise((resolve, reject) => {
+      this.backendService.post(this.apiPath + 'unit/' + unit._id, JSON.stringify({courseId: courseId , lectureId: lectureId}))
+        .subscribe(
+          (responseItem: any) => {
+            resolve(responseItem);
+          },
+          error => reject(error)
+        );
+    });
+  }
 }
 
 
@@ -275,7 +375,7 @@ export class AboutDataService extends DataService {
       this.backendService.get(this.apiPath + 'dependencies')
       .subscribe((responseItems: any) => {
           if (responseItems.httpCode >= 500) {
-            console.log('API: ' + responseItems.message);
+            // FIXME: Just return, right?
             return resolve([]);
           }
 

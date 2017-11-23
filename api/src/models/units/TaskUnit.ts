@@ -4,10 +4,10 @@ import {ITaskUnit} from '../../../../shared/models/units/ITaskUnit';
 import {ITaskModel, Task} from '../Task';
 import {ITask} from '../../../../shared/models/task/ITask';
 import {InternalServerError} from 'routing-controllers';
+import {ILectureModel, Lecture} from '../Lecture';
 
 interface ITaskUnitModel extends ITaskUnit, mongoose.Document {
-  export: () => Promise<ITaskUnit>;
-  import: (taskUnit: ITaskUnit, courseId: string) => Promise<ITaskUnit>;
+  exportJSON: () => Promise<ITaskUnit>;
 }
 
 const taskUnitSchema = new mongoose.Schema({
@@ -30,7 +30,7 @@ taskUnitSchema.pre('remove', function(next: () => void) {
     .catch(next);
 });
 
-taskUnitSchema.methods.export = function() {
+taskUnitSchema.methods.exportJSON = function() {
   const obj = this.toObject();
 
   // remove unwanted informations
@@ -49,7 +49,7 @@ taskUnitSchema.methods.export = function() {
 
   return Promise.all(tasks.map((taskId) => {
     return Task.findById(taskId).then((task) => {
-      return task.export();
+      return task.exportJSON();
     });
   }))
   .then((exportedTasks) => {
@@ -58,32 +58,28 @@ taskUnitSchema.methods.export = function() {
   });
 }
 
-taskUnitSchema.methods.import = function(taskUnit: ITaskUnit, courseId: string) {
+taskUnitSchema.statics.importJSON = async function(taskUnit: ITaskUnit, courseId: string, lectureId: string) {
   taskUnit._course = courseId;
 
   const tasks: Array<ITask>  = taskUnit.tasks;
   taskUnit.tasks = [];
 
-  return new TaskUnit(taskUnit).save()
-    .then((savedTaskUnit: ITaskUnitModel) => {
-      const taskUnitId = savedTaskUnit._id;
+  try {
+  const savedTaskUnit = await new TaskUnit(taskUnit).save();
+  taskUnit.tasks = await Promise.all(tasks.map((task: ITask) => {
+    return Task.prototype.importJSON(task, savedTaskUnit._id);
+  }));
 
-      return Promise.all(tasks.map((task: ITask) => {
-        return new Task().import(task);
-      }))
-        .then((importedUnits: ITask[]) => {
-          savedTaskUnit.tasks.concat(importedUnits);
-          return savedTaskUnit.save();
-        });
-    })
-    .then((importedTaskUnit: ITaskUnitModel) => {
-      return importedTaskUnit.toObject();
-    })
-    .catch((err: Error) => {
-      const newError = new InternalServerError('Failed to import course');
-      newError.stack += '\nCaused by: ' + err.stack;
-      throw newError;
-    });
+  const lecture = await Lecture.findById(lectureId);
+  lecture.units.push(<ITaskUnitModel>savedTaskUnit);
+  await lecture.save();
+
+  return savedTaskUnit.toObject();
+  } catch (err) {
+    const newError = new InternalServerError('Failed to import tasks');
+    newError.stack += '\nCaused by: ' + err.message + '\n' + err.stack;
+    throw newError;
+  }
 }
 
 const TaskUnit = Unit.discriminator('task', taskUnitSchema);

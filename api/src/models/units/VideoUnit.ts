@@ -2,10 +2,11 @@ import * as mongoose from 'mongoose';
 import {Unit} from './Unit';
 import {IVideoUnit} from '../../../../shared/models/units/IVideoUnit';
 import fs = require('fs');
+import {InternalServerError} from 'routing-controllers';
+import {ILectureModel, Lecture} from '../Lecture';
 
 interface IVideoUnitModel extends IVideoUnit, mongoose.Document {
-  export: () => Promise<IVideoUnit>;
-  import: (unit: IVideoUnit, courseId: string) => Promise<IVideoUnit>;
+  exportJSON: () => Promise<IVideoUnit>;
 }
 
 const videoUnitSchema = new mongoose.Schema({
@@ -42,6 +43,23 @@ videoUnitSchema.pre('remove', function(next: () => void) {
   });
   next();
 });
+
+videoUnitSchema.statics.importJSON = async function(unit: IVideoUnit, courseId: string, lectureId: string) {
+  unit._course = courseId;
+
+  try {
+    const savedVideo = await new VideoUnit(unit).save();
+    const lecture = await Lecture.findById(lectureId);
+    lecture.units.push(<IVideoUnitModel>savedVideo);
+    await lecture.save();
+
+    return savedVideo.toObject();
+  } catch (err) {
+    const newError = new InternalServerError('Failed to import video');
+    newError.stack += '\nCaused by: ' + err.message + '\n' + err.stack;
+    throw newError;
+  }
+};
 
 const VideoUnit = Unit.discriminator('video', videoUnitSchema);
 

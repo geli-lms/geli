@@ -1,4 +1,4 @@
-@import '../../breakpoints';
+@import '../../variables';
 
 :host {
   flex: 1;
@@ -41,4 +41,8 @@
     width: 100%;
     margin: 0;
   }
+}
+
+.mat-card-title h2 {
+  margin-top: 0;
 }

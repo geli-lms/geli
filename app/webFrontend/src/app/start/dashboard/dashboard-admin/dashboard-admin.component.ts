@@ -1,5 +1,6 @@
 import {Component} from '@angular/core';
 import {DashboardBaseComponent} from '../dashboard-base-component';
+import {MatSnackBar} from '@angular/material';
 
 @Component({
   selector: 'app-dashboard-admin',
@@ -8,10 +9,24 @@ import {DashboardBaseComponent} from '../dashboard-base-component';
 })
 export class DashboardAdminComponent extends DashboardBaseComponent {
 
-  constructor() {
+  fabOpen = false;
+
+  constructor(private snackBar: MatSnackBar) {
     super();
   }
 
   ngOnInit() {
   }
+
+  closeFab = () => {
+    this.fabOpen = false;
+  };
+
+  onFabClick = () => {
+    this.fabOpen = !this.fabOpen;
+  };
+
+  onImportCourse = () => {
+    this.snackBar.open('Not jet implemented', '', {duration: 3000});
+  };
 }

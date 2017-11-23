@@ -7,8 +7,7 @@ import {InternalServerError} from 'routing-controllers';
 import {IUser} from '../../../shared/models/IUser';
 
 interface ICourseModel extends ICourse, mongoose.Document {
-  export: () => Promise<ICourse>;
-  import: (course: ICourse, admin: IUser) => Promise<ICourse>;
+  exportJSON: () => Promise<ICourse>;
 }
 
 const courseSchema = new mongoose.Schema({
@@ -76,14 +75,14 @@ const courseSchema = new mongoose.Schema({
 );
 
 // Cascade delete
-courseSchema.pre('remove', function(next: () => void) {
+courseSchema.pre('remove', function (next: () => void) {
   Lecture.find({'_id': {$in: this.lectures}}).exec()
     .then((lectures) => Promise.all(lectures.map(lecture => lecture.remove())))
     .then(next)
     .catch(next);
 });
 
-courseSchema.methods.export = function() {
+courseSchema.methods.exportJSON = async function () {
   const obj = this.toObject();
 
   // remove unwanted informations
@@ -99,48 +98,44 @@ courseSchema.methods.export = function() {
   delete obj.teachers;
 
   // "populate" lectures
-  const lectures: Array<mongoose.Types.ObjectId>  = obj.lectures;
+  const lectures: Array<mongoose.Types.ObjectId> = obj.lectures;
   obj.lectures = [];
 
-  return Promise.all(lectures.map((lectureId: mongoose.Types.ObjectId) => {
+  obj.lectures = await Promise.all(lectures.map((lectureId: mongoose.Types.ObjectId) => {
     return Lecture.findById(lectureId).then((lecture: ILectureModel) => {
-      return lecture.export();
+      return lecture.exportJSON();
     });
-  }))
-  .then((exportedLectures: ILecture[]) => {
-    obj.lectures = exportedLectures;
-    return obj;
-  });
+  }));
+  return obj;
 };
 
-courseSchema.methods.import = function(course: ICourse, admin: IUser) {
+courseSchema.statics.importJSON = async function (course: ICourse, admin: IUser) {
   // set Admin
   course.courseAdmin = admin;
 
-  // import lectures
-  const lectures: Array<ILecture>  = course.lectures;
+  // course shouldn't be visible for students after importTest
+  course.active = false;
+
+  // importTest lectures
+  const lectures: Array<ILecture> = course.lectures;
   course.lectures = [];
 
-  return new Course(course).save()
-    .then((savedcourse: ICourseModel) => {
-      const courseId = savedcourse._id;
+  try {
+    const isCourseDuplicated = (await Course.findOne({name: course.name})) !== null;
+    if (isCourseDuplicated) {
+      course.name = course.name + ' (copy)';
+    }
+    const savedCourse = await new Course(course).save();
+    await Promise.all(lectures.map((lecture: ILecture) => {
+      return Lecture.prototype.importJSON(lecture, savedCourse._id);
+    }));
 
-      return Promise.all(lectures.map((lecture: ILecture) => {
-        return new Lecture().import(lecture, courseId);
-      }))
-      .then((importedLectures: ILecture[]) => {
-        savedcourse.lectures.concat(importedLectures);
-        return savedcourse.save();
-      });
-    })
-    .then((importedCourse: ICourseModel) => {
-      return importedCourse.toObject();
-    })
-    .catch((err: Error) => {
-      const newError = new InternalServerError('Failed to import course');
-      newError.stack += '\nCaused by: ' + err.stack;
-      throw newError;
-    });
+    return (await Course.findById(savedCourse._id)).toObject();
+  } catch (err) {
+    const newError = new InternalServerError('Failed to import course');
+    newError.stack += '\nCaused by: ' + err.message + '\n' + err.stack;
+    throw newError;
+  }
 };
 
 const Course = mongoose.model<ICourseModel>('Course', courseSchema);
