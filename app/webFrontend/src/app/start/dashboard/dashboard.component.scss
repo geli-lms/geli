@@ -1,0 +1,11 @@
+.courses {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.add-course-fab {
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
+}
