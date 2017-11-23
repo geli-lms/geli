@@ -11,6 +11,8 @@ import {SharedModule} from '../shared/shared.module';
 import {CourseContainerComponent} from './course-container/course-container.component';
 import {UserModule} from '../user/user.module';
 import { SelectUnitDialogComponent } from './course-detail/select-unit-dialog/select-unit-dialog.component';
+import { LectureCheckboxComponent } from './course-detail/select-unit-dialog/lecture-checkbox/lecture-checkbox.component';
+import { UnitCheckboxComponent } from './course-detail/select-unit-dialog/lecture-checkbox/unit-checkbox/unit-checkbox.component';
 
 @NgModule({
   imports: [
@@ -29,6 +31,8 @@ import { SelectUnitDialogComponent } from './course-detail/select-unit-dialog/se
     TeacherReportComponent,
     CourseContainerComponent,
     SelectUnitDialogComponent,
+    LectureCheckboxComponent,
+    UnitCheckboxComponent,
   ],
   providers: [],
   entryComponents: [
@@ -37,7 +41,9 @@ import { SelectUnitDialogComponent } from './course-detail/select-unit-dialog/se
   exports: [
     CourseComponent,
     CourseContainerComponent,
-    SelectUnitDialogComponent
+    SelectUnitDialogComponent,
+    LectureCheckboxComponent,
+    UnitCheckboxComponent
   ]
 })
 export class CourseModule {
