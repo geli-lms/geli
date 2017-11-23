@@ -10,7 +10,7 @@ import {AuthenticationService} from './shared/services/authentication.service';
 import {AuthGuardService} from './shared/services/auth-guard.service';
 import {
   CourseService, TaskService, UserDataService, LectureService,
-  UnitService, AboutDataService, FreeTextUnitService, CodeKataUnitService, APIInfoService
+  UnitService, AboutDataService, FreeTextUnitService, CodeKataUnitService, APIInfoService, WhitelistUserService
 } from './shared/services/data.service';
 import {BackendService} from './shared/services/backend.service';
 
@@ -51,6 +51,7 @@ import {AdminModule} from './admin/admin.module';
     TaskService,
     CourseService,
     UserDataService,
+    WhitelistUserService,
     LectureService,
     BackendService,
     UserDataService,

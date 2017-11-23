@@ -1,5 +1,9 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {IWhitelistUser} from '../../../../../../../../shared/models/IWhitelistUser';
+import {WhitelistUserService} from '../../../../shared/services/data.service';
+import {MatSnackBar} from '@angular/material';
+import {ShowProgressService} from '../../../../shared/services/show-progress.service';
+import {duration} from 'moment';
 
 @Component({
   selector: 'app-whitelist-edit',
@@ -9,15 +13,32 @@ import {IWhitelistUser} from '../../../../../../../../shared/models/IWhitelistUs
 export class WhitelistEditComponent implements OnInit {
 
   isToggled = false;
-  whitelistUser: IWhitelistUser = {_id: null, firstName: '', lastName: '', uid: ''};
+  whitelistUser: any = {firstName: '', lastName: '', uid: ''};
 
-  constructor() { }
+  constructor(private whitelistUserService: WhitelistUserService,
+              private showProgress: ShowProgressService,
+              private snackBar: MatSnackBar) {
+  }
 
   ngOnInit() {
   }
 
   toggle() {
     this.isToggled = !this.isToggled;
+  }
+
+  createNewWhitelistUser() {
+    if (this.whitelistUser.firstName === '') {
+      this.snackBar.open('First name should not be empty.', '', {duration: 6000});
+      return null;
+    } else if (this.whitelistUser.lastName === '') {
+      this.snackBar.open('Last name should not be empty.', '', {duration: 6000});
+      return null;
+    } else if (this.whitelistUser.uid === '' || isNaN(Number(this.whitelistUser.uid))) {
+      this.snackBar.open('Unique identification should be a number and not empty', '', {duration: 6000});
+      return null;
+    }
+    return this.whitelistUserService.createItem(this.whitelistUser);
   }
 
 

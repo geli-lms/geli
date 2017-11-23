@@ -7,8 +7,6 @@
 </div>
 
 <ng-container *ngIf="isToggled">
-
-
 </ng-container>
 
 <mat-form-field class="full-width">
@@ -22,11 +20,11 @@
 </mat-form-field>
 
 <mat-form-field class="full-width">
-  <input async matInput id="uid" placeholder="User identification" [(ngModel)]="whitelistUser.uid"
+  <input async matInput id="uid" placeholder="User identification number" [(ngModel)]="whitelistUser.uid"
          [ngModelOptions]="{standalone: true}"required="">
 </mat-form-field>
 
-<button class="mat-mini-fab" mat-fab color="accent" (click)="onClick()"
+<button class="mat-mini-fab" mat-fab color="accent" (click)="createNewWhitelistUser()"
         matTooltip="Add course">
   <mat-icon class="md-24 open-animation" [class.icon-open]="open">add</mat-icon>
 </button>
