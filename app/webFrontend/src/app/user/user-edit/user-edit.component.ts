@@ -64,7 +64,6 @@ export class UserEditComponent implements OnInit {
         });
       },
       (error) => {
-        console.log(error);
         this.snackBar.open(error, 'Dismiss');
       });
   }
