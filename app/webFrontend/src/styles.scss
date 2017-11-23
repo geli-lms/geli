@@ -1,9 +1,8 @@
 @import '~dragula/dist/dragula.css';
 @import 'variables';
 // Plus imports for other components in your app.
-
 // Custom global geli stuff
-@import 'breakpoints';
+@import 'styles/typography';
 
 // Include the common styles for Angular Material. We include this here so that you only
 // have to load a single css file for Angular Material in your app.
@@ -22,37 +21,19 @@ $app-theme: mat-light-theme($app-primary, $app-accent, $app-warn);
   box-sizing: border-box;
 }
 
-html {
-  height: 100%;
-}
-
 body, html {
   height: 100%;
   margin: 0;
   padding: 0;
+  background-color: #ffffff;
 }
 
-body {
-  font-family: Roboto, "Helvetica Neue", sans-serif;
-
-  @include bp(4k) {
-    background-color: lighten(map-get($app-primary, 'default'), 38.5%);
+app-root > .app-wrapper {
+  > .mat-toolbar .mat-toolbar-row,
+  > .app-content {
+    @include maxSideMargin;
+    width: auto;
   }
-}
-
-app-root {
-  min-width: $bp_width--xs;
-  max-width: $bp_width--4k;
-  margin: auto;
-  background-color: #fff;
-
-  @include bp(4k) {
-    box-shadow: 0px 0px 54px 5px rgba(0,0,0,0.75);
-  }
-}
-
-.logo-font {
-  font-family: Pacifico, cursive;
 }
 
 .avatar {
@@ -60,6 +41,9 @@ app-root {
 }
 
 .loading-container {
+  position: absolute;
+  top: 0;
+  bottom: 0;
   height: 100%;
   width: 100%;
   display: flex;
