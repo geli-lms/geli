@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { UnitSelectorComponent } from './unit-selector.component';
+import { SelectUnitDialogComponent } from './select-unit-dialog.component';
 
-describe('UnitSelectorComponent', () => {
-  let component: UnitSelectorComponent;
-  let fixture: ComponentFixture<UnitSelectorComponent>;
+describe('SelectUnitDialogComponent', () => {
+  let component: SelectUnitDialogComponent;
+  let fixture: ComponentFixture<SelectUnitDialogComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ UnitSelectorComponent ]
+      declarations: [ SelectUnitDialogComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(UnitSelectorComponent);
+    fixture = TestBed.createComponent(SelectUnitDialogComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

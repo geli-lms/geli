@@ -5,7 +5,7 @@ import {CourseService} from '../../shared/services/data.service';
 import {ICourse} from '../../../../../../shared/models/ICourse';
 import {UserService} from '../../shared/services/user.service';
 import {MatSnackBar, MatDialog} from '@angular/material';
-import {UnitSelectorComponent} from './unit-selector/unit-selector.component';
+import {SelectUnitDialogComponent} from './select-unit-dialog/select-unit-dialog.component';
 
 
 @Component({
@@ -48,7 +48,7 @@ export class CourseDetailComponent implements OnInit {
 
   openDownloadDialog() {
     console.log('Button pushed.');
-    this.dialog.open(UnitSelectorComponent, {
+    this.dialog.open(SelectUnitDialogComponent, {
       data: {course: this.course}
     });
   }

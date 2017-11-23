@@ -10,7 +10,7 @@ import {TeacherReportComponent} from './teacher-report/teacher-report.component'
 import {SharedModule} from '../shared/shared.module';
 import {CourseContainerComponent} from './course-container/course-container.component';
 import {UserModule} from '../user/user.module';
-import {UnitSelectorComponent} from './course-detail/unit-selector/unit-selector.component';
+import { SelectUnitDialogComponent } from './course-detail/select-unit-dialog/select-unit-dialog.component';
 
 @NgModule({
   imports: [
@@ -28,16 +28,16 @@ import {UnitSelectorComponent} from './course-detail/unit-selector/unit-selector
     CourseNewComponent,
     TeacherReportComponent,
     CourseContainerComponent,
-    UnitSelectorComponent,
+    SelectUnitDialogComponent,
   ],
   providers: [],
   entryComponents: [
-    UnitSelectorComponent
+    SelectUnitDialogComponent
   ],
   exports: [
     CourseComponent,
     CourseContainerComponent,
-    UnitSelectorComponent
+    SelectUnitDialogComponent
   ]
 })
 export class CourseModule {
