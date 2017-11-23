@@ -25,6 +25,11 @@ export class CourseEditComponent implements OnInit {
   courseOb: any[];
   uploader: FileUploader = null;
   enrollTypes =  ENROLL_TYPES;
+  enrollTypeConstants = {
+    ENROLL_TYPE_WHITELIST,
+    ENROLL_TYPE_FREE,
+    ENROLL_TYPE_ACCESSKEY,
+  };
 
 
   message = 'Course successfully added.';
@@ -91,9 +96,13 @@ export class CourseEditComponent implements OnInit {
     const request: any = {
       'name': this.course, 'description': this.description, '_id': this.id, 'active': this.active, 'enrollType': this.enrollType
     };
-    if (this.accessKey !== '****') {
+
+    if (this.enrollType === ENROLL_TYPE_FREE) {
+      request.accessKey = null;
+    } else if (this.accessKey !== '****') {
       request.accessKey = this.accessKey;
     }
+
     this.courseService.updateItem(request).then(
       (val) => {
         this.showProgress.toggleLoadingGlobal(false);
@@ -104,34 +113,6 @@ export class CourseEditComponent implements OnInit {
         const errormessage = error.json().message || error.json().errmsg;
         this.snackBar.open('Saving course failed ' + errormessage, 'Dismiss');
       });
-  }
-
-
-  GetCourseValue() {
-    this.mode = true;
-  }
-
-  onChangeMode(value) {
-    if (value.checked === true) {
-      this.mode = true;
-      this.enrollType = 'whitelist';
-    } else {
-      this.mode = false;
-      this.enrollType = 'free';
-    }
-  }
-
-  selectType(event) {
-    console.log(event);
-    if (event.value === ENROLL_TYPE_WHITELIST) {
-      this.enrollType = event.value;
-    }
-    if (event.value === ENROLL_TYPE_FREE) {
-      this.enrollType = event.value;
-    }
-    if (event.value === ENROLL_TYPE_ACCESSKEY) {
-      this.enrollType = event.value;
-    }
   }
 
   onChangeActive(value) {

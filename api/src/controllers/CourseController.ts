@@ -53,6 +53,7 @@ export class CourseController {
     if (conditions.$or) {
       // Everyone is allowed to see free courses in overview
       conditions.$or.push({enrollType: 'free'});
+      conditions.$or.push({enrollType: 'accesskey'});
     }
 
     const courseQuery = Course.find(conditions)
