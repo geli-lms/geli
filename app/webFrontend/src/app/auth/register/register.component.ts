@@ -4,6 +4,7 @@ import {AuthenticationService} from '../../shared/services/authentication.servic
 import {Router} from '@angular/router';
 import {ShowProgressService} from '../../shared/services/show-progress.service';
 import {MatSnackBar} from '@angular/material';
+import  {errorCodes} from '../../shared/validators/errorCodes';
 
 @Component({
   selector: 'app-register',
@@ -65,16 +66,16 @@ export class RegisterComponent implements OnInit {
       }, (error) => {
         const errormessage = error.json().message || error.json().errmsg;
         switch (errormessage) {
-          case 'duplicate mail': {
-            this.mailError = 'That email address is already in use';
+          case errorCodes.mail.duplicate.code: {
+            this.mailError = errorCodes.mail.duplicate.text;
             break;
           }
-          case 'no teacher': {
-            this.mailError = 'You are not allowed to register as teacher';
+          case errorCodes.mail.noTeacher.code: {
+            this.mailError = errorCodes.mail.noTeacher.text;
             break;
           }
-          case 'duplicate uid': {
-            this.uidError = 'That matriculation number is already in use';
+          case errorCodes.duplicateUid.code: {
+            this.mailError = errorCodes.duplicateUid.text;
             break;
           }
           default: {

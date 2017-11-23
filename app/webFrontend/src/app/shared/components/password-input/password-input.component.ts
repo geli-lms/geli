@@ -1,7 +1,7 @@
 import { Component, OnInit,  Input} from '@angular/core';
-import {Validators, FormGroup, FormBuilder, FormControl} from '@angular/forms';
-import {pwPattern} from '../../validators/password';
+import {Validators, FormGroup, FormControl} from '@angular/forms';
 import {matchPasswords} from '../../validators/validators';
+import {errorCodes} from '../../validators/errorCodes';
 
 
 @Component({
@@ -16,9 +16,9 @@ export class PasswordInputComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    this.passwordPatternText = pwPattern.text;
+    this.passwordPatternText = errorCodes.password.regex.text;
     this.form.addControl('password', new FormControl('', Validators.compose(
-      [Validators.required, Validators.pattern(pwPattern.pattern)])));
+      [Validators.required, Validators.pattern(errorCodes.password.regex.regex)])));
     this.form.addControl('confirmPassword', new FormControl('', Validators.required));
     this.form.setValidators(matchPasswords('password', 'confirmPassword'))
   }

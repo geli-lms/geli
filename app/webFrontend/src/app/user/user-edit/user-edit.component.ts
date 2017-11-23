@@ -6,9 +6,7 @@ import {UserDataService} from '../../shared/services/data.service';
 import {IUser} from '../../../../../../shared/models/IUser';
 import {UserService} from '../../shared/services/user.service';
 import {ShowProgressService} from '../../shared/services/show-progress.service';
-import {matchPasswords} from '../../shared/validators/validators';
 import {DialogService} from '../../shared/services/dialog.service';
-import {pwPattern} from '../../shared/validators/password'
 
 @Component({
   selector: 'app-user-edit',
@@ -44,7 +42,6 @@ export class UserEditComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.passwordPatternText = pwPattern.text;
     this.route.params.subscribe(params => {
       this.id = decodeURIComponent(params['id']);
       if (this.id === 'undefined') {

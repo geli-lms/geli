@@ -3,6 +3,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CourseService} from '../../shared/services/data.service';
 import {MatSnackBar} from '@angular/material';
 import {Router} from '@angular/router';
+import {errorCodes} from '../../shared/validators/errorCodes';
 
 @Component({
   selector: 'app-course-new',
@@ -38,8 +39,8 @@ export class CourseNewComponent implements OnInit {
       }, (error) => {
         // Mongodb uses the error field errmsg
         const errormessage = error.json().message || error.json().errmsg;
-        if (errormessage === 'duplicate course name') {
-          this.nameError = 'Course name already in use.';
+        if (errormessage === errorCodes.course.duplicateName.code) {
+          this.nameError = errorCodes.course.duplicateName.text;
         } else {
           this.snackBar.open('Error creating course ' + errormessage, 'Dismiss');
         }
