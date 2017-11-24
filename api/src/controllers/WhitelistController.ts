@@ -12,6 +12,8 @@ function escapeRegex(text: string) {
 @UseBefore(passportJwtMiddleware)
 export class WitelistController {
 
+
+  // FIXME Check filter Whitelist user which are not allowed to load.
   @Get('/search')
   @Authorized(['teacher', 'admin'])
   searchUser(@QueryParam('query') query: string) {
