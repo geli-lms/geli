@@ -12,12 +12,18 @@ import {duration} from 'moment';
 })
 export class WhitelistEditComponent implements OnInit {
 
-
-
+  dragableWhitelistUser: IWhitelistUser[] = [];
+  finishRestCall = false;
   search = '';
   @Input() set searchString(search: string) {
     this.search = search;
-  console.log(this.search);
+    this.finishRestCall = false;
+    if (search !== '') {
+      this.whitelistUserService.searchWhitelistUsers(search).then((found) => {
+        this.dragableWhitelistUser = found;
+        this.finishRestCall = true;
+      });
+    }
   }
 
   get searchString() {

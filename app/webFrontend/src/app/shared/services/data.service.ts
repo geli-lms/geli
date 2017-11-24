@@ -245,7 +245,7 @@ export class UserDataService extends DataService {
 @Injectable()
 export  class  WhitelistUserService extends DataService {
   constructor(public backendService: BackendService) {
-    super('whitelist', backendService);
+    super('whitelist/', backendService);
   }
 
   searchWhitelistUsers(query: string): Promise<any[]> {
