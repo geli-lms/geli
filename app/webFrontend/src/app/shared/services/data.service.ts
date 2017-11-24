@@ -216,7 +216,7 @@ export class UserDataService extends DataService {
     return promise;
   }
 
-  countUsers(role: string): Promise<any[]> {
+  countUsers(role: string): Promise<any> {
     const originalApiPath = this.apiPath;
     this.apiPath += role + '/';
     this.apiPath += 'count/';

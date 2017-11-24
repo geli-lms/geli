@@ -16,9 +16,11 @@ export class TeachersComponent implements OnInit {
   @Input() courseId;
   course: ICourse;
   foundTeachers: IUser[] = [];
+  total = 0;
 
   constructor(private courseService: CourseService,
-              private showProgress: ShowProgressService) {
+              private showProgress: ShowProgressService,
+              private userService: UserDataService) {
   }
 
   ngOnInit() {
@@ -65,9 +67,9 @@ export class TeachersComponent implements OnInit {
       '_id': this.course._id,
       'teachers': this.course.teachers.map((user) => user._id)
     })
-    .then(() => {
-      this.showProgress.toggleLoadingGlobal(false);
-    });
+      .then(() => {
+        this.showProgress.toggleLoadingGlobal(false);
+      });
   }
 
   /**
@@ -80,6 +82,9 @@ export class TeachersComponent implements OnInit {
   }
 
   search(search: string): void {
-    // Do nothing
-    }
+    this.userService.countUsers('teacher').then((count) => {
+        this.total = count - this.course.students.length;
+      }
+    )
+  }
 }

@@ -1,5 +1,5 @@
 import {Component, Input, OnInit, EventEmitter, Output, OnDestroy} from '@angular/core';
-import {CourseService} from '../../../shared/services/data.service';
+import {CourseService, UserDataService} from '../../../shared/services/data.service';
 import {ShowProgressService} from '../../../shared/services/show-progress.service';
 import {IUser} from '../../../../../../../shared/models/IUser';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
@@ -16,10 +16,12 @@ export class MembersComponent implements OnInit {
 
   course: ICourse;
   foundStudents: IUser[] = [];
-  showWhitelists =  false;
+  showWhitelists = false;
+  total = 0;
 
   constructor(private courseService: CourseService,
-              private showProgress: ShowProgressService) {
+              private showProgress: ShowProgressService,
+              private userService: UserDataService) {
   }
 
   ngOnInit() {
@@ -45,14 +47,13 @@ export class MembersComponent implements OnInit {
    */
   updateCourseStudents(): void {
     this.showProgress.toggleLoadingGlobal(true);
-
     this.courseService.updateItem({
       '_id': this.course._id,
       'students': this.course.students.map((user) => user._id)
     })
-    .then(() => {
-      this.showProgress.toggleLoadingGlobal(false);
-    });
+      .then(() => {
+        this.showProgress.toggleLoadingGlobal(false);
+      });
   }
 
   isUserInCourse(user: IUser) {
@@ -60,14 +61,18 @@ export class MembersComponent implements OnInit {
   }
 
   updateCoure(draggedUser: IUser) {
+
+
     if (this.isUserInCourse(draggedUser)) { // remove from course
       const idList: string[] = this.course.students.map((u) => u._id);
       const index: number = idList.indexOf(draggedUser._id);
       if (index !== -1) {
         this.course.students.splice(index, 1);
       }
+      this.total++;
     } else { // add to course
       this.course.students.push(draggedUser);
+      this.total--;
     }
     this.updateCourseStudents();
   }
@@ -82,10 +87,10 @@ export class MembersComponent implements OnInit {
   }
 
   search(search: string): void {
-    if (search.length > 0) {
-      this.showWhitelists = true;
-    } else {
-      this.showWhitelists = false;
-    }
+    this.userService.countUsers('student').then((count) => {
+        this.total = count - this.course.students.length;
+      }
+    );
+    this.showWhitelists = search.length > 0;
   }
 }

@@ -21,13 +21,13 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
   @Input() dragableUsers: User[] = [];
   @Input() users: User[] = [];
   @Input() dragulaBagId;
-  @Input()  role;
+  @Input() role;
+  @Input() usersTotal = 0;
 
   @Output() onDragendUpdate = new EventEmitter<IUser>();
   @Output() onUpdate = new EventEmitter<String>();
   @Output() onSearch = new EventEmitter<String>();
 
-  currentUser: IUser = null;
   search = '';
   userCtrl: FormControl;
   filteredStates: any;
@@ -59,13 +59,8 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
     return this.search;
   }
 
-  setCurrentUser(user: IUser) {
-    this.currentUser = user;
-  }
-
   constructor(private dragula: DragulaService,
-              private userService: UserDataService,
-              public dialogService: DialogService) {
+              private userService: UserDataService) {
   }
 
 
@@ -111,13 +106,7 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
       : [];
   }
 
-  removeUser() {
-    this.dialogService
-      .confirmRemove(this.currentUser.role, this.currentUser.email, 'course')
-      .subscribe(res => {
-        if (res) {
-          this.onUpdate.emit(this.currentUser._id);
-        }
-      });
+  updateUser(id: string) {
+    this.onUpdate.emit(id);
   }
 }

@@ -6,6 +6,7 @@
                       [dragableUsers]="foundStudents"
                       [role]="'student'"
                       [dragulaBagId]="'students'"
+                      [usersTotal]="total"
                       (onSearch)="search($event)"
                       (onDragendUpdate)="updateCoure($event)"
                       (onUpdate)="updateUser($event)"></app-course-user-list>

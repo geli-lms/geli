@@ -1,0 +1,22 @@
+<ng-container *ngFor="let user of users">
+  <mat-card [ngClass]="(currentUser != null && currentUser._id == user._id) ? 'active':'profile'"
+            (click)="setCurrentUser(user)">
+
+    <div class="bg" user-image [user-image]="user" [size]="160"></div>
+
+    <ul class="info" ng-class="{opacity: currentMember != null && currentMember._id == user._id}">
+      <li><strong>{{user.profile.firstName}}</strong></li>
+      <li><strong>{{user.profile.lastName}}</strong></li>
+      <li class="userId">{{user.uid}}</li>
+    </ul>
+
+    <div class="opacity" *ngIf="currentUser != null && currentUser._id == user._id"></div>
+
+    <div *ngIf="currentUser != null && currentUser._id == user._id">
+
+      <button mat-raised-button routerLink="/profile/{{user._id}}" routerLinkActive="active">DETAILS</button>
+      <button mat-raised-button><a href="mailto:{{user.email}}">SEND MAIL</a></button>
+      <button class="del" mat-raised-button (click)="removeUser()">REMOVE</button>
+    </div>
+  </mat-card>
+</ng-container>
