@@ -27,7 +27,7 @@
       <div *ngIf="currentUser != null && currentUser._id == user._id">
 
         <button mat-raised-button routerLink="/profile/{{user._id}}" routerLinkActive="active">DETAILS</button>
-        <button mat-raised-button>SEND MAIL</button>
+        <button mat-raised-button><a href="mailto:{{user.email}}">SEND MAIL</a></button>
         <button class="del" mat-raised-button (click)="removeUser()">REMOVE</button>
       </div>
     </mat-card>
@@ -72,7 +72,7 @@
   </div>
 
   <ul class="footer">
-  <li>{{role}}s {{dragableUsers.length}} of {{500}}</li>
+  <li>{{role}}s: {{dragableUsers.length}} of {{500}}</li>
   <li *ngIf="role === 'student'">blacklist: {{0}} of {{500}} [not implemented]</li>
   </ul>
 
