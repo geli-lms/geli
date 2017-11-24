@@ -43,7 +43,7 @@ export class WhitelistEditComponent implements OnInit {
   }
 
   ngOnInit() {
-  }
+    }
 
   toggle() {
     this.isToggled = !this.isToggled;

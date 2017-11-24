@@ -1,16 +1,21 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import {Component, Input, OnInit, ViewEncapsulation} from '@angular/core';
+import {User} from '../../../../models/User';
+import {IWhitelistUser} from '../../../../../../../../shared/models/IWhitelistUser';
 
 @Component({
   selector: 'app-course-user-list-show',
   templateUrl: './course-user-list-show.component.html',
   styleUrls: ['./course-user-list-show.component.scss'],
-  encapsulation: ViewEncapsulation.None
 })
 export class CourseUserListShowComponent implements OnInit {
 
-  constructor() { }
+  @Input() dragUsers: any = [];
+  @Input() dragulaBagId;
+  @Input() show: boolean;
+
+  constructor() {
+  }
 
   ngOnInit() {
   }
-
 }

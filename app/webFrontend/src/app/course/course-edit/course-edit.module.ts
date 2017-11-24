@@ -15,6 +15,8 @@ import {LectureModule} from '../../lecture/lecture.module';
 import {UnitFormModule} from '../../unit/unit-form/unit-form.module';
 import { WhitelistEditComponent } from './members/whitelist-edit/whitelist-edit.component';
 import { CourseUserListOverviewComponent } from './course-user-list/course-user-list-overview/course-user-list-overview.component';
+import { CourseUserListShowComponent } from './course-user-list/course-user-list-show/course-user-list-show.component';
+import { WhitelistShowComponent } from './members/whitelist-show/whitelist-show.component';
 
 @NgModule({
   imports: [
@@ -37,6 +39,8 @@ import { CourseUserListOverviewComponent } from './course-user-list/course-user-
     MatFabMenuComponent,
     WhitelistEditComponent,
     CourseUserListOverviewComponent,
+    CourseUserListShowComponent,
+    WhitelistShowComponent,
   ],
   exports: [
     CourseEditComponent,

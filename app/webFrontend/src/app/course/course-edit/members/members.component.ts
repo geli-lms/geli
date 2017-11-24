@@ -61,11 +61,7 @@ export class MembersComponent implements OnInit {
   }
 
   isUserInCourse(user: IUser) {
-    if (user) {
       return !isNullOrUndefined(this.course.students.find((elem: IUser) => elem._id === user._id));
-    } else {
-      return null;
-    }
   }
 
   updateCoure(draggedUser: IUser) {

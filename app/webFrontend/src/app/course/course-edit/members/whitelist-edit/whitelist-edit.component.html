@@ -10,34 +10,27 @@
 </ul>
 
 <mat-list class="drop">
-<ng-container *ngIf="isToggled">
-    <div *ngFor="let whitelistUser of dragableWhitelistUser">
-      <mat-list-item class="list" [dragula]='dragulaBagId' [dragulaModel]="dragableWhitelistUser">
-        <mat-icon class="user-drag-handle">drag_handle</mat-icon>
-        <span class="firstName">{{whitelistUser.firstName}}</span>
-        <span class="lastName">{{whitelistUser.lastName}}</span>
-        <span class="uid">{{whitelistUser.uid}}</span>
-      </mat-list-item>
-    </div>
-</ng-container>
-</mat-list>
 
-<mat-form-field class="full-width">
-  <input async matInput id="firstName" placeholder="Last name" [(ngModel)]="whitelistUser.firstName"
-         [ngModelOptions]="{standalone: true}" required="">
-</mat-form-field>
 
-<mat-form-field class="full-width">
-  <input async matInput id="lastName" placeholder="First name" [(ngModel)]="whitelistUser.lastName"
-         [ngModelOptions]="{standalone: true}" required="">
-</mat-form-field>
+  <app-whitelist-show [show]="isToggled" [dragUsers]="dragableWhitelistUser"
+                             [dragulaBagId]="dragulaBagId"></app-whitelist-show>
 
-<mat-form-field class="full-width">
-  <input async matInput id="uid" placeholder="User identification number" [(ngModel)]="whitelistUser.uid"
-         [ngModelOptions]="{standalone: true}" required="">
-</mat-form-field>
+  <mat-form-field class="full-width">
+    <input async matInput id="firstName" placeholder="Last name" [(ngModel)]="whitelistUser.firstName"
+           [ngModelOptions]="{standalone: true}" required="">
+  </mat-form-field>
 
-<button class="mat-mini-fab" mat-fab color="accent" (click)="createNewWhitelistUser()"
-        matTooltip="Add course">
-  <mat-icon class="md-24 open-animation" [class.icon-open]="open">add</mat-icon>
-</button>
+  <mat-form-field class="full-width">
+    <input async matInput id="lastName" placeholder="First name" [(ngModel)]="whitelistUser.lastName"
+           [ngModelOptions]="{standalone: true}" required="">
+  </mat-form-field>
+
+  <mat-form-field class="full-width">
+    <input async matInput id="uid" placeholder="User identification number" [(ngModel)]="whitelistUser.uid"
+           [ngModelOptions]="{standalone: true}" required="">
+  </mat-form-field>
+
+  <button class="mat-mini-fab" mat-fab color="accent" (click)="createNewWhitelistUser()"
+          matTooltip="Add course">
+    <mat-icon class="md-24 open-animation" [class.icon-open]="open">add</mat-icon>
+  </button>

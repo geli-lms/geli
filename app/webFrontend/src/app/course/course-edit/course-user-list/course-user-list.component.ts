@@ -21,8 +21,8 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
 
   @Input() courseId;
   @Input() course: ICourse;
-  @Input() dragableUsersInCourse: any[] = [];
-  @Input() dragableUsers: any[] = [];
+  @Input() dragableUsersInCourse: User[] = [];
+  @Input() dragableUsers: User[] = [];
   @Input() users: User[] = [];
   @Input() dragulaBagId;
   @Input() role;
@@ -37,6 +37,7 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
   filteredStates: any;
   finishRestCall = false;
   fieldsToShow = new Map<string, boolean>();
+  dragableWhitelistUser: IWhitelistUser[] = [];
 
   set searchString(search: string) {
     this.search = search;
@@ -107,22 +108,12 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
   filterStates(val: string) {
     return val ? this.dragableUsers.concat(this.dragableUsersInCourse)
         .map(e =>
-          isNullOrUndefined(e.profile.firstName) ? e.firstName : e.profile.firstName + ' ' +
-          isNullOrUndefined(e.profile.lastName) ? e.lastName : e.profile.lastName + ' ' +
-          isNullOrUndefined(e.email) ? '' : e.email)
+          e.profile.firstName + ' ' + e.profile.lastName + ' ' + e.email)
         .slice(0, 3)
       : [];
   }
 
   updateUser(id: string) {
     this.onUpdate.emit(id);
-  }
-
-  isTypeOfUser(user: User) {
-    return user.profile !== undefined
-  }
-
-  isTypeOfWhitelistUser(whitelistUser: IWhitelistUser) {
-    return whitelistUser !== undefined;
   }
 }

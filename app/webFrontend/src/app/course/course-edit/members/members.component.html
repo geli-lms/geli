@@ -12,7 +12,7 @@
                       (onUpdate)="updateUser($event)"></app-course-user-list>
 <ng-container *ngIf="showWhitelists">
 <app-whitelist-edit
-  [dragulaBagId]="'students'"
+  [dragulaBagId]="'whitelist'"
   [total]="totalWhitelist"
   [searchString]="search">
 </app-whitelist-edit>

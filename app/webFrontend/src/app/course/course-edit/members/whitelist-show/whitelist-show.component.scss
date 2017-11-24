@@ -1,0 +1,66 @@
+.gu-mirror {
+  z-index: 9999 !important;
+  opacity: 1;
+  box-shadow: 0 2px 2px rgba(182, 182, 182, 0.5);
+  display: inline-block;
+  border: 1px solid #d8d8d8;
+  background-color: #fff;
+  cursor: move;
+  border-style: dashed;
+  border-width: 1px;
+
+  .user-drag-handle, .member-drag-handle {
+    padding-top: 15px;
+    padding-left: 15px;
+    width: 60px;
+  }
+
+  .firstName {
+    padding-left: 5%;
+    display: inline-block;
+  }
+}
+
+.list {
+  padding-bottom: 10px;
+  background-color: #ffffff;
+
+  .listBg {
+    height: 40px;
+    width: 40px;
+    background: center;
+    border-radius: 20px;
+    background-size: 40px 40px;
+    margin-left: 10px;
+  }
+
+  .firstName {
+    padding-left: 5%;
+    display: inline-block;
+    flex: 1;
+  }
+
+  .lastName {
+    flex: 1;
+  }
+
+  .uid {
+    flex: 1;
+  }
+
+  .email {
+    flex: 1;
+  }
+}
+
+
+.user-drag-handle, .member-drag-handle {
+  cursor: move;
+  opacity: 0.2;
+  user-select: none;
+  margin-right: 0.5em;
+
+  &:hover {
+    opacity: 1;
+  }
+}
