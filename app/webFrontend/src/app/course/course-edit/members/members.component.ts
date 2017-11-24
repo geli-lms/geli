@@ -5,6 +5,7 @@ import {IUser} from '../../../../../../../shared/models/IUser';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
 import {User} from '../../../models/User';
 import {isNullOrUndefined} from 'util';
+import {IWhitelistUser} from '../../../../../../../shared/models/IWhitelistUser';
 
 @Component({
   selector: 'app-members',
@@ -64,7 +65,7 @@ export class MembersComponent implements OnInit {
       return !isNullOrUndefined(this.course.students.find((elem: IUser) => elem._id === user._id));
   }
 
-  removeFromCoure(draggedUser: IUser) {
+  removeUserFromCoure(draggedUser: IUser) {
     const idList: string[] = this.course.students.map((u) => u._id);
     const index: number = idList.indexOf(draggedUser._id);
     this.course.students.splice(index, 1);
@@ -75,7 +76,7 @@ export class MembersComponent implements OnInit {
     this.updateCourseStudents();
   }
 
-  pushToCoure(draggedUser: IUser) {
+  pushUserToCourse(draggedUser: IUser) {
     this.course.students.push(draggedUser);
     this.userService.countUsers('student').then((count) => {
         this.total = count - this.course.students.length;
@@ -83,6 +84,27 @@ export class MembersComponent implements OnInit {
     );
     this.updateCourseStudents();
   }
+
+  removeWhitelistUserFromCourse(draggedUser: IWhitelistUser) {
+    const idList: string[] = this.course.students.map((u) => u._id);
+    const index: number = idList.indexOf(draggedUser._id);
+    this.course.students.splice(index, 1);
+    this.whitelistUserService.count().then((count) => {
+        this.total = count - this.course.whitelist.length;
+      }
+    );
+    this.updateCourseStudents();
+  }
+
+  addWhitelistUserToCourse(draggedUser: IWhitelistUser) {
+    this.course.whitelist.push(draggedUser);
+    this.whitelistUserService.countWhitelistUsers().then((count) => {
+        this.total = count - this.course.whitelist.length;
+      }
+    );
+    this.updateCourseStudents();
+  }
+
 
   /**
    * @param id Id of an user.

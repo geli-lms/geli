@@ -37,8 +37,6 @@ export class WhitelistEditComponent implements OnInit {
   whitelistUser: any = {firstName: '', lastName: '', uid: ''};
 
   constructor(private whitelistUserService: WhitelistUserService,
-              private showProgress: ShowProgressService,
-              private dragula: DragulaService,
               private snackBar: MatSnackBar) {
   }
 
@@ -61,6 +59,13 @@ export class WhitelistEditComponent implements OnInit {
       return null;
     }
     return this.whitelistUserService.createItem(this.whitelistUser);
+  }
+
+  removeFromcoruse(whitelistUser: IWhitelistUser) {
+  }
+
+  deleteWhitelistUser() {
+
   }
 
 }
