@@ -44,16 +44,23 @@ export class TeachersComponent implements OnInit {
     return !isNullOrUndefined(this.course.teachers.find((elem: IUser) => elem._id === user._id));
   }
 
-  updateCoure(draggedUser: IUser) {
-    if (this.isUserInCourse(draggedUser)) { // remove from course
-      const idList: string[] = this.course.teachers.map((u) => u._id);
-      const index: number = idList.indexOf(draggedUser._id);
-      if (index !== -1) {
-        this.course.teachers.splice(index, 1);
+  removeFromCoure(draggedUser: IUser) {
+    const idList: string[] = this.course.teachers.map((u) => u._id);
+    const index: number = idList.indexOf(draggedUser._id);
+    this.course.teachers.splice(index, 1);
+    this.userService.countUsers('teacher').then((count) => {
+        this.total = count - this.course.teachers.length;
       }
-    } else { // add to course
-      this.course.teachers.push(draggedUser);
-    }
+    );
+    this.updateCourseTeachers();
+  }
+
+  pushToCoure(draggedUser: IUser) {
+    this.course.teachers.push(draggedUser);
+    this.userService.countUsers('teacher').then((count) => {
+        this.total = count - this.course.teachers.length;
+      }
+    );
     this.updateCourseTeachers();
   }
 
@@ -83,7 +90,7 @@ export class TeachersComponent implements OnInit {
 
   search(search: string): void {
     this.userService.countUsers('teacher').then((count) => {
-        this.total = count - this.course.students.length;
+        this.total = count - this.course.teachers.length;
       }
     )
   }

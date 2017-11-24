@@ -20,7 +20,7 @@ export class MembersComponent implements OnInit {
   search = '';
   total = 0;
   totalWhitelist = 0;
-
+  dragulaWhitelistBagId = 'whitelist';
 
   constructor(private courseService: CourseService,
               private showProgress: ShowProgressService,
@@ -64,21 +64,24 @@ export class MembersComponent implements OnInit {
       return !isNullOrUndefined(this.course.students.find((elem: IUser) => elem._id === user._id));
   }
 
-  updateCoure(draggedUser: IUser) {
-    if (draggedUser) {
-      if (this.isUserInCourse(draggedUser)) { // remove from course
-        const idList: string[] = this.course.students.map((u) => u._id);
-        const index: number = idList.indexOf(draggedUser._id);
-        if (index !== -1) {
-          this.course.students.splice(index, 1);
-        }
-        this.total++;
-      } else { // add to course
-        this.course.students.push(draggedUser);
-        this.total--;
+  removeFromCoure(draggedUser: IUser) {
+    const idList: string[] = this.course.students.map((u) => u._id);
+    const index: number = idList.indexOf(draggedUser._id);
+    this.course.students.splice(index, 1);
+    this.userService.countUsers('student').then((count) => {
+        this.total = count - this.course.students.length;
       }
-      this.updateCourseStudents();
-    }
+    );
+    this.updateCourseStudents();
+  }
+
+  pushToCoure(draggedUser: IUser) {
+    this.course.students.push(draggedUser);
+    this.userService.countUsers('student').then((count) => {
+        this.total = count - this.course.students.length;
+      }
+    );
+    this.updateCourseStudents();
   }
 
   /**

@@ -26,7 +26,7 @@
   background-color: #ffffff;
 
   .listBg {
-    height: 40px;
+    min-height: 2rem;
     width: 40px;
     background: center;
     border-radius: 20px;
@@ -63,4 +63,9 @@
   &:hover {
     opacity: 1;
   }
+}
+
+.drop {
+  min-height: 2rem;
+  background-color: #fafafa;
 }

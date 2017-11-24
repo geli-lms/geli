@@ -7,5 +7,7 @@
                       [role]="'teacher'"
                       [dragulaBagId]="'teachers'"
                       (onSearch)="search($event)"
-                      (onDragendUpdate)="updateCoure($event)"
+                      [usersTotal]="total"
+                      (onDragendRemove)="removeFromCoure($event)"
+                      (onDragendPush)="pushToCoure($event)"
                       (onUpdate)="updateUser($event)"></app-course-user-list>

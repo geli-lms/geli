@@ -13,7 +13,7 @@
 
 
   <app-whitelist-show [show]="isToggled" [dragUsers]="dragableWhitelistUser"
-                             [dragulaBagId]="dragulaBagId"></app-whitelist-show>
+                             [dragulaBagId]="dragulaBagId" [fieldId]="'Whitelist'"></app-whitelist-show>
 
   <mat-form-field class="full-width">
     <input async matInput id="firstName" placeholder="Last name" [(ngModel)]="whitelistUser.firstName"

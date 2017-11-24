@@ -28,7 +28,8 @@
   </ul>
   <app-course-user-list-show [dragulaBagId]="dragulaBagId"
                              [dragUsers]="dragableUsers"
-                             [show]="fieldsToShow.get('notInCourse')"></app-course-user-list-show>
+                             [show]="fieldsToShow.get('notInCourse')"
+                             [fieldId]="'UserNotInCourse'"></app-course-user-list-show>
 
   <div class="titleHeader"><h3>In course:</h3>
     <button class="open-toggle" (click)="toggle('inCourse')"
@@ -41,13 +42,15 @@
     <li>{{role}}s: {{dragableUsersInCourse.length}} of
       <ng-container *ngIf="role === 'student'">{{course.students.length}}</ng-container>
       <ng-container *ngIf="role === 'teacher'">{{course.teachers.length}}</ng-container></li>
-    <li *ngIf="role === 'student'">whitelist: {{0}} of {{500}}</li>
+    <li *ngIf="role === 'student'">whitelist: {{dragableWhitelistUser.length}} of {{500}}</li>
   </ul>
 
   <app-course-user-list-show [dragulaBagId]="dragulaBagId"
                              [dragUsers]="dragableUsersInCourse"
-                             [show]="fieldsToShow.get('inCourse')"></app-course-user-list-show>
+                             [show]="fieldsToShow.get('inCourse')"
+                             [fieldId]="'UserInCourse'"></app-course-user-list-show>
   <app-whitelist-show [dragulaBagId]="'whitelist'"
                              [dragUsers]="dragableWhitelistUser"
-                             [show]="fieldsToShow.get('inCourse')"></app-whitelist-show>
+                             [show]="fieldsToShow.get('inCourse')"
+                             [fieldId]="'WhitelistInCourse'"></app-whitelist-show>
 </div>

@@ -1,4 +1,4 @@
-<mat-list class="drop" [dragula]='dragulaBagId' [dragulaModel]="dragUsers">
+<mat-list class="drop" [dragula]='dragulaBagId' [dragulaModel]="dragUsers" [attr.item-id]="fieldId">
   <ng-container *ngIf="show">
     <div *ngFor="let user of dragUsers">
       <mat-list-item class="list" [attr.item-id]="user._id">
@@ -6,7 +6,12 @@
         <span class="firstName">{{user.firstName}}</span>
         <span class="lastName">{{user.lastName}}</span>
         <span class="uid">{{user.uid}}</span>
-        <button>remo</button>
+        <button mat-icon-button>
+          <mat-icon>mode edit</mat-icon>
+        </button>
+        <button mat-icon-button>
+          <mat-icon>delete</mat-icon>
+        </button>
       </mat-list-item>
     </div>
   </ng-container>

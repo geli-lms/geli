@@ -25,10 +25,12 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
   @Input() dragableUsers: User[] = [];
   @Input() users: User[] = [];
   @Input() dragulaBagId;
+  @Input() dragulaWhitelistBagId;
   @Input() role;
   @Input() usersTotal = 0;
 
-  @Output() onDragendUpdate = new EventEmitter<IUser>();
+  @Output() onDragendRemove = new EventEmitter<IUser>();
+  @Output() onDragendPush = new EventEmitter<IUser>();
   @Output() onUpdate = new EventEmitter<String>();
   @Output() onSearch = new EventEmitter<String>();
 
@@ -38,6 +40,7 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
   finishRestCall = false;
   fieldsToShow = new Map<string, boolean>();
   dragableWhitelistUser: IWhitelistUser[] = [];
+  lastDraggedItem: string;
 
   set searchString(search: string) {
     this.search = search;
@@ -72,20 +75,30 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
   ngOnInit() {
     const idList: string[] = this.dragableUsersInCourse.map((u) => u._id);
     this.users = this.users.filter(user => this.course.courseAdmin._id !== user._id);
-
     // Make items only draggable by dragging the handle
     this.dragula.setOptions(this.dragulaBagId, {
       moves: (el, container, handle) => {
-        return handle.classList.contains('user-drag-handle') || handle.classList.contains('member-drag-handle');
+        return handle.classList.contains('user-drag-handle');
+      }
+    });
+    // Make items only draggable by dragging the handle
+    this.dragula.setOptions(this.dragulaWhitelistBagId, {
+      moves: (el, container, handle) => {
+        return handle.classList.contains('user-drag-handle');
       }
     });
     this.dragula.dropModel.subscribe(value => {
       const [bagName, el, target, source] = value;
+      if (source.getAttribute('item-id') !== target.getAttribute('item-id')) {
       const draggedUser: IUser = this.dragableUsers.concat(this.dragableUsersInCourse)
         .find((user: IUser) => user._id === el.children[0].getAttribute('item-id'));
       if (bagName === this.dragulaBagId) {
-        this.onDragendUpdate.emit(draggedUser);
-      }
+        if (target.getAttribute('item-id') === 'UserNotInCourse') {
+          this.onDragendRemove.emit(draggedUser);
+        } else if (target.getAttribute('item-id') === 'UserInCourse') {
+          this.onDragendPush.emit(draggedUser);
+        }
+      }}
     });
     this.userCtrl = new FormControl();
     this.filteredStates = this.userCtrl.valueChanges
@@ -95,6 +108,7 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.dragula.destroy(this.dragulaBagId);
+    this.dragula.destroy(this.dragulaWhitelistBagId);
   }
 
   toggle(name: string) {
