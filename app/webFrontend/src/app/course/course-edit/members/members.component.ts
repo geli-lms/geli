@@ -1,5 +1,5 @@
 import {Component, Input, OnInit, EventEmitter, Output, OnDestroy} from '@angular/core';
-import {CourseService, UserDataService} from '../../../shared/services/data.service';
+import {CourseService, UserDataService, WhitelistUserService} from '../../../shared/services/data.service';
 import {ShowProgressService} from '../../../shared/services/show-progress.service';
 import {IUser} from '../../../../../../../shared/models/IUser';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
@@ -19,10 +19,13 @@ export class MembersComponent implements OnInit {
   showWhitelists = false;
   search = '';
   total = 0;
+  totalWhitelist = 0;
+
 
   constructor(private courseService: CourseService,
               private showProgress: ShowProgressService,
-              private userService: UserDataService) {
+              private userService: UserDataService,
+              private whitelistUserService: WhitelistUserService) {
   }
 
   ngOnInit() {
@@ -91,6 +94,10 @@ export class MembersComponent implements OnInit {
     this.search = search;
     this.userService.countUsers('student').then((count) => {
         this.total = count - this.course.students.length;
+      }
+    );
+    this.whitelistUserService.countWhitelistUsers().then((count) => {
+        this.totalWhitelist = count - this.course.whitelist.length;
       }
     );
     this.showWhitelists = search.length > 0;

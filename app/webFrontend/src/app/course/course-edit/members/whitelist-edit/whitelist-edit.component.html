@@ -6,20 +6,21 @@
 </div>
 
 <ul class="footer">
-  <li>User: 0 of 30</li>
+  <li>User: {{dragableWhitelistUser.length}} of {{total}}</li>
 </ul>
 
+<mat-list class="drop">
 <ng-container *ngIf="isToggled">
-  <mat-list class="drop">
     <div *ngFor="let whitelistUser of dragableWhitelistUser">
       <mat-list-item class="list">
+        <mat-icon class="user-drag-handle">drag_handle</mat-icon>
         <span class="firstName">{{whitelistUser.firstName}}</span>
         <span class="lastName">{{whitelistUser.lastName}}</span>
         <span class="uid">{{whitelistUser.uid}}</span>
       </mat-list-item>
     </div>
-  </mat-list>
 </ng-container>
+</mat-list>
 
 <mat-form-field class="full-width">
   <input async matInput id="firstName" placeholder="Last name" [(ngModel)]="whitelistUser.firstName"

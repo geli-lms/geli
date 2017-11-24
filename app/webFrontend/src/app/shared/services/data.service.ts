@@ -257,7 +257,7 @@ export  class  WhitelistUserService extends DataService {
     return promise;
   }
 
-  countWhitelistUsers(): Promise<any[]> {
+  countWhitelistUsers(): Promise<any> {
     const originalApiPath = this.apiPath;
     this.apiPath += 'count/';
     const promise = this.readItems();

@@ -4,6 +4,7 @@ import {WhitelistUserService} from '../../../../shared/services/data.service';
 import {MatSnackBar} from '@angular/material';
 import {ShowProgressService} from '../../../../shared/services/show-progress.service';
 import {duration} from 'moment';
+import {DragulaService} from 'ng2-dragula';
 
 @Component({
   selector: 'app-whitelist-edit',
@@ -14,6 +15,8 @@ export class WhitelistEditComponent implements OnInit {
 
   dragableWhitelistUser: IWhitelistUser[] = [];
   finishRestCall = false;
+  @Input() dragulaBagId;
+  @Input() total = 0;
   search = '';
   @Input() set searchString(search: string) {
     this.search = search;
@@ -35,6 +38,7 @@ export class WhitelistEditComponent implements OnInit {
 
   constructor(private whitelistUserService: WhitelistUserService,
               private showProgress: ShowProgressService,
+              private dragula: DragulaService,
               private snackBar: MatSnackBar) {
   }
 

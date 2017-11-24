@@ -17,8 +17,8 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
 
   @Input() courseId;
   @Input() course: ICourse;
-  @Input() dragableUsersInCourse: User[] = [];
-  @Input() dragableUsers: User[] = [];
+  @Input() dragableUsersInCourse: any[] = [];
+  @Input() dragableUsers: any[] = [];
   @Input() users: User[] = [];
   @Input() dragulaBagId;
   @Input() role;
@@ -67,6 +67,7 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
   ngOnInit() {
     const idList: string[] = this.dragableUsersInCourse.map((u) => u._id);
     this.users = this.users.filter(user => this.course.courseAdmin._id !== user._id);
+
     // Make items only draggable by dragging the handle
     this.dragula.setOptions(this.dragulaBagId, {
       moves: (el, container, handle) => {
