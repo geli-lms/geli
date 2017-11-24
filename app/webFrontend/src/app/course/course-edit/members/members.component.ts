@@ -61,24 +61,28 @@ export class MembersComponent implements OnInit {
   }
 
   isUserInCourse(user: IUser) {
-    return !isNullOrUndefined(this.course.students.find((elem: IUser) => elem._id === user._id));
+    if (user) {
+      return !isNullOrUndefined(this.course.students.find((elem: IUser) => elem._id === user._id));
+    } else {
+      return null;
+    }
   }
 
   updateCoure(draggedUser: IUser) {
-
-
-    if (this.isUserInCourse(draggedUser)) { // remove from course
-      const idList: string[] = this.course.students.map((u) => u._id);
-      const index: number = idList.indexOf(draggedUser._id);
-      if (index !== -1) {
-        this.course.students.splice(index, 1);
+    if (draggedUser) {
+      if (this.isUserInCourse(draggedUser)) { // remove from course
+        const idList: string[] = this.course.students.map((u) => u._id);
+        const index: number = idList.indexOf(draggedUser._id);
+        if (index !== -1) {
+          this.course.students.splice(index, 1);
+        }
+        this.total++;
+      } else { // add to course
+        this.course.students.push(draggedUser);
+        this.total--;
       }
-      this.total++;
-    } else { // add to course
-      this.course.students.push(draggedUser);
-      this.total--;
+      this.updateCourseStudents();
     }
-    this.updateCourseStudents();
   }
 
   /**

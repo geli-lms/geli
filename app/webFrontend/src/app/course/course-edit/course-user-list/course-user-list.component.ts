@@ -7,6 +7,10 @@ import {DialogService} from '../../../shared/services/dialog.service';
 import 'rxjs/add/operator/startWith'
 import {UserDataService} from '../../../shared/services/data.service';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
+import {isType} from '@angular/core/src/type';
+import {WhitelistUser} from '../../../../../../../api/src/models/WhitelistUser';
+import {IWhitelistUser} from '../../../../../../../shared/models/IWhitelistUser';
+import {isNullOrUndefined} from 'util';
 
 @Component({
   selector: 'app-course-user-list',
@@ -102,12 +106,23 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
 
   filterStates(val: string) {
     return val ? this.dragableUsers.concat(this.dragableUsersInCourse)
-        .map(e => e.profile.firstName + ' ' + e.profile.lastName + ' ' + e.email)
+        .map(e =>
+          isNullOrUndefined(e.profile.firstName) ? e.firstName : e.profile.firstName + ' ' +
+          isNullOrUndefined(e.profile.lastName) ? e.lastName : e.profile.lastName + ' ' +
+          isNullOrUndefined(e.email) ? '' : e.email)
         .slice(0, 3)
       : [];
   }
 
   updateUser(id: string) {
     this.onUpdate.emit(id);
+  }
+
+  isTypeOfUser(user: User) {
+    return user.profile !== undefined
+  }
+
+  isTypeOfWhitelistUser(whitelistUser: IWhitelistUser) {
+    return whitelistUser !== undefined;
   }
 }

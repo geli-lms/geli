@@ -31,7 +31,7 @@
   <mat-list class="drop" [dragula]='dragulaBagId' [dragulaModel]="dragableUsersInCourse">
     <ng-container *ngIf="fieldsToShow.get('inCourse')">
       <div *ngFor="let member of dragableUsersInCourse">
-        <mat-list-item class="list" [attr.item-id]="member._id">
+        <mat-list-item *ngIf="isTypeOfUser(member)" class="list" [attr.item-id]="member._id">
           <mat-icon class="user-drag-handle">drag_handle</mat-icon>
           <span class="listBg" user-image [user-image]="member" [size]="32"></span>
           <span class="firstName">{{member.profile.firstName}}</span>
@@ -58,7 +58,7 @@
   <mat-list class="drop" [dragula]='dragulaBagId' [dragulaModel]="dragableUsers">
     <ng-container *ngIf="fieldsToShow.get('notInCourse')">
       <div *ngFor="let user of dragableUsers">
-        <mat-list-item class="list" [attr.item-id]="user._id">
+        <mat-list-item *ngIf="isTypeOfUser(user)" class="list" [attr.item-id]="user._id">
           <mat-icon class="member-drag-handle">drag_handle</mat-icon>
           <span class="listBg" user-image [user-image]="user" [size]="32"></span>
           <span class="firstName">{{user.profile.firstName}}</span>

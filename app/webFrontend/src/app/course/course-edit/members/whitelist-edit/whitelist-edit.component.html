@@ -12,7 +12,7 @@
 <mat-list class="drop">
 <ng-container *ngIf="isToggled">
     <div *ngFor="let whitelistUser of dragableWhitelistUser">
-      <mat-list-item class="list">
+      <mat-list-item class="list" [dragula]='dragulaBagId' [dragulaModel]="dragableWhitelistUser">
         <mat-icon class="user-drag-handle">drag_handle</mat-icon>
         <span class="firstName">{{whitelistUser.firstName}}</span>
         <span class="lastName">{{whitelistUser.lastName}}</span>
