@@ -1,7 +1,7 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {FileItem, FileUploader} from 'ng2-file-upload';
 import {IUser} from '../../../../../../../shared/models/IUser';
-import {MatDialogRef} from '@angular/material';
+import {MatDialogRef, MatSnackBar} from '@angular/material';
 
 @Component({
   selector: 'app-upload-dialog',
@@ -20,7 +20,9 @@ export class UploadDialog implements OnInit {
   public pictureTaken: boolean;
   showProgressBar = false;
 
-  constructor(public dialogRef: MatDialogRef<UploadDialog>) { }
+  constructor(
+    public dialogRef: MatDialogRef<UploadDialog>,
+    private snackBar: MatSnackBar) { }
 
   ngOnInit() {
     this.uploader = new FileUploader({
@@ -56,7 +58,7 @@ export class UploadDialog implements OnInit {
         nativeVideo.play();
       })
       .catch(error => {
-        console.log(error);
+        this.snackBar.open('Couldn\'t start webcam', '', {duration: 3000});
       });
     }
   }

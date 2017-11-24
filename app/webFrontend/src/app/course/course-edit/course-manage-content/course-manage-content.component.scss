@@ -1,13 +1,11 @@
-@import "../../../../variables";
+@import '../../../../variables';
 
 .container {
   min-height: 500px;
 }
 
 .fab {
-  position: fixed;
-  bottom: 0;
-  right: 0;
+  @include globalFabBtn;
 }
 
 .lecture {
