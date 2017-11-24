@@ -1,10 +1,13 @@
-<div class="titleHeader"><h2>Whitelist</h2>
-  <app-badge [displayNumber]="0"></app-badge>
+<div class="titleHeader"><h3>Whitelist:</h3>
   <button class="open-toggle" (click)="toggle()"
           [class.opened]="isToggled" mat-icon-button>
     <mat-icon>arrow_drop_down</mat-icon>
   </button>
 </div>
+
+<ul class="footer">
+  <li>User: 0 of 30</li>
+</ul>
 
 <ng-container *ngIf="isToggled">
 </ng-container>
@@ -21,7 +24,7 @@
 
 <mat-form-field class="full-width">
   <input async matInput id="uid" placeholder="User identification number" [(ngModel)]="whitelistUser.uid"
-         [ngModelOptions]="{standalone: true}"required="">
+         [ngModelOptions]="{standalone: true}" required="">
 </mat-form-field>
 
 <button class="mat-mini-fab" mat-fab color="accent" (click)="createNewWhitelistUser()"

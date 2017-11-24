@@ -1,11 +1,10 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, EventEmitter, Output, OnDestroy} from '@angular/core';
 import {CourseService} from '../../../shared/services/data.service';
 import {ShowProgressService} from '../../../shared/services/show-progress.service';
 import {IUser} from '../../../../../../../shared/models/IUser';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
 import {User} from '../../../models/User';
 import {isNullOrUndefined} from 'util';
-import {MatDialog} from '@angular/material';
 
 @Component({
   selector: 'app-members',
@@ -14,6 +13,7 @@ import {MatDialog} from '@angular/material';
 export class MembersComponent implements OnInit {
 
   @Input() courseId;
+
   course: ICourse;
   foundStudents: IUser[] = [];
   showWhitelists =  false;

@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit, EventEmitter, Output, OnDestroy} from '@angular/core';
 import {IWhitelistUser} from '../../../../../../../../shared/models/IWhitelistUser';
 import {WhitelistUserService} from '../../../../shared/services/data.service';
 import {MatSnackBar} from '@angular/material';
@@ -11,6 +11,8 @@ import {duration} from 'moment';
   styleUrls: ['./whitelist-edit.component.scss']
 })
 export class WhitelistEditComponent implements OnInit {
+
+
 
   isToggled = false;
   whitelistUser: any = {firstName: '', lastName: '', uid: ''};
@@ -40,6 +42,5 @@ export class WhitelistEditComponent implements OnInit {
     }
     return this.whitelistUserService.createItem(this.whitelistUser);
   }
-
 
 }

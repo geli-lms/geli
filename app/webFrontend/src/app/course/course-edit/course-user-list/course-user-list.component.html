@@ -32,13 +32,20 @@
 </div>
 
 <div class="users" *ngIf="search.length > 0 && finishRestCall">
-  <div class="titleHeader"><h2>In course</h2>
-    <app-badge [displayNumber]="dragableUsersInCourse.length"></app-badge>
+  <div class="titleHeader"><h3>In course:</h3>
     <button class="open-toggle" (click)="toggle('inCourse')"
             [class.opened]="fieldsToShow.get('inCourse')" mat-icon-button>
       <mat-icon>arrow_drop_down</mat-icon>
     </button>
   </div>
+
+  <ul class="footer">
+  <li>{{role}}s: {{dragableUsersInCourse.length}} of
+    <ng-container *ngIf="role === 'student'">{{course.students.length}}</ng-container>
+  <ng-container *ngIf="role === 'teacher'">{{course.teachers.length}}</ng-container></li>
+  <li *ngIf="role === 'student'">whitelist: {{0}} of {{500}}</li>
+  </ul>
+
   <mat-list class="drop" [dragula]='dragulaBagId' [dragulaModel]="dragableUsersInCourse">
     <ng-container *ngIf="fieldsToShow.get('inCourse')">
       <div *ngFor="let member of dragableUsersInCourse">
@@ -54,15 +61,20 @@
     </ng-container>
   </mat-list>
 
-  <div class="titleHeader"><h2>Not in course</h2>
-    <app-badge [displayNumber]="dragableUsers.length"></app-badge>
+  <div class="titleHeader"><h3>Not in course:</h3>
     <button class="open-toggle" (click)="toggle('notInCourse')"
             [class.opened]="fieldsToShow.get('notInCourse')" mat-icon-button>
       <mat-icon>arrow_drop_down</mat-icon>
     </button>
   </div>
-  <ng-container *ngIf="fieldsToShow.get('notInCourse')">
-    <mat-list class="drop" [dragula]='dragulaBagId' [dragulaModel]="dragableUsers">
+
+  <ul class="footer">
+  <li>{{role}}s {{dragableUsers.length}} of {{500}}</li>
+  <li *ngIf="role === 'student'">blacklist: {{0}} of {{500}} [not implemented]</li>
+  </ul>
+
+  <mat-list class="drop" [dragula]='dragulaBagId' [dragulaModel]="dragableUsers">
+    <ng-container *ngIf="fieldsToShow.get('notInCourse')">
       <div *ngFor="let user of dragableUsers">
         <mat-list-item class="list" [attr.item-id]="user._id">
           <mat-icon class="member-drag-handle">drag_handle</mat-icon>
@@ -73,6 +85,6 @@
           <span class="email"><a href="mailto:{{user.email}}">{{user.email}}</a></span>
         </mat-list-item>
       </div>
-    </mat-list>
-  </ng-container>
+    </ng-container>
+  </mat-list>
 </div>

@@ -10,5 +10,6 @@
                       (onDragendUpdate)="updateCoure($event)"
                       (onUpdate)="updateUser($event)"></app-course-user-list>
 <ng-container *ngIf="showWhitelists">
-<app-whitelist-edit></app-whitelist-edit>
+<app-whitelist-edit   (onSearch) = "search($event)">
+</app-whitelist-edit>
 </ng-container>

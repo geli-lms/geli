@@ -21,7 +21,7 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
   @Input() dragableUsers: User[] = [];
   @Input() users: User[] = [];
   @Input() dragulaBagId;
-  @Input() role;
+  @Input()  role;
 
   @Output() onDragendUpdate = new EventEmitter<IUser>();
   @Output() onUpdate = new EventEmitter<String>();
@@ -105,7 +105,7 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
   }
 
   filterStates(val: string) {
-    return val ? this.dragableUsers.concat(this.dragableUsers)
+    return val ? this.dragableUsers.concat(this.dragableUsersInCourse)
         .map(e => e.profile.firstName + ' ' + e.profile.lastName + ' ' + e.email)
         .slice(0, 3)
       : [];

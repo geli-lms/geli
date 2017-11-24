@@ -8,7 +8,18 @@
   float: left;
 }
 
+.titleHeader {
+  display: flex;
+  align-items: center;
+}
+
+.footer {
+  margin-top: -1rem;
+}
+
 .open-toggle {
+  margin-top: auto;
+  margin-bottom: auto;
   width: 2.5rem;
   height: 100%;
   color: map-get($app-primary, 'default');
@@ -73,10 +84,6 @@
   opacity: 0.5;
 }
 
-ul {
-  list-style-type: none;
-}
-
 button {
   width: 184px;
   margin-left: 10px;
@@ -135,11 +142,6 @@ button {
   line-height: 1.6em;
   margin-left: 5px;
   text-align: center;
-}
-
-.titleHeader {
-  display: flex;
-  align-items: center;
 }
 
 .gu-mirror {

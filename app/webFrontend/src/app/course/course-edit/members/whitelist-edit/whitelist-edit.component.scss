@@ -5,7 +5,13 @@
   align-items: center;
 }
 
+.footer {
+  margin-top: -1rem;
+}
+
 .open-toggle {
+  margin-top: auto;
+  margin-bottom: auto;
   width: 2.5rem;
   height: 100%;
   color: map-get($app-primary, 'default');
@@ -15,4 +21,9 @@
   &.opened {
     transform: rotate(0);
   }
+}
+
+.drop {
+  min-height: 40px;
+  background-color: #fafafa;
 }
