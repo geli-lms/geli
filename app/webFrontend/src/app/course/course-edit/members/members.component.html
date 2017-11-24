@@ -7,10 +7,10 @@
                       [role]="'student'"
                       [dragulaBagId]="'students'"
                       [usersTotal]="total"
-                      (onSearch)="search($event)"
+                      (onSearch)="onSearch($event)"
                       (onDragendUpdate)="updateCoure($event)"
                       (onUpdate)="updateUser($event)"></app-course-user-list>
 <ng-container *ngIf="showWhitelists">
-<app-whitelist-edit   (onSearch) = "search($event)">
+<app-whitelist-edit   [searchString]="search">
 </app-whitelist-edit>
 </ng-container>

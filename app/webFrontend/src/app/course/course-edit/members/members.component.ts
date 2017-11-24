@@ -17,6 +17,7 @@ export class MembersComponent implements OnInit {
   course: ICourse;
   foundStudents: IUser[] = [];
   showWhitelists = false;
+  search = '';
   total = 0;
 
   constructor(private courseService: CourseService,
@@ -86,7 +87,8 @@ export class MembersComponent implements OnInit {
     this.updateCourseStudents();
   }
 
-  search(search: string): void {
+  onSearch(search: string): void {
+    this.search = search;
     this.userService.countUsers('student').then((count) => {
         this.total = count - this.course.students.length;
       }

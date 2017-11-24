@@ -14,6 +14,16 @@ export class WhitelistEditComponent implements OnInit {
 
 
 
+  search = '';
+  @Input() set searchString(search: string) {
+    this.search = search;
+  console.log(this.search);
+  }
+
+  get searchString() {
+    return this.search;
+  }
+
   isToggled = false;
   whitelistUser: any = {firstName: '', lastName: '', uid: ''};
 
