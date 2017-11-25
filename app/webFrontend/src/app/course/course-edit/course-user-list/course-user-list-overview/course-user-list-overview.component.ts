@@ -1,5 +1,4 @@
-import {Component, Input, Output, OnInit, ViewEncapsulation, EventEmitter} from '@angular/core';
-import {ICourse} from '../../../../../../../../shared/models/ICourse';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {IUser} from '../../../../../../../../shared/models/IUser';
 import {DialogService} from '../../../../shared/services/dialog.service';
 

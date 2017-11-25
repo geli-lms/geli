@@ -1,6 +1,6 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { WhitelistEditComponent } from './whitelist-edit.component';
+import {WhitelistEditComponent} from './whitelist-edit.component';
 
 describe('WhitelistEditComponent', () => {
   let component: WhitelistEditComponent;
@@ -8,9 +8,9 @@ describe('WhitelistEditComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ WhitelistEditComponent ]
+      declarations: [WhitelistEditComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

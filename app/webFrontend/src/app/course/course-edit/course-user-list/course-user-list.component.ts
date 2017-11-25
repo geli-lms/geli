@@ -38,6 +38,15 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
   fieldsToShow = new Map<string, boolean>();
   dragableWhitelistUser: IWhitelistUser[] = [];
 
+  constructor(private dragula: DragulaService,
+              private userService: UserDataService,
+              private whitelistUserService: WhitelistUserService) {
+  }
+
+  get searchString(): string {
+    return this.search;
+  }
+
   set searchString(search: string) {
     this.search = search;
     this.onSearch.emit(search);
@@ -65,16 +74,6 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
     }
   }
 
-  get searchString(): string {
-    return this.search;
-  }
-
-  constructor(private dragula: DragulaService,
-              private userService: UserDataService,
-              private whitelistUserService: WhitelistUserService) {
-  }
-
-
   ngOnInit() {
     const idList: string[] = this.dragableUsersInCourse.map((u) => u._id);
     // Make items only draggable by dragging the handle
@@ -95,12 +94,12 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
         if (bagName === this.dragulaBagId) {
           this.userService.readSingleItem(el.children[0].getAttribute('item-id'))
             .then((draggedUser: IUser) => {
-            if (target.getAttribute('item-id') === 'UserNotInCourse') {
-              this.onDragendRemove.emit(draggedUser);
-            } else if (target.getAttribute('item-id') === 'UserInCourse') {
-              this.onDragendPush.emit(draggedUser);
-            }
-          });
+              if (target.getAttribute('item-id') === 'UserNotInCourse') {
+                this.onDragendRemove.emit(draggedUser);
+              } else if (target.getAttribute('item-id') === 'UserInCourse') {
+                this.onDragendPush.emit(draggedUser);
+              }
+            });
         }
 
         if (bagName === this.dragulaWhitelistBagId) {

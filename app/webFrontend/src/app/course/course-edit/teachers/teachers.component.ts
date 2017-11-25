@@ -3,8 +3,6 @@ import {CourseService, UserDataService} from '../../../shared/services/data.serv
 import {IUser} from '../../../../../../../shared/models/IUser';
 import {ShowProgressService} from '../../../shared/services/show-progress.service';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
-import {SortUtil} from '../../../shared/utils/SortUtil';
-import {User} from '../../../models/User';
 import {isNullOrUndefined} from 'util';
 
 @Component({
@@ -17,6 +15,13 @@ export class TeachersComponent implements OnInit {
   @Input() course: ICourse;
   foundTeachers: IUser[] = [];
   total = 0;
+  /**
+   * Get this course from api and filter all teachers from users.
+   */
+  initCourseTeachersOnInit = () => {
+    this.course.teachers.forEach(member =>
+      this.foundTeachers = this.foundTeachers.filter(user => user._id !== member._id));
+  };
 
   constructor(private courseService: CourseService,
               private showProgress: ShowProgressService,
@@ -26,14 +31,6 @@ export class TeachersComponent implements OnInit {
   ngOnInit() {
     this.initCourseTeachersOnInit();
   }
-
-  /**
-   * Get this course from api and filter all teachers from users.
-   */
-  initCourseTeachersOnInit = () => {
-        this.course.teachers.forEach(member =>
-          this.foundTeachers = this.foundTeachers.filter(user => user._id !== member._id));
-  };
 
   isUserInCourse(user: IUser) {
     return !isNullOrUndefined(this.course.teachers.find((elem: IUser) => elem._id === user._id));

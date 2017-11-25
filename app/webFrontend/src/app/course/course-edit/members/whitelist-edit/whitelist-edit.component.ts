@@ -1,10 +1,7 @@
-import {Component, Input, OnInit, EventEmitter, Output, OnDestroy} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {IWhitelistUser} from '../../../../../../../../shared/models/IWhitelistUser';
 import {WhitelistUserService} from '../../../../shared/services/data.service';
 import {MatSnackBar} from '@angular/material';
-import {ShowProgressService} from '../../../../shared/services/show-progress.service';
-import {duration} from 'moment';
-import {DragulaService} from 'ng2-dragula';
 import {ICourse} from '../../../../../../../../shared/models/ICourse';
 
 @Component({
@@ -20,6 +17,17 @@ export class WhitelistEditComponent implements OnInit {
   @Input() dragulaBagId;
   @Input() total = 0;
   search = '';
+  isToggled = false;
+  whitelistUser: any = {firstName: '', lastName: '', uid: '', courseId: null};
+
+  constructor(private whitelistUserService: WhitelistUserService,
+              private snackBar: MatSnackBar) {
+  }
+
+  get searchString() {
+    return this.search;
+  }
+
   @Input() set searchString(search: string) {
     this.search = search;
     this.finishRestCall = false;
@@ -30,17 +38,6 @@ export class WhitelistEditComponent implements OnInit {
         this.finishRestCall = true;
       });
     }
-  }
-
-  get searchString() {
-    return this.search;
-  }
-
-  isToggled = false;
-  whitelistUser: any = {firstName: '', lastName: '', uid: '', courseId: null};
-
-  constructor(private whitelistUserService: WhitelistUserService,
-              private snackBar: MatSnackBar) {
   }
 
   ngOnInit() {
