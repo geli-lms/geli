@@ -7,6 +7,7 @@ import {ShowProgressService} from '../../shared/services/show-progress.service';
 import {FileUploader} from 'ng2-file-upload';
 import {SaveFileService} from '../../shared/services/save-file.service';
 import {ICourse} from '../../../../../../shared/models/ICourse';
+import {ENROLL_TYPES, ENROLL_TYPE_WHITELIST, ENROLL_TYPE_FREE, ENROLL_TYPE_ACCESSKEY} from '../../../../../../shared/models/ICourse';
 
 @Component({
   selector: 'app-course-edit',
@@ -25,6 +26,13 @@ export class CourseEditComponent implements OnInit {
   id: string;
   courseOb: ICourse;
   uploader: FileUploader = null;
+  enrollTypes =  ENROLL_TYPES;
+  enrollTypeConstants = {
+    ENROLL_TYPE_WHITELIST,
+    ENROLL_TYPE_FREE,
+    ENROLL_TYPE_ACCESSKEY,
+  };
+
 
   message = 'Course successfully added.';
 
@@ -92,9 +100,13 @@ export class CourseEditComponent implements OnInit {
     const request: any = {
       'name': this.course, 'description': this.description, '_id': this.id, 'active': this.active, 'enrollType': this.enrollType
     };
-    if (this.accessKey !== '****') {
+
+    if (this.enrollType === ENROLL_TYPE_FREE) {
+      request.accessKey = null;
+    } else if (this.accessKey !== '****') {
       request.accessKey = this.accessKey;
     }
+
     this.courseService.updateItem(request).then(
       (val) => {
         this.showProgress.toggleLoadingGlobal(false);
