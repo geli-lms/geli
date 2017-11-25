@@ -98,6 +98,7 @@ export class CourseController {
       .populate('courseAdmin')
       .populate('teachers')
       .populate('students')
+      .populate('whitelist')
       .then((course) => {
         if (!course) {
           throw new NotFoundError();
