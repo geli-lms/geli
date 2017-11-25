@@ -76,7 +76,7 @@ export class TaskUnitEditComponent implements OnInit {
           this.onDone();
         },
         (error) => {
-          console.log(error);
+          this.snackBar.open(`Couldn\'t ${this.add ? 'create' : 'update'} task`, '', {duration: 3000});
         });
     }
   };
@@ -137,7 +137,7 @@ export class TaskUnitEditComponent implements OnInit {
       (val) => {
         this.snackBar.open('Task saved', 'Update', {duration: 2000});
       }, (error) => {
-        console.log(error);
+        // THIS METHOD WILL BE REMOVED ANYWAY
       });
   }
 
