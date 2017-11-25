@@ -1,5 +1,4 @@
 @import '../variables';
-@import '../breakpoints';
 
 :host {
   display: flex;
@@ -24,7 +23,7 @@
 }
 
 .logo {
-  font-family: Pacifico, cursive;
+  font-family: $font-logo;
   text-decoration: none;
   color: white;
   font-size: 28px;
@@ -39,6 +38,13 @@
   margin-right: 0.2em;
 }
 
+.app-wrapper {
+  position: relative;
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+}
+
 .app-content {
   position: relative;
   padding: 20px;
@@ -48,7 +54,6 @@
 }
 
 .special-style {
-  background-image: url('/assets/people-woman-coffee-meeting.jpg');
+  background: url('/assets/people-woman-coffee-meeting.jpg') no-repeat;
   background-size: cover;
-  background-repeat: no-repeat;
 }

@@ -7,6 +7,7 @@ import {APIInfoService} from './shared/services/data.service';
 import {APIInfo} from './models/APIInfo';
 import {isNullOrUndefined} from 'util';
 import {RavenErrorHandler} from './shared/services/raven-error-handler.service';
+import {MatSnackBar} from '@angular/material';
 
 @Component({
   selector: 'app-root',
@@ -24,7 +25,8 @@ export class AppComponent implements OnInit {
               public userService: UserService,
               private showProgress: ShowProgressService,
               private apiInfoService: APIInfoService,
-              private ravenErrorHandler: RavenErrorHandler
+              private ravenErrorHandler: RavenErrorHandler,
+              private snackBar: MatSnackBar
   ) {
     showProgress.toggleSidenav$.subscribe(
       toggle => {
@@ -40,7 +42,9 @@ export class AppComponent implements OnInit {
       this.ravenErrorHandler.setup(info.sentryDsn);
       this.apiInfo = info;
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      this.snackBar.open('Error on init', '', {duration: 3000});
+    });
   }
 
   hasWarning() {
