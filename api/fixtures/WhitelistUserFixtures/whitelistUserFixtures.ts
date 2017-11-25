@@ -9,16 +9,19 @@ export const whitelistUserFixtures: IFixture = {
       firstName: 'Nappa',
       lastName: 'Saiyan',
       uid: '113567',
+      courseId: '123456'
     },
     {
       firstName: 'Vegeta',
       lastName: 'Saiyan',
       uid: '133766',
+      courseId: '123456'
     },
     {
       firstName: 'Raditz',
       lastName: 'Saiyan',
       uid: '629990',
+      courseId: '123456'
     },
   ]
 };

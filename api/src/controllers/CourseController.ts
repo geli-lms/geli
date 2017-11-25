@@ -184,9 +184,7 @@ export class CourseController {
     if (!name.endsWith('.csv')) {
       throw new TypeError('Wrong type allowed are just csv files.');
     }
-
-    // TODO: Never query all users!
-    return User.find({})
+    return User.find({role: 'student'})
       .then((users) => users.map((user) => user.toObject({virtuals: true})))
       .then((users) => Course.findById(id).then((course) => {
         return this.parser.parseFile(file).then((buffer: any) =>

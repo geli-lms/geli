@@ -26,7 +26,12 @@ const whitelistUserSchema = new mongoose.Schema({
       required: true,
       trim: true,
       index: true
-    }
+    },
+    courseId: {
+      type: String,
+      required: true,
+      trim: true
+    },
   },
   {
     timestamps: true,

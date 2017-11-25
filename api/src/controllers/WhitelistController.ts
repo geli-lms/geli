@@ -12,11 +12,10 @@ function escapeRegex(text: string) {
 @UseBefore(passportJwtMiddleware)
 export class WitelistController {
 
-
-  // FIXME Check filter Whitelist user which are not allowed to load.
-  @Get('/search')
+  // TODO: Needs more security
+  @Get('/:id/search/')
   @Authorized(['teacher', 'admin'])
-  searchUser(@QueryParam('query') query: string) {
+  searchUser(@Param('id') id: string, @QueryParam('query') query: string) {
     query = query.trim();
     if (isNullOrUndefined(query) || query.length <= 0) {
       throw Error('No given query.');
@@ -24,6 +23,8 @@ export class WitelistController {
     const conditions: any = {};
     const escaped = escapeRegex(query).split(' ');
     conditions.$or = [];
+    conditions.$and = [];
+    conditions.$and.push({courseId: id});
     conditions.$or.push({$text: {$search: query}});
     escaped.forEach(elem => {
       const re = new RegExp(elem, 'ig');

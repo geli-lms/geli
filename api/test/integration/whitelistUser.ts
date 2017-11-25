@@ -23,14 +23,16 @@ describe('Whitelist User', () => {
     it('should search for a whitelist user', (done) => {
       User.findOne({email: 'teacher1@test.local'})
         .then((user) => {
+          const courseId = '123456';
           const newWhitelistUser: IWhitelistUser = new WhitelistUser({
             firstName: 'Max',
             lastName: 'Mustermann',
-            uid: '123456'
+            uid: '123456',
+            courseId: courseId
           });
           WhitelistUser.create(newWhitelistUser).then((createdWhitelistUser) => {
             chai.request(app)
-              .get(`${BASE_URL}/search`)
+              .get(`${BASE_URL}/${courseId}/search/`)
               .query({
                 query: newWhitelistUser.uid +
                 ' ' + newWhitelistUser.firstName +
@@ -49,17 +51,48 @@ describe('Whitelist User', () => {
         }).catch(done);
     });
 
-    it('should fail with wrong authorization', (done) => {
+    it('should fail with not found course id', (done) => {
       User.findOne({email: 'teacher1@test.local'})
         .then((user) => {
+          const courseId = '123456';
           const newWhitelistUser: IWhitelistUser = new WhitelistUser({
             firstName: 'Max',
             lastName: 'Mustermann',
-            uid: '123456'
+            uid: '123456',
+            courseId: '654321'
           });
           WhitelistUser.create(newWhitelistUser).then((createdWhitelistUser) => {
             chai.request(app)
-              .get(`${BASE_URL}/search`)
+              .get(`${BASE_URL}/${courseId}/search/`)
+              .query({
+                query: newWhitelistUser.uid +
+                ' ' + newWhitelistUser.firstName +
+                ' ' + newWhitelistUser.lastName
+              })
+              .set('Authorization', `JWT ${JwtUtils.generateToken(user)}`)
+              .end((err, res) => {
+                res.status.should.be.equal(200);
+                res.body.length.should.be.equal(0);
+                done();
+              });
+          });
+        }).catch(done);
+    });
+
+    it('should fail with wrong authorization', (done) => {
+      User.findOne({email: 'teacher1@test.local'})
+        .then((user) => {
+          const courseId = '123456';
+          const newWhitelistUser: IWhitelistUser = new WhitelistUser({
+            firstName: 'Max',
+            lastName: 'Mustermann',
+            uid: '123456',
+            courseId: courseId
+          });
+          WhitelistUser.create(newWhitelistUser).then((createdWhitelistUser) => {
+            chai.request(app)
+              .get(`${BASE_URL}/${courseId}/search/`)
+              .set('id', '123456')
               .query({
                 query: newWhitelistUser.uid +
                 ' ' + newWhitelistUser.firstName +
@@ -108,7 +141,7 @@ describe('Whitelist User', () => {
 
   describe(`POST ${BASE_URL}`, () => {
     it('should create a new whitelist User', (done) => {
-      const whitelistUser: any = {firstName: 'Max', lastName: 'Mustermann', uid: '1236456'};
+      const whitelistUser: any = {firstName: 'Max', lastName: 'Mustermann', uid: '1236456', courseId: '123456'};
       User.findOne({email: 'teacher1@test.local'})
         .then((user) => {
           chai.request(app)
@@ -126,7 +159,7 @@ describe('Whitelist User', () => {
     });
 
     it('should fail with wrong authorization', (done) => {
-      const whitelistUser: any = {firstName: 'Max', lastName: 'Mustermann', uid: '1236456'};
+      const whitelistUser: any = {firstName: 'Max', lastName: 'Mustermann', uid: '1236456', courseId: '123456'};
       User.findOne({email: 'teacher1@test.local'})
         .then((user) => {
           chai.request(app)
@@ -148,7 +181,8 @@ describe('Whitelist User', () => {
           const newWhitelistUser: IWhitelistUser = new WhitelistUser({
             firstName: 'Max',
             lastName: 'Mustermann',
-            uid: '123456'
+            uid: '123456',
+            courseId: '123456'
           });
           WhitelistUser.create(newWhitelistUser).then((createdWhitelistUser) => {
             chai.request(app)
@@ -172,7 +206,8 @@ describe('Whitelist User', () => {
           const newWhitelistUser: IWhitelistUser = new WhitelistUser({
             firstName: 'Max',
             lastName: 'Mustermann',
-            uid: '123456'
+            uid: '123456',
+            courseId: '1234556'
           });
           WhitelistUser.create(newWhitelistUser).then((createdWhitelistUser) => {
             chai.request(app)
@@ -195,7 +230,8 @@ describe('Whitelist User', () => {
           const newWhitelistUser: IWhitelistUser = new WhitelistUser({
             firstName: 'Max',
             lastName: 'Mustermann',
-            uid: '123456'
+            uid: '123456',
+            courseId: '123456'
           });
           WhitelistUser.create(newWhitelistUser).then((createdWhitelistUser) => {
             chai.request(app)
@@ -216,7 +252,8 @@ describe('Whitelist User', () => {
           const newWhitelistUser: IWhitelistUser = new WhitelistUser({
             firstName: 'Max',
             lastName: 'Mustermann',
-            uid: '123456'
+            uid: '123456',
+            courseId: '123456'
           });
           WhitelistUser.create(newWhitelistUser).then((createdWhitelistUser) => {
             chai.request(app)
