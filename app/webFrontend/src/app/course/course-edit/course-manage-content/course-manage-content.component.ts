@@ -245,7 +245,6 @@ export class CourseManageContentComponent implements OnInit, OnDestroy {
       .chooseFile('Choose a unit.json to import')
       .subscribe(res => {
         if (res.success) {
-          console.log(res);
           this.snackBar.open('yes', '', {duration: 3000});
         } else {
           this.snackBar.open('noooo', '', {duration: 3000});

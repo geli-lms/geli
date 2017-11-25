@@ -23,7 +23,7 @@ export class DuplicationController {
     try {
       const courseModel: ICourseModel = await Course.findById(id);
       const exportedCourse: ICourse = await courseModel.exportJSON();
-      return Course.prototype.importJSON(exportedCourse, courseAdmin);
+      return Course.importJSON(exportedCourse, courseAdmin);
     } catch (err) {
         const newError = new InternalServerError('Failed to duplicate course');
         newError.stack += '\nCaused by: ' + err.message + '\n' + err.stack;
@@ -37,7 +37,7 @@ export class DuplicationController {
     try {
       const lectureModel: ILectureModel = await Lecture.findById(id);
       const exportedLecture: ILecture = await lectureModel.exportJSON();
-      return Lecture.prototype.importJSON(exportedLecture, courseId);
+      return Lecture.importJSON(exportedLecture, courseId);
     } catch (err) {
       const newError = new InternalServerError('Failed to duplicate lecture');
       newError.stack += '\nCaused by: ' + err.message + '\n' + err.stack;
