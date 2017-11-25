@@ -15,11 +15,10 @@ import {IWhitelistUser} from '../../../../../../../shared/models/IWhitelistUser'
 })
 export class CourseUserListComponent implements OnInit, OnDestroy {
 
-  @Input() courseId;
   @Input() course: ICourse;
+  @Input() users: User[] = [];
   @Input() dragableUsersInCourse: User[] = [];
   @Input() dragableUsers: User[] = [];
-  @Input() users: User[] = [];
   @Input() dragulaBagId;
   @Input() dragulaWhitelistBagId;
   @Input() role;
@@ -35,7 +34,7 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
   search = '';
   userCtrl: FormControl;
   filteredStates: any;
-  finishRestCall = false;
+  finishRestCall = true;
   fieldsToShow = new Map<string, boolean>();
   dragableWhitelistUser: IWhitelistUser[] = [];
 
@@ -48,9 +47,9 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
         if (found) {
           const idList: string[] = this.dragableUsersInCourse.map((u) => u._id);
           this.dragableUsers = found.filter(user => (idList.indexOf(user._id) < 0
-            && this.course.courseAdmin._id !== user._id)).map(data => new User(data));
+            && this.course.courseAdmin._id !== user._id));
           this.dragableUsersInCourse = found.filter(user => (idList.indexOf(user._id) >= 0
-            && this.course.courseAdmin._id !== user._id)).map(data => new User(data));
+            && this.course.courseAdmin._id !== user._id));
         } else {
           this.dragableUsers = [];
           this.dragableUsersInCourse = [];
@@ -61,6 +60,8 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
           this.finishRestCall = true;
         });
       });
+    } else {
+      this.finishRestCall = true;
     }
   }
 
@@ -76,7 +77,6 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     const idList: string[] = this.dragableUsersInCourse.map((u) => u._id);
-    this.users = this.users.filter(user => this.course.courseAdmin._id !== user._id);
     // Make items only draggable by dragging the handle
     this.dragula.setOptions(this.dragulaBagId, {
       moves: (el, container, handle) => {

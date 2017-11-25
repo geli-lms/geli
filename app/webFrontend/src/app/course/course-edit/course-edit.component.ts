@@ -63,8 +63,6 @@ export class CourseEditComponent implements OnInit {
           this.mode = true;
         }
         this.courseOb = val;
-        this.courseOb.students = this.courseOb.students.map(data => new User(data));
-        this.courseOb.teachers = this.courseOb.teachers.map(data => new User(data));
       }, (error) => {
         this.snackBar.open('Couldn\'t load Course-Item', '', {duration: 3000});
       });
