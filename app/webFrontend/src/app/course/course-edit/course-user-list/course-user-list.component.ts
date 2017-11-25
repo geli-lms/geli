@@ -1,16 +1,12 @@
-import {Component, Input, OnInit, EventEmitter, Output, OnDestroy} from '@angular/core';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {DragulaService} from 'ng2-dragula';
 import {IUser} from '../../../../../../../shared/models/IUser';
 import {User} from '../../../models/User';
 import {FormControl} from '@angular/forms';
-import {DialogService} from '../../../shared/services/dialog.service';
 import 'rxjs/add/operator/startWith'
 import {UserDataService} from '../../../shared/services/data.service';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
-import {isType} from '@angular/core/src/type';
-import {WhitelistUser} from '../../../../../../../api/src/models/WhitelistUser';
 import {IWhitelistUser} from '../../../../../../../shared/models/IWhitelistUser';
-import {isNullOrUndefined} from 'util';
 
 @Component({
   selector: 'app-course-user-list',
@@ -40,7 +36,6 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
   finishRestCall = false;
   fieldsToShow = new Map<string, boolean>();
   dragableWhitelistUser: IWhitelistUser[] = [];
-  lastDraggedItem: string;
 
   set searchString(search: string) {
     this.search = search;
