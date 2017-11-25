@@ -13,9 +13,7 @@ import {IWhitelistUser} from '../../../../../../../shared/models/IWhitelistUser'
 })
 export class MembersComponent implements OnInit {
 
-  @Input() courseId;
-
-  course: ICourse;
+  @Input() course: ICourse;
   foundStudents: IUser[] = [];
   showWhitelists = false;
   search = '';
@@ -37,13 +35,9 @@ export class MembersComponent implements OnInit {
    * Get this course from api and filter all teachers from users.
    */
   initCourseStudentsOnInit = () => {
-    this.courseService.readSingleItem(this.courseId).then(
-      (val: any) => {
-        this.course = val;
-        this.course.students.forEach(member =>
-          this.foundStudents = this.foundStudents.filter(user => user._id !== member._id));
-        this.course.students = this.course.students.map(data => new User(data));
-      });
+    this.course.students.forEach(member =>
+      this.foundStudents = this.foundStudents.filter(user => user._id !== member._id));
+    this.course.students = this.course.students.map(data => new User(data));
   };
 
 
@@ -63,7 +57,7 @@ export class MembersComponent implements OnInit {
   }
 
   isUserInCourse(user: IUser) {
-      return !isNullOrUndefined(this.course.students.find((elem: IUser) => elem._id === user._id));
+    return !isNullOrUndefined(this.course.students.find((elem: IUser) => elem._id === user._id));
   }
 
   removeUserFromCoure(draggedUser: IUser) {
@@ -90,7 +84,7 @@ export class MembersComponent implements OnInit {
     const idList: string[] = this.course.whitelist.map((u) => u._id);
     const index: number = idList.indexOf(draggedUser._id);
     this.course.whitelist.splice(index, 1);
-    this.whitelistUserService.countWhitelistUsers(this.courseId).then((count) => {
+    this.whitelistUserService.countWhitelistUsers(this.course._id).then((count) => {
         this.totalWhitelist = count - this.course.whitelist.length;
       }
     );
@@ -99,7 +93,7 @@ export class MembersComponent implements OnInit {
 
   pushWhitelistUserToCourse(draggedUser: IWhitelistUser) {
     this.course.whitelist.push(draggedUser);
-    this.whitelistUserService.countWhitelistUsers(this.courseId).then((count) => {
+    this.whitelistUserService.countWhitelistUsers(this.course._id).then((count) => {
         this.totalWhitelist = count - this.course.whitelist.length;
       }
     );
@@ -122,7 +116,7 @@ export class MembersComponent implements OnInit {
         this.total = count - this.course.students.length;
       }
     );
-    this.whitelistUserService.countWhitelistUsers(this.courseId).then((count) => {
+    this.whitelistUserService.countWhitelistUsers(this.course._id).then((count) => {
         this.totalWhitelist = count - this.course.whitelist.length;
       }
     );

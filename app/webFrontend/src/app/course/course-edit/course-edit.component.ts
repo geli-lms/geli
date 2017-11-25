@@ -5,7 +5,10 @@ import {CourseService} from '../../shared/services/data.service';
 import {MatSnackBar} from '@angular/material';
 import {ShowProgressService} from '../../shared/services/show-progress.service';
 import {FileUploader} from 'ng2-file-upload';
-import {ENROLL_TYPES, ENROLL_TYPE_WHITELIST, ENROLL_TYPE_FREE, ENROLL_TYPE_ACCESSKEY} from '../../../../../../shared/models/ICourse';
+import {
+  ENROLL_TYPES, ENROLL_TYPE_WHITELIST, ENROLL_TYPE_FREE, ENROLL_TYPE_ACCESSKEY,
+  ICourse
+} from '../../../../../../shared/models/ICourse';
 
 @Component({
   selector: 'app-course-edit',
@@ -22,7 +25,7 @@ export class CourseEditComponent implements OnInit {
   enrollType: string;
   newCourse: FormGroup;
   id: string;
-  courseOb: any[];
+  courseOb: ICourse;
   uploader: FileUploader = null;
   enrollTypes =  ENROLL_TYPES;
   enrollTypeConstants = {

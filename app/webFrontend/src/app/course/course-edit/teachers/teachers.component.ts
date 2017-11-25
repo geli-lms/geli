@@ -13,8 +13,8 @@ import {isNullOrUndefined} from 'util';
 })
 export class TeachersComponent implements OnInit {
 
-  @Input() courseId;
-  course: ICourse;
+
+  @Input() course: ICourse;
   foundTeachers: IUser[] = [];
   total = 0;
 
@@ -31,13 +31,9 @@ export class TeachersComponent implements OnInit {
    * Get this course from api and filter all teachers from users.
    */
   initCourseTeachersOnInit = () => {
-    this.courseService.readSingleItem(this.courseId).then(
-      (val: any) => {
-        this.course = val;
         this.course.teachers.forEach(member =>
           this.foundTeachers = this.foundTeachers.filter(user => user._id !== member._id));
         this.course.teachers = this.course.teachers.map(data => new User(data));
-      });
   };
 
   isUserInCourse(user: IUser) {

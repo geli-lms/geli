@@ -64,13 +64,13 @@
 
   <mat-tab label="Members">
     <div class="tab-content">
-      <app-members [courseId]="id"></app-members>
+      <app-members *ngIf="courseOb" [course]="courseOb"></app-members>
     </div>
   </mat-tab>
 
   <mat-tab label="Teachers">
     <div class="tab-content">
-      <app-teachers [courseId]="id"></app-teachers>
+      <app-teachers *ngIf="courseOb" [course]="courseOb"></app-teachers>
     </div>
   </mat-tab>
 </mat-tab-group>
