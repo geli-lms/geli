@@ -57,7 +57,7 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
         }
         this.whitelistUserService.searchWhitelistUsers(this.course._id, search).then((foundWhitelistUser) => {
           const idList: string[] = this.course.whitelist.map((u) => u._id);
-          this.dragableWhitelistUser = foundWhitelistUser.filter(user => (idList.indexOf(user._id) < 0));
+          this.dragableWhitelistUser = foundWhitelistUser.filter(user => (idList.indexOf(user._id) >= 0));
           this.finishRestCall = true;
         });
       });

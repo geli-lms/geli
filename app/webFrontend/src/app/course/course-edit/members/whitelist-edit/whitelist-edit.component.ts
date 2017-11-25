@@ -26,7 +26,7 @@ export class WhitelistEditComponent implements OnInit {
     if (search !== '') {
       this.whitelistUserService.searchWhitelistUsers(this.course._id, search).then((found) => {
         const idList: string[] = this.course.whitelist.map((u) => u._id);
-        this.dragableWhitelistUser = found.filter(user => (idList.indexOf(user._id) >= 0));
+        this.dragableWhitelistUser = found.filter(user => (idList.indexOf(user._id) < 0));
         this.finishRestCall = true;
       });
     }
