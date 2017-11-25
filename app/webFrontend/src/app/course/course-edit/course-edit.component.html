@@ -15,12 +15,15 @@
         </mat-form-field>
 
         <mat-form-field class="full-width">
-          <mat-select name="courseTypes" placeholder="Please select your course type" id="courseTypes" [(ngModel)]="enrollType">
+          <mat-select name="courseTypes" placeholder="Please select your course type" id="courseTypes"
+                      [(ngModel)]="enrollType">
             <mat-option *ngFor="let enrollType of enrollTypes" [value]="enrollType">{{enrollType}}</mat-option>
-          </mat-select><br>
+          </mat-select>
+          <br>
         </mat-form-field>
 
-        <p *ngIf="enrollType === enrollTypeConstants.ENROLL_TYPE_FREE">The course is free and accessible for everyone</p>
+        <p *ngIf="enrollType === enrollTypeConstants.ENROLL_TYPE_FREE">The course is free and accessible for
+          everyone</p>
 
         <mat-form-field class="full-width" *ngIf="enrollType === enrollTypeConstants.ENROLL_TYPE_ACCESSKEY">
           <input async matInput id="accessKey" placeholder="Access Key" [(ngModel)]="accessKey"

@@ -9,6 +9,7 @@ import {
   ENROLL_TYPES, ENROLL_TYPE_WHITELIST, ENROLL_TYPE_FREE, ENROLL_TYPE_ACCESSKEY,
   ICourse
 } from '../../../../../../shared/models/ICourse';
+import {User} from '../../models/User';
 
 @Component({
   selector: 'app-course-edit',
@@ -46,22 +47,27 @@ export class CourseEditComponent implements OnInit {
 
     this.route.params.subscribe(params => {
       this.id = params['id'];
-
-      this.courseService.readSingleItem(this.id).then(
-        (val: any) => {
-          this.course = val.name;
-          this.description = val.description;
-          this.accessKey = val.hasAccessKey ? '****' : '';
-          this.active = val.active;
-          this.enrollType = val.enrollType;
-          if (this.enrollType === 'whitelist') {
-            this.mode = true;
-          }
-          this.courseOb = val;
-        }, (error) => {
-          this.snackBar.open('Couldn\'t load Course-Item', '', {duration: 3000});
-        });
+      this.init();
     });
+  }
+
+  init() {
+    this.courseService.readSingleItem(this.id).then(
+      (val: any) => {
+        this.course = val.name;
+        this.description = val.description;
+        this.accessKey = val.hasAccessKey ? '****' : '';
+        this.active = val.active;
+        this.enrollType = val.enrollType;
+        if (this.enrollType === 'whitelist') {
+          this.mode = true;
+        }
+        this.courseOb = val;
+        this.courseOb.students = this.courseOb.students.map(data => new User(data));
+        this.courseOb.teachers = this.courseOb.teachers.map(data => new User(data));
+      }, (error) => {
+        this.snackBar.open('Couldn\'t load Course-Item', '', {duration: 3000});
+      });
   }
 
   ngOnInit() {
@@ -78,11 +84,12 @@ export class CourseEditComponent implements OnInit {
     };
     this.uploader.onCompleteItem = (item: any, response: any, status: any) => {
       if (status === 200) {
+        this.init();
         const course = JSON.parse(response);
-        this.snackBar.open('Item is uploaded there where ' + course.whitelist.length + ' users parsed!', '', {duration: 10000});
+        this.snackBar.open('Item is uploaded there where ' + course.whitelist.length + ' users parsed!', '', {duration: 20000});
         setTimeout(() => {
           this.uploader.clearQueue();
-        }, 3000);
+        }, 6000);
       } else {
         const error = JSON.parse(response);
         this.snackBar.open('Upload failed with status ' + status + ' message was: ' + error.message, '', {duration: 20000});

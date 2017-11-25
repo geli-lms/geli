@@ -37,7 +37,6 @@ export class MembersComponent implements OnInit {
   initCourseStudentsOnInit = () => {
     this.course.students.forEach(member =>
       this.foundStudents = this.foundStudents.filter(user => user._id !== member._id));
-    this.course.students = this.course.students.map(data => new User(data));
   };
 
 
