@@ -5,6 +5,7 @@ import {MatSnackBar} from '@angular/material';
 import {ShowProgressService} from '../../../../shared/services/show-progress.service';
 import {duration} from 'moment';
 import {DragulaService} from 'ng2-dragula';
+import {ICourse} from '../../../../../../../../shared/models/ICourse';
 
 @Component({
   selector: 'app-whitelist-edit',
@@ -15,7 +16,7 @@ export class WhitelistEditComponent implements OnInit {
 
   dragableWhitelistUser: IWhitelistUser[] = [];
   finishRestCall = false;
-  @Input() course;
+  @Input() course: ICourse;
   @Input() dragulaBagId;
   @Input() total = 0;
   search = '';
@@ -24,7 +25,8 @@ export class WhitelistEditComponent implements OnInit {
     this.finishRestCall = false;
     if (search !== '') {
       this.whitelistUserService.searchWhitelistUsers(this.course._id, search).then((found) => {
-        this.dragableWhitelistUser = found;
+        const idList: string[] = this.course.whitelist.map((u) => u._id);
+        this.dragableWhitelistUser = found.filter(user => (idList.indexOf(user._id) >= 0));
         this.finishRestCall = true;
       });
     }

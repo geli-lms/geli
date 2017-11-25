@@ -49,7 +49,7 @@
                              [dragUsers]="dragableUsersInCourse"
                              [show]="fieldsToShow.get('inCourse')"
                              [fieldId]="'UserInCourse'"></app-course-user-list-show>
-  <app-whitelist-show [dragulaBagId]="'whitelist'"
+  <app-whitelist-show *ngIf="role === 'student'" [dragulaBagId]="'whitelist'"
                              [dragUsers]="dragableWhitelistUser"
                              [show]="fieldsToShow.get('inCourse')"
                              [fieldId]="'WhitelistInCourse'"></app-whitelist-show>

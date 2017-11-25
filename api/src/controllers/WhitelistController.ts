@@ -39,6 +39,15 @@ export class WitelistController {
     });
   }
 
+  @Get('/:id')
+  getUser(@Param('id') id: string) {
+    return WhitelistUser.findById(id)
+      .populate('progress')
+      .then((whitelistUser) => {
+        return whitelistUser.toObject({virtuals: true});
+      });
+  }
+
   @Get('/:id/count')
   @Authorized(['teacher', 'admin'])
   searchCountUsers(@Param('id') id: string) {

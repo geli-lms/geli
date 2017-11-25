@@ -4,7 +4,7 @@ import {IUser} from '../../../../../../../shared/models/IUser';
 import {User} from '../../../models/User';
 import {FormControl} from '@angular/forms';
 import 'rxjs/add/operator/startWith'
-import {UserDataService} from '../../../shared/services/data.service';
+import {UserDataService, WhitelistUserService} from '../../../shared/services/data.service';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
 import {IWhitelistUser} from '../../../../../../../shared/models/IWhitelistUser';
 
@@ -27,6 +27,8 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
 
   @Output() onDragendRemove = new EventEmitter<IUser>();
   @Output() onDragendPush = new EventEmitter<IUser>();
+  @Output() onDragendRemoveWhitelist = new EventEmitter<IWhitelistUser>();
+  @Output() onDragendPushWhitelist = new EventEmitter<IWhitelistUser>();
   @Output() onUpdate = new EventEmitter<String>();
   @Output() onSearch = new EventEmitter<String>();
 
@@ -53,7 +55,11 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
           this.dragableUsers = [];
           this.dragableUsersInCourse = [];
         }
-        this.finishRestCall = true;
+        this.whitelistUserService.searchWhitelistUsers(this.course._id, search).then((foundWhitelistUser) => {
+          const idList: string[] = this.course.whitelist.map((u) => u._id);
+          this.dragableWhitelistUser = foundWhitelistUser.filter(user => (idList.indexOf(user._id) < 0));
+          this.finishRestCall = true;
+        });
       });
     }
   }
@@ -63,7 +69,8 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
   }
 
   constructor(private dragula: DragulaService,
-              private userService: UserDataService) {
+              private userService: UserDataService,
+              private whitelistUserService: WhitelistUserService) {
   }
 
 
@@ -85,15 +92,28 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
     this.dragula.dropModel.subscribe(value => {
       const [bagName, el, target, source] = value;
       if (source.getAttribute('item-id') !== target.getAttribute('item-id')) {
-      const draggedUser: IUser = this.dragableUsers.concat(this.dragableUsersInCourse)
-        .find((user: IUser) => user._id === el.children[0].getAttribute('item-id'));
-      if (bagName === this.dragulaBagId) {
-        if (target.getAttribute('item-id') === 'UserNotInCourse') {
-          this.onDragendRemove.emit(draggedUser);
-        } else if (target.getAttribute('item-id') === 'UserInCourse') {
-          this.onDragendPush.emit(draggedUser);
+        if (bagName === this.dragulaBagId) {
+          this.userService.readSingleItem(el.children[0].getAttribute('item-id'))
+            .then((draggedUser: IUser) => {
+            if (target.getAttribute('item-id') === 'UserNotInCourse') {
+              this.onDragendRemove.emit(draggedUser);
+            } else if (target.getAttribute('item-id') === 'UserInCourse') {
+              this.onDragendPush.emit(draggedUser);
+            }
+          });
         }
-      }}
+
+        if (bagName === this.dragulaWhitelistBagId) {
+          this.whitelistUserService.readSingleItem(el.children[0].getAttribute('item-id'))
+            .then((draggedWhitelistUser: IUser) => {
+              if (target.getAttribute('item-id') === 'Whitelist') {
+                this.onDragendRemove.emit(draggedWhitelistUser);
+              } else if (target.getAttribute('item-id') === 'WhitelistInCourse') {
+                this.onDragendPush.emit(draggedWhitelistUser);
+              }
+            });
+        }
+      }
     });
     this.userCtrl = new FormControl();
     this.filteredStates = this.userCtrl.valueChanges

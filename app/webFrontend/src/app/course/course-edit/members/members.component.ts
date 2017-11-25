@@ -86,6 +86,7 @@ export class MembersComponent implements OnInit {
   }
 
   removeWhitelistUserFromCourse(draggedUser: IWhitelistUser) {
+    console.log('remove');
     const idList: string[] = this.course.students.map((u) => u._id);
     const index: number = idList.indexOf(draggedUser._id);
     this.course.students.splice(index, 1);
@@ -96,7 +97,8 @@ export class MembersComponent implements OnInit {
     this.updateCourseStudents();
   }
 
-  addWhitelistUserToCourse(draggedUser: IWhitelistUser) {
+  pushWhitelistUserToCourse(draggedUser: IWhitelistUser) {
+    console.log('push');
     this.course.whitelist.push(draggedUser);
     this.whitelistUserService.countWhitelistUsers(this.courseId).then((count) => {
         this.totalWhitelist = count - this.course.whitelist.length;
