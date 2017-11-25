@@ -1,0 +1,5 @@
+<h2>Select a File</h2>
+<p>{{message}}</p>
+<input type="file" ng2FileSelect onchange="onFileChange(this)" placeholder="Select a file"/>
+<button mat-raised-button color="warn" (click)="close(true)">OK</button>
+<button mat-raised-button color="accent" (click)="close(false)">Cancel</button>
