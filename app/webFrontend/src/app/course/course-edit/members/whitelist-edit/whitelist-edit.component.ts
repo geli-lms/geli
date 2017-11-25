@@ -67,8 +67,4 @@ export class WhitelistEditComponent implements OnInit {
     });
   }
 
-  deleteWhitelistUser(user: IWhitelistUser) {
-    this.whitelistUserService.deleteItem(user);
-  }
-
 }

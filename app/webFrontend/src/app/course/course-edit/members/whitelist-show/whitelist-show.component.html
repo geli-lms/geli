@@ -3,11 +3,12 @@
     <div *ngFor="let user of dragUsers">
       <mat-list-item class="list" [attr.item-id]="user._id">
         <mat-icon class="user-drag-handle">drag_handle</mat-icon>
+        <span class="listBg"></span>
         <span class="firstName">{{user.firstName}}</span>
         <span class="lastName">{{user.lastName}}</span>
         <span class="uid">{{user.uid}}</span>
-        <button mat-icon-button>
-          <mat-icon>mode edit</mat-icon>
+        <button mat-icon-button disabled>
+          <mat-icon>edit</mat-icon>
         </button>
         <button mat-icon-button (click)="remove(user)">
           <mat-icon>delete</mat-icon>
