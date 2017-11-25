@@ -13,7 +13,7 @@ import {
   UseBefore
 } from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
-import * as ec from '../config/errorCodes'
+import * as errorCodes from '../config/errorCodes'
 
 import {ICourse} from '../../../shared/models/ICourse';
 import {IUser} from '../../../shared/models/IUser';
@@ -142,7 +142,7 @@ export class CourseController {
     return Course.findOne({name: course.name})
       .then((existingCourse) => {
         if (existingCourse) {
-          throw new BadRequestError(ec.errorCodes.course.duplicateName.code);
+          throw new BadRequestError(errorCodes.errorCodes.course.duplicateName.code);
         }
         return new Course(course).save()
           .then((c) => c.toObject());
@@ -164,11 +164,11 @@ export class CourseController {
                 e.firstName === currentUser.profile.firstName.toLowerCase()
                 && e.lastName === currentUser.profile.lastName.toLowerCase()
                 && e.uid === currentUser.uid).length <= 0) {
-              throw new ForbiddenError(ec.errorCodes.course.notOnWhitelist.code);
+              throw new ForbiddenError(errorCodes.errorCodes.course.notOnWhitelist.code);
             }
           });
         } else if (course.accessKey && course.accessKey !== data.accessKey) {
-          throw new ForbiddenError(ec.errorCodes.course.accessKey.code);
+          throw new ForbiddenError(errorCodes.errorCodes.course.accessKey.code);
         }
 
         if (course.students.indexOf(currentUser._id) < 0) {
@@ -188,7 +188,7 @@ export class CourseController {
     const name: string = file.originalname;
 
     if (!name.endsWith('.csv')) {
-      throw new TypeError(ec.errorCodes.upload.type.notCSV.code);
+      throw new TypeError(errorCodes.errorCodes.upload.type.notCSV.code);
     }
 
     // TODO: Never query all users!

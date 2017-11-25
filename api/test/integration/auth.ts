@@ -3,7 +3,7 @@ import {Server} from '../../src/server';
 import {FixtureLoader} from '../../fixtures/FixtureLoader';
 import {User} from '../../src/models/User';
 import chaiHttp = require('chai-http');
-import * as ec from '../../src/config/errorCodes'
+import * as errorCodes from '../../src/config/errorCodes'
 
 chai.use(chaiHttp);
 chai.should();
@@ -27,7 +27,7 @@ describe('Auth', () => {
             .end((err, res) => {
               res.status.should.be.equal(400);
               res.body.name.should.be.equal('BadRequestError');
-              res.body.message.should.be.equal(ec.errorCodes.mail.duplicate.code);
+              res.body.message.should.be.equal(errorCodes.errorCodes.mail.duplicate.code);
               done();
             });
         })
@@ -45,7 +45,7 @@ describe('Auth', () => {
             .end((err, res) => {
               res.status.should.be.equal(400);
               res.body.name.should.be.equal('BadRequestError');
-              res.body.message.should.be.equal(ec.errorCodes.duplicateUid.code);
+              res.body.message.should.be.equal(errorCodes.errorCodes.duplicateUid.code);
               done();
             });
         })

@@ -10,7 +10,7 @@ import {IUser} from '../../../shared/models/IUser';
 import {IUserModel, User} from '../models/User';
 import {JwtUtils} from '../security/JwtUtils';
 import config from '../config/main';
-import * as ec from '../config/errorCodes'
+import * as errorCodes from '../config/errorCodes'
 
 @JsonController('/auth')
 export class AuthController {
@@ -34,10 +34,10 @@ export class AuthController {
         // If user is not unique, return error
         if (existingUser) {
           if (user.role === 'student' && existingUser.uid === user.uid) {
-            throw new BadRequestError(ec.errorCodes.duplicateUid.code);
+            throw new BadRequestError(errorCodes.errorCodes.duplicateUid.code);
           }
           if (existingUser.email === user.email) {
-            throw new BadRequestError(ec.errorCodes.mail.duplicate.code);
+            throw new BadRequestError(errorCodes.errorCodes.mail.duplicate.code);
           }
         }
 
@@ -46,7 +46,7 @@ export class AuthController {
         }
 
         if (user.role === 'teacher' && (typeof user.email !== 'string' || !user.email.match(config.teacherMailRegex))) {
-          throw new BadRequestError(ec.errorCodes.mail.noTeacher.code);
+          throw new BadRequestError(errorCodes.errorCodes.mail.noTeacher.code);
         }
 
         const newUser = new User(user);
@@ -56,7 +56,7 @@ export class AuthController {
       .then((savedUser) => {
         return emailService.sendActivation(savedUser)
           .catch(() => {
-            throw new InternalServerError(ec.errorCodes.mail.notSend.code);
+            throw new InternalServerError(errorCodes.errorCodes.mail.notSend.code);
           });
       })
       .then(() => {

@@ -45,7 +45,7 @@ export class RegisterComponent implements OnInit {
       this.role = role;
   }
 
-  clearAllErrors(){
+  clearAllErrors() {
     this.mailError = null;
     this.uidError = null;
   }

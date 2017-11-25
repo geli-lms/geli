@@ -1,4 +1,4 @@
-// TODO move to Sharedfolder
+// TODO move to shared folder
 export const errorCodes = {
   mail: {
     duplicate: {
