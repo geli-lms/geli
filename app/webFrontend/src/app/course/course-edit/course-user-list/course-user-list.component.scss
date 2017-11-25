@@ -5,13 +5,20 @@
   width: 100%;
 }
 
-.titleHeader {
-  display: flex;
-  align-items: center;
-}
-
-.footer {
-  margin-top: -1rem;
+.info {
+  .title {
+    margin-top: -1.5rem;
+    font-size: large;
+  }
+  .subtitle {
+    margin-left: 2rem;
+    margin-top: -1.5rem;
+    font-size: small;
+    .line {
+      margin-top: -1rem;
+    }
+    margin-bottom: -2rem;
+  }
 }
 
 .open-toggle {

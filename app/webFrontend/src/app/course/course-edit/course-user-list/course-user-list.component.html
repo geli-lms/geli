@@ -16,36 +16,38 @@
 
 <div class="users" *ngIf="search.length > 0 && finishRestCall">
 
-  <div class="titleHeader"><h3>Not in course:</h3>
-    <button class="open-toggle" (click)="toggle('notInCourse')"
-            [class.opened]="fieldsToShow.get('notInCourse')" mat-icon-button>
-      <mat-icon>arrow_drop_down</mat-icon>
-    </button>
-  </div>
-
-  <ul class="footer">
-    <li>{{role}}s: {{dragableUsers.length}} of {{usersTotal}}</li>
-    <li *ngIf="role === 'student'">blacklist: {{0}} of {{500}} [not implemented]</li>
-  </ul>
+  <mat-card class="info">
+    <mat-card-title class="title">Not in course:
+      <button class="open-toggle" (click)="toggle('notInCourse')"
+              [class.opened]="fieldsToShow.get('notInCourse')" mat-icon-button>
+        <mat-icon>arrow_drop_down</mat-icon>
+      </button>
+    </mat-card-title>
+    <mat-card-subtitle class="subtitle">
+    <p class="line">{{role}}s: {{dragableUsers.length}} of {{usersTotal}}</p>
+    <p class="line" *ngIf="role === 'student'">blacklist: {{0}} of {{500}} [not implemented]</p>
+    </mat-card-subtitle>
+  </mat-card>
   <app-course-user-list-show [dragulaBagId]="dragulaBagId"
                              [dragUsers]="dragableUsers"
                              [show]="fieldsToShow.get('notInCourse')"
                              [fieldId]="'UserNotInCourse'"></app-course-user-list-show>
 
-  <div class="titleHeader"><h3>In course:</h3>
-    <button class="open-toggle" (click)="toggle('inCourse')"
-            [class.opened]="fieldsToShow.get('inCourse')" mat-icon-button>
-      <mat-icon>arrow_drop_down</mat-icon>
-    </button>
-  </div>
-
-  <ul class="footer">
-    <li>{{role}}s: {{dragableUsersInCourse.length}} of
-      <ng-container *ngIf="role === 'student'">{{course.students.length}}</ng-container>
-      <ng-container *ngIf="role === 'teacher'">{{course.teachers.length}}</ng-container>
-    </li>
-    <li *ngIf="role === 'student'">whitelist: {{dragableWhitelistUser.length}} of {{course.whitelist.length}}</li>
-  </ul>
+  <mat-card class="info">
+    <mat-card-title class="title">In course:
+      <button class="open-toggle" (click)="toggle('inCourse')"
+              [class.opened]="fieldsToShow.get('inCourse')" mat-icon-button>
+        <mat-icon>arrow_drop_down</mat-icon>
+      </button>
+    </mat-card-title>
+    <mat-card-subtitle class="subtitle">
+      <p class="line">{{role}}s: {{dragableUsersInCourse.length}} of
+        <ng-container *ngIf="role === 'student'">{{course.students.length}}</ng-container>
+        <ng-container *ngIf="role === 'teacher'">{{course.teachers.length}}</ng-container>
+      </p>
+      <p class="line" *ngIf="role === 'student'">whitelist: {{dragableWhitelistUser.length}} of {{course.whitelist.length}}</p>
+    </mat-card-subtitle>
+  </mat-card>
 
   <app-course-user-list-show [dragulaBagId]="dragulaBagId"
                              [dragUsers]="dragableUsersInCourse"

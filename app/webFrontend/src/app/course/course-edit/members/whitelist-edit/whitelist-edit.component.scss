@@ -1,13 +1,30 @@
 @import "../../../../../variables";
 
-.titleHeader {
-  display: flex;
-  align-items: center;
+.info {
+  .title {
+    margin-top: -1.5rem;
+    font-size: large;
+  }
+  .subtitle {
+    margin-left: 2rem;
+    margin-top: -1.5rem;
+    font-size: small;
+    .line {
+      margin-top: -1rem;
+    }
+    margin-bottom: -2rem;
+  }
 }
 
-.footer {
-  margin-top: -1rem;
-}
+  .full-width {
+    width: 25%;
+    flex: 1;
+  }
+
+  .mat-mini-fab {
+    background-color: map-get($app-primary, 'default');
+  }
+
 
 .open-toggle {
   margin-top: auto;

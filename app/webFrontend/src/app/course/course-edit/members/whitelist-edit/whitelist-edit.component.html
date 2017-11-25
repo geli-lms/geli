@@ -1,14 +1,14 @@
-<div class="titleHeader"><h3>Whitelist:</h3>
-  <button class="open-toggle" (click)="toggle()"
-          [class.opened]="isToggled" mat-icon-button>
-    <mat-icon>arrow_drop_down</mat-icon>
-  </button>
-</div>
-
-<ul class="footer">
-  <li>User: {{dragableWhitelistUser.length}} of {{total}}</li>
-</ul>
-
+<mat-card class="info">
+  <mat-card-title class="title">Whitelist:
+    <button class="open-toggle" (click)="toggle()"
+            [class.opened]="isToggled" mat-icon-button>
+      <mat-icon>arrow_drop_down</mat-icon>
+    </button>
+  </mat-card-title>
+  <mat-card-subtitle class="subtitle">
+    <p class="line">User: {{dragableWhitelistUser.length}} of {{total}}</p>
+  </mat-card-subtitle>
+</mat-card>
 
 <app-whitelist-show [show]="isToggled"
                     [dragUsers]="dragableWhitelistUser"
@@ -32,7 +32,7 @@
          [ngModelOptions]="{standalone: true}" required="">
 </mat-form-field>
 
-<button class="mat-mini-fab" mat-fab color="accent" (click)="createNewWhitelistUser()"
-        matTooltip="Add course">
+<button class="mat-mini-fab" mat-fab (click)="createNewWhitelistUser()"
+        matTooltip="Add whitelist user">
   <mat-icon>add</mat-icon>
 </button>
