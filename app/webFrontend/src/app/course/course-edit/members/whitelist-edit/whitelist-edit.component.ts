@@ -58,14 +58,13 @@ export class WhitelistEditComponent implements OnInit {
       this.snackBar.open('Unique identification should be a number and not empty', '', {duration: 6000});
       return null;
     }
-    return this.whitelistUserService.createItem(this.whitelistUser);
+    return this.whitelistUserService.createItem(this.whitelistUser).then((newUser) => {
+      this.dragableWhitelistUser.push(newUser);
+    });
   }
 
-  removeFromcoruse(whitelistUser: IWhitelistUser) {
-  }
-
-  deleteWhitelistUser() {
-
+  deleteWhitelistUser(user: IWhitelistUser) {
+    this.whitelistUserService.deleteItem(user);
   }
 
 }
