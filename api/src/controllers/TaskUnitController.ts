@@ -1,4 +1,4 @@
-import {Body, Post, Put, Param, JsonController, UseBefore, BadRequestError, Authorized} from 'routing-controllers';
+import {Body, Post, Put, Param, JsonController, UseBefore, BadRequestError, Authorized, Get} from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import {UnitBaseController} from './UnitBaseController';
 import {TaskUnit} from '../models/units/TaskUnit';
@@ -54,4 +54,15 @@ export class TaskUnitController extends UnitBaseController {
     return TaskUnit.findByIdAndUpdate(id, unit, {'new': true})
       .then((u) => u.toObject());
   }
+
+  @Authorized(['teacher', 'admin'])
+  @Get('/:id')
+  getTaskUnit(@Param('id') id: string) {
+    return TaskUnit.findById(id)
+      .populate({
+        path: 'tasks',
+      })
+      .then((u) => u.toObject());
+  }
+
 }

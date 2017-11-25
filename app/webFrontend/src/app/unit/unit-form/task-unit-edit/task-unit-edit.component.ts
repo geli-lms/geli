@@ -44,7 +44,15 @@ export class TaskUnitEditComponent implements OnInit {
     if (!this.model) {
       this.model = new TaskUnit(this.course._id);
       this.add = true;
+    } else {
+      this.reloadTaskUnit();
     }
+  }
+
+  async reloadTaskUnit() {
+    // Reload the task unit from the database to make sure that the tasks (and answers)
+    // are populated properly (e.g. necessary after a Cancel)
+    this.model = <ITaskUnit><any>await this.unitService.readTaskUnit(this.model._id);
   }
 
   saveUnit() {

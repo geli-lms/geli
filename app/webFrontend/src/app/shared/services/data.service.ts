@@ -139,12 +139,6 @@ export class TaskService extends DataService {
       );
     });
   }
-
-  getTasksForUnit(id: string): Promise<any[]> {
-    const promise = this.readSingleItem(id);
-    return promise;
-  }
-
 }
 
 @Injectable()
@@ -172,6 +166,14 @@ export class UnitService extends DataService {
     const originalApiPath = this.apiPath;
     this.apiPath += 'tasks/';
     const promise =  this.updateItem(taskUnit);
+    this.apiPath = originalApiPath;
+    return promise;
+  }
+
+  readTaskUnit(taskUnitId: string) {
+    const originalApiPath = this.apiPath;
+    this.apiPath += 'tasks/';
+    const promise =  this.readSingleItem(taskUnitId);
     this.apiPath = originalApiPath;
     return promise;
   }
