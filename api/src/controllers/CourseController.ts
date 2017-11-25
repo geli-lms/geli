@@ -13,6 +13,7 @@ import {
   UseBefore
 } from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
+import * as ec from '../config/errorCodes'
 
 import {ICourse} from '../../../shared/models/ICourse';
 import {IUser} from '../../../shared/models/IUser';
@@ -141,9 +142,8 @@ export class CourseController {
     return Course.findOne({name: course.name})
       .then((existingCourse) => {
         if (existingCourse) {
-          throw new BadRequestError('duplicate course name');
+          throw new BadRequestError(ec.errorCodes.course.duplicateName.code);
         }
-        console.log('ERRORLOG: ', course.name);
         return new Course(course).save()
           .then((c) => c.toObject());
       });
@@ -164,11 +164,11 @@ export class CourseController {
                 e.firstName === currentUser.profile.firstName.toLowerCase()
                 && e.lastName === currentUser.profile.lastName.toLowerCase()
                 && e.uid === currentUser.uid).length <= 0) {
-              throw new ForbiddenError('Not allowed to join, you are not on whitelist.');
+              throw new ForbiddenError(ec.errorCodes.course.notOnWhitelist.code);
             }
           });
         } else if (course.accessKey && course.accessKey !== data.accessKey) {
-          throw new ForbiddenError('Incorrect or missing access key');
+          throw new ForbiddenError(ec.errorCodes.course.accessKey.code);
         }
 
         if (course.students.indexOf(currentUser._id) < 0) {
@@ -188,7 +188,7 @@ export class CourseController {
     const name: string = file.originalname;
 
     if (!name.endsWith('.csv')) {
-      throw new TypeError('Wrong type allowed are just csv files.');
+      throw new TypeError(ec.errorCodes.upload.type.notCSV.code);
     }
 
     // TODO: Never query all users!

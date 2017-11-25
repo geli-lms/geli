@@ -56,7 +56,7 @@ export class AuthController {
       .then((savedUser) => {
         return emailService.sendActivation(savedUser)
           .catch(() => {
-            throw new InternalServerError('Could not send E-Mail');
+            throw new InternalServerError(ec.errorCodes.mail.notSend.code);
           });
       })
       .then(() => {
