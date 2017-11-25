@@ -51,6 +51,31 @@ describe('Whitelist User', () => {
         }).catch(done);
     });
 
+    it('should search for a whitelist user', (done) => {
+      User.findOne({email: 'teacher1@test.local'})
+        .then((user) => {
+          const courseId = '123456';
+          const newWhitelistUser: IWhitelistUser = new WhitelistUser({
+            firstName: 'Max',
+            lastName: 'Mustermann',
+            uid: '123456',
+            courseId: courseId
+          });
+          WhitelistUser.create(newWhitelistUser).then((createdWhitelistUser) => {
+            chai.request(app)
+              .get(`${BASE_URL}/${createdWhitelistUser._id}`)
+              .set('Authorization', `JWT ${JwtUtils.generateToken(user)}`)
+              .end((err, res) => {
+                res.status.should.be.equal(200);
+                res.body.firstName.should.be.equal(newWhitelistUser.firstName);
+                res.body.lastName.should.be.equal(newWhitelistUser.lastName);
+                res.body.uid.should.be.equal(newWhitelistUser.uid);
+                done();
+              });
+          });
+        }).catch(done);
+    });
+
     it('should fail with not found course id', (done) => {
       User.findOne({email: 'teacher1@test.local'})
         .then((user) => {
@@ -110,7 +135,7 @@ describe('Whitelist User', () => {
     it('should get amount of whitelist user', (done) => {
       User.findOne({email: 'teacher1@test.local'})
         .then((user) => {
-        const courseId = '123456';
+          const courseId = '123456';
           WhitelistUser.count({courseId: courseId}).then((count) => {
             chai.request(app)
               .get(`${BASE_URL}/${courseId}/count`)
