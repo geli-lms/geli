@@ -32,7 +32,7 @@ codeKataSchema.statics.importJSON = async function(unit: ICodeKataUnit, courseId
     lecture.units.push(<ICodeKataModel>savedKata);
     await lecture.save();
 
-    return savedKata;
+    return savedKata.toObject();
   } catch (err) {
     const newError = new InternalServerError('Failed to import code-kata');
     newError.stack += '\nCaused by: ' + err.message + '\n' + err.stack;

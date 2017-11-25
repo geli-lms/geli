@@ -50,21 +50,19 @@ export class DuplicationController {
   }
 
   @Post('/unit/:id')
-  duplicateUnit(@Param('id') id: string, @Body() data: any, @Req() request: Request) {
+  async duplicateUnit(@Param('id') id: string, @Body() data: any, @Req() request: Request) {
     const courseId = data.courseId;
     const lectureId = data.lectureId;
-    return Unit.findById(id)
-      .then((unit: IUnitModel) => {
-        return unit.exportJSON();
-      }).then((exportedUnit: IUnit) => {
-        const unitTypeClass = UnitClassMapper.getMongooseClassForUnit(exportedUnit);
-        return unitTypeClass.prototype.importJSON(exportedUnit, courseId, lectureId);
-      })
-      .catch((err: Error) => {
-        const newError = new InternalServerError('Failed to duplicate unit');
-        newError.stack += '\nCaused by: ' + err.message + '\n' + err.stack;
-        throw newError;
-      });
+    try {
+      const unitModel: IUnitModel = await Unit.findById(id);
+      const exportedUnit: IUnit = await unitModel.exportJSON();
+      const unitTypeClass = UnitClassMapper.getMongooseClassForUnit(exportedUnit);
+      return unitTypeClass.importJSON(exportedUnit, courseId, lectureId);
+    } catch (err) {
+      const newError = new InternalServerError('Failed to duplicate unit');
+      newError.stack += '\nCaused by: ' + err.message + '\n' + err.stack;
+      throw newError;
+    }
   }
 
 }
