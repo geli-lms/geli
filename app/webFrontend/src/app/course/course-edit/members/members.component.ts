@@ -54,7 +54,8 @@ export class MembersComponent implements OnInit {
     this.showProgress.toggleLoadingGlobal(true);
     this.courseService.updateItem({
       '_id': this.course._id,
-      'students': this.course.students.map((user) => user._id)
+      'students': this.course.students.map((user) => user._id),
+      'whitelist': this.course.whitelist.map((wUser) => wUser._id)
     })
       .then(() => {
         this.showProgress.toggleLoadingGlobal(false);
@@ -86,10 +87,9 @@ export class MembersComponent implements OnInit {
   }
 
   removeWhitelistUserFromCourse(draggedUser: IWhitelistUser) {
-    console.log('remove');
-    const idList: string[] = this.course.students.map((u) => u._id);
+    const idList: string[] = this.course.whitelist.map((u) => u._id);
     const index: number = idList.indexOf(draggedUser._id);
-    this.course.students.splice(index, 1);
+    this.course.whitelist.splice(index, 1);
     this.whitelistUserService.countWhitelistUsers(this.courseId).then((count) => {
         this.totalWhitelist = count - this.course.whitelist.length;
       }
@@ -98,7 +98,6 @@ export class MembersComponent implements OnInit {
   }
 
   pushWhitelistUserToCourse(draggedUser: IWhitelistUser) {
-    console.log('push');
     this.course.whitelist.push(draggedUser);
     this.whitelistUserService.countWhitelistUsers(this.courseId).then((count) => {
         this.totalWhitelist = count - this.course.whitelist.length;

@@ -105,11 +105,11 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
 
         if (bagName === this.dragulaWhitelistBagId) {
           this.whitelistUserService.readSingleItem(el.children[0].getAttribute('item-id'))
-            .then((draggedWhitelistUser: IUser) => {
+            .then((draggedWhitelistUser: IWhitelistUser) => {
               if (target.getAttribute('item-id') === 'Whitelist') {
-                this.onDragendRemove.emit(draggedWhitelistUser);
+                this.onDragendRemoveWhitelist.emit(draggedWhitelistUser);
               } else if (target.getAttribute('item-id') === 'WhitelistInCourse') {
-                this.onDragendPush.emit(draggedWhitelistUser);
+                this.onDragendPushWhitelist.emit(draggedWhitelistUser);
               }
             });
         }
