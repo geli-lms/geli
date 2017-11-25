@@ -218,7 +218,7 @@ describe('Course', () => {
           .del(`${BASE_URL}/${course._id}`)
           .set('Authorization', `JWT ${JwtUtils.generateToken(user)}`)
           .end((err, res) => {
-          console.log('End Test');
+          //console.log('End Test');
             res.status.should.be.equal(200);
             res.body.result.should.be.equal(true);
             done();

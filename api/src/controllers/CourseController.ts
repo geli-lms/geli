@@ -212,12 +212,24 @@ export class CourseController {
       .then((c) => c ? c.toObject() : undefined);
   }
 
-@Authorized(['teacher', 'admin'])
-@Delete('/:id')
+  @Authorized(['teacher', 'admin'])
+  @Delete('/:id')
   deleteCourse(@Param('id') id: string) {
-  const conditions: any = {_id: id};
-  return Course.findOneAndRemove(conditions).then((c) => { console.log('What is ', c.toObject()); });
+    const conditions: any = {_id: id};
+    return Course.findOneAndRemove(conditions).then((c) => { console.log('What is ', c.toObject()); });
+  }
+  /*    Doesnt work either.
+  @Authorized(['teacher', 'admin'])
+  @Delete('/:id')
+  async deleteCourse(@Param('id') id: string) {
+    return  Course.findById(id)
+      .then((course) => {
+        return Course.findOneAndRemove({_id: id});
+      });
+  }
 }
+  */
 
 }
+
 
