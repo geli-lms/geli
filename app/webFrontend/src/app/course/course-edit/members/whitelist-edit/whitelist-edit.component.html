@@ -10,30 +10,29 @@
 </ul>
 
 
-  <app-whitelist-show [show]="isToggled"
-                      [dragUsers]="dragableWhitelistUser"
-                      [dragulaBagId]="dragulaBagId"
-                      [fieldId]="'Whitelist'"
-                      (onRemove)="deleteWhitelistUser($event)"
+<app-whitelist-show [show]="isToggled"
+                    [dragUsers]="dragableWhitelistUser"
+                    [dragulaBagId]="dragulaBagId"
+                    [fieldId]="'Whitelist'"
+                    (onRemove)="deleteWhitelistUser($event)">
+</app-whitelist-show>
 
-  ></app-whitelist-show>
+<mat-form-field class="full-width">
+  <input async matInput id="firstName" placeholder="Last name" [(ngModel)]="whitelistUser.firstName"
+         [ngModelOptions]="{standalone: true}" required="">
+</mat-form-field>
 
-  <mat-form-field class="full-width">
-    <input async matInput id="firstName" placeholder="Last name" [(ngModel)]="whitelistUser.firstName"
-           [ngModelOptions]="{standalone: true}" required="">
-  </mat-form-field>
+<mat-form-field class="full-width">
+  <input async matInput id="lastName" placeholder="First name" [(ngModel)]="whitelistUser.lastName"
+         [ngModelOptions]="{standalone: true}" required="">
+</mat-form-field>
 
-  <mat-form-field class="full-width">
-    <input async matInput id="lastName" placeholder="First name" [(ngModel)]="whitelistUser.lastName"
-           [ngModelOptions]="{standalone: true}" required="">
-  </mat-form-field>
+<mat-form-field class="full-width">
+  <input async matInput id="uid" placeholder="User identification number" [(ngModel)]="whitelistUser.uid"
+         [ngModelOptions]="{standalone: true}" required="">
+</mat-form-field>
 
-  <mat-form-field class="full-width">
-    <input async matInput id="uid" placeholder="User identification number" [(ngModel)]="whitelistUser.uid"
-           [ngModelOptions]="{standalone: true}" required="">
-  </mat-form-field>
-
-  <button class="mat-mini-fab" mat-fab color="accent" (click)="createNewWhitelistUser()"
-          matTooltip="Add course">
-    <mat-icon class="md-24 open-animation" [class.icon-open]="open">add</mat-icon>
-  </button>
+<button class="mat-mini-fab" mat-fab color="accent" (click)="createNewWhitelistUser()"
+        matTooltip="Add course">
+  <mat-icon class="md-24 open-animation" [class.icon-open]="open">add</mat-icon>
+</button>

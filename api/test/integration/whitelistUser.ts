@@ -110,9 +110,10 @@ describe('Whitelist User', () => {
     it('should get amount of whitelist user', (done) => {
       User.findOne({email: 'teacher1@test.local'})
         .then((user) => {
-          WhitelistUser.count({}).then((count) => {
+        const courseId = '123456';
+          WhitelistUser.count({courseId: courseId}).then((count) => {
             chai.request(app)
-              .get(`${BASE_URL}/count`)
+              .get(`${BASE_URL}/${courseId}/count`)
               .set('Authorization', `JWT ${JwtUtils.generateToken(user)}`)
               .end((err, res) => {
                 res.status.should.be.equal(200);
@@ -126,9 +127,10 @@ describe('Whitelist User', () => {
     it('should fail with wrong authorization', (done) => {
       User.findOne({email: 'teacher1@test.local'})
         .then((user) => {
-          WhitelistUser.count({}).then((count) => {
+          const courseId = '123456';
+          WhitelistUser.count({courseId: courseId}).then((count) => {
             chai.request(app)
-              .get(`${BASE_URL}/count`)
+              .get(`${BASE_URL}/${courseId}/count`)
               .set('Authorization', `JWT awf`)
               .end((err, res) => {
                 res.status.should.be.equal(401);

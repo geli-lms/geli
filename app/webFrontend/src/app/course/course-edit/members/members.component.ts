@@ -89,7 +89,7 @@ export class MembersComponent implements OnInit {
     const idList: string[] = this.course.students.map((u) => u._id);
     const index: number = idList.indexOf(draggedUser._id);
     this.course.students.splice(index, 1);
-    this.whitelistUserService.countWhitelistUsers().then((count) => {
+    this.whitelistUserService.countWhitelistUsers(this.courseId).then((count) => {
         this.totalWhitelist = count - this.course.whitelist.length;
       }
     );
@@ -98,7 +98,7 @@ export class MembersComponent implements OnInit {
 
   addWhitelistUserToCourse(draggedUser: IWhitelistUser) {
     this.course.whitelist.push(draggedUser);
-    this.whitelistUserService.countWhitelistUsers().then((count) => {
+    this.whitelistUserService.countWhitelistUsers(this.courseId).then((count) => {
         this.totalWhitelist = count - this.course.whitelist.length;
       }
     );
@@ -121,7 +121,7 @@ export class MembersComponent implements OnInit {
         this.total = count - this.course.students.length;
       }
     );
-    this.whitelistUserService.countWhitelistUsers().then((count) => {
+    this.whitelistUserService.countWhitelistUsers(this.courseId).then((count) => {
         this.totalWhitelist = count - this.course.whitelist.length;
       }
     );

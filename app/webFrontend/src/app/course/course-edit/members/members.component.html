@@ -1,6 +1,6 @@
 <app-course-user-list *ngIf="course && foundStudents"
                       [courseId]="courseId"
-                      [course] = "course"
+                      [course]="course"
                       [users]="course.students"
                       [dragableUsersInCourse]="course.students"
                       [dragableUsers]="foundStudents"
@@ -13,9 +13,10 @@
                       (onDragendPush)="pushUserToCourse($event)"
                       (onUpdate)="updateUser($event)"></app-course-user-list>
 <ng-container *ngIf="showWhitelists">
-<app-whitelist-edit
-  [dragulaBagId]="dragulaWhitelistBagId"
-  [total]="totalWhitelist"
-  [searchString]="search">
-</app-whitelist-edit>
+  <app-whitelist-edit
+    [dragulaBagId]="dragulaWhitelistBagId"
+    [total]="totalWhitelist"
+    [searchString]="search"
+    [course]="course">
+  </app-whitelist-edit>
 </ng-container>

@@ -15,6 +15,7 @@ export class WhitelistEditComponent implements OnInit {
 
   dragableWhitelistUser: IWhitelistUser[] = [];
   finishRestCall = false;
+  @Input() course;
   @Input() dragulaBagId;
   @Input() total = 0;
   search = '';
@@ -22,7 +23,7 @@ export class WhitelistEditComponent implements OnInit {
     this.search = search;
     this.finishRestCall = false;
     if (search !== '') {
-      this.whitelistUserService.searchWhitelistUsers(search).then((found) => {
+      this.whitelistUserService.searchWhitelistUsers(this.course._id, search).then((found) => {
         this.dragableWhitelistUser = found;
         this.finishRestCall = true;
       });
@@ -34,7 +35,7 @@ export class WhitelistEditComponent implements OnInit {
   }
 
   isToggled = false;
-  whitelistUser: any = {firstName: '', lastName: '', uid: ''};
+  whitelistUser: any = {firstName: '', lastName: '', uid: '', courseId: null};
 
   constructor(private whitelistUserService: WhitelistUserService,
               private snackBar: MatSnackBar) {
@@ -58,6 +59,7 @@ export class WhitelistEditComponent implements OnInit {
       this.snackBar.open('Unique identification should be a number and not empty', '', {duration: 6000});
       return null;
     }
+    this.whitelistUser.courseId = this.course._id;
     return this.whitelistUserService.createItem(this.whitelistUser).then((newUser) => {
       this.dragableWhitelistUser.push(newUser);
     });
