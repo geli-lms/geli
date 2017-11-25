@@ -1,3 +1,4 @@
+<div class="members" *ngIf="show">
 <ng-container *ngFor="let user of users">
   <mat-card [ngClass]="(currentUser != null && currentUser._id == user._id) ? 'active':'profile'"
             (click)="setCurrentUser(user)">
@@ -20,3 +21,4 @@
     </div>
   </mat-card>
 </ng-container>
+</div>

@@ -11,6 +11,7 @@ import {DialogService} from '../../../../shared/services/dialog.service';
 export class CourseUserListOverviewComponent implements OnInit {
 
   @Input() users: IUser[];
+  @Input() show: boolean;
   @Output() onUpdate = new EventEmitter<String>();
   currentUser: IUser = null;
 
