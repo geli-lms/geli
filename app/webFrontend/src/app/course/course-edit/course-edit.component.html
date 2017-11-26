@@ -4,7 +4,7 @@
   <mat-tab label="General">
     <div class="tab-content">
       <form class="course-form" (ngSubmit)="createCourse()">
-        <mat-form-field class="full-width">
+        <mat-form-field>
           <input async matInput id="name" placeholder="Name" [(ngModel)]="course"
                  [ngModelOptions]="{standalone: true}">
         </mat-form-field>
@@ -15,19 +15,20 @@
         </mat-form-field>
 
         <mat-form-field class="full-width">
-          <input async matInput id="accessKey" placeholder="Access Key" [(ngModel)]="accessKey"
-                 [ngModelOptions]="{standalone: true}">
+          <mat-select name="courseTypes" placeholder="Please select your course type" id="courseTypes" [(ngModel)]="enrollType">
+            <mat-option *ngFor="let enrollType of enrollTypes" [value]="enrollType">{{enrollType}}</mat-option>
+          </mat-select><br>
         </mat-form-field>
 
-        <mat-slide-toggle class="slider" (change)="onChangeMode($event)"
-                         [checked]="mode">
-          <span *ngIf="enrollType === 'free' && !accessKey">Everyone can enroll</span>
-          <span
-            *ngIf="enrollType === 'free' && accessKey">Everyone can enroll using the access key</span>
-          <span *ngIf="enrollType === 'whitelist'">Only whitelisted members can enroll</span>
-        </mat-slide-toggle>
+        <p *ngIf="enrollType === enrollTypeConstants.ENROLL_TYPE_FREE">The course is free and accessible for everyone</p>
 
-        <div class="csv-upload" *ngIf="enrollType === 'whitelist'">
+        <mat-form-field class="full-width" *ngIf="enrollType === enrollTypeConstants.ENROLL_TYPE_ACCESSKEY">
+          <input async matInput id="accessKey" placeholder="Access Key" [(ngModel)]="accessKey"
+                 [ngModelOptions]="{standalone: true}">
+          <mat-hint>Enter an access key for the students</mat-hint>
+        </mat-form-field>
+
+        <div class="csv-upload" *ngIf="enrollType === enrollTypeConstants.ENROLL_TYPE_WHITELIST">
           <p>Upload your OBS csv file with your course members for whitelisting students.</p>
           <p>
             <input class="upload" type="file" ng2FileSelect [uploader]="uploader"
@@ -42,9 +43,9 @@
         </div>
 
         <p>
-          <mat-slide-toggle (change)="onChangeActive($event)"
-                           [checked]="active">
-            <span>Course can be seen by students</span>
+          <mat-slide-toggle (change)="onChangeActive($event)" [checked]="active">
+            <span *ngIf="active">Course can be seen by students</span>
+            <span *ngIf="!active">Course cannot be seen by students</span>
           </mat-slide-toggle>
         </p>
 
