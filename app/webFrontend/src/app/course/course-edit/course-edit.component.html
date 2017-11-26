@@ -1,6 +1,9 @@
 <div class="course-header">
   <h1>Edit course</h1>
-  <a  [routerLink]="['/course', id]" class="md-raised md-primary course-link">Go to course</a>
+  <a mat-button [routerLink]="['/course', id]" target="_blank" class="md-raised md-primary course-link">
+    <mat-icon>open_in_new</mat-icon>
+    Go to course
+  </a>
 </div>
 
 <mat-tab-group dynamicHeight="true">
@@ -55,9 +58,6 @@
           <app-button-save-cancel (cancel)="cancel()"></app-button-save-cancel>
         </p>
       </form>
-      <p>
-        <a [routerLink]="['/course', id]" class="md-raised md-primary">go to course view</a>
-      </p>
     </div>
   </mat-tab>
 
