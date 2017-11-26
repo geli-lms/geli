@@ -36,13 +36,11 @@
         </button>
       </div>
     </div>
-
   </div>
 
   <mat-toolbar class="bottom-toolbar">
     <mat-toolbar-row>
-      <button mat-button (click)="onCancel()" type="reset">Cancel</button>
-      <button mat-button color="primary" class="add-unit" (click)="saveUnit()" type="submit">Save</button>
+      <app-button-save-cancel (save)="saveUnit()" (cancel)="onCancel()"></app-button-save-cancel>
       <span class="toolbar-fill"></span>
       <button mat-mini-fab (click)="addTask()" matTooltip="Add task" matTooltipPosition="right">
         <mat-icon>add</mat-icon>

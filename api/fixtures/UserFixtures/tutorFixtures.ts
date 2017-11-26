@@ -7,7 +7,7 @@ export const tutorFixtures: IFixture = {
     {
       uid: '998745',
       email: 'tutor1@test.local',
-      password: 'test',
+      password: 'test1234',
       role: 'tutor',
       profile: {
         firstName: 'Tick',
@@ -18,7 +18,7 @@ export const tutorFixtures: IFixture = {
     {
       uid: '996548',
       email: 'tutor2@test.local',
-      password: 'test',
+      password: 'test1234',
       role: 'tutor',
       profile: {
         firstName: 'Trick',
@@ -29,7 +29,7 @@ export const tutorFixtures: IFixture = {
     {
       uid: '845218',
       email: 'tutor3@test.local',
-      password: 'test',
+      password: 'test1234',
       role: 'tutor',
       profile: {
         firstName: 'Track',
@@ -40,7 +40,7 @@ export const tutorFixtures: IFixture = {
     {
       uid: '625487',
       email: 'tutor4@test.local',
-      password: 'test',
+      password: 'test1234',
       role: 'tutor',
       profile: {
         firstName: 'Henning',
@@ -51,7 +51,7 @@ export const tutorFixtures: IFixture = {
     {
       uid: '752314',
       email: 'tutor5@test.local',
-      password: 'test',
+      password: 'test1234',
       role: 'tutor',
       profile: {
         firstName: 'Lukas',
