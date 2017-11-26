@@ -108,7 +108,7 @@ export class CourseManageContentComponent implements OnInit, OnDestroy {
     .then(() => {
       this.reloadCourse();
     }, (error) => {
-      console.log(error);
+      this.snackBar.open('Couldn\'t duplicate Lecture', '', {duration: 3000});
     });
   }
 
@@ -183,7 +183,7 @@ export class CourseManageContentComponent implements OnInit, OnDestroy {
       this.course = val;
     })
     .catch((error) => {
-      console.log(error);
+      this.snackBar.open('Couldn\'t reload Course', '', {duration: 3000});
     })
     .then(() => {
       this.showProgress.toggleLoadingGlobal(false)

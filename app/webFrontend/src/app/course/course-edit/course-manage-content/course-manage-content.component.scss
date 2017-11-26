@@ -1,4 +1,4 @@
-@import "../../../../variables";
+@import '../../../../variables';
 
 $unit-height: 64px;
 
@@ -7,9 +7,7 @@ $unit-height: 64px;
 }
 
 .fab {
-  position: fixed;
-  bottom: 0;
-  right: 0;
+  @include globalFabBtn;
 }
 
 .lecture {
