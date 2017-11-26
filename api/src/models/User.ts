@@ -5,6 +5,7 @@ import {NativeError} from 'mongoose';
 import * as crypto from 'crypto';
 import {isNullOrUndefined} from 'util';
 import {isEmail} from 'validator';
+import * as errorCodes from '../config/errorCodes'
 
 interface IUserModel extends IUser, mongoose.Document {
   isValidPassword: (candidatePassword: string) => Promise<boolean>;
@@ -32,7 +33,8 @@ const userSchema = new mongoose.Schema({
     },
     password: {
       type: String,
-      required: true
+      required: true,
+      validate: new RegExp(errorCodes.errorCodes.password.regex.regex)
     },
     profile: {
       firstName: {type: String, index: true},
