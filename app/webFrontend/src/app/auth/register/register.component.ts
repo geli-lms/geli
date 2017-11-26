@@ -14,7 +14,8 @@ import {errorCodes} from '../../../../../../api/src/config/errorCodes';
 export class RegisterComponent implements OnInit {
   registerForm: FormGroup;
   registrationDone = false;
-  role;
+  role = 'student';
+  loading = false;
   uidError = null;
   mailError = null;
 
@@ -37,12 +38,11 @@ export class RegisterComponent implements OnInit {
   ngOnInit() {
     // reset login status
     this.authenticationService.unsetAuthData();
-    this.role = 'student';
     this.generateForm();
   }
 
   changeRole(role) {
-      this.role = role;
+    this.role = role;
   }
 
   clearAllErrors() {
@@ -52,7 +52,8 @@ export class RegisterComponent implements OnInit {
 
   register() {
     this.clearAllErrors();
-    this.showProgress.toggleLoadingGlobal(true);
+    this.loading = true;
+    this.showProgress.toggleLoadingGlobal(this.loading);
     this.registerForm.value.role = this.role;
     if (this.registerForm.value.role !== 'student') {
       delete this.registerForm.value.uid;
@@ -61,9 +62,9 @@ export class RegisterComponent implements OnInit {
     this.trimFormFields();
     this.authenticationService.register(this.registerForm.value).then(
       (val) => {
-        this.showProgress.toggleLoadingGlobal(false);
         this.registrationDone = true;
-      }, (error) => {
+      })
+      .catch((error) => {
         const errormessage = error.json().message || error.json().errmsg;
         switch (errormessage) {
           case errorCodes.mail.duplicate.code: {
@@ -82,13 +83,16 @@ export class RegisterComponent implements OnInit {
             this.snackBar.open('Registration failed', 'Dismiss');
           }
         }
-        this.showProgress.toggleLoadingGlobal(false);
-      });
+      })
+      .then(() => {
+        this.loading = false;
+        this.showProgress.toggleLoadingGlobal(this.loading);
+      })
+    ;
   }
 
   generateForm() {
     this.registerForm = this.formBuilder.group({
-      role: ['', Validators.required],
       profile: this.formBuilder.group({
         firstName: ['', Validators.compose([Validators.required, Validators.minLength(2)])],
         lastName: ['', Validators.compose([Validators.required, Validators.minLength(2)])],
