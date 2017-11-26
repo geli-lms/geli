@@ -46,7 +46,6 @@ export class CourseEditComponent implements OnInit {
               private router: Router,
               private exportService: ExportService,
               private saveFileService: SaveFileService,
-              private showProgress: ShowProgressService,
               private duplicationService: DuplicationService,
               private userService: UserService) {
 
