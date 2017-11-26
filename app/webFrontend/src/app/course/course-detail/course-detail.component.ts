@@ -46,8 +46,4 @@ export class CourseDetailComponent implements OnInit {
         }
       });
   }
-
-  apply() {
-    console.log('apply');
-  }
 }

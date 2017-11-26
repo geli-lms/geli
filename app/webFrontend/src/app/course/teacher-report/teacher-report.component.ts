@@ -8,6 +8,7 @@ import {ProgressService} from '../../shared/services/data/progress.service';
 import {UserService} from '../../shared/services/user.service';
 import {User} from '../../models/User';
 import {TitleService} from '../../shared/services/title.service';
+import {MatSnackBar} from '@angular/material';
 
 @Component({
   selector: 'app-teacher-report',
@@ -28,7 +29,8 @@ export class TeacherReportComponent implements OnInit {
               private unitService: UnitService,
               private progressService: ProgressService,
               private userService: UserService,
-              private titleService: TitleService) {
+              private titleService: TitleService,
+              private snackBar: MatSnackBar) {
   }
 
   ngOnInit() {
@@ -52,11 +54,10 @@ export class TeacherReportComponent implements OnInit {
             }
           }
         }
-        console.log('debug');
         this.titleService.setTitleCut(['Course Report: ', this.course.name]);
       },
       (err: any) => {
-        console.log(err);
+        this.snackBar.open('Couldn\'t read course', '', {duration: 3000});
       })
     .then(() => {
       if (this.course) {

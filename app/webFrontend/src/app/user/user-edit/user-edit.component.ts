@@ -70,7 +70,6 @@ export class UserEditComponent implements OnInit {
         this.titleService.setTitleCut(['Edit User: ', this.user.profile.firstName]);
       },
       (error) => {
-        console.log(error);
         this.snackBar.open(error, 'Dismiss');
       });
   }
