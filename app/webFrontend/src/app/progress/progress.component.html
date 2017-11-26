@@ -1,3 +1,4 @@
-<p>
-  progress works!
-</p>
+<div [ngSwitch]="progress.type">
+  <app-code-kata-progress *ngSwitchCase="'codeKata'" [progress]="progress"></app-code-kata-progress>
+  <app-task-progress *ngSwitchCase="'task'"></app-task-progress>
+</div>

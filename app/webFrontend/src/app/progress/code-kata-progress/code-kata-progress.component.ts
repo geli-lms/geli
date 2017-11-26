@@ -1,4 +1,5 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import {Component, Input, OnInit, ViewEncapsulation} from '@angular/core';
+import {ICodeKataProgress} from '../../../../../../shared/models/ICodeKataProgress';
 
 @Component({
   selector: 'app-code-kata-progress',
@@ -7,6 +8,8 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
   encapsulation: ViewEncapsulation.None
 })
 export class CodeKataProgressComponent implements OnInit {
+
+  @Input() progress: ICodeKataProgress;
 
   constructor() { }
 

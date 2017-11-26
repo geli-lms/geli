@@ -28,7 +28,6 @@
     }
 
   .progress-bar {
-    width: 75%;
     float: right;
     vertical-align: top;
     padding-top: 1rem;
@@ -39,9 +38,15 @@
     }
   }
 
-  .unit-progress {
-    .unit-name {
-      display: inline-block;
+  .content {
+    mat-expansion-panel-header {
+      &.tried {
+        background-color: #C7B42C;
+      }
+
+      &.done {
+        background-color: #5AA454;
+      }
     }
   }
 }
