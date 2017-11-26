@@ -15,7 +15,6 @@ export class FilepickerDialog {
   }
 
   private fileChange(file: any) {
-    console.log(file);
     this.choosenFile = file;
   }
 
