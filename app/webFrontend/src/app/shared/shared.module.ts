@@ -8,7 +8,6 @@ import {UserImageDirective} from './directives/user-image.directive';
 import {MaterialImportModule} from './modules/material-import.module';
 import {BadgeComponent} from './components/badge/badge.component';
 import {MatFabMenuComponent} from './components/mat-fab-menu/mat-fab-menu.component';
-import { BadgeComponent } from './components/badge/badge.component';
 import {ExpandableDivComponent} from './components/expandable-div/expandable-div.component';
 
 @NgModule({
