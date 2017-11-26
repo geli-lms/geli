@@ -1,31 +1,31 @@
-@import "../../../variables";
+@import '../../../variables';
 
 .progress-container {
   border-bottom: 1px solid map-get($mat-grey, 300);
   padding: 1rem;
 
   .profile {
-      width: 25%;
+    width: 25%;
 
-      .user-icon {
-        display: inline-block;
-        width: 2.5rem;
-        height: 2.5rem;
-        background-size: cover;
-        border-radius: 1.25rem;
-        vertical-align: middle;
-      }
-
-      .name {
-        display: inline-block;
-        vertical-align: middle;
-        padding-left: 1rem;
-      }
-
-      .user-data {
-        margin-bottom: 1rem;
-      }
+    .user-icon {
+      display: inline-block;
+      width: 2.5rem;
+      height: 2.5rem;
+      background-size: cover;
+      border-radius: 1.25rem;
+      vertical-align: middle;
     }
+
+    .name {
+      display: inline-block;
+      vertical-align: middle;
+      padding-left: 1rem;
+    }
+
+    .user-data {
+      margin-bottom: 1rem;
+    }
+  }
 
   .progress-bar {
     float: right;

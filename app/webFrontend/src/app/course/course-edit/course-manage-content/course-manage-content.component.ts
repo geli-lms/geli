@@ -50,17 +50,27 @@ export class CourseManageContentComponent implements OnInit, OnDestroy {
     });
 
     this.dragulaService.dropModel.subscribe((value) => {
-      const bagName = value[0];
+      const [bagName, element, target, container] = value;
 
       switch (bagName) {
         case 'lectures':
           this.updateLectureOrder();
           break;
         case 'units':
+          // Update current lecture
           this.updateUnitOrder();
+
+          // When dragging to another lecture we need to update the other lecture too
+          if (target.dataset.lectureId) {
+            this.updateUnitOrder(target.dataset.lectureId);
+          }
           break;
       }
     });
+  }
+
+  isDraggingUnit() {
+    return this.dragulaService.find('units').drake.dragging;
   }
 
   ngOnDestroy() {
@@ -75,10 +85,18 @@ export class CourseManageContentComponent implements OnInit, OnDestroy {
     });
   }
 
-  updateUnitOrder() {
+  updateUnitOrder(id: string = null) {
+    let lecture;
+
+    if (id) {
+      lecture = this.course.lectures.filter(l => l._id === id)[0];
+    } else {
+      lecture = this.openedLecture;
+    }
+
     this.lectureService.updateItem({
-      '_id': this.openedLecture._id,
-      'units': this.openedLecture.units.map((unit) => unit._id)
+      '_id': lecture._id,
+      'units': lecture.units.map((unit) => unit._id)
     });
   }
 
@@ -90,7 +108,7 @@ export class CourseManageContentComponent implements OnInit, OnDestroy {
     .then(() => {
       this.reloadCourse();
     }, (error) => {
-      console.log(error);
+      this.snackBar.open('Couldn\'t duplicate Lecture', '', {duration: 3000});
     });
   }
 
@@ -165,7 +183,7 @@ export class CourseManageContentComponent implements OnInit, OnDestroy {
       this.course = val;
     })
     .catch((error) => {
-      console.log(error);
+      this.snackBar.open('Couldn\'t reload Course', '', {duration: 3000});
     })
     .then(() => {
       this.showProgress.toggleLoadingGlobal(false)
