@@ -7,19 +7,23 @@ import {UnitMenuComponent} from './components/unit-menu/unit-menu.component';
 import {UserImageDirective} from './directives/user-image.directive';
 import {MaterialImportModule} from './modules/material-import.module';
 import { BadgeComponent } from './components/badge/badge.component';
+import {ExpandableDivComponent} from './components/expandable-div/expandable-div.component';
+import {ButtonSaveCancelComponent} from './components/button-save-cancel/button-save-cancel.component';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    MaterialImportModule
+    MaterialImportModule,
   ],
   declarations: [
     GravatarDirective,
     UnitMenuComponent,
     UserImageDirective,
-    BadgeComponent
+    BadgeComponent,
+    ExpandableDivComponent,
+    ButtonSaveCancelComponent,
   ],
   exports: [
     GravatarDirective,
@@ -27,7 +31,9 @@ import { BadgeComponent } from './components/badge/badge.component';
     UnitMenuComponent,
     UserImageDirective,
     MaterialImportModule,
-    BadgeComponent
+    BadgeComponent,
+    ExpandableDivComponent,
+    ButtonSaveCancelComponent,
   ]
 })
 export class SharedModule {
