@@ -48,9 +48,8 @@
             <span *ngIf="!active">Course cannot be seen by students</span>
           </mat-slide-toggle>
         </p>
-
         <p>
-          <button mat-raised-button color="primary" class="mat-button" type="submit">Save</button>
+          <app-button-save-cancel (cancel)="cancel()"></app-button-save-cancel>
           <button mat-button (click)="onExport()" type="button">Export</button>
           <button mat-button (click)="onDuplicate()" type="button">Duplicate</button>
         </p>

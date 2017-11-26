@@ -9,6 +9,7 @@ import {MaterialImportModule} from './modules/material-import.module';
 import {BadgeComponent} from './components/badge/badge.component';
 import {MatFabMenuComponent} from './components/mat-fab-menu/mat-fab-menu.component';
 import {ExpandableDivComponent} from './components/expandable-div/expandable-div.component';
+import {ButtonSaveCancelComponent} from './components/button-save-cancel/button-save-cancel.component';
 
 @NgModule({
   imports: [
@@ -25,6 +26,7 @@ import {ExpandableDivComponent} from './components/expandable-div/expandable-div
     MatFabMenuComponent,
     BadgeComponent,
     ExpandableDivComponent,
+    ButtonSaveCancelComponent,
   ],
   exports: [
     GravatarDirective,
@@ -36,6 +38,7 @@ import {ExpandableDivComponent} from './components/expandable-div/expandable-div
     MatFabMenuComponent,
     BadgeComponent,
     ExpandableDivComponent,
+    ButtonSaveCancelComponent,
   ]
 })
 export class SharedModule {
