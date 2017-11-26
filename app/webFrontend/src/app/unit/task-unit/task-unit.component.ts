@@ -3,6 +3,7 @@ import {MatSnackBar} from '@angular/material';
 import {ActivatedRoute} from '@angular/router';
 import {ProgressService} from '../../shared/services/data/progress.service';
 import {IProgress} from '../../../../../../shared/models/IProgress';
+const knuth = require('knuth-shuffle').knuthShuffle;
 
 @Component({
   selector: 'app-task-unit',
@@ -33,6 +34,7 @@ export class TaskUnitComponent implements OnInit {
         this.progress = (<IProgress>value[0]);
       }
     });
+    this.shuffleAnswers();
   }
 
   reset() {
@@ -42,6 +44,7 @@ export class TaskUnitComponent implements OnInit {
       });
     });
     this.validationMode = false;
+    this.shuffleAnswers();
   }
 
   isAnswerCorrect(answer) {
@@ -78,5 +81,11 @@ export class TaskUnitComponent implements OnInit {
         this.snackBar.open(`An error occurred: ${err.json().message}`, '', {duration: 3000})
       });
     }
+  }
+
+  shuffleAnswers() {
+    this.taskUnit.tasks.forEach((task) => {
+      knuth(task.answers);
+    });
   }
 }
