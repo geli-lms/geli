@@ -1,10 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {CourseService, UnitService} from '../../shared/services/data.service';
-import {ICourse} from '../../../../../../shared/models/ICourse';
-import {IUnit} from '../../../../../../shared/models/units/IUnit';
 import {ActivatedRoute, Router} from '@angular/router';
-import {IProgress} from '../../../../../../shared/models/IProgress';
-import {ProgressService} from '../../shared/services/data/progress.service';
 import {UserService} from '../../shared/services/user.service';
 import {User} from '../../models/User';
 import {ShowProgressService} from '../../shared/services/show-progress.service';
@@ -18,9 +13,6 @@ import {ReportService} from '../../shared/services/data/report.service';
 export class TeacherReportComponent implements OnInit {
 
   id: string;
-  course: ICourse;
-  students: User[];
-  progress: IProgress[];
   report: any;
 
   public diagramColors = {
@@ -42,11 +34,14 @@ export class TeacherReportComponent implements OnInit {
   }
 
   getReport() {
+    this.showProgress.toggleLoadingGlobal(true);
     this.reportService.getCourseResults(this.id)
       .then((report) => {
         this.report = report.map((studentReport) => new User(studentReport));
+        this.showProgress.toggleLoadingGlobal(false);
       })
       .catch((err) => {
+        this.showProgress.toggleLoadingGlobal(false);
       })
   }
 }

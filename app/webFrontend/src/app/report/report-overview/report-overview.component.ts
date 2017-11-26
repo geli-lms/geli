@@ -2,6 +2,7 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import {UserService} from '../../shared/services/user.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ReportService} from '../../shared/services/data/report.service';
+import {ShowProgressService} from '../../shared/services/show-progress.service';
 
 @Component({
   selector: 'app-report-overview',
@@ -22,7 +23,8 @@ export class ReportOverviewComponent implements OnInit {
     public userService: UserService,
     private route: ActivatedRoute,
     private router: Router,
-    private reportService: ReportService) { }
+    private reportService: ReportService,
+    private showProgress: ShowProgressService) { }
 
   ngOnInit() {
     this.route.params.subscribe(params => {
@@ -32,12 +34,14 @@ export class ReportOverviewComponent implements OnInit {
   }
 
   private getReport() {
+    this.showProgress.toggleLoadingGlobal(true);
     this.reportService.getCourseOverview(this.id)
     .then((report) => {
       this.report = report;
+      this.showProgress.toggleLoadingGlobal(false);
     })
     .catch((err) => {
-      console.log(err);
+      this.showProgress.toggleLoadingGlobal(false);
     });
   }
 }
