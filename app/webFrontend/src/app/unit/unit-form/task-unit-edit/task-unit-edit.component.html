@@ -3,49 +3,44 @@
 
   <app-unit-general-info-form [model]="model"></app-unit-general-info-form>
 
-  <div class="info-text">
-    <mat-icon>info</mat-icon>
+  <mat-hint>
     Add questions with any number of possible answers. Mark the correct answer(s) with the checkbox.
-  </div>
+  </mat-hint>
 
   <div *ngFor="let task of model.tasks" class="question-answer">
-
     <mat-form-field matLine class="question">
       <textarea matInput id="name" placeholder="Enter question here" [(ngModel)]="task.name"></textarea>
     </mat-form-field>
 
-    <div class="actions">
-      <button mat-button (click)="updateTask(task)">UPDATE</button>
-      <button mat-button (click)="removeTask(task)">DELETE</button>
-    </div>
+    <button mat-button (click)="removeTask(task)">
+      <mat-icon>remove</mat-icon> Remove question
+    </button>
 
     <div matLine class="answers">
-      <div class="answer" *ngFor="let answer of task.answers; let idx = index;">
-        <div class="check-answer">
-          <mat-checkbox [(ngModel)]="answer.value" name="value_{{idx}}"></mat-checkbox>
-          <mat-form-field>
-            <input matInput placeholder="Enter answer here" [(ngModel)]="answer.text">
-          </mat-form-field>
+        <div class="answer" *ngFor="let answer of task.answers; let idx = index;">
+          <div class="check-answer">
+            <mat-checkbox [(ngModel)]="answer.value" name="value_{{idx}}"></mat-checkbox>
+            <mat-form-field>
+              <input matInput placeholder="Enter answer here" [(ngModel)]="answer.text">
+            </mat-form-field>
+          </div>
         </div>
-      </div>
-      <div class="btn-wrapper">
-        <button mat-icon-button (click)="addAnswerAtEnd(task)" matTooltip="Add answer" matTooltipPosition="right">
-          <mat-icon color="accent">add</mat-icon>
+      <div>
+        <button mat-button (click)="addAnswerAtEnd(task)">
+          <mat-icon>add</mat-icon> Add answer
         </button>
-        <button mat-icon-button (click)="removeLastAnswer(task)" matTooltip="Remove last answer" matTooltipPosition="right">
-          <mat-icon>remove</mat-icon>
+        <button *ngIf="task.answers.length" mat-button (click)="removeLastAnswer(task)">
+          <mat-icon>remove</mat-icon> Remove last answer
         </button>
       </div>
     </div>
   </div>
 
-  <mat-toolbar class="bottom-toolbar">
-    <mat-toolbar-row>
-      <app-button-save-cancel (save)="saveUnit()" (cancel)="onCancel()"></app-button-save-cancel>
-      <span class="toolbar-fill"></span>
-      <button mat-mini-fab (click)="addTask()" matTooltip="Add task" matTooltipPosition="right">
-        <mat-icon>add</mat-icon>
-      </button>
-    </mat-toolbar-row>
-  </mat-toolbar>
+  <p>
+    <button mat-raised-button color="accent" (click)="addTask()">
+      <mat-icon>add</mat-icon> Add question
+    </button>
+
+    <app-button-save-cancel (save)="saveUnit()" (cancel)="onCancel()"></app-button-save-cancel>
+  </p>
 </div>
