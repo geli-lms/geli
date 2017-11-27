@@ -3,26 +3,26 @@ import {IUnit} from '../../../../../../shared/models/units/IUnit';
 
 @Injectable()
 export class SelectedUnitsService {
-  units: IUnit[] = [];
+  unitIds: any[] = [];
 
   constructor() { }
 
   getSelectedData() {
-    return this.units;
+    return this.unitIds;
   }
 
   addUnit(unit: IUnit) {
-    this.units.push(unit);
+    this.unitIds.push(unit._id);
   }
 
   removeUnit(unit: IUnit) {
-    const index = this.units.indexOf(unit, 0);
+    const index = this.unitIds.indexOf(unit._id, 0);
     if (index > -1) {
-      this.units.splice(index, 1);
+      this.unitIds.splice(index, 1);
     }
   }
 
   clearData() {
-    this.units = [];
+    this.unitIds = [];
   }
 }

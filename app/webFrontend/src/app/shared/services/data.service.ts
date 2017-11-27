@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {BackendService} from './backend.service';
 import {Dependency} from '../../about/licenses/dependency.model';
 import {ITaskUnit} from '../../../../../../shared/models/units/ITaskUnit';
+import {IDownload} from '../../../../../../shared/models/IDownload';
 
 export abstract class DataService {
 
@@ -237,8 +238,8 @@ export class AboutDataService extends DataService {
   }
 
   getApiDependencies(): Promise<any[]> {
-    return new Promise((resolve, reject) => {
-      this.backendService.get(this.apiPath + 'dependencies')
+  return new Promise((resolve, reject) => {
+    this.backendService.get(this.apiPath + 'dependencies')
       .subscribe((responseItems: any) => {
           if (responseItems.httpCode >= 500) {
             console.log('API: ' + responseItems.message);
@@ -259,6 +260,22 @@ export class AboutDataService extends DataService {
         },
         error => reject(error)
       );
+  });
+}
+}
+
+@Injectable()
+export class DownloadReq extends DataService {
+  constructor(public backendService: BackendService) {
+    super('tasks/', backendService);
+  }
+
+  postDownloadReqForCourse(idl: IDownload) {
+    return new Promise((resolve, reject) => {
+      this.backendService.post(this.apiPath, idl).subscribe( (responseItem: any) => {
+        resolve(responseItem);
+        },
+        error => reject(error) );
     });
   }
 }
