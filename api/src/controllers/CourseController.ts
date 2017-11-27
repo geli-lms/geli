@@ -1,6 +1,6 @@
 import {Request} from 'express';
 import {
-  Authorized,
+  Authorized, BadRequestError,
   Body,
   CurrentUser, Delete, ForbiddenError,
   Get,
@@ -214,12 +214,20 @@ export class CourseController {
 
   @Authorized(['teacher', 'admin'])
   @Delete('/:id')
-  deleteCourse(@Param('id') id: string) {
+  async deleteCourse(@Param('id') id: string, @CurrentUser() currentUser: IUser) {
     const conditions: any = {_id: id};
-    return Course.findOneAndRemove(conditions).then((c) => { console.log('What is ', c.toObject());
-      return c;
-    });
+    conditions.$or = [
+      {teachers: currentUser._id},
+      {courseAdmin: currentUser._id}
+    ];
+    const course = await Course.findOneAndRemove(conditions);
+    if (course) {
+      return course;
+    } else {
+      throw new BadRequestError('Wrong Course ID or you dont have the rights to delete it.');
+    }
   }
+
 
 }
 
