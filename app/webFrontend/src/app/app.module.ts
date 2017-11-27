@@ -25,6 +25,7 @@ import {UserModule} from './user/user.module';
 import {AuthModule} from './auth/auth.module';
 import {AboutModule} from './about/about.module';
 import {AdminModule} from './admin/admin.module';
+import {SelectedUnitsService} from './shared/services/selected-units.service';
 
 @NgModule({
   declarations: [
@@ -60,6 +61,7 @@ import {AdminModule} from './admin/admin.module';
     FreeTextUnitService,
     CodeKataUnitService,
     APIInfoService,
+    SelectedUnitsService,
     RavenErrorHandler,
     {
       provide: ErrorHandler,

@@ -1,5 +1,7 @@
 import { Component, OnInit, ViewEncapsulation, Input } from '@angular/core';
 import {IUnit} from '../../../../../../../../../shared/models/units/IUnit';
+import {SelectedUnitsService} from '../../../../../shared/services/selected-units.service';
+
 
 @Component({
   selector: 'app-unit-checkbox',
@@ -13,11 +15,21 @@ export class UnitCheckboxComponent implements OnInit {
   @Input()
   chkbox: boolean;
 
-  constructor() {
+  constructor(private selectedUnitsService: SelectedUnitsService ) {
     this.chkbox = false;
   }
 
   ngOnInit() {
   }
+
+  onChange() {
+    console.log('checkbox of: ' + this.unit.name + 'changed, value is: ' + this.chkbox);
+    if(this.chkbox) {
+      this.selectedUnitsService.addUnit(this.unit);
+    } else {
+      this.selectedUnitsService.removeUnit(this.unit);
+    }
+  }
+
 
 }

@@ -47,7 +47,6 @@ export class CourseDetailComponent implements OnInit {
   }
 
   openDownloadDialog() {
-    console.log('Button pushed.');
     this.dialog.open(SelectUnitDialogComponent, {
       data: {course: this.course}
     });
