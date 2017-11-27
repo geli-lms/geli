@@ -108,7 +108,9 @@ export class CourseEditComponent implements OnInit {
   }
 
   deleteCourse() {
-
+    console.log('ID: ' + this.id);
+    //fire alert dialog with really wanna delete?
+    this.courseService.deleteCourse(this.id);
   }
 
   onChangeMode(value) {
