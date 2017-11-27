@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, Output, EventEmitter, OnInit} from '@angular/core';
 import {IWhitelistUser} from '../../../../../../../../shared/models/IWhitelistUser';
 import {WhitelistUserService} from '../../../../shared/services/data.service';
 import {MatSnackBar} from '@angular/material';
@@ -16,6 +16,7 @@ export class WhitelistEditComponent implements OnInit {
   @Input() course: ICourse;
   @Input() dragulaBagId;
   @Input() total = 0;
+  @Output() onDragableWhitelistUserInCourse = new EventEmitter<IWhitelistUser[]>();
   search = '';
   isToggled = false;
   whitelistUser: any = {firstName: '', lastName: '', uid: '', courseId: null};
@@ -35,6 +36,7 @@ export class WhitelistEditComponent implements OnInit {
       this.whitelistUserService.searchWhitelistUsers(this.course._id, search).then((found) => {
         const idList: string[] = this.course.whitelist.map((u) => u._id);
         this.dragableWhitelistUser = found.filter(user => (idList.indexOf(user._id) < 0));
+        this.onDragableWhitelistUserInCourse.emit(found.filter(user => (idList.indexOf(user._id) >= 0)));
         this.finishRestCall = true;
       });
     }

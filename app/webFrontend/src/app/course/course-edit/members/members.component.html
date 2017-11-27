@@ -7,6 +7,7 @@
                       [role]="'student'"
                       [dragulaBagId]="'students'"
                       [usersTotal]="total"
+                      [dragableWhitelistUser]="dragableWhitelistUserInCourse"
                       (onSearch)="onSearch($event)"
                       (onDragendRemove)="removeUserFromCoure($event)"
                       (onDragendPush)="pushUserToCourse($event)"
@@ -18,6 +19,7 @@
     [dragulaBagId]="dragulaWhitelistBagId"
     [total]="totalWhitelist"
     [searchString]="search"
-    [course]="course">
+    [course]="course"
+    (onDragableWhitelistUserInCourse)="onFoundWhitelistUserInCourse($event)">
   </app-whitelist-edit>
 </ng-container>

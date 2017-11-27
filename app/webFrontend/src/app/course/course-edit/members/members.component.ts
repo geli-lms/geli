@@ -15,6 +15,7 @@ export class MembersComponent implements OnInit {
 
   @Input() course: ICourse;
   foundStudents: IUser[] = [];
+  dragableWhitelistUserInCourse: IWhitelistUser[] = [];
   showWhitelists = false;
   search = '';
   total = 0;
@@ -120,5 +121,9 @@ export class MembersComponent implements OnInit {
       }
     );
     this.showWhitelists = search.length > 0;
+  }
+
+  onFoundWhitelistUserInCourse(users: IWhitelistUser[]) {
+    this.dragableWhitelistUserInCourse = users;
   }
 }

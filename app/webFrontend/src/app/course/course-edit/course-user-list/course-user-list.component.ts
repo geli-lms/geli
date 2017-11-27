@@ -23,6 +23,7 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
   @Input() dragulaWhitelistBagId;
   @Input() role;
   @Input() usersTotal = 0;
+  @Input() dragableWhitelistUser: IWhitelistUser[] = [];
 
   @Output() onDragendRemove = new EventEmitter<IUser>();
   @Output() onDragendPush = new EventEmitter<IUser>();
@@ -36,7 +37,6 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
   filteredStates: any;
   finishRestCall = true;
   fieldsToShow = new Map<string, boolean>();
-  dragableWhitelistUser: IWhitelistUser[] = [];
 
   constructor(private dragula: DragulaService,
               private userService: UserDataService,
@@ -47,8 +47,7 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
     return this.search;
   }
 
-  set searchString(search: string) {
-    this.search = search;
+  searchForUsers(search: string) {
     this.onSearch.emit(search);
     this.finishRestCall = false;
     if (search !== '') {
@@ -63,11 +62,7 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
           this.dragableUsers = [];
           this.dragableUsersInCourse = [];
         }
-        this.whitelistUserService.searchWhitelistUsers(this.course._id, search).then((foundWhitelistUser) => {
-          const idList: string[] = this.course.whitelist.map((u) => u._id);
-          this.dragableWhitelistUser = foundWhitelistUser.filter(user => (idList.indexOf(user._id) >= 0));
-          this.finishRestCall = true;
-        });
+        this.finishRestCall = true;
       });
     } else {
       this.finishRestCall = true;

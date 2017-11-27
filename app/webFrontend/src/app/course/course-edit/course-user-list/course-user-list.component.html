@@ -1,6 +1,6 @@
 <mat-form-field class="search">
   <input matInput placeholder="Search and add {{role}}s by name, Id, e-mail"
-         [matAutocomplete]="auto" [formControl]="userCtrl" [(ngModel)]="searchString">
+         [matAutocomplete]="auto" [formControl]="userCtrl" (ngModelOptions)="{debounce : 1000}" (ngModelChange)="searchForUsers($event)" [(ngModel)]="search">
 </mat-form-field>
 
 <mat-autocomplete #auto="matAutocomplete">
