@@ -25,6 +25,7 @@
     "load:fixtures": "gulp load:fixtures"
   },
   "dependencies": {
+    "archiver": "^2.1.0",
     "bcrypt": "^1.0.3",
     "body-parser": "^1.18.2",
     "express": "^4.16.2",
