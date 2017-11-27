@@ -14,6 +14,7 @@ import {
   FreeTextUnitService,
   LectureService,
   TaskService,
+  StudentConfigService,
   UnitService,
   UserDataService
 } from './shared/services/data.service';
@@ -30,6 +31,7 @@ import {AuthModule} from './auth/auth.module';
 import {AboutModule} from './about/about.module';
 import {AdminModule} from './admin/admin.module';
 import {TitleService} from './shared/services/title.service';
+import {studentConfigSchema} from "../../../../api/src/models/StudentConfig";
 
 @NgModule({
   declarations: [
@@ -59,6 +61,7 @@ import {TitleService} from './shared/services/title.service';
     LectureService,
     BackendService,
     UserDataService,
+    StudentConfigService,
     ProgressService,
     ShowProgressService,
     MarkdownService,

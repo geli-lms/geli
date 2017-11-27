@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {BackendService} from './backend.service';
 import {Dependency} from '../../about/licenses/dependency.model';
 import {ITaskUnit} from '../../../../../../shared/models/units/ITaskUnit';
+import {IStudentConfig} from "../../../../../../shared/models/IStudentConfig";
 
 export abstract class DataService {
 
@@ -110,6 +111,49 @@ export class CourseService extends DataService {
         },
         error => reject(error)
       );
+    });
+  }
+}
+
+@Injectable()
+export class StudentConfigService extends DataService {
+  constructor(public backendService: BackendService) {
+    super('studentConfig/', backendService);
+  }
+
+  getConfig(Id: string): Promise<any[]> {
+    return new Promise((resolve, reject) => {
+      this.backendService.get(this.apiPath + Id)
+        .subscribe(
+          (responseItem: any) => {
+            resolve(responseItem);
+          },
+          error => reject(error)
+        );
+    });
+  }
+
+  postConfig(config: IStudentConfig): Promise<any[]> {
+    return new Promise((resolve, reject) => {
+      this.backendService.post(this.apiPath, config)
+        .subscribe(
+          (responseItem: any) => {
+            resolve(responseItem);
+          },
+          error => reject(error)
+        );
+    });
+  }
+
+  updateConfig(id: string, config: IStudentConfig): Promise<any[]> {
+    return new Promise((resolve, reject) => {
+      this.backendService.post(this.apiPath + "/" + id, config)
+        .subscribe(
+          (responseItem: any) => {
+            resolve(responseItem);
+          },
+          error => reject(error)
+        );
     });
   }
 }
