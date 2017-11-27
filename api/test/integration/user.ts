@@ -160,7 +160,7 @@ describe('User', () => {
           const newUser: IUser = new User({
             uid: '123456',
             email: 'test@local.tv',
-            password: 'test',
+            password: 'test123456',
             profile: {
               firstName: 'Max',
               lastName: 'Mustermann'
@@ -196,7 +196,7 @@ describe('User', () => {
           const newUser: IUser = new User({
             uid: '123456',
             email: 'test@local.tv',
-            password: 'test',
+            password: 'test123456',
             profile: {
               firstName: 'Max',
               lastName: 'Mustermann'
