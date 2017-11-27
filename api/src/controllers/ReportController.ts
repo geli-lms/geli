@@ -15,12 +15,6 @@ import {ICourse} from '../../../shared/models/ICourse';
 @Authorized(['teacher', 'admin'])
 export class ReportController {
 
-  @Get('/units/:id')
-  getUnitProgress(@Param('id') id: string) {
-    return Progress.find({'unit': id})
-    .then((progresses) => progresses.map((progress) => progress.toObject({virtuals: true})));
-  }
-
   @Get('/overview/courses/:id')
   async getCourseOverview(@Param('id') id: string) {
     const coursePromise = this.createCoursePromise(id);
@@ -182,6 +176,12 @@ export class ReportController {
     })
     .populate('students')
     .exec();
+  }
+
+  @Get('/units/:id')
+  async getUnitProgress(@Param('id') id: string) {
+    const progresses = await Progress.find({'unit': id}).populate('user');
+    return progresses.map((progress) => progress.toObject({virtuals: true}));
   }
 
   @Get('/users/:id')

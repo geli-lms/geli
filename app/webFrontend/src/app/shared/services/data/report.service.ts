@@ -24,6 +24,14 @@ export class ReportService extends DataService {
     return promise;
   }
 
+  getUnitDetailForCourse(unitId: string) {
+    const originalApiPath = this.apiPath;
+    this.apiPath += 'units/';
+    const promise = this.readSingleItem(unitId);
+    this.apiPath = originalApiPath;
+    return promise;
+  }
+
   getUserProgress(userId: string) {
     const originalApiPath = this.apiPath;
     this.apiPath += 'users/';
