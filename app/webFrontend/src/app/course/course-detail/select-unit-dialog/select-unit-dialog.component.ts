@@ -11,7 +11,7 @@ import {LectureCheckboxComponent} from './lecture-checkbox/lecture-checkbox.comp
   encapsulation: ViewEncapsulation.None
 })
 export class SelectUnitDialogComponent {
-  course : ICourse;
+  course: ICourse;
   chkbox: boolean;
   @ViewChildren(LectureCheckboxComponent)
   childLectures: QueryList<LectureCheckboxComponent>;
@@ -24,10 +24,9 @@ export class SelectUnitDialogComponent {
   }
 
   onChange() {
-    console.log('checkbox of: ' + this.course.name + 'changed, value is: ' + this.chkbox);
     if (this.chkbox) {
       this.childLectures.forEach(lecture => {
-        if(lecture.chkbox == false) {
+        if (lecture.chkbox === false) {
           lecture.chkbox = true;
           lecture.onChange();
         }

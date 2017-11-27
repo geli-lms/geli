@@ -24,10 +24,9 @@ export class LectureCheckboxComponent implements OnInit {
   }
 
   onChange() {
-    console.log('checkbox of: ' + this.lecture.name + 'changed, value is: ' + this.chkbox);
     if (this.chkbox) {
       this.childUnits.forEach(unit => {
-        if(unit.chkbox == false) {
+        if (unit.chkbox === false) {
           unit.chkbox = true;
           unit.onChange();
         }
