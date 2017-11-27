@@ -23,8 +23,7 @@ export class UnitCheckboxComponent implements OnInit {
   }
 
   onChange() {
-    console.log('checkbox of: ' + this.unit.name + 'changed, value is: ' + this.chkbox);
-    if(this.chkbox) {
+    if (this.chkbox) {
       this.selectedUnitsService.addUnit(this.unit);
     } else {
       this.selectedUnitsService.removeUnit(this.unit);
