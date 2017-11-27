@@ -24,11 +24,14 @@ export class UnitReportComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.unitId = decodeURIComponent(params['id']);
     });
+    this.route.parent.params.subscribe(params => {
+      this.courseId = decodeURIComponent(params['id']);
+    });
     this.getReport();
   }
 
   private getReport() {
-    this.reportService.getUnitDetailForCourse(this.unitId)
+    this.reportService.getUnitDetailForCourse(this.courseId, this.unitId)
       .then((report) => {
         const debug = 0;
       })

@@ -10,6 +10,7 @@ import { ReportOverviewComponent } from './report-overview/report-overview.compo
 import {TeacherReportComponent} from './teacher-report/teacher-report.component';
 import {UserModule} from '../user/user.module';
 import {ProgressModule} from '../progress/progress.module';
+import { UnitReportDetailsComponent } from './unit-report-details/unit-report-details.component';
 
 @NgModule({
   imports: [
@@ -25,7 +26,8 @@ import {ProgressModule} from '../progress/progress.module';
     ReportOverviewComponent,
     UnitReportComponent,
     UserReportComponent,
-    TeacherReportComponent
+    TeacherReportComponent,
+    UnitReportDetailsComponent
   ]
 })
 export class ReportModule { }

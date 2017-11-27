@@ -178,10 +178,33 @@ export class ReportController {
     .exec();
   }
 
-  @Get('/units/:id')
-  async getUnitProgress(@Param('id') id: string) {
-    const progresses = await Progress.find({'unit': id}).populate('user');
-    return progresses.map((progress) => progress.toObject({virtuals: true}));
+  @Get('/details/courses/:courseId/units/:unitId')
+  async getUnitProgress(@Param('courseId') courseId: string, @Param('unitId') unitId: string) {
+    const coursePromise = Course.findOne({_id: courseId})
+      .select({ students: 1 })
+      .populate('students')
+      .exec();
+    const progressPromise = Progress.find({'unit': unitId}).exec();
+    const [course, progresses] = await Promise.all([coursePromise, progressPromise]);
+    const courseObj: ICourse = <ICourse>course.toObject();
+    const students = courseObj.students;
+
+    const progressObjects = progresses.map((progress) => progress.toObject());
+    const studentsWithProgress = students.map((student: IUser) => {
+      const studentWithProgress: IUser = student;
+      const progressIndex = progressObjects.findIndex((progressObj: any) => {
+        return progressObj.user === student._id;
+      });
+
+      if (progressIndex > -1) {
+        studentWithProgress.progress = progressObjects[progressIndex];
+        progressObjects.splice(progressIndex, 1);
+      }
+
+      return studentWithProgress;
+    });
+
+    return studentsWithProgress;
   }
 
   @Get('/users/:id')

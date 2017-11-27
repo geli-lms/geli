@@ -10,12 +10,7 @@
     <app-user-profile [user]="student" [userId]="this.userService.user._id"></app-user-profile>
   </div>
   <div class="content">
-    <mat-expansion-panel *ngFor="let unit of student.progress?.units">
-      <mat-expansion-panel-header [ngClass]="[unit.progressData.done ? 'done' : 'tried']">
-        <mat-panel-title>{{unit.name}}</mat-panel-title>
-      </mat-expansion-panel-header>
-      <app-progress [progress]="unit.progressData"></app-progress>
-    </mat-expansion-panel>
+    <app-unit-report-details *ngFor="let unit of student.progress?.units" [unit]="unit"></app-unit-report-details>
     <p *ngIf="student.progress?.units.length === 0">There are no submissions for this user.</p>
   </div>
 </div>

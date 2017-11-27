@@ -39,14 +39,6 @@
   }
 
   .content {
-    mat-expansion-panel-header {
-      &.tried {
-        background-color: #C7B42C;
-      }
 
-      &.done {
-        background-color: #5AA454;
-      }
-    }
   }
 }
