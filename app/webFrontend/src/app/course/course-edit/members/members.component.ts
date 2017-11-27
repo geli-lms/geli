@@ -6,6 +6,7 @@ import {ICourse} from '../../../../../../../shared/models/ICourse';
 import {User} from '../../../models/User';
 import {isNullOrUndefined} from 'util';
 import {IWhitelistUser} from '../../../../../../../shared/models/IWhitelistUser';
+import {DragulaService} from 'ng2-dragula';
 
 @Component({
   selector: 'app-members',

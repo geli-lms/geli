@@ -27,8 +27,6 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
 
   @Output() onDragendRemove = new EventEmitter<IUser>();
   @Output() onDragendPush = new EventEmitter<IUser>();
-  @Output() onDragendRemoveWhitelist = new EventEmitter<IWhitelistUser>();
-  @Output() onDragendPushWhitelist = new EventEmitter<IWhitelistUser>();
   @Output() onUpdate = new EventEmitter<String>();
   @Output() onSearch = new EventEmitter<String>();
 
@@ -70,7 +68,6 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    const idList: string[] = this.dragableUsersInCourse.map((u) => u._id);
     // Make items only draggable by dragging the handle
     this.dragula.setOptions(this.dragulaBagId, {
       moves: (el, container, handle) => {
@@ -87,25 +84,19 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
       const [bagName, el, target, source] = value;
       if (source.getAttribute('item-id') !== target.getAttribute('item-id')) {
         if (bagName === this.dragulaBagId) {
-          this.userService.readSingleItem(el.children[0].getAttribute('item-id'))
-            .then((draggedUser: IUser) => {
               if (target.getAttribute('item-id') === 'UserNotInCourse') {
-                this.onDragendRemove.emit(draggedUser);
+                const idList: string[] = this.dragableUsers.map(user => user._id);
+                const index: number = idList.indexOf(el.children[0].getAttribute('item-id'));
+                if (index >= 0) {
+                  this.onDragendRemove.emit(this.dragableUsers[index]);
+                }
               } else if (target.getAttribute('item-id') === 'UserInCourse') {
-                this.onDragendPush.emit(draggedUser);
+                const idList: string[] = this.dragableUsersInCourse.map(user => user._id);
+                const index: number = idList.indexOf(el.children[0].getAttribute('item-id'));
+                if (index >= 0) {
+                  this.onDragendPush.emit(this.dragableUsersInCourse[index]);
+                }
               }
-            });
-        }
-
-        if (bagName === this.dragulaWhitelistBagId) {
-          this.whitelistUserService.readSingleItem(el.children[0].getAttribute('item-id'))
-            .then((draggedWhitelistUser: IWhitelistUser) => {
-              if (target.getAttribute('item-id') === 'Whitelist') {
-                this.onDragendRemoveWhitelist.emit(draggedWhitelistUser);
-              } else if (target.getAttribute('item-id') === 'WhitelistInCourse') {
-                this.onDragendPushWhitelist.emit(draggedWhitelistUser);
-              }
-            });
         }
       }
     });

@@ -61,11 +61,14 @@ export class WhitelistShowComponent implements OnInit {
   }
 
   isInCourse(user: IWhitelistUser) {
-    const idListCourse: string[] = this.course.students.map((u) =>
-      u.profile.firstName.toLowerCase() +
-      u.profile.lastName.toLowerCase() +
-      u.uid);
-    return idListCourse.indexOf(user.firstName + user.lastName + user.uid) >= 0;
+    if (this.course) {
+      const idListCourse: string[] = this.course.students.map((u) =>
+        u.profile.firstName.toLowerCase() +
+        u.profile.lastName.toLowerCase() +
+        u.uid);
+      return idListCourse.indexOf(user.firstName + user.lastName + user.uid) >= 0;
+    }
+    return false;
   }
 
   isSignedIn(user: IWhitelistUser) {

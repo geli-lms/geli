@@ -3,6 +3,7 @@ import {IWhitelistUser} from '../../../../../../../../shared/models/IWhitelistUs
 import {WhitelistUserService} from '../../../../shared/services/data.service';
 import {MatSnackBar} from '@angular/material';
 import {ICourse} from '../../../../../../../../shared/models/ICourse';
+import {DragulaService} from 'ng2-dragula';
 
 @Component({
   selector: 'app-whitelist-edit',
@@ -12,17 +13,22 @@ import {ICourse} from '../../../../../../../../shared/models/ICourse';
 export class WhitelistEditComponent implements OnInit {
 
   dragableWhitelistUser: IWhitelistUser[] = [];
+  dragableWhitelistUserInCourse: IWhitelistUser[] = [];
   finishRestCall = false;
   @Input() course: ICourse;
   @Input() dragulaBagId;
   @Input() total = 0;
   @Output() onDragableWhitelistUserInCourse = new EventEmitter<IWhitelistUser[]>();
+  @Output() onDragendRemoveWhitelist = new EventEmitter<IWhitelistUser>();
+  @Output() onDragendPushWhitelist = new EventEmitter<IWhitelistUser>();
+
   search = '';
   isToggled = false;
   whitelistUser: any = {firstName: '', lastName: '', uid: '', courseId: null};
 
   constructor(private whitelistUserService: WhitelistUserService,
-              private snackBar: MatSnackBar) {
+              private snackBar: MatSnackBar,
+              private dragula: DragulaService) {
   }
 
   get searchString() {
@@ -37,14 +43,30 @@ export class WhitelistEditComponent implements OnInit {
       this.whitelistUserService.searchWhitelistUsers(this.course._id, search).then((found) => {
         const idList: string[] = this.course.whitelist.map((u) => u._id);
         this.dragableWhitelistUser = found.filter(user => (idList.indexOf(user._id) < 0));
-        const whitelistInCourse = found.filter(user => (idList.indexOf(user._id) >= 0));
-        this.onDragableWhitelistUserInCourse.emit(whitelistInCourse);
+        this.dragableWhitelistUserInCourse = found.filter(user => (idList.indexOf(user._id) >= 0));
+        this.onDragableWhitelistUserInCourse.emit(this.dragableWhitelistUserInCourse);
         this.finishRestCall = true;
       });
     }
   }
 
   ngOnInit() {
+    this.dragula.dropModel.subscribe(value => {
+      const [bagName, el, target, source] = value;
+      if (target.getAttribute('item-id') === 'Whitelist') {
+        const idList: string[] = this.dragableWhitelistUser.map(user => user._id);
+        const index: number = idList.indexOf(el.children[0].getAttribute('item-id'));
+        if (index >= 0) {
+          this.onDragendRemoveWhitelist.emit(this.dragableWhitelistUser[index]);
+        }
+      } else if (target.getAttribute('item-id') === 'WhitelistInCourse') {
+        const idList: string[] = this.dragableWhitelistUserInCourse.map(user => user._id);
+        const index: number = idList.indexOf(el.children[0].getAttribute('item-id'));
+        if (index >= 0) {
+          this.onDragendPushWhitelist.emit(this.dragableWhitelistUserInCourse[index]);
+        }
+      }
+    })
   }
 
   toggle() {
