@@ -1,5 +1,10 @@
 @import "../../../../../variables";
 
+.mat-card {
+  width: 99%;
+  margin-left: 0.2rem;
+}
+
 .info {
   .title {
     margin-top: -1.5rem;
@@ -22,6 +27,8 @@
   }
 
   .mat-mini-fab {
+    float: right;
+    margin-right: 3rem;
     background-color: map-get($app-primary, 'default');
   }
 

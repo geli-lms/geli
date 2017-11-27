@@ -22,6 +22,8 @@
 }
 
 .list {
+  width: 99%;
+  margin-left: 0.2rem;
   padding-bottom: 10px;
   background-color: #ffffff;
 
@@ -63,9 +65,4 @@
   &:hover {
     opacity: 1;
   }
-}
-
-.drop {
-  min-height: 2rem;
-  background-color: #fafafa;
 }
