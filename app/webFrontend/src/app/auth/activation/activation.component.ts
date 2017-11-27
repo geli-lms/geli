@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {AuthenticationService} from '../../shared/services/authentication.service';
+import {TitleService} from '../../shared/services/title.service';
 
 @Component({
   selector: 'app-activation',
@@ -13,7 +14,8 @@ export class ActivationComponent implements OnInit {
   success: boolean;
 
   constructor(private route: ActivatedRoute,
-              private auth: AuthenticationService) {
+              private auth: AuthenticationService,
+              private titleService: TitleService) {
     this.status = 'Activating account...';
     this.success = false;
     this.route.params.subscribe(params => {
@@ -29,6 +31,7 @@ export class ActivationComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.titleService.setTitle('Activation');
   }
 
 }
