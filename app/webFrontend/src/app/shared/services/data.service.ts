@@ -267,7 +267,7 @@ export class AboutDataService extends DataService {
 @Injectable()
 export class DownloadReq extends DataService {
   constructor(public backendService: BackendService) {
-    super('tasks/', backendService);
+    super('download/', backendService);
   }
 
   postDownloadReqForCourse(idl: IDownload) {

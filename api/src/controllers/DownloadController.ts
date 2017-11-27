@@ -8,21 +8,17 @@ import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import {CodeKataUnit} from '../models/units/CodeKataUnit';
 import {Unit} from '../models/units/Unit';
 import {IDownload} from '../../../shared/models/IDownload';
-import {Lecture} from '../models/Lecture';
-import {IUnit} from '../../../shared/models/units/IUnit';
-import {ITask} from '../../../shared/models/task/ITask';
 import {IFreeTextUnit} from '../../../shared/models/units/IFreeTextUnit';
-import {IVideoUnitModel, VideoUnit} from '../models/units/VideoUnit';
 import {FreeTextUnit} from '../models/units/FreeTextUnit';
-import {IFileUnitModel, FileUnit} from '../models/units/FileUnit';
 import {TaskUnit} from '../models/units/TaskUnit';
+import {ITaskUnit} from "../../../shared/models/units/ITaskUnit";
 import {ICodeKataUnit} from '../../../shared/models/units/ICodeKataUnit';
 import {IFileUnit} from '../../../shared/models/units/IFileUnit';
 import {IVideoUnit} from '../../../shared/models/units/IVideoUnit';
-import {ITaskUnit} from '../../../shared/models/units/ITaskUnit';
+import {Task} from '../models/Task';
 
 @JsonController('/download')
-// @UseBefore(passportJwtMiddleware)
+@UseBefore(passportJwtMiddleware)
 export class DownloadController {
 
   @Post('/')
@@ -42,7 +38,7 @@ export class DownloadController {
         archive.append(freeTextUnit.description + '\n' + freeTextUnit.markdown, {name: freeTextUnit.name + '.txt'});
       } else if (localUnit instanceof CodeKataUnit) {
         const codeKataUnit = <ICodeKataUnit><any>localUnit;
-        archive.append(codeKataUnit.description + '\n' + codeKataUnit.code, {name: codeKataUnit.name + '.txt'});
+        archive.append(codeKataUnit.description + '\n' + codeKataUnit.definition + '\n' + codeKataUnit.code, {name: codeKataUnit.name + '.txt'});
       } else if (localUnit instanceof FileUnit) {
         const fileUnit = <IFileUnit><any>localUnit;
         for (const file of fileUnit.files) {
@@ -55,13 +51,20 @@ export class DownloadController {
         }
       } else if (localUnit instanceof TaskUnit) {
         const taskUnit = <ITaskUnit><any>localUnit;
-        let fileStream: string = '';
+        let fileStream = '';
 
         for (const task of taskUnit.tasks) {
-          fileStream.concat(task.name + '\n' + task.answers);
+          const newTask = await Task.findOne(task._id);
+            fileStream = fileStream + newTask.name + '\n';
+
+          for(const answer of newTask.answers) {
+              fileStream = fileStream + answer.text + ': [ ]\n';
+            }
+            fileStream = fileStream + '-------------------------------------\n';
+            archive.append(taskUnit.description + '\n' + fileStream, {name: taskUnit.name + '.txt'});
         }
-        archive.append(taskUnit.description + '\n' + fileStream, {name: taskUnit.name + '.txt'});
-      } else {
+      }
+      else {
         throw new NotFoundError();
       }
     }
