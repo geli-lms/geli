@@ -47,14 +47,14 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
 
   searchForUsers(search: string) {
     this.onSearch.emit(search);
-    this.finishRestCall = false;
-    if (search !== '') {
-      this.userService.searchUsers(this.role, search).then((found) => {
+    if (search !== '' && this.finishRestCall) {
+      this.finishRestCall = false;
+      this.userService.searchUsers(this.role, search).then((found: User[]) => {
         if (found) {
-          const idList: string[] = this.dragableUsersInCourse.map((u) => u._id);
-          this.dragableUsers = found.filter(user => (idList.indexOf(user._id) < 0
-            && this.course.courseAdmin._id !== user._id));
+          const idList: string[] = found.map((u) => u._id);
           this.dragableUsersInCourse = found.filter(user => (idList.indexOf(user._id) >= 0
+            && this.course.courseAdmin._id !== user._id));
+          this.dragableUsers = found.filter(user => (idList.indexOf(user._id) < 0
             && this.course.courseAdmin._id !== user._id));
         } else {
           this.dragableUsers = [];
