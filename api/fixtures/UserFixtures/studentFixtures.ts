@@ -7,7 +7,7 @@ export const studentFixtures: IFixture = {
     {
       uid: '548926',
       email: 'student1@test.local',
-      password: 'test',
+      password: 'test1234',
       role: 'student',
       profile: {
         firstName: 'Tick',
@@ -18,7 +18,7 @@ export const studentFixtures: IFixture = {
     {
       uid: '234567',
       email: 'student2@test.local',
-      password: 'test',
+      password: 'test1234',
       role: 'student',
       profile: {
         firstName: 'Trick',
@@ -29,7 +29,7 @@ export const studentFixtures: IFixture = {
     {
       uid: '345678',
       email: 'student3@test.local',
-      password: 'test',
+      password: 'test1234',
       role: 'student',
       profile: {
         firstName: 'Track',
@@ -40,7 +40,7 @@ export const studentFixtures: IFixture = {
     {
       uid: '652147',
       email: 'student4@test.local',
-      password: 'test',
+      password: 'test1234',
       role: 'student',
       profile: {
         firstName: 'Curt',
@@ -51,7 +51,7 @@ export const studentFixtures: IFixture = {
     {
       uid: '469952',
       email: 'student5@test.local',
-      password: 'test',
+      password: 'test1234',
       role: 'student',
       profile: {
         firstName: 'Fabienne',
@@ -62,7 +62,7 @@ export const studentFixtures: IFixture = {
     {
       uid: '856472',
       email: 'student6@test.local',
-      password: 'test',
+      password: 'test1234',
       role: 'student',
       profile: {
         firstName: 'Margit',
@@ -73,7 +73,7 @@ export const studentFixtures: IFixture = {
     {
       uid: '560807',
       email: 'student7@test.local',
-      password: 'test',
+      password: 'test1234',
       role: 'student',
       profile: {
         firstName: 'Gerhard',
@@ -84,7 +84,7 @@ export const studentFixtures: IFixture = {
     {
       uid: '526599',
       email: 'student8@test.local',
-      password: 'test',
+      password: 'test1234',
       role: 'student',
       profile: {
         firstName: 'Margot',
@@ -95,7 +95,7 @@ export const studentFixtures: IFixture = {
     {
       uid: '669050',
       email: 'student9@test.local',
-      password: 'test',
+      password: 'test1234',
       role: 'student',
       profile: {
         firstName: 'Annika',
@@ -106,7 +106,7 @@ export const studentFixtures: IFixture = {
     {
       uid: '895468',
       email: 'student10@test.local',
-      password: 'test',
+      password: 'test1234',
       role: 'student',
       profile: {
         firstName: 'Lore',
@@ -117,7 +117,7 @@ export const studentFixtures: IFixture = {
     {
       uid: '989117',
       email: 'student11@test.local',
-      password: 'test',
+      password: 'test1234',
       role: 'student',
       profile: {
         firstName: 'Britta',
@@ -128,7 +128,7 @@ export const studentFixtures: IFixture = {
     {
       uid: '910456',
       email: 'student12@test.local',
-      password: 'test',
+      password: 'test1234',
       role: 'student',
       profile: {
         firstName: 'Moritz',
@@ -139,7 +139,7 @@ export const studentFixtures: IFixture = {
     {
       uid: '981906',
       email: 'student13@test.local',
-      password: 'test',
+      password: 'test1234',
       role: 'student',
       profile: {
         firstName: 'Hans',
@@ -150,7 +150,7 @@ export const studentFixtures: IFixture = {
     {
       uid: '343573',
       email: 'student14@test.local',
-      password: 'test',
+      password: 'test1234',
       role: 'student',
       profile: {
         firstName: 'Josephine',
@@ -161,7 +161,7 @@ export const studentFixtures: IFixture = {
     {
       uid: '322746',
       email: 'student15@test.local',
-      password: 'test',
+      password: 'test1234',
       role: 'student',
       profile: {
         firstName: 'Albert',
@@ -172,7 +172,7 @@ export const studentFixtures: IFixture = {
     {
       uid: '862138',
       email: 'student16@test.local',
-      password: 'test',
+      password: 'test1234',
       role: 'student',
       profile: {
         firstName: 'Wilfried',
@@ -183,7 +183,7 @@ export const studentFixtures: IFixture = {
     {
       uid: '804203',
       email: 'student17@test.local',
-      password: 'test',
+      password: 'test1234',
       role: 'student',
       profile: {
         firstName: 'Malin',
@@ -194,7 +194,7 @@ export const studentFixtures: IFixture = {
     {
       uid: '682277',
       email: 'student18@test.local',
-      password: 'test',
+      password: 'test1234',
       role: 'student',
       profile: {
         firstName: 'Nina',
@@ -205,7 +205,7 @@ export const studentFixtures: IFixture = {
     {
       uid: '334631',
       email: 'student19@test.local',
-      password: 'test',
+      password: 'test1234',
       role: 'student',
       profile: {
         firstName: 'Lars',
@@ -216,7 +216,7 @@ export const studentFixtures: IFixture = {
     {
       uid: '121504',
       email: 'student20@test.local',
-      password: 'test',
+      password: 'test1234',
       role: 'student',
       profile: {
         firstName: 'Guenther',
@@ -227,7 +227,7 @@ export const studentFixtures: IFixture = {
     {
       uid: '356408',
       email: 'student21@test.local',
-      password: 'test',
+      password: 'test1234',
       role: 'student',
       profile: {
         firstName: 'Alex',
@@ -238,7 +238,7 @@ export const studentFixtures: IFixture = {
     {
       uid: '187170',
       email: 'student22@test.local',
-      password: 'test',
+      password: 'test1234',
       role: 'student',
       profile: {
         firstName: 'Anke',
@@ -249,7 +249,7 @@ export const studentFixtures: IFixture = {
     {
       uid: '970531',
       email: 'student23@test.local',
-      password: 'test',
+      password: 'test1234',
       role: 'student',
       profile: {
         firstName: 'Clemens',
@@ -260,7 +260,7 @@ export const studentFixtures: IFixture = {
     {
       uid: '533373',
       email: 'student24@test.local',
-      password: 'test',
+      password: 'test1234',
       role: 'student',
       profile: {
         firstName: 'Björn',
@@ -271,7 +271,7 @@ export const studentFixtures: IFixture = {
     {
       uid: '359809',
       email: 'student25@test.local',
-      password: 'test',
+      password: 'test1234',
       role: 'student',
       profile: {
         firstName: 'Anna',
@@ -282,7 +282,7 @@ export const studentFixtures: IFixture = {
     {
       uid: '217407',
       email: 'student26@test.local',
-      password: 'test',
+      password: 'test1234',
       role: 'student',
       profile: {
         firstName: 'Jan',
@@ -293,7 +293,7 @@ export const studentFixtures: IFixture = {
     {
       uid: '102732',
       email: 'student27@test.local',
-      password: 'test',
+      password: 'test1234',
       role: 'student',
       profile: {
         firstName: 'Alexander',
@@ -304,7 +304,7 @@ export const studentFixtures: IFixture = {
     {
       uid: '462593',
       email: 'student28@test.local',
-      password: 'test',
+      password: 'test1234',
       role: 'student',
       profile: {
         firstName: 'Gerda',
@@ -315,7 +315,7 @@ export const studentFixtures: IFixture = {
     {
       uid: '609818',
       email: 'student29@test.local',
-      password: 'test',
+      password: 'test1234',
       role: 'student',
       profile: {
         firstName: 'Robin',
@@ -326,7 +326,7 @@ export const studentFixtures: IFixture = {
     {
       uid: '129982',
       email: 'student30@test.local',
-      password: 'test',
+      password: 'test1234',
       role: 'student',
       profile: {
         firstName: 'Christian',

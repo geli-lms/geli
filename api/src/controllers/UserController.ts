@@ -7,6 +7,7 @@ import fs = require('fs');
 import {IUser} from '../../../shared/models/IUser';
 import {IUserModel, User} from '../models/User';
 import {isNullOrUndefined} from 'util';
+import {errorCodes} from '../config/errorCodes';
 
 const multer = require('multer');
 
@@ -27,7 +28,7 @@ const uploadOptions = {
 
 function escapeRegex(text: string) {
   return text.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
-};
+}
 
 @JsonController('/users')
 @UseBefore(passportJwtMiddleware)
@@ -50,7 +51,7 @@ export class UserController {
     }
     query = query.trim();
     if (isNullOrUndefined(query) || query.length <= 0) {
-      throw new HttpError(400, 'No given query.');
+      throw new HttpError(400, errorCodes.query.empty.code);
     }
     const conditions: any = {};
     const escaped = escapeRegex(query).split(' ');

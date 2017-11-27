@@ -6,6 +6,7 @@ import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import {isNullOrUndefined} from 'util';
 import {WhitelistUser} from '../models/WhitelistUser';
 import {IWhitelistUser} from '../../../shared/models/IWhitelistUser';
+import {errorCodes} from '../config/errorCodes';
 
 function escapeRegex(text: string) {
   return text.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
@@ -21,7 +22,7 @@ export class WitelistController {
   searchUser(@Param('id') id: string, @QueryParam('query') query: string) {
     query = query.trim();
     if (isNullOrUndefined(query) || query.length <= 0) {
-      throw new HttpError(400, 'No given query.');
+      throw new HttpError(400, errorCodes.query.empty.code);
     }
     const conditions: any = {};
     const escaped = escapeRegex(query).split(' ');
