@@ -8,7 +8,7 @@ export class SelectedUnitsService {
   constructor() { }
 
   getSelectedData() {
-    //return this.selectedUnits();
+    return this.units;
   }
 
   addUnit(unit: IUnit) {
@@ -26,7 +26,6 @@ export class SelectedUnitsService {
 
   clearData() {
     this.units = []; //this.units.splice(o, this.units.length);
-    console.log('array size after clear:' + this.units.length);
+    //console.log('array size after clear:' + this.units.length);
   }
-
 }
