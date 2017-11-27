@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {UserService} from '../shared/services/user.service';
+import {TitleService} from '../shared/services/title.service';
 
 @Component({
   selector: 'app-admin',
@@ -8,10 +8,13 @@ import {UserService} from '../shared/services/user.service';
 })
 export class AdminComponent implements OnInit {
 
-  constructor(private userService: UserService) {
+  constructor(
+    private titleService: TitleService
+  ) {
   }
 
   ngOnInit() {
+    this.titleService.setTitle('Admin');
   }
 
 }

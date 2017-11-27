@@ -5,6 +5,7 @@ import {CourseService} from '../../shared/services/data.service';
 import {ICourse} from '../../../../../../shared/models/ICourse';
 import {UserService} from '../../shared/services/user.service';
 import {MatSnackBar} from '@angular/material';
+import {TitleService} from '../../shared/services/title.service';
 
 @Component({
   selector: 'app-course-detail',
@@ -21,7 +22,8 @@ export class CourseDetailComponent implements OnInit {
               private route: ActivatedRoute,
               private courseService: CourseService,
               public userService: UserService,
-              private snackBar: MatSnackBar) {
+              private snackBar: MatSnackBar,
+              private titleService: TitleService) {
   }
 
   ngOnInit() {
@@ -29,12 +31,14 @@ export class CourseDetailComponent implements OnInit {
       this.id = decodeURIComponent(params['id']);
     });
     this.getCourse(this.id);
+    this.titleService.setTitle('Course');
   }
 
   getCourse(courseId: string) {
     this.courseService.readSingleItem(courseId).then(
       (course: any) => {
         this.course = course;
+        this.titleService.setTitleCut(['Course: ', this.course.name]);
       },
       (errorResponse: Response) => {
         if (errorResponse.status === 401) {
