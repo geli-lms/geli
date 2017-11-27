@@ -1,9 +1,7 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {ErrorHandler, NgModule} from '@angular/core';
 import {HttpModule} from '@angular/http';
-
 import {AppComponent} from './app.component';
-
 import {RavenErrorHandler} from './shared/services/raven-error-handler.service';
 import {UserService} from './shared/services/user.service';
 import {AuthenticationService} from './shared/services/authentication.service';
@@ -20,7 +18,6 @@ import {
   UserDataService
 } from './shared/services/data.service';
 import {BackendService} from './shared/services/backend.service';
-
 import {ShowProgressService} from './shared/services/show-progress.service';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ProgressService} from './shared/services/data/progress.service';
@@ -48,7 +45,7 @@ import {TitleService} from './shared/services/title.service';
     UserModule,
     AuthModule,
     AboutModule,
-    SharedModule
+    SharedModule,
   ],
   providers: [
     UserService,

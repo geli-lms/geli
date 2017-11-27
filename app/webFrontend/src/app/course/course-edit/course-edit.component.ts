@@ -1,5 +1,5 @@
 import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CourseService} from '../../shared/services/data.service';
 import {MatSnackBar} from '@angular/material';
@@ -41,6 +41,7 @@ export class CourseEditComponent implements OnInit {
               public snackBar: MatSnackBar,
               private ref: ChangeDetectorRef,
               private showProgress: ShowProgressService,
+              private router: Router,
               private titleService: TitleService) {
 
     this.route.params.subscribe(params => {
@@ -92,6 +93,10 @@ export class CourseEditComponent implements OnInit {
         }, 6000);
       }
     };
+  }
+
+  cancel() {
+    this.router.navigate(['/']);
   }
 
   createCourse() {

@@ -6,8 +6,6 @@ import {ShowProgressService} from '../../shared/services/show-progress.service';
 import {MatSnackBar} from '@angular/material';
 import {ActivatedRoute, Router} from '@angular/router';
 import {isNullOrUndefined} from 'util';
-import {matchPasswords} from '../../shared/validators/validators';
-import {pwPattern} from '../password';
 import {TitleService} from '../../shared/services/title.service';
 
 @Component({
@@ -22,7 +20,6 @@ export class ResetComponent implements OnInit {
 
   token;
   hasToken = false;
-  passwordPatternText: string;
 
   constructor(private router: Router,
               private authenticationService: AuthenticationService,
@@ -42,7 +39,6 @@ export class ResetComponent implements OnInit {
 
   ngOnInit() {
     this.titleService.setTitle('Reset Password');
-    this.passwordPatternText = pwPattern.text;
     this.generateForm();
   }
 
@@ -81,10 +77,7 @@ export class ResetComponent implements OnInit {
 
   generateForm() {
     if (this.hasToken) {
-      this.resetForm = this.formBuilder.group({
-        password: ['',  Validators.compose([Validators.required, Validators.pattern(pwPattern.pattern)])],
-        confirmPassword: ['', Validators.required]
-      }, {validator: matchPasswords('password', 'confirmPassword')});
+      this.resetForm = this.formBuilder.group({});
     } else {
       this.resetForm = this.formBuilder.group({
         email: ['', Validators.required]

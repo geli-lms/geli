@@ -4,8 +4,7 @@ import {AuthenticationService} from '../../shared/services/authentication.servic
 import {Router} from '@angular/router';
 import {ShowProgressService} from '../../shared/services/show-progress.service';
 import {MatSnackBar} from '@angular/material';
-import {matchPasswords} from '../../shared/validators/validators';
-import {pwPattern} from '../password';
+import {errorCodes} from '../../../../../../api/src/config/errorCodes';
 import {TitleService} from '../../shared/services/title.service';
 
 @Component({
@@ -16,8 +15,10 @@ import {TitleService} from '../../shared/services/title.service';
 export class RegisterComponent implements OnInit {
   registerForm: FormGroup;
   registrationDone = false;
-  role;
-  passwordPatternText: string;
+  role = 'student';
+  loading = false;
+  uidError = null;
+  mailError = null;
 
   private trimFormFields() {
     this.registerForm.value.email = this.registerForm.value.email.trim();
@@ -40,17 +41,22 @@ export class RegisterComponent implements OnInit {
     this.titleService.setTitle('Register');
     // reset login status
     this.authenticationService.unsetAuthData();
-    this.role = 'student';
-    this.passwordPatternText = pwPattern.text;
     this.generateForm();
   }
 
   changeRole(role) {
-      this.role = role;
+    this.role = role;
+  }
+
+  clearAllErrors() {
+    this.mailError = null;
+    this.uidError = null;
   }
 
   register() {
-    this.showProgress.toggleLoadingGlobal(true);
+    this.clearAllErrors();
+    this.loading = true;
+    this.showProgress.toggleLoadingGlobal(this.loading);
     this.registerForm.value.role = this.role;
     if (this.registerForm.value.role !== 'student') {
       delete this.registerForm.value.uid;
@@ -59,31 +65,43 @@ export class RegisterComponent implements OnInit {
     this.trimFormFields();
     this.authenticationService.register(this.registerForm.value).then(
       (val) => {
-        this.showProgress.toggleLoadingGlobal(false);
         this.registrationDone = true;
-      }, (error) => {
-        this.showProgress.toggleLoadingGlobal(false);
-        this.snackBar.open('Registration failed', 'Dismiss');
-      });
+      })
+      .catch((error) => {
+        const errormessage = error.json().message || error.json().errmsg;
+        switch (errormessage) {
+          case errorCodes.mail.duplicate.code: {
+            this.mailError = errorCodes.mail.duplicate.text;
+            break;
+          }
+          case errorCodes.mail.noTeacher.code: {
+            this.mailError = errorCodes.mail.noTeacher.text;
+            break;
+          }
+          case errorCodes.duplicateUid.code: {
+            this.uidError = errorCodes.duplicateUid.text;
+            break;
+          }
+          default: {
+            this.snackBar.open('Registration failed', 'Dismiss');
+          }
+        }
+      })
+      .then(() => {
+        this.loading = false;
+        this.showProgress.toggleLoadingGlobal(this.loading);
+      })
+    ;
   }
 
   generateForm() {
     this.registerForm = this.formBuilder.group({
-      role: ['', Validators.required],
       profile: this.formBuilder.group({
         firstName: ['', Validators.compose([Validators.required, Validators.minLength(2)])],
         lastName: ['', Validators.compose([Validators.required, Validators.minLength(2)])],
       }),
       email: ['', Validators.compose([Validators.required, Validators.email])],
       uid: [null, Validators.required],
-      /*
-       *Regex for password validation:
-       * (?=.*[a-zA-Z]) --> searchs for at least one uppercase or lowercase letter
-       * (?=.*[$%&§=#!?*()|0-9]) --> searchs for at least one special character or digit
-       * .{8,} ensures, that the password has 8 or more characters
-       */
-      password: ['', Validators.compose([Validators.required, Validators.pattern(pwPattern.pattern)])],
-      confirmPassword: ['', Validators.required]
-    }, {validator: matchPasswords('password', 'confirmPassword')});
+    })
   }
 }
