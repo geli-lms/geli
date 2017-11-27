@@ -2,9 +2,10 @@ import {Component, OnInit, Output, Input, ViewEncapsulation, EventEmitter} from 
 import {DragulaService} from 'ng2-dragula';
 import {IWhitelistUser} from '../../../../../../../../shared/models/IWhitelistUser';
 import {ICourse} from '../../../../../../../../shared/models/ICourse';
-import {CourseService, WhitelistUserService} from '../../../../shared/services/data.service';
+import {CourseService, UserDataService, WhitelistUserService} from '../../../../shared/services/data.service';
 import {ProgressService} from '../../../../shared/services/data/progress.service';
 import {ShowProgressService} from '../../../../shared/services/show-progress.service';
+import {IUser} from '../../../../../../../../shared/models/IUser';
 
 @Component({
   selector: 'app-whitelist-show',
@@ -20,12 +21,18 @@ export class WhitelistShowComponent implements OnInit {
   @Input() fieldId: string;
   @Input() course: ICourse;
 
+  signedInStudents: IUser[];
+
   constructor(private courseService: CourseService,
               private showProgress: ShowProgressService,
+              private userService: UserDataService,
               private whitelistUserService: WhitelistUserService) {
   }
 
   ngOnInit() {
+    this.userService.getStudents().then((stud: IUser[]) => {
+      this.signedInStudents = stud;
+    });
   }
 
   updateCourse(): void {
@@ -60,4 +67,16 @@ export class WhitelistShowComponent implements OnInit {
       u.uid);
     return idListCourse.indexOf(user.firstName + user.lastName + user.uid) >= 0;
   }
+
+  isSignedIn(user: IWhitelistUser) {
+    if (this.signedInStudents) {
+    const idListCourse: string[] = this.signedInStudents.map((u) =>
+      u.profile.firstName.toLowerCase() +
+      u.profile.lastName.toLowerCase() +
+      u.uid);
+    return idListCourse.indexOf(user.firstName + user.lastName + user.uid) >= 0;
+  }
+    return false;
+  }
+
 }

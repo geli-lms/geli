@@ -43,6 +43,15 @@ export class UserController {
       });
   }
 
+  @Get('/students')
+  @Authorized(['teacher', 'admin'])
+  getStudents(@CurrentUser() currentUser?: IUser) {
+    return User.find({role: 'student'})
+      .then((users) => {
+        return users.map((user) => user.toObject({virtuals: true}));
+      });
+  }
+
   @Get('/:role/search')
   @Authorized(['teacher', 'admin'])
   searchUser(@Param('role') role: string, @QueryParam('query') query: string, @CurrentUser() currentUser?: IUser) {

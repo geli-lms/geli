@@ -226,6 +226,14 @@ export class UserDataService extends DataService {
     return promise;
   }
 
+  getStudents(): Promise<any[]> {
+    const originalApiPath = this.apiPath;
+    this.apiPath += 'students/';
+    const promise = this.readItems();
+    this.apiPath = originalApiPath;
+    return promise;
+  }
+
   countUsers(role: string): Promise<any> {
     const originalApiPath = this.apiPath;
     this.apiPath += role + '/';
