@@ -15,7 +15,6 @@
   </mat-card-header>
   <mat-card-content>
     <form name="form" (ngSubmit)="register()" [formGroup]="registerForm">
-      <input type='hidden' formControlName="role" value="{{role}}"/>
       <div class="form-group" formGroupName="profile">
         <mat-form-field>
           <input matInput formControlName="firstName" placeholder="First name"/>
@@ -45,6 +44,7 @@
         <input matInput formControlName="email" placeholder="E-Mail"/>
         <div *ngIf="registerForm.controls.email.touched">
           <small *ngIf="registerForm.controls.email.hasError('required')" class="text-danger">Email is required</small>
+          <small *ngIf="mailError" class="text-danger">{{mailError}}</small>
           <small *ngIf="registerForm.controls.email.hasError('email') && !registerForm.controls.email.hasError('required')" class="text-danger">Please use an email with the
             format john@doe.com
           </small>
@@ -55,6 +55,7 @@
         <mat-form-field>
           <input matInput formControlName="uid" placeholder="Matriculation number"/>
           <div *ngIf="registerForm.controls.uid.touched">
+            <small *ngIf="uidError" class="text-danger">{{uidError}}</small>
             <small *ngIf="registerForm.controls.uid.hasError('required')" class="text-danger">Matriculation number is
               required
             </small>
@@ -62,20 +63,9 @@
         </mat-form-field>
       </div>
 
-      <mat-form-field>
-        <input matInput type="password" formControlName="password" placeholder="Password"/>
-        <div *ngIf="registerForm.controls.password.touched">
-          <small *ngIf="registerForm.controls.password.hasError('required')" class="text-danger">Password is required</small>
-          <small *ngIf="registerForm.controls.password.hasError('pattern')" class="text-danger">Password must have at least 8 characters which contain one special character or digit</small>
-        </div>
-      </mat-form-field>
-      <mat-form-field>
-        <input matInput type="password" formControlName="confirmPassword" placeholder="Confirm password"/>
-        <div *ngIf="registerForm.controls.confirmPassword.touched">
-          <small *ngIf="registerForm.hasError('mismatchedPasswords')" class="text-danger">Passwords do not match.</small>
-        </div>
-      </mat-form-field>
-      <button mat-raised-button color="primary" type="submit" [disabled]="loading">Register</button>
+      <app-password-input [form]="registerForm"></app-password-input>
+
+      <button mat-raised-button color="primary" type="submit" [disabled]="loading || !registerForm?.valid">Register</button>
     </form>
     <div class="div-change-role" *ngIf="role=='student'"><i class="material-icons">arrow_forward</i>Not a student? Click <a href="javascript:void(0)" (click)="changeRole('teacher')">here.</a></div>
     <div class="div-change-role" *ngIf="role=='teacher'"><i class="material-icons">arrow_back</i><a href="javascript:void(0)" (click)="changeRole('student')">Back</a> </div>

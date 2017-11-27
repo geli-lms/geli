@@ -6,8 +6,8 @@ import {UserDataService} from '../../shared/services/data.service';
 import {IUser} from '../../../../../../shared/models/IUser';
 import {UserService} from '../../shared/services/user.service';
 import {ShowProgressService} from '../../shared/services/show-progress.service';
-import {matchPasswords} from '../../shared/validators/validators';
 import {DialogService} from '../../shared/services/dialog.service';
+import {TitleService} from '../../shared/services/title.service';
 
 @Component({
   selector: 'app-user-edit',
@@ -19,6 +19,8 @@ export class UserEditComponent implements OnInit {
   id: string;
   user: IUser;
   userForm: FormGroup;
+  passwordPatternText: string;
+  changePassword = false;
 
   constructor(private router: Router,
               private route: ActivatedRoute,
@@ -27,14 +29,24 @@ export class UserEditComponent implements OnInit {
               private showProgress: ShowProgressService,
               private formBuilder: FormBuilder,
               public dialogService: DialogService,
-              public snackBar: MatSnackBar) {
+              public snackBar: MatSnackBar,
+              private titleService: TitleService) {
     this.generateForm();
   }
 
+  showPwFields() {
+    if (this.user) {
+      if (this.userService.user._id === this.user._id) {
+        return true;
+      }
+      return false;
+    }
+  }
+
   ngOnInit() {
+    this.titleService.setTitle('Edit User');
     this.route.params.subscribe(params => {
       this.id = decodeURIComponent(params['id']);
-
       if (this.id === 'undefined') {
         this.id = this.userService.user._id;
       }
@@ -53,9 +65,9 @@ export class UserEditComponent implements OnInit {
           },
           email: this.user.email,
         });
+        this.titleService.setTitleCut(['Edit User: ', this.user.profile.firstName]);
       },
       (error) => {
-        console.log(error);
         this.snackBar.open(error, 'Dismiss');
       });
   }
@@ -79,13 +91,11 @@ export class UserEditComponent implements OnInit {
         saveIUser[key] = userFormModel[key];
       }
     }
-
     for (const key in this.user) {
       if (typeof saveIUser[key] === 'undefined') {
         saveIUser[key] = this.user[key];
       }
     }
-
     return saveIUser;
   }
 
@@ -99,7 +109,6 @@ export class UserEditComponent implements OnInit {
         if (this.userService.isLoggedInUser(val)) {
           this.userService.setUser(val);
         }
-
         this.navigateBack();
       },
       (error) => {
@@ -116,10 +125,8 @@ export class UserEditComponent implements OnInit {
       }),
       username: [''],
       email: ['', Validators.required],
-      currentPassword: [''],
-      password: [''],
-      confirmPassword: ['']
-    }, {validator: matchPasswords('password', 'confirmPassword')});
+      currentPassword: ['']
+    });
   }
 
   openAddPictureDialog() {

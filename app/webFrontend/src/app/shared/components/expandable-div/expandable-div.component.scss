@@ -1,0 +1,17 @@
+@import "../../../../variables";
+
+.toggle {
+  display: inline-block;
+  vertical-align: middle;
+  color: map-get($app-primary,'default');
+  float: right;
+  transition: transform 0.3s;
+  transform: rotate(-90deg);
+  &.opened {
+    transform: rotate(0);
+  }
+}
+
+.clickable {
+  cursor: pointer;
+}

@@ -1,18 +1,23 @@
 import {BrowserModule} from '@angular/platform-browser';
-import {NgModule} from '@angular/core';
+import {ErrorHandler, NgModule} from '@angular/core';
 import {HttpModule} from '@angular/http';
-
 import {AppComponent} from './app.component';
-
+import {RavenErrorHandler} from './shared/services/raven-error-handler.service';
 import {UserService} from './shared/services/user.service';
 import {AuthenticationService} from './shared/services/authentication.service';
 import {AuthGuardService} from './shared/services/auth-guard.service';
 import {
-  CourseService, TaskService, UserDataService, LectureService,
-  UnitService, AboutDataService, FreeTextUnitService, CodeKataUnitService, APIInfoService
+  AboutDataService,
+  APIInfoService,
+  CodeKataUnitService,
+  CourseService,
+  FreeTextUnitService,
+  LectureService,
+  TaskService,
+  UnitService,
+  UserDataService
 } from './shared/services/data.service';
 import {BackendService} from './shared/services/backend.service';
-
 import {ShowProgressService} from './shared/services/show-progress.service';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ProgressService} from './shared/services/data/progress.service';
@@ -24,6 +29,7 @@ import {UserModule} from './user/user.module';
 import {AuthModule} from './auth/auth.module';
 import {AboutModule} from './about/about.module';
 import {AdminModule} from './admin/admin.module';
+import {TitleService} from './shared/services/title.service';
 
 @NgModule({
   declarations: [
@@ -39,7 +45,7 @@ import {AdminModule} from './admin/admin.module';
     UserModule,
     AuthModule,
     AboutModule,
-    SharedModule
+    SharedModule,
   ],
   providers: [
     UserService,
@@ -59,6 +65,12 @@ import {AdminModule} from './admin/admin.module';
     FreeTextUnitService,
     CodeKataUnitService,
     APIInfoService,
+    TitleService,
+    RavenErrorHandler,
+    {
+      provide: ErrorHandler,
+      useExisting: RavenErrorHandler
+    },
   ],
   bootstrap: [AppComponent]
 })

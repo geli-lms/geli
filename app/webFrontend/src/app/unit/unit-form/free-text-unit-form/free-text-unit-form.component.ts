@@ -58,7 +58,9 @@ export class FreeTextUnitFormComponent implements OnInit {
             this.snackBar.open('Free text unit saved', '', {duration: 3000});
             this.onDone();
           },
-          error => console.log(error)
+          error => {
+            this.snackBar.open('Couldn\'t save unit', '', {duration: 3000});
+          }
         );
     } else {
       // Update existing
@@ -69,18 +71,19 @@ export class FreeTextUnitFormComponent implements OnInit {
             this.snackBar.open('Free text unit saved', 'Update', {duration: 2000});
             this.onDone();
           },
-          error => console.log(error)
+          error => {
+            this.snackBar.open('Couldn\'t update unit', '', {duration: 3000});
+          }
         );
     }
   }
 
   openFullscreen(): void {
-    // TODO: Max-Width/-Height comes with later Material version
-    // maxWidth: '100vw',
-    // maxHeight: '100vh',
     const dialogRef = this.dialog.open(FreeTextUnitEditorDialog, {
       width: '94vw',
       height: '94vh',
+      maxWidth: '100vw',
+      maxHeight: '100vh',
       data: {
         markdown: this.freeTextEditor.markdown ? this.freeTextEditor.markdown : ''
       }

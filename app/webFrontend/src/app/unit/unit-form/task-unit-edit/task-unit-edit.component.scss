@@ -1,55 +1,49 @@
-@import '../../../../breakpoints';
-
-.task-unit-edit {
-  position: relative;
-}
-
-.add-task-fab {
-  position: absolute;
-  right: 30px;
-  top: 20px;
-}
-
-.info-text {
-  padding: 20px 20px;
-  font-style: italic;
-  color: rgb(224, 224, 224);
-}
+@import '../../../../variables';
 
 .question-answer {
-
-  padding: 20px 20px;
+  border-top: 1px dashed map-get($mat-grey, 300);
+  margin-top: 1rem;
+  padding-top: 1rem;
   clear: both;
 
   .question {
-    width: 70%;
+    width: 100%;
+
+    @include bp(md) {
+      width: 60%;
+    }
   }
 
-  .answer, .actions {
-    display: inline-block;
-  }
   .answers {
-    padding-top: 20px;
-    padding-left: 20px;
-
-    background-color: whitesmoke;
+    padding: 1rem;
+    background-color: map-get($mat-grey, 100);
   }
 
   .answer {
     width: 100%;
-    margin-right: 10px;
+    display: inline-block;
+    padding-right: 1rem;
 
     .check-answer {
       width: 100%;
       display: flex;
 
+      .mat-checkbox {
+        //margin-left: 14px;
+        margin-right: 6px;
+        margin-top: 18px;
+      }
       .mat-form-field {
         flex-grow: 1;
       }
     }
 
     @include bp(md) {
-      width: 300px;
+      width: 50%;
+    }
+
+    @include bp(xl) {
+      width: 33.33%;
     }
   }
 }

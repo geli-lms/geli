@@ -11,6 +11,7 @@ import {StudentConfig} from '../models/StudentConfig';
 import {IUserModel, User} from '../models/User';
 import {JwtUtils} from '../security/JwtUtils';
 import config from '../config/main';
+import * as errorCodes from '../config/errorCodes'
 
 @JsonController('/auth')
 export class AuthController {
@@ -34,10 +35,10 @@ export class AuthController {
         // If user is not unique, return error
         if (existingUser) {
           if (user.role === 'student' && existingUser.uid === user.uid) {
-            throw new BadRequestError('That matriculation number is already in use');
+            throw new BadRequestError(errorCodes.errorCodes.duplicateUid.code);
           }
           if (existingUser.email === user.email) {
-            throw new BadRequestError('That email address is already in use');
+            throw new BadRequestError(errorCodes.errorCodes.mail.duplicate.code);
           }
         }
 
@@ -46,7 +47,7 @@ export class AuthController {
         }
 
         if (user.role === 'teacher' && (typeof user.email !== 'string' || !user.email.match(config.teacherMailRegex))) {
-          throw new BadRequestError('You are not allowed to register as teacher');
+          throw new BadRequestError(errorCodes.errorCodes.mail.noTeacher.code);
         }
 
         const newUser = new User(user);
@@ -55,7 +56,7 @@ export class AuthController {
       .then((savedUser) => {
         return emailService.sendActivation(savedUser)
           .catch(() => {
-            throw new InternalServerError('Could not send E-Mail');
+            throw new InternalServerError(errorCodes.errorCodes.mail.notSend.code);
           });
       })
       .then(() => {
