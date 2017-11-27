@@ -1,6 +1,6 @@
 import {
   Body, JsonController, UseBefore, Get, Param, QueryParam, Put, Delete, Authorized, CurrentUser,
-  BadRequestError, ForbiddenError, UploadedFile, Post
+  BadRequestError, ForbiddenError, UploadedFile, Post, HttpError
 } from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import fs = require('fs');
@@ -50,7 +50,7 @@ export class UserController {
     }
     query = query.trim();
     if (isNullOrUndefined(query) || query.length <= 0) {
-      throw Error('No given query.');
+      throw new HttpError(400, 'No given query.');
     }
     const conditions: any = {};
     const escaped = escapeRegex(query).split(' ');

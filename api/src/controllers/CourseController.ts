@@ -3,7 +3,7 @@ import {
   Authorized,
   Body,
   CurrentUser, ForbiddenError,
-  Get,
+  Get, HttpError,
   JsonController, NotFoundError,
   Param,
   Post,
@@ -181,9 +181,8 @@ export class CourseController {
   @Post('/:id/whitelist')
   whitelistStudents(@Param('id') id: string, @UploadedFile('file', {options: uploadOptions}) file: any) {
     const name: string = file.originalname;
-
     if (!name.endsWith('.csv')) {
-      throw new TypeError('Wrong type allowed are just csv files.');
+      throw new HttpError(400, 'Wrong type allowed are just csv files.');
     }
     return User.find({role: 'student'})
       .then((users) => users.map((user) => user.toObject({virtuals: true})))

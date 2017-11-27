@@ -1,4 +1,7 @@
-import {Authorized, Body, Delete, Get, JsonController, Post, Param, Put, QueryParam, UseBefore} from 'routing-controllers';
+import {
+  Authorized, Body, Delete, Get, JsonController, Post, Param, Put, QueryParam, UseBefore,
+  HttpError
+} from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import {isNullOrUndefined} from 'util';
 import {WhitelistUser} from '../models/WhitelistUser';
@@ -18,7 +21,7 @@ export class WitelistController {
   searchUser(@Param('id') id: string, @QueryParam('query') query: string) {
     query = query.trim();
     if (isNullOrUndefined(query) || query.length <= 0) {
-      throw Error('No given query.');
+      throw new HttpError(400, 'No given query.');
     }
     const conditions: any = {};
     const escaped = escapeRegex(query).split(' ');
