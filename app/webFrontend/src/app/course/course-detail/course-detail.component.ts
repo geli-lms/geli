@@ -6,6 +6,7 @@ import {ICourse} from '../../../../../../shared/models/ICourse';
 import {UserService} from '../../shared/services/user.service';
 import {MatSnackBar, MatDialog} from '@angular/material';
 import {SelectUnitDialogComponent} from './select-unit-dialog/select-unit-dialog.component';
+import {SelectedUnitsService} from "../../shared/services/selected-units.service";
 
 
 @Component({
@@ -16,15 +17,16 @@ import {SelectUnitDialogComponent} from './select-unit-dialog/select-unit-dialog
 export class CourseDetailComponent implements OnInit {
 
   course: ICourse;
-
   id: string;
+
 
   constructor(private router: Router,
               private route: ActivatedRoute,
               private courseService: CourseService,
               public userService: UserService,
               private snackBar: MatSnackBar,
-              private dialog: MatDialog) {
+              private dialog: MatDialog,
+              private selectedUnitsService: SelectedUnitsService) {
   }
 
   ngOnInit() {
@@ -47,8 +49,12 @@ export class CourseDetailComponent implements OnInit {
   }
 
   openDownloadDialog() {
-    this.dialog.open(SelectUnitDialogComponent, {
+    let diaRef = this.dialog.open(SelectUnitDialogComponent, {
       data: {course: this.course}
+    });
+    diaRef.afterClosed().subscribe(() => {
+      //console.log('AfterDialogClose');
+      this.selectedUnitsService.clearData();
     });
   }
 

@@ -5,13 +5,13 @@
 <mat-dialog-content>
   <p class="layout"> All
     <span class="spacer"></span>
-    <mat-checkbox class="chkbox" (change)="selectAll()"></mat-checkbox>
+    <mat-checkbox [(ngModel)]="chkbox" (change)="onChange()" class="chkbox"></mat-checkbox>
   </p>
   <mat-list *ngFor=" let lecture of course.lectures">
     <app-lecture-checkbox [lecture]= "lecture"></app-lecture-checkbox>
   </mat-list>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button mat-button mat-dialog-close>No</button>
-  <button mat-button [mat-dialog-close]="true">Yes</button>
+  <button mat-button (click)="downloadAndClose()">Download</button>
+  <button mat-button [mat-dialog-close]="true">Cancel</button>
 </mat-dialog-actions>
