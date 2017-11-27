@@ -52,15 +52,6 @@ export class WitelistController {
       });
   }
 
-  @Get('/course/:id')
-  @Authorized(['teacher', 'admin'])
-  getUsers(@Param('id') id: string) {
-    return WhitelistUser.find({courseId: id})
-      .then((whitelistUsers) => {
-        return whitelistUsers.map((user) => user.toObject({virtuals: true}));
-      });
-  }
-
   @Get('/:id/count')
   @Authorized(['teacher', 'admin'])
   searchCountUsers(@Param('id') id: string) {

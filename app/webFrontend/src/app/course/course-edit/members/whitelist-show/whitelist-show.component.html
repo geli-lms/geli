@@ -1,5 +1,5 @@
 <!--<mat-list class="drop" [dragula]='dragulaBagId' [dragulaModel]="dragUsers" [attr.item-id]="fieldId">-->
-<mat-list class="drop" [dragula]='dragulaBagId' [dragulaModel]="dragUsers" [attr.item-id]="fieldId">
+<mat-list class="drop">
   <ng-container *ngIf="show">
     <div *ngFor="let user of course.whitelist">
       <mat-list-item class="list" [attr.item-id]="user._id">

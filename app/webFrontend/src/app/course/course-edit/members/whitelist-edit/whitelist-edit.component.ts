@@ -22,33 +22,12 @@ export class WhitelistEditComponent implements OnInit {
   @Output() onDragendRemoveWhitelist = new EventEmitter<IWhitelistUser>();
   @Output() onDragendPushWhitelist = new EventEmitter<IWhitelistUser>();
 
-  search = '';
   isToggled = false;
   whitelistUser: any = {firstName: '', lastName: '', uid: '', courseId: null};
 
   constructor(private whitelistUserService: WhitelistUserService,
               private snackBar: MatSnackBar,
               private dragula: DragulaService) {
-  }
-
-  get searchString() {
-    return this.search;
-  }
-
-  @Input()
-  set searchString(search: string) {
-    this.search = search;
-    this.finishRestCall = false;
-    if (search !== '') {
-      this.whitelistUserService.getAll(this.course._id).then((found) => {
-        this.dragableWhitelistUser = found;
-        // const idList: string[] = this.course.whitelist.map((u) => u._id);
-        // this.dragableWhitelistUser = found.filter(user => (idList.indexOf(user._id) < 0));
-        // this.dragableWhitelistUserInCourse = found.filter(user => (idList.indexOf(user._id) >= 0));
-        // this.onDragableWhitelistUserInCourse.emit(this.dragableWhitelistUserInCourse);
-        this.finishRestCall = true;
-      });
-    }
   }
 
   ngOnInit() {
