@@ -40,11 +40,20 @@ export class SelectUnitDialogComponent {
     }
   }
 
-  downloadAndClose() {
+  async downloadAndClose() {
     const dl = {course: this.course.name, lectures: [], units: this.selectedUnitsService.getSelectedData()};
     console.log(dl.units.length + 'units Selected');
-    this.downloadReq.postDownloadReqForCourse(dl);
+    const uri = '/api/uploads' + await this.downloadReq.postDownloadReqForCourse(dl);
+    console.log('Url:' + uri);
+    this.downloadURI(uri,"Packed_Units_Lecture_" + this.course.name);
     this.dialogRef.close();
+  }
+
+  downloadURI(uri, name) {
+    var link = document.createElement("a");
+    link.download = name;
+    link.href = uri;
+    link.click();
   }
 
 }
