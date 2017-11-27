@@ -2,6 +2,10 @@ const fs = require('fs');
 const archiver = require('archiver');
 import crypto = require('crypto');
 
+const path = require('path');
+const appDir = path.dirname(require.main.filename);
+const osTmpdir = require('os-tmpdir');
+
 import {Request} from 'express';
 import {Body, Get, Post, Put, Param, Req, JsonController, UseBefore, Delete, NotFoundError} from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
@@ -28,8 +32,8 @@ export class DownloadController {
   async addTask(@Body() data: IDownload) {
 
     const fileName = await crypto.pseudoRandomBytes(16);
-
-    const output = fs.createWriteStream(__dirname + '/' + fileName.toString('hex') + '.zip');
+    const filepath = osTmpdir() + '/' + fileName.toString('hex') + '.zip';
+    const output = fs.createWriteStream(filepath);
     const archive = archiver('zip', {
       zlib: {level: 9} // Sets the compression level.
     });
@@ -43,7 +47,8 @@ export class DownloadController {
         archive.append(freeTextUnit.description + '\n' + freeTextUnit.markdown, {name: freeTextUnit.name + '.txt'});
       } else if (localUnit instanceof CodeKataUnit) {
         const codeKataUnit = <ICodeKataUnit><any>localUnit;
-        archive.append(codeKataUnit.description + '\n' + codeKataUnit.definition + '\n' + codeKataUnit.code, {name: codeKataUnit.name + '.txt'});
+        archive.append(codeKataUnit.description + '\n' + codeKataUnit.definition + '\n' +
+          codeKataUnit.code, {name: codeKataUnit.name + '.txt'});
       } else if (localUnit instanceof FileUnit) {
         const fileUnit = <IFileUnit><any>localUnit;
         for (const file of fileUnit.files) {
@@ -76,7 +81,7 @@ export class DownloadController {
     archive.finalize();
 
 
-    return fileName.toString('hex') + '.zip';
+    return filepath;
   }
 
 }
