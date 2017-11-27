@@ -3,7 +3,6 @@
     <div *ngFor="let user of dragUsers">
       <mat-list-item class="list" [attr.item-id]="user._id">
         <mat-icon class="user-drag-handle">drag_handle</mat-icon>
-        <span class="listBg"></span>
         <span class="firstName">{{user.firstName}}</span>
         <span class="lastName">{{user.lastName}}</span>
         <span class="uid">{{user.uid}}</span>
@@ -13,6 +12,10 @@
         <button mat-icon-button (click)="remove(user)">
           <mat-icon>delete</mat-icon>
         </button>
+        <!--<i class="material-icons red" matTooltip="Signed In">clear</i>-->
+        <!--<i class="material-icons green" matTooltip="Signed In">done</i>-->
+        <i *ngIf="isInCourse(user)" class="material-icons green" matTooltip="In Course">done</i>
+        <i *ngIf="!isInCourse(user)" class="material-icons red" matTooltip="In Course">clear</i>
       </mat-list-item>
     </div>
   </ng-container>
