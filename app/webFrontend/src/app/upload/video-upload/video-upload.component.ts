@@ -24,7 +24,7 @@ export class VideoUploadComponent implements OnInit {
   @ViewChild(UnitGeneralInfoFormComponent)
   public generalInfo: UnitGeneralInfoFormComponent;
 
-  allowedMimeType: string[] = ['video/mp4', 'video/webm', 'video/ogg'];
+  allowedMimeType: string[] = ['video/mp4', 'video/webm', 'video/ogg', 'video/avi'];
   uploader: FileUploader = new FileUploader({
     url: '/api/units/upload/video',
     headers: [{
