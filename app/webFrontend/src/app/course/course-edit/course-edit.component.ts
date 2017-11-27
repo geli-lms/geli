@@ -1,10 +1,11 @@
 import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CourseService} from '../../shared/services/data.service';
 import {MatSnackBar} from '@angular/material';
 import {ShowProgressService} from '../../shared/services/show-progress.service';
 import {FileUploader} from 'ng2-file-upload';
+import {TitleService} from '../../shared/services/title.service';
 import {ENROLL_TYPES, ENROLL_TYPE_WHITELIST, ENROLL_TYPE_FREE, ENROLL_TYPE_ACCESSKEY} from '../../../../../../shared/models/ICourse';
 
 @Component({
@@ -39,7 +40,9 @@ export class CourseEditComponent implements OnInit {
               private courseService: CourseService,
               public snackBar: MatSnackBar,
               private ref: ChangeDetectorRef,
-              private showProgress: ShowProgressService) {
+              private showProgress: ShowProgressService,
+              private router: Router,
+              private titleService: TitleService) {
 
     this.route.params.subscribe(params => {
       this.id = params['id'];
@@ -55,6 +58,7 @@ export class CourseEditComponent implements OnInit {
             this.mode = true;
           }
           this.courseOb = val;
+          this.titleService.setTitleCut(['Edit Course: ', this.course]);
         }, (error) => {
           this.snackBar.open('Couldn\'t load Course-Item', '', {duration: 3000});
         });
@@ -62,6 +66,7 @@ export class CourseEditComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.titleService.setTitle('Edit Course');
     this.generateForm();
     this.uploader = new FileUploader({
       url: '/api/courses/' + this.id + '/whitelist',
@@ -88,6 +93,10 @@ export class CourseEditComponent implements OnInit {
         }, 6000);
       }
     };
+  }
+
+  cancel() {
+    this.router.navigate(['/']);
   }
 
   createCourse() {

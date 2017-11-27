@@ -26,5 +26,3 @@ export class ButtonSaveCancelComponent implements OnInit {
     this.cancel.emit(null);
   }
 }
-
-
