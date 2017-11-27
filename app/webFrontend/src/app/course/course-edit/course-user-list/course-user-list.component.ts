@@ -23,7 +23,6 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
   @Input() dragulaWhitelistBagId;
   @Input() role;
   @Input() usersTotal = 0;
-  @Input() dragableWhitelistUser: IWhitelistUser[] = [];
 
   @Output() onDragendRemove = new EventEmitter<IUser>();
   @Output() onDragendPush = new EventEmitter<IUser>();
@@ -37,8 +36,7 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
   fieldsToShow = new Map<string, boolean>();
 
   constructor(private dragula: DragulaService,
-              private userService: UserDataService,
-              private whitelistUserService: WhitelistUserService) {
+              private userService: UserDataService) {
   }
 
   get searchString(): string {

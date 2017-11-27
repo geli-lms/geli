@@ -53,7 +53,7 @@ export class WhitelistShowComponent implements OnInit {
 
     const idListCourse: string[] = this.course.whitelist.map((c) => c._id);
     const indexCourse: number = idListCourse.indexOf(user._id);
-    if (indexCourse) {
+    if (indexCourse >= 0) {
       this.course.whitelist.splice(indexCourse, 1);
       this.updateCourse();
     }

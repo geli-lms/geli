@@ -40,7 +40,7 @@ export class WitelistController {
       .sort({score: {$meta: 'textScore'}})
       .limit(20).then(users => {
         return users.map((user) => user.toObject({virtuals: true}));
-    });
+      });
   }
 
   @Get('/:id')
@@ -49,6 +49,15 @@ export class WitelistController {
       .populate('progress')
       .then((whitelistUser) => {
         return whitelistUser.toObject({virtuals: true});
+      });
+  }
+
+  @Get('/course/:id')
+  @Authorized(['teacher', 'admin'])
+  getUsers(@Param('id') id: string) {
+    return WhitelistUser.find({courseId: id})
+      .then((whitelistUsers) => {
+        return whitelistUsers.map((user) => user.toObject({virtuals: true}));
       });
   }
 

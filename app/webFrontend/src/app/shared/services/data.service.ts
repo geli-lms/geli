@@ -266,6 +266,15 @@ export  class  WhitelistUserService extends DataService {
     super('whitelist/', backendService);
   }
 
+  getAll(courseId: string) {
+    const originalApiPath = this.apiPath;
+    this.apiPath += 'course/';
+    this.apiPath += courseId + '/';
+    const promise = this.readItems();
+    this.apiPath = originalApiPath;
+    return promise;
+  }
+
   searchWhitelistUsers(courseId: string, query: string): Promise<any[]> {
     const originalApiPath = this.apiPath;
     this.apiPath += courseId + '/';

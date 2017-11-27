@@ -41,17 +41,18 @@ export class WhitelistEditComponent implements OnInit {
     this.finishRestCall = false;
     if (search !== '') {
       this.whitelistUserService.getAll(this.course._id).then((found) => {
-        const idList: string[] = this.course.whitelist.map((u) => u._id);
-        this.dragableWhitelistUser = found.filter(user => (idList.indexOf(user._id) < 0));
-        this.dragableWhitelistUserInCourse = found.filter(user => (idList.indexOf(user._id) >= 0));
-        this.onDragableWhitelistUserInCourse.emit(this.dragableWhitelistUserInCourse);
+        this.dragableWhitelistUser = found;
+        // const idList: string[] = this.course.whitelist.map((u) => u._id);
+        // this.dragableWhitelistUser = found.filter(user => (idList.indexOf(user._id) < 0));
+        // this.dragableWhitelistUserInCourse = found.filter(user => (idList.indexOf(user._id) >= 0));
+        // this.onDragableWhitelistUserInCourse.emit(this.dragableWhitelistUserInCourse);
         this.finishRestCall = true;
       });
     }
   }
 
   ngOnInit() {
-    this.dragula.dropModel.subscribe(value => {
+/*    this.dragula.dropModel.subscribe(value => {
       const [bagName, el, target, source] = value;
       if (target.getAttribute('item-id') === 'Whitelist') {
         const idList: string[] = this.dragableWhitelistUser.map(user => user._id);
@@ -66,7 +67,7 @@ export class WhitelistEditComponent implements OnInit {
           this.onDragendPushWhitelist.emit(this.dragableWhitelistUserInCourse[index]);
         }
       }
-    })
+    })*/
   }
 
   toggle() {
@@ -87,6 +88,7 @@ export class WhitelistEditComponent implements OnInit {
     this.whitelistUser.courseId = this.course._id;
     return this.whitelistUserService.createItem(this.whitelistUser).then((newUser) => {
       this.dragableWhitelistUser.push(newUser);
+      this.onDragendPushWhitelist.emit(newUser);
     });
   }
 }

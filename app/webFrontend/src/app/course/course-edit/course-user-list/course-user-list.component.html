@@ -25,7 +25,6 @@
     </mat-card-title>
     <mat-card-subtitle class="subtitle">
     <p class="line">{{role}}s: {{dragableUsers.length}} of {{usersTotal}}</p>
-    <p class="line" *ngIf="role === 'student'">blacklist: {{0}} of {{500}} [not implemented]</p>
     </mat-card-subtitle>
   </mat-card>
   <app-course-user-list-show [dragulaBagId]="dragulaBagId"
@@ -45,7 +44,6 @@
         <ng-container *ngIf="role === 'student'">{{course.students.length}}</ng-container>
         <ng-container *ngIf="role === 'teacher'">{{course.teachers.length}}</ng-container>
       </p>
-      <p class="line" *ngIf="role === 'student'">whitelist: {{dragableWhitelistUser.length}} of {{course.whitelist.length}}</p>
     </mat-card-subtitle>
   </mat-card>
 
@@ -53,9 +51,4 @@
                              [dragUsers]="dragableUsersInCourse"
                              [show]="fieldsToShow.get('inCourse')"
                              [fieldId]="'UserInCourse'"></app-course-user-list-show>
-  <app-whitelist-show *ngIf="role === 'student'" [dragulaBagId]="'whitelist'"
-                      [dragUsers]="dragableWhitelistUser"
-                      [show]="fieldsToShow.get('inCourse')"
-                      [fieldId]="'WhitelistInCourse'"
-                      [course]="course"></app-whitelist-show>
 </div>
