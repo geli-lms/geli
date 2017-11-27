@@ -24,6 +24,7 @@ import {ICodeKataUnit} from '../../../shared/models/units/ICodeKataUnit';
 
 const multer = require('multer');
 import crypto = require('crypto');
+import logger = Handlebars.logger;
 
 const uploadOptions = {
   storage: multer.diskStorage({
@@ -167,6 +168,24 @@ export class CourseController {
         if (course.students.indexOf(currentUser._id) < 0) {
           course.students.push(currentUser);
 
+          return course.save().then((c) => c.toObject());
+        }
+
+        return course.toObject();
+      });
+  }
+
+  @Authorized(['student'])
+  @Post('/:id/leave')
+  leaveStudent(@Param('id') id: string, @Body() data: any, @CurrentUser() currentUser: IUser) {
+    return Course.findById(id)
+      .then(course => {
+        if (!course) {
+          throw new NotFoundError();
+        }
+        const index: number = course.students.indexOf(currentUser._id);
+        if (index  !== 0) {
+          course.students.splice(index, 1);
           return course.save().then((c) => c.toObject());
         }
 

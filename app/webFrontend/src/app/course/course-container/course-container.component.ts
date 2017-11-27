@@ -23,6 +23,7 @@ export class CourseContainerComponent implements OnInit {
 
   @Output()
   onEnroll = new EventEmitter();
+  onLeave = new EventEmitter();
 
   constructor(public userService: UserService,
               private courseService: CourseService,
@@ -53,4 +54,12 @@ export class CourseContainerComponent implements OnInit {
     });
   }
 
+  leaveCallback({courseId}) {
+    this.courseService.leaveStudent(courseId).then((res) => {
+      // reload courses to update enrollment status
+      this.onLeave.emit();
+    }).catch((err) => {
+      this.snackBar.open(`${err.statusText}: ${JSON.parse(err._body).message}`, '', {duration: 5000});
+    });
+  }
 }
