@@ -4,7 +4,6 @@ import {ICourse} from '../../../../../../../shared/models/ICourse';
 import {SelectedUnitsService} from '../../../shared/services/selected-units.service';
 import {LectureCheckboxComponent} from './lecture-checkbox/lecture-checkbox.component';
 import {DownloadReq} from 'app/shared/services/data.service';
-import {IDownload} from '../../../../../../../shared/models/IDownload';
 
 @Component({
   selector: 'app-select-unit-dialog',
@@ -43,6 +42,7 @@ export class SelectUnitDialogComponent {
 
   downloadAndClose() {
     const dl = {course: this.course.name, lectures: [], units: this.selectedUnitsService.getSelectedData()};
+    console.log(dl.units.length + 'units Selected');
     this.downloadReq.postDownloadReqForCourse(dl);
     this.dialogRef.close();
   }

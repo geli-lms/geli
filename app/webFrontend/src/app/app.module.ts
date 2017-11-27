@@ -10,7 +10,7 @@ import {AuthenticationService} from './shared/services/authentication.service';
 import {AuthGuardService} from './shared/services/auth-guard.service';
 import {
   CourseService, TaskService, UserDataService, LectureService,
-  UnitService, AboutDataService, FreeTextUnitService, CodeKataUnitService, APIInfoService
+  UnitService, AboutDataService, FreeTextUnitService, CodeKataUnitService, APIInfoService, DownloadReq
 } from './shared/services/data.service';
 import {BackendService} from './shared/services/backend.service';
 
@@ -62,6 +62,7 @@ import {SelectedUnitsService} from './shared/services/selected-units.service';
     CodeKataUnitService,
     APIInfoService,
     SelectedUnitsService,
+    DownloadReq,
     RavenErrorHandler,
     {
       provide: ErrorHandler,
