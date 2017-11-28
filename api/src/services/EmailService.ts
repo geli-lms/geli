@@ -92,7 +92,6 @@ class EmailService {
     return new Promise((resolve, reject) => {
       this.transporter.sendMail(message, (error: any, info: any) => {
         if (error) {
-          console.log(error);
           reject({error: error, info: info});
         } else {
           resolve();

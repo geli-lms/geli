@@ -8,6 +8,6 @@
             mat-tooltip="Open markdown-editor as fullscreen">
       Fullscreen
     </button>
-    <button mat-button mat-raised-button color="primary" class="add-unit" (click)="saveUnit()">Save</button>
+    <app-button-save-cancel (save)="saveUnit()" (cancel)="onCancel()"></app-button-save-cancel>
   </div>
 </div>

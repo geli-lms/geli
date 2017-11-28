@@ -4,6 +4,7 @@ import {UserDataService} from '../../shared/services/data.service';
 import {ActivatedRoute} from '@angular/router';
 import {UserService} from '../../shared/services/user.service';
 import {User} from '../../models/User';
+import {TitleService} from '../../shared/services/title.service';
 
 @Component({
   selector: 'app-user-details',
@@ -17,10 +18,12 @@ export class UserDetailsComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
               public userService: UserService,
-              public userDataService: UserDataService) {
+              public userDataService: UserDataService,
+              private titleService: TitleService) {
   }
 
   ngOnInit() {
+    this.titleService.setTitle('User');
     this.route.params.subscribe(params => {
       this.userId = decodeURIComponent(params['id']);
 
@@ -47,6 +50,7 @@ export class UserDetailsComponent implements OnInit {
     this.userDataService.readSingleItem(this.userId)
       .then((user: any) => {
         this.user = new User(user);
+        this.titleService.setTitleCut(['User: ', this.user.profile.firstName]);
       })
       .catch((error: any) => {
       });
