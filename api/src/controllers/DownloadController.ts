@@ -30,6 +30,10 @@ export class DownloadController {
   @Post('/')
   async addTask(@Body() data: IDownload) {
 
+    if ( data.units.length === 0) {
+      throw new NotFoundError();
+    }
+
     const fileName = await crypto.pseudoRandomBytes(16).toString('hex');
     const filepath = appRoot + '/temp/' + fileName + '.zip';
     const output = fs.createWriteStream(filepath);
