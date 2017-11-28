@@ -17,7 +17,6 @@ const freeTextUnitSchema = new mongoose.Schema({
 
 freeTextUnitSchema.statics.importJSON = async function(unit: IFreeTextUnit, courseId: string, lectureId: string) {
   unit._course = courseId;
-
   try {
     const savedFreeText = await new FreeTextUnit(unit).save();
     const lecture = await Lecture.findById(lectureId);

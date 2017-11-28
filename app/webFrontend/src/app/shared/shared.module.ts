@@ -8,13 +8,15 @@ import {UserImageDirective} from './directives/user-image.directive';
 import {MaterialImportModule} from './modules/material-import.module';
 import {BadgeComponent} from './components/badge/badge.component';
 import {MatFabMenuComponent} from './components/mat-fab-menu/mat-fab-menu.component';
+import {ExpandableDivComponent} from './components/expandable-div/expandable-div.component';
+import {ButtonSaveCancelComponent} from './components/button-save-cancel/button-save-cancel.component';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    MaterialImportModule
+    MaterialImportModule,
   ],
   declarations: [
     GravatarDirective,
@@ -22,6 +24,9 @@ import {MatFabMenuComponent} from './components/mat-fab-menu/mat-fab-menu.compon
     UserImageDirective,
     BadgeComponent,
     MatFabMenuComponent,
+    BadgeComponent,
+    ExpandableDivComponent,
+    ButtonSaveCancelComponent,
   ],
   exports: [
     GravatarDirective,
@@ -31,6 +36,9 @@ import {MatFabMenuComponent} from './components/mat-fab-menu/mat-fab-menu.compon
     MaterialImportModule,
     BadgeComponent,
     MatFabMenuComponent,
+    BadgeComponent,
+    ExpandableDivComponent,
+    ButtonSaveCancelComponent,
   ]
 })
 export class SharedModule {

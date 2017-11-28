@@ -84,7 +84,7 @@ lectureSchema.statics.importJSON = async function(lecture: ILecture, courseId: s
       return unitTypeClass.importJSON(unit, courseId, savedLecture._id);
     }));
 
-    return (await Course.findById(savedLecture._id)).toObject();
+    return (await Lecture.findById(savedLecture._id)).toObject();
   } catch (err) {
     const newError = new InternalServerError('Failed to import lecture');
     newError.stack += '\nCaused by: ' + err.message + '\n' + err.stack;

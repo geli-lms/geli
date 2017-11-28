@@ -1,12 +1,14 @@
 import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {CourseService, ExportService} from '../../shared/services/data.service';
+import {CourseService, DuplicationService, ExportService} from '../../shared/services/data.service';
 import {MatSnackBar} from '@angular/material';
 import {ShowProgressService} from '../../shared/services/show-progress.service';
 import {FileUploader} from 'ng2-file-upload';
 import {SaveFileService} from '../../shared/services/save-file.service';
 import {ICourse} from '../../../../../../shared/models/ICourse';
+import {ENROLL_TYPES, ENROLL_TYPE_WHITELIST, ENROLL_TYPE_FREE, ENROLL_TYPE_ACCESSKEY} from '../../../../../../shared/models/ICourse';
+import {UserService} from '../../shared/services/user.service';
 
 @Component({
   selector: 'app-course-edit',
@@ -25,6 +27,13 @@ export class CourseEditComponent implements OnInit {
   id: string;
   courseOb: ICourse;
   uploader: FileUploader = null;
+  enrollTypes =  ENROLL_TYPES;
+  enrollTypeConstants = {
+    ENROLL_TYPE_WHITELIST,
+    ENROLL_TYPE_FREE,
+    ENROLL_TYPE_ACCESSKEY,
+  };
+
 
   message = 'Course successfully added.';
 
@@ -33,9 +42,12 @@ export class CourseEditComponent implements OnInit {
               private courseService: CourseService,
               public snackBar: MatSnackBar,
               private ref: ChangeDetectorRef,
+              private showProgress: ShowProgressService,
+              private router: Router,
               private exportService: ExportService,
               private saveFileService: SaveFileService,
-              private showProgress: ShowProgressService) {
+              private duplicationService: DuplicationService,
+              private userService: UserService) {
 
     this.route.params.subscribe(params => {
       this.id = params['id'];
@@ -86,15 +98,23 @@ export class CourseEditComponent implements OnInit {
     };
   }
 
+  cancel() {
+    this.router.navigate(['/']);
+  }
+
   createCourse() {
     this.showProgress.toggleLoadingGlobal(true);
 
     const request: any = {
       'name': this.course, 'description': this.description, '_id': this.id, 'active': this.active, 'enrollType': this.enrollType
     };
-    if (this.accessKey !== '****') {
+
+    if (this.enrollType === ENROLL_TYPE_FREE) {
+      request.accessKey = null;
+    } else if (this.accessKey !== '****') {
       request.accessKey = this.accessKey;
     }
+
     this.courseService.updateItem(request).then(
       (val) => {
         this.showProgress.toggleLoadingGlobal(false);
@@ -114,6 +134,14 @@ export class CourseEditComponent implements OnInit {
       this.saveFileService.save(this.courseOb.name, JSON.stringify(courseJSON, null, 2));
     } catch (err) {
       this.snackBar.open('Export course failed ' + err.json().message, 'Dismiss');
+    }
+  }
+
+  async onDuplicate() {
+    try {
+      const course = await this.duplicationService.duplicateCourse(this.courseOb, this.userService.user);
+    } catch (err) {
+      this.snackBar.open('Duplication of the course failed ' + err.json().message, 'Dismiss');
     }
   }
 
