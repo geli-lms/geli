@@ -33,7 +33,6 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
   userCtrl: FormControl;
   filteredStates: any;
   finishRestCall = true;
-  fieldsToShow = new Map<string, boolean>();
 
   constructor(private dragula: DragulaService,
               private userService: UserDataService) {
@@ -107,14 +106,6 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.dragula.destroy(this.dragulaBagId);
     this.dragula.destroy(this.dragulaWhitelistBagId);
-  }
-
-  toggle(name: string) {
-    if (this.fieldsToShow.get(name)) {
-      this.fieldsToShow.set(name, false);
-    } else {
-      this.fieldsToShow.set(name, true);
-    }
   }
 
   filterStates(val: string) {

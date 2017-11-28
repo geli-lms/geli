@@ -1,6 +1,7 @@
 <mat-form-field class="search">
   <input matInput placeholder="Search and add {{role}}s by name, Id, e-mail"
-         [matAutocomplete]="auto" [formControl]="userCtrl" (ngModelOptions)="{debounce : 1000}" (ngModelChange)="searchForUsers($event)" [(ngModel)]="search">
+         [matAutocomplete]="auto" [formControl]="userCtrl" (ngModelOptions)="{debounce : 1000}"
+         (ngModelChange)="searchForUsers($event)" [(ngModel)]="search">
 </mat-form-field>
 
 <mat-autocomplete #auto="matAutocomplete">
@@ -9,46 +10,45 @@
   </mat-option>
 </mat-autocomplete>
 
+
 <app-course-user-list-overview [users]="users"
                                [show]="search.length <= 0 && finishRestCall"
                                (onUpdate)="updateUser($event)">
 </app-course-user-list-overview>
 
 <div class="users" *ngIf="search.length > 0 && finishRestCall">
+  <mat-expansion-panel class="panel" [expanded]="true" #expPanel2>
+    <mat-expansion-panel-header>
+      <mat-panel-title class="title">
+        In course
+      </mat-panel-title>
+      <mat-panel-description>
+        <p class="line">{{role}}s: {{dragableUsersInCourse.length}} of
+          <ng-container *ngIf="role === 'student'">{{course.students.length}}</ng-container>
+          <ng-container *ngIf="role === 'teacher'">{{course.teachers.length}}</ng-container>
+        </p>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <app-course-user-list-show
+      [show]="expPanel2.expanded"
+      [dragulaBagId]="dragulaBagId"
+      [dragUsers]="dragableUsersInCourse"
+      [fieldId]="'UserInCourse'"></app-course-user-list-show>
+  </mat-expansion-panel>
 
-  <mat-card class="info">
-    <mat-card-title class="title">Not in course:
-      <button class="open-toggle" (click)="toggle('notInCourse')"
-              [class.opened]="fieldsToShow.get('notInCourse')" mat-icon-button>
-        <mat-icon>arrow_drop_down</mat-icon>
-      </button>
-    </mat-card-title>
-    <mat-card-subtitle class="subtitle">
-    <p class="line">{{role}}s: {{dragableUsers.length}} of {{usersTotal}}</p>
-    </mat-card-subtitle>
-  </mat-card>
-  <app-course-user-list-show [dragulaBagId]="dragulaBagId"
-                             [dragUsers]="dragableUsers"
-                             [show]="fieldsToShow.get('notInCourse')"
-                             [fieldId]="'UserNotInCourse'"></app-course-user-list-show>
-
-  <mat-card class="info">
-    <mat-card-title class="title">In course:
-      <button class="open-toggle" (click)="toggle('inCourse')"
-              [class.opened]="fieldsToShow.get('inCourse')" mat-icon-button>
-        <mat-icon>arrow_drop_down</mat-icon>
-      </button>
-    </mat-card-title>
-    <mat-card-subtitle class="subtitle">
-      <p class="line">{{role}}s: {{dragableUsersInCourse.length}} of
-        <ng-container *ngIf="role === 'student'">{{course.students.length}}</ng-container>
-        <ng-container *ngIf="role === 'teacher'">{{course.teachers.length}}</ng-container>
-      </p>
-    </mat-card-subtitle>
-  </mat-card>
-
-  <app-course-user-list-show [dragulaBagId]="dragulaBagId"
-                             [dragUsers]="dragableUsersInCourse"
-                             [show]="fieldsToShow.get('inCourse')"
-                             [fieldId]="'UserInCourse'"></app-course-user-list-show>
+  <mat-expansion-panel class="panel" [expanded]="false" #expPanel1>
+    <mat-expansion-panel-header>
+      <mat-panel-title class="title">
+        Not in course
+      </mat-panel-title>
+      <mat-panel-description>
+        <p class="line">{{role}}s: {{dragableUsers.length}} of {{usersTotal}}</p>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <app-course-user-list-show
+      [show]="expPanel1.expanded"
+      [dragulaBagId]="dragulaBagId"
+      [dragUsers]="dragableUsers"
+      [fieldId]="'UserNotInCourse'"></app-course-user-list-show>
+  </mat-expansion-panel>
 </div>

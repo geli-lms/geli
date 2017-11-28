@@ -21,8 +21,6 @@ export class WhitelistEditComponent implements OnInit {
   @Output() onDragableWhitelistUserInCourse = new EventEmitter<IWhitelistUser[]>();
   @Output() onDragendRemoveWhitelist = new EventEmitter<IWhitelistUser>();
   @Output() onDragendPushWhitelist = new EventEmitter<IWhitelistUser>();
-
-  isToggled = false;
   whitelistUser: any = {firstName: '', lastName: '', uid: '', courseId: null};
 
   constructor(private whitelistUserService: WhitelistUserService,
@@ -47,10 +45,6 @@ export class WhitelistEditComponent implements OnInit {
         }
       }
     })*/
-  }
-
-  toggle() {
-    this.isToggled = !this.isToggled;
   }
 
   createNewWhitelistUser() {

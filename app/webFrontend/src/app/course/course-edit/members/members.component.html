@@ -11,13 +11,11 @@
                       (onDragendRemove)="removeUserFromCoure($event)"
                       (onDragendPush)="pushUserToCourse($event)"
                       (onUpdate)="updateUser($event)"></app-course-user-list>
-<ng-container *ngIf="showWhitelists">
-  <app-whitelist-edit
+<app-whitelist-edit
     [dragulaBagId]="dragulaWhitelistBagId"
     [total]="totalWhitelist"
     [course]="course"
     (onDragendRemoveWhitelist) ="removeWhitelistUserFromCourse($event)"
     (onDragendPushWhitelist)= "pushWhitelistUserToCourse($event)"
     (onDragableWhitelistUserInCourse)="onFoundWhitelistUserInCourse($event)">
-  </app-whitelist-edit>
-</ng-container>
+</app-whitelist-edit>

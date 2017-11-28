@@ -1,7 +1,15 @@
 import {NgModule} from '@angular/core';
 import {
   MatAutocompleteModule,
-  MatButtonModule, MatCardModule, MatCheckboxModule, MatDialogModule, MatFormFieldModule, MatIconModule, MatInputModule, MatListModule,
+  MatExpansionModule,
+  MatButtonModule,
+  MatCardModule,
+  MatCheckboxModule,
+  MatDialogModule,
+  MatFormFieldModule,
+  MatIconModule,
+  MatInputModule,
+  MatListModule,
   MatDatepickerModule,
   MatMenuModule,
   MatNativeDateModule,
@@ -14,6 +22,7 @@ import {
 @NgModule({
   imports: [
     MatAutocompleteModule,
+    MatExpansionModule,
     MatButtonModule,
     MatCardModule,
     MatCheckboxModule,
@@ -36,6 +45,7 @@ import {
   ],
   exports: [
     MatAutocompleteModule,
+    MatExpansionModule,
     MatButtonModule,
     MatCardModule,
     MatCheckboxModule,

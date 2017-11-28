@@ -11,8 +11,8 @@ export class CourseUserListShowComponent implements OnInit {
 
   @Input() dragUsers: any = [];
   @Input() dragulaBagId;
-  @Input() show: boolean;
   @Input() fieldId: string;
+  @Input() show: boolean;
 
   constructor() {
   }

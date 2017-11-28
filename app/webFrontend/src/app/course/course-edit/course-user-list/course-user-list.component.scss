@@ -4,38 +4,14 @@
   margin-top: 10px;
   width: 100%;
 }
+ .panel{
+     margin-left: 0.8rem;
+     width: 98%;
+     display: inline-block;
+ }
 
-.mat-card {
-  width: 99%;
-  margin-left: 0.2rem;
-}
-
-.info {
-  .title {
-    margin-top: -1.5rem;
-    font-size: large;
-  }
-  .subtitle {
-    margin-left: 2rem;
-    margin-top: -1.5rem;
-    font-size: small;
-    .line {
-      margin-top: -1rem;
-    }
-    margin-bottom: -2rem;
-  }
-}
-
-.open-toggle {
-  margin-top: auto;
-  margin-bottom: auto;
-  width: 2.5rem;
-  height: 100%;
-  color: map-get($app-primary, 'default');
-  transition: transform 0.3s;
-  transform: rotate(-90deg);
-
-  &.opened {
-    transform: rotate(0);
-  }
-}
+ .title{
+   padding: auto;
+   margin: auto;
+   flex: 1;
+ }

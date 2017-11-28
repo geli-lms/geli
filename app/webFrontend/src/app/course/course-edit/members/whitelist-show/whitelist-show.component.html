@@ -1,6 +1,5 @@
 <!--<mat-list class="drop" [dragula]='dragulaBagId' [dragulaModel]="dragUsers" [attr.item-id]="fieldId">-->
-<mat-list class="drop">
-  <ng-container *ngIf="show">
+<mat-list class="drop" *ngIf="show">
     <div *ngFor="let user of course.whitelist">
       <mat-list-item class="list" [attr.item-id]="user._id">
         <!--<mat-icon class="user-drag-handle">drag_handle</mat-icon>-->
@@ -19,5 +18,4 @@
         <i *ngIf="!isInCourse(user)" class="material-icons red" matTooltip="In Course">clear</i>
       </mat-list-item>
     </div>
-  </ng-container>
 </mat-list>

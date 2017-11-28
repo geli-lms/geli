@@ -17,9 +17,9 @@ export class WhitelistShowComponent implements OnInit {
 
   @Input() dragUsers: any = [];
   @Input() dragulaBagId;
-  @Input() show: boolean;
   @Input() fieldId: string;
   @Input() course: ICourse;
+  @Input() show: boolean;
 
   signedInStudents: IUser[];
 

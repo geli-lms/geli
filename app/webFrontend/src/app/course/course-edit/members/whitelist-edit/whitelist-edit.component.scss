@@ -1,48 +1,29 @@
 @import "../../../../../variables";
 
-.mat-card {
-  width: 99%;
-  margin-left: 0.2rem;
+.full-width {
+  width: 30%;
+  flex: 1;
 }
 
-.info {
-  .title {
-    margin-top: -1.5rem;
-    font-size: large;
-  }
-  .subtitle {
-    margin-left: 2rem;
-    margin-top: -1.5rem;
-    font-size: small;
-    .line {
-      margin-top: -1rem;
-    }
-    margin-bottom: -2rem;
-  }
+.mat-mini-fab {
+  margin-bottom: 10px;
+  margin-right: 3rem;
+  background-color: map-get($app-primary, 'default');
 }
 
-  .full-width {
-    width: 30%;
-    flex: 1;
-  }
+.mat-expansion-panel {
+  padding-top: 0.1rem;
+}
 
-  .mat-mini-fab {
-    margin-bottom: 10px;
-    margin-right: 3rem;
-    background-color: map-get($app-primary, 'default');
-  }
+.whitelist {
+  margin-left: 0.8rem;
+  width: 98%;
+  display: inline-block;
+}
 
-
-.open-toggle {
-  margin-top: auto;
-  margin-bottom: auto;
-  width: 2.5rem;
+.title {
+  padding: auto;
+  margin: auto;
+  flex: 1;
   height: 100%;
-  color: map-get($app-primary, 'default');
-  transition: transform 0.3s;
-  transform: rotate(-90deg);
-
-  &.opened {
-    transform: rotate(0);
-  }
 }

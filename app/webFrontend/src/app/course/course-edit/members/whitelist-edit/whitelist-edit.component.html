@@ -1,22 +1,19 @@
-<mat-card class="info">
-  <mat-card-title class="title">Whitelist:
-    <button class="open-toggle" (click)="toggle()"
-            [class.opened]="isToggled" mat-icon-button>
-      <mat-icon>arrow_drop_down</mat-icon>
-    </button>
-  </mat-card-title>
-  <mat-card-subtitle class="subtitle">
-    <!--<p class="line">User: {{dragableWhitelistUser.length}} of {{total}}</p>-->
-    <p class="line">Amount: {{course.whitelist.length}}</p>
-  </mat-card-subtitle>
-</mat-card>
-
-<app-whitelist-show [show]="isToggled"
-                    [dragUsers]="dragableWhitelistUser"
-                    [dragulaBagId]="dragulaBagId"
-                    [fieldId]="'Whitelist'"
-                    [course]="course">
-</app-whitelist-show>
+<mat-expansion-panel class="whitelist" [expanded]="false" #expPanel>
+  <mat-expansion-panel-header>
+  <mat-panel-title class="title">
+    Whitelist
+  </mat-panel-title>
+  <mat-panel-description>
+    amount: {{course.whitelist.length}}
+  </mat-panel-description>
+  </mat-expansion-panel-header>
+  <app-whitelist-show [show]="expPanel.expanded"
+                      [dragUsers]="dragableWhitelistUser"
+                      [dragulaBagId]="dragulaBagId"
+                      [fieldId]="'Whitelist'"
+                      [course]="course">
+  </app-whitelist-show>
+</mat-expansion-panel>
 
 <mat-form-field class="full-width">
   <input async matInput id="firstName" placeholder="Last name" [(ngModel)]="whitelistUser.firstName"
