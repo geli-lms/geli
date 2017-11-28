@@ -10,9 +10,7 @@ import {UserService} from '../../shared/services/user.service';
 import {ICourse} from '../../../../../../shared/models/ICourse';
 import {TitleService} from '../../shared/services/title.service';
 import {SaveFileService} from '../../shared/services/save-file.service';
-import {ICourse} from '../../../../../../shared/models/ICourse';
 import {ENROLL_TYPES, ENROLL_TYPE_WHITELIST, ENROLL_TYPE_FREE, ENROLL_TYPE_ACCESSKEY} from '../../../../../../shared/models/ICourse';
-import {UserService} from '../../shared/services/user.service';
 
 @Component({
   selector: 'app-course-edit',
@@ -149,7 +147,7 @@ export class CourseEditComponent implements OnInit {
       }
     });
   }
-  
+
   async onExport() {
     try {
       const courseJSON = await this.exportService.exportCourse(this.courseOb);
