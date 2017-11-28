@@ -40,11 +40,12 @@ export class DialogService {
     return this.confirmOperation('Remove', itemType, itemName, removeFrom);
   }
 
-  public chooseFile(message: string) {
+  public chooseFile(message: string, uploadPath: string) {
     let dialogRef: MatDialogRef<FilepickerDialog>;
 
     dialogRef = this.dialog.open(FilepickerDialog);
     dialogRef.componentInstance.message = message;
+    dialogRef.componentInstance.uploadPath = uploadPath;
 
     return dialogRef.afterClosed();
   }

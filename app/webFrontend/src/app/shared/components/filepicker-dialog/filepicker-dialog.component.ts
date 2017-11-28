@@ -1,5 +1,6 @@
-import {Component} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {MatDialogRef} from '@angular/material';
+import {FileItem, FileUploader, ParsedResponseHeaders} from 'ng2-file-upload';
 
 @Component({
   selector: 'app-filepicker-dialog',
@@ -9,17 +10,40 @@ import {MatDialogRef} from '@angular/material';
 export class FilepickerDialog {
 
   public message: string;
-  public choosenFile: any;
+  public uploadPath: string;
+
+  public uploader: FileUploader;
+  showProgressBar = false;
 
   constructor(public dialogRef: MatDialogRef<FilepickerDialog>) {
   }
 
-  private fileChange(file: any) {
-    this.choosenFile = file;
+  ngOnInit() {
+    this.uploader = new FileUploader({
+      url: this.uploadPath,
+      headers: [{
+        name: 'Authorization',
+        value: localStorage.getItem('token')
+      }]
+    });
+
+    this.uploader.onCompleteItem = (item: any, response: any, status: any, headers: any) => {
+      return this.dialogRef.close({success: (status === 200) ? true : false, result: JSON.parse(response)});
+    };
+    this.uploader.onErrorItem = (item: FileItem, response: string, status: number, headers: ParsedResponseHeaders) => {
+      return this.dialogRef.close({success: false, result: JSON.parse(response)});
+    }
   }
 
-  close(success: boolean) {
-    return this.dialogRef.close({success, file: this.choosenFile});
+  public upload() {
+    this.dialogRef.disableClose = true;
+    this.showProgressBar = true;
+    this.uploader.uploadAll();
+  }
+
+  public cancel() {
+    this.uploader.cancelAll();
+    this.dialogRef.close({success: false});
   }
 
 }
