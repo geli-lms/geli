@@ -8,6 +8,7 @@ export abstract class DashboardBaseComponent implements OnInit {
 
   @Output()
   onEnroll = new EventEmitter();
+  onLeave = new EventEmitter();
 
   constructor() {
 
@@ -15,6 +16,10 @@ export abstract class DashboardBaseComponent implements OnInit {
 
   ngOnInit() {
 
+  }
+
+  LeaveCallback() {
+    this.onLeave.emit();
   }
 
   enrollCallback() {

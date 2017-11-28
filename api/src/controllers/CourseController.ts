@@ -1,6 +1,6 @@
 import {Request} from 'express';
 import {
-  Authorized,
+  Authorized, BadRequestError,
   Body,
   CurrentUser, ForbiddenError,
   Get,
@@ -13,6 +13,7 @@ import {
   UseBefore
 } from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
+import * as errorCodes from '../config/errorCodes'
 
 import {ICourse} from '../../../shared/models/ICourse';
 import {IUser} from '../../../shared/models/IUser';
@@ -54,6 +55,7 @@ export class CourseController {
     if (conditions.$or) {
       // Everyone is allowed to see free courses in overview
       conditions.$or.push({enrollType: 'free'});
+      conditions.$or.push({enrollType: 'accesskey'});
     }
 
     const courseQuery = Course.find(conditions)
@@ -138,9 +140,14 @@ export class CourseController {
   @Post('/')
   addCourse(@Body() course: ICourse, @Req() request: Request, @CurrentUser() currentUser: IUser) {
     course.courseAdmin = currentUser;
-
-    return new Course(course).save()
-      .then((c) => c.toObject());
+    return Course.findOne({name: course.name})
+      .then((existingCourse) => {
+        if (existingCourse) {
+          throw new BadRequestError(errorCodes.errorCodes.course.duplicateName.code);
+        }
+        return new Course(course).save()
+          .then((c) => c.toObject());
+      });
   }
 
   @Authorized(['student'])
@@ -158,11 +165,11 @@ export class CourseController {
                 e.firstName === currentUser.profile.firstName.toLowerCase()
                 && e.lastName === currentUser.profile.lastName.toLowerCase()
                 && e.uid === currentUser.uid).length <= 0) {
-              throw new ForbiddenError('Not allowed to join, you are not on whitelist.');
+              throw new ForbiddenError(errorCodes.errorCodes.course.notOnWhitelist.code);
             }
           });
         } else if (course.accessKey && course.accessKey !== data.accessKey) {
-          throw new ForbiddenError('Incorrect or missing access key');
+          throw new ForbiddenError(errorCodes.errorCodes.course.accessKey.code);
         }
 
         if (course.students.indexOf(currentUser._id) < 0) {
@@ -200,7 +207,7 @@ export class CourseController {
     const name: string = file.originalname;
 
     if (!name.endsWith('.csv')) {
-      throw new TypeError('Wrong type allowed are just csv files.');
+      throw new TypeError(errorCodes.errorCodes.upload.type.notCSV.code);
     }
 
     // TODO: Never query all users!

@@ -6,7 +6,7 @@ export const teacherFixtures: IFixture = {
   data: [
     {
       email: 'teacher1@test.local',
-      password: 'test',
+      password: 'test1234',
       role: 'teacher',
       profile: {
         firstName: 'Daniel',
@@ -16,7 +16,7 @@ export const teacherFixtures: IFixture = {
     },
     {
       email: 'teacher2@test.local',
-      password: 'test',
+      password: 'test1234',
       role: 'teacher',
       profile: {
         firstName: 'Ober',
@@ -26,7 +26,7 @@ export const teacherFixtures: IFixture = {
     },
     {
       email: 'teacher3@test.local',
-      password: 'test',
+      password: 'test1234',
       role: 'teacher',
       profile: {
         firstName: 'Ober',
@@ -36,7 +36,7 @@ export const teacherFixtures: IFixture = {
     },
     {
       email: 'teacher4@test.local',
-      password: 'test',
+      password: 'test1234',
       role: 'teacher',
       profile: {
         firstName: 'Severus',
