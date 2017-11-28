@@ -5,6 +5,7 @@ import {IUnit} from '../../../shared/models/units/IUnit';
 import {InternalServerError} from 'routing-controllers';
 import {Course} from './Course';
 import {UnitClassMapper} from '../utilities/UnitClassMapper';
+import * as winston from 'winston';
 
 interface ILectureModel extends ILecture, mongoose.Document {
   exportJSON: () => Promise<ILecture>;
@@ -61,7 +62,11 @@ lectureSchema.methods.exportJSON = async function() {
 
   obj.units = await Promise.all(units.map((unitId: mongoose.Types.ObjectId) => {
     return Unit.findById(unitId).then((unit: IUnitModel) => {
-      return unit.exportJSON();
+      if (Unit) {
+        return unit.exportJSON();
+      } else {
+        winston.log('warn', 'unit ' + unitId + ' was referenced but does not exist anymore');
+      }
     });
   }));
   return obj;
