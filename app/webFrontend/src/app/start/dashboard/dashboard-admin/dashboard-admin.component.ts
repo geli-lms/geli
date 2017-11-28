@@ -40,7 +40,7 @@ export class DashboardAdminComponent extends DashboardBaseComponent {
           const url = '/course/' + res.result.id + '/edit';
           this.router.navigate([url]);
         } else if (res.result) {
-          this.snackBar.open(res.error.message, '', {duration: 3000});
+          this.snackBar.open(res.result.message, '', {duration: 3000});
         }
       });
   };
