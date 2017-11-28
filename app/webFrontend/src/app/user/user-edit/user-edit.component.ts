@@ -129,6 +129,30 @@ export class UserEditComponent implements OnInit {
     });
   }
 
+  resetPassword() {
+    this.dialogService
+      .confirmUpdate('property', 'password', this.user.email)
+      .subscribe(res => {
+        if (res) {
+          this.user.password = this.generatePass(12);
+          this.showProgress.toggleLoadingGlobal(true);
+          this.userDataService.updateItem(this.user).then(
+            (val) => {
+              this.showProgress.toggleLoadingGlobal(false);
+              this.dialogService.info(
+                'Password successfully updated',
+                'Password for user ' + this.user.email + ' was updated to: \'' + this.user.password + '\'')
+                .subscribe(() => this.snackBar.open('Password updated', '', {duration: 3000}));
+            },
+            (error) => {
+              this.showProgress.toggleLoadingGlobal(false);
+              this.snackBar.open(JSON.parse(error._body).message, '', {duration: 3000});
+            }
+          );
+        }
+      });
+  }
+
   openAddPictureDialog() {
     this.dialogService.upload(this.user)
       .subscribe((response) => {
@@ -147,5 +171,16 @@ export class UserEditComponent implements OnInit {
     } else {
       this.router.navigate(['/profile', this.user._id]);
     }
+  }
+
+  private generatePass(length: number): string {
+    let pass = '';
+    const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!?/$%&()[]{}';
+
+    for (let i = 0; i < length; i++) {
+      pass += alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+    }
+
+    return pass;
   }
 }
