@@ -3,12 +3,9 @@ import {Server} from '../../src/server';
 import {FixtureLoader} from '../../fixtures/FixtureLoader';
 import {JwtUtils} from '../../src/security/JwtUtils';
 import {User} from '../../src/models/User';
-import {IUser} from '../../../shared/models/IUser';
-import chaiHttp = require('chai-http');
-import fs = require('fs');
 import {WhitelistUser} from '../../src/models/WhitelistUser';
 import {IWhitelistUser} from '../../../shared/models/IWhitelistUser';
-import {whitelistUserFixtures} from '../../fixtures/WhitelistUserFixtures/whitelistUserFixtures';
+import chaiHttp = require('chai-http');
 
 chai.use(chaiHttp);
 const app = new Server().app;

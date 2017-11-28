@@ -31,6 +31,7 @@ import {WhitelistUser} from '../src/models/WhitelistUser';
 import {IWhitelistUser} from '../../shared/models/IWhitelistUser';
 import {IUser} from '../../shared/models/IUser';
 import whitelist = require('validator/lib/whitelist');
+import ObjectId = mongoose.Types.ObjectId;
 
 export class FixtureLoader {
 
@@ -130,10 +131,8 @@ export class FixtureLoader {
                     return tmp;
                   }).then(() => {
                     return this.addRandomWhitelistUSer(tmp.students, course).then((whitelistUser) => {
-                      if (whitelist) {
+                      if (whitelistUser) {
                         tmp.whitelist = whitelistUser
-                      } else {
-                        tmp.whitelist = [];
                       }}
                     );
                   })
@@ -222,7 +221,7 @@ export class FixtureLoader {
           firstName: stud.profile.firstName,
           lastName: stud.profile.lastName,
           uid: stud.uid,
-          courseId: course._id
+          courseId: new ObjectId(course._id)
         }
       }
     )).then((user: IWhitelistUser[]) => {
