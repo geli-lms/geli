@@ -33,7 +33,7 @@ import {TitleService} from './shared/services/title.service';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
   ],
   imports: [
     AdminModule,
