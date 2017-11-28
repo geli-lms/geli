@@ -1,10 +1,13 @@
 import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CourseService} from '../../shared/services/data.service';
-import {MatSnackBar} from '@angular/material';
+import {MatDialog, MatDialogRef, MatSnackBar} from '@angular/material';
 import {ShowProgressService} from '../../shared/services/show-progress.service';
 import {FileUploader} from 'ng2-file-upload';
+import {ConfirmDialog} from '../../shared/components/confirm-dialog/confirm-dialog.component';
+import {UserService} from "../../shared/services/user.service";
+import {ICourse} from "../../../../../../shared/models/ICourse";
 
 @Component({
   selector: 'app-course-edit',
@@ -31,7 +34,10 @@ export class CourseEditComponent implements OnInit {
               private courseService: CourseService,
               public snackBar: MatSnackBar,
               private ref: ChangeDetectorRef,
-              private showProgress: ShowProgressService) {
+              private showProgress: ShowProgressService,
+              private router: Router,
+              private dialog: MatDialog,
+              private userService: UserService) {
 
     this.route.params.subscribe(params => {
       this.id = params['id'];
@@ -108,9 +114,18 @@ export class CourseEditComponent implements OnInit {
   }
 
   deleteCourse() {
-    console.log('ID: ' + this.id);
-    //fire alert dialog with really wanna delete?
-    this.courseService.deleteCourse(this.id);
+    let dialogRef: MatDialogRef<ConfirmDialog>;
+    dialogRef = this.dialog.open(ConfirmDialog);
+    dialogRef.componentInstance.title = 'Attention!';
+    dialogRef.componentInstance.message = 'Are you sure you want to delete Course ' + this.course;
+    dialogRef.componentInstance.confirmText = 'Delete Course';
+    dialogRef.afterClosed().subscribe(res => {
+      if (res == true) {
+        console.log('res is:' + res);
+        this.courseService.deleteCourse(this.id);
+        this.router.navigate(['/']);
+      }
+    });
   }
 
   onChangeMode(value) {
