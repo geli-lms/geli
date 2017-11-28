@@ -7,6 +7,7 @@ import {UnitMenuComponent} from './components/unit-menu/unit-menu.component';
 import {UserImageDirective} from './directives/user-image.directive';
 import {MaterialImportModule} from './modules/material-import.module';
 import {BadgeComponent} from './components/badge/badge.component';
+import {MatFabMenuComponent} from './components/mat-fab-menu/mat-fab-menu.component';
 import {PasswordInputComponent} from './components/password-input/password-input.component';
 import {ExpandableDivComponent} from './components/expandable-div/expandable-div.component';
 import {ButtonSaveCancelComponent} from './components/button-save-cancel/button-save-cancel.component';
@@ -24,6 +25,8 @@ import {ButtonSaveCancelComponent} from './components/button-save-cancel/button-
     UserImageDirective,
     BadgeComponent,
     PasswordInputComponent,
+    MatFabMenuComponent,
+    BadgeComponent,
     ExpandableDivComponent,
     ButtonSaveCancelComponent,
   ],
@@ -35,6 +38,8 @@ import {ButtonSaveCancelComponent} from './components/button-save-cancel/button-
     MaterialImportModule,
     BadgeComponent,
     PasswordInputComponent,
+    MatFabMenuComponent,
+    BadgeComponent,
     ExpandableDivComponent,
     ButtonSaveCancelComponent,
   ]

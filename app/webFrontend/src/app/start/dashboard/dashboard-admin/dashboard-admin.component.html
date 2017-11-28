@@ -1,6 +1,7 @@
 <app-course-container [title]="'Courses'" [courses]="allCourses" [expand]="true" (onEnroll)="enrollCallback()"></app-course-container>
 
-<a mat-fab class="add-course-fab"
-   routerLink="course/new" matTooltip="Add course" matTooltipPosition="left">
-  <mat-icon>add</mat-icon>
-</a>
+<app-mat-fab-menu class="add-course-fab" [open]="fabOpen" [onClick]="onFabClick"
+                  fabTooltip="Add course">
+  <div (click)="onImportCourse()">Import course</div>
+  <div routerLink="course/new">Create course</div>
+</app-mat-fab-menu>

@@ -2,8 +2,12 @@ import * as mongoose from 'mongoose';
 import {IUnit} from '../../../../shared/models/units/IUnit';
 import {NativeError} from 'mongoose';
 import {Progress} from '../Progress';
+import {InternalServerError} from 'routing-controllers';
+
+import {ILectureModel, Lecture} from '../Lecture';
 
 interface IUnitModel extends IUnit, mongoose.Document {
+  exportJSON: () => Promise<IUnit>;
 }
 
 const unitSchema = new mongoose.Schema({
@@ -49,6 +53,39 @@ function populateUnit(next: (err?: NativeError) => void) {
 }
 
 // unitSchema.pre('find', populateUnit);
+
+unitSchema.methods.exportJSON = function() {
+  const obj = this.toObject();
+
+  // remove unwanted informations
+  // mongo properties
+  delete obj._id;
+  delete obj.createdAt;
+  delete obj.__v;
+  delete obj.updatedAt;
+
+  // custom properties
+  delete obj._course;
+
+  return obj;
+};
+
+unitSchema.statics.importJSON = async function(unit: IUnit, courseId: string, lectureId: string) {
+  unit._course = courseId;
+
+  try {
+    const savedUnit = await new Unit(unit).save();
+    const lecture = await Lecture.findById(lectureId);
+    lecture.units.push(savedUnit);
+    await lecture.save();
+
+    return savedUnit.toObject();
+  } catch (err) {
+    const newError = new InternalServerError('Failed to import unit');
+    newError.stack += '\nCaused by: ' + err.message + '\n' + err.stack;
+    throw newError;
+  }
+};
 
 // Cascade delete
 unitSchema.pre('remove', function(next: () => void) {
