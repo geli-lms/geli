@@ -22,6 +22,7 @@ export class CourseContainerComponent implements OnInit {
 
   @Output()
   onEnroll = new EventEmitter();
+  @Output()
   onLeave = new EventEmitter();
 
   constructor(public userService: UserService,

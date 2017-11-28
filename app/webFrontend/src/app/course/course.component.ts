@@ -23,6 +23,7 @@ export class CourseComponent {
 
   @Output()
   onEnroll = new EventEmitter();
+  @Output()
   onLeave = new EventEmitter();
 
   constructor(public userService: UserService,
@@ -58,6 +59,7 @@ export class CourseComponent {
       this.onEnroll.emit({'courseId': this.course._id, 'accessKey': null});
     }
   }
+
   leave() {
     this.dialogService
       .confirm('Leave course ?', 'Do you really want to leave the course?', 'Leave')

@@ -8,6 +8,7 @@ export abstract class DashboardBaseComponent implements OnInit {
 
   @Output()
   onEnroll = new EventEmitter();
+  @Output()
   onLeave = new EventEmitter();
 
   constructor() {
