@@ -2,12 +2,10 @@ const fs = require('fs');
 const archiver = require('archiver');
 import crypto = require('crypto');
 
-const path = require('path');
-const appDir = path.dirname(require.main.filename);
-const osTmpdir = require('os-tmpdir');
+var appRoot = require('app-root-path');
 
-import {Request} from 'express';
-import {Body, Get, Post, Put, Param, Req, JsonController, UseBefore, Delete, NotFoundError} from 'routing-controllers';
+import {
+  Body, Post, JsonController, NotFoundError, UseBefore} from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 
 import {CodeKataUnit} from '../models/units/CodeKataUnit';
@@ -31,8 +29,9 @@ export class DownloadController {
   @Post('/')
   async addTask(@Body() data: IDownload) {
 
-    const fileName = await crypto.pseudoRandomBytes(16);
-    const filepath = osTmpdir() + '/' + fileName.toString('hex') + '.zip';
+    const fileName = await crypto.pseudoRandomBytes(16).toString('hex');
+    const filepath = appRoot + '/temp/' + fileName + '.zip';
+    console.log(filepath);
     const output = fs.createWriteStream(filepath);
     const archive = archiver('zip', {
       zlib: {level: 9} // Sets the compression level.
@@ -67,7 +66,7 @@ export class DownloadController {
           const newTask = await Task.findOne(task._id);
             fileStream = fileStream + newTask.name + '\n';
 
-          for(const answer of newTask.answers) {
+          for (const answer of newTask.answers) {
               fileStream = fileStream + answer.text + ': [ ]\n';
             }
             fileStream = fileStream + '-------------------------------------\n';
@@ -81,7 +80,7 @@ export class DownloadController {
     archive.finalize();
 
 
-    return filepath;
+    return 'api/temp/' + fileName + '.zip';
   }
 
 }

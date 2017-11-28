@@ -51,6 +51,7 @@ export class Server {
     }
 
     // TODO: Needs authentication in the future
+    this.app.use('/api/temp', express.static('temp'));
     this.app.use('/api/uploads', express.static('uploads'));
 
     Server.setupPassport();

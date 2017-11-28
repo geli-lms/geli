@@ -40,10 +40,13 @@ export class SelectUnitDialogComponent {
     }
   }
 
-  downloadAndClose() {
+  async downloadAndClose() {
     const dl = {course: this.course.name, lectures: [], units: this.selectedUnitsService.getSelectedData()};
     console.log(dl.units.length + 'units Selected');
-    this.downloadReq.postDownloadReqForCourse(dl);
+    const result = await this.downloadReq.postDownloadReqForCourse(dl);
+
+    window.open(result.toString());
+
     this.dialogRef.close();
   }
 
