@@ -21,19 +21,8 @@
 
   <mat-card-content>
     <form name="form" (ngSubmit)="reset()" [formGroup]="resetForm">
-      <mat-form-field>
-        <input matInput type="password" formControlName="password" placeholder="Password"/>
-        <div class="form-text error" *ngIf="resetForm?.controls.password.touched">
-          <small *ngIf="resetForm.controls.password.hasError('required')" class="text-danger">Password is required</small>
-          <small *ngIf="resetForm.controls.password.hasError('pattern')">{{passwordPatternText}}</small>
-        </div>
-      </mat-form-field>
-      <mat-form-field>
-        <input matInput type="password" formControlName="confirmPassword" placeholder="Confirm password"/>
-        <div class="form-text error" *ngIf="resetForm.controls.confirmPassword.touched">
-          <small *ngIf="resetForm.hasError('mismatchedPasswords')">Passwords do not match.</small>
-        </div>
-      </mat-form-field>
+
+      <app-password-input [form]="resetForm"></app-password-input>
 
       <button mat-raised-button color="primary" type="submit" [disabled]="loading">Reset</button>
     </form>

@@ -1,10 +1,12 @@
 import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CourseService} from '../../shared/services/data.service';
 import {MatSnackBar} from '@angular/material';
 import {ShowProgressService} from '../../shared/services/show-progress.service';
 import {FileUploader} from 'ng2-file-upload';
+import {TitleService} from '../../shared/services/title.service';
+import {ENROLL_TYPES, ENROLL_TYPE_WHITELIST, ENROLL_TYPE_FREE, ENROLL_TYPE_ACCESSKEY} from '../../../../../../shared/models/ICourse';
 
 @Component({
   selector: 'app-course-edit',
@@ -23,6 +25,13 @@ export class CourseEditComponent implements OnInit {
   id: string;
   courseOb: any[];
   uploader: FileUploader = null;
+  enrollTypes =  ENROLL_TYPES;
+  enrollTypeConstants = {
+    ENROLL_TYPE_WHITELIST,
+    ENROLL_TYPE_FREE,
+    ENROLL_TYPE_ACCESSKEY,
+  };
+
 
   message = 'Course successfully added.';
 
@@ -31,7 +40,9 @@ export class CourseEditComponent implements OnInit {
               private courseService: CourseService,
               public snackBar: MatSnackBar,
               private ref: ChangeDetectorRef,
-              private showProgress: ShowProgressService) {
+              private showProgress: ShowProgressService,
+              private router: Router,
+              private titleService: TitleService) {
 
     this.route.params.subscribe(params => {
       this.id = params['id'];
@@ -47,6 +58,7 @@ export class CourseEditComponent implements OnInit {
             this.mode = true;
           }
           this.courseOb = val;
+          this.titleService.setTitleCut(['Edit Course: ', this.course]);
         }, (error) => {
           this.snackBar.open('Couldn\'t load Course-Item', '', {duration: 3000});
         });
@@ -54,6 +66,7 @@ export class CourseEditComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.titleService.setTitle('Edit Course');
     this.generateForm();
     this.uploader = new FileUploader({
       url: '/api/courses/' + this.id + '/whitelist',
@@ -82,15 +95,23 @@ export class CourseEditComponent implements OnInit {
     };
   }
 
+  cancel() {
+    this.router.navigate(['/']);
+  }
+
   createCourse() {
     this.showProgress.toggleLoadingGlobal(true);
 
     const request: any = {
       'name': this.course, 'description': this.description, '_id': this.id, 'active': this.active, 'enrollType': this.enrollType
     };
-    if (this.accessKey !== '****') {
+
+    if (this.enrollType === ENROLL_TYPE_FREE) {
+      request.accessKey = null;
+    } else if (this.accessKey !== '****') {
       request.accessKey = this.accessKey;
     }
+
     this.courseService.updateItem(request).then(
       (val) => {
         this.showProgress.toggleLoadingGlobal(false);
@@ -101,16 +122,6 @@ export class CourseEditComponent implements OnInit {
         const errormessage = error.json().message || error.json().errmsg;
         this.snackBar.open('Saving course failed ' + errormessage, 'Dismiss');
       });
-  }
-
-  onChangeMode(value) {
-    if (value.checked === true) {
-      this.mode = true;
-      this.enrollType = 'whitelist';
-    } else {
-      this.mode = false;
-      this.enrollType = 'free';
-    }
   }
 
   onChangeActive(value) {

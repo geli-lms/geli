@@ -2,10 +2,9 @@ import {Component, EventEmitter, Input, Output, OnInit, ViewEncapsulation} from 
 import {MatDialog, MatSnackBar} from '@angular/material';
 import {UserService} from '../../shared/services/user.service';
 import {CourseService} from '../../shared/services/data.service';
-import {BadgeComponent} from '../../shared/components/badge/badge.component'
 import {Router} from '@angular/router';
 import {ICourse} from '../../../../../../shared/models/ICourse';
-
+import {errorCodes} from '../../../../../../api/src/config/errorCodes';
 
 @Component({
   selector: 'app-course-container',
@@ -40,7 +39,6 @@ export class CourseContainerComponent implements OnInit {
       this.expand = !this.expand;
   }
 
-
   enrollCallback({courseId, accessKey}) {
     this.courseService.enrollStudent(courseId, {
       user: this.userService.user,
@@ -49,8 +47,21 @@ export class CourseContainerComponent implements OnInit {
       this.snackBar.open('Successfully enrolled', '', {duration: 5000});
       // reload courses to update enrollment status
       this.onEnroll.emit();
-    }).catch((err) => {
-      this.snackBar.open(`${err.statusText}: ${JSON.parse(err._body).message}`, '', {duration: 5000});
+    }).catch((error) => {
+      const errormessage = error.json().message || error.json().errmsg;
+      switch (errormessage) {
+        case errorCodes.course.accessKey.code: {
+          this.snackBar.open(`${errorCodes.course.accessKey.text}`, 'Dismiss');
+          break;
+        }
+        case errorCodes.course.notOnWhitelist.code: {
+          this.snackBar.open(`${errorCodes.course.notOnWhitelist.text}`, 'Dismiss');
+          break;
+        }
+        default: {
+          this.snackBar.open('Enroll failed', '', {duration: 5000});
+        }
+      }
     });
   }
 
