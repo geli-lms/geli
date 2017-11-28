@@ -41,6 +41,7 @@ export class SelectUnitDialogComponent {
   }
 
   async downloadAndClose() {
+    if (this.selectedUnitsService.unitIds.length > 0) {
     const dl = {course: this.course.name, lectures: [], units: this.selectedUnitsService.getSelectedData()};
     console.log(dl.units.length + 'units Selected');
     const result = await this.downloadReq.postDownloadReqForCourse(dl);
@@ -48,6 +49,9 @@ export class SelectUnitDialogComponent {
     window.open(result.toString());
 
     this.dialogRef.close();
+    } else {
+      this.snackBar.open("Keine Units ausgewählt!",'Dismiss');
+    }
   }
 
 }
