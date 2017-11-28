@@ -18,7 +18,7 @@ export abstract class DashboardBaseComponent implements OnInit {
 
   }
 
-  LeaveCallback() {
+  leaveCallback() {
     this.onLeave.emit();
   }
 
