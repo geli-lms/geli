@@ -5,6 +5,7 @@ import {CourseService, DuplicationService, ExportService} from '../../shared/ser
 import {MatSnackBar} from '@angular/material';
 import {ShowProgressService} from '../../shared/services/show-progress.service';
 import {FileUploader} from 'ng2-file-upload';
+import {TitleService} from '../../shared/services/title.service';
 import {SaveFileService} from '../../shared/services/save-file.service';
 import {ICourse} from '../../../../../../shared/models/ICourse';
 import {ENROLL_TYPES, ENROLL_TYPE_WHITELIST, ENROLL_TYPE_FREE, ENROLL_TYPE_ACCESSKEY} from '../../../../../../shared/models/ICourse';
@@ -47,7 +48,8 @@ export class CourseEditComponent implements OnInit {
               private exportService: ExportService,
               private saveFileService: SaveFileService,
               private duplicationService: DuplicationService,
-              private userService: UserService) {
+              private userService: UserService,
+              private titleService: TitleService) {
 
     this.route.params.subscribe(params => {
       this.id = params['id'];
@@ -63,6 +65,7 @@ export class CourseEditComponent implements OnInit {
             this.mode = true;
           }
           this.courseOb = val;
+          this.titleService.setTitleCut(['Edit Course: ', this.course]);
         }, (error) => {
           this.snackBar.open('Couldn\'t load Course-Item', '', {duration: 3000});
         });
@@ -70,6 +73,7 @@ export class CourseEditComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.titleService.setTitle('Edit Course');
     this.generateForm();
     this.uploader = new FileUploader({
       url: '/api/courses/' + this.id + '/whitelist',

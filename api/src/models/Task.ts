@@ -27,6 +27,10 @@ const taskSchema = new mongoose.Schema(
     toObject: {
       transform: function (doc: any, ret: any) {
         ret._id = doc.id;
+        // remove id for embedded documents
+        for (const answer of ret.answers) {
+          delete answer._id;
+        }
       }
     }
   }

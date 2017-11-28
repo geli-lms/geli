@@ -71,9 +71,7 @@ export class UnitBaseController {
         });
         return FileUnit;
       }
-      if (oldUnit instanceof TaskUnit) {
-        return TaskUnit;
-      }
+
       return Unit;
     }).then((model) => model.findByIdAndUpdate(id, unit, {'new': true}))
       .then((u) => u.toObject());
