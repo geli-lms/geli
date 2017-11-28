@@ -6,8 +6,7 @@ import {MatDialog, MatDialogRef, MatSnackBar} from '@angular/material';
 import {ShowProgressService} from '../../shared/services/show-progress.service';
 import {FileUploader} from 'ng2-file-upload';
 import {ConfirmDialog} from '../../shared/components/confirm-dialog/confirm-dialog.component';
-import {UserService} from "../../shared/services/user.service";
-import {ICourse} from "../../../../../../shared/models/ICourse";
+import {UserService} from '../../shared/services/user.service';
 
 @Component({
   selector: 'app-course-edit',
@@ -120,8 +119,7 @@ export class CourseEditComponent implements OnInit {
     dialogRef.componentInstance.message = 'Are you sure you want to delete Course ' + this.course;
     dialogRef.componentInstance.confirmText = 'Delete Course';
     dialogRef.afterClosed().subscribe(res => {
-      if (res == true) {
-        console.log('res is:' + res);
+      if (res === true) {
         this.courseService.deleteCourse(this.id);
         this.router.navigate(['/']);
       }
