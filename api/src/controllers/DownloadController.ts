@@ -2,10 +2,11 @@ const fs = require('fs');
 const archiver = require('archiver');
 import crypto = require('crypto');
 
-var appRoot = require('app-root-path');
+const appRoot = require('app-root-path');
 
 import {
-  Body, Post, JsonController, NotFoundError, UseBefore} from 'routing-controllers';
+  Body, Post, JsonController, NotFoundError, UseBefore
+} from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 
 import {CodeKataUnit} from '../models/units/CodeKataUnit';
@@ -37,6 +38,10 @@ export class DownloadController {
       zlib: {level: 9} // Sets the compression level.
     });
 
+    archive.on( 'error', function(err: Error ) {
+      throw err;
+    });
+
     archive.pipe(output);
 
     for (const unit of data.units) {
@@ -64,13 +69,13 @@ export class DownloadController {
 
         for (const task of taskUnit.tasks) {
           const newTask = await Task.findOne(task._id);
-            fileStream = fileStream + newTask.name + '\n';
+          fileStream = fileStream + newTask.name + '\n';
 
           for (const answer of newTask.answers) {
-              fileStream = fileStream + answer.text + ': [ ]\n';
-            }
-            fileStream = fileStream + '-------------------------------------\n';
-            archive.append(taskUnit.description + '\n' + fileStream, {name: taskUnit.name + '.txt'});
+            fileStream = fileStream + answer.text + ': [ ]\n';
+          }
+          fileStream = fileStream + '-------------------------------------\n';
+          archive.append(taskUnit.description + '\n' + fileStream, {name: taskUnit.name + '.txt'});
         }
       } else {
         throw new NotFoundError();
@@ -78,7 +83,6 @@ export class DownloadController {
     }
 
     archive.finalize();
-
 
     return 'api/temp/' + fileName + '.zip';
   }

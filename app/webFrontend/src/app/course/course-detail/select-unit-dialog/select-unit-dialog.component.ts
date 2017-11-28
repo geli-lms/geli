@@ -1,5 +1,5 @@
 import {Component, Inject, QueryList, ViewChildren, ViewEncapsulation} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialog, MatDialogRef,MatSnackBar} from '@angular/material';
+import {MAT_DIALOG_DATA, MatDialog, MatDialogRef, MatSnackBar} from '@angular/material';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
 import {SelectedUnitsService} from '../../../shared/services/selected-units.service';
 import {LectureCheckboxComponent} from './lecture-checkbox/lecture-checkbox.component';
@@ -21,8 +21,7 @@ export class SelectUnitDialogComponent {
               @Inject(MAT_DIALOG_DATA) public data: any,
               private selectedUnitsService: SelectedUnitsService,
               private downloadReq: DownloadReq,
-              public snackBar: MatSnackBar
-              ) {
+              public snackBar: MatSnackBar) {
     this.course = data.course;
     this.chkbox = false;
   }
@@ -43,15 +42,14 @@ export class SelectUnitDialogComponent {
 
   async downloadAndClose() {
     if (this.selectedUnitsService.unitIds.length > 0) {
-    const dl = {course: this.course.name, lectures: [], units: this.selectedUnitsService.getSelectedData()};
-    console.log(dl.units.length + 'units Selected');
-    const result = await this.downloadReq.postDownloadReqForCourse(dl);
+      const dl = {course: this.course.name, lectures: [], units: this.selectedUnitsService.getSelectedData()};
+      const result = await this.downloadReq.postDownloadReqForCourse(dl);
 
-    window.open(result.toString());
+      window.open(result.toString());
 
-    this.dialogRef.close();
+      this.dialogRef.close();
     } else {
-      this.snackBar.open("Keine Units ausgewählt!",'Dismiss');
+      this.snackBar.open('No units selected!', 'Dismiss', {duration: 3000});
     }
   }
 
