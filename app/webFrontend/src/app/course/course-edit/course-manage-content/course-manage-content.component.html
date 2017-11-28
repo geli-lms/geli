@@ -62,6 +62,8 @@
                            [onCancel]="closeEditUnit">
             </app-unit-form>
           </div>
+
+          <p *ngIf="!lecture.units.length">No units added yet.</p>
         </div>
 
         <app-unit-form *ngIf="unitCreateMode && unitCreateType"
@@ -71,8 +73,12 @@
                        [onDone]="onAddUnitDone"
                        [onCancel]="closeAddUnit">
         </app-unit-form>
-
-        <p *ngIf="!lecture.units.length">No units added yet.</p>
+      </div>
+      <div class="unit-drop-target"
+          *ngIf="openedLecture && (lecture._id !== openedLecture._id || !lecture.units.length) && isDraggingUnit()"
+          dragula="units"
+          [dragulaModel]="lecture.units"
+          [attr.data-lecture-id]="lecture._id">
       </div>
     </div>
   </div>

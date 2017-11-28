@@ -1,3 +1,5 @@
+@import '../../../variables';
+
 .tab-content {
   padding-top: 1.5em;
 }
@@ -6,8 +8,12 @@
   max-width: 700px;
 }
 
-.full-width {
+.mat-input-container {
   width: 100%;
+
+  @include bp(md) {
+    width: 60%;
+  }
 }
 
 .csv-upload {
@@ -16,8 +22,36 @@
 
 .upload {
   min-width: 250px;
+  width: 100%;
+
+  + button {
+    margin-top: 10px;
+  }
+
+  @include bp(sm) {
+    width: auto;
+
+    + button {
+      margin-top: 0;
+    }
+  }
 }
 
 .slider {
-  min-width: 250px;
+  width: 100%;
+
+  @include bp(md) {
+    width: 60%;
+  }
+}
+
+.course-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+
+  h1 {
+    margin: 0;
+  }
 }

@@ -1,0 +1,16 @@
+// STYLES
+body {
+  font-family: $font-body;
+  font-size: $base-font-size;
+  line-height: $line-height--base;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: $font-header;
+  line-height: $line-height--header;
+  font-weight: 600;
+}
+
+.logo-font {
+  font-family: $font-logo;
+}

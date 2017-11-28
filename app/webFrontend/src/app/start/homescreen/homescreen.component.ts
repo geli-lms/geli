@@ -1,4 +1,5 @@
 import {Component, OnInit} from '@angular/core';
+import {TitleService} from '../../shared/services/title.service';
 
 @Component({
   selector: 'app-homescreen',
@@ -7,10 +8,13 @@ import {Component, OnInit} from '@angular/core';
 })
 export class HomescreenComponent implements OnInit {
 
-  constructor() {
+  constructor(
+    private titleService: TitleService
+  ) {
   }
 
   ngOnInit() {
+    this.titleService.setTitle('Home');
   }
 
 }

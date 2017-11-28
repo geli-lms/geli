@@ -1,13 +1,13 @@
-@import "../../../../variables";
+@import '../../../../variables';
+
+$unit-height: 64px;
 
 .container {
   min-height: 500px;
 }
 
 .fab {
-  position: fixed;
-  bottom: 0;
-  right: 0;
+  @include globalFabBtn;
 }
 
 .lecture {
@@ -47,23 +47,25 @@
   }
 
   .lecture-content {
-    margin-bottom: 34px;
+    margin-bottom: 20px;
 
     .units {
-      margin-top: 24px;
+      margin-top: 12px;
+      min-height: $unit-height;
     }
   }
 }
 
 // Needs to be unnested, otherwise style is lost while dragging
 .unit {
-  border-bottom: 1px solid map-get($mat-grey, 300);
-  &, &:first-child {
-    border-top: 1px solid map-get($mat-grey, 300);
+  border-top: 1px solid map-get($mat-grey, 300);
+
+  &:last-child {
+    border-bottom: 1px solid map-get($mat-grey, 300);
   }
 
   .unit-content {
-    height: 64px;
+    height: $unit-height;
     display: flex;
     align-items: center;
 
@@ -83,4 +85,9 @@
       color: map-get($mat-grey, 600);
     }
   }
+}
+
+.unit-drop-target {
+  height: $unit-height;
+  border: 1px dashed map-get($mat-grey, 300);
 }
