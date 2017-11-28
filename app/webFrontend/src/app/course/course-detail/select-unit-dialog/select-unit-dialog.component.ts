@@ -1,5 +1,5 @@
 import {Component, Inject, QueryList, ViewChildren, ViewEncapsulation} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material';
+import {MAT_DIALOG_DATA, MatDialog, MatDialogRef,MatSnackBar} from '@angular/material';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
 import {SelectedUnitsService} from '../../../shared/services/selected-units.service';
 import {LectureCheckboxComponent} from './lecture-checkbox/lecture-checkbox.component';
@@ -20,7 +20,8 @@ export class SelectUnitDialogComponent {
   constructor(public dialogRef: MatDialogRef<SelectUnitDialogComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any,
               private selectedUnitsService: SelectedUnitsService,
-              private downloadReq: DownloadReq
+              private downloadReq: DownloadReq,
+              public snackBar: MatSnackBar
               ) {
     this.course = data.course;
     this.chkbox = false;
