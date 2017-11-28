@@ -7,6 +7,9 @@ import {isNullOrUndefined} from 'util';
 import {WhitelistUser} from '../models/WhitelistUser';
 import {IWhitelistUser} from '../../../shared/models/IWhitelistUser';
 import {errorCodes} from '../config/errorCodes';
+import * as mongoose from 'mongoose';
+import ObjectId = mongoose.Types.ObjectId;
+import {ObjectID} from 'bson';
 
 function escapeRegex(text: string) {
   return text.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
@@ -61,7 +64,7 @@ export class WitelistController {
   @Post('/')
   @Authorized(['teacher', 'admin'])
   addWhitelistUser(@Body() whitelistUser: IWhitelistUser) {
-    return new WhitelistUser(whitelistUser).save()
+    return new WhitelistUser(this.toMongooseObjectId(whitelistUser)).save()
       .then((w) => w.toObject());
   }
 
@@ -69,7 +72,7 @@ export class WitelistController {
   @Authorized(['teacher', 'admin'])
   updateWhitelistUser(@Param('id') id: string, @Body() whitelistUser: IWhitelistUser) {
     return WhitelistUser.findOneAndUpdate(
-      whitelistUser,
+      this.toMongooseObjectId(whitelistUser),
       {'new': true}
     )
       .then((w) => w ? w.toObject({}) : undefined);
@@ -79,5 +82,15 @@ export class WitelistController {
   @Authorized(['teacher', 'admin'])
   deleteWhitelistUser(@Param('id') id: string) {
     return WhitelistUser.findByIdAndRemove(id);
+  }
+
+  toMongooseObjectId(whitelistUser: IWhitelistUser) {
+    return {
+      _id: whitelistUser._id,
+      firstName: whitelistUser.lastName,
+      lastName: whitelistUser.lastName,
+      uid: whitelistUser.uid,
+      courseId: new ObjectID(whitelistUser.courseId)
+    }
   }
 }
