@@ -20,8 +20,10 @@
     </mat-form-field>
 
     <app-password-input  [form]="userForm"></app-password-input>
-
   </div>
+  <p *ngIf="!showPwFields()">
+    <button mat-button class="mat-button" (click)="resetPassword()" >Generate new Password</button>
+  </p>
   <button mat-raised-button color="primary" class="mat-button" type="submit" [disabled]="!userForm?.valid">Save</button>
   <button mat-button class="mat-button" routerLink="/profile" routerLinkActive="active">
     Cancel
