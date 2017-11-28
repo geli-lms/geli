@@ -1,6 +1,7 @@
 import {NgModule} from '@angular/core';
 import {ConfirmDialog} from '../components/confirm-dialog/confirm-dialog.component';
 import {AccessKeyDialog} from '../components/access-key-dialog/access-key-dialog.component';
+import {FilepickerDialog} from '../components/filepicker-dialog/filepicker-dialog.component';
 import {DialogService} from '../services/dialog.service';
 import {FormsModule} from '@angular/forms';
 import {UploadDialog} from '../components/upload-dialog/upload-dialog.component';
@@ -19,11 +20,13 @@ import {MaterialImportModule} from './material-import.module';
     ConfirmDialog,
     AccessKeyDialog,
     UploadDialog,
+    FilepickerDialog,
   ],
   declarations: [
     ConfirmDialog,
     AccessKeyDialog,
     UploadDialog,
+    FilepickerDialog,
   ],
   providers: [
     DialogService
@@ -31,7 +34,8 @@ import {MaterialImportModule} from './material-import.module';
   entryComponents: [
     ConfirmDialog,
     AccessKeyDialog,
-    UploadDialog
+    UploadDialog,
+    FilepickerDialog,
   ]
 })
 export class DialogModule {

@@ -1,9 +1,9 @@
-@import '../../../breakpoints';
+@import '../../../variables';
 
 video {
   max-width: 100%;
 
   @include bp(md) {
-    width: $bp_width--bg;
+    width: $bp-width--lg;
   }
 }

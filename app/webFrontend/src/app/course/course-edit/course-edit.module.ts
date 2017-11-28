@@ -32,7 +32,6 @@ import {UnitFormModule} from '../../unit/unit-form/unit-form.module';
     CourseUserListComponent,
     MembersComponent,
     TeachersComponent,
-    MatFabMenuComponent,
   ],
   exports: [
     CourseEditComponent,

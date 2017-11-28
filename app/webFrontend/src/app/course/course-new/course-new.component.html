@@ -4,6 +4,9 @@
     <form class="course-form" (ngSubmit)="createCourse()" [formGroup]="newCourse">
       <mat-form-field class="full-width">
         <input matInput formControlName="name" placeholder="Course Name">
+        <div *ngIf="nameError">
+          <small class="text-danger">{{nameError}}</small>
+        </div>
       </mat-form-field>
       <br/>
       <mat-form-field class="full-width">

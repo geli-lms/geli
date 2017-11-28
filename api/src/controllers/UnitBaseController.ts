@@ -8,6 +8,8 @@ import {IUnit} from '../../../shared/models/units/IUnit';
 import {IVideoUnitModel, VideoUnit} from '../models/units/VideoUnit';
 import {IFileUnitModel, FileUnit} from '../models/units/FileUnit';
 import {TaskUnit} from '../models/units/TaskUnit';
+import {IVideoUnit} from '../../../shared/models/units/IVideoUnit';
+import {IFileUnit} from '../../../shared/models/units/IFileUnit';
 
 const uploadOptions = {dest: 'uploads/'};
 
@@ -46,32 +48,30 @@ export class UnitBaseController {
 
   @Put('/:id')
   updateUnit(@Param('id') id: string, @Body() unit: IUnit) {
-    return Unit.findById(id).then((oldUnit) => {
+    return Unit.findById(id).then((oldUnit: IUnit) => {
       if (!oldUnit) {
         throw new NotFoundError();
       }
       // pre update: delete removed files
       if (oldUnit instanceof VideoUnit) {
-        (<IVideoUnitModel>oldUnit).files.forEach((file: any) => {
+        (<IVideoUnit>oldUnit).files.forEach((file: any) => {
           // if not present in new: delete
-          if (!(<IVideoUnitModel>unit).files.some((newFile) => newFile.name === file.name)) {
+          if (!(<IVideoUnit>unit).files.some((newFile) => newFile.name === file.name)) {
             fs.unlink(file.path, () => {}); // silently discard file not found errors
           }
         });
         return VideoUnit;
       }
       if (oldUnit instanceof FileUnit) {
-        (<IFileUnitModel>oldUnit).files.forEach((file: any) => {
+        (<IFileUnit>oldUnit).files.forEach((file: any) => {
           // if not present in new: delete
-          if (!(<IFileUnitModel>unit).files.some((newFile) => newFile.name === file.name)) {
+          if (!(<IFileUnit>unit).files.some((newFile) => newFile.name === file.name)) {
             fs.unlink(file.path, () => {}); // silently discard file not found errors
           }
         });
         return FileUnit;
       }
-      if (oldUnit instanceof TaskUnit) {
-        return TaskUnit;
-      }
+
       return Unit;
     }).then((model) => model.findByIdAndUpdate(id, unit, {'new': true}))
       .then((u) => u.toObject());
