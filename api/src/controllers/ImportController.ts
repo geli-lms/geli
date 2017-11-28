@@ -1,30 +1,36 @@
-import {Authorized, Body, CurrentUser, JsonController, Param, Post, UseBefore} from 'routing-controllers';
+import {Authorized, CurrentUser, JsonController, Param, Post, UploadedFile, UseBefore} from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import {Course} from '../models/Course';
 import {Lecture} from '../models/Lecture';
 import {Unit} from '../models/units/Unit';
 import {IUser} from '../../../shared/models/IUser';
+import {UnitClassMapper} from '../utilities/UnitClassMapper';
 
-@JsonController('/importTest')
+@JsonController('/import')
 @UseBefore(passportJwtMiddleware)
 @Authorized(['teacher', 'admin'])
 export class ImportController {
 
   @Post('/course')
-  async importCourse(@Body() body: any, @CurrentUser() user: IUser) {
-    return Course.prototype.importJSON(body, user);
+  async importCourse(@UploadedFile('file') file: any,
+                     @CurrentUser() user: IUser) {
+    const courseDesc = JSON.parse(file.buffer.toString());
+    return Course.importJSON(courseDesc, user);
   }
 
   @Post('/lecture/:course')
-  async importLecture(@Body() body: any,
+  async importLecture(@UploadedFile('file') file: any,
                       @Param('course') courseId: string) {
-    return Lecture.prototype.importJSON(body, courseId);
+    const lectureDesc = JSON.parse(file.buffer.toString());
+    return Lecture.importJSON(lectureDesc, courseId);
   }
 
   @Post('/unit/:course/:lecture')
-  async importUnit(@Body() body: any,
+  async importUnit(@UploadedFile('file') file: any,
                    @Param('course') courseId: string,
                    @Param('lecture') lectureId: string) {
-    return Unit.prototype.importJSON(body, courseId, lectureId);
+    const unitDesc = JSON.parse(file.buffer.toString());
+    const unitTypeClass = UnitClassMapper.getMongooseClassForUnit(unitDesc);
+    return unitTypeClass.importJSON(unitDesc, courseId, lectureId);
   }
 }

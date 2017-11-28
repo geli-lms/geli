@@ -127,7 +127,7 @@ courseSchema.statics.importJSON = async function (course: ICourse, admin: IUser)
     }
     const savedCourse = await new Course(course).save();
     await Promise.all(lectures.map((lecture: ILecture) => {
-      return Lecture.prototype.importJSON(lecture, savedCourse._id);
+      return Lecture.importJSON(lecture, savedCourse._id);
     }));
 
     return (await Course.findById(savedCourse._id)).toObject();
