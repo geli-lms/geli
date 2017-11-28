@@ -41,6 +41,10 @@ export class DownloadController {
       zlib: {level: 9} // Sets the compression level.
     });
 
+    if ( !fs.existsSync(appRoot + '/temp') ) {
+      fs.mkdir(appRoot + '/temp');
+    }
+
     archive.on( 'error', function(err: Error ) {
       throw err;
     });
