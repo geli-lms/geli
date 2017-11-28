@@ -8,7 +8,7 @@ export class SaveFileService {
 
   save(name: string, content: string) {
     const filename = name
-        .replace(/[^a-zA-Z -]/g, '')    // remove special characters
+        .replace(/[^a-zA-Z0-9 -]/g, '')    // remove special characters
         .replace(/ /g, '-')             // replace space by dashes
         .replace(/-+/g, '-')            // trim multiple dashes
       + '.json';
