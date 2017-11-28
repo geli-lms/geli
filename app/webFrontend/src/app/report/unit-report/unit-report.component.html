@@ -1,3 +1,12 @@
-<p>
-  unit-report works!
-</p>
+<h3>Details for unit {{unit.name}}</h3>
+<div class="progress-container" *ngFor="let user of userUnitProgress">
+  <app-user-profile [user]="user" [userId]="this.userService.user._id"></app-user-profile>
+  <div class="progress-submission">
+    <div class="progress-content" *ngIf="user.progress">
+      <i class="material-icons" [ngClass]="[user.progress.done ? 'done' : 'tried']">assignment_turned_in</i>
+      <h4>Submission</h4>
+      <app-progress [progress]="user.progress"></app-progress>
+    </div>
+    <p *ngIf="!user.progress">This user has no submission for this unit.</p>
+  </div>
+</div>

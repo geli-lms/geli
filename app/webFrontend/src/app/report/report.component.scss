@@ -1,11 +1,8 @@
-mat-card {
-  margin-bottom: 1rem;
+@import '../../variables';
 
-  mat-card-actions {
-    clear: both;
-  }
-
-  mat-icon {
-    float: left;
+.report-container {
+  .progress-container {
+    border-bottom: 1px solid map-get($mat-grey, 300);
+    padding: 1rem;
   }
 }
