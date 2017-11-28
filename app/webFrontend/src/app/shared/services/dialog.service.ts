@@ -13,9 +13,9 @@ export class DialogService {
   }
 
   public info(title: string, message: string): Observable<boolean> {
-    let dialogRef: MdDialogRef<InfoDialog>;
+    let dialogRef: MatDialogRef<InfoDialog>;
 
-    dialogRef = this.dialog.open(ConfirmDialog);
+    dialogRef = this.dialog.open(InfoDialog);
     dialogRef.componentInstance.title = title;
     dialogRef.componentInstance.message = message;
 
