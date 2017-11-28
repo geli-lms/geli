@@ -14,6 +14,40 @@ function tag_and_push_api_and_web {
     docker push hdafbi/geli-web-frontend:${1}
 }
 
+function check_dockerhub_major {
+    local EXISTING_TAGS=$( \
+        wget -q https://registry.hub.docker.com/v1/repositories/hdafbi/geli-api/tags -O - \
+        | sed -e 's/[][]//g' -e 's/"//g' -e 's/ //g' \
+        | tr '}' '\n' \
+        | awk -F: '{print $3}' \
+        )
+
+    while read -r line; do
+        # Check if line beginns with a "v"
+        if [[ $line == v* ]]; then
+            local MAJ=0; local MIN=0; local PAT=0; local SPE=""
+            semverParseInto "$line" MAJ MIN PAT SPE
+
+            # Check if same major
+            if [[ "$REAL_MAJOR" == "v$MAJ" ]]; then
+                semverGT "$line" "$TRAVIS_TAG"
+                
+                # Check if current line was bigger
+                if [[ $? == 0 ]]; then
+                    echo "+ found bigger MINOR: $line > $TRAVIS_TAG"
+                    return false
+                fi
+            else
+                echo "+ skipping $line, not same MAJOR"
+            fi
+        else
+            echo "+ skipping DockerHub-Tag: $line"
+        fi
+    done <<< "$EXISTING_TAGS"
+
+    return true
+}
+
 echo
 echo "+++ Run docker build and publish. +++"
 echo
@@ -62,8 +96,8 @@ else
     else
         echo "+ tag images"
         echo -e "${YELLOW}+ WARNING: Major tagging is currently not implemented, will skip major tagging"
-        if [ "there isnt a higher version of this major" = "" ]; then
-            # TODO: Check Docker api for versions
+        check_dockerhub_major
+        if [ $? == true ]; then
             echo "+ => tagged Major: ${REAL_MAJOR}"
             tag_and_push_api_and_web REAL_MAJOR
         fi
