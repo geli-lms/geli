@@ -28,6 +28,10 @@ import {studentFreeTextFixture} from './unitFixtures/studentFreeTextFixture';
 import {hardCodeKataFixture} from './unitFixtures/hardCodeKataFixtures';
 import {studentCodeKataFixture} from './unitFixtures/studentCodeKataFixtures';
 import {whitelistUserFixtures} from './WhitelistUserFixtures/whitelistUserFixtures';
+import {IWhitelistUserModel, WhitelistUser} from '../src/models/WhitelistUser';
+import {IWhitelistUser} from '../../shared/models/IWhitelistUser';
+import {IUser} from '../../shared/models/IUser';
+import whitelist = require('validator/lib/whitelist');
 
 export class FixtureLoader {
 
@@ -86,10 +90,6 @@ export class FixtureLoader {
     ],
   ];
 
-  private whitelistUsers = [
-    whitelistUserFixtures,
-  ];
-
   constructor() {
     (<any>mongoose).Promise = global.Promise;
 
@@ -113,16 +113,6 @@ export class FixtureLoader {
             )
           )
         ))
-      .then(() => Promise.all(
-        // Load whitelist user to Database
-        this.whitelistUsers.map((wUserFixtures) =>
-          Promise.all(wUserFixtures.data.map((whitelistUser) =>
-            new wUserFixtures.Model(whitelistUser).save().then(() => {
-              wUserFixtures.Model.ensureIndexes();
-            }))
-          ))
-        )
-      )
       .then(() =>
         // Load courses
         Promise.all(
@@ -139,6 +129,14 @@ export class FixtureLoader {
                     tmp.teachers = tmp.teachers.concat(results[0]);
                     tmp.students = tmp.students.concat(results[1]);
                     return tmp;
+                  }).then(() => {
+                    return this.addRandomWhitelistUSer(tmp.students, course).then((whitelistUser) => {
+                      if (whitelist) {
+                        tmp.whitelist = whitelistUser
+                      } else {
+                        tmp.whitelist = [];
+                      }}
+                    );
                   })
                   .then(() => new courseFixturesVar.Model(tmp).save());
               })
@@ -183,7 +181,7 @@ export class FixtureLoader {
               return course.save();
             });
         }))
-      );
+      )
   }
 
   getRandomTeacher() {
@@ -216,6 +214,21 @@ export class FixtureLoader {
 
   getStudents() {
     return this.getUser('student');
+  }
+
+  addRandomWhitelistUSer(students: IUser[], course: ICourseModel) {
+    const whitelistUser = students.splice(0, this.getRandomNumber(0, students.length - 1));
+    return WhitelistUser.create(whitelistUser.map(stud => {
+        return {
+          firstName: stud.profile.firstName,
+          lastName: stud.profile.lastName,
+          uid: stud.uid,
+          courseId: course._id
+        }
+      }
+    )).then((user: IWhitelistUser[]) => {
+      return user;
+    })
   }
 
   getUser(role: string) {
