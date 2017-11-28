@@ -32,7 +32,6 @@ export class DownloadController {
 
     const fileName = await crypto.pseudoRandomBytes(16).toString('hex');
     const filepath = appRoot + '/temp/' + fileName + '.zip';
-    console.log(filepath);
     const output = fs.createWriteStream(filepath);
     const archive = archiver('zip', {
       zlib: {level: 9} // Sets the compression level.
