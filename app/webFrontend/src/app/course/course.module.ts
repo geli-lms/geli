@@ -13,6 +13,8 @@ import {UserModule} from '../user/user.module';
 import { SelectUnitDialogComponent } from './course-detail/select-unit-dialog/select-unit-dialog.component';
 import { LectureCheckboxComponent } from './course-detail/select-unit-dialog/lecture-checkbox/lecture-checkbox.component';
 import { UnitCheckboxComponent } from './course-detail/select-unit-dialog/lecture-checkbox/unit-checkbox/unit-checkbox.component';
+import {DuplicationService, ExportService, ImportService} from '../shared/services/data.service';
+import {SaveFileService} from '../shared/services/save-file.service';
 
 @NgModule({
   imports: [
@@ -34,9 +36,14 @@ import { UnitCheckboxComponent } from './course-detail/select-unit-dialog/lectur
     LectureCheckboxComponent,
     UnitCheckboxComponent,
   ],
-  providers: [],
   entryComponents: [
-    SelectUnitDialogComponent
+    SelectUnitDialogComponent,
+  ],
+  providers: [
+    ImportService,
+    ExportService,
+    DuplicationService,
+    SaveFileService,
   ],
   exports: [
     CourseComponent,
