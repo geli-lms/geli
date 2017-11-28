@@ -3,6 +3,8 @@ import {ICourse} from '../../../../../../../shared/models/ICourse';
 import {UserService} from '../../../shared/services/user.service';
 import {DashboardBaseComponent} from '../dashboard-base-component';
 import {MatSnackBar} from '@angular/material';
+import {Router} from '@angular/router';
+import {DialogService} from '../../../shared/services/dialog.service';
 
 @Component({
   selector: 'app-dashboard-teacher',
@@ -18,6 +20,8 @@ export class DashboardTeacherComponent extends DashboardBaseComponent {
   fabOpen = false;
 
   constructor(public userService: UserService,
+              private router: Router,
+              private dialogService: DialogService,
               private snackBar: MatSnackBar) {
     super();
   }
@@ -62,6 +66,18 @@ export class DashboardTeacherComponent extends DashboardBaseComponent {
   };
 
   onImportCourse = () => {
-    this.snackBar.open('Not jet implemented', '', {duration: 3000});
+    this.dialogService
+      .chooseFile('Choose a course.json to import',
+        '/api/import/course/')
+      .subscribe(res => {
+        console.log(res);
+        if (res.success) {
+          this.snackBar.open('Course successfully imported', '', {duration: 3000});
+          const url = '/course/' + res.result.id + '/edit';
+          this.router.navigate([url]);
+        } else if (res.result) {
+          this.snackBar.open(res.result.message, '', {duration: 3000});
+        }
+      });
   };
 }

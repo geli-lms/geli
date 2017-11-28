@@ -38,7 +38,6 @@ export class CourseManageContentComponent implements OnInit, OnDestroy {
               private dragulaService: DragulaService,
               private duplicationService: DuplicationService,
               private exportService: ExportService,
-              private importService: ImportService,
               private saveFileService: SaveFileService,
               public userService: UserService) {
   }
@@ -207,7 +206,7 @@ export class CourseManageContentComponent implements OnInit, OnDestroy {
   }
 
   reloadCourse() {
-    this.courseService.readSingleItem(this.course._id)
+    return this.courseService.readSingleItem(this.course._id)
     .then((val: any) => {
       this.course = val;
     })
@@ -220,7 +219,20 @@ export class CourseManageContentComponent implements OnInit, OnDestroy {
   }
 
   onImportLecture = () => {
-    this.snackBar.open('Not jet implemented', '', {duration: 3000});
+    this.dialogService
+      .chooseFile('Choose a lecture.json to import',
+        '/api/import/lecture/' + this.course._id)
+      .subscribe(res => {
+        if (res.success) {
+          this.reloadCourse();
+          // This does not work as expected
+          this.unitEditElement = res.result;
+          this.unitEditMode = true;
+          this.snackBar.open('Lecture successfully imported', '', {duration: 3000});
+        } else if (res.result) {
+          this.snackBar.open(res.error.message, '', {duration: 3000});
+        }
+      });
   };
 
   onAddLecture() {
@@ -242,12 +254,17 @@ export class CourseManageContentComponent implements OnInit, OnDestroy {
 
   onImportUnit = () => {
     this.dialogService
-      .chooseFile('Choose a unit.json to import')
-      .subscribe(res => {
+      .chooseFile('Choose a unit.json to import',
+        '/api/import/unit/' + this.course._id + '/' + this.openedLecture._id)
+      .subscribe(async res => {
         if (res.success) {
-          this.snackBar.open('yes', '', {duration: 3000});
-        } else {
-          this.snackBar.open('noooo', '', {duration: 3000});
+          this.reloadCourse();
+          // This does not work as expected
+          this.openedLecture = res.result;
+          this.lectureEditMode = true;
+          this.snackBar.open('Unit successfully imported', '', {duration: 3000});
+        } else if (res.result) {
+          this.snackBar.open(res.error.message, '', {duration: 3000});
         }
       });
   };

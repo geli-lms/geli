@@ -1,6 +1,8 @@
 import {Component} from '@angular/core';
 import {DashboardBaseComponent} from '../dashboard-base-component';
 import {MatSnackBar} from '@angular/material';
+import {DialogService} from '../../../shared/services/dialog.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-dashboard-admin',
@@ -11,7 +13,9 @@ export class DashboardAdminComponent extends DashboardBaseComponent {
 
   fabOpen = false;
 
-  constructor(private snackBar: MatSnackBar) {
+  constructor(private snackBar: MatSnackBar,
+              private router: Router,
+              private dialogService: DialogService) {
     super();
   }
 
@@ -27,6 +31,17 @@ export class DashboardAdminComponent extends DashboardBaseComponent {
   };
 
   onImportCourse = () => {
-    this.snackBar.open('Not jet implemented', '', {duration: 3000});
+    this.dialogService
+      .chooseFile('Choose a course.json to import',
+        '/api/import/course/')
+      .subscribe(res => {
+        if (res.success) {
+          this.snackBar.open('Course successfully imported', '', {duration: 3000});
+          const url = '/course/' + res.result.id + '/edit';
+          this.router.navigate([url]);
+        } else if (res.result) {
+          this.snackBar.open(res.error.message, '', {duration: 3000});
+        }
+      });
   };
 }
