@@ -6,8 +6,7 @@ import {ShowProgressService} from '../../shared/services/show-progress.service';
 import {MatSnackBar} from '@angular/material';
 import {ActivatedRoute, Router} from '@angular/router';
 import {isNullOrUndefined} from 'util';
-import {matchPasswords} from '../../shared/validators/validators';
-import {pwPattern} from '../password';
+import {TitleService} from '../../shared/services/title.service';
 
 @Component({
   templateUrl: './reset.component.html',
@@ -21,14 +20,14 @@ export class ResetComponent implements OnInit {
 
   token;
   hasToken = false;
-  passwordPatternText: string;
 
   constructor(private router: Router,
               private authenticationService: AuthenticationService,
               private showProgress: ShowProgressService,
               private snackBar: MatSnackBar,
               private formBuilder: FormBuilder,
-              private route: ActivatedRoute) {
+              private route: ActivatedRoute,
+              private titleService: TitleService) {
     this.route.params.subscribe(params => {
       if (!isNullOrUndefined(params['token'])) {
         this.token = params['token'];
@@ -39,7 +38,7 @@ export class ResetComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.passwordPatternText = pwPattern.text;
+    this.titleService.setTitle('Reset Password');
     this.generateForm();
   }
 
@@ -51,7 +50,6 @@ export class ResetComponent implements OnInit {
       (val) => {
         this.snackBar.open('Check your mails', 'Dismiss');
       }, (error) => {
-        console.log(error);
         this.snackBar.open('Request failed', 'Dismiss');
       })
     .then(() => {
@@ -69,7 +67,6 @@ export class ResetComponent implements OnInit {
         this.router.navigate(['/login']);
         this.snackBar.open('Your password has been reset', 'Dismiss');
       }, (error) => {
-        console.log(error);
         this.snackBar.open('Your password could not be reset', 'Dismiss');
       })
     .then(() => {
@@ -80,10 +77,7 @@ export class ResetComponent implements OnInit {
 
   generateForm() {
     if (this.hasToken) {
-      this.resetForm = this.formBuilder.group({
-        password: ['',  Validators.compose([Validators.required, Validators.pattern(pwPattern.pattern)])],
-        confirmPassword: ['', Validators.required]
-      }, {validator: matchPasswords('password', 'confirmPassword')});
+      this.resetForm = this.formBuilder.group({});
     } else {
       this.resetForm = this.formBuilder.group({
         email: ['', Validators.required]

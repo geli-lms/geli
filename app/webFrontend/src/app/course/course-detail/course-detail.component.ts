@@ -7,7 +7,7 @@ import {UserService} from '../../shared/services/user.service';
 import {MatSnackBar, MatDialog} from '@angular/material';
 import {SelectUnitDialogComponent} from './select-unit-dialog/select-unit-dialog.component';
 import {SelectedUnitsService} from '../../shared/services/selected-units.service';
-
+import {TitleService} from '../../shared/services/title.service';
 
 @Component({
   selector: 'app-course-detail',
@@ -17,8 +17,8 @@ import {SelectedUnitsService} from '../../shared/services/selected-units.service
 export class CourseDetailComponent implements OnInit {
 
   course: ICourse;
-  id: string;
 
+  id: string;
 
   constructor(private router: Router,
               private route: ActivatedRoute,
@@ -26,7 +26,8 @@ export class CourseDetailComponent implements OnInit {
               public userService: UserService,
               private snackBar: MatSnackBar,
               private dialog: MatDialog,
-              private selectedUnitsService: SelectedUnitsService) {
+              private selectedUnitsService: SelectedUnitsService,
+              private titleService: TitleService) {
   }
 
   ngOnInit() {
@@ -34,12 +35,14 @@ export class CourseDetailComponent implements OnInit {
       this.id = decodeURIComponent(params['id']);
     });
     this.getCourse(this.id);
+    this.titleService.setTitle('Course');
   }
 
   getCourse(courseId: string) {
     this.courseService.readSingleItem(courseId).then(
       (course: any) => {
         this.course = course;
+        this.titleService.setTitleCut(['Course: ', this.course.name]);
       },
       (errorResponse: Response) => {
         if (errorResponse.status === 401) {
@@ -55,9 +58,5 @@ export class CourseDetailComponent implements OnInit {
     diaRef.afterClosed().subscribe(() => {
       this.selectedUnitsService.clearData();
     });
-  }
-
-  apply() {
-    console.log('apply');
   }
 }

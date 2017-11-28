@@ -6,7 +6,7 @@ export const adminFixtures: IFixture = {
   data: [
     {
       email: 'admin@test.local',
-      password: 'test',
+      password: 'test1234',
       role: 'admin',
       profile: {
         firstName: 'Dago',

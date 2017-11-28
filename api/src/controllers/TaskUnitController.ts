@@ -1,9 +1,10 @@
-import {Body, Post, JsonController, UseBefore, BadRequestError, Authorized} from 'routing-controllers';
+import {Body, Post, Put, Param, JsonController, UseBefore, BadRequestError, Authorized, Get} from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import {UnitBaseController} from './UnitBaseController';
 import {TaskUnit} from '../models/units/TaskUnit';
 import {ITask} from '../../../shared/models/task/ITask';
 import {ITaskModel, Task} from '../models/Task';
+import {ITaskUnit} from '../../../shared/models/units/ITaskUnit';
 
 @JsonController('/units/tasks')
 @UseBefore(passportJwtMiddleware)
@@ -35,4 +36,33 @@ export class TaskUnitController extends UnitBaseController {
   private addTask(task: ITask) {
     return new Task(task).save();
   }
+
+  @Authorized(['teacher', 'admin'])
+  @Put('/:id')
+  async updateUnit(@Param('id') id: string, @Body() unit: ITaskUnit) {
+    if (unit.tasks) {
+      unit.tasks = await Promise.all(unit.tasks.map((task) => {
+        // update task if exists
+        if (task._id) {
+          return Task.findByIdAndUpdate(task._id, task, {'new': true});
+        }
+
+        return new Task(task).save();
+      }));
+    }
+
+    return TaskUnit.findByIdAndUpdate(id, unit, {'new': true})
+      .then((u) => u.toObject());
+  }
+
+  @Authorized(['teacher', 'admin'])
+  @Get('/:id')
+  getTaskUnit(@Param('id') id: string) {
+    return TaskUnit.findById(id)
+      .populate({
+        path: 'tasks',
+      })
+      .then((u) => u.toObject());
+  }
+
 }

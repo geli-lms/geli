@@ -1,0 +1,20 @@
+@import 'breakpoints';
+
+@mixin maxSideMargin() {
+  @include bp(xxl) {
+    margin: 0 8%;
+  }
+  @include bp(max) {
+    margin: 0 14%;
+  }
+}
+
+@mixin globalFabBtn() {
+  position: fixed;
+  bottom: 1ex;
+  right: 1ex;
+
+  @include bp(xxl) {
+    position: absolute;
+  }
+}

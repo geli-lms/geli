@@ -1,19 +1,23 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {ErrorHandler, NgModule} from '@angular/core';
 import {HttpModule} from '@angular/http';
-
 import {AppComponent} from './app.component';
-
 import {RavenErrorHandler} from './shared/services/raven-error-handler.service';
 import {UserService} from './shared/services/user.service';
 import {AuthenticationService} from './shared/services/authentication.service';
 import {AuthGuardService} from './shared/services/auth-guard.service';
 import {
-  CourseService, TaskService, UserDataService, LectureService,
-  UnitService, AboutDataService, FreeTextUnitService, CodeKataUnitService, APIInfoService, DownloadReq
+  AboutDataService,
+  APIInfoService,
+  CodeKataUnitService,
+  CourseService,
+  FreeTextUnitService,
+  LectureService,
+  TaskService,
+  UnitService,
+  UserDataService
 } from './shared/services/data.service';
 import {BackendService} from './shared/services/backend.service';
-
 import {ShowProgressService} from './shared/services/show-progress.service';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ProgressService} from './shared/services/data/progress.service';
@@ -26,6 +30,7 @@ import {AuthModule} from './auth/auth.module';
 import {AboutModule} from './about/about.module';
 import {AdminModule} from './admin/admin.module';
 import {SelectedUnitsService} from './shared/services/selected-units.service';
+import {TitleService} from './shared/services/title.service';
 
 @NgModule({
   declarations: [
@@ -41,7 +46,7 @@ import {SelectedUnitsService} from './shared/services/selected-units.service';
     UserModule,
     AuthModule,
     AboutModule,
-    SharedModule
+    SharedModule,
   ],
   providers: [
     UserService,
@@ -61,6 +66,7 @@ import {SelectedUnitsService} from './shared/services/selected-units.service';
     FreeTextUnitService,
     CodeKataUnitService,
     APIInfoService,
+    TitleService,
     SelectedUnitsService,
     DownloadReq,
     RavenErrorHandler,
