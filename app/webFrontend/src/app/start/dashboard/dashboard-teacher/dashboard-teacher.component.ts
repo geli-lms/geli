@@ -70,10 +70,9 @@ export class DashboardTeacherComponent extends DashboardBaseComponent {
       .chooseFile('Choose a course.json to import',
         '/api/import/course/')
       .subscribe(res => {
-        console.log(res);
         if (res.success) {
           this.snackBar.open('Course successfully imported', '', {duration: 3000});
-          const url = '/course/' + res.result.id + '/edit';
+          const url = '/course/' + res.result._id + '/edit';
           this.router.navigate([url]);
         } else if (res.result) {
           this.snackBar.open(res.result.message, '', {duration: 3000});
