@@ -31,6 +31,7 @@ import {AuthModule} from './auth/auth.module';
 import {AboutModule} from './about/about.module';
 import {AdminModule} from './admin/admin.module';
 import {SelectedUnitsService} from './shared/services/selected-units.service';
+import {ReportService} from './shared/services/data/report.service';
 import {TitleService} from './shared/services/title.service';
 
 @NgModule({
@@ -67,6 +68,7 @@ import {TitleService} from './shared/services/title.service';
     FreeTextUnitService,
     CodeKataUnitService,
     APIInfoService,
+    ReportService,
     TitleService,
     SelectedUnitsService,
     DownloadReq,
