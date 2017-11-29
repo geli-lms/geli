@@ -42,12 +42,6 @@ const whitelistUserSchema = new mongoose.Schema({
     }
   });
 
-whitelistUserSchema.index({
-  firstName: 'text',
-  lastName: 'text',
-  uid: 'text'
-}, {name: 'whitelist_user_combined'});
-
 const WhitelistUser = mongoose.model<IWhitelistUserModel>('WhitelistUser', whitelistUserSchema);
 
 export {WhitelistUser, IWhitelistUserModel};

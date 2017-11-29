@@ -9,7 +9,6 @@ import {IWhitelistUser} from '../../../shared/models/IWhitelistUser';
 import {errorCodes} from '../config/errorCodes';
 import * as mongoose from 'mongoose';
 import ObjectId = mongoose.Types.ObjectId;
-import {ObjectID} from 'bson';
 
 function escapeRegex(text: string) {
   return text.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
@@ -18,33 +17,6 @@ function escapeRegex(text: string) {
 @JsonController('/whitelist')
 @UseBefore(passportJwtMiddleware)
 export class WitelistController {
-
-  // TODO: Needs more security
-  @Get('/:id/search/')
-  @Authorized(['teacher', 'admin'])
-  searchUser(@Param('id') id: string, @QueryParam('query') query: string) {
-    query = query.trim();
-    if (isNullOrUndefined(query) || query.length <= 0) {
-      throw new HttpError(400, errorCodes.query.empty.code);
-    }
-    const conditions: any = {};
-    const escaped = escapeRegex(query).split(' ');
-    conditions.$or = [];
-    conditions.$and = [];
-    conditions.$and.push({courseId: id});
-    conditions.$or.push({$text: {$search: query}});
-    escaped.forEach(elem => {
-      const re = new RegExp(elem, 'ig');
-      conditions.$or.push({uid: {$regex: re}});
-      conditions.$or.push({firstName: {$regex: re}});
-      conditions.$or.push({lastName: {$regex: re}})
-    });
-    return WhitelistUser.find(conditions, {score: {$meta: 'textScore'}})
-      .sort({score: {$meta: 'textScore'}})
-      .limit(20).then(users => {
-        return users.map((user) => user.toObject({virtuals: true}));
-      });
-  }
 
   @Get('/:id')
   getUser(@Param('id') id: string) {
@@ -87,10 +59,10 @@ export class WitelistController {
   toMongooseObjectId(whitelistUser: IWhitelistUser) {
     return {
       _id: whitelistUser._id,
-      firstName: whitelistUser.lastName,
+      firstName: whitelistUser.firstName,
       lastName: whitelistUser.lastName,
       uid: whitelistUser.uid,
-      courseId: new ObjectID(whitelistUser.courseId)
+      courseId: new ObjectId(whitelistUser.courseId)
     }
   }
 }
