@@ -22,6 +22,7 @@ import {Course, ICourseModel} from '../models/Course';
 import {User} from '../models/User';
 import {WhitelistUser} from '../models/WhitelistUser';
 import {ICodeKataUnit} from '../../../shared/models/units/ICodeKataUnit';
+import emailService from '../services/EmailService';
 
 const multer = require('multer');
 import crypto = require('crypto');
@@ -147,6 +148,12 @@ export class CourseController {
         return new Course(course).save()
           .then((c) => c.toObject());
       });
+  }
+
+  @Authorized(['teacher', 'admin'])
+  @Post('/mail')
+  sendMailToSelectedUsers(@Body() mailData: any) {
+    return emailService.sendFreeFormMail(mailData);
   }
 
   @Authorized(['student'])

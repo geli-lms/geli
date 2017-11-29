@@ -88,6 +88,16 @@ class EmailService {
     return this.sendMail(message);
   }
 
+  public sendFreeFormMail(mailData: any) {
+    const message: SendMailOptions = {
+      subject: mailData.subject,
+      text: mailData.text,
+      bcc: mailData.to,
+    };
+
+    return this.sendMail(message);
+  }
+
   private sendMail(message: SendMailOptions) {
     return new Promise((resolve, reject) => {
       this.transporter.sendMail(message, (error: any, info: any) => {
