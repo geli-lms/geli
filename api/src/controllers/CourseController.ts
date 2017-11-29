@@ -219,11 +219,15 @@ export class CourseController {
       .then((c) => c ? c.toObject() : undefined);
   }
 
+  @Authorized(['teacher', 'admin'])
+  @Delete('/:id')
   async deleteCourse(@Param('id') id: string, @CurrentUser() currentUser: IUser) {
     const cour = await Course.findOne( {_id : id} );
     if ( !cour ) {
       throw new NotFoundError();
-    } if ( cour.courseAdmin._id.toString() !== currentUser._id.toString() || currentUser.role === 'admin' || cour.teachers.indexOf(currentUser._id) === -1 ) {
+    }
+    const courseAdmin = await User.findOne({_id: cour.courseAdmin});
+    if ( !(courseAdmin._id.equals(currentUser._id)) || currentUser.role !== 'admin' || cour.teachers.indexOf(currentUser._id) === -1 ) {
       throw new UnauthorizedError();
     }
     return cour.remove();
