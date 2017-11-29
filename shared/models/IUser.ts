@@ -1,4 +1,3 @@
-import {IProgress} from './IProgress';
 import {IFile} from './IFile';
 export interface IUser {
   _id: any;
@@ -11,5 +10,5 @@ export interface IUser {
     picture: IFile
   };
   role: string;
-  progress: IProgress[];
+  progress: any;
 }

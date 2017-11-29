@@ -29,11 +29,12 @@ import {UserModule} from './user/user.module';
 import {AuthModule} from './auth/auth.module';
 import {AboutModule} from './about/about.module';
 import {AdminModule} from './admin/admin.module';
+import {ReportService} from './shared/services/data/report.service';
 import {TitleService} from './shared/services/title.service';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
   ],
   imports: [
     AdminModule,
@@ -65,6 +66,7 @@ import {TitleService} from './shared/services/title.service';
     FreeTextUnitService,
     CodeKataUnitService,
     APIInfoService,
+    ReportService,
     TitleService,
     RavenErrorHandler,
     {
