@@ -4,6 +4,7 @@ import {MatDialog, MatDialogRef} from '@angular/material';
 import {ConfirmDialog} from '../components/confirm-dialog/confirm-dialog.component';
 import {IUser} from '../../../../../../shared/models/IUser';
 import {UploadDialog} from '../components/upload-dialog/upload-dialog.component';
+import {FilepickerDialog} from '../components/filepicker-dialog/filepicker-dialog.component';
 import {WriteMailDialog} from '../components/write-mail-dialog/write-mail-dialog.component';
 
 @Injectable()
@@ -38,6 +39,16 @@ export class DialogService {
 
   public confirmRemove(itemType: string, itemName: string, removeFrom?: string): Observable<boolean> {
     return this.confirmOperation('Remove', itemType, itemName, removeFrom);
+  }
+
+  public chooseFile(message: string, uploadPath: string) {
+    let dialogRef: MatDialogRef<FilepickerDialog>;
+
+    dialogRef = this.dialog.open(FilepickerDialog);
+    dialogRef.componentInstance.message = message;
+    dialogRef.componentInstance.uploadPath = uploadPath;
+
+    return dialogRef.afterClosed();
   }
 
   public upload(user: IUser) {
