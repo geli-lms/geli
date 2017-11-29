@@ -46,8 +46,7 @@ export class CourseComponent {
   }
 
   enroll() {
-    // TODO: use correct interface
-    if ((<any> this.course).hasAccessKey) {
+    if (this.course.hasAccessKey) {
       // open dialog for accesskey
       const dialogRef = this.dialog.open(AccessKeyDialog);
       dialogRef.afterClosed().subscribe(result => {
@@ -69,7 +68,7 @@ export class CourseComponent {
           this.courseService.leaveStudent(this.course._id)
             .then(() => {
               this.onLeave.emit({'courseId': this.course._id});
-              this.snackBar.open('leave course', '', {duration: 3000});
+              this.snackBar.open('Left course successfully', '', {duration: 3000});
             })
             .catch((error) => {
               this.snackBar.open(error, '', {duration: 3000});

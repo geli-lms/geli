@@ -25,7 +25,6 @@ import {ICodeKataUnit} from '../../../shared/models/units/ICodeKataUnit';
 
 const multer = require('multer');
 import crypto = require('crypto');
-import logger = Handlebars.logger;
 
 const uploadOptions = {
   storage: multer.diskStorage({
