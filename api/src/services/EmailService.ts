@@ -94,7 +94,7 @@ class EmailService {
         if (error) {
           reject({error: error, info: info});
         } else {
-          resolve();
+          resolve(info);
         }
       });
     });
