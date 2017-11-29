@@ -106,4 +106,24 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
       this.selectedMembers = [];
     }
   }
+
+  async openWriteMailDialog() {
+    this.toggleBlocked = true;
+    const mailData = await this.dialogService.writeMail(
+      this.selectedMembers
+        .map((user: IUser) => `${user.profile.firstName} ${user.profile.lastName}<${user.email}>`)
+        .join(', ')
+    ).toPromise();
+    this.toggleBlocked = false;
+    if (!mailData) {
+      return;
+    }
+    this.selectedMembers = [];
+    try {
+      await this.courseService.sendMailToSelectedUsers(mailData);
+      this.snackBar.open('Sending mail succeeded.', '', {duration: 2000});
+    } catch (err) {
+      this.snackBar.open('Sending mail failed.', '', {duration: 3000});
+    }
+  }
 }
