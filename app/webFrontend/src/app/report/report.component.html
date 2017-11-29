@@ -1,0 +1,10 @@
+<h2>Report for {{courseName}}</h2>
+<mat-toolbar>
+  <mat-toolbar-row>
+    <button mat-button routerLink="." routerLinkActive="active">Overview</button>
+    <button mat-button routerLink="user/all" routerLinkActive="active">User results</button>
+  </mat-toolbar-row>
+</mat-toolbar>
+<div class="report-container">
+  <router-outlet></router-outlet>
+</div>
