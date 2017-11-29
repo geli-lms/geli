@@ -14,3 +14,6 @@
     <p *ngIf="student.progress?.units.length === 0">There are no submissions for this user.</p>
   </div>
 </div>
+<div *ngIf="report?.length === 0">
+  <p>There are no students enrolled to this course.</p>
+</div>
