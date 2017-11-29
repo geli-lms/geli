@@ -221,21 +221,15 @@ export class CourseController {
 
   @Authorized(['teacher', 'admin'])
   @Delete('/:id')
-  async deleteCourse(@Param('id') id: string, @CurrentUser() currentUser: IUser) {
+  async deleteCourse(@Param('id') id: string, @Body() course: ICourse, @CurrentUser() currentUser: IUser) {
     const conditions: any = {_id: id};
     conditions.$or = [
       {teachers: currentUser._id},
       {courseAdmin: currentUser._id}
     ];
-    const course = await Course.findOneAndRemove(conditions);
-    if (course) {
-      return course;
-    } else {
-      throw new BadRequestError('Wrong Course ID or you dont have the rights to delete it.');
-    }
+    const cour: ICourseModel = await Course.findOne(conditions);
+    cour.remove();
   }
-
-
 }
 
 

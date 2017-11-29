@@ -203,27 +203,24 @@ describe('Course', () => {
     });
   });
 
-  describe(`DELETE ${BASE_URL}`, () => {
-    it('should delete the Course', (done) => {
-    User.findOne({email: 'teacher1@test.local'}).then((user) => {
-      const testData = new Course(
-        {
-          name: 'Test Course',
-          description: 'Test description',
-          courseAdmin: user._id,
-          active: true
-        });
-      testData.save((error, course) => {
-        chai.request(app)
-          .del(`${BASE_URL}/${course._id}`)
-          .set('Authorization', `JWT ${JwtUtils.generateToken(user)}`)
-          .end((err, res) => {
-            res.status.should.be.equal(200);
-            done();
-          });
-      }).catch(done);
-    });
-  });
+   describe(`DELETE ${BASE_URL}`, () => {
+     it('should delete the Course', (done) => {
+       User.findOne({email: 'teacher1@test.local'}).then((user) => {
+         Course.findOne({name: 'Computer Graphics'}).then((course) => {
+           chai.request(app)
+             .del(`${BASE_URL}/${course._id}`)
+             .set('Authorization', `JWT ${JwtUtils.generateToken(user)}`);
+           chai.request(app)
+             .get(`${BASE_URL}/${course._id}`)
+             .set('Authorization', `JWT ${JwtUtils.generateToken(user)}`)
+             .end((err, res) => {
+               res.status.should.be.equal(404);
+               done();
+             });
+         });
+       });
+     });
+
 
     it('should not delete the Course and 403 because no rights', (done) => {
       User.findOne({email: 'student26@test.local'}).then((user) => {
