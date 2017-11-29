@@ -1,0 +1,27 @@
+.progress-container {
+
+  display: flex;
+
+  .profile {
+    margin-right: 2.5rem;
+  }
+
+  .progress-submission {
+
+    flex-grow: 3;
+
+    i.material-icons {
+
+      float: right;
+
+      &.tried {
+        color: #C7B42C;
+      }
+
+      &.done {
+        color: #5AA454;
+      }
+    }
+
+  }
+}

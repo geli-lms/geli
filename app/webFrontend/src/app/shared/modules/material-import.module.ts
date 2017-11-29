@@ -16,7 +16,7 @@ import {
   MatProgressBarModule, MatRadioModule,
   MatSelectModule, MatSlideToggleModule,
   MatSnackBarModule, MatTabsModule,
-  MatToolbarModule, MatTooltipModule,
+  MatToolbarModule, MatTooltipModule, MatExpansionModule,
 } from '@angular/material';
 
 @NgModule({
@@ -28,6 +28,7 @@ import {
     MatCheckboxModule,
     MatDatepickerModule,
     MatDialogModule,
+    MatExpansionModule,
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,
@@ -51,6 +52,7 @@ import {
     MatCheckboxModule,
     MatDatepickerModule,
     MatDialogModule,
+    MatExpansionModule,
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,

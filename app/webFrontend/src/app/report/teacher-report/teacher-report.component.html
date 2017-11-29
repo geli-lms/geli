@@ -1,0 +1,19 @@
+<div class="progress-container" *ngFor="let student of report">
+  <div class="header">
+    <div class="progress-bar">
+      <ngx-charts-bar-horizontal-stacked
+        [view]="[800, 40]"
+        [results]="student.progress.stats"
+        [scheme]="diagramColors">
+      </ngx-charts-bar-horizontal-stacked>
+    </div>
+    <app-user-profile [user]="student" [userId]="this.userService.user._id"></app-user-profile>
+  </div>
+  <div class="content">
+    <app-unit-report-details *ngFor="let unit of student.progress?.units" [unit]="unit"></app-unit-report-details>
+    <p *ngIf="student.progress?.units.length === 0">There are no submissions for this user.</p>
+  </div>
+</div>
+<div *ngIf="report?.length === 0">
+  <p>There are no students enrolled to this course.</p>
+</div>
