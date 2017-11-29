@@ -20,6 +20,10 @@
             <mat-icon>edit</mat-icon>
             Edit
           </button>
+          <button mat-menu-item (click)="exportLecture(lecture)">
+            <mat-icon>file_download</mat-icon>
+            Export
+          </button>
           <button mat-menu-item (click)="duplicateLecture(lecture)">
             <mat-icon>content_copy</mat-icon>
             Duplicate
@@ -47,9 +51,20 @@
               <button mat-icon-button matTooltip="Edit" (click)="onEditUnit(unit)">
                 <mat-icon>edit</mat-icon>
               </button>
-              <button mat-icon-button matTooltip="Delete" (click)="deleteUnit(unit)">
-                <mat-icon>delete</mat-icon>
+              <button class="unit-menu-button" mat-icon-button [matMenuTriggerFor]="unitMenu">
+                <mat-icon>more_vert</mat-icon>
               </button>
+              <mat-menu #unitMenu="matMenu">
+                <button mat-icon-button matTooltip="Delete" (click)="deleteUnit(unit)">
+                  <mat-icon>delete</mat-icon>
+                </button>
+                <button mat-icon-button matTooltip="Duplicate" (click)="duplicateUnit(unit)">
+                  <mat-icon>content_copy</mat-icon>
+                </button>
+                <button mat-icon-button matTooltip="Export" (click)="onExportUnit(unit)">
+                  <mat-icon>file_download</mat-icon>
+              </button>
+              </mat-menu>
             </span>
             </div>
 
@@ -92,10 +107,12 @@
 <app-mat-fab-menu class="fab" [open]="fabOpen" [onClick]="onFabClick"
                   [disabled]="unitCreateMode || unitEditMode || lectureCreateMode || lectureEditMode"
                   fabTooltip="Add content">
+  <div *ngIf="openedLecture" (click)="onImportUnit()">Import unit</div>
   <div *ngIf="openedLecture" (click)="onAddUnit('task')">Add tasks</div>
   <div *ngIf="openedLecture" (click)="onAddUnit('file')">Upload files</div>
   <div *ngIf="openedLecture" (click)="onAddUnit('code-kata')">Add Code-Kata</div>
   <div *ngIf="openedLecture" (click)="onAddUnit('video')">Upload videos</div>
   <div *ngIf="openedLecture" (click)="onAddUnit('free-text')">Add free text</div>
+  <div (click)="onImportLecture()">Import lecture</div>
   <div (click)="onAddLecture()">Add lecture</div>
 </app-mat-fab-menu>

@@ -1,16 +1,20 @@
 import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {CourseService} from '../../shared/services/data.service';
+import {CourseService, DuplicationService, ExportService} from '../../shared/services/data.service';
 import {MatSnackBar} from '@angular/material';
 import {ShowProgressService} from '../../shared/services/show-progress.service';
 import {FileUploader} from 'ng2-file-upload';
 import {TitleService} from '../../shared/services/title.service';
 import {
-  ENROLL_TYPES, ENROLL_TYPE_WHITELIST, ENROLL_TYPE_FREE, ENROLL_TYPE_ACCESSKEY,
+  ENROLL_TYPE_ACCESSKEY,
+  ENROLL_TYPE_FREE,
+  ENROLL_TYPE_WHITELIST,
+  ENROLL_TYPES,
   ICourse
 } from '../../../../../../shared/models/ICourse';
-import {User} from '../../models/User';
+import {SaveFileService} from '../../shared/services/save-file.service';
+import {UserService} from '../../shared/services/user.service';
 
 @Component({
   selector: 'app-course-edit',
@@ -46,6 +50,10 @@ export class CourseEditComponent implements OnInit {
               private ref: ChangeDetectorRef,
               private showProgress: ShowProgressService,
               private router: Router,
+              private exportService: ExportService,
+              private saveFileService: SaveFileService,
+              private duplicationService: DuplicationService,
+              private userService: UserService,
               private titleService: TitleService) {
 
     this.route.params.subscribe(params => {
@@ -130,6 +138,34 @@ export class CourseEditComponent implements OnInit {
         const errormessage = error.json().message || error.json().errmsg;
         this.snackBar.open('Saving course failed ' + errormessage, 'Dismiss');
       });
+  }
+
+  async onExport() {
+    try {
+      const courseJSON = await this.exportService.exportCourse(this.courseOb);
+
+      this.saveFileService.save(this.courseOb.name, JSON.stringify(courseJSON, null, 2));
+    } catch (err) {
+      this.snackBar.open('Export course failed ' + err.json().message, 'Dismiss');
+    }
+  }
+
+  async onDuplicate() {
+    try {
+      const course = await this.duplicationService.duplicateCourse(this.courseOb, this.userService.user);
+    } catch (err) {
+      this.snackBar.open('Duplication of the course failed ' + err.json().message, 'Dismiss');
+    }
+  }
+
+  onChangeMode(value) {
+    if (value.checked === true) {
+      this.mode = true;
+      this.enrollType = 'whitelist';
+    } else {
+      this.mode = false;
+      this.enrollType = 'free';
+    }
   }
 
   onChangeActive(value) {
