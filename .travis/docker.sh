@@ -98,10 +98,12 @@ else
         check_dockerhub_major
         if [ $? == 0 ]; then
             echo "+ => tagged Major: ${REAL_MAJOR}"
-            tag_and_push_api_and_web REAL_MAJOR
+            tag_and_push_api_and_web ${REAL_MAJOR}
+        else
+            echo -e "${YELLOW}+ INFO: didn't tag major $REAL_MAJOR, because there is a higher minor ${REAL_MAJOR}.*"
         fi
         echo "+ => tagged Minor: ${REAL_MINOR}"
-        tag_and_push_api_and_web REAL_MINOR
+        tag_and_push_api_and_web ${REAL_MINOR}
     fi
   else
     echo -e "${YELLOW}+ WARNING: branch $TRAVIS_BRANCH is not whitelisted -> skipping docker build and publish${NC}";
