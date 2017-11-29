@@ -8,7 +8,7 @@ import {
   Param,
   Post,
   Put,
-  Req,
+  Req, UnauthorizedError,
   UploadedFile,
   UseBefore
 } from 'routing-controllers';
@@ -219,16 +219,14 @@ export class CourseController {
       .then((c) => c ? c.toObject() : undefined);
   }
 
-  @Authorized(['teacher', 'admin'])
-  @Delete('/:id')
-  async deleteCourse(@Param('id') id: string, @Body() course: ICourse, @CurrentUser() currentUser: IUser) {
-    const conditions: any = {_id: id};
-    conditions.$or = [
-      {teachers: currentUser._id},
-      {courseAdmin: currentUser._id}
-    ];
-    const cour: ICourseModel = await Course.findOne(conditions);
-    cour.remove();
+  async deleteCourse(@Param('id') id: string, @CurrentUser() currentUser: IUser) {
+    const cour = await Course.findOne( {_id : id} );
+    if ( !cour ) {
+      throw new NotFoundError();
+    } if ( cour.courseAdmin._id.toString() !== currentUser._id.toString() || currentUser.role === 'admin' || cour.teachers.indexOf(currentUser._id) === -1 ) {
+      throw new UnauthorizedError();
+    }
+    return cour.remove();
   }
 }
 
