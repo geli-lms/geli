@@ -227,7 +227,8 @@ export class CourseController {
       throw new NotFoundError();
     }
     const courseAdmin = await User.findOne({_id: cour.courseAdmin});
-    if ( !(courseAdmin._id.equals(currentUser._id)) || currentUser.role !== 'admin' || cour.teachers.indexOf(currentUser._id) === -1 ) {
+    if ( !(courseAdmin.equals(currentUser._id.toString())) || currentUser.role !== 'admin' ||
+      cour.teachers.indexOf(currentUser._id) !== -1 ) {
       throw new UnauthorizedError();
     }
     return cour.remove();

@@ -205,8 +205,8 @@ describe('Course', () => {
 
   describe(`DELETE ${BASE_URL}`, () => {
     it('should delete the Course', async () => {
-      const user = await User.findOne({email: 'teacher2@test.local'});
       const course = await Course.findOne({name: 'Computer Graphics'});
+      const user = await User.findOne({_id: course.courseAdmin});
       return new Promise((resolve, reject) => {
         chai.request(app)
           .del(`${BASE_URL}/${course._id}`)
