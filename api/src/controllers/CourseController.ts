@@ -181,6 +181,24 @@ export class CourseController {
       });
   }
 
+  @Authorized(['student'])
+  @Post('/:id/leave')
+  leaveStudent(@Param('id') id: string, @Body() data: any, @CurrentUser() currentUser: IUser) {
+    return Course.findById(id)
+      .then(course => {
+        if (!course) {
+          throw new NotFoundError();
+        }
+        const index: number = course.students.indexOf(currentUser._id);
+        if (index  !== 0) {
+          course.students.splice(index, 1);
+          return course.save().then((c) => c.toObject());
+        }
+
+        return course.toObject();
+      });
+  }
+
   // TODO: Needs more security
   @Authorized(['teacher', 'admin'])
   @Post('/:id/whitelist')

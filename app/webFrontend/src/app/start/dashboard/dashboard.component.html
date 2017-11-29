@@ -1,4 +1,4 @@
-<app-dashboard-student [allCourses]="allCourses" *ngIf="this.userService.isStudent()" (onEnroll)="onUpdateCallback()"></app-dashboard-student>
+<app-dashboard-student [allCourses]="allCourses" *ngIf="this.userService.isStudent()" (onLeave)="onUpdateCallback()" (onEnroll)="onUpdateCallback()"></app-dashboard-student>
 <app-dashboard-teacher [allCourses]="allCourses" *ngIf="this.userService.isTeacher()" (onEnroll)="onUpdateCallback()"></app-dashboard-teacher>
 <app-dashboard-admin [allCourses]="allCourses" *ngIf="this.userService.isAdmin()" (onEnroll)="onUpdateCallback()"></app-dashboard-admin>
 

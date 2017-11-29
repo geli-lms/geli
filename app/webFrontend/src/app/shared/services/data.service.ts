@@ -253,6 +253,17 @@ export class CourseService extends DataService {
         .subscribe(
           () => {
             resolve();
+            });
+      });
+    });
+});
+
+  leaveStudent(courseId: string): Promise<any[]> {
+    return new Promise((resolve, reject) => {
+      this.backendService.post(this.apiPath + courseId + '/leave', {})
+        .subscribe(
+          (responseItem: any) => {
+            resolve(responseItem);
           },
           error => reject(error)
         );
