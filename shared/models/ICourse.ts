@@ -19,4 +19,5 @@ export interface ICourse {
     accessKey: string;
     whitelist: IWhitelistUser[];
     enrollType: string;
+    hasAccessKey: boolean;
 }

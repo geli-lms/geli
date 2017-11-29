@@ -5,6 +5,11 @@ import {ICourse} from '../../../../../shared/models/ICourse';
 import {Router} from '@angular/router';
 import {MatDialog, MatSnackBar} from '@angular/material';
 import {AccessKeyDialog} from '../shared/components/access-key-dialog/access-key-dialog.component';
+import {CourseService} from '../shared/services/data.service';
+import {DialogService} from '../shared/services/dialog.service';
+import {ShowProgressService} from '../shared/services/show-progress.service';
+
+
 
 @Component({
   selector: 'app-course',
@@ -18,11 +23,16 @@ export class CourseComponent {
 
   @Output()
   onEnroll = new EventEmitter();
+  @Output()
+  onLeave = new EventEmitter();
 
   constructor(public userService: UserService,
               private router: Router,
               private dialog: MatDialog,
-              private snackBar: MatSnackBar) {
+              private snackBar: MatSnackBar,
+              private dialogService: DialogService,
+              private showProgress: ShowProgressService,
+              private courseService: CourseService) {
   }
 
   editCourse(id: string) {
@@ -35,18 +45,39 @@ export class CourseComponent {
     this.router.navigate([url]);
   }
 
-  apply(courseId: string, hasAccessKey: Boolean) {
-    if (hasAccessKey) {
+  enroll() {
+    if (this.course.hasAccessKey) {
       // open dialog for accesskey
       const dialogRef = this.dialog.open(AccessKeyDialog);
       dialogRef.afterClosed().subscribe(result => {
         if (result) {
-          this.onEnroll.emit({'courseId': courseId, 'accessKey': result});
+          this.onEnroll.emit({'courseId': this.course._id, 'accessKey': result});
         }
       });
     } else {
-      this.onEnroll.emit({'courseId': courseId, 'accessKey': null});
+      this.onEnroll.emit({'courseId': this.course._id, 'accessKey': null});
     }
+  }
+
+  leave() {
+    this.dialogService
+      .confirm('Leave course ?', 'Do you really want to leave the course?', 'Leave')
+      .subscribe(res => {
+        if (res) {
+          this.showProgress.toggleLoadingGlobal(true);
+          this.courseService.leaveStudent(this.course._id)
+            .then(() => {
+              this.onLeave.emit({'courseId': this.course._id});
+              this.snackBar.open('Left course successfully', '', {duration: 3000});
+            })
+            .catch((error) => {
+              this.snackBar.open(error, '', {duration: 3000});
+            })
+            .then(() => {
+               this.showProgress.toggleLoadingGlobal(false);
+            });
+        }
+      });
   }
 
   isCourseTeacherOrAdmin(course: ICourse) {
