@@ -1,10 +1,11 @@
 import {
+  Authorized,
   BadRequestError, Body, CurrentUser, Get, JsonController, Param, Post, Put,
   UseBefore
 } from 'routing-controllers';
 import * as moment from 'moment';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
-import {Progress} from '../models/Progress';
+import {IProgressModel, Progress} from '../models/Progress';
 import {IUser} from '../../../shared/models/IUser';
 import {Unit} from '../models/units/Unit';
 import {UnitClassMapper} from '../utilities/UnitClassMapper';
