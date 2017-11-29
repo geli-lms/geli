@@ -222,16 +222,18 @@ export class CourseController {
   @Authorized(['teacher', 'admin'])
   @Delete('/:id')
   async deleteCourse(@Param('id') id: string, @CurrentUser() currentUser: IUser) {
-    const cour = await Course.findOne( {_id : id} );
-    if ( !cour ) {
+    const course = await Course.findOne( {_id : id} );
+    if ( !course ) {
       throw new NotFoundError();
     }
-    const courseAdmin = await User.findOne({_id: cour.courseAdmin});
-    if ( !(courseAdmin.equals(currentUser._id.toString())) || currentUser.role !== 'admin' ||
-      cour.teachers.indexOf(currentUser._id) !== -1 ) {
-      throw new UnauthorizedError();
+    const courseAdmin = await User.findOne({_id: course.courseAdmin});
+    if (course.teachers.indexOf(currentUser._id) !== -1 || courseAdmin.equals(currentUser._id.toString())
+      || currentUser.role === 'admin' ) {
+      course.remove();
+      return {result: true};
+    } else {
+      throw new ForbiddenError('Forbidden!');
     }
-    return cour.remove();
   }
 }
 
