@@ -42,7 +42,7 @@ const unitSchema = new mongoose.Schema({
   }
 );
 
-unitSchema.virtual('progress', [{
+unitSchema.virtual('progresses', [{
   ref: 'Progress',
   localField: '_id',
   foreignField: 'unit'
@@ -52,7 +52,7 @@ function populateUnit(next: (err?: NativeError) => void) {
   next();
 }
 
-unitSchema.pre('find', populateUnit);
+// unitSchema.pre('find', populateUnit);
 
 unitSchema.methods.exportJSON = function() {
   const obj = this.toObject();
