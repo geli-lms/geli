@@ -11,7 +11,7 @@
                       (onDragendRemove)="removeUserFromCoure($event)"
                       (onDragendPush)="pushUserToCourse($event)"
                       (onUpdate)="updateUser($event)"></app-course-user-list>
-<app-whitelist-edit
+<app-whitelist-edit *ngIf="course"
     [dragulaBagId]="dragulaWhitelistBagId"
     [total]="totalWhitelist"
     [course]="course"

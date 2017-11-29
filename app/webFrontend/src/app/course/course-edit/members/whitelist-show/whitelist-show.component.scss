@@ -15,17 +15,15 @@
     padding-left: 5%;
     display: inline-block;
     flex: 1;
+    text-transform:capitalize;
   }
 
   .lastName {
     flex: 1rem;
+    text-transform:capitalize;
   }
 
   .uid {
-    flex: 1;
-  }
-
-  .email {
     flex: 1;
   }
 

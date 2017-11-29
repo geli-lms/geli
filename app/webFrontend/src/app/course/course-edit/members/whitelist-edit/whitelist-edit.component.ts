@@ -4,6 +4,8 @@ import {WhitelistUserService} from '../../../../shared/services/data.service';
 import {MatSnackBar} from '@angular/material';
 import {ICourse} from '../../../../../../../../shared/models/ICourse';
 import {DragulaService} from 'ng2-dragula';
+import {FormControl} from '@angular/forms';
+import {Observable} from 'rxjs/Observable';
 
 @Component({
   selector: 'app-whitelist-edit',
@@ -23,12 +25,42 @@ export class WhitelistEditComponent implements OnInit {
   @Output() onDragendPushWhitelist = new EventEmitter<IWhitelistUser>();
   whitelistUser: any = {firstName: '', lastName: '', uid: '', courseId: null};
 
+  firstNameControl: FormControl = new FormControl();
+  lastNameControl: FormControl = new FormControl();
+  uidControl: FormControl = new FormControl();
+
+  firstNameOptions;
+  lastNameOptions;
+  uidOptions;
+
+  filteredOptionsFirstName: Observable<string[]>;
+  filteredOptionsLastName: Observable<string[]>;
+  filteredOptionsUid: Observable<string[]>;
+
   constructor(private whitelistUserService: WhitelistUserService,
               private snackBar: MatSnackBar,
               private dragula: DragulaService) {
   }
 
+  filter(val: string, options: string[]): string[] {
+    return options.filter(option =>
+      option.toLowerCase().indexOf(val.toLowerCase()) === 0);
+  }
+
   ngOnInit() {
+    this.firstNameOptions = this.course.students.map(stud => stud.profile.firstName);
+    this.lastNameOptions = this.course.students.map(stud => stud.profile.lastName);
+    this.uidOptions = this.course.students.map(stud => stud.uid);
+    this.filteredOptionsFirstName = this.firstNameControl.valueChanges
+      .startWith(null)
+      .map(val => val ? this.filter(val, this.firstNameOptions) : this.firstNameOptions.slice());
+    this.filteredOptionsLastName = this.lastNameControl.valueChanges
+      .startWith(null)
+      .map(val => val ? this.filter(val, this.lastNameOptions) : this.lastNameOptions.slice());
+    this.filteredOptionsUid = this.uidControl.valueChanges
+      .startWith(null)
+      .map(val => val ? this.filter(val, this.uidOptions) : this.uidOptions.slice());
+
 /*    this.dragula.dropModel.subscribe(value => {
       const [bagName, el, target, source] = value;
       if (target.getAttribute('item-id') === 'Whitelist') {

@@ -12,10 +12,9 @@
         <button mat-icon-button (click)="remove(user)">
           <mat-icon>delete</mat-icon>
         </button>
-        <i  *ngIf="isSignedIn(user)" class="material-icons green" matTooltip="Signed In">done</i>
-        <i  *ngIf="!isSignedIn(user)" class="material-icons red" matTooltip="Signed In">clear</i>
-        <i *ngIf="isInCourse(user)" class="material-icons green" matTooltip="In Course">done</i>
-        <i *ngIf="!isInCourse(user)" class="material-icons red" matTooltip="In Course">clear</i>
+        <i  *ngIf="isSignedIn(user) && !isInCourse(user)" class="material-icons green" matTooltip="Signed In">done</i>
+        <i  *ngIf="!isSignedIn(user) && !isInCourse(user)" class="material-icons red" matTooltip="not Signed In">clear</i>
+        <i *ngIf="isSignedIn(user) && isInCourse(user)" class="material-icons green" matTooltip="In Course">done_all</i>
       </mat-list-item>
     </div>
 </mat-list>

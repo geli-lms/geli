@@ -1,6 +1,7 @@
 @import "../../../../../variables";
 
 .full-width {
+  padding-top: 2rem;
   width: 30%;
   flex: 1;
 }
@@ -13,6 +14,12 @@
 
 .mat-expansion-panel {
   padding-top: 0.1rem;
+  min-height: 3rem;
+}
+
+.mat-expansion-panel-header {
+  min-height: 3rem;
+  margin-bottom: -1rem;
 }
 
 .whitelist {
