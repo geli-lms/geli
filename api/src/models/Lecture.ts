@@ -65,7 +65,7 @@ lectureSchema.methods.exportJSON = async function() {
       if (Unit) {
         return unit.exportJSON();
       } else {
-        winston.log('warn', 'unit ' + unitId + ' was referenced but does not exist anymore');
+        winston.log('warn', 'unit(' + unitId + ') was referenced by lecture(' + this._id + ') but does not exist anymore');
       }
     });
   }));

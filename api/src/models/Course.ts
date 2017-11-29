@@ -107,7 +107,7 @@ courseSchema.methods.exportJSON = async function () {
       if (lecture) {
         return lecture.exportJSON();
       } else {
-        winston.log('warn', 'lecture ' + lectureId + ' was referenced but does not exist anymore');
+        winston.log('warn', 'lecture(' + lectureId + ') was referenced by course(' + this._id + ') but does not exist anymore');
       }
     });
   }));
