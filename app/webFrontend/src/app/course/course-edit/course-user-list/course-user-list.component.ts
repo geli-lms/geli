@@ -4,6 +4,8 @@ import {IUser} from '../../../../../../../shared/models/IUser';
 import {FormControl} from '@angular/forms';
 import {DialogService} from '../../../shared/services/dialog.service';
 import 'rxjs/add/operator/startWith'
+import {CourseService} from '../../../shared/services/data.service';
+import {MatSnackBar} from '@angular/material';
 
 @Component({
   selector: 'app-course-user-list',
@@ -18,20 +20,19 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
   @Input() dragulaBagId;
   @Input() role;
 
-  currentMember: IUser = null;
+  selectedMembers: IUser[] = [];
   fuzzySearch: String = '';
   userCtrl: FormControl;
   filteredStates: any;
+  toggleBlocked = false;
 
   @Output() onDragendUpdate = new EventEmitter<IUser[]>();
   @Output() onRemove = new EventEmitter<String>();
 
-  setMember(member: IUser) {
-    this.currentMember = member;
-  }
-
   constructor(private dragula: DragulaService,
-              public dialogService: DialogService) {
+              public dialogService: DialogService,
+              private courseService: CourseService,
+              private snackBar: MatSnackBar) {
     this.userCtrl = new FormControl();
     this.filteredStates = this.userCtrl.valueChanges
     .startWith(null)
@@ -58,6 +59,22 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
     this.dragula.destroy(this.dragulaBagId);
   }
 
+  toggleMember(member: IUser) {
+    if (this.toggleBlocked) {
+      return;
+    }
+    const position = this.selectedMembers.indexOf(member);
+    if (position !== -1) {
+      this.selectedMembers.splice(position, 1);
+    } else {
+      this.selectedMembers.push(member);
+    }
+  }
+
+  isInSelectedMembers(member: IUser) {
+    return this.selectedMembers.indexOf(member) !== -1;
+  }
+
   filterStates(val: string) {
     return val ? this.users.filter(s => this.fuzzysearch(val, s))
       .map(e => e.profile.firstName + ' ' + e.profile.lastName + ' ' + e.email)
@@ -78,13 +95,15 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
     return resArray.length > 0;
   }
 
-  removeUser() {
-    this.dialogService
-    .confirmRemove(this.currentMember.role, this.currentMember.email, 'course')
-    .subscribe(res => {
-      if (res) {
-        this.onRemove.emit(this.currentMember._id);
-      }
-    });
+  async removeSelectedUsers() {
+    this.toggleBlocked = true;
+    const res = await this.dialogService
+      .confirmRemove('selected members', '', 'course')
+      .toPromise();
+    this.toggleBlocked = false;
+    if (res) {
+      this.selectedMembers.forEach(user => this.onRemove.emit(user._id));
+      this.selectedMembers = [];
+    }
   }
 }
