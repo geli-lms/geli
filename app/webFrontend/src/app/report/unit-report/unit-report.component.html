@@ -1,4 +1,4 @@
-<h3>Details for unit {{unit.name}}</h3>
+<h3>Details for unit {{unit?.name}}</h3>
 <div class="progress-container" *ngFor="let user of userUnitProgress">
   <app-user-profile [user]="user" [userId]="this.userService.user._id"></app-user-profile>
   <div class="progress-submission">
