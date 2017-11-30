@@ -1,6 +1,5 @@
 import {IUser} from '../../../../../shared/models/IUser';
 import md5 from 'blueimp-md5';
-import {IProgress} from '../../../../../shared/models/IProgress';
 import {IFile} from '../../../../../shared/models/IFile';
 
 export class User implements IUser {
@@ -10,7 +9,7 @@ export class User implements IUser {
   password: string;
   profile: { firstName: string; lastName: string; picture: IFile };
   role: string;
-  progress: IProgress[];
+  progress: any;
 
   constructor(user: IUser) {
     this._id = user._id;
@@ -18,6 +17,7 @@ export class User implements IUser {
     this.email = user.email;
     this.profile = user.profile;
     this.role = user.role;
+    this.progress = user.progress;
   }
 
   getGravatarURL(size: number = 80) {
