@@ -1,16 +1,16 @@
 import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {MatDialog, MatDialogRef, MatSnackBar} from '@angular/material';
+import {MatSnackBar} from '@angular/material';
 import {CourseService, DuplicationService, ExportService} from '../../shared/services/data.service';
 import {ShowProgressService} from '../../shared/services/show-progress.service';
 import {FileUploader} from 'ng2-file-upload';
-import {ConfirmDialog} from '../../shared/components/confirm-dialog/confirm-dialog.component';
 import {UserService} from '../../shared/services/user.service';
 import {ICourse} from '../../../../../../shared/models/ICourse';
 import {TitleService} from '../../shared/services/title.service';
 import {SaveFileService} from '../../shared/services/save-file.service';
 import {ENROLL_TYPES, ENROLL_TYPE_WHITELIST, ENROLL_TYPE_FREE, ENROLL_TYPE_ACCESSKEY} from '../../../../../../shared/models/ICourse';
+import {DialogService} from '../../shared/services/dialog.service';
 
 @Component({
   selector: 'app-course-edit',
@@ -46,7 +46,7 @@ export class CourseEditComponent implements OnInit {
               private ref: ChangeDetectorRef,
               private showProgress: ShowProgressService,
               private router: Router,
-              private dialog: MatDialog,
+              private dialogService: DialogService,
               private exportService: ExportService,
               private saveFileService: SaveFileService,
               private duplicationService: DuplicationService,
@@ -135,13 +135,9 @@ export class CourseEditComponent implements OnInit {
   }
 
   deleteCourse() {
-    let dialogRef: MatDialogRef<ConfirmDialog>;
-    dialogRef = this.dialog.open(ConfirmDialog);
-    dialogRef.componentInstance.title = 'Attention!';
-    dialogRef.componentInstance.message = 'Are you sure you want to delete Course ' + this.course;
-    dialogRef.componentInstance.confirmText = 'Delete Course';
-    dialogRef.afterClosed().subscribe(res => {
-      if (res === true) {
+    this.dialogService.confirmDelete('course', this.courseOb.name)
+    .subscribe(res => {
+      if (res) {
         this.courseService.deleteItem(this.courseOb);
         this.router.navigate(['/']);
       }
