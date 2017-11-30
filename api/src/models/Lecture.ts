@@ -62,7 +62,7 @@ lectureSchema.methods.exportJSON = async function() {
 
   obj.units = await Promise.all(units.map((unitId: mongoose.Types.ObjectId) => {
     return Unit.findById(unitId).then((unit: IUnitModel) => {
-      if (Unit) {
+      if (unit) {
         return unit.exportJSON();
       } else {
         winston.log('warn', 'unit(' + unitId + ') was referenced by lecture(' + this._id + ') but does not exist anymore');
