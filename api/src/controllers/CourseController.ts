@@ -2,13 +2,13 @@ import {Request} from 'express';
 import {
   Authorized, BadRequestError,
   Body,
-  CurrentUser, ForbiddenError,
+  CurrentUser, Delete, ForbiddenError,
   Get,
   JsonController, NotFoundError,
   Param,
   Post,
   Put,
-  Req,
+  Req, UnauthorizedError,
   UploadedFile,
   UseBefore
 } from 'routing-controllers';
@@ -229,7 +229,6 @@ export class CourseController {
         {courseAdmin: currentUser._id}
       ];
     }
-
     return Course.findOneAndUpdate(
       conditions,
       course,
@@ -237,4 +236,23 @@ export class CourseController {
     )
       .then((c) => c ? c.toObject() : undefined);
   }
+
+  @Authorized(['teacher', 'admin'])
+  @Delete('/:id')
+  async deleteCourse(@Param('id') id: string, @CurrentUser() currentUser: IUser) {
+    const course = await Course.findOne( {_id : id} );
+    if ( !course ) {
+      throw new NotFoundError();
+    }
+    const courseAdmin = await User.findOne({_id: course.courseAdmin});
+    if (course.teachers.indexOf(currentUser._id) !== -1 || courseAdmin.equals(currentUser._id.toString())
+      || currentUser.role === 'admin' ) {
+      course.remove();
+      return {result: true};
+    } else {
+      throw new ForbiddenError('Forbidden!');
+    }
+  }
 }
+
+
