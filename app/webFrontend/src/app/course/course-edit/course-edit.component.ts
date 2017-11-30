@@ -142,7 +142,7 @@ export class CourseEditComponent implements OnInit {
     dialogRef.componentInstance.confirmText = 'Delete Course';
     dialogRef.afterClosed().subscribe(res => {
       if (res === true) {
-        this.courseService.deleteCourse(this.id);
+        this.courseService.deleteItem(this.courseOb);
         this.router.navigate(['/']);
       }
     });

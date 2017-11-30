@@ -246,18 +246,6 @@ export class CourseService extends DataService {
       );
     });
   }
-
-  deleteCourse(courseID: string): Promise<any> {
-    return new Promise((resolve, reject) => {
-      this.backendService.delete(this.apiPath + courseID)
-        .subscribe(
-          () => {
-            resolve();
-          },
-          error => reject(error)
-        );
-    });
-  }
 }
 
 @Injectable()
