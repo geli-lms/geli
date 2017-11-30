@@ -18,6 +18,7 @@ export class Course implements ICourse {
   whitelist: IWhitelistUser[];
   enrollType: string;
   accessKey: string;
+  hasAccessKey: boolean;
 
   public Course(course: ICourse) {
     this._id = course._id;
@@ -30,5 +31,6 @@ export class Course implements ICourse {
     this.lectures = course.lectures;
     this.whitelist = course.whitelist;
     this.enrollType = course.enrollType;
+    this.hasAccessKey = course.hasAccessKey;
   }
 }

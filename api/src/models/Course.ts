@@ -49,7 +49,7 @@ const courseSchema = new mongoose.Schema({
     },
     enrollType: {
       type: String,
-      'enum': ['free', 'whitelist'],
+      'enum': ['free', 'whitelist', 'accesskey'],
       'default': 'free'
     },
     whitelist: [
