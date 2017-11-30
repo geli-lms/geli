@@ -1,0 +1,8 @@
+@import '../../variables';
+
+.report-container {
+  .progress-container {
+    border-bottom: 1px solid map-get($mat-grey, 300);
+    padding: 1rem;
+  }
+}

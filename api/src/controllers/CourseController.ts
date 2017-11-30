@@ -8,7 +8,7 @@ import {
   Param,
   Post,
   Put,
-  Req,
+  Req, UnauthorizedError,
   UploadedFile,
   UseBefore
 } from 'routing-controllers';
@@ -181,6 +181,24 @@ export class CourseController {
       });
   }
 
+  @Authorized(['student'])
+  @Post('/:id/leave')
+  leaveStudent(@Param('id') id: string, @Body() data: any, @CurrentUser() currentUser: IUser) {
+    return Course.findById(id)
+      .then(course => {
+        if (!course) {
+          throw new NotFoundError();
+        }
+        const index: number = course.students.indexOf(currentUser._id);
+        if (index  !== 0) {
+          course.students.splice(index, 1);
+          return course.save().then((c) => c.toObject());
+        }
+
+        return course.toObject();
+      });
+  }
+
   // TODO: Needs more security
   @Authorized(['teacher', 'admin'])
   @Post('/:id/whitelist')
@@ -211,6 +229,7 @@ export class CourseController {
         {courseAdmin: currentUser._id}
       ];
     }
+
     return Course.findOneAndUpdate(
       conditions,
       course,
@@ -229,12 +248,10 @@ export class CourseController {
     const courseAdmin = await User.findOne({_id: course.courseAdmin});
     if (course.teachers.indexOf(currentUser._id) !== -1 || courseAdmin.equals(currentUser._id.toString())
       || currentUser.role === 'admin' ) {
-      await course.remove();
+      course.remove();
       return {result: true};
     } else {
       throw new ForbiddenError('Forbidden!');
     }
   }
 }
-
-

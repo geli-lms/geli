@@ -3,8 +3,8 @@
 <app-course-container [title]="'Inactive Courses'" [courses]="inactiveCourses" [expand]="true" (onEnroll)="enrollCallback()" *ngIf="inactiveCourses.length"></app-course-container>
 <app-course-container [title]="'Available Courses'" [courses]="availableCourses" [expand]="false" (onEnroll)="enrollCallback()"></app-course-container>
 
-
-<a mat-fab class="add-course-fab"
-   routerLink="course/new" matTooltip="Add course" matTooltipPosition="left">
-  <mat-icon>add</mat-icon>
-</a>
+<app-mat-fab-menu class="add-course-fab" [open]="fabOpen" [onClick]="onFabClick"
+                  fabTooltip="Add course">
+  <div (click)="onImportCourse()">Import course</div>
+  <div routerLink="course/new">Create course</div>
+</app-mat-fab-menu>
