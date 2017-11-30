@@ -16,15 +16,16 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 a:not([mat-button]) {
-  color: $app-warn;
+  $baseClr: map-get($app-warn, 'default');
+  color: $baseClr;
   text-decoration: underline;
 
   &:visited {
-    color: darken($app-warn, 10%);
+    color: darken($baseClr, 10%);
   }
 
   &:hover {
-    color: lighten($app-warn, 10%);
+    color: lighten($baseClr, 10%);
     text-decoration: none;
   }
 }

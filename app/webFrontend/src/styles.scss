@@ -98,12 +98,17 @@ app-root > .app-wrapper {
 }
 
 @mixin transition {
-  transition: all 150ms ease 0ms;
+  transition: all 150ms ease 0ms !important;
 }
-a, .mat-button-focus-overlay, .mat-menu-item {
+a,
+.mat-menu-item {
   @include transition;
 
   &:hover {
     @include transition;
   }
+}
+.mat-button .mat-button-focus-overlay,
+.mat-button:hover .mat-button-focus-overlay {
+  @include transition;
 }
