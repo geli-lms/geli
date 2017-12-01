@@ -246,6 +246,24 @@ export class CourseService extends DataService {
       );
     });
   }
+
+  sendMailToSelectedUsers(data: any): Promise<any> {
+    return this.backendService
+        .post(this.apiPath + '/mail', JSON.stringify(data))
+        .toPromise();
+  }
+
+  leaveStudent(courseId: string): Promise<any[]> {
+    return new Promise((resolve, reject) => {
+      this.backendService.post(this.apiPath + courseId + '/leave', {})
+        .subscribe(
+          (responseItem: any) => {
+            resolve(responseItem);
+          },
+          error => reject(error)
+        );
+    });
+  }
 }
 
 @Injectable()
