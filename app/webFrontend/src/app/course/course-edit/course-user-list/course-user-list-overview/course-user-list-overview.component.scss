@@ -1,6 +1,36 @@
+.opacity {
+  background-color: #000;
+  opacity: .33;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  border-radius: 8px;
+}
 
-ul {
-  list-style: none;
+.user-drag-handle, .member-drag-handle {
+  cursor: move;
+  opacity: 0.2;
+  user-select: none;
+  margin-right: 0.5em;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.profile {
+  height: 248px;
+  width: 248px;
+  float: left;
+  margin: 10px;
+  border-radius: 8px;
+  background: no-repeat 75px 15px;
+}
+
+.profile:hover {
+  background-color: cornsilk;
 }
 
 .active {
@@ -30,8 +60,16 @@ ul {
   font-size: .9em;
 }
 
+ul {
+  list-style: none;
+}
+
 .userId {
   opacity: 0.5;
+}
+
+.text-fit {
+  width: auto;
 }
 
 button {
@@ -43,28 +81,4 @@ button {
 
 .del {
   color: #D64C4C;
-}
-
-.profile {
-  height: 248px;
-  width: 248px;
-  float: left;
-  margin: 10px;
-  border-radius: 8px;
-  background: no-repeat 75px 15px;
-}
-
-.profile:hover {
-  background-color: cornsilk;
-}
-
-.opacity {
-  background-color: #000;
-  opacity: .33;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  position: absolute;
-  border-radius: 8px;
 }

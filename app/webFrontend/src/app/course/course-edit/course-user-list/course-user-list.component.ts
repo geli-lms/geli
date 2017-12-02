@@ -7,6 +7,8 @@ import 'rxjs/add/operator/startWith'
 import {UserDataService, WhitelistUserService} from '../../../shared/services/data.service';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
 import {IWhitelistUser} from '../../../../../../../shared/models/IWhitelistUser';
+import {MatSnackBar} from '@angular/material';
+
 
 @Component({
   selector: 'app-course-user-list',
@@ -24,15 +26,16 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
   @Input() role;
   @Input() usersTotal = 0;
 
+  search = '';
+  userCtrl: FormControl;
+  filteredStates: any;
+  finishRestCall = true;
+
   @Output() onDragendRemove = new EventEmitter<IUser>();
   @Output() onDragendPush = new EventEmitter<IUser>();
   @Output() onUpdate = new EventEmitter<String>();
   @Output() onSearch = new EventEmitter<String>();
 
-  search = '';
-  userCtrl: FormControl;
-  filteredStates: any;
-  finishRestCall = true;
 
   constructor(private dragula: DragulaService,
               private userService: UserDataService) {
@@ -107,6 +110,7 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
     this.dragula.destroy(this.dragulaBagId);
     this.dragula.destroy(this.dragulaWhitelistBagId);
   }
+
 
   filterStates(val: string) {
     return val ? this.dragableUsers.concat(this.dragableUsersInCourse)

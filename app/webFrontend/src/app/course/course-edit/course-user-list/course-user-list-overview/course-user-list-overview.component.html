@@ -1,7 +1,11 @@
 <div class="members" *ngIf="show">
-<ng-container *ngFor="let user of users">
-  <mat-card [ngClass]="(currentUser != null && currentUser._id == user._id) ? 'active':'profile'"
-            (click)="setCurrentUser(user)">
+  <div *ngIf="selectedMembers.length > 1">
+    <button class="text-fit" mat-raised-button (click)="openWriteMailDialog()">SEND MAIL TO SELECTED MEMBERS</button>
+    <button class="del text-fit" mat-raised-button (click)="removeSelectedUsers()">REMOVE SELECTED MEMBERS</button>
+  </div>
+  <ng-container *ngFor="let user of usersInCourse">
+    <mat-card [ngClass]="isInSelectedMembers(user) ? 'active':'profile'"
+              (click)="toggleMember(user)">
 
     <div class="bg" user-image [user-image]="user" [size]="160"></div>
 
