@@ -380,7 +380,7 @@ export class UserDataService extends DataService {
 
   getStudents(): Promise<any[]> {
     const originalApiPath = this.apiPath;
-    this.apiPath += 'students/';
+    this.apiPath += '/all/students/';
     const promise = this.readItems();
     this.apiPath = originalApiPath;
     return promise;

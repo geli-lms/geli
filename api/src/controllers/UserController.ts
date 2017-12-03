@@ -43,7 +43,7 @@ export class UserController {
       });
   }
 
-  @Get('/students')
+  @Get('/all/students')
   @Authorized(['teacher', 'admin'])
   getStudents(@CurrentUser() currentUser?: IUser) {
     return User.find({role: 'student'})
