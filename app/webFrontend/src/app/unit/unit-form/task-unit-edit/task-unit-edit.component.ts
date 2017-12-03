@@ -1,5 +1,5 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
-import {TaskService, UnitService} from '../../../shared/services/data.service';
+import {UnitService} from '../../../shared/services/data.service';
 import {Task} from '../../../models/Task';
 import {MatSnackBar} from '@angular/material';
 import {ITaskUnit} from '../../../../../../../shared/models/units/ITaskUnit';
@@ -35,8 +35,7 @@ export class TaskUnitEditComponent implements OnInit {
   @ViewChild(UnitGeneralInfoFormComponent)
   private generalInfo: UnitGeneralInfoFormComponent;
 
-  constructor(private taskService: TaskService,
-              private unitService: UnitService,
+  constructor(private unitService: UnitService,
               private snackBar: MatSnackBar) {
   }
 
@@ -51,7 +50,7 @@ export class TaskUnitEditComponent implements OnInit {
   }
 
   async reloadTaskUnit() {
-    // Reload the task unit from the database to make sure that the tasks (and answers)
+    // Reload task unit from database to make sure that tasks (and answers)
     // are populated properly (e.g. necessary after a Cancel)
     this.model = <ITaskUnit><any>await this.unitService.readTaskUnit(this.model._id);
   }
@@ -139,7 +138,7 @@ export class TaskUnitEditComponent implements OnInit {
   }
 
   addAnswerAtEnd(task: ITask) {
-    task.answers.push(new Answer()); // add item to end
+    task.answers.push(new Answer());
   }
 
   removeAnswer(task: ITask, index: number) {
@@ -148,15 +147,11 @@ export class TaskUnitEditComponent implements OnInit {
     }
   }
 
-  removeTask(task: any) {
+  removeTask(task: ITask) {
     if (!task._id) {
       this.model.tasks = this.model.tasks.filter(obj => task !== obj);
-      return;
-    }
-
-    this.taskService.deleteItem(task).then(tasks => {
+    } else {
       this.model.tasks = this.model.tasks.filter(obj => task._id !== obj._id);
-      this.snackBar.open('Task deleted', 'Delete', {duration: 2000});
-    });
+    }
   }
 }
