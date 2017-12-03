@@ -5,6 +5,7 @@ import {FilepickerDialog} from '../components/filepicker-dialog/filepicker-dialo
 import {DialogService} from '../services/dialog.service';
 import {FormsModule} from '@angular/forms';
 import {UploadDialog} from '../components/upload-dialog/upload-dialog.component';
+import {WriteMailDialog} from '../components/write-mail-dialog/write-mail-dialog.component';
 import {FileUploadModule} from 'ng2-file-upload';
 import {CommonModule} from '@angular/common';
 import {MaterialImportModule} from './material-import.module';
@@ -21,12 +22,14 @@ import {MaterialImportModule} from './material-import.module';
     AccessKeyDialog,
     UploadDialog,
     FilepickerDialog,
+    WriteMailDialog,
   ],
   declarations: [
     ConfirmDialog,
     AccessKeyDialog,
     UploadDialog,
     FilepickerDialog,
+    WriteMailDialog,
   ],
   providers: [
     DialogService
@@ -36,6 +39,7 @@ import {MaterialImportModule} from './material-import.module';
     AccessKeyDialog,
     UploadDialog,
     FilepickerDialog,
+    WriteMailDialog,
   ]
 })
 export class DialogModule {
