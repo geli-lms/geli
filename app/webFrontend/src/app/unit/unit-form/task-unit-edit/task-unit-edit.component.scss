@@ -39,6 +39,9 @@
       }
       .remove {
         min-width: min-content;
+        height: 36px; // height of mat button
+        margin-top: 0.75rem;
+        margin-left: 0.3rem;
       }
     }
 
