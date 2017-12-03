@@ -142,8 +142,10 @@ export class TaskUnitEditComponent implements OnInit {
     task.answers.push(new Answer()); // add item to end
   }
 
-  removeLastAnswer(task: any) {
-    task.answers.pop();
+  removeAnswer(task: ITask, index: number) {
+    if (index > -1) {
+      task.answers.splice(index, 1);
+    }
   }
 
   removeTask(task: any) {

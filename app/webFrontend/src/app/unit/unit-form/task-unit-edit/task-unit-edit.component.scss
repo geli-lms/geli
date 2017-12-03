@@ -14,6 +14,10 @@
     }
   }
 
+  .remove {
+    color: map-get($mat-grey, 600);
+  }
+
   .answers {
     padding: 1rem;
     background-color: map-get($mat-grey, 100);
@@ -22,19 +26,19 @@
   .answer {
     width: 100%;
     display: inline-block;
-    padding-right: 1rem;
 
     .check-answer {
       width: 100%;
       display: flex;
 
       .mat-checkbox {
-        //margin-left: 14px;
-        margin-right: 6px;
-        margin-top: 18px;
+        margin: 1rem;
       }
       .mat-form-field {
         flex-grow: 1;
+      }
+      .remove {
+        min-width: min-content;
       }
     }
 
@@ -45,5 +49,9 @@
     @include bp(xl) {
       width: 33.33%;
     }
+  }
+
+  .add-answer {
+    padding-top: 0.66rem;
   }
 }
