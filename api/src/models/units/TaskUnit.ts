@@ -56,7 +56,7 @@ taskUnitSchema.methods.exportJSON = function() {
     obj.tasks = exportedTasks;
     return obj;
   });
-}
+};
 
 taskUnitSchema.statics.importJSON = async function(taskUnit: ITaskUnit, courseId: string, lectureId: string) {
   taskUnit._course = courseId;
@@ -80,7 +80,7 @@ taskUnitSchema.statics.importJSON = async function(taskUnit: ITaskUnit, courseId
     newError.stack += '\nCaused by: ' + err.message + '\n' + err.stack;
     throw newError;
   }
-}
+};
 
 const TaskUnit = Unit.discriminator('task', taskUnitSchema);
 
