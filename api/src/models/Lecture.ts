@@ -86,7 +86,7 @@ lectureSchema.statics.importJSON = async function(lecture: ILecture, courseId: s
 
     await Promise.all(units.map((unit: IUnit) => {
       const unitTypeClass = UnitClassMapper.getMongooseClassForUnit(unit);
-      return unitTypeClass.importJSON(unit, courseId, savedLecture._id);
+      return unitTypeClass.schema.statics.importJSON(unit, courseId, savedLecture._id);
     }));
 
     return (await Lecture.findById(savedLecture._id)).toObject();

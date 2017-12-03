@@ -67,7 +67,7 @@ taskUnitSchema.statics.importJSON = async function(taskUnit: ITaskUnit, courseId
   try {
   const savedTaskUnit = await new TaskUnit(taskUnit).save();
   taskUnit.tasks = await Promise.all(tasks.map((task: ITask) => {
-    return Task.importJSON(task, savedTaskUnit._id);
+    return Task.schema.statics.importJSON(task, savedTaskUnit._id);
   }));
 
   const lecture = await Lecture.findById(lectureId);
