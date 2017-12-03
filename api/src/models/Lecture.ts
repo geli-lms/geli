@@ -88,8 +88,9 @@ lectureSchema.statics.importJSON = async function(lecture: ILecture, courseId: s
       const unitTypeClass = UnitClassMapper.getMongooseClassForUnit(unit);
       return unitTypeClass.schema.statics.importJSON(unit, courseId, savedLecture._id);
     }));
+    const newLecture: ILectureModel = await Lecture.findById(savedLecture._id);
 
-    return (await Lecture.findById(savedLecture._id)).toObject();
+    return newLecture.toObject();
   } catch (err) {
     const newError = new InternalServerError('Failed to import lecture');
     newError.stack += '\nCaused by: ' + err.message + '\n' + err.stack;

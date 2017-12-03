@@ -134,8 +134,9 @@ courseSchema.statics.importJSON = async function (course: ICourse, admin: IUser)
     await Promise.all(lectures.map((lecture: ILecture) => {
       return Lecture.schema.statics.importJSON(lecture, savedCourse._id);
     }));
+    const newCourse: ICourseModel = await Course.findById(savedCourse._id);
 
-    return (await Course.findById(savedCourse._id)).toObject();
+    return newCourse.toObject();
   } catch (err) {
     const newError = new InternalServerError('Failed to import course');
     newError.stack += '\nCaused by: ' + err.message + '\n' + err.stack;
