@@ -102,15 +102,16 @@ courseSchema.methods.exportJSON = async function () {
   const lectures: Array<mongoose.Types.ObjectId> = obj.lectures;
   obj.lectures = [];
 
-  obj.lectures = await Promise.all(lectures.map((lectureId: mongoose.Types.ObjectId) => {
-    return Lecture.findById(lectureId).then((lecture: ILectureModel) => {
-      if (lecture) {
-        return lecture.exportJSON();
-      } else {
-        winston.log('warn', 'lecture(' + lectureId + ') was referenced by course(' + this._id + ') but does not exist anymore');
-      }
-    });
-  }));
+  for (const lectureId of lectures) {
+    const lecture: ILectureModel = await Lecture.findById(lectureId);
+    if (lecture) {
+      const lectureExport = await lecture.exportJSON();
+      obj.lectures.push(lectureExport);
+    } else {
+      winston.log('warn', 'lecture(' + lectureId + ') was referenced by course(' + this._id + ') but does not exist anymore');
+    }
+  }
+
   return obj;
 };
 
@@ -131,9 +132,9 @@ courseSchema.statics.importJSON = async function (course: ICourse, admin: IUser)
       course.name = course.name + ' (copy)';
     }
     const savedCourse = await new Course(course).save();
-    await Promise.all(lectures.map((lecture: ILecture) => {
-      return Lecture.schema.statics.importJSON(lecture, savedCourse._id);
-    }));
+    for (const lecture of lectures) {
+      await Lecture.schema.statics.importJSON(lecture, savedCourse._id);
+    }
     const newCourse: ICourseModel = await Course.findById(savedCourse._id);
 
     return newCourse.toObject();
