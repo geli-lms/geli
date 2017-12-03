@@ -44,6 +44,7 @@ export class TaskUnitEditComponent implements OnInit {
     if (!this.model) {
       this.model = new TaskUnit(this.course._id);
       this.add = true;
+      this.addTask();
     } else {
       this.reloadTaskUnit();
     }
@@ -131,7 +132,10 @@ export class TaskUnitEditComponent implements OnInit {
   }
 
   addTask() {
-    this.model.tasks.push(new Task());
+    const task = new Task();
+    this.model.tasks.push(task);
+    this.addAnswerAtEnd(task);
+    this.addAnswerAtEnd(task);
   }
 
   addAnswerAtEnd(task: ITask) {
