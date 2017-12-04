@@ -236,6 +236,7 @@ export class CourseController {
         {courseAdmin: currentUser._id}
       ];
     }
+
     return Course.findOneAndUpdate(
       conditions,
       course,
@@ -261,5 +262,3 @@ export class CourseController {
     }
   }
 }
-
-

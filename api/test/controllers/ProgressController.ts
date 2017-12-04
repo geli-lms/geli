@@ -214,7 +214,7 @@ describe('ProgressController', () => {
             res.body._id.should.be.equal(progress._id.toString());
 
             resolve();
-          });
+      });
       });
     });
 
