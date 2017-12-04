@@ -31,16 +31,19 @@ if [ "$TRAVIS_BRANCH" == "master" ] || [ "$TRAVIS_BRANCH" == "develop" ]; then
             )
 
         while read -r line; do
-            semverEQ "$line" "$PACKAGE_VERSION"
-            
-            # Check if same
-            if [[ $? == 0 ]]; then
-                echo -e "${RED}+ ERROR: Version '$line' already exists on DockerHub${NC}"
-                return 1
+            # Check if line beginns with a "v"
+            if [[ $line == v* ]]; then
+                semverEQ "$line" "$PACKAGE_VERSION"
+                
+                # Check if same
+                if [[ $? == 0 ]]; then
+                    echo -e "${RED}+ ERROR: Version '$line' already exists on DockerHub${NC}"
+                    return 1
+                fi
             fi
         done <<< "$EXISTING_TAGS"
 
-        echo "${GREEN}+ Everything is fine, have a great day :)${NC}"
+        echo -e "${GREEN}+ Everything is fine, have a great day :)${NC}"
         return 0
     else
         echo -e "${YELLOW}+ WARNING: is NO pull request -> skipping${NC}";
