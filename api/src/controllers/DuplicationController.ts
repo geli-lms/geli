@@ -23,7 +23,7 @@ export class DuplicationController {
     try {
       const courseModel: ICourseModel = await Course.findById(id);
       const exportedCourse: ICourse = await courseModel.exportJSON();
-      return Course.importJSON(exportedCourse, courseAdmin);
+      return Course.schema.statics.importJSON(exportedCourse, courseAdmin);
     } catch (err) {
         const newError = new InternalServerError('Failed to duplicate course');
         newError.stack += '\nCaused by: ' + err.message + '\n' + err.stack;
@@ -37,7 +37,7 @@ export class DuplicationController {
     try {
       const lectureModel: ILectureModel = await Lecture.findById(id);
       const exportedLecture: ILecture = await lectureModel.exportJSON();
-      return Lecture.importJSON(exportedLecture, courseId);
+      return Lecture.schema.statics.importJSON(exportedLecture, courseId);
     } catch (err) {
       const newError = new InternalServerError('Failed to duplicate lecture');
       newError.stack += '\nCaused by: ' + err.message + '\n' + err.stack;
@@ -53,7 +53,7 @@ export class DuplicationController {
       const unitModel: IUnitModel = await Unit.findById(id);
       const exportedUnit: IUnit = await unitModel.exportJSON();
       const unitTypeClass = UnitClassMapper.getMongooseClassForUnit(exportedUnit);
-      return unitTypeClass.importJSON(exportedUnit, courseId, lectureId);
+      return unitTypeClass.schema.statics.importJSON(exportedUnit, courseId, lectureId);
     } catch (err) {
       const newError = new InternalServerError('Failed to duplicate unit');
       newError.stack += '\nCaused by: ' + err.message + '\n' + err.stack;

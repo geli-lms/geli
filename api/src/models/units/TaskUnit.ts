@@ -30,7 +30,7 @@ taskUnitSchema.pre('remove', function(next: () => void) {
     .catch(next);
 });
 
-taskUnitSchema.methods.exportJSON = function() {
+taskUnitSchema.methods.exportJSON = async function() {
   const obj = this.toObject();
 
   // remove unwanted informations
@@ -47,16 +47,14 @@ taskUnitSchema.methods.exportJSON = function() {
   const tasks: Array<mongoose.Types.ObjectId>  = obj.tasks;
   obj.tasks = [];
 
-  return Promise.all(tasks.map((taskId) => {
-    return Task.findById(taskId).then((task) => {
-      return task.exportJSON();
-    });
-  }))
-  .then((exportedTasks) => {
-    obj.tasks = exportedTasks;
-    return obj;
-  });
-}
+  for (const taskId of tasks) {
+    const task: ITaskModel = await Task.findById(taskId);
+    const taskExport = await task.exportJSON();
+    obj.tasks.push(taskExport);
+  }
+
+  return obj;
+};
 
 taskUnitSchema.statics.importJSON = async function(taskUnit: ITaskUnit, courseId: string, lectureId: string) {
   taskUnit._course = courseId;
@@ -66,9 +64,11 @@ taskUnitSchema.statics.importJSON = async function(taskUnit: ITaskUnit, courseId
 
   try {
   const savedTaskUnit = await new TaskUnit(taskUnit).save();
-  taskUnit.tasks = await Promise.all(tasks.map((task: ITask) => {
-    return Task.importJSON(task, savedTaskUnit._id);
-  }));
+
+  for (const task of tasks) {
+    const newTask: ITask = await Task.schema.statics.importJSON(task, savedTaskUnit._id);
+    taskUnit.tasks.push(newTask);
+  }
 
   const lecture = await Lecture.findById(lectureId);
   lecture.units.push(<ITaskUnitModel>savedTaskUnit);
@@ -80,7 +80,7 @@ taskUnitSchema.statics.importJSON = async function(taskUnit: ITaskUnit, courseId
     newError.stack += '\nCaused by: ' + err.message + '\n' + err.stack;
     throw newError;
   }
-}
+};
 
 const TaskUnit = Unit.discriminator('task', taskUnitSchema);
 
