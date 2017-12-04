@@ -5,7 +5,7 @@ import crypto = require('crypto');
 const appRoot = require('app-root-path');
 import {Response} from "express";
 import {
-  Body, Post, Get, JsonController, NotFoundError, ContentType, UseBefore, Param, Res, Controller
+  Body, Post, Get, Header, NotFoundError, ContentType, OnUndefined, UseBefore, Param, Res, Controller
 } from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 
@@ -29,6 +29,7 @@ export class DownloadController {
 
   @Get('/:id')
   @ContentType('file/zip')
+  @OnUndefined(200)
   async getArchivedFile(@Param('id') id: string, @Res() response: Response) {
     const filePath = appRoot + '/temp/' + id + '.zip';
 
@@ -37,7 +38,6 @@ export class DownloadController {
         fs.unlink(filePath);
       }
     });
-
   }
 
   @Post('/')
