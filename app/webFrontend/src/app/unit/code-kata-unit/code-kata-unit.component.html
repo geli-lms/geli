@@ -7,7 +7,8 @@
     [theme]="'github'"
     [readOnly]="true">
   </ace-editor>
-  <div>Your code goes here:</div>
+  <div *ngIf="!isExampleCode">Your code goes here:</div>
+  <div *ngIf="isExampleCode">This is the provided example solution:</div>
   <ace-editor class="user-code-editor"
               #codeEditor
               [(text)]="codeKata.code || progress.code"
@@ -27,8 +28,8 @@
   </ace-editor>
 
   <div *ngIf="!isExampleCode">
-    <button md-button (click)="validate()">Validate</button>
-    <button md-button color="primary" class="submit-progress" (click)="submitProgress()">Submit</button>
+    <button mat-button (click)="validate()">Validate</button>
+    <button mat-button color="primary" class="submit-progress" (click)="submitProgress()">Submit</button>
   </div>
   <div *ngIf="logs!==undefined"><strong>Logs</strong></div>
   <pre>{{logs}}</pre>

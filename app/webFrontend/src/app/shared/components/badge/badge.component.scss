@@ -1,0 +1,13 @@
+@import '../../../../variables';
+
+.badge {
+  background-color: map-get($app-primary, 'default');
+  border-radius: 50%;
+  color: white;
+  width: 1.5em;
+  height: 1.5em;
+  line-height: 1.5em;
+  margin-left: 8px;
+  margin-right: 2px;
+  text-align: center;
+}

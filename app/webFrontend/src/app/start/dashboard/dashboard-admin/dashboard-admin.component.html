@@ -1,3 +1,7 @@
-<p>
-  dashboard-admin works!
-</p>
+<app-course-container [title]="'Courses'" [courses]="allCourses" [expand]="true" (onEnroll)="enrollCallback()"></app-course-container>
+
+<app-mat-fab-menu class="add-course-fab" [open]="fabOpen" [onClick]="onFabClick"
+                  fabTooltip="Add course">
+  <div (click)="onImportCourse()">Import course</div>
+  <div routerLink="course/new">Create course</div>
+</app-mat-fab-menu>

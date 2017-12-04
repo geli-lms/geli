@@ -3,51 +3,44 @@
 
   <app-unit-general-info-form [model]="model"></app-unit-general-info-form>
 
-  <div class="info-text">
-    <md-icon>info</md-icon>
+  <mat-hint>
     Add questions with any number of possible answers. Mark the correct answer(s) with the checkbox.
-  </div>
+  </mat-hint>
 
   <div *ngFor="let task of model.tasks" class="question-answer">
+    <mat-form-field matLine class="question">
+      <textarea matInput id="name" placeholder="Enter question here" [(ngModel)]="task.name"></textarea>
+    </mat-form-field>
 
-    <md-input-container md-line class="question">
-      <textarea mdInput id="name" placeholder="Frage hier eingeben." [(ngModel)]="task.name"></textarea>
-    </md-input-container>
+    <button mat-button (click)="removeTask(task)">
+      <mat-icon>remove</mat-icon> Remove question
+    </button>
 
-    <div class="actions">
-      <button md-icon-button (click)="addAnswerAtEnd(task)">
-        <md-icon color="accent">add</md-icon>
-      </button>
-      <button md-icon-button (click)="removeLastAnswer(task)">
-        <md-icon>remove</md-icon>
-      </button>
-      <button md-button (click)="updateTask(task)">UPDATE</button>
-      <button md-button (click)="removeTask(task)">DELETE</button>
-    </div>
-
-    <div md-line class="answers">
-      <div class="answer" *ngFor="let answer of task.answers; let idx = index;">
-        <div class="check-answer">
-          <md-checkbox [(ngModel)]="answer.value" name="value_{{idx}}"></md-checkbox>
-          <md-input-container>
-            <input mdInput placeholder="Antwort hier eingeben." [(ngModel)]="answer.text">
-          </md-input-container>
+    <div matLine class="answers">
+        <div class="answer" *ngFor="let answer of task.answers; let idx = index;">
+          <div class="check-answer">
+            <mat-checkbox [(ngModel)]="answer.value" name="value_{{idx}}"></mat-checkbox>
+            <mat-form-field>
+              <input matInput placeholder="Enter answer here" [(ngModel)]="answer.text">
+            </mat-form-field>
+          </div>
         </div>
+      <div>
+        <button mat-button (click)="addAnswerAtEnd(task)">
+          <mat-icon>add</mat-icon> Add answer
+        </button>
+        <button *ngIf="task.answers.length" mat-button (click)="removeLastAnswer(task)">
+          <mat-icon>remove</mat-icon> Remove last answer
+        </button>
       </div>
-
     </div>
-
   </div>
+
   <p>
-    <button md-button (click)="onCancel()" type="reset">Cancel</button>
-    <button md-button color="primary" class="add-unit" (click)="addUnit()" type="submit">Save</button>
+    <button mat-raised-button color="accent" (click)="addTask()">
+      <mat-icon>add</mat-icon> Add question
+    </button>
+
+    <app-button-save-cancel (save)="saveUnit()" (cancel)="onCancel()"></app-button-save-cancel>
   </p>
-  <button md-mini-fab class="add-task-fab" (click)="addTask()" mdTooltip="Add task" mdTooltipPosition="right">
-    <md-icon>add</md-icon>
-  </button>
 </div>
-
-
-
-
-

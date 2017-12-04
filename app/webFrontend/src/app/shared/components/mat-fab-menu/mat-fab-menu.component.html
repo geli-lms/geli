@@ -1,0 +1,12 @@
+<div class="container">
+
+  <div class="menu" [class.open]="open">
+    <ng-content></ng-content>
+  </div>
+
+  <button class="fab" mat-fab color="accent" (click)="onClick()"
+          disabled="{{disabled}}" matTooltip="{{fabTooltip}}" matTooltipPosition="left">
+    <mat-icon class="md-24 open-animation" [class.icon-open]="open">add</mat-icon>
+  </button>
+
+</div>

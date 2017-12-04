@@ -1,10 +1,16 @@
 import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {CourseService} from '../../shared/services/data.service';
-import {MdSnackBar} from '@angular/material';
+import {MatSnackBar} from '@angular/material';
+import {CourseService, DuplicationService, ExportService} from '../../shared/services/data.service';
 import {ShowProgressService} from '../../shared/services/show-progress.service';
 import {FileUploader} from 'ng2-file-upload';
+import {UserService} from '../../shared/services/user.service';
+import {ICourse} from '../../../../../../shared/models/ICourse';
+import {TitleService} from '../../shared/services/title.service';
+import {SaveFileService} from '../../shared/services/save-file.service';
+import {ENROLL_TYPES, ENROLL_TYPE_WHITELIST, ENROLL_TYPE_FREE, ENROLL_TYPE_ACCESSKEY} from '../../../../../../shared/models/ICourse';
+import {DialogService} from '../../shared/services/dialog.service';
 
 @Component({
   selector: 'app-course-edit',
@@ -21,17 +27,32 @@ export class CourseEditComponent implements OnInit {
   enrollType: string;
   newCourse: FormGroup;
   id: string;
-  courseOb: any[];
+  courseOb: ICourse;
   uploader: FileUploader = null;
+  enrollTypes =  ENROLL_TYPES;
+  enrollTypeConstants = {
+    ENROLL_TYPE_WHITELIST,
+    ENROLL_TYPE_FREE,
+    ENROLL_TYPE_ACCESSKEY,
+  };
+
 
   message = 'Course successfully added.';
 
   constructor(private route: ActivatedRoute,
               private formBuilder: FormBuilder,
               private courseService: CourseService,
-              public snackBar: MdSnackBar,
+              public snackBar: MatSnackBar,
               private ref: ChangeDetectorRef,
-              private showProgress: ShowProgressService) {
+              private showProgress: ShowProgressService,
+              private router: Router,
+              private dialogService: DialogService,
+              private exportService: ExportService,
+              private saveFileService: SaveFileService,
+              private duplicationService: DuplicationService,
+              private userService: UserService,
+              private titleService: TitleService) {
+
 
     this.route.params.subscribe(params => {
       this.id = params['id'];
@@ -47,13 +68,15 @@ export class CourseEditComponent implements OnInit {
             this.mode = true;
           }
           this.courseOb = val;
+          this.titleService.setTitleCut(['Edit Course: ', this.course]);
         }, (error) => {
-          console.log(error);
+          this.snackBar.open('Couldn\'t load Course-Item', '', {duration: 3000});
         });
     });
   }
 
   ngOnInit() {
+    this.titleService.setTitle('Edit Course');
     this.generateForm();
     this.uploader = new FileUploader({
       url: '/api/courses/' + this.id + '/whitelist',
@@ -82,29 +105,61 @@ export class CourseEditComponent implements OnInit {
     };
   }
 
+  cancel() {
+    this.router.navigate(['/']);
+  }
+
   createCourse() {
     this.showProgress.toggleLoadingGlobal(true);
-    console.log(this.description);
-    console.log(this.course);
 
     const request: any = {
       'name': this.course, 'description': this.description, '_id': this.id, 'active': this.active, 'enrollType': this.enrollType
     };
-    if (this.accessKey !== '****') {
+
+    if (this.enrollType === ENROLL_TYPE_FREE) {
+      request.accessKey = null;
+    } else if (this.accessKey !== '****') {
       request.accessKey = this.accessKey;
     }
+
     this.courseService.updateItem(request).then(
       (val) => {
-        console.log(val);
         this.showProgress.toggleLoadingGlobal(false);
         this.snackBar.open('Saved successfully', '', {duration: 5000});
       }, (error) => {
         this.showProgress.toggleLoadingGlobal(false);
         // Mongodb uses the error field errmsg
-        const errormessage = JSON.parse(error._body).message || JSON.parse(error._body).errmsg;
+        const errormessage = error.json().message || error.json().errmsg;
         this.snackBar.open('Saving course failed ' + errormessage, 'Dismiss');
-        console.log(error);
       });
+  }
+
+  deleteCourse() {
+    this.dialogService.confirmDelete('course', this.courseOb.name)
+    .subscribe(res => {
+      if (res) {
+        this.courseService.deleteItem(this.courseOb);
+        this.router.navigate(['/']);
+      }
+    });
+  }
+
+  async onExport() {
+    try {
+      const courseJSON = await this.exportService.exportCourse(this.courseOb);
+
+      this.saveFileService.save(this.courseOb.name, JSON.stringify(courseJSON, null, 2));
+    } catch (err) {
+      this.snackBar.open('Export course failed ' + err.json().message, 'Dismiss');
+    }
+  }
+
+  async onDuplicate() {
+    try {
+      const course = await this.duplicationService.duplicateCourse(this.courseOb, this.userService.user);
+    } catch (err) {
+      this.snackBar.open('Duplication of the course failed ' + err.json().message, 'Dismiss');
+    }
   }
 
   onChangeMode(value) {

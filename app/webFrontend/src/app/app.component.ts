@@ -6,6 +6,8 @@ import {Router} from '@angular/router';
 import {APIInfoService} from './shared/services/data.service';
 import {APIInfo} from './models/APIInfo';
 import {isNullOrUndefined} from 'util';
+import {RavenErrorHandler} from './shared/services/raven-error-handler.service';
+import {MatSnackBar} from '@angular/material';
 
 @Component({
   selector: 'app-root',
@@ -22,7 +24,10 @@ export class AppComponent implements OnInit {
               private authenticationService: AuthenticationService,
               public userService: UserService,
               private showProgress: ShowProgressService,
-              private apiInfoService: APIInfoService) {
+              private apiInfoService: APIInfoService,
+              private ravenErrorHandler: RavenErrorHandler,
+              private snackBar: MatSnackBar
+  ) {
     showProgress.toggleSidenav$.subscribe(
       toggle => {
         this.toggleProgressBar();
@@ -34,9 +39,12 @@ export class AppComponent implements OnInit {
     this.authenticationService.reloadUser();
     this.apiInfoService.readItems()
     .then((info: any) => {
+      this.ravenErrorHandler.setup(info.sentryDsn);
       this.apiInfo = info;
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      this.snackBar.open('Error on init', '', {duration: 3000});
+    });
   }
 
   hasWarning() {

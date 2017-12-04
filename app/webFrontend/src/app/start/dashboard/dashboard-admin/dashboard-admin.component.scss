@@ -1,0 +1,11 @@
+@import '../../../../variables';
+
+.courses {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.add-course-fab {
+  @include globalFabBtn;
+}

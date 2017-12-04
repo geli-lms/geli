@@ -1,0 +1,53 @@
+@import '../../../../variables';
+
+.container {
+  position: relative;
+}
+
+.fab {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+
+  .open-animation {
+    transition: transform 0.5s;
+  }
+
+  .icon-open {
+    transform: rotate(45deg);
+  }
+}
+
+.menu {
+  position: absolute;
+  bottom: 70px;
+  right: 40px;
+
+  transition: transform 0.5s, opacity 0.5s;
+  transform: scaleY(0);
+  transform-origin: bottom;
+  opacity: 0;
+
+  &.open {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+
+  /deep/ * {
+    @include mat-elevation(8);
+
+    color: map-get($app-primary, 'default');
+    background-color: map-get($app-primary, 'default-contrast');
+
+    cursor: pointer;
+    width: 250px;
+    border-radius: 20px;
+    padding: 10px 20px;
+    margin-top: 10px;
+
+    &:hover {
+      color: map-get($app-primary, 'default-contrast');
+      background-color: map-get($app-primary, 'default');
+    }
+  }
+}

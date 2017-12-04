@@ -1,6 +1,6 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {IFreeTextUnit} from '../../../../../../../shared/models/units/IFreeTextUnit';
-import {MdDialog, MdSnackBar} from '@angular/material';
+import {MatDialog, MatSnackBar} from '@angular/material';
 import {FreeTextUnitService} from '../../../shared/services/data.service';
 import {FreeTextUnit} from '../../../models/FreeTextUnit';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
@@ -26,8 +26,8 @@ export class FreeTextUnitFormComponent implements OnInit {
   private freeTextEditor: FreeTextUnitEditorComponent;
 
   constructor(private freeTextUnitService: FreeTextUnitService,
-              private snackBar: MdSnackBar,
-              public dialog: MdDialog) {
+              private snackBar: MatSnackBar,
+              public dialog: MatDialog) {
   }
 
   ngOnInit() {
@@ -58,7 +58,9 @@ export class FreeTextUnitFormComponent implements OnInit {
             this.snackBar.open('Free text unit saved', '', {duration: 3000});
             this.onDone();
           },
-          error => console.log(error)
+          error => {
+            this.snackBar.open('Couldn\'t save unit', '', {duration: 3000});
+          }
         );
     } else {
       // Update existing
@@ -69,18 +71,19 @@ export class FreeTextUnitFormComponent implements OnInit {
             this.snackBar.open('Free text unit saved', 'Update', {duration: 2000});
             this.onDone();
           },
-          error => console.log(error)
+          error => {
+            this.snackBar.open('Couldn\'t update unit', '', {duration: 3000});
+          }
         );
     }
   }
 
   openFullscreen(): void {
-    // TODO: Max-Width/-Height comes with later Material version
-    // maxWidth: '100vw',
-    // maxHeight: '100vh',
     const dialogRef = this.dialog.open(FreeTextUnitEditorDialog, {
       width: '94vw',
       height: '94vh',
+      maxWidth: '100vw',
+      maxHeight: '100vh',
       data: {
         markdown: this.freeTextEditor.markdown ? this.freeTextEditor.markdown : ''
       }

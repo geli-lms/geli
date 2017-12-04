@@ -2,25 +2,27 @@ import {Request} from 'express';
 import {
   Authorized, BadRequestError,
   Body,
-  CurrentUser, ForbiddenError,
+  CurrentUser, Delete, ForbiddenError,
   Get,
   JsonController, NotFoundError,
   Param,
   Post,
   Put,
-  Req,
+  Req, UnauthorizedError,
   UploadedFile,
   UseBefore
 } from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
+import * as errorCodes from '../config/errorCodes'
 
-import {IUserModel, User} from '../models/User';
 import {ICourse} from '../../../shared/models/ICourse';
 import {IUser} from '../../../shared/models/IUser';
 import {ObsCsvController} from './ObsCsvController';
 import {Course, ICourseModel} from '../models/Course';
+import {User} from '../models/User';
 import {WhitelistUser} from '../models/WhitelistUser';
 import {ICodeKataUnit} from '../../../shared/models/units/ICodeKataUnit';
+import emailService from '../services/EmailService';
 
 const multer = require('multer');
 import crypto = require('crypto');
@@ -53,6 +55,7 @@ export class CourseController {
     if (conditions.$or) {
       // Everyone is allowed to see free courses in overview
       conditions.$or.push({enrollType: 'free'});
+      conditions.$or.push({enrollType: 'accesskey'});
     }
 
     const courseQuery = Course.find(conditions)
@@ -137,9 +140,20 @@ export class CourseController {
   @Post('/')
   addCourse(@Body() course: ICourse, @Req() request: Request, @CurrentUser() currentUser: IUser) {
     course.courseAdmin = currentUser;
+    return Course.findOne({name: course.name})
+      .then((existingCourse) => {
+        if (existingCourse) {
+          throw new BadRequestError(errorCodes.errorCodes.course.duplicateName.code);
+        }
+        return new Course(course).save()
+          .then((c) => c.toObject());
+      });
+  }
 
-    return new Course(course).save()
-      .then((c) => c.toObject());
+  @Authorized(['teacher', 'admin'])
+  @Post('/mail')
+  sendMailToSelectedUsers(@Body() mailData: any) {
+    return emailService.sendFreeFormMail(mailData);
   }
 
   @Authorized(['student'])
@@ -157,16 +171,34 @@ export class CourseController {
                 e.firstName === currentUser.profile.firstName.toLowerCase()
                 && e.lastName === currentUser.profile.lastName.toLowerCase()
                 && e.uid === currentUser.uid).length <= 0) {
-              throw new ForbiddenError('Not allowed to join, you are not on whitelist.');
+              throw new ForbiddenError(errorCodes.errorCodes.course.notOnWhitelist.code);
             }
           });
         } else if (course.accessKey && course.accessKey !== data.accessKey) {
-          throw new ForbiddenError('Incorrect or missing access key');
+          throw new ForbiddenError(errorCodes.errorCodes.course.accessKey.code);
         }
 
         if (course.students.indexOf(currentUser._id) < 0) {
           course.students.push(currentUser);
 
+          return course.save().then((c) => c.toObject());
+        }
+
+        return course.toObject();
+      });
+  }
+
+  @Authorized(['student'])
+  @Post('/:id/leave')
+  leaveStudent(@Param('id') id: string, @Body() data: any, @CurrentUser() currentUser: IUser) {
+    return Course.findById(id)
+      .then(course => {
+        if (!course) {
+          throw new NotFoundError();
+        }
+        const index: number = course.students.indexOf(currentUser._id);
+        if (index  !== 0) {
+          course.students.splice(index, 1);
           return course.save().then((c) => c.toObject());
         }
 
@@ -181,7 +213,7 @@ export class CourseController {
     const name: string = file.originalname;
 
     if (!name.endsWith('.csv')) {
-      throw new TypeError('Wrong type allowed are just csv files.');
+      throw new TypeError(errorCodes.errorCodes.upload.type.notCSV.code);
     }
 
     // TODO: Never query all users!
@@ -204,7 +236,6 @@ export class CourseController {
         {courseAdmin: currentUser._id}
       ];
     }
-
     return Course.findOneAndUpdate(
       conditions,
       course,
@@ -212,4 +243,23 @@ export class CourseController {
     )
       .then((c) => c ? c.toObject() : undefined);
   }
+
+  @Authorized(['teacher', 'admin'])
+  @Delete('/:id')
+  async deleteCourse(@Param('id') id: string, @CurrentUser() currentUser: IUser) {
+    const course = await Course.findOne( {_id : id} );
+    if ( !course ) {
+      throw new NotFoundError();
+    }
+    const courseAdmin = await User.findOne({_id: course.courseAdmin});
+    if (course.teachers.indexOf(currentUser._id) !== -1 || courseAdmin.equals(currentUser._id.toString())
+      || currentUser.role === 'admin' ) {
+      course.remove();
+      return {result: true};
+    } else {
+      throw new ForbiddenError('Forbidden!');
+    }
+  }
 }
+
+

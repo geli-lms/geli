@@ -1,8 +1,9 @@
 import {Component, OnInit, Input} from '@angular/core';
-import {MdSnackBar} from '@angular/material';
+import {MatSnackBar} from '@angular/material';
 import {ActivatedRoute} from '@angular/router';
 import {ProgressService} from '../../shared/services/data/progress.service';
 import {IProgress} from '../../../../../../shared/models/IProgress';
+const knuth = require('knuth-shuffle').knuthShuffle;
 
 @Component({
   selector: 'app-task-unit',
@@ -17,7 +18,9 @@ export class TaskUnitComponent implements OnInit {
   validationMode = false;
   courseId: string;
 
-  constructor(private route: ActivatedRoute, private progressService: ProgressService, private snackBar: MdSnackBar) {
+  constructor(private route: ActivatedRoute,
+              private progressService: ProgressService,
+              private snackBar: MatSnackBar) {
   }
 
   ngOnInit() {
@@ -30,8 +33,8 @@ export class TaskUnitComponent implements OnInit {
       if (value && value.length > 0) {
         this.progress = (<IProgress>value[0]);
       }
-      console.log(this.progress);
     });
+    this.shuffleAnswers();
   }
 
   reset() {
@@ -41,6 +44,7 @@ export class TaskUnitComponent implements OnInit {
       });
     });
     this.validationMode = false;
+    this.shuffleAnswers();
   }
 
   isAnswerCorrect(answer) {
@@ -73,7 +77,15 @@ export class TaskUnitComponent implements OnInit {
         this.progress = savedProgress;
         this.snackBar.open('Progress has been saved', '', {duration: 3000});
       })
-      .catch(() => this.snackBar.open('An unknown error occurred', '', {duration: 3000}));
+      .catch((err) => {
+        this.snackBar.open(`An error occurred: ${err.json().message}`, '', {duration: 3000})
+      });
     }
+  }
+
+  shuffleAnswers() {
+    this.taskUnit.tasks.forEach((task) => {
+      knuth(task.answers);
+    });
   }
 }

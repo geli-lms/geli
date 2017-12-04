@@ -1,15 +1,27 @@
 import {
+  Authorized,
   BadRequestError, Body, CurrentUser, Get, JsonController, Param, Post, Put,
   UseBefore
 } from 'routing-controllers';
+import * as moment from 'moment';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
-import {Progress} from '../models/Progress';
-import {IProgress} from '../../../shared/models/IProgress';
+import {IProgressModel, Progress} from '../models/Progress';
 import {IUser} from '../../../shared/models/IUser';
+import {Unit} from '../models/units/Unit';
+import {UnitClassMapper} from '../utilities/UnitClassMapper';
 
 @JsonController('/progress')
 @UseBefore(passportJwtMiddleware)
 export class ProgressController {
+  private static async getUnit(unitId: string) {
+    return (await Unit.findById(unitId)).toObject();
+  }
+
+  private static checkDeadline(unit: any) {
+    if (unit.deadline && moment(unit.deadline).isBefore()) {
+      throw new BadRequestError('Past deadline, no further update possible');
+    }
+  }
 
   @Get('/units/:id')
   getUnitProgress(@Param('id') id: string) {
@@ -30,21 +42,29 @@ export class ProgressController {
   }
 
   @Post('/')
-  createProgress(@Body() data: any, @CurrentUser() currentUser?: IUser) {
+  async createProgress(@Body() data: any, @CurrentUser() currentUser?: IUser) {
     // discard invalid requests
     if (!data.course || !data.unit || !currentUser) {
       throw new BadRequestError('progress need fields course, user and unit');
     }
+    const unit: any = await ProgressController.getUnit(data.unit);
+    ProgressController.checkDeadline(unit);
 
     data.user = currentUser;
 
-    return new Progress(data).save()
-      .then((progress) => progress.toObject());
+    const progressClass = UnitClassMapper.getProgressClassForUnit(unit);
+    const progress = await new progressClass(data).save();
+
+    return progress.toObject();
   }
 
   @Put('/:id')
-  updateCodeKataUnit(@Param('id') id: string, @Body() unit: IProgress) {
-    return Progress.findByIdAndUpdate(id, unit)
-      .then(u => u.toObject());
+  async updateProgress(@Param('id') id: string, @Body() data: any) {
+    const unit: any = await ProgressController.getUnit(data.unit);
+    ProgressController.checkDeadline(unit);
+    const progressClass = UnitClassMapper.getProgressClassForUnit(unit);
+    const updatedProgress = await progressClass.findByIdAndUpdate(id, data, {'new': true});
+
+    return updatedProgress.toObject();
   }
 }

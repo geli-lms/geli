@@ -1,4 +1,4 @@
-import {Body, Post, JsonController, UseBefore, Put, Param, Authorized} from 'routing-controllers';
+import {Body, Post, JsonController, UseBefore, Put, Param, Authorized, BadRequestError} from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import {UnitBaseController} from './UnitBaseController';
 import {CodeKataUnit} from '../models/units/CodeKataUnit';
@@ -15,6 +15,7 @@ export class CodeKataUnitController extends UnitBaseController {
     this.checkPostParam(data);
 
     data.model = this.splitCodeAreas(data.model);
+    this.validateKata(data.model);
 
     return new CodeKataUnit(data.model).save()
       .then((savedCodeKataUnit) => {
@@ -26,8 +27,25 @@ export class CodeKataUnitController extends UnitBaseController {
   @Put('/:id')
   updateCodeKataUnit(@Param('id') id: string, @Body() unit: ICodeKataUnit) {
     unit = this.splitCodeAreas(unit);
+    this.validateKata(unit);
     return CodeKataUnit.findByIdAndUpdate(id, unit, {new: true})
       .then(u => u.toObject());
+  }
+
+  private validateKata(unit: ICodeKataUnit) {
+    if (!unit.definition || !unit.code || !unit.test) {
+      throw new BadRequestError('A Kata must at least contain 3 areas');
+    }
+
+    if (!unit.test.match(new RegExp('function(.|\t)*validate\\(\\)(.|\n|\t)*{(.|\n|\t)*}', 'gmi'))) {
+      throw new BadRequestError('The test section must contain a validate function');
+    }
+    if (!unit.test.match(new RegExp('function(.|\t)*validate\\(\\)(.|\n|\t)*{(.|\n|\t)*return(.|\n|\t)*}', 'gmi'))) {
+      throw new BadRequestError('The validate function must return something');
+    }
+    if (!unit.test.match(new RegExp('validate\\(\\);', 'gmi'))) {
+      throw new BadRequestError('The test section must call the validate function');
+    }
   }
 
   private splitCodeAreas(unit: ICodeKataUnit): ICodeKataUnit {
@@ -55,7 +73,7 @@ export class CodeKataUnitController extends UnitBaseController {
 
   private findLastIndexOf(source: string, value: string): number {
     const regex = new RegExp(value, '');
-    let i: number = -1;
+    let i = -1;
 
     // limit execution time (prevent deadlocks)
     let j = 10;

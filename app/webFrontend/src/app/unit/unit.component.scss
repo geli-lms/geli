@@ -4,9 +4,22 @@
   position: relative;
 }
 
-.unit-card-title{
+.unit-card-title {
   font-size: medium;
 }
-.unit-card-subtitle{
+
+.unit-card-subtitle {
   font-size: small;
+}
+
+.deadline {
+  float: right;
+}
+
+.orange {
+  color: #FF9800;
+}
+
+.red {
+  color: #F44336
 }

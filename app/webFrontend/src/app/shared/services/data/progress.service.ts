@@ -32,10 +32,3 @@ export class ProgressService extends DataService {
     return promise;
   }
 }
-
-@Injectable()
-export class CodeKataProgressService extends DataService {
-  constructor(public backendService: BackendService) {
-    super('progress/code-katas/', backendService);
-  }
-}

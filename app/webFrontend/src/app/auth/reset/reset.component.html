@@ -1,37 +1,30 @@
-<md-card *ngIf="hasToken === false" class="reset-card">
-  <md-card-header>
-    <md-card-title><h1>Request password reset</h1></md-card-title>
-  </md-card-header>
+<mat-card *ngIf="hasToken === false" class="reset-card">
+  <mat-card-header>
+    <mat-card-title><h1>Request password reset</h1></mat-card-title>
+  </mat-card-header>
 
-  <md-card-content>
+  <mat-card-content>
     <form name="form" (ngSubmit)="requestReset()" [formGroup]="resetForm">
-      <md-input-container>
-        <input mdInput formControlName="email" placeholder="Mail address">
-      </md-input-container>
+      <mat-form-field>
+        <input matInput formControlName="email" placeholder="Mail address">
+      </mat-form-field>
 
-      <button md-raised-button color="primary" class="md-button" type="submit" [disabled]="loading">Submit</button>
+      <button mat-raised-button color="primary" class="mat-button" type="submit" [disabled]="loading">Submit</button>
       <br>
     </form>
-  </md-card-content>
-</md-card>
-<md-card *ngIf="hasToken === true" class="reset-card">
-  <md-card-header>
-    <md-card-title><h1>Reset Password</h1></md-card-title>
-  </md-card-header>
+  </mat-card-content>
+</mat-card>
+<mat-card *ngIf="hasToken === true" class="reset-card">
+  <mat-card-header>
+    <mat-card-title><h1>Reset Password</h1></mat-card-title>
+  </mat-card-header>
 
-  <md-card-content>
+  <mat-card-content>
     <form name="form" (ngSubmit)="reset()" [formGroup]="resetForm">
-      <md-input-container>
-        <input mdInput type="password" formControlName="password" placeholder="Password"/>
-      </md-input-container>
-      <md-input-container>
-        <input mdInput type="password" formControlName="confirmPassword" placeholder="Confirm password"/>
-        <div class="form-text error" *ngIf="resetForm.controls.confirmPassword.touched">
-          <div *ngIf="resetForm.hasError('mismatchedPasswords')">Passwords do not match.</div>
-        </div>
-      </md-input-container>
 
-      <button md-raised-button color="primary" type="submit" [disabled]="loading">Reset</button>
+      <app-password-input [form]="resetForm"></app-password-input>
+
+      <button mat-raised-button color="primary" type="submit" [disabled]="loading">Reset</button>
     </form>
-  </md-card-content>
-</md-card>
+  </mat-card-content>
+</mat-card>

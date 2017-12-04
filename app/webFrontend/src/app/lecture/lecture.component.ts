@@ -12,10 +12,15 @@ export class LectureComponent implements OnInit {
 
   @Input() course: ICourse;
   @Input() lecture: ILecture;
-
+  opened: boolean;
   constructor(public userService: UserService) {
+    this.opened = true;
   }
 
   ngOnInit() {
+  }
+
+  toggleOpen() {
+    this.opened = !this.opened;
   }
 }

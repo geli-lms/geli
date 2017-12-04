@@ -1,12 +1,4 @@
-<app-course-container [title]="'My Courses'" [courses]="myCourses" [expand]="true" (onEnroll)="enrollCallback()"></app-course-container>
-<app-course-container [title]="'Available Courses'" [courses]="availableCourses" [expand]="false" (onEnroll)="enrollCallback()"></app-course-container>
-
-<a md-fab *ngIf="userService.isTeacher() || userService.isAdmin()" class="add-course-fab"
-   routerLink="course/new" mdTooltip="Add course" mdTooltipPosition="left">
-  <md-icon>add</md-icon>
-</a>
-
-<!--<app-dashboard-student *ngIf="this.userService.isStudent()"></app-dashboard-student>-->
-<!--<app-dashboard-teacher *ngIf="this.userService.isTeacher()"></app-dashboard-teacher>-->
-<!--<app-dashboard-admin *ngIf="this.userService.isAdmin()"></app-dashboard-admin>-->
+<app-dashboard-student [allCourses]="allCourses" *ngIf="this.userService.isStudent()" (onLeave)="onUpdateCallback()" (onEnroll)="onUpdateCallback()"></app-dashboard-student>
+<app-dashboard-teacher [allCourses]="allCourses" *ngIf="this.userService.isTeacher()" (onEnroll)="onUpdateCallback()"></app-dashboard-teacher>
+<app-dashboard-admin [allCourses]="allCourses" *ngIf="this.userService.isAdmin()" (onEnroll)="onUpdateCallback()"></app-dashboard-admin>
 

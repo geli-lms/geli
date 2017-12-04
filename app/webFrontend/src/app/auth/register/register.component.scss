@@ -13,14 +13,15 @@
     text-transform: capitalize;
   }
 
-  .mat-input-container{
+  .mat-form-field,
+  .mat-radio-group {
     width: 100%;
   }
 
-  .div-change-role{
+  .div-change-role {
     margin-top: 10px;
     font-size: small;
-    .material-icons{
+    .material-icons {
       font-size: small;
       vertical-align: middle;
     }

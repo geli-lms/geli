@@ -1,13 +1,13 @@
-<h1 md-dialog-title>This course requires an access key</h1>
-<div md-dialog-content>Please enter the course's access key:</div>
+<h1 matDialogTitle>This course requires an access key</h1>
+<div mat-dialog-content>Please enter the course's access key:</div>
 <div>
-  <md-input-container class="full-width">
-    <input async mdInput type="password" id="accessKey" placeholder="access key" [(ngModel)]="accessKey"
+  <mat-form-field class="full-width">
+    <input async matInput type="password" id="accessKey" placeholder="access key" [(ngModel)]="accessKey"
            [ngModelOptions]="{standalone: true}">
-  </md-input-container>
+  </mat-form-field>
 </div>
-<div md-dialog-actions>
-  <button md-raised-button color="primary" (click)="dialogRef.close(accessKey)" style="margin-right: 10px">Continue
+<div mat-dialog-actions>
+  <button mat-raised-button color="primary" (click)="dialogRef.close(accessKey)" style="margin-right: 10px">Continue
   </button>
-  <button md-raised-button color="warn" (click)="dialogRef.close(null)">Discard</button>
+  <button mat-raised-button color="warn" (click)="dialogRef.close(null)">Discard</button>
 </div>

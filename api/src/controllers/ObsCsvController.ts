@@ -24,7 +24,6 @@ export class ObsCsvController {
           }
         ).on('end', () => {
           fs.unlinkSync(file.path);
-          console.log('File is parsed successfully.');
           resolve(buffer);
         }
       );
@@ -52,12 +51,12 @@ export class ObsCsvController {
     this.whitelistUser = [];
     const lines = buffer.split(/\r?\n|\r/);
     let actualLine = 0;
-    const userLines = lines.filter(e => e.split(';').length >= 3);
-    userLines.forEach(e => {
+    const userLines = lines.filter((line) => line.split(';').length >= 3);
+    userLines.forEach((singleLine) => {
         actualLine++;
-        const lastName = e.split(';')[0];
-        const firstName = e.split(';')[1];
-        const uid = e.split(';')[2];
+        const lastName = singleLine.split(';')[0];
+        const firstName = singleLine.split(';')[1];
+        const uid = singleLine.split(';')[2];
         if (firstName.length > 0 && lastName.length > 0 && uid.length > 0) {
           if (!isNaN(Number(firstName))) {
             throw new HttpError(400, 'First name was a number in line ' + actualLine + '.');
@@ -76,7 +75,6 @@ export class ObsCsvController {
         }
       }
     );
-    console.log('File was parsed successfully. There where ' + this.whitelistUser.length + ' user parsed in whitelist.');
   }
 
   /**
@@ -96,8 +94,8 @@ export class ObsCsvController {
       if (foundUsers.length > 0) {
         foundUser = foundUsers[0];
       }
-      if (foundUser != null && course.students.filter((e: any) =>
-        e.toString() === foundUser._id.toString()).length <= 0) {
+      if (foundUser != null && course.students.filter((student: any) =>
+        student.toString() === foundUser._id.toString()).length <= 0) {
         course.students.push(foundUser);
       }
     });
@@ -114,11 +112,11 @@ export class ObsCsvController {
       .then(() => {
       }));
     course.whitelist = [];
-    this.whitelistUser.forEach(e => {
+    this.whitelistUser.forEach((whiteListUser) => {
       const wUser = new WhitelistUser();
-      wUser.firstName = e.firstName;
-      wUser.lastName = e.lastName;
-      wUser.uid = e.uid;
+      wUser.firstName = whiteListUser.firstName;
+      wUser.lastName = whiteListUser.lastName;
+      wUser.uid = whiteListUser.uid;
       wUser.save().then(user => user.toObject());
       course.whitelist.push(wUser._id);
     });
