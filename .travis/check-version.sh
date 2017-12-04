@@ -11,6 +11,7 @@ echo
 echo "+++ Check if current version already used"
 echo
 
+# If is PR against master
 if [ "$TRAVIS_BRANCH" == "master" ] || [ "$TRAVIS_BRANCH" == "develop" ]; then
     if [ "$TRAVIS_PULL_REQUEST" -ne "false" ]; then
         . ${DIR}/_semver.sh
@@ -39,10 +40,10 @@ if [ "$TRAVIS_BRANCH" == "master" ] || [ "$TRAVIS_BRANCH" == "develop" ]; then
             fi
         done <<< "$EXISTING_TAGS"
 
-        echo "+ Everything is fine, have a great day :)"
+        echo "${GREEN}+ Everything is fine, have a great day :)${NC}"
         return 0
     else
-        echo -e "${YELLOW}+ WARNING: is NO pull request #$TRAVIS_PULL_REQUEST -> skipping${NC}";
+        echo -e "${YELLOW}+ WARNING: is NO pull request -> skipping${NC}";
     fi
 else
     echo -e "${YELLOW}+ WARNING: branch $TRAVIS_BRANCH is not whitelisted -> skipping version check${NC}";
