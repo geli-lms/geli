@@ -234,7 +234,12 @@ describe('Course', () => {
 
     it('should fail because the teacher is not in the course', async () => {
       const course = await Course.findOne({name: 'Computer Graphics'});
-      const user = await User.findOne({role: 'teacher'});
+      const allTeachersAndAdmins = course.teachers;
+      allTeachersAndAdmins.push(course.courseAdmin);
+      const user = await User.findOne( {$and: [
+        {role: 'teacher'},
+        {_id: {$nin: allTeachersAndAdmins}}
+      ]});
       return new Promise((resolve, reject) => {
         chai.request(app)
           .del(`${BASE_URL}/${course._id}`)
