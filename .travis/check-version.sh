@@ -13,7 +13,7 @@ echo
 
 # If is PR against master
 if [ "$TRAVIS_BRANCH" == "master" ] || [ "$TRAVIS_BRANCH" == "develop" ]; then
-    if [ "$TRAVIS_PULL_REQUEST" -ne "false" ]; then
+    if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
         . ${DIR}/_semver.sh
 
         EXISTING_TAGS=$( \
