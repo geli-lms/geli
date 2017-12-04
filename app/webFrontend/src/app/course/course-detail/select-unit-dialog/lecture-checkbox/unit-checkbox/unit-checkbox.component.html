@@ -2,3 +2,9 @@
   <span class="spacer"></span>
   <mat-checkbox [(ngModel)]="chkbox" (change)="onChange()" class="chkbox"></mat-checkbox>
 </mat-list-item>
+
+<ng-container *ngIf="files">
+  <mat-list *ngFor=" let unit of this.files">
+    <app-upload-unit-checkbox ></app-upload-unit-checkbox>
+  </mat-list>
+</ng-container>

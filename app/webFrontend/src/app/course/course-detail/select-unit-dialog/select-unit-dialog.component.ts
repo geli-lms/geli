@@ -41,6 +41,8 @@ export class SelectUnitDialogComponent {
   }
 
   async downloadAndClose() {
+    // Iterate through structure, build json with positive bool values.
+
     if (this.selectedUnitsService.unitIds.length > 0) {
       const dl = {course: this.course.name, lectures: [], units: this.selectedUnitsService.getSelectedData()};
       const result = await this.downloadReq.postDownloadReqForCourse(dl);

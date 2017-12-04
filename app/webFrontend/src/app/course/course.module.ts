@@ -15,6 +15,7 @@ import { UnitCheckboxComponent } from './course-detail/select-unit-dialog/lectur
 import {DuplicationService, ExportService, ImportService} from '../shared/services/data.service';
 import {SaveFileService} from '../shared/services/save-file.service';
 import {ReportModule} from '../report/report.module';
+import { UploadUnitCheckboxComponent } from './course-detail/select-unit-dialog/lecture-checkbox/unit-checkbox/upload-unit-checkbox/upload-unit-checkbox.component';
 
 @NgModule({
   imports: [
@@ -35,6 +36,7 @@ import {ReportModule} from '../report/report.module';
     SelectUnitDialogComponent,
     LectureCheckboxComponent,
     UnitCheckboxComponent,
+    UploadUnitCheckboxComponent,
   ],
   entryComponents: [
     SelectUnitDialogComponent,
