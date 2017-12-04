@@ -8,7 +8,6 @@ export class AboutController {
   getDependencies() {
     return fs.readJson('nlf-licenses.json')
       .then((data) => {
-        console.log(typeof data.name);
         if (typeof data.name !== 'undefined' && data.name === 'Error') {
           return new HttpError(500, 'Licensefile not found');
         }
