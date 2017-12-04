@@ -38,13 +38,12 @@ if [ "$TRAVIS_BRANCH" == "master" ] || [ "$TRAVIS_BRANCH" == "develop" ]; then
                 # Check if same
                 if [[ $? == 0 ]]; then
                     echo -e "${RED}+ ERROR: Version '$line' already exists on DockerHub${NC}"
-                    return 1
+                    exit 1
                 fi
             fi
         done <<< "$EXISTING_TAGS"
 
         echo -e "${GREEN}+ Everything is fine, have a great day :)${NC}"
-        return 0
     else
         echo -e "${YELLOW}+ WARNING: is NO pull request -> skipping${NC}";
     fi
