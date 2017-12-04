@@ -3,7 +3,7 @@ import {Server} from '../../src/server';
 import {FixtureLoader} from '../../fixtures/FixtureLoader';
 import {JwtUtils} from '../../src/security/JwtUtils';
 import {User} from '../../src/models/User';
-import {Course} from '../../src/models/Course';
+import {Course, ICourseModel} from '../../src/models/Course';
 import chaiHttp = require('chai-http');
 
 chai.use(chaiHttp);
@@ -202,4 +202,54 @@ describe('Course', () => {
       }).catch(done);
     });
   });
+
+  describe(`DELETE ${BASE_URL}`, () => {
+    it('should delete the Course', async () => {
+      const course = await Course.findOne({name: 'Computer Graphics'});
+      const user = await User.findOne({_id: course.courseAdmin});
+
+      return new Promise((resolve, reject) => {
+        chai.request(app)
+          .del(`${BASE_URL}/${course._id}`)
+          .set('Authorization', `JWT ${JwtUtils.generateToken(user)}`)
+          .end((err, res) => {
+            res.status.should.be.equal(200);
+            const deletedCourse = Course.findOne({name: 'Computer Graphics'});
+            resolve();
+          });
+      });
+    });
+
+    it('should fail because the user is not authorize', async () => {
+      const course = await Course.findOne({name: 'Computer Graphics'});
+      return new Promise((resolve, reject) => {
+        chai.request(app)
+          .del(`${BASE_URL}/${course._id}`)
+          .end((err, res) => {
+            res.status.should.be.equal(401);
+            resolve();
+          });
+      });
+    });
+
+    it('should fail because the teacher is not in the course', async () => {
+      const course = await Course.findOne({name: 'Computer Graphics'});
+      const user = await User.findOne({role: 'teacher'});
+      return new Promise((resolve, reject) => {
+        chai.request(app)
+          .del(`${BASE_URL}/${course._id}`)
+          .set('Authorization', `JWT ${JwtUtils.generateToken(user)}`)
+          .end((err, res) => {
+            res.status.should.be.equal(403);
+            resolve();
+          });
+      });
+    });
+  });
 });
+
+
+
+
+
+
