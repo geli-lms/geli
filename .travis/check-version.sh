@@ -12,7 +12,7 @@ echo "+++ Check if current version already used"
 echo
 
 if [ "$TRAVIS_BRANCH" == "master" ] || [ "$TRAVIS_BRANCH" == "develop" ]; then
-    if [ "$TRAVIS_PULL_REQUEST" == "true" ]; then
+    if [ "$TRAVIS_PULL_REQUEST" -ne "false" ]; then
         . ${DIR}/_semver.sh
 
         EXISTING_TAGS=$( \

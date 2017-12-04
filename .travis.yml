@@ -64,12 +64,12 @@ install:
   - cd ..
 
 script:
+  # check for versions
+  - .travis/check-version.sh
   # run license checker and write license.json / dependencies.ts
   - cd .travis
   - node license.js
   - cd ..
-  # check for versions
-  - .travis/check-version.sh
   # run backend-tests and return back to root for following steps
   - cd api
   - npm run test        # run backend test
