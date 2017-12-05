@@ -56,7 +56,7 @@ export class UserEditComponent implements OnInit {
   async getUserData() {
     try {
       const user = await this.userDataService.readSingleItem(this.id);
-      this.user = <IUser>user;
+      this.user = <any>user;
       this.userForm.patchValue({
         profile: {
           firstName: this.user.profile.firstName,
