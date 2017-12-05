@@ -25,8 +25,13 @@
     </button>
 
     <button mat-icon-button (click)="showReport(course._id)"
-            *ngIf="isCourseTeacherOrAdmin(course)">
+            *ngIf="isCourseTeacherOrAdmin(course) && course.active">
       <mat-icon>show_chart</mat-icon>
+    </button>
+
+    <button mat-icon-button (click)="showReport(course._id)"
+            *ngIf="isCourseTeacherOrAdmin(course) && !course.active" disabled>
+      <mat-icon color="warn">visibility_off</mat-icon>
     </button>
 
     <button mat-mini-fab *ngIf="isCourseTeacherOrAdmin(course) || isMemberOfCourse(course)"
