@@ -1,11 +1,13 @@
 #!/bin/bash
 
-PATH_BIN=".travis/node_modules/.bin/david"
-PATHS_TO_CHECK=(".travis" "api" "app/webFrontend")
+# Path to this file
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+# Path the script was called from
+IPWD="$(pwd)"
+# Import shared vars
+. ${DIR}/_shared-vars.sh
 
-RED='\033[0;31m'
-YELLOW='\033[0;33m'
-NC='\033[0m'
+PATHS_TO_CHECK=(".travis" "api" "app/webFrontend")
 
 # Functions
 function npm_package_is_installed {
@@ -26,17 +28,17 @@ echo
 # fi
 
 echo "+ checking if david is installed"
-cd .travis
+cd ${DIR}
 if [ $(npm_package_is_installed david) == 0 ]; then
   echo -e "${RED}+ ERROR: david is not installed, please add david to the .travis/package.json${NC}"
   exit 1
 fi
-cd ..
+cd ${IPWD}
 
 for i in "${PATHS_TO_CHECK[@]}"
 do
   echo "+ checking $i"
-  $PATH_BIN --package $i/package.json
+  ${BIN_PATH_FULL}/david --package $i/package.json
   echo
 done
 
