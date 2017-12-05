@@ -1,5 +1,6 @@
 import {IFileUnit} from '../../../../../../shared/models/units/IFileUnit';
 import {IFile} from '../../../../../../shared/models/IFile';
+import {ICourse} from '../../../../../../shared/models/ICourse';
 
 export class FileUnit implements IFileUnit {
   _id: any;
@@ -15,7 +16,8 @@ export class FileUnit implements IFileUnit {
   files: IFile[];
   fileUnitType: string;
 
-  constructor() {
+  constructor(_course: ICourse) {
+    this._course = _course;
     this.fileUnitType = 'file';
     this.progressable = false;
     this.weight = 0;

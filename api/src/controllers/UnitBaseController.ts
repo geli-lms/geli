@@ -1,6 +1,6 @@
 import {
   Body, Get, Put, Delete, Param, JsonController, UseBefore, NotFoundError, BadRequestError, Post,
-  Authorized, UploadedFile
+  Authorized, UploadedFile, Req
 } from 'routing-controllers';
 import fs = require('fs');
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
@@ -45,6 +45,10 @@ export class UnitBaseController {
   @Authorized(['teacher', 'admin'])
   @Post('/')
   addUnit(@UploadedFile('file', {options: uploadOptions}) file: any, @Body() data: any) {
+    if (file) {
+      data = JSON.parse(data.data);
+    }
+
     // discard invalid requests
     this.checkPostParam(data, file);
     return Unit.create(data.model)

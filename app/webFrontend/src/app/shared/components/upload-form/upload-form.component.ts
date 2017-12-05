@@ -31,16 +31,12 @@ export class UploadFormComponent implements OnInit {
   ngOnInit() {
     this.fileUploader = new FileUploader({
       url: this.uploadPath,
-      headers: [{
-        name: 'Authorization',
-        value: localStorage.getItem('token'),
-      }],
-      allowedMimeType: this.allowedMimeTypes,
-      disableMultipart: true
+      authToken: localStorage.getItem('token'),
+      allowedMimeType: this.allowedMimeTypes
     });
 
     this.fileUploader.onBuildItemForm = (fileItem: any, form: any) => {
-      form.append('data', JSON.stringify(this.additionalData));
+      form.append('data', JSON.stringify(this.additionalData))
     };
 
     this.fileUploader.onCompleteAll = () => {

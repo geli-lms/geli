@@ -51,7 +51,7 @@ export class FileUploadComponent implements OnInit {
 
   ngOnInit() {
     if (!this.model) {
-      this.model = new FileUnit();
+      this.model = new FileUnit(this.course);
     }
   }
 
