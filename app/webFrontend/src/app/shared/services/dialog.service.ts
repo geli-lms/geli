@@ -5,6 +5,7 @@ import {ConfirmDialog} from '../components/confirm-dialog/confirm-dialog.compone
 import {IUser} from '../../../../../../shared/models/IUser';
 import {UploadDialog} from '../components/upload-dialog/upload-dialog.component';
 import {FilepickerDialog} from '../components/filepicker-dialog/filepicker-dialog.component';
+import {WriteMailDialog} from '../components/write-mail-dialog/write-mail-dialog.component';
 
 @Injectable()
 export class DialogService {
@@ -55,6 +56,13 @@ export class DialogService {
 
     dialogRef = this.dialog.open(UploadDialog);
     dialogRef.componentInstance.user = user;
+
+    return dialogRef.afterClosed();
+  }
+
+  public writeMail(to: String) {
+    const dialogRef: MatDialogRef<WriteMailDialog> = this.dialog.open(WriteMailDialog);
+    dialogRef.componentInstance.to = to;
 
     return dialogRef.afterClosed();
   }
