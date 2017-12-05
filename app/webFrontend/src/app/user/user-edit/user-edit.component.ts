@@ -31,7 +31,7 @@ export class UserEditComponent implements OnInit {
               public dialogService: DialogService,
               public snackBar: MatSnackBar,
               private titleService: TitleService,
-              private cdRef: ChangeDetectorRef,) {
+              private cdRef: ChangeDetectorRef) {
     this.generateForm();
   }
 
