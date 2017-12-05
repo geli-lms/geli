@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
-YELLOW='\033[0;33m'
-NC='\033[0m'
+
+# Path to this file
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+# Path the script was called from
+IPWD="$(pwd)"
+# Import shared vars
+. ${DIR}/_shared-vars.sh
 
 echo
 echo "+++ Run automate deployment script. +++"
