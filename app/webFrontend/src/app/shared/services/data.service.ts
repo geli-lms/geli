@@ -249,7 +249,7 @@ export class CourseService extends DataService {
 
   sendMailToSelectedUsers(data: any): Promise<any> {
     return this.backendService
-        .post(this.apiPath + '/mail', JSON.stringify(data))
+        .post(this.apiPath + 'mail', JSON.stringify(data))
         .toPromise();
   }
 
