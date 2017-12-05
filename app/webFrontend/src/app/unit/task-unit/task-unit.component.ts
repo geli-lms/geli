@@ -18,10 +18,6 @@ export class TaskUnitComponent implements OnInit {
   validationMode = false;
   courseId: string;
 
-  static isAnswerCorrect(answer) {
-    return ((typeof answer.value === 'undefined' || !answer.value) && !answer.userAnswer) || (answer.value && answer.userAnswer);
-  }
-
   constructor(private route: ActivatedRoute,
               private progressService: ProgressService,
               private snackBar: MatSnackBar) {
@@ -51,6 +47,10 @@ export class TaskUnitComponent implements OnInit {
     this.shuffleAnswers();
   }
 
+  isAnswerCorrect(answer) {
+    return ((typeof answer.value === 'undefined' || !answer.value) && !answer.userAnswer) || (answer.value && answer.userAnswer);
+  }
+
   validate() {
     this.validationMode = true;
 
@@ -59,7 +59,7 @@ export class TaskUnitComponent implements OnInit {
     this.taskUnit.tasks.forEach((task) => {
       task.answers.forEach((answer) => {
         // One wrong answer will mark the TaskUnit as failed
-        if (!TaskUnitComponent.isAnswerCorrect(answer)) {
+        if (!this.isAnswerCorrect(answer)) {
           done = false;
         }
       });
