@@ -2,8 +2,9 @@
 
 <app-unit-general-info-form [model]="model"></app-unit-general-info-form>
 <app-upload-form [uploadPath]="uploadPath"
-                 [additionalData]="model"
-                 (onFileSelectedChange)="onFileSelectedChange($event)"></app-upload-form>
+                 [additionalData]="additionalUploadData"
+                 (onFileSelectedChange)="onFileSelectedChange($event)"
+                 (onFileUploaded)="onFileUploaded($event)"></app-upload-form>
 <p>
   <button mat-button (click)="onCancel()">Cancel</button>
   <button mat-button color="primary"

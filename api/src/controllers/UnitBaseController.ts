@@ -51,11 +51,16 @@ export class UnitBaseController {
 
     // discard invalid requests
     this.checkPostParam(data, file);
+    data.model = this.handleUploadedFile(file, data.model);
+
     return Unit.create(data.model)
     .then((createdUnit) => {
       return this.pushToLecture(data.lectureId, createdUnit);
     })
     .catch((err) => {
+      if (file) {
+        fs.unlinkSync(file.path);
+      }
       throw new BadRequestError(err);
     });
   }
@@ -137,5 +142,14 @@ export class UnitBaseController {
       }
       throw error;
     }
+  }
+
+  private handleUploadedFile(file: any, unit: IFileUnit) {
+    if (!unit.hasOwnProperty('files')) {
+      unit.files = []
+    }
+
+    unit.files.push({path: file.path, name: file.filename, alias: file.originalname});
+    return unit;
   }
 }

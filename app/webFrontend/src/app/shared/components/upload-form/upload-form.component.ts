@@ -21,6 +21,9 @@ export class UploadFormComponent implements OnInit {
   @Output()
   onFileSelectedChange = new EventEmitter();
 
+  @Output()
+  onFileUploaded = new EventEmitter();
+
   fileUploader: FileUploader;
 
   private first = true;
@@ -53,15 +56,31 @@ export class UploadFormComponent implements OnInit {
       if (this.first && responseObject._id && status === 200) {
         this.first = false;
         // all subsequent (if any) uploads will be added to this unit
+        this.onFileUploaded.emit();
         this.fileUploader.uploadAll();
       }
+    };
+
+    this.fileUploader.onSuccessItem = (item, response, status, headers) => {
+      const debug = 0;
     };
 
     this.fileUploader.onAfterAddingAll = (fileItems) => {
       this.onFileSelectedChange.emit(true);
     };
 
+    this.fileUploader.onErrorItem = (item, response, status, headers) => {
+      this.error = true;
+      // reset the error state to try again later
+      item.isError = false;
+      item.isUploaded = false;
+      this.snackBar.open(`${item._file.name} failed to upload`, '', {duration: 1000});
+    };
+
     this.fileUploader.clearQueue();
+    this.fileUploader.response.subscribe((res) => {
+      const debug = 0;
+    });
   }
 
   clearQueue() {

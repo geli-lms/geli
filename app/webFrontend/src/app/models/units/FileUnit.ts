@@ -18,6 +18,7 @@ export class FileUnit implements IFileUnit {
 
   constructor(_course: ICourse) {
     this._course = _course;
+    this.unitType = 'file';
     this.fileUnitType = 'file';
     this.progressable = false;
     this.weight = 0;

@@ -41,6 +41,8 @@ export class FileUploadComponent implements OnInit {
   first = true;
   error = false;
 
+  additionalUploadData: any;
+
   constructor(public snackBar: MatSnackBar,
               private unitService: UnitService,
               private ref: ChangeDetectorRef) {
@@ -53,13 +55,28 @@ export class FileUploadComponent implements OnInit {
     if (!this.model) {
       this.model = new FileUnit(this.course);
     }
+
+    this.additionalUploadData = {
+      lectureId: this.lecture._id,
+      model: this.model
+    }
   }
 
   onFileSelectedChange(event: boolean) {
     this.filesSelected = event;
   }
 
+  onFileUploaded(event: IFileUnit) {
+    this.additionalUploadData.model = event;
+  }
+
   uploadAll() {
+    this.additionalUploadData.model = {
+      ...this.model,
+      name: this.generalInfo.form.value.name,
+      description: this.generalInfo.form.value.description,
+    };
+
     this.uploadForm.uploadAll();
   }
 
