@@ -8,29 +8,28 @@
       {{course.description}}
     </p>
   </mat-card-content>
-  <mat-card-actions>
-    <button mat-icon-button *ngIf="this.userService.isStudent() && !this.isMemberOfCourse(course)"
+  <mat-card-actions *ngIf="this.userService.isStudent()">
+    <button mat-icon-button *ngIf="!this.isMemberOfCourse(course)"
             (click)="enroll()" matTooltip="Enroll">
       <mat-icon>add_circle_outline</mat-icon>
     </button>
 
-    <button mat-icon-button *ngIf="this.userService.isStudent() && this.isMemberOfCourse(course)"
+    <button mat-icon-button *ngIf="this.isMemberOfCourse(course)"
              (click)="leave()" matTooltip="Leave">
       <mat-icon>remove_circle_outline</mat-icon>
     </button>
-
-    <button mat-icon-button (click)="editCourse(course._id)"
-            *ngIf="isCourseTeacherOrAdmin(course)">
+  </mat-card-actions>
+  <mat-card-actions *ngIf="isCourseTeacherOrAdmin(course)">
+    <button mat-icon-button (click)="editCourse(course._id)">
       <mat-icon>mode_edit</mat-icon>
     </button>
 
-    <button mat-icon-button (click)="showReport(course._id)"
-            *ngIf="isCourseTeacherOrAdmin(course)">
+    <button mat-icon-button (click)="showReport(course._id)">
       <mat-icon>show_chart</mat-icon>
     </button>
 
     <button mat-icon-button (click)="showReport(course._id)"
-            *ngIf="isCourseTeacherOrAdmin(course) && !course.active" disabled>
+            *ngIf="!course.active" disabled>
       <mat-icon color="warn">visibility_off</mat-icon>
     </button>
 
