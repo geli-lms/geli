@@ -31,7 +31,7 @@ export class UserEditComponent implements OnInit {
               public dialogService: DialogService,
               public snackBar: MatSnackBar,
               private titleService: TitleService) {
-    this.generateForm();
+      this.generateForm();
   }
 
   showPwFields() {
