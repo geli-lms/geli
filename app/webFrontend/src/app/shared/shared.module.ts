@@ -11,6 +11,8 @@ import {MatFabMenuComponent} from './components/mat-fab-menu/mat-fab-menu.compon
 import {PasswordInputComponent} from './components/password-input/password-input.component';
 import {ExpandableDivComponent} from './components/expandable-div/expandable-div.component';
 import {ButtonSaveCancelComponent} from './components/button-save-cancel/button-save-cancel.component';
+import { UploadFormComponent } from './components/upload-form/upload-form.component';
+import {FileUploadModule} from 'ng2-file-upload';
 
 @NgModule({
   imports: [
@@ -18,6 +20,7 @@ import {ButtonSaveCancelComponent} from './components/button-save-cancel/button-
     FormsModule,
     ReactiveFormsModule,
     MaterialImportModule,
+    FileUploadModule
   ],
   declarations: [
     GravatarDirective,
@@ -29,6 +32,7 @@ import {ButtonSaveCancelComponent} from './components/button-save-cancel/button-
     BadgeComponent,
     ExpandableDivComponent,
     ButtonSaveCancelComponent,
+    UploadFormComponent,
   ],
   exports: [
     GravatarDirective,
@@ -42,6 +46,7 @@ import {ButtonSaveCancelComponent} from './components/button-save-cancel/button-
     BadgeComponent,
     ExpandableDivComponent,
     ButtonSaveCancelComponent,
+    UploadFormComponent,
   ]
 })
 export class SharedModule {

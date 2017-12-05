@@ -6,7 +6,7 @@ import {FreeTextUnitFormComponent} from './free-text-unit-form/free-text-unit-fo
 import {TaskUnitEditComponent} from './task-unit-edit/task-unit-edit.component';
 import {UnitFormComponent} from './unit-form.component';
 import {UnitGeneralInfoFormComponent} from './unit-general-info-form/unit-general-info-form.component';
-import {FileUploadComponent} from '../../upload/file-upload/file-upload.component';
+import {FileUploadComponent} from './file-upload/file-upload.component';
 import {VideoUploadComponent} from '../../upload/video-upload/video-upload.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {AceEditorModule} from 'ng2-ace-editor';

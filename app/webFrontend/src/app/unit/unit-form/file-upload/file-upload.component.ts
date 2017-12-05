@@ -1,12 +1,13 @@
 import {Component, OnInit, Input, ChangeDetectorRef, ViewChild} from '@angular/core';
 import {MatSnackBar} from '@angular/material';
 import {FileUploader, FileItem} from 'ng2-file-upload';
-import {ICourse} from '../../../../../../shared/models/ICourse';
-import {ILecture} from '../../../../../../shared/models/ILecture';
-import {IFileUnit} from '../../../../../../shared/models/units/IFileUnit';
-/* tslint:disable-next-line:max-line-length */
-import {UnitGeneralInfoFormComponent} from '../../unit/unit-form/unit-general-info-form/unit-general-info-form.component';
-import {UnitService} from '../../shared/services/data.service';
+import {ICourse} from '../../../../../../../shared/models/ICourse';
+import {ILecture} from '../../../../../../../shared/models/ILecture';
+import {IFileUnit} from '../../../../../../../shared/models/units/IFileUnit';
+import {UnitGeneralInfoFormComponent} from '../unit-general-info-form/unit-general-info-form.component';
+import {UnitService} from '../../../shared/services/data.service';
+import {FileUnit} from '../../../models/units/FileUnit';
+import {UploadFormComponent} from '../../../shared/components/upload-form/upload-form.component';
 
 @Component({
   selector: 'app-file-upload',
@@ -24,6 +25,9 @@ export class FileUploadComponent implements OnInit {
   @ViewChild(UnitGeneralInfoFormComponent)
   public generalInfo: UnitGeneralInfoFormComponent;
 
+  @ViewChild(UploadFormComponent)
+  public uploadForm: UploadFormComponent;
+
   uploader: FileUploader = new FileUploader({
     url: '/api/units/upload/file',
     headers: [{
@@ -31,6 +35,9 @@ export class FileUploadComponent implements OnInit {
       value: localStorage.getItem('token'),
     }]
   });
+
+  uploadPath = '/api/units';
+  filesSelected = false;
   first = true;
   error = false;
 
@@ -42,6 +49,21 @@ export class FileUploadComponent implements OnInit {
     };
   }
 
+  ngOnInit() {
+    if (!this.model) {
+      this.model = new FileUnit();
+    }
+  }
+
+  onFileSelectedChange(event: boolean) {
+    this.filesSelected = event;
+  }
+
+  uploadAll() {
+    this.uploadForm.uploadAll();
+  }
+
+  /*
   ngOnInit() {
     this.uploader.onBuildItemForm = (fileItem: any, form: any) => {
       form.append('name', this.generalInfo.form.value.name);
@@ -128,4 +150,5 @@ export class FileUploadComponent implements OnInit {
     }
     return false;
   }
+  */
 }

@@ -3,7 +3,7 @@ import {CodeKataUnitService, UnitService} from '../../../shared/services/data.se
 import {MatSnackBar} from '@angular/material';
 import {ICodeKataUnit} from '../../../../../../../shared/models/units/ICodeKataUnit';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
-import {CodeKataUnit} from '../../../models/CodeKataUnit';
+import {CodeKataUnit} from '../../../models/units/CodeKataUnit';
 import {UnitGeneralInfoFormComponent} from '../unit-general-info-form/unit-general-info-form.component';
 import {AceEditorComponent} from 'ng2-ace-editor';
 import 'brace';

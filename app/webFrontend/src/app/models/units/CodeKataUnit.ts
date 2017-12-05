@@ -1,5 +1,5 @@
-import {ICodeKataUnit} from '../../../../../shared/models/units/ICodeKataUnit';
-import {ICourse} from '../../../../../shared/models/ICourse';
+import {ICodeKataUnit} from '../../../../../../shared/models/units/ICodeKataUnit';
+import {ICourse} from '../../../../../../shared/models/ICourse';
 
 export class CodeKataUnit implements ICodeKataUnit {
   name: string;

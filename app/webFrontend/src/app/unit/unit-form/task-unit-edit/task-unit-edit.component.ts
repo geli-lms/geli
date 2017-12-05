@@ -3,7 +3,7 @@ import {TaskService, UnitService} from '../../../shared/services/data.service';
 import {Task} from '../../../models/Task';
 import {MatSnackBar} from '@angular/material';
 import {ITaskUnit} from '../../../../../../../shared/models/units/ITaskUnit';
-import {TaskUnit} from '../../../models/TaskUnit';
+import {TaskUnit} from '../../../models/units/TaskUnit';
 import {ITask} from '../../../../../../../shared/models/task/ITask';
 import {Answer} from '../../../models/Answer';
 import {ICourse} from '../../../../../../../shared/models/ICourse';

@@ -1,5 +1,5 @@
-import {ICourse} from '../../../../../shared/models/ICourse';
-import {IFreeTextUnit} from '../../../../../shared/models/units/IFreeTextUnit';
+import {ICourse} from '../../../../../../shared/models/ICourse';
+import {IFreeTextUnit} from '../../../../../../shared/models/units/IFreeTextUnit';
 
 export class FreeTextUnit implements IFreeTextUnit {
   name: string;

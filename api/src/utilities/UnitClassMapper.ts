@@ -39,12 +39,12 @@ export class UnitClassMapper {
   };
 
   private static getClassMappingForUnit(unit: IUnit): any {
-    const hasNoProgressClass = Object.keys(this.classMappings).indexOf(unit.type) === -1 ;
+    const hasNoProgressClass = Object.keys(this.classMappings).indexOf(unit.unitType) === -1 ;
     if (hasNoProgressClass) {
-      throw new InternalServerError(`No classmapping for type ${unit.type} available`);
+      throw new InternalServerError(`No classmapping for type ${unit.unitType} available`);
     }
 
-    return this.classMappings[unit.type];
+    return this.classMappings[unit.unitType];
   }
 
   public static getMongooseClassForUnit(unit: IUnit) {
@@ -56,7 +56,7 @@ export class UnitClassMapper {
   public static getProgressClassForUnit(unit: IUnit) {
     const classMapping = this.getClassMappingForUnit(unit);
     if (!classMapping || classMapping.progressClass === null) {
-      throw new InternalServerError(`No progress class for type ${unit.type} available`);
+      throw new InternalServerError(`No progress class for type ${unit.unitType} available`);
     }
 
     return classMapping.progressClass;

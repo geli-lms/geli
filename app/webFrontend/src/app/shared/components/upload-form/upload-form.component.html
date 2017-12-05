@@ -1,6 +1,4 @@
-<strong>Files</strong>
-
-<app-unit-general-info-form [model]="model"></app-unit-general-info-form>
+<!--
 <div *ngIf="model">
   <span *ngIf="model.files.length">Existing files:</span>
   <div *ngFor="let file of model.files;">
@@ -18,14 +16,15 @@
     </button>
   </div>
 </div>
+-->
 <div>
-  <input type="file" ng2FileSelect [uploader]="uploader" placeholder="Upload files" multiple/>
-  <button mat-button color="warn" (click)="uploader.clearQueue()">
+  <input type="file" ng2FileSelect [uploader]="fileUploader" placeholder="Upload files" multiple/>
+  <button mat-button *ngIf="this.fileUploader.queue.length" color="warn" (click)="clearQueue()">
     Remove all
   </button>
 </div>
 <div>
-  <div *ngFor="let item of uploader.queue">
+  <div *ngFor="let item of fileUploader.queue">
     <strong>{{ item?.file?.name }}</strong>
     <span *ngIf="item.isReady">(ready)</span>
     <span *ngIf="item.isUploading">(uploading...)</span>
@@ -36,13 +35,6 @@
 <div>
   Queue progress:
   <div>
-    <mat-progress-bar mode="determinate" [value]="uploader.progress"></mat-progress-bar>
+    <mat-progress-bar mode="determinate" [value]="fileUploader.progress"></mat-progress-bar>
   </div>
 </div>
-<p>
-  <button mat-button (click)="onCancel()">Cancel</button>
-  <button mat-button color="primary"
-          (click)="uploadAll()" [disabled]="(!uploader.getNotUploadedItems().length) || (!generalInfo.form.value.name)">
-    Upload
-  </button>
-</p>

@@ -1,6 +1,6 @@
-import {ITaskUnit} from '../../../../../shared/models/units/ITaskUnit';
-import {ITask} from '../../../../../shared/models/task/ITask';
-import {ICourse} from '../../../../../shared/models/ICourse';
+import {ITaskUnit} from '../../../../../../shared/models/units/ITaskUnit';
+import {ITask} from '../../../../../../shared/models/task/ITask';
+import {ICourse} from '../../../../../../shared/models/ICourse';
 
 export class TaskUnit implements ITaskUnit {
   name: string;

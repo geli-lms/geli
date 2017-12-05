@@ -1,5 +1,5 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
-import {CodeKataUnit} from '../../models/CodeKataUnit';
+import {CodeKataUnit} from '../../models/units/CodeKataUnit';
 import {MatSnackBar} from '@angular/material';
 import {ProgressService} from 'app/shared/services/data/progress.service';
 import {ICodeKataProgress} from '../../../../../../shared/models/ICodeKataProgress';

@@ -23,6 +23,10 @@ const fileUnitSchema = new mongoose.Schema({
       },
     }
   ],
+  fileUnitType: {
+    type: String,
+    required: true
+  }
 }, {
   toObject: {
     transform: function (doc: any, ret: any) {

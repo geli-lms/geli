@@ -2,7 +2,7 @@ import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {IFreeTextUnit} from '../../../../../../../shared/models/units/IFreeTextUnit';
 import {MatDialog, MatSnackBar} from '@angular/material';
 import {FreeTextUnitService, UnitService} from '../../../shared/services/data.service';
-import {FreeTextUnit} from '../../../models/FreeTextUnit';
+import {FreeTextUnit} from '../../../models/units/FreeTextUnit';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
 import {UnitGeneralInfoFormComponent} from '../unit-general-info-form/unit-general-info-form.component';
 import {FreeTextUnitEditorComponent} from './free-text-unit-editor/free-text-unit-editor.component';
