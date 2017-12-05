@@ -22,26 +22,27 @@ function check_dockerhub_major {
         | awk -F: '{print $3}' \
         )
 
-    while read -r line; do
+    while read -r LINE; do
         # Check if line beginns with a "v"
-        if [[ $line == v* ]]; then
+        if [[ $LINE == v* ]]; then
             local MAJ=0; local MIN=0; local PAT=0; local SPE=""
-            semverParseInto "$line" MAJ MIN PAT SPE
+            semverParseInto "$LINE" MAJ MIN PAT SPE
 
             # Check if same major
             if [[ "$REAL_MAJOR" == "v$MAJ" ]]; then
-                semverGT "$line" "$TRAVIS_TAG"
+                semverGT "$LINE" "$TRAVIS_TAG"
                 
                 # Check if current line was bigger
                 if [[ $? == 0 ]]; then
-                    echo "+ found bigger MINOR: $line > $TRAVIS_TAG"
+                    echo "+ found bigger MINOR: $LINE > $TRAVIS_TAG"
+                    echo -e "${YELLOW}+ INFO: didn't tag major $REAL_MAJOR, because there is a higher minor $MAJ.$MIN${NC}"
                     return 1
                 fi
             else
-                echo "+ skipping $line, not same MAJOR"
+                echo "+ skipping $LINE, not same MAJOR"
             fi
         else
-            echo "+ skipping DockerHub-Tag: $line"
+            echo "+ skipping DockerHub-Tag: $LINE"
         fi
     done <<< "$EXISTING_TAGS"
 
@@ -61,9 +62,9 @@ if [ "$TRAVIS_BRANCH" == "master" ] || [ "$TRAVIS_BRANCH" == "develop" ]; then
     
     echo "+ publish docker images";
     docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
-    echo "+ => tagged: latest"
+    echo "+ => tagging: latest"
     tag_and_push_api_and_web "latest"
-    echo "+ => tagged: ${TRAVIS_BRANCH}"
+    echo "+ => tagging: ${TRAVIS_BRANCH}"
     tag_and_push_api_and_web ${TRAVIS_BRANCH}
   else
     echo -e "${YELLOW}+ WARNING: pull request #$TRAVIS_PULL_REQUEST -> skipping docker build and publish${NC}";
@@ -74,12 +75,12 @@ else
     echo "+ build docker images";
     echo "+ prune dev-dependencies"
     ( cd api && npm prune --production )
-    docker build -t hdafbi/geli-api:$TRAVIS_TAG -f .docker/api/Dockerfile .
-    docker build -t hdafbi/geli-web-frontend:$TRAVIS_TAG -f .docker/web-frontend/Dockerfile .
+    docker build -t hdafbi/geli-api:latest -f .docker/api/Dockerfile .
+    docker build -t hdafbi/geli-web-frontend:latest -f .docker/web-frontend/Dockerfile .
     
     echo "+ publish docker images";
     docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
-    echo "+ => tagged: ${TRAVIS_TAG}"
+    echo "+ => tagging: ${TRAVIS_TAG}"
     tag_and_push_api_and_web ${TRAVIS_TAG}
 
     echo "+ retrieve semver-parts of tag"
@@ -95,14 +96,13 @@ else
         echo -e "${YELLOW}+ WARNING: will NOT tag Major '${REAL_MAJOR}' and Minor '${REAL_MINOR}', only the full tag '${TRAVIS_TAG}'${NC}"
     else
         echo "+ tag images"
+        echo "+ check if we can tag the Major"
         check_dockerhub_major
         if [ $? == 0 ]; then
-            echo "+ => tagged Major: ${REAL_MAJOR}"
+            echo "+ => tagging Major: ${REAL_MAJOR}"
             tag_and_push_api_and_web ${REAL_MAJOR}
-        else
-            echo -e "${YELLOW}+ INFO: didn't tag major $REAL_MAJOR, because there is a higher minor ${REAL_MAJOR}.*"
         fi
-        echo "+ => tagged Minor: ${REAL_MINOR}"
+        echo "+ => tagging Minor: ${REAL_MINOR}"
         tag_and_push_api_and_web ${REAL_MINOR}
     fi
   else
