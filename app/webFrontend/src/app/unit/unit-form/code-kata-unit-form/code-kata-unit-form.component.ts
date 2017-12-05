@@ -128,7 +128,7 @@ export class CodeKataUnitFormComponent implements OnInit {
 
 // refactor this to use the same as in code-kata-unit
   validate() {
-    if (!this.validateStructure) {
+    if (!this.validateStructure()) {
       return false;
     }
 
