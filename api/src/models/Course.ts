@@ -130,10 +130,16 @@ courseSchema.statics.importJSON = async function (course: ICourse, admin: IUser)
   course.lectures = [];
 
   try {
-    const isCourseDuplicated = (await Course.findOne({name: course.name})) !== null;
-    if (isCourseDuplicated) {
-      course.name = course.name + ' (copy)';
-    }
+    const origName = course.name;
+    let isCourseDuplicated = false;
+    let i = 0;
+    do {
+      // 1. Duplicate -> 'name (copy)', 2. Duplicate -> 'name (copy 2)', 3. Duplicate -> 'name (copy 3)', ...
+      course.name = origName + ((i > 0) ? ' (copy' + ((i > 1) ? ' ' + i : '') + ')' : '');
+      isCourseDuplicated = (await Course.findOne({name: course.name})) !== null;
+      console.log(course.name + ' -> ' + ((isCourseDuplicated) ? 'Duplicate' : 'OK'));
+      i++;
+    } while (isCourseDuplicated);
     const savedCourse = await new Course(course).save();
     for (const lecture of lectures) {
       await Lecture.schema.statics.importJSON(lecture, savedCourse._id);
