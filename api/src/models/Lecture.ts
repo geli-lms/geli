@@ -60,15 +60,16 @@ lectureSchema.methods.exportJSON = async function() {
   const units: Array<mongoose.Types.ObjectId>  = obj.units;
   obj.units = [];
 
-  obj.units = await Promise.all(units.map((unitId: mongoose.Types.ObjectId) => {
-    return Unit.findById(unitId).then((unit: IUnitModel) => {
-      if (Unit) {
-        return unit.exportJSON();
-      } else {
-        winston.log('warn', 'unit(' + unitId + ') was referenced by lecture(' + this._id + ') but does not exist anymore');
-      }
-    });
-  }));
+  for (const unitId of units) {
+    const unit: IUnitModel = await Unit.findById(unitId);
+    if (unit) {
+      const unitExport = await unit.exportJSON();
+      obj.units.push(unitExport);
+    } else {
+      winston.log('warn', 'unit(' + unitId + ') was referenced by lecture(' + this._id + ') but does not exist anymore');
+    }
+  }
+
   return obj;
 };
 
@@ -84,12 +85,13 @@ lectureSchema.statics.importJSON = async function(lecture: ILecture, courseId: s
     course.lectures.push(savedLecture);
     await course.save();
 
-    await Promise.all(units.map((unit: IUnit) => {
+    for (const unit of units) {
       const unitTypeClass = UnitClassMapper.getMongooseClassForUnit(unit);
-      return unitTypeClass.importJSON(unit, courseId, savedLecture._id);
-    }));
+      await unitTypeClass.schema.statics.importJSON(unit, courseId, savedLecture._id);
+    }
+    const newLecture: ILectureModel = await Lecture.findById(savedLecture._id);
 
-    return (await Lecture.findById(savedLecture._id)).toObject();
+    return newLecture.toObject();
   } catch (err) {
     const newError = new InternalServerError('Failed to import lecture');
     newError.stack += '\nCaused by: ' + err.message + '\n' + err.stack;
