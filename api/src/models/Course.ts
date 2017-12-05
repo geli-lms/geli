@@ -5,6 +5,7 @@ import {ILectureModel, Lecture} from './Lecture';
 import {ILecture} from '../../../shared/models/ILecture';
 import {InternalServerError} from 'routing-controllers';
 import {IUser} from '../../../shared/models/IUser';
+import * as winston from 'winston';
 
 interface ICourseModel extends ICourse, mongoose.Document {
   exportJSON: () => Promise<ICourse>;
@@ -101,11 +102,16 @@ courseSchema.methods.exportJSON = async function () {
   const lectures: Array<mongoose.Types.ObjectId> = obj.lectures;
   obj.lectures = [];
 
-  obj.lectures = await Promise.all(lectures.map((lectureId: mongoose.Types.ObjectId) => {
-    return Lecture.findById(lectureId).then((lecture: ILectureModel) => {
-      return lecture.exportJSON();
-    });
-  }));
+  for (const lectureId of lectures) {
+    const lecture: ILectureModel = await Lecture.findById(lectureId);
+    if (lecture) {
+      const lectureExport = await lecture.exportJSON();
+      obj.lectures.push(lectureExport);
+    } else {
+      winston.log('warn', 'lecture(' + lectureId + ') was referenced by course(' + this._id + ') but does not exist anymore');
+    }
+  }
+
   return obj;
 };
 
@@ -126,11 +132,12 @@ courseSchema.statics.importJSON = async function (course: ICourse, admin: IUser)
       course.name = course.name + ' (copy)';
     }
     const savedCourse = await new Course(course).save();
-    await Promise.all(lectures.map((lecture: ILecture) => {
-      return Lecture.importJSON(lecture, savedCourse._id);
-    }));
+    for (const lecture of lectures) {
+      await Lecture.schema.statics.importJSON(lecture, savedCourse._id);
+    }
+    const newCourse: ICourseModel = await Course.findById(savedCourse._id);
 
-    return (await Course.findById(savedCourse._id)).toObject();
+    return newCourse.toObject();
   } catch (err) {
     const newError = new InternalServerError('Failed to import course');
     newError.stack += '\nCaused by: ' + err.message + '\n' + err.stack;
