@@ -48,6 +48,8 @@ fileUnitSchema.pre('remove', function(next: () => void) {
   next();
 });
 
+// TODO: Implement pre('findOneAndUpdate') and / or pre('update') for file cleanups
+
 fileUnitSchema.statics.importJSON = async function(unit: IFileUnit, courseId: string, lectureId: string) {
   unit._course = courseId;
 

@@ -1,7 +1,7 @@
 <strong>Files</strong>
 
 <app-unit-general-info-form [model]="model"></app-unit-general-info-form>
-<app-upload-form [uploadPath]="uploadPath"
+<app-upload-form [(uploadPath)]="uploadPath"
                  [additionalData]="additionalUploadData"
                  (onFileSelectedChange)="onFileSelectedChange($event)"
                  (onFileUploaded)="onFileUploaded($event)"></app-upload-form>

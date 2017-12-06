@@ -67,6 +67,7 @@ export class UnitBaseController {
 
   @Put('/:id')
   updateUnit(@UploadedFile('file', {options: uploadOptions}) file: any, @Param('id') id: string, @Body() unit: IUnit) {
+    // TODO: Complete PUT Implementation
     return Unit.findById(id).then((oldUnit: IUnit) => {
       if (!oldUnit) {
         throw new NotFoundError();

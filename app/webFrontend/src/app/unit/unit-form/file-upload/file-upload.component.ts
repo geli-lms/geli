@@ -68,8 +68,8 @@ export class FileUploadComponent implements OnInit {
 
   onFileUploaded(event: IFileUnit) {
     this.model = event;
-    this.additionalUploadData.model = this.model
-    this.uploadForm.uploadPath += '/' + this.model._id;
+    this.additionalUploadData.model = this.model;
+    this.uploadPath += '/' + this.model._id;
   }
 
   uploadAll() {

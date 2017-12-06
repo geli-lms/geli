@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {FileUploader} from 'ng2-file-upload';
 import {MatSnackBar} from '@angular/material';
 
@@ -7,7 +7,7 @@ import {MatSnackBar} from '@angular/material';
   templateUrl: './upload-form.component.html',
   styleUrls: ['./upload-form.component.scss']
 })
-export class UploadFormComponent implements OnInit {
+export class UploadFormComponent implements OnInit, OnChanges {
 
   @Input()
   uploadPath: string;
@@ -45,6 +45,10 @@ export class UploadFormComponent implements OnInit {
     this.fileUploader.onBeforeUploadItem = (fileItem) => {
       if (!this.first) {
         fileItem.method = 'PUT';
+
+        if (fileItem.url !== this.uploadPath) {
+          fileItem.url = this.uploadPath;
+        }
       }
     };
 
@@ -63,7 +67,6 @@ export class UploadFormComponent implements OnInit {
         this.first = false;
         // all subsequent (if any) uploads will be added to this unit
         this.onFileUploaded.emit(responseObject);
-        this.fileUploader.uploadAll();
       }
     };
 
@@ -80,9 +83,12 @@ export class UploadFormComponent implements OnInit {
     };
 
     this.fileUploader.clearQueue();
-    this.fileUploader.response.subscribe((res) => {
-      const debug = 0;
-    });
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.hasOwnProperty('uploadPath') && !this.first) {
+      this.fileUploader.uploadAll();
+    }
   }
 
   clearQueue() {
