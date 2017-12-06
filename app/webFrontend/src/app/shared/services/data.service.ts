@@ -438,5 +438,14 @@ export class DownloadReq extends DataService {
         },
         error => reject(error) );
     });
+    }
+
+   getFile(id: string) {
+     return new Promise((resolve, reject) => {
+       this.backendService.get(this.apiPath + id).subscribe( (responseItem: any) => {
+           resolve(responseItem);
+         },
+         error => reject(error) );
+     });
+   }
   }
-}

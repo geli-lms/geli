@@ -148,7 +148,7 @@ export class CourseEditComponent implements OnInit {
     try {
       const courseJSON = await this.exportService.exportCourse(this.courseOb);
 
-      this.saveFileService.save(this.courseOb.name, JSON.stringify(courseJSON, null, 2));
+      this.saveFileService.save(this.courseOb.name, JSON.stringify(courseJSON, null, 2),'.json','application/json','text/json');
     } catch (err) {
       this.snackBar.open('Export course failed ' + err.json().message, 'Dismiss');
     }

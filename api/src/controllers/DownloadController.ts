@@ -3,9 +3,9 @@ const archiver = require('archiver');
 import crypto = require('crypto');
 
 const appRoot = require('app-root-path');
-
+import {Response} from "express";
 import {
-  Body, Post, JsonController, NotFoundError, UseBefore
+  Body, Post, Get, Header, NotFoundError, ContentType, OnUndefined, UseBefore, Param, Res, Controller
 } from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 
@@ -23,14 +23,28 @@ import {VideoUnit} from '../models/units/VideoUnit';
 import {IVideoUnit} from '../../../shared/models/units/IVideoUnit';
 import {Task} from '../models/Task';
 
-@JsonController('/download')
+@Controller('/download')
 @UseBefore(passportJwtMiddleware)
 export class DownloadController {
 
-  @Post('/')
-  async addTask(@Body() data: IDownload) {
+  @Get('/:id')
+  @ContentType('file/zip')
+  @OnUndefined(200)
+  async getArchivedFile(@Param('id') id: string, @Res() response: Response) {
+    const filePath = appRoot + '/temp/' + id + '.zip';
 
-    if ( data.units.length === 0) {
+    response.download(filePath, 'id.zip', function(err) {
+      if (!err) {
+        fs.unlink(filePath);
+      }
+    });
+  }
+
+  @Post('/')
+  @ContentType('application/json')
+  async postDownloadRequest(@Body() data: IDownload) {
+
+    if (data.units.length === 0) {
       throw new NotFoundError();
     }
 
@@ -41,7 +55,7 @@ export class DownloadController {
       zlib: {level: 9} // Sets the compression level.
     });
 
-    archive.on( 'error', function(err: Error ) {
+    archive.on('error', function (err: Error) {
       throw err;
     });
 
@@ -87,7 +101,7 @@ export class DownloadController {
 
     archive.finalize();
 
-    return 'api/temp/' + fileName + '.zip';
+    return fileName;
   }
 
 }

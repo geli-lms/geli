@@ -6,15 +6,15 @@ export class SaveFileService {
   constructor() {
   }
 
-  save(name: string, content: string) {
+  save(name: string, content: string, fileEnding: string, type: string, downloadType: string) {
     const filename = name
         .replace(/[^a-zA-Z0-9 -]/g, '')    // remove special characters
         .replace(/ /g, '-')             // replace space by dashes
         .replace(/-+/g, '-')            // trim multiple dashes
-      + '.json';
+      + fileEnding;
     const blob = new Blob(
       [content],
-      {type: 'application/json'});
+      {type: type});
 
     if (window.navigator && window.navigator.msSaveOrOpenBlob) {
       window.navigator.msSaveOrOpenBlob(blob, filename);
@@ -23,7 +23,7 @@ export class SaveFileService {
         a = document.createElement('a');
       a.download = filename;
       a.href = window.URL.createObjectURL(blob);
-      a.dataset.downloadurl = ['text/json', a.download, a.href].join(':');
+      a.dataset.downloadurl = [downloadType, a.download, a.href].join(':');
       e.initEvent('click', true, false);
       a.dispatchEvent(e);
     }
