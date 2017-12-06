@@ -42,6 +42,12 @@ export class UploadFormComponent implements OnInit {
       form.append('data', JSON.stringify(this.additionalData))
     };
 
+    this.fileUploader.onBeforeUploadItem = (fileItem) => {
+      if (!this.first) {
+        fileItem.method = 'PUT';
+      }
+    };
+
     this.fileUploader.onCompleteAll = () => {
       if (!this.error) {
         this.snackBar.open('All items uploaded!', '', {duration: 3000});
@@ -56,13 +62,9 @@ export class UploadFormComponent implements OnInit {
       if (this.first && responseObject._id && status === 200) {
         this.first = false;
         // all subsequent (if any) uploads will be added to this unit
-        this.onFileUploaded.emit();
+        this.onFileUploaded.emit(responseObject);
         this.fileUploader.uploadAll();
       }
-    };
-
-    this.fileUploader.onSuccessItem = (item, response, status, headers) => {
-      const debug = 0;
     };
 
     this.fileUploader.onAfterAddingAll = (fileItems) => {
@@ -74,7 +76,7 @@ export class UploadFormComponent implements OnInit {
       // reset the error state to try again later
       item.isError = false;
       item.isUploaded = false;
-      this.snackBar.open(`${item._file.name} failed to upload`, '', {duration: 1000});
+      this.snackBar.open(`${item._file.name} failed to upload`, 'Dismiss');
     };
 
     this.fileUploader.clearQueue();

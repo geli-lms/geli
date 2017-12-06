@@ -6,8 +6,8 @@ import fs = require('fs');
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import crypto = require('crypto');
 
-import {Lecture} from '../models/Lecture';
-import {Unit} from '../models/units/Unit';
+import {ILectureModel, Lecture} from '../models/Lecture';
+import {IUnitModel, Unit} from '../models/units/Unit';
 import {IUnit} from '../../../shared/models/units/IUnit';
 import {IVideoUnitModel, VideoUnit} from '../models/units/VideoUnit';
 import {IFileUnitModel, FileUnit} from '../models/units/FileUnit';
@@ -66,12 +66,13 @@ export class UnitBaseController {
   }
 
   @Put('/:id')
-  updateUnit(@Param('id') id: string, @Body() unit: IUnit) {
+  updateUnit(@UploadedFile('file', {options: uploadOptions}) file: any, @Param('id') id: string, @Body() unit: IUnit) {
     return Unit.findById(id).then((oldUnit: IUnit) => {
       if (!oldUnit) {
         throw new NotFoundError();
       }
       // pre update: delete removed files
+      /*
       if (oldUnit instanceof VideoUnit) {
         (<IVideoUnit>oldUnit).files.forEach((file: any) => {
           // if not present in new: delete
@@ -90,7 +91,7 @@ export class UnitBaseController {
         });
         return FileUnit;
       }
-
+      */
       return Unit;
     }).then((model) => model.findByIdAndUpdate(id, unit, {'new': true}))
       .then((u) => u.toObject());
@@ -117,7 +118,9 @@ export class UnitBaseController {
         lecture.units.push(unit);
         return lecture.save();
       })
-      .then((lecture) => lecture.toObject())
+      .then(() => {
+        return unit.toObject();
+      })
       .catch((err) => {
         throw new BadRequestError(err);
       });

@@ -37,6 +37,7 @@ export class TaskUnitController extends UnitBaseController {
     return new Task(task).save();
   }
 
+  /*
   @Authorized(['teacher', 'admin'])
   @Put('/:id')
   async updateUnit(@Param('id') id: string, @Body() unit: ITaskUnit) {
@@ -54,6 +55,7 @@ export class TaskUnitController extends UnitBaseController {
     return TaskUnit.findByIdAndUpdate(id, unit, {'new': true})
       .then((u) => u.toObject());
   }
+  */
 
   @Authorized(['teacher', 'admin'])
   @Get('/:id')

@@ -8,7 +8,7 @@ import {IFreeTextUnit} from '../../../shared/models/units/IFreeTextUnit';
 @UseBefore(passportJwtMiddleware)
 @Authorized(['teacher', 'admin'])
 export class FreeTextUnitController extends UnitBaseController {
-
+  /*
   @Post('/')
   addUnit(@Body() data: any) {
     // discard invalid requests
@@ -19,10 +19,13 @@ export class FreeTextUnitController extends UnitBaseController {
         return this.pushToLecture(data.lectureId, savedFreeTextUnit);
       });
   }
+  */
 
+  /*
   @Put('/:id')
   updateUnit(@Param('id') id: string, @Body() unit: IFreeTextUnit) {
     return FreeTextUnit.findByIdAndUpdate(id, unit)
       .then((u) => u.toObject());
   }
+  */
 }
