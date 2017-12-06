@@ -18,9 +18,8 @@ export class WriteMailDialog implements OnInit {
   @Input() subject: string;
   @Input() markdown: string;
 
-  @ViewChild('editor')
-  private editor: AceEditorComponent;
-  private renderedHtml: string;
+  @ViewChild('editor') editor: AceEditorComponent;
+  renderedHtml: string;
 
   constructor(
     public dialogRef: MatDialogRef<WriteMailDialog>,
