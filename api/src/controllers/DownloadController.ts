@@ -1,11 +1,14 @@
+import {promisify} from 'util';
+
 const fs = require('fs');
 const archiver = require('archiver');
 import crypto = require('crypto');
 
 const appRoot = require('app-root-path');
-import {Response} from "express";
+import {Response} from 'express';
 import {
-  Body, Post, Get, Header, NotFoundError, ContentType, OnUndefined, UseBefore, Param, Res, Controller
+  Body, Post, Get, Header, NotFoundError, ContentType, UseInterceptor,  OnUndefined, UseBefore, Param, Res, Controller,
+  Action
 } from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 
@@ -28,17 +31,13 @@ import {Task} from '../models/Task';
 export class DownloadController {
 
   @Get('/:id')
-  @ContentType('file/zip')
-  @OnUndefined(200)
   async getArchivedFile(@Param('id') id: string, @Res() response: Response) {
     const filePath = appRoot + '/temp/' + id + '.zip';
 
-    response.download(filePath, 'id.zip', function(err) {
-      if (!err) {
-        fs.unlink(filePath);
-      }
-    });
-  }
+    await promisify<string, void>(response.download.bind(response))(filePath);
+    return response;
+
+    }
 
   @Post('/')
   @ContentType('application/json')

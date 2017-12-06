@@ -47,16 +47,26 @@ export class SelectUnitDialogComponent {
       const dl = {course: this.course.name, lectures: [], units: this.selectedUnitsService.getSelectedData()};
       const result = await this.downloadReq.postDownloadReqForCourse(dl);
 
-      const idk = await this.downloadReq.getFile(result.toString());
+      const response = await this.downloadReq.getFile(result.toString());
 
-      console.log(JSON.stringify(idk, null, 2));
+      var link=document.createElement('a');
+      link.href=window.URL.createObjectURL(response);
+      link.download= this.course.name + '.zip';
+      link.click();
 
-      //this.saveFileService.save(this.course.name,'Some Data','.zip', 'file/zip', 'file/zip');
 
       this.dialogRef.close();
     } else {
       this.snackBar.open('No units selected!', 'Dismiss', {duration: 3000});
     }
+  }
+
+  private saveToFileSystem(response, courseName) {
+    const contentDispositionHeader: string = response.headers.get('Content-Disposition');
+    const parts: string[] = contentDispositionHeader.split(';');
+    const filename = courseName + '.zip';
+    const blob = new Blob([response._body], {type: 'application/zip'});
+    saveAs(blob, filename);
   }
 
 }
