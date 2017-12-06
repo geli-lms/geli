@@ -1,7 +1,5 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
-import {FileItem, FileUploader} from 'ng2-file-upload';
-import {IUser} from '../../../../../../../shared/models/IUser';
-import {MatDialogRef, MatSnackBar} from '@angular/material';
+import {MatDialogRef} from '@angular/material';
 
 @Component({
   selector: 'app-write-mail-dialog',
