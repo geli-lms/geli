@@ -120,7 +120,7 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
     const mailData = await this.dialogService.writeMail({
       bcc: CourseUserListComponent.getMailAddressStringForUsers(this.selectedMembers),
       cc: CourseUserListComponent.getMailAddressStringForUsers(this.course.teachers),
-      text: `\n\n\n\nYou received this mail because you are a member of the course ${this.course.name}.`,
+      markdown: `\n\n\n\nYou received this mail because you are a ${this.role} in the course ${this.course.name}.`,
       subject: `${this.course.name}: `,
     }).toPromise();
     this.toggleBlocked = false;

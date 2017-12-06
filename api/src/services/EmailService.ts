@@ -4,6 +4,8 @@ import {IUserModel} from '../models/User';
 import config from '../config/main';
 import {SendMailOptions, Transporter} from 'nodemailer';
 
+const markdown = require('nodemailer-markdown').markdown;
+
 class EmailService {
 
   private transporter: Transporter = null;
@@ -32,6 +34,7 @@ class EmailService {
     }
 
     this.transporter = nodemailer.createTransport(this.mailTransportConfig, this.mailDefaultConfig);
+    this.transporter.use('compile', markdown());
   };
 
   public sendActivation(user: IUserModel) {

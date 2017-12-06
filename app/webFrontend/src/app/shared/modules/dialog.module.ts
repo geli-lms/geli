@@ -9,6 +9,7 @@ import {WriteMailDialog} from '../components/write-mail-dialog/write-mail-dialog
 import {FileUploadModule} from 'ng2-file-upload';
 import {CommonModule} from '@angular/common';
 import {MaterialImportModule} from './material-import.module';
+import {AceEditorModule} from 'ng2-ace-editor';
 
 @NgModule({
   imports: [
@@ -16,6 +17,7 @@ import {MaterialImportModule} from './material-import.module';
     FormsModule,
     FileUploadModule,
     MaterialImportModule,
+    AceEditorModule,
   ],
   exports: [
     ConfirmDialog,
