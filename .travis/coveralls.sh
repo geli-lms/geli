@@ -1,13 +1,11 @@
 #!/bin/bash
 
-# Variables
-MODULE_PATH=".travis/node_modules"
-# BIN_PATH="coveralls/bin"
-BIN_PATH=".bin"
-
-RED='\033[0;31m'
-YELLOW='\033[0;33m'
-NC='\033[0m'
+# Path to this file
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+# Path the script was called from
+IPWD="$(pwd)"
+# Import shared vars
+. ${DIR}/_shared-vars.sh
 
 # Functions
 function npm_package_is_installed {
@@ -22,18 +20,18 @@ echo "+++ Run coveralls send +++"
 echo
 
 echo "+ checking if coveralls is installed"
-cd .travis
+cd ${DIR}
 if [ $(npm_package_is_installed coveralls) == 0 ]; then
   echo -e "${RED}+ ERROR: coveralls is not installed, please add coveralls to the .travis/package.json${NC}"
   exit 1
 fi
-cd ..
+cd ${IPWD}
 
 echo "+ sending lcov file to coveralls"
 # since we are using typescript and remap our coverage data to the ts files we need to remove the "build" part of all paths
 # this could easily be done with some sed magic
 # search for "api/build/src" and replace it with "api/src"
-sed "s/api\/build\/src/api\/src/g" api/coverage/lcov.info | $MODULE_PATH/$BIN_PATH/coveralls -v
+sed "s/api\/build\/src/api\/src/g" api/coverage/lcov.info | $BIN_PATH_FULL/coveralls -v
 
 echo "+ INFO: Currently only the api-coverdata are generated and send"
 
