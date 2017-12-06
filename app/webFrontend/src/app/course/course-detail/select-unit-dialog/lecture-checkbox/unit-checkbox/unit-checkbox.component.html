@@ -4,7 +4,12 @@
 </mat-list-item>
 
 <ng-container *ngIf="files">
-  <mat-list *ngFor=" let unit of this.files">
-    <app-upload-unit-checkbox ></app-upload-unit-checkbox>
+  <mat-list>
+    <ng-container *ngFor=" let file of this.files" ngSwitch="unit.type">
+      <app-upload-unit-checkbox *ngSwitchCase="'video'" [icon_name]="'live_tv'" [file]= file ></app-upload-unit-checkbox>
+      <app-upload-unit-checkbox *ngSwitchCase="'file'" [icon_name]="'insert_drive_file'"  [file]= file ></app-upload-unit-checkbox>
+      <app-upload-unit-checkbox *ngSwitchDefault [icon_name]="'insert_drive_file'"  [file]= file ></app-upload-unit-checkbox>
+
+    </ng-container>
   </mat-list>
 </ng-container>

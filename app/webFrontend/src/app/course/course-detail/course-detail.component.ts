@@ -53,7 +53,8 @@ export class CourseDetailComponent implements OnInit {
 
   openDownloadDialog() {
     const diaRef = this.dialog.open(SelectUnitDialogComponent, {
-      data: {course: this.course}
+      data: {course: this.course},
+      width: '800px'
     });
     diaRef.afterClosed().subscribe(() => {
       this.selectedUnitsService.clearData();

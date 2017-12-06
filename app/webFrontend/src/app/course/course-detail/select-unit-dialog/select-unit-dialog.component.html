@@ -2,13 +2,13 @@
 <ng-container *ngIf="!course.lectures.length">No lectures to download!</ng-container>
 <p>Select units which you want download</p>
 
-<mat-dialog-content>
-  <p class="layout"> All
-    <span class="spacer"></span>
-    <mat-checkbox [(ngModel)]="chkbox" (change)="onChange()" class="chkbox"></mat-checkbox>
-  </p>
-  <mat-list *ngFor=" let lecture of course.lectures">
-    <app-lecture-checkbox [lecture]= "lecture"></app-lecture-checkbox>
+<mat-dialog-content class="layout">
+  <mat-list>
+    <mat-list-item>All
+      <span class="spacer"></span>
+      <mat-checkbox [(ngModel)]="chkbox" (change)="onChange()" class="chkbox"></mat-checkbox>
+    </mat-list-item>
+    <app-lecture-checkbox *ngFor=" let lecture of course.lectures" [lecture]= "lecture"></app-lecture-checkbox>
   </mat-list>
 </mat-dialog-content>
 <mat-dialog-actions>
