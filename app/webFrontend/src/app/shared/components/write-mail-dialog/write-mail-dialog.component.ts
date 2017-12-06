@@ -10,9 +10,10 @@ import {MatDialogRef, MatSnackBar} from '@angular/material';
 })
 export class WriteMailDialog implements OnInit {
 
-  @Input() to: String;
-  subject = '';
-  text = '';
+  @Input() bcc: String;
+  @Input() cc: String;
+  @Input() subject: String;
+  @Input() text: String;
 
   constructor(
     public dialogRef: MatDialogRef<WriteMailDialog>
@@ -27,7 +28,8 @@ export class WriteMailDialog implements OnInit {
 
   public sendMail() {
     this.dialogRef.close({
-      to: this.to,
+      bcc: this.bcc,
+      cc: this.cc,
       subject: this.subject,
       text: this.text,
     });

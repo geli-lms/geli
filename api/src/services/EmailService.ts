@@ -89,13 +89,7 @@ class EmailService {
   }
 
   public sendFreeFormMail(mailData: any) {
-    const message: SendMailOptions = {
-      subject: mailData.subject,
-      text: mailData.text,
-      bcc: mailData.to,
-    };
-
-    return this.sendMail(message);
+    return this.sendMail(mailData);
   }
 
   private sendMail(message: SendMailOptions) {
