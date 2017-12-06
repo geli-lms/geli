@@ -43,7 +43,9 @@ export class SelectUnitDialogComponent {
   }
 
   async downloadAndClose() {
-    if (this.selectedUnitsService.unitIds.length > 0) {
+    // Iterate through structure, build obj with positive bool values.
+    this.buildDialog();
+    /*if (this.selectedUnitsService.unitIds.length > 0) {
       const dl = {course: this.course.name, lectures: [], units: this.selectedUnitsService.getSelectedData()};
       const result = await this.downloadReq.postDownloadReqForCourse(dl);
 
@@ -54,19 +56,44 @@ export class SelectUnitDialogComponent {
       link.download= this.course.name + '.zip';
       link.click();
 
+      //this.saveFileService.save(this.course.name,'Some Data','.zip', 'file/zip', 'file/zip');
 
       this.dialogRef.close();
     } else {
       this.snackBar.open('No units selected!', 'Dismiss', {duration: 3000});
-    }
+    }*/
   }
 
-  private saveToFileSystem(response, courseName) {
-    const contentDispositionHeader: string = response.headers.get('Content-Disposition');
-    const parts: string[] = contentDispositionHeader.split(';');
-    const filename = courseName + '.zip';
-    const blob = new Blob([response._body], {type: 'application/zip'});
-    saveAs(blob, filename);
-  }
+  buildDialog() {
+    let obj = {};
+    obj["course"] = this.course._id;
+    obj["lectures"] = [];
+    this.childLectures.forEach(lec => {
+        let lecObj = {};
+        lecObj["lecID"] = lec.lecture._id;
+        lecObj["units"] = [];
+        lec.childUnits.forEach(unit => {
+          if(unit.chkbox) {
+            let unitObj = {};
+            unitObj["unitID"] = unit.unit._id;
+            if (unit.unit.type == 'video' || 'file') {
+              unitObj["files"] = [];
+              const files = unit.childUnits.toArray();
+              for (var fileIndex in files) {
+                const file = files[fileIndex];
+                if(file.chkbox) {
+                  unitObj["files"].push(fileIndex);
+                }
+              }
+            }
+            lecObj["units"].push(unitObj);
+          }
 
+        });
+        if(lecObj["units"].length > 0) {
+          obj["lectures"].push(lecObj);
+        }
+    });
+    console.dir(obj, {depth: null, colors: true});
+  }
 }

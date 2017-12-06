@@ -442,8 +442,11 @@ export class DownloadReq extends DataService {
 
    getFile(id: string) {
      return new Promise((resolve, reject) => {
-       this.backendService.get(this.apiPath + id).subscribe( (responseItem: any) => {
-           resolve(responseItem);
+       this.backendService.getMultipart(this.apiPath + id).subscribe( (responseItem) => {
+         console.log(responseItem);
+           const data =  new Blob( [responseItem.blob()], { type: 'application/zip'} );
+           console.log(data);
+           resolve(data);
          },
          error => reject(error) );
      });

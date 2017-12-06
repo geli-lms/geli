@@ -36,5 +36,4 @@ export class LectureCheckboxComponent implements OnInit {
       this.childUnits.forEach(unit => unit.onChange());
     }
   }
-
 }

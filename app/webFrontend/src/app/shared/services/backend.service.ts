@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Http, Response} from '@angular/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
@@ -13,7 +13,7 @@ export class BackendService {
 
   public static readonly API_URL = '/api/';
 
-  constructor(private http: Http, private authenticationService: AuthenticationService) {
+  constructor(private http: HttpClient, private authenticationService: AuthenticationService) {
   }
 
   private handleUnauthorized = (err) => {
@@ -28,6 +28,11 @@ export class BackendService {
     return this.http.get(BackendService.API_URL + serviceUrl, {headers: this.authenticationService.authHeader()})
     .catch(this.handleUnauthorized)
     .map(response => response.json());
+  }
+
+  getMultipart(serviceUrl: string): Observable<Response> {
+    return this.http.get(BackendService.API_URL + serviceUrl, {headers: this.authenticationService.authHeader()})
+      .catch(this.handleUnauthorized);
   }
 
   post(serviceUrl: string, options: any): Observable<Response> {

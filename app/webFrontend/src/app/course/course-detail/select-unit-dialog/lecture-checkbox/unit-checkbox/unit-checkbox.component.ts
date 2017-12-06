@@ -1,6 +1,9 @@
-import { Component, OnInit, ViewEncapsulation, Input } from '@angular/core';
+import {Component, OnInit, ViewEncapsulation, Input, ViewChildren, QueryList} from '@angular/core';
 import {IUnit} from '../../../../../../../../../shared/models/units/IUnit';
 import {SelectedUnitsService} from '../../../../../shared/services/selected-units.service';
+import {IFileUnit} from '../../../../../../../../../shared/models/units/IFileUnit';
+import {IVideoUnit} from '../../../../../../../../../shared/models/units/IVideoUnit';
+import {UploadUnitCheckboxComponent} from "./upload-unit-checkbox/upload-unit-checkbox.component";
 
 
 @Component({
@@ -11,24 +14,43 @@ import {SelectedUnitsService} from '../../../../../shared/services/selected-unit
 })
 export class UnitCheckboxComponent implements OnInit {
   @Input()
-  unit: IUnit;
+  unit;
   @Input()
   chkbox: boolean;
+
+  files;
+
+  @ViewChildren(UploadUnitCheckboxComponent)
+  childUnits: QueryList<UploadUnitCheckboxComponent>;
 
   constructor(private selectedUnitsService: SelectedUnitsService ) {
     this.chkbox = false;
   }
 
   ngOnInit() {
+    if (this.unit.type === 'video') {
+      const videoUnit = <IVideoUnit><any> this.unit;
+      this.files = videoUnit.files;
+    } else if (this.unit.type === 'file') {
+      const fileUnit = <IFileUnit><any> this.unit;
+      this.files = fileUnit.files;
+    }
   }
 
   onChange() {
-    if (this.chkbox) {
-      this.selectedUnitsService.addUnit(this.unit);
-    } else {
-      this.selectedUnitsService.removeUnit(this.unit);
+    if (this.files) {
+      if (this.chkbox) {
+        this.childUnits.forEach(upUnit => {
+          if (upUnit.chkbox === false) {
+            upUnit.chkbox = true;
+          }
+        });
+      } else {
+        this.childUnits.forEach(upUnit => upUnit.chkbox = false);
+      }
     }
   }
+
 
 
 }

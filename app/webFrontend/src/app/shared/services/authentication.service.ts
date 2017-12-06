@@ -1,8 +1,7 @@
 import {Injectable} from '@angular/core';
-import {Headers} from '@angular/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import 'rxjs/add/operator/map';
 import {UserService} from './user.service';
-import {Http} from '@angular/http';
 import {IUser} from '../../../../../../shared/models/IUser';
 import {Router} from '@angular/router';
 
@@ -14,7 +13,7 @@ export class AuthenticationService {
   public token: string;
   public isLoggedIn = false;
 
-  constructor(private http: Http,
+  constructor(private http: HttpClient,
               private router: Router,
               private userService: UserService) {
     this.token = localStorage.getItem('token');
@@ -22,13 +21,13 @@ export class AuthenticationService {
     this.isLoggedIn = this.token !== null;
   }
 
-  login(email: string, password: string) {
+  async login(email: string, password: string) {
     return new Promise((resolve, reject) => {
 
       return this.http.post(AuthenticationService.API_URL + 'auth/login', {email: email, password: password})
-      .map(response => response.json())
-      .subscribe(
-        (response: any) => {
+      .map((response: Response) => response.json())
+      .subscribe(response => {
+          console.log(response);
           this.userService.setUser(response.user);
           this.token = response.token;
           this.isLoggedIn = true;
@@ -137,7 +136,7 @@ export class AuthenticationService {
   }
 
   authHeader() {
-    const headers = new Headers({'Content-Type': 'application/json'});
+    const headers = new HttpHeaders({'Content-Type': 'application/json'});
     if (this.token !== '') {
       headers.set('Authorization', this.token);
     }

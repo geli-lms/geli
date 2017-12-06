@@ -2,7 +2,7 @@
   <span class="spacer"></span>
   <mat-checkbox [(ngModel)]="chkbox" (change)="onChange()" class="chkbox"></mat-checkbox>
 </mat-list-item>
-<mat-list *ngFor=" let unit of this.lecture.units">
-  <app-unit-checkbox [unit]= "unit"></app-unit-checkbox>
+<mat-list>
+  <app-unit-checkbox *ngFor=" let unit of this.lecture.units" [unit]= "unit"></app-unit-checkbox>
 </mat-list>
 
