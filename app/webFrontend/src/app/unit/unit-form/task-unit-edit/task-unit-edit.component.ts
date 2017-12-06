@@ -142,16 +142,26 @@ export class TaskUnitEditComponent implements OnInit {
   }
 
   removeAnswer(task: ITask, index: number) {
-    if (index > -1) {
-      task.answers.splice(index, 1);
+    if (task.answers.length > 2) {
+      if (index > -1) {
+        task.answers.splice(index, 1);
+      }
+    } else {
+      const message = 'Not possible: Every question requires at least two answers';
+      this.snackBar.open(message, '', {duration: 3000});
     }
   }
 
   removeTask(task: ITask) {
-    if (!task._id) {
-      this.model.tasks = this.model.tasks.filter(obj => task !== obj);
+    if (this.model.tasks.length > 1) {
+      if (!task._id) {
+        this.model.tasks = this.model.tasks.filter(obj => task !== obj);
+      } else {
+        this.model.tasks = this.model.tasks.filter(obj => task._id !== obj._id);
+      }
     } else {
-      this.model.tasks = this.model.tasks.filter(obj => task._id !== obj._id);
+      const message = 'Not possible: At least one question is required';
+      this.snackBar.open(message, '', {duration: 3000});
     }
   }
 }
