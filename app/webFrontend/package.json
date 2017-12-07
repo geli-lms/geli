@@ -2,7 +2,7 @@
   "name": "geli-web-frontend",
   "description": "This is the WebFronted-Package.json for geli.",
   "repository": "h-da/geli",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "license": "GPL-3.0",
   "scripts": {
     "ng": "ng",
@@ -28,15 +28,18 @@
     "@angular/platform-browser-dynamic": "^5.0.0",
     "@angular/router": "^5.0.0",
     "@ngx-translate/core": "^8.0.0",
+    "@swimlane/ngx-charts": "^7.0.0",
     "blueimp-md5": "^2.10.0",
     "core-js": "^2.5.1",
+    "d3": "^4.11.0",
     "knuth-shuffle": "^1.0.8",
     "markdown-it": "^8.4.0",
     "material-design-icons": "^3.0.1",
-    "moment": "^2.19.1",
-    "ng2-ace-editor": "^0.3.1",
+    "moment": "^2.19.3",
+    "ng2-ace-editor": "^0.3.3",
     "ng2-dragula": "^1.5.0",
     "ng2-file-upload": "^1.2.1",
+    "node-sass": "^4.7.2",
     "raven-js": "^3.19.1",
     "rxjs": "^5.5.2",
     "zone.js": "^0.8.18"
@@ -45,8 +48,8 @@
     "@angular-devkit/schematics": "0.0.36",
     "@angular/cli": "1.5.3",
     "@angular/compiler-cli": "^5.0.0",
-    "@schematics/angular": "^0.1.2",
-    "@types/jasmine": "^2.5.45",
+    "@schematics/angular": "^0.1.5",
+    "@types/jasmine": "2.5.45",
     "@types/node": "~8.0.50",
     "codelyzer": "~4.0.1",
     "jasmine-core": "~2.8.0",
@@ -60,6 +63,6 @@
     "protractor": "~5.2.0",
     "ts-node": "~3.3.0",
     "tslint": "~5.8.0",
-    "typescript": "^2.4.2"
+    "typescript": "2.4.2"
   }
 }

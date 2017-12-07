@@ -1,13 +1,14 @@
 import {
-  BadRequestError, Body, CurrentUser, Get, InternalServerError, JsonController, Param, Post, Put,
+  Authorized,
+  BadRequestError, Body, CurrentUser, Get, JsonController, Param, Post, Put,
   UseBefore
 } from 'routing-controllers';
 import * as moment from 'moment';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
-import {Progress} from '../models/Progress';
+import {IProgressModel, Progress} from '../models/Progress';
 import {IUser} from '../../../shared/models/IUser';
 import {Unit} from '../models/units/Unit';
-import {CodeKataProgress} from '../models/CodeKataProgress';
+import {UnitClassMapper} from '../utilities/UnitClassMapper';
 
 @JsonController('/progress')
 @UseBefore(passportJwtMiddleware)
@@ -20,19 +21,6 @@ export class ProgressController {
     if (unit.deadline && moment(unit.deadline).isBefore()) {
       throw new BadRequestError('Past deadline, no further update possible');
     }
-  }
-
-  private static getProgressClassForType(type: string) {
-    const classMappings: any = {
-      'code-kata': CodeKataProgress,
-      'task': Progress,
-    };
-    const hasNoProgressClass = Object.keys(classMappings).indexOf(type) === -1 ;
-    if (hasNoProgressClass) {
-      throw new InternalServerError(`No progress class for type ${type} available`);
-    }
-
-    return classMappings[type];
   }
 
   @Get('/units/:id')
@@ -64,7 +52,7 @@ export class ProgressController {
 
     data.user = currentUser;
 
-    const progressClass = ProgressController.getProgressClassForType(unit.type);
+    const progressClass = UnitClassMapper.getProgressClassForUnit(unit);
     const progress = await new progressClass(data).save();
 
     return progress.toObject();
@@ -74,7 +62,7 @@ export class ProgressController {
   async updateProgress(@Param('id') id: string, @Body() data: any) {
     const unit: any = await ProgressController.getUnit(data.unit);
     ProgressController.checkDeadline(unit);
-    const progressClass = ProgressController.getProgressClassForType(unit.type);
+    const progressClass = UnitClassMapper.getProgressClassForUnit(unit);
     const updatedProgress = await progressClass.findByIdAndUpdate(id, data, {'new': true});
 
     return updatedProgress.toObject();
