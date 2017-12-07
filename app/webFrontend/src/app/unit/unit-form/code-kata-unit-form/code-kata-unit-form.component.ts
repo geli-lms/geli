@@ -175,15 +175,15 @@ export class CodeKataUnitFormComponent implements OnInit {
   // this code gets unnessessary with the Implementation of Issue #44 (all validation parts should happen on the server)
   private validateStructure(): boolean {
     if (!this.model.code.match(new RegExp('function(.|\t)*validate\\(\\)(.|\n|\t)*{(.|\n|\t)*}', 'gmi'))) {
-      this.snackBar.open('The test section must contain a validate function');
+      this.snackBar.open('The test section must contain a validate function', 'Dismiss');
       return false;
     }
     if (!this.model.code.match(new RegExp('function(.|\t)*validate\\(\\)(.|\n|\t)*{(.|\n|\t)*return(.|\n|\t)*}', 'gmi'))) {
-      this.snackBar.open('The validate function must return something');
+      this.snackBar.open('The validate function must return something', 'Dismiss');
       return false;
     }
     if (!this.model.code.match(new RegExp('validate\\(\\);', 'gmi'))) {
-      this.snackBar.open('The test section must call the validate function');
+      this.snackBar.open('The test section must call the validate function', 'Dismiss');
       return false;
     }
 
