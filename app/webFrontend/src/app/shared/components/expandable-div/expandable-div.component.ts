@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewEncapsulation, EventEmitter, Output, Input } from '@angular/core';
+import {ExpandableDivHeaderTags} from './expandable-div-header-tags.enum';
 
 @Component({
   selector: 'app-expandable-div',
@@ -11,12 +12,15 @@ export class ExpandableDivComponent implements OnInit {
   notifyParent: EventEmitter<any> = new EventEmitter();
   @Input()
   title: string;
+  @Input()
+  headerTag: string;
   opened: boolean;
 
   constructor() { }
 
   ngOnInit() {
     this.opened = true;
+    this.headerTag = this.headerTag || ExpandableDivHeaderTags.Text;
   }
 
   notify() {
