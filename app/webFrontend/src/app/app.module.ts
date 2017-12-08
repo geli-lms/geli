@@ -15,7 +15,8 @@ import {
   LectureService,
   TaskService,
   UnitService,
-  UserDataService
+  UserDataService,
+  ConfigService
 } from './shared/services/data.service';
 import {BackendService} from './shared/services/backend.service';
 import {ShowProgressService} from './shared/services/show-progress.service';
@@ -69,6 +70,7 @@ import {TitleService} from './shared/services/title.service';
     ReportService,
     TitleService,
     RavenErrorHandler,
+    ConfigService,
     {
       provide: ErrorHandler,
       useExisting: RavenErrorHandler
