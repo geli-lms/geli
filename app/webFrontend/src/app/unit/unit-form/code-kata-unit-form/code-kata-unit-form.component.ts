@@ -42,7 +42,7 @@ export class CodeKataUnitFormComponent implements OnInit {
       '\nvalidate();' +
       '\n' +
       '\nfunction validate() {' +
-      '\n\tlet result = targetSet.has("Hello") && targetSet.has("CodeKata") && targetSet.size === 2;' +
+      '\n\tconst result = targetSet.has("Hello") && targetSet.has("CodeKata") && targetSet.size === 2;' +
       '\n\tif (result === true) {' +
       '\n\t\tconsole.log("Well done, you solved this Kata");' +
       '\n\t} else {' +
@@ -129,6 +129,10 @@ export class CodeKataUnitFormComponent implements OnInit {
 
 // refactor this to use the same as in code-kata-unit
   validate() {
+    if (!this.validateStructure()) {
+      return false;
+    }
+
     const codeToTest: string = this.model.code;
 
     this.logs = undefined;
@@ -167,6 +171,24 @@ export class CodeKataUnitFormComponent implements OnInit {
       console.log(result);
       return false;
     }
+  }
+
+  // this code gets unnessessary with the Implementation of Issue #44 (all validation parts should happen on the server)
+  private validateStructure(): boolean {
+    if (!this.model.code.match(new RegExp('function(.|\t)*validate\\(\\)(.|\n|\t)*{(.|\n|\t)*}', 'gmi'))) {
+      this.snackBar.open('The test section must contain a validate function', 'Dismiss');
+      return false;
+    }
+    if (!this.model.code.match(new RegExp('function(.|\t)*validate\\(\\)(.|\n|\t)*{(.|\n|\t)*return(.|\n|\t)*}', 'gmi'))) {
+      this.snackBar.open('The validate function must return something', 'Dismiss');
+      return false;
+    }
+    if (!this.model.code.match(new RegExp('validate\\(\\);', 'gmi'))) {
+      this.snackBar.open('The test section must call the validate function', 'Dismiss');
+      return false;
+    }
+
+    return true;
   }
 
 }
