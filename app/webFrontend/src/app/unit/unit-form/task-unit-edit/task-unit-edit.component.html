@@ -12,25 +12,25 @@
       <textarea matInput id="name" placeholder="Enter question here" [(ngModel)]="task.name"></textarea>
     </mat-form-field>
 
-    <button mat-button (click)="removeTask(task)">
-      <mat-icon>remove</mat-icon> Remove question
+    <button mat-button class="remove" (click)="removeTask(task)">
+      <mat-icon>delete</mat-icon> Remove question
     </button>
 
     <div matLine class="answers">
-        <div class="answer" *ngFor="let answer of task.answers; let idx = index;">
-          <div class="check-answer">
-            <mat-checkbox [(ngModel)]="answer.value" name="value_{{idx}}"></mat-checkbox>
-            <mat-form-field>
-              <input matInput placeholder="Enter answer here" [(ngModel)]="answer.text">
-            </mat-form-field>
-          </div>
+      <div class="answer" *ngFor="let answer of task.answers; let idx = index;">
+        <div class="check-answer">
+          <mat-checkbox [(ngModel)]="answer.value" name="value_{{idx}}"></mat-checkbox>
+          <mat-form-field>
+            <input matInput placeholder="Enter answer here" [(ngModel)]="answer.text">
+          </mat-form-field>
+          <button mat-button class="remove" (click)="removeAnswer(task, idx)" matTooltip="Remove answer">
+            <mat-icon>delete</mat-icon>
+          </button>
         </div>
-      <div>
+      </div>
+      <div class="add-answer">
         <button mat-button (click)="addAnswerAtEnd(task)">
           <mat-icon>add</mat-icon> Add answer
-        </button>
-        <button *ngIf="task.answers.length" mat-button (click)="removeLastAnswer(task)">
-          <mat-icon>remove</mat-icon> Remove last answer
         </button>
       </div>
     </div>
