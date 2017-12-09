@@ -5,6 +5,7 @@ import {UserService} from './user.service';
 import {HttpClient} from '@angular/common/http';
 import {IUser} from '../../../../../../shared/models/IUser';
 import {Router} from '@angular/router';
+import {isNullOrUndefined} from 'util';
 
 @Injectable()
 export class AuthenticationService {
@@ -18,8 +19,10 @@ export class AuthenticationService {
               private router: Router,
               private userService: UserService) {
     this.token = localStorage.getItem('token');
-
-    this.isLoggedIn = this.token !== null;
+    if (isNullOrUndefined(this.token)) {
+      this.token = '';
+    }
+    this.isLoggedIn = this.token !== '';
   }
 
   login(email: string, password: string) {
@@ -138,7 +141,7 @@ export class AuthenticationService {
   authHeader() {
 
     let headers = new HttpHeaders({'Content-Type': 'application/json'});
-    if (this.token !== '') {
+    if (this.token !== '' || !isNullOrUndefined(this.token)) {
       headers = headers.append('Authorization', this.token);
     }
     return headers;

@@ -39,13 +39,13 @@ export abstract class DataService {
       .subscribe(
         (responseItems) => {
           if (this.changeProps2Date) {
-            responseItems.body.forEach(item => {
+            for(let item of responseItems) {
               this.changeProps2Date.forEach(prop => {
                 DataService.changeStringProp2DateProp(item, prop);
               });
-            });
+            }
           }
-          resolve(responseItems.body);
+          resolve(responseItems);
         },
         (error) => reject(error)
       );
