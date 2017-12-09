@@ -25,7 +25,7 @@ export abstract class DataService {
     return new Promise((resolve, reject) => {
       this.backendService.post(this.apiPath, JSON.stringify(createItem))
       .subscribe(
-        (responseItem: any) => {
+        (responseItem) => {
           resolve(responseItem);
         },
         error => reject(error)
@@ -37,18 +37,17 @@ export abstract class DataService {
     return new Promise((resolve, reject) => {
       this.backendService.get(this.apiPath)
       .subscribe(
-        (responseItems: any) => {
+        (responseItems) => {
           if (this.changeProps2Date) {
-            responseItems.forEach(item => {
+            responseItems.body.forEach(item => {
               this.changeProps2Date.forEach(prop => {
                 DataService.changeStringProp2DateProp(item, prop);
               });
             });
           }
-
-          resolve(responseItems);
+          resolve(responseItems.body);
         },
-        error => reject(error)
+        (error) => reject(error)
       );
     });
   }

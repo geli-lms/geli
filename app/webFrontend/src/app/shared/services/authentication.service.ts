@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
-import {Headers} from '@angular/http';
+import {HttpHeaders} from '@angular/common/http';
 import 'rxjs/add/operator/map';
 import {UserService} from './user.service';
-import {Http} from '@angular/http';
+import {HttpClient} from '@angular/common/http';
 import {IUser} from '../../../../../../shared/models/IUser';
 import {Router} from '@angular/router';
 
@@ -14,7 +14,7 @@ export class AuthenticationService {
   public token: string;
   public isLoggedIn = false;
 
-  constructor(private http: Http,
+  constructor(private http: HttpClient,
               private router: Router,
               private userService: UserService) {
     this.token = localStorage.getItem('token');
@@ -26,11 +26,10 @@ export class AuthenticationService {
     return new Promise((resolve, reject) => {
 
       return this.http.post(AuthenticationService.API_URL + 'auth/login', {email: email, password: password})
-      .map(response => response.json())
       .subscribe(
-        (response: any) => {
-          this.userService.setUser(response.user);
-          this.token = response.token;
+        (response) => {
+          this.userService.setUser(response['user']);
+          this.token = response['token'];
           this.isLoggedIn = true;
           localStorage.setItem('token', this.token);
 
@@ -43,10 +42,10 @@ export class AuthenticationService {
 
   reloadUser() {
     if (this.isLoggedIn && this.userService.user) {
-      return this.http.get(`${AuthenticationService.API_URL}users/${this.userService.user._id}`, {headers: this.authHeader()})
-      .map(response => response.json())
+      return this.http.get<IUser>(`${AuthenticationService.API_URL}users/${this.userService.user._id}`, {headers: this.authHeader()})
       .subscribe(
-        (response: any) => {
+        (response) => {
+          console.log(response);
           this.userService.setUser(response);
         }, () => {
           this.logout();
@@ -76,7 +75,7 @@ export class AuthenticationService {
         user
       )
       .subscribe(
-        (json: any) => {
+        (json) => {
           resolve();
         }, (err) => {
           reject(err);
@@ -93,7 +92,7 @@ export class AuthenticationService {
         {authenticationToken: token}
       )
       .subscribe(
-        (json: any) => {
+        (json) => {
           resolve();
         }, (err) => {
           reject(err);
@@ -109,7 +108,7 @@ export class AuthenticationService {
         {email: email}
       )
       .subscribe(
-        (json: any) => {
+        (json) => {
           resolve();
         }, (err) => {
           reject(err);
@@ -137,9 +136,10 @@ export class AuthenticationService {
   }
 
   authHeader() {
-    const headers = new Headers({'Content-Type': 'application/json'});
+
+    let headers = new HttpHeaders({'Content-Type': 'application/json'});
     if (this.token !== '') {
-      headers.set('Authorization', this.token);
+      headers = headers.append('Authorization', this.token);
     }
     return headers;
   }
