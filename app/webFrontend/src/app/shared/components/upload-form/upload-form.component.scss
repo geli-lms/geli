@@ -1,0 +1,15 @@
+@import "../../../../variables";
+
+.file-dropzone {
+  display: table;
+  height: 7.5rem;
+  width: 100%;
+
+  border: dotted 2px map-get($app-accent, 'default');
+
+  span {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+  }
+}

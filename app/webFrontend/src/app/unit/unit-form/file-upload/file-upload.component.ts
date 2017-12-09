@@ -72,6 +72,10 @@ export class FileUploadComponent implements OnInit {
     this.uploadPath += '/' + this.model._id;
   }
 
+  onAllUploaded() {
+    this.onDone();
+  }
+
   uploadAll() {
     this.additionalUploadData.model = {
       ...this.model,

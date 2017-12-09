@@ -4,13 +4,15 @@
 <app-upload-form [(uploadPath)]="uploadPath"
                  [additionalData]="additionalUploadData"
                  (onFileSelectedChange)="onFileSelectedChange($event)"
-                 (onFileUploaded)="onFileUploaded($event)"></app-upload-form>
+                 (onFileUploaded)="onFileUploaded($event)"
+                 (onAllUploaded)="onAllUploaded()"></app-upload-form>
 <p>
-  <button mat-button (click)="onCancel()">Cancel</button>
-  <button mat-button color="primary"
+  <button mat-raised-button color="primary"
           (click)="uploadAll()" [disabled]="!filesSelected || (!generalInfo.form.value.name)">
-    Upload
+    <mat-icon>file_upload</mat-icon>
+    Upload and save
   </button>
+  <button mat-button (click)="onCancel()">Cancel</button>
 </p>
 <!--
 <div *ngIf="model">

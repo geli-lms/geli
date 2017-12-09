@@ -17,12 +17,21 @@
   </div>
 </div>
 -->
+<div ng2FileDrop
+     [ngClass]="{'nv-file-over': hasDropZoneOver}"
+     (fileOver)="onFileOverDropzone($event)"
+     [uploader]="fileUploader"
+     class="file-dropzone">
+  <span>Drop files here</span>
+</div>
+<!--
 <div>
   <input type="file" ng2FileSelect [uploader]="fileUploader" placeholder="Upload files" multiple/>
   <button mat-button *ngIf="this.fileUploader.queue.length" color="warn" (click)="clearQueue()">
     Remove all
   </button>
 </div>
+-->
 <div>
   <div *ngFor="let item of fileUploader.queue">
     <strong>{{ item?.file?.name }}</strong>

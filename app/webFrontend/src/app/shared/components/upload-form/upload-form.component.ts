@@ -24,6 +24,10 @@ export class UploadFormComponent implements OnInit, OnChanges {
   @Output()
   onFileUploaded = new EventEmitter();
 
+  @Output()
+  onAllUploaded = new EventEmitter();
+
+  hasDropZoneOver = false;
   fileUploader: FileUploader;
 
   private first = true;
@@ -102,5 +106,8 @@ export class UploadFormComponent implements OnInit, OnChanges {
 
   uploadAll() {
     this.fileUploader.uploadItem(this.fileUploader.getNotUploadedItems()[0]);
+  }
+
+  onFileOverDropzone(event) {
   }
 }
