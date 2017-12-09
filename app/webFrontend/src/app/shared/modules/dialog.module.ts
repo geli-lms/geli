@@ -9,6 +9,7 @@ import {WriteMailDialog} from '../components/write-mail-dialog/write-mail-dialog
 import {FileUploadModule} from 'ng2-file-upload';
 import {CommonModule} from '@angular/common';
 import {MaterialImportModule} from './material-import.module';
+import {InfoDialog} from '../components/info-dialog/info-dialog.component';
 
 @NgModule({
   imports: [
@@ -18,6 +19,7 @@ import {MaterialImportModule} from './material-import.module';
     MaterialImportModule,
   ],
   exports: [
+    InfoDialog,
     ConfirmDialog,
     AccessKeyDialog,
     UploadDialog,
@@ -25,6 +27,7 @@ import {MaterialImportModule} from './material-import.module';
     WriteMailDialog,
   ],
   declarations: [
+    InfoDialog,
     ConfirmDialog,
     AccessKeyDialog,
     UploadDialog,
@@ -35,6 +38,7 @@ import {MaterialImportModule} from './material-import.module';
     DialogService
   ],
   entryComponents: [
+    InfoDialog,
     ConfirmDialog,
     AccessKeyDialog,
     UploadDialog,
