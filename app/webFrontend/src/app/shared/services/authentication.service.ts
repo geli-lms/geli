@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {http} from '@angular/http';
 import 'rxjs/add/operator/map';
 import {UserService} from './user.service';
 import {IUser} from '../../../../../../shared/models/IUser';
@@ -27,7 +27,6 @@ export class AuthenticationService {
       return this.http.post(AuthenticationService.API_URL + 'auth/login', {email: email, password: password})
       .map((response: Response) => response.json())
       .subscribe(response => {
-          console.log(response);
           this.userService.setUser(response.user);
           this.token = response.token;
           this.isLoggedIn = true;
