@@ -1,4 +1,7 @@
-import {Component, OnInit, ViewEncapsulation, Input, ViewChildren, QueryList} from '@angular/core';
+import {
+  Component, OnInit, ViewEncapsulation, Input, ViewChildren, QueryList, Output,
+  EventEmitter
+} from '@angular/core';
 import {ILecture} from '../../../../../../../../shared/models/ILecture';
 import {UnitCheckboxComponent} from './unit-checkbox/unit-checkbox.component';
 
@@ -15,6 +18,8 @@ export class LectureCheckboxComponent implements OnInit {
   lecture: ILecture;
   @ViewChildren(UnitCheckboxComponent)
   childUnits: QueryList<UnitCheckboxComponent>;
+  @Output()
+  valueChanged: EventEmitter<any> = new EventEmitter();
 
   constructor() {
     this.chkbox = false;
@@ -35,5 +40,19 @@ export class LectureCheckboxComponent implements OnInit {
       this.childUnits.forEach(unit => unit.chkbox = false);
       this.childUnits.forEach(unit => unit.onChange());
     }
+  }
+
+  onChildEvent(event) {
+    let childChecked = false;
+    this.childUnits.forEach(unit => {
+      if (unit.chkbox == true) {
+        childChecked = true;
+        this.chkbox = true;
+      }
+    });
+    if (!childChecked) {
+      this.chkbox = false;
+    }
+    this.valueChanged.emit();
   }
 }

@@ -4,14 +4,18 @@
 
 <mat-dialog-content class="layout">
   <mat-list>
-    <mat-list-item>All
+    <mat-list-item>{{course.name}}
       <span class="spacer"></span>
       <mat-checkbox [(ngModel)]="chkbox" (change)="onChange()" class="chkbox"></mat-checkbox>
     </mat-list-item>
-    <app-lecture-checkbox *ngFor=" let lecture of course.lectures" [lecture]= "lecture"></app-lecture-checkbox>
+    <app-lecture-checkbox (valueChanged)="onChildEvent($event)" *ngFor=" let lecture of course.lectures" [lecture]= "lecture"></app-lecture-checkbox>
   </mat-list>
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-button (click)="downloadAndClose()">Download</button>
   <button mat-button [mat-dialog-close]="true">Cancel</button>
+  <span class="spacer"></span>
+  <ng-container *ngIf="showSpinner">
+    <mat-spinner [diameter]=20 [strokeWidth]=2 class="spinner"></mat-spinner>
+  </ng-container>
 </mat-dialog-actions>

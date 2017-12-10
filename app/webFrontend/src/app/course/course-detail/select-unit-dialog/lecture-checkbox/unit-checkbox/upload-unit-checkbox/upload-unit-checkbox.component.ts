@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, Output, OnInit, EventEmitter} from '@angular/core';
 import {IFile} from "../../../../../../../../../../shared/models/IFile";
 
 @Component({
@@ -14,10 +14,18 @@ export class UploadUnitCheckboxComponent implements OnInit {
   @Input()
   chkbox: boolean;
 
+  @Output()
+  valueChanged: EventEmitter<any> = new EventEmitter();
+
   constructor() { }
 
   ngOnInit() {
     this.chkbox = false;
   }
+
+  emitEvent() {
+    this.valueChanged.emit();
+  }
+
 
 }

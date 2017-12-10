@@ -26,7 +26,7 @@ import { UploadUnitCheckboxComponent } from './course-detail/select-unit-dialog/
     LectureModule,
     SharedModule,
     UserModule,
-    ReportModule
+    ReportModule,
   ],
   declarations: [
     CourseComponent,

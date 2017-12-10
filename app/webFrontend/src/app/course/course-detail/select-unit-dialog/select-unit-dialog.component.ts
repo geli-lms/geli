@@ -1,4 +1,4 @@
-import {Component, Inject, QueryList, ViewChildren, ViewEncapsulation} from '@angular/core';
+import {Component, Inject, OnInit, QueryList, ViewChildren, ViewEncapsulation} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef, MatSnackBar} from '@angular/material';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
 import {SelectedUnitsService} from '../../../shared/services/selected-units.service';
@@ -12,9 +12,10 @@ import {DownloadReq} from 'app/shared/services/data.service';
   styleUrls: ['./select-unit-dialog.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class SelectUnitDialogComponent {
+export class SelectUnitDialogComponent implements OnInit{
   course: ICourse;
   chkbox: boolean;
+  showSpinner: boolean;
   @ViewChildren(LectureCheckboxComponent)
   childLectures: QueryList<LectureCheckboxComponent>;
 
@@ -24,7 +25,11 @@ export class SelectUnitDialogComponent {
               private downloadReq: DownloadReq,
               private saveFileService: SaveFileService,
               public snackBar: MatSnackBar) {
-    this.course = data.course;
+  }
+
+  ngOnInit() {
+    this.showSpinner = false;
+    this.course = this.data.course;
     this.chkbox = false;
   }
 
@@ -42,7 +47,21 @@ export class SelectUnitDialogComponent {
     }
   }
 
+  onChildEvent() {
+    let childChecked = false;
+    this.childLectures.forEach(lec => {
+      if (lec.chkbox == true) {
+        childChecked = true;
+        this.chkbox = true;
+      }
+    });
+    if (!childChecked) {
+      this.chkbox = false;
+    }
+  }
+
   async downloadAndClose() {
+    this.showSpinner = true;
     // Iterate through structure, build obj with positive bool values.
     const obj = await this.buildObject();
     // hier prüfen ob keine Units || zu groß
@@ -50,16 +69,17 @@ export class SelectUnitDialogComponent {
       const dl = {obj};
       const result = await this.downloadReq.postDownloadReqForCourse(dl);
       const response = await this.downloadReq.getFile(result.toString());
-
+      this.showSpinner = false;
       var link=document.createElement('a');
       link.href=window.URL.createObjectURL(response);
       link.download= this.course.name + '.zip';
       link.click();
       //this.saveFileService.save(this.course.name,'Some Data','.zip', 'file/zip', 'file/zip');
       this.dialogRef.close();
-    } else {
+    } /*else {
       this.snackBar.open('No units selected!', 'Dismiss', {duration: 3000});
-    }
+    }*/
+
   }
 
   buildObject() {

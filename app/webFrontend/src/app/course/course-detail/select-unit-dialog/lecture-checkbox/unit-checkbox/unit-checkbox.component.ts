@@ -1,4 +1,7 @@
-import {Component, OnInit, ViewEncapsulation, Input, ViewChildren, QueryList} from '@angular/core';
+import {
+  Component, OnInit, ViewEncapsulation, Input, ViewChildren, QueryList, Output,
+  EventEmitter
+} from '@angular/core';
 import {IUnit} from '../../../../../../../../../shared/models/units/IUnit';
 import {SelectedUnitsService} from '../../../../../shared/services/selected-units.service';
 import {IFileUnit} from '../../../../../../../../../shared/models/units/IFileUnit';
@@ -18,10 +21,13 @@ export class UnitCheckboxComponent implements OnInit {
   @Input()
   chkbox: boolean;
 
-  files;
-
   @ViewChildren(UploadUnitCheckboxComponent)
   childUnits: QueryList<UploadUnitCheckboxComponent>;
+
+  @Output()
+  valueChanged: EventEmitter<any> = new EventEmitter();
+
+  files;
 
   constructor(private selectedUnitsService: SelectedUnitsService ) {
     this.chkbox = false;
@@ -49,8 +55,20 @@ export class UnitCheckboxComponent implements OnInit {
         this.childUnits.forEach(upUnit => upUnit.chkbox = false);
       }
     }
+    this.valueChanged.emit();
   }
 
-
+  onChildEvent() {
+    let childChecked = false;
+    this.childUnits.forEach(unit => {
+      if (unit.chkbox == true) {
+        childChecked = true;
+        this.chkbox = true;
+      }
+    });
+    if (!childChecked) {
+      this.chkbox = false;
+    }
+  }
 
 }
