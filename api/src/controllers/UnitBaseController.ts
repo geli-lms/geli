@@ -51,7 +51,10 @@ export class UnitBaseController {
 
     // discard invalid requests
     this.checkPostParam(data, file);
-    data.model = this.handleUploadedFile(file, data.model);
+
+    if (file) {
+      data.model = this.handleUploadedFile(file, data.model);
+    }
 
     return Unit.create(data.model)
     .then((createdUnit) => {
@@ -65,39 +68,25 @@ export class UnitBaseController {
     });
   }
 
+  @Authorized(['teacher', 'admin'])
   @Put('/:id')
-  updateUnit(@UploadedFile('file', {options: uploadOptions}) file: any, @Param('id') id: string, @Body() unit: IUnit) {
-    // TODO: Complete PUT Implementation
-    return Unit.findById(id).then((oldUnit: IUnit) => {
-      if (!oldUnit) {
-        throw new NotFoundError();
-      }
-      // pre update: delete removed files
-      /*
-      if (oldUnit instanceof VideoUnit) {
-        (<IVideoUnit>oldUnit).files.forEach((file: any) => {
-          // if not present in new: delete
-          if (!(<IVideoUnit>unit).files.some((newFile) => newFile.name === file.name)) {
-            fs.unlink(file.path, () => {}); // silently discard file not found errors
-          }
-        });
-        return VideoUnit;
-      }
-      if (oldUnit instanceof FileUnit) {
-        (<IFileUnit>oldUnit).files.forEach((file: any) => {
-          // if not present in new: delete
-          if (!(<IFileUnit>unit).files.some((newFile) => newFile.name === file.name)) {
-            fs.unlink(file.path, () => {}); // silently discard file not found errors
-          }
-        });
-        return FileUnit;
-      }
-      */
-      return Unit;
-    }).then((model) => model.findByIdAndUpdate(id, unit, {'new': true}))
-      .then((u) => u.toObject());
+  async updateUnit(@UploadedFile('file', {options: uploadOptions}) file: any, @Param('id') id: string, @Body() data: any) {
+    const oldUnit: IUnitModel = await Unit.findById(id);
+
+    if (!oldUnit) {
+      throw new NotFoundError();
+    }
+
+    if (file) {
+      data = JSON.parse(data.data);
+      data = this.handleUploadedFile(file, data.model, oldUnit);
+    }
+
+    const updatedUnit: IUnitModel = await Unit.findOneAndUpdate({'_id': id}, data, {new: true});
+    return updatedUnit.toObject();
   }
 
+  @Authorized(['teacher', 'admin'])
   @Delete('/:id')
   deleteUnit(@Param('id') id: string) {
     return Unit.findById(id).then((unit) => {
@@ -148,12 +137,21 @@ export class UnitBaseController {
     }
   }
 
-  private handleUploadedFile(file: any, unit: IFileUnit) {
+  private handleUploadedFile(file: any, unit: IFileUnit, oldUnit?: IUnitModel) {
     if (!unit.hasOwnProperty('files')) {
       unit.files = []
     }
 
-    unit.files.push({path: file.path, name: file.filename, alias: file.originalname});
+    if (oldUnit) {
+      (<IFileUnitModel>oldUnit).files.forEach((oldUnitFile: any) => {
+        // if not present in new: delete
+        if (!unit.files.some((newFile) => newFile._id === oldUnitFile._id)) {
+          fs.unlink(oldUnitFile.path, () => {}); // silently discard file not found errors
+        }
+      });
+    }
+
+    unit.files.push({path: file.path, name: file.filename, alias: file.originalname, size: file.size});
     return unit;
   }
 }

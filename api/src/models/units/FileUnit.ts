@@ -21,6 +21,9 @@ const fileUnitSchema = new mongoose.Schema({
       alias: {
         type: String,
       },
+      size: {
+        type: Number
+      }
     }
   ],
   fileUnitType: {
@@ -49,6 +52,9 @@ fileUnitSchema.pre('remove', function(next: () => void) {
 });
 
 // TODO: Implement pre('findOneAndUpdate') and / or pre('update') for file cleanups
+fileUnitSchema.pre('findOneAndUpdate', function (next) {
+  next();
+});
 
 fileUnitSchema.statics.importJSON = async function(unit: IFileUnit, courseId: string, lectureId: string) {
   unit._course = courseId;

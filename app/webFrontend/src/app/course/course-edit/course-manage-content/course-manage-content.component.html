@@ -45,7 +45,7 @@
             <div class="unit-content">
               <mat-icon class="unit-drag-handle">drag_handle</mat-icon>
               <span class="unit-name">{{ unit.name }}</span>
-              <span class="unit-type">{{ unit.unitType }}</span>
+              <span class="unit-type">{{ unit.unitType ? unit.unitType : unit.type }}</span>
               <span class="unit-date">{{ unit.updatedAt | date:"y-MM-dd" }}</span>
               <span class="unit-actions">
               <button mat-icon-button matTooltip="Edit" (click)="onEditUnit(unit)">
@@ -68,10 +68,11 @@
             </span>
             </div>
 
-            <app-unit-form *ngIf="unitEditMode && unitEditElement === unit"
+            <app-unit-form *ngIf="unit && unitEditMode && unitEditElement === unit"
                            [course]="course"
                            [lecture]="lecture"
                            [type]="unit.type"
+                           [unitType]="unit.unitType"
                            [model]="unit"
                            [onDone]="onEditUnitDone"
                            [onCancel]="closeEditUnit">

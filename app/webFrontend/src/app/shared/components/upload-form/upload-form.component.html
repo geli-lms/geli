@@ -17,13 +17,20 @@
   </div>
 </div>
 -->
-<div ng2FileDrop
+<label ng2FileDrop
      [ngClass]="{'nv-file-over': hasDropZoneOver}"
      (fileOver)="onFileOverDropzone($event)"
      [uploader]="fileUploader"
      class="file-dropzone">
-  <span>Drop files here</span>
-</div>
+  <span>Drop files here or click here to add files</span>
+  <input type="file"
+         ng2FileSelect
+         [uploader]="fileUploader"
+         placeholder="Upload files"
+         [multiple]="maxFileNumber !== 1"
+         hidden
+  />
+</label>
 <!--
 <div>
   <input type="file" ng2FileSelect [uploader]="fileUploader" placeholder="Upload files" multiple/>
@@ -32,6 +39,37 @@
   </button>
 </div>
 -->
+<div class="queue-container" *ngIf="fileUploader.queue.length > 0">
+  <div class="overall-progress">
+    <span>Overall progress:</span>
+    <span class="progress-bar">
+      <mat-progress-bar mode="determinate" [value]="fileUploader.progress"></mat-progress-bar>
+    </span>
+  </div>
+  <div class="file-queue">
+    <div class="file-queue-row file-queue-header">
+      <span>Filename</span>
+      <span>Filesize</span>
+      <span class="progress-col">Progress</span>
+      <span>Actions</span>
+    </div>
+    <div class="file-queue-row" *ngFor="let item of fileUploader.queue">
+      <span class="filename">{{item.file.name}}</span>
+      <span class="filesize">{{item.file.size | filesize}}</span>
+      <span class="progress-col">
+        <mat-progress-bar mode="determinate" [value]="item.progress"></mat-progress-bar>
+      </span>
+      <mat-action-row>
+        <button *ngIf="item.isUploading" mat-button (click)="item.cancel()">
+          <mat-icon>block</mat-icon>Cancel upload
+        </button>
+        <button *ngIf="!item.isUploading && !item.isSuccess" mat-raised-button color="warn" (click)="item.remove()">
+          <mat-icon>delete</mat-icon>Remove from queue
+        </button>
+      </mat-action-row>
+    </div>
+  </div>
+</div>
 <div>
   <div *ngFor="let item of fileUploader.queue">
     <strong>{{ item?.file?.name }}</strong>
@@ -39,11 +77,5 @@
     <span *ngIf="item.isUploading">(uploading...)</span>
     <span *ngIf="item.isSuccess">(success!)</span>
     <mat-progress-bar mode="determinate" [value]="item.progress"></mat-progress-bar>
-  </div>
-</div>
-<div>
-  Queue progress:
-  <div>
-    <mat-progress-bar mode="determinate" [value]="fileUploader.progress"></mat-progress-bar>
   </div>
 </div>

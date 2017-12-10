@@ -27,6 +27,9 @@ const unitSchema = new mongoose.Schema({
     },
     weight: {
       type: Number
+    },
+    type: {
+      type: String
     }
   },
   {

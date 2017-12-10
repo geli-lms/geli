@@ -65,7 +65,8 @@ export class UserController {
         user.profile.picture = {
           path: file.path,
           name: file.filename,
-          alias: file.originalname
+          alias: file.originalname,
+          size: file.size
         };
         return user.save();
       })

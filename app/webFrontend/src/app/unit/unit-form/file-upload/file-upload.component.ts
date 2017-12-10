@@ -86,6 +86,24 @@ export class FileUploadComponent implements OnInit {
     this.uploadForm.uploadAll();
   }
 
+  removeFile(file: any) {
+    if (this.model) {
+      this.model.files = this.model.files.filter((currFile: any) => currFile !== file);
+    }
+  }
+
+  checkSave() {
+    if (this.generalInfo.form.value.name) {
+      if (this.filesSelected || this.model.files.length > 0) {
+        return false;
+      } else {
+        return true;
+      }
+    } else {
+      return true;
+    }
+  }
+
   /*
   ngOnInit() {
     this.uploader.onBuildItemForm = (fileItem: any, form: any) => {

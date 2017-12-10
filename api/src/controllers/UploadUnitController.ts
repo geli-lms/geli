@@ -53,6 +53,7 @@ export class UploadUnitController extends UnitBaseController {
               path: file.path,
               name: file.filename,
               alias: file.originalname,
+              size: 1
             });
             return unit.save();
           })
@@ -98,6 +99,7 @@ export class UploadUnitController extends UnitBaseController {
               path: file.path,
               name: file.filename,
               alias: file.originalname,
+              size: 1
             });
             return unit.save();
           })

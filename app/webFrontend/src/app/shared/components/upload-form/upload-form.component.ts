@@ -1,6 +1,7 @@
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
-import {FileUploader} from 'ng2-file-upload';
+import {FileUploader, FileUploaderOptions} from 'ng2-file-upload';
 import {MatSnackBar} from '@angular/material';
+import {isNullOrUndefined} from 'util';
 
 @Component({
   selector: 'app-upload-form',
@@ -17,6 +18,9 @@ export class UploadFormComponent implements OnInit, OnChanges {
 
   @Input()
   additionalData: any;
+
+  @Input()
+  maxFileNumber: number;
 
   @Output()
   onFileSelectedChange = new EventEmitter();
@@ -36,11 +40,17 @@ export class UploadFormComponent implements OnInit, OnChanges {
   constructor(private snackBar: MatSnackBar) { }
 
   ngOnInit() {
-    this.fileUploader = new FileUploader({
+    const uploadOptions: FileUploaderOptions = {
       url: this.uploadPath,
       authToken: localStorage.getItem('token'),
       allowedMimeType: this.allowedMimeTypes
-    });
+    };
+
+    if (this.maxFileNumber) {
+      uploadOptions.queueLimit = this.maxFileNumber;
+    }
+
+    this.fileUploader = new FileUploader(uploadOptions);
 
     this.fileUploader.onBuildItemForm = (fileItem: any, form: any) => {
       form.append('data', JSON.stringify(this.additionalData))
@@ -58,6 +68,7 @@ export class UploadFormComponent implements OnInit, OnChanges {
 
     this.fileUploader.onCompleteAll = () => {
       if (!this.error) {
+        this.onAllUploaded.emit();
         this.snackBar.open('All items uploaded!', '', {duration: 3000});
       }
     };
@@ -109,5 +120,6 @@ export class UploadFormComponent implements OnInit, OnChanges {
   }
 
   onFileOverDropzone(event) {
+    this.hasDropZoneOver = event;
   }
 }

@@ -13,6 +13,7 @@ import {ExpandableDivComponent} from './components/expandable-div/expandable-div
 import {ButtonSaveCancelComponent} from './components/button-save-cancel/button-save-cancel.component';
 import { UploadFormComponent } from './components/upload-form/upload-form.component';
 import {FileUploadModule} from 'ng2-file-upload';
+import { FilesizePipe } from './pipes/filesize/filesize.pipe';
 
 @NgModule({
   imports: [
@@ -33,6 +34,7 @@ import {FileUploadModule} from 'ng2-file-upload';
     ExpandableDivComponent,
     ButtonSaveCancelComponent,
     UploadFormComponent,
+    FilesizePipe,
   ],
   exports: [
     GravatarDirective,
@@ -47,6 +49,7 @@ import {FileUploadModule} from 'ng2-file-upload';
     ExpandableDivComponent,
     ButtonSaveCancelComponent,
     UploadFormComponent,
+    FilesizePipe,
   ]
 })
 export class SharedModule {
