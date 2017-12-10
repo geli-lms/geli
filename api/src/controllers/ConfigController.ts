@@ -1,15 +1,10 @@
-import {Request} from 'express';
 import {
-  Authorized, BadRequestError,
+  Authorized,
   Body,
-  CurrentUser, Delete, ForbiddenError,
   Get, InternalServerError,
-  JsonController, NotFoundError,
+  JsonController,
   Param,
-  Post,
   Put,
-  Req, UnauthorizedError,
-  UploadedFile,
   UseBefore
 } from 'routing-controllers';
 import {Config} from '../models/Config';
@@ -17,7 +12,6 @@ import passportJwtMiddleware from '../security/passportJwtMiddleware';
 
 
 @JsonController('/config')
-
 export class ConfigController {
   @Get('/imprint')
   async getImprint() {
@@ -38,12 +32,11 @@ export class ConfigController {
   async setImprint(@Param('id') name: string, @Body() data: any) {
     const conditions: any = {name: name};
     try {
-      const config = Config.findOneAndUpdate(
+      return Config.findOneAndUpdate(
         conditions,
         {name: name, configValue: data.data},
         {'upsert': true, 'new': true}
       );
-      return config;
     } catch (error) {
       throw new InternalServerError('something went wrong');
     }

@@ -1,10 +1,13 @@
 <h1>Administration</h1>
+<mat-toolbar>
+  <button mat-menu-item routerLink="/admin/users">
+    <span>Users</span>
+  </button>
+  <button mat-menu-item routerLink="/admin/imprint">
+    <span>Imprint</span>
+  </button>
+</mat-toolbar>
 
-<mat-tab-group>
-  <mat-tab label="User">
-    <app-user-admin></app-user-admin>
-  </mat-tab>
-  <mat-tab label="Imprint">
-    <app-imprint-admin></app-imprint-admin>
-  </mat-tab>
-</mat-tab-group>
+<div class="admin-container">
+  <router-outlet></router-outlet>
+</div>

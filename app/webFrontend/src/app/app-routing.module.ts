@@ -26,9 +26,7 @@ const routes: Routes = [
   },
   {
     path: 'admin',
-    component: AdminComponent,
-    canActivate: [AuthGuardService],
-    data: {roles: ['admin']}
+    loadChildren: 'app/admin/admin.module#AdminModule'
   },
   {
     path: 'about',
