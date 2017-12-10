@@ -26,7 +26,7 @@ export abstract class DataService {
     return new Promise((resolve, reject) => {
       this.backendService.post(this.apiPath, JSON.stringify(createItem))
       .subscribe(
-        (responseItem: any) => {
+        (responseItem) => {
           resolve(responseItem);
         },
         error => reject(error)
@@ -38,18 +38,17 @@ export abstract class DataService {
     return new Promise((resolve, reject) => {
       this.backendService.get(this.apiPath)
       .subscribe(
-        (responseItems: any) => {
+        (responseItems) => {
           if (this.changeProps2Date) {
-            responseItems.forEach(item => {
+            for(let item of responseItems.body) {
               this.changeProps2Date.forEach(prop => {
                 DataService.changeStringProp2DateProp(item, prop);
               });
-            });
+            }
           }
-
-          resolve(responseItems);
+          resolve(responseItems.body);
         },
-        error => reject(error)
+        (error) => reject(error)
       );
     });
   }
@@ -442,11 +441,9 @@ export class DownloadReq extends DataService {
 
    getFile(id: string) {
      return new Promise((resolve, reject) => {
-       this.backendService.getMultipart(this.apiPath + id).subscribe( (responseItem) => {
+       this.backendService.get(this.apiPath + id).subscribe( (responseItem) => {
          console.log(responseItem);
-           const data =  new Blob( [responseItem.blob()], { type: 'application/zip'} );
-           console.log(data);
-           resolve(data);
+           resolve(responseItem);
          },
          error => reject(error) );
      });

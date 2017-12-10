@@ -35,16 +35,8 @@ export class AppComponent implements OnInit {
     );
   }
 
-  ngOnInit(): void {
+ ngOnInit(): void {
     this.authenticationService.reloadUser();
-    this.apiInfoService.readItems()
-    .then((info: any) => {
-      this.ravenErrorHandler.setup(info.sentryDsn);
-      this.apiInfo = info;
-    })
-    .catch((err) => {
-      this.snackBar.open('Error on init', '', {duration: 3000});
-    });
   }
 
   hasWarning() {

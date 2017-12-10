@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {HttpClient, HttpResponse} from '@angular/common/http';
 
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
@@ -24,35 +24,25 @@ export class BackendService {
     return Observable.throw(err);
   };
 
-  get(serviceUrl: string): Observable<Response> {
+  get(serviceUrl: string): Observable<HttpResponse<any>> {
     return this.http.get(BackendService.API_URL + serviceUrl, {headers: this.authenticationService.authHeader()})
-    .catch(this.handleUnauthorized)
-    .map(response => response.json());
+    .catch(this.handleUnauthorized);
   }
 
-  getMultipart(serviceUrl: string): Observable<Response> {
-    return this.http.get(BackendService.API_URL + serviceUrl, {headers: this.authenticationService.authHeader()})
-      .catch(this.handleUnauthorized);
-  }
-
-  post(serviceUrl: string, options: any): Observable<Response> {
+  post(serviceUrl: string, options: any): Observable<HttpResponse<any>> {
     return this.http.post(BackendService.API_URL + serviceUrl, options, {headers: this.authenticationService.authHeader()})
-    .catch(this.handleUnauthorized)
-    .map(response => response.json());
+    .catch(this.handleUnauthorized);
   }
 
-  put(serviceUrl: string, options: any): Observable<Response> {
+  put(serviceUrl: string, options: any): Observable<HttpResponse<any>> {
 
     return this.http.put(BackendService.API_URL + serviceUrl, options, {headers: this.authenticationService.authHeader()})
-    .catch(this.handleUnauthorized)
-    .map(response => response.json());
-
+    .catch(this.handleUnauthorized);
   }
 
-  delete(serviceUrl: string): Observable<Response> {
+  delete(serviceUrl: string): Observable<HttpResponse<any>> {
     return this.http.delete(BackendService.API_URL + serviceUrl, {headers: this.authenticationService.authHeader()})
-    .catch(this.handleUnauthorized)
-    .map(response => response.json());
+    .catch(this.handleUnauthorized);
 
   }
 
