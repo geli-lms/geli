@@ -34,7 +34,7 @@ export abstract class DataService {
     });
   }
 
-  readItems(): Promise<any[]> {
+  readItems(): Promise<any> {
     return new Promise((resolve, reject) => {
       this.backendService.get(this.apiPath)
       .subscribe(

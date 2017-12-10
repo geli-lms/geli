@@ -44,27 +44,25 @@ export class SelectUnitDialogComponent {
 
   async downloadAndClose() {
     // Iterate through structure, build obj with positive bool values.
-    this.buildDialog();
-    /*if (this.selectedUnitsService.unitIds.length > 0) {
-      const dl = {course: this.course.name, lectures: [], units: this.selectedUnitsService.getSelectedData()};
+    const obj = await this.buildObject();
+    // hier prüfen ob keine Units || zu groß
+    if (true) {
+      const dl = {obj};
       const result = await this.downloadReq.postDownloadReqForCourse(dl);
-
       const response = await this.downloadReq.getFile(result.toString());
 
       var link=document.createElement('a');
       link.href=window.URL.createObjectURL(response);
       link.download= this.course.name + '.zip';
       link.click();
-
       //this.saveFileService.save(this.course.name,'Some Data','.zip', 'file/zip', 'file/zip');
-
       this.dialogRef.close();
     } else {
       this.snackBar.open('No units selected!', 'Dismiss', {duration: 3000});
-    }*/
+    }
   }
 
-  buildDialog() {
+  buildObject() {
     let obj = {};
     obj["course"] = this.course._id;
     obj["lectures"] = [];
@@ -94,6 +92,7 @@ export class SelectUnitDialogComponent {
           obj["lectures"].push(lecObj);
         }
     });
-    console.dir(obj, {depth: null, colors: true});
+   // console.dir(obj, {depth: null, colors: true});
+    return obj;
   }
 }
