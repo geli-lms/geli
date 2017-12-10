@@ -6,7 +6,6 @@ import {ICourse} from '../../../../../../shared/models/ICourse';
 import {UserService} from '../../shared/services/user.service';
 import {MatSnackBar, MatDialog} from '@angular/material';
 import {SelectUnitDialogComponent} from './select-unit-dialog/select-unit-dialog.component';
-import {SelectedUnitsService} from '../../shared/services/selected-units.service';
 import {TitleService} from '../../shared/services/title.service';
 
 @Component({
@@ -26,7 +25,6 @@ export class CourseDetailComponent implements OnInit {
               public userService: UserService,
               private snackBar: MatSnackBar,
               private dialog: MatDialog,
-              private selectedUnitsService: SelectedUnitsService,
               private titleService: TitleService) {
   }
 
@@ -55,9 +53,6 @@ export class CourseDetailComponent implements OnInit {
     const diaRef = this.dialog.open(SelectUnitDialogComponent, {
       data: {course: this.course},
       width: '800px'
-    });
-    diaRef.afterClosed().subscribe(() => {
-      this.selectedUnitsService.clearData();
     });
   }
 }

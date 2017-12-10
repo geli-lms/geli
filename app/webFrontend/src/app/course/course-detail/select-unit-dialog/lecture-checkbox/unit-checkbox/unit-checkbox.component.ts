@@ -3,7 +3,6 @@ import {
   EventEmitter
 } from '@angular/core';
 import {IUnit} from '../../../../../../../../../shared/models/units/IUnit';
-import {SelectedUnitsService} from '../../../../../shared/services/selected-units.service';
 import {IFileUnit} from '../../../../../../../../../shared/models/units/IFileUnit';
 import {IVideoUnit} from '../../../../../../../../../shared/models/units/IVideoUnit';
 import {UploadUnitCheckboxComponent} from "./upload-unit-checkbox/upload-unit-checkbox.component";
@@ -29,11 +28,12 @@ export class UnitCheckboxComponent implements OnInit {
 
   files;
 
-  constructor(private selectedUnitsService: SelectedUnitsService ) {
-    this.chkbox = false;
+  constructor() {
+
   }
 
   ngOnInit() {
+    this.chkbox = false;
     if (this.unit.type === 'video') {
       const videoUnit = <IVideoUnit><any> this.unit;
       this.files = videoUnit.files;
@@ -69,6 +69,6 @@ export class UnitCheckboxComponent implements OnInit {
     if (!childChecked) {
       this.chkbox = false;
     }
+    this.valueChanged.emit();
   }
-
 }

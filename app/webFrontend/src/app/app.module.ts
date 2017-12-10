@@ -30,7 +30,6 @@ import {UserModule} from './user/user.module';
 import {AuthModule} from './auth/auth.module';
 import {AboutModule} from './about/about.module';
 import {AdminModule} from './admin/admin.module';
-import {SelectedUnitsService} from './shared/services/selected-units.service';
 import {ReportService} from './shared/services/data/report.service';
 import {TitleService} from './shared/services/title.service';
 
@@ -70,7 +69,6 @@ import {TitleService} from './shared/services/title.service';
     APIInfoService,
     ReportService,
     TitleService,
-    SelectedUnitsService,
     DownloadReq,
     RavenErrorHandler,
     {

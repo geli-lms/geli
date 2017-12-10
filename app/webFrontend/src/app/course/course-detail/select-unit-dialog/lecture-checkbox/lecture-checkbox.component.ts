@@ -40,6 +40,7 @@ export class LectureCheckboxComponent implements OnInit {
       this.childUnits.forEach(unit => unit.chkbox = false);
       this.childUnits.forEach(unit => unit.onChange());
     }
+    this.valueChanged.emit();
   }
 
   onChildEvent(event) {
