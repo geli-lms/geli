@@ -67,9 +67,10 @@ export class SelectUnitDialogComponent implements OnInit{
       this.snackBar.open('No units selected!', 'Dismiss', {duration: 3000});
       return;
     }
-    this.showSpinner = true;
     const downloadObj = <IDownload> obj;
-    // hier prüfen ob keine Units || zu groß
+    this.showSpinner = true;
+
+    const sizeResult = await this.downloadReq.getPackageSize(downloadObj);
 
     const result = await this.downloadReq.postDownloadReqForCourse(downloadObj);
     const response = await this.downloadReq.getFile(result.toString());

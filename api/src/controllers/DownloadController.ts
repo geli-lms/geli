@@ -39,6 +39,50 @@ export class DownloadController {
 
   }
 
+  @Get('/size/')
+  async getFileSize(@Body() data: IDownload) {
+
+    let totalSize: number = 0;
+    let tooLargeFiles: Array<string> = [];
+
+
+    for (const lec of data.lectures) {
+      for (const unit of lec.units) {
+
+        const localUnit = await Unit.findOne({_id: unit.unitId});
+        if (localUnit instanceof FileUnit) {
+          const fileUnit = <IFileUnit><any>localUnit;
+          fileUnit.files.forEach((file, index) => {
+            if (unit.files.indexOf({id: index})) {
+              const stats = fs.statSync(file.path);
+              const fileSize = stats.size / 1000000.0;
+              if( fileSize > 50 ) {
+                tooLargeFiles.push(file.path);
+              }
+              totalSize += fileSize;
+            }
+          });
+        } else if (localUnit instanceof VideoUnit) {
+          const videoFileUnit = <IVideoUnit><any>localUnit;
+          videoFileUnit.files.forEach((file, index) => {
+            if (unit.files.indexOf({id: index}) !== -1) {
+              const stats = fs.statSync(file.path);
+              const fileSize = stats.size / 1000000.0;
+              if( fileSize > 50 ) {
+                tooLargeFiles.push(file.path);
+              }
+              totalSize += fileSize;
+            }
+          });
+        }
+      }
+    }
+
+    let downPackage = {size: totalSize, largeElements: tooLargeFiles};
+
+    return downPackage;
+  }
+
   @Post('/')
   @ContentType('application/json')
   async postDownloadRequest(@Body() data: IDownload) {

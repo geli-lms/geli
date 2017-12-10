@@ -430,6 +430,16 @@ export class DownloadReq extends DataService {
   constructor(public backendService: BackendService) {
     super('download/', backendService);
   }
+
+  getPackageSize(idl: IDownload) {
+    return new Promise((resolve, reject) => {
+      this.backendService.post(this.apiPath + '/size', idl).subscribe( (responseItem: any) => {
+          resolve(responseItem);
+        },
+        error => reject(error) );
+    });
+  }
+
   postDownloadReqForCourse(idl: IDownload) {
     return new Promise((resolve, reject) => {
       this.backendService.post(this.apiPath, idl).subscribe( (responseItem: any) => {
