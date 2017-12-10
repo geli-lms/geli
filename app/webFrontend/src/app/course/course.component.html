@@ -28,8 +28,7 @@
       <mat-icon>show_chart</mat-icon>
     </button>
 
-    <button mat-icon-button (click)="showReport(course._id)"
-            *ngIf="!course.active" disabled>
+    <button mat-icon-button *ngIf="!course.active" disabled>
       <mat-icon color="warn">visibility_off</mat-icon>
     </button>
 
