@@ -5,6 +5,7 @@ import {SelectedUnitsService} from '../../../shared/services/selected-units.serv
 import {LectureCheckboxComponent} from './lecture-checkbox/lecture-checkbox.component';
 import {SaveFileService} from '../../../shared/services/save-file.service';
 import {DownloadReq} from 'app/shared/services/data.service';
+import {IDownload} from '../../../../../../../shared/models/IDownload';
 
 @Component({
   selector: 'app-select-unit-dialog',
@@ -44,55 +45,52 @@ export class SelectUnitDialogComponent {
 
   async downloadAndClose() {
     // Iterate through structure, build obj with positive bool values.
-    const obj = await this.buildObject();
-    // hier prüfen ob keine Units || zu groß
-    if (true) {
-      const dl = {obj};
-      const result = await this.downloadReq.postDownloadReqForCourse(dl);
-      const response = await this.downloadReq.getFile(result.toString());
-
-      var link=document.createElement('a');
-      link.href=window.URL.createObjectURL(response);
-      link.download= this.course.name + '.zip';
-      link.click();
-      //this.saveFileService.save(this.course.name,'Some Data','.zip', 'file/zip', 'file/zip');
-      this.dialogRef.close();
-    } else {
+    if (this.childLectures.length === 0) {
       this.snackBar.open('No units selected!', 'Dismiss', {duration: 3000});
+      return;
     }
+
+    const obj = await this.buildObject();
+    const downloadObj = <IDownload> obj;
+    // hier prüfen ob keine Units || zu groß
+
+    const result = await this.downloadReq.postDownloadReqForCourse(downloadObj);
+    const response = await this.downloadReq.getFile(result.toString());
+
+    var link = document.createElement('a');
+    link.href = window.URL.createObjectURL(response);
+    link.download = this.course.name + '.zip';
+    link.click();
+    //this.saveFileService.save(this.course.name,'Some Data','.zip', 'file/zip', 'file/zip');
+    this.dialogRef.close();
   }
 
   buildObject() {
-    let obj = {};
-    obj["course"] = this.course._id;
-    obj["lectures"] = [];
+    let lectures = [];
     this.childLectures.forEach(lec => {
-        let lecObj = {};
-        lecObj["lecID"] = lec.lecture._id;
-        lecObj["units"] = [];
+      if (lec.chkbox) {
+        let units = [];
         lec.childUnits.forEach(unit => {
-          if(unit.chkbox) {
-            let unitObj = {};
-            unitObj["unitID"] = unit.unit._id;
-            if (unit.unit.type == 'video' || 'file') {
-              unitObj["files"] = [];
-              const files = unit.childUnits.toArray();
-              for (var fileIndex in files) {
-                const file = files[fileIndex];
-                if(file.chkbox) {
-                  unitObj["files"].push(fileIndex);
+          if (unit.chkbox) {
+            if (unit.unit.type === 'Video' || unit.unit.type === 'File') {
+              let files;
+              unit.childUnits.forEach((file, index) => {
+                if (file.chkbox) {
+                  files.push(index);
                 }
-              }
+              });
+              units.push({id: unit.unit._id, files: files});
+            } else {
+              units.push({id: unit.unit._id});
             }
-            lecObj["units"].push(unitObj);
           }
-
         });
-        if(lecObj["units"].length > 0) {
-          obj["lectures"].push(lecObj);
-        }
+        lectures.push({lectureId: lec.lecture._id, units: units});
+      }
     });
-   // console.dir(obj, {depth: null, colors: true});
-    return obj;
+
+    let downloadObj = {courseName: this.course._id, lectures: lectures};
+    return downloadObj;
   }
+
 }
