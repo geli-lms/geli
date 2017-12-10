@@ -46,7 +46,7 @@ export abstract class DataService {
               });
             }
           }
-          resolve(responseItems.body);
+          resolve(responseItems);
         },
         (error) => reject(error)
       );
