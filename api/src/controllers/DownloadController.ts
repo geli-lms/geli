@@ -7,7 +7,7 @@ import crypto = require('crypto');
 const appRoot = require('app-root-path');
 import {Response} from 'express';
 import {
-  Body, Post, Get, Header, NotFoundError, ContentType, UseInterceptor,  OnUndefined, UseBefore, Param, Res, Controller,
+  Body, Post, Get, Header, NotFoundError, ContentType, UseInterceptor, OnUndefined, UseBefore, Param, Res, Controller,
   Action
 } from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
@@ -37,13 +37,13 @@ export class DownloadController {
     await promisify<string, void>(response.download.bind(response))(filePath);
     return response;
 
-    }
+  }
 
   @Post('/')
   @ContentType('application/json')
   async postDownloadRequest(@Body() data: IDownload) {
 
-    if (data.units.length === 0) {
+    if (data.lectures.length === 0) {
       throw new NotFoundError();
     }
 
@@ -60,41 +60,48 @@ export class DownloadController {
 
     archive.pipe(output);
 
-    for (const unit of data.units) {
-      const localUnit = await Unit.findOne({_id: unit});
-      if (localUnit instanceof FreeTextUnit) {
-        const freeTextUnit = <IFreeTextUnit><any>localUnit;
-        archive.append(freeTextUnit.description + '\n' + freeTextUnit.markdown, {name: freeTextUnit.name + '.txt'});
-      } else if (localUnit instanceof CodeKataUnit) {
-        const codeKataUnit = <ICodeKataUnit><any>localUnit;
-        archive.append(codeKataUnit.description + '\n' + codeKataUnit.definition + '\n' +
-          codeKataUnit.code, {name: codeKataUnit.name + '.txt'});
-      } else if (localUnit instanceof FileUnit) {
-        const fileUnit = <IFileUnit><any>localUnit;
-        for (const file of fileUnit.files) {
-          archive.file(file.path, {name: file.name});
-        }
-      } else if (localUnit instanceof VideoUnit) {
-        const videoFileUnit = <IVideoUnit><any>localUnit;
-        for (const file of videoFileUnit.files) {
-          archive.file(file.path, {name: file.name});
-        }
-      } else if (localUnit instanceof TaskUnit) {
-        const taskUnit = <ITaskUnit><any>localUnit;
-        let fileStream = '';
+    for (const lec of data.lectures) {
+      for (const unit of lec.units) {
 
-        for (const task of taskUnit.tasks) {
-          const newTask = await Task.findOne(task._id);
-          fileStream = fileStream + newTask.name + '\n';
+        const localUnit = await Unit.findOne({_id: unit.unitId});
+        if (localUnit instanceof FreeTextUnit) {
+          const freeTextUnit = <IFreeTextUnit><any>localUnit;
+          archive.append(freeTextUnit.description + '\n' + freeTextUnit.markdown, {name: freeTextUnit.name + '.txt'});
+        } else if (localUnit instanceof CodeKataUnit) {
+          const codeKataUnit = <ICodeKataUnit><any>localUnit;
+          archive.append(codeKataUnit.description + '\n' + codeKataUnit.definition + '\n' +
+            codeKataUnit.code, {name: codeKataUnit.name + '.txt'});
+        } else if (localUnit instanceof FileUnit) {
+          const fileUnit = <IFileUnit><any>localUnit;
+          fileUnit.files.forEach((file, index) => {
+            if (unit.files.indexOf({id: index})) {
+              archive.file(file.path, {name: file.name});
+            }
+          });
+        } else if (localUnit instanceof VideoUnit) {
+          const videoFileUnit = <IVideoUnit><any>localUnit;
+          videoFileUnit.files.forEach((file, index) => {
+            if (unit.files.indexOf({id: index}) !== -1) {
+              archive.file(file.path, {name: file.name});
+            }
+          });
+        } else if (localUnit instanceof TaskUnit) {
+          const taskUnit = <ITaskUnit><any>localUnit;
+          let fileStream = '';
 
-          for (const answer of newTask.answers) {
-            fileStream = fileStream + answer.text + ': [ ]\n';
+          for (const task of taskUnit.tasks) {
+            const newTask = await Task.findOne(task._id);
+            fileStream = fileStream + newTask.name + '\n';
+
+            for (const answer of newTask.answers) {
+              fileStream = fileStream + answer.text + ': [ ]\n';
+            }
+            fileStream = fileStream + '-------------------------------------\n';
+            archive.append(taskUnit.description + '\n' + fileStream, {name: taskUnit.name + '.txt'});
           }
-          fileStream = fileStream + '-------------------------------------\n';
-          archive.append(taskUnit.description + '\n' + fileStream, {name: taskUnit.name + '.txt'});
+        } else {
+          throw new NotFoundError();
         }
-      } else {
-        throw new NotFoundError();
       }
     }
 

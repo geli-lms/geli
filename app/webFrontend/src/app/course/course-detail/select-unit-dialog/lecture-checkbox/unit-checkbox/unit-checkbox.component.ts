@@ -17,7 +17,7 @@ import {UploadUnitCheckboxComponent} from "./upload-unit-checkbox/upload-unit-ch
 })
 export class UnitCheckboxComponent implements OnInit {
   @Input()
-  unit;
+  unit : IUnit;
   @Input()
   chkbox: boolean;
 

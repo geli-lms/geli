@@ -1,3 +1,12 @@
 export interface IDownload {
-  obj: {};
+  courseName: string;
+  lectures: [{
+    lectureId: string;
+    units: [{
+      unitId: string;
+      files?: [{
+        id: number;
+      }]
+    }]
+  }]
 }
