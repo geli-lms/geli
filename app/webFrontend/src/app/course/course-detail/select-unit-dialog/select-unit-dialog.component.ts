@@ -1,4 +1,4 @@
-import {Component, Inject, QueryList, ViewChildren, ViewEncapsulation} from '@angular/core';
+import {Component, Inject, OnInit, QueryList, ViewChildren, ViewEncapsulation} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef, MatSnackBar} from '@angular/material';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
 import {SelectedUnitsService} from '../../../shared/services/selected-units.service';
@@ -62,20 +62,18 @@ export class SelectUnitDialogComponent implements OnInit{
   }
 
   async downloadAndClose() {
-
-    // Iterate through structure, build obj with positive bool values.
-    if (this.childLectures.length === 0) {
+    const obj = await this.buildObject();
+    if (obj.lectures.length === 0) {
       this.snackBar.open('No units selected!', 'Dismiss', {duration: 3000});
       return;
     }
     this.showSpinner = true;
-    const obj = await this.buildObject();
     const downloadObj = <IDownload> obj;
     // hier prüfen ob keine Units || zu groß
 
     const result = await this.downloadReq.postDownloadReqForCourse(downloadObj);
     const response = await this.downloadReq.getFile(result.toString());
-
+    this.showSpinner = false;
     var link = document.createElement('a');
     link.href = window.URL.createObjectURL(response);
     link.download = this.course.name + '.zip';
