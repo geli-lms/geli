@@ -1,5 +1,5 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
-import {TaskService, UnitService} from '../../../shared/services/data.service';
+import {UnitService} from '../../../shared/services/data.service';
 import {Task} from '../../../models/Task';
 import {MatSnackBar} from '@angular/material';
 import {ITaskUnit} from '../../../../../../../shared/models/units/ITaskUnit';
@@ -35,8 +35,7 @@ export class TaskUnitEditComponent implements OnInit {
   @ViewChild(UnitGeneralInfoFormComponent)
   private generalInfo: UnitGeneralInfoFormComponent;
 
-  constructor(private taskService: TaskService,
-              private unitService: UnitService,
+  constructor(private unitService: UnitService,
               private snackBar: MatSnackBar) {
   }
 
@@ -44,13 +43,14 @@ export class TaskUnitEditComponent implements OnInit {
     if (!this.model) {
       this.model = new TaskUnit(this.course._id);
       this.add = true;
+      this.addTask();
     } else {
       this.reloadTaskUnit();
     }
   }
 
   async reloadTaskUnit() {
-    // Reload the task unit from the database to make sure that the tasks (and answers)
+    // Reload task unit from database to make sure that tasks (and answers)
     // are populated properly (e.g. necessary after a Cancel)
     this.model = <ITaskUnit><any>await this.unitService.readTaskUnit(this.model._id);
   }
@@ -131,26 +131,37 @@ export class TaskUnitEditComponent implements OnInit {
   }
 
   addTask() {
-    this.model.tasks.push(new Task());
+    const task = new Task();
+    this.model.tasks.push(task);
+    this.addAnswerAtEnd(task);
+    this.addAnswerAtEnd(task);
   }
 
   addAnswerAtEnd(task: ITask) {
-    task.answers.push(new Answer()); // add item to end
+    task.answers.push(new Answer());
   }
 
-  removeLastAnswer(task: any) {
-    task.answers.pop();
-  }
-
-  removeTask(task: any) {
-    if (!task._id) {
-      this.model.tasks = this.model.tasks.filter(obj => task !== obj);
-      return;
+  removeAnswer(task: ITask, index: number) {
+    if (task.answers.length > 2) {
+      if (index > -1) {
+        task.answers.splice(index, 1);
+      }
+    } else {
+      const message = 'Not possible: Every question requires at least two answers';
+      this.snackBar.open(message, '', {duration: 3000});
     }
+  }
 
-    this.taskService.deleteItem(task).then(tasks => {
-      this.model.tasks = this.model.tasks.filter(obj => task._id !== obj._id);
-      this.snackBar.open('Task deleted', 'Delete', {duration: 2000});
-    });
+  removeTask(task: ITask) {
+    if (this.model.tasks.length > 1) {
+      if (!task._id) {
+        this.model.tasks = this.model.tasks.filter(obj => task !== obj);
+      } else {
+        this.model.tasks = this.model.tasks.filter(obj => task._id !== obj._id);
+      }
+    } else {
+      const message = 'Not possible: At least one question is required';
+      this.snackBar.open(message, '', {duration: 3000});
+    }
   }
 }
