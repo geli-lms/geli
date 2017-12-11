@@ -79,7 +79,7 @@ export class UnitBaseController {
 
     if (file) {
       data = JSON.parse(data.data);
-      data = this.handleUploadedFile(file, data.model, oldUnit);
+      data = this.handleUploadedFile(file, data.model);
     }
 
     const updatedUnit: IUnitModel = await Unit.findOneAndUpdate({'_id': id}, data, {new: true});
@@ -137,18 +137,9 @@ export class UnitBaseController {
     }
   }
 
-  private handleUploadedFile(file: any, unit: IFileUnit, oldUnit?: IUnitModel) {
+  private handleUploadedFile(file: any, unit: IFileUnit) {
     if (!unit.hasOwnProperty('files')) {
       unit.files = []
-    }
-
-    if (oldUnit) {
-      (<IFileUnitModel>oldUnit).files.forEach((oldUnitFile: any) => {
-        // if not present in new: delete
-        if (!unit.files.some((newFile) => newFile._id === oldUnitFile._id)) {
-          fs.unlink(oldUnitFile.path, () => {}); // silently discard file not found errors
-        }
-      });
     }
 
     unit.files.push({path: file.path, name: file.filename, alias: file.originalname, size: file.size});

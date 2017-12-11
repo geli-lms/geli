@@ -94,7 +94,7 @@ export class FileUploadComponent implements OnInit {
 
   checkSave() {
     if (this.generalInfo.form.value.name) {
-      if (this.filesSelected || this.model.files.length > 0) {
+      if (this.filesSelected || (this.model.files.length > 0)) {
         return false;
       } else {
         return true;

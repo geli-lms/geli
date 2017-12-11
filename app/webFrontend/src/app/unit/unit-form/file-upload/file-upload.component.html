@@ -1,12 +1,13 @@
 <strong>Files</strong>
 
 <app-unit-general-info-form [model]="model"></app-unit-general-info-form>
-<div *ngIf="model.files.length > 0" class="file-list">
+<div *ngIf="model?.files?.length > 0" class="file-list">
   <div class="file-list-row file-queue-header">
     <span>Filename</span>
     <span>Filesize</span>
     <span>Actions</span>
   </div>
+  <p>{{model.files | json }}</p>
   <div class="file-list-row" *ngFor="let file of model.files">
     <span class="filename">{{file.alias}}</span>
     <span class="filesize">{{file.size | filesize}}</span>

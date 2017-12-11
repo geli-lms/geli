@@ -68,7 +68,7 @@ export class UploadFormComponent implements OnInit, OnChanges {
 
     this.fileUploader.onCompleteAll = () => {
       if (!this.error) {
-        this.onAllUploaded.emit();
+        // this.onAllUploaded.emit();
         this.snackBar.open('All items uploaded!', '', {duration: 3000});
       }
     };
@@ -96,13 +96,11 @@ export class UploadFormComponent implements OnInit, OnChanges {
       item.isUploaded = false;
       this.snackBar.open(`${item._file.name} failed to upload`, 'Dismiss');
     };
-
-    this.fileUploader.clearQueue();
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.hasOwnProperty('uploadPath') && !this.first) {
-      this.fileUploader.uploadAll();
+      this.uploadAll();
     }
   }
 
