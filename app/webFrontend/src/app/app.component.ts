@@ -37,7 +37,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.authenticationService.reloadUser();
-    this.apiInfoService.backendService.get()
+    this.apiInfoService.readItems()
     .then((info: any) => {
       this.ravenErrorHandler.setup(info.sentryDsn);
       this.apiInfo = info;

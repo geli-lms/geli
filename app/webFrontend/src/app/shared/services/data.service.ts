@@ -1,4 +1,5 @@
 import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
 import {BackendService} from './backend.service';
 import {Dependency} from '../../about/licenses/dependency.model';
 import {ITaskUnit} from '../../../../../../shared/models/units/ITaskUnit';
@@ -23,7 +24,7 @@ export abstract class DataService {
 
   createItem(createItem: any): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.backendService.post(this.apiPath, JSON.stringify(createItem))
+      this.backendService.post(this.apiPath, createItem)
       .subscribe(
         (responseItem) => {
           resolve(responseItem);
@@ -37,14 +38,15 @@ export abstract class DataService {
     return new Promise((resolve, reject) => {
       this.backendService.get(this.apiPath)
       .subscribe(
-        (responseItems) => {
+        (responseItems: any) => {
           if (this.changeProps2Date) {
-            for(let item of responseItems) {
+            responseItems.forEach(item => {
               this.changeProps2Date.forEach(prop => {
                 DataService.changeStringProp2DateProp(item, prop);
               });
-            }
+            });
           }
+
           resolve(responseItems);
         },
         (error) => reject(error)
