@@ -1,12 +1,12 @@
 import {NgModule} from '@angular/core';
 import {
   MatAutocompleteModule,
-  MatButtonModule, 
-  MatCardModule, 
-  MatCheckboxModule, 
-  MatDialogModule, 
-  MatFormFieldModule, 
-  MatIconModule, 
+  MatButtonModule,
+  MatCardModule,
+  MatCheckboxModule,
+  MatDialogModule,
+  MatFormFieldModule,
+  MatIconModule,
   MatInputModule,
   MatListModule,
   MatDatepickerModule,
@@ -15,9 +15,9 @@ import {
   MatProgressBarModule, MatRadioModule,
   MatSelectModule, MatSlideToggleModule,
   MatSnackBarModule, MatTabsModule,
-  MatToolbarModule, 
-  MatTooltipModule, 
-  MatExpansionModule, 
+  MatToolbarModule,
+  MatTooltipModule,
+  MatExpansionModule,
   DateAdapter,
 } from '@angular/material';
 import {CustomDateAdapter} from '../classes/CustomDateAdapter';
