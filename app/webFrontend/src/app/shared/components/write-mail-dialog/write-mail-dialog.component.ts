@@ -30,6 +30,10 @@ export class WriteMailDialog implements OnInit {
     this.renderedHtml = this.mdService.render(this.markdown);
   }
 
+  ngAfterViewInit(): void {
+    this.editor.getEditor().navigateFileStart();
+  }
+
   public cancel() {
     this.dialogRef.close(false);
   }
