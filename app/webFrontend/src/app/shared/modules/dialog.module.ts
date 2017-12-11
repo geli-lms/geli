@@ -10,6 +10,7 @@ import {FileUploadModule} from 'ng2-file-upload';
 import {CommonModule} from '@angular/common';
 import {MaterialImportModule} from './material-import.module';
 import {AceEditorModule} from 'ng2-ace-editor';
+import {FocusDirective} from '../directives/focus.directive';
 
 @NgModule({
   imports: [
@@ -25,6 +26,7 @@ import {AceEditorModule} from 'ng2-ace-editor';
     UploadDialog,
     FilepickerDialog,
     WriteMailDialog,
+    FocusDirective,
   ],
   declarations: [
     ConfirmDialog,
@@ -32,6 +34,7 @@ import {AceEditorModule} from 'ng2-ace-editor';
     UploadDialog,
     FilepickerDialog,
     WriteMailDialog,
+    FocusDirective,
   ],
   providers: [
     DialogService
