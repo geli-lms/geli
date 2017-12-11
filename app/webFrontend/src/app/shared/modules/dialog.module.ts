@@ -10,6 +10,7 @@ import {FileUploadModule} from 'ng2-file-upload';
 import {CommonModule} from '@angular/common';
 import {MaterialImportModule} from './material-import.module';
 import {AceEditorModule} from 'ng2-ace-editor';
+import {InfoDialog} from '../components/info-dialog/info-dialog.component';
 import {FocusDirective} from '../directives/focus.directive';
 
 @NgModule({
@@ -21,6 +22,7 @@ import {FocusDirective} from '../directives/focus.directive';
     AceEditorModule,
   ],
   exports: [
+    InfoDialog,
     ConfirmDialog,
     AccessKeyDialog,
     UploadDialog,
@@ -29,6 +31,7 @@ import {FocusDirective} from '../directives/focus.directive';
     FocusDirective,
   ],
   declarations: [
+    InfoDialog,
     ConfirmDialog,
     AccessKeyDialog,
     UploadDialog,
@@ -40,6 +43,7 @@ import {FocusDirective} from '../directives/focus.directive';
     DialogService
   ],
   entryComponents: [
+    InfoDialog,
     ConfirmDialog,
     AccessKeyDialog,
     UploadDialog,
