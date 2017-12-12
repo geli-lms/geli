@@ -48,7 +48,7 @@
           <small *ngIf="registerForm.controls.email.hasError('email') && !registerForm.controls.email.hasError('required')" class="text-danger">Please use an email with the
             format john@doe.com
           </small>
-          <small *ngIf="registerForm.controls.email.hasError('pattern') && !registerForm.controls.email.hasError('email') && !registerForm.controls.email.hasError('required')" class="text-warning">If possible, please use you're @h-da.de email</small>
+          <small *ngIf="registerForm.controls.email.hasError('hdaEmailValidator') && !registerForm.controls.email.hasError('email') && !registerForm.controls.email.hasError('required')" class="text-danger">Please register with your @h-da.de email</small>
         </div>
       </mat-form-field>
 

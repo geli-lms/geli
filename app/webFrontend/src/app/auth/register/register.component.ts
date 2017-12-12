@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {Validators, FormGroup, FormBuilder} from '@angular/forms';
+import {Validators, FormGroup, FormBuilder, FormControl} from '@angular/forms';
 import {AuthenticationService} from '../../shared/services/authentication.service';
 import {Router} from '@angular/router';
 import {ShowProgressService} from '../../shared/services/show-progress.service';
@@ -100,8 +100,17 @@ export class RegisterComponent implements OnInit {
         firstName: ['', Validators.compose([Validators.required, Validators.minLength(2)])],
         lastName: ['', Validators.compose([Validators.required, Validators.minLength(2)])],
       }),
-      email: ['', Validators.compose([Validators.required, Validators.email, Validators.pattern('^.*@h-da.de*$')])],
-      uid: [null, Validators.required],
+      email: ['', Validators.compose([Validators.required, Validators.email, this.hdaEmailValidator.bind(this)])],
+      uid: [null, Validators.required]
     })
   }
+
+  hdaEmailValidator(control: FormControl) {
+    if (this.role === 'teacher' && !(control.value as String).includes('@h-da.de')) {
+      return { hdaEmailValidator: true };
+    }
+    return null;
+  }
 }
+
+
