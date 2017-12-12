@@ -10,8 +10,13 @@
   </mat-card-content>
   <mat-card-actions>
     <button mat-icon-button *ngIf="this.userService.isStudent() && !this.isMemberOfCourse(course)"
-            (click)="apply(course._id, course.hasAccessKey)" matTooltip="Enroll">
+            (click)="enroll()" matTooltip="Enroll">
       <mat-icon>add_circle_outline</mat-icon>
+    </button>
+
+    <button mat-icon-button *ngIf="this.userService.isStudent() && this.isMemberOfCourse(course)"
+             (click)="leave()" matTooltip="Leave">
+      <mat-icon>remove_circle_outline</mat-icon>
     </button>
 
     <button mat-icon-button (click)="editCourse(course._id)"

@@ -51,6 +51,10 @@ export class TaskUnitComponent implements OnInit {
     return ((typeof answer.value === 'undefined' || !answer.value) && !answer.userAnswer) || (answer.value && answer.userAnswer);
   }
 
+  isAnswerSolution(answer) {
+    return (typeof answer.value !== 'undefined' && answer.value);
+  }
+
   validate() {
     this.validationMode = true;
 
