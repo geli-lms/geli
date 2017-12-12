@@ -47,8 +47,8 @@ export const errorCodes = {
       }
     }
   },
-  save:{
-    couldNotSaveImprint:{
+  save: {
+    couldNotSaveImprint: {
       code: 'coldNotSaveImprint',
       text: 'Could not save Imprint'
     }
