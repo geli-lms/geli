@@ -7,9 +7,8 @@
     <textarea matInput formControlName="description" placeholder="Description"></textarea>
   </mat-form-field>
 
-
   <p>
+    <button mat-raised-button [disabled]="!lectureForm.valid" color="primary" type="submit">{{ actionLabel }}</button>
     <button mat-button (click)="onCancel()">Cancel</button>
-    <button mat-button [disabled]="!lectureForm.valid" color="primary" type="submit">{{ actionLabel }}</button>
   </p>
 </form>
