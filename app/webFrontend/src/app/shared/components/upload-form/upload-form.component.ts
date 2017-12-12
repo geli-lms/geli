@@ -1,7 +1,6 @@
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {FileUploader, FileUploaderOptions} from 'ng2-file-upload';
 import {MatSnackBar} from '@angular/material';
-import {isNullOrUndefined} from 'util';
 
 @Component({
   selector: 'app-upload-form',
@@ -12,6 +11,9 @@ export class UploadFormComponent implements OnInit, OnChanges {
 
   @Input()
   uploadPath: string;
+
+  @Input()
+  uploadMethod = 'POST';
 
   @Input()
   allowedMimeTypes: string[];
@@ -42,8 +44,10 @@ export class UploadFormComponent implements OnInit, OnChanges {
   ngOnInit() {
     const uploadOptions: FileUploaderOptions = {
       url: this.uploadPath,
+      method: this.uploadMethod,
       authToken: localStorage.getItem('token'),
-      allowedMimeType: this.allowedMimeTypes
+      allowedMimeType: this.allowedMimeTypes,
+      removeAfterUpload: true
     };
 
     if (this.maxFileNumber) {
@@ -58,7 +62,7 @@ export class UploadFormComponent implements OnInit, OnChanges {
 
     this.fileUploader.onBeforeUploadItem = (fileItem) => {
       if (!this.first) {
-        fileItem.method = 'PUT';
+        fileItem.method = this.uploadMethod;
 
         if (fileItem.url !== this.uploadPath) {
           fileItem.url = this.uploadPath;
@@ -67,8 +71,8 @@ export class UploadFormComponent implements OnInit, OnChanges {
     };
 
     this.fileUploader.onCompleteAll = () => {
-      if (!this.error) {
-        // this.onAllUploaded.emit();
+      if (!this.error && this.fileUploader.queue.length === 0) {
+        this.onAllUploaded.emit();
         this.snackBar.open('All items uploaded!', '', {duration: 3000});
       }
     };
@@ -99,8 +103,8 @@ export class UploadFormComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.hasOwnProperty('uploadPath') && !this.first) {
-      this.uploadAll();
+    if (changes.hasOwnProperty('uploadPath') && changes.hasOwnProperty('uploadMethod') && !this.first) {
+      this.uploadNextItem();
     }
   }
 
@@ -113,7 +117,7 @@ export class UploadFormComponent implements OnInit, OnChanges {
    }
   }
 
-  uploadAll() {
+  uploadNextItem() {
     this.fileUploader.uploadItem(this.fileUploader.getNotUploadedItems()[0]);
   }
 

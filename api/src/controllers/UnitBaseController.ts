@@ -1,18 +1,14 @@
 import {
   Body, Get, Put, Delete, Param, JsonController, UseBefore, NotFoundError, BadRequestError, Post,
-  Authorized, UploadedFile, Req
+  Authorized, UploadedFile
 } from 'routing-controllers';
 import fs = require('fs');
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import crypto = require('crypto');
 
-import {ILectureModel, Lecture} from '../models/Lecture';
+import {Lecture} from '../models/Lecture';
 import {IUnitModel, Unit} from '../models/units/Unit';
 import {IUnit} from '../../../shared/models/units/IUnit';
-import {IVideoUnitModel, VideoUnit} from '../models/units/VideoUnit';
-import {IFileUnitModel, FileUnit} from '../models/units/FileUnit';
-import {TaskUnit} from '../models/units/TaskUnit';
-import {IVideoUnit} from '../../../shared/models/units/IVideoUnit';
 import {IFileUnit} from '../../../shared/models/units/IFileUnit';
 
 const multer = require('multer');
@@ -79,10 +75,11 @@ export class UnitBaseController {
 
     if (file) {
       data = JSON.parse(data.data);
-      data = this.handleUploadedFile(file, data.model);
+      data = await this.handleUploadedFile(file, data.model);
     }
 
-    const updatedUnit: IUnitModel = await Unit.findOneAndUpdate({'_id': id}, data, {new: true});
+    oldUnit.set(data);
+    const updatedUnit: IUnitModel = await oldUnit.save();
     return updatedUnit.toObject();
   }
 
@@ -137,7 +134,7 @@ export class UnitBaseController {
     }
   }
 
-  private handleUploadedFile(file: any, unit: IFileUnit) {
+  private handleUploadedFile(file: any, unit: IFileUnit): IUnit {
     if (!unit.hasOwnProperty('files')) {
       unit.files = []
     }

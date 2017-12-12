@@ -21,14 +21,14 @@
     [onDone]="onDone"
     [onCancel]="onCancel"></app-task-unit-edit>
   <app-code-kata-unit-form
-    *ngIf="course && (type == 'code-kata' && unitType == 'code-kata')"
+    *ngIf="course && (type == 'code-kata' || unitType == 'code-kata')"
     [course]="course"
     [model]="model"
     [lectureId]="lecture._id"
     [onDone]="onDone"
     [onCancel]="onCancel"></app-code-kata-unit-form>
   <app-free-text-unit-form
-    *ngIf="course && (type == 'free-text' && unitType == 'free-text')"
+    *ngIf="course && (type == 'free-text' || unitType == 'free-text')"
     [course]="course"
     [model]="model"
     [lectureId]="lecture._id"

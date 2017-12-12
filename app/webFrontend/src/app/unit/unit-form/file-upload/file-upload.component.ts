@@ -8,6 +8,7 @@ import {UnitGeneralInfoFormComponent} from '../unit-general-info-form/unit-gener
 import {UnitService} from '../../../shared/services/data.service';
 import {FileUnit} from '../../../models/units/FileUnit';
 import {UploadFormComponent} from '../../../shared/components/upload-form/upload-form.component';
+import {ShowProgressService} from '../../../shared/services/show-progress.service';
 
 @Component({
   selector: 'app-file-upload',
@@ -36,7 +37,9 @@ export class FileUploadComponent implements OnInit {
     }]
   });
 
-  uploadPath = '/api/units';
+  private baseUploadPath = '/api/units';
+  uploadPath = this.baseUploadPath;
+  uploadMethod = 'POST';
   filesSelected = false;
   first = true;
   error = false;
@@ -45,6 +48,7 @@ export class FileUploadComponent implements OnInit {
 
   constructor(public snackBar: MatSnackBar,
               private unitService: UnitService,
+              private showProgress: ShowProgressService,
               private ref: ChangeDetectorRef) {
     this.uploader.onProgressItem = (fileItem: FileItem, progress: any) => {
       this.ref.detectChanges();
@@ -59,6 +63,11 @@ export class FileUploadComponent implements OnInit {
     this.additionalUploadData = {
       lectureId: this.lecture._id,
       model: this.model
+    };
+
+    if (this.model._id) {
+      this.uploadMethod = 'PUT';
+      this.uploadPath += '/' + this.model._id;
     }
   }
 
@@ -69,21 +78,35 @@ export class FileUploadComponent implements OnInit {
   onFileUploaded(event: IFileUnit) {
     this.model = event;
     this.additionalUploadData.model = this.model;
-    this.uploadPath += '/' + this.model._id;
+    this.uploadPath = this.baseUploadPath + '/' + this.model._id;
+    this.uploadMethod = 'PUT';
   }
 
   onAllUploaded() {
     this.onDone();
   }
 
-  uploadAll() {
+  async uploadAll() {
     this.additionalUploadData.model = {
       ...this.model,
       name: this.generalInfo.form.value.name,
       description: this.generalInfo.form.value.description,
     };
 
-    this.uploadForm.uploadAll();
+    if (this.uploadForm.fileUploader.queue.length > 0) {
+      this.uploadForm.uploadNextItem();
+    } else {
+      this.showProgress.toggleLoadingGlobal(true);
+      this.unitService.updateItem(this.model)
+        .then((updatedUnit) => {
+          this.model = updatedUnit;
+          this.onAllUploaded();
+        })
+        .catch((error) => {
+          this.snackBar.open('An error occurred', 'Dismiss');
+          this.showProgress.toggleLoadingGlobal(false);
+        });
+    }
   }
 
   removeFile(file: any) {

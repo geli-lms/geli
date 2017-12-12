@@ -18,7 +18,8 @@
     </mat-action-row>
   </div>
 </div>
-<app-upload-form [(uploadPath)]="uploadPath"
+<app-upload-form [uploadPath]="uploadPath"
+                 [uploadMethod]="uploadMethod"
                  [additionalData]="additionalUploadData"
                  (onFileSelectedChange)="onFileSelectedChange($event)"
                  (onFileUploaded)="onFileUploaded($event)"

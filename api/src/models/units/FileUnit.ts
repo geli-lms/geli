@@ -1,9 +1,11 @@
 import * as mongoose from 'mongoose';
-import {IUnitModel, Unit} from './Unit';
+import {Unit} from './Unit';
 import {IFileUnit} from '../../../../shared/models/units/IFileUnit';
 import fs = require('fs');
 import {InternalServerError} from 'routing-controllers';
-import {ILectureModel, Lecture} from '../Lecture';
+import {Lecture} from '../Lecture';
+import {NativeError} from 'mongoose';
+import {IFile} from '../../../../shared/models/IFile';
 
 interface IFileUnitModel extends IFileUnit, mongoose.Document {
   exportJSON: () => Promise<IFileUnit>;
@@ -52,8 +54,19 @@ fileUnitSchema.pre('remove', function(next: () => void) {
 });
 
 // TODO: Implement pre('findOneAndUpdate') and / or pre('update') for file cleanups
-fileUnitSchema.pre('findOneAndUpdate', function (next) {
+fileUnitSchema.pre('save', function (next: (err?: NativeError) => void) {
   next();
+});
+
+fileUnitSchema.path('files').set(function (newFiles: IFile[]) {
+  this.files.forEach((file: any) => {
+    // if not present in new: delete
+    if (!newFiles.some((newFile) => newFile.name === file.name)) {
+      fs.unlink(file.path, () => {}); // silently discard file not found errors
+    }
+  });
+
+  return newFiles;
 });
 
 fileUnitSchema.statics.importJSON = async function(unit: IFileUnit, courseId: string, lectureId: string) {

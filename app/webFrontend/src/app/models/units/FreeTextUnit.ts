@@ -8,6 +8,7 @@ export class FreeTextUnit implements IFreeTextUnit {
   createdAt: string;
   _course: any;
   _id: any;
+  type: string;
   unitType: string;
   progressable: boolean;
   weight: number;
