@@ -193,7 +193,7 @@ gulp.task(WATCH_POLL, [BUILD_DEV], function () {
   });
 });
 
-gulp.task(LOAD_FIXTURES, [BUILD], function () {
+gulp.task(LOAD_FIXTURES, [BUILD_DEV], function () {
   require(__dirname + "/build/fixtures/load");
 });
 
