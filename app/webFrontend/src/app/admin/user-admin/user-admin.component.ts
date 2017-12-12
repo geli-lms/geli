@@ -57,6 +57,11 @@ export class UserAdminComponent implements OnInit {
     );
   }
 
+  editUser(userIndex: number) {
+    const link = `/profile/${this.allUsers[userIndex]._id}/edit`;
+    this.router.navigate([link]);
+  }
+
   deleteUser(userIndex: number) {
     this.dialogService
     .confirmDelete('user', this.allUsers[userIndex].email)

@@ -30,12 +30,13 @@ import {UserModule} from './user/user.module';
 import {AuthModule} from './auth/auth.module';
 import {AboutModule} from './about/about.module';
 import {AdminModule} from './admin/admin.module';
+import {ReportService} from './shared/services/data/report.service';
 import {TitleService} from './shared/services/title.service';
 import {studentConfigSchema} from "../../../../api/src/models/StudentConfig";
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
   ],
   imports: [
     AdminModule,
@@ -68,6 +69,7 @@ import {studentConfigSchema} from "../../../../api/src/models/StudentConfig";
     FreeTextUnitService,
     CodeKataUnitService,
     APIInfoService,
+    ReportService,
     TitleService,
     RavenErrorHandler,
     {

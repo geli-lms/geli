@@ -2,13 +2,13 @@ import {Request} from 'express';
 import {
   Authorized, BadRequestError,
   Body,
-  CurrentUser, ForbiddenError,
+  CurrentUser, Delete, ForbiddenError,
   Get,
   JsonController, NotFoundError,
   Param,
   Post,
   Put,
-  Req,
+  Req, UnauthorizedError,
   UploadedFile,
   UseBefore
 } from 'routing-controllers';
@@ -22,6 +22,7 @@ import {Course, ICourseModel} from '../models/Course';
 import {User} from '../models/User';
 import {WhitelistUser} from '../models/WhitelistUser';
 import {ICodeKataUnit} from '../../../shared/models/units/ICodeKataUnit';
+import emailService from '../services/EmailService';
 
 const multer = require('multer');
 import crypto = require('crypto');
@@ -149,6 +150,12 @@ export class CourseController {
       });
   }
 
+  @Authorized(['teacher', 'admin'])
+  @Post('/mail')
+  sendMailToSelectedUsers(@Body() mailData: any) {
+    return emailService.sendFreeFormMail(mailData);
+  }
+
   @Authorized(['student'])
   @Post('/:id/enroll')
   enrollStudent(@Param('id') id: string, @Body() data: any, @CurrentUser() currentUser: IUser) {
@@ -174,6 +181,24 @@ export class CourseController {
         if (course.students.indexOf(currentUser._id) < 0) {
           course.students.push(currentUser);
 
+          return course.save().then((c) => c.toObject());
+        }
+
+        return course.toObject();
+      });
+  }
+
+  @Authorized(['student'])
+  @Post('/:id/leave')
+  leaveStudent(@Param('id') id: string, @Body() data: any, @CurrentUser() currentUser: IUser) {
+    return Course.findById(id)
+      .then(course => {
+        if (!course) {
+          throw new NotFoundError();
+        }
+        const index: number = course.students.indexOf(currentUser._id);
+        if (index  !== 0) {
+          course.students.splice(index, 1);
           return course.save().then((c) => c.toObject());
         }
 
@@ -211,7 +236,6 @@ export class CourseController {
         {courseAdmin: currentUser._id}
       ];
     }
-
     return Course.findOneAndUpdate(
       conditions,
       course,
@@ -219,4 +243,23 @@ export class CourseController {
     )
       .then((c) => c ? c.toObject() : undefined);
   }
+
+  @Authorized(['teacher', 'admin'])
+  @Delete('/:id')
+  async deleteCourse(@Param('id') id: string, @CurrentUser() currentUser: IUser) {
+    const course = await Course.findOne( {_id : id} );
+    if ( !course ) {
+      throw new NotFoundError();
+    }
+    const courseAdmin = await User.findOne({_id: course.courseAdmin});
+    if (course.teachers.indexOf(currentUser._id) !== -1 || courseAdmin.equals(currentUser._id.toString())
+      || currentUser.role === 'admin' ) {
+      course.remove();
+      return {result: true};
+    } else {
+      throw new ForbiddenError('Forbidden!');
+    }
+  }
 }
+
+
