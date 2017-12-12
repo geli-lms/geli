@@ -7,6 +7,7 @@ import {ICourse} from '../../../../../../../shared/models/ICourse';
 import {UnitGeneralInfoFormComponent} from '../unit-general-info-form/unit-general-info-form.component';
 import {FreeTextUnitEditorComponent} from './free-text-unit-editor/free-text-unit-editor.component';
 import {FreeTextUnitEditorDialog} from './free-text-unit-editor/free-text-unit-editor-dialog/free-text-unit-editor.dialog';
+import {isUndefined} from 'util';
 
 @Component({
   selector: 'app-free-text-unit-form',
@@ -46,7 +47,7 @@ export class FreeTextUnitFormComponent implements OnInit {
     };
 
     // If markdown was left empty, define field for db-consistency
-    if (typeof this.model.markdown === 'undefined') {
+    if (isUndefined(this.model.markdown)) {
       this.model.markdown = '';
     }
 
@@ -65,8 +66,8 @@ export class FreeTextUnitFormComponent implements OnInit {
         );
     } else {
       // Update existing
-      delete this.model._course;
-      this.freeTextUnitService.updateItem(this.model)
+      // delete this.model._course;
+      this.unitService.updateItem(this.model)
         .then(
           () => {
             this.snackBar.open('Free text unit saved', 'Update', {duration: 2000});

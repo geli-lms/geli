@@ -180,7 +180,7 @@ export class CourseManageContentComponent implements OnInit, OnDestroy {
 
   deleteUnit(unit: IUnit) {
     this.dialogService
-    .confirmDelete('unit', unit.unitType)
+    .confirmDelete('unit', unit.type)
     .subscribe(res => {
       if (res) {
         this.showProgress.toggleLoadingGlobal(true);

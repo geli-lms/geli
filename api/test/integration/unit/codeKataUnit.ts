@@ -14,7 +14,7 @@ import {CodeKataUnit, ICodeKataModel} from '../../../src/models/units/CodeKataUn
 chai.use(chaiHttp);
 chai.should();
 const app = new Server().app;
-const BASE_URL = '/api/units/code-katas';
+const BASE_URL = '/api/units';
 const fixtureLoader = new FixtureLoader();
 
 describe(`CodeKataUnit ${BASE_URL}`, () => {
@@ -43,7 +43,7 @@ describe(`CodeKataUnit ${BASE_URL}`, () => {
   describe(`POST ${BASE_URL}`, () => {
     it('should fail with wrong authorization', (done) => {
       chai.request(app)
-        .get(BASE_URL)
+        .post(BASE_URL)
         .set('Authorization', 'JWT asdf')
         .end((err, res) => {
           res.status.should.be.equal(401);
@@ -102,9 +102,8 @@ describe(`CodeKataUnit ${BASE_URL}`, () => {
                     .end((err, res) => {
                       res.status.should.be.equal(200);
 
-                      res.body.name.should.equal(lecture.name);
-                      res.body.description.should.equal(lecture.description);
-                      res.body.units.length.should.equal(lecture.units.length + 1);
+                      res.body.name.should.equal(model.name);
+                      res.body.description.should.equal(model.description);
                       done();
                     });
                 })
@@ -140,9 +139,8 @@ describe(`CodeKataUnit ${BASE_URL}`, () => {
                     .end((err, res) => {
                       res.status.should.be.equal(200);
 
-                      res.body.name.should.equal(lecture.name);
-                      res.body.description.should.equal(lecture.description);
-                      res.body.units.length.should.equal(lecture.units.length + 1);
+                      res.body.name.should.equal(model.name);
+                      res.body.description.should.equal(model.description);
                       done();
                     });
                 })

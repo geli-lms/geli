@@ -6,7 +6,7 @@ export class CodeKataUnit implements ICodeKataUnit {
   description: string;
   _course: any;
   _id: any;
-  unitType: string;
+  type: string;
   progressable: boolean;
   weight: number;
   updatedAt: string;
@@ -21,6 +21,6 @@ export class CodeKataUnit implements ICodeKataUnit {
     this._course = _course;
     this.progressable = true;
     this.weight = 0;
-    this.unitType = 'code-kata';
+    this.type = 'code-kata';
   }
 }

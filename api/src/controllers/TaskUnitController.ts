@@ -1,6 +1,6 @@
 import {Body, Post, Put, Param, JsonController, UseBefore, BadRequestError, Authorized, Get} from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
-import {UnitBaseController} from './UnitBaseController';
+import {UnitController} from './UnitController';
 import {TaskUnit} from '../models/units/TaskUnit';
 import {ITask} from '../../../shared/models/task/ITask';
 import {ITaskModel, Task} from '../models/Task';
@@ -8,7 +8,7 @@ import {ITaskUnit} from '../../../shared/models/units/ITaskUnit';
 
 @JsonController('/units/tasks')
 @UseBefore(passportJwtMiddleware)
-export class TaskUnitController extends UnitBaseController {
+export class TaskUnitController extends UnitController {
 
   @Authorized(['teacher', 'admin'])
   @Post('/')

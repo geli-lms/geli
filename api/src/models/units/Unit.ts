@@ -4,7 +4,7 @@ import {NativeError} from 'mongoose';
 import {Progress} from '../Progress';
 import {InternalServerError} from 'routing-controllers';
 
-import {ILectureModel, Lecture} from '../Lecture';
+import {Lecture} from '../Lecture';
 
 interface IUnitModel extends IUnit, mongoose.Document {
   exportJSON: () => Promise<IUnit>;
@@ -27,14 +27,11 @@ const unitSchema = new mongoose.Schema({
     },
     weight: {
       type: Number
-    },
-    type: {
-      type: String
     }
   },
   {
     collection: 'units',
-    discriminatorKey: 'unitType',
+    discriminatorKey: 'type',
     timestamps: true,
     toObject: {
       transform: function (doc: IUnitModel, ret: any) {

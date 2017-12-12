@@ -114,7 +114,7 @@ export class CodeKataUnitFormComponent implements OnInit {
         });
     } else {
       delete this.model._course;
-      this.codeKataUnitService.updateItem(this.model)
+      this.unitService.updateItem(this.model)
       .then(
         () => {
           this.snackBar.open('Code-Kata updated', '', {duration: 3000});

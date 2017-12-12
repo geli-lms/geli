@@ -107,7 +107,7 @@ export class CourseController {
 
         course.lectures.forEach((lecture) => {
           lecture.units.forEach((unit) => {
-            if (unit.unitType === 'code-kata' && currentUser.role === 'student') {
+            if (unit.type === 'code-kata' && currentUser.role === 'student') {
               (<ICodeKataUnit>unit).code = null;
             }
           });

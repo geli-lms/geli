@@ -10,6 +10,7 @@ import {Lecture} from '../models/Lecture';
 import {IUnitModel, Unit} from '../models/units/Unit';
 import {IUnit} from '../../../shared/models/units/IUnit';
 import {IFileUnit} from '../../../shared/models/units/IFileUnit';
+import {ValidationError} from 'mongoose';
 
 const multer = require('multer');
 
@@ -30,7 +31,7 @@ const uploadOptions = {
 
 @JsonController('/units')
 @UseBefore(passportJwtMiddleware)
-export class UnitBaseController {
+export class UnitController {
 
   @Get('/:id')
   getUnit(@Param('id') id: string) {
@@ -60,7 +61,12 @@ export class UnitBaseController {
       if (file) {
         fs.unlinkSync(file.path);
       }
-      throw new BadRequestError(err);
+
+      if (err.name === 'ValidationError') {
+        throw err;
+      } else {
+        throw new BadRequestError(err);
+      }
     });
   }
 
@@ -78,9 +84,17 @@ export class UnitBaseController {
       data = await this.handleUploadedFile(file, data.model);
     }
 
-    oldUnit.set(data);
-    const updatedUnit: IUnitModel = await oldUnit.save();
-    return updatedUnit.toObject();
+    try {
+      oldUnit.set(data);
+      const updatedUnit: IUnitModel = await oldUnit.save();
+      return updatedUnit.toObject();
+    } catch (err) {
+      if (err.name === 'ValidationError') {
+        throw err;
+      } else {
+        throw new BadRequestError(err);
+      }
+    }
   }
 
   @Authorized(['teacher', 'admin'])

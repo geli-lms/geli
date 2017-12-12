@@ -140,7 +140,7 @@ describe('ProgressController', () => {
         done: false,
       };
 
-      const progressClass = getProgressClassForType(unit.unitType);
+      const progressClass = getProgressClassForType(unit.type);
       const progress = await new progressClass(oldProgress).save();
 
       const newProgress = {

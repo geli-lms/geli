@@ -48,6 +48,10 @@ codeKataSchema.statics.importJSON = async function(unit: ICodeKataUnit, courseId
 function splitCodeAreas(next: (err?: NativeError) => void) {
   const codeKataUnit: ICodeKataModel = this;
 
+  if (codeKataUnit.definition !== undefined || codeKataUnit.test !== undefined || codeKataUnit.code === undefined) {
+    return next();
+  }
+
   const separator = '\/\/#+';
   const firstSeparator: number = findFirstIndexOf(codeKataUnit.code, separator);
   const lastSeparator: number = findLastIndexOf(codeKataUnit.code, separator);

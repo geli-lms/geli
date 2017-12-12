@@ -12,7 +12,6 @@ export class UnitFormComponent implements OnInit {
 
   @Input() model: IUnit;
   @Input() type: string;
-  @Input() unitType: string;
   @Input() course: ICourse;
   @Input() lecture: ILecture;
   @Input() onDone: () => void;
