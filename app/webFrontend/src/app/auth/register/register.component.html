@@ -57,7 +57,7 @@
           <input matInput formControlName="uid" placeholder="Matriculation number"/>
           <div *ngIf="registerForm.controls.uid.touched">
             <small *ngIf="uidError" class="text-danger">{{uidError}}</small>
-            <small *ngIf="registerForm.controls.uid.hasError('required')" class="text-danger">Matriculation number is
+            <small *ngIf="registerForm.controls.uid.hasError('uidValidator')" class="text-danger">Matriculation number is
               required
             </small>
           </div>

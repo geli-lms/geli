@@ -46,6 +46,8 @@ export class RegisterComponent implements OnInit {
 
   changeRole(role) {
     this.role = role;
+    this.registerForm.controls.email.updateValueAndValidity();
+    this.registerForm.controls.uid.updateValueAndValidity();
   }
 
   clearAllErrors() {
@@ -101,13 +103,20 @@ export class RegisterComponent implements OnInit {
         lastName: ['', Validators.compose([Validators.required, Validators.minLength(2)])],
       }),
       email: ['', Validators.compose([Validators.required, Validators.email, this.hdaEmailValidator.bind(this)])],
-      uid: [null, Validators.required]
+      uid: ['', [this.uidValidator.bind(this)]]
     })
   }
 
   hdaEmailValidator(control: FormControl) {
     if (this.role === 'teacher' && !(control.value as String).includes('@h-da.de')) {
       return { hdaEmailValidator: true };
+    }
+    return null;
+  }
+
+  uidValidator(control: FormControl) {
+    if (this.role === 'student' && (control.value as String).length <= 0) {
+      return { uidValidator: true };
     }
     return null;
   }
