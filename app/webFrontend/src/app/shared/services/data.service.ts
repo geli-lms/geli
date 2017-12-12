@@ -1,5 +1,4 @@
-import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {unnecessaryom '@angular/core';
 import {BackendService} from './backend.service';
 import {Dependency} from '../../about/licenses/dependency.model';
 import {ITaskUnit} from '../../../../../../shared/models/units/ITaskUnit';
