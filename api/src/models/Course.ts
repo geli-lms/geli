@@ -115,12 +115,13 @@ courseSchema.methods.exportJSON = async function () {
   return obj;
 };
 
-courseSchema.statics.importJSON = async function (course: ICourse, admin: IUser) {
+courseSchema.statics.importJSON = async function (course: ICourse, admin: IUser, active: boolean) {
   // set Admin
   course.courseAdmin = admin;
 
-  // course shouldn't be visible for students after importTest
-  course.active = false;
+  // course shouldn't be visible for students after import
+  // until active flag is explicitly set (e.g. fixtures)
+  course.active = (active === true) ? true : false;
 
   // importTest lectures
   const lectures: Array<ILecture> = course.lectures;
