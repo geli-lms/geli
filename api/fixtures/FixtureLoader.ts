@@ -26,15 +26,15 @@ export class FixtureLoader {
 
     // import userfiles
     // order needs to be always the same for 'getRandom...(hash)' to work properly
-    userfixtures.forEach((userFile: string) => {
+    for (const userFile of userfixtures) {
       const file = fs.readFileSync(this.usersDirectory + userFile);
       const users = JSON.parse(file.toString());
 
       // each file consists of an array of users to provide possibility of logical grouping
-      users.forEach(async (userDef: IUser) => {
+      for (const userDef of users) {
         await new User(userDef).save();
-      });
-    });
+      }
+    }
 
     // import coursefiles
     const courseIDs = await Promise.all(coursefixtures.map( async (courseFile: string) => {
