@@ -48,7 +48,6 @@ export class AuthenticationService {
       return this.http.get<IUser>(`${AuthenticationService.API_URL}users/${this.userService.user._id}`, {headers: this.authHeader()})
       .subscribe(
         (response) => {
-          console.log(response);
           this.userService.setUser(response);
         }, () => {
           this.logout();
