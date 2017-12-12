@@ -23,6 +23,7 @@ const BUILD_DEV = "build:dev";
 const GENERATE_DOC = "generate:doc";
 const PRETEST = "pretest";
 const RUN_TESTS = "run:tests";
+const COPY_FIXTURES = "copy:fixtures";
 const LOAD_FIXTURES = "load:fixtures";
 const TEST = "test";
 const TEST_NATIVE = "test:native";
@@ -32,11 +33,18 @@ const WATCH_POLL = "watch:poll";
 const DEBUG = "debug";
 const INSPECT = "inspect";
 
-const TS_SRC_GLOB = "./src/**/*.ts";
-const TS_TEST_GLOB = "./test/**/*.ts";
-const TS_FIXTURES_GLOB = "./fixtures/**/*.ts";
-const JS_TEST_GLOB = "./build/test/**/*.js";
-const JS_SRC_GLOB = "./build/src/**/*.js";
+const SRC_GLOB = "./src/**/*";
+const TS_SRC_GLOB = SRC_GLOB + ".ts";
+const TEST_GLOB = "./test/**/*";
+const TS_TEST_GLOB = TEST_GLOB + ".ts";
+const FIXTURES_GLOB = "./fixtures/**/*";
+const TS_FIXTURES_GLOB = FIXTURES_GLOB + ".ts";
+
+const BUILD_GLOB = "./build/";
+const BUILD_TEST_GLOB = BUILD_GLOB + "test/**/*";
+const JS_TEST_GLOB = BUILD_TEST_GLOB + ".js";
+const BUILD_SRC_GLOB = BUILD_GLOB + "src/**/*";
+const JS_SRC_GLOB = BUILD_SRC_GLOB + ".js";
 const TS_GLOB = [TS_SRC_GLOB, TS_TEST_GLOB, TS_FIXTURES_GLOB];
 
 const tsProject = typescript.createProject("tsconfig.json");
@@ -85,14 +93,19 @@ gulp.task(COMPILE_TYPESCRIPT, function () {
     .pipe(gulp.dest("./build"));
 });
 
+gulp.task(COPY_FIXTURES, function () {
+  return gulp.src([FIXTURES_GLOB, "!" + TS_FIXTURES_GLOB], {base: "."})
+    .pipe(gulp.dest(BUILD_GLOB));
+})
+
 // Runs all required steps for the build in sequence.
 gulp.task(BUILD, function (callback) {
-  runSequence(CLEAN_BUILD, TSLINT, COMPILE_TYPESCRIPT, callback);
+  runSequence(CLEAN_BUILD, TSLINT, COMPILE_TYPESCRIPT, COPY_FIXTURES, callback);
 });
 
 // Runs all required steps for the build in sequence FOR DEVELOP
 gulp.task(BUILD_DEV, function (callback) {
-  runSequence(CLEAN_BUILD, TSLINT_DEV, COMPILE_TYPESCRIPT, callback);
+  runSequence(CLEAN_BUILD, TSLINT_DEV, COMPILE_TYPESCRIPT, COPY_FIXTURES, callback);
 });
 
 // Generates a documentation based on the code comments in the *.ts files.
