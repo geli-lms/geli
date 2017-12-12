@@ -7,25 +7,34 @@ import {AdminComponent} from './admin.component';
 
 const routes: Routes = [
   {
-    path: 'admin',
+    path: '',
+    pathMatch: 'full',
     component: AdminComponent,
     canActivate: [AuthGuardService],
-    data: {roles: ['admin']}
-  },
-  {
-    path: 'admin/imprint',
-    component: ImprintAdminComponent,
-    canActivate: [AuthGuardService],
     data: {roles: ['admin']},
-  },
-  {
-    path: 'admin/users',
-    component: UserAdminComponent,
-    canActivate: [AuthGuardService],
-    data: {roles: ['admin']},
+    children: [
+      {
+        path: '',
+        pathMatch: 'full',
+        component: UserAdminComponent,
+        canActivate: [AuthGuardService],
+        data: {roles: ['admin']}
+      },
+      {
+        path: 'users',
+        component: UserAdminComponent,
+        canActivate: [AuthGuardService],
+        data: {roles: ['admin']}
+      },
+      {
+        path: 'imprint',
+        component: ImprintAdminComponent,
+        canActivate: [AuthGuardService],
+        data: {roles: ['admin']}
+      },
+    ]
   },
 ];
-
 @NgModule({
   imports: [
     RouterModule.forChild(routes)

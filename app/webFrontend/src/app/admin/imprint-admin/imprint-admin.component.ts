@@ -6,6 +6,7 @@ import {MatSnackBar} from '@angular/material';
 import 'brace';
 import 'brace/mode/markdown';
 import 'brace/theme/github';
+import {errorCodes} from '../../../../../../api/src/config/errorCodes';
 
 @Component({
   selector: 'app-imprint-admin',
@@ -50,7 +51,7 @@ export class ImprintAdminComponent implements OnInit {
       void this.service.updateItem({_id: 'imprint', data: this.text});
       this.snackBar.open('Imprint saved', '', {duration: 3000})
     } catch (error) {
-      this.snackBar.open('Could not save imprint', '', {duration: 3000})
+      this.snackBar.open(errorCodes.save.couldNotSaveImprint.text, '', {duration: 3000})
     }
     this.loadImprint();
     this.renderHtml();

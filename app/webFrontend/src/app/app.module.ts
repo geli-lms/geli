@@ -38,7 +38,6 @@ import {TitleService} from './shared/services/title.service';
     AppComponent,
   ],
   imports: [
-    AdminModule,
     BrowserModule,
     HttpModule,
     AppRoutingModule,
@@ -48,6 +47,7 @@ import {TitleService} from './shared/services/title.service';
     AuthModule,
     AboutModule,
     SharedModule,
+    AdminModule,
   ],
   providers: [
     UserService,
