@@ -14,6 +14,8 @@ export class FixtureLoader {
   private usersDirectory = 'build/fixtures/users/';
   private coursesDirectory = 'build/fixtures/courses/';
 
+  private binaryDirectory = 'build/fixtures/binaryData/';
+
   constructor() {
     (<any>mongoose).Promise = global.Promise;
 
@@ -55,6 +57,19 @@ export class FixtureLoader {
 
       const importedCourse = await Course.schema.statics.importJSON(course, teacher, course.active);
       return importedCourse._id;
+    }));
+
+    // import files
+    const fileUnits = await Unit.find({files: {$exists: true}});
+
+    await Promise.all(fileUnits.map(async unit => {
+      const files = (<any>unit).files;
+
+      for (const file of files) {
+        if (!fs.existsSync(file.path) && fs.existsSync(this.binaryDirectory + file.alias)) {
+          fs.copyFileSync(this.binaryDirectory + file.alias, file.path)
+        }
+      }
     }));
 
     // generate progress
