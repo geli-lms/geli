@@ -110,9 +110,9 @@ export class SelectUnitDialogComponent implements OnInit{
                   files.push(index);
                 }
               });
-              units.push({id: unit.unit._id, files: files});
+              units.push({unitId: unit.unit._id, files: files});
             } else {
-              units.push({id: unit.unit._id});
+              units.push({unitId: unit.unit._id});
             }
           }
         });
