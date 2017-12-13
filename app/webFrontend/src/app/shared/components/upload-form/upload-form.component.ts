@@ -37,6 +37,7 @@ export class UploadFormComponent implements OnInit, OnChanges {
   fileUploader: FileUploader;
 
   private first = true;
+  private updateUploadParams = false;
   private error = false;
 
   constructor(private snackBar: MatSnackBar) { }
@@ -61,7 +62,7 @@ export class UploadFormComponent implements OnInit, OnChanges {
     };
 
     this.fileUploader.onBeforeUploadItem = (fileItem) => {
-      if (!this.first) {
+      if (this.updateUploadParams) {
         fileItem.method = this.uploadMethod;
 
         if (fileItem.url !== this.uploadPath) {
@@ -82,8 +83,10 @@ export class UploadFormComponent implements OnInit, OnChanges {
       if (status === 200) {
         this.error = false;
       }
-      if (this.first && responseObject._id && status === 200) {
-        this.first = false;
+      if (responseObject._id && status === 200) {
+        if (this.first) {
+          this.first = false;
+        }
         // all subsequent (if any) uploads will be added to this unit
         this.onFileUploaded.emit(responseObject);
       }
@@ -104,6 +107,7 @@ export class UploadFormComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.hasOwnProperty('uploadPath') && changes.hasOwnProperty('uploadMethod') && !this.first) {
+      this.updateUploadParams = true;
       this.uploadNextItem();
     }
   }

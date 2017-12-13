@@ -1,0 +1,35 @@
+<h3>Files</h3>
+
+<app-unit-general-info-form [model]="model"></app-unit-general-info-form>
+<div *ngIf="model?.files?.length > 0" class="file-list-container">
+  <div class="file-list">
+    <div class="file-list-row file-list-header">
+      <span>Filename</span>
+      <span>Filesize</span>
+      <span>Actions</span>
+    </div>
+    <div class="file-list-row" *ngFor="let file of model.files">
+      <span class="filename">{{file.alias}}</span>
+      <span class="filesize">{{file.size | filesize}}</span>
+      <mat-action-row>
+        <button mat-raised-button color="warn" (click)="removeFile(file)">
+          <mat-icon>delete</mat-icon>Remove
+        </button>
+      </mat-action-row>
+    </div>
+  </div>
+</div>
+<app-upload-form [uploadPath]="uploadPath"
+                 [uploadMethod]="uploadMethod"
+                 [additionalData]="additionalUploadData"
+                 (onFileSelectedChange)="onFileSelectedChange($event)"
+                 (onFileUploaded)="onFileUploaded($event)"
+                 (onAllUploaded)="onAllUploaded()"></app-upload-form>
+<p>
+  <button mat-raised-button color="primary"
+          (click)="uploadAll()" [disabled]="checkSave()">
+    <mat-icon>file_upload</mat-icon>
+    Upload and save
+  </button>
+  <button mat-button (click)="onCancel()">Cancel</button>
+</p>

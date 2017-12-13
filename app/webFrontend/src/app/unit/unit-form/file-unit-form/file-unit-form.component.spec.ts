@@ -1,21 +1,21 @@
 /* tslint:disable:no-unused-variable */
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import {FileUnitFormComponent} from './file-unit-form.component';
 
-import {FileUploadComponent} from './file-upload.component';
 
-describe('FileUploadComponent', () => {
-  let component: FileUploadComponent;
-  let fixture: ComponentFixture<FileUploadComponent>;
+describe('FileUnitFormComponent', () => {
+  let component: FileUnitFormComponent;
+  let fixture: ComponentFixture<FileUnitFormComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [FileUploadComponent]
+      declarations: [FileUnitFormComponent]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(FileUploadComponent);
+    fixture = TestBed.createComponent(FileUnitFormComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

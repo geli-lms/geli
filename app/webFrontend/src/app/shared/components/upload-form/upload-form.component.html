@@ -1,22 +1,3 @@
-<!--
-<div *ngIf="model">
-  <span *ngIf="model.files.length">Existing files:</span>
-  <div *ngFor="let file of model.files;">
-    <mat-form-field>
-      <input matInput [(ngModel)]="file.alias" placeholder="File name" size="40">
-    </mat-form-field>
-    <button mat-icon-button matTooltip="Delete" (click)="deleteFile(file)">
-      <mat-icon>delete</mat-icon>
-    </button>
-  </div>
-  <div>
-    <button mat-button color="primary" (click)="update()"
-            [disabled]="!generalInfo.form.value.name || hasInvalidFileNames()">
-      Update
-    </button>
-  </div>
-</div>
--->
 <label ng2FileDrop
      [ngClass]="{'nv-file-over': hasDropZoneOver}"
      (fileOver)="onFileOverDropzone($event)"
@@ -31,29 +12,21 @@
          hidden
   />
 </label>
-<!--
-<div>
-  <input type="file" ng2FileSelect [uploader]="fileUploader" placeholder="Upload files" multiple/>
-  <button mat-button *ngIf="this.fileUploader.queue.length" color="warn" (click)="clearQueue()">
-    Remove all
-  </button>
-</div>
--->
-<div class="queue-container" *ngIf="fileUploader.queue.length > 0">
+<div class="file-list-container" *ngIf="fileUploader.queue.length > 0">
   <div class="overall-progress">
     <span>Overall progress:</span>
     <span class="progress-bar">
       <mat-progress-bar mode="determinate" [value]="fileUploader.progress"></mat-progress-bar>
     </span>
   </div>
-  <div class="file-queue">
-    <div class="file-queue-row file-queue-header">
+  <div class="file-list">
+    <div class="file-list-row file-list-header">
       <span>Filename</span>
       <span>Filesize</span>
       <span class="progress-col">Progress</span>
       <span>Actions</span>
     </div>
-    <div class="file-queue-row" *ngFor="let item of fileUploader.queue">
+    <div class="file-list-row" *ngFor="let item of fileUploader.queue">
       <span class="filename">{{item.file.name}}</span>
       <span class="filesize">{{item.file.size | filesize}}</span>
       <span class="progress-col">

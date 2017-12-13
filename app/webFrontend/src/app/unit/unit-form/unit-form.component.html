@@ -6,13 +6,13 @@
     [lecture]="lecture"
     [onDone]="onDone"
     [onCancel]="onCancel"></app-video-upload>
-  <app-file-upload
+  <app-file-unit-form
     *ngIf="course && (type == 'file')"
     [course]="course"
     [model]="model"
     [lecture]="lecture"
     [onDone]="onDone"
-    [onCancel]="onCancel"></app-file-upload>
+    [onCancel]="onCancel"></app-file-unit-form>
   <app-task-unit-edit
     *ngIf="course && (type == 'task')"
     [course]="course"
