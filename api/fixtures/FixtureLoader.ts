@@ -5,6 +5,10 @@ import * as fs from 'fs';
 import {Course} from '../src/models/Course';
 import * as crypto from 'crypto';
 import {FixtureUtils} from './FixtureUtils';
+import {UnitClassMapper} from '../src/utilities/UnitClassMapper';
+import {ICodeKataModel} from '../src/models/units/CodeKataUnit';
+import {Lecture} from '../src/models/Lecture';
+import {Unit} from '../src/models/units/Unit';
 
 export class FixtureLoader {
   private usersDirectory = 'build/fixtures/users/';
@@ -36,7 +40,7 @@ export class FixtureLoader {
     }
 
     // import coursefiles
-    const courseIDs = await Promise.all(coursefixtures.map(async (courseFile: string) => {
+    await Promise.all(coursefixtures.map( async (courseFile: string) => {
       const file = fs.readFileSync(this.coursesDirectory + courseFile);
       const course = JSON.parse(file.toString());
 
@@ -51,6 +55,47 @@ export class FixtureLoader {
 
       const importedCourse = await Course.schema.statics.importJSON(course, teacher, course.active);
       return importedCourse._id;
+    }));
+
+    // generate progress
+    const progressableUnits = await Unit.find({progressable: true});
+
+    await Promise.all(progressableUnits.map(async unit => {
+      const lecture = await Lecture.findOne({units: { $in: [ unit._id ] }});
+      const course = await Course.findOne({lectures: { $in: [ lecture._id ] }});
+      const students = await User.find({_id: { $in: course.students}});
+
+      for (const student of students) {
+        // do not create a progress if type is zero
+        // 1 -> create progress with `done: false`
+        // 2 -> create progress with `done: true` (and a solution)
+        const progressType = FixtureUtils.getNumberFromString(student.email + student.uid + course.name + lecture.name + unit.name, 0, 3);
+
+        if (progressType === 0) {
+          continue;
+        }
+
+        const newProgress = {
+          course: course._id.toString(),
+          unit: unit._id.toString(),
+          user: student._id.toString(),
+          done: false,
+        };
+
+        if (progressType === 2) {
+          newProgress.done = true;
+          switch (unit.type) {
+            case 'code-kata':
+              (<any>newProgress).code = (<ICodeKataModel>unit).code;
+              break;
+          }
+        }
+
+
+        const progressClass = UnitClassMapper.getProgressClassForUnit(unit);
+        await new progressClass(newProgress).save();
+      }
+      return unit.name;
     }));
   }
 }

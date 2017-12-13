@@ -112,7 +112,7 @@ export class FixtureUtils {
   }
 
   // returns a number for a given string between the boundaries of start(inclusive) and end(exclusive)
-  private static getNumberFromString(str: string, start: number, end: number): number {
+  public static getNumberFromString(str: string, start: number, end: number): number {
     let hash = 0;
     for (let i = 0; i < str.length; i++) {
       const char = str.charCodeAt(i);
