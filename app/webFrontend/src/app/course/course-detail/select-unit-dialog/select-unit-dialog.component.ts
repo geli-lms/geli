@@ -83,7 +83,6 @@ export class SelectUnitDialogComponent implements OnInit{
         iDownload.tooLargeFiles.forEach(file => {
           this.childLectures.forEach(lecture => {
             lecture.childUnits.forEach(unit => {
-
               if (unit.files) {
                 unit.childUnits.forEach(fileUnit => {
 
@@ -104,8 +103,8 @@ export class SelectUnitDialogComponent implements OnInit{
         let units = [];
         lec.childUnits.forEach(unit => {
           if (unit.chkbox) {
-            if (unit.unit.type === 'Video' || unit.unit.type === 'File') {
-              let files;
+            if (unit.unit.type === 'video' || unit.unit.type === 'file') {
+              let files = [];
               unit.childUnits.forEach((file, index) => {
                 if (file.chkbox) {
                   files.push(index);
