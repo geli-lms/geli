@@ -1,7 +1,10 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
-import {FileItem, FileUploader} from 'ng2-file-upload';
-import {IUser} from '../../../../../../../shared/models/IUser';
-import {MatDialogRef, MatSnackBar} from '@angular/material';
+import {MatDialogRef} from '@angular/material';
+import {MarkdownService} from '../../services/markdown.service';
+import 'brace';
+import 'brace/mode/markdown';
+import 'brace/theme/github';
+import {AceEditorComponent} from 'ng2-ace-editor';
 
 @Component({
   selector: 'app-write-mail-dialog',
@@ -10,15 +13,25 @@ import {MatDialogRef, MatSnackBar} from '@angular/material';
 })
 export class WriteMailDialog implements OnInit {
 
-  @Input() to: String;
-  subject = '';
-  text = '';
+  @Input() bcc: string;
+  @Input() cc: string;
+  @Input() subject: string;
+  @Input() markdown: string;
+
+  @ViewChild('editor') editor: AceEditorComponent;
+  renderedHtml: string;
 
   constructor(
-    public dialogRef: MatDialogRef<WriteMailDialog>
+    public dialogRef: MatDialogRef<WriteMailDialog>,
+    private mdService: MarkdownService
   ) {}
 
   ngOnInit() {
+    this.renderedHtml = this.mdService.render(this.markdown);
+  }
+
+  ngAfterViewInit(): void {
+    this.editor.getEditor().navigateFileStart();
   }
 
   public cancel() {
@@ -27,9 +40,19 @@ export class WriteMailDialog implements OnInit {
 
   public sendMail() {
     this.dialogRef.close({
-      to: this.to,
+      bcc: this.bcc,
+      cc: this.cc,
       subject: this.subject,
-      text: this.text,
+      markdown: this.markdown,
     });
+  }
+
+  onTabChange(event: any) {
+    if (event.index === 1) {
+      // We are on the preview tab
+      this.renderedHtml = this.mdService.render(this.markdown);
+    } else {
+      this.editor.getEditor().focus();
+    }
   }
 }
