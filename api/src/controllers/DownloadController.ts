@@ -27,6 +27,8 @@ import {IVideoUnit} from '../../../shared/models/units/IVideoUnit';
 import {Task} from '../models/Task';
 import {IDownloadSize} from '../../../shared/models/IDownloadSize';
 
+
+// Set all routes to json, because the download is streaming data and do not use json headers
 @Controller('/download')
 @UseBefore(passportJwtMiddleware)
 export class DownloadController {
@@ -34,7 +36,8 @@ export class DownloadController {
 
   async calcPackage(pack: IDownload) {
 
-    let size: IDownloadSize;
+    let localTotalSize = 0;
+    let localTooLargeFiles : Array<String> = [];
 
     for (const lec of pack.lectures) {
       for (const unit of lec.units) {
@@ -47,9 +50,9 @@ export class DownloadController {
               const stats = fs.statSync(file.path);
               const fileSize = stats.size / 1000000.0;
               if (fileSize > 50) {
-                size.tooLargeFiles.push(file.path);
+                localTooLargeFiles.push(file.path);
               }
-              size.totalSize += fileSize;
+              localTotalSize += fileSize;
             }
           });
         } else if (localUnit instanceof VideoUnit) {
@@ -59,15 +62,16 @@ export class DownloadController {
               const stats = fs.statSync(file.path);
               const fileSize = stats.size / 1000000.0;
               if (fileSize > 50) {
-                size.tooLargeFiles.push(file.path);
+                localTooLargeFiles.push(file.path);
               }
-              size.totalSize += fileSize;
+              localTotalSize += fileSize;
             }
           });
         }
       }
     }
 
+    const size = {totalSize: localTotalSize, tooLargeFiles: localTooLargeFiles};
     return size;
   }
 
@@ -82,9 +86,10 @@ export class DownloadController {
 
   }
 
-  @Get('/size/')
-  async getFileSize(@Body() data: IDownload) {
-
+  @Post('/size/')
+  @ContentType('application/json')
+  async getFileSize(@Body() data: any) {
+    console.log(data);
     return this.calcPackage(data);
   }
 
