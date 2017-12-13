@@ -4,6 +4,8 @@ import {ICourse} from '../../../../../../../shared/models/ICourse';
 import {LectureCheckboxComponent} from './lecture-checkbox/lecture-checkbox.component';
 import {DownloadReq} from 'app/shared/services/data.service';
 import {IDownload} from '../../../../../../../shared/models/IDownload';
+import {IDownloadSize} from "../../../../../../../shared/models/IDownloadSize";
+import {IFileUnit} from "../../../../../../../shared/models/units/IFileUnit";
 
 @Component({
   selector: 'app-select-unit-dialog',
@@ -65,16 +67,32 @@ export class SelectUnitDialogComponent implements OnInit{
     }
     const downloadObj = <IDownload> obj;
     this.showSpinner = true;
-
     const sizeResult = await this.downloadReq.getPackageSize(downloadObj);
+    const iDownload = <IDownloadSize><any>sizeResult;
+    if (iDownload.tooLargeFiles.length == 0) {
+      const result = await this.downloadReq.postDownloadReqForCourse(downloadObj);
+      const response = await this.downloadReq.getFile(result.toString());
+      this.showSpinner = false;
+      var link = document.createElement('a');
+      link.href = window.URL.createObjectURL(response);
+      link.download = this.course.name + '.zip';
+      link.click();
+    } else {
+      // TODO: Test withg large video file, once i get one.
+      this.snackBar.open('The selected files are too big! Please download the red-marked files seperately!', 'Okay', {duration: 3000});
+        iDownload.tooLargeFiles.forEach(file => {
+          this.childLectures.forEach(lecture => {
+            lecture.childUnits.forEach(unit => {
 
-    const result = await this.downloadReq.postDownloadReqForCourse(downloadObj);
-    const response = await this.downloadReq.getFile(result.toString());
-    this.showSpinner = false;
-    var link = document.createElement('a');
-    link.href = window.URL.createObjectURL(response);
-    link.download = this.course.name + '.zip';
-    link.click();
+              if (unit.files) {
+                unit.childUnits.forEach(fileUnit => {
+
+                });
+              }
+            });
+          });
+        });
+    }
     //this.saveFileService.save(this.course.name,'Some Data','.zip', 'file/zip', 'file/zip');
     this.dialogRef.close();
   }
@@ -104,6 +122,7 @@ export class SelectUnitDialogComponent implements OnInit{
     });
 
     let downloadObj = {courseName: this.course._id, lectures: lectures};
+    console.dir(downloadObj);
     return downloadObj;
   }
 
