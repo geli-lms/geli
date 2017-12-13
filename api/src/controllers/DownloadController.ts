@@ -25,10 +25,53 @@ import {FileUnit} from '../models/units/FileUnit';
 import {VideoUnit} from '../models/units/VideoUnit';
 import {IVideoUnit} from '../../../shared/models/units/IVideoUnit';
 import {Task} from '../models/Task';
+import {IDownloadSize} from '../../../shared/models/IDownloadSize';
 
 @Controller('/download')
 @UseBefore(passportJwtMiddleware)
 export class DownloadController {
+
+
+  async calcPackage(pack: IDownload) {
+
+    let size: IDownloadSize;
+
+    for (const lec of pack.lectures) {
+      for (const unit of lec.units) {
+
+        const localUnit = await Unit.findOne({_id: unit.unitId});
+        if (localUnit instanceof FileUnit) {
+          const fileUnit = <IFileUnit><any>localUnit;
+          fileUnit.files.forEach((file, index) => {
+            if (unit.files.indexOf({id: index})) {
+              const stats = fs.statSync(file.path);
+              const fileSize = stats.size / 1000000.0;
+              if (fileSize > 50) {
+                size.tooLargeFiles.push(file.path);
+              }
+              size.totalSize += fileSize;
+            }
+          });
+        } else if (localUnit instanceof VideoUnit) {
+          const videoFileUnit = <IVideoUnit><any>localUnit;
+          videoFileUnit.files.forEach((file, index) => {
+            if (unit.files.indexOf({id: index}) !== -1) {
+              const stats = fs.statSync(file.path);
+              const fileSize = stats.size / 1000000.0;
+              if (fileSize > 50) {
+                size.tooLargeFiles.push(file.path);
+              }
+              size.totalSize += fileSize;
+            }
+          });
+        }
+      }
+    }
+
+    return size;
+  }
+
+
 
   @Get('/:id')
   async getArchivedFile(@Param('id') id: string, @Res() response: Response) {
@@ -42,45 +85,7 @@ export class DownloadController {
   @Get('/size/')
   async getFileSize(@Body() data: IDownload) {
 
-    let totalSize: number = 0;
-    let tooLargeFiles: Array<string> = [];
-
-
-    for (const lec of data.lectures) {
-      for (const unit of lec.units) {
-
-        const localUnit = await Unit.findOne({_id: unit.unitId});
-        if (localUnit instanceof FileUnit) {
-          const fileUnit = <IFileUnit><any>localUnit;
-          fileUnit.files.forEach((file, index) => {
-            if (unit.files.indexOf({id: index})) {
-              const stats = fs.statSync(file.path);
-              const fileSize = stats.size / 1000000.0;
-              if( fileSize > 50 ) {
-                tooLargeFiles.push(file.path);
-              }
-              totalSize += fileSize;
-            }
-          });
-        } else if (localUnit instanceof VideoUnit) {
-          const videoFileUnit = <IVideoUnit><any>localUnit;
-          videoFileUnit.files.forEach((file, index) => {
-            if (unit.files.indexOf({id: index}) !== -1) {
-              const stats = fs.statSync(file.path);
-              const fileSize = stats.size / 1000000.0;
-              if( fileSize > 50 ) {
-                tooLargeFiles.push(file.path);
-              }
-              totalSize += fileSize;
-            }
-          });
-        }
-      }
-    }
-
-    let downPackage = {size: totalSize, largeElements: tooLargeFiles};
-
-    return downPackage;
+    return this.calcPackage(data);
   }
 
   @Post('/')
@@ -88,6 +93,12 @@ export class DownloadController {
   async postDownloadRequest(@Body() data: IDownload) {
 
     if (data.lectures.length === 0) {
+      throw new NotFoundError();
+    }
+
+    const size = await this.calcPackage(data);
+
+    if(size.totalSize > 200 || size.tooLargeFiles.length !== 0) {
       throw new NotFoundError();
     }
 
