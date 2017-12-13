@@ -1,6 +1,7 @@
 <mat-tab-group *ngIf="!showProgressBar" (selectChange)="changedTab($event)">
   <mat-tab label="Upload image">
     <div class="tab-content">
+      <!-- TODO: Replace with shared upload form -->
       <input type="file" name="fileupload" ng2FileSelect [uploader]="uploader" placeholder="Upload picture"/>
       <button mat-raised-button color="primary" disabled="{{!uploader.queue.length}}" (click)="uploadImage()">Upload picture</button>
       <button mat-raised-button color="warn" (click)="cancel()">Cancel</button>
