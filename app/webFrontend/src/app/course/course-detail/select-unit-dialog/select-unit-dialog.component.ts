@@ -68,6 +68,7 @@ export class SelectUnitDialogComponent implements OnInit{
     this.showSpinner = true;
     const sizeResult = await this.downloadReq.getPackageSize(downloadObj);
     const iDownload = <IDownloadSize><any>sizeResult;
+    console.dir(iDownload);
     if (iDownload.tooLargeFiles.length == 0) {
       const result = await this.downloadReq.postDownloadReqForCourse(downloadObj);
       const response = await this.downloadReq.getFile(result.toString());
@@ -85,8 +86,7 @@ export class SelectUnitDialogComponent implements OnInit{
               if (unit.files) {
                 unit.childUnits.forEach(fileUnit => {
                   if (fileUnit.file.path == file ) {
-
-
+                    fileUnit.redText = true;
                   }
                 });
               }
@@ -123,7 +123,6 @@ export class SelectUnitDialogComponent implements OnInit{
     });
 
     let downloadObj = {courseName: this.course._id, lectures: lectures};
-    console.dir(downloadObj);
     return downloadObj;
   }
 

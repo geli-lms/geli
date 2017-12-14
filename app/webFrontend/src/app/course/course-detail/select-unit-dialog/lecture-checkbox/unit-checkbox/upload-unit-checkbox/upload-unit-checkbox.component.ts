@@ -13,19 +13,22 @@ export class UploadUnitCheckboxComponent implements OnInit {
   file: IFile;
   @Input()
   chkbox: boolean;
-
+  @Input()
+  redText: boolean;
   @Output()
   valueChanged: EventEmitter<any> = new EventEmitter();
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit() {
     this.chkbox = false;
+    this.redText = true;
   }
 
   emitEvent() {
     this.valueChanged.emit();
   }
-
-
 }
+
+
