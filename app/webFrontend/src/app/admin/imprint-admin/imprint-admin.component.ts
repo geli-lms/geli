@@ -25,16 +25,14 @@ export class ImprintAdminComponent implements OnInit {
     this.loadImprint()
   }
 
-  loadImprint() {
-    this.service.readSingleItem('imprint').then(
-      (imprint: any) => {
-        this.imprint = imprint;
-        this.text = this.imprint.configValue;
-        this.renderHtml();
-      },
-      (errorResponse: Response) => {
-        this.text = '';
-      });
+  async loadImprint() {
+    try {
+      this.imprint = <IConfig><any> await this.service.readSingleItem('imprint');
+      this.text = this.imprint.configValue;
+      this.renderHtml();
+    } catch (error) {
+      this.text = '';
+    }
   }
 
   renderHtml() {
@@ -53,11 +51,11 @@ export class ImprintAdminComponent implements OnInit {
     } catch (error) {
       this.snackBar.open(errorCodes.save.couldNotSaveImprint.text, '', {duration: 3000})
     }
-    this.loadImprint();
+    void this.loadImprint();
     this.renderHtml();
   }
   onCancel() {
-    this.loadImprint();
+    void this.loadImprint();
     this.renderHtml();
   }
 
