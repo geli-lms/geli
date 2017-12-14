@@ -4,6 +4,16 @@ import {Lecture} from '../src/models/Lecture';
 import {Unit} from '../src/models/units/Unit';
 
 export class FixtureUtils {
+  public static async getRandomUser(hash?: string) {
+    const array = await this.getUser();
+    return this.getRandom(array, hash);
+  }
+
+  public static async getRandomUsers(min: number, max: number, hash?: string) {
+    const array = await this.getUser();
+    return this.getRandomArray(array, min, max, hash);
+  }
+
   public static async getRandomAdmin(hash?: string) {
     const array = await this.getAdmins();
     return this.getRandom(array, hash);
@@ -73,7 +83,7 @@ export class FixtureUtils {
     return Unit.find();
   }
 
-  private static async getUser(role: string) {
+  private static async getUser(role?: string) {
     if (!role) {
       return User.find();
     }
