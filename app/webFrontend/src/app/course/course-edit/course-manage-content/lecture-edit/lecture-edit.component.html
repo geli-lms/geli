@@ -1,0 +1,98 @@
+<div *ngIf="lecture" class="lecture">
+  <div class="lecture-header">
+    <mat-icon class="lecture-drag-handle">drag_handle</mat-icon>
+    <h2>{{lecture.name}}</h2>
+    <button class="open-toggle" (click)="toggleLecture()"
+            [class.opened]="isOpened" mat-icon-button>
+      <mat-icon>arrow_drop_down</mat-icon>
+    </button>
+
+    <span class="flex-spacer"></span>
+
+    <button class="lecture-menu-button" mat-icon-button [matMenuTriggerFor]="lectureMenu">
+      <mat-icon>more_vert</mat-icon>
+    </button>
+
+    <mat-menu #lectureMenu="matMenu">
+      <button mat-menu-item (click)="onEditLecture(lecture)">
+        <mat-icon>edit</mat-icon>
+        Edit
+      </button>
+      <button mat-menu-item (click)="exportLecture(lecture)">
+        <mat-icon>file_download</mat-icon>
+        Export
+      </button>
+      <button mat-menu-item (click)="duplicateLecture(lecture)">
+        <mat-icon>content_copy</mat-icon>
+        Duplicate
+      </button>
+      <button mat-menu-item (click)="deleteLecture(lecture)">
+        <mat-icon>delete</mat-icon>
+        Delete
+      </button>
+    </mat-menu>
+  </div>
+
+  <app-lecture-form [model]="lecture"
+                    *ngIf="isOpened() && getDataForKey('lecture-edit-mode')"
+                    (onSubmit)="updateLecture($event)"
+                    [onCancel]="closeEditLecture"
+                    actionLabel="Update"></app-lecture-form>
+  <div *ngIf="getDataForKey('openLectureId') === lecture._id">
+    <div class="units" [dragula]="'units'" [dragulaModel]="lecture.units">
+      <div class="unit" *ngFor="let unit of lecture.units;">
+        <div class="unit-content">
+          <mat-icon class="unit-drag-handle">drag_handle</mat-icon>
+          <span class="unit-name">{{ unit.name }}</span>
+          <span class="unit-type">{{ unit.type }}</span>
+          <span class="unit-date">{{ unit.updatedAt | date:"y-MM-dd" }}</span>
+          <span class="unit-actions">
+              <button mat-icon-button matTooltip="Edit" (click)="onEditUnit(unit)">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button class="unit-menu-button" mat-icon-button [matMenuTriggerFor]="unitMenu">
+                <mat-icon>more_vert</mat-icon>
+              </button>
+              <mat-menu #unitMenu="matMenu">
+                <button mat-icon-button matTooltip="Delete" (click)="deleteUnit(unit)">
+                  <mat-icon>delete</mat-icon>
+                </button>
+                <button mat-icon-button matTooltip="Duplicate" (click)="duplicateUnit(unit)">
+                  <mat-icon>content_copy</mat-icon>
+                </button>
+                <button mat-icon-button matTooltip="Export" (click)="onExportUnit(unit)">
+                  <mat-icon>file_download</mat-icon>
+              </button>
+              </mat-menu>
+            </span>
+        </div>
+
+        <app-unit-form *ngIf="getDataForKey('unit-edit-mode') && getDataForKey('unit-edit-element') === unit"
+                       [course]="course"
+                       [lecture]="lecture"
+                       [type]="unit.type"
+                       [model]="unit"
+                       [onDone]="onEditUnitDone"
+                       [onCancel]="closeEditUnit">
+        </app-unit-form>
+      </div>
+
+      <p *ngIf="!lecture.units.length">No units added yet.</p>
+    </div>
+
+    <app-unit-form *ngIf="getDataForKey('unit-create-mode') && getDataForKey('unit-create-type')"
+                   [course]="course"
+                   [lecture]="lecture"
+                   [type]="getDataForKey('unit-create-type')"
+                   [onDone]="onAddUnitDone"
+                   [onCancel]="closeAddUnit">
+    </app-unit-form>
+  </div>
+</div>
+
+<div class="unit-drop-target"
+     *ngIf="getDataForKey('openLectureId') === lecture._id && !lecture.units.length && isDraggingUnit()"
+     dragula="units"
+     [dragulaModel]="lecture.units"
+     [attr.data-lecture-id]="lecture._id">
+</div>

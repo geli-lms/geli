@@ -1,0 +1,255 @@
+import {Component, OnInit, OnDestroy, Input} from '@angular/core';
+import {ICourse} from '../../../../../../../../shared/models/ICourse';
+import {ILecture} from '../../../../../../../../shared/models/ILecture';
+import {DuplicationService, ExportService, LectureService, UnitService} from '../../../../shared/services/data.service';
+import {ShowProgressService} from 'app/shared/services/show-progress.service';
+import {DialogService} from '../../../../shared/services/dialog.service';
+import {UserService} from '../../../../shared/services/user.service';
+import {MatSnackBar} from '@angular/material';
+import {IUnit} from '../../../../../../../../shared/models/units/IUnit';
+import {DragulaService} from 'ng2-dragula';
+import {SaveFileService} from '../../../../shared/services/save-file.service';
+import {ActivatedRoute, Router} from '@angular/router';
+import {DataSharingService} from '../../../../shared/services/data-sharing.service';
+import {Subject} from 'rxjs/Subject';
+
+@Component({
+  selector: 'app-lecture-edit',
+  templateUrl: './lecture-edit.component.html',
+  styleUrls: ['./lecture-edit.component.scss']
+})
+export class LectureEditComponent implements OnInit, OnDestroy {
+  @Input() lecture: ILecture;
+  @Input() course: ICourse;
+
+  onCloseAllForms: Subject<void>;
+  onReloadCourse: Subject<void>;
+
+  lectureId: string;
+
+  constructor(private route: ActivatedRoute,
+              private lectureService: LectureService,
+              private unitService: UnitService,
+              private showProgress: ShowProgressService,
+              private snackBar: MatSnackBar,
+              private dialogService: DialogService,
+              private dragulaService: DragulaService,
+              private duplicationService: DuplicationService,
+              private exportService: ExportService,
+              private saveFileService: SaveFileService,
+              public userService: UserService,
+              private dataSharingService: DataSharingService,
+              private router: Router) {
+  }
+
+  ngOnInit() {
+    this.onCloseAllForms = this.dataSharingService.getDataForKey('onCloseAllForms');
+    this.onCloseAllForms.asObservable().subscribe(() => {
+      this.closeAllForms();
+    });
+    this.onReloadCourse = this.dataSharingService.getDataForKey('onReloadCourse');
+  }
+
+  isDraggingUnit() {
+    return this.dragulaService.find('units').drake.dragging;
+  }
+
+  ngOnDestroy() {}
+
+  duplicateLecture(lecture: ILecture) {
+    this.duplicationService.duplicateLecture(lecture, this.course._id)
+      .then(() => {
+        this.snackBar.open('Lecture duplicated.', '', {duration: 3000});
+        this.reloadCourse();
+      })
+      .catch((error) => {
+        this.snackBar.open(error, '', {duration: 3000});
+      });
+  }
+
+  duplicateUnit(unit: IUnit) {
+    this.duplicationService.duplicateUnit(unit, this.lecture._id , this.course._id)
+      .then(() => {
+        this.snackBar.open('Unit duplicated.', '', {duration: 3000});
+        this.reloadCourse();
+      })
+      .catch((error) => {
+        this.snackBar.open(error, '', {duration: 3000});
+      });
+  }
+
+  async exportLecture(lecture: ILecture) {
+    try {
+      const lectureJSON = await this.exportService.exportLecture(lecture);
+
+      this.saveFileService.save(lecture.name, JSON.stringify(lectureJSON, null, 2));
+    } catch (err) {
+      this.snackBar.open('Export lecture failed ' + err.json().message, 'Dismiss');
+    }
+  }
+
+  updateLecture(lecture: ILecture) {
+    this.showProgress.toggleLoadingGlobal(true);
+
+    this.lectureService.updateItem(lecture)
+      .then(() => {
+        this.dataSharingService.setDataForKey('lecture-edit-mode', false);
+      })
+      .catch(console.error)
+      .then(() => this.showProgress.toggleLoadingGlobal(false));
+  }
+
+
+
+  deleteUnit(unit: IUnit) {
+    this.dialogService
+      .confirmDelete('unit', unit.type)
+      .subscribe(res => {
+        if (res) {
+          this.showProgress.toggleLoadingGlobal(true);
+          this.unitService.deleteItem(unit)
+            .then(() => {
+              this.snackBar.open('Unit deleted.', '', {duration: 3000});
+              this.closeEditUnit();
+              this.reloadCourse();
+            })
+            .catch((error) => {
+              this.snackBar.open(error, '', {duration: 3000});
+            })
+            .then(() => {
+              this.showProgress.toggleLoadingGlobal(false);
+            });
+        }
+      });
+  }
+
+  getDataForKey(key) {
+    return this.dataSharingService.getDataForKey(key);
+  }
+
+  deleteLecture(lecture: ILecture) {
+    this.dialogService
+      .confirmDelete('lecture', lecture.name)
+      .subscribe(res => {
+        if (!res) {
+          return;
+        }
+        this.showProgress.toggleLoadingGlobal(true);
+        this.lectureService.deleteItem(lecture)
+          .then((val) => {
+            this.snackBar.open('Lecture deleted.', '', {duration: 3000});
+            this.closeEditUnit();
+            this.closeEditLecture();
+            this.reloadCourse();
+          })
+          .catch((error) => {
+            this.snackBar.open(error, '', {duration: 3000});
+          })
+          .then(() => {
+            this.showProgress.toggleLoadingGlobal(false);
+          });
+      });
+  }
+
+  reloadCourse() {
+    this.onReloadCourse.next();
+  }
+
+  onEditLecture() {
+    this.closeAllForms();
+
+    this.dataSharingService.setDataForKey('lecture-edit-mode', true);
+    this.dataSharingService.setDataForKey('openLectureId', this.lecture._id);
+    this.navigateToThisLecture();
+  }
+
+  closeEditLecture = () => {
+    this.dataSharingService.setDataForKey('lecture-edit-mode', false);
+  };
+
+
+  onAddUnitDone = () => {
+    this.reloadCourse();
+    this.closeAddUnit();
+  };
+
+  closeAddUnit = () => {
+    this.dataSharingService.setDataForKey('unit-create-mode', false);
+    this.dataSharingService.setDataForKey('unit-create-type', null);
+  };
+
+  onEditUnit = (unit: IUnit) => {
+    this.closeAllForms();
+
+    this.dataSharingService.setDataForKey('unit-edit-mode', true);
+    this.dataSharingService.setDataForKey('unit-edit-element', unit);
+    this.navigateToUnitEdit(unit._id);
+  };
+
+  onExportUnit = async (unit: IUnit) => {
+    try {
+      const unitJSON = await this.exportService.exportUnit(unit);
+
+      this.saveFileService.save(unit.name, JSON.stringify(unitJSON, null, 2));
+    } catch (err) {
+      this.snackBar.open('Export unit failed ' + err.json().message, 'Dismiss');
+    }
+  };
+
+  onEditUnitDone = () => {
+    this.reloadCourse();
+    this.closeEditUnit();
+  };
+
+  closeEditUnit = () => {
+    this.dataSharingService.setDataForKey('unit-edit-mode', false);
+    this.dataSharingService.setDataForKey('unit-edit-element', null);
+    this.navigateToThisLecture();
+  };
+
+  private closeAllForms() {
+    this.closeEditLecture();
+    this.closeAddUnit();
+    this.closeEditUnit();
+  }
+
+  isOpened() {
+    return this.dataSharingService.getDataForKey('openLectureId') === this.lecture._id;
+  }
+
+  navigateToThisLecture() {
+    this.route.url.subscribe(segments => {
+      let path = segments.map(() => '../').join('') || '';
+      path += `lecture/${this.lecture._id}`;
+      this.router.navigate([path], {relativeTo: this.route});
+    });
+  }
+
+  navigateToUnitEdit(unitId) {
+    this.route.url.subscribe(segments => {
+      let path = segments.map(() => '../').join('') || '';
+      path += `lecture/${this.lecture._id}/unit/${unitId}`;
+      this.router.navigate([path], {relativeTo: this.route});
+    });
+  }
+
+  navigateToRoot() {
+    this.route.url.subscribe(segments => {
+      const path = segments.map(() => '../').join('') || '';
+      this.router.navigate([path], {relativeTo: this.route});
+    });
+  }
+
+  toggleLecture() {
+    this.onCloseAllForms.next();
+
+    const openLectureId = this.dataSharingService.getDataForKey('openLectureId');
+    if (openLectureId && openLectureId === this.lecture._id) {
+      this.dataSharingService.setDataForKey('openLectureId', null);
+      this.navigateToRoot();
+    } else {
+      this.dataSharingService.setDataForKey('openLectureId', this.lecture._id);
+      this.navigateToThisLecture();
+    }
+  }
+}

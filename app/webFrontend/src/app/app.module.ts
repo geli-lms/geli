@@ -31,6 +31,7 @@ import {AboutModule} from './about/about.module';
 import {AdminModule} from './admin/admin.module';
 import {ReportService} from './shared/services/data/report.service';
 import {TitleService} from './shared/services/title.service';
+import {DataSharingService} from './shared/services/data-sharing.service';
 
 @NgModule({
   declarations: [
@@ -73,6 +74,7 @@ import {TitleService} from './shared/services/title.service';
       provide: ErrorHandler,
       useExisting: RavenErrorHandler
     },
+    DataSharingService,
   ],
   bootstrap: [AppComponent]
 })
