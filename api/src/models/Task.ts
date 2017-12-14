@@ -13,8 +13,7 @@ const taskSchema = new mongoose.Schema(
     },
     unitId: {
       type: String
-    }
-    ,
+    },
     answers: {
       type: [{
         value: Boolean,
@@ -29,14 +28,14 @@ const taskSchema = new mongoose.Schema(
         ret._id = doc.id;
         // remove id for embedded documents
         for (const answer of ret.answers) {
-          delete answer._id;
+          answer._id = answer._id.toString();
         }
       }
     }
   }
 );
 
-taskSchema.methods.exportJSON = function() {
+taskSchema.methods.exportJSON = function () {
   const obj = this.toObject();
 
   // remove unwanted informations
@@ -54,7 +53,7 @@ taskSchema.methods.exportJSON = function() {
   return obj;
 };
 
-taskSchema.statics.importJSON = function(task: ITask, unitId: string) {
+taskSchema.statics.importJSON = function (task: ITask, unitId: string) {
   return new Task(task).save()
     .catch((err: Error) => {
       const newError = new InternalServerError('Failed to import task');
