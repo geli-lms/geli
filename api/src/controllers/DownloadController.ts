@@ -46,7 +46,7 @@ export class DownloadController {
         if (localUnit instanceof FileUnit) {
           const fileUnit = <IFileUnit><any>localUnit;
           fileUnit.files.forEach((file, index) => {
-            if (unit.files.indexOf({id: index})) {
+            if (unit.files.indexOf(index) > -1) {
               const stats = fs.statSync(file.path);
               const fileSize = stats.size / 1000000.0;
               if (fileSize > 50) {
@@ -58,7 +58,7 @@ export class DownloadController {
         } else if (localUnit instanceof VideoUnit) {
           const videoFileUnit = <IVideoUnit><any>localUnit;
           videoFileUnit.files.forEach((file, index) => {
-            if (unit.files.indexOf({id: index}) !== -1) {
+            if (unit.files.indexOf(index) > -1) {
               const stats = fs.statSync(file.path);
               const fileSize = stats.size / 1000000.0;
               if (fileSize > 50) {
@@ -134,14 +134,14 @@ export class DownloadController {
         } else if (localUnit instanceof FileUnit) {
           const fileUnit = <IFileUnit><any>localUnit;
           fileUnit.files.forEach((file, index) => {
-            if (unit.files.indexOf({id: index})) {
+            if (unit.files.indexOf(index) > -1) {
               archive.file(file.path, {name: file.name});
             }
           });
         } else if (localUnit instanceof VideoUnit) {
           const videoFileUnit = <IVideoUnit><any>localUnit;
           videoFileUnit.files.forEach((file, index) => {
-            if (unit.files.indexOf({id: index}) !== -1) {
+            if (unit.files.indexOf(index) > -1) {
               archive.file(file.path, {name: file.name});
             }
           });
