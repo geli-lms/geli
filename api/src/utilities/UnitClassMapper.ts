@@ -1,5 +1,4 @@
 import {CodeKataProgress} from '../models/CodeKataProgress';
-import {Progress} from '../models/Progress';
 import {InternalServerError} from 'routing-controllers';
 import {IUnit} from '../../../shared/models/units/IUnit';
 import {CodeKataUnit} from '../models/units/CodeKataUnit';
@@ -7,6 +6,7 @@ import {TaskUnit} from '../models/units/TaskUnit';
 import {FileUnit} from '../models/units/FileUnit';
 import {FreeTextUnit} from '../models/units/FreeTextUnit';
 import {VideoUnit} from '../models/units/VideoUnit';
+import {TaskUnitProgress} from '../models/TaskUnitProgress';
 
 export class UnitClassMapper {
 
@@ -34,7 +34,7 @@ export class UnitClassMapper {
     'task' :
       {
         mongooseClass: TaskUnit,
-        progressClass: Progress,
+        progressClass: TaskUnitProgress,
       },
   };
 
