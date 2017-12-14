@@ -10,7 +10,7 @@ import {Lightbox, IAlbum} from 'angular2-lightbox';
 export class FileUnitComponent implements OnInit {
 
   @Input() fileUnit: IFileUnit;
-  private album: Array<IAlbum> = [];
+  album: Array<IAlbum> = [];
 
   constructor(private lightbox: Lightbox) {
   }
