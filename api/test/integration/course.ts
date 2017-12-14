@@ -62,7 +62,7 @@ describe('Course', () => {
       const res = await chai.request(app)
         .get(BASE_URL)
         .set('Authorization', 'JWT asdf')
-        .catch(err => err);
+        .catch(err => err.response);
         res.status.should.be.equal(401);
     });
   });
@@ -119,7 +119,7 @@ describe('Course', () => {
       const res = await chai.request(app)
         .get(`${BASE_URL}/${savedCourse._id}`)
         .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
-        .catch(err => err);
+        .catch(err => err.response);
 
       res.should.have.status(404);
     });
@@ -167,7 +167,7 @@ describe('Course', () => {
         .put(`${BASE_URL}/${savedCourse._id}`)
         .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
         .send(savedCourse)
-        .catch(err => err);
+        .catch(err => err.response);
 
       res.should.have.status(404);
     });
@@ -175,12 +175,12 @@ describe('Course', () => {
 
   describe(`DELETE ${BASE_URL}`, () => {
     it('should delete the Course', async () => {
-      const course = await Course.findOne({name: 'Computer Graphics'});
-      const user = await User.findOne({_id: course.courseAdmin});
+      const course = await FixtureUtils.getRandomCourse();
+      const courseAdmin = await User.findOne({_id: course.courseAdmin});
 
       const res = await chai.request(app)
         .del(`${BASE_URL}/${course._id}`)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(user)}`);
+        .set('Authorization', `JWT ${JwtUtils.generateToken(courseAdmin)}`);
 
       res.status.should.be.equal(200);
       const deletedCourse = await Course.findById(course._id);
@@ -188,17 +188,17 @@ describe('Course', () => {
     });
 
     it('should fail because the user is not authorize', async () => {
-      const course = await Course.findOne({name: 'Computer Graphics'});
+      const course = await FixtureUtils.getRandomCourse();
 
       const res = await chai.request(app)
         .del(`${BASE_URL}/${course._id}`)
-        .catch(err => err);
+        .catch(err => err.response);
 
       res.status.should.be.equal(401);
     });
 
     it('should fail because the teacher is not in the course', async () => {
-      const course = await Course.findOne({name: 'Computer Graphics'});
+      const course = await FixtureUtils.getRandomCourse();
       const allTeachersAndAdmins = course.teachers;
       allTeachersAndAdmins.push(course.courseAdmin);
       const user = await User.findOne({
@@ -210,7 +210,7 @@ describe('Course', () => {
       const res = await chai.request(app)
         .del(`${BASE_URL}/${course._id}`)
         .set('Authorization', `JWT ${JwtUtils.generateToken(user)}`)
-        .catch(err => err);
+        .catch(err => err.response);
 
       res.status.should.be.equal(403);
     });
