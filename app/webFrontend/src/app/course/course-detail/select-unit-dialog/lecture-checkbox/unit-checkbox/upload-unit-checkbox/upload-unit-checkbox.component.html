@@ -1,5 +1,8 @@
-<mat-list-item class="fileUnit">
-  {{file.name}}
+<mat-list-item class="fileUnit" [class.redText]="redText">
+  <ng-container *ngIf="icon_name">
+    <mat-icon class="icon">{{icon_name}}</mat-icon>
+  </ng-container>
+  {{file.alias}}
   <span class="spacer"></span>
-  <mat-checkbox [(ngModel)]="chkbox" (change)="emitEvent()" class="chkbox"></mat-checkbox>
+  <mat-checkbox [class.redText]="redText" [(ngModel)]="chkbox" (change)="emitEvent()" class="chkbox"></mat-checkbox>
 </mat-list-item>
