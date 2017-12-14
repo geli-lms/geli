@@ -5,7 +5,6 @@ import {LectureCheckboxComponent} from './lecture-checkbox/lecture-checkbox.comp
 import {DownloadReq} from 'app/shared/services/data.service';
 import {IDownload} from '../../../../../../../shared/models/IDownload';
 import {IDownloadSize} from "../../../../../../../shared/models/IDownloadSize";
-import {IFileUnit} from "../../../../../../../shared/models/units/IFileUnit";
 
 @Component({
   selector: 'app-select-unit-dialog',
@@ -85,7 +84,10 @@ export class SelectUnitDialogComponent implements OnInit{
             lecture.childUnits.forEach(unit => {
               if (unit.files) {
                 unit.childUnits.forEach(fileUnit => {
+                  if (fileUnit.file.path == file ) {
 
+
+                  }
                 });
               }
             });

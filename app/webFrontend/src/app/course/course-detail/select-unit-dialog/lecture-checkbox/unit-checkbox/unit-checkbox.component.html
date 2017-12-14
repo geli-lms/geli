@@ -1,14 +1,16 @@
-<mat-list-item class="unit">{{unit.name}}
+<mat-list-item class="unit">
+
+  {{unit.name}}
   <span class="spacer"></span>
   <mat-checkbox [(ngModel)]="chkbox" (change)="onChange()" class="chkbox"></mat-checkbox>
 </mat-list-item>
 
 <ng-container *ngIf="files">
   <mat-list>
-    <ng-container *ngFor=" let file of this.files" ngSwitch="unit.type">
+    <ng-container *ngFor=" let file of this.files" [ngSwitch]="unit.type">
       <app-upload-unit-checkbox (valueChanged)="onChildEvent($event)" *ngSwitchCase="'video'" [icon_name]="'live_tv'" [file]= file ></app-upload-unit-checkbox>
       <app-upload-unit-checkbox (valueChanged)="onChildEvent($event)" *ngSwitchCase="'file'" [icon_name]="'insert_drive_file'"  [file]= file ></app-upload-unit-checkbox>
-      <app-upload-unit-checkbox (valueChanged)="onChildEvent($event)" *ngSwitchDefault [icon_name]="'insert_drive_file'"  [file]= file ></app-upload-unit-checkbox>
+      <app-upload-unit-checkbox (valueChanged)="onChildEvent($event)" *ngSwitchDefault [file]= file ></app-upload-unit-checkbox>
     </ng-container>
   </mat-list>
 </ng-container>

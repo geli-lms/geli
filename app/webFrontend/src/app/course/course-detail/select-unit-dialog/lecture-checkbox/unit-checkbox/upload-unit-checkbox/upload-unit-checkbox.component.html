@@ -1,4 +1,7 @@
 <mat-list-item class="fileUnit">
+  <ng-container *ngIf="icon_name">
+    <mat-icon class="icon">{{icon_name}}</mat-icon>
+  </ng-container>
   {{file.name}}
   <span class="spacer"></span>
   <mat-checkbox [(ngModel)]="chkbox" (change)="emitEvent()" class="chkbox"></mat-checkbox>
