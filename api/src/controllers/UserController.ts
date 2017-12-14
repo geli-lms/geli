@@ -81,11 +81,10 @@ export class UserController {
   updateUser(@Param('id') id: string, @Body() user: any, @CurrentUser() currentUser?: IUser) {
     return User.find({'role': 'admin'})
       .then((adminUsers) => {
-        if (adminUsers.length === 1 &&
-          adminUsers[0].get('id') === id &&
-          adminUsers[0].role === 'admin' &&
-          user.role !== 'admin') {
-          throw new BadRequestError('There are no other users with admin privileges.');
+        if (id === currentUser._id
+            && currentUser.role === 'admin'
+            && user.role !== 'admin') {
+          throw new BadRequestError('You can\'t revoke your own privileges');
         } else {
           return User.find({ $and: [{'email': user.email}, {'_id': { $ne: user._id }}]});
         }
