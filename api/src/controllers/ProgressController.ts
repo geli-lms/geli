@@ -70,7 +70,7 @@ export class ProgressController {
     ProgressController.checkDeadline(unit);
 
     progress.set(data);
-    progress.save();
+    await progress.save();
 
     return progress.toObject();
   }
