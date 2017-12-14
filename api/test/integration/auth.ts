@@ -1,7 +1,6 @@
 import * as chai from 'chai';
 import {Server} from '../../src/server';
 import {FixtureLoader} from '../../fixtures/FixtureLoader';
-import {User} from '../../src/models/User';
 import chaiHttp = require('chai-http');
 import * as errorCodes from '../../src/config/errorCodes'
 import {FixtureUtils} from '../../fixtures/FixtureUtils';

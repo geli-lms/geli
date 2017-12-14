@@ -8,7 +8,6 @@ import {Lecture} from '../../../src/models/Lecture';
 import {Course} from '../../../src/models/Course';
 import {FixtureUtils} from '../../../fixtures/FixtureUtils';
 import {Unit} from '../../../src/models/units/Unit';
-import {ICodeKataUnit} from '../../../../shared/models/units/ICodeKataUnit';
 import {ICodeKataModel} from '../../../src/models/units/CodeKataUnit';
 
 chai.use(chaiHttp);

@@ -4,7 +4,6 @@ import {Server} from '../../src/server';
 import {FixtureLoader} from '../../fixtures/FixtureLoader';
 import {JwtUtils} from '../../src/security/JwtUtils';
 import {User} from '../../src/models/User';
-import {IUser} from '../../../shared/models/IUser';
 import fs = require('fs');
 import {FixtureUtils} from '../../fixtures/FixtureUtils';
 
