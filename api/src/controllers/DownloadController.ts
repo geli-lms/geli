@@ -133,23 +133,23 @@ export class DownloadController {
         const localUnit = await Unit.findOne({_id: unit.unitId});
         if (localUnit instanceof FreeTextUnit) {
           const freeTextUnit = <IFreeTextUnit><any>localUnit;
-          archive.append(freeTextUnit.description + '\n' + freeTextUnit.markdown, {name: lecCounter + '. ' + localLecture.name + '/' + unitCounter + '. ' + freeTextUnit.name + '.txt'});
+          archive.append(freeTextUnit.description + '\n' + freeTextUnit.markdown, {name: lecCounter + '_' + localLecture.name + '/' + unitCounter + '_' + freeTextUnit.name + '.txt'});
         } else if (localUnit instanceof CodeKataUnit) {
           const codeKataUnit = <ICodeKataUnit><any>localUnit;
           archive.append(codeKataUnit.description + '\n' + codeKataUnit.definition + '\n' +
-            codeKataUnit.code, {name: lecCounter + '. ' + localLecture.name + '/' + unitCounter + '. ' + codeKataUnit.name + '.txt'});
+            codeKataUnit.code, {name: lecCounter + '_' + localLecture.name + '/' + unitCounter + '_' + codeKataUnit.name + '.txt'});
         } else if (localUnit instanceof FileUnit) {
           const fileUnit = <IFileUnit><any>localUnit;
           fileUnit.files.forEach((file, index) => {
             if (unit.files.indexOf(index) > -1) {
-              archive.file(file.path, {name: lecCounter + '. ' + localLecture.name + '/' + unitCounter + '. ' + file.name});
+              archive.file(file.path, {name: lecCounter + '_' + localLecture.name + '/' + unitCounter + '_' + file.name});
             }
           });
         } else if (localUnit instanceof VideoUnit) {
           const videoFileUnit = <IVideoUnit><any>localUnit;
           videoFileUnit.files.forEach((file, index) => {
             if (unit.files.indexOf(index) > -1) {
-              archive.file(file.path, {name: lecCounter + '. ' + localLecture.name + '/' + unitCounter + '. ' + file.name});
+              archive.file(file.path, {name: lecCounter + '_' + localLecture.name + '/' + unitCounter + '_' + file.name});
             }
           });
         } else if (localUnit instanceof TaskUnit) {
@@ -164,7 +164,7 @@ export class DownloadController {
               fileStream = fileStream + answer.text + ': [ ]\n';
             }
             fileStream = fileStream + '-------------------------------------\n';
-            archive.append(taskUnit.description + '\n' + fileStream, {name: lecCounter + '. ' + localLecture.name + '/' + unitCounter + '. ' + taskUnit.name + '.txt'});
+            archive.append(taskUnit.description + '\n' + fileStream, {name: lecCounter + '_' + localLecture.name + '/' + unitCounter + '. ' + taskUnit.name + '.txt'});
           }
         } else {
           throw new NotFoundError();
