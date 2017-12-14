@@ -206,6 +206,7 @@ describe('User', () => {
     it('should keep a existing uid', async () => {
       const admin = await FixtureUtils.getRandomAdmin();
       const student = await FixtureUtils.getRandomStudent();
+      const origUid = student.uid;
       const updatedUser = student;
       updatedUser.uid = null;
       updatedUser.password = '';
@@ -219,6 +220,7 @@ describe('User', () => {
         .send(updatedUser);
 
       res.status.should.be.equal(200);
+      res.body.uid.should.be.equal(origUid);
       res.body.profile.firstName.should.be.equal('Updated');
       res.body.profile.lastName.should.be.equal('User');
       res.body.email.should.be.equal('student@updated.local');
