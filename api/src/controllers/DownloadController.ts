@@ -26,6 +26,7 @@ import {VideoUnit} from '../models/units/VideoUnit';
 import {IVideoUnit} from '../../../shared/models/units/IVideoUnit';
 import {Task} from '../models/Task';
 import {IDownloadSize} from '../../../shared/models/IDownloadSize';
+import {Lecture} from "../models/Lecture";
 
 
 // Set all routes to json, because the download is streaming data and do not use json headers
@@ -46,7 +47,7 @@ export class DownloadController {
         if (localUnit instanceof FileUnit) {
           const fileUnit = <IFileUnit><any>localUnit;
           fileUnit.files.forEach((file, index) => {
-            if (unit.files.indexOf({id: index})) {
+            if (unit.files.indexOf(index) > -1) {
               const stats = fs.statSync(file.path);
               const fileSize = stats.size / 1000000.0;
               if (fileSize > 50) {
@@ -58,7 +59,7 @@ export class DownloadController {
         } else if (localUnit instanceof VideoUnit) {
           const videoFileUnit = <IVideoUnit><any>localUnit;
           videoFileUnit.files.forEach((file, index) => {
-            if (unit.files.indexOf({id: index}) !== -1) {
+            if (unit.files.indexOf(index) > -1) {
               const stats = fs.statSync(file.path);
               const fileSize = stats.size / 1000000.0;
               if (fileSize > 50) {
@@ -120,29 +121,35 @@ export class DownloadController {
 
     archive.pipe(output);
 
+    let lecCounter = 1;
+
     for (const lec of data.lectures) {
+
+      const localLecture = await Lecture.findOne({_id: lec.lectureId});
+      let unitCounter = 1;
+
       for (const unit of lec.units) {
 
         const localUnit = await Unit.findOne({_id: unit.unitId});
         if (localUnit instanceof FreeTextUnit) {
           const freeTextUnit = <IFreeTextUnit><any>localUnit;
-          archive.append(freeTextUnit.description + '\n' + freeTextUnit.markdown, {name: freeTextUnit.name + '.txt'});
+          archive.append(freeTextUnit.description + '\n' + freeTextUnit.markdown, {name: lecCounter + '. ' + localLecture.name + '/' + unitCounter + '. ' + freeTextUnit.name + '.txt'});
         } else if (localUnit instanceof CodeKataUnit) {
           const codeKataUnit = <ICodeKataUnit><any>localUnit;
           archive.append(codeKataUnit.description + '\n' + codeKataUnit.definition + '\n' +
-            codeKataUnit.code, {name: codeKataUnit.name + '.txt'});
+            codeKataUnit.code, {name: lecCounter + '. ' + localLecture.name + '/' + unitCounter + '. ' + codeKataUnit.name + '.txt'});
         } else if (localUnit instanceof FileUnit) {
           const fileUnit = <IFileUnit><any>localUnit;
           fileUnit.files.forEach((file, index) => {
-            if (unit.files.indexOf({id: index})) {
-              archive.file(file.path, {name: file.name});
+            if (unit.files.indexOf(index) > -1) {
+              archive.file(file.path, {name: lecCounter + '. ' + localLecture.name + '/' + unitCounter + '. ' + file.name});
             }
           });
         } else if (localUnit instanceof VideoUnit) {
           const videoFileUnit = <IVideoUnit><any>localUnit;
           videoFileUnit.files.forEach((file, index) => {
-            if (unit.files.indexOf({id: index}) !== -1) {
-              archive.file(file.path, {name: file.name});
+            if (unit.files.indexOf(index) > -1) {
+              archive.file(file.path, {name: lecCounter + '. ' + localLecture.name + '/' + unitCounter + '. ' + file.name});
             }
           });
         } else if (localUnit instanceof TaskUnit) {
@@ -157,12 +164,14 @@ export class DownloadController {
               fileStream = fileStream + answer.text + ': [ ]\n';
             }
             fileStream = fileStream + '-------------------------------------\n';
-            archive.append(taskUnit.description + '\n' + fileStream, {name: taskUnit.name + '.txt'});
+            archive.append(taskUnit.description + '\n' + fileStream, {name: lecCounter + '. ' + localLecture.name + '/' + unitCounter + '. ' + taskUnit.name + '.txt'});
           }
         } else {
           throw new NotFoundError();
         }
+        unitCounter++;
       }
+      lecCounter++;
     }
 
     archive.finalize();

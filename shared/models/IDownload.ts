@@ -4,9 +4,7 @@ export interface IDownload {
     lectureId: string;
     units: [{
       unitId: string;
-      files?: [{
-        id: number;
-      }]
+      files?: Array<Number>
     }]
   }]
 }
