@@ -94,6 +94,7 @@ export class FixtureLoader {
           course: course._id.toString(),
           unit: unit._id.toString(),
           user: student._id.toString(),
+          answers: [],
           done: false,
         };
 
@@ -102,6 +103,8 @@ export class FixtureLoader {
           switch (unit.type) {
             case 'code-kata':
               (<any>newProgress).code = (<ICodeKataModel>unit).code;
+              break;
+            case 'task-unit-progress':
               break;
           }
         }

@@ -65,6 +65,55 @@
           "description": "...",
           "markdown": "   \n   echo \"Hello World\"\n   \nThis should be a code above",
           "type": "free-text"
+        },
+        {
+          "progressable": true,
+          "weight": 0,
+          "name": "Nachfrage",
+          "description": null,
+          "deadline": null,
+          "type": "task",
+          "tasks": [
+            {
+              "name": "Hast du das verstanden?",
+              "answers": [
+                {
+                  "text": "Ja",
+                  "value": true
+                },
+                {
+                  "text": "Nein"
+                }
+              ]
+            },
+            {
+              "name": "Bist du dir sicher?",
+              "answers": [
+                {
+                  "text": "Ja"
+                },
+                {
+                  "value": true,
+                  "text": "Halt einfach die Fresse"
+                },
+                {
+                  "text": "Öööhm.... nein..."
+                }
+              ]
+            },
+            {
+              "name": "Sonst noch Fragen?",
+              "answers": [
+                {
+                  "text": "Gib mir einfach meine Note",
+                  "value": true
+                },
+                {
+                  "text": "pfff...."
+                }
+              ]
+            }
+          ]
         }
       ]
     }
