@@ -153,8 +153,11 @@ export class CourseController {
 
   @Authorized(['teacher', 'admin'])
   @Post('/mail')
-  sendMailToSelectedUsers(@Body() mailData: any) {
-    return emailService.sendFreeFormMail(mailData);
+  sendMailToSelectedUsers(@Body() mailData: any, @CurrentUser() currentUser: IUser) {
+    return emailService.sendFreeFormMail({
+      ...mailData,
+      replyTo: `${currentUser.profile.firstName} ${currentUser.profile.lastName}<${currentUser.email}>`,
+    });
   }
 
   @Authorized(['student'])

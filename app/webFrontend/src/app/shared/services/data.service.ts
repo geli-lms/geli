@@ -24,9 +24,9 @@ export abstract class DataService {
 
   createItem(createItem: any): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.backendService.post(this.apiPath, JSON.stringify(createItem))
+      this.backendService.post(this.apiPath, createItem)
       .subscribe(
-        (responseItem: any) => {
+        (responseItem) => {
           resolve(responseItem);
         },
         error => reject(error)
@@ -49,7 +49,7 @@ export abstract class DataService {
 
           resolve(responseItems);
         },
-        error => reject(error)
+        (error) => reject(error)
       );
     });
   }
