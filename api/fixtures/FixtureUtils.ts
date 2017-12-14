@@ -1,91 +1,52 @@
 import {User} from '../src/models/User';
+import {Course} from '../src/models/Course';
+import {Lecture} from '../src/models/Lecture';
+import {Unit} from '../src/models/units/Unit';
 
 export class FixtureUtils {
-  // returns a random user with role 'admin'
-  // returns always the same admin when you provide the same hash (given the fixture base did not change)
   public static async getRandomAdmin(hash?: string) {
-    if (hash) {
-      const admins = await this.getAdmins();
-      return admins[this.getNumberFromString(hash, 0, admins.length)];
-    } else {
-      const admins = await this.getAdmins();
-      return admins[this.getRandomNumber(0, admins.length)];
-    }
+    const array = await this.getAdmins();
+    return this.getRandom(array, hash);
   }
 
-  // returns an array of random user with role 'admin'
-  // returns always the same array when you provide the same hash (given the fixture base did not change)
   public static async getRandomAdmins(min: number, max: number, hash?: string) {
-    if (hash) {
-      const admins = await this.getAdmins();
-      const count = this.getNumberFromString(hash, min, max);
-      const start = this.getNumberFromString(hash, 0, admins.length - count);
-      return admins.slice(start, start + count);
-    } else {
-      const admins = await this.getAdmins();
-      const shuffeledAdmins = this.shuffleArray(admins);
-      const count = this.getRandomNumber(min, max);
-      const start = this.getRandomNumber(0, shuffeledAdmins.length - count);
-      return shuffeledAdmins.slice(start, start + count);
-    }
+    const array = await this.getAdmins();
+    return this.getRandomArray(array, min, max, hash);
   }
 
-  // returns a random user with role 'teacher'
-  // returns always the same teacher when you provide the same hash (given the fixture base did not change)
   public static async getRandomTeacher(hash?: string) {
-    if (hash) {
-      const teacher = await this.getTeacher();
-      return teacher[this.getNumberFromString(hash, 0, teacher.length)];
-    } else {
-      const teacher = await this.getTeacher();
-      return teacher[this.getRandomNumber(0, teacher.length)];
-    }
+    const array = await this.getTeacher();
+    return this.getRandom(array, hash);
   }
 
-  // returns an array of random user with role 'teacher'
-  // returns always the same array when you provide the same hash (given the fixture base did not change)
   public static async getRandomTeachers(min: number, max: number, hash?: string) {
-    if (hash) {
-      const teacher = await this.getTeacher();
-      const count = this.getNumberFromString(hash, min, max);
-      const start = this.getNumberFromString(hash, 0, teacher.length - count);
-      return teacher.slice(start, start + count);
-    } else {
-      const teacher = await this.getTeacher();
-      const shuffeledTeacher = this.shuffleArray(teacher);
-      const count = this.getRandomNumber(min, max);
-      const start = this.getRandomNumber(0, shuffeledTeacher.length - count);
-      return shuffeledTeacher.slice(start, start + count);
-    }
+    const array = await this.getTeacher();
+    return this.getRandomArray(array, min, max, hash);
   }
 
-  // returns a random user with role 'student'
-  // returns always the same student when you provide the same hash (given the fixture base did not change)
   public static async getRandomStudent(hash?: string) {
-    if (hash) {
-      const students = await this.getStudents();
-      return students[this.getNumberFromString(hash, 0, students.length)];
-    } else {
-      const students = await this.getStudents();
-      return students[this.getRandomNumber(0, students.length)];
-    }
+    const array = await this.getStudents();
+    return this.getRandom(array, hash);
   }
 
-  // returns an array of random user with role 'student'
-  // returns always the same array when you provide the same hash (given the fixture base did not change)
   public static async getRandomStudents(min: number, max: number, hash?: string) {
-    if (hash) {
-      const students = await this.getStudents();
-      const count = this.getNumberFromString(hash, min, max);
-      const start = this.getNumberFromString(hash, 0, students.length - count);
-      return students.slice(start, start + count);
-    } else {
-      const students = await this.getStudents();
-      const shuffeledStudents = this.shuffleArray(students);
-      const count = this.getRandomNumber(min, max);
-      const start = this.getRandomNumber(0, shuffeledStudents.length - count);
-      return shuffeledStudents.slice(start, start + count)
-    }
+    const array = await this.getStudents();
+    return this.getRandomArray(array, min, max, hash);
+  }
+
+  public static async getRandomCourse(hash?: string) {
+    const array = await this.getCourses();
+    return this.getRandom(array, hash);
+  }
+
+  public static async getRandomLecture(hash?: string) {
+    const array = await this.getLectures();
+    return this.getRandom(array, hash);
+  }
+
+  public static async getRandomUnit(hash?: string) {
+    const array = await this.getUnits();
+    return this.getRandom(array, hash);
   }
 
   private static async getAdmins() {
@@ -100,11 +61,48 @@ export class FixtureUtils {
     return this.getUser('student');
   }
 
+  private static async getCourses() {
+    return Course.find();
+  }
+
+  private static async getLectures() {
+    return Lecture.find();
+  }
+
+  private static async getUnits() {
+    return Unit.find();
+  }
+
   private static async getUser(role: string) {
     if (!role) {
       return User.find();
     }
     return User.find({role:  role});
+  }
+
+  // returns a random entry out of the array
+  // returns always the same entry when you provide the same hash (given the fixture base did not change)
+  private static async getRandom(array: any[], hash?: string) {
+    if (hash) {
+      return array[this.getNumberFromString(hash, 0, array.length)];
+    } else {
+      return array[this.getRandomNumber(0, array.length)];
+    }
+  }
+
+  // returns an random subarray
+  // returns always the same array when you provide the same hash (given the fixture base did not change)
+  private static async getRandomArray(array: any[], min: number, max: number, hash?: string) {
+    if (hash) {
+      const count = this.getNumberFromString(hash, min, max);
+      const start = this.getNumberFromString(hash, 0, array.length - count);
+      return array.slice(start, start + count);
+    } else {
+      const shuffeledArray = this.shuffleArray(array);
+      const count = this.getRandomNumber(min, max);
+      const start = this.getRandomNumber(0, shuffeledArray.length - count);
+      return shuffeledArray.slice(start, start + count)
+    }
   }
 
   private static getRandomNumber(start: number, end: number): number {
