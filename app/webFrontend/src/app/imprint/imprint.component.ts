@@ -1,7 +1,7 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {ConfigService} from '../../shared/services/data.service';
-import {IConfig} from '../../../../../../shared/models/IConfig';
-import {MarkdownService} from '../../shared/services/markdown.service';
+import {IConfig} from '../../../../../shared/models/IConfig';
+import {MarkdownService} from '../shared/services/markdown.service';
+import {ConfigService} from '../shared/services/data.service';
 
 @Component({
   selector: 'app-imprint',
@@ -15,17 +15,15 @@ export class ImprintComponent implements OnInit {
               private mdService: MarkdownService) { }
 
   ngOnInit() {
-    this.loadImprint();
+    void this.loadImprint();
   }
-  loadImprint() {
-    this.service.readSingleItem('imprint').then(
-      (imprint: any) => {
-        this.imprint = imprint;
-        this.renderHtml();
-      },
-      (errorResponse: Response) => {
-        this.imprintRendered = '';
-      });
+  async loadImprint() {
+    try {
+      this.imprint = <IConfig><any> await this.service.readSingleItem('imprint');
+      this.renderHtml();
+    } catch (error) {
+      this.imprintRendered = '';
+    }
   }
   renderHtml() {
     this.imprintRendered = this.mdService.render(this.imprint.configValue);

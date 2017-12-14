@@ -8,17 +8,14 @@ import {AdminComponent} from './admin.component';
 const routes: Routes = [
   {
     path: '',
-    pathMatch: 'full',
     component: AdminComponent,
     canActivate: [AuthGuardService],
     data: {roles: ['admin']},
     children: [
       {
         path: '',
+        redirectTo: 'users',
         pathMatch: 'full',
-        component: UserAdminComponent,
-        canActivate: [AuthGuardService],
-        data: {roles: ['admin']}
       },
       {
         path: 'users',

@@ -32,6 +32,7 @@ import {AboutModule} from './about/about.module';
 import {AdminModule} from './admin/admin.module';
 import {ReportService} from './shared/services/data/report.service';
 import {TitleService} from './shared/services/title.service';
+import {ImprintModule} from './imprint/imprint.module';
 
 @NgModule({
   declarations: [
@@ -48,6 +49,7 @@ import {TitleService} from './shared/services/title.service';
     AboutModule,
     SharedModule,
     AdminModule,
+    ImprintModule,
   ],
   providers: [
     UserService,
