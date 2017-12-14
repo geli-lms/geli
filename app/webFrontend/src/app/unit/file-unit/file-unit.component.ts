@@ -1,5 +1,6 @@
 import {Component, OnInit, Input} from '@angular/core';
 import {IFileUnit} from '../../../../../../shared/models/units/IFileUnit';
+import {Lightbox} from 'angular2-lightbox';
 
 @Component({
   selector: 'app-file-unit',
@@ -9,11 +10,23 @@ import {IFileUnit} from '../../../../../../shared/models/units/IFileUnit';
 export class FileUnitComponent implements OnInit {
 
   @Input() fileUnit: IFileUnit;
+  private albums: Array<object> = [];
 
-  constructor() {
+  constructor(private lightbox: Lightbox) {
   }
 
   ngOnInit() {
+    this.fileUnit.files.forEach(file => {
+      if (this.isPicture(file.name)) {
+        const src = '/api/uploads/' + file.name;
+        const caption = file.name;
+        const album = {
+          src: src,
+          caption: caption,
+        };
+        this.albums.push(album);
+      }
+    });
   }
 
   isPicture(fileName: string) {

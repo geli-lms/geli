@@ -1,6 +1,10 @@
+<div *ngFor="let image of albums; let i=index">
+  <img [src]="image.src" (click)="open(i)" class="lightbox-cstm--preview">
+</div>
+
 <div *ngFor="let file of fileUnit.files;">
-  <a href="{{'/api/uploads/' + file.name}}" download="{{file.alias}}">
-    <img *ngIf="isPicture(file.name)" src="{{'/api/uploads/' + file.name}}" width="400" alt="{{file.alias}}">
-    <span *ngIf="!isPicture(file.name)">{{file.alias}}</span>
+  <a *ngIf="!isPicture(file.name)" href="{{'/api/uploads/' + file.name}}" download="{{file.alias}}">
+    <span>{{file.alias}}</span>
   </a>
+  <!--<img *ngIf="isPicture(file.name)" [src]="'/api/uploads/' + file.name" width="400" alt="{{file.alias}}">-->
 </div>
