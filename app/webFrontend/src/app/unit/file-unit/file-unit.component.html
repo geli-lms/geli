@@ -1,10 +1,12 @@
-<div *ngFor="let image of albums; let i=index">
-  <img [src]="image.src" (click)="open(i)" class="lightbox-cstm--preview">
+<div>
+  <img *ngFor="let image of album; let i=index" [src]="image.src" (click)="openLB(i)" class="lightbox-cstm--preview" mat-tooltip="Rightclick and choose 'save as' to download this image">
 </div>
-
-<div *ngFor="let file of fileUnit.files;">
-  <a *ngIf="!isPicture(file.name)" href="{{'/api/uploads/' + file.name}}" download="{{file.alias}}">
-    <span>{{file.alias}}</span>
-  </a>
-  <!--<img *ngIf="isPicture(file.name)" [src]="'/api/uploads/' + file.name" width="400" alt="{{file.alias}}">-->
-</div>
+<ul>
+  <ng-container *ngFor="let file of fileUnit.files;">
+    <li *ngIf="!isPicture(file.name)">
+      <a href="{{'/api/uploads/' + file.name}}" download="{{file.alias}}">
+        <span>{{file.alias}}</span>
+      </a>
+    </li>
+  </ng-container>
+</ul>

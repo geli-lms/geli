@@ -1,3 +1,17 @@
 .lightbox-cstm--preview {
-  max-height: 10em;
+  max-height: 10rem;
+  margin: 0 .5rem;
+  cursor: pointer;
+  // Bootstrap img-thumbnail class
+  padding: .25rem;
+  border: 1px solid #ddd;
+  border-radius: .25rem;
+
+  &:first-child {
+    margin-left: 0;
+  }
+
+  &:last-child {
+    margin-right: 0;
+  }
 }

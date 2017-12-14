@@ -1,6 +1,6 @@
 import {Component, OnInit, Input} from '@angular/core';
 import {IFileUnit} from '../../../../../../shared/models/units/IFileUnit';
-import {Lightbox} from 'angular2-lightbox';
+import {Lightbox, IAlbum} from 'angular2-lightbox';
 
 @Component({
   selector: 'app-file-unit',
@@ -10,7 +10,7 @@ import {Lightbox} from 'angular2-lightbox';
 export class FileUnitComponent implements OnInit {
 
   @Input() fileUnit: IFileUnit;
-  private albums: Array<object> = [];
+  private album: Array<IAlbum> = [];
 
   constructor(private lightbox: Lightbox) {
   }
@@ -19,14 +19,20 @@ export class FileUnitComponent implements OnInit {
     this.fileUnit.files.forEach(file => {
       if (this.isPicture(file.name)) {
         const src = '/api/uploads/' + file.name;
+        const thumb = src;
         const caption = file.name;
-        const album = {
+        const image = {
           src: src,
+          thumb: thumb,
           caption: caption,
         };
-        this.albums.push(album);
+        this.album.push(image);
       }
     });
+  }
+
+  openLB(index: number): void {
+    this.lightbox.open(this.album, index);
   }
 
   isPicture(fileName: string) {
