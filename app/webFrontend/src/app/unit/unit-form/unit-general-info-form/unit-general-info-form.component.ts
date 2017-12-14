@@ -23,4 +23,11 @@ export class UnitGeneralInfoFormComponent implements OnInit {
       deadline: [this.model ? this.model.deadline : '']
     });
   }
+
+  updateDateTime(date: Date) {
+    // TODO: selectedChanged event is deprecated
+    // set time to 23:59
+    date.setHours(23);
+    date.setMinutes(59);
+  }
 }
