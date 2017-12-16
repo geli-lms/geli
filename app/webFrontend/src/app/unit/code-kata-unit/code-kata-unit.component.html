@@ -28,8 +28,8 @@
   </ace-editor>
 
   <div *ngIf="!isExampleCode">
-    <button mat-button (click)="validate()">Validate</button>
-    <button mat-button color="primary" class="submit-progress" (click)="submitProgress()">Submit</button>
+    <button mat-raised-button (click)="validate()">Validate</button>
+    <button mat-raised-button color="primary" class="submit-progress" (click)="submitProgress()">Submit</button>
   </div>
   <div *ngIf="logs!==undefined"><strong>Logs</strong></div>
   <pre>{{logs}}</pre>
