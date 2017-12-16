@@ -4,10 +4,7 @@
   <app-free-text-unit-editor [(markdown)]="this.model.markdown"></app-free-text-unit-editor>
 
   <div class="btn-wrapper">
-    <button mat-button mat-raised-button color="secondary" (click)="openFullscreen()"
-            mat-tooltip="Open markdown-editor as fullscreen">
-      Fullscreen
-    </button>
+    <button mat-raised-button color="secondary" (click)="openFullscreen()">Fullscreen</button>
     <app-button-save-cancel (save)="saveUnit()" (cancel)="onCancel()"></app-button-save-cancel>
   </div>
 </div>
