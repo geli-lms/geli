@@ -41,7 +41,10 @@ class TaskUnitMigration {
   async up() {
     console.log('TaskUnit up was called');
     try {
-      const taskUnits = await Unit.find({'type': 'task'}).exec();
+      let taskUnits: any[] = await Unit.find({'type': 'task'}).populate('tasks').exec();
+      taskUnits = await taskUnits.map((taskUnit: IUnitModel) => {
+        return taskUnit.toObject()
+      });
       console.log('Task: ' + taskUnits);
       const debug = 0;
     } catch (error) {
