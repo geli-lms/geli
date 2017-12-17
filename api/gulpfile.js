@@ -27,17 +27,20 @@ const LOAD_FIXTURES = "load:fixtures";
 const TEST = "test";
 const TEST_NATIVE = "test:native";
 const REMAP_COVERAGE = "remap:coverage";
+const MIGRATE = 'migrate';
 const WATCH = "watch";
 const WATCH_POLL = "watch:poll";
 const DEBUG = "debug";
 const INSPECT = "inspect";
+const INSPECT_MIGRATOR = "migrate:inspect";
 
 const TS_SRC_GLOB = "./src/**/*.ts";
 const TS_TEST_GLOB = "./test/**/*.ts";
 const TS_FIXTURES_GLOB = "./fixtures/**/*.ts";
+const TS_MIGRATION_GLOB = "./migrations/**/*.ts";
 const JS_TEST_GLOB = "./build/test/**/*.js";
 const JS_SRC_GLOB = "./build/src/**/*.js";
-const TS_GLOB = [TS_SRC_GLOB, TS_TEST_GLOB, TS_FIXTURES_GLOB];
+const TS_GLOB = [TS_SRC_GLOB, TS_TEST_GLOB, TS_FIXTURES_GLOB, TS_MIGRATION_GLOB];
 
 const tsProject = typescript.createProject("tsconfig.json");
 
@@ -184,6 +187,10 @@ gulp.task(LOAD_FIXTURES, [BUILD], function () {
   require(__dirname + "/build/fixtures/load");
 });
 
+gulp.task(MIGRATE, [BUILD], function () {
+  require(__dirname + "/build/migrations/migrate");
+});
+
 gulp.task(DEBUG, [BUILD_DEV], function () {
   return nodemon({
     ext: "ts js json",
@@ -199,6 +206,16 @@ gulp.task(INSPECT, [BUILD_DEV], function () {
     ext: "ts js json",
     script: "build/src/server.js",
     watch: ["src/*", "test/*"],
+    tasks: [BUILD_DEV],
+    nodeArgs: ["--inspect=0.0.0.0:9229"]
+  });
+});
+
+gulp.task(INSPECT_MIGRATOR, [BUILD_DEV], function () {
+  return nodemon({
+    ext: "ts js json",
+    script: "build/migrations/migrate.js",
+    watch: ["migrations/*"],
     tasks: [BUILD_DEV],
     nodeArgs: ["--inspect=0.0.0.0:9229"]
   });
