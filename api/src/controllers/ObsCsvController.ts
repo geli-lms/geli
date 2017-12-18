@@ -1,5 +1,5 @@
 import {IUser} from '../../../shared/models/IUser';
-import {WhitelistUser} from '../models/WhitelistUser';
+import {IWhitelistUserModel, WhitelistUser} from '../models/WhitelistUser';
 import {Course, ICourseModel} from '../models/Course';
 import {HttpError} from 'routing-controllers';
 import e = require('express');
@@ -104,15 +104,18 @@ export class ObsCsvController {
    * @param course Is the course to update.
    * @returns {any} Updated course.
    */
-  private async updateWhitelistUser(course: ICourseModel) {
-    await course.whitelist.forEach(async (wuser: any) => await WhitelistUser.findByIdAndRemove(wuser));
+  private updateWhitelistUser(course: ICourseModel): ICourseModel {
+
+    course.whitelist.forEach((wuser: any) => WhitelistUser.findByIdAndRemove(wuser)
+      .then(() => {
+      }));
     course.whitelist = [];
-    await this.whitelistUser.forEach(async (whiteListUser) => {
+    this.whitelistUser.forEach((whiteListUser) => {
       const wUser = new WhitelistUser();
       wUser.firstName = whiteListUser.firstName;
       wUser.lastName = whiteListUser.lastName;
       wUser.uid = whiteListUser.uid;
-      await wUser.save();
+      wUser.save().then(user => user.toObject());
       course.whitelist.push(wUser._id);
     });
     return course;
