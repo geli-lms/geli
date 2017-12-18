@@ -11,9 +11,12 @@
 </mat-autocomplete>
 
 
-<app-course-user-list-overview [usersInCourse]="users"
-                               [show]="search.length <= 0 && finishRestCall"
-                               (onRemove)="updateUser($event)">
+<app-course-user-list-overview
+  [course]="course"
+  [role]="role"
+  [usersInCourse]="users"
+  [show]="search.length <= 0 && finishRestCall"
+  (onRemove)="updateUser($event)">
 </app-course-user-list-overview>
 
 <div class="users" *ngIf="search.length > 0 && finishRestCall">
