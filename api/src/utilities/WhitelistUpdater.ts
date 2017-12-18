@@ -11,16 +11,20 @@ export class WhitelistUpdater {
    * @returns {Promise<void>}
    */
   public async addWhitelistetUserToCourses(user: IUser) {
+    // TODO: It should work with $elemMatch!
     const courses = await Course.find(
-      {
-        'whitelist.firstName': user.profile.firstName.toLowerCase(),
-        'whitelist.lastName': user.profile.lastName.toLowerCase(),
-        'whitelist.uid': user.uid
-      });
+      {enrollType: 'whitelist'}).populate('whitelist');
     await Promise.all(
       courses.map(async (course) => {
-        course.students.push(user);
-        await Course.update({_id: course._id}, course);
+        if (course.students.findIndex(u => user._id === u._id) < 0
+          && course.whitelist.findIndex(w =>
+            w.firstName === user.profile.firstName.toLowerCase() &&
+            w.lastName === user.profile.lastName.toLowerCase() &&
+            w.uid === user.uid) >= 0
+        ) {
+          course.students.push(user);
+          await Course.update({_id: course._id}, course);
+        }
       }));
   }
 }
