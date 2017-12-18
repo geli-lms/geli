@@ -9,11 +9,14 @@ import emailService from '../services/EmailService';
 import {IUser} from '../../../shared/models/IUser';
 import {IUserModel, User} from '../models/User';
 import {JwtUtils} from '../security/JwtUtils';
+import {WhitelistUpdater} from '../utilities/WhitelistUpdater';
 import config from '../config/main';
 import * as errorCodes from '../config/errorCodes'
 
 @JsonController('/auth')
 export class AuthController {
+
+  private updater: WhitelistUpdater = new WhitelistUpdater();
 
   @Post('/login')
   @UseBefore(bodyParserJson(), passportLoginMiddleware) // We need body-parser for passport to find the credentials
@@ -54,10 +57,13 @@ export class AuthController {
         return newUser.save();
       })
       .then((savedUser) => {
-        return emailService.sendActivation(savedUser)
-          .catch(() => {
-            throw new InternalServerError(errorCodes.errorCodes.mail.notSend.code);
-          });
+        // User can now match a whitelist.
+        return this.updater.addWhitelistetUserToCourses(savedUser).then(() => {
+          return emailService.sendActivation(savedUser)
+            .catch(() => {
+              throw new InternalServerError(errorCodes.errorCodes.mail.notSend.code);
+            });
+        });
       })
       .then(() => {
         return null;
