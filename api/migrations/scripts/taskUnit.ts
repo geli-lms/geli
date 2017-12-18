@@ -1,6 +1,8 @@
 // tslint:disable:no-console
 import * as mongoose from 'mongoose';
 import {IUnitModel} from '../../src/models/units/Unit';
+import {ITaskUnitModel} from '../../src/models/units/TaskUnit';
+import {ITaskUnit} from '../../../shared/models/units/ITaskUnit';
 
 const unitSchema = new mongoose.Schema({
     _course: {
@@ -36,16 +38,70 @@ const unitSchema = new mongoose.Schema({
 
 const Unit = mongoose.model<IUnitModel>('Unit', unitSchema);
 
+const taskSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String
+    },
+    unitId: {
+      type: String
+    }
+    ,
+    answers: {
+      type: [{
+        value: Boolean,
+        text: String
+      }],
+      required: true
+    },
+  }, {
+    timestamps: true,
+    toObject: {
+      transform: function (doc: any, ret: any) {
+        ret.id =  ret.id.toString();
+        ret.answers = ret.answers.map((answer: any) => {
+          answer._id = answer._id.toString();
+          return answer;
+        });
+      }
+    }
+  }
+);
+
+const taskUnitSchema = new mongoose.Schema({
+  tasks: [taskSchema],
+  deadline: {
+    type: String
+  },
+});
+
+const TaskUnit = Unit.discriminator('task', taskUnitSchema);
+
 class TaskUnitMigration {
 
   async up() {
     console.log('TaskUnit up was called');
     try {
-      let taskUnits: any[] = await Unit.find({'type': 'task'}).populate('tasks').exec();
-      taskUnits = await taskUnits.map((taskUnit: IUnitModel) => {
-        return taskUnit.toObject()
+      const taskUnits: any[] = await TaskUnit.find({'type': 'task'}).populate('tasks').exec();
+      const oldUnits: IUnitModel[] = await Unit.find({'type': 'task'}).populate('tasks').exec();
+      const oldUnitObjs: ITaskUnit[] = await oldUnits.map((oldUnit) => {
+        return (<ITaskUnit>oldUnit.toObject());
       });
-      console.log('Task: ' + taskUnits);
+
+      const updatedTaskUnits = taskUnits.map((taskUnit: ITaskUnitModel) => {
+        const matchedUnit = oldUnitObjs.find((oldUnit) => {
+          return oldUnit._id.toString() === taskUnit._id.toString();
+        });
+
+        taskUnit.tasks = (<ITaskUnitModel>matchedUnit).tasks;
+
+        return taskUnit;
+      });
+
+      updatedTaskUnits.forEach((updatedUnit) => {
+        updatedUnit.save();
+      });
+
       const debug = 0;
     } catch (error) {
       console.log('1: ' + error);
