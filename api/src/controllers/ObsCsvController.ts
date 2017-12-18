@@ -91,7 +91,6 @@ export class ObsCsvController {
       const user: IUserModel = await User.findOne({uid: wUser.uid});
       if (user && user.profile.firstName.toLowerCase() === wUser.firstName.toLowerCase() &&
         user.profile.lastName.toLowerCase() === wUser.lastName.toLowerCase()) {
-        console.log(course.students.findIndex( stud => stud._id.toString() === user._id.toString()));
         if (course.students.findIndex( stud => stud._id.toString() === user._id.toString()) < 0) {
           course.students.push(user);
         }
