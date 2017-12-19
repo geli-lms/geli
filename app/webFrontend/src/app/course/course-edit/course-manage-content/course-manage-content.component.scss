@@ -93,5 +93,10 @@ $unit-height: 64px;
 }
 
 .mat-fab-menu-spacer {
-  height: 4rem;
+  display: none;
+
+  @include bp(max) {
+    display: block;
+    height: 4rem;
+  }
 }
