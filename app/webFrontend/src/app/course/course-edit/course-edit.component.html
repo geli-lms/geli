@@ -26,7 +26,9 @@
           </mat-select><br>
         </mat-form-field>
 
-        <p *ngIf="enrollType === enrollTypeConstants.ENROLL_TYPE_FREE">The course is free and accessible for everyone</p>
+        <p *ngIf="enrollType === enrollTypeConstants.ENROLL_TYPE_FREE">
+          The course is free and accessible for everyone
+        </p>
 
         <mat-form-field class="full-width" *ngIf="enrollType === enrollTypeConstants.ENROLL_TYPE_ACCESSKEY">
           <input async matInput id="accessKey" placeholder="Access Key" [(ngModel)]="accessKey"
@@ -57,11 +59,11 @@
         </p>
         <p>
           <app-button-save-cancel (cancel)="cancel()"></app-button-save-cancel>
-          <button mat-button (click)="onExport()" type="button">Export</button>
-          <button mat-button (click)="onDuplicate()" type="button">Duplicate</button>
+          <button mat-raised-button (click)="onExport()" type="button">Export</button>
+          <button mat-raised-button (click)="onDuplicate()" type="button">Duplicate</button>
         </p>
       </form>
-      <button mat-raised-button color="accent" (click)= "deleteCourse()">Delete Course</button>
+      <button mat-raised-button color="warn" (click)= "deleteCourse()">Delete Course</button>
     </div>
   </mat-tab>
 
