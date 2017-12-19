@@ -6,6 +6,7 @@ import * as crypto from 'crypto';
 import {isNullOrUndefined} from 'util';
 import { isEmail } from 'validator';
 import * as errorCodes from '../config/errorCodes'
+import {ICourse} from '../../../shared/models/ICourse';
 
 interface IUserModel extends IUser, mongoose.Document {
   isValidPassword: (candidatePassword: string) => Promise<boolean>;
@@ -48,6 +49,9 @@ const userSchema = new mongoose.Schema({
       'enum': ['student', 'teacher', 'tutor', 'admin'],
       'default': 'student'
     },
+    lastVisitedCourses: [ {
+        ICourse: {type: String}
+  }],
     authenticationToken: {type: String},
     resetPasswordToken: {type: String},
     resetPasswordExpires: {type: Date},

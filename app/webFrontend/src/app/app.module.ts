@@ -32,7 +32,7 @@ import {AboutModule} from './about/about.module';
 import {AdminModule} from './admin/admin.module';
 import {ReportService} from './shared/services/data/report.service';
 import {TitleService} from './shared/services/title.service';
-import {studentConfigSchema} from "../../../../api/src/models/StudentConfig";
+import {studentConfigSchema} from '../../../../api/src/models/StudentConfig';
 
 @NgModule({
   declarations: [

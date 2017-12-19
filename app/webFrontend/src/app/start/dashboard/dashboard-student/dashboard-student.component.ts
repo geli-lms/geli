@@ -11,6 +11,7 @@ import {IStudentConfig} from '../../../../../../../shared/models/IStudentConfig'
   templateUrl: './dashboard-student.component.html',
   styleUrls: ['./dashboard-student.component.scss']
 })
+
 export class DashboardStudentComponent extends DashboardBaseComponent {
 
   myCourses: ICourse[];
@@ -41,11 +42,17 @@ export class DashboardStudentComponent extends DashboardBaseComponent {
         this.availableCourses.push(course);
       }
     }
+    this.sortLastVisitedCourses();
+  }
+  sortLastVisitedCourses() {
+    // console.log(this.myCourses);
+    for (const course of this.myCourses) {
+      const vCourse =
+    }
   }
 
   isMemberOfCourse(course: ICourse) {
     const user = this.userService.user;
     return course.students.filter(obj => obj._id === user._id).length > 0;
   }
-
 }

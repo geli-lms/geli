@@ -6,7 +6,7 @@ import {ILecture} from '../../../../../../shared/models/ILecture';
 import {IUnit} from '../../../../../../shared/models/units/IUnit';
 import {IUser} from '../../../../../../shared/models/IUser';
 import {ICourse} from '../../../../../../shared/models/ICourse';
-import {IStudentConfig} from "../../../../../../shared/models/IStudentConfig";
+import {IStudentConfig} from '../../../../../../shared/models/IStudentConfig';
 
 export abstract class DataService {
 
@@ -297,9 +297,9 @@ export class StudentConfigService extends DataService {
     });
   }
 
-  updateConfig(id: string, config: IStudentConfig): Promise<any[]> {
+  updateStudentConfig(id: string, config: IStudentConfig): Promise<any[]> {
     return new Promise((resolve, reject) => {
-      this.backendService.post(this.apiPath + "/" + id, config)
+      this.backendService.post(this.apiPath + '/' + id, config)
         .subscribe(
           (responseItem: any) => {
             resolve(responseItem);
