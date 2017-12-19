@@ -3,6 +3,9 @@ import * as mongoose from 'mongoose';
 import {IUnitModel} from '../../src/models/units/Unit';
 import {ITaskUnitModel} from '../../src/models/units/TaskUnit';
 import {ITaskUnit} from '../../../shared/models/units/ITaskUnit';
+import {ObjectID} from 'bson';
+import {ITask} from '../../../shared/models/task/ITask';
+import {IUnit} from '../../../shared/models/units/IUnit';
 
 const unitSchema = new mongoose.Schema({
     _course: {
@@ -74,46 +77,44 @@ const taskSchema = new mongoose.Schema(
   }
 );
 
-const taskUnitSchema = new mongoose.Schema({
-  tasks: [taskSchema],
-  deadline: {
-    type: String
-  },
-});
-
-const TaskUnit = Unit.discriminator('task', taskUnitSchema);
+const Task = mongoose.model('Task', taskSchema);
 
 class TaskUnitMigration {
 
   async up() {
     console.log('TaskUnit up was called');
     try {
-      const taskUnits: any[] = await TaskUnit.find({'type': 'task'}).populate('tasks').exec();
-      const oldUnits: IUnitModel[] = await Unit.find({'type': 'task'}).populate('tasks').exec();
-      const oldUnitObjs: ITaskUnit[] = await oldUnits.map((oldUnit) => {
-        return (<ITaskUnit>oldUnit.toObject());
-      });
+      const oldUnits: IUnitModel[] = await Unit.find({'type': 'task'});
+      const updatedUnitObjs: IUnit[] = await Promise.all(oldUnits.map(async (oldUnit: ITaskUnitModel) => {
+        const oldUnitObj: ITaskUnit = <ITaskUnit>oldUnit.toObject();
+        oldUnitObj.tasks = <ITask[]>(await Promise.all(oldUnitObj.tasks.map(async (task) => {
+          if (task instanceof ObjectID) {
+            const taskData = await Task.findById(task).exec();
+            const taskDataObj = taskData.toObject();
+            return taskDataObj;
+          } else {
+            return task;
+          }
+        })));
 
-      const updatedTaskUnits = taskUnits.map((taskUnit: ITaskUnitModel) => {
-        const matchedUnit = oldUnitObjs.find((oldUnit) => {
-          return oldUnit._id.toString() === taskUnit._id.toString();
+        return oldUnitObj;
+      }));
+
+      const updatedUnits = await Promise.all(oldUnits.map(async (oldUnit) => {
+        const updatedUnitObj = updatedUnitObjs.find((updatedUnit: IUnit) => {
+          return updatedUnit._id === oldUnit._id.toString();
         });
 
-        taskUnit.tasks = (<ITaskUnitModel>matchedUnit).tasks;
+        updatedUnitObj._id = new ObjectID(updatedUnitObj._id);
 
-        return taskUnit;
-      });
-
-      updatedTaskUnits.forEach((updatedUnit) => {
-        updatedUnit.save();
-      });
-
-      const debug = 0;
+        const unitAfterReplace = await mongoose.connection.collection('units')
+          .findOneAndReplace({'_id': oldUnit._id}, updatedUnitObj);
+      }));
     } catch (error) {
       console.log('1: ' + error);
     }
 
-    console.log('ABC');
+    console.log('TaskUnit documents successfully migrated!');
     return true;
   }
 
