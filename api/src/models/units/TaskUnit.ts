@@ -31,7 +31,13 @@ const taskSchema = new mongoose.Schema(
     timestamps: true,
     toObject: {
       transform: function (doc: any, ret: any) {
-        ret._id =  ret._id.toString();
+        if (ret.hasOwnProperty('_id')) {
+          ret._id =  ret._id.toString();
+        }
+
+        if (ret.hasOwnProperty('id')) {
+          ret.id = ret.id.toString();
+        }
         ret.answers = ret.answers.map((answer: any) => {
           answer._id = answer._id.toString();
           return answer;

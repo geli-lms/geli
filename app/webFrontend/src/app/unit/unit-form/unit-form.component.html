@@ -1,34 +1,28 @@
-<div class="edit-unit">
-  <app-video-upload
-    *ngIf="course && (type == 'video')"
-    [course]="course"
-    [model]="model"
-    [lecture]="lecture"
-    [onDone]="onDone"
-    [onCancel]="onCancel"></app-video-upload>
+<div class="edit-unit" *ngIf="course">
   <app-file-unit-form
-    *ngIf="course && (type == 'file')"
+    *ngIf="(type == 'video' || type == 'file')"
     [course]="course"
-    [model]="model"
     [lecture]="lecture"
+    [model]="model"
+    [fileUnitType]="type"
     [onDone]="onDone"
     [onCancel]="onCancel"></app-file-unit-form>
   <app-task-unit-edit
-    *ngIf="course && (type == 'task')"
+    *ngIf="type == 'task'"
     [course]="course"
     [model]="model"
     [lectureId]="lecture._id"
     [onDone]="onDone"
     [onCancel]="onCancel"></app-task-unit-edit>
   <app-code-kata-unit-form
-    *ngIf="course && (type == 'code-kata')"
+    *ngIf="type == 'code-kata'"
     [course]="course"
     [model]="model"
     [lectureId]="lecture._id"
     [onDone]="onDone"
     [onCancel]="onCancel"></app-code-kata-unit-form>
   <app-free-text-unit-form
-    *ngIf="course && (type == 'free-text')"
+    *ngIf="type == 'free-text'"
     [course]="course"
     [model]="model"
     [lectureId]="lecture._id"

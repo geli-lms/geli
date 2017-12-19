@@ -8,6 +8,7 @@ import {UnitService} from '../../../shared/services/data.service';
 import {FileUnit} from '../../../models/units/FileUnit';
 import {UploadFormComponent} from '../../../shared/components/upload-form/upload-form.component';
 import {ShowProgressService} from '../../../shared/services/show-progress.service';
+import {VideoUnit} from '../../../models/units/VideoUnit';
 
 @Component({
   selector: 'app-file-unit-form',
@@ -19,6 +20,7 @@ export class FileUnitFormComponent implements OnInit {
   @Input() course: ICourse;
   @Input() lecture: ILecture;
   @Input() model: IFileUnit;
+  @Input() fileUnitType: string;
   @Input() onDone: () => void;
   @Input() onCancel: () => void;
 
@@ -41,7 +43,21 @@ export class FileUnitFormComponent implements OnInit {
 
   ngOnInit() {
     if (!this.model) {
-      this.model = new FileUnit(this.course);
+      switch (this.fileUnitType) {
+        case 'video': {
+          this.model = new VideoUnit(this.course);
+          this.uploadForm.allowedMimeTypes = ['video/mp4', 'video/webm', 'video/ogg', 'video/avi'];
+          break;
+        }
+        case 'file': {
+          this.model = new FileUnit(this.course);
+          break;
+        }
+        default: {
+          this.model = new FileUnit(this.course);
+          break;
+        }
+      }
     }
 
     this.additionalUploadData = {
