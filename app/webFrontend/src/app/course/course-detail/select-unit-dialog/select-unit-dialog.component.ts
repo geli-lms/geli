@@ -6,6 +6,8 @@ import {DownloadReq} from 'app/shared/services/data.service';
 import {IDownload} from '../../../../../../../shared/models/IDownload';
 import {IDownloadSize} from "../../../../../../../shared/models/IDownloadSize";
 
+import { saveAs } from 'file-saver/FileSaver';
+
 @Component({
   selector: 'app-select-unit-dialog',
   templateUrl: './select-unit-dialog.component.html',
@@ -71,12 +73,9 @@ export class SelectUnitDialogComponent implements OnInit{
     console.dir(iDownload);
     if (iDownload.tooLargeFiles.length == 0) {
       const result = await this.downloadReq.postDownloadReqForCourse(downloadObj);
-      const response = await this.downloadReq.getFile(result.toString());
+      const response = <Response> await this.downloadReq.getFile(result.toString());
       this.showSpinner = false;
-      // var link = document.createElement('a');
-      // link.href = window.URL.createObjectURL(response);
-      // link.download = this.course.name + '.zip';
-      // link.click();
+      saveAs(response.body, this.course.name + '.zip');
     } else {
       // TODO: Test withg large video file, once i get one.
       this.snackBar.open('The selected files are too big! Please download the red-marked files seperately!', 'Okay', {duration: 3000});

@@ -30,7 +30,7 @@ export class BackendService {
       .pipe(catchError(this.handleUnauthorized));
   }
 
-  getDownload(serviceUrl: string) {
+  getDownload(serviceUrl: string): Observable<Response> {
     return this.http.get(BackendService.API_URL + serviceUrl, {headers: this.authenticationService.authHeader(), observe: 'response', responseType: 'blob'})
       .pipe(catchError(this.handleUnauthorized));
   }
