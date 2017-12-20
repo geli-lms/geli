@@ -48,12 +48,6 @@ unitSchema.virtual('progresses', [{
   foreignField: 'unit'
 }]);
 
-function populateUnit(next: (err?: NativeError) => void) {
-  next();
-}
-
-// unitSchema.pre('find', populateUnit);
-
 unitSchema.methods.exportJSON = function() {
   const obj = this.toObject();
 
@@ -74,14 +68,14 @@ unitSchema.statics.importJSON = async function(unit: IUnit, courseId: string, le
   unit._course = courseId;
 
   try {
-    const savedUnit = await new Unit(unit).save();
+    const savedUnit = await Unit.create(unit);
     const lecture = await Lecture.findById(lectureId);
     lecture.units.push(savedUnit);
     await lecture.save();
 
     return savedUnit.toObject();
   } catch (err) {
-    const newError = new InternalServerError('Failed to import unit');
+    const newError = new InternalServerError('Failed to import unit of type ' + unit.type);
     newError.stack += '\nCaused by: ' + err.message + '\n' + err.stack;
     throw newError;
   }

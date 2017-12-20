@@ -4,7 +4,6 @@ import {IFileUnit} from '../../../../shared/models/units/IFileUnit';
 import fs = require('fs');
 import {InternalServerError} from 'routing-controllers';
 import {Lecture} from '../Lecture';
-import {NativeError} from 'mongoose';
 import {IFile} from '../../../../shared/models/IFile';
 
 interface IFileUnitModel extends IFileUnit, mongoose.Document {
@@ -50,11 +49,6 @@ fileUnitSchema.pre('remove', function(next: () => void) {
   (<IFileUnitModel>this).files.forEach((file: any) => {
     fs.unlink(file.path, () => {}); // silently discard file not found errors
   });
-  next();
-});
-
-// TODO: Implement pre('findOneAndUpdate') and / or pre('update') for file cleanups
-fileUnitSchema.pre('save', function (next: (err?: NativeError) => void) {
   next();
 });
 

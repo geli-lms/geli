@@ -5,7 +5,6 @@ import {CodeKataUnit} from '../models/units/CodeKataUnit';
 import {TaskUnit} from '../models/units/TaskUnit';
 import {FileUnit} from '../models/units/FileUnit';
 import {FreeTextUnit} from '../models/units/FreeTextUnit';
-import {VideoUnit} from '../models/units/VideoUnit';
 import {TaskUnitProgress} from '../models/TaskUnitProgress';
 
 export class UnitClassMapper {
@@ -19,11 +18,6 @@ export class UnitClassMapper {
     'file' :
       {
         mongooseClass: FileUnit,
-        progressClass: null,
-      },
-    'video' :
-      {
-        mongooseClass: VideoUnit,
         progressClass: null,
       },
     'code-kata' :

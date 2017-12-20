@@ -43,7 +43,11 @@ export class UnitController {
   @Post('/')
   addUnit(@UploadedFile('file', {options: uploadOptions}) file: any, @Body() data: any) {
     if (file) {
-      data = JSON.parse(data.data);
+      try {
+        data = JSON.parse(data.data);
+      } catch (error) {
+        throw new BadRequestError('Invalid combination of file upload and unit data.');
+      }
     }
 
     // discard invalid requests
@@ -80,8 +84,12 @@ export class UnitController {
     }
 
     if (file) {
-      data = JSON.parse(data.data);
-      data = await this.handleUploadedFile(file, data.model);
+      try {
+        data = JSON.parse(data.data);
+        data = await this.handleUploadedFile(file, data.model);
+      } catch (error) {
+        throw new BadRequestError('Invalid combination of file upload and unit data.');
+      }
     }
 
     try {
