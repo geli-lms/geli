@@ -72,11 +72,6 @@ export class Server {
 /**
  * For testing mocha will start express itself
  */
-console.log('Starting Test Environments: ' + process.env.NODE_ENV);
-console.log('Mail Environments MAILSMTPSERVER: ' + process.env.MAILSMTPSERVER);
-console.log('Mail Environments MAILSMTPPORT: ' + process.env.MAILSMTPPORT);
-console.log('Mail Environments MAILUSER: ' + process.env.MAILUSER);
-console.log('Mail Environments MAILPASS: ' + process.env.MAILPASS);
 if (process.env.NODE_ENV !== 'test') {
   new Server().start();
 }
