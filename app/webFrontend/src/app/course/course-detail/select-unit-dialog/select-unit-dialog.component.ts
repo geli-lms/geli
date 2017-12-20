@@ -73,10 +73,10 @@ export class SelectUnitDialogComponent implements OnInit{
       const result = await this.downloadReq.postDownloadReqForCourse(downloadObj);
       const response = await this.downloadReq.getFile(result.toString());
       this.showSpinner = false;
-      var link = document.createElement('a');
-      link.href = window.URL.createObjectURL(response);
-      link.download = this.course.name + '.zip';
-      link.click();
+      // var link = document.createElement('a');
+      // link.href = window.URL.createObjectURL(response);
+      // link.download = this.course.name + '.zip';
+      // link.click();
     } else {
       // TODO: Test withg large video file, once i get one.
       this.snackBar.open('The selected files are too big! Please download the red-marked files seperately!', 'Okay', {duration: 3000});
@@ -94,7 +94,6 @@ export class SelectUnitDialogComponent implements OnInit{
           });
         });
     }
-    //this.saveFileService.save(this.course.name,'Some Data','.zip', 'file/zip', 'file/zip');
     this.dialogRef.close();
   }
 

@@ -452,11 +452,11 @@ export class DownloadReq extends DataService {
 
    getFile(id: string) {
      return new Promise((resolve, reject) => {
-       this.backendService.get(this.apiPath + id).subscribe( (responseItem) => {
-         console.log(responseItem);
-           resolve(responseItem);
+       this.backendService.getDownload(this.apiPath + id).subscribe(resp => {
+           console.log(resp.headers.get('content-disposition'));
+           resolve(resp.headers.get('content-disposition'));
          },
-         error => reject(error) );
+         error => reject(error));
      });
    }
   }

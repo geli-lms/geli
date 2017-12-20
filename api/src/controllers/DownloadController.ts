@@ -82,7 +82,9 @@ export class DownloadController {
   async getArchivedFile(@Param('id') id: string, @Res() response: Response) {
     const filePath = appRoot + '/temp/' + id + '.zip';
 
+    response.setHeader('Connection', 'keep-alive');
     await promisify<string, void>(response.download.bind(response))(filePath);
+    console.log(response);
     return response;
 
   }
@@ -90,7 +92,6 @@ export class DownloadController {
   @Post('/size/')
   @ContentType('application/json')
   async getFileSize(@Body() data: any) {
-    console.log(data);
     return this.calcPackage(data);
   }
 
