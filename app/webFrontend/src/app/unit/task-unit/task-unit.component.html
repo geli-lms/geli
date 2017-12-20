@@ -15,7 +15,9 @@
 </div>
 
 <p>
-  <button mat-button [disabled]="validationMode" (click)="validate()">Submit answers</button>
-  <button mat-button (click)="reset()">Reset</button>
-  <span *ngIf="progress && progress.done" class="progress-done"><mat-icon>check</mat-icon>You have completed this task.</span>
+  <button mat-raised-button color="primary" [disabled]="validationMode" (click)="validate()">Submit answers</button>
+  <button mat-raised-button (click)="reset()">Reset</button>
+  <span *ngIf="progress && progress.done" class="progress-done">
+    <mat-icon>check</mat-icon>You have completed this task.
+  </span>
 </p>
