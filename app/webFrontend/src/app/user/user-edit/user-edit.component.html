@@ -22,15 +22,15 @@
     <app-password-input  [form]="userForm"></app-password-input>
   </div>
   <button mat-raised-button color="primary" class="mat-button" type="submit" [disabled]="!userForm?.valid">Save</button>
-  <button mat-button class="mat-button" routerLink="/profile" routerLinkActive="active">
+  <button mat-raised-button class="mat-button" routerLink="/profile" routerLinkActive="active">
     Cancel
   </button>
 </form>
 <p *ngIf="!showPwFields()">
-  <button mat-button class="mat-button" (click)="resetPassword()">Generate new Password</button>
+  <button mat-raised-button class="mat-button" (click)="resetPassword()">Generate new Password</button>
 </p>
 <p>
-  <button mat-raised-button color="accent" class="mat-button" (click)="openAddPictureDialog()">
+  <button mat-raised-button class="mat-button" (click)="openAddPictureDialog()">
     Upload new picture
   </button>
 </p>

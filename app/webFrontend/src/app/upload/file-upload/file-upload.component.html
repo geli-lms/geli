@@ -12,7 +12,7 @@
     </button>
   </div>
   <div>
-    <button mat-button color="primary" (click)="update()"
+    <button mat-raised-button color="primary" (click)="update()"
             [disabled]="!generalInfo.form.value.name || hasInvalidFileNames()">
       Update
     </button>
@@ -20,7 +20,7 @@
 </div>
 <div>
   <input type="file" ng2FileSelect [uploader]="uploader" placeholder="Upload files" multiple/>
-  <button mat-button color="warn" (click)="uploader.clearQueue()">
+  <button mat-raised-button color="warn" (click)="uploader.clearQueue()">
     Remove all
   </button>
 </div>
@@ -40,9 +40,9 @@
   </div>
 </div>
 <p>
-  <button mat-button (click)="onCancel()">Cancel</button>
-  <button mat-button color="primary"
+  <button mat-raised-button color="primary"
           (click)="uploadAll()" [disabled]="(!uploader.getNotUploadedItems().length) || (!generalInfo.form.value.name)">
     Upload
   </button>
+  <button mat-raised-button (click)="onCancel()">Cancel</button>
 </p>
