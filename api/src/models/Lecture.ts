@@ -79,13 +79,14 @@ lectureSchema.statics.importJSON = async function(lecture: ILecture, courseId: s
 
   try {
     const savedLecture = await new Lecture(lecture).save();
-    savedLecture.units = await Unit.create(units);
-    await savedLecture.save();
 
     const course = await Course.findById(courseId);
     course.lectures.push(savedLecture);
     await course.save();
 
+    for (const unit of units) {
+      await Unit.schema.statics.importJSON(unit, courseId, savedLecture._id);
+    }
     const newLecture: ILectureModel = await Lecture.findById(savedLecture._id);
 
     return newLecture.toObject();
