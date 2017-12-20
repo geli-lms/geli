@@ -14,10 +14,25 @@ chai.should();
 const app = new Server().app;
 const BASE_URL = '/api/auth';
 const fixtureLoader = new FixtureLoader();
+const mockery = require('mockery');
+const nodemailerMock = require('nodemailer-mock');
 
 describe('Auth', () => {
+  before( () => {
+    mockery.enable({
+      warnOnUnregistered: false,
+    });
+    mockery.registerMock('nodemailer', nodemailerMock);
+  });
+
   // Before each test we reset the database
   beforeEach(() => fixtureLoader.load());
+  afterEach(() => nodemailerMock.mock.reset());
+
+  after(() => {
+    mockery.deregisterAll();
+    mockery.disable();
+  });
 
   describe(`POST ${BASE_URL}/register`, () => {
     it('should fail (email address is already in use)', (done) => {
