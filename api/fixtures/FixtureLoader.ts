@@ -90,25 +90,34 @@ export class FixtureLoader {
           continue;
         }
 
-        const newProgress = {
+        const newProgress: any = {
           course: course._id.toString(),
           unit: unit._id.toString(),
           user: student._id.toString(),
-          answers: [],
-          done: false,
         };
 
-        if (progressType === 2) {
-          newProgress.done = true;
-          switch (unit.type) {
-            case 'code-kata':
+        // need to be implemented for each unit type separately
+        switch (unit.type) {
+          case 'code-kata':
+            if (progressType === 1) {
+              (<any>newProgress).code = '// at least i tried ¯\\\\_(ツ)_/¯';
+              newProgress.done = false;
+            } else if (progressType === 2) {
               (<any>newProgress).code = (<ICodeKataModel>unit).code;
-              break;
-            case 'task-unit-progress':
-              break;
-          }
+              newProgress.done = true;
+            }
+            break;
+          case 'task':
+            // does not work properly yet
+            if (progressType === 1) {
+              newProgress.answers = [];
+              newProgress.done = false;
+            } else if (progressType === 2) {
+              newProgress.answers = [];
+              newProgress.done = true;
+            }
+            break;
         }
-
 
         const progressClass = UnitClassMapper.getProgressClassForUnit(unit);
         await new progressClass(newProgress).save();
