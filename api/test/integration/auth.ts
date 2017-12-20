@@ -11,18 +11,22 @@ import chaiHttp = require('chai-http');
 
 chai.use(chaiHttp);
 chai.should();
-const app = new Server().app;
+let app: any = null;
 const BASE_URL = '/api/auth';
 const fixtureLoader = new FixtureLoader();
 const mockery = require('mockery');
 const nodemailerMock = require('nodemailer-mock');
 
 describe('Auth', () => {
-  before( () => {
+  before(() => {
     mockery.enable({
       warnOnUnregistered: false,
     });
-    mockery.registerMock('nodemailer', nodemailerMock);
+
+    mockery.registerSubstitute('nodemailer', nodemailerMock);
+    mockery.registerSubstitute('nodemailer-markdown', nodemailerMock);
+
+    app = new Server().app;
   });
 
   // Before each test we reset the database
