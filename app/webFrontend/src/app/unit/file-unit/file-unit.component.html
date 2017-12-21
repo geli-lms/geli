@@ -1,5 +1,5 @@
 <div>
-  <img *ngFor="let image of album; let i=index" [src]="image.src" (click)="openLB(i)" class="lightbox-cstm--preview" mat-tooltip="Rightclick and choose 'save as' to download this image">
+  <img *ngFor="let image of album; let i=index" [src]="image.src" (click)="openLB(i)" class="lightbox-cstm--preview" matTooltip="Right-click and choose 'Save image as' to download this image">
 </div>
 <ul>
   <ng-container *ngFor="let file of fileUnit.files;">
