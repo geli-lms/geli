@@ -47,7 +47,8 @@ export class ProgressController {
     if (!data.course || !data.unit || !currentUser) {
       throw new BadRequestError('progress need fields course, user and unit');
     }
-    const unit: any = await ProgressController.getUnit(data.unit);
+
+    const unit: IUnitModel = await Unit.findById(data.unit);
     ProgressController.checkDeadline(unit);
 
     data.user = currentUser;
@@ -66,7 +67,7 @@ export class ProgressController {
       throw new NotFoundError();
     }
 
-    const unit: any = await ProgressController.getUnit(progress.unit);
+    const unit: IUnitModel = await Unit.findById(progress.unit);
     ProgressController.checkDeadline(unit);
 
     progress.set(data);

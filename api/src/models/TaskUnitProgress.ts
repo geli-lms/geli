@@ -1,7 +1,8 @@
 import * as mongoose from 'mongoose';
 import {Progress} from './Progress';
 import {ITaskUnitProgress} from '../../../shared/models/ITaskUnitProgress';
-import {ITaskUnitModel, TaskUnit} from './units/TaskUnit';
+import {ITaskUnitModel} from './units/TaskUnit';
+import {Unit} from './units/Unit';
 
 interface ITaskUnitProgressModel extends ITaskUnitProgress, mongoose.Document {
 }
@@ -15,11 +16,11 @@ const taskUnitProgressSchema = new mongoose.Schema({
 );
 
 taskUnitProgressSchema.pre('save', async function (next: () => void) {
-  const task = <ITaskUnitModel> await TaskUnit.findById(this.unit).populate('tasks');
+  const taskUnit = <ITaskUnitModel> await Unit.findById(this.unit);
 
   this.done = true;
 
-  task.tasks.forEach(question => {
+  taskUnit.tasks.forEach(question => {
     question.answers.forEach(answer => {
       if (
         !this.answers[question._id.toString()] ||
