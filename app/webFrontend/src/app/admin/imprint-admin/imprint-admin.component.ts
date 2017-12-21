@@ -28,7 +28,7 @@ export class ImprintAdminComponent implements OnInit {
   async loadImprint() {
     try {
       this.imprint = <IConfig><any> await this.service.readSingleItem('imprint');
-      this.text = this.imprint.configValue;
+      this.text = this.imprint.value;
       this.renderHtml();
     } catch (error) {
       this.text = '';

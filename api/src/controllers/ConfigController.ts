@@ -4,25 +4,42 @@ import {
   Get, InternalServerError,
   JsonController,
   Param,
-  Put,
+  Put, UnauthorizedError,
   UseBefore
 } from 'routing-controllers';
 import {Config} from '../models/Config';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
+import config from '../config/main';
 
+const publicConfigs = [
+  new RegExp('imprint')
+];
+
+function publicConfig(id: string) {
+  for (const item of publicConfigs) {
+    if (id.match(item)) {
+      return true;
+    }
+  }
+  return false;
+}
 
 @JsonController('/config')
 export class ConfigController {
-  @Get('/imprint')
-  async getImprint() {
-    try {
-      const imprint = await Config.findOne({name: 'imprint'});
-      if (!imprint) {
-        return {name: 'imprint', configValue: ''};
+  @Get('/public/:id')
+  async getPublicConfig(@Param('id') name: string) {
+    if (publicConfig(name)) {
+      try {
+        const configV = await Config.findOne({name: name});
+        if (!configV) {
+          return {name: name, value: ''};
+        }
+        return configV.toObject();
+      } catch (error) {
+        throw new InternalServerError('');
       }
-      return imprint.toObject();
-    } catch (error) {
-      throw new InternalServerError('');
+    } else {
+      throw new UnauthorizedError('');
     }
   }
 
@@ -34,12 +51,27 @@ export class ConfigController {
     try {
       return Config.findOneAndUpdate(
         conditions,
-        {name: name, configValue: data.data},
+        {name: name, value: data.data},
         {'upsert': true, 'new': true}
       );
     } catch (error) {
       throw new InternalServerError('something went wrong');
     }
+  }
+
+  @UseBefore(passportJwtMiddleware)
+  @Authorized(['admin'])
+  @Get('/:id')
+  async getConfig(@Param('id') name: string) {
+      try {
+        const configV = await Config.findOne({name: name});
+        if (!configV) {
+          return {name: name, value: ''};
+        }
+        return configV.toObject();
+      } catch (error) {
+        throw new InternalServerError('');
+      }
   }
 }
 

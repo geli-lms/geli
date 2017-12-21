@@ -19,13 +19,13 @@ export class ImprintComponent implements OnInit {
   }
   async loadImprint() {
     try {
-      this.imprint = <IConfig><any> await this.service.readSingleItem('imprint');
+      this.imprint = <IConfig><any> await this.service.readSingleItem('public/imprint');
       this.renderHtml();
     } catch (error) {
       this.imprintRendered = '';
     }
   }
   renderHtml() {
-    this.imprintRendered = this.mdService.render(this.imprint.configValue);
+    this.imprintRendered = this.mdService.render(this.imprint.value);
   }
 }

@@ -11,7 +11,7 @@ const configSchema = new mongoose.Schema({
       unique: true,
       required: true
     },
-    configValue: {
+    value: {
       type: String
     }
   },
