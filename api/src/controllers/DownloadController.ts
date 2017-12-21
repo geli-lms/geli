@@ -25,7 +25,6 @@ import {FileUnit} from '../models/units/FileUnit';
 import {VideoUnit} from '../models/units/VideoUnit';
 import {IVideoUnit} from '../../../shared/models/units/IVideoUnit';
 import {Task} from '../models/Task';
-import {IDownloadSize} from '../../../shared/models/IDownloadSize';
 import {Lecture} from "../models/Lecture";
 
 
@@ -80,12 +79,11 @@ export class DownloadController {
 
   @Get('/:id')
   async getArchivedFile(@Param('id') id: string, @Res() response: Response) {
-    const filePath = appRoot + '/temp/' + '239cd7e86b1ef49f80c400d5099a962d.zip';
+    const filePath = appRoot + '/temp/' + id + '.zip';
 
     response.setHeader('Connection', 'keep-alive');
     response.setHeader('Access-Control-Expose-Headers', 'Content-Disposition');
     await promisify<string, void>(response.download.bind(response))(filePath);
-    console.log(response);
     return response;
 
   }
@@ -135,11 +133,12 @@ export class DownloadController {
         const localUnit = await Unit.findOne({_id: unit.unitId});
         if (localUnit instanceof FreeTextUnit) {
           const freeTextUnit = <IFreeTextUnit><any>localUnit;
-          archive.append(freeTextUnit.description + '\n' + freeTextUnit.markdown, {name: lecCounter + '_' + localLecture.name + '/' + unitCounter + '_' + freeTextUnit.name + '.txt'});
+          archive.append(freeTextUnit.name + '\n' + freeTextUnit.description + '\n' + freeTextUnit.markdown, {name: lecCounter + '_' +
+            localLecture.name + '/' + unitCounter + '_' + freeTextUnit.name + '.md'});
         } else if (localUnit instanceof CodeKataUnit) {
           const codeKataUnit = <ICodeKataUnit><any>localUnit;
           archive.append(codeKataUnit.description + '\n' + codeKataUnit.definition + '\n' +
-            codeKataUnit.code, {name: lecCounter + '_' + localLecture.name + '/' + unitCounter + '_' + codeKataUnit.name + '.txt'});
+            codeKataUnit.code + '\n' + codeKataUnit.test, {name: lecCounter + '_' + localLecture.name + '/' + unitCounter + '_' + codeKataUnit.name + '.txt'});
         } else if (localUnit instanceof FileUnit) {
           const fileUnit = <IFileUnit><any>localUnit;
           fileUnit.files.forEach((file, index) => {
