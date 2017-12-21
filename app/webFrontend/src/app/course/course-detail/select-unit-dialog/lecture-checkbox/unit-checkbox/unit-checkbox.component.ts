@@ -19,6 +19,7 @@ export class UnitCheckboxComponent implements OnInit {
   unit : IUnit;
   @Input()
   chkbox: boolean;
+  icon_name: string;
 
   @ViewChildren(UploadUnitCheckboxComponent)
   childUnits: QueryList<UploadUnitCheckboxComponent>;
@@ -37,9 +38,11 @@ export class UnitCheckboxComponent implements OnInit {
     if (this.unit.type === 'video') {
       const videoUnit = <IVideoUnit><any> this.unit;
       this.files = videoUnit.files;
+      this.icon_name = 'live_tv';
     } else if (this.unit.type === 'file') {
       const fileUnit = <IFileUnit><any> this.unit;
       this.files = fileUnit.files;
+      this.icon_name = 'insert_drive_file';
     }
   }
 
