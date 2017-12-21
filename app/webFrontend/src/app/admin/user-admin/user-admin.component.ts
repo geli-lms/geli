@@ -52,8 +52,8 @@ export class UserAdminComponent implements OnInit {
         this.snackBar.open('Role of user ' + val.email + ' successfully updated to ' + val.role, '', {duration: 3000});
       },
       (error) => {
+        this.snackBar.open(error.error.message, 'Desmiss', {duration: 3000});
         this.showProgress.toggleLoadingGlobal(false);
-        this.snackBar.open(error.json().message, 'Desmiss', {duration: 3000})
       }
     );
   }
