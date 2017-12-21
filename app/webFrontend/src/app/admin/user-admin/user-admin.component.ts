@@ -53,6 +53,7 @@ export class UserAdminComponent implements OnInit {
       },
       (error) => {
         this.showProgress.toggleLoadingGlobal(false);
+        this.snackBar.open(error.json().message, 'Desmiss', {duration: 3000})
       }
     );
   }
