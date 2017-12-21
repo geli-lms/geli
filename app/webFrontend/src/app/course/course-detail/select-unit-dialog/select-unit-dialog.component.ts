@@ -74,8 +74,8 @@ export class SelectUnitDialogComponent implements OnInit{
     if (iDownload.tooLargeFiles.length == 0) {
       const result = await this.downloadReq.postDownloadReqForCourse(downloadObj);
       const response = <Response> await this.downloadReq.getFile(result.toString());
-      this.showSpinner = false;
       saveAs(response.body, this.course.name + '.zip');
+      this.showSpinner = false;
     } else {
       this.showSpinner = false;
       this.snackBar.open('The selected files are too big! Please download the red-marked files seperately!', 'Okay', {duration: 10000});

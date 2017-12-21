@@ -80,9 +80,10 @@ export class DownloadController {
 
   @Get('/:id')
   async getArchivedFile(@Param('id') id: string, @Res() response: Response) {
-    const filePath = appRoot + '/temp/' + id + '.zip';
+    const filePath = appRoot + '/temp/' + '239cd7e86b1ef49f80c400d5099a962d.zip';
 
     response.setHeader('Connection', 'keep-alive');
+    response.setHeader('Access-Control-Expose-Headers', 'Content-Disposition');
     await promisify<string, void>(response.download.bind(response))(filePath);
     console.log(response);
     return response;
@@ -175,9 +176,10 @@ export class DownloadController {
       lecCounter++;
     }
 
-    archive.finalize();
-
-    return fileName;
+    return new Promise(resolve => {
+      archive.finalize();
+      archive.on('end', () => resolve(fileName));
+    });
   }
 
 }
