@@ -20,7 +20,7 @@ export class FileUnitComponent implements OnInit {
       if (this.isPicture(file.name)) {
         const src = '/api/uploads/' + file.name;
         const thumb = src;
-        const caption = file.name;
+        const caption = file.alias;
         const image = {
           src: src,
           thumb: thumb,
