@@ -17,5 +17,12 @@
     "typeRoots": [
       "../node_modules/@types"
     ]
-  }
+  },
+  "include": [
+    "./**/*",
+    "../node_modules/angular2-lightbox/index.ts"
+  ],
+  "exclude": [
+    "**/*.spec.ts"
+  ]
 }
