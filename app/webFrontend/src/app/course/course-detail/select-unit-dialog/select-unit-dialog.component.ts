@@ -77,8 +77,8 @@ export class SelectUnitDialogComponent implements OnInit{
       this.showSpinner = false;
       saveAs(response.body, this.course.name + '.zip');
     } else {
-      // TODO: Test withg large video file, once i get one.
-      this.snackBar.open('The selected files are too big! Please download the red-marked files seperately!', 'Okay', {duration: 3000});
+      this.showSpinner = false;
+      this.snackBar.open('The selected files are too big! Please download the red-marked files seperately!', 'Okay', {duration: 10000});
         iDownload.tooLargeFiles.forEach(file => {
           this.childLectures.forEach(lecture => {
             lecture.childUnits.forEach(unit => {
@@ -92,6 +92,8 @@ export class SelectUnitDialogComponent implements OnInit{
             });
           });
         });
+        this.chkbox = false;
+        this.onChange();
     }
     this.dialogRef.close();
   }

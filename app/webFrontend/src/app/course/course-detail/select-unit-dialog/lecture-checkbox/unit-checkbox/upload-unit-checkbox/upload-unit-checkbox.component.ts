@@ -23,7 +23,7 @@ export class UploadUnitCheckboxComponent implements OnInit {
 
   ngOnInit() {
     this.chkbox = false;
-    this.redText = true;
+    this.redText = false;
   }
 
   emitEvent() {
