@@ -17,6 +17,7 @@ import {ICodeKataModel} from '../../src/models/units/CodeKataUnit';
 import {ICodeKataUnit} from '../../../shared/models/units/ICodeKataUnit';
 import {ITaskUnitModel} from '../../src/models/units/TaskUnit';
 import {ITaskUnit} from '../../../shared/models/units/ITaskUnit';
+import * as winston from 'winston';
 
 chai.use(chaiHttp);
 const should = chai.should();
@@ -87,8 +88,7 @@ describe('Export', async () => {
             // maybe further test single tasks?
             break;
           default:
-            console.log('export for \'' + unit.type + '\' is not completly tested');
-            console.log(unitJson);
+            winston.log('warn', 'export for \'' + unit.type + '\' is not completly tested');
             break;
         }
       }
