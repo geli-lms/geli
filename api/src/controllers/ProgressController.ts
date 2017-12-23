@@ -1,14 +1,12 @@
 import {
-  Authorized,
   BadRequestError, Body, CurrentUser, Get, JsonController, NotFoundError, Param, Post, Put,
   UseBefore
 } from 'routing-controllers';
 import * as moment from 'moment';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
-import {IProgressModel, Progress} from '../models/Progress';
+import {IProgressModel, Progress} from '../models/progress/Progress';
 import {IUser} from '../../../shared/models/IUser';
 import {IUnitModel, Unit} from '../models/units/Unit';
-import {UnitClassMapper} from '../utilities/UnitClassMapper';
 
 @JsonController('/progress')
 @UseBefore(passportJwtMiddleware)
@@ -53,10 +51,9 @@ export class ProgressController {
 
     data.user = currentUser;
 
-    const progressClass = UnitClassMapper.getProgressClassForUnit(unit);
-    const progress = await new progressClass(data).save();
+    const savedProgress = await Progress.create(data);
 
-    return progress.toObject();
+    return savedProgress.map((progress) => progress.toObject());
   }
 
   @Put('/:id')

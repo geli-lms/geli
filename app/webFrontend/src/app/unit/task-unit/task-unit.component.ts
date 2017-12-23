@@ -2,7 +2,9 @@ import {Component, OnInit, Input} from '@angular/core';
 import {MatSnackBar} from '@angular/material';
 import {ActivatedRoute} from '@angular/router';
 import {ProgressService} from '../../shared/services/data/progress.service';
-import {IProgress} from '../../../../../../shared/models/IProgress';
+import {ITaskUnit} from '../../../../../../shared/models/units/ITaskUnit';
+import {ITaskUnitProgress} from '../../../../../../shared/models/progress/ITaskUnitProgress';
+import {TaskUnitProgress} from '../../models/progress/TaskUnitProgress';
 
 const knuth = require('knuth-shuffle').knuthShuffle;
 
@@ -13,9 +15,9 @@ const knuth = require('knuth-shuffle').knuthShuffle;
 })
 export class TaskUnitComponent implements OnInit {
 
-  @Input() taskUnit: any;
+  @Input() taskUnit: ITaskUnit;
 
-  progress: any;
+  progress: ITaskUnitProgress;
   validationMode = false;
   courseId: string;
 
@@ -25,41 +27,28 @@ export class TaskUnitComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.route.params.subscribe(
-      params => {
-        this.courseId = decodeURIComponent(params['id']);
-      });
+    if (!this.taskUnit.progressData) {
+      this.progress = new TaskUnitProgress(this.taskUnit);
+    } else {
+      this.progress = this.taskUnit.progressData;
+    }
 
-    this.progress = {
-      unit: this.taskUnit._id,
-      course: this.courseId,
-      answers: {},
-    };
-    this.resetProgressAnswers();
-
-    this.progressService.getUnitProgress(this.taskUnit._id).then((value) => {
-      if (value && value.length > 0) {
-        this.progress = value[0];
-
-        // The Task could have been changed, so we need to check that the Progress still matches
-        if (!this.progress.answers) {
-          this.resetProgressAnswers();
+    if (!this.progress.answers) {
+      this.resetProgressAnswers();
+    } else {
+      this.taskUnit.tasks.forEach(task => {
+        if (!this.progress.answers[task._id]) {
+          this.progress.answers[task._id] = {};
+          task.answers.forEach(answer => this.progress.answers[task._id][answer._id] = false);
         } else {
-          this.taskUnit.tasks.forEach(task => {
-            if (!this.progress.answers[task._id]) {
-              this.progress.answers[task._id] = {};
-              task.answers.forEach(answer => this.progress.answers[task._id][answer._id] = false);
-            } else {
-              task.answers.forEach(answer => {
-                if (!this.progress.answers[task._id][answer._id]) {
-                  this.progress.answers[task._id][answer._id] = false;
-                }
-              });
+          task.answers.forEach(answer => {
+            if (!this.progress.answers[task._id][answer._id]) {
+              this.progress.answers[task._id][answer._id] = false;
             }
           });
         }
-      }
-    });
+      });
+    }
     this.shuffleAnswers();
   }
 

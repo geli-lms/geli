@@ -1,8 +1,8 @@
 import * as mongoose from 'mongoose';
 import {Progress} from './Progress';
-import {ITaskUnitProgress} from '../../../shared/models/ITaskUnitProgress';
-import {ITaskUnitModel} from './units/TaskUnit';
-import {Unit} from './units/Unit';
+import {ITaskUnitProgress} from '../../../../shared/models/progress/ITaskUnitProgress';
+import {ITaskUnitModel} from '../units/TaskUnit';
+import {Unit} from '../units/Unit';
 
 interface ITaskUnitProgressModel extends ITaskUnitProgress, mongoose.Document {
 }

@@ -1,7 +1,6 @@
 import * as mongoose from 'mongoose';
 import {IUnit} from '../../../../shared/models/units/IUnit';
-import {NativeError} from 'mongoose';
-import {Progress} from '../Progress';
+import {Progress} from '../progress/Progress';
 import {InternalServerError} from 'routing-controllers';
 
 import {Lecture} from '../Lecture';
@@ -35,21 +34,23 @@ const unitSchema = new mongoose.Schema({
     timestamps: true,
     toObject: {
       transform: function (doc: IUnitModel, ret: any) {
-        ret._id = doc._id.toString();
+        ret._id = ret._id.toString();
         ret._course = ret._course.toString();
       }
     },
   }
 );
 
-unitSchema.virtual('progresses', [{
+unitSchema.virtual('progressData', {
   ref: 'Progress',
   localField: '_id',
-  foreignField: 'unit'
-}]);
+  foreignField: 'unit',
+  justOne: true
+});
 
 unitSchema.methods.exportJSON = function() {
   const obj = this.toObject();
+  const jsonData = this.toJSON();
 
   // remove unwanted informations
   // mongo properties

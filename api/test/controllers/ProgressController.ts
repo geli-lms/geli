@@ -9,8 +9,8 @@ import {User} from '../../src/models/User';
 import {Unit} from '../../src/models/units/Unit';
 import {Lecture} from '../../src/models/Lecture';
 import {Course} from '../../src/models/Course';
-import {CodeKataProgress} from '../../src/models/CodeKataProgress';
-import {Progress} from '../../src/models/Progress';
+import {CodeKataProgress} from '../../src/models/progress/CodeKataProgress';
+import {Progress} from '../../src/models/progress/Progress';
 import * as moment from 'moment';
 
 chai.use(chaiHttp);
