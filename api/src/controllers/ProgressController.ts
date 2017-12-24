@@ -4,17 +4,14 @@ import {
 } from 'routing-controllers';
 import * as moment from 'moment';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
-import {IProgressModel, Progress} from '../models/progress/Progress';
+import {Progress} from '../models/progress/Progress';
 import {IUser} from '../../../shared/models/IUser';
 import {IUnitModel, Unit} from '../models/units/Unit';
+import {IProgress} from '../../../shared/models/progress/IProgress';
 
 @JsonController('/progress')
 @UseBefore(passportJwtMiddleware)
 export class ProgressController {
-  private static async getUnit(unitId: string): Promise<IUnitModel> {
-    return (await Unit.findById(unitId));
-  }
-
   private static checkDeadline(unit: any) {
     if (unit.deadline && moment(unit.deadline).isBefore()) {
       throw new BadRequestError('Past deadline, no further update possible');
@@ -40,7 +37,7 @@ export class ProgressController {
   }
 
   @Post('/')
-  async createProgress(@Body() data: any, @CurrentUser() currentUser?: IUser) {
+  async createProgress(@Body() data: IProgress, @CurrentUser() currentUser?: IUser) {
     // discard invalid requests
     if (!data.course || !data.unit || !currentUser) {
       throw new BadRequestError('progress need fields course, user and unit');
@@ -51,9 +48,8 @@ export class ProgressController {
 
     data.user = currentUser;
 
-    const savedProgress = await Progress.create(data);
-
-    return savedProgress.map((progress) => progress.toObject());
+    const progress = await Progress.create(data);
+    return progress.toObject();
   }
 
   @Put('/:id')
