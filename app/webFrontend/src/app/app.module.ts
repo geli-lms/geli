@@ -13,7 +13,6 @@ import {
   CourseService,
   FreeTextUnitService,
   LectureService,
-  TaskService,
   UnitService,
   UserDataService
 } from './shared/services/data.service';
@@ -54,7 +53,6 @@ import {TitleService} from './shared/services/title.service';
     AboutDataService,
     AuthGuardService,
     UnitService,
-    TaskService,
     CourseService,
     UserDataService,
     LectureService,
