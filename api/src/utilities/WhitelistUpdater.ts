@@ -14,7 +14,7 @@ export class WhitelistUpdater {
 
     await Promise.all(
       courses.map(async (course) => {
-        if (course.students.find(u => user._id === u._id)
+        if (course.students.findIndex(u => user._id === u._id < 0)
           && course.whitelist.find(w =>
             w.firstName === user.profile.firstName.toLowerCase() &&
             w.lastName === user.profile.lastName.toLowerCase() &&
