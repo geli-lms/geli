@@ -16,7 +16,6 @@ import './utilities/FilterErrorHandler';
 
 if (config.sentryDsn) {
   Raven.config(config.sentryDsn, {
-    autoBreadcrumbs: true,
     environment: 'api',
     release: '$TRAVIS_COMMIT',
   }).install();
