@@ -52,9 +52,15 @@ export class UserAdminComponent implements OnInit {
         this.snackBar.open('Role of user ' + val.email + ' successfully updated to ' + val.role, '', {duration: 3000});
       },
       (error) => {
+        this.snackBar.open(error.error.message, '', {duration: 3000});
         this.showProgress.toggleLoadingGlobal(false);
       }
     );
+  }
+
+  editUser(userIndex: number) {
+    const link = `/profile/${this.allUsers[userIndex]._id}/edit`;
+    this.router.navigate([link]);
   }
 
   deleteUser(userIndex: number) {

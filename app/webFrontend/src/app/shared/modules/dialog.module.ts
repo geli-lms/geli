@@ -9,6 +9,9 @@ import {WriteMailDialog} from '../components/write-mail-dialog/write-mail-dialog
 import {FileUploadModule} from 'ng2-file-upload';
 import {CommonModule} from '@angular/common';
 import {MaterialImportModule} from './material-import.module';
+import {AceEditorModule} from 'ng2-ace-editor';
+import {InfoDialog} from '../components/info-dialog/info-dialog.component';
+import {FocusDirective} from '../directives/focus.directive';
 
 @NgModule({
   imports: [
@@ -16,25 +19,31 @@ import {MaterialImportModule} from './material-import.module';
     FormsModule,
     FileUploadModule,
     MaterialImportModule,
+    AceEditorModule,
   ],
   exports: [
+    InfoDialog,
     ConfirmDialog,
     AccessKeyDialog,
     UploadDialog,
     FilepickerDialog,
     WriteMailDialog,
+    FocusDirective,
   ],
   declarations: [
+    InfoDialog,
     ConfirmDialog,
     AccessKeyDialog,
     UploadDialog,
     FilepickerDialog,
     WriteMailDialog,
+    FocusDirective,
   ],
   providers: [
     DialogService
   ],
   entryComponents: [
+    InfoDialog,
     ConfirmDialog,
     AccessKeyDialog,
     UploadDialog,
