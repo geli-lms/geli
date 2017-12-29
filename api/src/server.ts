@@ -6,16 +6,18 @@ import * as morgan from 'morgan';
 import * as winston from 'winston';
 import * as passport from 'passport';
 import {Express} from 'express';
+import * as Raven from 'raven';
 import config from './config/main';
 import passportLoginStrategy from './security/passportLoginStrategy';
 import passportJwtStrategy from './security/passportJwtStrategy';
 import {RoleAuthorization} from './security/RoleAuthorization';
 import {CurrentUserDecorator} from './security/CurrentUserDecorator';
-import * as Raven from 'raven';
+import './utilities/FilterErrorHandler';
 
 if (config.sentryDsn) {
   Raven.config(config.sentryDsn, {
-    autoBreadcrumbs: true
+    environment: 'api',
+    release: '$TRAVIS_COMMIT',
   }).install();
 }
 
@@ -40,7 +42,7 @@ export class Server {
       routePrefix: '/api',
       controllers: [__dirname + '/controllers/*.js'], // register all controller's routes
       authorizationChecker: RoleAuthorization.checkAuthorization,
-      currentUserChecker: CurrentUserDecorator.checkCurrentUser
+      currentUserChecker: CurrentUserDecorator.checkCurrentUser,
     });
 
     if (config.sentryDsn) {

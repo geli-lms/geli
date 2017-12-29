@@ -12,13 +12,16 @@ import {Progress} from '../../src/models/progress/Progress';
 import * as moment from 'moment';
 
 chai.use(chaiHttp);
+const should = chai.should();
 const app = new Server().app;
 const BASE_URL = '/api/progress';
 const fixtureLoader = new FixtureLoader();
 
 describe('ProgressController', () => {
   // Before each test we reset the database
-  beforeEach(() => fixtureLoader.load());
+  beforeEach(async () => {
+    await fixtureLoader.load();
+  });
 
   describe(`POST ${BASE_URL}`, () => {
     it('should create progress for some progressable unit', async () => {
@@ -36,25 +39,17 @@ describe('ProgressController', () => {
         type: 'codeKata'
       };
 
-      return new Promise((resolve, reject) => {
-        chai.request(app)
-          .post(BASE_URL)
-          .set('Authorization', `JWT ${JwtUtils.generateToken(student)}`)
-          .send(newProgress)
-          .end((err, res) => {
-            if (err) {
-              return reject(err);
-            }
-            res.status.should.be.equal(200);
-            res.body.course.should.be.equal(newProgress.course);
-            res.body.unit.should.be.equal(newProgress.unit);
-            res.body.user.should.be.equal(newProgress.user);
-            res.body.done.should.be.equal(newProgress.done);
-            res.body._id.should.be.a('string');
+      const res = await chai.request(app)
+        .post(BASE_URL)
+        .set('Authorization', `JWT ${JwtUtils.generateToken(student)}`)
+        .send(newProgress);
 
-            resolve();
-          });
-      });
+      res.status.should.be.equal(200);
+      res.body.course.should.be.equal(newProgress.course);
+      res.body.unit.should.be.equal(newProgress.unit);
+      res.body.user.should.be.equal(newProgress.user);
+      res.body.done.should.be.equal(newProgress.done);
+      res.body._id.should.be.a('string');
     });
 
     it('should create progress for some progressable unit with a deadline', async () => {
@@ -75,25 +70,17 @@ describe('ProgressController', () => {
         type: 'codeKata'
       };
 
-      return new Promise((resolve, reject) => {
-        chai.request(app)
-          .post(BASE_URL)
-          .set('Authorization', `JWT ${JwtUtils.generateToken(student)}`)
-          .send(newProgress)
-          .end((err, res) => {
-            if (err) {
-              return reject(err);
-            }
-            res.status.should.be.equal(200);
-            res.body.course.should.be.equal(newProgress.course);
-            res.body.unit.should.be.equal(newProgress.unit);
-            res.body.user.should.be.equal(newProgress.user);
-            res.body.done.should.be.equal(newProgress.done);
-            res.body._id.should.be.a('string');
+      const res = await chai.request(app)
+        .post(BASE_URL)
+        .set('Authorization', `JWT ${JwtUtils.generateToken(student)}`)
+        .send(newProgress);
 
-            resolve();
-          });
-      });
+      res.status.should.be.equal(200);
+      res.body.course.should.be.equal(newProgress.course);
+      res.body.unit.should.be.equal(newProgress.unit);
+      res.body.user.should.be.equal(newProgress.user);
+      res.body.done.should.be.equal(newProgress.done);
+      res.body._id.should.be.a('string');
     });
 
     it('should fail creating progress for some progressable unit with a deadline', async () => {
@@ -114,19 +101,15 @@ describe('ProgressController', () => {
         type: 'codeKata'
       };
 
-      return new Promise((resolve) => {
-        chai.request(app)
-          .post(BASE_URL)
-          .set('Authorization', `JWT ${JwtUtils.generateToken(student)}`)
-          .send(newProgress)
-          .end((err, res) => {
-            res.status.should.be.equal(400);
-            err.message.should.be.equal('Bad Request');
-            res.body.message.should.be.equal('Past deadline, no further update possible');
+      const res = await chai.request(app)
+        .post(BASE_URL)
+        .set('Authorization', `JWT ${JwtUtils.generateToken(student)}`)
+        .send(newProgress)
+        .catch(err => err.response);
 
-            resolve();
-          });
-      });
+      res.status.should.be.equal(400);
+      res.body.name.should.be.equal('BadRequestError');
+      res.body.message.should.be.equal('Past deadline, no further update possible');
     });
   });
 
@@ -157,25 +140,17 @@ describe('ProgressController', () => {
         type: 'codeKata'
       };
 
-      return new Promise((resolve, reject) => {
-        chai.request(app)
-          .put(`${BASE_URL}/${progress._id.toString()}`)
-          .set('Authorization', `JWT ${JwtUtils.generateToken(student)}`)
-          .send(newProgress)
-          .end((err, res) => {
-            if (err) {
-              return reject(err);
-            }
-            res.status.should.be.equal(200);
-            res.body.course.should.be.equal(newProgress.course);
-            res.body.unit.should.be.equal(newProgress.unit);
-            res.body.user.should.be.equal(newProgress.user);
-            res.body.done.should.be.equal(newProgress.done);
-            res.body._id.should.be.equal(progress._id.toString());
+      const res = await chai.request(app)
+        .put(`${BASE_URL}/${progress._id.toString()}`)
+        .set('Authorization', `JWT ${JwtUtils.generateToken(student)}`)
+        .send(newProgress);
 
-            resolve();
-          });
-      });
+      res.status.should.be.equal(200);
+      res.body.course.should.be.equal(newProgress.course);
+      res.body.unit.should.be.equal(newProgress.unit);
+      res.body.user.should.be.equal(newProgress.user);
+      res.body.done.should.be.equal(newProgress.done);
+      res.body._id.should.be.equal(progress._id.toString());
     });
 
     it('should update progress for some progressable unit with a deadline', async () => {
@@ -207,25 +182,17 @@ describe('ProgressController', () => {
         type: 'codeKata'
       };
 
-      return new Promise((resolve, reject) => {
-        chai.request(app)
-          .put(`${BASE_URL}/${progress._id.toString()}`)
-          .set('Authorization', `JWT ${JwtUtils.generateToken(student)}`)
-          .send(newProgress)
-          .end((err, res) => {
-            if (err) {
-              return reject(err);
-            }
-            res.status.should.be.equal(200);
-            res.body.course.should.be.equal(newProgress.course);
-            res.body.unit.should.be.equal(newProgress.unit);
-            res.body.user.should.be.equal(newProgress.user);
-            res.body.done.should.be.equal(newProgress.done);
-            res.body._id.should.be.equal(progress._id.toString());
+      const res = await chai.request(app)
+        .put(`${BASE_URL}/${progress._id.toString()}`)
+        .set('Authorization', `JWT ${JwtUtils.generateToken(student)}`)
+        .send(newProgress);
 
-            resolve();
-          });
-      });
+      res.status.should.be.equal(200);
+      res.body.course.should.be.equal(newProgress.course);
+      res.body.unit.should.be.equal(newProgress.unit);
+      res.body.user.should.be.equal(newProgress.user);
+      res.body.done.should.be.equal(newProgress.done);
+      res.body._id.should.be.equal(progress._id.toString());
     });
 
     it('should fail updating progress for some progressable unit with a deadline', async () => {
@@ -257,19 +224,15 @@ describe('ProgressController', () => {
         type: 'codeKata'
       };
 
-      return new Promise((resolve) => {
-        chai.request(app)
-          .put(`${BASE_URL}/${progress._id.toString()}`)
-          .set('Authorization', `JWT ${JwtUtils.generateToken(student)}`)
-          .send(newProgress)
-          .end((err, res) => {
-            res.status.should.be.equal(400);
-            err.message.should.be.equal('Bad Request');
-            res.body.message.should.be.equal('Past deadline, no further update possible');
+      const res = await chai.request(app)
+        .put(`${BASE_URL}/${progress._id.toString()}`)
+        .set('Authorization', `JWT ${JwtUtils.generateToken(student)}`)
+        .send(newProgress)
+        .catch(err => err.response);
 
-            resolve();
-          });
-      });
+      res.status.should.be.equal(400);
+      res.body.name.should.be.equal('BadRequestError');
+      res.body.message.should.be.equal('Past deadline, no further update possible');
     });
   });
 });
