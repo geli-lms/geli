@@ -81,7 +81,7 @@ gulp.task(COMPILE_TYPESCRIPT, function () {
   return gulp.src(TS_GLOB, {base: "."})
     .pipe(sourcemaps.init())
     .pipe(tsProject())
-    .pipe(sourcemaps.write())
+    .pipe(sourcemaps.write('maps'))
     .pipe(gulp.dest("./build"));
 });
 
