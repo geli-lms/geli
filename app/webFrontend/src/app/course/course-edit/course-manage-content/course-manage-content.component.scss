@@ -91,3 +91,12 @@ $unit-height: 64px;
   height: $unit-height;
   border: 1px dashed map-get($mat-grey, 300);
 }
+
+.mat-fab-menu-spacer {
+  display: none;
+
+  @include bp(max) {
+    display: block;
+    height: 4rem;
+  }
+}
