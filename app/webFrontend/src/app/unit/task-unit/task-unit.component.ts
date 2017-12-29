@@ -33,7 +33,6 @@ export class TaskUnitComponent implements OnInit {
     this.progress = {
       unit: this.taskUnit._id,
       course: this.courseId,
-      answers: {},
     };
     this.resetProgressAnswers();
 
@@ -64,6 +63,8 @@ export class TaskUnitComponent implements OnInit {
   }
 
   resetProgressAnswers() {
+    this.progress.answers = {};
+
     this.taskUnit.tasks.forEach(task => {
       // Initialize all as unchecked
       this.progress.answers[task._id] = {};

@@ -20,6 +20,7 @@ export class BackendService {
   private handleUnauthorized = (err) => {
     if (err.status === 401) {
       this.authenticationService.logout();
+      return Observable.empty();
     }
 
     return Observable.throw(err);

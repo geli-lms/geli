@@ -19,7 +19,8 @@
       "testTsconfig": "tsconfig.spec.json",
       "prefix": "app",
       "styles": [
-        "styles.scss"
+        "styles.scss",
+        "../node_modules/angular2-lightbox/lightbox.css"
       ],
       "scripts": [
         "../node_modules/ace-builds/src-min/ace.js",
