@@ -1,5 +1,4 @@
 import {Injectable} from '@angular/core';
-import '../../../../../../shared/geliUtilities';
 
 @Injectable()
 export class SaveFileService {
