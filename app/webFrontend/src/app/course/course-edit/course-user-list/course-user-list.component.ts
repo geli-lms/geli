@@ -6,6 +6,7 @@ import {DialogService} from '../../../shared/services/dialog.service';
 import 'rxjs/add/operator/startWith'
 import {CourseService} from '../../../shared/services/data.service';
 import {MatSnackBar} from '@angular/material';
+import {ICourse} from '../../../../../../../shared/models/ICourse';
 
 @Component({
   selector: 'app-course-user-list',
@@ -19,15 +20,21 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
   @Input() users: IUser[];
   @Input() dragulaBagId;
   @Input() role;
+  @Input() course: ICourse;
 
   selectedMembers: IUser[] = [];
   fuzzySearch: String = '';
   userCtrl: FormControl;
   filteredStates: any;
   toggleBlocked = false;
+  selectedAll = false;
 
   @Output() onDragendUpdate = new EventEmitter<IUser[]>();
   @Output() onRemove = new EventEmitter<String>();
+
+  static getMailAddressStringForUsers(users: IUser[]) {
+    return users.map((user: IUser) => `${user.profile.firstName} ${user.profile.lastName}<${user.email}>`).join(', ');
+  }
 
   constructor(private dragula: DragulaService,
               public dialogService: DialogService,
@@ -63,6 +70,7 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
     if (this.toggleBlocked) {
       return;
     }
+    this.selectedAll = false;
     const position = this.selectedMembers.indexOf(member);
     if (position !== -1) {
       this.selectedMembers.splice(position, 1);
@@ -103,27 +111,42 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
     this.toggleBlocked = false;
     if (res) {
       this.selectedMembers.forEach(user => this.onRemove.emit(user._id));
-      this.selectedMembers = [];
+      this.resetSelectedUsers();
     }
   }
 
   async openWriteMailDialog() {
     this.toggleBlocked = true;
-    const mailData = await this.dialogService.writeMail(
-      this.selectedMembers
-        .map((user: IUser) => `${user.profile.firstName} ${user.profile.lastName}<${user.email}>`)
-        .join(', ')
-    ).toPromise();
+    const mailData = await this.dialogService.writeMail({
+      bcc: CourseUserListComponent.getMailAddressStringForUsers(this.selectedMembers),
+      cc: CourseUserListComponent.getMailAddressStringForUsers(this.course.teachers),
+      markdown: `\n\n\n---\nYou received this mail because you are a ${this.role} in the course ${this.course.name}.`,
+      subject: `${this.course.name}: `,
+    }).toPromise();
     this.toggleBlocked = false;
     if (!mailData) {
       return;
     }
-    this.selectedMembers = [];
+    this.resetSelectedUsers();
     try {
       await this.courseService.sendMailToSelectedUsers(mailData);
       this.snackBar.open('Sending mail succeeded.', '', {duration: 2000});
     } catch (err) {
       this.snackBar.open('Sending mail failed.', '', {duration: 3000});
     }
+  }
+
+  toggleAllUsers() {
+    if (this.selectedAll) {
+      this.resetSelectedUsers();
+    } else {
+      this.selectedMembers = this.usersInCourse.map(user => user); // new array but values by ref
+      this.selectedAll = true;
+    }
+  }
+
+  resetSelectedUsers() {
+    this.selectedMembers = [];
+    this.selectedAll = false;
   }
 }

@@ -3,6 +3,7 @@ import {MatSnackBar} from '@angular/material';
 import {ActivatedRoute} from '@angular/router';
 import {ProgressService} from '../../shared/services/data/progress.service';
 import {IProgress} from '../../../../../../shared/models/IProgress';
+
 const knuth = require('knuth-shuffle').knuthShuffle;
 
 @Component({
@@ -14,7 +15,7 @@ export class TaskUnitComponent implements OnInit {
 
   @Input() taskUnit: any;
 
-  progress: IProgress;
+  progress: any;
   validationMode = false;
   courseId: string;
 
@@ -29,62 +30,77 @@ export class TaskUnitComponent implements OnInit {
         this.courseId = decodeURIComponent(params['id']);
       });
 
+    this.progress = {
+      unit: this.taskUnit._id,
+      course: this.courseId,
+    };
+    this.resetProgressAnswers();
+
     this.progressService.getUnitProgress(this.taskUnit._id).then((value) => {
       if (value && value.length > 0) {
-        this.progress = (<IProgress>value[0]);
+        this.progress = value[0];
+
+        // The Task could have been changed, so we need to check that the Progress still matches
+        if (!this.progress.answers) {
+          this.resetProgressAnswers();
+        } else {
+          this.taskUnit.tasks.forEach(task => {
+            if (!this.progress.answers[task._id]) {
+              this.progress.answers[task._id] = {};
+              task.answers.forEach(answer => this.progress.answers[task._id][answer._id] = false);
+            } else {
+              task.answers.forEach(answer => {
+                if (!this.progress.answers[task._id][answer._id]) {
+                  this.progress.answers[task._id][answer._id] = false;
+                }
+              });
+            }
+          });
+        }
       }
     });
     this.shuffleAnswers();
   }
 
-  reset() {
-    this.taskUnit.tasks.forEach((task) => {
-      task.answers.forEach((answer) => {
-        answer.userAnswer = null;
-      });
+  resetProgressAnswers() {
+    this.progress.answers = {};
+
+    this.taskUnit.tasks.forEach(task => {
+      // Initialize all as unchecked
+      this.progress.answers[task._id] = {};
+      task.answers.forEach(answer => this.progress.answers[task._id][answer._id] = false);
     });
+  }
+
+  reset() {
+    this.resetProgressAnswers();
     this.validationMode = false;
     this.shuffleAnswers();
-  }
-
-  isAnswerCorrect(answer) {
-    return ((typeof answer.value === 'undefined' || !answer.value) && !answer.userAnswer) || (answer.value && answer.userAnswer);
-  }
-
-  isAnswerSolution(answer) {
-    return (typeof answer.value !== 'undefined' && answer.value);
   }
 
   validate() {
     this.validationMode = true;
 
-    let done = true;
+    const handleSave = (promise: Promise<any>) => {
+      promise
+        .then((savedProgress) => {
+          this.progress = savedProgress;
+          this.snackBar.open('Progress has been saved', '', {duration: 3000});
+        })
+        .catch((err) => {
+          this.snackBar.open(`An error occurred: ${err.json().message}`, '', {duration: 3000})
+        });
+    };
 
-    this.taskUnit.tasks.forEach((task) => {
-      task.answers.forEach((answer) => {
-        // One wrong answer will mark the TaskUnit as failed
-        if (!this.isAnswerCorrect(answer)) {
-          done = false;
-        }
-      });
-    });
-
-    if (!this.progress && done) {
-      const progress = {
-        unit: this.taskUnit._id,
-        course: this.courseId,
-        done
-      };
-
-      this.progressService.createItem(progress)
-      .then((savedProgress) => {
-        this.progress = savedProgress;
-        this.snackBar.open('Progress has been saved', '', {duration: 3000});
-      })
-      .catch((err) => {
-        this.snackBar.open(`An error occurred: ${err.json().message}`, '', {duration: 3000})
-      });
+    if (!this.progress._id) {
+      handleSave(this.progressService.createItem(this.progress));
+    } else {
+      handleSave(this.progressService.updateItem({
+        _id: this.progress._id,
+        answers: this.progress.answers,
+      }));
     }
+
   }
 
   shuffleAnswers() {
