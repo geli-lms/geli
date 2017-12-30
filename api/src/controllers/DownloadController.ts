@@ -6,9 +6,8 @@ import crypto = require('crypto');
 
 const appRoot = require('app-root-path');
 import {Response} from 'express';
-import {
-  Body, Post, Get, Header, NotFoundError, ContentType, UseInterceptor, OnUndefined, UseBefore, Param, Res, Controller,
-  Action, CurrentUser
+import {Body, Post, Get, NotFoundError, ContentType, UseBefore, Param, Res, Controller,
+  CurrentUser
 } from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 
@@ -34,6 +33,12 @@ import {Course} from '../models/Course';
 @Controller('/download')
 @UseBefore(passportJwtMiddleware)
 export class DownloadController {
+
+  replaceCharInFilename(filename: string) {
+    return filename.replace(/[^a-zA-Z0-9 -]/g, '')    // remove special characters
+      .replace(/ /g, '-')             // replace space by dashes
+      .replace(/-+/g, '-');
+  }
 
 
   async calcPackage(pack: IDownload) {
@@ -102,7 +107,8 @@ export class DownloadController {
 
     const course = await Course.findOne({_id: data.courseName});
 
-    if (course.students.indexOf(user._id) !== -1 || course.courseAdmin === user._id || course.teachers.indexOf(user._id) !== -1) {
+    if (course.students.indexOf(user._id) !== -1 || course.courseAdmin === user._id ||
+      course.teachers.indexOf(user._id) !== -1) {
 
       if (data.lectures.length === 0) {
         throw new NotFoundError();
@@ -118,7 +124,7 @@ export class DownloadController {
       const filepath = appRoot + '/temp/' + fileName + '.zip';
       const output = fs.createWriteStream(filepath);
       const archive = archiver('zip', {
-        zlib: {level: 9} // Sets the compression level.
+        zlib: {level: 9}
       });
 
       archive.pipe(output);
@@ -128,6 +134,7 @@ export class DownloadController {
       for (const lec of data.lectures) {
 
         const localLecture = await Lecture.findOne({_id: lec.lectureId});
+        const lcName = this.replaceCharInFilename(localLecture.name);
         let unitCounter = 1;
 
         for (const unit of lec.units) {
@@ -136,30 +143,30 @@ export class DownloadController {
           if (localUnit instanceof FreeTextUnit) {
             const freeTextUnit = <IFreeTextUnit><any>localUnit;
             archive.append(FreeTextUnit.schema.statics.toFile(freeTextUnit), {
-              name: lecCounter + '_' + localLecture.name + '/' + unitCounter + '_' + freeTextUnit.name + '.md'
+              name: lecCounter + '_' + lcName + '/' + unitCounter + '_' + this.replaceCharInFilename(freeTextUnit.name) + '.md'
             });
           } else if (localUnit instanceof CodeKataUnit) {
             const codeKataUnit = <ICodeKataUnit><any>localUnit;
             archive.append(CodeKataUnit.schema.statics.toFile(codeKataUnit),
-              {name: lecCounter + '_' + localLecture.name + '/' + unitCounter + '_' + codeKataUnit.name + '.txt'});
+              {name: lecCounter + '_' + lcName + '/' + unitCounter + '_' + this.replaceCharInFilename(codeKataUnit.name) + '.txt'});
           } else if (localUnit instanceof FileUnit) {
             const fileUnit = <IFileUnit><any>localUnit;
             fileUnit.files.forEach((file, index) => {
               if (unit.files.indexOf(index) > -1) {
-                archive.file(file.path, {name: lecCounter + '_' + localLecture.name + '/' + unitCounter + '_' + file.name});
+                archive.file(file.path, {name: lecCounter + '_' + lcName + '/' + unitCounter + '_' + file.alias});
               }
             });
           } else if (localUnit instanceof VideoUnit) {
             const videoFileUnit = <IVideoUnit><any>localUnit;
             videoFileUnit.files.forEach((file, index) => {
               if (unit.files.indexOf(index) > -1) {
-                archive.file(file.path, {name: lecCounter + '_' + localLecture.name + '/' + unitCounter + '_' + file.name});
+                archive.file(file.path, {name: lecCounter + '_' + lcName + '/' + unitCounter + '_' + file.alias});
               }
             });
           } else if (localUnit instanceof TaskUnit) {
             const taskUnit = <ITaskUnit><any>localUnit;
               archive.append(await Task.schema.statics.toFile(taskUnit),
-                {name: lecCounter + '_' + localLecture.name + '/' + unitCounter + '. ' + taskUnit.name + '.txt'});
+                {name: lecCounter + '_' + lcName + '/' + unitCounter + '. ' + this.replaceCharInFilename(taskUnit.name) + '.txt'});
           } else {
             throw new NotFoundError();
           }
