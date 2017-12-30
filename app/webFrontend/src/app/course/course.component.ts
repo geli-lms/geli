@@ -82,10 +82,7 @@ export class CourseComponent {
 
   isMemberOfCourse(course: ICourse) {
     const user = this.userService.user;
-    /*
     return this.userService.isStudent() &&
       course.students.filter(obj => obj._id === user._id).length > 0;
-      */
-    return true;
   }
 }
