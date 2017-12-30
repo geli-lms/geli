@@ -5,6 +5,7 @@ import {ITaskModel, Task} from '../Task';
 import {ITask} from '../../../../shared/models/task/ITask';
 import {InternalServerError} from 'routing-controllers';
 import {ILectureModel, Lecture} from '../Lecture';
+import * as winston from 'winston';
 
 interface ITaskUnitModel extends ITaskUnit, mongoose.Document {
   exportJSON: () => Promise<ITaskUnit>;
@@ -49,8 +50,13 @@ taskUnitSchema.methods.exportJSON = async function() {
 
   for (const taskId of tasks) {
     const task: ITaskModel = await Task.findById(taskId);
-    const taskExport = await task.exportJSON();
-    obj.tasks.push(taskExport);
+
+    if (task) {
+      const taskExport = await task.exportJSON();
+      obj.tasks.push(taskExport);
+    } else {
+      winston.log('warn', 'task(' + taskId + ') was referenced by unit(' + this._id + ') but does not exist anymore');
+    }
   }
 
   return obj;
