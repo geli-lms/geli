@@ -8,7 +8,7 @@ const appRoot = require('app-root-path');
 import {Response} from 'express';
 import {
   Body, Post, Get, Header, NotFoundError, ContentType, UseInterceptor, OnUndefined, UseBefore, Param, Res, Controller,
-  Action
+  Action, CurrentUser
 } from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 
@@ -25,7 +25,9 @@ import {FileUnit} from '../models/units/FileUnit';
 import {VideoUnit} from '../models/units/VideoUnit';
 import {IVideoUnit} from '../../../shared/models/units/IVideoUnit';
 import {Task} from '../models/Task';
-import {Lecture} from "../models/Lecture";
+import {Lecture} from '../models/Lecture';
+import {IUser} from '../../../shared/models/IUser';
+import {Course} from '../models/Course';
 
 
 // Set all routes to json, because the download is streaming data and do not use json headers
@@ -96,89 +98,95 @@ export class DownloadController {
 
   @Post('/')
   @ContentType('application/json')
-  async postDownloadRequest(@Body() data: IDownload) {
+  async postDownloadRequest(@Body() data: IDownload, @CurrentUser() user: IUser) {
 
-    if (data.lectures.length === 0) {
-      throw new NotFoundError();
-    }
+    const course = await Course.findOne({_id: data.courseName});
 
-    const size = await this.calcPackage(data);
+    if (course.students.indexOf(user._id) !== -1 || course.courseAdmin === user._id || course.teachers.indexOf(user._id) !== -1) {
 
-    if(size.totalSize > 200 || size.tooLargeFiles.length !== 0) {
-      throw new NotFoundError();
-    }
-
-    const fileName = await crypto.pseudoRandomBytes(16).toString('hex');
-    const filepath = appRoot + '/temp/' + fileName + '.zip';
-    const output = fs.createWriteStream(filepath);
-    const archive = archiver('zip', {
-      zlib: {level: 9} // Sets the compression level.
-    });
-
-    archive.on('error', function (err: Error) {
-      throw err;
-    });
-
-    archive.pipe(output);
-
-    let lecCounter = 1;
-
-    for (const lec of data.lectures) {
-
-      const localLecture = await Lecture.findOne({_id: lec.lectureId});
-      let unitCounter = 1;
-
-      for (const unit of lec.units) {
-
-        const localUnit = await Unit.findOne({_id: unit.unitId});
-        if (localUnit instanceof FreeTextUnit) {
-          const freeTextUnit = <IFreeTextUnit><any>localUnit;
-          archive.append(freeTextUnit.name + '\n' + freeTextUnit.description + '\n' + freeTextUnit.markdown, {name: lecCounter + '_' +
-            localLecture.name + '/' + unitCounter + '_' + freeTextUnit.name + '.md'});
-        } else if (localUnit instanceof CodeKataUnit) {
-          const codeKataUnit = <ICodeKataUnit><any>localUnit;
-          archive.append(codeKataUnit.description + '\n' + codeKataUnit.definition + '\n' +
-            codeKataUnit.code + '\n' + codeKataUnit.test, {name: lecCounter + '_' + localLecture.name + '/' + unitCounter + '_' + codeKataUnit.name + '.txt'});
-        } else if (localUnit instanceof FileUnit) {
-          const fileUnit = <IFileUnit><any>localUnit;
-          fileUnit.files.forEach((file, index) => {
-            if (unit.files.indexOf(index) > -1) {
-              archive.file(file.path, {name: lecCounter + '_' + localLecture.name + '/' + unitCounter + '_' + file.name});
-            }
-          });
-        } else if (localUnit instanceof VideoUnit) {
-          const videoFileUnit = <IVideoUnit><any>localUnit;
-          videoFileUnit.files.forEach((file, index) => {
-            if (unit.files.indexOf(index) > -1) {
-              archive.file(file.path, {name: lecCounter + '_' + localLecture.name + '/' + unitCounter + '_' + file.name});
-            }
-          });
-        } else if (localUnit instanceof TaskUnit) {
-          const taskUnit = <ITaskUnit><any>localUnit;
-          let fileStream = '';
-
-          for (const task of taskUnit.tasks) {
-            const newTask = await Task.findOne(task._id);
-            fileStream = fileStream + newTask.name + '\n';
-
-            for (const answer of newTask.answers) {
-              fileStream = fileStream + answer.text + ': [ ]\n';
-            }
-            fileStream = fileStream + '-------------------------------------\n';
-            archive.append(taskUnit.description + '\n' + fileStream, {name: lecCounter + '_' + localLecture.name + '/' + unitCounter + '. ' + taskUnit.name + '.txt'});
-          }
-        } else {
-          throw new NotFoundError();
-        }
-        unitCounter++;
+      if (data.lectures.length === 0) {
+        throw new NotFoundError();
       }
-      lecCounter++;
-    }
 
-    return new Promise(resolve => {
-      archive.finalize();
-      archive.on('end', () => resolve(fileName));
-    });
+      const size = await this.calcPackage(data);
+
+      if (size.totalSize > 200 || size.tooLargeFiles.length !== 0) {
+        throw new NotFoundError();
+      }
+
+      const fileName = await crypto.pseudoRandomBytes(16).toString('hex');
+      const filepath = appRoot + '/temp/' + fileName + '.zip';
+      const output = fs.createWriteStream(filepath);
+      const archive = archiver('zip', {
+        zlib: {level: 9} // Sets the compression level.
+      });
+
+      archive.pipe(output);
+
+      let lecCounter = 1;
+
+      for (const lec of data.lectures) {
+
+        const localLecture = await Lecture.findOne({_id: lec.lectureId});
+        let unitCounter = 1;
+
+        for (const unit of lec.units) {
+
+          const localUnit = await Unit.findOne({_id: unit.unitId});
+          if (localUnit instanceof FreeTextUnit) {
+            const freeTextUnit = <IFreeTextUnit><any>localUnit;
+            archive.append(freeTextUnit.name + '\n' + freeTextUnit.description + '\n' + freeTextUnit.markdown, {
+              name: lecCounter + '_' +
+              localLecture.name + '/' + unitCounter + '_' + freeTextUnit.name + '.md'
+            });
+          } else if (localUnit instanceof CodeKataUnit) {
+            const codeKataUnit = <ICodeKataUnit><any>localUnit;
+            archive.append(codeKataUnit.description + '\n' + codeKataUnit.definition + '\n' +
+              codeKataUnit.code + '\n' + codeKataUnit.test, {name: lecCounter + '_' + localLecture.name + '/' + unitCounter + '_' + codeKataUnit.name + '.txt'});
+          } else if (localUnit instanceof FileUnit) {
+            const fileUnit = <IFileUnit><any>localUnit;
+            fileUnit.files.forEach((file, index) => {
+              if (unit.files.indexOf(index) > -1) {
+                archive.file(file.path, {name: lecCounter + '_' + localLecture.name + '/' + unitCounter + '_' + file.name});
+              }
+            });
+          } else if (localUnit instanceof VideoUnit) {
+            const videoFileUnit = <IVideoUnit><any>localUnit;
+            videoFileUnit.files.forEach((file, index) => {
+              if (unit.files.indexOf(index) > -1) {
+                archive.file(file.path, {name: lecCounter + '_' + localLecture.name + '/' + unitCounter + '_' + file.name});
+              }
+            });
+          } else if (localUnit instanceof TaskUnit) {
+            const taskUnit = <ITaskUnit><any>localUnit;
+            let fileStream = '';
+
+            for (const task of taskUnit.tasks) {
+              const newTask = await Task.findOne(task._id);
+              fileStream = fileStream + newTask.name + '\n';
+
+              for (const answer of newTask.answers) {
+                fileStream = fileStream + answer.text + ': [ ]\n';
+              }
+              fileStream = fileStream + '-------------------------------------\n';
+              archive.append(taskUnit.description + '\n' + fileStream, {name: lecCounter + '_' + localLecture.name + '/' + unitCounter + '. ' + taskUnit.name + '.txt'});
+            }
+          } else {
+            throw new NotFoundError();
+          }
+          unitCounter++;
+        }
+        lecCounter++;
+      }
+      return new Promise((resolve, reject) => {
+        archive.on('error', () => reject(fileName));
+        archive.finalize();
+        archive.on('end', () => resolve(fileName));
+      });
+    } else {
+      throw new NotFoundError();
+    }
   }
+
 
 }
