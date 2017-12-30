@@ -4,7 +4,8 @@ import {ICourse} from '../../../../../../../shared/models/ICourse';
 import {LectureCheckboxComponent} from './lecture-checkbox/lecture-checkbox.component';
 import {DownloadReq} from 'app/shared/services/data.service';
 import {IDownload} from '../../../../../../../shared/models/IDownload';
-import {IDownloadSize} from "../../../../../../../shared/models/IDownloadSize";
+import {IDownloadSize} from '../../../../../../../shared/models/IDownloadSize';
+import {SaveFileService} from '../../../shared/services/save-file.service'
 
 import { saveAs } from 'file-saver/FileSaver';
 
@@ -24,7 +25,8 @@ export class SelectUnitDialogComponent implements OnInit{
   constructor(public dialogRef: MatDialogRef<SelectUnitDialogComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any,
               private downloadReq: DownloadReq,
-              public snackBar: MatSnackBar) {
+              public snackBar: MatSnackBar,
+              private saveFileService: SaveFileService) {
   }
 
   ngOnInit() {
@@ -74,7 +76,7 @@ export class SelectUnitDialogComponent implements OnInit{
     if (iDownload.tooLargeFiles.length == 0) {
       const result = await this.downloadReq.postDownloadReqForCourse(downloadObj);
       const response = <Response> await this.downloadReq.getFile(result.toString());
-      saveAs(response.body, this.course.name + '.zip');
+      saveAs(response.body, this.saveFileService.replaceCharInFilename(this.course.name) + '.zip');
       this.showSpinner = false;
       this.dialogRef.close();
     } else {

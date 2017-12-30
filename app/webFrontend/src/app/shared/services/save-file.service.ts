@@ -6,12 +6,14 @@ export class SaveFileService {
   constructor() {
   }
 
+  replaceCharInFilename(filename: string) {
+    return filename.replace(/[^a-zA-Z0-9 -]/g, '')    // remove special characters
+      .replace(/ /g, '-')             // replace space by dashes
+      .replace(/-+/g, '-');
+  }
+
   save(name: string, content: string, fileEnding: string, type: string, downloadType: string) {
-    const filename = name
-        .replace(/[^a-zA-Z0-9 -]/g, '')    // remove special characters
-        .replace(/ /g, '-')             // replace space by dashes
-        .replace(/-+/g, '-')            // trim multiple dashes
-      + fileEnding;
+    const filename = this.replaceCharInFilename(name) + fileEnding;
     const blob = new Blob(
       [content],
       {type: type});

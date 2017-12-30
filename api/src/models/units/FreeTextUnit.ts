@@ -6,6 +6,7 @@ import {ILectureModel, Lecture} from '../Lecture';
 
 interface IFreeTextUnitModel extends IFreeTextUnit, mongoose.Document {
   exportJSON: () => Promise<IFreeTextUnit>;
+  toFile: () => String;
 }
 
 const freeTextUnitSchema = new mongoose.Schema({
@@ -14,6 +15,9 @@ const freeTextUnitSchema = new mongoose.Schema({
   }
 });
 
+freeTextUnitSchema.statics.toFile = function (unit: IFreeTextUnit) {
+  return unit.name + '\n' + unit.description + '\n' + unit.markdown;
+};
 
 freeTextUnitSchema.statics.importJSON = async function(unit: IFreeTextUnit, courseId: string, lectureId: string) {
   unit._course = courseId;

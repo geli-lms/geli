@@ -9,6 +9,7 @@ import * as winston from 'winston';
 
 interface ITaskUnitModel extends ITaskUnit, mongoose.Document {
   exportJSON: () => Promise<ITaskUnit>;
+  toFile: () => Promise<String>;
 }
 
 const taskUnitSchema = new mongoose.Schema({
@@ -85,6 +86,24 @@ taskUnitSchema.statics.importJSON = async function(taskUnit: ITaskUnit, courseId
     const newError = new InternalServerError('Failed to import tasks');
     newError.stack += '\nCaused by: ' + err.message + '\n' + err.stack;
     throw newError;
+  }
+};
+
+taskUnitSchema.statics.toFile = async function(unit: ITaskUnit) {
+  let fileStream = unit.description;
+
+  for (const task of unit.tasks) {
+    const newTask = await Task.findOne(task._id);
+    fileStream = fileStream + newTask.name + '\n';
+
+    for (const answer of newTask.answers) {
+      fileStream = fileStream + answer.text + ': [ ]\n';
+    }
+    fileStream = fileStream + '-------------------------------------\n';
+
+    return new Promise((resolve) => {
+      return resolve(fileStream);
+    });
   }
 };
 
