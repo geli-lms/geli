@@ -39,7 +39,7 @@ export class DownloadController {
   async calcPackage(pack: IDownload) {
 
     let localTotalSize = 0;
-    let localTooLargeFiles : Array<String> = [];
+    const localTooLargeFiles: Array<String> = [];
 
     for (const lec of pack.lectures) {
       for (const unit of lec.units) {
@@ -135,14 +135,13 @@ export class DownloadController {
           const localUnit = await Unit.findOne({_id: unit.unitId});
           if (localUnit instanceof FreeTextUnit) {
             const freeTextUnit = <IFreeTextUnit><any>localUnit;
-            archive.append(freeTextUnit.name + '\n' + freeTextUnit.description + '\n' + freeTextUnit.markdown, {
-              name: lecCounter + '_' +
-              localLecture.name + '/' + unitCounter + '_' + freeTextUnit.name + '.md'
+            archive.append(FreeTextUnit.schema.statics.toFile(freeTextUnit), {
+              name: lecCounter + '_' + localLecture.name + '/' + unitCounter + '_' + freeTextUnit.name + '.md'
             });
           } else if (localUnit instanceof CodeKataUnit) {
             const codeKataUnit = <ICodeKataUnit><any>localUnit;
-            archive.append(codeKataUnit.description + '\n' + codeKataUnit.definition + '\n' +
-              codeKataUnit.code + '\n' + codeKataUnit.test, {name: lecCounter + '_' + localLecture.name + '/' + unitCounter + '_' + codeKataUnit.name + '.txt'});
+            archive.append(CodeKataUnit.schema.statics.toFile(codeKataUnit),
+              {name: lecCounter + '_' + localLecture.name + '/' + unitCounter + '_' + codeKataUnit.name + '.txt'});
           } else if (localUnit instanceof FileUnit) {
             const fileUnit = <IFileUnit><any>localUnit;
             fileUnit.files.forEach((file, index) => {
@@ -159,18 +158,8 @@ export class DownloadController {
             });
           } else if (localUnit instanceof TaskUnit) {
             const taskUnit = <ITaskUnit><any>localUnit;
-            let fileStream = '';
-
-            for (const task of taskUnit.tasks) {
-              const newTask = await Task.findOne(task._id);
-              fileStream = fileStream + newTask.name + '\n';
-
-              for (const answer of newTask.answers) {
-                fileStream = fileStream + answer.text + ': [ ]\n';
-              }
-              fileStream = fileStream + '-------------------------------------\n';
-              archive.append(taskUnit.description + '\n' + fileStream, {name: lecCounter + '_' + localLecture.name + '/' + unitCounter + '. ' + taskUnit.name + '.txt'});
-            }
+              archive.append(await Task.schema.statics.toFile(taskUnit),
+                {name: lecCounter + '_' + localLecture.name + '/' + unitCounter + '. ' + taskUnit.name + '.txt'});
           } else {
             throw new NotFoundError();
           }

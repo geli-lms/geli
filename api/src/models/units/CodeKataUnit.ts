@@ -6,6 +6,7 @@ import {ILectureModel, Lecture} from '../Lecture';
 
 interface ICodeKataModel extends ICodeKataUnit, mongoose.Document {
   exportJSON: () => Promise<ICodeKataUnit>;
+  toFile: () => String;
 }
 
 const codeKataSchema = new mongoose.Schema({
@@ -38,6 +39,11 @@ codeKataSchema.statics.importJSON = async function(unit: ICodeKataUnit, courseId
     newError.stack += '\nCaused by: ' + err.message + '\n' + err.stack;
     throw newError;
   }
+};
+
+codeKataSchema.statics.toFile = function (unit: ICodeKataUnit) {
+  return unit.description + '\n' + unit.definition + '\n' +
+    unit.code + '\n' + unit.test;
 };
 
 const CodeKataUnit = Unit.discriminator('code-kata', codeKataSchema);
