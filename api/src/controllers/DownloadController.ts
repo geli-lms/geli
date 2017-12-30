@@ -36,6 +36,24 @@ import {Course} from '../models/Course';
 @UseBefore(passportJwtMiddleware)
 export class DownloadController {
 
+
+  constructor() {
+    setInterval(this.cleanupCache, 60000);
+  }
+
+  cleanupCache() {
+    cache.expire((record: Record) => {
+      fs.unlink(appRoot + '/temp/' + record.key + '.zip', (err: Error) => {
+        if (err) {
+          return false;
+        } else {
+          return false;
+        }
+      });
+    });
+  }
+
+
   replaceCharInFilename(filename: string) {
     return filename.replace(/[^a-zA-Z0-9 -]/g, '')    // remove special characters
       .replace(/ /g, '-')             // replace space by dashes
@@ -79,7 +97,6 @@ export class DownloadController {
         }
       }
     }
-
     const size = {totalSize: localTotalSize, tooLargeFiles: localTooLargeFiles};
     return size;
   }
