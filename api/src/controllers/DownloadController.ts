@@ -4,6 +4,8 @@ const fs = require('fs');
 const archiver = require('archiver');
 import crypto = require('crypto');
 
+const cache = require('node-file-cache').create({life: 3600});
+
 const appRoot = require('app-root-path');
 import {Response} from 'express';
 import {Body, Post, Get, NotFoundError, ContentType, UseBefore, Param, Res, Controller,
@@ -101,7 +103,38 @@ export class DownloadController {
     return this.calcPackage(data);
   }
 
-  @Post('/')
+  async createFileHash(pack: IDownload) {
+    let data: string = '';
+
+    for (const lec of pack.lectures) {
+      for (const unit of lec.units) {
+
+        const localUnit = await
+        Unit.findOne({_id: unit.unitId});
+        if (localUnit instanceof FileUnit) {
+          const fileUnit = <IFileUnit><any>localUnit;
+          fileUnit.files.forEach((file, index) => {
+            if (unit.files.indexOf(index) > -1) {
+                data = data + file.name;
+            }
+          });
+        } else if (localUnit instanceof VideoUnit) {
+          const videoFileUnit = <IVideoUnit><any>localUnit;
+          videoFileUnit.files.forEach((file, index) => {
+            if (unit.files.indexOf(index) > -1) {
+              data = data + file.name;
+            }
+          });
+        } else {
+          data = data + localUnit._id;
+        }
+      }
+    }
+
+    return crypto.createHash('sha1').update(data).digest("hex");
+  }
+
+    @Post('/')
   @ContentType('application/json')
   async postDownloadRequest(@Body() data: IDownload, @CurrentUser() user: IUser) {
 
@@ -120,65 +153,74 @@ export class DownloadController {
         throw new NotFoundError();
       }
 
-      const fileName = await crypto.pseudoRandomBytes(16).toString('hex');
-      const filepath = appRoot + '/temp/' + fileName + '.zip';
-      const output = fs.createWriteStream(filepath);
-      const archive = archiver('zip', {
-        zlib: {level: 9}
-      });
+      const hash = await this.createFileHash(data);
+      const key = cache.get(hash);
 
-      archive.pipe(output);
+      if(key === null) {
+        //make new
 
-      let lecCounter = 1;
+        const filepath = appRoot + '/temp/' + hash + '.zip';
+        const output = fs.createWriteStream(filepath);
+        const archive = archiver('zip', {
+          zlib: {level: 9}
+        });
 
-      for (const lec of data.lectures) {
+        archive.pipe(output);
 
-        const localLecture = await Lecture.findOne({_id: lec.lectureId});
-        const lcName = this.replaceCharInFilename(localLecture.name);
-        let unitCounter = 1;
+        let lecCounter = 1;
 
-        for (const unit of lec.units) {
+        for (const lec of data.lectures) {
 
-          const localUnit = await Unit.findOne({_id: unit.unitId});
-          if (localUnit instanceof FreeTextUnit) {
-            const freeTextUnit = <IFreeTextUnit><any>localUnit;
-            archive.append(FreeTextUnit.schema.statics.toFile(freeTextUnit), {
-              name: lecCounter + '_' + lcName + '/' + unitCounter + '_' + this.replaceCharInFilename(freeTextUnit.name) + '.md'
-            });
-          } else if (localUnit instanceof CodeKataUnit) {
-            const codeKataUnit = <ICodeKataUnit><any>localUnit;
-            archive.append(CodeKataUnit.schema.statics.toFile(codeKataUnit),
-              {name: lecCounter + '_' + lcName + '/' + unitCounter + '_' + this.replaceCharInFilename(codeKataUnit.name) + '.txt'});
-          } else if (localUnit instanceof FileUnit) {
-            const fileUnit = <IFileUnit><any>localUnit;
-            fileUnit.files.forEach((file, index) => {
-              if (unit.files.indexOf(index) > -1) {
-                archive.file(file.path, {name: lecCounter + '_' + lcName + '/' + unitCounter + '_' + file.alias});
-              }
-            });
-          } else if (localUnit instanceof VideoUnit) {
-            const videoFileUnit = <IVideoUnit><any>localUnit;
-            videoFileUnit.files.forEach((file, index) => {
-              if (unit.files.indexOf(index) > -1) {
-                archive.file(file.path, {name: lecCounter + '_' + lcName + '/' + unitCounter + '_' + file.alias});
-              }
-            });
-          } else if (localUnit instanceof TaskUnit) {
-            const taskUnit = <ITaskUnit><any>localUnit;
+          const localLecture = await Lecture.findOne({_id: lec.lectureId});
+          const lcName = this.replaceCharInFilename(localLecture.name);
+          let unitCounter = 1;
+
+          for (const unit of lec.units) {
+
+            const localUnit = await Unit.findOne({_id: unit.unitId});
+            if (localUnit instanceof FreeTextUnit) {
+              const freeTextUnit = <IFreeTextUnit><any>localUnit;
+              archive.append(FreeTextUnit.schema.statics.toFile(freeTextUnit), {
+                name: lecCounter + '_' + lcName + '/' + unitCounter + '_' + this.replaceCharInFilename(freeTextUnit.name) + '.md'
+              });
+            } else if (localUnit instanceof CodeKataUnit) {
+              const codeKataUnit = <ICodeKataUnit><any>localUnit;
+              archive.append(CodeKataUnit.schema.statics.toFile(codeKataUnit),
+                {name: lecCounter + '_' + lcName + '/' + unitCounter + '_' + this.replaceCharInFilename(codeKataUnit.name) + '.txt'});
+            } else if (localUnit instanceof FileUnit) {
+              const fileUnit = <IFileUnit><any>localUnit;
+              fileUnit.files.forEach((file, index) => {
+                if (unit.files.indexOf(index) > -1) {
+                  archive.file(file.path, {name: lecCounter + '_' + lcName + '/' + unitCounter + '_' + file.alias});
+                }
+              });
+            } else if (localUnit instanceof VideoUnit) {
+              const videoFileUnit = <IVideoUnit><any>localUnit;
+              videoFileUnit.files.forEach((file, index) => {
+                if (unit.files.indexOf(index) > -1) {
+                  archive.file(file.path, {name: lecCounter + '_' + lcName + '/' + unitCounter + '_' + file.alias});
+                }
+              });
+            } else if (localUnit instanceof TaskUnit) {
+              const taskUnit = <ITaskUnit><any>localUnit;
               archive.append(await Task.schema.statics.toFile(taskUnit),
                 {name: lecCounter + '_' + lcName + '/' + unitCounter + '. ' + this.replaceCharInFilename(taskUnit.name) + '.txt'});
-          } else {
-            throw new NotFoundError();
+            } else {
+              throw new NotFoundError();
+            }
+            unitCounter++;
           }
-          unitCounter++;
+          lecCounter++;
         }
-        lecCounter++;
+        return new Promise((resolve, reject) => {
+          archive.on('error', () => reject(hash));
+          archive.finalize();
+          cache.set(hash,hash);
+          archive.on('end', () => resolve(hash));
+        });
+      } else {
+        return hash;
       }
-      return new Promise((resolve, reject) => {
-        archive.on('error', () => reject(fileName));
-        archive.finalize();
-        archive.on('end', () => resolve(fileName));
-      });
     } else {
       throw new NotFoundError();
     }
