@@ -1,5 +1,7 @@
-<mat-list-item class="lecture">{{lecture.name}}
+<mat-list-item class="lecture">
+  <h4>{{lecture.name}}</h4>
   <span class="spacer"></span>
+  <span class="lightgray"> Lecture </span>
   <mat-checkbox [(ngModel)]="chkbox" (change)="onChange()" class="chkbox"></mat-checkbox>
 </mat-list-item>
 <mat-list>
