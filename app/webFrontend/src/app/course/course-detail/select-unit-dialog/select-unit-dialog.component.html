@@ -6,6 +6,7 @@
   <mat-list>
     <mat-list-item>Select All
       <span class="spacer"></span>
+      <span class="lightgray"> Course </span>
       <mat-checkbox [(ngModel)]="chkbox" (change)="onChange()" class="chkbox"></mat-checkbox>
     </mat-list-item>
     <app-lecture-checkbox (valueChanged)="onChildEvent($event)" *ngFor=" let lecture of course.lectures" [lecture]= "lecture"></app-lecture-checkbox>

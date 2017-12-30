@@ -79,14 +79,15 @@ export class SelectUnitDialogComponent implements OnInit{
       this.dialogRef.close();
     } else {
       this.showSpinner = false;
-      this.snackBar.open('The selected files are too big! Please download the red-marked files seperately!', 'Dismiss', {duration: 10000});
+      this.snackBar.open('Some selected files are too big! Please download Units with a Download-Button seperately!', 'Dismiss', {duration: 10000});
         iDownload.tooLargeFiles.forEach(file => {
           this.childLectures.forEach(lecture => {
             lecture.childUnits.forEach(unit => {
               if (unit.files) {
                 unit.childUnits.forEach(fileUnit => {
                   if (fileUnit.file.path == file ) {
-                    fileUnit.redText = true;
+                      fileUnit.showDL = true;
+                      // TODO: hier Link übergeben
                   }
                 });
               }
