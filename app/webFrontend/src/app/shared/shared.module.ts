@@ -13,7 +13,6 @@ import {PasswordInputComponent} from './components/password-input/password-input
 import {ExpandableDivComponent} from './components/expandable-div/expandable-div.component';
 import {ButtonSaveCancelComponent} from './components/button-save-cancel/button-save-cancel.component';
 
-
 @NgModule({
   imports: [
     CommonModule,

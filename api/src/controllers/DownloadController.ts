@@ -1,18 +1,9 @@
 import {promisify} from 'util';
-
-const fs = require('fs');
-const archiver = require('archiver');
-import crypto = require('crypto');
-
-const cache = require('node-file-cache').create({life: 3600});
-
-const appRoot = require('app-root-path');
 import {Response} from 'express';
 import {Body, Post, Get, NotFoundError, ContentType, UseBefore, Param, Res, Controller,
   CurrentUser
 } from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
-
 import {CodeKataUnit} from '../models/units/CodeKataUnit';
 import {Unit} from '../models/units/Unit';
 import {IDownload} from '../../../shared/models/IDownload';
@@ -30,19 +21,24 @@ import {Lecture} from '../models/Lecture';
 import {IUser} from '../../../shared/models/IUser';
 import {Course} from '../models/Course';
 
+const fs = require('fs');
+const archiver = require('archiver');
+import crypto = require('crypto');
+const cache = require('node-file-cache').create({life: 3600});
+const appRoot = require('app-root-path');
+
 
 // Set all routes to json, because the download is streaming data and do not use json headers
 @Controller('/download')
 @UseBefore(passportJwtMiddleware)
 export class DownloadController {
 
-
   constructor() {
     setInterval(this.cleanupCache, 60000);
   }
 
   cleanupCache() {
-    cache.expire((record: Record) => {
+    cache.expire((record: any) => {
       fs.unlink(appRoot + '/temp/' + record.key + '.zip', (err: Error) => {
         if (err) {
           return false;
@@ -53,13 +49,11 @@ export class DownloadController {
     });
   }
 
-
   replaceCharInFilename(filename: string) {
     return filename.replace(/[^a-zA-Z0-9 -]/g, '')    // remove special characters
       .replace(/ /g, '-')             // replace space by dashes
       .replace(/-+/g, '-');
   }
-
 
   async calcPackage(pack: IDownload) {
 
@@ -101,8 +95,6 @@ export class DownloadController {
     return size;
   }
 
-
-
   @Get('/:id')
   async getArchivedFile(@Param('id') id: string, @Res() response: Response) {
     const filePath = appRoot + '/temp/' + id + '.zip';
@@ -111,7 +103,6 @@ export class DownloadController {
     response.setHeader('Access-Control-Expose-Headers', 'Content-Disposition');
     await promisify<string, void>(response.download.bind(response))(filePath);
     return response;
-
   }
 
   @Post('/size/')
@@ -121,7 +112,7 @@ export class DownloadController {
   }
 
   async createFileHash(pack: IDownload) {
-    let data: string = '';
+    let data = '';
 
     for (const lec of pack.lectures) {
       for (const unit of lec.units) {
@@ -148,7 +139,7 @@ export class DownloadController {
       }
     }
 
-    return crypto.createHash('sha1').update(data).digest("hex");
+    return crypto.createHash('sha1').update(data).digest('hex');
   }
 
     @Post('/')
@@ -173,9 +164,7 @@ export class DownloadController {
       const hash = await this.createFileHash(data);
       const key = cache.get(hash);
 
-      if(key === null) {
-        //make new
-
+      if (key === null) {
         const filepath = appRoot + '/temp/' + hash + '.zip';
         const output = fs.createWriteStream(filepath);
         const archive = archiver('zip', {
@@ -185,7 +174,6 @@ export class DownloadController {
         archive.pipe(output);
 
         let lecCounter = 1;
-
         for (const lec of data.lectures) {
 
           const localLecture = await Lecture.findOne({_id: lec.lectureId});
@@ -232,7 +220,7 @@ export class DownloadController {
         return new Promise((resolve, reject) => {
           archive.on('error', () => reject(hash));
           archive.finalize();
-          cache.set(hash,hash);
+          cache.set(hash, hash);
           archive.on('end', () => resolve(hash));
         });
       } else {
@@ -242,6 +230,4 @@ export class DownloadController {
       throw new NotFoundError();
     }
   }
-
-
 }

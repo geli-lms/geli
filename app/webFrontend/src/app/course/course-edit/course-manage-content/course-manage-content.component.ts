@@ -132,7 +132,7 @@ export class CourseManageContentComponent implements OnInit, OnDestroy {
     try {
       const lectureJSON = await this.exportService.exportLecture(lecture);
 
-      this.saveFileService.save(lecture.name, JSON.stringify(lectureJSON, null, 2),'.json','application/json','text/json');
+      this.saveFileService.save(lecture.name, JSON.stringify(lectureJSON, null, 2));
     } catch (err) {
       this.snackBar.open('Export lecture failed ' + err.json().message, 'Dismiss');
     }
@@ -315,7 +315,7 @@ export class CourseManageContentComponent implements OnInit, OnDestroy {
     try {
       const unitJSON = await this.exportService.exportUnit(unit);
 
-      this.saveFileService.save(unit.name, JSON.stringify(unitJSON, null, 2),'.json','application/json','text/json');
+      this.saveFileService.save(unit.name, JSON.stringify(unitJSON, null, 2));
     } catch (err) {
       this.snackBar.open('Export unit failed ' + err.json().message, 'Dismiss');
     }
