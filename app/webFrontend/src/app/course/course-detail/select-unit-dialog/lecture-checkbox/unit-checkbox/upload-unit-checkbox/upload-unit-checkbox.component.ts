@@ -1,7 +1,5 @@
 import {Component, Input, Output, OnInit, EventEmitter} from '@angular/core';
-import {IFile} from "../../../../../../../../../../shared/models/IFile";
-import {IVideoUnit} from "../../../../../../../../../../shared/models/units/IVideoUnit";
-import {IFileUnit} from "../../../../../../../../../../shared/models/units/IFileUnit";
+import {IFile} from '../../../../../../../../../../shared/models/IFile';
 
 @Component({
   selector: 'app-upload-unit-checkbox',
@@ -12,9 +10,9 @@ export class UploadUnitCheckboxComponent implements OnInit {
   @Input()
   file: IFile;
   @Input()
-  chkbox: boolean;
+  chkbox = false;
   @Input()
-  showDL: boolean;
+  showDL = false;
   @Input()
   unit_desc: string;
   @Output()
@@ -24,8 +22,6 @@ export class UploadUnitCheckboxComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.chkbox = false;
-    this.showDL = false;
   }
 
   emitEvent() {
@@ -33,7 +29,6 @@ export class UploadUnitCheckboxComponent implements OnInit {
   }
 
   dlFile() {
-
   }
 
 }

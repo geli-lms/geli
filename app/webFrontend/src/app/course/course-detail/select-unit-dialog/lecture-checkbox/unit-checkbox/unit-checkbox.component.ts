@@ -5,7 +5,7 @@ import {
 import {IUnit} from '../../../../../../../../../shared/models/units/IUnit';
 import {IFileUnit} from '../../../../../../../../../shared/models/units/IFileUnit';
 import {IVideoUnit} from '../../../../../../../../../shared/models/units/IVideoUnit';
-import {UploadUnitCheckboxComponent} from "./upload-unit-checkbox/upload-unit-checkbox.component";
+import {UploadUnitCheckboxComponent} from './upload-unit-checkbox/upload-unit-checkbox.component';
 
 
 @Component({
@@ -16,9 +16,9 @@ import {UploadUnitCheckboxComponent} from "./upload-unit-checkbox/upload-unit-ch
 })
 export class UnitCheckboxComponent implements OnInit {
   @Input()
-  unit : IUnit;
+  unit: IUnit;
   @Input()
-  chkbox: boolean;
+  chkbox = false;
   unit_desc: string;
 
   @ViewChildren(UploadUnitCheckboxComponent)
@@ -35,30 +35,28 @@ export class UnitCheckboxComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.chkbox = false;
-
     switch (this.unit.type) {
       case 'video':
         const videoUnit = <IVideoUnit><any> this.unit;
         this.files = videoUnit.files;
-        this.unit_desc = "Video Unit";
-        this.child_unit_desc = "Video";
+        this.unit_desc = 'Video Unit';
+        this.child_unit_desc = 'Video';
         break;
       case 'file':
         const fileUnit = <IFileUnit><any> this.unit;
         this.files = fileUnit.files;
-        this.unit_desc = "File Unit";
-        this.child_unit_desc = "File";
+        this.unit_desc = 'File Unit';
+        this.child_unit_desc = 'File';
         break;
       case 'task':
-        this.unit_desc = "Task Unit";
+        this.unit_desc = 'Task Unit';
         break;
       case 'code-kata':
-        this.unit_desc = "Code-Kata Unit";
+        this.unit_desc = 'Code-Kata Unit';
         break;
       case 'free-text':
-        this.unit_desc = "Free-Text Unit";
-        break
+        this.unit_desc = 'Free-Text Unit';
+        break;
       default:
     }
   }
@@ -81,7 +79,7 @@ export class UnitCheckboxComponent implements OnInit {
   onChildEvent() {
     let childChecked = false;
     this.childUnits.forEach(unit => {
-      if (unit.chkbox == true) {
+      if (unit.chkbox === true) {
         childChecked = true;
         this.chkbox = true;
       }

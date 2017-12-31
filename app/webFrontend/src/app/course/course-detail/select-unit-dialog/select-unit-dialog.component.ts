@@ -15,7 +15,8 @@ import { saveAs } from 'file-saver/FileSaver';
   styleUrls: ['./select-unit-dialog.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class SelectUnitDialogComponent implements OnInit{
+
+export class SelectUnitDialogComponent implements OnInit {
   course: ICourse;
   chkbox: boolean;
   showSpinner: boolean;
@@ -52,7 +53,7 @@ export class SelectUnitDialogComponent implements OnInit{
   onChildEvent() {
     let childChecked = false;
     this.childLectures.forEach(lec => {
-      if (lec.chkbox == true) {
+      if (lec.chkbox === true) {
         childChecked = true;
         this.chkbox = true;
       }
@@ -73,7 +74,7 @@ export class SelectUnitDialogComponent implements OnInit{
     const sizeResult = await this.downloadReq.getPackageSize(downloadObj);
     const iDownload = <IDownloadSize><any>sizeResult;
     console.dir(iDownload);
-    if (iDownload.tooLargeFiles.length == 0) {
+    if (iDownload.tooLargeFiles.length === 0) {
       const result = await this.downloadReq.postDownloadReqForCourse(downloadObj);
       const response = <Response> await this.downloadReq.getFile(result.toString());
       saveAs(response.body, this.saveFileService.replaceCharInFilename(this.course.name) + '.zip');
@@ -81,13 +82,14 @@ export class SelectUnitDialogComponent implements OnInit{
       this.dialogRef.close();
     } else {
       this.showSpinner = false;
-      this.snackBar.open('Some selected files are too big! Please download Units with a Download-Button seperately!', 'Dismiss', {duration: 10000});
+      this.snackBar.open('Some selected files are too big! Please download Units with a Download-Button seperately!',
+        'Dismiss', {duration: 10000});
         iDownload.tooLargeFiles.forEach(file => {
           this.childLectures.forEach(lecture => {
             lecture.childUnits.forEach(unit => {
               if (unit.files) {
                 unit.childUnits.forEach(fileUnit => {
-                  if (fileUnit.file.path == file ) {
+                  if (fileUnit.file.path === file ) {
                       fileUnit.showDL = true;
                       // TODO: hier Link übergeben
                   }
@@ -102,14 +104,14 @@ export class SelectUnitDialogComponent implements OnInit{
   }
 
   buildObject() {
-    let lectures = [];
+    const lectures = [];
     this.childLectures.forEach(lec => {
       if (lec.chkbox) {
-        let units = [];
+        const units = [];
         lec.childUnits.forEach(unit => {
           if (unit.chkbox) {
             if (unit.unit.type === 'video' || unit.unit.type === 'file') {
-              let files = [];
+              const files = [];
               unit.childUnits.forEach((file, index) => {
                 if (file.chkbox) {
                   files.push(index);
@@ -125,7 +127,7 @@ export class SelectUnitDialogComponent implements OnInit{
       }
     });
 
-    let downloadObj = {courseName: this.course._id, lectures: lectures};
+    const downloadObj = {courseName: this.course._id, lectures: lectures};
     return downloadObj;
   }
 

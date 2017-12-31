@@ -46,7 +46,7 @@ export class LectureCheckboxComponent implements OnInit {
   onChildEvent(event) {
     let childChecked = false;
     this.childUnits.forEach(unit => {
-      if (unit.chkbox == true) {
+      if (unit.chkbox === true) {
         childChecked = true;
         this.chkbox = true;
       }
