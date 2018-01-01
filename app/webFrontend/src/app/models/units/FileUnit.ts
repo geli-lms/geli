@@ -8,6 +8,7 @@ export class FileUnit implements IFileUnit {
   name: string;
   description: string;
   type: string;
+  __t: string;
   progressable: boolean;
   weight: number;
   updatedAt: string;
@@ -18,7 +19,7 @@ export class FileUnit implements IFileUnit {
 
   constructor(_course: ICourse) {
     this._course = _course;
-    this.type = 'file';
+    this.__t = 'file';
     this.fileUnitType = 'file';
     this.progressable = false;
     this.weight = 0;

@@ -34,6 +34,6 @@ taskUnitProgressSchema.pre('save', async function (next: () => void) {
   next();
 });
 
-const TaskUnitProgress = Progress.discriminator('task-unit-progress', taskUnitProgressSchema);
+// const TaskUnitProgress = Progress.discriminator('task-unit-progress', taskUnitProgressSchema);
 
-export {TaskUnitProgress, ITaskUnitProgressModel};
+export {taskUnitProgressSchema, ITaskUnitProgressModel};

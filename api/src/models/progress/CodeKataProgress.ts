@@ -12,6 +12,6 @@ const codeKataProgressSchema = new mongoose.Schema({
   }
 );
 
-const CodeKataProgress = Progress.discriminator('codeKata', codeKataProgressSchema);
+// const CodeKataProgress = Progress.discriminator('codeKata', codeKataProgressSchema);
 
-export {CodeKataProgress, ICodeKataProgressModel};
+export {codeKataProgressSchema, ICodeKataProgressModel};

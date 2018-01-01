@@ -9,6 +9,7 @@ export class FreeTextUnit implements IFreeTextUnit {
   _course: any;
   _id: any;
   type: string;
+  __t: string;
   progressable: boolean;
   weight: number;
 
@@ -18,6 +19,6 @@ export class FreeTextUnit implements IFreeTextUnit {
     this._course = _course;
     this.progressable = false;
     this.weight = 0;
-    this.type = 'free-text';
+    this.__t = 'free-text';
   }
 }

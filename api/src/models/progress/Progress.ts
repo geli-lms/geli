@@ -1,5 +1,7 @@
 import * as mongoose from 'mongoose';
 import {IProgress} from '../../../../shared/models/progress/IProgress';
+import {codeKataProgressSchema} from './CodeKataProgress';
+import {taskUnitProgressSchema} from './TaskUnitProgress';
 
 interface IProgressModel extends IProgress, mongoose.Document {
 }
@@ -41,5 +43,7 @@ const progressSchema = new mongoose.Schema({
 
 
 const Progress = mongoose.model<IProgressModel>('Progress', progressSchema);
+const CodeKataProgress = Progress.discriminator('codeKata', codeKataProgressSchema);
+const TaskUnitProgress = Progress.discriminator('task-unit-progress', taskUnitProgressSchema);
 
 export {Progress, IProgressModel};

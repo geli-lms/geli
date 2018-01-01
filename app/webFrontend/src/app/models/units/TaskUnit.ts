@@ -11,6 +11,7 @@ export class TaskUnit implements ITaskUnit {
   _id: any;
   title: string;
   type: string;
+  __t: string;
   progressable: boolean;
   weight: number;
 
@@ -21,6 +22,6 @@ export class TaskUnit implements ITaskUnit {
     this._course = _course;
     this.progressable = true;
     this.weight = 0;
-    this.type = 'task';
+    this.__t = 'task';
   }
 }

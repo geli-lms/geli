@@ -86,6 +86,6 @@ function validateTestArea(testArea: any) {
 codeKataSchema.pre('validate', splitCodeAreas);
 codeKataSchema.path('test').validate(validateTestArea);
 
-const CodeKataUnit = Unit.discriminator('code-kata', codeKataSchema);
+// const CodeKataUnit = Unit.discriminator('code-kata', codeKataSchema);
 
-export {CodeKataUnit, ICodeKataModel}
+export {codeKataSchema, ICodeKataModel}

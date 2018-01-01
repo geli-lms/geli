@@ -4,6 +4,10 @@ import {Progress} from '../progress/Progress';
 import {InternalServerError} from 'routing-controllers';
 
 import {Lecture} from '../Lecture';
+import {freeTextUnitSchema} from './FreeTextUnit';
+import {codeKataSchema} from './CodeKataUnit';
+import {fileUnitSchema} from './FileUnit';
+import {taskUnitSchema} from './TaskUnit';
 
 interface IUnitModel extends IUnit, mongoose.Document {
   exportJSON: () => Promise<IUnit>;
@@ -30,7 +34,6 @@ const unitSchema = new mongoose.Schema({
   },
   {
     collection: 'units',
-    discriminatorKey: 'type',
     timestamps: true,
     toObject: {
       transform: function (doc: IUnitModel, ret: any) {
@@ -76,7 +79,7 @@ unitSchema.statics.importJSON = async function(unit: IUnit, courseId: string, le
 
     return savedUnit.toObject();
   } catch (err) {
-    const newError = new InternalServerError('Failed to import unit of type ' + unit.type);
+    const newError = new InternalServerError('Failed to import unit of type ' + unit.__t);
     newError.stack += '\nCaused by: ' + err.message + '\n' + err.stack;
     throw newError;
   }
@@ -88,5 +91,9 @@ unitSchema.pre('remove', function(next: () => void) {
 });
 
 const Unit = mongoose.model<IUnitModel>('Unit', unitSchema);
+const FreeTextUnit = Unit.discriminator('free-text', freeTextUnitSchema);
+const CodeKataUnit = Unit.discriminator('code-kata', codeKataSchema);
+const FileUnit = Unit.discriminator('file', fileUnitSchema);
+const TaskUnit = Unit.discriminator('task', taskUnitSchema);
 
 export {Unit, IUnitModel};

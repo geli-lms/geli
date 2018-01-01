@@ -12,6 +12,6 @@ const freeTextUnitSchema = new mongoose.Schema({
   }
 });
 
-const FreeTextUnit = Unit.discriminator('free-text', freeTextUnitSchema);
+// const FreeTextUnit = Unit.discriminator('free-text', freeTextUnitSchema);
 
-export {FreeTextUnit, IFreeTextUnitModel}
+export {freeTextUnitSchema, IFreeTextUnitModel}

@@ -63,24 +63,6 @@ fileUnitSchema.path('files').set(function (newFiles: IFile[]) {
   return newFiles;
 });
 
-fileUnitSchema.statics.importJSON = async function(unit: IFileUnit, courseId: string, lectureId: string) {
-  unit._course = courseId;
+// const FileUnit = Unit.discriminator('file', fileUnitSchema);
 
-  try {
-    const savedFile = await new FileUnit(unit).save();
-    const lecture = await Lecture.findById(lectureId);
-    lecture.units.push(<IFileUnitModel>savedFile);
-    await lecture.save();
-
-    return savedFile.toObject();
-  } catch (err) {
-    const newError = new InternalServerError('Failed to import file');
-    newError.stack += '\nCaused by: ' + err.message + '\n' + err.stack;
-    throw newError;
-  }
-};
-
-
-const FileUnit = Unit.discriminator('file', fileUnitSchema);
-
-export {FileUnit, IFileUnitModel}
+export {fileUnitSchema, IFileUnitModel}
