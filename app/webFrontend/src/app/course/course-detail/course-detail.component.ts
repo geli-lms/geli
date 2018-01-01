@@ -5,7 +5,7 @@ import {CourseService} from '../../shared/services/data.service';
 import {ICourse} from '../../../../../../shared/models/ICourse';
 import {UserService} from '../../shared/services/user.service';
 import {MatSnackBar, MatDialog} from '@angular/material';
-import {SelectUnitDialogComponent} from './select-unit-dialog/select-unit-dialog.component';
+import {DownloadCourseDialogComponent} from './download-course-dialog/download-course-dialog.component';
 import {TitleService} from '../../shared/services/title.service';
 
 @Component({
@@ -50,7 +50,7 @@ export class CourseDetailComponent implements OnInit {
   }
 
   openDownloadDialog() {
-    const diaRef = this.dialog.open(SelectUnitDialogComponent, {
+    const diaRef = this.dialog.open(DownloadCourseDialogComponent, {
       data: {course: this.course},
       width: '800px'
     });

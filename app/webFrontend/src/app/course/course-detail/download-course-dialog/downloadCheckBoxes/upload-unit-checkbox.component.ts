@@ -1,6 +1,6 @@
 import {Component, Input, Output, OnInit, EventEmitter} from '@angular/core';
-import {IFile} from '../../../../../../../../../../shared/models/IFile';
-import {BackendService} from '../../../../../../shared/services/backend.service';
+import {IFile} from '../../../../../../../../shared/models/IFile';
+import {BackendService} from '../../../../shared/services/backend.service';
 
 @Component({
   selector: 'app-upload-unit-checkbox',
@@ -34,7 +34,7 @@ export class UploadUnitCheckboxComponent implements OnInit {
 
   downloadFile() {
     const downloadLink = BackendService.API_URL + '/uploads/' + this.file.name;
-    console.log(downloadLink);
+
     if (window.navigator && window.navigator.msSaveOrOpenBlob) {
       window.navigator.msSaveOrOpenBlob(downloadLink, this.file.alias);
     } else {

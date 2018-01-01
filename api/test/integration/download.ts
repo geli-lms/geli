@@ -49,18 +49,5 @@ describe('DownloadFile', () => {
         .catch(err => err.response);
       res.status.should.be.equal(401);
     });
-
-    it('should fail, this course does not exists', async () => {
-      const teacher = await FixtureUtils.getRandomTeacher();
-
-      const sizePackage = <IDownload> {courseName: '12312312313213', lectures: [{lectureId: '232323', units: [{unitId: '12351531531'}]}]};
-
-      const res = await chai.request(app)
-        .post(BASE_URL + '/size/')
-        .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
-        .send(sizePackage)
-        .catch(err => err.response);
-      res.status.should.be.equal(403);
-    });
   });
 });

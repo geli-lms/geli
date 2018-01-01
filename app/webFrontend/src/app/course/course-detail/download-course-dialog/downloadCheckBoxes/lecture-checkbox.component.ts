@@ -3,7 +3,7 @@ import {
   EventEmitter
 } from '@angular/core';
 import {ILecture} from '../../../../../../../../shared/models/ILecture';
-import {UnitCheckboxComponent} from './unit-checkbox/unit-checkbox.component';
+import {UnitCheckboxComponent} from './unit-checkbox.component';
 
 @Component({
   selector: 'app-lecture-checkbox',

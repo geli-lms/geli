@@ -2,10 +2,10 @@ import {
   Component, OnInit, ViewEncapsulation, Input, ViewChildren, QueryList, Output,
   EventEmitter
 } from '@angular/core';
-import {IUnit} from '../../../../../../../../../shared/models/units/IUnit';
-import {IFileUnit} from '../../../../../../../../../shared/models/units/IFileUnit';
-import {IVideoUnit} from '../../../../../../../../../shared/models/units/IVideoUnit';
-import {UploadUnitCheckboxComponent} from './upload-unit-checkbox/upload-unit-checkbox.component';
+import {IUnit} from '../../../../../../../../shared/models/units/IUnit';
+import {IFileUnit} from '../../../../../../../../shared/models/units/IFileUnit';
+import {IVideoUnit} from '../../../../../../../../shared/models/units/IVideoUnit';
+import {UploadUnitCheckboxComponent} from './upload-unit-checkbox.component';
 
 
 @Component({
@@ -79,10 +79,10 @@ export class UnitCheckboxComponent implements OnInit {
     this.valueChanged.emit();
   }
 
-  noChildsChecked() :boolean {
+  noChildsChecked(): boolean {
     let noChecked = true;
     this.childUnits.forEach(upUnit => {
-      if (upUnit.chkbox == true) {
+      if (upUnit.chkbox === true) {
         noChecked = false;
       }
     });

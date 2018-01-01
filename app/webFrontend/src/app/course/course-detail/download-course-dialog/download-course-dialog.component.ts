@@ -1,29 +1,30 @@
 import {Component, Inject, OnInit, QueryList, ViewChildren, ViewEncapsulation} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef, MatSnackBar} from '@angular/material';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
-import {LectureCheckboxComponent} from './lecture-checkbox/lecture-checkbox.component';
+import {LectureCheckboxComponent} from './downloadCheckBoxes/lecture-checkbox.component';
 import {DownloadFileService} from 'app/shared/services/data.service';
 import {IDownload} from '../../../../../../../shared/models/IDownload';
 import {IDownloadSize} from '../../../../../../../shared/models/IDownloadSize';
-import {SaveFileService} from '../../../shared/services/save-file.service'
+import {SaveFileService} from '../../../shared/services/save-file.service';
 
 import { saveAs } from 'file-saver/FileSaver';
 
 @Component({
-  selector: 'app-select-unit-dialog',
-  templateUrl: './select-unit-dialog.component.html',
-  styleUrls: ['./select-unit-dialog.component.scss'],
+  selector: 'app-download-course-dialog',
+  templateUrl: './download-course-dialog.component.html',
+  styleUrls: ['./download-course-dialog.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
 
-export class SelectUnitDialogComponent implements OnInit {
+export class DownloadCourseDialogComponent implements OnInit {
   course: ICourse;
   chkbox: boolean;
+  keepDialogOpen = false;
   showSpinner: boolean;
   @ViewChildren(LectureCheckboxComponent)
   childLectures: QueryList<LectureCheckboxComponent>;
 
-  constructor(public dialogRef: MatDialogRef<SelectUnitDialogComponent>,
+  constructor(public dialogRef: MatDialogRef<DownloadCourseDialogComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any,
               private downloadReq: DownloadFileService,
               public snackBar: MatSnackBar,
@@ -78,8 +79,11 @@ export class SelectUnitDialogComponent implements OnInit {
       const response = <Response> await this.downloadReq.getFile(result.toString());
       saveAs(response.body, this.saveFileService.replaceCharInFilename(this.course.name) + '.zip');
       this.showSpinner = false;
-      this.dialogRef.close();
+      if (!this.keepDialogOpen) {
+        this.dialogRef.close();
+      }
     } else {
+      this.keepDialogOpen = true;
       this.showSpinner = false;
       this.snackBar.open('Some selected files are too big! Please download Units with a Download-Button seperately!',
         'Dismiss', {duration: 10000});
