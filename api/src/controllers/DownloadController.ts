@@ -28,15 +28,11 @@ const archiver = require('archiver');
 import crypto = require('crypto');
 
 const cache = require('node-file-cache').create({life: config.timeToLiveCacheValue});
-const appRoot = require('app-root-path');
-
 
 // Set all routes to json, because the download is streaming data and do not use json headers
 @Controller('/download')
 @UseBefore(passportJwtMiddleware)
 export class DownloadController {
-
-  filePath = appRoot + '/tmp/';
 
   constructor() {
     setInterval(this.cleanupCache, config.timeToLiveCacheValue * 60);
@@ -45,7 +41,7 @@ export class DownloadController {
   cleanupCache() {
     cache.expire((record: any) => {
       return new Promise((resolve, reject) => {
-        fs.unlink( this.filePath + record.key + '.zip', (err: Error) => {
+        fs.unlink( config.tmpFileCacheFolder + record.key + '.zip', (err: Error) => {
           if (err) {
             reject(false);
           } else {
@@ -104,7 +100,7 @@ export class DownloadController {
 
   @Get('/:id')
   async getArchivedFile(@Param('id') id: string, @Res() response: Response) {
-    const filePath = this.filePath + id + '.zip';
+    const filePath = config.tmpFileCacheFolder + id + '.zip';
 
     response.setHeader('Connection', 'keep-alive');
     response.setHeader('Access-Control-Expose-Headers', 'Content-Disposition');
@@ -172,7 +168,7 @@ export class DownloadController {
       const key = cache.get(hash);
 
       if (key === null) {
-        const filepath = this.filePath + hash + '.zip';
+        const filepath = config.tmpFileCacheFolder + hash + '.zip';
         const output = fs.createWriteStream(filepath);
         const archive = archiver('zip', {
           zlib: {level: 9}

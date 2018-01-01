@@ -1,3 +1,5 @@
+const appRoot = require('app-root-path');
+
 export default {
   // Secret key for JWT signing and encryption
   secret: process.env.SECRET || 'notSoSecret234oi23o423ooqnafsnaaslfj',
@@ -31,4 +33,5 @@ export default {
   sentryDsnPublic: process.env.SENTRY_DSN_PUBLIC,
 
   timeToLiveCacheValue: 3600,
+  tmpFileCacheFolder: appRoot + '/tmp/',
 };
