@@ -73,7 +73,6 @@ export class SelectUnitDialogComponent implements OnInit {
     this.showSpinner = true;
     const sizeResult = await this.downloadReq.getPackageSize(downloadObj);
     const iDownload = <IDownloadSize><any>sizeResult;
-    console.dir(iDownload);
     if (iDownload.tooLargeFiles.length === 0) {
       const result = await this.downloadReq.postDownloadReqForCourse(downloadObj);
       const response = <Response> await this.downloadReq.getFile(result.toString());
@@ -91,7 +90,6 @@ export class SelectUnitDialogComponent implements OnInit {
                 unit.childUnits.forEach(fileUnit => {
                   if (fileUnit.file.path === file ) {
                       fileUnit.showDL = true;
-                      // TODO: hier Link übergeben
                   }
                 });
               }
