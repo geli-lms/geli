@@ -78,7 +78,6 @@ export class SelectUnitDialogComponent implements OnInit {
       const response = <Response> await this.downloadReq.getFile(result.toString());
       saveAs(response.body, this.saveFileService.replaceCharInFilename(this.course.name) + '.zip');
       this.showSpinner = false;
-      this.dialogRef.close();
     } else {
       this.showSpinner = false;
       this.snackBar.open('Some selected files are too big! Please download Units with a Download-Button seperately!',
