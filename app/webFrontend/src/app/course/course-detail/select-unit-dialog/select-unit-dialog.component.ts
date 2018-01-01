@@ -91,6 +91,7 @@ export class SelectUnitDialogComponent implements OnInit {
                 unit.childUnits.forEach(fileUnit => {
                   if (fileUnit.file.path === file ) {
                       fileUnit.showDL = true;
+
                       // TODO: hier Link übergeben
                   }
                 });
