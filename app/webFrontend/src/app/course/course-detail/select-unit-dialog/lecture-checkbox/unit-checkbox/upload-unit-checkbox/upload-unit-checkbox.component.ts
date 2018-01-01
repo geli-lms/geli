@@ -1,5 +1,6 @@
 import {Component, Input, Output, OnInit, EventEmitter} from '@angular/core';
 import {IFile} from '../../../../../../../../../../shared/models/IFile';
+import {BackendService} from '../../../../../../shared/services/backend.service';
 
 @Component({
   selector: 'app-upload-unit-checkbox',
@@ -13,8 +14,6 @@ export class UploadUnitCheckboxComponent implements OnInit {
   chkbox = false;
   @Input()
   showDL = false;
-  @Input()
-  linkDL: string;
   @Input()
   unit_desc: string;
   @Output()
@@ -34,6 +33,21 @@ export class UploadUnitCheckboxComponent implements OnInit {
   }
 
   dlFile() {
+
+    const downloadLink = BackendService.API_URL + '/uploads/' + this.file.name;
+    console.log(downloadLink);
+
+    if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+      window.navigator.msSaveOrOpenBlob(downloadLink, this.file.alias);
+    } else {
+      const e = document.createEvent('MouseEvents'),
+        a = document.createElement('a');
+      a.download = this.file.alias;
+      a.href = window.URL.createObjectURL(downloadLink);
+      a.dataset.downloadurl = [a.download, a.href].join(':');
+      e.initEvent('click', true, false);
+      a.dispatchEvent(e);
+    }
   }
 
 }
