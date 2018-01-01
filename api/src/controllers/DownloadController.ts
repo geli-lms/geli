@@ -67,6 +67,11 @@ export class DownloadController {
       for (const unit of lec.units) {
 
         const localUnit = await Unit.findOne({_id: unit.unitId});
+
+        if (localUnit === null) {
+          throw new NotFoundError();
+        }
+
         // This should be replaced with the size from the DB
         if (localUnit instanceof FileUnit) {
           const fileUnit = <IFileUnit><any>localUnit;
@@ -155,6 +160,10 @@ export class DownloadController {
   async postDownloadRequest(@Body() data: IDownload, @CurrentUser() user: IUser) {
 
     const course = await Course.findOne({_id: data.courseName});
+
+    if (course === null) {
+      throw new NotFoundError();
+    }
 
     if (course.students.indexOf(user._id) !== -1 || course.courseAdmin === user._id ||
       course.teachers.indexOf(user._id) !== -1 || user.role === 'admin') {
