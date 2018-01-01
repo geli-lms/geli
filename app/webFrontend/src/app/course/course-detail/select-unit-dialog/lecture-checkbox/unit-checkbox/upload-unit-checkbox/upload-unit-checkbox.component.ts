@@ -27,6 +27,9 @@ export class UploadUnitCheckboxComponent implements OnInit {
   }
 
   emitEvent() {
+    if (this.showDL) {
+      this.chkbox = false;
+    }
     this.valueChanged.emit();
   }
 

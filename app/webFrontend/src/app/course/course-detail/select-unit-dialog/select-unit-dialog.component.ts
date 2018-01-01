@@ -91,7 +91,6 @@ export class SelectUnitDialogComponent implements OnInit {
                 unit.childUnits.forEach(fileUnit => {
                   if (fileUnit.file.path === file ) {
                       fileUnit.showDL = true;
-
                       // TODO: hier Link übergeben
                   }
                 });
@@ -114,7 +113,7 @@ export class SelectUnitDialogComponent implements OnInit {
             if (unit.unit.type === 'video' || unit.unit.type === 'file') {
               const files = [];
               unit.childUnits.forEach((file, index) => {
-                if (file.chkbox) {
+                if (file.chkbox && !file.showDL) {
                   files.push(index);
                 }
               });
