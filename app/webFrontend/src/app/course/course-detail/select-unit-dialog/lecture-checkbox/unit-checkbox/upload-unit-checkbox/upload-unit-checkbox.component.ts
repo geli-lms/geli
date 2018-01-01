@@ -32,18 +32,16 @@ export class UploadUnitCheckboxComponent implements OnInit {
     this.valueChanged.emit();
   }
 
-  dlFile() {
-
+  downloadFile() {
     const downloadLink = BackendService.API_URL + '/uploads/' + this.file.name;
     console.log(downloadLink);
-
     if (window.navigator && window.navigator.msSaveOrOpenBlob) {
       window.navigator.msSaveOrOpenBlob(downloadLink, this.file.alias);
     } else {
       const e = document.createEvent('MouseEvents'),
         a = document.createElement('a');
       a.download = this.file.alias;
-      a.href = window.URL.createObjectURL(downloadLink);
+      a.href = downloadLink;
       a.dataset.downloadurl = [a.download, a.href].join(':');
       e.initEvent('click', true, false);
       a.dispatchEvent(e);
