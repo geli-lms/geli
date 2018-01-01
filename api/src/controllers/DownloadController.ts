@@ -1,6 +1,7 @@
 import {promisify} from 'util';
 import {Response} from 'express';
-import {Body, Post, Get, NotFoundError, ContentType, UseBefore, Param, Res, Controller,
+import {
+  Body, Post, Get, NotFoundError, ContentType, UseBefore, Param, Res, Controller,
   CurrentUser
 } from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
@@ -20,11 +21,13 @@ import {Task} from '../models/Task';
 import {Lecture} from '../models/Lecture';
 import {IUser} from '../../../shared/models/IUser';
 import {Course} from '../models/Course';
+import config from '../config/main';
 
 const fs = require('fs');
 const archiver = require('archiver');
 import crypto = require('crypto');
-const cache = require('node-file-cache').create({life: 3600});
+
+const cache = require('node-file-cache').create({life: config.timeToLiveCacheValue});
 const appRoot = require('app-root-path');
 
 
@@ -33,18 +36,22 @@ const appRoot = require('app-root-path');
 @UseBefore(passportJwtMiddleware)
 export class DownloadController {
 
+  filePath = appRoot + '/tmp/';
+
   constructor() {
-    setInterval(this.cleanupCache, 60000);
+    setInterval(this.cleanupCache, config.timeToLiveCacheValue * 60);
   }
 
   cleanupCache() {
     cache.expire((record: any) => {
-      fs.unlink(appRoot + '/temp/' + record.key + '.zip', (err: Error) => {
-        if (err) {
-          return false;
-        } else {
-          return false;
-        }
+      return new Promise((resolve, reject) => {
+        fs.unlink( this.filePath + record.key + '.zip', (err: Error) => {
+          if (err) {
+            reject(false);
+          } else {
+            resolve(true);
+          }
+        });
       });
     });
   }
@@ -97,7 +104,7 @@ export class DownloadController {
 
   @Get('/:id')
   async getArchivedFile(@Param('id') id: string, @Res() response: Response) {
-    const filePath = appRoot + '/temp/' + id + '.zip';
+    const filePath = this.filePath + id + '.zip';
 
     response.setHeader('Connection', 'keep-alive');
     response.setHeader('Access-Control-Expose-Headers', 'Content-Disposition');
@@ -118,12 +125,12 @@ export class DownloadController {
       for (const unit of lec.units) {
 
         const localUnit = await
-        Unit.findOne({_id: unit.unitId});
+          Unit.findOne({_id: unit.unitId});
         if (localUnit instanceof FileUnit) {
           const fileUnit = <IFileUnit><any>localUnit;
           fileUnit.files.forEach((file, index) => {
             if (unit.files.indexOf(index) > -1) {
-                data = data + file.name;
+              data = data + file.name;
             }
           });
         } else if (localUnit instanceof VideoUnit) {
@@ -142,7 +149,7 @@ export class DownloadController {
     return crypto.createHash('sha1').update(data).digest('hex');
   }
 
-    @Post('/')
+  @Post('/')
   @ContentType('application/json')
   async postDownloadRequest(@Body() data: IDownload, @CurrentUser() user: IUser) {
 
@@ -151,7 +158,7 @@ export class DownloadController {
     if (course.students.indexOf(user._id) !== -1 || course.courseAdmin === user._id ||
       course.teachers.indexOf(user._id) !== -1) {
 
-      if (data.lectures.length === 0) {
+      if (!data.lectures.length) {
         throw new NotFoundError();
       }
 
@@ -165,7 +172,7 @@ export class DownloadController {
       const key = cache.get(hash);
 
       if (key === null) {
-        const filepath = appRoot + '/temp/' + hash + '.zip';
+        const filepath = this.filePath + hash + '.zip';
         const output = fs.createWriteStream(filepath);
         const archive = archiver('zip', {
           zlib: {level: 9}

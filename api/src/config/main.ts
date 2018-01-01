@@ -29,4 +29,6 @@ export default {
 
   sentryDsn: process.env.SENTRY_DSN,
   sentryDsnPublic: process.env.SENTRY_DSN_PUBLIC,
+
+  timeToLiveCacheValue: 3600,
 };
