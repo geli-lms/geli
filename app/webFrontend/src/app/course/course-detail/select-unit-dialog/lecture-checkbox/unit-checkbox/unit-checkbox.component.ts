@@ -65,10 +65,13 @@ export class UnitCheckboxComponent implements OnInit {
     if (this.files) {
       if (this.chkbox) {
         this.childUnits.forEach(upUnit => {
-          if (upUnit.chkbox === false) {
+          if (upUnit.chkbox === false && !upUnit.showDL) {
             upUnit.chkbox = true;
           }
         });
+        if (this.noChildsChecked()) {
+          this.chkbox = false;
+        }
       } else {
         this.childUnits.forEach(upUnit => upUnit.chkbox = false);
       }
@@ -76,10 +79,20 @@ export class UnitCheckboxComponent implements OnInit {
     this.valueChanged.emit();
   }
 
+  noChildsChecked() :boolean {
+    let noChecked = true;
+    this.childUnits.forEach(upUnit => {
+      if (upUnit.chkbox == true) {
+        noChecked = false;
+      }
+    });
+    return noChecked;
+  }
+
   onChildEvent() {
     let childChecked = false;
     this.childUnits.forEach(unit => {
-      if (unit.chkbox === true) {
+      if (unit.chkbox === true && !unit.showDL) {
         childChecked = true;
         this.chkbox = true;
       }

@@ -2,7 +2,7 @@
   <h4>{{file.alias}}</h4>
   <span class="spacer"></span>
   <span class="lightgray"> {{unit_desc}} </span>
-  <mat-checkbox *ngIf="!this.showDL" [class.redText]="redText" [(ngModel)]="chkbox" (change)="emitEvent()" class="chkbox"></mat-checkbox>
+  <mat-checkbox *ngIf="!this.showDL" [(ngModel)]="chkbox" (change)="emitEvent()" class="chkbox"></mat-checkbox>
   <button mat-icon-button color="primary" *ngIf="this.showDL" class="dlButton" (click)="dlFile" matTooltip="Download this Unit">
      <mat-icon>file_download</mat-icon>
   </button>
