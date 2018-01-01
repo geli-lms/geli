@@ -157,7 +157,7 @@ export class DownloadController {
     const course = await Course.findOne({_id: data.courseName});
 
     if (course.students.indexOf(user._id) !== -1 || course.courseAdmin === user._id ||
-      course.teachers.indexOf(user._id) !== -1) {
+      course.teachers.indexOf(user._id) !== -1 || user.role === 'admin') {
 
       if (!data.lectures.length) {
         throw new NotFoundError();
