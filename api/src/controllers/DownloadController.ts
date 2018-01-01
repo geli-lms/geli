@@ -29,7 +29,7 @@ import crypto = require('crypto');
 
 const cache = require('node-file-cache').create({life: config.timeToLiveCacheValue});
 
-// Set all routes to json, because the download is streaming data and do not use json headers
+// Set all routes which should use json to json, the standard is blob streaming data
 @Controller('/download')
 @UseBefore(passportJwtMiddleware)
 export class DownloadController {
@@ -67,6 +67,7 @@ export class DownloadController {
       for (const unit of lec.units) {
 
         const localUnit = await Unit.findOne({_id: unit.unitId});
+        // This should be replaced with the size from the DB
         if (localUnit instanceof FileUnit) {
           const fileUnit = <IFileUnit><any>localUnit;
           fileUnit.files.forEach((file, index) => {
@@ -101,6 +102,10 @@ export class DownloadController {
   @Get('/:id')
   async getArchivedFile(@Param('id') id: string, @Res() response: Response) {
     const filePath = config.tmpFileCacheFolder + id + '.zip';
+
+    if (!fs.existsSync(filePath)) {
+      throw new NotFoundError();
+    }
 
     response.setHeader('Connection', 'keep-alive');
     response.setHeader('Access-Control-Expose-Headers', 'Content-Disposition');

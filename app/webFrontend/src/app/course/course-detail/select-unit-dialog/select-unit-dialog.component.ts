@@ -2,7 +2,7 @@ import {Component, Inject, OnInit, QueryList, ViewChildren, ViewEncapsulation} f
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef, MatSnackBar} from '@angular/material';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
 import {LectureCheckboxComponent} from './lecture-checkbox/lecture-checkbox.component';
-import {DownloadReq} from 'app/shared/services/data.service';
+import {DownloadFileService} from 'app/shared/services/data.service';
 import {IDownload} from '../../../../../../../shared/models/IDownload';
 import {IDownloadSize} from '../../../../../../../shared/models/IDownloadSize';
 import {SaveFileService} from '../../../shared/services/save-file.service'
@@ -25,7 +25,7 @@ export class SelectUnitDialogComponent implements OnInit {
 
   constructor(public dialogRef: MatDialogRef<SelectUnitDialogComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any,
-              private downloadReq: DownloadReq,
+              private downloadReq: DownloadFileService,
               public snackBar: MatSnackBar,
               private saveFileService: SaveFileService) {
   }

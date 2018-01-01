@@ -430,7 +430,7 @@ export class AboutDataService extends DataService {
 }
 
 @Injectable()
-export class DownloadReq extends DataService {
+export class DownloadFileService extends DataService {
   constructor(public backendService: BackendService) {
     super('download/', backendService);
   }
