@@ -23,7 +23,7 @@
     "lint": "gulp tslint",
     "debug": "gulp debug",
     "load:fixtures": "gulp load:fixtures",
-    "migrate": "gulp build && node ./build/migrations/migrate.js",
+    "migrate": "gulp build && node ./build/src/migrate.js",
     "migrate:inspect": "gulp migrate:inspect"
   },
   "dependencies": {

@@ -1,7 +1,7 @@
 // tslint:disable:no-console
 
-import {MigrationHandler} from './MigrationHandler';
 import * as mongoose from 'mongoose';
+import {MigrationHandler} from './migrations/MigrationHandler';
 
 if (process.argv.length === 3) {
   console.log('Print help');

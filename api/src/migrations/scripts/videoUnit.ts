@@ -1,8 +1,8 @@
 // tslint:disable:no-console
-import {IUnitModel} from '../../src/models/units/Unit';
 import * as mongoose from 'mongoose';
-import {IFileUnit} from '../../../shared/models/units/IFileUnit';
 import {ObjectID} from 'bson';
+import {IUnitModel} from '../../models/units/Unit';
+import {IFileUnit} from '../../../../shared/models/units/IFileUnit';
 
 const unitSchema = new mongoose.Schema({
     _course: {

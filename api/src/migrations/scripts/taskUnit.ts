@@ -1,11 +1,11 @@
 // tslint:disable:no-console
 import * as mongoose from 'mongoose';
-import {IUnitModel} from '../../src/models/units/Unit';
-import {ITaskUnitModel} from '../../src/models/units/TaskUnit';
-import {ITaskUnit} from '../../../shared/models/units/ITaskUnit';
 import {ObjectID} from 'bson';
-import {ITask} from '../../../shared/models/task/ITask';
-import {IUnit} from '../../../shared/models/units/IUnit';
+import {IUnitModel} from '../../models/units/Unit';
+import {ITaskUnitModel} from '../../models/units/TaskUnit';
+import {ITaskUnit} from '../../../../shared/models/units/ITaskUnit';
+import {ITask} from '../../../../shared/models/task/ITask';
+import {IUnit} from '../../../../shared/models/units/IUnit';
 
 const unitSchema = new mongoose.Schema({
     _course: {
@@ -61,7 +61,7 @@ const taskSchema = new mongoose.Schema(
     toObject: {
       transform: function (doc: any, ret: any) {
         if (ret.hasOwnProperty('_id')) {
-          ret._id =  ret._id.toString();
+          ret._id = ret._id.toString();
         }
 
         if (ret.hasOwnProperty('id')) {
