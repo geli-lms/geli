@@ -5,4 +5,5 @@ export interface IProgress {
   user: any;
   done: boolean;
   type: string;
+  __t: string;
 }

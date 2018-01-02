@@ -30,6 +30,9 @@ const unitSchema = new mongoose.Schema({
     },
     weight: {
       type: Number
+    },
+    type: {
+      type: String
     }
   },
   {
@@ -53,7 +56,6 @@ unitSchema.virtual('progressData', {
 
 unitSchema.methods.exportJSON = function() {
   const obj = this.toObject();
-  const jsonData = this.toJSON();
 
   // remove unwanted informations
   // mongo properties

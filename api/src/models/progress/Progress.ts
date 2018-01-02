@@ -21,10 +21,12 @@ const progressSchema = new mongoose.Schema({
     },
     done: {
       type: Boolean
+    },
+    type: {
+      type: String
     }
   },
   {
-    discriminatorKey: 'type',
     timestamps: true,
     toObject: {
       transform: function (doc: any, ret: any) {

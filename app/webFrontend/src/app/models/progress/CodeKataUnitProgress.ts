@@ -9,11 +9,13 @@ export class CodeKataUnitProgress implements ICodeKataUnitProgress {
   user: any;
   done: boolean;
   type: string;
+  __t: string;
 
   constructor(unit: IUnit) {
     this.unit = unit;
     this.course = this.unit._course;
     this.code = '';
+    this.type = 'codeKata';
     this.type = 'codeKata';
   }
 }

@@ -23,7 +23,7 @@ describe(`CodeKataUnit ${BASE_URL}`, () => {
     description: '...',
     progressable: true,
     weight: 0,
-    type: 'code-kata',
+    __t: 'code-kata',
     definition: '// Task: Manipulate the targetSet, so it only contains the values "Hello" and "h_da"' +
     '\n' +
     '\nlet targetSet = new Set(["Hello", "there"]);',
@@ -89,9 +89,8 @@ describe(`CodeKataUnit ${BASE_URL}`, () => {
         .send({lectureId: lecture._id, model: model});
 
       res.status.should.be.equal(200);
-      res.body.name.should.equal(lecture.name);
-      res.body.description.should.equal(lecture.description);
-      res.body.units.length.should.equal(lecture.units.length + 1);
+      res.body.name.should.equal(model.name);
+      res.body.description.should.equal(model.description);
     });
 
     it('should create a new codeKataUnit (entire code in model.code)', async () => {
@@ -116,13 +115,12 @@ describe(`CodeKataUnit ${BASE_URL}`, () => {
         .send({lectureId: lecture._id, model: model});
 
       res.status.should.be.equal(200);
-      res.body.name.should.equal(lecture.name);
-      res.body.description.should.equal(lecture.description);
-      res.body.units.length.should.equal(lecture.units.length + 1);
+      res.body.name.should.equal(model.name);
+      res.body.description.should.equal(model.description);
     });
 
     it('should update a codeKata', async () => {
-      const unit = await Unit.findOne({type: 'code-kata'});
+      const unit = await Unit.findOne({__t: 'code-kata'});
       const lecture = await Lecture.findOne({units: { $in: [ unit._id ] }});
       const course = await Course.findOne({lectures: { $in: [ lecture._id ] }});
       const courseAdmin = await User.findOne({_id: course.courseAdmin});
@@ -131,7 +129,7 @@ describe(`CodeKataUnit ${BASE_URL}`, () => {
       const res = await chai.request(app)
         .put(BASE_URL + '/' + unit.id)
         .set('Authorization', `JWT ${JwtUtils.generateToken(courseAdmin)}`)
-        .send(unit.toObject())
+        .send(unit.toObject());
 
       res.status.should.be.equal(200);
       res.body.test.should.string('// Test if we can edit a Kata');

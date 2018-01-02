@@ -25,7 +25,7 @@ describe('ProgressController', () => {
 
   describe(`POST ${BASE_URL}`, () => {
     it('should create progress for some progressable unit', async () => {
-      const unit: ICodeKataModel = <ICodeKataModel>await Unit.findOne({progressable: true, type: 'code-kata'});
+      const unit: ICodeKataModel = <ICodeKataModel>await Unit.findOne({progressable: true, __t: 'code-kata'});
       const lecture = await Lecture.findOne({units: { $in: [ unit._id ] }});
       const course = await Course.findOne({lectures: { $in: [ lecture._id ] }});
       const student = await User.findOne({_id: { $in: course.students}});
@@ -53,7 +53,7 @@ describe('ProgressController', () => {
     });
 
     it('should create progress for some progressable unit with a deadline', async () => {
-      const unit: ICodeKataModel = <ICodeKataModel>await Unit.findOne({progressable: true, type: 'code-kata'});
+      const unit: ICodeKataModel = <ICodeKataModel>await Unit.findOne({progressable: true, __t: 'code-kata'});
       const lecture = await Lecture.findOne({units: { $in: [ unit._id ] }});
       const course = await Course.findOne({lectures: { $in: [ lecture._id ] }});
       const student = await User.findOne({_id: { $in: course.students}});
@@ -84,7 +84,7 @@ describe('ProgressController', () => {
     });
 
     it('should fail creating progress for some progressable unit with a deadline', async () => {
-      const unit: ICodeKataModel = <ICodeKataModel>await Unit.findOne({progressable: true, type: 'code-kata'});
+      const unit: ICodeKataModel = <ICodeKataModel>await Unit.findOne({progressable: true, __t: 'code-kata'});
       const lecture = await Lecture.findOne({units: { $in: [ unit._id ] }});
       const course = await Course.findOne({lectures: { $in: [ lecture._id ] }});
       const student = await User.findOne({_id: { $in: course.students}});
@@ -115,7 +115,7 @@ describe('ProgressController', () => {
 
   describe(`PUT ${BASE_URL}`, () => {
     it('should update progress for some progressable unit', async () => {
-      const unit = await Unit.findOne({progressable: true, type: 'code-kata'});
+      const unit = await Unit.findOne({progressable: true, __t: 'code-kata'});
       const lecture = await Lecture.findOne({units: { $in: [ unit._id ] }});
       const course = await Course.findOne({lectures: { $in: [ lecture._id ] }});
       const student = await User.findOne({_id: { $in: course.students}});
@@ -154,7 +154,7 @@ describe('ProgressController', () => {
     });
 
     it('should update progress for some progressable unit with a deadline', async () => {
-      const unit: ICodeKataModel = <ICodeKataModel>await Unit.findOne({progressable: true, type: 'code-kata'});
+      const unit: ICodeKataModel = <ICodeKataModel>await Unit.findOne({progressable: true, __t: 'code-kata'});
       const lecture = await Lecture.findOne({units: { $in: [ unit._id ] }});
       const course = await Course.findOne({lectures: { $in: [ lecture._id ] }});
       const student = await User.findOne({_id: { $in: course.students}});
@@ -196,7 +196,7 @@ describe('ProgressController', () => {
     });
 
     it('should fail updating progress for some progressable unit with a deadline', async () => {
-      const unit: ICodeKataModel = <ICodeKataModel>await Unit.findOne({progressable: true, type: 'code-kata'});
+      const unit: ICodeKataModel = <ICodeKataModel>await Unit.findOne({progressable: true, __t: 'code-kata'});
       const lecture = await Lecture.findOne({units: { $in: [ unit._id ] }});
       const course = await Course.findOne({lectures: { $in: [ lecture._id ] }});
       const student = await User.findOne({_id: { $in: course.students}});

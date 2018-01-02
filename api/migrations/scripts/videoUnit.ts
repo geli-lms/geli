@@ -25,7 +25,6 @@ const unitSchema = new mongoose.Schema({
   },
   {
     collection: 'units',
-    discriminatorKey: 'type',
     timestamps: true,
     toObject: {
       transform: function (doc: IUnitModel, ret: any) {
@@ -42,7 +41,7 @@ class VideoUnitMigration {
   async up() {
     console.log('VideoUnit up was called');
     try {
-      const videoUnits = await Unit.find({'type': 'video'}).exec();
+      const videoUnits = await Unit.find({'__t': 'video'}).exec();
       const updatedFileUnits = await Promise.all(videoUnits.map(async(videoUnit) => {
         const videoUnitObj: IFileUnit = <IFileUnit>videoUnit.toObject();
         videoUnitObj.fileUnitType = videoUnitObj.type;

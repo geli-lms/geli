@@ -6,7 +6,6 @@ import {Server} from '../../../src/server';
 import {FixtureLoader} from '../../../fixtures/FixtureLoader';
 import {JwtUtils} from '../../../src/security/JwtUtils';
 import {User} from '../../../src/models/User';
-import {Course} from '../../../src/models/Course';
 
 chai.use(chaiHttp);
 const should = chai.should();
@@ -21,27 +20,6 @@ describe('FileUnit', () => {
   });
 
   describe(`POST ${BASE_URL}`, () => {
-    /*
-    it('should upload a video and return the created unit', (done) => {
-      User.findOne({email: 'teacher1@test.local'})
-      .then((user) => {
-        return Course.findOne({name: 'Introduction to web development'})
-        .then((course) => ({user, course}));
-      })
-      .then(({user, course}) => {
-        const data = {
-          model: {
-            _course: course._id.toString(),
-            name: 'Test Upload',
-            description: 'This is my test upload.'
-          },
-          lectureId: course.lectures[0].toString()
-        };
-
-        chai.request(app)
-        .post(BASE_URL)
-        .field('data', JSON.stringify(data))
-        */
     it('should upload a video and return the created unit', async () => {
       const course = await FixtureUtils.getRandomCourse();
       const courseAdmin = await User.findOne({_id: course.courseAdmin});
@@ -56,7 +34,7 @@ describe('FileUnit', () => {
       };
 
       const res = await chai.request(app)
-        .post(`${BASE_URL}/video`)
+        .post(BASE_URL)
         .field('data', JSON.stringify(data))
         .attach('file', fs.readFileSync('fixtures/binaryData/testvideo.mp4'), 'testvideo.mp4')
         .set('Authorization', `JWT ${JwtUtils.generateToken(courseAdmin)}`);

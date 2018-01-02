@@ -28,7 +28,6 @@ const unitSchema = new mongoose.Schema({
   },
   {
     collection: 'units',
-    discriminatorKey: 'type',
     timestamps: true,
     toObject: {
       transform: function (doc: IUnitModel, ret: any) {
@@ -84,7 +83,7 @@ class TaskUnitMigration {
   async up() {
     console.log('TaskUnit up was called');
     try {
-      const oldUnits: IUnitModel[] = await Unit.find({'type': 'task'});
+      const oldUnits: IUnitModel[] = await Unit.find({'__t': 'task'});
       const updatedUnitObjs: IUnit[] = await Promise.all(oldUnits.map(async (oldUnit: ITaskUnitModel) => {
         const oldUnitObj: ITaskUnit = <ITaskUnit>oldUnit.toObject();
         oldUnitObj.tasks = <ITask[]>(await Promise.all(oldUnitObj.tasks.map(async (task) => {
