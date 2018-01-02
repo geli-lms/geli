@@ -9,14 +9,12 @@ import emailService from '../services/EmailService';
 import {IUser} from '../../../shared/models/IUser';
 import {IUserModel, User} from '../models/User';
 import {JwtUtils} from '../security/JwtUtils';
-import {WhitelistUpdater} from '../utilities/WhitelistUpdater';
 import config from '../config/main';
 import * as errorCodes from '../config/errorCodes'
+import {Course} from '../models/Course';
 
 @JsonController('/auth')
 export class AuthController {
-
-  private updater: WhitelistUpdater = new WhitelistUpdater();
 
   @Post('/login')
   @UseBefore(bodyParserJson(), passportLoginMiddleware) // We need body-parser for passport to find the credentials
@@ -31,43 +29,32 @@ export class AuthController {
 
   @Post('/register')
   @OnUndefined(204)
-  postRegister(@Body() user: IUser) {
-    return User.findOne({$or: [{email: user.email}, {uid: user.uid}]})
-      .then((existingUser) => {
-        // If user is not unique, return error
-        if (existingUser) {
-          if (user.role === 'student' && existingUser.uid === user.uid) {
-            throw new BadRequestError(errorCodes.errorCodes.duplicateUid.code);
-          }
-          if (existingUser.email === user.email) {
-            throw new BadRequestError(errorCodes.errorCodes.mail.duplicate.code);
-          }
-        }
-
-        if (user.role !== 'teacher' && user.role !== 'student') {
-          throw new BadRequestError('You can only sign up as student or teacher');
-        }
-
-        if (user.role === 'teacher' && (typeof user.email !== 'string' || !user.email.match(config.teacherMailRegex))) {
-          throw new BadRequestError(errorCodes.errorCodes.mail.noTeacher.code);
-        }
-
-        const newUser = new User(user);
-
-        return newUser.save();
-      })
-      .then((savedUser) => {
-        // User can now match a whitelist.
-        return this.updater.addWhitelistetUserToCourses(savedUser).then(() => {
-          return emailService.sendActivation(savedUser)
-            .catch(() => {
-              throw new InternalServerError(errorCodes.errorCodes.mail.notSend.code);
-            });
-        });
-      })
-      .then(() => {
-        return null;
-      });
+  async postRegister(@Body() user: IUser) {
+    const existingUser = await User.findOne({$or: [{email: user.email}, {uid: user.uid}]});
+    // If user is not unique, return error
+    if (existingUser) {
+      if (user.role === 'student' && existingUser.uid === user.uid) {
+        throw new BadRequestError(errorCodes.errorCodes.duplicateUid.code);
+      }
+      if (existingUser.email === user.email) {
+        throw new BadRequestError(errorCodes.errorCodes.mail.duplicate.code);
+      }
+    }
+    if (user.role !== 'teacher' && user.role !== 'student') {
+      throw new BadRequestError('You can only sign up as student or teacher');
+    }
+    if (user.role === 'teacher' && (typeof user.email !== 'string' || !user.email.match(config.teacherMailRegex))) {
+      throw new BadRequestError(errorCodes.errorCodes.mail.noTeacher.code);
+    }
+    const newUser = new User(user);
+    const savedUser = await newUser.save();
+    // User can now match a whitelist.
+    await this.addWhitelistetUserToCourses(savedUser);
+    try {
+      emailService.sendActivation(savedUser);
+    } catch (err) {
+      throw new InternalServerError(errorCodes.errorCodes.mail.notSend.code);
+    }
   }
 
   // TODO If activate user and is in playlist add to course.
@@ -135,5 +122,26 @@ export class AuthController {
       .catch((err) => {
         throw new InternalServerError('Could not send E-Mail');
       });
+  }
+
+  /**
+   * Add new user to all whitelistet courses in example after registration.
+   * @param {IUser} user
+   * @returns {Promise<void>}
+   */
+  private async addWhitelistetUserToCourses(user: IUser) {
+    const courses = await Course.find(
+      {enrollType: 'whitelist'}).populate('whitelist');
+
+    await Promise.all(
+      courses.map(async (course) => {
+        if (course.students.findIndex(u => user._id === u._id < 0)
+          && course.whitelist.find(w =>
+            w.uid === user.uid)
+        ) {
+          course.students.push(user);
+          await Course.update({_id: course._id}, course);
+        }
+      }));
   }
 }

@@ -42,7 +42,7 @@ export class ObsCsvController {
   public async updateCourseFromBuffer(buffer: string, course: ICourseModel) {
     this.pushWhitelistUser(buffer);
     course.students = [];
-    course = await this.addParsedUsersToCourse(course);
+    await this.addParsedUsersToCourse(course);
     return this.updateWhitelistUser(course);
   }
 
@@ -96,7 +96,6 @@ export class ObsCsvController {
         }
       }
     }));
-    return course;
   }
 
   /**
