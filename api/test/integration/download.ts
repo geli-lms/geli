@@ -31,6 +31,16 @@ describe('DownloadFile', () => {
         .catch(err => err.response);
       res.status.should.be.equal(401);
     });
+
+    it('should fail, no hash with that id', async () => {
+      const teacher = await FixtureUtils.getRandomTeacher();
+
+      const res = await chai.request(app)
+        .get(BASE_URL + '/123456789')
+        .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
+        .catch(err => err.response);
+      res.status.should.be.equal(404);
+    });
   });
 
   describe(`POST ${BASE_URL}`, () => {
