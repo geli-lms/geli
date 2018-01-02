@@ -1,9 +1,9 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
-import {CodeKataUnitService} from '../../../shared/services/data.service';
+import {CodeKataUnitService, UnitService} from '../../../shared/services/data.service';
 import {MatSnackBar} from '@angular/material';
 import {ICodeKataUnit} from '../../../../../../../shared/models/units/ICodeKataUnit';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
-import {CodeKataUnit} from '../../../models/CodeKataUnit';
+import {CodeKataUnit} from '../../../models/units/CodeKataUnit';
 import {UnitGeneralInfoFormComponent} from '../unit-general-info-form/unit-general-info-form.component';
 import {AceEditorComponent} from 'ng2-ace-editor';
 import 'brace';
@@ -55,6 +55,7 @@ export class CodeKataUnitFormComponent implements OnInit {
   logs: string;
 
   constructor(private codeKataUnitService: CodeKataUnitService,
+              private unitService: UnitService,
               private snackBar: MatSnackBar) {
   }
 
@@ -98,9 +99,9 @@ export class CodeKataUnitFormComponent implements OnInit {
     };
 
     if (this.model._id === undefined) {
-      this.codeKataUnitService.createItem({
+      this.unitService.createItem({
         model: this.model,
-        lectureId: this.lectureId,
+        lectureId: this.lectureId
       })
       .then(
         () => {
@@ -113,7 +114,7 @@ export class CodeKataUnitFormComponent implements OnInit {
         });
     } else {
       delete this.model._course;
-      this.codeKataUnitService.updateItem(this.model)
+      this.unitService.updateItem(this.model)
       .then(
         () => {
           this.snackBar.open('Code-Kata updated', '', {duration: 3000});

@@ -1,8 +1,8 @@
-<div class="code-kata-unit-form">
+<div class="code-kata-unit-form" *ngIf="codeKataUnit">
   <strong>Code-Kata</strong>
   <ace-editor
     #definitionEditor
-    [(text)]="codeKata.definition"
+    [(text)]="codeKataUnit.definition"
     [mode]="'javascript'"
     [theme]="'github'"
     [readOnly]="true">
@@ -11,7 +11,7 @@
   <div *ngIf="isExampleCode">This is the provided example solution:</div>
   <ace-editor class="user-code-editor"
               #codeEditor
-              [(text)]="codeKata.code || progress.code"
+              [(text)]="codeKataUnit.code || progress.code"
               [mode]="'javascript'"
               [theme]="'github'"
               [readOnly]="isExampleCode"
@@ -21,7 +21,7 @@
   <div>These tests need to success:</div>
   <ace-editor
     #testEditor
-    [(text)]="codeKata.test"
+    [(text)]="codeKataUnit.test"
     [mode]="'javascript'"
     [theme]="'github'"
     [readOnly]="true">

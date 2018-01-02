@@ -1,24 +1,50 @@
 import * as mongoose from 'mongoose';
 import {Unit} from './Unit';
 import {ITaskUnit} from '../../../../shared/models/units/ITaskUnit';
-import {ITaskModel, Task} from '../Task';
-import {ITask} from '../../../../shared/models/task/ITask';
-import {InternalServerError} from 'routing-controllers';
-import {ILectureModel, Lecture} from '../Lecture';
-import * as winston from 'winston';
 
 interface ITaskUnitModel extends ITaskUnit, mongoose.Document {
   exportJSON: () => Promise<ITaskUnit>;
   toFile: () => Promise<String>;
 }
 
-const taskUnitSchema = new mongoose.Schema({
-  tasks: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Task'
+const taskSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String
+    },
+    unitId: {
+      type: String
     }
-  ],
+    ,
+    answers: {
+      type: [{
+        value: Boolean,
+        text: String
+      }],
+      required: true
+    },
+  }, {
+    timestamps: true,
+    toObject: {
+      transform: function (doc: any, ret: any) {
+        if (ret.hasOwnProperty('_id')) {
+          ret._id =  ret._id.toString();
+        }
+
+        if (ret.hasOwnProperty('id')) {
+          ret.id = ret.id.toString();
+        }
+        ret.answers = ret.answers.map((answer: any) => {
+          answer._id = answer._id.toString();
+          return answer;
+        });
+      }
+    }
+  }
+);
+
+const taskUnitSchema = new mongoose.Schema({
+  tasks: [taskSchema],
   deadline: {
     type: String
   },
@@ -107,6 +133,6 @@ taskUnitSchema.statics.toFile = async function(unit: ITaskUnit) {
   }
 };
 
-const TaskUnit = Unit.discriminator('task', taskUnitSchema);
+// const TaskUnit = Unit.discriminator('task', taskUnitSchema);
 
-export {TaskUnit, ITaskUnitModel};
+export {taskUnitSchema, ITaskUnitModel};

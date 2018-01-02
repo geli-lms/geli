@@ -38,7 +38,7 @@ export class UserController {
   }
 
   @Authorized(['admin'])
-  @Get('/roles')
+  @Get('/roles/')
   getRoles() {
     // TODO: Fix any cast
     return (<any>User.schema.path('role')).enumValues;
@@ -65,7 +65,8 @@ export class UserController {
         user.profile.picture = {
           path: file.path,
           name: file.filename,
-          alias: file.originalname
+          alias: file.originalname,
+          size: file.size
         };
         return user.save();
       })

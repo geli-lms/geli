@@ -270,34 +270,6 @@ export class CourseService extends DataService {
   }
 }
 
-@Injectable()
-export class TaskService extends DataService {
-  constructor(public backendService: BackendService) {
-    super('tasks/', backendService);
-  }
-
-  getTasksForCourse(id: string): Promise<any[]> {
-    return new Promise((resolve, reject) => {
-      this.backendService.get(this.apiPath + 'course/' + id)
-        .subscribe(
-          (responseItems: any) => {
-            if (this.changeProps2Date) {
-              responseItems.forEach(item => {
-                this.changeProps2Date.forEach(prop => {
-                  DataService.changeStringProp2DateProp(item, prop);
-                });
-              });
-            }
-
-            resolve(responseItems);
-          },
-          error => reject(error)
-        );
-    });
-  }
-}
-
-@Injectable()
 export class LectureService extends DataService {
   constructor(public backendService: BackendService) {
     super('lecture/', backendService);
@@ -308,30 +280,6 @@ export class LectureService extends DataService {
 export class UnitService extends DataService {
   constructor(public backendService: BackendService) {
     super('units/', backendService);
-  }
-
-  addTaskUnit(taskUnit: ITaskUnit, lectureId: string) {
-    const originalApiPath = this.apiPath;
-    this.apiPath += 'tasks';
-    const promise = this.createItem({model: taskUnit, lectureId: lectureId});
-    this.apiPath = originalApiPath;
-    return promise;
-  }
-
-  updateTaskUnit(taskUnit: ITaskUnit) {
-    const originalApiPath = this.apiPath;
-    this.apiPath += 'tasks/';
-    const promise = this.updateItem(taskUnit);
-    this.apiPath = originalApiPath;
-    return promise;
-  }
-
-  readTaskUnit(taskUnitId: string) {
-    const originalApiPath = this.apiPath;
-    this.apiPath += 'tasks/';
-    const promise = this.readSingleItem(taskUnitId);
-    this.apiPath = originalApiPath;
-    return promise;
   }
 
   getUnitForCourse(courseId: string) {
@@ -373,7 +321,7 @@ export class UserDataService extends DataService {
 
   getRoles(): Promise<any[]> {
     const originalApiPath = this.apiPath;
-    this.apiPath += 'roles';
+    this.apiPath += 'roles/';
     const promise = this.readItems();
     this.apiPath = originalApiPath;
     return promise;

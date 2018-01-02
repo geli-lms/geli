@@ -22,7 +22,9 @@
     "posttest": "gulp remap:coverage",
     "lint": "gulp tslint",
     "debug": "gulp debug",
-    "load:fixtures": "gulp load:fixtures"
+    "load:fixtures": "gulp load:fixtures",
+    "migrate": "gulp build && node ./build/migrations/migrate.js",
+    "migrate:inspect": "gulp migrate:inspect"
   },
   "dependencies": {
     "app-root-path": "^2.0.1",
@@ -33,6 +35,7 @@
     "fast-csv": "^2.4.1",
     "fs-extra": "^4.0.3",
     "jsonwebtoken": "^8.1.0",
+    "migrate-mongoose": "^3.2.2",
     "moment": "^2.19.3",
     "mongoose": "^4.13.6",
     "morgan": "^1.9.0",

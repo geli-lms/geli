@@ -8,7 +8,7 @@ import {
   Param,
   Post,
   Put,
-  Req, UnauthorizedError,
+  Req,
   UploadedFile,
   UseBefore
 } from 'routing-controllers';
@@ -92,8 +92,10 @@ export class CourseController {
         path: 'lectures',
         populate: {
           path: 'units',
+          virtuals: true,
           populate: {
-            path: 'tasks'
+            path: 'progressData',
+            match: { user: { $eq: currentUser._id }}
           }
         }
       })
@@ -112,7 +114,7 @@ export class CourseController {
             }
           });
         });
-        return course.toObject();
+        return course.toObject({virtuals: true});
       });
   }
 
