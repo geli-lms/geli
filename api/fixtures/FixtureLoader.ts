@@ -5,7 +5,6 @@ import * as fs from 'fs';
 import {Course} from '../src/models/Course';
 import * as crypto from 'crypto';
 import {FixtureUtils} from './FixtureUtils';
-import {UnitClassMapper} from '../src/utilities/UnitClassMapper';
 import {ICodeKataModel} from '../src/models/units/CodeKataUnit';
 import {Lecture} from '../src/models/Lecture';
 import {Unit} from '../src/models/units/Unit';
@@ -119,8 +118,10 @@ export class FixtureLoader {
             break;
         }
 
+        /*
         const progressClass = UnitClassMapper.getProgressClassForUnit(unit);
         await new progressClass(newProgress).save();
+        */
       }
       return unit.name;
     }));
