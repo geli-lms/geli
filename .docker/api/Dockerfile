@@ -12,5 +12,6 @@ CMD node server.js
 RUN mkdir -p /usr/src/app/uploads
 
 COPY api/build/src /usr/src/app/
+COPY api/build/migrations /usr/src/migrations
 COPY api/node_modules /usr/src/app/node_modules
 COPY api/nlf-licenses.json /usr/src/app/
