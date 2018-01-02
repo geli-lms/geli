@@ -3,7 +3,7 @@ import {UnitService} from '../../../shared/services/data.service';
 import {Task} from '../../../models/Task';
 import {MatSnackBar} from '@angular/material';
 import {ITaskUnit} from '../../../../../../../shared/models/units/ITaskUnit';
-import {TaskUnit} from '../../../models/TaskUnit';
+import {TaskUnit} from '../../../models/units/TaskUnit';
 import {ITask} from '../../../../../../../shared/models/task/ITask';
 import {Answer} from '../../../models/Answer';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
@@ -52,7 +52,7 @@ export class TaskUnitEditComponent implements OnInit {
   async reloadTaskUnit() {
     // Reload task unit from database to make sure that tasks (and answers)
     // are populated properly (e.g. necessary after a Cancel)
-    this.model = <ITaskUnit><any>await this.unitService.readTaskUnit(this.model._id);
+    this.model = <ITaskUnit><any>await this.unitService.readSingleItem(this.model._id);
   }
 
   saveUnit() {
@@ -66,9 +66,9 @@ export class TaskUnitEditComponent implements OnInit {
     if (this.isTaskUnitValid()) {
       let taskPromise = null;
       if (this.add) {
-        taskPromise = this.unitService.addTaskUnit(this.model, this.lectureId);
+        taskPromise = this.unitService.createItem({model: this.model, lectureId: this.lectureId});
       } else {
-        taskPromise = this.unitService.updateTaskUnit(this.model);
+        taskPromise = this.unitService.updateItem(this.model);
       }
       taskPromise.then(
         (task) => {

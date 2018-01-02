@@ -6,8 +6,7 @@ import {FreeTextUnitFormComponent} from './free-text-unit-form/free-text-unit-fo
 import {TaskUnitEditComponent} from './task-unit-edit/task-unit-edit.component';
 import {UnitFormComponent} from './unit-form.component';
 import {UnitGeneralInfoFormComponent} from './unit-general-info-form/unit-general-info-form.component';
-import {FileUploadComponent} from '../../upload/file-upload/file-upload.component';
-import {VideoUploadComponent} from '../../upload/video-upload/video-upload.component';
+import {FileUnitFormComponent} from './file-unit-form/file-unit-form.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {AceEditorModule} from 'ng2-ace-editor';
 import {FileUploadModule} from 'ng2-file-upload';
@@ -32,8 +31,7 @@ import {SharedModule} from '../../shared/shared.module';
     TaskUnitEditComponent,
     UnitFormComponent,
     UnitGeneralInfoFormComponent,
-    FileUploadComponent,
-    VideoUploadComponent,
+    FileUnitFormComponent,
     FreeTextUnitEditorComponent,
     FreeTextUnitEditorDialog
   ],
@@ -42,8 +40,7 @@ import {SharedModule} from '../../shared/shared.module';
     FreeTextUnitFormComponent,
     TaskUnitEditComponent,
     UnitFormComponent,
-    UnitGeneralInfoFormComponent,
-    VideoUploadComponent,
+    UnitGeneralInfoFormComponent
   ],
   entryComponents: [
     FreeTextUnitEditorDialog

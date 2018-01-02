@@ -38,7 +38,7 @@ export class UserController {
   }
 
   @Authorized(['admin'])
-  @Get('/roles')
+  @Get('/roles/')
   getRoles() {
     // TODO: Fix any cast
     return (<any>User.schema.path('role')).enumValues;
@@ -65,7 +65,8 @@ export class UserController {
         user.profile.picture = {
           path: file.path,
           name: file.filename,
-          alias: file.originalname
+          alias: file.originalname,
+          size: file.size
         };
         return user.save();
       })
@@ -84,7 +85,7 @@ export class UserController {
         if (id === currentUser._id
             && currentUser.role === 'admin'
             && user.role !== 'admin') {
-          throw new BadRequestError('There are no other users with admin privileges.');
+          throw new BadRequestError('You can\'t revoke your own privileges');
         } else {
           return User.find({ $and: [{'email': user.email}, {'_id': { $ne: user._id }}]});
         }

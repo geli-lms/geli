@@ -1,7 +1,7 @@
 import {Authorized, Get, JsonController, Param, UseBefore} from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
-import {Progress} from '../models/Progress';
-import {IProgress} from '../../../shared/models/IProgress';
+import {Progress} from '../models/progress/Progress';
+import {IProgress} from '../../../shared/models/progress/IProgress';
 import {IUser} from '../../../shared/models/IUser';
 import * as mongoose from 'mongoose';
 import ObjectId = mongoose.Types.ObjectId;

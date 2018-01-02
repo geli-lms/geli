@@ -94,6 +94,9 @@ courseSchema.methods.exportJSON = async function () {
   delete obj.updatedAt;
 
   // custom properties
+  delete obj.accessKey;
+  delete obj.active;
+  delete obj.whitelist;
   delete obj.students;
   delete obj.courseAdmin;
   delete obj.teachers;
@@ -115,22 +118,28 @@ courseSchema.methods.exportJSON = async function () {
   return obj;
 };
 
-courseSchema.statics.importJSON = async function (course: ICourse, admin: IUser) {
+courseSchema.statics.importJSON = async function (course: ICourse, admin: IUser, active: boolean) {
   // set Admin
   course.courseAdmin = admin;
 
-  // course shouldn't be visible for students after importTest
-  course.active = false;
+  // course shouldn't be visible for students after import
+  // until active flag is explicitly set (e.g. fixtures)
+  course.active = (active === true) ? true : false;
 
   // importTest lectures
   const lectures: Array<ILecture> = course.lectures;
   course.lectures = [];
 
   try {
-    const isCourseDuplicated = (await Course.findOne({name: course.name})) !== null;
-    if (isCourseDuplicated) {
-      course.name = course.name + ' (copy)';
-    }
+    const origName = course.name;
+    let isCourseDuplicated = false;
+    let i = 0;
+    do {
+      // 1. Duplicate -> 'name (copy)', 2. Duplicate -> 'name (copy 2)', 3. Duplicate -> 'name (copy 3)', ...
+      course.name = origName + ((i > 0) ? ' (copy' + ((i > 1) ? ' ' + i : '') + ')' : '');
+      isCourseDuplicated = (await Course.findOne({name: course.name})) !== null;
+      i++;
+    } while (isCourseDuplicated);
     const savedCourse = await new Course(course).save();
     for (const lecture of lectures) {
       await Lecture.schema.statics.importJSON(lecture, savedCourse._id);

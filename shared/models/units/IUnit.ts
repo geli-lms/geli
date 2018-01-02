@@ -1,5 +1,3 @@
-import {ICourse} from '../ICourse';
-
 export interface IUnit {
     _id: any;
     _course: any;
@@ -11,4 +9,5 @@ export interface IUnit {
     weight: number;
     updatedAt: string;
     createdAt: string;
+    __t: string;
 }
