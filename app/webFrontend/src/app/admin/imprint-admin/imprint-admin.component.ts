@@ -15,48 +15,34 @@ import {errorCodes} from '../../../../../../api/src/config/errorCodes';
 })
 export class ImprintAdminComponent implements OnInit {
   imprint: IConfig;
-  imprintRendered: string;
   text: string;
   constructor(private service: ConfigService,
               private mdService: MarkdownService,
               private snackBar: MatSnackBar) { }
 
   ngOnInit() {
-    this.loadImprint()
+    void this.loadImprint()
   }
 
   async loadImprint() {
     try {
       this.imprint = <IConfig><any> await this.service.readSingleItem('imprint');
       this.text = this.imprint.value;
-      this.renderHtml();
     } catch (error) {
       this.text = '';
     }
   }
-
-  renderHtml() {
-    this.imprintRendered = this.mdService.render(this.text);
-  }
-
-  onTabChange($event: any) {
-    if ($event.index === 1) {
-      this.renderHtml();
-    }
-  }
-  onSave() {
+  onSave(markdown: string ) {
     try {
-      void this.service.updateItem({_id: 'imprint', data: this.text});
+      void this.service.updateItem({_id: 'imprint', data: markdown});
       this.snackBar.open('Imprint saved', '', {duration: 3000})
     } catch (error) {
       this.snackBar.open(errorCodes.save.couldNotSaveImprint.text, '', {duration: 3000})
     }
     void this.loadImprint();
-    this.renderHtml();
   }
   onCancel() {
     void this.loadImprint();
-    this.renderHtml();
   }
 
 }
