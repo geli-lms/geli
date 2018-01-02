@@ -8,7 +8,7 @@ import {
   Param,
   Post,
   Put,
-  Req, UnauthorizedError,
+  Req,
   UploadedFile,
   UseBefore
 } from 'routing-controllers';
@@ -92,8 +92,10 @@ export class CourseController {
         path: 'lectures',
         populate: {
           path: 'units',
+          virtuals: true,
           populate: {
-            path: 'tasks'
+            path: 'progressData',
+            match: { user: { $eq: currentUser._id }}
           }
         }
       })
@@ -113,7 +115,7 @@ export class CourseController {
             }
           });
         });
-        return course.toObject();
+        return course.toObject({virtuals: true});
       });
   }
 
@@ -255,7 +257,7 @@ export class CourseController {
     const courseAdmin = await User.findOne({_id: course.courseAdmin});
     if (course.teachers.indexOf(currentUser._id) !== -1 || courseAdmin.equals(currentUser._id.toString())
       || currentUser.role === 'admin' ) {
-      course.remove();
+      await course.remove();
       return {result: true};
     } else {
       throw new ForbiddenError('Forbidden!');

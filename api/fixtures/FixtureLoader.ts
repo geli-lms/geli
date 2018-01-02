@@ -1,32 +1,13 @@
 import * as mongoose from 'mongoose';
 import config from '../src/config/main';
-
-import {studentFixtures} from './UserFixtures/studentFixtures';
-import {courseFixtures} from './courseFixtures';
-import {dumpTestLectureFixtures} from './lectureFixtures/1-dumpTest-lectureFixtures';
-import {IFixture} from './IFixture';
-import {ICourseModel} from '../src/models/Course';
-import {ILectureModel} from '../src/models/Lecture';
-import {adminFixtures} from './UserFixtures/adminFixtures';
-import {teacherFixtures} from './UserFixtures/teacherFixtures';
-import {tutorFixtures} from './UserFixtures/tutorFixtures';
-import {webDevelopmentLectureFixtures} from './lectureFixtures/2-intWebDev-lectureFixtures';
-import {dummyFreeTextFixture} from './unitFixtures/dummyFreeTextFixture';
-import {randomFreeTextFixture} from './unitFixtures/randomFreeTextFixture';
-import {simpleCodeKataFixture} from './unitFixtures/simpleCodeKataFixtures';
-import {IUnitModel} from '../src/models/units/Unit';
-import {advancedWebDevelopmentLectureFixtures} from './lectureFixtures/3-advWebDev-lectureFixtures';
-import {computerGraphicsLectureFixtures} from './lectureFixtures/4-comGra-lectureFixtures';
-import {randomLectureFixtures} from './lectureFixtures/5-randomness-lectureFixtures';
-import {mpseLectureFixtures} from './lectureFixtures/6-MPSE-lectureFixtures';
-import {IUserModel, User} from '../src/models/User';
-import {isNullOrUndefined} from 'util';
-import {loremFreeTextFixture} from './unitFixtures/loremFreeTextFixture';
-import {readmeFreeTextFixture} from './unitFixtures/readmeFreeTextFixture';
-import {mpseIntFreeTextFixture} from './unitFixtures/mpseIntFreeTextFixture';
-import {studentFreeTextFixture} from './unitFixtures/studentFreeTextFixture';
-import {hardCodeKataFixture} from './unitFixtures/hardCodeKataFixtures';
-import {studentCodeKataFixture} from './unitFixtures/studentCodeKataFixtures';
+import {User} from '../src/models/User';
+import * as fs from 'fs';
+import {Course} from '../src/models/Course';
+import * as crypto from 'crypto';
+import {FixtureUtils} from './FixtureUtils';
+import {ICodeKataModel} from '../src/models/units/CodeKataUnit';
+import {Lecture} from '../src/models/Lecture';
+import {Unit} from '../src/models/units/Unit';
 import {WhitelistUser} from '../src/models/WhitelistUser';
 import {IWhitelistUser} from '../../shared/models/IWhitelistUser';
 import {IUser} from '../../shared/models/IUser';
@@ -34,61 +15,10 @@ import whitelist = require('validator/lib/whitelist');
 import ObjectId = mongoose.Types.ObjectId;
 
 export class FixtureLoader {
+  private usersDirectory = 'build/fixtures/users/';
+  private coursesDirectory = 'build/fixtures/courses/';
 
-  private user: Array<IFixture> = [
-    adminFixtures,
-    teacherFixtures,
-    tutorFixtures,
-    studentFixtures,
-  ];
-
-  private courses: Array<IFixture> = [
-    courseFixtures,
-  ];
-
-  private lectures: Array<IFixture> = [
-    /*course 1 lectures*/ dumpTestLectureFixtures,
-    /*course 2 lectures*/ webDevelopmentLectureFixtures,
-    /*course 3 lectures*/ advancedWebDevelopmentLectureFixtures,
-    /*course 4 lectures*/ computerGraphicsLectureFixtures,
-    /*course 5 lectures*/ randomLectureFixtures,
-    /*course 6 lectures*/ mpseLectureFixtures,
-  ];
-
-  private units = [
-    [ // dumpTestLectureFixtures
-      /*lecture 1 units*/ [loremFreeTextFixture],
-      /*lecture 2 units*/ [dummyFreeTextFixture, randomFreeTextFixture],
-      /*lecture 3 units*/ [dummyFreeTextFixture],
-    ],
-    [ // webDevelopmentLectureFixtures
-      /*lecture 1 units*/ [randomFreeTextFixture],
-      /*lecture 2 units*/ [simpleCodeKataFixture],
-      /*lecture 3 units*/ [dummyFreeTextFixture],
-    ],
-    [ // advancedWebDevelopmentLectureFixtures
-      /*lecture 1 units*/ [loremFreeTextFixture],
-      /*lecture 2 units*/ [hardCodeKataFixture],
-      /*lecture 3 units*/ [randomFreeTextFixture],
-    ],
-    [ // computerGraphicsLectureFixtures
-      /*lecture 1 units*/ [loremFreeTextFixture],
-      /*lecture 2 units*/ [dummyFreeTextFixture],
-      /*lecture 3 units*/ [randomFreeTextFixture],
-      /*lecture 4 units*/ [dummyFreeTextFixture],
-    ],
-    [ // randomLectureFixtures
-      /*lecture 1 units*/ [randomFreeTextFixture],
-      /*lecture 2 units*/ [randomFreeTextFixture],
-      /*lecture 3 units*/ [loremFreeTextFixture],
-      /*lecture 4 units*/ [randomFreeTextFixture],
-    ],
-    [ // mpseLectureFixtures
-      /*lecture 1 units*/ [mpseIntFreeTextFixture],
-      /*lecture 2 units*/ [readmeFreeTextFixture],
-      /*lecture 3 units*/ [studentFreeTextFixture, studentCodeKataFixture],
-    ],
-  ];
+  private binaryDirectory = 'build/fixtures/binaryData/';
 
   constructor() {
     (<any>mongoose).Promise = global.Promise;
@@ -98,162 +28,107 @@ export class FixtureLoader {
     }
   }
 
-  load() {
-    return mongoose.connection.dropDatabase()
-      .then(() =>
-        // Load users to Database
-        Promise.all(
-          this.user.map((userFixtures) =>
-            Promise.all(
-              userFixtures.data.map((user) =>
-                new userFixtures.Model(user).save().then(() => {
-                  userFixtures.Model.ensureIndexes();
-                })
-              )
-            )
-          )
-        ))
-      .then(() =>
-        // Load courses
-        Promise.all(
-          this.courses.map((courseFixturesVar) =>
-            Promise.all(
-              courseFixturesVar.data.map((course) => {
-                // add random teacher as course admin
-                // add 2-10 random students
-                const tmp = <ICourseModel>course;
-                return Promise.all([this.getRandomTeacher(), this.getRandomStudents(2, 10)])
-                  .then((results) => {
-                    // does this make any difference? do we need both? is one deprecated?
-                    tmp.courseAdmin = results[0];
-                    tmp.teachers = tmp.teachers.concat(results[0]);
-                    tmp.students = tmp.students.concat(results[1]);
-                    return tmp;
-                  }).then(() => {
-                    return this.addRandomWhitelistUSer(tmp.students, course).then((whitelistUser) => {
-                      if (whitelistUser) {
-                        tmp.whitelist = whitelistUser
-                      }}
-                    );
-                  })
-                  .then(() => new courseFixturesVar.Model(tmp).save());
-              })
-            )
-          )
-        )
-      )
-      .then((neastedCourseList) => {
-        // unwind neasted list
-        const courses: ICourseModel[] = [];
-        neastedCourseList.map((courseList) =>
-          courseList.map((course) =>
-            courses.push(<ICourseModel>course))
-        );
-        return courses;
-      })
-      .then((courses: ICourseModel[]) =>
-        Promise.all(courses.map((course: ICourseModel, courseIndex: number) => {
-          const courseLectures: IFixture = this.lectures[courseIndex];
-          // save all lectures
-          return Promise.all(courseLectures.data.map((lecture: ILectureModel, lectureIndex: number) => {
-            const lect: ILectureModel = <ILectureModel> new courseLectures.Model(lecture);
-            const lectureUnits: IFixture[] = this.units[courseIndex][lectureIndex];
+  async load() {
+    await mongoose.connection.dropDatabase();
+    const userfixtures = fs.readdirSync(this.usersDirectory);
+    const coursefixtures = fs.readdirSync(this.coursesDirectory);
 
-            return Promise.all(lectureUnits.map((unitFixtures) =>
-              // save Units
-              Promise.all(unitFixtures.data.map((unit: IUnitModel) => {
-                unit._course = course._id;
-                return new unitFixtures.Model(unit).save();
-              }))
-              // push units to lecture
-                .then((savedUnits: IUnitModel[]) => {
-                  lect.units = lect.units.concat(savedUnits);
-                  return savedUnits.length;
-                })
-            ))
-              .then(() => lect.save());
-          }))
-          // push lectures to course
-            .then((savedLectures: ILectureModel[]) => {
-              course.lectures = course.lectures.concat(savedLectures);
-              return course.save();
-            });
-        }))
-      )
-  }
+    // import userfiles
+    // order needs to be always the same for 'getRandom...(hash)' to work properly
+    for (const userFile of userfixtures) {
+      const file = fs.readFileSync(this.usersDirectory + userFile);
+      const users = JSON.parse(file.toString());
 
-  getRandomTeacher() {
-    return this.getTeacher()
-      .then((teacher: IUserModel[]) => {
-        return teacher[this.getRandomNumber(0, teacher.length)];
-      });
-  }
+      // each file consists of an array of users to provide possibility of logical grouping
+      for (const userDef of users) {
+        await new User(userDef).save();
+      }
+    }
 
-  getRandomStudent() {
-    return this.getStudents()
-      .then((students: IUserModel[]) => {
-        return students[this.getRandomNumber(0, students.length)];
-      });
-  }
+    // import coursefiles
+    await Promise.all(coursefixtures.map( async (courseFile: string) => {
+      const file = fs.readFileSync(this.coursesDirectory + courseFile);
+      const course = JSON.parse(file.toString());
 
-  getRandomStudents(min: number, max: number) {
-    return this.getStudents()
-      .then((students: IUserModel[]) => {
-        const shuffeledStudents = this.shuffleArray(students);
-        const count = this.getRandomNumber(min, max);
-        const start = this.getRandomNumber(0, shuffeledStudents.length - count);
-        return shuffeledStudents.slice(start, start + count);
-      });
-  }
+      const hash = crypto.createHash('sha1').update(file.toString()).digest('hex');
 
-  getTeacher() {
-    return this.getUser('teacher');
-  }
+      // assign random courseAdmin
+      const teacher = await FixtureUtils.getRandomTeacher(hash);
+      // assign random courseTeachers
+      course.teachers = await FixtureUtils.getRandomTeachers(0, 2, hash);
+      // enroll random array of Students
+      course.students = await FixtureUtils.getRandomStudents(2, 10, hash);
 
-  getStudents() {
-    return this.getUser('student');
-  }
+      const importedCourse = await Course.schema.statics.importJSON(course, teacher, course.active);
+      return importedCourse._id;
+    }));
 
-  addRandomWhitelistUSer(students: IUser[], course: ICourseModel) {
-    const whitelistUser = students.splice(0, this.getRandomNumber(0, students.length - 1));
-    return WhitelistUser.create(whitelistUser.map(stud => {
-        return {
-          firstName: stud.profile.firstName,
-          lastName: stud.profile.lastName,
-          uid: stud.uid,
-          courseId: new ObjectId(course._id)
+    // import files
+    const fileUnits = await Unit.find({files: {$exists: true}});
+
+    await Promise.all(fileUnits.map(async unit => {
+      const files = (<any>unit).files;
+
+      for (const file of files) {
+        if (!fs.existsSync(file.path) && fs.existsSync(this.binaryDirectory + file.alias)) {
+          fs.copyFileSync(this.binaryDirectory + file.alias, file.path)
         }
       }
-    )).then((user: IWhitelistUser[]) => {
-      return user;
-    })
-  }
+    }));
 
-  getUser(role: string) {
-    if (isNullOrUndefined(role)) {
-      return User.find();
-    }
-    return User.find({role: role});
-  }
+    // generate progress
+    const progressableUnits = await Unit.find({progressable: true});
 
-  getRandomNumber(start: number, end: number): number {
-    return Math.floor(Math.random() * end) + start;
-  }
+    await Promise.all(progressableUnits.map(async unit => {
+      const lecture = await Lecture.findOne({units: { $in: [ unit._id ] }});
+      const course = await Course.findOne({lectures: { $in: [ lecture._id ] }});
+      const students = await User.find({_id: { $in: course.students}});
 
-  shuffleArray(array: Array<any>) {
-    let tmp;
-    let current;
-    let top = array.length;
+      for (const student of students) {
+        // do not create a progress if type is zero
+        // 1 -> create progress with `done: false`
+        // 2 -> create progress with `done: true` (and a solution)
+        const progressType = FixtureUtils.getNumberFromString(student.email + student.uid + course.name + lecture.name + unit.name, 0, 3);
 
-    if (top) {
-      while (--top) {
-        current = Math.floor(Math.random() * (top + 1));
-        tmp = array[current];
-        array[current] = array[top];
-        array[top] = tmp;
+        if (progressType === 0) {
+          continue;
+        }
+
+        const newProgress: any = {
+          course: course._id.toString(),
+          unit: unit._id.toString(),
+          user: student._id.toString(),
+        };
+
+        // need to be implemented for each unit type separately
+        switch (unit.type) {
+          case 'code-kata':
+            if (progressType === 1) {
+              (<any>newProgress).code = '// at least i tried ¯\\\\_(ツ)_/¯';
+              newProgress.done = false;
+            } else if (progressType === 2) {
+              (<any>newProgress).code = (<ICodeKataModel>unit).code;
+              newProgress.done = true;
+            }
+            break;
+          case 'task':
+            // does not work properly yet
+            if (progressType === 1) {
+              newProgress.answers = [];
+              newProgress.done = false;
+            } else if (progressType === 2) {
+              newProgress.answers = [];
+              newProgress.done = true;
+            }
+            break;
+        }
+
+        /*
+        const progressClass = UnitClassMapper.getProgressClassForUnit(unit);
+        await new progressClass(newProgress).save();
+        */
       }
-    }
-
-    return array;
+      return unit.name;
+    }));
   }
 }

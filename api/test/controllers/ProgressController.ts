@@ -1,5 +1,4 @@
-process.env.NODE_ENV = 'test';
-
+import {ICodeKataModel} from '../../src/models/units/CodeKataUnit';
 import * as chai from 'chai';
 import chaiHttp = require('chai-http');
 import {Server} from '../../src/server';
@@ -9,22 +8,24 @@ import {User} from '../../src/models/User';
 import {Unit} from '../../src/models/units/Unit';
 import {Lecture} from '../../src/models/Lecture';
 import {Course} from '../../src/models/Course';
-import {CodeKataProgress} from '../../src/models/CodeKataProgress';
-import {Progress} from '../../src/models/Progress';
+import {Progress} from '../../src/models/progress/Progress';
 import * as moment from 'moment';
 
 chai.use(chaiHttp);
+const should = chai.should();
 const app = new Server().app;
 const BASE_URL = '/api/progress';
 const fixtureLoader = new FixtureLoader();
 
 describe('ProgressController', () => {
   // Before each test we reset the database
-  beforeEach(() => fixtureLoader.load());
+  beforeEach(async () => {
+    await fixtureLoader.load();
+  });
 
   describe(`POST ${BASE_URL}`, () => {
     it('should create progress for some progressable unit', async () => {
-      const unit = await Unit.findOne({progressable: true});
+      const unit: ICodeKataModel = <ICodeKataModel>await Unit.findOne({progressable: true, __t: 'code-kata'});
       const lecture = await Lecture.findOne({units: { $in: [ unit._id ] }});
       const course = await Course.findOne({lectures: { $in: [ lecture._id ] }});
       const student = await User.findOne({_id: { $in: course.students}});
@@ -33,32 +34,26 @@ describe('ProgressController', () => {
         course: course._id.toString(),
         unit: unit._id.toString(),
         user: student._id.toString(),
+        code: 'let a = test;',
         done: true,
+        type: 'codeKata'
       };
 
-      return new Promise((resolve, reject) => {
-        chai.request(app)
-          .post(BASE_URL)
-          .set('Authorization', `JWT ${JwtUtils.generateToken(student)}`)
-          .send(newProgress)
-          .end((err, res) => {
-            if (err) {
-              return reject(err);
-            }
-            res.status.should.be.equal(200);
-            res.body.course.should.be.equal(newProgress.course);
-            res.body.unit.should.be.equal(newProgress.unit);
-            res.body.user.should.be.equal(newProgress.user);
-            res.body.done.should.be.equal(newProgress.done);
-            res.body._id.should.be.a('string');
+      const res = await chai.request(app)
+        .post(BASE_URL)
+        .set('Authorization', `JWT ${JwtUtils.generateToken(student)}`)
+        .send(newProgress);
 
-            resolve();
-          });
-      });
+      res.status.should.be.equal(200);
+      res.body.course.should.be.equal(newProgress.course);
+      res.body.unit.should.be.equal(newProgress.unit);
+      res.body.user.should.be.equal(newProgress.user);
+      res.body.done.should.be.equal(newProgress.done);
+      res.body._id.should.be.a('string');
     });
 
     it('should create progress for some progressable unit with a deadline', async () => {
-      const unit: any = await Unit.findOne({progressable: true});
+      const unit: ICodeKataModel = <ICodeKataModel>await Unit.findOne({progressable: true, __t: 'code-kata'});
       const lecture = await Lecture.findOne({units: { $in: [ unit._id ] }});
       const course = await Course.findOne({lectures: { $in: [ lecture._id ] }});
       const student = await User.findOne({_id: { $in: course.students}});
@@ -70,32 +65,26 @@ describe('ProgressController', () => {
         course: course._id.toString(),
         unit: unit._id.toString(),
         user: student._id.toString(),
+        code: 'let a = test',
         done: true,
+        type: 'codeKata'
       };
 
-      return new Promise((resolve, reject) => {
-        chai.request(app)
-          .post(BASE_URL)
-          .set('Authorization', `JWT ${JwtUtils.generateToken(student)}`)
-          .send(newProgress)
-          .end((err, res) => {
-            if (err) {
-              return reject(err);
-            }
-            res.status.should.be.equal(200);
-            res.body.course.should.be.equal(newProgress.course);
-            res.body.unit.should.be.equal(newProgress.unit);
-            res.body.user.should.be.equal(newProgress.user);
-            res.body.done.should.be.equal(newProgress.done);
-            res.body._id.should.be.a('string');
+      const res = await chai.request(app)
+        .post(BASE_URL)
+        .set('Authorization', `JWT ${JwtUtils.generateToken(student)}`)
+        .send(newProgress);
 
-            resolve();
-          });
-      });
+      res.status.should.be.equal(200);
+      res.body.course.should.be.equal(newProgress.course);
+      res.body.unit.should.be.equal(newProgress.unit);
+      res.body.user.should.be.equal(newProgress.user);
+      res.body.done.should.be.equal(newProgress.done);
+      res.body._id.should.be.a('string');
     });
 
     it('should fail creating progress for some progressable unit with a deadline', async () => {
-      const unit: any = await Unit.findOne({progressable: true});
+      const unit: ICodeKataModel = <ICodeKataModel>await Unit.findOne({progressable: true, __t: 'code-kata'});
       const lecture = await Lecture.findOne({units: { $in: [ unit._id ] }});
       const course = await Course.findOne({lectures: { $in: [ lecture._id ] }});
       const student = await User.findOne({_id: { $in: course.students}});
@@ -107,28 +96,26 @@ describe('ProgressController', () => {
         course: course._id.toString(),
         unit: unit._id.toString(),
         user: student._id.toString(),
+        code: 'let a = test',
         done: true,
+        type: 'codeKata'
       };
 
-      return new Promise((resolve) => {
-        chai.request(app)
-          .post(BASE_URL)
-          .set('Authorization', `JWT ${JwtUtils.generateToken(student)}`)
-          .send(newProgress)
-          .end((err, res) => {
-            res.status.should.be.equal(400);
-            err.message.should.be.equal('Bad Request');
-            res.body.message.should.be.equal('Past deadline, no further update possible');
+      const res = await chai.request(app)
+        .post(BASE_URL)
+        .set('Authorization', `JWT ${JwtUtils.generateToken(student)}`)
+        .send(newProgress)
+        .catch(err => err.response);
 
-            resolve();
-          });
-      });
+      res.status.should.be.equal(400);
+      res.body.name.should.be.equal('BadRequestError');
+      res.body.message.should.be.equal('Past deadline, no further update possible');
     });
   });
 
   describe(`PUT ${BASE_URL}`, () => {
     it('should update progress for some progressable unit', async () => {
-      const unit = await Unit.findOne({progressable: true});
+      const unit = await Unit.findOne({progressable: true, __t: 'code-kata'});
       const lecture = await Lecture.findOne({units: { $in: [ unit._id ] }});
       const course = await Course.findOne({lectures: { $in: [ lecture._id ] }});
       const student = await User.findOne({_id: { $in: course.students}});
@@ -137,42 +124,37 @@ describe('ProgressController', () => {
         course: course._id.toString(),
         unit: unit._id.toString(),
         user: student._id.toString(),
+        code: 'let b = test',
         done: false,
+        type: 'codeKata'
       };
 
-      const progressClass = getProgressClassForType(unit.type);
-      const progress = await new progressClass(oldProgress).save();
+      const progress = await Progress.create(oldProgress);
 
       const newProgress = {
         course: course._id.toString(),
         unit: unit._id.toString(),
         user: student._id.toString(),
+        code: 'let a = test',
         done: true,
+        type: 'codeKata'
       };
 
-      return new Promise((resolve, reject) => {
-        chai.request(app)
-          .put(`${BASE_URL}/${progress._id.toString()}`)
-          .set('Authorization', `JWT ${JwtUtils.generateToken(student)}`)
-          .send(newProgress)
-          .end((err, res) => {
-            if (err) {
-              return reject(err);
-            }
-            res.status.should.be.equal(200);
-            res.body.course.should.be.equal(newProgress.course);
-            res.body.unit.should.be.equal(newProgress.unit);
-            res.body.user.should.be.equal(newProgress.user);
-            res.body.done.should.be.equal(newProgress.done);
-            res.body._id.should.be.equal(progress._id.toString());
+      const res = await chai.request(app)
+        .put(`${BASE_URL}/${progress._id.toString()}`)
+        .set('Authorization', `JWT ${JwtUtils.generateToken(student)}`)
+        .send(newProgress);
 
-            resolve();
-          });
-      });
+      res.status.should.be.equal(200);
+      res.body.course.should.be.equal(newProgress.course);
+      res.body.unit.should.be.equal(newProgress.unit);
+      res.body.user.should.be.equal(newProgress.user);
+      res.body.done.should.be.equal(newProgress.done);
+      res.body._id.should.be.equal(progress._id.toString());
     });
 
     it('should update progress for some progressable unit with a deadline', async () => {
-      const unit: any = await Unit.findOne({progressable: true});
+      const unit: ICodeKataModel = <ICodeKataModel>await Unit.findOne({progressable: true, __t: 'code-kata'});
       const lecture = await Lecture.findOne({units: { $in: [ unit._id ] }});
       const course = await Course.findOne({lectures: { $in: [ lecture._id ] }});
       const student = await User.findOne({_id: { $in: course.students}});
@@ -184,42 +166,37 @@ describe('ProgressController', () => {
         course: course._id.toString(),
         unit: unit._id.toString(),
         user: student._id.toString(),
+        code: 'let b = test',
         done: false,
+        type: 'codeKata'
       };
 
-      const progressClass = getProgressClassForType(unit.type);
-      const progress = await new progressClass(oldProgress).save();
+      const progress = await Progress.create(oldProgress);
 
       const newProgress = {
         course: course._id.toString(),
         unit: unit._id.toString(),
         user: student._id.toString(),
+        code: 'let a = test',
         done: true,
+        type: 'codeKata'
       };
 
-      return new Promise((resolve, reject) => {
-        chai.request(app)
-          .put(`${BASE_URL}/${progress._id.toString()}`)
-          .set('Authorization', `JWT ${JwtUtils.generateToken(student)}`)
-          .send(newProgress)
-          .end((err, res) => {
-            if (err) {
-              return reject(err);
-            }
-            res.status.should.be.equal(200);
-            res.body.course.should.be.equal(newProgress.course);
-            res.body.unit.should.be.equal(newProgress.unit);
-            res.body.user.should.be.equal(newProgress.user);
-            res.body.done.should.be.equal(newProgress.done);
-            res.body._id.should.be.equal(progress._id.toString());
+      const res = await chai.request(app)
+        .put(`${BASE_URL}/${progress._id.toString()}`)
+        .set('Authorization', `JWT ${JwtUtils.generateToken(student)}`)
+        .send(newProgress);
 
-            resolve();
-          });
-      });
+      res.status.should.be.equal(200);
+      res.body.course.should.be.equal(newProgress.course);
+      res.body.unit.should.be.equal(newProgress.unit);
+      res.body.user.should.be.equal(newProgress.user);
+      res.body.done.should.be.equal(newProgress.done);
+      res.body._id.should.be.equal(progress._id.toString());
     });
 
     it('should fail updating progress for some progressable unit with a deadline', async () => {
-      const unit: any = await Unit.findOne({progressable: true});
+      const unit: ICodeKataModel = <ICodeKataModel>await Unit.findOne({progressable: true, __t: 'code-kata'});
       const lecture = await Lecture.findOne({units: { $in: [ unit._id ] }});
       const course = await Course.findOne({lectures: { $in: [ lecture._id ] }});
       const student = await User.findOne({_id: { $in: course.students}});
@@ -231,45 +208,31 @@ describe('ProgressController', () => {
         course: course._id.toString(),
         unit: unit._id.toString(),
         user: student._id.toString(),
+        code: 'let b = test',
         done: false,
+        type: 'codeKata'
       };
 
-      const progressClass = getProgressClassForType(unit.type);
-      const progress = await new progressClass(oldProgress).save();
+      const progress = await Progress.create(oldProgress);
 
       const newProgress = {
         course: course._id.toString(),
         unit: unit._id.toString(),
         user: student._id.toString(),
+        code: 'let a = test',
         done: true,
+        type: 'codeKata'
       };
 
-      return new Promise((resolve) => {
-        chai.request(app)
-          .put(`${BASE_URL}/${progress._id.toString()}`)
-          .set('Authorization', `JWT ${JwtUtils.generateToken(student)}`)
-          .send(newProgress)
-          .end((err, res) => {
-            res.status.should.be.equal(400);
-            err.message.should.be.equal('Bad Request');
-            res.body.message.should.be.equal('Past deadline, no further update possible');
+      const res = await chai.request(app)
+        .put(`${BASE_URL}/${progress._id.toString()}`)
+        .set('Authorization', `JWT ${JwtUtils.generateToken(student)}`)
+        .send(newProgress)
+        .catch(err => err.response);
 
-            resolve();
-          });
-      });
+      res.status.should.be.equal(400);
+      res.body.name.should.be.equal('BadRequestError');
+      res.body.message.should.be.equal('Past deadline, no further update possible');
     });
   });
 });
-
-function getProgressClassForType(type: string) {
-  const classMappings: any = {
-    'code-kata': CodeKataProgress,
-    'task': Progress,
-  };
-  const hasNoProgressClass = Object.keys(classMappings).indexOf(type) === -1 ;
-  if (hasNoProgressClass) {
-    throw new Error(`No progress class for type ${type} available`);
-  }
-
-  return classMappings[type];
-}

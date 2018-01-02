@@ -23,21 +23,32 @@ const BUILD_DEV = "build:dev";
 const GENERATE_DOC = "generate:doc";
 const PRETEST = "pretest";
 const RUN_TESTS = "run:tests";
+const COPY_FIXTURES = "copy:fixtures";
 const LOAD_FIXTURES = "load:fixtures";
 const TEST = "test";
 const TEST_NATIVE = "test:native";
 const REMAP_COVERAGE = "remap:coverage";
+const MIGRATE = 'migrate';
 const WATCH = "watch";
 const WATCH_POLL = "watch:poll";
 const DEBUG = "debug";
 const INSPECT = "inspect";
+const INSPECT_MIGRATOR = "migrate:inspect";
 
-const TS_SRC_GLOB = "./src/**/*.ts";
-const TS_TEST_GLOB = "./test/**/*.ts";
-const TS_FIXTURES_GLOB = "./fixtures/**/*.ts";
-const JS_TEST_GLOB = "./build/test/**/*.js";
-const JS_SRC_GLOB = "./build/src/**/*.js";
-const TS_GLOB = [TS_SRC_GLOB, TS_TEST_GLOB, TS_FIXTURES_GLOB];
+const SRC_GLOB = "./src/**/*";
+const TS_SRC_GLOB = SRC_GLOB + ".ts";
+const TEST_GLOB = "./test/**/*";
+const TS_TEST_GLOB = TEST_GLOB + ".ts";
+const FIXTURES_GLOB = "./fixtures/**/*";
+const TS_FIXTURES_GLOB = FIXTURES_GLOB + ".ts";
+const TS_MIGRATION_GLOB = "./migrations/**/*.ts";
+
+const BUILD_GLOB = "./build/";
+const BUILD_TEST_GLOB = BUILD_GLOB + "test/**/*";
+const JS_TEST_GLOB = BUILD_TEST_GLOB + ".js";
+const BUILD_SRC_GLOB = BUILD_GLOB + "src/**/*";
+const JS_SRC_GLOB = BUILD_SRC_GLOB + ".js";
+const TS_GLOB = [TS_SRC_GLOB, TS_TEST_GLOB, TS_FIXTURES_GLOB, TS_MIGRATION_GLOB];
 
 const tsProject = typescript.createProject("tsconfig.json");
 
@@ -81,18 +92,23 @@ gulp.task(COMPILE_TYPESCRIPT, function () {
   return gulp.src(TS_GLOB, {base: "."})
     .pipe(sourcemaps.init())
     .pipe(tsProject())
-    .pipe(sourcemaps.write())
+    .pipe(sourcemaps.write('maps'))
     .pipe(gulp.dest("./build"));
+});
+
+gulp.task(COPY_FIXTURES, function () {
+  return gulp.src([FIXTURES_GLOB, "!" + TS_FIXTURES_GLOB], {base: "."})
+    .pipe(gulp.dest(BUILD_GLOB));
 });
 
 // Runs all required steps for the build in sequence.
 gulp.task(BUILD, function (callback) {
-  runSequence(CLEAN_BUILD, TSLINT, COMPILE_TYPESCRIPT, callback);
+  runSequence(CLEAN_BUILD, TSLINT, COMPILE_TYPESCRIPT, COPY_FIXTURES, callback);
 });
 
 // Runs all required steps for the build in sequence FOR DEVELOP
 gulp.task(BUILD_DEV, function (callback) {
-  runSequence(CLEAN_BUILD, TSLINT_DEV, COMPILE_TYPESCRIPT, callback);
+  runSequence(CLEAN_BUILD, TSLINT_DEV, COMPILE_TYPESCRIPT, COPY_FIXTURES, callback);
 });
 
 // Generates a documentation based on the code comments in the *.ts files.
@@ -180,8 +196,12 @@ gulp.task(WATCH_POLL, [BUILD_DEV], function () {
   });
 });
 
-gulp.task(LOAD_FIXTURES, [BUILD], function () {
+gulp.task(LOAD_FIXTURES, [BUILD_DEV], function () {
   require(__dirname + "/build/fixtures/load");
+});
+
+gulp.task(MIGRATE, [BUILD], function () {
+  require(__dirname + "/build/migrations/migrate");
 });
 
 gulp.task(DEBUG, [BUILD_DEV], function () {
@@ -199,6 +219,16 @@ gulp.task(INSPECT, [BUILD_DEV], function () {
     ext: "ts js json",
     script: "build/src/server.js",
     watch: ["src/*", "test/*"],
+    tasks: [BUILD_DEV],
+    nodeArgs: ["--inspect=0.0.0.0:9229"]
+  });
+});
+
+gulp.task(INSPECT_MIGRATOR, [BUILD_DEV], function () {
+  return nodemon({
+    ext: "ts js json",
+    script: "build/migrations/migrate.js",
+    watch: ["migrations/*"],
     tasks: [BUILD_DEV],
     nodeArgs: ["--inspect=0.0.0.0:9229"]
   });

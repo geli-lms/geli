@@ -1,14 +1,15 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
-import {CodeKataUnit} from '../../models/CodeKataUnit';
 import {MatSnackBar} from '@angular/material';
 import {ProgressService} from 'app/shared/services/data/progress.service';
-import {ICodeKataProgress} from '../../../../../../shared/models/ICodeKataProgress';
+import {ICodeKataUnitProgress} from '../../../../../../shared/models/progress/ICodeKataProgress';
 import {UserService} from '../../shared/services/user.service';
 import {ActivatedRoute} from '@angular/router';
 import {AceEditorComponent} from 'ng2-ace-editor';
 import 'brace';
 import 'brace/mode/javascript';
 import 'brace/theme/github';
+import {ICodeKataUnit} from '../../../../../../shared/models/units/ICodeKataUnit';
+import {CodeKataUnitProgress} from '../../models/progress/CodeKataUnitProgress';
 
 @Component({
   selector: 'app-code-kata',
@@ -16,7 +17,7 @@ import 'brace/theme/github';
   styleUrls: ['./code-kata-unit.component.scss']
 })
 export class CodeKataComponent implements OnInit {
-  @Input() codeKata: CodeKataUnit;
+  @Input() codeKataUnit: ICodeKataUnit;
 
   @ViewChild('definitionEditor')
   definitionEditor: AceEditorComponent;
@@ -26,7 +27,7 @@ export class CodeKataComponent implements OnInit {
   testEditor: AceEditorComponent;
 
   logs: string;
-  progress: any;
+  progress: ICodeKataUnitProgress;
   isExampleCode = false;
 
   constructor(private route: ActivatedRoute,
@@ -34,17 +35,16 @@ export class CodeKataComponent implements OnInit {
               private progressService: ProgressService,
               private userService: UserService) {
     this.logs = undefined;
-    this.progress = {course: '', unit: '', user: '', code: '', done: false};
   }
 
   ngOnInit() {
-    this.route.params.subscribe(
-      params => {
-        this.progress.course = decodeURIComponent(params['id']);
-      });
-    this.isExampleCode = this.codeKata.code !== null;
+    this.isExampleCode = this.codeKataUnit.code !== null;
     if (!this.isExampleCode) {
-      this.loadProgress();
+      if (!this.codeKataUnit.progressData) {
+        this.progress = new CodeKataUnitProgress(this.codeKataUnit);
+      } else {
+        this.progress = this.codeKataUnit.progressData;
+      }
     }
   }
 
@@ -58,11 +58,11 @@ export class CodeKataComponent implements OnInit {
     });
     this.codeEditor.setOptions({
       maxLines: 9999,
-      firstLineNumber: (this.codeKata.definition.split('\n').length || 0) + 1,
+      firstLineNumber: (this.codeKataUnit.definition.split('\n').length || 0) + 1,
     });
     this.testEditor.setOptions({
       maxLines: 9999,
-      firstLineNumber: ((this.codeKata.definition.split('\n').length + this.progress.code.split('\n').length) || 0) + 1,
+      firstLineNumber: ((this.codeKataUnit.definition.split('\n').length) || 0) + 1,
     });
   }
 
@@ -73,37 +73,25 @@ export class CodeKataComponent implements OnInit {
     }
 
     if (!this.progress._id) {
-      this.progress.unit = this.codeKata._id;
       this.progress.user = this.userService.user._id;
       this.progressService.createItem(this.progress)
         .then((item) => {
           this.snackBar.open('Progress has been saved', '', {duration: 3000});
-          this.progress._id = item._id;
+          this.progress = item;
         })
         .catch((err) => {
           this.snackBar.open(`An error occurred: ${err.json().message}`, '', {duration: 3000});
         });
     } else {
       this.progressService.updateItem(this.progress)
-        .then(() => {
+        .then((item) => {
           this.snackBar.open('Progress has been updated', '', {duration: 3000});
+          this.progress = item;
         })
         .catch((err) => {
           this.snackBar.open(`An error occurred: ${err.json().message}`, '', {duration: 3000})
         });
     }
-  }
-
-  private loadProgress() {
-    this.progressService.getUserProgress(this.userService.user._id)
-      .then((progress: any) => {
-        for (const prop in progress) {
-          if (progress[prop].unit === this.codeKata._id) {
-            this.progress = progress[prop];
-            break;
-          }
-        }
-      });
   }
 
   onUserInput() {
@@ -112,7 +100,7 @@ export class CodeKataComponent implements OnInit {
 
   // refactor this to use the same as in code-kata-unit-form
   validate() {
-    const codeToTest: string = this.codeKata.definition + '\n' + this.progress.code + '\n' + this.codeKata.test;
+    const codeToTest: string = this.codeKataUnit.definition + '\n' + this.progress.code + '\n' + this.codeKataUnit.test;
 
     this.logs = undefined;
 

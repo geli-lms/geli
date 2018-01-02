@@ -166,6 +166,9 @@ export class CourseEditComponent implements OnInit {
   async onDuplicate() {
     try {
       const course = await this.duplicationService.duplicateCourse(this.courseOb, this.userService.user);
+      const url = '/course/' + (<any>course)._id + '/edit';
+      this.router.navigate([url]);
+      this.snackBar.open('Course successfully duplicated', '', {duration: 3000});
     } catch (err) {
       this.snackBar.open('Duplication of the course failed ' + err.json().message, 'Dismiss');
     }
