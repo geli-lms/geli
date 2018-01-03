@@ -11,6 +11,7 @@ import {TitleService} from '../../shared/services/title.service';
 import {SaveFileService} from '../../shared/services/save-file.service';
 import {ENROLL_TYPES, ENROLL_TYPE_WHITELIST, ENROLL_TYPE_FREE, ENROLL_TYPE_ACCESSKEY} from '../../../../../../shared/models/ICourse';
 import {DialogService} from '../../shared/services/dialog.service';
+import {HelloWorldComponent} from './hello-world/hello-world.component';
 
 @Component({
   selector: 'app-course-edit',
