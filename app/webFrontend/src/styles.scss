@@ -96,3 +96,19 @@ app-root > .app-wrapper {
 .text-danger{
   color: red;
 }
+
+@mixin transition {
+  transition: all 200ms ease 0ms !important;
+}
+a,
+.mat-menu-item {
+  @include transition;
+
+  &:hover {
+    @include transition;
+  }
+}
+.mat-button .mat-button-focus-overlay,
+.mat-button:hover .mat-button-focus-overlay {
+  @include transition;
+}

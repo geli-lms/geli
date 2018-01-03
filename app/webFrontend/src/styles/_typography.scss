@@ -14,3 +14,18 @@ h1, h2, h3, h4, h5, h6 {
 .logo-font {
   font-family: $font-logo;
 }
+
+a:not([mat-button]) {
+  $baseClr: map-get($app-warn, 'default');
+  color: $baseClr;
+  text-decoration: underline;
+
+  &:visited {
+    color: darken($baseClr, 10%);
+  }
+
+  &:hover {
+    color: lighten($baseClr, 10%);
+    text-decoration: none;
+  }
+}
