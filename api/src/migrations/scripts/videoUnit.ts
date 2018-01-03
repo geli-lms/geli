@@ -44,8 +44,8 @@ class VideoUnitMigration {
       const videoUnits = await Unit.find({'__t': 'video'}).exec();
       const updatedFileUnits = await Promise.all(videoUnits.map(async(videoUnit) => {
         const videoUnitObj: IFileUnit = <IFileUnit>videoUnit.toObject();
-        videoUnitObj.fileUnitType = videoUnitObj.type;
-        videoUnitObj.type = 'file';
+        videoUnitObj.fileUnitType = videoUnitObj.__t;
+        videoUnitObj.__t = 'file';
         videoUnitObj._id = new ObjectID(videoUnitObj._id);
 
         const unitsAfterReplace = await mongoose.connection.collection('units')
