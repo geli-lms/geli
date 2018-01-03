@@ -4,7 +4,6 @@ import {Course} from '../models/Course';
 import {Lecture} from '../models/Lecture';
 import {Unit} from '../models/units/Unit';
 import {IUser} from '../../../shared/models/IUser';
-import {UnitClassMapper} from '../utilities/UnitClassMapper';
 
 @JsonController('/import')
 @UseBefore(passportJwtMiddleware)
@@ -30,7 +29,6 @@ export class ImportController {
                    @Param('course') courseId: string,
                    @Param('lecture') lectureId: string) {
     const unitDesc = JSON.parse(file.buffer.toString());
-    const unitTypeClass = UnitClassMapper.getMongooseClassForUnit(unitDesc);
-    return unitTypeClass.schema.statics.importJSON(unitDesc, courseId, lectureId);
+    return Unit.schema.statics.importJSON(unitDesc, courseId, lectureId);
   }
 }

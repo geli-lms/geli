@@ -12,6 +12,9 @@ import {MatFabMenuComponent} from './components/mat-fab-menu/mat-fab-menu.compon
 import {PasswordInputComponent} from './components/password-input/password-input.component';
 import {ExpandableDivComponent} from './components/expandable-div/expandable-div.component';
 import {ButtonSaveCancelComponent} from './components/button-save-cancel/button-save-cancel.component';
+import {UploadFormComponent} from './components/upload-form/upload-form.component';
+import {FileUploadModule} from 'ng2-file-upload';
+import {FilesizePipe} from './pipes/filesize/filesize.pipe';
 import {MarkdownEditorComponent} from './components/markdown-editor/markdown-editor.component';
 import {AceEditorModule} from 'ng2-ace-editor';
 
@@ -23,6 +26,7 @@ import {AceEditorModule} from 'ng2-ace-editor';
     MaterialImportModule,
     HttpClientModule,
     AceEditorModule,
+    FileUploadModule
   ],
   declarations: [
     GravatarDirective,
@@ -34,6 +38,8 @@ import {AceEditorModule} from 'ng2-ace-editor';
     BadgeComponent,
     ExpandableDivComponent,
     ButtonSaveCancelComponent,
+    UploadFormComponent,
+    FilesizePipe,
     MarkdownEditorComponent,
   ],
   exports: [
@@ -49,6 +55,8 @@ import {AceEditorModule} from 'ng2-ace-editor';
     ExpandableDivComponent,
     ButtonSaveCancelComponent,
     MarkdownEditorComponent,
+    UploadFormComponent,
+    FilesizePipe,
   ]
 })
 export class SharedModule {

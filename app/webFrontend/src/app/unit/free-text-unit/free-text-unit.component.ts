@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {FreeTextUnit} from '../../models/FreeTextUnit';
+import {FreeTextUnit} from '../../models/units/FreeTextUnit';
 
 @Component({
   selector: 'app-free-text-unit',

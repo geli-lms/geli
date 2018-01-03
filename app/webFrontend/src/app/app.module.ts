@@ -13,7 +13,6 @@ import {
   CourseService,
   FreeTextUnitService,
   LectureService,
-  TaskService,
   UnitService,
   UserDataService,
   ConfigService
@@ -36,7 +35,7 @@ import {ImprintModule} from './imprint/imprint.module';
 
 @NgModule({
   declarations: [
-    AppComponent,
+    AppComponent
   ],
   imports: [
     BrowserModule,
@@ -57,7 +56,6 @@ import {ImprintModule} from './imprint/imprint.module';
     AboutDataService,
     AuthGuardService,
     UnitService,
-    TaskService,
     CourseService,
     UserDataService,
     LectureService,
