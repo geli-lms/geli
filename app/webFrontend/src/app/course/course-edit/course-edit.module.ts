@@ -3,7 +3,7 @@ import {CommonModule} from '@angular/common';
 import {MembersComponent} from './members/members.component';
 import {CourseUserListComponent} from './course-user-list/course-user-list.component';
 import {CourseManageContentComponent} from './course-manage-content/course-manage-content.component';
-import { HelloWorldComponent } from './hello-world/hello-world.component';
+import {HelloWorldComponent} from './hello-world/hello-world.component';
 import {CourseEditComponent} from './course-edit.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {FileUploadModule} from 'ng2-file-upload';
