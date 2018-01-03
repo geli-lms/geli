@@ -42,6 +42,7 @@ import { HelloWorldComponent } from './hello-world/hello-world.component';
     MembersComponent,
     TeachersComponent,
     MatFabMenuComponent,
+    HelloWorldComponent,
   ]
 })
 export class CourseEditModule {
