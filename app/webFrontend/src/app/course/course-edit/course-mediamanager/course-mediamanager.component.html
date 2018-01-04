@@ -1,3 +1,54 @@
-<p>
-  course-mediamanager works!
-</p>
+<!-- Left part: Folders -->
+<div class="part--left">
+  <!-- TODO -->
+  <p>Folders here</p>
+</div>
+
+<!-- Center part: search/files -->
+<div class="part--center">
+
+  <!-- Fuzzy Search -->
+  <div class="area--search">
+    <mat-form-field class="fuzzySearch">
+      <input matInput placeholder="Search for files" [matAutocomplete]="auto">
+    </mat-form-field>
+
+    <mat-autocomplete #auto="matAutocomplete">
+      <!--<mat-option *ngFor="let state of filteredStates | async" [value]="state">-->
+        <!--{{ state }}-->
+      <!--</mat-option>-->
+    </mat-autocomplete>
+  </div>
+
+  <!-- Files cards -->
+  <div class="area--files">
+
+    <!-- Multi-Select button area -->
+    <div class="btn__area">
+      <button class="text-fit" mat-raised-button matTooltip="" (click)="">
+        <mat-icon>select_all</mat-icon>
+      </button>
+    </div>
+
+    <!-- File Cards -->
+    <div class="file-wrapper">
+      <ng-container *ngFor="let file of files">
+        <mat-card [ngClass]="isInSelectedCards(file) ? 'active' : 'file'" (click)="toggleSelection(user)">
+          <!-- TODO -->
+        </mat-card>
+      </ng-container>
+    </div>
+  </div>
+</div>
+
+<!-- Right part: Detail-->
+<div class="part--right">
+  <mat-toolbar>
+    <mat-tooltip-component>
+      <button (click)="toggleDetailBar()">
+        <mat-icon *ngIf="isDetailBar">close</mat-icon>
+        <mat-icon *ngIf="!isDetailBar">arrow_left</mat-icon>
+      </button>
+    </mat-tooltip-component>
+  </mat-toolbar>
+</div>
