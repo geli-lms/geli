@@ -1,16 +1,43 @@
+.mm-container {
+  display: flex;
+  flex-direction: row;
+}
+
 .part {
-  display: grid;
 
-  &.--left {
-
+  &--left {
+    flex-grow: 10;
   }
 
-  &.--center {
-
+  &--center {
+    flex-grow: 100;
   }
 
-  &.--right {
+  &--right {
+    flex-grow: 20;
 
+    .mat-toolbar-multiple-rows {
+      min-height: 50px;
+
+      .mat-toolbar-row {
+        height: 50px;
+        padding: 0 10px;
+      }
+    }
+
+    .mm-detail-wrapper {
+      padding: 1ex;
+    }
+
+    .mm-detail-group {
+      display: grid;
+      grid-template-columns: 30% 69%;
+      grid-gap: 1%;
+    }
+
+    .mm-detail-label {
+      font-weight: bold;
+    }
   }
 }
 

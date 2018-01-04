@@ -8,10 +8,20 @@ import {ICourse} from '../../../../../../../shared/models/ICourse';
 })
 export class CourseMediamanagerComponent implements OnInit {
   @Input() course: ICourse;
+  detailBarVisible: boolean;
 
   constructor() { }
 
   ngOnInit() {
+    this.detailBarVisible = true;
+  }
+
+  isDetailBarVisible(): boolean {
+    return this.detailBarVisible;
+  }
+
+  toggleDetailBarVisible(): void {
+    this.detailBarVisible = !this.detailBarVisible;
   }
 
 }
