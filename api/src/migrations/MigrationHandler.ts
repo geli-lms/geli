@@ -1,7 +1,7 @@
 // tslint:disable:no-console
-import config from '../src/config/main';
+import config from '../config/main';
 import * as mongoose from 'mongoose';
-import {Connection} from 'mongoose';
+
 const fs = require('fs');
 
 export class MigrationHandler {
