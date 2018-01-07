@@ -47,6 +47,7 @@ describe('Export', async () => {
         should.not.exist(exportResult.body.__v);
         should.not.exist(exportResult.body.updatedAt);
         should.not.exist(unitJson._id);
+        // TODO: share this check since it is the same one as in import.ts
         unitJson.name.should.be.equal(unit.name);
         // check nullable fields
         if (unit.description != null) {
