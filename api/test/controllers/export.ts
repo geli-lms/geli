@@ -70,9 +70,10 @@ describe('Export', async () => {
           }
         }
 
-        unitJson.type.should.be.equal(unit.type);
+        // TODO: Do not use any cast
+        (<any>unitJson).__t.should.be.equal((<any>unit).__t);
         // check different types
-        switch (unit.type) {
+        switch ((<any>unit).__t) {
           case 'free-text':
             const freeTextUnit = <IFreeTextUnitModel>unit;
             (<IFreeTextUnit>unitJson).markdown.should.be.equal(freeTextUnit.markdown);

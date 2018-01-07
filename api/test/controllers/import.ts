@@ -76,8 +76,6 @@ describe('Import', async () => {
         should.exist(importResult.body.updatedAt);
         should.exist(unitJson._id);
         // TODO: share this check since it is the same one as in export.ts
-        console.log(unit);
-        console.log(unitJson);
         unitJson.name.should.be.equal(unit.name);
         // check nullable fields
         if (unit.description != null) {
@@ -100,9 +98,9 @@ describe('Import', async () => {
           }
         }
 
-        unitJson.type.should.be.equal(unit.type);
+        (<any>unitJson).__t.should.be.equal((<any>unit).__t);
         // check different types
-        switch (unit.type) {
+        switch ((<any>unit).__t) {
           case 'free-text':
             const freeTextUnit = <IFreeTextUnitModel>unit;
             (<IFreeTextUnit>unitJson).markdown.should.be.equal(freeTextUnit.markdown);
