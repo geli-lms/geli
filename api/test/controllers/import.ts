@@ -52,9 +52,6 @@ describe('Import', async () => {
       }
 
       for (const unit of units) {
-        if (unit.type !== 'task') {
-          continue;
-        }
         const tmpUnitFile = await createTempFile('unit');
         util.promisify(fs.write)(tmpUnitFile.fd, JSON.stringify(unit));
 
