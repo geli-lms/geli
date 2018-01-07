@@ -61,6 +61,14 @@ export class FixtureUtils {
     return this.getRandom(array, hash);
   }
 
+  public static async getCoursesFromLecture(lecture: ILecture) {
+    return Course.findOne({lectures: { $in: [ lecture._id ] }});
+  }
+
+  public static async getCoursesFromUnit(unit: IUnit) {
+    return Course.findById(unit._course);
+  }
+
   public static async getRandomLecture(hash?: string) {
     const array = await this.getLectures();
     return this.getRandom(array, hash);
@@ -69,6 +77,10 @@ export class FixtureUtils {
   public static async getRandomLectureFromCourse(course: ICourse, hash?: string) {
     const lectureId = await this.getRandom(course.lectures, hash);
     return Lecture.findById(lectureId);
+  }
+
+  public static async getLectureFromUnit(unit: IUnit) {
+    return Lecture.findOne({units: { $in: [ unit._id ] }});
   }
 
   public static async getRandomUnit(hash?: string) {
@@ -102,15 +114,15 @@ export class FixtureUtils {
     return this.getUser('student');
   }
 
-  private static async getCourses() {
+  public static async getCourses() {
     return Course.find();
   }
 
-  private static async getLectures() {
+  public static async getLectures() {
     return Lecture.find();
   }
 
-  private static async getUnits() {
+  public static async getUnits() {
     return Unit.find();
   }
 
