@@ -80,21 +80,6 @@ export class CourseComponent {
       });
   }
 
-  isCourseTeacherOrAdmin(course: ICourse) {
-    if (this.userService.isStudent()) {
-      return false;
-    }
-    if (this.userService.isAdmin()) {
-      return true;
-    }
-
-    if (course.courseAdmin._id === this.userService.user._id) {
-      return true;
-    }
-
-    return ( course.teachers.filter(teacher => teacher._id === this.userService.user._id).length)
-  }
-
   isMemberOfCourse(course: ICourse) {
     const user = this.userService.user;
     return this.userService.isStudent() &&

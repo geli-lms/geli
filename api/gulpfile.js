@@ -28,10 +28,12 @@ const LOAD_FIXTURES = "load:fixtures";
 const TEST = "test";
 const TEST_NATIVE = "test:native";
 const REMAP_COVERAGE = "remap:coverage";
+const MIGRATE = 'migrate';
 const WATCH = "watch";
 const WATCH_POLL = "watch:poll";
 const DEBUG = "debug";
 const INSPECT = "inspect";
+const INSPECT_MIGRATOR = "migrate:inspect";
 
 const SRC_GLOB = "./src/**/*";
 const TS_SRC_GLOB = SRC_GLOB + ".ts";
@@ -39,13 +41,14 @@ const TEST_GLOB = "./test/**/*";
 const TS_TEST_GLOB = TEST_GLOB + ".ts";
 const FIXTURES_GLOB = "./fixtures/**/*";
 const TS_FIXTURES_GLOB = FIXTURES_GLOB + ".ts";
+const TS_MIGRATION_GLOB = "./migrations/**/*.ts";
 
 const BUILD_GLOB = "./build/";
 const BUILD_TEST_GLOB = BUILD_GLOB + "test/**/*";
 const JS_TEST_GLOB = BUILD_TEST_GLOB + ".js";
 const BUILD_SRC_GLOB = BUILD_GLOB + "src/**/*";
 const JS_SRC_GLOB = BUILD_SRC_GLOB + ".js";
-const TS_GLOB = [TS_SRC_GLOB, TS_TEST_GLOB, TS_FIXTURES_GLOB];
+const TS_GLOB = [TS_SRC_GLOB, TS_TEST_GLOB, TS_FIXTURES_GLOB, TS_MIGRATION_GLOB];
 
 const tsProject = typescript.createProject("tsconfig.json");
 
@@ -89,14 +92,14 @@ gulp.task(COMPILE_TYPESCRIPT, function () {
   return gulp.src(TS_GLOB, {base: "."})
     .pipe(sourcemaps.init())
     .pipe(tsProject())
-    .pipe(sourcemaps.write())
+    .pipe(sourcemaps.write('maps'))
     .pipe(gulp.dest("./build"));
 });
 
 gulp.task(COPY_FIXTURES, function () {
   return gulp.src([FIXTURES_GLOB, "!" + TS_FIXTURES_GLOB], {base: "."})
     .pipe(gulp.dest(BUILD_GLOB));
-})
+});
 
 // Runs all required steps for the build in sequence.
 gulp.task(BUILD, function (callback) {
@@ -197,6 +200,10 @@ gulp.task(LOAD_FIXTURES, [BUILD_DEV], function () {
   require(__dirname + "/build/fixtures/load");
 });
 
+gulp.task(MIGRATE, [BUILD], function () {
+  require(__dirname + "/build/migrations/migrate");
+});
+
 gulp.task(DEBUG, [BUILD_DEV], function () {
   return nodemon({
     ext: "ts js json",
@@ -212,6 +219,16 @@ gulp.task(INSPECT, [BUILD_DEV], function () {
     ext: "ts js json",
     script: "build/src/server.js",
     watch: ["src/*", "test/*"],
+    tasks: [BUILD_DEV],
+    nodeArgs: ["--inspect=0.0.0.0:9229"]
+  });
+});
+
+gulp.task(INSPECT_MIGRATOR, [BUILD_DEV], function () {
+  return nodemon({
+    ext: "ts js json",
+    script: "build/migrations/migrate.js",
+    watch: ["migrations/*"],
     tasks: [BUILD_DEV],
     nodeArgs: ["--inspect=0.0.0.0:9229"]
   });
