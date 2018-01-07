@@ -113,11 +113,12 @@ describe('Import', async () => {
             break;
           case 'task':
             const taskUnit = <ITaskUnitModel>unit;
-            // (<ITaskUnit>unitJson).tasks.should.be.instanceOf(Array).and.have.lengthOf(taskUnit.tasks.length);
+            (<ITaskUnit>unitJson).tasks.should.be.instanceOf(Array).and.have.lengthOf(taskUnit.tasks.length);
             // maybe further test single tasks?
             break;
           default:
-            winston.log('warn', 'export for \'' + unit.type + '\' is not completly tested');
+            // should this fail the test?
+            winston.log('warn', 'import for \'' + unit.type + '\' is not completly tested');
             break;
         }
       }

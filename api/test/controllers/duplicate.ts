@@ -27,46 +27,32 @@ const createTempFile = util.promisify(temp.open);
 chai.use(chaiHttp);
 const should = chai.should();
 const app = new Server().app;
-const BASE_URL = '/api/import';
+const BASE_URL = '/api/duplicate';
 const fixtureLoader = new FixtureLoader();
 
-describe('Import', async () => {
+describe('Duplicate', async () => {
   // Before each test we reset the database
   beforeEach(async () => {
     await fixtureLoader.load();
   });
 
   describe(`POST ${BASE_URL}`, async () => {
-    it('should import units', async () => {
-      const coursesDirectory = 'build/fixtures/courses/';
-      const coursefixtures = fs.readdirSync(coursesDirectory);
-
-      let units: Array<IUnit> = [];
-      for (const courseFilePath of coursefixtures) {
-        const courseFile = fs.readFileSync(coursesDirectory + courseFilePath);
-        const course: ICourse = JSON.parse(courseFile.toString());
-
-        for (const lecture of course.lectures) {
-          units = units.concat(lecture.units);
-        }
-      }
+    it('should duplicate units', async () => {
+      const units = await FixtureUtils.getUnits();
 
       for (const unit of units) {
-        const tmpUnitFile = await createTempFile('unit');
-        util.promisify(fs.write)(tmpUnitFile.fd, JSON.stringify(unit));
-
-        const course = await FixtureUtils.getRandomCourse();
-        const lecture = await FixtureUtils.getRandomLectureFromCourse(course);
+        const course = await FixtureUtils.getCoursesFromUnit(unit);
+        const lecture = await FixtureUtils.getLectureFromUnit(unit);
         const teacher = await FixtureUtils.getRandomTeacherForCourse(course);
 
         let unitJson: IUnit;
         const importResult = await chai.request(app)
-          .post(`${BASE_URL}/unit/${course.id}/${lecture.id}`)
+          .post(`${BASE_URL}/unit/${unit.id}`)
           .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
-          .attach('file', fs.readFileSync(tmpUnitFile.path), unit.name)
+          .send({courseId: course.id, lectureId: lecture.id})
           .catch((err) => err.response);
         importResult.status.should.be.equal(200,
-          'failed to import ' + unit.name +
+          'failed to duplicate ' + unit.name +
           ' into ' + lecture.name +
           ' from ' + course.name +
           ' -> ' + importResult.body.message);
@@ -118,36 +104,24 @@ describe('Import', async () => {
             break;
           default:
             // should this fail the test?
-            winston.log('warn', 'import for \'' + unit.type + '\' is not completly tested');
+            winston.log('warn', 'duplicate for \'' + unit.type + '\' is not completly tested');
             break;
         }
       }
     });
 
-    it('should import lectures', async () => {
-      const coursesDirectory = 'build/fixtures/courses/';
-      const coursefixtures = fs.readdirSync(coursesDirectory);
-
-      let lectures: Array<ILecture> = [];
-      for (const courseFilePath of coursefixtures) {
-        const courseFile = fs.readFileSync(coursesDirectory + courseFilePath);
-        const course: ICourse = JSON.parse(courseFile.toString());
-
-        lectures = lectures.concat(course.lectures);
-      }
+    it('should duplicate lectures', async () => {
+      const lectures = await FixtureUtils.getLectures();
 
       for (const lecture of lectures) {
-        const tmpLectureFile = await createTempFile('lecture');
-        util.promisify(fs.write)(tmpLectureFile.fd, JSON.stringify(lecture));
-
-        const course = await FixtureUtils.getRandomCourse();
+        const course = await FixtureUtils.getCoursesFromLecture(lecture);
         const teacher = await FixtureUtils.getRandomTeacherForCourse(course);
 
         let lectureJson: ILecture;
         const importResult = await chai.request(app)
-          .post(`${BASE_URL}/lecture/${course.id}`)
+          .post(`${BASE_URL}/lecture/${lecture.id}`)
           .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
-          .attach('file', fs.readFileSync(tmpLectureFile.path), lecture.name)
+          .send({courseId: course.id})
           .catch((err) => err.response);
         importResult.status.should.be.equal(200,
           'failed to import ' + lecture.name +
@@ -169,23 +143,20 @@ describe('Import', async () => {
       }
     });
 
-    it('should import courses', async () => {
-      const coursesDirectory = 'build/fixtures/courses/';
-      const coursefixtures = fs.readdirSync(coursesDirectory);
+    it('should duplicate courses', async () => {
+      const courses = await FixtureUtils.getCourses();
 
-      for (const courseFilePath of coursefixtures) {
-        const teacher = await FixtureUtils.getRandomTeacher();
-        const courseFile = fs.readFileSync(coursesDirectory + courseFilePath);
-        const course: ICourse = JSON.parse(courseFile.toString());
+      for (const course of courses) {
+        const teacher = await FixtureUtils.getRandomTeacherForCourse(course);
 
         let courseJson: ICourse;
         const importResult = await chai.request(app)
-          .post(`${BASE_URL}/course`)
+          .post(`${BASE_URL}/course/${course.id}`)
           .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
-          .attach('file', courseFile, courseFilePath)
+          .send({courseAdmin: teacher.id})
           .catch((err) => err.response);
         importResult.status.should.be.equal(200,
-          'failed to import ' + course.name +
+          'failed to duplicate ' + course.name +
           ' -> ' + importResult.body.message);
         courseJson = importResult.body;
         should.exist(importResult.body.createdAt);

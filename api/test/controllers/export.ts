@@ -90,6 +90,7 @@ describe('Export', async () => {
             // maybe further test single tasks?
             break;
           default:
+            // should this fail the test?
             winston.log('warn', 'export for \'' + unit.type + '\' is not completly tested');
             break;
         }
