@@ -35,7 +35,7 @@ export class UnitCheckboxComponent implements OnInit {
   }
 
   ngOnInit() {
-    switch (this.unit.type) {
+    switch (this.unit.__t) {
       case 'video':
         const videoUnit = <IVideoUnit><any> this.unit;
         this.files = videoUnit.files;

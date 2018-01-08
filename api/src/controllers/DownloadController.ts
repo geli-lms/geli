@@ -5,19 +5,13 @@ import {
   CurrentUser
 } from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
-import {CodeKataUnit} from '../models/units/CodeKataUnit';
-import {Unit} from '../models/units/Unit';
+import {Unit, FreeTextUnit, CodeKataUnit, TaskUnit} from '../models/units/Unit';
 import {IDownload} from '../../../shared/models/IDownload';
 import {IFreeTextUnit} from '../../../shared/models/units/IFreeTextUnit';
-import {FreeTextUnit} from '../models/units/FreeTextUnit';
-import {TaskUnit} from '../models/units/TaskUnit';
 import {ITaskUnit} from '../../../shared/models/units/ITaskUnit';
 import {ICodeKataUnit} from '../../../shared/models/units/ICodeKataUnit';
 import {IFileUnit} from '../../../shared/models/units/IFileUnit';
-import {FileUnit} from '../models/units/FileUnit';
-import {VideoUnit} from '../models/units/VideoUnit';
 import {IVideoUnit} from '../../../shared/models/units/IVideoUnit';
-import {Task} from '../models/Task';
 import {Lecture} from '../models/Lecture';
 import {IUser} from '../../../shared/models/IUser';
 import {Course} from '../models/Course';
@@ -26,6 +20,7 @@ import config from '../config/main';
 const fs = require('fs');
 const archiver = require('archiver');
 import crypto = require('crypto');
+import {User} from "../models/User";
 
 const cache = require('node-file-cache').create({life: config.timeToLiveCacheValue});
 
@@ -73,7 +68,7 @@ export class DownloadController {
         }
 
         // This should be replaced with the size from the DB
-        if (localUnit instanceof FileUnit) {
+        if (localUnit.__t === 'file') {
           const fileUnit = <IFileUnit><any>localUnit;
           fileUnit.files.forEach((file, index) => {
             if (unit.files.indexOf(index) > -1) {
@@ -85,7 +80,7 @@ export class DownloadController {
               localTotalSize += fileSize;
             }
           });
-        } else if (localUnit instanceof VideoUnit) {
+        } else if (localUnit.__t === 'video') {
           const videoFileUnit = <IVideoUnit><any>localUnit;
           videoFileUnit.files.forEach((file, index) => {
             if (unit.files.indexOf(index) > -1) {
@@ -132,14 +127,14 @@ export class DownloadController {
 
         const localUnit = await
           Unit.findOne({_id: unit.unitId});
-        if (localUnit instanceof FileUnit) {
+        if (localUnit.__t === 'file') {
           const fileUnit = <IFileUnit><any>localUnit;
           fileUnit.files.forEach((file, index) => {
             if (unit.files.indexOf(index) > -1) {
               data = data + file.name;
             }
           });
-        } else if (localUnit instanceof VideoUnit) {
+        } else if (localUnit.__t === 'video') {
           const videoFileUnit = <IVideoUnit><any>localUnit;
           videoFileUnit.files.forEach((file, index) => {
             if (unit.files.indexOf(index) > -1) {
@@ -165,7 +160,9 @@ export class DownloadController {
       throw new NotFoundError();
     }
 
-    if (course.students.indexOf(user._id) !== -1 || course.courseAdmin === user._id ||
+    const courseAdmin = await User.findOne({_id: course.courseAdmin});
+
+    if (course.students.indexOf(user._id) !== -1 || courseAdmin.equals(user._id.toString()) ||
       course.teachers.indexOf(user._id) !== -1 || user.role === 'admin') {
 
       if (!data.lectures.length) {
@@ -200,32 +197,32 @@ export class DownloadController {
           for (const unit of lec.units) {
 
             const localUnit = await Unit.findOne({_id: unit.unitId});
-            if (localUnit instanceof FreeTextUnit) {
+            if (localUnit.__t === 'free-text') {
               const freeTextUnit = <IFreeTextUnit><any>localUnit;
               archive.append(FreeTextUnit.schema.statics.toFile(freeTextUnit), {
                 name: lecCounter + '_' + lcName + '/' + unitCounter + '_' + this.replaceCharInFilename(freeTextUnit.name) + '.md'
               });
-            } else if (localUnit instanceof CodeKataUnit) {
+            } else if (localUnit.__t === 'code-kata') {
               const codeKataUnit = <ICodeKataUnit><any>localUnit;
               archive.append(CodeKataUnit.schema.statics.toFile(codeKataUnit),
                 {name: lecCounter + '_' + lcName + '/' + unitCounter + '_' + this.replaceCharInFilename(codeKataUnit.name) + '.txt'});
-            } else if (localUnit instanceof FileUnit) {
+            } else if (localUnit.__t === 'file') {
               const fileUnit = <IFileUnit><any>localUnit;
               fileUnit.files.forEach((file, index) => {
                 if (unit.files.indexOf(index) > -1) {
                   archive.file(file.path, {name: lecCounter + '_' + lcName + '/' + unitCounter + '_' + file.alias});
                 }
               });
-            } else if (localUnit instanceof VideoUnit) {
+            } else if (localUnit.__t === 'video') {
               const videoFileUnit = <IVideoUnit><any>localUnit;
               videoFileUnit.files.forEach((file, index) => {
                 if (unit.files.indexOf(index) > -1) {
                   archive.file(file.path, {name: lecCounter + '_' + lcName + '/' + unitCounter + '_' + file.alias});
                 }
               });
-            } else if (localUnit instanceof TaskUnit) {
+            } else if (localUnit.__t === 'task') {
               const taskUnit = <ITaskUnit><any>localUnit;
-              archive.append(await Task.schema.statics.toFile(taskUnit),
+              archive.append(await TaskUnit.schema.statics.toFile(taskUnit),
                 {name: lecCounter + '_' + lcName + '/' + unitCounter + '. ' + this.replaceCharInFilename(taskUnit.name) + '.txt'});
             } else {
               throw new NotFoundError();

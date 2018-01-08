@@ -2,11 +2,11 @@ import {Injectable} from '@angular/core';
 import {BackendService} from './backend.service';
 import {Dependency} from '../../about/licenses/dependency.model';
 import {ITaskUnit} from '../../../../../../shared/models/units/ITaskUnit';
-import {IDownload} from '../../../../../../shared/models/IDownload';
 import {ILecture} from '../../../../../../shared/models/ILecture';
 import {IUnit} from '../../../../../../shared/models/units/IUnit';
 import {IUser} from '../../../../../../shared/models/IUser';
 import {ICourse} from '../../../../../../shared/models/ICourse';
+import {IDownload} from '../../../../../../shared/models/IDownload';
 
 export abstract class DataService {
 
@@ -34,7 +34,7 @@ export abstract class DataService {
     });
   }
 
-  readItems(): Promise<any> {
+  readItems(): Promise<any[]> {
     return new Promise((resolve, reject) => {
       this.backendService.get(this.apiPath)
         .subscribe(
@@ -217,10 +217,7 @@ export class DuplicationService extends DataService {
 
   duplicateUnit(unit: IUnit, lectureId: string, courseId: string): Promise<any[]> {
     return new Promise((resolve, reject) => {
-      this.backendService.post(this.apiPath + 'unit/' + unit._id, JSON.stringify({
-        courseId: courseId,
-        lectureId: lectureId
-      }))
+      this.backendService.post(this.apiPath + 'unit/' + unit._id, JSON.stringify({courseId: courseId , lectureId: lectureId}))
         .subscribe(
           (responseItem: any) => {
             resolve(responseItem);
@@ -270,6 +267,7 @@ export class CourseService extends DataService {
   }
 }
 
+@Injectable()
 export class LectureService extends DataService {
   constructor(public backendService: BackendService) {
     super('lecture/', backendService);

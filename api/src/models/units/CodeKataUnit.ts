@@ -92,6 +92,6 @@ codeKataSchema.statics.toFile = function (unit: ICodeKataUnit) {
     unit.code + '\n' + unit.test;
 };
 
-const CodeKataUnit = Unit.discriminator('code-kata', codeKataSchema);
+// const CodeKataUnit = Unit.discriminator('code-kata', codeKataSchema);
 
 export {codeKataSchema, ICodeKataModel}
