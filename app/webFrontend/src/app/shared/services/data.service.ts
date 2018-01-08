@@ -313,7 +313,7 @@ export class FreeTextUnitService extends DataService {
 @Injectable()
 export class NotificationService extends DataService {
   constructor (public backendService: BackendService) {
-    super('notification/', backendService);
+    super('notificationSettings/', backendService);
   }
 }
 

@@ -1,20 +1,7 @@
-import {ICourse} from './ICourse';
 import {IUser} from './IUser';
 
-export const NOTIFICATION_TYPE_NONE = 'none';
-export const NOTIFICATION_TYPE_CHANGES_WITH_RELATIONIONSHIP = 'relatedChanges';
-export const NOTIFICATION_TYPE_ALL_CHANGES = 'allChanges';
-export const NOTIFICATION_TYPES = [NOTIFICATION_TYPE_NONE, NOTIFICATION_TYPE_CHANGES_WITH_RELATIONIONSHIP, NOTIFICATION_TYPE_ALL_CHANGES];
-
 export interface INotification {
-  course: ICourse;
+  _id: any;
   user: IUser;
-  notificationType: NotificationType;
-  hasChanges: boolean;
-}
-
-enum NotificationType {
-  NONE,
-  DIRECTLY_RELATED_CHANGES,
-  ALL_CHANGES
+  text: string;
 }
