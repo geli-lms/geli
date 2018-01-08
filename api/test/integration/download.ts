@@ -143,7 +143,7 @@ describe('DownloadFile', () => {
       res.status.should.be.equal(404);
     });
 
-    it('should fail, because the lectures are empty', async () => {
+    it('should fail, because the lectures is empty and the IDownloadObject cant be created', async () => {
       const course = await FixtureUtils.getRandomCourse();
       const teacher = await User.findById(course.courseAdmin);
 
@@ -157,7 +157,7 @@ describe('DownloadFile', () => {
         .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
         .send(testData)
         .catch(err => err.response);
-      res.status.should.be.equal(404);
+      res.status.should.be.equal(500);
     });
   });
 });
