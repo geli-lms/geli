@@ -20,7 +20,7 @@ import config from '../config/main';
 const fs = require('fs');
 const archiver = require('archiver');
 import crypto = require('crypto');
-import {User} from "../models/User";
+import {User} from '../models/User';
 
 const cache = require('node-file-cache').create({life: config.timeToLiveCacheValue});
 
@@ -72,24 +72,20 @@ export class DownloadController {
           const fileUnit = <IFileUnit><any>localUnit;
           fileUnit.files.forEach((file, index) => {
             if (unit.files.indexOf(index) > -1) {
-              const stats = fs.statSync(file.path);
-              const fileSize = stats.size / 1000000.0;
-              if (fileSize > 50) {
+              if ((file.size / 1024 ) > 51200) {
                 localTooLargeFiles.push(file.path);
               }
-              localTotalSize += fileSize;
+              localTotalSize += (file.size / 1024 );
             }
           });
         } else if (localUnit.__t === 'video') {
           const videoFileUnit = <IVideoUnit><any>localUnit;
           videoFileUnit.files.forEach((file, index) => {
             if (unit.files.indexOf(index) > -1) {
-              const stats = fs.statSync(file.path);
-              const fileSize = stats.size / 1000000.0;
-              if (fileSize > 50) {
+              if ((file.size / 1024 )  > 51200) {
                 localTooLargeFiles.push(file.path);
               }
-              localTotalSize += fileSize;
+              localTotalSize += (file.size / 1024 );
             }
           });
         }
@@ -171,7 +167,7 @@ export class DownloadController {
 
       const size = await this.calcPackage(data);
 
-      if (size.totalSize > 200 || size.tooLargeFiles.length !== 0) {
+      if (size.totalSize > 204800 || size.tooLargeFiles.length !== 0) {
         throw new NotFoundError();
       }
 

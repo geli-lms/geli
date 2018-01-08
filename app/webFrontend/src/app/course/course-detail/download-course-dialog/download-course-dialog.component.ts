@@ -74,7 +74,7 @@ export class DownloadCourseDialogComponent implements OnInit {
     this.showSpinner = true;
     const sizeResult = await this.downloadReq.getPackageSize(downloadObj);
     const iDownload = <IDownloadSize><any>sizeResult;
-    if (iDownload.tooLargeFiles.length === 0) {
+    if (iDownload.tooLargeFiles.length === 0 && iDownload.totalSize < 204800) {
       const result = await this.downloadReq.postDownloadReqForCourse(downloadObj);
       const response = <Response> await this.downloadReq.getFile(result.toString());
       saveAs(response.body, this.saveFileService.replaceCharInFilename(this.course.name) + '.zip');
