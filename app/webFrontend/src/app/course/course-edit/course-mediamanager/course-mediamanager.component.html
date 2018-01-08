@@ -1,4 +1,4 @@
-<div class="mm-container">
+<div class="mm-container debug">
   <!-- Left part: Folders -->
   <div class="part part--left">
     <!-- TODO -->
@@ -6,7 +6,7 @@
   </div>
 
   <!-- Center part: search/files -->
-  <div class="part part--center">
+  <div class="part part--center" [ngClass]="{'hide__right': !isDetailBarVisible()}">
 
     <!-- Fuzzy Search -->
     <div class="area--search">
@@ -43,13 +43,14 @@
   </div>
 
   <!-- Right part: Detail-->
-  <div class="part part--right">
+  <div class="part part--right" [ngClass]="{'hide__right': !isDetailBarVisible()}">
     <mat-toolbar>
       <mat-toolbar-row>
         <button mat-icon-button (click)="toggleDetailBarVisible()">
           <mat-icon *ngIf="isDetailBarVisible()">close</mat-icon>
           <mat-icon *ngIf="!isDetailBarVisible()">arrow_left</mat-icon>
         </button>
+        <span *ngIf="isDetailBarVisible()">Details</span>
       </mat-toolbar-row>
     </mat-toolbar>
     <div class="mm-detail-wrapper">

@@ -1,20 +1,56 @@
-.mm-container {
-  display: flex;
-  flex-direction: row;
+$width__left: 15%;
+$width__right: 20%;
+$width__right--collapsed: 4%;
+$width__center: 100% - $width__left - $width__right;
+$width__center--ext: 100% - $width__left - $width__right--collapsed;
+
+.mm-container {}
+
+.debug {
+  .part {
+    &--left {
+      background-color: red;
+    }
+    &--center {
+      background: green;
+    }
+    &--right {
+      background: blue;
+    }
+  }
 }
 
 .part {
+  margin: 0;
+  padding: 0 1ex;
+  float: left;
 
   &--left {
-    flex-grow: 10;
+    width: $width__left;
+    padding-left: 0;
   }
 
   &--center {
-    flex-grow: 100;
+    width: $width__center;
+    transition: width 300ms ease;
+
+    &.hide__right {
+      width: $width__center--ext;
+    }
   }
 
   &--right {
-    flex-grow: 20;
+    width: $width__right;
+    padding-right: 0;
+    transition: width 300ms ease;
+
+    &.hide__right {
+      width: $width__right--collapsed;
+
+      .mm-detail-wrapper {
+        display: none;
+      }
+    }
 
     .mat-toolbar-multiple-rows {
       min-height: 50px;
@@ -40,4 +76,3 @@
     }
   }
 }
-
