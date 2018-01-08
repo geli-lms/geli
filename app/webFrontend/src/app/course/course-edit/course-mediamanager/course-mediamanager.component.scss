@@ -1,53 +1,24 @@
 $width__left: 15%;
-$width__right: 20%;
-$width__right--collapsed: 4%;
-$width__center: 100% - $width__left - $width__right;
-$width__center--ext: 100% - $width__left - $width__right--collapsed;
 
-.mm-container {}
-
-.debug {
-  .part {
-    &--left {
-      background-color: red;
-    }
-    &--center {
-      background: green;
-    }
-    &--right {
-      background: blue;
-    }
-  }
+.mm-container {
+  display: flex;
 }
 
 .part {
   margin: 0;
   padding: 0 1ex;
-  float: left;
 
   &--left {
     width: $width__left;
     padding-left: 0;
-  }
-
-  &--center {
-    width: $width__center;
+    min-width: 6em;
     transition: width 300ms ease;
 
-    &.hide__right {
-      width: $width__center--ext;
-    }
-  }
+    &.hide {
+      min-width: 4rem;
+      width: 4rem;
 
-  &--right {
-    width: $width__right;
-    padding-right: 0;
-    transition: width 300ms ease;
-
-    &.hide__right {
-      width: $width__right--collapsed;
-
-      .mm-detail-wrapper {
+      .folder-wrapper {
         display: none;
       }
     }
@@ -59,20 +30,16 @@ $width__center--ext: 100% - $width__left - $width__right--collapsed;
         height: 50px;
         padding: 0 10px;
       }
-    }
 
-    .mm-detail-wrapper {
-      padding: 1ex;
+      .mat-icon-button {
+        cursor: pointer;
+      }
     }
+  }
 
-    .mm-detail-group {
-      display: grid;
-      grid-template-columns: 30% 69%;
-      grid-gap: 1%;
-    }
-
-    .mm-detail-label {
-      font-weight: bold;
-    }
+  &--center {
+    transition: width 300ms ease;
+    flex-grow: 1;
+    padding-right: 0;
   }
 }

@@ -1,12 +1,22 @@
 <div class="mm-container debug">
   <!-- Left part: Folders -->
-  <div class="part part--left">
-    <!-- TODO -->
-    <p>Folders here</p>
+  <div class="part part--left" [ngClass]="{'hide': !folderBarVisible}">
+    <mat-toolbar>
+      <mat-toolbar-row>
+        <button mat-icon-button (click)="toggleFolderBarVisibility()">
+          <mat-icon *ngIf="folderBarVisible">close</mat-icon>
+          <mat-icon *ngIf="!folderBarVisible">arrow_right</mat-icon>
+        </button>
+        <span *ngIf="folderBarVisible">Folder</span>
+      </mat-toolbar-row>
+    </mat-toolbar>
+    <div class="folder-wrapper">
+      content
+    </div>
   </div>
 
   <!-- Center part: search/files -->
-  <div class="part part--center" [ngClass]="{'hide__right': !isDetailBarVisible()}">
+  <div class="part part--center">
 
     <!-- Fuzzy Search -->
     <div class="area--search">
@@ -38,29 +48,6 @@
             <!-- TODO -->
           </mat-card>
         </ng-container>
-      </div>
-    </div>
-  </div>
-
-  <!-- Right part: Detail-->
-  <div class="part part--right" [ngClass]="{'hide__right': !isDetailBarVisible()}">
-    <mat-toolbar>
-      <mat-toolbar-row>
-        <button mat-icon-button (click)="toggleDetailBarVisible()">
-          <mat-icon *ngIf="isDetailBarVisible()">close</mat-icon>
-          <mat-icon *ngIf="!isDetailBarVisible()">arrow_left</mat-icon>
-        </button>
-        <span *ngIf="isDetailBarVisible()">Details</span>
-      </mat-toolbar-row>
-    </mat-toolbar>
-    <div class="mm-detail-wrapper">
-      <div class="mm-detail-group">
-        <span class="mm-detail-label">Name</span>
-        <span class="mm-detail-value">nana</span>
-      </div>
-      <div class="mm-detail-group">
-        <span class="mm-detail-label">Name</span>
-        <span class="mm-detail-value">nana</span>
       </div>
     </div>
   </div>
