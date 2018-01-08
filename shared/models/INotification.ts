@@ -9,6 +9,12 @@ export const NOTIFICATION_TYPES = [NOTIFICATION_TYPE_NONE, NOTIFICATION_TYPE_CHA
 export interface INotification {
   course: ICourse;
   user: IUser;
-  notificationType: string;
+  notificationType: NotificationType;
   hasChanges: boolean;
+}
+
+enum NotificationType {
+  NONE,
+  DIRECTLY_RELATED_CHANGES,
+  ALL_CHANGES
 }

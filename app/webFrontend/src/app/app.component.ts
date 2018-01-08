@@ -67,6 +67,10 @@ export class AppComponent implements OnInit {
     return this.userService.isAdmin();
   }
 
+  isStudent(): boolean {
+    return this.userService.isStudent();
+  }
+
   specialContainerStyle(): string {
     const routeTest = /^(\/|\/login|\/register)$/.test(this.router.url);
 

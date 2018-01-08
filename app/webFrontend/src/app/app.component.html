@@ -20,6 +20,7 @@
           <img class="avatar" src="{{userService.user.getUserImageURL(30)}}" width="30" height="30">
           {{ this.userService.user.profile.firstName }}
         </button>
+        <app-notification-menu *ngIf="isStudent()"></app-notification-menu>
       </span>
       <button mat-icon-button [matMenuTriggerFor]="menu">
         <mat-icon>more_vert</mat-icon>
@@ -29,6 +30,7 @@
         <!--<mat-icon>favorite</mat-icon>-->
         <!--<span>Favorites</span>-->
         <!--</button>-->
+
         <button mat-menu-item *ngIf="isLoggedIn() && isAdmin()" routerLink="/admin" routerLinkActive="active">
           <mat-icon>settings</mat-icon>
           <span>Admin</span>
