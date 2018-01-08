@@ -11,7 +11,6 @@ import {IFreeTextUnit} from '../../../shared/models/units/IFreeTextUnit';
 import {ITaskUnit} from '../../../shared/models/units/ITaskUnit';
 import {ICodeKataUnit} from '../../../shared/models/units/ICodeKataUnit';
 import {IFileUnit} from '../../../shared/models/units/IFileUnit';
-import {IVideoUnit} from '../../../shared/models/units/IVideoUnit';
 import {Lecture} from '../models/Lecture';
 import {IUser} from '../../../shared/models/IUser';
 import {Course} from '../models/Course';
@@ -67,22 +66,11 @@ export class DownloadController {
           throw new NotFoundError();
         }
 
-        // This should be replaced with the size from the DB
         if (localUnit.__t === 'file') {
           const fileUnit = <IFileUnit><any>localUnit;
           fileUnit.files.forEach((file, index) => {
             if (unit.files.indexOf(index) > -1) {
-              if ((file.size / 1024 ) > 51200) {
-                localTooLargeFiles.push(file.path);
-              }
-              localTotalSize += (file.size / 1024 );
-            }
-          });
-        } else if (localUnit.__t === 'video') {
-          const videoFileUnit = <IVideoUnit><any>localUnit;
-          videoFileUnit.files.forEach((file, index) => {
-            if (unit.files.indexOf(index) > -1) {
-              if ((file.size / 1024 )  > 51200) {
+              if ((file.size / 1024 ) > config.maxFileSize) {
                 localTooLargeFiles.push(file.path);
               }
               localTotalSize += (file.size / 1024 );
@@ -130,13 +118,6 @@ export class DownloadController {
               data = data + file.name;
             }
           });
-        } else if (localUnit.__t === 'video') {
-          const videoFileUnit = <IVideoUnit><any>localUnit;
-          videoFileUnit.files.forEach((file, index) => {
-            if (unit.files.indexOf(index) > -1) {
-              data = data + file.name;
-            }
-          });
         } else {
           data = data + localUnit._id;
         }
@@ -167,7 +148,7 @@ export class DownloadController {
 
       const size = await this.calcPackage(data);
 
-      if (size.totalSize > 204800 || size.tooLargeFiles.length !== 0) {
+      if (size.totalSize > config.maxZipSize || size.tooLargeFiles.length !== 0) {
         throw new NotFoundError();
       }
 
@@ -205,13 +186,6 @@ export class DownloadController {
             } else if (localUnit.__t === 'file') {
               const fileUnit = <IFileUnit><any>localUnit;
               fileUnit.files.forEach((file, index) => {
-                if (unit.files.indexOf(index) > -1) {
-                  archive.file(file.path, {name: lecCounter + '_' + lcName + '/' + unitCounter + '_' + file.alias});
-                }
-              });
-            } else if (localUnit.__t === 'video') {
-              const videoFileUnit = <IVideoUnit><any>localUnit;
-              videoFileUnit.files.forEach((file, index) => {
                 if (unit.files.indexOf(index) > -1) {
                   archive.file(file.path, {name: lecCounter + '_' + lcName + '/' + unitCounter + '_' + file.alias});
                 }

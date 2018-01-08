@@ -34,4 +34,7 @@ export default {
 
   timeToLiveCacheValue: 3600,
   tmpFileCacheFolder: appRoot + '/tmp/',
+  maxFileSize: 51200,
+  maxZipSize: 204800,
+
 };
