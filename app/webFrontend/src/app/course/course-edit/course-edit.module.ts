@@ -14,6 +14,7 @@ import {CourseEditRoutingModule} from './course-edit-routing.module';
 import {LectureModule} from '../../lecture/lecture.module';
 import {UnitFormModule} from '../../unit/unit-form/unit-form.module';
 import { CourseMediamanagerComponent } from './course-mediamanager/course-mediamanager.component';
+import { CourseMediamanagerDetailDialog } from './course-mediamanager/course-mediamanager-detail-dialog/course-mediamanager-detail.dialog';
 
 @NgModule({
   imports: [
@@ -34,6 +35,7 @@ import { CourseMediamanagerComponent } from './course-mediamanager/course-mediam
     MembersComponent,
     TeachersComponent,
     CourseMediamanagerComponent,
+    CourseMediamanagerDetailDialog,
   ],
   exports: [
     CourseEditComponent,
