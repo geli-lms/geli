@@ -1,11 +1,10 @@
 import {BadRequestError, Body, InternalServerError, JsonController, Post, UseBefore} from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
-import {NotificationSettings} from '../models/NotificationSettings';
-import {Notification} from '../models/Notification';
 import {
-  NOTIFICATION_TYPE_ALL_CHANGES, NOTIFICATION_TYPE_CHANGES_WITH_RELATIONIONSHIP,
-  NOTIFICATION_TYPE_NONE
-} from '../../../shared/models/INotificationSettings';
+  NotificationSettings, API_NOTIFICATION_TYPE_NONE,
+  API_NOTIFICATION_TYPE_CHANGES_WITH_RELATIONIONSHIP, API_NOTIFICATION_TYPE_ALL_CHANGES,
+} from '../models/NotificationSettings';
+import {Notification} from '../models/Notification';
 
 @JsonController('/notification')
 @UseBefore(passportJwtMiddleware)
@@ -26,12 +25,12 @@ export class NotificationController {
       for (const stud of students) {
         const notificationSettings = await NotificationSettings.findOne({'user': stud._id, 'course': data.course._id});
         if (!notificationSettings.notificationType) {
-          notificationSettings.notificationType = NOTIFICATION_TYPE_NONE;
+          notificationSettings.notificationType = API_NOTIFICATION_TYPE_NONE;
         }
-        if (notificationSettings.notificationType === NOTIFICATION_TYPE_CHANGES_WITH_RELATIONIONSHIP) {
+        if (notificationSettings.notificationType === API_NOTIFICATION_TYPE_CHANGES_WITH_RELATIONIONSHIP) {
           // something should happen here
         }
-        if (notificationSettings.notificationType === NOTIFICATION_TYPE_ALL_CHANGES) {
+        if (notificationSettings.notificationType === API_NOTIFICATION_TYPE_ALL_CHANGES) {
           // something should happen here
           new Notification({'user': stud._id, 'text': data.text}).save();
         }

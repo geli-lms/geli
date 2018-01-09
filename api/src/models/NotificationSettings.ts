@@ -5,18 +5,18 @@ interface INotificationSettingsModel extends INotificationSettings, mongoose.Doc
 }
 
 const notificationSettingsSchema = new mongoose.Schema({
-  course: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Course'
+    course: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Course'
+    },
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User'
+    },
+    notificationType: {
+      type: String
+    },
   },
-  user: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User'
-  },
-  notificationType: {
-    type: String
-  },
-},
   {
     discriminatorKey: 'type',
     timestamps: true,
@@ -35,4 +35,17 @@ const notificationSettingsSchema = new mongoose.Schema({
 
 const NotificationSettings = mongoose.model<INotificationSettingsModel>('NotificationSettings', notificationSettingsSchema);
 
-export {NotificationSettings, INotificationSettingsModel};
+// Ugly copy of shared/models/INotificationSettings.ts
+export const API_NOTIFICATION_TYPE_ALL_CHANGES = 'allChanges';
+export const API_NOTIFICATION_TYPE_CHANGES_WITH_RELATIONIONSHIP = 'relatedChanges';
+export const API_NOTIFICATION_TYPE_NONE = 'none';
+export const API_NOTIFICATION_TYPES = [
+  API_NOTIFICATION_TYPE_NONE,
+  API_NOTIFICATION_TYPE_CHANGES_WITH_RELATIONIONSHIP,
+  API_NOTIFICATION_TYPE_ALL_CHANGES
+];
+
+export {
+  NotificationSettings,
+  INotificationSettingsModel,
+};
