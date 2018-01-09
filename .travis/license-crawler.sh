@@ -23,12 +23,15 @@ echo
 ( [ "$TRAVIS_BRANCH" == "master" ] || [ "$TRAVIS_BRANCH" == "develop" ] ) ; IS_BRANCH=$?
 [ -n "$TRAVIS_TAG" ] ; IS_TAG=$?
 
-echo "+ 0 => true ; 1 => false"
-echo "+ IS_PR     => $IS_PR ($TRAVIS_PULL_REQUEST)"
-echo "+ IS_BRANCH => $IS_BRANCH ($TRAVIS_BRANCH)"
-echo "+ IS_TAG    => $IS_TAG ($TRAVIS_TAG)"
+IS_PR=$(if [ "$IS_PR" == "0" ]; then echo -n true; else echo -n false; fi)
+IS_BRANCH=$(if [ "$IS_BRANCH" == "0" ]; then echo -n true; else echo -n false; fi)
+IS_TAG=$(if [ "$IS_TAG" == "0" ]; then echo -n true; else echo -n false; fi)
 
-if ( [ "$IS_BRANCH" == "0" ] && [ "$IS_PR" == "1" ] ) || [ "$IS_TAG" == "0" ]; then
+echo "+ IS_PR     => $IS_PR\t($TRAVIS_PULL_REQUEST)"
+echo "+ IS_BRANCH => $IS_BRANCH\t($TRAVIS_BRANCH)"
+echo "+ IS_TAG    => $IS_TAG\t($TRAVIS_TAG)"
+
+if ( [ "$IS_BRANCH" == "true" ] && [ "$IS_PR" == "false" ] ) || [ "$IS_TAG" == "true" ]; then
   echo "+ checking if nlf is installed"
   cd ${DIR}
   if [ $(npm_package_is_installed nlf) == 0 ]; then
