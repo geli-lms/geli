@@ -54,7 +54,7 @@ new Dependency('NO-DEP', '0.0.1', 'https://example.com', 'MIT', false),
 new Dependency('NO-DEP', '0.0.1', 'https://example.com', 'MIT', true)
   "
   FE_DATA=`echo $FE_DATA | tr '\n' "\\n"`
-  sed "s|// DEPENDENCY_REPLACE|$FE_DATA|" app/webFrontend/src/app/about/licenses/dependencies.ts
+  sed -i "s!// DEPENDENCY_REPLACE!$FE_DATA!" app/webFrontend/src/app/about/licenses/dependencies.ts
 fi
 
 cat api/nlf-licenses.json
