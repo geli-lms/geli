@@ -23,9 +23,9 @@ echo
 [ "$TRAVIS_BRANCH" == "master" ] || [ "$TRAVIS_BRANCH" == "develop" ] ; IS_BRANCH=$?
 [ -n "$TRAVIS_TAG" ] ; IS_TAG=$?
 
-echo "+ IS_PR     => $IS_PR"
-echo "+ IS_BRANCH => $IS_BRANCH"
-echo "+ IS_TAG    => $IS_TAG"
+echo "+ IS_PR     => $IS_PR ($TRAVIS_PULL_REQUEST)"
+echo "+ IS_BRANCH => $IS_BRANCH ($TRAVIS_BRANCH)"
+echo "+ IS_TAG    => $IS_TAG ($TRAVIS_TAG)"
 
 if ( [ "$IS_BRANCH" == "true" ] && [ "$IS_PR" == "false" ] ) || [ "$IS_TAG" == "true" ]; then
   echo "+ checking if nlf is installed"
