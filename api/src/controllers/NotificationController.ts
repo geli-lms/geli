@@ -1,6 +1,7 @@
 import {BadRequestError, Body, InternalServerError, JsonController, Post, UseBefore} from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import {NotificationSettings} from '../models/NotificationSettings';
+import {Notification} from '../models/Notification';
 import {
   NOTIFICATION_TYPE_ALL_CHANGES, NOTIFICATION_TYPE_CHANGES_WITH_RELATIONIONSHIP,
   NOTIFICATION_TYPE_NONE
