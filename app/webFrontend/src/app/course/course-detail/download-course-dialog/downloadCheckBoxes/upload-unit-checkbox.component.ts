@@ -15,7 +15,7 @@ export class UploadUnitCheckboxComponent implements OnInit {
   @Input()
   showDL = false;
   @Input()
-  unit_desc: string;
+  unitDesc: string;
   @Output()
   valueChanged: EventEmitter<any> = new EventEmitter();
 

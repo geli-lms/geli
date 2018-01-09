@@ -19,7 +19,7 @@ export class UnitCheckboxComponent implements OnInit {
   unit: IUnit;
   @Input()
   chkbox = false;
-  unit_desc: string;
+  unitDesc: string;
 
   @ViewChildren(UploadUnitCheckboxComponent)
   childUnits: QueryList<UploadUnitCheckboxComponent>;
@@ -28,34 +28,35 @@ export class UnitCheckboxComponent implements OnInit {
   valueChanged: EventEmitter<any> = new EventEmitter();
 
   files;
-  child_unit_desc: string;
+  childUnitDesc: string;
 
   constructor() {
 
   }
 
   ngOnInit() {
+    console.log("__t of Unit"+this.unit.name+": "+this.unit.__t);
     switch (this.unit.__t) {
       case 'video':
         const videoUnit = <IVideoUnit><any> this.unit;
         this.files = videoUnit.files;
-        this.unit_desc = 'Video Unit';
-        this.child_unit_desc = 'Video';
+        this.unitDesc = 'Video Unit';
+        this.childUnitDesc = 'Video';
         break;
       case 'file':
         const fileUnit = <IFileUnit><any> this.unit;
         this.files = fileUnit.files;
-        this.unit_desc = 'File Unit';
-        this.child_unit_desc = 'File';
+        this.unitDesc = 'File Unit';
+        this.childUnitDesc = 'File';
         break;
       case 'task':
-        this.unit_desc = 'Task Unit';
+        this.unitDesc = 'Task Unit';
         break;
       case 'code-kata':
-        this.unit_desc = 'Code-Kata Unit';
+        this.unitDesc = 'Code-Kata Unit';
         break;
       case 'free-text':
-        this.unit_desc = 'Free-Text Unit';
+        this.unitDesc = 'Free-Text Unit';
         break;
       default:
     }
