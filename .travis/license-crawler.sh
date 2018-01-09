@@ -27,9 +27,10 @@ IS_PR=$(if [ "$IS_PR" == "0" ]; then echo -n true; else echo -n false; fi)
 IS_BRANCH=$(if [ "$IS_BRANCH" == "0" ]; then echo -n true; else echo -n false; fi)
 IS_TAG=$(if [ "$IS_TAG" == "0" ]; then echo -n true; else echo -n false; fi)
 
-echo -e "+ IS_PR     => $IS_PR\t($TRAVIS_PULL_REQUEST)"
-echo -e "+ IS_BRANCH => $IS_BRANCH\t($TRAVIS_BRANCH)"
-echo -e "+ IS_TAG    => $IS_TAG\t($TRAVIS_TAG)"
+echo -e "+ IS_PR\t=> $IS_PR\t($TRAVIS_PULL_REQUEST)"
+echo -e "+ IS_BRANCH\t=> $IS_BRANCH\t($TRAVIS_BRANCH)"
+echo -e "+ IS_TAG\t=> $IS_TAG\t($TRAVIS_TAG)"
+echo
 
 if ( [ "$IS_BRANCH" == "true" ] && [ "$IS_PR" == "false" ] ) || [ "$IS_TAG" == "true" ]; then
   echo "+ checking if nlf is installed"
