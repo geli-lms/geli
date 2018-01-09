@@ -31,7 +31,6 @@ import {AboutModule} from './about/about.module';
 import {AdminModule} from './admin/admin.module';
 import {ReportService} from './shared/services/data/report.service';
 import {TitleService} from './shared/services/title.service';
-import { NotificationMenuComponent } from './shared/components/notification-menu/notification-menu.component';
 
 @NgModule({
   declarations: [
