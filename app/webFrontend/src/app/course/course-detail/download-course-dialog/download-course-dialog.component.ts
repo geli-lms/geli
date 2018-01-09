@@ -112,7 +112,7 @@ export class DownloadCourseDialogComponent implements OnInit {
         const units = [];
         lec.childUnits.forEach(unit => {
           if (unit.chkbox) {
-            if (unit.unit.__t === 'video' || unit.unit.__t === 'file') {
+            if (unit.unit.__t === 'file') {
               const files = [];
               unit.childUnits.forEach((file, index) => {
                 if (file.chkbox && !file.showDL) {
