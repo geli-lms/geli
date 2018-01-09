@@ -42,14 +42,24 @@ else
   echo -e "${YELLOW}+ WARNING: Branch not whitelisted OR PullRequest${NC}";
   echo "+ will write dummy data"
   echo "
-todo
+{
+\"data\": [
+  {\"name\":\"NO-DEP\",\"version\":\"0.0.1\",\"repository\":\"https://exmaple.com\",\"license\":\"MIT\",\"devDependency\":false},
+  {\"name\":\"NO-DEP\",\"version\":\"0.0.1\",\"repository\":\"https://exmaple.com\",\"license\":\"MIT\",\"devDependency\":true},
+]
+}
   " > api/nlf-licenses.json
   FE_DATA="
-todo
+new Dependency('NO-DEP', '0.0.1', 'https://example.com', 'MIT', false),
+new Dependency('NO-DEP', '0.0.1', 'https://example.com', 'MIT', true)
   "
   FE_DATA=`echo $FE_DATA | tr '\n' "\\n"`
   sed "s|// DEPENDENCY_REPLACE|$FE_DATA|" app/webFrontend/src/app/about/licenses/dependencies.ts
 fi
+
+cat api/nlf-licenses.json
+echo "###################"
+cat app/webFrontend/src/app/about/licenses/dependencies.ts
 
 echo
 echo "+ finished"
