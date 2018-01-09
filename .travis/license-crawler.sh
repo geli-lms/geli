@@ -20,7 +20,7 @@ echo "+++ Run NLF +++"
 echo
 
 [ "$TRAVIS_PULL_REQUEST" == "false" ] ; IS_PR=$?
-[ "$TRAVIS_BRANCH" == "master" ] || [ "$TRAVIS_BRANCH" == "develop" ] ; IS_BRANCH=$?
+( [ "$TRAVIS_BRANCH" == "master" ] || [ "$TRAVIS_BRANCH" == "develop" ] ) ; IS_BRANCH=$?
 [ -n "$TRAVIS_TAG" ] ; IS_TAG=$?
 
 echo "+ IS_PR     => $IS_PR ($TRAVIS_PULL_REQUEST)"
