@@ -1,0 +1,50 @@
+@import "../variables";
+
+.file-list-container {
+  margin-top: 1rem;
+
+  .overall-progress {
+    padding-bottom: 0.5rem;
+    display: table;
+    width: 100%;
+    border-bottom: 2px solid map-get($mat-grey, 300);
+
+    span {
+      display: table-cell;
+      width: 25%;
+      vertical-align: middle;
+      padding: 0.5rem;
+
+      &.progress-bar {
+        width: 75%;
+      }
+    }
+  }
+
+  .file-list {
+    width: 100%;
+    display: table;
+    border-collapse: collapse;
+    margin-top: 0.5rem;
+
+    .file-list-row {
+      display: table-row;
+      width: 100%;
+      border-bottom: 1px solid map_get($mat-grey, 300);
+
+      &.file-list-header {
+        font-weight: bold;
+      }
+
+      span,
+      mat-action-row {
+        display: table-cell;
+        padding: 0.5rem;
+
+        &.progress-col {
+          width: 50%;
+        }
+      }
+    }
+  }
+}
