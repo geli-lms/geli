@@ -317,10 +317,10 @@ export class UserDataService extends DataService {
     super('users/', backendService);
   }
 
-  searchUsers(role: string, query: string): Promise<any[]> {
+  searchUsers(role: string, query: string): Promise<any> {
     const originalApiPath = this.apiPath;
-    this.apiPath += role + '/';
-    this.apiPath += 'search/';
+    this.apiPath += '/members/search/';
+    this.apiPath += '?role=' + role;
     this.apiPath += '?query=' + query;
     const promise = this.readItems();
     this.apiPath = originalApiPath;
@@ -330,15 +330,6 @@ export class UserDataService extends DataService {
   getStudents(): Promise<any[]> {
     const originalApiPath = this.apiPath;
     this.apiPath += '/all/students/';
-    const promise = this.readItems();
-    this.apiPath = originalApiPath;
-    return promise;
-  }
-
-  countUsers(role: string): Promise<any> {
-    const originalApiPath = this.apiPath;
-    this.apiPath += role + '/';
-    this.apiPath += 'count/';
     const promise = this.readItems();
     this.apiPath = originalApiPath;
     return promise;
