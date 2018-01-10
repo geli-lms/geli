@@ -52,15 +52,14 @@ export class UserController {
       });
   }
 
-  @Get('/:role/search')
-  @Authorized(['teacher', 'admin'])
-  searchUser(@Param('role') role: string, @QueryParam('query') query: string, @CurrentUser() currentUser?: IUser) {
+  @Get('/members/search') // members/search because of conflict with /:id
+  async searchUser(@QueryParam('role') role: string, @QueryParam('query') query: string) {
     if (role !== 'student' && role !== 'teacher') {
-      throw new Error('Method not allowed for this role.');
+      throw new BadRequestError('Method not allowed for this role.');
     }
     query = query.trim();
     if (isNullOrUndefined(query) || query.length <= 0) {
-      throw new HttpError(400, errorCodes.query.empty.code);
+      throw new BadRequestError(errorCodes.query.empty.code);
     }
     const conditions: any = {};
     const escaped = escapeRegex(query).split(' ');
@@ -73,21 +72,18 @@ export class UserController {
       conditions.$or.push({'profile.firstName': {$regex: re}});
       conditions.$or.push({'profile.lastName': {$regex: re}})
     });
-    return User.find(conditions, {score: {$meta: 'textScore'}})
+    const users = await User.find(conditions, {
+      'score': {$meta: 'textScore'}
+    })
       .where({role: role})
-      .sort({score: {$meta: 'textScore'}})
-      .limit(20).then(users => {
-        return users.map((user) => user.toObject({virtuals: true}));
-    });
-  }
-
-  @Get('/:role/count')
-  @Authorized(['teacher', 'admin'])
-  searchCountUsers(@Param('role') role: string, @QueryParam('query') query: string, @CurrentUser() currentUser?: IUser) {
-    if (role !== 'student' && role !== 'teacher') {
-      throw new Error('Method not allowed for this role.');
-    }
-    return User.count({role: role});
+      .sort({'score': {$meta: 'textScore'}})
+      .limit(20);
+    return {
+      users: users.map((user) => user.toObject({virtuals: true})),
+      meta: {
+        count: users.length
+      }
+    };
   }
 
   @Authorized(['admin'])
@@ -136,8 +132,8 @@ export class UserController {
     return User.find({'role': 'admin'})
       .then((adminUsers) => {
         if (id === currentUser._id
-            && currentUser.role === 'admin'
-            && user.role !== 'admin') {
+          && currentUser.role === 'admin'
+          && user.role !== 'admin') {
           throw new BadRequestError('You can\'t revoke your own privileges');
         } else {
           return User.find({$and: [{'email': user.email}, {'_id': {$ne: user._id}}]});

@@ -13,6 +13,7 @@ const should = chai.should();
 const app = new Server().app;
 const BASE_URL = '/api/users';
 const ROLE_URL = BASE_URL + '/roles';
+const Search_URL = BASE_URL + '/members/search';
 const fixtureLoader = new FixtureLoader();
 
 describe('User', () => {
@@ -83,137 +84,71 @@ describe('User', () => {
     });
   });
 
-  describe(`GET ${BASE_URL}/:role`, () => {
-    it('should get amount of students', (done) => {
-      User.findOne({email: 'teacher1@test.local'})
-        .then((user) => {
-          User.count({role: 'student'}).then((students) => {
-            chai.request(app)
-              .get(`${BASE_URL}/student/count`)
-              .set('Authorization', `JWT ${JwtUtils.generateToken(user)}`)
-              .end((err, res) => {
-                res.status.should.be.equal(200);
-                res.body.should.be.equal(students);
-                done();
-              });
-          });
-        }).catch(done);
+  describe(`GET ${Search_URL}`, () => {
+    it('should search for a student', async () => {
+      const foundTestUser = await User.findOne({email: 'teacher1@test.local'});
+      const newUser: IUser = new User({
+        uid: '487895',
+        email: 'test@local.tv',
+        password: 'test123456',
+        profile: {
+          firstName: 'Max',
+          lastName: 'Mustermann'
+        },
+        role: 'student'
+      });
+      const createdUser = await User.create(newUser);
+      const res = await chai.request(app)
+        .get(Search_URL)
+        .query({
+          role: newUser.role,
+          query: newUser.uid +
+          ' ' + newUser.email +
+          ' ' + newUser.profile.firstName +
+          ' ' + newUser.profile.lastName
+        })
+        .set('Authorization', `JWT ${JwtUtils.generateToken(foundTestUser)}`);
+
+      res.status.should.be.equal(200);
+      res.body.meta.count.should.be.greaterThan(0);
+      res.body.users.length.should.be.greaterThan(0);
+      res.body.users[0].profile.firstName.should.be.equal(newUser.profile.firstName);
+      res.body.users[0].profile.firstName.should.be.equal(newUser.profile.firstName);
+      res.body.users[0].uid.should.be.equal(newUser.uid);
+      res.body.users[0].email.should.be.equal(newUser.email);
     });
 
-    it('should fail get amount of admins', (done) => {
-      User.findOne({email: 'teacher1@test.local'})
-        .then((user) => {
-          User.count({role: 'student'}).then((students) => {
-            chai.request(app)
-              .get(`${BASE_URL}/admin/count`)
-              .set('Authorization', `JWT ${JwtUtils.generateToken(user)}`)
-              .end((err, res) => {
-                res.status.should.be.equal(500);
-                done();
-              });
-          });
-        }).catch(done);
-    });
+    it('should search for a teacher', async () => {
+      const foundTestUser = await User.findOne({email: 'teacher1@test.local'});
+      const newUser: IUser = new User({
+        uid: '487895',
+        email: 'test@local.tv',
+        password: 'test123456',
+        profile: {
+          firstName: 'Max',
+          lastName: 'Mustermann'
+        },
+        role: 'teacher'
+      });
+      const createdUser = await User.create(newUser);
+      const res = await chai.request(app)
+        .get(Search_URL)
+        .query({
+          role: 'teacher',
+          query: newUser.uid +
+          ' ' + newUser.email +
+          ' ' + newUser.profile.firstName +
+          ' ' + newUser.profile.lastName
+        })
+        .set('Authorization', `JWT ${JwtUtils.generateToken(foundTestUser)}`);
 
-    it('should get amount of teachers', (done) => {
-      User.findOne({email: 'teacher1@test.local'})
-        .then((user) => {
-          User.count({role: 'teacher'}).then((teachers) => {
-            chai.request(app)
-              .get(`${BASE_URL}/teacher/count`)
-              .set('Authorization', `JWT ${JwtUtils.generateToken(user)}`)
-              .end((err, res) => {
-                res.status.should.be.equal(200);
-                res.body.should.be.equal(teachers);
-                done();
-              });
-          });
-        }).catch(done);
-    });
-
-    it('should fail with no authorization', (done) => {
-      User.findOne({email: 'teacher1@test.local'})
-        .then((user) => {
-          chai.request(app)
-            .get(`${BASE_URL}/teacher/count`)
-            .set('Authorization', `JWT xxr`)
-            .end((err, res) => {
-              res.status.should.be.equal(401);
-              done();
-            });
-        }).catch(done);
-    });
-
-    it('should search for a student', (done) => {
-      User.findOne({email: 'teacher1@test.local'})
-        .then((user) => {
-          const newUser: IUser = new User({
-            uid: '123456',
-            email: 'test@local.tv',
-            password: 'test123456',
-            profile: {
-              firstName: 'Max',
-              lastName: 'Mustermann'
-            },
-            role: 'student'
-          });
-          User.create(newUser).then((createdUser) => {
-            chai.request(app)
-              .get(`${BASE_URL}/student/search`)
-              .query({
-                query: newUser.uid +
-                ' ' + newUser.email +
-                ' ' + newUser.profile.firstName +
-                ' ' + newUser.profile.lastName
-              })
-              .set('Authorization', `JWT ${JwtUtils.generateToken(user)}`)
-              .end((err, res) => {
-                res.status.should.be.equal(200);
-                res.body.length.should.be.greaterThan(0);
-                res.body[0].profile.firstName.should.be.equal(newUser.profile.firstName);
-                res.body[0].profile.firstName.should.be.equal(newUser.profile.firstName);
-                res.body[0].uid.should.be.equal(newUser.uid);
-                res.body[0].email.should.be.equal(newUser.email);
-                done();
-              });
-          });
-        }).catch(done);
-    });
-
-    it('should search for a teacher', (done) => {
-      User.findOne({email: 'teacher1@test.local'})
-        .then((user) => {
-          const newUser: IUser = new User({
-            uid: '123456',
-            email: 'test@local.tv',
-            password: 'test123456',
-            profile: {
-              firstName: 'Max',
-              lastName: 'Mustermann'
-            },
-            role: 'teacher'
-          });
-          User.create(newUser).then((createdUser) => {
-            chai.request(app)
-              .get(`${BASE_URL}/teacher/search`)
-              .query({
-                query: newUser.uid +
-                ' ' + newUser.email +
-                ' ' + newUser.profile.firstName +
-                ' ' + newUser.profile.lastName
-              })
-              .set('Authorization', `JWT ${JwtUtils.generateToken(user)}`)
-              .end((err, res) => {
-                res.status.should.be.equal(200);
-                res.body.length.should.be.greaterThan(0);
-                res.body[0].profile.firstName.should.be.equal(newUser.profile.firstName);
-                res.body[0].profile.firstName.should.be.equal(newUser.profile.firstName);
-                res.body[0].uid.should.be.equal(newUser.uid);
-                res.body[0].email.should.be.equal(newUser.email);
-                done();
-              });
-          });
-        }).catch(done);
+      res.status.should.be.equal(200);
+      res.body.meta.count.should.be.greaterThan(0);
+      res.body.users.length.should.be.greaterThan(0);
+      res.body.users[0].profile.firstName.should.be.equal(newUser.profile.firstName);
+      res.body.users[0].profile.firstName.should.be.equal(newUser.profile.firstName);
+      res.body.users[0].uid.should.be.equal(newUser.uid);
+      res.body.users[0].email.should.be.equal(newUser.email);
     });
   });
 
@@ -291,10 +226,10 @@ describe('User', () => {
       updatedUser.uid = '987456';
 
       const res = await chai.request(app)
-      .put(`${BASE_URL}/${teacher._id}`)
-      .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
-      .send(updatedUser)
-      .catch(err => err.response);
+        .put(`${BASE_URL}/${teacher._id}`)
+        .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
+        .send(updatedUser)
+        .catch(err => err.response);
 
       res.status.should.be.equal(403);
       res.body.name.should.be.equal('ForbiddenError');
@@ -326,8 +261,8 @@ describe('User', () => {
 
     it('should fail with missing password', async () => {
       const student = await FixtureUtils.getRandomStudent();
-          const updatedUser = student;
-          updatedUser.password = '1234test';
+      const updatedUser = student;
+      updatedUser.password = '1234test';
 
       const res = await chai.request(app)
         .put(`${BASE_URL}/${student._id}`)
@@ -368,9 +303,9 @@ describe('User', () => {
       updatedUser.email = 'student@updated.local';
 
       const res = await chai.request(app)
-      .put(`${BASE_URL}/${student._id}`)
-      .set('Authorization', `JWT ${JwtUtils.generateToken(student)}`)
-      .send(updatedUser);
+        .put(`${BASE_URL}/${student._id}`)
+        .set('Authorization', `JWT ${JwtUtils.generateToken(student)}`)
+        .send(updatedUser);
 
       res.status.should.be.equal(200);
       res.body.profile.firstName.should.be.equal('Updated');
@@ -446,8 +381,8 @@ describe('User', () => {
       const student = await FixtureUtils.getRandomStudent();
 
       const res = await chai.request(app)
-            .del(`${BASE_URL}/${student._id}`)
-            .set('Authorization', `JWT ${JwtUtils.generateToken(admin)}`);
+        .del(`${BASE_URL}/${student._id}`)
+        .set('Authorization', `JWT ${JwtUtils.generateToken(admin)}`);
 
       res.status.should.be.equal(200);
       res.body.result.should.be.equal(true);
