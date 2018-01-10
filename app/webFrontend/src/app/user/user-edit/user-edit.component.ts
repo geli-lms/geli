@@ -158,7 +158,9 @@ export class UserEditComponent implements OnInit {
   async openAddPictureDialog() {
     const response = await this.dialogService.upload(this.user).toPromise();
     if (response && response.success && response.user) {
-      this.userService.setUser(response.user);
+      if (this.userService.isLoggedInUser(response.user)) {
+        this.userService.setUser(response.user);
+      }
       this.snackBar.open('User image successfully uploaded.', '', {duration: 3000});
     }
   }
