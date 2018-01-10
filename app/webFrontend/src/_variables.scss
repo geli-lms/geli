@@ -29,4 +29,9 @@ $bp-width--xl: 75em; // 1200px
 $bp-width--xxl: 121em; // 1936px
 $bp-width--max: 160em; // 2560px => app-root max-width
 
+$app-night-primary: mat-palette($mat-indigo);
+$app-night-accent: mat-palette($mat-pink, A200, A100, A400);
+// The warn palette is optional (defaults to red).
+$app-night-warn: mat-palette($mat-red);
+
 @import 'styles/mixins';

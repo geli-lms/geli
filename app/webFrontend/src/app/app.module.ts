@@ -30,6 +30,7 @@ import {AboutModule} from './about/about.module';
 import {AdminModule} from './admin/admin.module';
 import {ReportService} from './shared/services/data/report.service';
 import {TitleService} from './shared/services/title.service';
+import {ThemeService} from './shared/services/theme.service';
 
 @NgModule({
   declarations: [
@@ -67,6 +68,7 @@ import {TitleService} from './shared/services/title.service';
     ReportService,
     TitleService,
     RavenErrorHandler,
+    ThemeService,
     {
       provide: ErrorHandler,
       useExisting: RavenErrorHandler
