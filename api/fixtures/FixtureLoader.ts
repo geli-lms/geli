@@ -8,11 +8,6 @@ import {FixtureUtils} from './FixtureUtils';
 import {ICodeKataModel} from '../src/models/units/CodeKataUnit';
 import {Lecture} from '../src/models/Lecture';
 import {Unit} from '../src/models/units/Unit';
-import {WhitelistUser} from '../src/models/WhitelistUser';
-import {IWhitelistUser} from '../../shared/models/IWhitelistUser';
-import {IUser} from '../../shared/models/IUser';
-import whitelist = require('validator/lib/whitelist');
-import ObjectId = mongoose.Types.ObjectId;
 
 export class FixtureLoader {
   private usersDirectory = 'build/fixtures/users/';
@@ -30,6 +25,7 @@ export class FixtureLoader {
 
   async load() {
     await mongoose.connection.dropDatabase();
+    await User.ensureIndexes();
     const userfixtures = fs.readdirSync(this.usersDirectory);
     const coursefixtures = fs.readdirSync(this.coursesDirectory);
 
