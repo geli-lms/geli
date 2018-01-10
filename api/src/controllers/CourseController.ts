@@ -26,6 +26,7 @@ import emailService from '../services/EmailService';
 
 const multer = require('multer');
 import crypto = require('crypto');
+import {NotificationSettings} from '../models/NotificationSettings';
 
 const uploadOptions = {
   storage: multer.diskStorage({
@@ -185,7 +186,7 @@ export class CourseController {
 
         if (course.students.indexOf(currentUser._id) < 0) {
           course.students.push(currentUser);
-
+          new NotificationSettings({'user': currentUser._id, 'course': course._id}).save();
           return course.save().then((c) => c.toObject());
         }
 
@@ -204,6 +205,7 @@ export class CourseController {
         const index: number = course.students.indexOf(currentUser._id);
         if (index  !== 0) {
           course.students.splice(index, 1);
+          NotificationSettings.findOne({'user': currentUser._id, 'course': course._id}).remove();
           return course.save().then((c) => c.toObject());
         }
 
