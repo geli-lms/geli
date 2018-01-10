@@ -8,6 +8,7 @@ import {AdminComponent} from './admin/admin.component';
 import {AboutComponent} from './about/about.component';
 import {ResetComponent} from './auth/reset/reset.component';
 import {RouterModule, Routes} from '@angular/router';
+import {UserSettingsComponent} from './user/user-settings/user-settings.component';
 
 const routes: Routes = [
   {path: '', component: StartComponent, pathMatch: 'full'},
@@ -33,6 +34,10 @@ const routes: Routes = [
   {
     path: 'about',
     component: AboutComponent
+  },
+  {
+    path: 'userSettings',
+    component: UserSettingsComponent
   }
 ];
 

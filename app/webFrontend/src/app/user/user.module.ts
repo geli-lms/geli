@@ -6,6 +6,7 @@ import {UserEditComponent} from './user-edit/user-edit.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {SharedModule} from '../shared/shared.module';
 import {UserProfileComponent} from './user-profile/user-profile.component';
+import {UserSettingsComponent} from './user-settings/user-settings.component';
 
 @NgModule({
   imports: [
@@ -18,7 +19,8 @@ import {UserProfileComponent} from './user-profile/user-profile.component';
   declarations: [
     UserDetailsComponent,
     UserEditComponent,
-    UserProfileComponent
+    UserProfileComponent,
+    UserSettingsComponent
   ],
   exports: [
     UserProfileComponent

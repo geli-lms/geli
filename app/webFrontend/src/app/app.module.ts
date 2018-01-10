@@ -31,10 +31,11 @@ import {AboutModule} from './about/about.module';
 import {AdminModule} from './admin/admin.module';
 import {ReportService} from './shared/services/data/report.service';
 import {TitleService} from './shared/services/title.service';
+import { UserSettingsComponent } from './user/user-settings/user-settings.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
   ],
   imports: [
     AdminModule,
