@@ -7,6 +7,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {SharedModule} from '../shared/shared.module';
 import {UserProfileComponent} from './user-profile/user-profile.component';
 import {UserSettingsComponent} from './user-settings/user-settings.component';
+import {MatHeaderCell, MatTableModule} from '@angular/material';
 
 @NgModule({
   imports: [
@@ -15,6 +16,7 @@ import {UserSettingsComponent} from './user-settings/user-settings.component';
     SharedModule,
     ReactiveFormsModule,
     UserRoutingModule,
+    MatTableModule
   ],
   declarations: [
     UserDetailsComponent,

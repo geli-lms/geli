@@ -29,17 +29,11 @@ export class DashboardStudentComponent extends DashboardBaseComponent {
     this.myCourses = [];
     this.availableCourses = [];
     for (const course of this.allCourses) {
-      if (this.isMemberOfCourse(course)) {
+      if (this.userService.isMemberOfCourse(course)) {
         this.myCourses.push(course);
       } else {
         this.availableCourses.push(course);
       }
     }
   }
-
-  isMemberOfCourse(course: ICourse) {
-    const user = this.userService.user;
-    return course.students.filter(obj => obj._id === user._id).length > 0;
-  }
-
 }

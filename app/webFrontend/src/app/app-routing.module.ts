@@ -37,7 +37,9 @@ const routes: Routes = [
   },
   {
     path: 'userSettings',
-    component: UserSettingsComponent
+    component: UserSettingsComponent,
+    canActivate: [AuthGuardService],
+    data: {roles: ['student']}
   }
 ];
 
