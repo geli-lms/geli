@@ -21,7 +21,7 @@
         </mat-form-field>
 
         <mat-form-field class="full-width">
-          <mat-select name="courseTypes" placeholder="Please select your access type your course" id="courseTypes" [(ngModel)]="enrollType">
+          <mat-select name="courseTypes" placeholder="Please select your course access type" id="courseTypes" [(ngModel)]="enrollType">
             <mat-option *ngFor="let enrollType of enrollTypes" [value]="enrollType">{{enrollType}}</mat-option>
           </mat-select><br>
         </mat-form-field>
