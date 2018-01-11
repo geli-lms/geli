@@ -7,9 +7,16 @@ import {IFile} from '../../../shared/models/mediaManager/IFile';
 @JsonController('/media')
 @Authorized()
 export class MediaController {
-  @Get('directory/:id')
+  @Get('/directory/:id')
   async getDirectory(@Param('id') directoryId: string) {
     return Directory.findById(directoryId);
+  }
+
+  @Get('/directory/:id/lazy')
+  async getDirectoryLazy(@Param('id') directoryId: string) {
+    return Directory.findById(directoryId)
+      .populate('subDirectories')
+      .populate('files');
   }
 
   @Get('/file/:id')
@@ -17,7 +24,11 @@ export class MediaController {
     return File.findById(fileId);
   }
 
-  @Put('directory/:parent')
+  @Put('/directory')
+  async createRootDirectory(@Body() directory: IDirectory) {
+    return new Directory(directory).save();
+  }
+  @Put('/directory/:parent')
   async createDirectory(@Param('parent') parentDirectoryId: string, @Body() directory: IDirectory) {
     const savedDirectory = await new Directory(directory).save();
 
@@ -28,7 +39,7 @@ export class MediaController {
     return savedDirectory;
   }
 
-  @Put('file/:parent')
+  @Put('/file/:parent')
   async createFile(@Param('parent') parentDirectoryId: string, @Body() file: IFile) {
     const savedFile = await new File(file).save();
 
