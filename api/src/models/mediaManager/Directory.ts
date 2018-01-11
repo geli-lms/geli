@@ -26,7 +26,7 @@ const directorySchema = new mongoose.Schema({
       ref: 'File'
     }
   ]
-},{
+}, {
     timestamps: true,
 });
 
