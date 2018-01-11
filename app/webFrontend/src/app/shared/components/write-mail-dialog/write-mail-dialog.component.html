@@ -1,0 +1,26 @@
+<form class="writeMailForm">
+  <mat-form-field class="full-width">
+    <input matInput name="bcc" [(ngModel)]="bcc" placeholder="Recipients (bcc)">
+  </mat-form-field>
+  <mat-form-field class="full-width">
+    <input matInput name="cc" [(ngModel)]="cc" placeholder="Recipients (cc)">
+  </mat-form-field>
+  <mat-form-field class="full-width">
+    <input matInput name="subject" [(ngModel)]="subject" placeholder="Subject" focus>
+  </mat-form-field>
+  <mat-tab-group (selectChange)="onTabChange($event)">
+    <mat-tab label="Mail Text (Markdown)">
+      <ace-editor #editor
+                  [(text)]="markdown"
+                  [mode]="'markdown'"
+                  [theme]="'github'"
+                  [autoUpdateContent]="true">
+      </ace-editor>
+    </mat-tab>
+    <mat-tab label="Preview">
+      <div [innerHtml]="renderedHtml"></div>
+    </mat-tab>
+  </mat-tab-group>
+  <button mat-raised-button color="primary" disabled="{{!markdown || !subject || !bcc}}" (click)="sendMail()">Send Mail</button>
+  <button mat-raised-button (click)="cancel()">Cancel</button>
+</form>

@@ -1,9 +1,13 @@
 import * as mongoose from 'mongoose';
-import {IUnitModel, Unit} from './Unit';
+import {Unit} from './Unit';
 import {IFileUnit} from '../../../../shared/models/units/IFileUnit';
 import fs = require('fs');
+import {InternalServerError} from 'routing-controllers';
+import {Lecture} from '../Lecture';
+import {IFile} from '../../../../shared/models/IFile';
 
 interface IFileUnitModel extends IFileUnit, mongoose.Document {
+  exportJSON: () => Promise<IFileUnit>;
 }
 
 const fileUnitSchema = new mongoose.Schema({
@@ -18,8 +22,15 @@ const fileUnitSchema = new mongoose.Schema({
       alias: {
         type: String,
       },
+      size: {
+        type: Number
+      }
     }
   ],
+  fileUnitType: {
+    type: String,
+    required: true
+  }
 }, {
   toObject: {
     transform: function (doc: any, ret: any) {
@@ -41,6 +52,17 @@ fileUnitSchema.pre('remove', function(next: () => void) {
   next();
 });
 
-const FileUnit = Unit.discriminator('file', fileUnitSchema);
+fileUnitSchema.path('files').set(function (newFiles: IFile[]) {
+  this.files.forEach((file: any) => {
+    // if not present in new: delete
+    if (!newFiles.some((newFile) => newFile.name === file.name)) {
+      fs.unlink(file.path, () => {}); // silently discard file not found errors
+    }
+  });
 
-export {FileUnit, IFileUnitModel}
+  return newFiles;
+});
+
+// const FileUnit = Unit.discriminator('file', fileUnitSchema);
+
+export {fileUnitSchema, IFileUnitModel}

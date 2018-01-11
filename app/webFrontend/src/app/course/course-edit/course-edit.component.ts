@@ -1,12 +1,16 @@
 import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {CourseService} from '../../shared/services/data.service';
 import {MatSnackBar} from '@angular/material';
+import {CourseService, DuplicationService, ExportService} from '../../shared/services/data.service';
 import {ShowProgressService} from '../../shared/services/show-progress.service';
 import {FileUploader} from 'ng2-file-upload';
+import {UserService} from '../../shared/services/user.service';
+import {ICourse} from '../../../../../../shared/models/ICourse';
 import {TitleService} from '../../shared/services/title.service';
+import {SaveFileService} from '../../shared/services/save-file.service';
 import {ENROLL_TYPES, ENROLL_TYPE_WHITELIST, ENROLL_TYPE_FREE, ENROLL_TYPE_ACCESSKEY} from '../../../../../../shared/models/ICourse';
+import {DialogService} from '../../shared/services/dialog.service';
 
 @Component({
   selector: 'app-course-edit',
@@ -23,7 +27,7 @@ export class CourseEditComponent implements OnInit {
   enrollType: string;
   newCourse: FormGroup;
   id: string;
-  courseOb: any[];
+  courseOb: ICourse;
   uploader: FileUploader = null;
   enrollTypes =  ENROLL_TYPES;
   enrollTypeConstants = {
@@ -42,7 +46,13 @@ export class CourseEditComponent implements OnInit {
               private ref: ChangeDetectorRef,
               private showProgress: ShowProgressService,
               private router: Router,
+              private dialogService: DialogService,
+              private exportService: ExportService,
+              private saveFileService: SaveFileService,
+              private duplicationService: DuplicationService,
+              private userService: UserService,
               private titleService: TitleService) {
+
 
     this.route.params.subscribe(params => {
       this.id = params['id'];
@@ -122,6 +132,47 @@ export class CourseEditComponent implements OnInit {
         const errormessage = error.json().message || error.json().errmsg;
         this.snackBar.open('Saving course failed ' + errormessage, 'Dismiss');
       });
+  }
+
+  deleteCourse() {
+    this.dialogService.confirmDelete('course', this.courseOb.name)
+    .subscribe(res => {
+      if (res) {
+        this.courseService.deleteItem(this.courseOb);
+        this.router.navigate(['/']);
+      }
+    });
+  }
+
+  async onExport() {
+    try {
+      const courseJSON = await this.exportService.exportCourse(this.courseOb);
+
+      this.saveFileService.save(this.courseOb.name, JSON.stringify(courseJSON, null, 2));
+    } catch (err) {
+      this.snackBar.open('Export course failed ' + err.json().message, 'Dismiss');
+    }
+  }
+
+  async onDuplicate() {
+    try {
+      const course = await this.duplicationService.duplicateCourse(this.courseOb, this.userService.user);
+      const url = '/course/' + (<any>course)._id + '/edit';
+      this.router.navigate([url]);
+      this.snackBar.open('Course successfully duplicated', '', {duration: 3000});
+    } catch (err) {
+      this.snackBar.open('Duplication of the course failed ' + err.json().message, 'Dismiss');
+    }
+  }
+
+  onChangeMode(value) {
+    if (value.checked === true) {
+      this.mode = true;
+      this.enrollType = 'whitelist';
+    } else {
+      this.mode = false;
+      this.enrollType = 'free';
+    }
   }
 
   onChangeActive(value) {

@@ -26,7 +26,9 @@
           </mat-select><br>
         </mat-form-field>
 
-        <p *ngIf="enrollType === enrollTypeConstants.ENROLL_TYPE_FREE">The course is free and accessible for everyone</p>
+        <p *ngIf="enrollType === enrollTypeConstants.ENROLL_TYPE_FREE">
+          The course is free and accessible for everyone
+        </p>
 
         <mat-form-field class="full-width" *ngIf="enrollType === enrollTypeConstants.ENROLL_TYPE_ACCESSKEY">
           <input async matInput id="accessKey" placeholder="Access Key" [(ngModel)]="accessKey"
@@ -37,6 +39,7 @@
         <div class="csv-upload" *ngIf="enrollType === enrollTypeConstants.ENROLL_TYPE_WHITELIST">
           <p>Upload your OBS csv file with your course members for whitelisting students.</p>
           <p>
+            <!-- TODO: Replace with shared upload form -->
             <input class="upload" type="file" ng2FileSelect [uploader]="uploader"
                    placeholder="Upload files" accept=".csv"/>
             <button mat-raised-button color="primary"
@@ -56,8 +59,11 @@
         </p>
         <p>
           <app-button-save-cancel (cancel)="cancel()"></app-button-save-cancel>
+          <button mat-raised-button (click)="onExport()" type="button">Export</button>
+          <button mat-raised-button (click)="onDuplicate()" type="button">Duplicate</button>
         </p>
       </form>
+      <button mat-raised-button color="warn" (click)= "deleteCourse()">Delete Course</button>
     </div>
   </mat-tab>
 

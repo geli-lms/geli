@@ -1,6 +1,19 @@
-<div *ngFor="let file of fileUnit.files;">
-  <a href="{{'/api/uploads/' + file.name}}" download="{{file.alias}}">
-    <img *ngIf="isPicture(file.name)" src="{{'/api/uploads/' + file.name}}" width="400" alt="{{file.alias}}">
-    <span *ngIf="!isPicture(file.name)">{{file.alias}}</span>
-  </a>
+<div *ngIf="fileUnit.fileUnitType === 'video'">
+  <div *ngFor="let file of fileUnit.files;">
+    <video src="{{'/api/uploads/' + file.name}}" controls></video>
+  </div>
+</div>
+<div *ngIf="fileUnit.fileUnitType !== 'video'">
+  <div>
+    <img *ngFor="let image of album; let i=index" [src]="image.src" (click)="openLB(i)" class="lightbox-cstm--preview" matTooltip="Right-click and choose 'Save image as' to download this image">
+  </div>
+  <ul>
+    <ng-container *ngFor="let file of fileUnit.files;">
+      <li *ngIf="!isPicture(file.name)">
+        <a href="{{'/api/uploads/' + file.name}}" download="{{file.alias}}">
+          <span>{{file.alias}}</span>
+        </a>
+      </li>
+    </ng-container>
+  </ul>
 </div>

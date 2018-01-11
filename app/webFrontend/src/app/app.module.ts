@@ -13,7 +13,6 @@ import {
   CourseService,
   FreeTextUnitService,
   LectureService,
-  TaskService,
   UnitService,
   UserDataService
 } from './shared/services/data.service';
@@ -29,6 +28,7 @@ import {UserModule} from './user/user.module';
 import {AuthModule} from './auth/auth.module';
 import {AboutModule} from './about/about.module';
 import {AdminModule} from './admin/admin.module';
+import {ReportService} from './shared/services/data/report.service';
 import {TitleService} from './shared/services/title.service';
 
 @NgModule({
@@ -53,7 +53,6 @@ import {TitleService} from './shared/services/title.service';
     AboutDataService,
     AuthGuardService,
     UnitService,
-    TaskService,
     CourseService,
     UserDataService,
     LectureService,
@@ -65,6 +64,7 @@ import {TitleService} from './shared/services/title.service';
     FreeTextUnitService,
     CodeKataUnitService,
     APIInfoService,
+    ReportService,
     TitleService,
     RavenErrorHandler,
     {

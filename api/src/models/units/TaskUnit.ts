@@ -1,31 +1,54 @@
 import * as mongoose from 'mongoose';
 import {Unit} from './Unit';
 import {ITaskUnit} from '../../../../shared/models/units/ITaskUnit';
-import {Task} from '../Task';
 
 interface ITaskUnitModel extends ITaskUnit, mongoose.Document {
+  exportJSON: () => Promise<ITaskUnit>;
 }
 
-const taskUnitSchema = new mongoose.Schema({
-  tasks: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Task'
+const taskSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String
+    },
+    unitId: {
+      type: String
     }
-  ],
+    ,
+    answers: {
+      type: [{
+        value: Boolean,
+        text: String
+      }],
+      required: true
+    },
+  }, {
+    timestamps: true,
+    toObject: {
+      transform: function (doc: any, ret: any) {
+        if (ret.hasOwnProperty('_id') && ret._id !== null) {
+          ret._id =  ret._id.toString();
+        }
+
+        if (ret.hasOwnProperty('id') && ret.id !== null) {
+          ret.id = ret.id.toString();
+        }
+        ret.answers = ret.answers.map((answer: any) => {
+          answer._id = answer._id.toString();
+          return answer;
+        });
+      }
+    }
+  }
+);
+
+const taskUnitSchema = new mongoose.Schema({
+  tasks: [taskSchema],
   deadline: {
     type: String
   },
 });
 
-// Cascade delete
-taskUnitSchema.pre('remove', function(next: () => void) {
-  Task.find({'_id': {$in: this.tasks}}).exec()
-    .then((tasks) => Promise.all(tasks.map(task => task.remove())))
-    .then(next)
-    .catch(next);
-});
+// const TaskUnit = Unit.discriminator('task', taskUnitSchema);
 
-const TaskUnit = Unit.discriminator('task', taskUnitSchema);
-
-export {TaskUnit, ITaskUnitModel};
+export {taskUnitSchema, ITaskUnitModel};

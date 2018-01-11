@@ -1,9 +1,9 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
-import {CodeKataUnitService} from '../../../shared/services/data.service';
+import {CodeKataUnitService, UnitService} from '../../../shared/services/data.service';
 import {MatSnackBar} from '@angular/material';
 import {ICodeKataUnit} from '../../../../../../../shared/models/units/ICodeKataUnit';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
-import {CodeKataUnit} from '../../../models/CodeKataUnit';
+import {CodeKataUnit} from '../../../models/units/CodeKataUnit';
 import {UnitGeneralInfoFormComponent} from '../unit-general-info-form/unit-general-info-form.component';
 import {AceEditorComponent} from 'ng2-ace-editor';
 import 'brace';
@@ -42,7 +42,7 @@ export class CodeKataUnitFormComponent implements OnInit {
       '\nvalidate();' +
       '\n' +
       '\nfunction validate() {' +
-      '\n\tlet result = targetSet.has("Hello") && targetSet.has("CodeKata") && targetSet.size === 2;' +
+      '\n\tconst result = targetSet.has("Hello") && targetSet.has("CodeKata") && targetSet.size === 2;' +
       '\n\tif (result === true) {' +
       '\n\t\tconsole.log("Well done, you solved this Kata");' +
       '\n\t} else {' +
@@ -55,6 +55,7 @@ export class CodeKataUnitFormComponent implements OnInit {
   logs: string;
 
   constructor(private codeKataUnitService: CodeKataUnitService,
+              private unitService: UnitService,
               private snackBar: MatSnackBar) {
   }
 
@@ -98,9 +99,9 @@ export class CodeKataUnitFormComponent implements OnInit {
     };
 
     if (this.model._id === undefined) {
-      this.codeKataUnitService.createItem({
+      this.unitService.createItem({
         model: this.model,
-        lectureId: this.lectureId,
+        lectureId: this.lectureId
       })
       .then(
         () => {
@@ -113,7 +114,7 @@ export class CodeKataUnitFormComponent implements OnInit {
         });
     } else {
       delete this.model._course;
-      this.codeKataUnitService.updateItem(this.model)
+      this.unitService.updateItem(this.model)
       .then(
         () => {
           this.snackBar.open('Code-Kata updated', '', {duration: 3000});
@@ -128,6 +129,10 @@ export class CodeKataUnitFormComponent implements OnInit {
 
 // refactor this to use the same as in code-kata-unit
   validate() {
+    if (!this.validateStructure()) {
+      return false;
+    }
+
     const codeToTest: string = this.model.code;
 
     this.logs = undefined;
@@ -166,6 +171,24 @@ export class CodeKataUnitFormComponent implements OnInit {
       console.log(result);
       return false;
     }
+  }
+
+  // this code gets unnessessary with the Implementation of Issue #44 (all validation parts should happen on the server)
+  private validateStructure(): boolean {
+    if (!this.model.code.match(new RegExp('function(.|\t)*validate\\(\\)(.|\n|\t)*{(.|\n|\t)*}', 'gmi'))) {
+      this.snackBar.open('The test section must contain a validate function', 'Dismiss');
+      return false;
+    }
+    if (!this.model.code.match(new RegExp('function(.|\t)*validate\\(\\)(.|\n|\t)*{(.|\n|\t)*return(.|\n|\t)*}', 'gmi'))) {
+      this.snackBar.open('The validate function must return something', 'Dismiss');
+      return false;
+    }
+    if (!this.model.code.match(new RegExp('validate\\(\\);', 'gmi'))) {
+      this.snackBar.open('The test section must call the validate function', 'Dismiss');
+      return false;
+    }
+
+    return true;
   }
 
 }

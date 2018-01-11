@@ -1,8 +1,16 @@
-<div class="clickable" (click)="notify()">
-  <h1>{{title}}
-    <button class="toggle" [class.opened] = "opened" mat-icon-button>
-      <mat-icon>arrow_drop_down</mat-icon>
-    </button>
-  </h1>
+<ng-template #innerContent>
+  {{title}}
+  <button class="toggle" [class.opened] = "opened" mat-icon-button>
+    <mat-icon>arrow_drop_down</mat-icon>
+  </button>
+</ng-template>
 
+<div class="clickable" (click)="notify()" [ngSwitch]="headerTag">
+  <h1 *ngSwitchCase="'h1'"><ng-container *ngTemplateOutlet="innerContent"></ng-container></h1>
+  <h2 *ngSwitchCase="'h2'"><ng-container *ngTemplateOutlet="innerContent"></ng-container></h2>
+  <h3 *ngSwitchCase="'h3'"><ng-container *ngTemplateOutlet="innerContent"></ng-container></h3>
+  <h4 *ngSwitchCase="'h4'"><ng-container *ngTemplateOutlet="innerContent"></ng-container></h4>
+  <h5 *ngSwitchCase="'h5'"><ng-container *ngTemplateOutlet="innerContent"></ng-container></h5>
+  <h6 *ngSwitchCase="'h6'"><ng-container *ngTemplateOutlet="innerContent"></ng-container></h6>
+  <span *ngSwitchCase="'text'" class="bold"><ng-container *ngTemplateOutlet="innerContent"></ng-container></span>
 </div>

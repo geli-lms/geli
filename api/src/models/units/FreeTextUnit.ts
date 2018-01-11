@@ -3,6 +3,7 @@ import {Unit} from './Unit';
 import {IFreeTextUnit} from '../../../../shared/models/units/IFreeTextUnit';
 
 interface IFreeTextUnitModel extends IFreeTextUnit, mongoose.Document {
+  exportJSON: () => Promise<IFreeTextUnit>;
 }
 
 const freeTextUnitSchema = new mongoose.Schema({
@@ -11,6 +12,6 @@ const freeTextUnitSchema = new mongoose.Schema({
   }
 });
 
-const FreeTextUnit = Unit.discriminator('free-text', freeTextUnitSchema);
+// const FreeTextUnit = Unit.discriminator('free-text', freeTextUnitSchema);
 
-export {FreeTextUnit, IFreeTextUnitModel}
+export {freeTextUnitSchema, IFreeTextUnitModel}
