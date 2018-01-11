@@ -1,7 +1,7 @@
 import {IDirectory} from '../../../../shared/models/mediaManager/IDirectory';
 import * as mongoose from 'mongoose';
 
-interface IDIrectoryModel extends IDirectory, mongoose.Document {
+interface IDirectoryModel extends IDirectory, mongoose.Document {
 
 }
 
@@ -30,6 +30,6 @@ const directorySchema = new mongoose.Schema({
     timestamps: true,
 });
 
-const Directory = mongoose.model<IDIrectoryModel>('Directory', directorySchema);
+const Directory = mongoose.model<IDirectoryModel>('Directory', directorySchema);
 
-export {Directory, IDIrectoryModel};
+export {Directory, IDirectoryModel};
