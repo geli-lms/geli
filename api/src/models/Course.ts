@@ -131,6 +131,7 @@ courseSchema.statics.importJSON = async function (course: ICourse, admin: IUser,
   course.lectures = [];
 
   try {
+    // tslint:disable:no-use-before-declare
     const origName = course.name;
     let isCourseDuplicated = false;
     let i = 0;
@@ -147,6 +148,7 @@ courseSchema.statics.importJSON = async function (course: ICourse, admin: IUser,
     const newCourse: ICourseModel = await Course.findById(savedCourse._id);
 
     return newCourse.toObject();
+    // tslint:enable:no-use-before-declare
   } catch (err) {
     const newError = new InternalServerError('Failed to import course');
     newError.stack += '\nCaused by: ' + err.message + '\n' + err.stack;

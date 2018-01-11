@@ -78,6 +78,7 @@ lectureSchema.statics.importJSON = async function(lecture: ILecture, courseId: s
   lecture.units = [];
 
   try {
+    // tslint:disable:no-use-before-declare
     const savedLecture = await new Lecture(lecture).save();
 
     const course = await Course.findById(courseId);
@@ -90,6 +91,7 @@ lectureSchema.statics.importJSON = async function(lecture: ILecture, courseId: s
     const newLecture: ILectureModel = await Lecture.findById(savedLecture._id);
 
     return newLecture.toObject();
+    // tslint:enable:no-use-before-declare
   } catch (err) {
     const newError = new InternalServerError('Failed to import lecture');
     newError.stack += '\nCaused by: ' + err.message + '\n' + err.stack;
