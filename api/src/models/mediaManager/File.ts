@@ -20,7 +20,6 @@ const fileSchema = new mongoose.Schema({
   },
   mimeType: {
     type: String,
-    required: true
   },
 }, {
   timestamps: true,
