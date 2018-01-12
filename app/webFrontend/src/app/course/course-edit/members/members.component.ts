@@ -1,12 +1,10 @@
-import {Component, Input, OnInit, EventEmitter, Output, OnDestroy} from '@angular/core';
-import {CourseService, UserDataService, WhitelistUserService} from '../../../shared/services/data.service';
+import {Component, Input, OnInit} from '@angular/core';
+import {CourseService} from '../../../shared/services/data.service';
 import {ShowProgressService} from '../../../shared/services/show-progress.service';
 import {IUser} from '../../../../../../../shared/models/IUser';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
-import {User} from '../../../models/User';
 import {isNullOrUndefined} from 'util';
 import {IWhitelistUser} from '../../../../../../../shared/models/IWhitelistUser';
-import {DragulaService} from 'ng2-dragula';
 
 @Component({
   selector: 'app-members',
@@ -15,18 +13,16 @@ import {DragulaService} from 'ng2-dragula';
 export class MembersComponent implements OnInit {
 
   @Input() course: ICourse;
+  @Input() total = 0;
+
+  totalWhitelist = 0;
   foundStudents: IUser[] = [];
   dragableWhitelistUserInCourse: IWhitelistUser[] = [];
   showWhitelists = false;
   search = '';
-  total = 0;
-  totalWhitelist = 0;
-  dragulaWhitelistBagId = 'whitelist';
 
   constructor(private courseService: CourseService,
-              private showProgress: ShowProgressService,
-              private userService: UserDataService,
-              private whitelistUserService: WhitelistUserService) {
+              private showProgress: ShowProgressService) {
   }
 
   ngOnInit() {
@@ -40,7 +36,6 @@ export class MembersComponent implements OnInit {
     this.course.students.forEach(member =>
       this.foundStudents = this.foundStudents.filter(user => user._id !== member._id));
   };
-
 
   /**
    * Save all students in this course in database.
@@ -63,44 +58,25 @@ export class MembersComponent implements OnInit {
 
   removeUserFromCoure(draggedUser: IUser) {
     const idList: string[] = this.course.students.map((u) => u._id);
-    const index: number = idList.indexOf(draggedUser._id);
-    this.course.students.splice(index, 1);
-    this.userService.countUsers('student').then((count) => {
-        this.total = count - this.course.students.length;
-      }
-    );
+    this.course.students.splice(idList.indexOf(draggedUser._id), 1);
     this.updateCourseStudents();
   }
 
   pushUserToCourse(draggedUser: IUser) {
     this.course.students.push(draggedUser);
-    this.userService.countUsers('student').then((count) => {
-        this.total = count - this.course.students.length;
-      }
-    );
     this.updateCourseStudents();
   }
 
   removeWhitelistUserFromCourse(draggedUser: IWhitelistUser) {
     const idList: string[] = this.course.whitelist.map((u) => u._id);
-    const index: number = idList.indexOf(draggedUser._id);
-    this.course.whitelist.splice(index, 1);
-    // this.whitelistUserService.countWhitelistUsers(this.course._id).then((count) => {
-    //     this.totalWhitelist = count - this.course.whitelist.length;
-    //   }
-    // );
+    this.course.whitelist.splice(idList.indexOf(draggedUser._id), 1);
     this.updateCourseStudents();
   }
 
   pushWhitelistUserToCourse(draggedUser: IWhitelistUser) {
     this.course.whitelist.push(draggedUser);
-    // this.whitelistUserService.countWhitelistUsers(this.course._id).then((count) => {
-    //     this.totalWhitelist = count - this.course.whitelist.length;
-    //   }
-    // );
     this.updateCourseStudents();
   }
-
 
   /**
    * @param id Id of an user.
@@ -113,14 +89,6 @@ export class MembersComponent implements OnInit {
 
   onSearch(search: string): void {
     this.search = search;
-    this.userService.countUsers('student').then((count) => {
-        this.total = count - this.course.students.length;
-      }
-    );
-    this.whitelistUserService.countWhitelistUsers(this.course._id).then((count) => {
-        this.totalWhitelist = count - this.course.whitelist.length;
-      }
-    );
     this.showWhitelists = search.length > 0;
   }
 

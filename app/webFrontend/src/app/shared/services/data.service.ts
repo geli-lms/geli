@@ -319,9 +319,9 @@ export class UserDataService extends DataService {
 
   searchUsers(role: string, query: string): Promise<any> {
     const originalApiPath = this.apiPath;
-    this.apiPath += '/members/search/';
+    this.apiPath += 'members/search/';
     this.apiPath += '?role=' + role;
-    this.apiPath += '?query=' + query;
+    this.apiPath += '&query=' + query;
     const promise = this.readItems();
     this.apiPath = originalApiPath;
     return promise;
@@ -329,7 +329,7 @@ export class UserDataService extends DataService {
 
   getStudents(): Promise<any[]> {
     const originalApiPath = this.apiPath;
-    this.apiPath += '/all/students/';
+    this.apiPath += 'all/students/';
     const promise = this.readItems();
     this.apiPath = originalApiPath;
     return promise;

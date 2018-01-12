@@ -60,23 +60,6 @@ export class WhitelistEditComponent implements OnInit {
     this.filteredOptionsUid = this.uidControl.valueChanges
       .startWith(null)
       .map(val => val ? this.filter(val, this.uidOptions) : this.uidOptions.slice());
-
-/*    this.dragula.dropModel.subscribe(value => {
-      const [bagName, el, target, source] = value;
-      if (target.getAttribute('item-id') === 'Whitelist') {
-        const idList: string[] = this.dragableWhitelistUser.map(user => user._id);
-        const index: number = idList.indexOf(el.children[0].getAttribute('item-id'));
-        if (index >= 0) {
-          this.onDragendRemoveWhitelist.emit(this.dragableWhitelistUser[index]);
-        }
-      } else if (target.getAttribute('item-id') === 'WhitelistInCourse') {
-        const idList: string[] = this.dragableWhitelistUserInCourse.map(user => user._id);
-        const index: number = idList.indexOf(el.children[0].getAttribute('item-id'));
-        if (index >= 0) {
-          this.onDragendPushWhitelist.emit(this.dragableWhitelistUserInCourse[index]);
-        }
-      }
-    })*/
   }
 
   createNewWhitelistUser() {

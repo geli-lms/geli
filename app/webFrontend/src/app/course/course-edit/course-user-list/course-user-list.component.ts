@@ -4,10 +4,8 @@ import {IUser} from '../../../../../../../shared/models/IUser';
 import {User} from '../../../models/User';
 import {FormControl} from '@angular/forms';
 import 'rxjs/add/operator/startWith'
-import {UserDataService, WhitelistUserService} from '../../../shared/services/data.service';
+import {UserDataService} from '../../../shared/services/data.service';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
-import {IWhitelistUser} from '../../../../../../../shared/models/IWhitelistUser';
-import {MatSnackBar} from '@angular/material';
 
 
 @Component({
@@ -22,7 +20,6 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
   @Input() dragableUsersInCourse: User[] = [];
   @Input() dragableUsers: User[] = [];
   @Input() dragulaBagId;
-  @Input() dragulaWhitelistBagId;
   @Input() role;
   @Input() usersTotal = 0;
 
@@ -35,33 +32,31 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
   @Output() onDragendPush = new EventEmitter<IUser>();
   @Output() onUpdate = new EventEmitter<String>();
   @Output() onSearch = new EventEmitter<String>();
+  @Output() amountUsers = 0;
 
 
   constructor(private dragula: DragulaService,
               private userService: UserDataService) {
   }
 
-  get searchString(): string {
-    return this.search;
-  }
-
-  searchForUsers(search: string) {
+  async searchForUsers(search: string) {
     this.onSearch.emit(search);
     if (search !== '' && this.finishRestCall) {
       this.finishRestCall = false;
-      this.userService.searchUsers(this.role, search).then((found: User[]) => {
-        if (found) {
-          const idList: string[] = this.course.students.map((u) => u._id);
-          this.dragableUsersInCourse = found.filter(user => (idList.indexOf(user._id) >= 0
-            && this.course.courseAdmin._id !== user._id));
-          this.dragableUsers = found.filter(user => (idList.indexOf(user._id) < 0
-            && this.course.courseAdmin._id !== user._id));
-        } else {
-          this.dragableUsers = [];
-          this.dragableUsersInCourse = [];
-        }
-        this.finishRestCall = true;
-      });
+      const foundDatas = await this.userService.searchUsers(this.role, search);
+      const foundUsers = foundDatas.users;
+      this.amountUsers = foundDatas.meta.count;
+      if (foundUsers) {
+        const idList: string[] = this.course.students.map((u) => u._id);
+        this.dragableUsersInCourse = foundUsers.filter(user => (idList.indexOf(user._id) >= 0
+          && this.course.courseAdmin._id !== user._id));
+        this.dragableUsers = foundUsers.filter(user => (idList.indexOf(user._id) < 0
+          && this.course.courseAdmin._id !== user._id));
+      } else {
+        this.dragableUsers = [];
+        this.dragableUsersInCourse = [];
+      }
+      this.finishRestCall = true;
     } else {
       this.finishRestCall = true;
     }
@@ -70,12 +65,6 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
   ngOnInit() {
     // Make items only draggable by dragging the handle
     this.dragula.setOptions(this.dragulaBagId, {
-      moves: (el, container, handle) => {
-        return handle.classList.contains('user-drag-handle');
-      }
-    });
-    // Make items only draggable by dragging the handle
-    this.dragula.setOptions(this.dragulaWhitelistBagId, {
       moves: (el, container, handle) => {
         return handle.classList.contains('user-drag-handle');
       }
@@ -108,7 +97,6 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.dragula.destroy(this.dragulaBagId);
-    this.dragula.destroy(this.dragulaWhitelistBagId);
   }
 
 

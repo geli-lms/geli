@@ -13,8 +13,9 @@ export class TeachersComponent implements OnInit {
 
 
   @Input() course: ICourse;
+  @Input() total = 0;
   foundTeachers: IUser[] = [];
-  total = 0;
+
   /**
    * Get this course from api and filter all teachers from users.
    */
@@ -38,21 +39,12 @@ export class TeachersComponent implements OnInit {
 
   removeFromCoure(draggedUser: IUser) {
     const idList: string[] = this.course.teachers.map((u) => u._id);
-    const index: number = idList.indexOf(draggedUser._id);
-    this.course.teachers.splice(index, 1);
-    this.userService.countUsers('teacher').then((count) => {
-        this.total = count - this.course.teachers.length;
-      }
-    );
+    this.course.teachers.splice(idList.indexOf(draggedUser._id), 1);
     this.updateCourseTeachers();
   }
 
   pushToCoure(draggedUser: IUser) {
     this.course.teachers.push(draggedUser);
-    this.userService.countUsers('teacher').then((count) => {
-        this.total = count - this.course.teachers.length;
-      }
-    );
     this.updateCourseTeachers();
   }
 
@@ -78,12 +70,5 @@ export class TeachersComponent implements OnInit {
     this.foundTeachers = this.foundTeachers.concat(this.course.teachers.filter(obj => id === obj._id));
     this.course.teachers = this.course.teachers.filter(obj => id !== obj._id);
     this.updateCourseTeachers();
-  }
-
-  search(search: string): void {
-    this.userService.countUsers('teacher').then((count) => {
-        this.total = count - this.course.teachers.length;
-      }
-    )
   }
 }
