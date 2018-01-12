@@ -311,9 +311,21 @@ export class FreeTextUnitService extends DataService {
 }
 
 @Injectable()
-export class NotificationService extends DataService {
+export class NotificationSettingsService extends DataService {
   constructor (public backendService: BackendService) {
     super('notificationSettings/', backendService);
+  }
+
+  getNotificationSettingsPerUser(user: IUser) {
+      return new Promise((resolve, reject) => {
+        this.backendService.get(this.apiPath + 'user/' + user._id)
+          .subscribe(
+            (responseItem: any) => {
+              resolve(responseItem);
+            },
+            error => reject(error)
+          );
+      });
   }
 }
 

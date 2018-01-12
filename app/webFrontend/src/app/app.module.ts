@@ -13,7 +13,7 @@ import {
   CourseService,
   FreeTextUnitService,
   LectureService,
-  NotificationService,
+  NotificationSettingsService,
   UnitService,
   UserDataService
 } from './shared/services/data.service';
@@ -68,7 +68,7 @@ import { UserSettingsComponent } from './user/user-settings/user-settings.compon
     APIInfoService,
     ReportService,
     TitleService,
-    NotificationService,
+    NotificationSettingsService,
     RavenErrorHandler,
     {
       provide: ErrorHandler,
