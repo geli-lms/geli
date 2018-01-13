@@ -10,18 +10,20 @@ export class ThemeService {
   }
 
   setTheme(theme: string) {
-    this.renderer.removeClass(document.body, 'nightTheme');
+    for (const removeTheme of this.themes) {
+      this.renderer.removeClass(document.body, removeTheme + 'Theme');
+    }
     switch (theme) {
-      case 'night':
-        this.renderer.addClass(document.body, 'nightTheme');
-        break;
       case 'auto':
         const time = new Date();
-        if (time.getHours() >= 22 && time.getHours() <= 6) {
+        if (time.getHours() >= 22 || time.getHours() <= 6) {
           this.renderer.addClass(document.body, 'nightTheme');
         }
         break;
+      case 'default':
+        break;
       default :
+        this.renderer.addClass(document.body, theme + 'Theme');
         break;
     }
   }
