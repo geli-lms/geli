@@ -29,6 +29,6 @@ export class ImprintComponent implements OnInit {
     }
   }
   renderHtml() {
-    this.imprintRendered = this.mdService.render(this.imprint.value);
+    this.imprintRendered = this.mdService.render(this.imprint.value) || 'No imprint yet!';
   }
 }
