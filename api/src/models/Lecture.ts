@@ -78,6 +78,7 @@ lectureSchema.statics.importJSON = async function(lecture: ILecture, courseId: s
   lecture.units = [];
 
   try {
+    // Need to disabled this rule because we can export Course AFTER this function
     // tslint:disable:no-use-before-declare
     const savedLecture = await new Lecture(lecture).save();
 
