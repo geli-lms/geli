@@ -6,10 +6,6 @@ interface IDirectoryModel extends IDirectory, mongoose.Document {
 }
 
 const directorySchema = new mongoose.Schema({
-  _course: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Course'
-  },
   name: {
     type: String,
     required: true
