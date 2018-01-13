@@ -61,10 +61,11 @@ taskUnitSchema.statics.toFile = async function(unit: ITaskUnit) {
     }
     fileStream = fileStream + '-------------------------------------\n';
 
-    return new Promise((resolve) => {
-      return resolve(fileStream);
-    });
   }
+
+  return new Promise((resolve) => {
+    return resolve(fileStream);
+  });
 };
 
 // const TaskUnit = Unit.discriminator('task', taskUnitSchema);
