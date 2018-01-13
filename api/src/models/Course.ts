@@ -131,7 +131,7 @@ courseSchema.statics.importJSON = async function (course: ICourse, admin: IUser,
   course.lectures = [];
 
   try {
-    // Need to disabled this rule because we can export Course AFTER this function
+    // Need to disabled this rule because we can't export 'Course' BEFORE this function-declaration
     // tslint:disable:no-use-before-declare
     const origName = course.name;
     let isCourseDuplicated = false;
