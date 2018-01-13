@@ -1,5 +1,5 @@
 import * as mongoose from 'mongoose';
-import {Unit} from './Unit';
+import {TaskUnit, Unit} from './Unit';
 import {ITaskUnit} from '../../../../shared/models/units/ITaskUnit';
 
 interface ITaskUnitModel extends ITaskUnit, mongoose.Document {
@@ -51,13 +51,12 @@ const taskUnitSchema = new mongoose.Schema({
 });
 
 taskUnitSchema.statics.toFile = async function(unit: ITaskUnit) {
-  let fileStream = unit.description;
+  let fileStream = '';
 
   for (const task of unit.tasks) {
-    const newTask = await taskUnitSchema.statics.findOne(task._id);
-    fileStream = fileStream + newTask.name + '\n';
+    fileStream = fileStream + task.name + '\n';
 
-    for (const answer of newTask.answers) {
+    for (const answer of task.answers) {
       fileStream = fileStream + answer.text + ': [ ]\n';
     }
     fileStream = fileStream + '-------------------------------------\n';
