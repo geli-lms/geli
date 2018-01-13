@@ -21,11 +21,9 @@
         </mat-form-field>
 
         <mat-form-field class="full-width">
-          <mat-select name="courseTypes" placeholder="Please select your course type" id="courseTypes"
-                      [(ngModel)]="enrollType">
+          <mat-select name="courseTypes" placeholder="Please select your course access type" id="courseTypes" [(ngModel)]="enrollType">
             <mat-option *ngFor="let enrollType of enrollTypes" [value]="enrollType">{{enrollType}}</mat-option>
-          </mat-select>
-          <br>
+          </mat-select><br>
         </mat-form-field>
 
         <p *ngIf="enrollType === enrollTypeConstants.ENROLL_TYPE_FREE">
@@ -77,13 +75,13 @@
 
   <mat-tab label="Members">
     <div class="tab-content">
-      <app-members *ngIf="courseOb" [course]="courseOb"></app-members>
+      <app-members [courseId]="id"></app-members>
     </div>
   </mat-tab>
 
   <mat-tab label="Teachers">
     <div class="tab-content">
-      <app-teachers *ngIf="courseOb" [course]="courseOb"></app-teachers>
+      <app-teachers [courseId]="id"></app-teachers>
     </div>
   </mat-tab>
 </mat-tab-group>
