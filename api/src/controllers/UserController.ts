@@ -72,6 +72,7 @@ export class UserController {
       conditions.$or.push({'profile.firstName': {$regex: re}});
       conditions.$or.push({'profile.lastName': {$regex: re}})
     });
+    const amountUsers = await User.count({}).where({role: role});
     const users = await User.find(conditions, {
       'score': {$meta: 'textScore'}
     })
@@ -81,7 +82,7 @@ export class UserController {
     return {
       users: users.map((user) => user.toObject({virtuals: true})),
       meta: {
-        count: users.length
+        count: amountUsers
       }
     };
   }
