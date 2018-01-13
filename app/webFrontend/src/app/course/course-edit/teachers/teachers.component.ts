@@ -13,7 +13,7 @@ export class TeachersComponent implements OnInit {
 
 
   @Input() course: ICourse;
-  @Input() total = 0;
+  total = 0;
   foundTeachers: IUser[] = [];
 
   /**

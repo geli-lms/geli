@@ -13,8 +13,6 @@ import {IWhitelistUser} from '../../../../../../../shared/models/IWhitelistUser'
 export class MembersComponent implements OnInit {
 
   @Input() course: ICourse;
-  @Input() total = 0;
-
   totalWhitelist = 0;
   foundStudents: IUser[] = [];
   dragableWhitelistUserInCourse: IWhitelistUser[] = [];

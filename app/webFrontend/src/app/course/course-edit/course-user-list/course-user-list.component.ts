@@ -21,19 +21,17 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
   @Input() dragableUsers: User[] = [];
   @Input() dragulaBagId;
   @Input() role;
-  @Input() usersTotal = 0;
 
   search = '';
   userCtrl: FormControl;
   filteredStates: any;
   finishRestCall = true;
+  usersTotal = 0;
 
   @Output() onDragendRemove = new EventEmitter<IUser>();
   @Output() onDragendPush = new EventEmitter<IUser>();
   @Output() onUpdate = new EventEmitter<String>();
   @Output() onSearch = new EventEmitter<String>();
-  @Output() amountUsers = 0;
-
 
   constructor(private dragula: DragulaService,
               private userService: UserDataService) {
@@ -45,7 +43,7 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
       this.finishRestCall = false;
       const foundDatas = await this.userService.searchUsers(this.role, search);
       const foundUsers = foundDatas.users;
-      this.amountUsers = foundDatas.meta.count;
+      this.usersTotal = foundDatas.meta.count;
       if (foundUsers) {
         const idList: string[] = this.course.students.map((u) => u._id);
         this.dragableUsersInCourse = foundUsers.filter(user => (idList.indexOf(user._id) >= 0

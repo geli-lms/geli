@@ -68,20 +68,20 @@
   </mat-tab>
 
   <mat-tab label="Content">
-    <div class="tab-content">
+    <div class="tab-content" *ngIf="courseOb">
       <app-course-manage-content [course]="courseOb"></app-course-manage-content>
     </div>
   </mat-tab>
 
   <mat-tab label="Members">
-    <div class="tab-content">
-      <app-members [courseId]="id"></app-members>
+    <div class="tab-content" *ngIf="courseOb">
+      <app-members [course]="courseOb"></app-members>
     </div>
   </mat-tab>
 
   <mat-tab label="Teachers">
-    <div class="tab-content">
-      <app-teachers [courseId]="id"></app-teachers>
+    <div class="tab-content" *ngIf="courseOb">
+      <app-teachers [course]="courseOb"></app-teachers>
     </div>
   </mat-tab>
 </mat-tab-group>
