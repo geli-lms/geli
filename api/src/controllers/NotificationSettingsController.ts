@@ -13,12 +13,24 @@ export class NotificationSettingsController {
   }
 
   @Put('/')
-  async updateSettings(@Body() data: any) {
+  async updateNotificationSettings(@Body() data: any) {
     if (!data.notificationSettings) {
       throw new BadRequestError('notification needs fields course and user')
     }
-    return await NotificationSettings.findOneAndUpdate({'user:': data.notificationSettings.user._id,
+    return await NotificationSettings.findOneAndUpdate({'user': data.notificationSettings.user._id,
         'course': data.notificationSettings.course._id}, data.notificationSettings, {new: true});
+  }
+
+  @Post('/')
+  async createNotificationSettings(@Body() data: any) {
+    if (!data.userId || !data.courseId || !data.notificationType) {
+      throw new BadRequestError('NotificationSettings need courseId, userId and notificationType');
+    }
+    const notificationSettings = await NotificationSettings.findOne({'user': data.userId, 'course': data.courseId});
+    if (notificationSettings) {
+      throw new BadRequestError('NotificationSettings for user:' + data.userId + ' with course: ' + data.courseId + ' already exist');
+    }
+    return new NotificationSettings({'user': data.userId, 'course': data.courseId, 'notificationType': data.notificationType}).save();
   }
 
 
