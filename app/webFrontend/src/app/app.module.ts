@@ -11,6 +11,7 @@ import {
   APIInfoService,
   CodeKataUnitService,
   CourseService,
+  DownloadFileService,
   FreeTextUnitService,
   LectureService,
   UnitService,
@@ -66,6 +67,7 @@ import {TitleService} from './shared/services/title.service';
     APIInfoService,
     ReportService,
     TitleService,
+    DownloadFileService,
     RavenErrorHandler,
     {
       provide: ErrorHandler,
