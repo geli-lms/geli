@@ -1,10 +1,12 @@
-.add-lecture-fab {
-  position: fixed;
-  right: 20px;
-  bottom: 20px;
+.download-button {
+  float: right;
 }
 
 .report-button {
   float: right;
   clear: both;
+}
+
+.course-header {
+  display: block;
 }

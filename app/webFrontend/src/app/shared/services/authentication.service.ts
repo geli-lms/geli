@@ -25,7 +25,7 @@ export class AuthenticationService {
     this.isLoggedIn = this.token !== '';
   }
 
-  login(email: string, password: string) {
+  async login(email: string, password: string) {
     return new Promise((resolve, reject) => {
 
       return this.http.post(AuthenticationService.API_URL + 'auth/login', {email: email, password: password})
@@ -138,7 +138,6 @@ export class AuthenticationService {
   }
 
   authHeader() {
-
     let headers = new HttpHeaders({'Content-Type': 'application/json'});
     if (this.token !== '' || !isNullOrUndefined(this.token)) {
       headers = headers.append('Authorization', this.token);
