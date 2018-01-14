@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {Router} from '@angular/router';
+import {ActivatedRoute} from '@angular/router';
 import {TitleService} from '../../shared/services/title.service';
 
 @Component({
@@ -9,25 +9,23 @@ import {TitleService} from '../../shared/services/title.service';
 })
 export class CourseEditComponent implements OnInit {
 
-  private tabs = [
+  id: string;
+  tabs = [
     { path: '.', label: 'General' },
     { path: 'content', label: 'Content' },
     { path: 'members', label: 'Members' },
     { path: 'teachers', label: 'Teachers' },
   ];
 
-  constructor(private router: Router,
+  constructor(private route: ActivatedRoute,
               private titleService: TitleService) {
+    this.route.params.subscribe(params => {
+      this.id = params['id'];
+    });
   }
 
   ngOnInit() {
     this.titleService.setTitle('Edit Course');
   }
-
-  cancel() {
-    this.router.navigate(['/']);
-  }
-
-
 
 }

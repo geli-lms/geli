@@ -16,6 +16,7 @@ import {TitleService} from '../../../shared/services/title.service';
 import {SaveFileService} from '../../../shared/services/save-file.service';
 import {UserService} from '../../../shared/services/user.service';
 import {DataSharingService} from '../../../shared/services/data-sharing.service';
+import {DialogService} from '../../../shared/services/dialog.service';
 
 @Component({
   selector: 'app-course-edit-general-tab',
@@ -55,7 +56,8 @@ export class GeneralTabComponent implements OnInit {
               private saveFileService: SaveFileService,
               private duplicationService: DuplicationService,
               private userService: UserService,
-              private dataSharingService: DataSharingService) {
+              private dataSharingService: DataSharingService,
+              private dialogService: DialogService) {
 
     this.route.params.subscribe(params => {
       this.id = params['id'];
@@ -164,5 +166,19 @@ export class GeneralTabComponent implements OnInit {
 
   onChangeActive(value) {
     this.active = value.checked;
+  }
+
+  cancel() {
+    this.router.navigate(['/']);
+  }
+
+  deleteCourse() {
+    this.dialogService.confirmDelete('course', this.courseOb.name)
+      .subscribe(res => {
+        if (res) {
+          this.courseService.deleteItem(this.courseOb);
+          this.router.navigate(['/']);
+        }
+      });
   }
 }
