@@ -174,11 +174,12 @@ export class GeneralTabComponent implements OnInit {
 
   deleteCourse() {
     this.dialogService.confirmDelete('course', this.courseOb.name)
-      .subscribe(res => {
-        if (res) {
-          this.courseService.deleteItem(this.courseOb);
-          this.router.navigate(['/']);
+      .subscribe(async res => {
+        if (!res) {
+          return;
         }
+        await this.courseService.deleteItem(this.courseOb);
+        await this.router.navigate(['/']);
       });
   }
 }
