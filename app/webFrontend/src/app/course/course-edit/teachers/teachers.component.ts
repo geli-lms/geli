@@ -38,8 +38,7 @@ export class TeachersComponent implements OnInit {
   }
 
   removeFromCoure(draggedUser: IUser) {
-    const idList: string[] = this.course.teachers.map((u) => u._id);
-    this.course.teachers.splice(idList.indexOf(draggedUser._id), 1);
+    this.course.teachers = this.course.teachers.filter(t => t._id !== draggedUser._id);
     this.updateCourseTeachers();
   }
 

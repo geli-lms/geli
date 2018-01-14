@@ -55,8 +55,7 @@ export class MembersComponent implements OnInit {
   }
 
   removeUserFromCoure(draggedUser: IUser) {
-    const idList: string[] = this.course.students.map((u) => u._id);
-    this.course.students.splice(idList.indexOf(draggedUser._id), 1);
+    this.course.students = this.course.students.filter(s => s._id !== draggedUser._id);
     this.updateCourseStudents();
   }
 
@@ -66,8 +65,7 @@ export class MembersComponent implements OnInit {
   }
 
   removeWhitelistUserFromCourse(draggedUser: IWhitelistUser) {
-    const idList: string[] = this.course.whitelist.map((u) => u._id);
-    this.course.whitelist.splice(idList.indexOf(draggedUser._id), 1);
+    this.course.whitelist = this.course.whitelist.filter(w => w._id !== draggedUser._id);
     this.updateCourseStudents();
   }
 
