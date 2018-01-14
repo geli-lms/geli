@@ -11,6 +11,7 @@ import {
   APIInfoService,
   CodeKataUnitService,
   CourseService,
+  DownloadFileService,
   FreeTextUnitService,
   LectureService,
   UnitService,
@@ -69,6 +70,7 @@ import {ImprintModule} from './imprint/imprint.module';
     APIInfoService,
     ReportService,
     TitleService,
+    DownloadFileService,
     RavenErrorHandler,
     ConfigService,
     {
