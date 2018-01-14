@@ -22,6 +22,9 @@ $app-night-theme: mat-dark-theme($app-night-primary, $app-night-accent, $app-nig
 .nightTheme{
   @include angular-material-theme($app-night-theme);
   background-color: #303030;
+  .gu-mirror{
+    background-color: #303030;
+  }
   color: #ffffff;
   a:link:not(.mat-button):not(.logo)	      { color: map-get($app-night-primary, A100) }
   a:visited:not(.mat-button):not(.logo)  { color: map-get($app-night-primary, A200) }
