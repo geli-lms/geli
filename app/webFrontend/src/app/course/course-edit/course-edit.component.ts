@@ -9,6 +9,13 @@ import {TitleService} from '../../shared/services/title.service';
 })
 export class CourseEditComponent implements OnInit {
 
+  private tabs = [
+    { path: '.', label: 'General' },
+    { path: 'content', label: 'Content' },
+    { path: 'members', label: 'Members' },
+    { path: 'teachers', label: 'Teachers' },
+  ];
+
   constructor(private router: Router,
               private titleService: TitleService) {
   }

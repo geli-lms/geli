@@ -6,14 +6,16 @@
   </a>
 </div>
 
-<mat-toolbar>
-  <mat-toolbar-row>
-    <button mat-button routerLink="." routerLinkActive="active">General</button>
-    <button mat-button routerLink="content" routerLinkActive="active">Content</button>
-    <button mat-button routerLink="members" routerLinkActive="active">Members</button>
-    <button mat-button routerLink="teachers" routerLinkActive="active">Teachers</button>
-  </mat-toolbar-row>
-</mat-toolbar>
+<nav mat-tab-nav-bar>
+  <a mat-tab-link *ngFor="let tab of tabs"
+     [routerLink]="tab.path"
+     routerLinkActive
+     #rla="routerLinkActive"
+     [routerLinkActiveOptions]="{exact: true}"
+     [active]="rla.isActive">
+    {{tab.label}}
+  </a>
+</nav>
 
 <div class="tab-content">
   <router-outlet></router-outlet>
