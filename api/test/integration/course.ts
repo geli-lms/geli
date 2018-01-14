@@ -92,9 +92,9 @@ describe('Course', () => {
       const testData = new Course({
         name: 'Test Course',
         description: 'Test description',
-        active: true
+        active: true,
+        courseAdmin: teacher.id
       });
-      testData.teachers.push(teacher);
       const savedCourse = await testData.save();
 
       const res = await chai.request(app)
@@ -108,17 +108,18 @@ describe('Course', () => {
     });
 
     it('should not get course not a teacher of course', async () => {
-      const teacher = await FixtureUtils.getRandomTeacher();
+      const teacher = await FixtureUtils.getRandomTeachers(2, 2);
       const testData = new Course({
         name: 'Test Course',
         description: 'Test description',
-        active: true
+        active: true,
+        courseAdmin: teacher[0].id
       });
       const savedCourse = await testData.save();
 
       const res = await chai.request(app)
         .get(`${BASE_URL}/${savedCourse._id}`)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
+        .set('Authorization', `JWT ${JwtUtils.generateToken(teacher[1])}`)
         .catch(err => err.response);
 
       res.should.have.status(404);
@@ -128,18 +129,20 @@ describe('Course', () => {
   describe(`PUT ${BASE_URL} :id`, () => {
     it('change added course', async () => {
       const teacher = await FixtureUtils.getRandomTeacher();
-      const testDataUpdate = new Course({
-        name: 'Test Course Update',
-        description: 'Test description update',
-        active: true
-      });
+      const testDataUpdate = new Course(
+        {
+          name: 'Test Course Update',
+          description: 'Test description update',
+          active: true,
+          courseAdmin: teacher.id
+        });
       const testData = new Course(
         {
           name: 'Test Course',
           description: 'Test description',
-          active: false
+          active: false,
+          courseAdmin: teacher.id
         });
-      testData.teachers.push(teacher);
       const savedCourse = await testData.save();
       testDataUpdate._id = savedCourse._id;
 
