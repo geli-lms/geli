@@ -65,6 +65,7 @@ const courseSchema = new mongoose.Schema({
     toObject: {
       transform: function (doc: any, ret: any) {
         ret._id = ret._id.toString();
+        ret.courseAdmin = ret.courseAdmin.toString();
         ret.hasAccessKey = false;
         if (ret.accessKey) {
           delete ret.accessKey;
