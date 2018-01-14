@@ -1,0 +1,29 @@
+<h1>Settings</h1>
+<h2>Notifications</h2>
+<mat-table #table [dataSource]="dataSource">
+  <ng-container matColumnDef="Notifications">
+    <mat-header-cell *matHeaderCellDef>
+      <mat-checkbox (change)="$event ? masterToggle() : null"
+                    [checked]="selection.hasValue() && isAllSelected()"
+                    [indeterminate]="selection.hasValue() && !isAllSelected()">
+      </mat-checkbox>
+    </mat-header-cell>
+    <mat-cell *matCellDef="let course">
+      <mat-checkbox (click)="$event.stopPropagation()"
+                    (change)="$event ? selection.toggle(course) : null"
+                    [checked]="selection.isSelected(course)">
+      </mat-checkbox>
+    </mat-cell>
+  </ng-container>
+    <!-- Name Column -->
+  <ng-container matColumnDef="name">
+    <mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
+    <mat-cell *matCellDef="let course">{{course.name}}</mat-cell>
+  </ng-container>
+
+  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: displayedColumns;"
+           (click)="selection.toggle(row)">
+  </mat-row>
+</mat-table>
+<button mat-raised-button color="primary" class="mat-button" (click)="saveNotifications()">Save</button>
