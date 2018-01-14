@@ -11,6 +11,7 @@ import {
   APIInfoService,
   CodeKataUnitService,
   CourseService,
+  DownloadFileService,
   FreeTextUnitService,
   LectureService,
   UnitService,
@@ -67,6 +68,7 @@ import {ThemeService} from './shared/services/theme.service';
     APIInfoService,
     ReportService,
     TitleService,
+    DownloadFileService,
     RavenErrorHandler,
     ThemeService,
     {

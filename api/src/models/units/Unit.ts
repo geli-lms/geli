@@ -98,4 +98,4 @@ const CodeKataUnit = Unit.discriminator('code-kata', codeKataSchema);
 const FileUnit = Unit.discriminator('file', fileUnitSchema);
 const TaskUnit = Unit.discriminator('task', taskUnitSchema);
 
-export {Unit, IUnitModel};
+export {Unit, FreeTextUnit, CodeKataUnit, FileUnit, TaskUnit, IUnitModel};
