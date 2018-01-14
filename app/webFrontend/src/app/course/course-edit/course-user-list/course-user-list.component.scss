@@ -1,3 +1,5 @@
+@import '../../../../variables';
+
 .fuzzySearch {
   margin-top: 10px;
   width: 100%;
@@ -35,7 +37,7 @@
 }
 
 .profile:hover {
-  background-color: cornsilk;
+  background-color: map-get($app-primary, 700);
 }
 
 .active {
@@ -95,12 +97,10 @@ button {
 
 .drop {
   min-height: 40px;
-  background-color: #fafafa;
 }
 
 .list {
   padding-bottom: 10px;
-  background-color: #ffffff;
 
   .listBg {
     height: 40px;
