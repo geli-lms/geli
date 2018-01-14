@@ -1,6 +1,7 @@
 import {BadRequestError, Body, Get, JsonController, Param, Post, Put, UseBefore} from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import {NotificationSettings} from '../models/NotificationSettings';
+import {INotificationSettings} from '../../../shared/models/INotificationSettings';
 
 @JsonController('/notificationSettings')
 @UseBefore(passportJwtMiddleware)
@@ -12,13 +13,12 @@ export class NotificationSettingsController {
     return notificationSettings;
   }
 
-  @Put('/')
-  async updateNotificationSettings(@Body() data: any) {
-    if (!data.notificationSettings) {
+  @Put('/:id')
+  async updateNotificationSettings(@Param('id') id: string, @Body() notificationSettings: INotificationSettings) {
+    if (!notificationSettings) {
       throw new BadRequestError('notification needs fields course and user')
     }
-    return await NotificationSettings.findOneAndUpdate({'user': data.notificationSettings.user._id,
-        'course': data.notificationSettings.course._id}, data.notificationSettings, {new: true});
+    return NotificationSettings.findOneAndUpdate({'_id': id}, notificationSettings, {new: true});
   }
 
   @Post('/')
