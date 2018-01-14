@@ -74,12 +74,15 @@ unitSchema.statics.importJSON = async function(unit: IUnit, courseId: string, le
   unit._course = courseId;
 
   try {
+    // Need to disabled this rule because we can't export 'Unit' BEFORE this function-declaration
+    // tslint:disable:no-use-before-declare
     const savedUnit = await Unit.create(unit);
     const lecture = await Lecture.findById(lectureId);
     lecture.units.push(savedUnit);
     await lecture.save();
 
     return savedUnit.toObject();
+    // tslint:enable:no-use-before-declare
   } catch (err) {
     const newError = new InternalServerError('Failed to import unit of type ' + unit.__t);
     newError.stack += '\nCaused by: ' + err.message + '\n' + err.stack;
