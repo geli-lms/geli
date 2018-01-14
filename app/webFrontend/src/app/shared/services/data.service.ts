@@ -7,6 +7,7 @@ import {ILecture} from '../../../../../../shared/models/ILecture';
 import {IUnit} from '../../../../../../shared/models/units/IUnit';
 import {IUser} from '../../../../../../shared/models/IUser';
 import {ICourse} from '../../../../../../shared/models/ICourse';
+import {IDownload} from '../../../../../../shared/models/IDownload';
 
 export abstract class DataService {
 
@@ -25,76 +26,76 @@ export abstract class DataService {
   createItem(createItem: any): Promise<any> {
     return new Promise((resolve, reject) => {
       this.backendService.post(this.apiPath, createItem)
-      .subscribe(
-        (responseItem) => {
-          resolve(responseItem);
-        },
-        error => reject(error)
-      );
+        .subscribe(
+          (responseItem) => {
+            resolve(responseItem);
+          },
+          error => reject(error)
+        );
     });
   }
 
   readItems(): Promise<any[]> {
     return new Promise((resolve, reject) => {
       this.backendService.get(this.apiPath)
-      .subscribe(
-        (responseItems: any) => {
-          if (this.changeProps2Date) {
-            responseItems.forEach(item => {
-              this.changeProps2Date.forEach(prop => {
-                DataService.changeStringProp2DateProp(item, prop);
+        .subscribe(
+          (responseItems: any) => {
+            if (this.changeProps2Date) {
+              responseItems.forEach(item => {
+                this.changeProps2Date.forEach(prop => {
+                  DataService.changeStringProp2DateProp(item, prop);
+                });
               });
-            });
-          }
+            }
 
-          resolve(responseItems);
-        },
-        (error) => reject(error)
-      );
+            resolve(responseItems);
+          },
+          (error) => reject(error)
+        );
     });
   }
 
   updateItem(updateItem: any): Promise<any> {
     return new Promise((resolve, reject) => {
       this.backendService.put(this.apiPath + updateItem._id, JSON.stringify(updateItem))
-      .subscribe(
-        (res) => {
-          resolve(res);
-        },
-        error => reject(error)
-      );
+        .subscribe(
+          (res) => {
+            resolve(res);
+          },
+          error => reject(error)
+        );
     });
   }
 
   deleteItem(deleteItem: any): Promise<any> {
     return new Promise((resolve, reject) => {
       this.backendService.delete(this.apiPath + deleteItem._id)
-      .subscribe(
-        () => {
-          resolve();
-        },
-        error => reject(error)
-      );
+        .subscribe(
+          () => {
+            resolve();
+          },
+          error => reject(error)
+        );
     });
   }
 
   readSingleItem(id: string): Promise<any> {
     return new Promise((resolve, reject) => {
       this.backendService.get(this.apiPath + id)
-      .subscribe(
-        (responseItems: any) => {
-          if (this.changeProps2Date) {
-            responseItems.forEach(item => {
-              this.changeProps2Date.forEach(prop => {
-                DataService.changeStringProp2DateProp(item, prop);
+        .subscribe(
+          (responseItems: any) => {
+            if (this.changeProps2Date) {
+              responseItems.forEach(item => {
+                this.changeProps2Date.forEach(prop => {
+                  DataService.changeStringProp2DateProp(item, prop);
+                });
               });
-            });
-          }
+            }
 
-          resolve(responseItems);
-        },
-        error => reject(error)
-      );
+            resolve(responseItems);
+          },
+          error => reject(error)
+        );
     });
   }
 }
@@ -239,19 +240,19 @@ export class CourseService extends DataService {
     const accessKey: string = data.accessKey;
     return new Promise((resolve, reject) => {
       this.backendService.post(this.apiPath + courseId + '/enroll', JSON.stringify({accessKey}))
-      .subscribe(
-        (responseItem: any) => {
-          resolve(responseItem);
-        },
-        error => reject(error)
-      );
+        .subscribe(
+          (responseItem: any) => {
+            resolve(responseItem);
+          },
+          error => reject(error)
+        );
     });
   }
 
   sendMailToSelectedUsers(data: any): Promise<any> {
     return this.backendService
-        .post(this.apiPath + 'mail', JSON.stringify(data))
-        .toPromise();
+      .post(this.apiPath + 'mail', JSON.stringify(data))
+      .toPromise();
   }
 
   leaveStudent(courseId: string): Promise<any[]> {
@@ -385,26 +386,60 @@ export class AboutDataService extends DataService {
   getApiDependencies(): Promise<any[]> {
     return new Promise((resolve, reject) => {
       this.backendService.get(this.apiPath + 'dependencies')
-      .subscribe((responseItems: any) => {
-          if (responseItems.httpCode >= 500) {
-            // FIXME: Just return, right?
-            return resolve([]);
-          }
+        .subscribe((responseItems: any) => {
+            if (responseItems.httpCode >= 500) {
+              // FIXME: Just return, right?
+              return resolve([]);
+            }
 
-          const out = [];
-          responseItems.data.forEach(item => {
-            out.push(new Dependency(
-              item.name,
-              item.version,
-              item.repository,
-              item.license,
-              item.devDependency)
-            );
-          });
-          resolve(out);
+            const out = [];
+            responseItems.data.forEach(item => {
+              out.push(new Dependency(
+                item.name,
+                item.version,
+                item.repository,
+                item.license,
+                item.devDependency)
+              );
+            });
+            resolve(out);
+          },
+          error => reject(error)
+        );
+    });
+  }
+}
+
+@Injectable()
+export class DownloadFileService extends DataService {
+  constructor(public backendService: BackendService) {
+    super('download/', backendService);
+  }
+
+  getPackageSize(idl: IDownload) {
+    return new Promise((resolve, reject) => {
+      this.backendService.post(this.apiPath + '/size', idl).subscribe((responseItem: any) => {
+          resolve(responseItem);
         },
-        error => reject(error)
-      );
+        error => reject(error));
+    });
+  }
+
+  postDownloadReqForCourse(idl: IDownload) {
+    return new Promise((resolve, reject) => {
+      this.backendService.post(this.apiPath, idl).subscribe((responseItem: any) => {
+          resolve(responseItem);
+        },
+        error => reject(error));
+    });
+  }
+
+  getFile(id: string) {
+    return new Promise((resolve, reject) => {
+      this.backendService.getDownload(this.apiPath + id).subscribe(resp => {
+          resolve(resp);
+        },
+        error => reject(error));
     });
   }
 }
