@@ -14,7 +14,7 @@ export class FileUnit implements IFileUnit {
   updatedAt: string;
   createdAt: string;
 
-  files: IFile[];
+  files: IFile[] = [];
   fileUnitType: string;
 
   constructor(_course: ICourse) {

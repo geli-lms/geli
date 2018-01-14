@@ -122,7 +122,8 @@ export class UploadFormComponent implements OnInit, OnChanges {
   }
 
   uploadNextItem() {
-    this.fileUploader.uploadItem(this.fileUploader.getNotUploadedItems()[0]);
+    if (this.fileUploader.getNotUploadedItems().length)
+      this.fileUploader.uploadItem(this.fileUploader.getNotUploadedItems()[0]);
   }
 
   onFileOverDropzone(event) {
