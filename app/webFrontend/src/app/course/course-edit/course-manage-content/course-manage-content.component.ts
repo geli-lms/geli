@@ -55,6 +55,44 @@ export class CourseManageContentComponent implements OnInit, OnDestroy {
     }
   }
 
+  ngOnInit() {
+    // Make items only draggable by dragging the handle
+    this.dragulaService.setOptions('lectures', {
+      moves: (el, container, handle) => {
+        return handle.classList.contains('lecture-drag-handle');
+      }
+    });
+    this.dragulaService.setOptions('units', {
+      moves: (el, container, handle) => {
+        return handle.classList.contains('unit-drag-handle');
+      }
+    });
+
+    this.dragulaService.dropModel.subscribe((value) => {
+      const [bagName, element, target, container] = value;
+
+      switch (bagName) {
+        case 'lectures':
+          this.updateLectureOrder();
+          break;
+        case 'units':
+          // Update current lecture
+          this.updateUnitOrder();
+
+          // When dragging to another lecture we need to update the other lecture too
+          if (target.dataset.lectureId) {
+            this.updateUnitOrder(target.dataset.lectureId);
+          }
+          break;
+      }
+    });
+  }
+
+  ngOnDestroy() {
+    this.dragulaService.destroy('lectures');
+    this.dragulaService.destroy('units');
+  }
+
   isInMode(lecture, create) {
     return this.dataSharingService.getDataForKey(`${lecture}-${create}-mode`) || false;
   }
@@ -143,44 +181,6 @@ export class CourseManageContentComponent implements OnInit, OnDestroy {
         this.dataSharingService.setDataForKey('unit-create-type', type);
       }
     });
-  }
-
-  ngOnInit() {
-    // Make items only draggable by dragging the handle
-    this.dragulaService.setOptions('lectures', {
-      moves: (el, container, handle) => {
-        return handle.classList.contains('lecture-drag-handle');
-      }
-    });
-    this.dragulaService.setOptions('units', {
-      moves: (el, container, handle) => {
-        return handle.classList.contains('unit-drag-handle');
-      }
-    });
-
-    this.dragulaService.dropModel.subscribe((value) => {
-      const [bagName, element, target, container] = value;
-
-      switch (bagName) {
-        case 'lectures':
-          this.updateLectureOrder();
-          break;
-        case 'units':
-          // Update current lecture
-          this.updateUnitOrder();
-
-          // When dragging to another lecture we need to update the other lecture too
-          if (target.dataset.lectureId) {
-            this.updateUnitOrder(target.dataset.lectureId);
-          }
-          break;
-      }
-    });
-  }
-
-  ngOnDestroy() {
-    this.dragulaService.destroy('lectures');
-    this.dragulaService.destroy('units');
   }
 
   updateLectureOrder() {

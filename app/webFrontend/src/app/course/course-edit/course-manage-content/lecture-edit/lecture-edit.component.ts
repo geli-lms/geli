@@ -50,11 +50,11 @@ export class LectureEditComponent implements OnInit, OnDestroy {
     this.onReloadCourse = this.dataSharingService.getDataForKey('onReloadCourse');
   }
 
+  ngOnDestroy() {}
+
   isDraggingUnit() {
     return this.dragulaService.find('units').drake.dragging;
   }
-
-  ngOnDestroy() {}
 
   duplicateLecture(lecture: ILecture) {
     this.duplicationService.duplicateLecture(lecture, this.course._id)
