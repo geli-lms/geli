@@ -10,12 +10,14 @@
   </mat-form-field>
 
   <mat-form-field class="full-width">
-    <mat-select name="courseTypes" placeholder="Please select your course type" id="courseTypes" [(ngModel)]="enrollType">
+    <mat-select name="courseTypes" placeholder="Please select your course access type" id="courseTypes" [(ngModel)]="enrollType">
       <mat-option *ngFor="let enrollType of enrollTypes" [value]="enrollType">{{enrollType}}</mat-option>
     </mat-select><br>
   </mat-form-field>
 
-  <p *ngIf="enrollType === enrollTypeConstants.ENROLL_TYPE_FREE">The course is free and accessible for everyone</p>
+  <p *ngIf="enrollType === enrollTypeConstants.ENROLL_TYPE_FREE">
+    The course is free and accessible for everyone
+  </p>
 
   <mat-form-field class="full-width" *ngIf="enrollType === enrollTypeConstants.ENROLL_TYPE_ACCESSKEY">
     <input async matInput id="accessKey" placeholder="Access Key" [(ngModel)]="accessKey"
@@ -26,6 +28,7 @@
   <div class="csv-upload" *ngIf="enrollType === enrollTypeConstants.ENROLL_TYPE_WHITELIST">
     <p>Upload your OBS csv file with your course members for whitelisting students.</p>
     <p>
+      <!-- TODO: Replace with shared upload form -->
       <input class="upload" type="file" ng2FileSelect [uploader]="uploader"
              placeholder="Upload files" accept=".csv"/>
       <button mat-raised-button color="primary"
@@ -45,8 +48,8 @@
   </p>
   <p>
     <app-button-save-cancel (cancel)="cancel()"></app-button-save-cancel>
-    <button mat-button (click)="onExport()" type="button">Export</button>
-    <button mat-button (click)="onDuplicate()" type="button">Duplicate</button>
+    <button mat-raised-button (click)="onExport()" type="button">Export</button>
+    <button mat-raised-button (click)="onDuplicate()" type="button">Duplicate</button>
   </p>
 </form>
-<button mat-raised-button color="accent" (click)= "deleteCourse()">Delete Course</button>
+<button mat-raised-button color="warn" (click)= "deleteCourse()">Delete Course</button>

@@ -8,7 +8,7 @@ import {
   ENROLL_TYPE_FREE,
   ICourse
 } from '../../../../../../../shared/models/ICourse';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {CourseService, DuplicationService, ExportService} from '../../../shared/services/data.service';
 import {MatSnackBar} from '@angular/material';
 import {ShowProgressService} from '../../../shared/services/show-progress.service';
@@ -44,6 +44,7 @@ export class GeneralTabComponent implements OnInit {
   message = 'Course successfully added.';
 
   constructor(private route: ActivatedRoute,
+              private router: Router,
               private formBuilder: FormBuilder,
               private courseService: CourseService,
               private snackBar: MatSnackBar,
@@ -153,6 +154,9 @@ export class GeneralTabComponent implements OnInit {
   async onDuplicate() {
     try {
       const course = await this.duplicationService.duplicateCourse(this.courseOb, this.userService.user);
+      const url = '/course/' + (<any>course)._id + '/edit';
+      this.router.navigate([url]);
+      this.snackBar.open('Course successfully duplicated', '', {duration: 3000});
     } catch (err) {
       this.snackBar.open('Duplication of the course failed ' + err.json().message, 'Dismiss');
     }
