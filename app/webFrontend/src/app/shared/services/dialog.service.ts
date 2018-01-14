@@ -79,7 +79,7 @@ export class DialogService {
     const dialogRef: MatDialogRef<WriteMailDialog> = this.dialog.open(WriteMailDialog);
     dialogRef.componentInstance.bcc = data.bcc;
     dialogRef.componentInstance.cc = data.cc;
-    dialogRef.componentInstance.text = data.text;
+    dialogRef.componentInstance.markdown = data.markdown;
     dialogRef.componentInstance.subject = data.subject;
 
     return dialogRef.afterClosed();

@@ -11,9 +11,9 @@ import {
   APIInfoService,
   CodeKataUnitService,
   CourseService,
+  DownloadFileService,
   FreeTextUnitService,
   LectureService,
-  TaskService,
   UnitService,
   UserDataService
 } from './shared/services/data.service';
@@ -35,7 +35,7 @@ import {DataSharingService} from './shared/services/data-sharing.service';
 
 @NgModule({
   declarations: [
-    AppComponent,
+    AppComponent
   ],
   imports: [
     AdminModule,
@@ -55,7 +55,6 @@ import {DataSharingService} from './shared/services/data-sharing.service';
     AboutDataService,
     AuthGuardService,
     UnitService,
-    TaskService,
     CourseService,
     UserDataService,
     LectureService,
@@ -69,6 +68,7 @@ import {DataSharingService} from './shared/services/data-sharing.service';
     APIInfoService,
     ReportService,
     TitleService,
+    DownloadFileService,
     RavenErrorHandler,
     {
       provide: ErrorHandler,

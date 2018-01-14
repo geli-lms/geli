@@ -20,6 +20,5 @@ export class UnitFormComponent implements OnInit {
   constructor() {
   }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 }

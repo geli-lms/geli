@@ -4,7 +4,6 @@ import {IUnitModel, Unit} from './units/Unit';
 import {IUnit} from '../../../shared/models/units/IUnit';
 import {InternalServerError} from 'routing-controllers';
 import {Course} from './Course';
-import {UnitClassMapper} from '../utilities/UnitClassMapper';
 import * as winston from 'winston';
 
 interface ILectureModel extends ILecture, mongoose.Document {
@@ -86,8 +85,7 @@ lectureSchema.statics.importJSON = async function(lecture: ILecture, courseId: s
     await course.save();
 
     for (const unit of units) {
-      const unitTypeClass = UnitClassMapper.getMongooseClassForUnit(unit);
-      await unitTypeClass.schema.statics.importJSON(unit, courseId, savedLecture._id);
+      await Unit.schema.statics.importJSON(unit, courseId, savedLecture._id);
     }
     const newLecture: ILectureModel = await Lecture.findById(savedLecture._id);
 

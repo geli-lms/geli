@@ -1,33 +1,31 @@
-<div class="edit-unit">
-  <app-video-upload *ngIf="course && type == 'video'"
-                    [course]="course"
-                    [model]="model"
-                    [lecture]="lecture"
-                    [onDone]="onDone"
-                    [onCancel]="onCancel"></app-video-upload>
-  <app-file-upload *ngIf="course && type == 'file'"
-                   [course]="course"
-                   [model]="model"
-                   [lecture]="lecture"
-                   [onDone]="onDone"
-                   [onCancel]="onCancel"></app-file-upload>
-  <app-task-unit-edit *ngIf="course && type == 'task'"
-                      [course]="course"
-                      [model]="model"
-                      [lectureId]="lecture._id"
-                      [onDone]="onDone"
-                      [onCancel]="onCancel"></app-task-unit-edit>
-  <app-code-kata-unit-form *ngIf="course && type == 'code-kata'"
-                           [course]="course"
-                           [model]="model"
-                           [lectureId]="lecture._id"
-                           [onDone]="onDone"
-                           [onCancel]="onCancel"></app-code-kata-unit-form>
-
-  <app-free-text-unit-form *ngIf="course && type == 'free-text'"
-                           [course]="course"
-                           [model]="model"
-                           [lectureId]="lecture._id"
-                           [onDone]="onDone"
-                           [onCancel]="onCancel"></app-free-text-unit-form>
+<div class="edit-unit" *ngIf="course">
+  <app-file-unit-form
+    *ngIf="(type == 'video' || type == 'file')"
+    [course]="course"
+    [lecture]="lecture"
+    [model]="model"
+    [fileUnitType]="type"
+    [onDone]="onDone"
+    [onCancel]="onCancel"></app-file-unit-form>
+  <app-task-unit-edit
+    *ngIf="type == 'task'"
+    [course]="course"
+    [model]="model"
+    [lectureId]="lecture._id"
+    [onDone]="onDone"
+    [onCancel]="onCancel"></app-task-unit-edit>
+  <app-code-kata-unit-form
+    *ngIf="type == 'code-kata'"
+    [course]="course"
+    [model]="model"
+    [lectureId]="lecture._id"
+    [onDone]="onDone"
+    [onCancel]="onCancel"></app-code-kata-unit-form>
+  <app-free-text-unit-form
+    *ngIf="type == 'free-text'"
+    [course]="course"
+    [model]="model"
+    [lectureId]="lecture._id"
+    [onDone]="onDone"
+    [onCancel]="onCancel"></app-free-text-unit-form>
 </div>
