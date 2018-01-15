@@ -5,6 +5,7 @@ import {ShowProgressService} from '../../../shared/services/show-progress.servic
 import {ICourse} from '../../../../../../../shared/models/ICourse';
 import {SortUtil} from '../../../shared/utils/SortUtil';
 import {User} from '../../../models/User';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'app-teachers',
@@ -12,13 +13,17 @@ import {User} from '../../../models/User';
 })
 export class TeachersComponent implements OnInit {
 
-  @Input() courseId;
+  courseId: string;
   course: ICourse;
   allTeachers: IUser[] = [];
 
-  constructor(private courseService: CourseService,
+  constructor(private route: ActivatedRoute,
+              private courseService: CourseService,
               private userService: UserDataService,
               private showProgress: ShowProgressService) {
+    this.route.parent.params.subscribe(params => {
+      this.courseId = params['id'];
+    });
   }
 
   ngOnInit() {

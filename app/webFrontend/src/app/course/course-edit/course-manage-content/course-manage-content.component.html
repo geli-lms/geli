@@ -1,118 +1,27 @@
-<div class="container" *ngIf="course">
-  <div class="lectures" (click)="closeFab()" [dragula]="'lectures'" [dragulaModel]="course.lectures">
-    <div class="lecture" *ngFor="let lecture of course.lectures">
-      <div class="lecture-header">
-        <mat-icon class="lecture-drag-handle">drag_handle</mat-icon>
-        <h2>{{lecture.name}}</h2>
-        <button class="open-toggle" (click)="openToggleLecture(lecture)"
-                [class.opened]="openedLecture && lecture._id === openedLecture._id" mat-icon-button>
-          <mat-icon>arrow_drop_down</mat-icon>
-        </button>
-
-        <span class="flex-spacer"></span>
-
-        <button class="lecture-menu-button" mat-icon-button [matMenuTriggerFor]="lectureMenu">
-          <mat-icon>more_vert</mat-icon>
-        </button>
-
-        <mat-menu #lectureMenu="matMenu">
-          <button mat-menu-item (click)="onEditLecture(lecture)">
-            <mat-icon>edit</mat-icon>
-            Edit
-          </button>
-          <button mat-menu-item (click)="exportLecture(lecture)">
-            <mat-icon>file_download</mat-icon>
-            Export
-          </button>
-          <button mat-menu-item (click)="duplicateLecture(lecture)">
-            <mat-icon>content_copy</mat-icon>
-            Duplicate
-          </button>
-          <button mat-menu-item (click)="deleteLecture(lecture)">
-            <mat-icon>delete</mat-icon>
-            Delete
-          </button>
-        </mat-menu>
-      </div>
-
-      <div class="lecture-content" *ngIf="openedLecture && lecture._id === openedLecture._id">
-        <app-lecture-form [model]="lecture" *ngIf="lectureEditMode" (onSubmit)="updateLecture($event)"
-                          [onCancel]="closeEditLecture"
-                          actionLabel="Update"></app-lecture-form>
-
-        <div class="units" [dragula]="'units'" [dragulaModel]="lecture.units">
-          <div class="unit" *ngFor="let unit of lecture.units;">
-            <div class="unit-content">
-              <mat-icon class="unit-drag-handle">drag_handle</mat-icon>
-              <span class="unit-name">{{ unit.name }}</span>
-              <span class="unit-type">{{ unit.__t }}</span>
-              <span class="unit-date">{{ unit.updatedAt | date:"y-MM-dd" }}</span>
-              <span class="unit-actions">
-              <button mat-icon-button matTooltip="Edit" (click)="onEditUnit(unit)">
-                <mat-icon>edit</mat-icon>
-              </button>
-              <button class="unit-menu-button" mat-icon-button [matMenuTriggerFor]="unitMenu">
-                <mat-icon>more_vert</mat-icon>
-              </button>
-              <mat-menu #unitMenu="matMenu">
-                <button mat-icon-button matTooltip="Delete" (click)="deleteUnit(unit)">
-                  <mat-icon>delete</mat-icon>
-                </button>
-                <button mat-icon-button matTooltip="Duplicate" (click)="duplicateUnit(unit)">
-                  <mat-icon>content_copy</mat-icon>
-                </button>
-                <button mat-icon-button matTooltip="Export" (click)="onExportUnit(unit)">
-                  <mat-icon>file_download</mat-icon>
-              </button>
-              </mat-menu>
-            </span>
-            </div>
-
-            <app-unit-form *ngIf="unit && unitEditMode && unitEditElement === unit"
-                           [course]="course"
-                           [lecture]="lecture"
-                           [type]="unit.type"
-                           [model]="unit"
-                           [onDone]="onEditUnitDone"
-                           [onCancel]="closeEditUnit">
-            </app-unit-form>
-          </div>
-
-          <p *ngIf="!lecture.units.length">No units added yet.</p>
-        </div>
-
-        <app-unit-form *ngIf="unitCreateMode && unitCreateType"
-                       [course]="course"
-                       [lecture]="lecture"
-                       [type]="unitCreateType"
-                       [onDone]="onAddUnitDone"
-                       [onCancel]="closeAddUnit">
-        </app-unit-form>
-      </div>
-      <div class="unit-drop-target"
-          *ngIf="openedLecture && (lecture._id !== openedLecture._id || !lecture.units.length) && isDraggingUnit()"
-          dragula="units"
-          [dragulaModel]="lecture.units"
-          [attr.data-lecture-id]="lecture._id">
-      </div>
-    </div>
+<div class="container" *ngIf="course" (click)="closeFab()">
+  <div class="lectures" [dragula]="'lectures'" [dragulaModel]="course.lectures">
+    <app-lecture-edit
+      *ngFor="let lecture of course.lectures"
+      [lecture]="lecture"
+      [course]="course">
+    </app-lecture-edit>
   </div>
 
   <p *ngIf="!course.lectures.length">No lectures added yet.</p>
 
-  <app-lecture-form *ngIf="lectureCreateMode" (onSubmit)="createLecture($event)" [onCancel]="closeAddLecture"
+  <app-lecture-form *ngIf="isInMode('lecture', 'create')" (onSubmit)="createLecture($event)" [onCancel]="closeAddLecture"
                     actionLabel="Add"></app-lecture-form>
 </div>
 
 <app-mat-fab-menu class="fab" [open]="fabOpen" [onClick]="onFabClick"
-                  [disabled]="unitCreateMode || unitEditMode || lectureCreateMode || lectureEditMode"
+                  [disabled]="isInMode('lecture', 'create') || isInMode('lecture', 'edit') || isInMode('unit', 'create') || isInMode('unit', 'edit')"
                   fabTooltip="Add content">
-  <div *ngIf="openedLecture" (click)="onImportUnit()">Import unit</div>
-  <div *ngIf="openedLecture" (click)="onAddUnit('task')">Add tasks</div>
-  <div *ngIf="openedLecture" (click)="onAddUnit('file')">Upload files</div>
-  <div *ngIf="openedLecture" (click)="onAddUnit('code-kata')">Add Code-Kata</div>
-  <div *ngIf="openedLecture" (click)="onAddUnit('video')">Upload videos</div>
-  <div *ngIf="openedLecture" (click)="onAddUnit('free-text')">Add free text</div>
+  <div *ngIf="isLectureOpen()" (click)="onImportUnit()">Import unit</div>
+  <div *ngIf="isLectureOpen()" (click)="onAddUnit('task')">Add tasks</div>
+  <div *ngIf="isLectureOpen()" (click)="onAddUnit('file')">Upload files</div>
+  <div *ngIf="isLectureOpen()" (click)="onAddUnit('code-kata')">Add Code-Kata</div>
+  <div *ngIf="isLectureOpen()" (click)="onAddUnit('video')">Upload videos</div>
+  <div *ngIf="isLectureOpen()" (click)="onAddUnit('free-text')">Add free text</div>
   <div (click)="onImportLecture()">Import lecture</div>
   <div (click)="onAddLecture()">Add lecture</div>
 </app-mat-fab-menu>
