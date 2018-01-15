@@ -67,9 +67,7 @@ script:
   # check for versions
   - .travis/check-version.sh
   # run license checker and write license.json / dependencies.ts
-  - cd .travis
-  - node license.js
-  - cd ..
+  - .travis/license-crawler.sh
   # run backend-tests and return back to root for following steps
   - cd api
   - sed -i 's/$TRAVIS_COMMIT/'$TRAVIS_COMMIT'/' src/server.ts

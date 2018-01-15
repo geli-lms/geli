@@ -4,7 +4,11 @@ instrumentation:
     extensions:
         - .js
     default-excludes: true
-    excludes: ["**/server.js", "**/config/**"]
+    excludes:
+        - "**/server.js"
+        - "**/config/**"
+        - "**/migrations/**"
+        - "**/migrate.js"
     embed-source: false
     variable: __coverage__
     compact: true

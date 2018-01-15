@@ -3,7 +3,8 @@ let gulp = require("gulp");
 let sourcemaps = require("gulp-sourcemaps");
 let typescript = require("gulp-typescript");
 let nodemon = require("gulp-nodemon");
-let tslint = require("gulp-tslint");
+let gulpTslint = require("gulp-tslint");
+let tslint = require("tslint");
 let runSequence = require("run-sequence");
 let rimraf = require("rimraf");
 let typedoc = require("gulp-typedoc");
@@ -52,6 +53,12 @@ const TS_GLOB = [TS_SRC_GLOB, TS_TEST_GLOB, TS_FIXTURES_GLOB, TS_MIGRATION_GLOB]
 
 const tsProject = typescript.createProject("tsconfig.json");
 
+const TSLINT_CONF = {
+  formatter: "verbose",
+  typeCheck: true,
+  program: tslint.Linter.createProgram("./tsconfig.json")
+};
+
 // Removes the ./build directory with all its content.
 gulp.task(CLEAN_BUILD, function (callback) {
   rimraf("./build", callback);
@@ -70,8 +77,8 @@ gulp.task(CLEAN_DOC, function (callback) {
 // Checks all *.ts-files if they are conform to the rules specified in tslint.json.
 gulp.task(TSLINT, function () {
   return gulp.src(TS_GLOB)
-    .pipe(tslint({formatter: "verbose"}))
-    .pipe(tslint.report({
+    .pipe(gulpTslint(TSLINT_CONF))
+    .pipe(gulpTslint.report({
       // set this to true, if you want the build process to fail on tslint errors.
       emitError: true
     }));
@@ -80,8 +87,8 @@ gulp.task(TSLINT, function () {
 // Checks all *.ts-files if they are conform to the rules specified in tslint.json. WON'T ERROR ON LINTING ERROR.
 gulp.task(TSLINT_DEV, function () {
   return gulp.src(TS_GLOB)
-    .pipe(tslint({formatter: "verbose"}))
-    .pipe(tslint.report({
+    .pipe(gulpTslint(TSLINT_CONF))
+    .pipe(gulpTslint.report({
       // set this to true, if you want the build process to fail on tslint errors.
       emitError: false
     }));
