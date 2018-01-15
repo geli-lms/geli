@@ -18,6 +18,7 @@ export class DuplicationController {
 
   @Post('/course/:id')
   async duplicateCourse(@Param('id') id: string, @Body() data: any, @Req() request: Request) {
+    // we could use @CurrentUser instead of the need to explicitly provide a teacher
     const courseAdmin = data.courseAdmin;
     try {
       const courseModel: ICourseModel = await Course.findById(id);
