@@ -4,13 +4,15 @@ import {IUser} from '../../../../../../../shared/models/IUser';
 import {ShowProgressService} from '../../../shared/services/show-progress.service';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
 import {isNullOrUndefined} from 'util';
+import {SortUtil} from '../../../shared/utils/SortUtil';
+import {User} from '../../../models/User';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'app-teachers',
   templateUrl: './teachers.component.html',
 })
 export class TeachersComponent implements OnInit {
-
 
   @Input() course: ICourse;
   total = 0;
@@ -24,9 +26,15 @@ export class TeachersComponent implements OnInit {
       this.foundTeachers = this.foundTeachers.filter(user => user._id !== member._id));
   };
 
-  constructor(private courseService: CourseService,
-              private showProgress: ShowProgressService,
-              private userService: UserDataService) {
+  constructor(private route: ActivatedRoute,
+              private courseService: CourseService,
+              private userService: UserDataService,
+              private showProgress: ShowProgressService) {
+    this.route.parent.params.subscribe(params => {
+      courseService.readSingleItem(params['id']).then((course: ICourse) =>
+        this.course = course
+      )
+    });
   }
 
   ngOnInit() {

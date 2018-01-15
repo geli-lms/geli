@@ -1,10 +1,11 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {CourseService} from '../../../shared/services/data.service';
+import {CourseService, UserDataService} from '../../../shared/services/data.service';
 import {ShowProgressService} from '../../../shared/services/show-progress.service';
 import {IUser} from '../../../../../../../shared/models/IUser';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
 import {isNullOrUndefined} from 'util';
 import {IWhitelistUser} from '../../../../../../../shared/models/IWhitelistUser';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'app-members',
@@ -19,8 +20,15 @@ export class MembersComponent implements OnInit {
   showWhitelists = false;
   search = '';
 
-  constructor(private courseService: CourseService,
+   constructor(private route: ActivatedRoute,
+              private courseService: CourseService,
+              private userService: UserDataService,
               private showProgress: ShowProgressService) {
+    this.route.parent.params.subscribe(params => {
+      courseService.readSingleItem(params['id']).then((course: ICourse) =>
+        this.course = course
+      )
+    });
   }
 
   ngOnInit() {
