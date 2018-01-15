@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, OnDestroy} from '@angular/core';
+import {Component, OnInit, OnDestroy} from '@angular/core';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
 import {ILecture} from '../../../../../../../shared/models/ILecture';
 import {CourseService, LectureService} from '../../../shared/services/data.service';
@@ -36,13 +36,9 @@ export class CourseManageContentComponent implements OnInit, OnDestroy {
               private dataSharingService: DataSharingService) {
     // setup subjects
     this.dataSharingService.setDataForKey('onCloseAllForms', this.onCloseAllForms);
-    this.onCloseAllForms.asObservable().subscribe(() => {
-      this.closeAllForms();
-    });
+    this.onCloseAllForms.asObservable().subscribe(() => this.closeAllForms());
     this.dataSharingService.setDataForKey('onReloadCourse', this.onReloadCourse);
-    this.onReloadCourse.asObservable().subscribe(() => {
-      this.reloadCourse();
-    });
+    this.onReloadCourse.asObservable().subscribe(() => this.reloadCourse());
     // setup course object
     const course = this.dataSharingService.getDataForKey('course');
     if (course) {
@@ -214,18 +210,14 @@ export class CourseManageContentComponent implements OnInit, OnDestroy {
     .catch(console.error);
   }
 
-  reloadCourse() {
-    return this.courseService.readSingleItem(this.course._id)
-    .then((val: any) => {
-      this.course = val;
+  async reloadCourse() {
+    try {
+      this.course =  <any>(await this.courseService.readSingleItem(this.course._id));
       this.dataSharingService.setDataForKey('course', this.course);
-    })
-    .catch((error) => {
+    } catch (err) {
       this.snackBar.open('Couldn\'t reload Course', '', {duration: 3000});
-    })
-    .then(() => {
-      this.showProgress.toggleLoadingGlobal(false)
-    });
+    }
+    return this.showProgress.toggleLoadingGlobal(false);
   }
 
   onImportLecture = () => {
