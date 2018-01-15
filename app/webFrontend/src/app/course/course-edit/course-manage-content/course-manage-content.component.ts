@@ -38,7 +38,10 @@ export class CourseManageContentComponent implements OnInit, OnDestroy {
     this.dataSharingService.setDataForKey('onCloseAllForms', this.onCloseAllForms);
     this.onCloseAllForms.asObservable().subscribe(() => this.closeAllForms());
     this.dataSharingService.setDataForKey('onReloadCourse', this.onReloadCourse);
-    this.onReloadCourse.asObservable().subscribe(() => this.reloadCourse());
+    this.onReloadCourse.asObservable().subscribe(async (resolve: Function) => {
+      await this.reloadCourse();
+      return resolve();
+    });
     // setup course object
     const course = this.dataSharingService.getDataForKey('course');
     if (course) {

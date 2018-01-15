@@ -23,7 +23,7 @@ export class LectureEditComponent implements OnInit, OnDestroy {
   @Input() course: ICourse;
 
   onCloseAllForms: Subject<void>;
-  onReloadCourse: Subject<void>;
+  onReloadCourse: Subject<Function>;
 
   constructor(private route: ActivatedRoute,
               private lectureService: LectureService,
@@ -104,10 +104,10 @@ export class LectureEditComponent implements OnInit, OnDestroy {
         if (res) {
           this.showProgress.toggleLoadingGlobal(true);
           this.unitService.deleteItem(unit)
-            .then(() => {
+            .then(async () => {
               this.snackBar.open('Unit deleted.', '', {duration: 3000});
+              await this.reloadCourse();
               this.closeEditUnit();
-              this.reloadCourse();
             })
             .catch((error) => {
               this.snackBar.open(error, '', {duration: 3000});
@@ -148,7 +148,10 @@ export class LectureEditComponent implements OnInit, OnDestroy {
   }
 
   reloadCourse() {
-    this.onReloadCourse.next();
+    // this works because we only have single course-manage-content component
+    return new Promise(resolve => {
+      this.onReloadCourse.next(resolve);
+    });
   }
 
   onEditLecture() {
@@ -164,8 +167,8 @@ export class LectureEditComponent implements OnInit, OnDestroy {
   };
 
 
-  onAddUnitDone = () => {
-    this.reloadCourse();
+  onAddUnitDone = async () => {
+    await this.reloadCourse();
     this.closeAddUnit();
   };
 
@@ -207,8 +210,8 @@ export class LectureEditComponent implements OnInit, OnDestroy {
     }
   };
 
-  onEditUnitDone = () => {
-    this.reloadCourse();
+  onEditUnitDone = async () => {
+    await this.reloadCourse();
     this.closeEditUnit();
   };
 
