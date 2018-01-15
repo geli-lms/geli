@@ -45,6 +45,8 @@ export class UserSettingsComponent implements OnInit {
     })
   }
 
+  // TODO: Fix: bei myCourse.find wird nur geschaut, ob es settings gibt.
+  // es muss aber geschaut werden, ob der notificationType = all_changes ist.
   setSelection() {
     this.notificationSettingsService.getNotificationSettingsPerUser(this.userService.user).then(settings => {
       this.notificationSettings = settings;
@@ -59,7 +61,13 @@ export class UserSettingsComponent implements OnInit {
 
   saveNotifications () {
     this.myCourses.forEach(course => {
-      const settings = this.notificationSettings.find(x => x.course._id === course._id);
+      // const settings = this.notificationSettings.find((x: INotificationSettings) => x.course === course);
+      let settings: INotificationSettings;
+      this.notificationSettings.forEach((x) => {
+        if (x.course._id === course._id) {
+          settings = x;
+        }
+      })
       if (this.selection.isSelected(course)) {
         settings.notificationType = NOTIFICATION_TYPE_ALL_CHANGES;
       } else {

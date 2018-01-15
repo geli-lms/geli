@@ -186,7 +186,7 @@ export class CourseController {
 
         if (course.students.indexOf(currentUser._id) < 0) {
           course.students.push(currentUser);
-          new NotificationSettings({'user': currentUser._id, 'course': course._id, 'notificationType': API_NOTIFICATION_TYPE_NONE}).save();
+          new NotificationSettings({'user': currentUser, 'course': course, 'notificationType': API_NOTIFICATION_TYPE_NONE}).save();
           return course.save().then((c) => c.toObject());
         }
 
@@ -205,7 +205,7 @@ export class CourseController {
         const index: number = course.students.indexOf(currentUser._id);
         if (index  !== 0) {
           course.students.splice(index, 1);
-          NotificationSettings.findOne({'user': currentUser._id, 'course': course._id}).remove();
+          NotificationSettings.findOne({'user': currentUser, 'course': course}).remove();
           return course.save().then((c) => c.toObject());
         }
 
