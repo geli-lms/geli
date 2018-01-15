@@ -3,7 +3,7 @@
     <mat-icon class="lecture-drag-handle">drag_handle</mat-icon>
     <h2>{{lecture.name}}</h2>
     <button class="open-toggle" (click)="toggleLecture()"
-            [class.opened]="isOpened" mat-icon-button>
+            [class.opened]="isOpened()" mat-icon-button>
       <mat-icon>arrow_drop_down</mat-icon>
     </button>
 
