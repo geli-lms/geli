@@ -25,8 +25,6 @@ export class LectureEditComponent implements OnInit, OnDestroy {
   onCloseAllForms: Subject<void>;
   onReloadCourse: Subject<void>;
 
-  lectureId: string;
-
   constructor(private route: ActivatedRoute,
               private lectureService: LectureService,
               private unitService: UnitService,
@@ -44,9 +42,7 @@ export class LectureEditComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.onCloseAllForms = this.dataSharingService.getDataForKey('onCloseAllForms');
-    this.onCloseAllForms.asObservable().subscribe(() => {
-      this.closeAllForms();
-    });
+    this.onCloseAllForms.asObservable().subscribe(() => this.closeAllForms());
     this.onReloadCourse = this.dataSharingService.getDataForKey('onReloadCourse');
   }
 
@@ -138,7 +134,7 @@ export class LectureEditComponent implements OnInit, OnDestroy {
         this.lectureService.deleteItem(lecture)
           .then((val) => {
             this.snackBar.open('Lecture deleted.', '', {duration: 3000});
-            this.closeEditUnit();
+            this.unsetUnitEdit();
             this.closeEditLecture();
             this.reloadCourse();
           })
@@ -174,17 +170,32 @@ export class LectureEditComponent implements OnInit, OnDestroy {
   };
 
   closeAddUnit = () => {
-    this.dataSharingService.setDataForKey('unit-create-mode', false);
-    this.dataSharingService.setDataForKey('unit-create-type', null);
+    this.unsetAddUnit();
+    this.navigateToThisLecture();
   };
 
+  unsetAddUnit() {
+    this.dataSharingService.setDataForKey('unit-create-mode', false);
+    this.dataSharingService.setDataForKey('unit-create-type', null);
+  }
+
   onEditUnit = (unit: IUnit) => {
+    const isOpen = this.isUnitCurrentlyOpen(unit);
     this.closeAllForms();
+    if (isOpen) {
+      return this.navigateToThisLecture();
+    }
 
     this.dataSharingService.setDataForKey('unit-edit-mode', true);
     this.dataSharingService.setDataForKey('unit-edit-element', unit);
     this.navigateToUnitEdit(unit._id);
   };
+
+  isUnitCurrentlyOpen(unit: IUnit) {
+    const isInEditMode = this.dataSharingService.getDataForKey('unit-edit-mode');
+    const isSameUnit = this.dataSharingService.getDataForKey('unit-edit-element') === unit;
+    return isInEditMode && isSameUnit;
+  }
 
   onExportUnit = async (unit: IUnit) => {
     try {
@@ -202,15 +213,19 @@ export class LectureEditComponent implements OnInit, OnDestroy {
   };
 
   closeEditUnit = () => {
-    this.dataSharingService.setDataForKey('unit-edit-mode', false);
-    this.dataSharingService.setDataForKey('unit-edit-element', null);
+    this.unsetUnitEdit();
     this.navigateToThisLecture();
   };
 
+  unsetUnitEdit() {
+    this.dataSharingService.setDataForKey('unit-edit-mode', false);
+    this.dataSharingService.setDataForKey('unit-edit-element', null);
+  }
+
   private closeAllForms() {
     this.closeEditLecture();
-    this.closeAddUnit();
-    this.closeEditUnit();
+    this.unsetAddUnit();
+    this.unsetUnitEdit();
   }
 
   isOpened() {
