@@ -19,13 +19,20 @@ $app-night-theme: mat-dark-theme($app-night-primary, $app-night-accent, $app-nig
 // that you are using.
 @include angular-material-theme($app-theme);
 
-.nightTheme{
+.nightTheme {
   @include angular-material-theme($app-night-theme);
   background-color: #303030;
   color: #ffffff;
-  a:link:not(.mat-button):not(.logo)	      { color: map-get($app-night-primary, A100) }
-  a:visited:not(.mat-button):not(.logo)  { color: map-get($app-night-primary, A200) }
-  mat-option.mat-selected{
+
+  a:link:not(.mat-button):not(.logo) {
+    color: map-get($app-night-primary, A100)
+  }
+
+  a:visited:not(.mat-button):not(.logo) {
+    color: map-get($app-night-primary, A200)
+  }
+
+  mat-option.mat-selected {
     color: map-get($app-night-primary, A100) !important;
   }
 }
@@ -105,6 +112,6 @@ app-root > .app-wrapper {
   }
 }
 
-.text-danger{
+.text-danger {
   color: red;
 }
