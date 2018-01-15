@@ -6,8 +6,20 @@ interface INotificationModel extends INotification, mongoose.Document {
 
 const notificationSchema = new mongoose.Schema({
   user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User'
+  },
+  changedCourse: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User'
+    ref: 'Course'
+  },
+  changedLecture: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Lecture'
+  },
+  changedUnit: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Unit'
   },
   text: {
     type: String

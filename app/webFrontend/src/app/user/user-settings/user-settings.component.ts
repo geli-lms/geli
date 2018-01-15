@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {UserService} from '../../shared/services/user.service';
 import {CourseService, NotificationSettingsService} from '../../shared/services/data.service';
 import {ICourse} from '../../../../../../shared/models/ICourse';
-import {MatTableDataSource} from '@angular/material';
+import {MatSnackBar, MatTableDataSource} from '@angular/material';
 import {SelectionModel} from '@angular/cdk/collections';
 import {
   INotificationSettings, NOTIFICATION_TYPE_ALL_CHANGES,
@@ -24,7 +24,8 @@ export class UserSettingsComponent implements OnInit {
 
   constructor(public userService: UserService,
               public courseService: CourseService,
-              public notificationSettingsService: NotificationSettingsService) {
+              public notificationSettingsService: NotificationSettingsService,
+              public snackBar: MatSnackBar) {
 
   }
 
@@ -60,21 +61,25 @@ export class UserSettingsComponent implements OnInit {
   }
 
   saveNotifications () {
-    this.myCourses.forEach(course => {
-      // const settings = this.notificationSettings.find((x: INotificationSettings) => x.course === course);
-      let settings: INotificationSettings;
-      this.notificationSettings.forEach((x) => {
-        if (x.course._id === course._id) {
-          settings = x;
+    try {
+      this.myCourses.forEach(course => {
+        let settings: INotificationSettings;
+        this.notificationSettings.forEach((x) => {
+         if (x.course._id === course._id) {
+           settings = x;
+         }
+        });
+        if (this.selection.isSelected(course)) {
+         settings.notificationType = NOTIFICATION_TYPE_ALL_CHANGES;
+        } else {
+         settings.notificationType = NOTIFICATION_TYPE_NONE;
         }
-      })
-      if (this.selection.isSelected(course)) {
-        settings.notificationType = NOTIFICATION_TYPE_ALL_CHANGES;
-      } else {
-        settings.notificationType = NOTIFICATION_TYPE_NONE;
-      }
-      this.notificationSettingsService.updateItem(settings);
-    })
+        this.notificationSettingsService.updateItem(settings);
+      });
+      this.snackBar.open('Notifications successfully updated.', '', {duration: 3000});
+    } catch (error) {
+      this.snackBar.open(error.json().message, 'Dismiss');
+    }
   }
 
   isAllSelected() {
