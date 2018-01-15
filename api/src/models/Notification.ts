@@ -18,9 +18,6 @@ const notificationSchema = new mongoose.Schema({
     toObject: {
       transform: function (doc: any, ret: any) {
         ret._id = ret._id.toString();
-        if (doc.populated('user') === undefined) {
-          ret.user = ret.user.toString();
-        }
       }
     }
   }

@@ -332,6 +332,13 @@ export class NotificationSettingsService extends DataService {
 }
 
 @Injectable()
+export class NotificationService extends DataService {
+  constructor (public backendService: BackendService) {
+    super('notifications/', backendService);
+  }
+}
+
+@Injectable()
 export class UserDataService extends DataService {
   constructor(public backendService: BackendService) {
     super('users/', backendService);
