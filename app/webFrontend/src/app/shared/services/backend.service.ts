@@ -20,6 +20,7 @@ export class BackendService {
   private handleUnauthorized = (err) => {
     if (err.status === 401) {
       this.authenticationService.logout();
+      return Observable.empty();
     }
 
     return Observable.throw(err);
@@ -27,6 +28,12 @@ export class BackendService {
 
   get(serviceUrl: string): Observable<any> {
     return this.http.get(BackendService.API_URL + serviceUrl, {headers: this.authenticationService.authHeader()})
+      .pipe(catchError(this.handleUnauthorized));
+  }
+
+  getDownload(serviceUrl: string): Observable<Response> {
+    return this.http.get(BackendService.API_URL + serviceUrl, {headers: this.authenticationService.authHeader(),
+      observe: 'response', responseType: 'blob'})
       .pipe(catchError(this.handleUnauthorized));
   }
 

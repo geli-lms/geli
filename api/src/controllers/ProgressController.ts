@@ -1,22 +1,17 @@
 import {
-  Authorized,
   BadRequestError, Body, CurrentUser, Get, JsonController, NotFoundError, Param, Post, Put,
   UseBefore
 } from 'routing-controllers';
 import * as moment from 'moment';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
-import {IProgressModel, Progress} from '../models/Progress';
+import {Progress} from '../models/progress/Progress';
 import {IUser} from '../../../shared/models/IUser';
 import {IUnitModel, Unit} from '../models/units/Unit';
-import {UnitClassMapper} from '../utilities/UnitClassMapper';
+import {IProgress} from '../../../shared/models/progress/IProgress';
 
 @JsonController('/progress')
 @UseBefore(passportJwtMiddleware)
 export class ProgressController {
-  private static async getUnit(unitId: string): Promise<IUnitModel> {
-    return (await Unit.findById(unitId));
-  }
-
   private static checkDeadline(unit: any) {
     if (unit.deadline && moment(unit.deadline).isBefore()) {
       throw new BadRequestError('Past deadline, no further update possible');
@@ -42,19 +37,18 @@ export class ProgressController {
   }
 
   @Post('/')
-  async createProgress(@Body() data: any, @CurrentUser() currentUser?: IUser) {
+  async createProgress(@Body() data: IProgress, @CurrentUser() currentUser?: IUser) {
     // discard invalid requests
     if (!data.course || !data.unit || !currentUser) {
       throw new BadRequestError('progress need fields course, user and unit');
     }
-    const unit: any = await ProgressController.getUnit(data.unit);
+
+    const unit: IUnitModel = await Unit.findById(data.unit);
     ProgressController.checkDeadline(unit);
 
     data.user = currentUser;
 
-    const progressClass = UnitClassMapper.getProgressClassForUnit(unit);
-    const progress = await new progressClass(data).save();
-
+    const progress = await Progress.create(data);
     return progress.toObject();
   }
 
@@ -66,7 +60,7 @@ export class ProgressController {
       throw new NotFoundError();
     }
 
-    const unit: any = await ProgressController.getUnit(progress.unit);
+    const unit: IUnitModel = await Unit.findById(progress.unit);
     ProgressController.checkDeadline(unit);
 
     progress.set(data);

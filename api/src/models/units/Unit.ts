@@ -1,10 +1,13 @@
 import * as mongoose from 'mongoose';
 import {IUnit} from '../../../../shared/models/units/IUnit';
-import {NativeError} from 'mongoose';
-import {Progress} from '../Progress';
+import {Progress} from '../progress/Progress';
 import {InternalServerError} from 'routing-controllers';
 
-import {ILectureModel, Lecture} from '../Lecture';
+import {Lecture} from '../Lecture';
+import {freeTextUnitSchema} from './FreeTextUnit';
+import {codeKataSchema} from './CodeKataUnit';
+import {fileUnitSchema} from './FileUnit';
+import {taskUnitSchema} from './TaskUnit';
 
 interface IUnitModel extends IUnit, mongoose.Document {
   exportJSON: () => Promise<IUnit>;
@@ -27,32 +30,29 @@ const unitSchema = new mongoose.Schema({
     },
     weight: {
       type: Number
+    },
+    type: {
+      type: String
     }
   },
   {
     collection: 'units',
-    discriminatorKey: 'type',
     timestamps: true,
     toObject: {
       transform: function (doc: IUnitModel, ret: any) {
-        ret._id = doc._id.toString();
+        ret._id = ret._id.toString();
         ret._course = ret._course.toString();
       }
     },
   }
 );
 
-unitSchema.virtual('progresses', [{
+unitSchema.virtual('progressData', {
   ref: 'Progress',
   localField: '_id',
-  foreignField: 'unit'
-}]);
-
-function populateUnit(next: (err?: NativeError) => void) {
-  next();
-}
-
-// unitSchema.pre('find', populateUnit);
+  foreignField: 'unit',
+  justOne: true
+});
 
 unitSchema.methods.exportJSON = function() {
   const obj = this.toObject();
@@ -74,14 +74,17 @@ unitSchema.statics.importJSON = async function(unit: IUnit, courseId: string, le
   unit._course = courseId;
 
   try {
-    const savedUnit = await new Unit(unit).save();
+    // Need to disabled this rule because we can't export 'Unit' BEFORE this function-declaration
+    // tslint:disable:no-use-before-declare
+    const savedUnit = await Unit.create(unit);
     const lecture = await Lecture.findById(lectureId);
     lecture.units.push(savedUnit);
     await lecture.save();
 
     return savedUnit.toObject();
+    // tslint:enable:no-use-before-declare
   } catch (err) {
-    const newError = new InternalServerError('Failed to import unit');
+    const newError = new InternalServerError('Failed to import unit of type ' + unit.__t);
     newError.stack += '\nCaused by: ' + err.message + '\n' + err.stack;
     throw newError;
   }
@@ -93,5 +96,9 @@ unitSchema.pre('remove', function(next: () => void) {
 });
 
 const Unit = mongoose.model<IUnitModel>('Unit', unitSchema);
+const FreeTextUnit = Unit.discriminator('free-text', freeTextUnitSchema);
+const CodeKataUnit = Unit.discriminator('code-kata', codeKataSchema);
+const FileUnit = Unit.discriminator('file', fileUnitSchema);
+const TaskUnit = Unit.discriminator('task', taskUnitSchema);
 
-export {Unit, IUnitModel};
+export {Unit, FreeTextUnit, CodeKataUnit, FileUnit, TaskUnit, IUnitModel};

@@ -7,7 +7,6 @@ import {IUnit} from '../../../shared/models/units/IUnit';
 import {ILectureModel, Lecture} from '../models/Lecture';
 import {IUnitModel, Unit} from '../models/units/Unit';
 import {Course, ICourseModel} from '../models/Course';
-import {UnitClassMapper} from '../utilities/UnitClassMapper';
 import {ILecture} from '../../../shared/models/ILecture';
 import {ICourse} from '../../../shared/models/ICourse';
 
@@ -19,6 +18,7 @@ export class DuplicationController {
 
   @Post('/course/:id')
   async duplicateCourse(@Param('id') id: string, @Body() data: any, @Req() request: Request) {
+    // we could use @CurrentUser instead of the need to explicitly provide a teacher
     const courseAdmin = data.courseAdmin;
     try {
       const courseModel: ICourseModel = await Course.findById(id);
@@ -52,8 +52,7 @@ export class DuplicationController {
     try {
       const unitModel: IUnitModel = await Unit.findById(id);
       const exportedUnit: IUnit = await unitModel.exportJSON();
-      const unitTypeClass = UnitClassMapper.getMongooseClassForUnit(exportedUnit);
-      return unitTypeClass.schema.statics.importJSON(exportedUnit, courseId, lectureId);
+      return Unit.schema.statics.importJSON(exportedUnit, courseId, lectureId);
     } catch (err) {
       const newError = new InternalServerError('Failed to duplicate unit');
       newError.stack += '\nCaused by: ' + err.message + '\n' + err.stack;

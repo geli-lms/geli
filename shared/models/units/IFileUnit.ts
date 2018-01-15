@@ -4,4 +4,5 @@ import {IFile} from '../IFile';
 
 export interface IFileUnit extends IUnit {
   files: IFile[];
+  fileUnitType: string;
 }
