@@ -106,8 +106,8 @@ export class UserController {
           if (oldUser.uid && user.uid === null) {
             user.uid = oldUser.uid;
           }
-
-          return oldUser.isValidPassword(user.currentPassword);
+          return oldUser.isValidPassword(user.password);
+        //  return oldUser.isValidPassword(user.currentPassword);
         }
       })
       .then((isValidPassword) => {

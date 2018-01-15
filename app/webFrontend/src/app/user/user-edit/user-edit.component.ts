@@ -71,8 +71,8 @@ export class UserEditComponent implements OnInit {
     this.cdRef.detectChanges();
   }
 
-  onSubmit() {
-    this.user = this.prepareSaveUser();
+  async onSubmit() {
+    this.user = await this.prepareSaveUser();
     this.updateUser();
   }
 
@@ -109,7 +109,9 @@ export class UserEditComponent implements OnInit {
       }
       this.navigateBack();
     } catch (error) {
-      this.snackBar.open(error.json().message, 'Dismiss');
+      console.dir(error);
+      const errormsg = error.message;
+      this.snackBar.open(errormsg, 'Dismiss');
     }
     this.showProgress.toggleLoadingGlobal(false);
   }
@@ -123,7 +125,7 @@ export class UserEditComponent implements OnInit {
       }),
       username: [''],
       email: ['', Validators.required],
-      currentPassword: ['']
+     // currentPassword: ['']
     });
   }
 

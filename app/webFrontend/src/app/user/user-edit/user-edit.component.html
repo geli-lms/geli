@@ -15,10 +15,6 @@
     <input matInput formControlName="email" placeholder="e-mail"/>
   </mat-form-field>
   <div *ngIf="showPwFields()">
-    <mat-form-field class="full-width">
-      <input matInput type="password" formControlName="currentPassword" placeholder="Current password"/>
-    </mat-form-field>
-
     <app-password-input  [form]="userForm"></app-password-input>
   </div>
   <button mat-raised-button color="primary" class="mat-button" type="submit" [disabled]="!userForm?.valid">Save</button>
