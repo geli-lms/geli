@@ -91,7 +91,9 @@
 </div>
 
 <div class="unit-drop-target"
-     *ngIf="getDataForKey('openLectureId') === lecture._id && !lecture.units.length && isDraggingUnit()"
+     *ngIf="getDataForKey('openLectureId') &&
+     (getDataForKey('openLectureId') !== lecture._id || !lecture.units.length) &&
+     isDraggingUnit()"
      dragula="units"
      [dragulaModel]="lecture.units"
      [attr.data-lecture-id]="lecture._id">
