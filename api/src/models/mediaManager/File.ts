@@ -23,6 +23,11 @@ const fileSchema = new mongoose.Schema({
   },
 }, {
   timestamps: true,
+  toObject: {
+    transform: function (doc: IFileModel, ret: any) {
+      ret._id = ret._id.toString();
+    }
+  },
 });
 
 const File = mongoose.model<IFileModel>('File', fileSchema);
