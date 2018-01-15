@@ -5,6 +5,7 @@ import {ILecture} from '../../../../../../shared/models/ILecture';
 import {IUnit} from '../../../../../../shared/models/units/IUnit';
 import {IUser} from '../../../../../../shared/models/IUser';
 import {ICourse} from '../../../../../../shared/models/ICourse';
+import {IDownload} from '../../../../../../shared/models/IDownload';
 import {IDirectory} from '../../../../../../shared/models/mediaManager/IDirectory';
 import {IFile} from '../../../../../../shared/models/mediaManager/IFile';
 
@@ -451,6 +452,40 @@ export class AboutDataService extends DataService {
           },
           error => reject(error)
         );
+    });
+  }
+}
+
+@Injectable()
+export class DownloadFileService extends DataService {
+  constructor(public backendService: BackendService) {
+    super('download/', backendService);
+  }
+
+  getPackageSize(idl: IDownload) {
+    return new Promise((resolve, reject) => {
+      this.backendService.post(this.apiPath + '/size', idl).subscribe((responseItem: any) => {
+          resolve(responseItem);
+        },
+        error => reject(error));
+    });
+  }
+
+  postDownloadReqForCourse(idl: IDownload) {
+    return new Promise((resolve, reject) => {
+      this.backendService.post(this.apiPath, idl).subscribe((responseItem: any) => {
+          resolve(responseItem);
+        },
+        error => reject(error));
+    });
+  }
+
+  getFile(id: string) {
+    return new Promise((resolve, reject) => {
+      this.backendService.getDownload(this.apiPath + id).subscribe(resp => {
+          resolve(resp);
+        },
+        error => reject(error));
     });
   }
 }

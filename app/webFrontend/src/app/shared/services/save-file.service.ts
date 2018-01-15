@@ -6,12 +6,14 @@ export class SaveFileService {
   constructor() {
   }
 
+  replaceCharInFilename(filename: string) {
+    return filename.replace(/[^a-zA-Z0-9 -]/g, '')    // remove special characters
+      .replace(/ /g, '-')             // replace space by dashes
+      .replace(/-+/g, '-');
+  }
+
   save(name: string, content: string) {
-    const filename = name
-        .replace(/[^a-zA-Z0-9 -]/g, '')    // remove special characters
-        .replace(/ /g, '-')             // replace space by dashes
-        .replace(/-+/g, '-')            // trim multiple dashes
-      + '.json';
+    const filename = this.replaceCharInFilename(name) + '.json';
     const blob = new Blob(
       [content],
       {type: 'application/json'});

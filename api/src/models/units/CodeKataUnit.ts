@@ -6,6 +6,7 @@ import {BadRequestError} from 'routing-controllers';
 
 interface ICodeKataModel extends ICodeKataUnit, mongoose.Document {
   exportJSON: () => Promise<ICodeKataUnit>;
+  toFile: () => String;
 }
 
 const codeKataSchema = new mongoose.Schema({
@@ -85,6 +86,11 @@ function validateTestArea(testArea: any) {
 
 codeKataSchema.pre('validate', splitCodeAreas);
 codeKataSchema.path('test').validate(validateTestArea);
+
+codeKataSchema.statics.toFile = function (unit: ICodeKataUnit) {
+  return unit.description + '\n' + unit.definition + '\n' +
+    unit.code + '\n' + unit.test;
+};
 
 // const CodeKataUnit = Unit.discriminator('code-kata', codeKataSchema);
 
