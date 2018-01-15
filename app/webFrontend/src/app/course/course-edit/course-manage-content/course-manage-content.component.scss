@@ -9,10 +9,6 @@
 }
 
 .mat-fab-menu-spacer {
-  display: none;
-
-  @include bp(max) {
-    display: block;
-    height: 4rem;
-  }
+  display: block;
+  height: 4rem;
 }
