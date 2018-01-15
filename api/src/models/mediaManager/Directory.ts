@@ -24,6 +24,11 @@ const directorySchema = new mongoose.Schema({
   ]
 }, {
     timestamps: true,
+    toObject: {
+      transform: function (doc: IDirectoryModel, ret: any) {
+        ret._id = ret._id.toString();
+      }
+    },
 });
 
 const Directory = mongoose.model<IDirectoryModel>('Directory', directorySchema);
