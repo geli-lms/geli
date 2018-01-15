@@ -5,7 +5,7 @@ import {AuthGuardService} from '../../shared/services/auth-guard.service';
 import {GeneralTabComponent} from './general-tab/general-tab.component';
 import {MembersComponent} from './members/members.component';
 import {TeachersComponent} from './teachers/teachers.component';
-import {CourseMediamanagerComponent} from './course-mediamanager/course-mediamanager.component';
+import {CourseMediaComponent} from './course-media/course-media.component';
 
 const routes: Routes = [
   {
@@ -27,7 +27,7 @@ const routes: Routes = [
       },
       {
         path: 'media',
-        component: CourseMediamanagerComponent,
+        component: CourseMediaComponent,
         canActivate: [AuthGuardService],
         data: {roles: ['teacher', 'admin']},
       },

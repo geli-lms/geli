@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CourseMediamanagerComponent } from './course-mediamanager.component';
+import { CourseMediaComponent } from './course-media.component';
 
-describe('CourseMediamanagerComponent', () => {
-  let component: CourseMediamanagerComponent;
-  let fixture: ComponentFixture<CourseMediamanagerComponent>;
+describe('CourseMediaComponent', () => {
+  let component: CourseMediaComponent;
+  let fixture: ComponentFixture<CourseMediaComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CourseMediamanagerComponent ]
+      declarations: [ CourseMediaComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CourseMediamanagerComponent);
+    fixture = TestBed.createComponent(CourseMediaComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -13,8 +13,8 @@ import {SharedModule} from '../../shared/shared.module';
 import {CourseEditRoutingModule} from './course-edit-routing.module';
 import {GeneralTabComponent} from './general-tab/general-tab.component';
 import {CourseManageContentModule} from './course-manage-content/course-manage-content.module';
-import { CourseMediamanagerComponent } from './course-mediamanager/course-mediamanager.component';
-import { CourseMediamanagerDetailDialog } from './course-mediamanager/course-mediamanager-detail-dialog/course-mediamanager-detail.dialog';
+import { CourseMediaComponent } from './course-media/course-media.component';
+import { CourseMediamanagerDetailDialog } from './course-media/course-media-detail-dialog/course-mediamanager-detail.dialog';
 
 @NgModule({
   imports: [
@@ -32,7 +32,7 @@ import { CourseMediamanagerDetailDialog } from './course-mediamanager/course-med
     MembersComponent,
     TeachersComponent,
     GeneralTabComponent,
-    CourseMediamanagerComponent,
+    CourseMediaComponent,
     CourseMediamanagerDetailDialog,
   ],
   exports: [

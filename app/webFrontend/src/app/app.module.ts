@@ -13,7 +13,7 @@ import {
   CourseService,
   DownloadFileService,
   FreeTextUnitService,
-  LectureService,
+  LectureService, MediaService,
   UnitService,
   UserDataService
 } from './shared/services/data.service';
@@ -70,6 +70,7 @@ import {DataSharingService} from './shared/services/data-sharing.service';
     TitleService,
     DownloadFileService,
     RavenErrorHandler,
+    MediaService,
     {
       provide: ErrorHandler,
       useExisting: RavenErrorHandler

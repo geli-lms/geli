@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CourseMediamanagerDetail.DialogComponent } from './course-mediamanager-detail-dialog.component';
+import { CourseMediamanagerDetail.DialogComponent } from './course-media-detail-dialog.component';
 
 describe('CourseMediamanagerDetail.DialogComponent', () => {
   let component: CourseMediamanagerDetail.DialogComponent;
