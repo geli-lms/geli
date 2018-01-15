@@ -65,6 +65,7 @@ const courseSchema = new mongoose.Schema({
     toObject: {
       transform: function (doc: any, ret: any) {
         ret._id = ret._id.toString();
+        ret.courseAdmin = ret.courseAdmin.toString();
         ret.hasAccessKey = false;
         if (ret.accessKey) {
           delete ret.accessKey;
@@ -131,6 +132,8 @@ courseSchema.statics.importJSON = async function (course: ICourse, admin: IUser,
   course.lectures = [];
 
   try {
+    // Need to disabled this rule because we can't export 'Course' BEFORE this function-declaration
+    // tslint:disable:no-use-before-declare
     const origName = course.name;
     let isCourseDuplicated = false;
     let i = 0;
@@ -147,6 +150,7 @@ courseSchema.statics.importJSON = async function (course: ICourse, admin: IUser,
     const newCourse: ICourseModel = await Course.findById(savedCourse._id);
 
     return newCourse.toObject();
+    // tslint:enable:no-use-before-declare
   } catch (err) {
     const newError = new InternalServerError('Failed to import course');
     newError.stack += '\nCaused by: ' + err.message + '\n' + err.stack;

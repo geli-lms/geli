@@ -2,6 +2,10 @@ import {User} from '../src/models/User';
 import {Course} from '../src/models/Course';
 import {Lecture} from '../src/models/Lecture';
 import {Unit} from '../src/models/units/Unit';
+import {ICourse} from '../../shared/models/ICourse';
+import {ILecture} from '../../shared/models/ILecture';
+import {IUnit} from '../../shared/models/units/IUnit';
+import {IUser} from '../../shared/models/IUser';
 
 export class FixtureUtils {
   public static async getRandomUser(hash?: string) {
@@ -29,6 +33,14 @@ export class FixtureUtils {
     return this.getRandom(array, hash);
   }
 
+  public static async getRandomTeacherForCourse(course: ICourse, hash?: string) {
+    let array: IUser[] = [];
+    array = array.concat(course.teachers);
+    array.push(course.courseAdmin);
+    const user = await this.getRandom(array, hash);
+    return User.findById(user);
+  }
+
   public static async getRandomTeachers(min: number, max: number, hash?: string) {
     const array = await this.getTeacher();
     return this.getRandomArray(array, min, max, hash);
@@ -49,14 +61,45 @@ export class FixtureUtils {
     return this.getRandom(array, hash);
   }
 
+  public static async getCoursesFromLecture(lecture: ILecture) {
+    return Course.findOne({lectures: { $in: [ lecture._id ] }});
+  }
+
+  public static async getCoursesFromUnit(unit: IUnit) {
+    return Course.findById(unit._course);
+  }
+
   public static async getRandomLecture(hash?: string) {
     const array = await this.getLectures();
     return this.getRandom(array, hash);
   }
 
+  public static async getRandomLectureFromCourse(course: ICourse, hash?: string) {
+    const lectureId = await this.getRandom(course.lectures, hash);
+    return Lecture.findById(lectureId);
+  }
+
+  public static async getLectureFromUnit(unit: IUnit) {
+    return Lecture.findOne({units: { $in: [ unit._id ] }});
+  }
+
   public static async getRandomUnit(hash?: string) {
     const array = await this.getUnits();
     return this.getRandom(array, hash);
+  }
+
+  public static async getRandomUnitFromLecture(lecture: ILecture, hash?: string) {
+    const unitId = await this.getRandom(lecture.units, hash);
+    return Unit.findById(unitId);
+  }
+
+  public static async getRandomUnitFromCourse(course: ICourse, hash?: string) {
+    let units: Array<IUnit> = [];
+    for (const lecture of course.lectures) {
+      units = units.concat(lecture.units);
+    }
+    const unitId = await this.getRandom(units, hash);
+    return Unit.findById(unitId);
   }
 
   private static async getAdmins() {
@@ -71,15 +114,15 @@ export class FixtureUtils {
     return this.getUser('student');
   }
 
-  private static async getCourses() {
+  public static async getCourses() {
     return Course.find();
   }
 
-  private static async getLectures() {
+  public static async getLectures() {
     return Lecture.find();
   }
 
-  private static async getUnits() {
+  public static async getUnits() {
     return Unit.find();
   }
 
