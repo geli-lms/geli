@@ -4,6 +4,7 @@ import {CourseMediamanagerDetailDialog} from './course-media-detail-dialog/cours
 import {MatDialog, MatSnackBar} from '@angular/material';
 import {CourseService, MediaService} from '../../../shared/services/data.service';
 import {ActivatedRoute} from '@angular/router';
+import {IDirectory} from '../../../../../../../shared/models/mediaManager/IDirectory';
 
 @Component({
   selector: 'app-course-mediamanager',
@@ -21,37 +22,18 @@ export class CourseMediaComponent implements OnInit {
               private snackBar: MatSnackBar) {
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.folderBarVisible = true;
 
-    this.route.params.subscribe(params => {
-        console.log(params);
-        const courseId = params['id'];
-        // this.courseService.readSingleItem(courseId)
-        //   .then(course => {
-        //     console.log(course);
-        //   });
+    this.route.parent.params.subscribe(
+      async (params) => {
+        // retrieve course
+        this.course = await this.courseService.readSingleItem<ICourse>(params['id']);
       },
       error => {
-      },
-
+        this.snackBar.open('Could not load course', '', {duration: 3000})
+      }
     );
-    // console.log(this.course);
-    // if (this.course.media === null) {
-    //   // Root dir does not exist, add one
-    //   this.mediaService.createRootDir(this.course.name)
-    //     .then(value => {
-    //       this.course.media = value;
-    //       console.log(this.course);
-    //       this.courseService.updateItem(this.course)
-    //         .catch(reason =>
-    //           this.snackBar.open('Applying root-dir to course failed', '', {duration: 3000})
-    //         );
-    //     })
-    //     .catch(reason =>
-    //       this.snackBar.open('Creating root-dir failed', '', {duration: 3000})
-    //     );
-    // }
   }
 
   toggleFolderBarVisibility(): void {
@@ -74,6 +56,17 @@ export class CourseMediaComponent implements OnInit {
     //   this.model.markdown = result;
     // }
     // });
+  }
+
+  async getRootDir(): Promise<IDirectory> {
+    // Check if course has root dir
+    if (this.course.media === undefined) {
+      // Root dir does not exist, add one
+      this.course.media = await this.mediaService.createRootDir(this.course.name);
+      await this.courseService.updateItem(this.course);
+    }
+
+    return this.course.media;
   }
 
 }
