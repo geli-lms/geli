@@ -27,12 +27,6 @@ export class WitelistController {
       });
   }
 
-  @Get('/:id/count')
-  @Authorized(['teacher', 'admin'])
-  searchCountUsers(@Param('id') id: string) {
-    return WhitelistUser.count({courseId: id});
-  }
-
   @Post('/')
   @Authorized(['teacher', 'admin'])
   addWhitelistUser(@Body() whitelistUser: IWhitelistUser) {

@@ -28,38 +28,16 @@ describe('Whitelist User', () => {
         uid: '123456',
         courseId: course._id
       });
-      const createdWhitelistUser = await WhitelistUser.create(newWhitelistUser);
+      const createdWhitelistUser: IWhitelistUser = await WhitelistUser.create(newWhitelistUser);
       const res = await chai.request(app)
-        .get(`${BASE_URL}/${createdWhitelistUser._id}`)
+        .get(`${BASE_URL}/${createdWhitelistUser._id.toString()}`)
         .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`);
       res.status.should.be.equal(200);
       res.body.firstName.should.be.equal(newWhitelistUser.firstName);
       res.body.lastName.should.be.equal(newWhitelistUser.lastName);
       res.body.uid.should.be.equal(newWhitelistUser.uid);
     });
-
-    it('should get amount of whitelist user', async () => {
-      const teacher = await FixtureUtils.getRandomTeacher();
-      const course: ICourse = await FixtureUtils.getRandomCourse();
-      const count = WhitelistUser.count({courseId: course._id});
-      const res = await chai.request(app)
-        .get(`${BASE_URL}/${course._id}/count`)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`);
-      res.status.should.be.equal(200);
-      res.body.should.be.equal(count);
-    });
-
-    it('should fail with wrong authorization', async () => {
-      const teacher = await FixtureUtils.getRandomTeacher();
-      const course: ICourse = await FixtureUtils.getRandomCourse();
-      const count = WhitelistUser.count({courseId: course._id});
-      const res = await chai.request(app)
-        .get(`${BASE_URL}/${course._id}/count`)
-        .set('Authorization', `JWT awf`);
-      res.status.should.be.equal(401);
-    });
   });
-
   describe(`POST ${BASE_URL}`, () => {
     it('should create a new whitelist User', async () => {
       const course: ICourse = await FixtureUtils.getRandomCourse();
@@ -72,6 +50,7 @@ describe('Whitelist User', () => {
       const teacher = await FixtureUtils.getRandomTeacher();
       const res = await chai.request(app)
         .post(`${BASE_URL}/`)
+        .send(whitelistUser)
         .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`);
       res.status.should.be.equal(200);
       res.body.firstName.should.be.equal(whitelistUser.firstName.toLowerCase());
@@ -90,7 +69,8 @@ describe('Whitelist User', () => {
       const res = await chai.request(app)
         .post(`${BASE_URL}/`)
         .set('Authorization', `JWT awf`)
-        .send(whitelistUser);
+        .send(whitelistUser)
+        .catch(err => err.response);
       res.status.should.be.equal(401);
     });
   });
@@ -130,7 +110,8 @@ describe('Whitelist User', () => {
       const res = await chai.request(app)
         .put(`${BASE_URL}/${createdWhitelistUser._id}`)
         .send(createdWhitelistUser)
-        .set('Authorization', `JWT awf`);
+        .set('Authorization', `JWT awf`)
+        .catch(err => err.response);
       res.status.should.be.equal(401);
     });
 
@@ -155,17 +136,18 @@ describe('Whitelist User', () => {
       it('should fail with wrong authorization', async () => {
         const teacher = await FixtureUtils.getRandomTeacher();
         const course: ICourse = await FixtureUtils.getRandomCourse();
-            const newWhitelistUser: IWhitelistUser = new WhitelistUser({
-              firstName: 'Max',
-              lastName: 'Mustermann',
-              uid: '123456',
-              courseId: course._id
-            });
-       const createdWhitelistUser = await WhitelistUser.create(newWhitelistUser);
-            const res = await chai.request(app)
-                .del(`${BASE_URL}/${createdWhitelistUser._id}`)
-                .send(createdWhitelistUser)
-                .set('Authorization', `JWT awf`);
+        const newWhitelistUser: IWhitelistUser = new WhitelistUser({
+          firstName: 'Max',
+          lastName: 'Mustermann',
+          uid: '123456',
+          courseId: course._id
+        });
+        const createdWhitelistUser = await WhitelistUser.create(newWhitelistUser);
+        const res = await chai.request(app)
+          .del(`${BASE_URL}/${createdWhitelistUser._id}`)
+          .send(createdWhitelistUser)
+          .set('Authorization', `JWT awf`)
+          .catch(err => err.response);
         res.status.should.be.equal(401);
       });
     });
