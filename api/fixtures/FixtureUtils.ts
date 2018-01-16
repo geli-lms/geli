@@ -6,6 +6,7 @@ import {ICourse} from '../../shared/models/ICourse';
 import {ILecture} from '../../shared/models/ILecture';
 import {IUnit} from '../../shared/models/units/IUnit';
 import {IUser} from '../../shared/models/IUser';
+import {ITaskUnit} from '../../shared/models/units/ITaskUnit';
 
 export class FixtureUtils {
   public static async getRandomUser(hash?: string) {
@@ -187,5 +188,22 @@ export class FixtureUtils {
     }
 
     return array;
+  }
+
+  public static getAnswersFromTaskUnit(unit: ITaskUnit, success: boolean): any {
+    const answers: any = {};
+    unit.tasks.forEach((task) => {
+      answers[task._id.toString()] = {};
+      task.answers.forEach((answer) => {
+        let result = false;
+        if (success && answer.hasOwnProperty('value')) {
+          result = true;
+        }
+
+        answers[task._id.toString()][answer._id.toString()] = result;
+      });
+    });
+
+    return answers;
   }
 }
