@@ -1,21 +1,21 @@
-import {Authorized, Get, JsonController, Param, UseBefore} from 'routing-controllers';
+import {Authorized, CurrentUser, ForbiddenError, Get, JsonController, Param, UseBefore} from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import {Progress} from '../models/progress/Progress';
 import {IProgress} from '../../../shared/models/progress/IProgress';
 import {IUser} from '../../../shared/models/IUser';
 import * as mongoose from 'mongoose';
 import ObjectId = mongoose.Types.ObjectId;
-import {Course} from '../models/Course';
+import {Course, ICourseModel} from '../models/Course';
 import {ILecture} from '../../../shared/models/ILecture';
 import {IUnit} from '../../../shared/models/units/IUnit';
 import {ICourse} from '../../../shared/models/ICourse';
 
 @JsonController('/report')
 @UseBefore(passportJwtMiddleware)
-@Authorized(['teacher', 'admin'])
 export class ReportController {
 
   @Get('/overview/courses/:id')
+  @Authorized(['teacher', 'admin'])
   async getCourseOverview(@Param('id') id: string) {
     const coursePromise = this.createCoursePromise(id);
     const progressPromise = Progress.aggregate([
@@ -24,13 +24,8 @@ export class ReportController {
     ]).exec();
 
     const [course, unitProgressData] = await Promise.all([coursePromise, progressPromise]);
-    const courseObj: ICourse = <ICourse>course.toObject();
-    courseObj.lectures = courseObj.lectures.filter((lecture: ILecture) => {
-      lecture.units = lecture.units.filter((unit) => {
-        return unit.progressable;
-      });
-      return lecture.units.length > 0;
-    });
+    let courseObj: ICourse = <ICourse>course.toObject();
+    courseObj = this.filterUnits(courseObj);
     courseObj.lectures.map((lecture: ILecture) => {
       lecture.units.map((unit) => {
         const progressIndex = unitProgressData.findIndex((unitProgress: any) => {
@@ -69,6 +64,7 @@ export class ReportController {
   }
 
   @Get('/result/courses/:id')
+  @Authorized(['teacher', 'admin'])
   async getCourseResults(@Param('id') id: string) {
     const coursePromise = this.createCoursePromise(id);
     const progressPromise = Progress.aggregate([
@@ -179,6 +175,7 @@ export class ReportController {
   }
 
   @Get('/details/courses/:courseId/units/:unitId')
+  @Authorized(['teacher', 'admin'])
   async getUnitProgress(@Param('courseId') courseId: string, @Param('unitId') unitId: string) {
     const coursePromise = Course.findOne({_id: courseId})
       .select({ students: 1 })
@@ -207,9 +204,50 @@ export class ReportController {
     return studentsWithProgress;
   }
 
-  @Get('/users/:id')
-  getUserProgress(@Param('id') id: string) {
-    return Progress.find({'user': id})
-    .then((progresses) => progresses.map((progress) => progress.toObject({virtuals: true})));
+  @Get('/overview/users/:id')
+  async getUserProgress(@Param('id') id: string, @CurrentUser() currentUser: IUser) {
+    if (id !== currentUser._id.toString()) {
+      throw new ForbiddenError();
+    }
+
+    const coursesPromise = Course.find({ students: new ObjectId(id) })
+      .select({
+        name: 1
+      })
+      .populate({
+        path: 'lectures',
+        populate: {
+          path: 'units'
+        },
+        select: {
+          name: 1,
+          units: 1
+        }
+      })
+      .exec();
+    const progressPromise = Progress.aggregate([
+      {$match: { user: new ObjectId(id) }},
+      {$lookup: { from: 'units', localField: 'unit', foreignField: '_id', as: 'unit' }},
+      {$group: { _id: '$course', progresses: { $push: '$$ROOT' }}}
+    ]).exec();
+
+    const [courses, progress] = await Promise.all([coursesPromise, progressPromise]);
+    let courseObjects: ICourse[] = courses.map((course: ICourseModel) => <ICourse>course.toObject());
+    courseObjects = courseObjects.map(this.filterUnits);
+
+    const debug = 0;
+
+    return courses.map((course) => course.toObject());
+  }
+
+  private filterUnits(courseObj: ICourse) {
+    courseObj.lectures = courseObj.lectures.filter((lecture: ILecture) => {
+      lecture.units = lecture.units.filter((unit) => {
+        return unit.progressable;
+      });
+      return lecture.units.length > 0;
+    });
+
+    return courseObj;
   }
 }

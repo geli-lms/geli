@@ -1,0 +1,17 @@
+<h2>Your course progress</h2>
+<mat-card *ngFor="let course of report">
+  <mat-card-header>
+    <mat-card-title>{{ course.name }}</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    Text content
+  </mat-card-content>
+  <mat-card-actions align="start">
+    <button mat-button (click)="onAction1">
+      <mat-icon>arrow_forward</mat-icon>
+      Go to course
+    </button>
+
+  </mat-card-actions>
+</mat-card>
+
