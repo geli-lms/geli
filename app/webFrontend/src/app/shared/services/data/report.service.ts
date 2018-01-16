@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {DataService} from '../data.service';
 import {BackendService} from '../backend.service';
+import {IUser} from '../../../../../../../shared/models/IUser';
 
 @Injectable()
 export class ReportService extends DataService {
@@ -19,7 +20,7 @@ export class ReportService extends DataService {
   getCourseResults(courseId: string) {
     const originalApiPath = this.apiPath;
     this.apiPath += 'result/courses/';
-    const promise = this.readSingleItem(courseId);
+    const promise = this.readSingleItem<any>(courseId);
     this.apiPath = originalApiPath;
     return promise;
   }
@@ -27,7 +28,7 @@ export class ReportService extends DataService {
   getUnitDetailForCourse(courseId: string, unitId: string) {
     const originalApiPath = this.apiPath;
     this.apiPath += 'details/courses/' + courseId + '/units/';
-    const promise = this.readSingleItem(unitId);
+    const promise = this.readSingleItem<IUser>(unitId);
     this.apiPath = originalApiPath;
     return promise;
   }

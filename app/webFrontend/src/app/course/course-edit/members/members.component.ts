@@ -36,7 +36,7 @@ export class MembersComponent implements OnInit {
    * TODO: Never load all users!
    */
   getStudents() {
-    return this.userService.readItems()
+    return this.userService.readItems<IUser>()
       .then(users => {
         this.allStudents = users.filter(obj => obj.role === 'student');
         this.allStudents = this.allStudents.map(data => new User(data));
