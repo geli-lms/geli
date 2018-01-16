@@ -4,10 +4,16 @@
     <mat-card-title>{{ course.name }}</mat-card-title>
   </mat-card-header>
   <mat-card-content>
-    Text content
+    <div>
+      <ngx-charts-advanced-pie-chart
+        [view]="[800, 200]"
+        [results]="course.progressData"
+        [scheme]="diagramColors">
+      </ngx-charts-advanced-pie-chart>
+    </div>
   </mat-card-content>
   <mat-card-actions align="start">
-    <button mat-button (click)="onAction1">
+    <button mat-button [routerLink]="['/', 'course', course._id]" routerLinkActive="active">
       <mat-icon>arrow_forward</mat-icon>
       Go to course
     </button>

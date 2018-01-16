@@ -7,6 +7,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {SharedModule} from '../shared/shared.module';
 import {UserProfileComponent} from './user-profile/user-profile.component';
 import {UserReportComponent} from './user-report/user-report.component';
+import {NgxChartsModule} from '@swimlane/ngx-charts';
 
 @NgModule({
   imports: [
@@ -14,6 +15,7 @@ import {UserReportComponent} from './user-report/user-report.component';
     FormsModule,
     SharedModule,
     ReactiveFormsModule,
+    NgxChartsModule,
     UserRoutingModule,
   ],
   declarations: [

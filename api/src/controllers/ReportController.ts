@@ -24,34 +24,12 @@ export class ReportController {
     ]).exec();
 
     const [course, unitProgressData] = await Promise.all([coursePromise, progressPromise]);
-    let courseObj: ICourse = <ICourse>course.toObject();
-    courseObj = this.filterUnits(courseObj);
+    const courseObjUnfiltered: ICourse = <ICourse>course.toObject();
+    const courseObj = this.filterUnits(courseObjUnfiltered).courseObj;
     courseObj.lectures.map((lecture: ILecture) => {
       lecture.units.map((unit) => {
-        const progressIndex = unitProgressData.findIndex((unitProgress: any) => {
-          return unitProgress._id.toString() === unit._id.toString();
-        });
+        const progressStats = this.calculateProgress(unitProgressData, courseObj.students.length, unit);
 
-        const progressStats = {
-          nothing: 0,
-          tried: 0,
-          done: 0
-        };
-
-        if (progressIndex > -1) {
-          const unitProgressObj = unitProgressData[progressIndex];
-          unitProgressObj.progresses.forEach((progressObj: IProgress) => {
-            if (progressObj.done) {
-              progressStats.done++;
-            } else {
-              progressStats.tried++;
-            }
-          });
-
-          unitProgressData.splice(progressIndex, 1);
-        }
-
-        progressStats.nothing = courseObj.students.length - progressStats.done - progressStats.tried;
         unit.progressData = [
           { name: 'nothing', value: progressStats.nothing },
           { name: 'tried', value: progressStats.tried },
@@ -227,27 +205,65 @@ export class ReportController {
       .exec();
     const progressPromise = Progress.aggregate([
       {$match: { user: new ObjectId(id) }},
-      {$lookup: { from: 'units', localField: 'unit', foreignField: '_id', as: 'unit' }},
       {$group: { _id: '$course', progresses: { $push: '$$ROOT' }}}
     ]).exec();
 
-    const [courses, progress] = await Promise.all([coursesPromise, progressPromise]);
-    let courseObjects: ICourse[] = courses.map((course: ICourseModel) => <ICourse>course.toObject());
-    courseObjects = courseObjects.map(this.filterUnits);
+    const [courses, userProgressData] = await Promise.all([coursesPromise, progressPromise]);
+    const courseObjects: any = courses.map((course: ICourseModel) => <ICourse>course.toObject());
+    const courseObjectsWithProgress = courseObjects
+      .map(this.filterUnits)
+      .map(({courseObj, progressableUnitCount}: any) => {
+        const progressStats = this.calculateProgress(userProgressData, progressableUnitCount, courseObj);
+        courseObj.progressData = [
+          { name: 'nothing', value: progressStats.nothing },
+          { name: 'tried', value: progressStats.tried },
+          { name: 'done', value: progressStats.done }
+        ];
+        return courseObj;
+      });
 
-    const debug = 0;
-
-    return courses.map((course) => course.toObject());
+    return courseObjectsWithProgress;
   }
 
   private filterUnits(courseObj: ICourse) {
+    let progressableUnitCount = 0;
     courseObj.lectures = courseObj.lectures.filter((lecture: ILecture) => {
       lecture.units = lecture.units.filter((unit) => {
         return unit.progressable;
       });
+      progressableUnitCount += lecture.units.length;
       return lecture.units.length > 0;
     });
 
-    return courseObj;
+    return {courseObj, progressableUnitCount};
+  }
+
+  private calculateProgress(progressData: any, totalCount: number, doc: any) {
+    const progressStats = {
+      nothing: 0,
+      tried: 0,
+      done: 0
+    };
+
+    const progressIndex = progressData.findIndex((progress: any) => {
+      return progress._id.toString() === doc._id.toString();
+    });
+
+    if (progressIndex > -1) {
+      const unitProgressObj = progressData[progressIndex];
+      unitProgressObj.progresses.forEach((progressObj: IProgress) => {
+        if (progressObj.done) {
+          progressStats.done++;
+        } else {
+          progressStats.tried++;
+        }
+      });
+
+      progressData.splice(progressIndex, 1);
+    }
+
+    progressStats.nothing = totalCount - progressStats.done - progressStats.tried;
+
+    return progressStats;
   }
 }

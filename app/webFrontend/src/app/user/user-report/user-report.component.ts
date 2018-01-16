@@ -15,6 +15,9 @@ export class UserReportComponent implements OnInit {
   user: IUser;
 
   public report: any;
+  public diagramColors = {
+    domain: ['#A10A28', '#C7B42C', '#5AA454']
+  };
 
   constructor(
     public userService: UserService,
