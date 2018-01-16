@@ -52,10 +52,6 @@ export class CourseMediaComponent implements OnInit {
     );
   }
 
-  dataReady(): boolean {
-    return this.course !== undefined && this.course.media !== undefined;
-  }
-
   toggleFolderBarVisibility(): void {
     this.folderBarVisible = !this.folderBarVisible;
   }

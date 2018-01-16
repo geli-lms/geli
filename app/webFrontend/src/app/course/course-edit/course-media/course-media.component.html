@@ -11,7 +11,7 @@
       </mat-toolbar-row>
     </mat-toolbar>
     <div class="folder-wrapper">
-      <p *ngIf="dataReady()">{{ course.media.name }}</p>
+      <p>{{ course?.media?.name }}</p>
     </div>
   </div>
 
@@ -35,16 +35,14 @@
 
       <!-- File Cards -->
       <div class="file-wrapper">
-        <ng-container *ngIf="dataReady()">
-          <ng-container *ngFor="let file of currentFolder.files">
-            <mat-card [ngClass]="isInSelectedCards(file) ? 'active' : 'file'" (click)="toggleSelection(user)">
-              <!-- TODO -->
-            </mat-card>
-          </ng-container>
-          <p *ngIf="currentFolder.files.length === 0">
-            No Files so far.
-          </p>
+        <ng-container *ngFor="let file of currentFolder?.files">
+          <mat-card [ngClass]="isInSelectedCards(file) ? 'active' : 'file'" (click)="toggleSelection(user)">
+            <!-- TODO -->
+          </mat-card>
         </ng-container>
+        <p *ngIf="currentFolder?.files.length === 0">
+          No Files so far.
+        </p>
       </div>
     </div>
   </div>
