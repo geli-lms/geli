@@ -30,7 +30,7 @@ const courseSchema = new mongoose.Schema({
     media:
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'IDirectory'
+      ref: 'Directory'
     },
     teachers: [
       {
