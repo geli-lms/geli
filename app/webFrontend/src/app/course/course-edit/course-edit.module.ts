@@ -11,8 +11,8 @@ import {DragulaModule} from 'ng2-dragula';
 import {MatFabMenuComponent} from '../../shared/components/mat-fab-menu/mat-fab-menu.component';
 import {SharedModule} from '../../shared/shared.module';
 import {CourseEditRoutingModule} from './course-edit-routing.module';
-import {LectureModule} from '../../lecture/lecture.module';
-import {UnitFormModule} from '../../unit/unit-form/unit-form.module';
+import {GeneralTabComponent} from './general-tab/general-tab.component';
+import {CourseManageContentModule} from './course-manage-content/course-manage-content.module';
 
 @NgModule({
   imports: [
@@ -23,23 +23,21 @@ import {UnitFormModule} from '../../unit/unit-form/unit-form.module';
     FileUploadModule,
     SharedModule,
     CourseEditRoutingModule,
-    LectureModule,
-    UnitFormModule
   ],
   declarations: [
     CourseEditComponent,
-    CourseManageContentComponent,
     CourseUserListComponent,
     MembersComponent,
     TeachersComponent,
+    GeneralTabComponent,
   ],
   exports: [
     CourseEditComponent,
-    CourseManageContentComponent,
     CourseUserListComponent,
     MembersComponent,
     TeachersComponent,
     MatFabMenuComponent,
+    GeneralTabComponent,
   ]
 })
 export class CourseEditModule {
