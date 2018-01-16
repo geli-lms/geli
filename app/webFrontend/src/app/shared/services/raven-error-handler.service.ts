@@ -7,7 +7,10 @@ export class RavenErrorHandler implements ErrorHandler {
   setup(dsn: string) {
     if (!Raven.isSetup() && dsn) {
       Raven
-        .config(dsn)
+        .config(dsn, {
+          environment: 'web-frontend',
+          release: '$TRAVIS_COMMIT',
+        })
         .install();
     }
   }

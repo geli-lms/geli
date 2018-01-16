@@ -11,10 +11,10 @@ import {
   APIInfoService,
   CodeKataUnitService,
   CourseService,
+  DownloadFileService,
   FreeTextUnitService,
   LectureService,
   TaskService,
-  StudentConfigService,
   UnitService,
   UserDataService
 } from './shared/services/data.service';
@@ -32,11 +32,10 @@ import {AboutModule} from './about/about.module';
 import {AdminModule} from './admin/admin.module';
 import {ReportService} from './shared/services/data/report.service';
 import {TitleService} from './shared/services/title.service';
-import {studentConfigSchema} from '../../../../api/src/models/StudentConfig';
 
 @NgModule({
   declarations: [
-    AppComponent,
+    AppComponent
   ],
   imports: [
     AdminModule,
@@ -56,7 +55,6 @@ import {studentConfigSchema} from '../../../../api/src/models/StudentConfig';
     AboutDataService,
     AuthGuardService,
     UnitService,
-    TaskService,
     CourseService,
     UserDataService,
     LectureService,
@@ -71,11 +69,13 @@ import {studentConfigSchema} from '../../../../api/src/models/StudentConfig';
     APIInfoService,
     ReportService,
     TitleService,
+    DownloadFileService,
     RavenErrorHandler,
     {
       provide: ErrorHandler,
       useExisting: RavenErrorHandler
     },
+    DataSharingService,
   ],
   bootstrap: [AppComponent]
 })

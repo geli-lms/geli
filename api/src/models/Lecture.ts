@@ -4,7 +4,6 @@ import {IUnitModel, Unit} from './units/Unit';
 import {IUnit} from '../../../shared/models/units/IUnit';
 import {InternalServerError} from 'routing-controllers';
 import {Course} from './Course';
-import {UnitClassMapper} from '../utilities/UnitClassMapper';
 import * as winston from 'winston';
 
 interface ILectureModel extends ILecture, mongoose.Document {
@@ -79,6 +78,8 @@ lectureSchema.statics.importJSON = async function(lecture: ILecture, courseId: s
   lecture.units = [];
 
   try {
+    // Need to disabled this rule because we can't export 'Lecture' BEFORE this function-declaration
+    // tslint:disable:no-use-before-declare
     const savedLecture = await new Lecture(lecture).save();
 
     const course = await Course.findById(courseId);
@@ -86,12 +87,12 @@ lectureSchema.statics.importJSON = async function(lecture: ILecture, courseId: s
     await course.save();
 
     for (const unit of units) {
-      const unitTypeClass = UnitClassMapper.getMongooseClassForUnit(unit);
-      await unitTypeClass.schema.statics.importJSON(unit, courseId, savedLecture._id);
+      await Unit.schema.statics.importJSON(unit, courseId, savedLecture._id);
     }
     const newLecture: ILectureModel = await Lecture.findById(savedLecture._id);
 
     return newLecture.toObject();
+    // tslint:enable:no-use-before-declare
   } catch (err) {
     const newError = new InternalServerError('Failed to import lecture');
     newError.stack += '\nCaused by: ' + err.message + '\n' + err.stack;
