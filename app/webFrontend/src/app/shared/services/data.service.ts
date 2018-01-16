@@ -22,7 +22,7 @@ export abstract class DataService {
               public dependentID?: string) {
   }
 
-  createItem(createItem: any): Promise<any> {
+  createItem<T>(createItem: T): Promise<T> {
     return new Promise((resolve, reject) => {
       this.backendService.post(this.apiPath, createItem)
         .subscribe(
@@ -34,7 +34,7 @@ export abstract class DataService {
     });
   }
 
-  readItems(): Promise<any[]> {
+  readItems<T>(): Promise<T[]> {
     return new Promise((resolve, reject) => {
       this.backendService.get(this.apiPath)
         .subscribe(
@@ -54,7 +54,7 @@ export abstract class DataService {
     });
   }
 
-  updateItem(updateItem: any): Promise<any> {
+  updateItem<T extends any>(updateItem: T): Promise<T> {
     return new Promise((resolve, reject) => {
       this.backendService.put(this.apiPath + updateItem._id, JSON.stringify(updateItem))
         .subscribe(
@@ -66,7 +66,7 @@ export abstract class DataService {
     });
   }
 
-  deleteItem(deleteItem: any): Promise<any> {
+  deleteItem<T extends any>(deleteItem: T): Promise<any> {
     return new Promise((resolve, reject) => {
       this.backendService.delete(this.apiPath + deleteItem._id)
         .subscribe(
@@ -78,7 +78,7 @@ export abstract class DataService {
     });
   }
 
-  readSingleItem(id: string): Promise<any[]> {
+  readSingleItem<T>(id: string): Promise<T[]> {
     return new Promise((resolve, reject) => {
       this.backendService.get(this.apiPath + id)
         .subscribe(
