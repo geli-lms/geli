@@ -99,6 +99,7 @@ export class CourseController {
           }
         }
       })
+      .populate('media')
       .populate('courseAdmin')
       .populate('teachers')
       .populate('students')

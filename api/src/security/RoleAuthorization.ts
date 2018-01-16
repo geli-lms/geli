@@ -10,7 +10,11 @@ export class RoleAuthorization {
     if (!authorizationHeader) {
       throw new UnauthorizedError();
     }
-    const token = authorizationHeader.split(' ')[1];
+    const authorizationSplit = authorizationHeader.split(' ');
+    if (authorizationSplit.length < 2) {
+      throw new UnauthorizedError();
+    }
+    const token = authorizationSplit[1];
     const decoded: any = jwt.verify(token, config.secret);
     const userId = decoded._id;
 

@@ -11,13 +11,14 @@ import {IUnitModel, Unit} from '../models/units/Unit';
 import {IUnit} from '../../../shared/models/units/IUnit';
 import {IFileUnit} from '../../../shared/models/units/IFileUnit';
 import {ValidationError} from 'mongoose';
+import config from '../config/main'
 
 const multer = require('multer');
 
 const uploadOptions = {
   storage: multer.diskStorage({
     destination: (req: any, file: any, cb: any) => {
-      cb(null, 'uploads/');
+      cb(null, config.uploadFolder);
     },
     filename: (req: any, file: any, cb: any) => {
       const extPos = file.originalname.lastIndexOf('.');

@@ -1,8 +1,30 @@
-import {Authorized, Body, Delete, Get, JsonController, NotFoundError, Param, Put} from 'routing-controllers';
+import {
+  Authorized, Body, Delete, Get, JsonController, NotFoundError, Param, Put,
+  UploadedFile
+} from 'routing-controllers';
 import {Directory} from '../models/mediaManager/Directory';
 import {File} from '../models/mediaManager/File';
 import {IDirectory} from '../../../shared/models/mediaManager/IDirectory';
 import {IFile} from '../../../shared/models/mediaManager/IFile';
+import crypto = require('crypto');
+import config from '../config/main';
+
+const multer = require('multer');
+
+const uploadOptions = {
+  storage: multer.diskStorage({
+    destination: (req: any, file: any, cb: any) => {
+      cb(null, config.uploadFolder);
+    },
+    filename: (req: any, file: any, cb: any) => {
+      const extPos = file.originalname.lastIndexOf('.');
+      const ext = (extPos !== -1) ? `.${file.originalname.substr(extPos + 1).toLowerCase()}` : '';
+      crypto.pseudoRandomBytes(16, (err, raw) => {
+        cb(err, err ? undefined : `${raw.toString('hex')}${ext}`);
+      });
+    }
+  }),
+};
 
 @JsonController('/media')
 @Authorized()
@@ -47,7 +69,13 @@ export class MediaController {
 
   @Authorized(['teacher', 'admin'])
   @Put('/file/:parent')
-  async createFile(@Param('parent') parentDirectoryId: string, @Body() file: IFile) {
+  async createFile(@Param('parent') parentDirectoryId: string, @UploadedFile('file', {options: uploadOptions}) uploadedFile: any) {
+    const file: IFile = new File({
+      name: uploadedFile.originalname,
+      physicalPath: uploadedFile.path,
+      size: uploadedFile.size,
+      mimeType: uploadedFile.mimetype,
+    });
     const savedFile = await new File(file).save();
 
     const parent = await Directory.findById(parentDirectoryId);
