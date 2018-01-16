@@ -79,7 +79,7 @@ export abstract class DataService {
     });
   }
 
-  readSingleItem<T>(id: string): Promise<T[]> {
+  readSingleItem<T>(id: string): Promise<T> {
     return new Promise((resolve, reject) => {
       this.backendService.get(this.apiPath + id)
         .subscribe(
