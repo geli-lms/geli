@@ -15,6 +15,7 @@ import {ButtonSaveCancelComponent} from './components/button-save-cancel/button-
 import {UploadFormComponent} from './components/upload-form/upload-form.component';
 import {FileUploadModule} from 'ng2-file-upload';
 import {FilesizePipe} from './pipes/filesize/filesize.pipe';
+import { UploadFormDialogComponent } from './components/upload-form-dialog/upload-form-dialog.component';
 
 @NgModule({
   imports: [
@@ -37,6 +38,7 @@ import {FilesizePipe} from './pipes/filesize/filesize.pipe';
     ButtonSaveCancelComponent,
     UploadFormComponent,
     FilesizePipe,
+    UploadFormDialogComponent,
   ],
   exports: [
     GravatarDirective,
