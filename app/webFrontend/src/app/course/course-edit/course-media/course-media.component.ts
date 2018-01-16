@@ -14,6 +14,7 @@ import {IDirectory} from '../../../../../../../shared/models/mediaManager/IDirec
 export class CourseMediaComponent implements OnInit {
   course: ICourse;
   folderBarVisible: boolean;
+  currentFolder: IDirectory;
 
   constructor(public dialog: MatDialog,
               private mediaService: MediaService,
@@ -29,11 +30,30 @@ export class CourseMediaComponent implements OnInit {
       async (params) => {
         // retrieve course
         this.course = await this.courseService.readSingleItem<ICourse>(params['id']);
+
+        // Check if course has root dir
+        if (this.course.media === undefined) {
+          // Root dir does not exist, add one
+          this.course.media = await this.mediaService.createRootDir(this.course.name);
+          // Update course
+          const request: any = {
+            '_id': this.course._id,
+            'media': this.course.media,
+          };
+          await this.courseService.updateItem(request);
+        }
+
+        // Set root dir as current
+        this.currentFolder = this.course.media;
       },
       error => {
         this.snackBar.open('Could not load course', '', {duration: 3000})
       }
     );
+  }
+
+  dataReady(): boolean {
+    return this.course !== undefined && this.course.media !== undefined;
   }
 
   toggleFolderBarVisibility(): void {
@@ -57,16 +77,4 @@ export class CourseMediaComponent implements OnInit {
     // }
     // });
   }
-
-  async getRootDir(): Promise<IDirectory> {
-    // Check if course has root dir
-    if (this.course.media === undefined) {
-      // Root dir does not exist, add one
-      this.course.media = await this.mediaService.createRootDir(this.course.name);
-      await this.courseService.updateItem(this.course);
-    }
-
-    return this.course.media;
-  }
-
 }

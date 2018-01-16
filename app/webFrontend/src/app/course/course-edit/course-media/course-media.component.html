@@ -11,42 +11,39 @@
       </mat-toolbar-row>
     </mat-toolbar>
     <div class="folder-wrapper">
-      content
+      <p *ngIf="dataReady()">{{ course.media.name }}</p>
     </div>
   </div>
 
   <!-- Center part: search/files -->
   <div class="part part--center">
 
-    <!-- Fuzzy Search -->
-    <div class="area--search">
-      <mat-form-field class="fuzzySearch">
-        <input matInput placeholder="Search for files" [matAutocomplete]="auto">
-      </mat-form-field>
-
-      <mat-autocomplete #auto="matAutocomplete">
-        <!--<mat-option *ngFor="let state of filteredStates | async" [value]="state">-->
-          <!--{{ state }}-->
-        <!--</mat-option>-->
-      </mat-autocomplete>
-    </div>
+    <!-- Todo: Add search here -->
 
     <!-- Files cards -->
     <div class="area--files">
 
       <!-- Multi-Select button area -->
       <div class="btn__area">
-        <button class="text-fit" mat-raised-button matTooltip="">
+        <button class="text-fit" mat-raised-button matTooltip="Upload file">
+          <mat-icon>add</mat-icon>
+        </button>
+        <button class="text-fit" mat-raised-button matTooltip="Select all">
           <mat-icon>select_all</mat-icon>
         </button>
       </div>
 
       <!-- File Cards -->
       <div class="file-wrapper">
-        <ng-container *ngFor="let file of files">
-          <mat-card [ngClass]="isInSelectedCards(file) ? 'active' : 'file'" (click)="toggleSelection(user)">
-            <!-- TODO -->
-          </mat-card>
+        <ng-container *ngIf="dataReady()">
+          <ng-container *ngFor="let file of currentFolder.files">
+            <mat-card [ngClass]="isInSelectedCards(file) ? 'active' : 'file'" (click)="toggleSelection(user)">
+              <!-- TODO -->
+            </mat-card>
+          </ng-container>
+          <p *ngIf="currentFolder.files.length === 0">
+            No Files so far.
+          </p>
         </ng-container>
       </div>
     </div>
