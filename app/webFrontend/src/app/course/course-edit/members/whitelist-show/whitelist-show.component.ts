@@ -30,8 +30,8 @@ export class WhitelistShowComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.userService.getStudents().then((stud: IUser[]) => {
-      this.signedInStudents = stud;
+    this.userService.searchUsers('student', '').then((res) => {
+      this.signedInStudents = res.users;
     });
   }
 

@@ -15,30 +15,25 @@ import {ActivatedRoute} from '@angular/router';
 export class TeachersComponent implements OnInit {
 
   @Input() course: ICourse;
+  courseId: string;
   total = 0;
   foundTeachers: IUser[] = [];
-
-  /**
-   * Get this course from api and filter all teachers from users.
-   */
-  initCourseTeachersOnInit = () => {
-    this.course.teachers.forEach(member =>
-      this.foundTeachers = this.foundTeachers.filter(user => user._id !== member._id));
-  };
 
   constructor(private route: ActivatedRoute,
               private courseService: CourseService,
               private userService: UserDataService,
               private showProgress: ShowProgressService) {
     this.route.parent.params.subscribe(params => {
-      courseService.readSingleItem(params['id']).then((course: ICourse) =>
-        this.course = course
-      )
+      this.courseId = params['id'];
     });
   }
 
   ngOnInit() {
-    this.initCourseTeachersOnInit();
+    this.courseService.readSingleItem(this.courseId).then((course: ICourse) => {
+      this.course = course;
+      this.course.teachers.forEach(member =>
+        this.foundTeachers = this.foundTeachers.filter(user => user._id !== member._id))}
+    );
   }
 
   isUserInCourse(user: IUser) {

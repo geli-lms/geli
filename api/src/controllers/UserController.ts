@@ -43,22 +43,13 @@ export class UserController {
       });
   }
 
-  @Get('/all/students')
-  @Authorized(['teacher', 'admin'])
-  getStudents(@CurrentUser() currentUser?: IUser) {
-    return User.find({role: 'student'})
-      .then((users) => {
-        return users.map((user) => user.toObject({virtuals: true}));
-      });
-  }
-
   @Get('/members/search') // members/search because of conflict with /:id
   async searchUser(@QueryParam('role') role: string, @QueryParam('query') query: string) {
     if (role !== 'student' && role !== 'teacher') {
       throw new BadRequestError('Method not allowed for this role.');
     }
     query = query.trim();
-    if (isNullOrUndefined(query) || query.length <= 0) {
+    if (isNullOrUndefined(query)) {
       throw new BadRequestError(errorCodes.query.empty.code);
     }
     const conditions: any = {};

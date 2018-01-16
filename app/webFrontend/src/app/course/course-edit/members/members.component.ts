@@ -13,7 +13,8 @@ import {ActivatedRoute} from '@angular/router';
 })
 export class MembersComponent implements OnInit {
 
-  @Input() course: ICourse;
+  course: ICourse;
+  courseId: string;
   totalWhitelist = 0;
   foundStudents: IUser[] = [];
   dragableWhitelistUserInCourse: IWhitelistUser[] = [];
@@ -25,23 +26,17 @@ export class MembersComponent implements OnInit {
               private userService: UserDataService,
               private showProgress: ShowProgressService) {
     this.route.parent.params.subscribe(params => {
-      courseService.readSingleItem(params['id']).then((course: ICourse) =>
-        this.course = course
-      )
+      this.courseId = params['id'];
     });
   }
 
   ngOnInit() {
-    this.initCourseStudentsOnInit();
+    this.courseService.readSingleItem(this.courseId).then((course: ICourse) => {
+      this.course = course;
+      this.course.students.forEach(member =>
+        this.foundStudents = this.foundStudents.filter(user => user._id !== member._id))}
+    );
   }
-
-  /**
-   * Get this course from api and filter all teachers from users.
-   */
-  initCourseStudentsOnInit = () => {
-    this.course.students.forEach(member =>
-      this.foundStudents = this.foundStudents.filter(user => user._id !== member._id));
-  };
 
   /**
    * Save all students in this course in database.

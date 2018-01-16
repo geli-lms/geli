@@ -328,14 +328,6 @@ export class UserDataService extends DataService {
     return promise;
   }
 
-  getStudents(): Promise<any[]> {
-    const originalApiPath = this.apiPath;
-    this.apiPath += 'all/students/';
-    const promise = this.readItems();
-    this.apiPath = originalApiPath;
-    return promise;
-  }
-
   getRoles(): Promise<any[]> {
     const originalApiPath = this.apiPath;
     this.apiPath += 'roles/';
