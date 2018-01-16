@@ -122,11 +122,6 @@ export class FixtureLoader {
         }
 
         await Progress.create(newProgress);
-
-        /*
-        const progressClass = UnitClassMapper.getProgressClassForUnit(unit);
-        await new progressClass(newProgress).save();
-        */
       }
       return unit.name;
     }));
