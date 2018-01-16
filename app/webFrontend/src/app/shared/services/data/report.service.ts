@@ -28,7 +28,8 @@ export class ReportService extends DataService {
   getUnitDetailForCourse(courseId: string, unitId: string) {
     const originalApiPath = this.apiPath;
     this.apiPath += 'details/courses/' + courseId + '/units/';
-    const promise = this.readSingleItem<IUser>(unitId);
+    // FIXME: Why do we expect an array?
+    const promise = this.readSingleItem<IUser[]>(unitId);
     this.apiPath = originalApiPath;
     return promise;
   }
