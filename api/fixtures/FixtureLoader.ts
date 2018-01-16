@@ -97,18 +97,19 @@ export class FixtureLoader {
         };
 
         // need to be implemented for each unit type separately
-        switch (unit.type) {
-          case 'code-kata':
+        switch (unit.__t) {
+          case 'code-kata': {
             if (progressType === 1) {
               (<any>newProgress).code = '// at least i tried ¯\\\\_(ツ)_/¯';
               newProgress.done = false;
             } else if (progressType === 2) {
               (<any>newProgress).code = (<ICodeKataModel>unit).code;
               newProgress.done = true;
-              newProgress.__t = 'codeKata';
             }
+            newProgress.__t = 'codeKata';
             break;
-          case 'task':
+          }
+          case 'task': {
             // does not work properly yet
             if (progressType === 1) {
               newProgress.answers = [];
@@ -116,9 +117,10 @@ export class FixtureLoader {
             } else if (progressType === 2) {
               newProgress.answers = [];
               newProgress.done = true;
-              newProgress.__t = 'task-unit-progress'
             }
+            newProgress.__t = 'task-unit-progress';
             break;
+          }
         }
 
         await Progress.create(newProgress);
