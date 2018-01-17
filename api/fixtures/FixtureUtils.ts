@@ -135,7 +135,7 @@ export class FixtureUtils {
 
   // returns a random entry out of the array
   // returns always the same entry when you provide the same hash (given the fixture base did not change)
-  private static async getRandom<T>(array: T[], hash?: string): Promise<T>{
+  private static async getRandom<T>(array: T[], hash?: string): Promise<T> {
     if (hash) {
       return array[this.getNumberFromString(hash, 0, array.length)];
     } else {
