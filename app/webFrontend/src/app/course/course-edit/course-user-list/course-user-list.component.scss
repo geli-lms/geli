@@ -32,10 +32,10 @@
   margin: 10px;
   border-radius: 8px;
   background: no-repeat 75px 15px;
-}
 
-.profile:hover {
-  background-color: cornsilk;
+  &:hover {
+    background-color: cornsilk;
+  }
 }
 
 .active {

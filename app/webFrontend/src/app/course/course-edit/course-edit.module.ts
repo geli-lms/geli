@@ -12,7 +12,6 @@ import {SharedModule} from '../../shared/shared.module';
 import {CourseEditRoutingModule} from './course-edit-routing.module';
 import {GeneralTabComponent} from './general-tab/general-tab.component';
 import {CourseMediaComponent} from './course-media/course-media.component';
-import {CourseMediamanagerDetailDialog} from './course-media/course-media-detail-dialog/course-mediamanager-detail.dialog';
 
 @NgModule({
   imports: [
@@ -31,7 +30,6 @@ import {CourseMediamanagerDetailDialog} from './course-media/course-media-detail
     TeachersComponent,
     GeneralTabComponent,
     CourseMediaComponent,
-    CourseMediamanagerDetailDialog,
   ],
   exports: [
     CourseEditComponent,

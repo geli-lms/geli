@@ -25,19 +25,46 @@
 
       <!-- Multi-Select button area -->
       <div class="btn__area">
-        <button class="text-fit" mat-raised-button matTooltip="Upload file" (click)="addFile()">
+        <button class="text-fit" mat-raised-button matTooltip="Upload file"
+                (click)="addFile()">
           <mat-icon>add</mat-icon>
         </button>
-        <button class="text-fit" mat-raised-button matTooltip="Select all">
-          <mat-icon>select_all</mat-icon>
+        <!--<button class="text-fit" mat-raised-button matTooltip="Select all" (click)="selectAll()">-->
+        <!--<mat-icon>select_all</mat-icon>-->
+        <!--</button>-->
+        <button [disabled]="selectedFiles.length <= 1"
+                class="text-fit" mat-raised-button matTooltip="Remove file"
+                color="warn"
+                (click)="removeSelectedFile()">
+          <mat-icon>delete</mat-icon>
         </button>
       </div>
 
       <!-- File Cards -->
       <div class="file-wrapper">
         <ng-container *ngFor="let file of currentFolder?.files">
-          <mat-card [ngClass]="isInSelectedCards(file) ? 'active' : 'file'" (click)="toggleSelection(user)">
-            <!-- TODO -->
+          <mat-card [ngClass]="isInSelectedFiles(file) ? 'card_active' : 'card'" (click)="toggleSelection(file)">
+
+            <ul class="info">
+              <li><strong>{{file.name}}</strong></li>
+              <li>{{file.size}} Byte</li>
+              <li>{{file.mimeType}}</li>
+            </ul>
+
+            <div class="opacity" *ngIf="isInSelectedFiles(file)"></div>
+
+            <div class="card-btn-wrapper" *ngIf="isInSelectedFiles(file)">
+              <button mat-raised-button *ngIf="selectedFiles.length <= 1" (click)="initFileDownload(file)">
+                <mat-icon>open_in_new</mat-icon>
+              </button>
+              <button mat-raised-button *ngIf="selectedFiles.length <= 1" (click)="renameFile(file)">
+                <mat-icon>mode_edit</mat-icon>
+              </button>
+              <button mat-raised-button color="warn" (click)="removeSelectedFile()" *ngIf="selectedFiles.length <= 1">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+
           </mat-card>
         </ng-container>
         <p *ngIf="currentFolder?.files.length === 0">

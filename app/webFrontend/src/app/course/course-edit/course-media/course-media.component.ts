@@ -1,11 +1,12 @@
 import {Component, OnInit} from '@angular/core';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
-import {CourseMediamanagerDetailDialog} from './course-media-detail-dialog/course-mediamanager-detail.dialog';
 import {MatDialog, MatSnackBar} from '@angular/material';
 import {CourseService, MediaService} from '../../../shared/services/data.service';
 import {ActivatedRoute} from '@angular/router';
 import {IDirectory} from '../../../../../../../shared/models/mediaManager/IDirectory';
 import {UploadFormDialog} from '../../../shared/components/upload-form-dialog/upload-form-dialog.component';
+import {IFile} from '../../../../../../../shared/models/mediaManager/IFile';
+import {DialogService} from '../../../shared/services/dialog.service';
 
 @Component({
   selector: 'app-course-mediamanager',
@@ -16,9 +17,12 @@ export class CourseMediaComponent implements OnInit {
   course: ICourse;
   folderBarVisible: boolean;
   currentFolder: IDirectory;
+  selectedFiles: IFile[] = [];
+  toggleBlocked = false;
 
   constructor(public dialog: MatDialog,
               private mediaService: MediaService,
+              public dialogService: DialogService,
               private courseService: CourseService,
               private route: ActivatedRoute,
               private snackBar: MatSnackBar) {
@@ -44,8 +48,11 @@ export class CourseMediaComponent implements OnInit {
           await this.courseService.updateItem(request);
         }
 
+        this.course.media = await this.mediaService.getDirectory(this.course.media._id, true);
+
         // Set root dir as current
         this.currentFolder = this.course.media;
+        console.log(this.course.media);
       },
       error => {
         this.snackBar.open('Could not load course', '', {duration: 3000})
@@ -75,21 +82,42 @@ export class CourseMediaComponent implements OnInit {
     });
   }
 
-  openDetailDialog(): void {
-    const dialogRef = this.dialog.open(CourseMediamanagerDetailDialog, {
-      width: '80vw',
-      // height: '94vh',
-      maxWidth: '100vw',
-      maxHeight: '90vh',
-      data: {
-        markdown: this.course
-      }
-    });
+  isInSelectedFiles(file: IFile) {
+    return this.selectedFiles.indexOf(file) !== -1;
+  }
 
-    // dialogRef.afterClosed().subscribe(result => {
-    // if (typeof result !== 'undefined') {
-    //   this.model.markdown = result;
-    // }
-    // });
+  toggleSelection(file: IFile) {
+    if (this.toggleBlocked) {
+      return;
+    }
+    const position = this.selectedFiles.indexOf(file);
+    if (position !== -1) {
+      this.selectedFiles.splice(position, 1);
+    } else {
+      this.selectedFiles.push(file);
+    }
+  }
+
+  async removeSelectedFile() {
+    this.toggleBlocked = true;
+    const res = await this.dialogService
+      .confirmRemove('selected files', '', 'course')
+      .toPromise();
+    this.toggleBlocked = false;
+    if (res) {
+      this.selectedFiles.forEach(file => console.log('TODO: Remove file', file));
+      this.selectedFiles = [];
+    }
+  }
+
+  initFileDownload(file: IFile) {
+    // FIXME: REMOVE split/pop when physical path holds correct value
+    const url = '/api/uploads/' + file.physicalPath.split('/').pop();
+    window.open(url, '_blank');
+    this.toggleSelection(file);
+  }
+
+  renameFile(file: IFile) {
+
   }
 }

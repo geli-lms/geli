@@ -1,3 +1,5 @@
+@import '../../../../variables';
+
 $width__left: 15%;
 
 .mm-container {
@@ -42,4 +44,72 @@ $width__left: 15%;
     flex-grow: 1;
     padding-right: 0;
   }
+}
+
+.card button {
+  width: 184px;
+  margin-left: 10px;
+  margin-bottom: 10px;
+}
+
+.text-fit {
+  min-width: 1em;
+  width: auto;
+}
+
+.card {
+  height: 248px;
+  width: 248px;
+  float: left;
+  margin: 10px;
+  border-radius: 8px;
+  background: no-repeat 75px 15px;
+
+  &:hover {
+    background-color: map-get($app-primary, 700);;
+  }
+
+  &:first-of-type {
+    margin-left: 0;
+  }
+
+  &:last-of-type {
+    margin-right: 0;
+  }
+
+  ul {
+    list-style-type: none;
+    padding: 0;
+  }
+
+  .card-btn-wrapper {
+    position: absolute;
+    bottom: 24px;
+  }
+}
+
+.card_active {
+  @extend .card;
+  background: #4490E2;
+
+  .info {
+    color: #ffffff;
+  }
+}
+
+.opacity {
+  background-color: #000;
+  opacity: .33;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  border-radius: 8px;
+}
+
+.info {
+  position: absolute;
+  margin-bottom: 0;
+  font-size: .9em;
 }
