@@ -60,7 +60,6 @@ import {TitleService} from './shared/services/title.service';
     LectureService,
     BackendService,
     UserDataService,
-    StudentConfigService,
     ProgressService,
     ShowProgressService,
     MarkdownService,
@@ -75,7 +74,6 @@ import {TitleService} from './shared/services/title.service';
       provide: ErrorHandler,
       useExisting: RavenErrorHandler
     },
-    DataSharingService,
   ],
   bootstrap: [AppComponent]
 })

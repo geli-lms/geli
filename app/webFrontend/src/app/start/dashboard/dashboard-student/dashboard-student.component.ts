@@ -1,7 +1,6 @@
 import {Component} from '@angular/core';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
 import {UserService} from '../../../shared/services/user.service';
-import {StudentConfigService} from '../../../shared/services/data.service';
 import {DashboardBaseComponent} from '../dashboard-base-component';
 import {IStudentConfig} from '../../../../../../../shared/models/IStudentConfig';
 
@@ -18,8 +17,7 @@ export class DashboardStudentComponent extends DashboardBaseComponent {
   availableCourses: ICourse[];
   studentConfig: IStudentConfig;
 
-  constructor(public userService: UserService,
-              private studentConfigService: StudentConfigService) {
+  constructor(public userService: UserService) {
     super();
   }
 
@@ -45,10 +43,10 @@ export class DashboardStudentComponent extends DashboardBaseComponent {
     this.sortLastVisitedCourses();
   }
   sortLastVisitedCourses() {
-    // console.log(this.myCourses);
-    for (const course of this.myCourses) {
-      const vCourse =
-    }
+     // console.log(this.myCourses);
+    // for (const course of this.myCourses) {
+      // const vCourse =
+    // }
   }
 
   isMemberOfCourse(course: ICourse) {

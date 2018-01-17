@@ -11,6 +11,7 @@ import {ShowProgressService} from '../shared/services/show-progress.service';
 
 
 
+
 @Component({
   selector: 'app-course',
   templateUrl: './course.component.html',

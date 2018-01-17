@@ -50,7 +50,7 @@ const userSchema = new mongoose.Schema({
       'default': 'student'
     },
     lastVisitedCourses: [ {
-        ICourse: {type: String}
+      type: String
   }],
     authenticationToken: {type: String},
     resetPasswordToken: {type: String},

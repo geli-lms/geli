@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import 'rxjs/add/operator/switchMap';
-import {CourseService} from '../../shared/services/data.service';
+import {CourseService, UserDataService} from '../../shared/services/data.service';
 import {ICourse} from '../../../../../../shared/models/ICourse';
 import {UserService} from '../../shared/services/user.service';
 import {MatSnackBar, MatDialog} from '@angular/material';
@@ -25,7 +25,8 @@ export class CourseDetailComponent implements OnInit {
               public userService: UserService,
               private snackBar: MatSnackBar,
               private dialog: MatDialog,
-              private titleService: TitleService) {
+              private titleService: TitleService,
+              private userDataService: UserDataService) {
   }
 
   ngOnInit() {
@@ -40,12 +41,25 @@ export class CourseDetailComponent implements OnInit {
     this.courseService.readSingleItem(courseId).then(
       (course: any) => {
         this.course = course;
+        this.updateLastVisitedCourses();
         this.titleService.setTitleCut(['Course: ', this.course.name]);
       },
       (errorResponse: Response) => {
         if (errorResponse.status === 401) {
           this.snackBar.open('You are not authorized to view this course.', '', {duration: 3000});
         }
+      });
+  }
+
+  updateLastVisitedCourses() {
+    const user = this.userService.user;
+    console.log(user.lastVisitedCourses);
+    user.lastVisitedCourses.push(this.course._id);
+    console.log(user.lastVisitedCourses);
+    this.userDataService.updateItem(user)
+      .then((updatedUser) => {
+        console.log(updatedUser.lastVisitedCourses);
+        this.userService.setUser(updatedUser);
       });
   }
 
