@@ -92,7 +92,7 @@ after_success:
   - .travis/deploy.sh
   - .travis/sentry.sh
 
-# Configure notifications
+# Configure notification
 notifications:
   webhooks:
     urls:

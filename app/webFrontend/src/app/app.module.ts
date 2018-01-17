@@ -13,8 +13,7 @@ import {
   CourseService,
   DownloadFileService,
   FreeTextUnitService,
-  LectureService, NotificationService,
-  NotificationSettingsService,
+  LectureService,
   UnitService,
   UserDataService
 } from './shared/services/data.service';
@@ -33,6 +32,7 @@ import {AdminModule} from './admin/admin.module';
 import {ReportService} from './shared/services/data/report.service';
 import {TitleService} from './shared/services/title.service';
 import {DataSharingService} from './shared/services/data-sharing.service';
+import {NotificationModule} from './notification/notification.module';
 
 @NgModule({
   declarations: [
@@ -49,6 +49,7 @@ import {DataSharingService} from './shared/services/data-sharing.service';
     AuthModule,
     AboutModule,
     SharedModule,
+    NotificationModule
   ],
   providers: [
     UserService,
@@ -69,8 +70,6 @@ import {DataSharingService} from './shared/services/data-sharing.service';
     APIInfoService,
     ReportService,
     TitleService,
-    NotificationSettingsService,
-    NotificationService,
     DownloadFileService,
     RavenErrorHandler,
     {

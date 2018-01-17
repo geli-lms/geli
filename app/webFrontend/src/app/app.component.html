@@ -20,7 +20,7 @@
           <img class="avatar" src="{{userService.user.getUserImageURL(30)}}" width="30" height="30">
           {{ this.userService.user.profile.firstName }}
         </button>
-        <app-notification-menu *ngIf="isStudent()"></app-notification-menu>
+        <app-notification *ngIf="isStudent()"></app-notification>
       </span>
       <button mat-icon-button [matMenuTriggerFor]="menu">
         <mat-icon>more_vert</mat-icon>

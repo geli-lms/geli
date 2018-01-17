@@ -12,7 +12,7 @@ enum NotificationIcon {
 }
 
 @Component({
-  selector: 'app-notification-menu',
+  selector: 'app-notification',
   templateUrl: './notification.component.html',
   styleUrls: ['./notification.component.scss']
 })

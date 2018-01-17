@@ -334,7 +334,7 @@ export class NotificationSettingsService extends DataService {
 @Injectable()
 export class NotificationService extends DataService {
   constructor (public backendService: BackendService) {
-    super('notifications/', backendService);
+    super('notification/', backendService);
   }
 
   getNotificationsPerUser(user: IUser): Promise<any[]> {

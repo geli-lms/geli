@@ -2,14 +2,11 @@
   <mat-icon>{{notificationIcon}}</mat-icon>
 </button>
 <mat-menu #notificationMenu="matMenu">
-  <!--div mat-menu-item class="linebreak" *ngFor="let notification of notifications">
-    <pre class="notificationItem" >{{notification.text}}</pre>
-  </div-->
   <mat-nav-list>
     <mat-list-item class="headline">Notifications</mat-list-item>
     <div *ngFor="let notification of notifications">
       <mat-divider></mat-divider>
-      <mat-list-item>
+      <mat-list-item [routerLink]="['/course', notification.changedCourse._id]">
         <span class="notificationItem">{{notification.text}}</span>
       </mat-list-item>
     </div>

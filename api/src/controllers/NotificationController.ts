@@ -6,7 +6,7 @@ import {
 } from '../models/NotificationSettings';
 import {Notification} from '../models/Notification';
 
-@JsonController('/notifications')
+@JsonController('/notification')
 @UseBefore(passportJwtMiddleware)
 export class NotificationController {
 
