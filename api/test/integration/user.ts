@@ -86,7 +86,7 @@ describe('User', () => {
 
   describe(`GET ${Search_URL}`, () => {
     it('should search for a student', async () => {
-      const foundTestUser = await User.findOne({email: 'teacher1@test.local'});
+      const teacher = await FixtureUtils.getRandomTeacher();
       const newUser: IUser = new User({
         uid: '487895',
         email: 'test@local.tv',
@@ -107,7 +107,7 @@ describe('User', () => {
           ' ' + newUser.profile.firstName +
           ' ' + newUser.profile.lastName
         })
-        .set('Authorization', `JWT ${JwtUtils.generateToken(foundTestUser)}`);
+        .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`);
 
       res.status.should.be.equal(200);
       res.body.meta.count.should.be.greaterThan(0);
@@ -119,7 +119,7 @@ describe('User', () => {
     });
 
     it('should search for a teacher', async () => {
-      const foundTestUser = await User.findOne({email: 'teacher1@test.local'});
+      const teacher = await FixtureUtils.getRandomTeacher();
       const newUser: IUser = new User({
         uid: '487895',
         email: 'test@local.tv',
@@ -140,7 +140,7 @@ describe('User', () => {
           ' ' + newUser.profile.firstName +
           ' ' + newUser.profile.lastName
         })
-        .set('Authorization', `JWT ${JwtUtils.generateToken(foundTestUser)}`);
+        .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`);
 
       res.status.should.be.equal(200);
       res.body.meta.count.should.be.greaterThan(0);
@@ -236,27 +236,21 @@ describe('User', () => {
       res.body.message.should.be.equal('Only users with admin privileges can change uids');
     });
 
-    it('should update user base data without password', (done) => {
-      User.findOne({email: 'student2@test.local'})
-        .then((user: IUser) => {
-          const updatedUser = user;
+    it('should update user base data without password', async () => {
+      const student = await FixtureUtils.getRandomStudent();
+          const updatedUser = student;
           updatedUser.password = undefined;
           updatedUser.profile.firstName = 'Updated';
           updatedUser.profile.lastName = 'User';
           updatedUser.email = 'student2@updated.local';
-          chai.request(app)
-            .put(`${BASE_URL}/${user._id}`)
-            .set('Authorization', `JWT ${JwtUtils.generateToken(user)}`)
-            .send(updatedUser)
-            .end((err, res) => {
+          const res = await chai.request(app)
+            .put(`${BASE_URL}/${student._id}`)
+            .set('Authorization', `JWT ${JwtUtils.generateToken(student)}`)
+            .send(updatedUser);
               res.status.should.be.equal(200);
               res.body.profile.firstName.should.be.equal('Updated');
               res.body.profile.lastName.should.be.equal('User');
               res.body.email.should.be.equal('student2@updated.local');
-              done();
-            });
-        })
-        .catch(done);
     });
 
     it('should fail with missing password', async () => {
