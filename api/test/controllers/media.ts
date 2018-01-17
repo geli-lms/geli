@@ -24,7 +24,7 @@ describe('Media', async () => {
 
   });
 
-  describe(`PUT ${BASE_URL}`, async () => {
+  describe(`POST ${BASE_URL}`, async () => {
     it('should create a root directory', async () => {
       const teacher = await FixtureUtils.getRandomTeacher();
 
@@ -33,7 +33,7 @@ describe('Media', async () => {
       });
 
       const result = await chai.request(app)
-        .put(`${BASE_URL}/directory`)
+        .post(`${BASE_URL}/directory`)
         .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
         .send(rootDirectory)
         .catch((err) => err.response);
@@ -60,7 +60,7 @@ describe('Media', async () => {
       });
 
       const result = await chai.request(app)
-        .put(`${BASE_URL}/directory/${rootDirectory._id}`)
+        .post(`${BASE_URL}/directory/${rootDirectory._id}`)
         .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
         .send(subDirectory)
         .catch((err) => err.response);
@@ -92,7 +92,7 @@ describe('Media', async () => {
       const testFile = fs.readFileSync(testFileName);
 
       const result = await chai.request(app)
-        .put(`${BASE_URL}/file/${rootDirectory._id}`)
+        .post(`${BASE_URL}/file/${rootDirectory._id}`)
         .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
         .attach('file', testFile, testFileName)
         .catch((err) => err.response);
