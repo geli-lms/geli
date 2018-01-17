@@ -47,9 +47,9 @@ describe('Duplicate', async () => {
 
         let unitJson: IUnit;
         const importResult = await chai.request(app)
-          .post(`${BASE_URL}/unit/${unit.id}`)
+          .post(`${BASE_URL}/unit/${unit._id}`)
           .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
-          .send({courseId: course.id, lectureId: lecture.id})
+          .send({courseId: course._id, lectureId: lecture._id})
           .catch((err) => err.response);
         importResult.status.should.be.equal(200,
           'failed to duplicate ' + unit.name +
@@ -119,9 +119,9 @@ describe('Duplicate', async () => {
 
         let lectureJson: ILecture;
         const importResult = await chai.request(app)
-          .post(`${BASE_URL}/lecture/${lecture.id}`)
+          .post(`${BASE_URL}/lecture/${lecture._id}`)
           .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
-          .send({courseId: course.id})
+          .send({courseId: course._id})
           .catch((err) => err.response);
         importResult.status.should.be.equal(200,
           'failed to import ' + lecture.name +
@@ -151,9 +151,9 @@ describe('Duplicate', async () => {
 
         let courseJson: ICourse;
         const importResult = await chai.request(app)
-          .post(`${BASE_URL}/course/${course.id}`)
+          .post(`${BASE_URL}/course/${course._id}`)
           .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
-          .send({courseAdmin: teacher.id})
+          .send({courseAdmin: teacher._id})
           .catch((err) => err.response);
         importResult.status.should.be.equal(200,
           'failed to duplicate ' + course.name +
@@ -164,7 +164,7 @@ describe('Duplicate', async () => {
         should.exist(importResult.body.updatedAt);
         should.exist(courseJson._id);
         courseJson.active.should.be.equal(false);
-        courseJson.courseAdmin.should.be.equal(teacher.id);
+        courseJson.courseAdmin.should.be.equal(teacher._id.toString());
         courseJson.name.startsWith(course.name).should.be.equal(true);
         courseJson.description.should.be.equal(course.description);
         courseJson.lectures.should.be.instanceOf(Array).and.have.lengthOf(course.lectures.length);
