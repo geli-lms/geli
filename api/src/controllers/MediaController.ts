@@ -1,5 +1,5 @@
 import {
-  Authorized, Body, Delete, Get, JsonController, NotFoundError, Param, Put,
+  Authorized, Body, Delete, Get, JsonController, NotFoundError, Param, Post, Put,
   UploadedFile
 } from 'routing-controllers';
 import {Directory} from '../models/mediaManager/Directory';
@@ -50,13 +50,13 @@ export class MediaController {
   }
 
   @Authorized(['teacher', 'admin'])
-  @Put('/directory')
+  @Post('/directory')
   async createRootDirectory(@Body() directory: IDirectory) {
     const savedDirectory = await new Directory(directory).save();
     return savedDirectory.toObject();
   }
   @Authorized(['teacher', 'admin'])
-  @Put('/directory/:parent')
+  @Post('/directory/:parent')
   async createDirectory(@Param('parent') parentDirectoryId: string, @Body() directory: IDirectory) {
     const savedDirectory = await new Directory(directory).save();
 
@@ -68,7 +68,7 @@ export class MediaController {
   }
 
   @Authorized(['teacher', 'admin'])
-  @Put('/file/:parent')
+  @Post('/file/:parent')
   async createFile(@Param('parent') parentDirectoryId: string, @UploadedFile('file', {options: uploadOptions}) uploadedFile: any) {
     const file: IFile = new File({
       name: uploadedFile.originalname,
