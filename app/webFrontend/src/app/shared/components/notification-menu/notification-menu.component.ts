@@ -3,6 +3,14 @@ import {NotificationService, NotificationSettingsService, UserDataService} from 
 import {INotification} from '../../../../../../../shared/models/INotification';
 import {UserService} from '../../services/user.service';
 
+enum NotificationIcon {
+  NOTIFICATIONS = 'notifications',
+  ACTIVE = 'notifications_active',
+  NONE = 'notifications_none',
+  OFF = 'notifications_off',
+  PAUSED = 'notifications_paused',
+}
+
 @Component({
   selector: 'app-notification-menu',
   templateUrl: './notification-menu.component.html',
@@ -32,10 +40,4 @@ export class NotificationMenuComponent implements OnInit {
   }
 }
 
-enum NotificationIcon {
-  NOTIFICATIONS = 'notifications',
-  ACTIVE = 'notifications_active',
-  NONE = 'notifications_none',
-  OFF = 'notifications_off',
-  PAUSED = 'notifications_paused',
-}
+
