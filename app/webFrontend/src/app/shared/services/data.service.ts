@@ -383,7 +383,7 @@ export class DownloadFileService extends DataService {
 
   getPackageSize(idl: IDownload) {
     return new Promise((resolve, reject) => {
-      this.backendService.post(this.apiPath + '/size', idl).subscribe((responseItem: any) => {
+      this.backendService.post(this.apiPath + 'size', idl).subscribe((responseItem: any) => {
           resolve(responseItem);
         },
         error => reject(error));
