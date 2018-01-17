@@ -23,15 +23,9 @@ export abstract class DataService {
   }
 
   createItem<T>(createItem: T): Promise<T> {
-    return new Promise((resolve, reject) => {
-      this.backendService.post(this.apiPath, createItem)
-        .subscribe(
-          (responseItem) => {
-            resolve(responseItem);
-          },
-          error => reject(error)
-        );
-    });
+    return this.backendService
+      .post(this.apiPath, createItem)
+      .toPromise();
   }
 
   readItems<T>(): Promise<T[]> {
@@ -55,27 +49,15 @@ export abstract class DataService {
   }
 
   updateItem<T extends any>(updateItem: T): Promise<T> {
-    return new Promise((resolve, reject) => {
-      this.backendService.put(this.apiPath + updateItem._id, JSON.stringify(updateItem))
-        .subscribe(
-          (res) => {
-            resolve(res);
-          },
-          error => reject(error)
-        );
-    });
+    return this.backendService
+      .put(this.apiPath + updateItem._id, JSON.stringify(updateItem))
+      .toPromise();
   }
 
   deleteItem<T extends any>(deleteItem: T): Promise<any> {
-    return new Promise((resolve, reject) => {
-      this.backendService.delete(this.apiPath + deleteItem._id)
-        .subscribe(
-          () => {
-            resolve();
-          },
-          error => reject(error)
-        );
-    });
+    return this.backendService
+      .delete(this.apiPath + deleteItem._id)
+      .toPromise();
   }
 
   readSingleItem<T>(id: string): Promise<T> {
@@ -106,39 +88,21 @@ export class ExportService extends DataService {
   }
 
   exportCourse(course: ICourse): Promise<ICourse> {
-    return new Promise((resolve, reject) => {
-      this.backendService.get(this.apiPath + 'course/' + course._id)
-        .subscribe(
-          (responseItem: ICourse) => {
-            resolve(responseItem);
-          },
-          error => reject(error)
-        );
-    });
+    return this.backendService
+      .get(this.apiPath + 'course/' + course._id)
+      .toPromise();
   }
 
   exportLecture(lecture: ILecture): Promise<ILecture> {
-    return new Promise((resolve, reject) => {
-      this.backendService.get(this.apiPath + 'lecture/' + lecture._id)
-        .subscribe(
-          (responseItem: ILecture) => {
-            resolve(responseItem);
-          },
-          error => reject(error)
-        );
-    });
+    return this.backendService
+      .get(this.apiPath + 'lecture/' + lecture._id)
+      .toPromise();
   }
 
   exportUnit(unit: IUnit): Promise<IUnit> {
-    return new Promise((resolve, reject) => {
-      this.backendService.get(this.apiPath + 'unit/' + unit._id)
-        .subscribe(
-          (responseItem: IUnit) => {
-            resolve(responseItem);
-          },
-          error => reject(error)
-        );
-    });
+    return this.backendService
+      .get(this.apiPath + 'unit/' + unit._id)
+      .toPromise();
   }
 }
 
@@ -149,39 +113,21 @@ export class ImportService extends DataService {
   }
 
   importCourse(course: ICourse): Promise<ICourse> {
-    return new Promise((resolve, reject) => {
-      this.backendService.post(this.apiPath + 'course/', JSON.stringify(course))
-        .subscribe(
-          (responseItem: ICourse) => {
-            resolve(responseItem);
-          },
-          error => reject(error)
-        );
-    });
+    return this.backendService
+      .post(this.apiPath + 'course/', JSON.stringify(course))
+      .toPromise();
   }
 
   importLecture(lecture: ILecture, course: ICourse): Promise<ILecture> {
-    return new Promise((resolve, reject) => {
-      this.backendService.post(this.apiPath + 'course/' + course._id, JSON.stringify(lecture))
-        .subscribe(
-          (responseItem: ILecture) => {
-            resolve(responseItem);
-          },
-          error => reject(error)
-        );
-    });
+    return this.backendService
+      .post(this.apiPath + 'course/' + course._id, JSON.stringify(lecture))
+      .toPromise();
   }
 
   importUnit(unit: IUnit, lecture: ILecture, course: ICourse): Promise<IUnit> {
-    return new Promise((resolve, reject) => {
-      this.backendService.post(this.apiPath + 'unit/' + course._id + '/' + lecture._id, JSON.stringify(unit))
-        .subscribe(
-          (responseItem: IUnit) => {
-            resolve(responseItem);
-          },
-          error => reject(error)
-        );
-    });
+    return this.backendService
+      .post(this.apiPath + 'unit/' + course._id + '/' + lecture._id, JSON.stringify(unit))
+      .toPromise();
   }
 }
 
@@ -192,39 +138,21 @@ export class DuplicationService extends DataService {
   }
 
   duplicateCourse(course: ICourse, courseAdmin: IUser): Promise<ICourse> {
-    return new Promise((resolve, reject) => {
-      this.backendService.post(this.apiPath + 'course/' + course._id, JSON.stringify({courseAdmin: courseAdmin}))
-        .subscribe(
-          (responseItem: ICourse) => {
-            resolve(responseItem);
-          },
-          error => reject(error)
-        );
-    });
+    return this.backendService
+      .post(this.apiPath + 'course/' + course._id, JSON.stringify({courseAdmin: courseAdmin}))
+      .toPromise();
   }
 
   duplicateLecture(lecture: ILecture, courseId: string): Promise<ILecture> {
-    return new Promise((resolve, reject) => {
-      this.backendService.post(this.apiPath + 'lecture/' + lecture._id, JSON.stringify({courseId: courseId}))
-        .subscribe(
-          (responseItem: ILecture) => {
-            resolve(responseItem);
-          },
-          error => reject(error)
-        );
-    });
+    return this.backendService
+      .post(this.apiPath + 'lecture/' + lecture._id, JSON.stringify({courseId: courseId}))
+      .toPromise();
   }
 
   duplicateUnit(unit: IUnit, lectureId: string, courseId: string): Promise<IUnit> {
-    return new Promise((resolve, reject) => {
-      this.backendService.post(this.apiPath + 'unit/' + unit._id, JSON.stringify({courseId: courseId , lectureId: lectureId}))
-        .subscribe(
-          (responseItem: IUnit) => {
-            resolve(responseItem);
-          },
-          error => reject(error)
-        );
-    });
+    return this.backendService
+      .post(this.apiPath + 'unit/' + unit._id, JSON.stringify({courseId: courseId , lectureId: lectureId}))
+      .toPromise();
   }
 }
 
@@ -237,15 +165,9 @@ export class CourseService extends DataService {
 
   enrollStudent(courseId: string, data: any): Promise<ICourse> {
     const accessKey: string = data.accessKey;
-    return new Promise((resolve, reject) => {
-      this.backendService.post(this.apiPath + courseId + '/enroll', JSON.stringify({accessKey}))
-        .subscribe(
-          (responseItem: ICourse) => {
-            resolve(responseItem);
-          },
-          error => reject(error)
-        );
-    });
+    return this.backendService
+      .post(this.apiPath + courseId + '/enroll', JSON.stringify({accessKey}))
+      .toPromise();
   }
 
   sendMailToSelectedUsers(data: any): Promise<any> {
@@ -255,15 +177,9 @@ export class CourseService extends DataService {
   }
 
   leaveStudent(courseId: string): Promise<ICourse> {
-    return new Promise((resolve, reject) => {
-      this.backendService.post(this.apiPath + courseId + '/leave', {})
-        .subscribe(
-          (responseItem: ICourse) => {
-            resolve(responseItem);
-          },
-          error => reject(error)
-        );
-    });
+    return this.backendService
+      .post(this.apiPath + courseId + '/leave', {})
+      .toPromise();
   }
 }
 
@@ -383,31 +299,22 @@ export class DownloadFileService extends DataService {
 
   // FIXME: What does this return? please set return type(not any)
   getPackageSize(idl: IDownload) {
-    return new Promise((resolve, reject) => {
-      this.backendService.post(this.apiPath + '/size', idl).subscribe((responseItem: any) => {
-          resolve(responseItem);
-        },
-        error => reject(error));
-    });
+    return this.backendService
+      .post(this.apiPath + '/size', idl)
+      .toPromise();
   }
 
   // FIXME: What does this return? please set return type(not any)
   postDownloadReqForCourse(idl: IDownload) {
-    return new Promise((resolve, reject) => {
-      this.backendService.post(this.apiPath, idl).subscribe((responseItem: any) => {
-          resolve(responseItem);
-        },
-        error => reject(error));
-    });
+    return this.backendService
+      .post(this.apiPath, idl)
+      .toPromise();
   }
 
   // FIXME: What does this return? please set return type(not any)
   getFile(id: string) {
-    return new Promise((resolve, reject) => {
-      this.backendService.getDownload(this.apiPath + id).subscribe(resp => {
-          resolve(resp);
-        },
-        error => reject(error));
-    });
+    return this.backendService
+      .getDownload(this.apiPath + id)
+      .toPromise();
   }
 }
