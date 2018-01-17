@@ -1,5 +1,17 @@
-<app-upload-form [uploadPath]="uploadPath"
+<h2>Add files</h2>
+
+<app-upload-form [uploadMethod]="'PUT'"
+                 [uploadPath]="uploadPath"
                  [additionalData]="null"
                  (onFileSelectedChange)="null"
                  (onFileUploaded)="onFileUploaded($event)"
                  (onAllUploaded)="onAllUploaded()"></app-upload-form>
+
+<p>
+  <button mat-raised-button color="primary"
+          (click)="uploadAll()" [disabled]="!checkSave()">
+    <mat-icon>file_upload</mat-icon>
+    Upload and save
+  </button>
+  <button mat-raised-button (click)="cancel()">Cancel</button>
+</p>

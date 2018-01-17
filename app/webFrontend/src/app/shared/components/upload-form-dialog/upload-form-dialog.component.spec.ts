@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { UploadFormDialogComponent } from './upload-form-dialog.component';
+import { UploadFormDialog } from './upload-form-dialog.component';
 
-describe('UploadFormDialogComponent', () => {
-  let component: UploadFormDialogComponent;
-  let fixture: ComponentFixture<UploadFormDialogComponent>;
+describe('UploadFormDialog', () => {
+  let component: UploadFormDialog;
+  let fixture: ComponentFixture<UploadFormDialog>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ UploadFormDialogComponent ]
+      declarations: [ UploadFormDialog ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(UploadFormDialogComponent);
+    fixture = TestBed.createComponent(UploadFormDialog);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

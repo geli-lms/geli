@@ -5,6 +5,7 @@ import {MatDialog, MatSnackBar} from '@angular/material';
 import {CourseService, MediaService} from '../../../shared/services/data.service';
 import {ActivatedRoute} from '@angular/router';
 import {IDirectory} from '../../../../../../../shared/models/mediaManager/IDirectory';
+import {UploadFormDialog} from '../../../shared/components/upload-form-dialog/upload-form-dialog.component';
 
 @Component({
   selector: 'app-course-mediamanager',
@@ -54,6 +55,24 @@ export class CourseMediaComponent implements OnInit {
 
   toggleFolderBarVisibility(): void {
     this.folderBarVisible = !this.folderBarVisible;
+  }
+
+  addFile(): void {
+    // TODO: Dialog can grow to high; implement scroll
+    const dialogRef = this.dialog.open(UploadFormDialog, {
+      maxHeight: '90vh',
+      minWidth: '50vw',
+      data: {
+        targetDir: this.currentFolder,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe(value => {
+      if (value) {
+        // TODO: Reload folder content
+        console.log('Reload site, folder not yet updated');
+      }
+    });
   }
 
   openDetailDialog(): void {

@@ -15,7 +15,7 @@ import {ButtonSaveCancelComponent} from './components/button-save-cancel/button-
 import {UploadFormComponent} from './components/upload-form/upload-form.component';
 import {FileUploadModule} from 'ng2-file-upload';
 import {FilesizePipe} from './pipes/filesize/filesize.pipe';
-import { UploadFormDialogComponent } from './components/upload-form-dialog/upload-form-dialog.component';
+import {UploadFormDialog} from './components/upload-form-dialog/upload-form-dialog.component';
 
 @NgModule({
   imports: [
@@ -38,7 +38,7 @@ import { UploadFormDialogComponent } from './components/upload-form-dialog/uploa
     ButtonSaveCancelComponent,
     UploadFormComponent,
     FilesizePipe,
-    UploadFormDialogComponent,
+    UploadFormDialog,
   ],
   exports: [
     GravatarDirective,
@@ -54,6 +54,10 @@ import { UploadFormDialogComponent } from './components/upload-form-dialog/uploa
     ButtonSaveCancelComponent,
     UploadFormComponent,
     FilesizePipe,
+    UploadFormDialog,
+  ],
+  entryComponents: [
+    UploadFormDialog,
   ]
 })
 export class SharedModule {
