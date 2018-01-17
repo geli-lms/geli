@@ -27,6 +27,7 @@ import emailService from '../services/EmailService';
 const multer = require('multer');
 import crypto = require('crypto');
 import {API_NOTIFICATION_TYPE_NONE, NotificationSettings} from '../models/NotificationSettings';
+import {Notification} from '../models/Notification';
 
 const uploadOptions = {
   storage: multer.diskStorage({
@@ -248,7 +249,15 @@ export class CourseController {
       course,
       {'new': true}
     )
-      .then((c) => c ? c.toObject() : undefined);
+      .then((c) => {
+        if (c) {
+          c.students.forEach(student => {
+            Notification.schema.statics.createNotification(student, course, 'Course ' + course.name + ' has been updated.');
+          });
+          return c.toObject();
+        }
+        return undefined;
+      });
   }
 
   @Authorized(['teacher', 'admin'])
@@ -261,6 +270,9 @@ export class CourseController {
     const courseAdmin = await User.findOne({_id: course.courseAdmin});
     if (course.teachers.indexOf(currentUser._id) !== -1 || courseAdmin.equals(currentUser._id.toString())
       || currentUser.role === 'admin' ) {
+      course.students.forEach(student => {
+        Notification.schema.statics.createNotification(student, course, 'Course ' + course.name + 'has been removed.');
+      });
       await course.remove();
       return {result: true};
     } else {

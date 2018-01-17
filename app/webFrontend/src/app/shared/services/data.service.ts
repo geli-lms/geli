@@ -336,6 +336,18 @@ export class NotificationService extends DataService {
   constructor (public backendService: BackendService) {
     super('notifications/', backendService);
   }
+
+  getNotificationsPerUser(user: IUser): Promise<any[]> {
+    return new Promise((resolve, reject) => {
+      this.backendService.get(this.apiPath + 'user/' + user._id)
+        .subscribe(
+          (responseItem: any) => {
+            resolve(responseItem);
+          },
+          error => reject(error)
+        );
+    });
+  }
 }
 
 @Injectable()

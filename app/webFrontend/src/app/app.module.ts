@@ -13,7 +13,7 @@ import {
   CourseService,
   DownloadFileService,
   FreeTextUnitService,
-  LectureService,
+  LectureService, NotificationService,
   NotificationSettingsService,
   UnitService,
   UserDataService
@@ -70,6 +70,7 @@ import {DataSharingService} from './shared/services/data-sharing.service';
     ReportService,
     TitleService,
     NotificationSettingsService,
+    NotificationService,
     DownloadFileService,
     RavenErrorHandler,
     {

@@ -10,4 +10,6 @@ export interface INotification {
   changedLecture: ILecture;
   changedUnit: IUnit;
   text: string;
+  isOld: boolean;
 }
+

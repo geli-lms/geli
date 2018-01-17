@@ -1,9 +1,9 @@
 <button mat-icon-button [matMenuTriggerFor]="notificationMenu">
-  <mat-icon>{{getNotificationType()}}</mat-icon>
+  <mat-icon>{{notificationIcon}}</mat-icon>
 </button>
 <mat-menu #notificationMenu="matMenu">
   <button mat-menu-item *ngFor="let notification of notifications">
-    <span>{{notification}}</span>
+    <span>{{notification.text}}</span>
   </button>
 </mat-menu>
 

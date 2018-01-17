@@ -1,5 +1,7 @@
-import {Component, OnInit} from '@angular/core';
-import {NotificationSettingsService} from '../../services/data.service';
+import {Component, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {NotificationService, NotificationSettingsService, UserDataService} from '../../services/data.service';
+import {INotification} from '../../../../../../../shared/models/INotification';
+import {UserService} from '../../services/user.service';
 
 @Component({
   selector: 'app-notification-menu',
@@ -8,25 +10,25 @@ import {NotificationSettingsService} from '../../services/data.service';
 })
 export class NotificationMenuComponent implements OnInit {
 
-  notificationType: NotificationIcon;
-  notifications: Array<String> =
-    ['test1', 'test2', 'test1', 'test2', 'test1', 'test2', 'test1', 'test2', 'test1', 'test2',
-      'test1', 'test2', 'test1', 'test2', 'test1', 'test2', 'test1', 'test2', 'test1', 'test2',
-      'test1', 'test2', 'test1', 'test2', 'test1', 'test2', 'test1', 'test2', 'test1', 'test2',
-      'test1', 'test2', 'test1', 'test2', 'test1', 'test2', 'test1', 'test2', 'test1', 'test2',
-      'test1', 'test2', 'test1', 'test2', 'test1', 'test2', 'test1', 'test2', 'test1', 'test2',
-      'test1', 'test2', 'test1', 'test2', 'test1', 'test2', 'test1', 'test2', 'test1', 'test2',
-    ];
+  notificationIcon: NotificationIcon;
+  notifications: Array<INotification>;
 
-  constructor(private notificationService: NotificationSettingsService) {
+  constructor(private notificationService: NotificationService,
+              private userService: UserService) {
+    this.notificationIcon = NotificationIcon.NONE;
+    this.getNotifications();
   }
 
   ngOnInit() {
-    this.notificationType = NotificationIcon.NONE;
   }
 
-  getNotificationType(): string {
-    return this.notificationType;
+  getNotifications() {
+     this.notificationService.getNotificationsPerUser(this.userService.user).then(notifications => {
+       this.notifications = notifications;
+       if (this.notifications.length > 0) {
+         this.notificationIcon = NotificationIcon.ACTIVE;
+       }
+     });
   }
 }
 
