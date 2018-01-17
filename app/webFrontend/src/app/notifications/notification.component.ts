@@ -13,10 +13,10 @@ enum NotificationIcon {
 
 @Component({
   selector: 'app-notification-menu',
-  templateUrl: './notification-menu.component.html',
-  styleUrls: ['./notification-menu.component.scss']
+  templateUrl: './notification.component.html',
+  styleUrls: ['./notification.component.scss']
 })
-export class NotificationMenuComponent implements OnInit {
+export class NotificationComponent implements OnInit {
 
   notificationIcon: NotificationIcon;
   notifications: Array<INotification>;

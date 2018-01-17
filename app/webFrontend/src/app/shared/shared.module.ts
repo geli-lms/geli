@@ -15,7 +15,7 @@ import {ButtonSaveCancelComponent} from './components/button-save-cancel/button-
 import {UploadFormComponent} from './components/upload-form/upload-form.component';
 import {FileUploadModule} from 'ng2-file-upload';
 import {FilesizePipe} from './pipes/filesize/filesize.pipe';
-import {NotificationMenuComponent} from '../notifications/notification-menu.component';
+import {NotificationComponent} from '../notifications/notification.component';
 
 @NgModule({
   imports: [
@@ -38,7 +38,7 @@ import {NotificationMenuComponent} from '../notifications/notification-menu.comp
     ButtonSaveCancelComponent,
     UploadFormComponent,
     FilesizePipe,
-    NotificationMenuComponent,
+    NotificationComponent,
   ],
   exports: [
     GravatarDirective,
@@ -54,7 +54,7 @@ import {NotificationMenuComponent} from '../notifications/notification-menu.comp
     ButtonSaveCancelComponent,
     UploadFormComponent,
     FilesizePipe,
-    NotificationMenuComponent,
+    NotificationComponent,
   ]
 })
 export class SharedModule {
