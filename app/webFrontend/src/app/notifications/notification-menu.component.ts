@@ -1,7 +1,7 @@
 import {Component, OnChanges, OnInit, SimpleChanges} from '@angular/core';
-import {NotificationService, NotificationSettingsService, UserDataService} from '../../services/data.service';
-import {INotification} from '../../../../../../../shared/models/INotification';
-import {UserService} from '../../services/user.service';
+import {NotificationService, NotificationSettingsService, UserDataService} from '../shared/services/data.service';
+import {INotification} from '../../../../../shared/models/INotification';
+import {UserService} from '../shared/services/user.service';
 
 enum NotificationIcon {
   NOTIFICATIONS = 'notifications',

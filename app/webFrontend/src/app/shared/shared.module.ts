@@ -15,7 +15,7 @@ import {ButtonSaveCancelComponent} from './components/button-save-cancel/button-
 import {UploadFormComponent} from './components/upload-form/upload-form.component';
 import {FileUploadModule} from 'ng2-file-upload';
 import {FilesizePipe} from './pipes/filesize/filesize.pipe';
-import {NotificationMenuComponent} from './components/notification-menu/notification-menu.component';
+import {NotificationMenuComponent} from '../notifications/notification-menu.component';
 
 @NgModule({
   imports: [
