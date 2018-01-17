@@ -1,0 +1,26 @@
+.tasks {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+
+  .task {
+    flex-grow: 1;
+    max-width: 200px;
+
+    ul.answers {
+      padding: 0 0 0 15px;
+
+      li {
+        list-style-type: none;
+
+        &.correct .answer-text {
+          color: green;
+        }
+
+        &.incorrect .answer-text {
+          color: red;
+        }
+      }
+    }
+  }
+}

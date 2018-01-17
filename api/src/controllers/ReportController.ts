@@ -9,6 +9,7 @@ import {Course, ICourseModel} from '../models/Course';
 import {ILecture} from '../../../shared/models/ILecture';
 import {IUnit} from '../../../shared/models/units/IUnit';
 import {ICourse} from '../../../shared/models/ICourse';
+import {Unit} from '../models/units/Unit';
 
 @JsonController('/report')
 @UseBefore(passportJwtMiddleware)
@@ -66,7 +67,8 @@ export class ReportController {
 
     const userProgressData = await userProgressDataRaw.map((userProgress: any) => {
       const remappedProgresses = userProgress.progresses.map((progress: IProgress) => {
-        let unit = progress.unit.pop();
+        // Hydrate and toObject are neccessary to transform all ObjectIds to strings
+        let unit = Unit.hydrate(progress.unit.pop()).toObject();
         unit = {
           ...unit,
           progressData: progress

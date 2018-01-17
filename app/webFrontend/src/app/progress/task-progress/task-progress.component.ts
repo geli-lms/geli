@@ -8,8 +8,8 @@ import {Component, Input, OnInit, ViewEncapsulation} from '@angular/core';
 })
 export class TaskProgressComponent implements OnInit {
 
-  @Input()
-  progress;
+  @Input() unit;
+  @Input() progress;
 
   constructor() { }
 
