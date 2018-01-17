@@ -86,6 +86,22 @@ export class MediaController {
   }
 
   @Authorized(['teacher', 'admin'])
+  @Put('/directory/:id')
+  async updateDirectory(@Param('id') directoryId: string, @Body() updatedDirectory: IDirectory) {
+    const directory = await Directory.findById(directoryId);
+    directory.set(updatedDirectory);
+    return directory.save();
+  }
+
+  @Authorized(['teacher', 'admin'])
+  @Put('/file/:id')
+  async updateFile(@Param('id') fileId: string, @Body() updatedFile: IFile) {
+    const file = await File.findById(fileId);
+    file.set(updatedFile);
+    return file.save();
+  }
+
+  @Authorized(['teacher', 'admin'])
   @Delete('/directory/:id')
   async deleteDirectory(@Param('id') directoryId: string) {
     const directoryToDelete = await Directory.findById(directoryId);
