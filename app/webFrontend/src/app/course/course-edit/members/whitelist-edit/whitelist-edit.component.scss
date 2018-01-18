@@ -1,0 +1,36 @@
+@import "../../../../../variables";
+
+.full-width {
+  padding-top: 2rem;
+  width: 30%;
+  flex: 1;
+}
+
+.mat-mini-fab {
+  margin-bottom: 10px;
+  margin-right: 3rem;
+  background-color: map-get($app-primary, 'default');
+}
+
+.mat-expansion-panel {
+  padding-top: 0.1rem;
+  min-height: 3rem;
+}
+
+.mat-expansion-panel-header {
+  min-height: 3rem;
+  margin-bottom: -1rem;
+}
+
+.whitelist {
+  margin-left: 0.8rem;
+  width: 98%;
+  display: inline-block;
+}
+
+.title {
+  padding: auto;
+  margin: auto;
+  flex: 1;
+  height: 100%;
+}
