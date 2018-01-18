@@ -50,11 +50,12 @@
 
             <div class="icon-wrapper">
               <ng-container [ngSwitch]="getSimpleMimeType(file)">
-                <mat-icon *ngSwitchCase="'video'">music_video</mat-icon>
+                <mat-icon *ngSwitchCase="'video'">movie</mat-icon>
                 <mat-icon *ngSwitchCase="'image'">image</mat-icon>
                 <mat-icon *ngSwitchCase="'pdf'">picture_as_pdf</mat-icon>
                 <mat-icon *ngSwitchCase="'archive'">archive</mat-icon>
-                <mat-icon *ngSwitchDefault>file</mat-icon>
+                <mat-icon *ngSwitchCase="'text'">subject</mat-icon>
+                <mat-icon *ngSwitchDefault>insert_drive_file</mat-icon>
               </ng-container>
             </div>
 
