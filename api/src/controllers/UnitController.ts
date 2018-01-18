@@ -136,7 +136,7 @@ export class UnitController {
         Course.findById(unit._course).populate('students').then((course) => {
           course.students.forEach(student => {
             Notification.schema.statics.createNotification(
-              student, course, 'Course: ' + course.name + ': Lecture ' + lecture.name + ' has a new unit.', lecture, unit);
+              student, course, 'Course ' + course.name + ': Lecture ' + lecture.name + ' has a new unit.', lecture, unit);
           });
         }).catch(err => {
           throw new BadRequestError(err);

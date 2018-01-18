@@ -1,5 +1,6 @@
 <button mat-icon-button [matMenuTriggerFor]="notificationMenu">
   <mat-icon>{{notificationIcon}}</mat-icon>
+  <span *ngIf="!isNullOrUndefined(notifications)">{{notifications.length}}</span>
 </button>
 <mat-menu #notificationMenu="matMenu">
   <mat-nav-list>
