@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {BackendService} from './backend.service';
 import {Dependency} from '../../about/licenses/dependency.model';
 import {ITaskUnit} from '../../../../../../shared/models/units/ITaskUnit';
+import construct = Reflect.construct;
 import {ILecture} from '../../../../../../shared/models/ILecture';
 import {IUnit} from '../../../../../../shared/models/units/IUnit';
 import {IUser} from '../../../../../../shared/models/IUser';
@@ -78,7 +79,7 @@ export abstract class DataService {
     });
   }
 
-  readSingleItem(id: string): Promise<any[]> {
+  readSingleItem(id: string): Promise<any> {
     return new Promise((resolve, reject) => {
       this.backendService.get(this.apiPath + id)
         .subscribe(
@@ -317,6 +318,16 @@ export class UserDataService extends DataService {
     super('users/', backendService);
   }
 
+  searchUsers(role: string, query: string): Promise<any> {
+    const originalApiPath = this.apiPath;
+    this.apiPath += 'members/search/';
+    this.apiPath += '?role=' + role;
+    this.apiPath += '&query=' + query;
+    const promise = this.readItems();
+    this.apiPath = originalApiPath;
+    return promise;
+  }
+
   getRoles(): Promise<any[]> {
     const originalApiPath = this.apiPath;
     this.apiPath += 'roles/';
@@ -329,6 +340,22 @@ export class UserDataService extends DataService {
     const originalApiPath = this.apiPath;
     this.apiPath += 'picture/';
     const promise = this.updateItem(data);
+    this.apiPath = originalApiPath;
+    return promise;
+  }
+}
+
+@Injectable()
+export  class  WhitelistUserService extends DataService {
+  constructor(public backendService: BackendService) {
+    super('whitelist/', backendService);
+  }
+
+  countWhitelistUsers(courseId: string): Promise<any> {
+    const originalApiPath = this.apiPath;
+    this.apiPath += courseId + '/';
+    this.apiPath += 'count/';
+    const promise = this.readItems();
     this.apiPath = originalApiPath;
     return promise;
   }

@@ -8,7 +8,9 @@ import {FixtureUtils} from './FixtureUtils';
 import {ICodeKataModel} from '../src/models/units/CodeKataUnit';
 import {Lecture} from '../src/models/Lecture';
 import {Unit} from '../src/models/units/Unit';
+import {WhitelistUser} from '../src/models/WhitelistUser';
 import {Progress} from '../src/models/progress/Progress';
+
 
 export class FixtureLoader {
   private usersDirectory = 'build/fixtures/users/';
@@ -26,6 +28,7 @@ export class FixtureLoader {
 
   async load() {
     await mongoose.connection.dropDatabase();
+    await User.ensureIndexes();
     const userfixtures = fs.readdirSync(this.usersDirectory);
     const coursefixtures = fs.readdirSync(this.coursesDirectory);
 
@@ -54,7 +57,11 @@ export class FixtureLoader {
       course.teachers = await FixtureUtils.getRandomTeachers(0, 2, hash);
       // enroll random array of Students
       course.students = await FixtureUtils.getRandomStudents(2, 10, hash);
-
+      // enroll random array of WhitelistUsers
+      const randomWhitelistUser = await FixtureUtils.getRandomWhitelistUsers(course.students, course, hash);
+      await Promise.all(randomWhitelistUser.map(async (whitelistUser) => {
+        course.whitelist.push(await WhitelistUser.create(whitelistUser));
+      }));
       const importedCourse = await Course.schema.statics.importJSON(course, teacher, course.active);
       return importedCourse._id;
     }));

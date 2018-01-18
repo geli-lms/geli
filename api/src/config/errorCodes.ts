@@ -46,5 +46,11 @@ export const errorCodes = {
         text: 'Wrong type allowed are just csv files.'
       }
     }
-  }
+  },
+  query: {
+    empty: {
+        code: 'emptyQuery',
+        text: 'Query was empty.'
+      }
+    }
 };
