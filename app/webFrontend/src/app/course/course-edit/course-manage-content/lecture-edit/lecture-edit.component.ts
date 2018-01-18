@@ -52,15 +52,15 @@ export class LectureEditComponent implements OnInit, OnDestroy {
     return this.dragulaService.find('units').drake.dragging;
   }
 
-  duplicateLecture(lecture: ILecture) {
-    this.duplicationService.duplicateLecture(lecture, this.course._id)
-      .then(() => {
-        this.snackBar.open('Lecture duplicated.', '', {duration: 3000});
-        this.reloadCourse();
-      })
-      .catch((error) => {
-        this.snackBar.open(error, '', {duration: 3000});
-      });
+  async duplicateLecture(lecture: ILecture) {
+    try {
+      const duplicateLecture = await this.duplicationService.duplicateLecture(lecture, this.course._id);
+      this.snackBar.open('Lecture duplicated.', '', {duration: 3000});
+      await this.reloadCourse();
+      this.navigateToLecture(duplicateLecture._id);
+    } catch (err) {
+      this.snackBar.open(err, '', {duration: 3000});
+    }
   }
 
   async duplicateUnit(unit: IUnit) {
@@ -236,9 +236,13 @@ export class LectureEditComponent implements OnInit, OnDestroy {
   }
 
   navigateToThisLecture() {
+    this.navigateToLecture(this.lecture._id);
+  }
+
+  navigateToLecture(lectureId: string) {
     this.route.url.subscribe(segments => {
       let path = segments.map(() => '../').join('') || '';
-      path += `lecture/${this.lecture._id}`;
+      path += `lecture/${lectureId}`;
       this.router.navigate([path], {relativeTo: this.route});
     });
   }
