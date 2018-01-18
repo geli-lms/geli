@@ -50,6 +50,8 @@ const notificationSchema = new mongoose.Schema({
   }
 );
 
+const Notification = mongoose.model<INotificationModel>('Notification', notificationSchema);
+
 notificationSchema.statics.createNotification = async function (
   user: IUser, changedCourse: ICourse, text: string, changedLecture?: ILecture, changedUnit?: IUnit) {
   try {
@@ -75,6 +77,6 @@ notificationSchema.statics.createNotification = async function (
   }
 }
 
-const Notification = mongoose.model<INotificationModel>('Notification', notificationSchema);
+
 
 export {Notification, INotificationModel};

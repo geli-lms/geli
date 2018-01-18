@@ -101,7 +101,7 @@ export class UnitController {
       const course = await Course.findById(updatedUnit._course);
       course.students.forEach(student => {
         Notification.schema.statics.createNotification(
-          student, course, 'Unit ' + updatedUnit.name + ' has been updated.', null, updatedUnit);
+          student, course, 'Course ' + course.name + ': Unit ' + updatedUnit.name + ' has been updated.', null, updatedUnit);
       });
       return updatedUnit.toObject();
     } catch (err) {
@@ -135,7 +135,8 @@ export class UnitController {
         lecture.units.push(unit);
         Course.findById(unit._course).populate('students').then((course) => {
           course.students.forEach(student => {
-            Notification.schema.statics.createNotification(student, course, 'Lecture ' + lecture.name + ' has a new unit.', lecture, unit);
+            Notification.schema.statics.createNotification(
+              student, course, 'Course: ' + course.name + ': Lecture ' + lecture.name + ' has a new unit.', lecture, unit);
           });
         }).catch(err => {
           throw new BadRequestError(err);
