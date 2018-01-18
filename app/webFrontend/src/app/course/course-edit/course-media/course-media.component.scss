@@ -1,6 +1,6 @@
 @import '../../../../variables';
 
-$width__left: 15%;
+$width__left: 30%;
 
 .mm-container {
   display: flex;
@@ -57,24 +57,22 @@ $width__left: 15%;
   width: auto;
 }
 
+$margin-card: 10px;
+
+.file-wrapper {
+  margin-left: -$margin-card;
+}
+
 .card {
   height: 248px;
   width: 248px;
   float: left;
-  margin: 10px;
+  margin: $margin-card;
   border-radius: 8px;
   background: no-repeat 75px 15px;
 
   &:hover {
     background-color: map-get($app-primary, 700);;
-  }
-
-  &:first-of-type {
-    margin-left: 0;
-  }
-
-  &:last-of-type {
-    margin-right: 0;
   }
 
   ul {

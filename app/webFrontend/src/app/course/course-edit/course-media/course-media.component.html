@@ -54,13 +54,16 @@
             <div class="opacity" *ngIf="isInSelectedFiles(file)"></div>
 
             <div class="card-btn-wrapper" *ngIf="isInSelectedFiles(file)">
-              <button mat-raised-button *ngIf="selectedFiles.length <= 1" (click)="initFileDownload(file)">
+              <button mat-raised-button *ngIf="selectedFiles.length <= 1" (click)="initFileDownload(file)"
+                      matTooltip="Open in new Tab">
                 <mat-icon>open_in_new</mat-icon>
               </button>
-              <button mat-raised-button *ngIf="selectedFiles.length <= 1" (click)="renameFile(file)">
+              <button mat-raised-button *ngIf="selectedFiles.length <= 1" (click)="renameFile(file)"
+                      matTooltip="Rename">
                 <mat-icon>mode_edit</mat-icon>
               </button>
-              <button mat-raised-button color="warn" (click)="removeSelectedFile()" *ngIf="selectedFiles.length <= 1">
+              <button mat-raised-button color="warn" (click)="removeSelectedFile()" *ngIf="selectedFiles.length <= 1"
+                      matTooltip="Delete">
                 <mat-icon>delete</mat-icon>
               </button>
             </div>
