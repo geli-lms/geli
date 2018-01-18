@@ -21,7 +21,108 @@ describe('Media', async () => {
   });
 
   describe(`GET ${BASE_URL}`, async () => {
+    it('should get a directory', async () => {
+      const teacher = await FixtureUtils.getRandomTeacher();
 
+      const file = await new File({
+        name: 'root',
+        physicalPath: 'test/a',
+        size: 129
+      }).save();
+      const subDirectory = await new Directory({
+        name: 'sub'
+      }).save();
+      const rootDirectory = await new Directory({
+        name: 'root',
+        subDirectories: [subDirectory],
+        files: [file]
+      }).save();
+
+
+      const result = await chai.request(app)
+        .get(`${BASE_URL}/directory/${rootDirectory.id}`)
+        .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
+        .catch((err) => err.response);
+
+      result.status.should.be.equal(200,
+        'could not get directory' +
+        ' -> ' + result.body.message);
+      result.body.name.should.equal(rootDirectory.name);
+      result.body.subDirectories.should.be.instanceOf(Array)
+        .and.have.lengthOf(1)
+        .and.contains(subDirectory.id);
+      result.body.files.should.be.instanceOf(Array)
+        .and.have.lengthOf(1)
+        .and.contains(file.id);
+    });
+
+    it('should get a populated directory', async () => {
+      const teacher = await FixtureUtils.getRandomTeacher();
+
+      const file = await new File({
+        name: 'root',
+        physicalPath: 'test/a',
+        size: 129
+      }).save();
+      const subDirectory = await new Directory({
+        name: 'sub'
+      }).save();
+      const rootDirectory = await new Directory({
+        name: 'root',
+        subDirectories: [subDirectory],
+        files: [file]
+      }).save();
+
+
+      const result = await chai.request(app)
+        .get(`${BASE_URL}/directory/${rootDirectory.id}/lazy`)
+        .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
+        .catch((err) => err.response);
+
+      result.status.should.be.equal(200,
+        'could not get directory' +
+        ' -> ' + result.body.message);
+      result.body._id.should.be.equal(rootDirectory.id);
+      result.body.name.should.equal(rootDirectory.name);
+      result.body.subDirectories.should.be.instanceOf(Array)
+        .and.have.lengthOf(1);
+      result.body.subDirectories[0]._id.should.be.equal(subDirectory.id);
+      result.body.subDirectories[0].name.should.be.equal(subDirectory.name);
+      result.body.subDirectories[0].subDirectories.should.be.instanceOf(Array)
+        .and.have.lengthOf(subDirectory.subDirectories.length);
+      result.body.subDirectories[0].files.should.be.instanceOf(Array)
+        .and.have.lengthOf(subDirectory.files.length);
+      result.body.files.should.be.instanceOf(Array)
+        .and.have.lengthOf(1);
+      result.body.files[0]._id.should.be.equal(file.id);
+      result.body.files[0].name.should.be.equal(file.name);
+      result.body.files[0].size.should.be.equal(file.size);
+      result.body.files[0].physicalPath.should.be.equal(file.physicalPath);
+    });
+
+    it('should get a file', async () => {
+      const teacher = await FixtureUtils.getRandomTeacher();
+
+      const file = await new File({
+        name: 'root',
+        physicalPath: 'test/a',
+        size: 129
+      }).save();
+
+      const result = await chai.request(app)
+        .get(`${BASE_URL}/file/${file.id}`)
+        .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
+        .catch((err) => err.response);
+
+      result.status.should.be.equal(200,
+        'could not get file' +
+        ' -> ' + result.body.message);
+
+      result.body._id.should.be.equal(file.id);
+      result.body.name.should.be.equal(file.name);
+      result.body.size.should.be.equal(file.size);
+      result.body.physicalPath.should.be.equal(file.physicalPath);
+    });
   });
 
   describe(`POST ${BASE_URL}`, async () => {
