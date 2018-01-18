@@ -9,7 +9,7 @@ import {
 import {CommonModule} from '@angular/common';
 import {SharedModule} from '../shared/shared.module';
 import {NotificationComponent} from './notification.component';
-import {NotificationRoutingModule} from './notification-routing.module';
+import {RouterModule} from '@angular/router';
 
 @NgModule({
   imports: [
@@ -17,10 +17,10 @@ import {NotificationRoutingModule} from './notification-routing.module';
     FormsModule,
     ReactiveFormsModule,
     SharedModule,
-    NotificationRoutingModule
+    RouterModule
   ],
   declarations: [
-    NotificationComponent
+    NotificationComponent,
   ],
   providers: [
     NotificationSettingsService,

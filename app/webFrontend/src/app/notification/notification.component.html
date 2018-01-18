@@ -9,6 +9,9 @@
       <mat-list-item [routerLink]="['/course', notification.changedCourse._id]">
         <span class="notificationItem">{{notification.text}}</span>
       </mat-list-item>
+      <mat-list-item *ngIf="notification.changedLecture" [routerLink]="['/course', notification.changedCourse._id, 'lecture', notification.changedLecture._id]">
+        <span class="notificationItem">{{notification.text}}</span>
+      </mat-list-item>
     </div>
   </mat-nav-list>
 </mat-menu>

@@ -11,6 +11,9 @@ import {IUnitModel, Unit} from '../models/units/Unit';
 import {IUnit} from '../../../shared/models/units/IUnit';
 import {IFileUnit} from '../../../shared/models/units/IFileUnit';
 import {ValidationError} from 'mongoose';
+import {Notification} from '../models/Notification';
+import {ICourse} from '../../../shared/models/ICourse';
+import {Course} from '../models/Course';
 
 const multer = require('multer');
 
@@ -95,6 +98,11 @@ export class UnitController {
     try {
       oldUnit.set(data);
       const updatedUnit: IUnitModel = await oldUnit.save();
+      const course = await Course.findById(updatedUnit._course);
+      course.students.forEach(student => {
+        Notification.schema.statics.createNotification(
+          student, course, 'Unit ' + updatedUnit.name + ' has been updated.', null, updatedUnit);
+      });
       return updatedUnit.toObject();
     } catch (err) {
       if (err.name === 'ValidationError') {
@@ -125,6 +133,13 @@ export class UnitController {
     return Lecture.findById(lectureId)
       .then((lecture) => {
         lecture.units.push(unit);
+        Course.findById(unit._course).populate('students').then((course) => {
+          course.students.forEach(student => {
+            Notification.schema.statics.createNotification(student, course, 'Lecture ' + lecture.name + ' has a new unit.', lecture, unit);
+          });
+        }).catch(err => {
+          throw new BadRequestError(err);
+        });
         return lecture.save();
       })
       .then(() => {

@@ -3,6 +3,7 @@ import {UserService} from '../shared/services/user.service';
 import {ICourse} from '../../../../../shared/models/ICourse';
 import {ILecture} from '../../../../../shared/models/ILecture';
 import {ExpandableDivHeaderTags} from '../shared/components/expandable-div/expandable-div-header-tags.enum';
+import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
   selector: 'app-lecture',
@@ -16,7 +17,9 @@ export class LectureComponent implements OnInit {
   opened: boolean;
   private headerTags = ExpandableDivHeaderTags;
 
-  constructor(public userService: UserService) {
+  constructor(public userService: UserService,
+              private route: ActivatedRoute,
+              private router: Router) {
     this.opened = true;
   }
 
@@ -25,5 +28,14 @@ export class LectureComponent implements OnInit {
 
   toggleOpen() {
     this.opened = !this.opened;
+    // this.navigateToThisLecture();
+  }
+
+  navigateToThisLecture() {
+    this.route.url.subscribe(segments => {
+      let path = segments.map(() => '../').join('') || '';
+      path += `lecture/${this.lecture._id}`;
+      this.router.navigate([path], {relativeTo: this.route});
+    });
   }
 }

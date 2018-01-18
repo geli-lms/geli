@@ -9,6 +9,7 @@ import {
   INotificationSettingsModel,
   NotificationSettings
 } from './NotificationSettings';
+import {InternalServerError} from 'routing-controllers';
 
 interface INotificationModel extends INotification, mongoose.Document {
 }
@@ -51,20 +52,26 @@ const notificationSchema = new mongoose.Schema({
 
 notificationSchema.statics.createNotification = async function (
   user: IUser, changedCourse: ICourse, text: string, changedLecture?: ILecture, changedUnit?: IUnit) {
-  const settings = await NotificationSettings.findOne({'user': user, 'course': changedCourse});
-  if (settings.notificationType === API_NOTIFICATION_TYPE_ALL_CHANGES) {
-    const notification = new Notification();
-    notification.user = user;
-    notification.changedCourse = changedCourse;
-    notification.text = text;
-    if (changedLecture) {
-      notification.changedLecture = changedLecture;
+  try {
+    const settings = await NotificationSettings.findOne({'user': user, 'course': changedCourse});
+    if (settings.notificationType === API_NOTIFICATION_TYPE_ALL_CHANGES) {
+      const notification = new Notification();
+      notification.user = user;
+      notification.changedCourse = changedCourse;
+      notification.text = text;
+      if (changedLecture) {
+        notification.changedLecture = changedLecture;
+      }
+      if (changedUnit) {
+        notification.changedUnit = changedUnit;
+      }
+      notification.isOld = false;
+      return notification.save();
     }
-    if (changedUnit) {
-      notification.changedUnit = changedUnit;
-    }
-    notification.isOld = false;
-    return notification.save();
+  } catch (err) {
+    const newError = new InternalServerError('Failed to create notification');
+    newError.stack += '\nCaused by: ' + err.message + '\n' + err.stack;
+    throw newError;
   }
 }
 

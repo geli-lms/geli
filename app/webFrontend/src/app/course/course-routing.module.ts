@@ -25,6 +25,10 @@ const routes: Routes = [
     path: ':id/report',
     loadChildren: 'app/report/report.module#ReportModule'
   },
+  {
+    path: ':id/lecture',
+    loadChildren: 'app/lecture/lecture.module#LectureModule'
+  }
 ];
 
 @NgModule({

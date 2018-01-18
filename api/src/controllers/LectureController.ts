@@ -5,6 +5,7 @@ import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import {Lecture} from '../models/Lecture';
 import {ILecture} from '../../../shared/models/ILecture';
 import {Course} from '../models/Course';
+import {Notification} from '../models/Notification';
 
 @JsonController('/lecture')
 @UseBefore(passportJwtMiddleware)
@@ -27,6 +28,9 @@ export class LectureController {
       })
       .then(({course, lecture}) => {
         course.lectures.push(lecture);
+        course.students.forEach(student => {
+          Notification.schema.statics.createNotification(student, course, 'Course ' + course.name + ' has a new lecture.', lecture);
+        });
         return course.save().then(updatedCourse => ({course, lecture}));
       })
       .then(({course, lecture}) => lecture.toObject());
