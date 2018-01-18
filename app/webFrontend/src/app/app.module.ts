@@ -81,6 +81,7 @@ import {DataSharingService} from './shared/services/data-sharing.service';
       provide: ErrorHandler,
       useExisting: RavenErrorHandler
     },
+    DataSharingService,
   ],
   bootstrap: [AppComponent]
 })
