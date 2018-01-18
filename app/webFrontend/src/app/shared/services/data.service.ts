@@ -435,3 +435,10 @@ export class DownloadFileService extends DataService {
     });
   }
 }
+
+@Injectable()
+export class ConfigService extends DataService {
+  constructor(public backendService: BackendService) {
+    super('config/', backendService);
+  }
+}

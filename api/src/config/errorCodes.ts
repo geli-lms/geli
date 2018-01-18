@@ -47,10 +47,16 @@ export const errorCodes = {
       }
     }
   },
+  save: {
+    couldNotSaveImprint: {
+      code: 'coldNotSaveImprint',
+      text: 'Could not save Imprint'
+    }
+  },
   query: {
     empty: {
-        code: 'emptyQuery',
-        text: 'Query was empty.'
-      }
+      code: 'emptyQuery',
+      text: 'Query was empty.'
     }
+  }
 };
