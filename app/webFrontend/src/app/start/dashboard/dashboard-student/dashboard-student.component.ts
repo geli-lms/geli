@@ -3,6 +3,7 @@ import {ICourse} from '../../../../../../../shared/models/ICourse';
 import {UserService} from '../../../shared/services/user.service';
 import {DashboardBaseComponent} from '../dashboard-base-component';
 import {IStudentConfig} from '../../../../../../../shared/models/IStudentConfig';
+import {SortUtil} from '../../../shared/utils/SortUtil';
 
 
 @Component({
@@ -33,20 +34,15 @@ export class DashboardStudentComponent extends DashboardBaseComponent {
     this.myCourses = [];
     this.availableCourses = [];
 
-    for (const course of this.allCourses) {
+    let allCourses = JSON.parse(JSON.stringify(this.allCourses));
+    allCourses = SortUtil.sortByLastVisitedCourses(allCourses, this.userService.user.lastVisitedCourses);
+    for (const course of allCourses) {
       if (this.isMemberOfCourse(course)) {
         this.myCourses.push(course);
       } else {
         this.availableCourses.push(course);
       }
     }
-    this.sortLastVisitedCourses();
-  }
-  sortLastVisitedCourses() {
-     // console.log(this.myCourses);
-    // for (const course of this.myCourses) {
-      // const vCourse =
-    // }
   }
 
   isMemberOfCourse(course: ICourse) {

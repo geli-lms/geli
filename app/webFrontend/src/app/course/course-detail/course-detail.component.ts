@@ -53,12 +53,10 @@ export class CourseDetailComponent implements OnInit {
 
   updateLastVisitedCourses() {
     const user = this.userService.user;
-    console.log(user.lastVisitedCourses);
-    user.lastVisitedCourses.push(this.course._id);
-    console.log(user.lastVisitedCourses);
+    user.lastVisitedCourses = user.lastVisitedCourses.filter(id => id !== this.course._id);
+    user.lastVisitedCourses.unshift(this.course._id);
     this.userDataService.updateItem(user)
       .then((updatedUser) => {
-        console.log(updatedUser.lastVisitedCourses);
         this.userService.setUser(updatedUser);
       });
   }

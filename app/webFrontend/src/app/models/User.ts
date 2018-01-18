@@ -19,7 +19,7 @@ export class User implements IUser {
     this.profile = user.profile;
     this.role = user.role;
     this.progress = user.progress;
-    this.lastVisitedCourses = [];
+    this.lastVisitedCourses = user.lastVisitedCourses;
   }
 
   getGravatarURL(size: number = 80) {
