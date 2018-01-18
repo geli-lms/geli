@@ -63,15 +63,15 @@ export class LectureEditComponent implements OnInit, OnDestroy {
       });
   }
 
-  duplicateUnit(unit: IUnit) {
-    this.duplicationService.duplicateUnit(unit, this.lecture._id , this.course._id)
-      .then(() => {
-        this.snackBar.open('Unit duplicated.', '', {duration: 3000});
-        this.reloadCourse();
-      })
-      .catch((error) => {
-        this.snackBar.open(error, '', {duration: 3000});
-      });
+  async duplicateUnit(unit: IUnit) {
+    try {
+      const duplicateUnit = await this.duplicationService.duplicateUnit(unit, this.lecture._id , this.course._id);
+      this.snackBar.open('Unit duplicated.', '', {duration: 3000});
+      await this.reloadCourse();
+      this.navigateToUnitEdit(duplicateUnit._id);
+    } catch (err) {
+      this.snackBar.open(err, '', {duration: 3000});
+    }
   }
 
   async exportLecture(lecture: ILecture) {
