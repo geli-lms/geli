@@ -6,6 +6,7 @@ import {FixtureUtils} from '../../fixtures/FixtureUtils';
 import {JwtUtils} from '../../src/security/JwtUtils';
 import {Directory} from '../../src/models/mediaManager/Directory';
 import {File} from '../../src/models/mediaManager/File';
+import config from '../../src/config/main';
 import * as fs from 'fs';
 
 chai.use(chaiHttp);
@@ -13,6 +14,7 @@ const should = chai.should();
 const app = new Server().app;
 const BASE_URL = '/api/media';
 const fixtureLoader = new FixtureLoader();
+const appRoot = require('app-root-path');
 
 describe('Media', async () => {
   // Before each test we reset the database
@@ -279,8 +281,12 @@ describe('Media', async () => {
     it('should delete a directory', async () => {
       const teacher = await FixtureUtils.getRandomTeacher();
 
+      const subDirectory = await new Directory({
+        name: 'sub'
+      }).save();
       const rootDirectory = await new Directory({
-        name: 'root'
+        name: 'root',
+        subDirectories: [subDirectory],
       }).save();
 
       const result = await chai.request(app)
@@ -293,16 +299,76 @@ describe('Media', async () => {
         ' -> ' + result.body.message);
 
       should.not.exist(await Directory.findById(rootDirectory));
-      // TODO: test if subDirectories and files got deleted
+    });
+
+    it('should delete a directory and its subdirectories', async () => {
+      const teacher = await FixtureUtils.getRandomTeacher();
+
+      const subDirectory = await new Directory({
+        name: 'sub'
+      }).save();
+      const rootDirectory = await new Directory({
+        name: 'root',
+        subDirectories: [subDirectory],
+      }).save();
+
+      const result = await chai.request(app)
+        .del(`${BASE_URL}/directory/${rootDirectory._id}`)
+        .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
+        .catch((err) => err.response);
+
+      result.status.should.be.equal(200,
+        'could not delete directory' +
+        ' -> ' + result.body.message);
+
+      should.not.exist(await Directory.findById(rootDirectory));
+      should.not.exist(await Directory.findById(subDirectory));
+    });
+
+
+    it('should delete a directory and its files', async () => {
+      const teacher = await FixtureUtils.getRandomTeacher();
+
+      const testFileName = fs.readdirSync('./')[0];
+      const testFile = fs.readFileSync(testFileName);
+      fs.copyFileSync(testFileName, config.uploadFolder + '/test.file');
+
+      const file = await new File({
+        name: 'root',
+        physicalPath: config.uploadFolder + '/test.file',
+        link: testFileName,
+        size: testFile.length
+      }).save();
+      const rootDirectory = await new Directory({
+        name: 'root',
+        files: [file]
+      }).save();
+
+      const result = await chai.request(app)
+        .del(`${BASE_URL}/directory/${rootDirectory._id}`)
+        .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
+        .catch((err) => err.response);
+
+      result.status.should.be.equal(200,
+        'could not delete directory' +
+        ' -> ' + result.body.message);
+
+      should.not.exist(await Directory.findById(rootDirectory));
+      should.not.exist(await File.findById(file));
     });
 
     it('should delete a file', async () => {
       const teacher = await FixtureUtils.getRandomTeacher();
 
+      const testFileName = fs.readdirSync('./')[0];
+      const testFile = fs.readFileSync(testFileName);
+      fs.copyFileSync(testFileName, config.uploadFolder + '/test.file');
+
       const file = await new File({
         name: 'root',
-        link: 'test/a',
-        size: 129
+        physicalPath: config.uploadFolder + '/test.file',
+        link: testFileName,
+        size: testFile.length
       }).save();
 
       const result = await chai.request(app)
@@ -315,7 +381,7 @@ describe('Media', async () => {
         ' -> ' + result.body.message);
 
       should.not.exist(await File.findById(file));
-      // TODO: test if the actual file got deleted
+      fs.existsSync(config.uploadFolder + '/test.file').should.be.equal(false);
     });
   });
 });
