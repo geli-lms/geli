@@ -89,6 +89,9 @@ class TaskUnitMigration {
         oldUnitObj.tasks = <ITask[]>(await Promise.all(oldUnitObj.tasks.map(async (task) => {
           if (task instanceof ObjectID) {
             const taskData = await Task.findById(task).exec();
+            if (taskData === null) {
+              return null;
+            }
             const taskDataObj = taskData.toObject();
             return taskDataObj;
           } else {
