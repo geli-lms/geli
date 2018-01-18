@@ -7,6 +7,7 @@ import {IDirectory} from '../../../../../../../shared/models/mediaManager/IDirec
 import {UploadFormDialog} from '../../../shared/components/upload-form-dialog/upload-form-dialog.component';
 import {IFile} from '../../../../../../../shared/models/mediaManager/IFile';
 import {DialogService} from '../../../shared/services/dialog.service';
+
 const prettyBytes = require('pretty-bytes');
 
 @Component({
@@ -124,5 +125,21 @@ export class CourseMediaComponent implements OnInit {
 
   renameFile(file: IFile) {
 
+  }
+
+  getSimpleMimeType(file: IFile): string {
+    const mimeType = file.mimeType.toLowerCase();
+
+    if (mimeType.startsWith('video')) {
+      return 'video';
+    } else if (mimeType.startsWith('image')) {
+      return 'image';
+    } else if (mimeType.startsWith('pdf')) {
+      return 'pdf';
+    } else if (mimeType.startsWith('zip')) {
+      return 'zip';
+    } else {
+      return 'unknown';
+    }
   }
 }

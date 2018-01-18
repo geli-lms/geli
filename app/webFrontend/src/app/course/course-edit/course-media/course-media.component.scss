@@ -72,6 +72,19 @@ $toolbar__height: 50px;
   height: $toolbar__height;
 }
 
+.icon-wrapper {
+  left: 45px;
+  width: 160px;
+  height: 160px;
+  position: absolute;
+  background: center;
+  border-radius: 80px;
+
+  .mat-icon {
+
+  }
+}
+
 .card {
   height: 248px;
   width: 248px;

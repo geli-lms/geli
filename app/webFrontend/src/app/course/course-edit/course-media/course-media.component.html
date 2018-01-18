@@ -48,7 +48,15 @@
         <ng-container *ngFor="let file of currentFolder?.files">
           <mat-card [ngClass]="isInSelectedFiles(file) ? 'card_active' : 'card'" (click)="toggleSelection(file)">
 
-            <div class="bg"><mat-icon>folder</mat-icon></div>
+            <div class="icon-wrapper">
+              <ng-container [ngSwitch]="getSimpleMimeType(file)">
+                <mat-icon *ngSwitchCase="'video'">video</mat-icon>
+                <mat-icon *ngSwitchCase="'image'">image</mat-icon>
+                <mat-icon *ngSwitchCase="'pdf'">pdf</mat-icon>
+                <mat-icon *ngSwitchCase="'zip'">zip</mat-icon>
+                <mat-icon *ngSwitchCase="'unknown'" *ngSwitchDefault>file</mat-icon>
+              </ng-container>
+            </div>
 
             <ul class="info">
               <li><strong>{{file.name}}</strong></li>
