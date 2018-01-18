@@ -15,6 +15,8 @@ import {ButtonSaveCancelComponent} from './components/button-save-cancel/button-
 import {UploadFormComponent} from './components/upload-form/upload-form.component';
 import {FileUploadModule} from 'ng2-file-upload';
 import {FilesizePipe} from './pipes/filesize/filesize.pipe';
+import {MarkdownEditorComponent} from './components/markdown-editor/markdown-editor.component';
+import {AceEditorModule} from 'ng2-ace-editor';
 
 @NgModule({
   imports: [
@@ -23,6 +25,7 @@ import {FilesizePipe} from './pipes/filesize/filesize.pipe';
     ReactiveFormsModule,
     MaterialImportModule,
     HttpClientModule,
+    AceEditorModule,
     FileUploadModule
   ],
   declarations: [
@@ -37,6 +40,7 @@ import {FilesizePipe} from './pipes/filesize/filesize.pipe';
     ButtonSaveCancelComponent,
     UploadFormComponent,
     FilesizePipe,
+    MarkdownEditorComponent,
   ],
   exports: [
     GravatarDirective,
@@ -50,6 +54,7 @@ import {FilesizePipe} from './pipes/filesize/filesize.pipe';
     BadgeComponent,
     ExpandableDivComponent,
     ButtonSaveCancelComponent,
+    MarkdownEditorComponent,
     UploadFormComponent,
     FilesizePipe,
   ]
