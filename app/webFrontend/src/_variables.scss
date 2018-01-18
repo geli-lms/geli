@@ -3,11 +3,17 @@
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue.
+//defaultTheme
 $app-primary: mat-palette($mat-indigo);
 $app-accent: mat-palette($mat-pink, A200, A100, A400);
-
 // The warn palette is optional (defaults to red).
 $app-warn: mat-palette($mat-red);
+
+//nightTheme
+$app-night-primary: mat-palette($mat-indigo);
+$app-night-accent: mat-palette($mat-pink, A200, A100, A400);
+// The warn palette is optional (defaults to red).
+$app-night-warn: mat-palette($mat-red);
 
 // FONT VARS
 $font-body: Roboto, "Helvetica Neue", sans-serif;
