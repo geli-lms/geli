@@ -40,7 +40,8 @@ export class UploadFormComponent implements OnInit, OnChanges {
   private updateUploadParams = false;
   private error = false;
 
-  constructor(private snackBar: MatSnackBar) { }
+  constructor(private snackBar: MatSnackBar) {
+  }
 
   ngOnInit() {
     const uploadOptions: FileUploaderOptions = {
@@ -113,16 +114,18 @@ export class UploadFormComponent implements OnInit, OnChanges {
   }
 
   clearQueue() {
-   this.fileUploader.clearQueue();
-   if (this.fileUploader.queue.length > 0) {
-     this.snackBar.open('Queue couldn\'t be cleared.', 'Dismiss')
-   } else {
-     this.onFileSelectedChange.emit(false);
-   }
+    this.fileUploader.clearQueue();
+    if (this.fileUploader.queue.length > 0) {
+      this.snackBar.open('Queue couldn\'t be cleared.', 'Dismiss')
+    } else {
+      this.onFileSelectedChange.emit(false);
+    }
   }
 
   uploadNextItem() {
-    this.fileUploader.uploadItem(this.fileUploader.getNotUploadedItems()[0]);
+    if (this.fileUploader.getNotUploadedItems().length) {
+      this.fileUploader.uploadItem(this.fileUploader.getNotUploadedItems()[0]);
+    }
   }
 
   onFileOverDropzone(event) {
