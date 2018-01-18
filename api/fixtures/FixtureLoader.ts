@@ -8,6 +8,7 @@ import {FixtureUtils} from './FixtureUtils';
 import {ICodeKataModel} from '../src/models/units/CodeKataUnit';
 import {Lecture} from '../src/models/Lecture';
 import {Unit} from '../src/models/units/Unit';
+import {Progress} from '../src/models/progress/Progress';
 
 export class FixtureLoader {
   private usersDirectory = 'build/fixtures/users/';
@@ -96,8 +97,8 @@ export class FixtureLoader {
         };
 
         // need to be implemented for each unit type separately
-        switch (unit.type) {
-          case 'code-kata':
+        switch (unit.__t) {
+          case 'code-kata': {
             if (progressType === 1) {
               (<any>newProgress).code = '// at least i tried ¯\\\\_(ツ)_/¯';
               newProgress.done = false;
@@ -105,8 +106,10 @@ export class FixtureLoader {
               (<any>newProgress).code = (<ICodeKataModel>unit).code;
               newProgress.done = true;
             }
+            newProgress.__t = 'codeKata';
             break;
-          case 'task':
+          }
+          case 'task': {
             // does not work properly yet
             if (progressType === 1) {
               newProgress.answers = [];
@@ -115,13 +118,12 @@ export class FixtureLoader {
               newProgress.answers = [];
               newProgress.done = true;
             }
+            newProgress.__t = 'task-unit-progress';
             break;
+          }
         }
 
-        /*
-        const progressClass = UnitClassMapper.getProgressClassForUnit(unit);
-        await new progressClass(newProgress).save();
-        */
+        await Progress.create(newProgress);
       }
       return unit.name;
     }));
