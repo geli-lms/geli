@@ -5,27 +5,42 @@ interface IWhitelistUserModel extends IWhitelistUser, mongoose.Document {
 }
 
 const whitelistUserSchema = new mongoose.Schema({
-  firstName: {
+    firstName: {
       type: String,
       lowercase: true,
       required: true,
-      trim: true
+      trim: true,
+      index: true
     },
 
     lastName: {
       type: String,
       lowercase: true,
       required: true,
-      trim: true
+      trim: true,
+      index: true
     },
 
     uid: {
       type: String,
       required: true,
-      trim: true
+      trim: true,
+      index: true
+    },
+    courseId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Course'
     }
-  }
-);
+  },
+  {
+    timestamps: true,
+    toObject: {
+      virtuals: true,
+      transform: function (doc: any, ret: any) {
+        ret._id = ret._id.toString();
+      }
+    }
+  });
 
 const WhitelistUser = mongoose.model<IWhitelistUserModel>('WhitelistUser', whitelistUserSchema);
 
