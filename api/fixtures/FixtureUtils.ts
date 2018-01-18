@@ -71,7 +71,7 @@ export class FixtureUtils {
       }
     });
   }
-  
+
   public static async getRandomCourse(hash?: string): Promise<ICourse> {
     const array = await this.getCourses();
     return this.getRandom<ICourse>(array, hash);
