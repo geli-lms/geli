@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {BackendService} from './backend.service';
 import {Dependency} from '../../about/licenses/dependency.model';
 import {ITaskUnit} from '../../../../../../shared/models/units/ITaskUnit';
+import construct = Reflect.construct;
 import {ILecture} from '../../../../../../shared/models/ILecture';
 import {IUnit} from '../../../../../../shared/models/units/IUnit';
 import {IUser} from '../../../../../../shared/models/IUser';
@@ -233,6 +234,17 @@ export class UserDataService extends DataService {
     super('users/', backendService);
   }
 
+  // FIXME: Which Type comes back?
+  searchUsers(role: string, query: string): Promise<any> {
+    const originalApiPath = this.apiPath;
+    this.apiPath += 'members/search/';
+    this.apiPath += '?role=' + role;
+    this.apiPath += '&query=' + query;
+    const promise = this.readItems();
+    this.apiPath = originalApiPath;
+    return promise;
+  }
+
   getRoles(): Promise<string[]> {
     const originalApiPath = this.apiPath;
     this.apiPath += 'roles/';
@@ -245,6 +257,22 @@ export class UserDataService extends DataService {
     const originalApiPath = this.apiPath;
     this.apiPath += 'picture/';
     const promise = this.updateItem(data);
+    this.apiPath = originalApiPath;
+    return promise;
+  }
+}
+
+@Injectable()
+export  class  WhitelistUserService extends DataService {
+  constructor(public backendService: BackendService) {
+    super('whitelist/', backendService);
+  }
+
+  countWhitelistUsers(courseId: string): Promise<any> {
+    const originalApiPath = this.apiPath;
+    this.apiPath += courseId + '/';
+    this.apiPath += 'count/';
+    const promise = this.readItems();
     this.apiPath = originalApiPath;
     return promise;
   }
@@ -300,7 +328,7 @@ export class DownloadFileService extends DataService {
   // FIXME: What does this return? please set return type(not any)
   getPackageSize(idl: IDownload) {
     return this.backendService
-      .post(this.apiPath + '/size', idl)
+      .post(this.apiPath + 'size', idl)
       .toPromise();
   }
 
@@ -316,5 +344,12 @@ export class DownloadFileService extends DataService {
     return this.backendService
       .getDownload(this.apiPath + id)
       .toPromise();
+  }
+}
+
+@Injectable()
+export class ConfigService extends DataService {
+  constructor(public backendService: BackendService) {
+    super('config/', backendService);
   }
 }

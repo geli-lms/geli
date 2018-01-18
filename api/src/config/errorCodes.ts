@@ -46,5 +46,17 @@ export const errorCodes = {
         text: 'Wrong type allowed are just csv files.'
       }
     }
+  },
+  save: {
+    couldNotSaveImprint: {
+      code: 'coldNotSaveImprint',
+      text: 'Could not save Imprint'
+    }
+  },
+  query: {
+    empty: {
+      code: 'emptyQuery',
+      text: 'Query was empty.'
+    }
   }
 };
