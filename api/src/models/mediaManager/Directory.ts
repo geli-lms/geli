@@ -1,6 +1,6 @@
 import {IDirectory} from '../../../../shared/models/mediaManager/IDirectory';
+import {File} from './File';
 import * as mongoose from 'mongoose';
-import {ObjectID} from 'bson';
 
 interface IDirectoryModel extends IDirectory, mongoose.Document {
 
@@ -42,6 +42,24 @@ const directorySchema = new mongoose.Schema({
         });
       }
     },
+});
+
+directorySchema.pre('remove', async function(next: () => void) {
+  for (const subdir of this.subDirectories) {
+    // linting won't let us use 'Directory' before it is actually declared
+    // tslint:disable-next-line:no-use-before-declare
+    const model = await Directory.findById(subdir);
+    if (model) {
+      await model.remove();
+    }
+  }
+  for (const file of this.files) {
+    const model = await File.findById(file);
+    if (model) {
+      await model.remove();
+    }
+  }
+  next();
 });
 
 const Directory = mongoose.model<IDirectoryModel>('Directory', directorySchema);

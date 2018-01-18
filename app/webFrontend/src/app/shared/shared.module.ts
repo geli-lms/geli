@@ -16,6 +16,8 @@ import {UploadFormComponent} from './components/upload-form/upload-form.componen
 import {FileUploadModule} from 'ng2-file-upload';
 import {FilesizePipe} from './pipes/filesize/filesize.pipe';
 import {UploadFormDialog} from './components/upload-form-dialog/upload-form-dialog.component';
+import {MarkdownEditorComponent} from './components/markdown-editor/markdown-editor.component';
+import {AceEditorModule} from 'ng2-ace-editor';
 
 @NgModule({
   imports: [
@@ -24,6 +26,7 @@ import {UploadFormDialog} from './components/upload-form-dialog/upload-form-dial
     ReactiveFormsModule,
     MaterialImportModule,
     HttpClientModule,
+    AceEditorModule,
     FileUploadModule
   ],
   declarations: [
@@ -39,6 +42,7 @@ import {UploadFormDialog} from './components/upload-form-dialog/upload-form-dial
     UploadFormComponent,
     FilesizePipe,
     UploadFormDialog,
+    MarkdownEditorComponent,
   ],
   exports: [
     GravatarDirective,
@@ -52,6 +56,7 @@ import {UploadFormDialog} from './components/upload-form-dialog/upload-form-dial
     BadgeComponent,
     ExpandableDivComponent,
     ButtonSaveCancelComponent,
+    MarkdownEditorComponent,
     UploadFormComponent,
     FilesizePipe,
     UploadFormDialog,

@@ -26,7 +26,7 @@ describe('Media', async () => {
 
       const file = await new File({
         name: 'root',
-        physicalPath: 'test/a',
+        link: 'test/a',
         size: 129
       }).save();
       const subDirectory = await new Directory({
@@ -61,7 +61,7 @@ describe('Media', async () => {
 
       const file = await new File({
         name: 'root',
-        physicalPath: 'test/a',
+        link: 'test/a',
         size: 129
       }).save();
       const subDirectory = await new Directory({
@@ -97,7 +97,7 @@ describe('Media', async () => {
       result.body.files[0]._id.should.be.equal(file.id);
       result.body.files[0].name.should.be.equal(file.name);
       result.body.files[0].size.should.be.equal(file.size);
-      result.body.files[0].physicalPath.should.be.equal(file.physicalPath);
+      result.body.files[0].link.should.be.equal(file.link);
     });
 
     it('should get a file', async () => {
@@ -105,7 +105,7 @@ describe('Media', async () => {
 
       const file = await new File({
         name: 'root',
-        physicalPath: 'test/a',
+        link: 'test/a',
         size: 129
       }).save();
 
@@ -121,7 +121,7 @@ describe('Media', async () => {
       result.body._id.should.be.equal(file.id);
       result.body.name.should.be.equal(file.name);
       result.body.size.should.be.equal(file.size);
-      result.body.physicalPath.should.be.equal(file.physicalPath);
+      result.body.link.should.be.equal(file.link);
     });
   });
 
@@ -205,13 +205,73 @@ describe('Media', async () => {
       should.exist(result.body._id);
       should.exist(result.body.mimeType);
       should.exist(result.body.size);
-      should.exist(result.body.physicalPath);
+      should.exist(result.body.link);
       result.body.name.should.be.equal(testFileName);
 
       const updatedRoot = (await Directory.findById(rootDirectory));
       updatedRoot.files.should.be.instanceOf(Array)
         .and.have.lengthOf(1)
         .and.contains(result.body._id);
+    });
+  });
+
+  describe(`PUT ${BASE_URL}`, async () => {
+    it('should rename a directory', async () => {
+      const teacher = await FixtureUtils.getRandomTeacher();
+
+      const rootDirectory = await new Directory({
+        name: 'root'
+      }).save();
+
+      const renamedDirectory = rootDirectory;
+      renamedDirectory.name = 'renamedRoot';
+
+
+      const result = await chai.request(app)
+        .put(`${BASE_URL}/directory/${rootDirectory._id}`)
+        .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
+        .send(renamedDirectory)
+        .catch((err) => err.response);
+
+      result.status.should.be.equal(200,
+        'could not rename directory' +
+        ' -> ' + result.body.message);
+
+      result.body._id.should.equal(rootDirectory.id);
+      result.body.name.should.equal(renamedDirectory.name);
+      result.body.subDirectories.should.be.instanceOf(Array)
+        .and.have.lengthOf(rootDirectory.subDirectories.length);
+      result.body.files.should.be.instanceOf(Array)
+        .and.lengthOf(rootDirectory.files.length);
+    });
+
+    it('should rename a file', async () => {
+      const teacher = await FixtureUtils.getRandomTeacher();
+
+      const file = await new File({
+        name: 'file',
+        link: 'test/a',
+        size: 129
+      }).save();
+
+      const renamedFile = file;
+      file.name = 'renamedFile';
+
+
+      const result = await chai.request(app)
+        .put(`${BASE_URL}/file/${file._id}`)
+        .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
+        .send(renamedFile)
+        .catch((err) => err.response);
+
+      result.status.should.be.equal(200,
+        'could not rename file' +
+        ' -> ' + result.body.message);
+
+      result.body._id.should.equal(file.id);
+      result.body.name.should.equal(renamedFile.name);
+      result.body.link.should.equal(file.link);
+      result.body.size.should.equal(file.size);
     });
   });
 
@@ -241,7 +301,7 @@ describe('Media', async () => {
 
       const file = await new File({
         name: 'root',
-        physicalPath: 'test/a',
+        link: 'test/a',
         size: 129
       }).save();
 

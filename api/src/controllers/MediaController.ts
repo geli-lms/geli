@@ -73,6 +73,7 @@ export class MediaController {
     const file: IFile = new File({
       name: uploadedFile.originalname,
       physicalPath: uploadedFile.path,
+      link: uploadedFile.filename,
       size: uploadedFile.size,
       mimeType: uploadedFile.mimetype,
     });
@@ -90,7 +91,8 @@ export class MediaController {
   async updateDirectory(@Param('id') directoryId: string, @Body() updatedDirectory: IDirectory) {
     const directory = await Directory.findById(directoryId);
     directory.set(updatedDirectory);
-    return directory.save();
+    const savedDirectory = await directory.save();
+    return savedDirectory.toObject();
   }
 
   @Authorized(['teacher', 'admin'])
@@ -98,7 +100,8 @@ export class MediaController {
   async updateFile(@Param('id') fileId: string, @Body() updatedFile: IFile) {
     const file = await File.findById(fileId);
     file.set(updatedFile);
-    return file.save();
+    const savedFile = await file.save();
+    return savedFile.toObject();
   }
 
   @Authorized(['teacher', 'admin'])

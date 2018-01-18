@@ -1,0 +1,14 @@
+<mat-list class="drop" [dragula]='dragulaBagId' [dragulaModel]="dragUsers" [attr.item-id]="fieldId">
+  <ng-container *ngIf="show">
+    <div *ngFor="let user of dragUsers">
+      <mat-list-item class="list" [attr.item-id]="user._id">
+        <mat-icon class="user-drag-handle">drag_handle</mat-icon>
+        <span class="listBg" user-image [user-image]="user" [size]="32"></span>
+        <span class="firstName">{{user.profile.firstName}}</span>
+        <span class="lastName">{{user.profile.lastName}}</span>
+        <span class="uid">{{user.uid}}</span>
+        <span class="email"><a href="mailto:{{user.email}}">{{user.email}}</a></span>
+      </mat-list-item>
+    </div>
+  </ng-container>
+</mat-list>
