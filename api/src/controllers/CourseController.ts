@@ -3,7 +3,7 @@ import {
   Authorized, BadRequestError,
   Body,
   CurrentUser, Delete, ForbiddenError,
-  Get,
+  Get, HttpError,
   JsonController, NotFoundError,
   Param,
   Post,
@@ -102,6 +102,7 @@ export class CourseController {
       .populate('courseAdmin')
       .populate('teachers')
       .populate('students')
+      .populate('whitelist')
       .then((course) => {
         if (!course) {
           throw new NotFoundError();
@@ -216,13 +217,10 @@ export class CourseController {
   @Post('/:id/whitelist')
   whitelistStudents(@Param('id') id: string, @UploadedFile('file', {options: uploadOptions}) file: any) {
     const name: string = file.originalname;
-
     if (!name.endsWith('.csv')) {
       throw new TypeError(errorCodes.errorCodes.upload.type.notCSV.code);
     }
-
-    // TODO: Never query all users!
-    return User.find({})
+    return User.find({role: 'student'})
       .then((users) => users.map((user) => user.toObject({virtuals: true})))
       .then((users) => Course.findById(id).then((course) => {
         return this.parser.parseFile(file).then((buffer: any) =>
