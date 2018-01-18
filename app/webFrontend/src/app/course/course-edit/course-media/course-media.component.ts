@@ -43,24 +43,43 @@ export class CourseMediaComponent implements OnInit {
           // Root dir does not exist, add one
           this.course.media = await this.mediaService.createRootDir(this.course.name);
           // Update course
-          const request: any = {
-            '_id': this.course._id,
-            'media': this.course.media,
-          };
-          await this.courseService.updateItem(request);
+          this.course = await this.courseService.updateItem<ICourse>(this.course);
         }
 
-        this.course.media = await this.mediaService.getDirectory(this.course.media._id, true);
-
-        // Set root dir as current
-        this.currentFolder = this.course.media;
-        // tslint:disable-next-line:no-console
-        console.log(this.course.media);
+        await this.changeDirectory(this.course.media._id, true);
       },
       error => {
         this.snackBar.open('Could not load course', '', {duration: 3000})
       }
     );
+  }
+
+  async reloadDirectory() {
+    await this.changeDirectory(this.currentFolder._id, true);
+  }
+
+  async changeDirectory(mediaId: string, lazy: boolean = false) {
+    // Set current dir
+    this.currentFolder = await this.mediaService.getDirectory(mediaId, lazy);
+
+    // Define Sort function to sort by name
+    const sortFnc = (a, b): number => {
+      const aName = a.name.toLowerCase();
+      const bName = b.name.toLowerCase();
+
+      if (aName < bName) {
+        return -1;
+      } else if (aName > bName) {
+        return 1;
+      }
+      return 0;
+    };
+
+    // Sort files by name
+    this.currentFolder.files.sort(sortFnc);
+
+    // Sort subdirs by name
+    this.currentFolder.subDirectories.sort(sortFnc);
   }
 
   bytesHumanReadable(bytes: number): string {
@@ -83,9 +102,8 @@ export class CourseMediaComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(value => {
       if (value) {
-        // TODO: Reload folder content
-        // tslint:disable-next-line:no-console
-        console.log('Reload site, folder not yet updated');
+        // Reload current folder
+        this.changeDirectory(this.currentFolder._id, true);
       }
     });
   }
@@ -113,28 +131,44 @@ export class CourseMediaComponent implements OnInit {
       .toPromise();
     this.toggleBlocked = false;
     if (res) {
-      // tslint:disable-next-line:no-console
-      this.selectedFiles.forEach(file => console.log('TODO: Remove file', file));
+      let failed = false;
+      this.selectedFiles.forEach(async file => {
+        await this.mediaService.deleteFile(file)
+          .catch(reason => {
+            this.snackBar.open('Could not remove file: ' + file.name, '', {duration: 2000});
+            failed = true;
+          });
+      });
+      if (!failed) {
+        this.snackBar.open('Removed all selected files', '', {duration: 3000});
+      }
       this.selectedFiles = [];
+      await this.reloadDirectory();
     }
   }
 
   initFileDownload(file: IFile) {
-    // FIXME: REMOVE split/pop when physical path holds correct value
-    const url = '/api/uploads/' + file.link.split('/').pop();
+    const url = '/api/uploads/' + file.link;
     window.open(url, '_blank');
     this.toggleSelection(file);
   }
 
-  renameFile(file: IFile) {
+  async renameFile(file: IFile) {
 
+    await this.reloadDirectory();
   }
 
   getSimpleMimeType(file: IFile): string {
     const mimeType = file.mimeType.toLowerCase();
-
-    // tslint:disable-next-line:no-console
-    console.log('MIME: ' + mimeType);
+    const archives = [
+      'application/x-bzip',
+      'application/x-bzip2',
+      'application/x-rar-compressed',
+      'application/x-tar',
+      'application/x-zip-compressed',
+      'application/zip',
+      'application/x-7z-compressed',
+    ];
 
     if (mimeType.startsWith('video')) {
       return 'video';
@@ -142,8 +176,10 @@ export class CourseMediaComponent implements OnInit {
       return 'image';
     } else if (mimeType === 'application/pdf') {
       return 'pdf';
-    } else if (mimeType.startsWith('zip')) {
+    } else if (archives.indexOf(mimeType) >= 0) {
       return 'archive';
+    } else if (mimeType.startsWith('text')) {
+      return 'text';
     } else {
       return 'unknown';
     }
