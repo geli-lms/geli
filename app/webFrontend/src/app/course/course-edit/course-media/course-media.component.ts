@@ -7,6 +7,7 @@ import {IDirectory} from '../../../../../../../shared/models/mediaManager/IDirec
 import {UploadFormDialog} from '../../../shared/components/upload-form-dialog/upload-form-dialog.component';
 import {IFile} from '../../../../../../../shared/models/mediaManager/IFile';
 import {DialogService} from '../../../shared/services/dialog.service';
+const prettyBytes = require('pretty-bytes');
 
 @Component({
   selector: 'app-course-mediamanager',
@@ -58,6 +59,10 @@ export class CourseMediaComponent implements OnInit {
         this.snackBar.open('Could not load course', '', {duration: 3000})
       }
     );
+  }
+
+  bytesHumanReadable(bytes: number): string {
+    return prettyBytes(bytes);
   }
 
   toggleFolderBarVisibility(): void {
