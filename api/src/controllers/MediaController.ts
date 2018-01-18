@@ -1,5 +1,5 @@
 import {
-  Authorized, Body, Delete, Get, JsonController, NotFoundError, Param, Put,
+  Authorized, Body, Delete, Get, JsonController, NotFoundError, Param, Post, Put,
   UploadedFile
 } from 'routing-controllers';
 import {Directory} from '../models/mediaManager/Directory';
@@ -50,13 +50,13 @@ export class MediaController {
   }
 
   @Authorized(['teacher', 'admin'])
-  @Put('/directory')
+  @Post('/directory')
   async createRootDirectory(@Body() directory: IDirectory) {
     const savedDirectory = await new Directory(directory).save();
     return savedDirectory.toObject();
   }
   @Authorized(['teacher', 'admin'])
-  @Put('/directory/:parent')
+  @Post('/directory/:parent')
   async createDirectory(@Param('parent') parentDirectoryId: string, @Body() directory: IDirectory) {
     const savedDirectory = await new Directory(directory).save();
 
@@ -68,7 +68,7 @@ export class MediaController {
   }
 
   @Authorized(['teacher', 'admin'])
-  @Put('/file/:parent')
+  @Post('/file/:parent')
   async createFile(@Param('parent') parentDirectoryId: string, @UploadedFile('file', {options: uploadOptions}) uploadedFile: any) {
     const file: IFile = new File({
       name: uploadedFile.originalname,
@@ -83,6 +83,22 @@ export class MediaController {
     await parent.save();
 
     return savedFile.toObject();
+  }
+
+  @Authorized(['teacher', 'admin'])
+  @Put('/directory/:id')
+  async updateDirectory(@Param('id') directoryId: string, @Body() updatedDirectory: IDirectory) {
+    const directory = await Directory.findById(directoryId);
+    directory.set(updatedDirectory);
+    return directory.save();
+  }
+
+  @Authorized(['teacher', 'admin'])
+  @Put('/file/:id')
+  async updateFile(@Param('id') fileId: string, @Body() updatedFile: IFile) {
+    const file = await File.findById(fileId);
+    file.set(updatedFile);
+    return file.save();
   }
 
   @Authorized(['teacher', 'admin'])
