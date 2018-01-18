@@ -114,6 +114,7 @@ export class ObsCsvController {
       wUser.firstName = whiteListUser.firstName;
       wUser.lastName = whiteListUser.lastName;
       wUser.uid = whiteListUser.uid;
+      wUser.courseId = course._id;
       wUser.save().then(user => user.toObject());
       course.whitelist.push(wUser._id);
     });
