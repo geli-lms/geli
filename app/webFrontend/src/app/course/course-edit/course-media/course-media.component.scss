@@ -1,4 +1,5 @@
 @import '../../../../variables';
+@import '../../../../styles/card';
 
 $margin__card: 10px;
 $width__left: 30%;
@@ -48,17 +49,6 @@ $toolbar__height: 50px;
   }
 }
 
-.card button {
-  width: 184px;
-  margin-left: 10px;
-  margin-bottom: 10px;
-}
-
-.text-fit {
-  min-width: 1em;
-  width: auto;
-}
-
 .file-wrapper {
   margin-left: -$margin__card;
   margin-right: -$margin__card;
@@ -70,66 +60,4 @@ $toolbar__height: 50px;
 
 .btn__area {
   height: $toolbar__height;
-}
-
-.icon-wrapper {
-  left: 45px;
-  width: 160px;
-  height: 160px;
-  position: absolute;
-  background: center;
-  border-radius: 80px;
-
-  .mat-icon {
-
-  }
-}
-
-.card {
-  height: 248px;
-  width: 248px;
-  float: left;
-  margin: $margin__card;
-  border-radius: 8px;
-  background: no-repeat 75px 15px;
-
-  &:hover {
-    background-color: map-get($app-primary, 700);;
-  }
-
-  ul {
-    list-style-type: none;
-    padding: 0;
-  }
-
-  .card-btn-wrapper {
-    position: absolute;
-    bottom: 24px;
-  }
-}
-
-.card_active {
-  @extend .card;
-  background: #4490E2;
-
-  .info {
-    color: #ffffff;
-  }
-}
-
-.opacity {
-  background-color: #000;
-  opacity: .33;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  position: absolute;
-  border-radius: 8px;
-}
-
-.info {
-  position: absolute;
-  margin-bottom: 0;
-  font-size: .9em;
 }

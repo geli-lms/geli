@@ -237,13 +237,13 @@ export class MediaService extends DataService {
 
   createRootDir(rootDirName: string): Promise<IDirectory> {
     // TODO: If this works, apply to all
-    return this.backendService.put(this.apiPath + 'directory', JSON.stringify({name: rootDirName}))
+    return this.backendService.post(this.apiPath + 'directory', JSON.stringify({name: rootDirName}))
       .toPromise();
   }
 
   createDir(newDirName: string, parentDir: IDirectory): Promise<IDirectory> {
     return new Promise<IDirectory>((resolve, reject) => {
-      this.backendService.put(this.apiPath + 'directory/' + parentDir._id, JSON.stringify({name: newDirName}))
+      this.backendService.post(this.apiPath + 'directory/' + parentDir._id, JSON.stringify({name: newDirName}))
         .subscribe((responseItem: IDirectory) => {
             resolve(responseItem);
           },
@@ -254,7 +254,7 @@ export class MediaService extends DataService {
 
   addFile(directory: IDirectory): Promise<IFile> {
     return new Promise<IFile>((resolve, reject) => {
-      this.backendService.put(this.apiPath + 'file/' + directory._id, JSON.stringify({}))
+      this.backendService.post(this.apiPath + 'file/' + directory._id, JSON.stringify({}))
         .subscribe((responseItem: IFile) => {
             resolve(responseItem);
           },

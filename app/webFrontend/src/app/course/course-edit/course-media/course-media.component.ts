@@ -1,5 +1,3 @@
-// tslint:disable:no-console
-
 import {Component, OnInit} from '@angular/core';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
 import {MatDialog, MatSnackBar} from '@angular/material';
@@ -56,6 +54,7 @@ export class CourseMediaComponent implements OnInit {
 
         // Set root dir as current
         this.currentFolder = this.course.media;
+        // tslint:disable-next-line:no-console
         console.log(this.course.media);
       },
       error => {
@@ -85,6 +84,7 @@ export class CourseMediaComponent implements OnInit {
     dialogRef.afterClosed().subscribe(value => {
       if (value) {
         // TODO: Reload folder content
+        // tslint:disable-next-line:no-console
         console.log('Reload site, folder not yet updated');
       }
     });
@@ -113,6 +113,7 @@ export class CourseMediaComponent implements OnInit {
       .toPromise();
     this.toggleBlocked = false;
     if (res) {
+      // tslint:disable-next-line:no-console
       this.selectedFiles.forEach(file => console.log('TODO: Remove file', file));
       this.selectedFiles = [];
     }
@@ -132,14 +133,17 @@ export class CourseMediaComponent implements OnInit {
   getSimpleMimeType(file: IFile): string {
     const mimeType = file.mimeType.toLowerCase();
 
+    // tslint:disable-next-line:no-console
+    console.log('MIME: ' + mimeType);
+
     if (mimeType.startsWith('video')) {
       return 'video';
     } else if (mimeType.startsWith('image')) {
       return 'image';
-    } else if (mimeType.startsWith('pdf')) {
+    } else if (mimeType === 'application/pdf') {
       return 'pdf';
     } else if (mimeType.startsWith('zip')) {
-      return 'zip';
+      return 'archive';
     } else {
       return 'unknown';
     }

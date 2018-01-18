@@ -1,0 +1,73 @@
+.card {
+  height: 248px;
+  width: 248px;
+  float: left;
+  margin: 10px;
+  border-radius: 8px;
+  background: no-repeat 75px 15px;
+
+  &:hover {
+    background-color: map-get($app-primary, 700);
+  }
+
+  ul {
+    list-style-type: none;
+    padding: 0;
+  }
+
+  .card-btn-wrapper {
+    .mat-raised-button {
+      width: 184px;
+      margin-left: 10px;
+      margin-bottom: 10px;
+    }
+  }
+
+  .opacity {
+    background-color: #000;
+    opacity: .33;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    position: absolute;
+    border-radius: 8px;
+  }
+
+  .info {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    margin-bottom: 0;
+    font-size: .9em;
+  }
+
+  .text-fit {
+    min-width: 1em;
+    width: auto;
+  }
+
+  .icon-wrapper {
+    $icon-wrapper-size: 140px;
+    left: 45px;
+    width: $icon-wrapper-size;
+    height: $icon-wrapper-size;
+    position: absolute;
+    background: center;
+    border-radius: 50%;
+
+    .mat-icon {
+      height: 100%;
+      width: 100%;
+      font-size: $icon-wrapper-size - 20px;
+      line-height: $icon-wrapper-size - 20px;
+      text-align: center;
+    }
+  }
+}
+
+.card_active {
+  @extend .card;
+  background-color: map-get($app-primary, 800);;
+}
+
