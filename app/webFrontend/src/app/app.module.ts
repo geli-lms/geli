@@ -33,6 +33,7 @@ import {AboutModule} from './about/about.module';
 import {AdminModule} from './admin/admin.module';
 import {ReportService} from './shared/services/data/report.service';
 import {TitleService} from './shared/services/title.service';
+import {ThemeService} from './shared/services/theme.service';
 import {ImprintModule} from './imprint/imprint.module';
 import {DataSharingService} from './shared/services/data-sharing.service';
 
@@ -75,6 +76,7 @@ import {DataSharingService} from './shared/services/data-sharing.service';
     TitleService,
     DownloadFileService,
     RavenErrorHandler,
+    ThemeService,
     ConfigService,
     {
       provide: ErrorHandler,

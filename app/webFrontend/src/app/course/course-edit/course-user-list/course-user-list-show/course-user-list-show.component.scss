@@ -4,7 +4,6 @@
   box-shadow: 0 2px 2px rgba(182, 182, 182, 0.5);
   display: inline-block;
   border: 1px solid #d8d8d8;
-  background-color: #fff;
   cursor: move;
   border-style: dashed;
   border-width: 1px;
@@ -25,7 +24,6 @@
   width: 99%;
   margin-left: 0.2rem;
   padding-bottom: 10px;
-  background-color: #ffffff;
 
   .listBg {
     min-height: 2rem;
@@ -54,7 +52,6 @@
     flex: 1;
   }
 }
-
 
 .user-drag-handle, .member-drag-handle {
   cursor: move;
