@@ -26,7 +26,7 @@ describe('Media', async () => {
 
       const file = await new File({
         name: 'root',
-        physicalPath: 'test/a',
+        link: 'test/a',
         size: 129
       }).save();
       const subDirectory = await new Directory({
@@ -61,7 +61,7 @@ describe('Media', async () => {
 
       const file = await new File({
         name: 'root',
-        physicalPath: 'test/a',
+        link: 'test/a',
         size: 129
       }).save();
       const subDirectory = await new Directory({
@@ -97,7 +97,7 @@ describe('Media', async () => {
       result.body.files[0]._id.should.be.equal(file.id);
       result.body.files[0].name.should.be.equal(file.name);
       result.body.files[0].size.should.be.equal(file.size);
-      result.body.files[0].physicalPath.should.be.equal(file.physicalPath);
+      result.body.files[0].link.should.be.equal(file.link);
     });
 
     it('should get a file', async () => {
@@ -105,7 +105,7 @@ describe('Media', async () => {
 
       const file = await new File({
         name: 'root',
-        physicalPath: 'test/a',
+        link: 'test/a',
         size: 129
       }).save();
 
@@ -121,7 +121,7 @@ describe('Media', async () => {
       result.body._id.should.be.equal(file.id);
       result.body.name.should.be.equal(file.name);
       result.body.size.should.be.equal(file.size);
-      result.body.physicalPath.should.be.equal(file.physicalPath);
+      result.body.link.should.be.equal(file.link);
     });
   });
 
@@ -205,7 +205,7 @@ describe('Media', async () => {
       should.exist(result.body._id);
       should.exist(result.body.mimeType);
       should.exist(result.body.size);
-      should.exist(result.body.physicalPath);
+      should.exist(result.body.link);
       result.body.name.should.be.equal(testFileName);
 
       const updatedRoot = (await Directory.findById(rootDirectory));
@@ -250,7 +250,7 @@ describe('Media', async () => {
 
       const file = await new File({
         name: 'file',
-        physicalPath: 'test/a',
+        link: 'test/a',
         size: 129
       }).save();
 
@@ -270,7 +270,7 @@ describe('Media', async () => {
 
       result.body._id.should.equal(file.id);
       result.body.name.should.equal(renamedFile.name);
-      result.body.physicalPath.should.equal(file.physicalPath);
+      result.body.link.should.equal(file.link);
       result.body.size.should.equal(file.size);
     });
   });
@@ -301,7 +301,7 @@ describe('Media', async () => {
 
       const file = await new File({
         name: 'root',
-        physicalPath: 'test/a',
+        link: 'test/a',
         size: 129
       }).save();
 

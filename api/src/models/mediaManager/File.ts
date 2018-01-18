@@ -2,7 +2,7 @@ import * as mongoose from 'mongoose';
 import {IFile} from '../../../../shared/models/mediaManager/IFile';
 
 interface IFileModel extends IFile, mongoose.Document {
-
+  physicalPath: string;
 }
 
 const fileSchema = new mongoose.Schema({
@@ -11,6 +11,9 @@ const fileSchema = new mongoose.Schema({
     required: true
   },
   physicalPath: {
+    type: String
+  },
+  link: {
     type: String,
     required: true
   },
@@ -26,6 +29,8 @@ const fileSchema = new mongoose.Schema({
   toObject: {
     transform: function (doc: IFileModel, ret: any) {
       ret._id = ret._id.toString();
+      delete ret.physicalPath;
+      return ret;
     }
   },
 });

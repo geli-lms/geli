@@ -73,6 +73,7 @@ export class MediaController {
     const file: IFile = new File({
       name: uploadedFile.originalname,
       physicalPath: uploadedFile.path,
+      link: uploadedFile.filename,
       size: uploadedFile.size,
       mimeType: uploadedFile.mimetype,
     });
