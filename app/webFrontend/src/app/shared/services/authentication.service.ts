@@ -139,7 +139,7 @@ export class AuthenticationService {
 
   authHeader() {
     let headers = new HttpHeaders({'Content-Type': 'application/json'});
-    if (this.token !== '' || !isNullOrUndefined(this.token)) {
+    if (this.token) {
       headers = headers.append('Authorization', this.token);
     }
     return headers;

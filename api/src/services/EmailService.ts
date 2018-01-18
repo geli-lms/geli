@@ -11,7 +11,7 @@ class EmailService {
   private transporter: Transporter = null;
   private mailTransportConfig: any = {
     debug: false // include SMTP traffic in the logs
-  };
+};
   private mailDefaultConfig: any = {
     // default message fields
     // sender info
@@ -19,6 +19,10 @@ class EmailService {
   };
 
   constructor() {
+    if (process.env.NODE_ENV && process.env.NODE_ENV.includes('test')) {
+      this.mailTransportConfig.streamTransport = true;
+    }
+
     // define endpoint and login-credentials for smtp server
     if (config.mailSMTPServer === undefined) {
       this.mailTransportConfig.service = config.mailProvider;
