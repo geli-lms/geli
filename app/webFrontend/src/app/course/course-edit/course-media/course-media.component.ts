@@ -1,3 +1,5 @@
+// tslint:disable:no-console
+
 import {Component, OnInit} from '@angular/core';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
 import {MatDialog, MatSnackBar} from '@angular/material';
@@ -118,7 +120,7 @@ export class CourseMediaComponent implements OnInit {
 
   initFileDownload(file: IFile) {
     // FIXME: REMOVE split/pop when physical path holds correct value
-    const url = '/api/uploads/' + file.physicalPath.split('/').pop();
+    const url = '/api/uploads/' + file.link.split('/').pop();
     window.open(url, '_blank');
     this.toggleSelection(file);
   }
