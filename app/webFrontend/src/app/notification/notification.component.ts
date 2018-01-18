@@ -32,11 +32,18 @@ export class NotificationComponent implements OnInit {
 
   getNotifications() {
      this.notificationService.getNotificationsPerUser(this.userService.user).then(notifications => {
-       this.notifications = notifications;
+       this.notifications = notifications.reverse();
        if (this.notifications.length > 0) {
          this.notificationIcon = NotificationIcon.ACTIVE;
        }
      });
+  }
+
+  isNullOrUndefined(item: any): boolean {
+    if (item === null || item === undefined) {
+      return true;
+    }
+    return false;
   }
 }
 

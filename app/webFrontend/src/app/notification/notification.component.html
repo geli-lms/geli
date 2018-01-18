@@ -6,10 +6,10 @@
     <mat-list-item class="headline">Notifications</mat-list-item>
     <div *ngFor="let notification of notifications">
       <mat-divider></mat-divider>
-      <mat-list-item [routerLink]="['/course', notification.changedCourse._id]">
+      <mat-list-item *ngIf="isNullOrUndefined(notification.changedLecture)" [routerLink]="['/course', notification.changedCourse._id]">
         <span class="notificationItem">{{notification.text}}</span>
       </mat-list-item>
-      <mat-list-item *ngIf="notification.changedLecture" [routerLink]="['/course', notification.changedCourse._id, 'lecture', notification.changedLecture._id]">
+      <mat-list-item *ngIf="!isNullOrUndefined(notification.changedLecture)" [routerLink]="['/course', notification.changedCourse._id, 'lecture', notification.changedLecture._id]">
         <span class="notificationItem">{{notification.text}}</span>
       </mat-list-item>
     </div>
