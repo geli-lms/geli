@@ -7,7 +7,7 @@ export class User implements IUser {
   uid: any;
   email: string;
   password: string;
-  profile: { firstName: string; lastName: string; picture: IFile };
+  profile: { firstName: string; lastName: string; picture: IFile; theme: string };
   role: string;
   progress: any;
 
