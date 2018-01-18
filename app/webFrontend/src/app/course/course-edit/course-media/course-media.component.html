@@ -11,7 +11,10 @@
       </mat-toolbar-row>
     </mat-toolbar>
     <div class="folder-wrapper">
-      <p>{{ course?.media?.name }}</p>
+      <p>
+        <mat-icon class="inline-mat-icon">folder</mat-icon>
+        <span>{{ course?.media?.name }}</span>
+      </p>
     </div>
   </div>
 
@@ -44,6 +47,8 @@
       <div class="file-wrapper">
         <ng-container *ngFor="let file of currentFolder?.files">
           <mat-card [ngClass]="isInSelectedFiles(file) ? 'card_active' : 'card'" (click)="toggleSelection(file)">
+
+            <div class="bg"><mat-icon>folder</mat-icon></div>
 
             <ul class="info">
               <li><strong>{{file.name}}</strong></li>

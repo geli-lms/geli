@@ -1,6 +1,8 @@
 @import '../../../../variables';
 
+$margin__card: 10px;
 $width__left: 30%;
+$toolbar__height: 50px;
 
 .mm-container {
   display: flex;
@@ -29,7 +31,7 @@ $width__left: 30%;
       min-height: 50px;
 
       .mat-toolbar-row {
-        height: 50px;
+        height: $toolbar__height;
         padding: 0 10px;
       }
 
@@ -57,17 +59,24 @@ $width__left: 30%;
   width: auto;
 }
 
-$margin-card: 10px;
-
 .file-wrapper {
-  margin-left: -$margin-card;
+  margin-left: -$margin__card;
+  margin-right: -$margin__card;
+}
+
+.inline-mat-icon {
+  font-size: 1.2em;
+}
+
+.btn__area {
+  height: $toolbar__height;
 }
 
 .card {
   height: 248px;
   width: 248px;
   float: left;
-  margin: $margin-card;
+  margin: $margin__card;
   border-radius: 8px;
   background: no-repeat 75px 15px;
 

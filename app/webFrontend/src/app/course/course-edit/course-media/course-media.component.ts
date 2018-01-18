@@ -29,7 +29,7 @@ export class CourseMediaComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.folderBarVisible = true;
+    this.folderBarVisible = false;
 
     this.route.parent.params.subscribe(
       async (params) => {
