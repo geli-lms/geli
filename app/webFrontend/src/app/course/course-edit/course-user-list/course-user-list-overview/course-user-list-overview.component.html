@@ -18,10 +18,12 @@
   </div>
 
   <ng-container *ngFor="let user of usersInCourse">
-    <mat-card [ngClass]="isInSelectedMembers(user) ? 'active':'profile'"
+    <mat-card [ngClass]="isInSelectedMembers(user) ? 'card_active' : 'card'"
               (click)="toggleMember(user)">
 
-      <div class="bg" user-image [user-image]="user" [size]="160"></div>
+      <div class="icon-wrapper">
+        <div class="user-image" user-image [user-image]="user"></div>
+      </div>
 
       <ul class="info" ng-class="{opacity: isInSelectedMembers(user)}">
         <li><strong>{{user.profile.firstName}}</strong></li>
