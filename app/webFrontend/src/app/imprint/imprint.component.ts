@@ -17,7 +17,7 @@ export class ImprintComponent implements OnInit {
               private titleService: TitleService) { }
 
   ngOnInit() {
-    this.titleService.setTitle('Imprint')
+    this.titleService.setTitle('Imprint');
     void this.loadImprint();
   }
   async loadImprint() {
