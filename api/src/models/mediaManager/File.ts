@@ -1,5 +1,8 @@
 import * as mongoose from 'mongoose';
 import {IFile} from '../../../../shared/models/mediaManager/IFile';
+import * as fs from 'fs';
+
+const {promisify} = require('util');
 
 interface IFileModel extends IFile, mongoose.Document {
   physicalPath: string;
@@ -33,6 +36,15 @@ const fileSchema = new mongoose.Schema({
       return ret;
     }
   },
+});
+
+fileSchema.pre('remove', async function(next: () => void) {
+  if (fs.existsSync(this.physicalPath)) {
+    await promisify(fs.unlink)(this.physicalPath);
+  }
+
+  // TODO: look for references
+  next();
 });
 
 const File = mongoose.model<IFileModel>('File', fileSchema);
