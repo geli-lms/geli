@@ -215,6 +215,66 @@ describe('Media', async () => {
     });
   });
 
+  describe(`PUT ${BASE_URL}`, async () => {
+    it('should rename a directory', async () => {
+      const teacher = await FixtureUtils.getRandomTeacher();
+
+      const rootDirectory = await new Directory({
+        name: 'root'
+      }).save();
+
+      const renamedDirectory = rootDirectory;
+      renamedDirectory.name = 'renamedRoot';
+
+
+      const result = await chai.request(app)
+        .put(`${BASE_URL}/directory/${rootDirectory._id}`)
+        .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
+        .send(renamedDirectory)
+        .catch((err) => err.response);
+
+      result.status.should.be.equal(200,
+        'could not rename directory' +
+        ' -> ' + result.body.message);
+
+      result.body._id.should.equal(rootDirectory.id);
+      result.body.name.should.equal(renamedDirectory.name);
+      result.body.subDirectories.should.be.instanceOf(Array)
+        .and.have.lengthOf(rootDirectory.subDirectories.length);
+      result.body.files.should.be.instanceOf(Array)
+        .and.lengthOf(rootDirectory.files.length);
+    });
+
+    it('should rename a file', async () => {
+      const teacher = await FixtureUtils.getRandomTeacher();
+
+      const file = await new File({
+        name: 'file',
+        physicalPath: 'test/a',
+        size: 129
+      }).save();
+
+      const renamedFile = file;
+      file.name = 'renamedFile';
+
+
+      const result = await chai.request(app)
+        .put(`${BASE_URL}/file/${file._id}`)
+        .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
+        .send(renamedFile)
+        .catch((err) => err.response);
+
+      result.status.should.be.equal(200,
+        'could not rename file' +
+        ' -> ' + result.body.message);
+
+      result.body._id.should.equal(file.id);
+      result.body.name.should.equal(renamedFile.name);
+      result.body.physicalPath.should.equal(file.physicalPath);
+      result.body.size.should.equal(file.size);
+    });
+  });
+
   describe(`DELETE ${BASE_URL}`, async () => {
     it('should delete a directory', async () => {
       const teacher = await FixtureUtils.getRandomTeacher();
