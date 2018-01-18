@@ -23,10 +23,12 @@
     "lint": "gulp tslint",
     "debug": "gulp debug",
     "load:fixtures": "gulp load:fixtures",
-    "migrate": "gulp build && node ./build/migrations/migrate.js",
+    "migrate": "gulp build && node ./build/src/migrate.js",
     "migrate:inspect": "gulp migrate:inspect"
   },
   "dependencies": {
+    "app-root-path": "^2.0.1",
+    "archiver": "^2.1.0",
     "bcrypt": "^1.0.3",
     "body-parser": "^1.18.2",
     "express": "^4.16.2",
@@ -38,8 +40,9 @@
     "mongoose": "^4.13.6",
     "morgan": "^1.9.0",
     "multer": "^1.3.0",
+    "node-file-cache": "^1.0.2",
     "nodemailer": "^4.4.1",
-    "nodemailer-markdown": "^1.0.1",
+    "nodemailer-markdown": "^1.0.2",
     "passport": "^0.4.0",
     "passport-jwt": "^3.0.1",
     "passport-local": "^1.0.0",
@@ -85,6 +88,7 @@
     "remap-istanbul": "0.9.5",
     "rimraf": "2.6.2",
     "run-sequence": "2.2.0",
+    "temp": "^0.8.3",
     "tslint": "5.8.0",
     "typedoc": "^0.9.0",
     "typescript": "^2.6.2"
