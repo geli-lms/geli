@@ -52,5 +52,11 @@ export const errorCodes = {
       code: 'coldNotSaveImprint',
       text: 'Could not save Imprint'
     }
+  },
+  query: {
+    empty: {
+      code: 'emptyQuery',
+      text: 'Query was empty.'
+    }
   }
 };

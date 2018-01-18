@@ -1,12 +1,20 @@
 import config from '../config/main';
-import {Action} from 'routing-controllers';
+import {Action, UnauthorizedError} from 'routing-controllers';
 import {User} from '../models/User';
 import jwt = require('jsonwebtoken');
 import * as mongoose from 'mongoose';
 
 export class RoleAuthorization {
   static checkAuthorization(action: Action, roles: string[]): Promise<any> {
-    const token = action.request.headers['authorization'].split(' ')[1];
+    const authorizationHeader = action.request.headers['authorization'];
+    if (!authorizationHeader) {
+      throw new UnauthorizedError();
+    }
+    const authorizationSplit = authorizationHeader.split(' ');
+    if (authorizationSplit.length < 2) {
+      throw new UnauthorizedError();
+    }
+    const token = authorizationSplit[1];
     const decoded: any = jwt.verify(token, config.secret);
     const userId = decoded._id;
 

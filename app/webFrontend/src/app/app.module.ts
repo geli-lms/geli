@@ -16,7 +16,8 @@ import {
   LectureService,
   UnitService,
   UserDataService,
-  ConfigService
+  WhitelistUserService,
+  ConfigService,
 } from './shared/services/data.service';
 import {BackendService} from './shared/services/backend.service';
 import {ShowProgressService} from './shared/services/show-progress.service';
@@ -60,6 +61,7 @@ import {DataSharingService} from './shared/services/data-sharing.service';
     UnitService,
     CourseService,
     UserDataService,
+    WhitelistUserService,
     LectureService,
     BackendService,
     UserDataService,
