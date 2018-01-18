@@ -1,158 +1,18 @@
-@import '../../../../variables';
+@import "../../../../variables";
 
-.fuzzySearch {
+.search {
   margin-top: 10px;
   width: 100%;
 }
+ .panel{
+     margin-left: 0.8rem;
+     width: 98%;
+     display: inline-block;
+      margin-bottom: 0.1rem;
+ }
 
-.opacity {
-  background-color: #000;
-  opacity: .33;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  position: absolute;
-  border-radius: 8px;
-}
-
-.user-drag-handle, .member-drag-handle {
-  cursor: move;
-  opacity: 0.2;
-  user-select: none;
-  margin-right: 0.5em;
-
-  &:hover {
-    opacity: 1;
-  }
-}
-
-.profile {
-  height: 248px;
-  width: 248px;
-  float: left;
-  margin: 10px;
-  border-radius: 8px;
-  background: no-repeat 75px 15px;
-}
-
-.profile:hover {
-  background-color: map-get($app-primary, 700);
-}
-
-.active {
-  height: 248px;
-  width: 248px;
-  float: left;
-  margin: 10px;
-  border-radius: 8px;
-  color: #ffffff;
-  background: #4490E2;
-}
-
-.bg {
-  left: 45px;
-  width: 160px;
-  height: 160px;
-  position: absolute;
-  background: center;
-  border-radius: 80px;
-}
-
-.info {
-  position: absolute;
-  bottom: 10px;
-  left: -22px;
-  margin-bottom: 0;
-  font-size: .9em;
-}
-
-.userId {
-  opacity: 0.5;
-}
-
-.text-fit {
-  min-width: 1em;
-  width: auto;
-}
-
-.centered {
-  margin-top: 30%;
-}
-
-ul {
-  list-style-type: none;
-}
-
-button {
-  width: 184px;
-  margin-left: 10px;
-  margin-bottom: 10px;
-  color: #4490E2;
-}
-
-.del {
-  color: #D64C4C;
-}
-
-.drop {
-  min-height: 40px;
-}
-
-.list {
-  padding-bottom: 10px;
-
-  .listBg {
-    height: 40px;
-    width: 40px;
-    background: center;
-    border-radius: 20px;
-    background-size: 40px 40px;
-    margin-left: 10px;
-  }
-
-  .firstName {
-    padding-left: 5%;
-    display: inline-block;
-    flex: 1;
-  }
-
-  .lastName {
-    flex: 1;
-  }
-
-  .uid {
-    flex: 1;
-  }
-
-  .email {
-    flex: 1;
-  }
-}
-
-.titleHeader {
-  display: flex;
-  align-items: center;
-}
-
-.gu-mirror {
-  z-index: 9999 !important;
-  opacity: 1;
-  box-shadow: 0 2px 2px rgba(182, 182, 182, 0.5);
-  display: inline-block;
-  border: 1px solid #d8d8d8;
-  cursor: move;
-  border-style: dashed;
-  border-width: 1px;
-
-  .user-drag-handle, .member-drag-handle {
-    padding-top: 15px;
-    padding-left: 15px;
-    width: 60px;
-  }
-
-  .firstName {
-    padding-left: 5%;
-    display: inline-block;
-  }
+.title{
+  padding: auto;
+  margin: auto;
+  flex: 1;
 }

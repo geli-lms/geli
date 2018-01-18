@@ -4,7 +4,7 @@ import {IUser} from '../../../shared/models/IUser';
 import {NativeError} from 'mongoose';
 import * as crypto from 'crypto';
 import {isNullOrUndefined} from 'util';
-import { isEmail } from 'validator';
+import {isEmail} from 'validator';
 import * as errorCodes from '../config/errorCodes'
 
 interface IUserModel extends IUser, mongoose.Document {
@@ -20,14 +20,16 @@ const userSchema = new mongoose.Schema({
       type: String,
       lowercase: true,
       unique: true,
-      sparse: true
+      sparse: true,
+      index: true
     },
     email: {
       type: String,
       lowercase: true,
       unique: true,
       required: true,
-      validate: [{ validator: (value: any) => isEmail(value), msg: 'Invalid email.' }]
+      validate: [{validator: (value: any) => isEmail(value), msg: 'Invalid email.'}],
+      index: true
     },
     password: {
       type: String,
@@ -35,8 +37,8 @@ const userSchema = new mongoose.Schema({
       validate: new RegExp(errorCodes.errorCodes.password.regex.regex)
     },
     profile: {
-      firstName: {type: String},
-      lastName: {type: String},
+      firstName: {type: String, index: true},
+      lastName: {type: String, index: true},
       picture: {
         path: {type: String},
         name: {type: String},
@@ -64,6 +66,12 @@ const userSchema = new mongoose.Schema({
       }
     }
   });
+userSchema.index({
+  uid: 'text',
+  email: 'text',
+  'profile.firstName': 'text',
+  'profile.lastName': 'text'
+}, {name: 'user_combined'});
 
 function hashPassword(next: (err?: NativeError) => void) {
   const user = this, SALT_FACTOR = 5;
@@ -125,11 +133,11 @@ userSchema.pre('findOneAndUpdate', function (next) {
   const newPassword = this.getUpdate().password;
   if (typeof newPassword !== 'undefined') {
     bcrypt.hash(newPassword, SALT_FACTOR)
-    .then((hash) => {
-      this.findOneAndUpdate({}, {password: hash});
-    })
-    .then(() => next())
-    .catch(next);
+      .then((hash) => {
+        this.findOneAndUpdate({}, {password: hash});
+      })
+      .then(() => next())
+      .catch(next);
   } else {
     next();
   }
