@@ -40,7 +40,6 @@ import {ChangePasswordDialogComponent} from '../components/change-password-dialo
     FilepickerDialog,
     WriteMailDialog,
     FocusDirective,
-
   ],
   providers: [
     DialogService

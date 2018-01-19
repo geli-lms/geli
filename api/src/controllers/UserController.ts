@@ -83,11 +83,11 @@ export class UserController {
     return User.find({'role': 'admin'})
       .then((adminUsers) => {
         if (id === currentUser._id
-            && currentUser.role === 'admin'
-            && user.role !== 'admin') {
+          && currentUser.role === 'admin'
+          && user.role !== 'admin') {
           throw new BadRequestError('You can\'t revoke your own privileges');
         } else {
-          return User.find({ $and: [{'email': user.email}, {'_id': { $ne: user._id }}]});
+          return User.find({$and: [{'email': user.email}, {'_id': {$ne: user._id}}]});
         }
       })
       .then((emailInUse) => {
@@ -106,8 +106,8 @@ export class UserController {
           if (oldUser.uid && user.uid === null) {
             user.uid = oldUser.uid;
           }
-          return oldUser.isValidPassword(user.password);
-        //  return oldUser.isValidPassword(user.currentPassword);
+
+          return oldUser.isValidPassword(user.currentPassword);
         }
       })
       .then((isValidPassword) => {
