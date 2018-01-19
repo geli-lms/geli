@@ -53,6 +53,19 @@ export class NotificationComponent implements OnInit {
       }
       return 0;
     });
+    this.notifications = this.notifications.sort(function(a, b) {
+      if (!(a.changedLecture === null || a.changedLecture === undefined)
+        && !(b.changedLecture === null || b.changedLecture === undefined)) {
+        if (a.changedLecture._id > b.changedLecture._id) {
+          return 1;
+        }
+        if (a.changedLecture._id < b.changedLecture._id) {
+          return -1;
+        }
+      }
+      return 0;
+    });
+    this.notifications = this.notifications.reverse();
   }
 
   sortUndefined(a: any) {

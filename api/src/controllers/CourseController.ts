@@ -26,7 +26,7 @@ import emailService from '../services/EmailService';
 
 const multer = require('multer');
 import crypto = require('crypto');
-import {API_NOTIFICATION_TYPE_NONE, NotificationSettings} from '../models/NotificationSettings';
+import {API_NOTIFICATION_TYPE_ALL_CHANGES, API_NOTIFICATION_TYPE_NONE, NotificationSettings} from '../models/NotificationSettings';
 import {Notification} from '../models/Notification';
 
 const uploadOptions = {
@@ -187,7 +187,7 @@ export class CourseController {
 
         if (course.students.indexOf(currentUser._id) < 0) {
           course.students.push(currentUser);
-          new NotificationSettings({'user': currentUser, 'course': course, 'notificationType': API_NOTIFICATION_TYPE_NONE}).save();
+          new NotificationSettings({'user': currentUser, 'course': course, 'notificationType': API_NOTIFICATION_TYPE_ALL_CHANGES}).save();
           return course.save().then((c) => c.toObject());
         }
 
