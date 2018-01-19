@@ -43,6 +43,19 @@ export class NotificationComponent implements OnInit {
      });
   }
 
+  clearAll() {
+    this.notifications.forEach(async notification => {
+      await this.removeNotification(notification);
+    })
+  }
+
+  async removeNotification(notification: INotification) {
+    const index = this.notifications.indexOf(notification);
+    this.notifications.splice(index, 1);
+    await this.notificationService.deleteItem(notification);
+    // remove one notification
+  }
+
   sortNotifications() {
     this.notifications = this.notifications.sort(function(a, b) {
       if (a.changedCourse._id > b.changedCourse._id) {
