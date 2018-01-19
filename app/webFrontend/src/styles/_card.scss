@@ -7,7 +7,7 @@
   background: no-repeat 75px 15px;
 
   &:hover {
-    background-color: map-get($app-primary, 700);
+    background-color: map-get($app-primary, 300);
   }
 
   ul {
@@ -69,6 +69,6 @@
 
 .card_active {
   @extend .card;
-  background-color: map-get($app-primary, 800);;
+  background-color: map-get($app-primary, 500);
 }
 
