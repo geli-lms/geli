@@ -16,6 +16,8 @@ import {UploadFormComponent} from './components/upload-form/upload-form.componen
 import {FileUploadModule} from 'ng2-file-upload';
 import {FilesizePipe} from './pipes/filesize/filesize.pipe';
 import {ChangePasswordDialogComponent} from './components/change-password-dialog/change-password-dialog.component';
+import {MarkdownEditorComponent} from './components/markdown-editor/markdown-editor.component';
+import {AceEditorModule} from 'ng2-ace-editor';
 
 @NgModule({
   imports: [
@@ -25,6 +27,8 @@ import {ChangePasswordDialogComponent} from './components/change-password-dialog
     MaterialImportModule,
     HttpClientModule,
     FileUploadModule,
+    AceEditorModule,
+    FileUploadModule
   ],
   declarations: [
     GravatarDirective,
@@ -39,6 +43,7 @@ import {ChangePasswordDialogComponent} from './components/change-password-dialog
     UploadFormComponent,
     FilesizePipe,
     ChangePasswordDialogComponent,
+    MarkdownEditorComponent,
   ],
   exports: [
     GravatarDirective,
@@ -52,6 +57,7 @@ import {ChangePasswordDialogComponent} from './components/change-password-dialog
     BadgeComponent,
     ExpandableDivComponent,
     ButtonSaveCancelComponent,
+    MarkdownEditorComponent,
     UploadFormComponent,
     FilesizePipe,
     ChangePasswordDialogComponent,

@@ -3,6 +3,7 @@ import {CourseService, UserDataService} from '../../../shared/services/data.serv
 import {IUser} from '../../../../../../../shared/models/IUser';
 import {ShowProgressService} from '../../../shared/services/show-progress.service';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
+import {isNullOrUndefined} from 'util';
 import {SortUtil} from '../../../shared/utils/SortUtil';
 import {User} from '../../../models/User';
 import {ActivatedRoute} from '@angular/router';
@@ -13,9 +14,10 @@ import {ActivatedRoute} from '@angular/router';
 })
 export class TeachersComponent implements OnInit {
 
+  @Input() course: ICourse;
   courseId: string;
-  course: ICourse;
-  allTeachers: IUser[] = [];
+  total = 0;
+  foundTeachers: IUser[] = [];
 
   constructor(private route: ActivatedRoute,
               private courseService: CourseService,
@@ -27,19 +29,25 @@ export class TeachersComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getTeachers().then(this.getCourseTeachers);
+    this.courseService.readSingleItem(this.courseId).then((course: ICourse) => {
+      this.course = course;
+      this.course.teachers.forEach(member =>
+        this.foundTeachers = this.foundTeachers.filter(user => user._id !== member._id))}
+    );
   }
 
-  /**
-   * Get all users from api and filter those role teacher.
-   *
-   * TODO: Never load all users!
-   */
-  getTeachers() {
-    return this.userService.readItems().then(users => {
-      this.allTeachers = users.filter(obj => obj.role === 'teacher');
-      this.allTeachers = this.allTeachers.map(data => new User(data));
-    });
+  isUserInCourse(user: IUser) {
+    return !isNullOrUndefined(this.course.teachers.find((elem: IUser) => elem._id === user._id));
+  }
+
+  removeFromCoure(draggedUser: IUser) {
+    this.course.teachers = this.course.teachers.filter(t => t._id !== draggedUser._id);
+    this.updateCourseTeachers();
+  }
+
+  pushToCoure(draggedUser: IUser) {
+    this.course.teachers.push(draggedUser);
+    this.updateCourseTeachers();
   }
 
   /**
@@ -52,32 +60,16 @@ export class TeachersComponent implements OnInit {
       '_id': this.course._id,
       'teachers': this.course.teachers.map((user) => user._id)
     })
-    .then(() => {
-      this.showProgress.toggleLoadingGlobal(false);
-    });
-  }
-
-  /**
-   * Get this course from api and filter all teachers from users.
-   */
-  getCourseTeachers = () => {
-    this.courseService.readSingleItem(this.courseId).then(
-      (val: any) => {
-        this.course = val;
-        this.course.teachers.forEach(member =>
-          this.allTeachers = this.allTeachers.filter(user => user._id !== member._id));
-        this.course.teachers = this.course.teachers.map(data => new User(data));
-
-        SortUtil.sortUsers(this.allTeachers);
-        SortUtil.sortUsers(this.course.teachers);
+      .then(() => {
+        this.showProgress.toggleLoadingGlobal(false);
       });
-  };
+  }
 
   /**
    * @param id Id of an user.
    */
-  removeUser(id: string): void {
-    this.allTeachers = this.allTeachers.concat(this.course.teachers.filter(obj => id === obj._id));
+  updateUser(id: string): void {
+    this.foundTeachers = this.foundTeachers.concat(this.course.teachers.filter(obj => id === obj._id));
     this.course.teachers = this.course.teachers.filter(obj => id !== obj._id);
     this.updateCourseTeachers();
   }

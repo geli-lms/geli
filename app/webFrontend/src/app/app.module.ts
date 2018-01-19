@@ -15,7 +15,9 @@ import {
   FreeTextUnitService,
   LectureService,
   UnitService,
-  UserDataService
+  UserDataService,
+  WhitelistUserService,
+  ConfigService,
 } from './shared/services/data.service';
 import {BackendService} from './shared/services/backend.service';
 import {ShowProgressService} from './shared/services/show-progress.service';
@@ -31,6 +33,8 @@ import {AboutModule} from './about/about.module';
 import {AdminModule} from './admin/admin.module';
 import {ReportService} from './shared/services/data/report.service';
 import {TitleService} from './shared/services/title.service';
+import {ThemeService} from './shared/services/theme.service';
+import {ImprintModule} from './imprint/imprint.module';
 import {DataSharingService} from './shared/services/data-sharing.service';
 
 @NgModule({
@@ -38,7 +42,6 @@ import {DataSharingService} from './shared/services/data-sharing.service';
     AppComponent
   ],
   imports: [
-    AdminModule,
     BrowserModule,
     HttpModule,
     AppRoutingModule,
@@ -48,6 +51,8 @@ import {DataSharingService} from './shared/services/data-sharing.service';
     AuthModule,
     AboutModule,
     SharedModule,
+    AdminModule,
+    ImprintModule,
   ],
   providers: [
     UserService,
@@ -57,6 +62,7 @@ import {DataSharingService} from './shared/services/data-sharing.service';
     UnitService,
     CourseService,
     UserDataService,
+    WhitelistUserService,
     LectureService,
     BackendService,
     UserDataService,
@@ -70,6 +76,8 @@ import {DataSharingService} from './shared/services/data-sharing.service';
     TitleService,
     DownloadFileService,
     RavenErrorHandler,
+    ThemeService,
+    ConfigService,
     {
       provide: ErrorHandler,
       useExisting: RavenErrorHandler
