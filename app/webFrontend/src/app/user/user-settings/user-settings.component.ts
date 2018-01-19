@@ -8,6 +8,7 @@ import {
   INotificationSettings, NOTIFICATION_TYPE_ALL_CHANGES,
   NOTIFICATION_TYPE_NONE
 } from '../../../../../../shared/models/INotificationSettings';
+import {NotificationSettings} from '../../models/NotificationSettings';
 
 @Component({
   selector: 'app-user-settings',
@@ -60,25 +61,29 @@ export class UserSettingsComponent implements OnInit {
     });
   }
 
-  saveNotifications () {
+  saveNotificationSettings () {
     try {
-      this.myCourses.forEach(course => {
+      this.myCourses.forEach(async course => {
         let settings: INotificationSettings;
         this.notificationSettings.forEach((x) => {
          if (x.course._id === course._id) {
            settings = x;
          }
         });
-        if (this.selection.isSelected(course)) {
-         settings.notificationType = NOTIFICATION_TYPE_ALL_CHANGES;
-        } else {
-         settings.notificationType = NOTIFICATION_TYPE_NONE;
+        if (settings === null || settings === undefined) {
+          settings = await this.notificationSettingsService.createItem({user: this.userService.user, course: course});
+          this.notificationSettings.push(settings);
         }
-        this.notificationSettingsService.updateItem(settings);
+        if (this.selection.isSelected(course)) {
+          settings.notificationType = NOTIFICATION_TYPE_ALL_CHANGES;
+        } else {
+          settings.notificationType = NOTIFICATION_TYPE_NONE;
+        }
+        await this.notificationSettingsService.updateItem(settings);
       });
-      this.snackBar.open('Notifications successfully updated.', '', {duration: 3000});
+      this.snackBar.open('Notification settings updated successfully.', '', {duration: 3000});
     } catch (error) {
-      this.snackBar.open(error.json().message, 'Dismiss');
+      this.snackBar.open(error.message, 'Dismiss');
     }
   }
 

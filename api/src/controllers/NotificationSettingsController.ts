@@ -1,6 +1,6 @@
 import {BadRequestError, Body, Get, JsonController, Param, Post, Put, UseBefore} from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
-import {INotificationSettingsModel, NotificationSettings} from '../models/NotificationSettings';
+import {API_NOTIFICATION_TYPE_ALL_CHANGES, INotificationSettingsModel, NotificationSettings} from '../models/NotificationSettings';
 import {INotificationSettings} from '../../../shared/models/INotificationSettings';
 
 @JsonController('/notificationSettings')
@@ -26,16 +26,17 @@ export class NotificationSettingsController {
 
   @Post('/')
   async createNotificationSettings(@Body() data: any) {
-      if (!data.userId || !data.courseId || !data.notificationType) {
-        throw new BadRequestError('NotificationSettings need courseId, userId and notificationType');
+      if (!data.user || !data.course) {
+        throw new BadRequestError('NotificationSettings need course, user and notificationType');
       }
       const notificationSettings: INotificationSettingsModel =
-        await NotificationSettings.findOne({'user': data.userId, 'course': data.courseId});
+        await NotificationSettings.findOne({'user': data.user, 'course': data.course});
       if (notificationSettings) {
-        throw new BadRequestError('NotificationSettings for user:' + data.userId + ' with course: ' + data.courseId + ' already exist');
+        throw new BadRequestError('NotificationSettings for user:' + data.user + ' with course: ' + data.course + ' already exist');
       }
       const settings: INotificationSettingsModel =
-        await new NotificationSettings({'user': data.userId, 'course': data.courseId, 'notificationType': data.notificationType}).save()
+        await new NotificationSettings(
+          {'user': data.user, 'course': data.course, 'notificationType': API_NOTIFICATION_TYPE_ALL_CHANGES}).save();
       return settings.toObject();
     }
 

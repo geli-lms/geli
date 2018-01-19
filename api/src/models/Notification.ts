@@ -55,7 +55,11 @@ const Notification = mongoose.model<INotificationModel>('Notification', notifica
 notificationSchema.statics.createNotification = async function (
   user: IUser, changedCourse: ICourse, text: string, changedLecture?: ILecture, changedUnit?: IUnit) {
   try {
-    const settings = await NotificationSettings.findOne({'user': user, 'course': changedCourse});
+    let settings = await NotificationSettings.findOne({'user': user, 'course': changedCourse});
+    if (settings === undefined || settings === null) {
+      settings = await new NotificationSettings(
+        {'user': user, 'course': changedCourse, 'notificationType': API_NOTIFICATION_TYPE_ALL_CHANGES}).save();
+    }
     if (settings.notificationType === API_NOTIFICATION_TYPE_ALL_CHANGES) {
       const notification = new Notification();
       notification.user = user;
