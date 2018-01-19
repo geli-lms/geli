@@ -34,13 +34,13 @@ export class NotificationComponent implements OnInit {
   }
 
   getNotifications() {
-     this.notificationService.getNotificationsPerUser(this.userService.user).then(notifications => {
-       this.notifications = notifications.reverse();
-       this.sortNotifications();
-       if (this.notifications.length > 0) {
-         this.notificationIcon = NotificationIcon.ACTIVE;
-       }
-     });
+    this.notificationService.getNotificationsPerUser(this.userService.user).then(notifications => {
+      this.notifications = notifications.reverse();
+      this.sortNotifications();
+      if (this.notifications.length > 0) {
+        this.notificationIcon = NotificationIcon.ACTIVE;
+      }
+    });
   }
 
   clearAll() {
@@ -53,71 +53,31 @@ export class NotificationComponent implements OnInit {
     const index = this.notifications.indexOf(notification);
     this.notifications.splice(index, 1);
     await this.notificationService.deleteItem(notification);
-    // remove one notification
   }
 
   sortNotifications() {
-    this.notifications = this.notifications.sort(function(a, b) {
-      if (a.changedCourse._id > b.changedCourse._id) {
-        return 1;
-      }
-      if (a.changedCourse._id < b.changedCourse._id) {
-        return -1;
-      }
-      return 0;
-    });
-    this.notifications = this.notifications.sort(function(a, b) {
-      if (!(a.changedLecture === null || a.changedLecture === undefined)
-        && !(b.changedLecture === null || b.changedLecture === undefined)) {
-        if (a.changedLecture._id > b.changedLecture._id) {
-          return 1;
-        }
-        if (a.changedLecture._id < b.changedLecture._id) {
-          return -1;
+    this.notifications = this.notifications.sort((a, b) => {
+      if (compareIds(a.changedCourse, b.changedCourse) === 0) {
+        if (!(a.changedLecture === null || a.changedLecture === undefined)
+          && !(b.changedLecture === null || b.changedLecture === undefined)) {
+          if (compareIds(a.changedLecture, b.changedLecture) === 0) {
+            if (!(a.changedUnit === null || a.changedUnit === undefined)
+              && !(b.changedUnit === null || b.changedUnit === undefined)) {
+              return compareIds(a.changedUnit, b.changedUnit);
+            }
+          }
+          return compareIds(a.changedLecture, b.changedLecture);
         }
       }
-      return 0;
+      return compareIds(a.changedCourse, b.changedCourse);
     });
-    this.notifications = this.notifications.reverse();
   }
 
-  sortUndefined(a: any) {
-    if (this.isNullOrUndefined(a)) {
-      return -1;
-    }
-    return 1;
+  filterShownNotifications() {
+
   }
 
-  compareUnit (a: IUnit, b: IUnit) {
-    if (a._id > b._id) {
-      return 1;
-    }
-    if (a._id < b._id) {
-      return -1;
-    }
-    return 0;
-  }
-
-  compareLecture (a: ILecture, b: ILecture) {
-    if (a._id > b._id) {
-      return 1;
-    }
-    if (a._id < b._id) {
-      return -1;
-    }
-    return 0;
-  }
-  compareCourse (a: ICourse, b: ICourse) {
-    if (a._id > b._id) {
-      return 1;
-    }
-    if (a._id < b._id) {
-      return -1;
-    }
-    return 0;
-  }
-
-  compareNotificationDate (a: any, b: any) {
+  compareNotificationDate(a: any, b: any) {
     if (a.createdAt > b.createdAt) {
       return 1;
     }
@@ -134,5 +94,17 @@ export class NotificationComponent implements OnInit {
     return false;
   }
 }
+
+function compareIds(a: any, b: any) {
+  if (a._id > b._id) {
+    return 1;
+  }
+  if (a._id < b._id) {
+    return -1;
+  }
+  return 0;
+};
+
+
 
 
