@@ -18,9 +18,10 @@ import {NotificationSettings} from '../../models/NotificationSettings';
 export class UserSettingsComponent implements OnInit {
 
   myCourses: ICourse[];
-  displayedColumns = ['name', 'Notifications'];
+  displayedColumns = ['name', 'Notifications', 'email'];
   dataSource: MatTableDataSource<ICourse>;
-  selection = new SelectionModel<ICourse>(true, []);
+  notificationSelection = new SelectionModel<ICourse>(true, []);
+  emailSelection = new SelectionModel<ICourse>(true, []);
   notificationSettings: INotificationSettings[];
 
   constructor(public userService: UserService,
@@ -51,10 +52,13 @@ export class UserSettingsComponent implements OnInit {
     this.notificationSettingsService.getNotificationSettingsPerUser(this.userService.user).then(settings => {
       this.notificationSettings = settings;
       settings.forEach((setting: INotificationSettings) => {
-        if (setting.notificationType === NOTIFICATION_TYPE_ALL_CHANGES) {
-          const courseWithNotificationSettings = this.myCourses.find(x => x._id === setting.course._id);
-          if (courseWithNotificationSettings) {
-            this.selection.select(courseWithNotificationSettings);
+        const courseWithNotificationSettings = this.myCourses.find(x => x._id === setting.course._id);
+        if (courseWithNotificationSettings) {
+          if (setting.notificationType === NOTIFICATION_TYPE_ALL_CHANGES) {
+            this.notificationSelection.select(courseWithNotificationSettings);
+          }
+          if (setting.emailNotification) {
+            this.emailSelection.select(courseWithNotificationSettings);
           }
         }
       })
@@ -74,10 +78,15 @@ export class UserSettingsComponent implements OnInit {
           settings = await this.notificationSettingsService.createItem({user: this.userService.user, course: course});
           this.notificationSettings.push(settings);
         }
-        if (this.selection.isSelected(course)) {
+        if (this.notificationSelection.isSelected(course)) {
           settings.notificationType = NOTIFICATION_TYPE_ALL_CHANGES;
         } else {
           settings.notificationType = NOTIFICATION_TYPE_NONE;
+        }
+        if (this.emailSelection.isSelected(course)) {
+          settings.emailNotification = true;
+        } else {
+          settings.emailNotification = false;
         }
         await this.notificationSettingsService.updateItem(settings);
       });
@@ -87,16 +96,16 @@ export class UserSettingsComponent implements OnInit {
     }
   }
 
-  isAllSelected() {
-    const numSelected = this.selection.selected.length;
+  isAllSelected(selectionModel: SelectionModel<ICourse>) {
+    const numSelected = selectionModel.selected.length;
     const numRows = this.dataSource.data.length;
     return numSelected === numRows;
   }
 
-  masterToggle() {
-    this.isAllSelected() ?
-      this.selection.clear() :
-      this.dataSource.data.forEach(row => this.selection.select(row));
+  masterToggle(selectionModel: SelectionModel<ICourse>) {
+    this.isAllSelected(selectionModel) ?
+      selectionModel.clear() :
+      this.dataSource.data.forEach(row => selectionModel.select(row));
   }
 
 

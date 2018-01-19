@@ -15,5 +15,6 @@ export interface INotificationSettings {
   course: ICourse;
   user: IUser;
   notificationType: string;
+  emailNotification: boolean;
 }
 

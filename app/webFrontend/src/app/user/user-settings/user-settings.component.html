@@ -3,15 +3,16 @@
 <mat-table #table [dataSource]="dataSource">
   <ng-container matColumnDef="Notifications">
     <mat-header-cell *matHeaderCellDef>
-      <mat-checkbox (change)="$event ? masterToggle() : null"
-                    [checked]="selection.hasValue() && isAllSelected()"
-                    [indeterminate]="selection.hasValue() && !isAllSelected()">
+      Notifications
+      <mat-checkbox (change)="$event ? masterToggle(notificationSelection) : null"
+                    [checked]="notificationSelection.hasValue() && isAllSelected(notificationSelection)"
+                    [indeterminate]="notificationSelection.hasValue() && !isAllSelected(notificationSelection)">
       </mat-checkbox>
     </mat-header-cell>
     <mat-cell *matCellDef="let course">
       <mat-checkbox (click)="$event.stopPropagation()"
-                    (change)="$event ? selection.toggle(course) : null"
-                    [checked]="selection.isSelected(course)">
+                    (change)="$event ? notificationSelection.toggle(course) : null"
+                    [checked]="notificationSelection.isSelected(course)">
       </mat-checkbox>
     </mat-cell>
   </ng-container>
@@ -21,9 +22,27 @@
     <mat-cell *matCellDef="let course">{{course.name}}</mat-cell>
   </ng-container>
 
+  <!-- Email Column -->
+  <ng-container matColumnDef="email">
+    <mat-header-cell *matHeaderCellDef>
+      Email
+      <mat-checkbox (change)="$event ? masterToggle(emailSelection) : null"
+                    [checked]="emailSelection.hasValue() && isAllSelected(emailSelection)"
+                    [indeterminate]="emailSelection.hasValue() && !isAllSelected(emailSelection)">
+      </mat-checkbox>
+    </mat-header-cell>
+    <mat-cell *matCellDef="let course">
+      <mat-checkbox (click)="$event.stopPropagation()"
+                    (change)="$event ? emailSelection.toggle(course) : null"
+                    [checked]="emailSelection.isSelected(course)">
+      </mat-checkbox>
+    </mat-cell>
+  </ng-container>
+
+
   <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-  <mat-row *matRowDef="let row; columns: displayedColumns;"
-           (click)="selection.toggle(row)">
+  <mat-row *matRowDef="let row; columns: displayedColumns;">
+           <!--(click)="notificationSelection.toggle(row)">-->
   </mat-row>
 </mat-table>
 <button mat-raised-button color="primary" class="mat-button" (click)="saveNotificationSettings()">Save</button>

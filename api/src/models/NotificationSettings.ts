@@ -16,6 +16,9 @@ const notificationSettingsSchema = new mongoose.Schema({
     notificationType: {
       type: String
     },
+    emailNotification: {
+      type: Boolean
+    }
   },
   {
     timestamps: true,

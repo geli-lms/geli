@@ -187,7 +187,8 @@ export class CourseController {
 
         if (course.students.indexOf(currentUser._id) < 0) {
           course.students.push(currentUser);
-          new NotificationSettings({'user': currentUser, 'course': course, 'notificationType': API_NOTIFICATION_TYPE_ALL_CHANGES}).save();
+          new NotificationSettings({'user': currentUser, 'course': course,
+            'notificationType': API_NOTIFICATION_TYPE_ALL_CHANGES, 'emailNotification': false}).save();
           return course.save().then((c) => c.toObject());
         }
 

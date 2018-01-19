@@ -10,6 +10,10 @@ import {
   NotificationSettings
 } from './NotificationSettings';
 import {InternalServerError} from 'routing-controllers';
+import emailService from '../services/EmailService';
+import {SendMailOptions} from 'nodemailer';
+import config from '../config/main';
+import {User} from './User';
 
 interface INotificationModel extends INotification, mongoose.Document {
 }
@@ -58,7 +62,7 @@ notificationSchema.statics.createNotification = async function (
     let settings = await NotificationSettings.findOne({'user': user, 'course': changedCourse});
     if (settings === undefined || settings === null) {
       settings = await new NotificationSettings(
-        {'user': user, 'course': changedCourse, 'notificationType': API_NOTIFICATION_TYPE_ALL_CHANGES}).save();
+        {'user': user, 'course': changedCourse, 'notificationType': API_NOTIFICATION_TYPE_ALL_CHANGES, 'emailNotification': false}).save();
     }
     if (settings.notificationType === API_NOTIFICATION_TYPE_ALL_CHANGES) {
       const notification = new Notification();
@@ -71,6 +75,9 @@ notificationSchema.statics.createNotification = async function (
       if (changedUnit) {
         notification.changedUnit = changedUnit;
       }
+      if (settings.emailNotification) {
+        sendNotificationMail(user, 'you received new notifications for the course ' + changedCourse.name + '.');
+      }
       notification.isOld = false;
       return notification.save();
     }
@@ -79,6 +86,24 @@ notificationSchema.statics.createNotification = async function (
     newError.stack += '\nCaused by: ' + err.message + '\n' + err.stack;
     throw newError;
   }
+}
+
+async function sendNotificationMail(user: IUser, text: string) {
+  const message: SendMailOptions = {};
+  console.warn('user: ' + user);
+  console.warn('profile: ' + user.email);
+  user = await User.findById(user);
+  console.warn('user: ' + user);
+  console.warn('user:' + user.email);
+  message.to = user.profile.firstName + ' ' + user.profile.lastName + '<' + user.email + '>';
+  message.subject = 'Geli informs: you have new notifications :)';
+  message.text = 'Hello ' + user.profile.firstName + ', \n\n' +
+     + text + '\n' + 'Please check your notifications in geli.\n' +
+    'Your GELI Team.';
+  message.html = '<p>Hello ' + user.profile.firstName  + ',</p><br>' +
+    '<p>' + text + '<br>Please check your notifications in geli.</p><br>' +
+    '<p>Your GELI Team.</p>';
+  await emailService.sendFreeFormMail(message);
 }
 
 
