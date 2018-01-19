@@ -5,7 +5,7 @@ import {FileItem, FileUploader, ParsedResponseHeaders} from 'ng2-file-upload';
 @Component({
   selector: 'app-filepicker-dialog',
   templateUrl: './filepicker-dialog.component.html',
-  styleUrls: ['./filepicker-dialog.component.css']
+  styleUrls: ['./filepicker-dialog.component.scss']
 })
 export class FilepickerDialog {
 
