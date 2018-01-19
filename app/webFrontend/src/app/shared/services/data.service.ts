@@ -236,77 +236,49 @@ export class MediaService extends DataService {
   }
 
   createRootDir(rootDirName: string): Promise<IDirectory> {
-    // TODO: If this works, apply to all
     return this.backendService.post(this.apiPath + 'directory', JSON.stringify({name: rootDirName}))
       .toPromise();
   }
 
-  createDir(newDirName: string, parentDir: IDirectory): Promise<IDirectory> {
-    return new Promise<IDirectory>((resolve, reject) => {
-      this.backendService.post(this.apiPath + 'directory/' + parentDir._id, JSON.stringify({name: newDirName}))
-        .subscribe((responseItem: IDirectory) => {
-            resolve(responseItem);
-          },
-          error => reject(error)
-        );
-    });
+  createDirectory(newDirName: string, parentDir: IDirectory): Promise<IDirectory> {
+    return this.backendService.post(this.apiPath + 'directory/' + parentDir._id, JSON.stringify({name: newDirName}))
+      .toPromise();
   }
 
   addFile(directory: IDirectory): Promise<IFile> {
-    return new Promise<IFile>((resolve, reject) => {
-      this.backendService.post(this.apiPath + 'file/' + directory._id, JSON.stringify({}))
-        .subscribe((responseItem: IFile) => {
-            resolve(responseItem);
-          },
-          error => reject(error)
-        );
-    });
+    return this.backendService.post(this.apiPath + 'file/' + directory._id, JSON.stringify({}))
+      .toPromise();
   }
 
   getDirectory(dirId: string, lazy: boolean = false): Promise<IDirectory> {
     const path = this.apiPath + 'directory/' + dirId + (lazy ? '/lazy' : '');
-    return new Promise<IDirectory>((resolve, reject) => {
-      this.backendService.get(path)
-        .subscribe((responseItem: IDirectory) => {
-            resolve(responseItem);
-          },
-          error => reject(error)
-        );
-    });
+    return this.backendService.get(path)
+      .toPromise();
   }
 
   getFile(fileId: string): Promise<IFile> {
-    return new Promise<IFile>((resolve, reject) => {
-      this.backendService.get(this.apiPath + 'file/' + fileId)
-        .subscribe((responseItem: IFile) => {
-            resolve(responseItem);
-          },
-          error => reject(error));
-    });
+    return this.backendService.get(this.apiPath + 'file/' + fileId)
+      .toPromise();
+  }
+
+  updateDirectory(dir: IDirectory): Promise<IDirectory> {
+    return this.backendService.put(this.apiPath + 'directory/' + dir._id, JSON.stringify(dir))
+      .toPromise();
+  }
+
+  updateFile(file: IFile): Promise<IFile> {
+    return this.backendService.put(this.apiPath + 'file/' + file._id, JSON.stringify(file))
+      .toPromise();
   }
 
   deleteDirectory(dir: IDirectory): Promise<any> {
-    return new Promise<any>((resolve, reject) => {
-      this.backendService.delete(this.apiPath + 'directory/' + dir._id)
-        .subscribe(
-          (responseItem: any) => {
-            resolve(responseItem);
-          },
-          error => reject(error)
-        );
-    });
+    return this.backendService.delete(this.apiPath + 'directory/' + dir._id)
+      .toPromise();
   }
 
   deleteFile(file: IFile): Promise<any> {
-    return new Promise<any>((resolve, reject) => {
-      this.backendService.delete(this.apiPath + 'file/' + file._id)
-        .subscribe(
-          (responseItem: any) => {
-            resolve(responseItem);
-          },
-          error => reject(error)
-        );
-    });
+    return this.backendService.delete(this.apiPath + 'file/' + file._id)
+      .toPromise();
   }
 }
 
@@ -426,7 +398,7 @@ export class UserDataService extends DataService {
 }
 
 @Injectable()
-export  class  WhitelistUserService extends DataService {
+export class WhitelistUserService extends DataService {
   constructor(public backendService: BackendService) {
     super('whitelist/', backendService);
   }
