@@ -1,0 +1,10 @@
+<form>
+  <mat-form-field>
+    <input matInput placeholder="Name to be set" [(ngModel)]="nameField" name="name">
+  </mat-form-field>
+</form>
+
+<p>
+  <button mat-raised-button color="primary" (click)="save()"><mat-icon>save</mat-icon>SAVE</button>
+  <button mat-raised-button color="warn" (click)="cancel()"><mat-icon>cancel</mat-icon>CANCEL</button>
+</p>

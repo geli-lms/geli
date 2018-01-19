@@ -7,6 +7,7 @@ import {IDirectory} from '../../../../../../../shared/models/mediaManager/IDirec
 import {UploadFormDialog} from '../../../shared/components/upload-form-dialog/upload-form-dialog.component';
 import {IFile} from '../../../../../../../shared/models/mediaManager/IFile';
 import {DialogService} from '../../../shared/services/dialog.service';
+import {RenameDialogComponent} from '../../../shared/components/rename-dialog/rename-dialog.component';
 
 const prettyBytes = require('pretty-bytes');
 
@@ -43,7 +44,9 @@ export class CourseMediaComponent implements OnInit {
           // Root dir does not exist, add one
           this.course.media = await this.mediaService.createRootDir(this.course.name);
           // Update course
-          this.course = await this.courseService.updateItem<ICourse>(this.course);
+          await this.courseService.updateItem<ICourse>(this.course);
+          // Reload course
+          this.course = await this.courseService.readSingleItem<ICourse>(this.course._id);
         }
 
         await this.changeDirectory(this.course.media._id, true);
@@ -103,7 +106,7 @@ export class CourseMediaComponent implements OnInit {
     dialogRef.afterClosed().subscribe(value => {
       if (value) {
         // Reload current folder
-        this.changeDirectory(this.currentFolder._id, true);
+        this.reloadDirectory();
       }
     });
   }
@@ -154,8 +157,23 @@ export class CourseMediaComponent implements OnInit {
   }
 
   async renameFile(file: IFile) {
+    const res = await this.dialog.open(RenameDialogComponent, {
+      minWidth: '30%',
+      data: {
+        name: file.name,
+      }
+    });
 
-    await this.reloadDirectory();
+    res.afterClosed().subscribe(async value => {
+      if (value !== false) {
+        // Update file attributes
+        file.name = value;
+        await this.mediaService.updateFile(file)
+          .then(value2 => this.snackBar.open('Renamed file', '', {duration: 2000}))
+          .catch(reason => this.snackBar.open('Rename failed, Server error', '', {duration: 2000}));
+        await this.reloadDirectory();
+      }
+    });
   }
 
   getSimpleMimeType(file: IFile): string {

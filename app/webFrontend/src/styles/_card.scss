@@ -5,6 +5,7 @@
   margin: 10px;
   border-radius: 8px;
   background: no-repeat 75px 15px;
+  overflow: hidden;
 
   &:hover {
     background-color: map-get($app-primary, 300);

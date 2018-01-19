@@ -12,6 +12,7 @@ import {MaterialImportModule} from './material-import.module';
 import {AceEditorModule} from 'ng2-ace-editor';
 import {InfoDialog} from '../components/info-dialog/info-dialog.component';
 import {FocusDirective} from '../directives/focus.directive';
+import {RenameDialogComponent} from '../components/rename-dialog/rename-dialog.component';
 
 @NgModule({
   imports: [
@@ -28,6 +29,7 @@ import {FocusDirective} from '../directives/focus.directive';
     UploadDialog,
     FilepickerDialog,
     WriteMailDialog,
+    RenameDialogComponent,
     FocusDirective,
   ],
   declarations: [
@@ -37,6 +39,7 @@ import {FocusDirective} from '../directives/focus.directive';
     UploadDialog,
     FilepickerDialog,
     WriteMailDialog,
+    RenameDialogComponent,
     FocusDirective,
   ],
   providers: [
@@ -48,6 +51,7 @@ import {FocusDirective} from '../directives/focus.directive';
     AccessKeyDialog,
     UploadDialog,
     FilepickerDialog,
+    RenameDialogComponent,
     WriteMailDialog,
   ]
 })
