@@ -18,7 +18,7 @@ import {UserProfileComponent} from './user-profile/user-profile.component';
   declarations: [
     UserDetailsComponent,
     UserEditComponent,
-    UserProfileComponent
+    UserProfileComponent,
   ],
   exports: [
     UserProfileComponent
