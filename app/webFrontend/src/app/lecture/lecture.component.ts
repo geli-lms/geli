@@ -41,14 +41,5 @@ export class LectureComponent implements OnInit, AfterViewInit {
 
   toggleOpen() {
     this.opened = !this.opened;
-    // this.navigateToThisLecture();
-  }
-
-  navigateToThisLecture() {
-    this.route.url.subscribe(segments => {
-      let path = segments.map(() => '../').join('') || '';
-      path += `lecture/${this.lecture._id}`;
-      this.router.navigate([path], {relativeTo: this.route});
-    });
   }
 }

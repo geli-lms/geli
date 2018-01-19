@@ -11,12 +11,6 @@ const routes: Routes = [
     canActivate: [AuthGuardService],
     data: {roles: ['student', 'teacher', 'admin']},
   },
- // {
- //   path: ':id',
-  //  component: LectureComponent,
-  //  canActivate: [AuthGuardService],
- //   data: {roles: ['student', 'teacher', 'admin']},
-  // },
 ];
 
 
