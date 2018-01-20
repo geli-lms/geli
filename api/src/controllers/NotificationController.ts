@@ -25,17 +25,21 @@ import emailService from '../services/EmailService';
 export class NotificationController {
 
 
-  @Authorized(['student', 'teacher', 'admin'])
+  @Authorized(['teacher', 'admin'])
   @Post('/')
   async createNotifications(@Body() data: any, @Req() request: Request) {
     if (!data.changedCourse || !data.text) {
-      throw new BadRequestError('Notification needs at least the fields course  and text');
+      throw new BadRequestError('Notification needs at least the fields course and text');
     }
     const course = await Course.findById(data.changedCourse._id);
-    course.students.forEach(async student => {
+    /*course.students.forEach(async student => {
       await this.createNotification(
         student, data.changedCourse, data.text, data.changedLecture, data.changedUnit);
-    });
+    });*/
+    await Promise.all(course.students.map( async student => {
+      await this.createNotification(
+        student, data.changedCourse, data.text, data.changedLecture, data.changedUnit);
+    }));
     return {notified: true};
   }
 
@@ -102,7 +106,6 @@ export class NotificationController {
     });
 
   }
-
 
   @Authorized(['student', 'teacher', 'admin'])
   @Delete('/:id')
