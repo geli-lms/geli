@@ -97,7 +97,6 @@ describe('NotificationSettings', async () => {
         .set('Authorization', `JWT ${JwtUtils.generateToken(student)}`)
         .send(settings);
       res.should.have.status(200);
-      console.warn('log: ' + res.text);
       res.body.notificationType.should.be.equal(API_NOTIFICATION_TYPE_NONE);
       res.body.emailNotification.should.be.equal(true);
       res.body.should.have.property('user');
