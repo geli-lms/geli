@@ -49,10 +49,10 @@ export class NotificationController {
       if (settings === undefined || settings === null) {
         settings = await new NotificationSettings(
           {
-            'user': user,
-            'course': changedCourse,
-            'notificationType': API_NOTIFICATION_TYPE_ALL_CHANGES,
-            'emailNotification': false
+            user: user,
+            course: changedCourse,
+            notificationType: API_NOTIFICATION_TYPE_ALL_CHANGES,
+            emailNotification: false
           }).save();
       }
       if (settings.notificationType === API_NOTIFICATION_TYPE_ALL_CHANGES) {
