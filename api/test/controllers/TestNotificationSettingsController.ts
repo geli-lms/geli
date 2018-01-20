@@ -4,8 +4,11 @@ import {FixtureLoader} from '../../fixtures/FixtureLoader';
 import chaiHttp = require('chai-http');
 import {FixtureUtils} from '../../fixtures/FixtureUtils';
 import {JwtUtils} from '../../src/security/JwtUtils';
-import {API_NOTIFICATION_TYPE_ALL_CHANGES, NotificationSettings} from '../../src/models/NotificationSettings';
+import {API_NOTIFICATION_TYPE_ALL_CHANGES, API_NOTIFICATION_TYPE_NONE, NotificationSettings} from '../../src/models/NotificationSettings';
 import {User} from '../../src/models/User';
+import {Course} from '../../src/models/Course';
+import {ICourse} from '../../../shared/models/ICourse';
+import * as mongoose from 'mongoose';
 
 chai.use(chaiHttp);
 const should = chai.should();
@@ -40,4 +43,69 @@ describe('NotificationSettings', async () => {
       notificationSettings.course.toString().should.be.equal(newSettings.course._id.toString());
     })
   });
+
+  describe(`GET ${BASE_URL} user :id`, () => {
+    it('should return all notification settings for a student', async () => {
+      const student = await FixtureUtils.getRandomStudent();
+      const course1 = await FixtureUtils.getRandomCourse();
+      const course2 = await FixtureUtils.getRandomCourse();
+      course1.students.push(student);
+      course2.students.push(student);
+      await Course.update(course1, {new: true});
+      await Course.update(course2, {new: true});
+
+      await new NotificationSettings({
+        'user': student, 'course': course1,
+        'notificationType': API_NOTIFICATION_TYPE_ALL_CHANGES, 'emailNotification': false
+      }).save();
+
+      await new NotificationSettings({
+        'user': student, 'course': course2,
+        'notificationType': API_NOTIFICATION_TYPE_ALL_CHANGES, 'emailNotification': false
+      }).save();
+
+
+      const res = await chai.request(app)
+        .get(`${BASE_URL}/user/${student._id}`)
+        .set('Authorization', `JWT ${JwtUtils.generateToken(student)}`);
+      res.should.have.status(200);
+      res.body.forEach((notificationSettings: any) => {
+        notificationSettings._id.should.be.a('string');
+        notificationSettings.user.toString().should.be.a('string');
+        notificationSettings.course.toString().should.be.a('string');
+        notificationSettings.notificationType.should.be.a('string');
+        notificationSettings.emailNotification.should.be.a('boolean');
+      });
+      console.warn('res.body: ' + res.text);
+    })
+  });
+
+  describe(`PUT ${BASE_URL} :id`, () => {
+    it('should update the notification settings', async () => {
+      const student = await FixtureUtils.getRandomStudent();
+      const course = await FixtureUtils.getRandomCourse();
+      course.students.push(student);
+      await Course.update(course, {new: true});
+      const settings = await new NotificationSettings({
+        'user': student, 'course': course,
+        'notificationType': API_NOTIFICATION_TYPE_ALL_CHANGES, 'emailNotification': false
+      }).save();
+
+      settings.notificationType = API_NOTIFICATION_TYPE_NONE;
+      settings.emailNotification = true;
+
+      const res = await chai.request(app)
+        .put(`${BASE_URL}/${settings._id}`)
+        .set('Authorization', `JWT ${JwtUtils.generateToken(student)}`)
+        .send(settings);
+      res.should.have.status(200);
+      console.warn('log: ' + res.text);
+      res.body.notificationType.should.be.equal(API_NOTIFICATION_TYPE_NONE);
+      res.body.emailNotification.should.be.equal(true);
+      res.body.should.have.property('user');
+      res.body.should.have.property('course');
+      res.body._id.should.be.a('string');
+    })
+  })
 });
+

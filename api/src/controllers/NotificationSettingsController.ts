@@ -24,15 +24,14 @@ export class NotificationSettingsController {
     if (!notificationSettings) {
       throw new BadRequestError('notification needs fields course and user')
     }
-    const settings: INotificationSettingsModel = await NotificationSettings.findOneAndUpdate({'_id': id}, notificationSettings, {new: true})
+    const settings: INotificationSettingsModel =
+      await NotificationSettings.findOneAndUpdate({'_id': id}, notificationSettings, {new: true});
     return settings.toObject();
   }
 
   @Authorized(['student', 'teacher', 'admin'])
   @Post('/')
   async createNotificationSettings(@Body() data: any) {
-    console.warn('user: ' + data.user._id);
-    console.warn('course: ' + data.course._id);
     if (!data.user || !data.course) {
       throw new BadRequestError('NotificationSettings need course and user');
     }
@@ -45,8 +44,6 @@ export class NotificationSettingsController {
       'user': data.user, 'course': data.course,
       'notificationType': API_NOTIFICATION_TYPE_ALL_CHANGES, 'emailNotification': false
     }).save();
-    console.warn('settings: ' + settings);
-    console.warn('settingsObject: ' + settings.toObject());
     return settings.toObject();
   }
 
