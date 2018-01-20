@@ -1,5 +1,5 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
-import {CodeKataUnitService, UnitService} from '../../../shared/services/data.service';
+import {CodeKataUnitService, NotificationService, UnitService} from '../../../shared/services/data.service';
 import {MatSnackBar} from '@angular/material';
 import {ICodeKataUnit} from '../../../../../../../shared/models/units/ICodeKataUnit';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
@@ -56,7 +56,8 @@ export class CodeKataUnitFormComponent implements OnInit {
 
   constructor(private codeKataUnitService: CodeKataUnitService,
               private unitService: UnitService,
-              private snackBar: MatSnackBar) {
+              private snackBar: MatSnackBar,
+              private notificationService: NotificationService) {
   }
 
   ngOnInit() {
@@ -104,7 +105,11 @@ export class CodeKataUnitFormComponent implements OnInit {
         lectureId: this.lectureId
       })
       .then(
-        () => {
+        (unit) => {
+          this.notificationService.createItem(
+            {changedCourse: this.course, changedLecture: null,
+              changedUnit: unit, text: 'Course ' + this.course.name + ' has a new code kata unit.'})
+            .catch(console.error);
           this.snackBar.open('Code-Kata created', '', {duration: 3000});
           this.onDone();
         },
@@ -116,7 +121,11 @@ export class CodeKataUnitFormComponent implements OnInit {
       delete this.model._course;
       this.unitService.updateItem(this.model)
       .then(
-        () => {
+        (unit) => {
+          this.notificationService.createItem(
+            {changedCourse: this.course, changedLecture: null,
+              changedUnit: unit, text: 'Course ' + this.course.name + ' has an updated unit.'})
+            .catch(console.error);
           this.snackBar.open('Code-Kata updated', '', {duration: 3000});
           this.onDone();
         },

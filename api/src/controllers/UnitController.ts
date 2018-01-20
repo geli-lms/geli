@@ -98,11 +98,6 @@ export class UnitController {
     try {
       oldUnit.set(data);
       const updatedUnit: IUnitModel = await oldUnit.save();
-      const course = await Course.findById(updatedUnit._course);
-      course.students.forEach(student => {
-        Notification.schema.statics.createNotification(
-          student, course, 'Course ' + course.name + ': Unit ' + updatedUnit.name + ' has been updated.', null, updatedUnit);
-      });
       return updatedUnit.toObject();
     } catch (err) {
       if (err.name === 'ValidationError') {
@@ -133,14 +128,6 @@ export class UnitController {
     return Lecture.findById(lectureId)
       .then((lecture) => {
         lecture.units.push(unit);
-        Course.findById(unit._course).populate('students').then((course) => {
-          course.students.forEach(student => {
-            Notification.schema.statics.createNotification(
-              student, course, 'Course ' + course.name + ': Lecture ' + lecture.name + ' has a new unit.', lecture, unit);
-          });
-        }).catch(err => {
-          throw new BadRequestError(err);
-        });
         return lecture.save();
       })
       .then(() => {

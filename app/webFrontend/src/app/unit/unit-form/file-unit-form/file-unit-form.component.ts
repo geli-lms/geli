@@ -4,7 +4,7 @@ import {ICourse} from '../../../../../../../shared/models/ICourse';
 import {ILecture} from '../../../../../../../shared/models/ILecture';
 import {IFileUnit} from '../../../../../../../shared/models/units/IFileUnit';
 import {UnitGeneralInfoFormComponent} from '../unit-general-info-form/unit-general-info-form.component';
-import {UnitService} from '../../../shared/services/data.service';
+import {NotificationService, UnitService} from '../../../shared/services/data.service';
 import {FileUnit} from '../../../models/units/FileUnit';
 import {UploadFormComponent} from '../../../shared/components/upload-form/upload-form.component';
 import {ShowProgressService} from '../../../shared/services/show-progress.service';
@@ -39,7 +39,8 @@ export class FileUnitFormComponent implements OnInit {
 
   constructor(public snackBar: MatSnackBar,
               private unitService: UnitService,
-              private showProgress: ShowProgressService) {  }
+              private showProgress: ShowProgressService,
+              private notificationService: NotificationService) {  }
 
   ngOnInit() {
     if (!this.model) {
@@ -105,6 +106,10 @@ export class FileUnitFormComponent implements OnInit {
       this.unitService.updateItem(this.model)
         .then((updatedUnit) => {
           this.model = updatedUnit;
+          this.notificationService.createItem(
+            {changedCourse: this.course, changedLecture: null,
+              changedUnit: updatedUnit, text: 'Course ' + this.course.name + ' has an updated file unit.'})
+            .catch(console.error);
           this.onAllUploaded();
         })
         .catch((error) => {

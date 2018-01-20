@@ -1,7 +1,7 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {IFreeTextUnit} from '../../../../../../../shared/models/units/IFreeTextUnit';
 import {MatDialog, MatSnackBar} from '@angular/material';
-import {FreeTextUnitService, UnitService} from '../../../shared/services/data.service';
+import {FreeTextUnitService, NotificationService, UnitService} from '../../../shared/services/data.service';
 import {FreeTextUnit} from '../../../models/units/FreeTextUnit';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
 import {UnitGeneralInfoFormComponent} from '../unit-general-info-form/unit-general-info-form.component';
@@ -29,7 +29,8 @@ export class FreeTextUnitFormComponent implements OnInit {
   constructor(private freeTextUnitService: FreeTextUnitService,
               private unitService: UnitService,
               private snackBar: MatSnackBar,
-              public dialog: MatDialog) {
+              public dialog: MatDialog,
+              private notificationService: NotificationService) {
   }
 
   ngOnInit() {
@@ -56,7 +57,11 @@ export class FreeTextUnitFormComponent implements OnInit {
       // Create new one
       this.unitService.createItem({model: this.model, lectureId: this.lectureId})
         .then(
-          () => {
+          (unit) => {
+            this.notificationService.createItem(
+              {changedCourse: this.course, changedLecture: null,
+                changedUnit: unit, text: 'Course ' + this.course.name + ' has a new text unit.'})
+              .catch(console.error);
             this.snackBar.open('Free text unit saved', '', {duration: 3000});
             this.onDone();
           },
@@ -69,7 +74,11 @@ export class FreeTextUnitFormComponent implements OnInit {
       // delete this.model._course;
       this.unitService.updateItem(this.model)
         .then(
-          () => {
+          (unit) => {
+            this.notificationService.createItem(
+              {changedCourse: this.course, changedLecture: null,
+                changedUnit: unit, text: 'Course ' + this.course.name + ' has an updated text unit.'})
+              .catch(console.error);
             this.snackBar.open('Free text unit saved', 'Update', {duration: 2000});
             this.onDone();
           },

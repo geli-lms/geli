@@ -28,9 +28,6 @@ export class LectureController {
       })
       .then(({course, lecture}) => {
         course.lectures.push(lecture);
-        course.students.forEach(student => {
-          Notification.schema.statics.createNotification(student, course, 'Course ' + course.name + ' has a new lecture.', lecture);
-        });
         return course.save().then(updatedCourse => ({course, lecture}));
       })
       .then(({course, lecture}) => lecture.toObject());

@@ -252,9 +252,6 @@ export class CourseController {
     )
       .then((c) => {
         if (c) {
-          c.students.forEach(student => {
-            Notification.schema.statics.createNotification(student, course, 'Course ' + course.name + ' has been updated.');
-          });
           return c.toObject();
         }
         return undefined;
@@ -271,9 +268,6 @@ export class CourseController {
     const courseAdmin = await User.findOne({_id: course.courseAdmin});
     if (course.teachers.indexOf(currentUser._id) !== -1 || courseAdmin.equals(currentUser._id.toString())
       || currentUser.role === 'admin' ) {
-      course.students.forEach(student => {
-        Notification.schema.statics.createNotification(student, course, 'Course ' + course.name + 'has been removed.');
-      });
       await course.remove();
       return {result: true};
     } else {

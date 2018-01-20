@@ -12,7 +12,9 @@ export class NotificationSettingsController {
     const notificationSettings: INotificationSettingsModel[] = await NotificationSettings.find({'user': id})
       .populate('user')
       .populate('course');
-    return notificationSettings.map(settings => {return settings.toObject()});
+    return notificationSettings.map(settings => {
+      return settings.toObject()
+    });
   }
 
   @Put('/:id')
@@ -26,18 +28,20 @@ export class NotificationSettingsController {
 
   @Post('/')
   async createNotificationSettings(@Body() data: any) {
-      if (!data.user || !data.course) {
-        throw new BadRequestError('NotificationSettings need course, user and notificationType');
-      }
-      const notificationSettings: INotificationSettingsModel =
-        await NotificationSettings.findOne({'user': data.user, 'course': data.course});
-      if (notificationSettings) {
-        throw new BadRequestError('NotificationSettings for user:' + data.user + ' with course: ' + data.course + ' already exist');
-      }
-      const settings: INotificationSettingsModel = await new NotificationSettings({'user': data.user, 'course': data.course,
-        'notificationType': API_NOTIFICATION_TYPE_ALL_CHANGES, 'emailNotification': false}).save();
-      return settings.toObject();
+    if (!data.user || !data.course) {
+      throw new BadRequestError('NotificationSettings need course, user and notificationType');
     }
+    const notificationSettings: INotificationSettingsModel =
+      await NotificationSettings.findOne({'user': data.user, 'course': data.course});
+    if (notificationSettings) {
+      throw new BadRequestError('NotificationSettings for user:' + data.user + ' with course: ' + data.course + ' already exist');
+    }
+    const settings: INotificationSettingsModel = await new NotificationSettings({
+      'user': data.user, 'course': data.course,
+      'notificationType': API_NOTIFICATION_TYPE_ALL_CHANGES, 'emailNotification': false
+    }).save();
+    return settings.toObject();
+  }
 
 
 }

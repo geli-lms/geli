@@ -90,11 +90,7 @@ notificationSchema.statics.createNotification = async function (
 
 async function sendNotificationMail(user: IUser, text: string) {
   const message: SendMailOptions = {};
-  console.warn('user: ' + user);
-  console.warn('profile: ' + user.email);
   user = await User.findById(user);
-  console.warn('user: ' + user);
-  console.warn('user:' + user.email);
   message.to = user.profile.firstName + ' ' + user.profile.lastName + '<' + user.email + '>';
   message.subject = 'Geli informs: you have new notifications :)';
   message.text = 'Hello ' + user.profile.firstName + ', \n\n' +

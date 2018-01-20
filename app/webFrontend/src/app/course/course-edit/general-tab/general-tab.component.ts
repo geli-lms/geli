@@ -9,7 +9,7 @@ import {
   ICourse
 } from '../../../../../../../shared/models/ICourse';
 import {ActivatedRoute, Router} from '@angular/router';
-import {CourseService, DuplicationService, ExportService} from '../../../shared/services/data.service';
+import {CourseService, DuplicationService, ExportService, NotificationService} from '../../../shared/services/data.service';
 import {MatSnackBar} from '@angular/material';
 import {ShowProgressService} from '../../../shared/services/show-progress.service';
 import {TitleService} from '../../../shared/services/title.service';
@@ -57,7 +57,8 @@ export class GeneralTabComponent implements OnInit {
               private duplicationService: DuplicationService,
               private userService: UserService,
               private dataSharingService: DataSharingService,
-              private dialogService: DialogService) {
+              private dialogService: DialogService,
+              private notificationService: NotificationService) {
 
     this.route.params.subscribe(params => {
       this.id = params['id'];
@@ -133,6 +134,10 @@ export class GeneralTabComponent implements OnInit {
 
     this.courseService.updateItem(request).then(
       (val) => {
+        this.notificationService.createItem(
+          {changedCourse: val, changedLecture: null,
+            changedUnit: null, text: 'Course ' + val.name + ' has been updated.'})
+          .catch(console.error);
         this.showProgress.toggleLoadingGlobal(false);
         this.snackBar.open('Saved successfully', '', {duration: 5000});
       }, (error) => {
@@ -178,6 +183,10 @@ export class GeneralTabComponent implements OnInit {
         if (!res) {
           return;
         }
+        this.notificationService.createItem(
+          {changedCourse: this.courseOb, changedLecture: null,
+            changedUnit: null, text: 'Course ' + this.courseOb.name + ' has been deleted.'})
+          .catch(console.error);
         await this.courseService.deleteItem(this.courseOb);
         await this.router.navigate(['/']);
       });
