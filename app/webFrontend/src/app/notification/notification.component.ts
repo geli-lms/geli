@@ -40,10 +40,11 @@ export class NotificationComponent implements OnInit {
     });
   }
 
-  clearAll() {
-    this.notifications.forEach(async notification => {
+  async clearAll() {
+    await Promise.all(this.notifications.map(async notification => {
       await this.removeNotification(notification);
-    })
+    }));
+    this.notifications = [];
   }
 
   async removeNotification(notification: INotification) {
@@ -68,20 +69,6 @@ export class NotificationComponent implements OnInit {
       }
       return compareIds(a.changedCourse, b.changedCourse);
     });
-  }
-
-  filterShownNotifications() {
-
-  }
-
-  compareNotificationDate(a: any, b: any) {
-    if (a.createdAt > b.createdAt) {
-      return 1;
-    }
-    if (a.createdAt < b.createdAt) {
-      return -1;
-    }
-    return 0;
   }
 
   isNullOrUndefined(item: any): boolean {
