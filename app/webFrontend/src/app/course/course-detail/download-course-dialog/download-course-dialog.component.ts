@@ -92,7 +92,7 @@ export class DownloadCourseDialogComponent implements OnInit {
             lecture.childUnits.forEach(unit => {
               if (unit.files) {
                 unit.childUnits.forEach(fileUnit => {
-                  if (fileUnit.file.path === file ) {
+                  if (fileUnit.file.link === file ) {
                       fileUnit.showDL = true;
                   }
                 });

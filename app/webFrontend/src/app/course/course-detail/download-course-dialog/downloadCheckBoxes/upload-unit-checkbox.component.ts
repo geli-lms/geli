@@ -1,5 +1,5 @@
 import {Component, Input, Output, OnInit, EventEmitter} from '@angular/core';
-import {IFile} from '../../../../../../../../shared/models/IFile';
+import {IFile} from '../../../../../../../../shared/models/mediaManager/IFile';
 import {BackendService} from '../../../../shared/services/backend.service';
 
 @Component({
@@ -36,11 +36,11 @@ export class UploadUnitCheckboxComponent implements OnInit {
     const downloadLink = BackendService.API_URL + '/uploads/' + this.file.name;
 
     if (window.navigator && window.navigator.msSaveOrOpenBlob) {
-      window.navigator.msSaveOrOpenBlob(downloadLink, this.file.alias);
+      window.navigator.msSaveOrOpenBlob(downloadLink, this.file.name);
     } else {
       const e = document.createEvent('MouseEvents'),
         a = document.createElement('a');
-      a.download = this.file.alias;
+      a.download = this.file.name;
       a.href = downloadLink;
       a.dataset.downloadurl = [a.download, a.href].join(':');
       e.initEvent('click', true, false);
