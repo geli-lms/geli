@@ -15,13 +15,8 @@ import {Observable} from 'rxjs/Observable';
 export class WhitelistEditComponent implements OnInit {
 
   dragableWhitelistUser: IWhitelistUser[] = [];
-  dragableWhitelistUserInCourse: IWhitelistUser[] = [];
-  finishRestCall = false;
   @Input() course: ICourse;
-  @Input() dragulaBagId;
   @Input() total = 0;
-  @Output() onDragableWhitelistUserInCourse = new EventEmitter<IWhitelistUser[]>();
-  @Output() onDragendRemoveWhitelist = new EventEmitter<IWhitelistUser>();
   @Output() onDragendPushWhitelist = new EventEmitter<IWhitelistUser>();
   whitelistUser: any = {firstName: '', lastName: '', uid: '', courseId: null};
 
@@ -38,8 +33,7 @@ export class WhitelistEditComponent implements OnInit {
   filteredOptionsUid: Observable<string[]>;
 
   constructor(private whitelistUserService: WhitelistUserService,
-              private snackBar: MatSnackBar,
-              private dragula: DragulaService) {
+              private snackBar: MatSnackBar) {
   }
 
   filter(val: string, options: string[]): string[] {

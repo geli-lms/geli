@@ -16,8 +16,6 @@ import {IUser} from '../../../../../../../../shared/models/IUser';
 export class WhitelistShowComponent implements OnInit {
 
   @Input() dragUsers: any = [];
-  @Input() dragulaBagId;
-  @Input() fieldId: string;
   @Input() course: ICourse;
   @Input() show: boolean;
 
