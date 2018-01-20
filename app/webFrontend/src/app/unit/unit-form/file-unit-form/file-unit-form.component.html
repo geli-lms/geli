@@ -19,17 +19,17 @@
     </div>
   </div>
 </div>
-<app-upload-form [uploadPath]="uploadPath"
-                 [uploadMethod]="uploadMethod"
-                 [additionalData]="additionalUploadData"
-                 (onFileSelectedChange)="onFileSelectedChange($event)"
-                 (onFileUploaded)="onFileUploaded($event)"
-                 (onAllUploaded)="onAllUploaded()"></app-upload-form>
+
+<p>
+  <button mat-raised-button (click)="openAddFilesDialog()">
+    Add files
+  </button>
+</p>
 <p>
   <button mat-raised-button color="primary"
-          (click)="uploadAll()" [disabled]="checkSave()">
-    <mat-icon>file_upload</mat-icon>
-    Upload and save
+          (click)="save()" [disabled]="checkSave()">
+    <mat-icon>save</mat-icon>
+    Save
   </button>
   <button mat-raised-button (click)="onCancel()">Cancel</button>
 </p>

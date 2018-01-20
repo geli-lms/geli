@@ -1,5 +1,5 @@
-import {Component, OnInit, Input, ViewChild} from '@angular/core';
-import {MatSnackBar} from '@angular/material';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {MatDialog, MatSnackBar} from '@angular/material';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
 import {ILecture} from '../../../../../../../shared/models/ILecture';
 import {IFileUnit} from '../../../../../../../shared/models/units/IFileUnit';
@@ -9,6 +9,7 @@ import {FileUnit} from '../../../models/units/FileUnit';
 import {UploadFormComponent} from '../../../shared/components/upload-form/upload-form.component';
 import {ShowProgressService} from '../../../shared/services/show-progress.service';
 import {VideoUnit} from '../../../models/units/VideoUnit';
+import {PickMediaDialog} from '../../../shared/components/pick-media-dialog/pick-media-dialog.component';
 
 @Component({
   selector: 'app-file-unit-form',
@@ -39,7 +40,9 @@ export class FileUnitFormComponent implements OnInit {
 
   constructor(public snackBar: MatSnackBar,
               private unitService: UnitService,
-              private showProgress: ShowProgressService) {  }
+              private showProgress: ShowProgressService,
+              private dialog: MatDialog) {
+  }
 
   ngOnInit() {
     if (!this.model) {
@@ -126,5 +129,20 @@ export class FileUnitFormComponent implements OnInit {
     } else {
       return true;
     }
+  }
+
+  async openAddFilesDialog() {
+    const res = await this.dialog.open(PickMediaDialog, {
+      data: {
+        directoryId: this.course.media._id,
+      },
+    });
+
+    res.afterClosed().subscribe(value => {
+      console.log(value);
+      if (value) {
+        // TODO
+      }
+    });
   }
 }

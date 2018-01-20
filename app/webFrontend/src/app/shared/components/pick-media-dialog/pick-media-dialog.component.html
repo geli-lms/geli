@@ -1,0 +1,18 @@
+<h2>Add files to unit</h2>
+<span>Files selected: {{fileList.selectedOptions.selected.length}}</span>
+<mat-dialog-content>
+  <mat-selection-list dense #fileList>
+    <mat-list-option *ngFor="let file of allFiles">
+      <span>{{file.name}}</span>
+    </mat-list-option>
+  </mat-selection-list>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button mat-raised-button color="primary" (click)="save()">
+    SAVE
+  </button>
+  <button mat-raised-button (click)="cancel()">
+    CANCEL
+  </button>
+</mat-dialog-actions>
