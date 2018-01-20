@@ -84,8 +84,9 @@ export class WhitelistEditComponent implements OnInit {
         this.snackBar.open('Create whitelist user. User is not signed in.', '', {duration: this.snackBarDuration});
       }
       return newUser;
-    } catch (error) {
-      this.snackBar.open('Could not create whitelist user. Error was:' + error, '', {duration: this.snackBarDuration});
+    } catch (exception) {
+      this.snackBar.open('Could not create whitelist user. Error was: '
+        + exception.error.message, '', {duration: this.snackBarDuration});
       return null;
     }
   }
