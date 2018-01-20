@@ -100,7 +100,6 @@ export class UserEditComponent implements OnInit {
       }
     }
     saveIUser['currentPassword'] = this.user.password;
-    console.dir(saveIUser);
     return saveIUser;
   }
 
@@ -115,7 +114,6 @@ export class UserEditComponent implements OnInit {
       }
       this.navigateBack();
     } catch (error) {
-      console.dir(error);
       const errormsg = error.message;
       this.snackBar.open(errormsg, 'Dismiss');
     }

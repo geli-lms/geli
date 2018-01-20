@@ -11,8 +11,7 @@ import {UserService} from '../../services/user.service';
   styleUrls: ['./change-password-dialog.component.scss']
 })
 export class ChangePasswordDialogComponent implements OnInit {
-  @Input()
-  user: IUser;
+  @Input() user: IUser;
   pwForm: FormGroup;
 
   constructor( private dialogRef: MatDialogRef<ChangePasswordDialogComponent>,
