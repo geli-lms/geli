@@ -45,10 +45,10 @@
         <div *ngIf="registerForm.controls.email.touched">
           <small *ngIf="registerForm.controls.email.hasError('required')" class="text-danger">Email is required</small>
           <small *ngIf="mailError" class="text-danger">{{mailError}}</small>
-          <small *ngIf="registerForm.controls.email.hasError('email') && !registerForm.controls.email.hasError('required')" class="text-danger">Please use an email with the
+          <small *ngIf="registerForm.controls.email.hasError('teacherEmailError') && !registerForm.controls.email.hasError('email') && !registerForm.controls.email.hasError('required')" class="text-danger">Please register with your teacher email</small>
+          <small *ngIf="registerForm.controls.email.hasError('email') && !registerForm.controls.email.hasError('validateTeacherEmail') &&!registerForm.controls.email.hasError('required')" class="text-danger">Please use an email with the
             format john@doe.com
           </small>
-          <small *ngIf="registerForm.controls.email.hasError('hdaEmailValidator') && !registerForm.controls.email.hasError('email') && !registerForm.controls.email.hasError('required')" class="text-danger">Please register with your @h-da.de email</small>
         </div>
       </mat-form-field>
 
@@ -57,7 +57,7 @@
           <input matInput formControlName="uid" placeholder="Matriculation number"/>
           <div *ngIf="registerForm.controls.uid.touched">
             <small *ngIf="uidError" class="text-danger">{{uidError}}</small>
-            <small *ngIf="registerForm.controls.uid.hasError('uidValidator')" class="text-danger">Matriculation number is
+            <small *ngIf="registerForm.controls.uid.hasError('validateMatriculationNumber')" class="text-danger">Matriculation number is
               required
             </small>
           </div>

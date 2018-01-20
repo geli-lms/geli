@@ -218,7 +218,7 @@ export class DuplicationService extends DataService {
 
   duplicateUnit(unit: IUnit, lectureId: string, courseId: string): Promise<any[]> {
     return new Promise((resolve, reject) => {
-      this.backendService.post(this.apiPath + 'unit/' + unit._id, JSON.stringify({courseId: courseId , lectureId: lectureId}))
+      this.backendService.post(this.apiPath + 'unit/' + unit._id, JSON.stringify({courseId: courseId, lectureId: lectureId}))
         .subscribe(
           (responseItem: any) => {
             resolve(responseItem);
@@ -346,7 +346,7 @@ export class UserDataService extends DataService {
 }
 
 @Injectable()
-export  class  WhitelistUserService extends DataService {
+export class WhitelistUserService extends DataService {
   constructor(public backendService: BackendService) {
     super('whitelist/', backendService);
   }
@@ -440,5 +440,17 @@ export class DownloadFileService extends DataService {
 export class ConfigService extends DataService {
   constructor(public backendService: BackendService) {
     super('config/', backendService);
+  }
+
+  getEnvironmentVariable(name: string): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.backendService.get(this.apiPath + 'env/' + name)
+        .subscribe(
+          (responseItem: any) => {
+            resolve(responseItem);
+          },
+          error => reject(error)
+        );
+    });
   }
 }

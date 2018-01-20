@@ -6,6 +6,7 @@ import {ShowProgressService} from '../../shared/services/show-progress.service';
 import {MatSnackBar} from '@angular/material';
 import {errorCodes} from '../../../../../../api/src/config/errorCodes';
 import {TitleService} from '../../shared/services/title.service';
+import {ConfigService} from '../../shared/services/data.service';
 
 @Component({
   selector: 'app-register',
@@ -19,6 +20,7 @@ export class RegisterComponent implements OnInit {
   loading = false;
   uidError = null;
   mailError = null;
+  teacherMailRegex: string;
 
   private trimFormFields() {
     this.registerForm.value.email = this.registerForm.value.email.trim();
@@ -34,10 +36,15 @@ export class RegisterComponent implements OnInit {
               private showProgress: ShowProgressService,
               private snackBar: MatSnackBar,
               private formBuilder: FormBuilder,
-              private titleService: TitleService) {
+              private titleService: TitleService,
+              private configService: ConfigService) {
   }
 
   ngOnInit() {
+    this.configService.getEnvironmentVariable('teacherMailRegex').then(regex => {
+        this.teacherMailRegex = regex;
+      }
+    );
     this.titleService.setTitle('Register');
     // reset login status
     this.authenticationService.unsetAuthData();
@@ -70,6 +77,7 @@ export class RegisterComponent implements OnInit {
         this.registrationDone = true;
       })
       .catch((error) => {
+
         const errormessage = error.json().message || error.json().errmsg;
         switch (errormessage) {
           case errorCodes.mail.duplicate.code: {
@@ -78,6 +86,7 @@ export class RegisterComponent implements OnInit {
           }
           case errorCodes.mail.noTeacher.code: {
             this.mailError = errorCodes.mail.noTeacher.text;
+            this.snackBar.open(this.mailError, 'Dismiss');
             break;
           }
           case errorCodes.duplicateUid.code: {
@@ -102,19 +111,19 @@ export class RegisterComponent implements OnInit {
         firstName: ['', Validators.compose([Validators.required, Validators.minLength(2)])],
         lastName: ['', Validators.compose([Validators.required, Validators.minLength(2)])],
       }),
-      email: ['', Validators.compose([Validators.required, Validators.email, this.hdaEmailValidator.bind(this)])],
-      uid: ['', [this.uidValidator.bind(this)]]
+      email: ['', Validators.compose([Validators.required, Validators.email, this.validateTeacherEmail.bind(this)])],
+      uid: ['', [this.validateMatriculationNumber.bind(this)]]
     })
   }
 
-  hdaEmailValidator(control: FormControl) {
-    if (this.role === 'teacher' && !(control.value as String).includes('@h-da.de')) {
-      return { hdaEmailValidator: true };
+  validateTeacherEmail(control: FormControl) {
+    if (this.role === 'teacher' && !(control.value as String).match(this.teacherMailRegex)) {
+      return { teacherEmailError: true };
     }
     return null;
   }
 
-  uidValidator(control: FormControl) {
+  validateMatriculationNumber(control: FormControl) {
     if (this.role === 'student' && (control.value as String).length <= 0) {
       return { uidValidator: true };
     }

@@ -26,7 +26,6 @@ export default {
   mailSender: process.env.MAILSENDER || 'no-reply@geli.edu',
 
   teacherMailRegex: process.env.TEACHER_MAIL_REGEX || '^.+@.+\..+$',
-
   nonProductionWarning: process.env.NONPRODUCTIONWARNING || undefined,
 
   sentryDsn: process.env.SENTRY_DSN,

@@ -2,14 +2,14 @@ import {
   Authorized,
   Body,
   Get, InternalServerError,
-  JsonController,
+  JsonController, NotFoundError,
   Param,
   Put, UnauthorizedError,
   UseBefore
 } from 'routing-controllers';
 import {Config} from '../models/Config';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
-import config from '../config/main';
+import config from '../config/main'
 
 const publicConfigs = [
   new RegExp('imprint')
@@ -26,6 +26,15 @@ function publicConfig(id: string) {
 
 @JsonController('/config')
 export class ConfigController {
+
+  @Get('/env/:var')
+  async getEnvironmentVariable(@Param('var') variable: string) {
+    switch (variable) {
+      case 'teacherMailRegex': return config.teacherMailRegex;
+      default: throw new NotFoundError('Variable ' + variable + ' not found');
+    }
+  }
+
   @Get('/public/:id')
   async getPublicConfig(@Param('id') name: string) {
     if (publicConfig(name)) {
@@ -63,15 +72,15 @@ export class ConfigController {
   @Authorized(['admin'])
   @Get('/:id')
   async getConfig(@Param('id') name: string) {
-      try {
-        const configV = await Config.findOne({name: name});
-        if (!configV) {
-          return {name: name, value: ''};
-        }
-        return configV.toObject();
-      } catch (error) {
-        throw new InternalServerError('');
+    try {
+      const configV = await Config.findOne({name: name});
+      if (!configV) {
+        return {name: name, value: ''};
       }
+      return configV.toObject();
+    } catch (error) {
+      throw new InternalServerError('');
+    }
   }
 }
 
