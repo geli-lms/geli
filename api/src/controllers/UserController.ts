@@ -68,8 +68,7 @@ export class UserController {
       'score': {$meta: 'textScore'}
     })
       .where({role: role})
-      .sort({'score': {$meta: 'textScore'}})
-      .limit(20);
+      .sort({'score': {$meta: 'textScore'}});
     return {
       users: users.map((user) => user.toObject({virtuals: true})),
       meta: {
