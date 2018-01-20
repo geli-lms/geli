@@ -165,7 +165,7 @@ export class CourseMediaComponent implements OnInit {
     });
 
     res.afterClosed().subscribe(async value => {
-      if (value !== false) {
+      if (value !== undefined && value !== false) {
         // Update file attributes
         file.name = value;
         await this.mediaService.updateFile(file)
