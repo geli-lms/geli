@@ -1,4 +1,4 @@
-import {Component, Input, Output, EventEmitter, OnInit} from '@angular/core';
+import {Component, Input, Output, EventEmitter, OnInit, ViewChild} from '@angular/core';
 import {IWhitelistUser} from '../../../../../../../../shared/models/IWhitelistUser';
 import {WhitelistUserService} from '../../../../shared/services/data.service';
 import {MatSnackBar} from '@angular/material';
@@ -6,6 +6,7 @@ import {ICourse} from '../../../../../../../../shared/models/ICourse';
 import {DragulaService} from 'ng2-dragula';
 import {FormControl} from '@angular/forms';
 import {Observable} from 'rxjs/Observable';
+import {WhitelistShowComponent} from '../whitelist-show/whitelist-show.component';
 
 @Component({
   selector: 'app-whitelist-edit',
@@ -13,15 +14,13 @@ import {Observable} from 'rxjs/Observable';
   styleUrls: ['./whitelist-edit.component.scss']
 })
 export class WhitelistEditComponent implements OnInit {
+  snackBarDuration = 6000;
 
   dragableWhitelistUser: IWhitelistUser[] = [];
-  dragableWhitelistUserInCourse: IWhitelistUser[] = [];
-  finishRestCall = false;
+  @ViewChild(WhitelistShowComponent)
+  showComponent: WhitelistShowComponent;
   @Input() course: ICourse;
-  @Input() dragulaBagId;
   @Input() total = 0;
-  @Output() onDragableWhitelistUserInCourse = new EventEmitter<IWhitelistUser[]>();
-  @Output() onDragendRemoveWhitelist = new EventEmitter<IWhitelistUser>();
   @Output() onDragendPushWhitelist = new EventEmitter<IWhitelistUser>();
   whitelistUser: any = {firstName: '', lastName: '', uid: '', courseId: null};
 
@@ -38,8 +37,7 @@ export class WhitelistEditComponent implements OnInit {
   filteredOptionsUid: Observable<string[]>;
 
   constructor(private whitelistUserService: WhitelistUserService,
-              private snackBar: MatSnackBar,
-              private dragula: DragulaService) {
+              private snackBar: MatSnackBar) {
   }
 
   filter(val: string, options: string[]): string[] {
@@ -62,21 +60,33 @@ export class WhitelistEditComponent implements OnInit {
       .map(val => val ? this.filter(val, this.uidOptions) : this.uidOptions.slice());
   }
 
-  createNewWhitelistUser() {
+  async createNewWhitelistUser() {
     if (this.whitelistUser.firstName === '') {
-      this.snackBar.open('First name should not be empty.', '', {duration: 6000});
+      this.snackBar.open('First name should not be empty.', '', {duration: this.snackBarDuration});
       return null;
     } else if (this.whitelistUser.lastName === '') {
-      this.snackBar.open('Last name should not be empty.', '', {duration: 6000});
+      this.snackBar.open('Last name should not be empty.', '', {duration: this.snackBarDuration});
       return null;
     } else if (this.whitelistUser.uid === '' || isNaN(Number(this.whitelistUser.uid))) {
-      this.snackBar.open('Unique identification should be a number and not empty', '', {duration: 6000});
+      this.snackBar.open('Unique identification should be a number and not empty', '', {duration: this.snackBarDuration});
       return null;
     }
     this.whitelistUser.courseId = this.course._id;
-    return this.whitelistUserService.createItem(this.whitelistUser).then((newUser) => {
+    try {
+      const newUser: IWhitelistUser = await this.whitelistUserService.createItem(this.whitelistUser);
       this.dragableWhitelistUser.push(newUser);
       this.onDragendPushWhitelist.emit(newUser);
-    });
+      if (this.showComponent.isInCourse(newUser)) {
+        this.snackBar.open('Create whitelist user. User is in course.', '', {duration: this.snackBarDuration});
+      } else if (this.showComponent.isSignedIn(newUser)) {
+        this.snackBar.open('Create whitelist user. User is signed in.', '', {duration: this.snackBarDuration});
+      } else {
+        this.snackBar.open('Create whitelist user. User is not signed in.', '', {duration: this.snackBarDuration});
+      }
+      return newUser;
+    } catch (error) {
+      this.snackBar.open('Could not create whitelist user. Error was:' + error, '', {duration: this.snackBarDuration});
+      return null;
+    }
   }
 }
