@@ -3,4 +3,5 @@ export interface IWhitelistUser {
   firstName: string;
   lastName: string;
   uid: string;
+  courseId: string
 }

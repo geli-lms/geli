@@ -1,5 +1,5 @@
 import {User} from '../src/models/User';
-import {Course} from '../src/models/Course';
+import {Course, ICourseModel} from '../src/models/Course';
 import {Lecture} from '../src/models/Lecture';
 import {Unit} from '../src/models/units/Unit';
 import {ICourse} from '../../shared/models/ICourse';
@@ -8,6 +8,8 @@ import {IUnit} from '../../shared/models/units/IUnit';
 import {IUser} from '../../shared/models/IUser';
 import {ITaskUnit} from '../../shared/models/units/ITaskUnit';
 import {ITaskUnitModel} from '../src/models/units/TaskUnit';
+import * as mongoose from 'mongoose';
+import ObjectId = mongoose.Types.ObjectId;
 
 export class FixtureUtils {
   public static async getRandomUser(hash?: string) {
@@ -56,6 +58,19 @@ export class FixtureUtils {
   public static async getRandomStudents(min: number, max: number, hash?: string) {
     const array = await this.getStudents();
     return this.getRandomArray(array, min, max, hash);
+  }
+
+  public static async getRandomWhitelistUsers(students: IUser[], course: ICourseModel, hash?: string) {
+    const randomArray = students.splice(0, this.getRandomNumber(0, students.length - 1));
+    const array = await this.getRandomArray(randomArray, 0, students.length - 1, hash);
+    return array.map( (stud: IUser) => {
+      return {
+        firstName: stud.profile.firstName,
+        lastName: stud.profile.lastName,
+        uid: stud.uid,
+        courseId: new ObjectId(course._id)
+      }
+    });
   }
 
   public static async getRandomCourse(hash?: string) {

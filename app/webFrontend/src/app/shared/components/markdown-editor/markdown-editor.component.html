@@ -1,0 +1,23 @@
+<div>
+  <mat-tab-group (selectChange)="onTabChange($event)">
+    <mat-tab label="Write">
+      <p class="info-text">
+        <mat-icon>info</mat-icon>
+        Add Markdown to add text.
+        A Cheatsheet you can find
+        <a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet" target="_blank">here</a>.
+      </p>
+
+      <ace-editor #editor
+                  [(text)]="this.markdown"
+                  [mode]="'markdown'"
+                  [theme]="'github'"
+                  [autoUpdateContent]="true">
+      </ace-editor>
+    </mat-tab>
+    <mat-tab label="Preview">
+      <div [innerHtml]="this.renderedHtml"></div>
+    </mat-tab>
+  </mat-tab-group>
+  <app-button-save-cancel *ngIf="save" (save)="emitSave()" (cancel)="emitCancel()"></app-button-save-cancel>
+</div>
