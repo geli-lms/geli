@@ -3,12 +3,12 @@ import {
   Authorized, BadRequestError,
   Body,
   CurrentUser, Delete, ForbiddenError,
-  Get,
+  Get, HttpError,
   JsonController, NotFoundError,
   Param,
   Post,
   Put,
-  Req, UnauthorizedError,
+  Req,
   UploadedFile,
   UseBefore
 } from 'routing-controllers';
@@ -92,14 +92,17 @@ export class CourseController {
         path: 'lectures',
         populate: {
           path: 'units',
+          virtuals: true,
           populate: {
-            path: 'tasks'
+            path: 'progressData',
+            match: { user: { $eq: currentUser._id }}
           }
         }
       })
       .populate('courseAdmin')
       .populate('teachers')
       .populate('students')
+      .populate('whitelist')
       .then((course) => {
         if (!course) {
           throw new NotFoundError();
@@ -107,12 +110,12 @@ export class CourseController {
 
         course.lectures.forEach((lecture) => {
           lecture.units.forEach((unit) => {
-            if (unit.type === 'code-kata' && currentUser.role === 'student') {
+            if (unit.__t === 'code-kata' && currentUser.role === 'student') {
               (<ICodeKataUnit>unit).code = null;
             }
           });
         });
-        return course.toObject();
+        return course.toObject({virtuals: true});
       });
   }
 
@@ -214,19 +217,19 @@ export class CourseController {
   @Post('/:id/whitelist')
   whitelistStudents(@Param('id') id: string, @UploadedFile('file', {options: uploadOptions}) file: any) {
     const name: string = file.originalname;
-
     if (!name.endsWith('.csv')) {
       throw new TypeError(errorCodes.errorCodes.upload.type.notCSV.code);
     }
-
-    // TODO: Never query all users!
-    return User.find({})
-      .then((users) => users.map((user) => user.toObject({virtuals: true})))
-      .then((users) => Course.findById(id).then((course) => {
+    return Course.findById(id)
+        .populate('whitelist')
+        .populate('students')
+        .then((course) => {
         return this.parser.parseFile(file).then((buffer: any) =>
-          this.parser.updateCourseFromBuffer(buffer, course, users).save().then((c: ICourseModel) =>
+          this.parser.updateCourseFromBuffer(buffer, course)
+            .then(c => c.save())
+            .then((c: ICourseModel) =>
             c.toObject()));
-      }));
+      });
   }
 
   @Authorized(['teacher', 'admin'])
@@ -257,7 +260,7 @@ export class CourseController {
     const courseAdmin = await User.findOne({_id: course.courseAdmin});
     if (course.teachers.indexOf(currentUser._id) !== -1 || courseAdmin.equals(currentUser._id.toString())
       || currentUser.role === 'admin' ) {
-      course.remove();
+      await course.remove();
       return {result: true};
     } else {
       throw new ForbiddenError('Forbidden!');

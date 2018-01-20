@@ -1,8 +1,10 @@
 import {IUser} from '../../../shared/models/IUser';
-import {WhitelistUser} from '../models/WhitelistUser';
-import {ICourseModel} from '../models/Course';
+import {IWhitelistUserModel, WhitelistUser} from '../models/WhitelistUser';
+import {Course, ICourseModel} from '../models/Course';
 import {HttpError} from 'routing-controllers';
 import e = require('express');
+import {IUserModel, User} from '../models/User';
+
 const fs = require('fs');
 const utf8 = require('to-utf-8');
 const csv = require('fast-csv');
@@ -37,9 +39,10 @@ export class ObsCsvController {
    * @param allUsers All users in System.
    * @returns {any} An updated course model.
    */
-  public updateCourseFromBuffer(buffer: string, course: ICourseModel, allUsers: any[]): ICourseModel {
+  public async updateCourseFromBuffer(buffer: string, course: ICourseModel) {
     this.pushWhitelistUser(buffer);
-    course = this.addParsedUsersToCourse(course, allUsers);
+    course.students = [];
+    await this.addParsedUsersToCourse(course);
     return this.updateWhitelistUser(course);
   }
 
@@ -83,23 +86,16 @@ export class ObsCsvController {
    * @param allUsers Are all users in system.
    * @returns {any} Is the updated course.
    */
-  private addParsedUsersToCourse(course: ICourseModel, allUsers: IUser[]): ICourseModel {
-    this.whitelistUser.forEach(wUser => {
-      let foundUser: IUser = null;
-      const foundUsers: IUser[] =
-        allUsers.filter(user =>
-        wUser.firstName === user.profile.firstName
-        && wUser.lastName === user.profile.lastName
-        && wUser.uid === user.uid);
-      if (foundUsers.length > 0) {
-        foundUser = foundUsers[0];
+  private async addParsedUsersToCourse(course: ICourseModel) {
+    await Promise.all(this.whitelistUser.map(async (wUser) => {
+      const user: IUserModel = await User.findOne({uid: wUser.uid});
+      if (user && user.profile.firstName.toLowerCase() === wUser.firstName.toLowerCase() &&
+        user.profile.lastName.toLowerCase() === wUser.lastName.toLowerCase()) {
+        if (course.students.findIndex( stud => stud._id.toString() === user._id.toString()) < 0) {
+          course.students.push(user);
+        }
       }
-      if (foundUser != null && course.students.filter((student: any) =>
-        student.toString() === foundUser._id.toString()).length <= 0) {
-        course.students.push(foundUser);
-      }
-    });
-    return course;
+    }));
   }
 
   /**
@@ -108,6 +104,7 @@ export class ObsCsvController {
    * @returns {any} Updated course.
    */
   private updateWhitelistUser(course: ICourseModel): ICourseModel {
+
     course.whitelist.forEach((wuser: any) => WhitelistUser.findByIdAndRemove(wuser)
       .then(() => {
       }));
@@ -117,6 +114,7 @@ export class ObsCsvController {
       wUser.firstName = whiteListUser.firstName;
       wUser.lastName = whiteListUser.lastName;
       wUser.uid = whiteListUser.uid;
+      wUser.courseId = course._id;
       wUser.save().then(user => user.toObject());
       course.whitelist.push(wUser._id);
     });

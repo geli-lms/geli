@@ -9,6 +9,12 @@
     <mat-form-field class="full-width">
       <input matInput formControlName="lastName" placeholder="Last name"/>
     </mat-form-field>
+
+    <mat-form-field class="full-width">
+      <mat-select placeholder="Theme" formControlName="theme">
+        <mat-option *ngFor="let theme of themes" value="{{theme}}">{{theme}}</mat-option>
+      </mat-select>
+    </mat-form-field>
   </div>
 
   <mat-form-field class="full-width">
@@ -22,15 +28,15 @@
     <app-password-input  [form]="userForm"></app-password-input>
   </div>
   <button mat-raised-button color="primary" class="mat-button" type="submit" [disabled]="!userForm?.valid">Save</button>
-  <button mat-button class="mat-button" routerLink="/profile" routerLinkActive="active">
+  <button mat-raised-button class="mat-button" routerLink="/profile" routerLinkActive="active">
     Cancel
   </button>
 </form>
 <p *ngIf="!showPwFields()">
-  <button mat-button class="mat-button" (click)="resetPassword()">Generate new Password</button>
+  <button mat-raised-button class="mat-button" (click)="resetPassword()">Generate new Password</button>
 </p>
 <p>
-  <button mat-raised-button color="accent" class="mat-button" (click)="openAddPictureDialog()">
+  <button mat-raised-button class="mat-button" (click)="openAddPictureDialog()">
     Upload new picture
   </button>
 </p>

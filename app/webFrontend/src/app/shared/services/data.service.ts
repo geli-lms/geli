@@ -2,10 +2,12 @@ import {Injectable} from '@angular/core';
 import {BackendService} from './backend.service';
 import {Dependency} from '../../about/licenses/dependency.model';
 import {ITaskUnit} from '../../../../../../shared/models/units/ITaskUnit';
+import construct = Reflect.construct;
 import {ILecture} from '../../../../../../shared/models/ILecture';
 import {IUnit} from '../../../../../../shared/models/units/IUnit';
 import {IUser} from '../../../../../../shared/models/IUser';
 import {ICourse} from '../../../../../../shared/models/ICourse';
+import {IDownload} from '../../../../../../shared/models/IDownload';
 
 export abstract class DataService {
 
@@ -24,76 +26,76 @@ export abstract class DataService {
   createItem(createItem: any): Promise<any> {
     return new Promise((resolve, reject) => {
       this.backendService.post(this.apiPath, createItem)
-      .subscribe(
-        (responseItem) => {
-          resolve(responseItem);
-        },
-        error => reject(error)
-      );
+        .subscribe(
+          (responseItem) => {
+            resolve(responseItem);
+          },
+          error => reject(error)
+        );
     });
   }
 
   readItems(): Promise<any[]> {
     return new Promise((resolve, reject) => {
       this.backendService.get(this.apiPath)
-      .subscribe(
-        (responseItems: any) => {
-          if (this.changeProps2Date) {
-            responseItems.forEach(item => {
-              this.changeProps2Date.forEach(prop => {
-                DataService.changeStringProp2DateProp(item, prop);
+        .subscribe(
+          (responseItems: any) => {
+            if (this.changeProps2Date) {
+              responseItems.forEach(item => {
+                this.changeProps2Date.forEach(prop => {
+                  DataService.changeStringProp2DateProp(item, prop);
+                });
               });
-            });
-          }
+            }
 
-          resolve(responseItems);
-        },
-        (error) => reject(error)
-      );
+            resolve(responseItems);
+          },
+          (error) => reject(error)
+        );
     });
   }
 
   updateItem(updateItem: any): Promise<any> {
     return new Promise((resolve, reject) => {
       this.backendService.put(this.apiPath + updateItem._id, JSON.stringify(updateItem))
-      .subscribe(
-        (res) => {
-          resolve(res);
-        },
-        error => reject(error)
-      );
+        .subscribe(
+          (res) => {
+            resolve(res);
+          },
+          error => reject(error)
+        );
     });
   }
 
   deleteItem(deleteItem: any): Promise<any> {
     return new Promise((resolve, reject) => {
       this.backendService.delete(this.apiPath + deleteItem._id)
-      .subscribe(
-        () => {
-          resolve();
-        },
-        error => reject(error)
-      );
+        .subscribe(
+          () => {
+            resolve();
+          },
+          error => reject(error)
+        );
     });
   }
 
-  readSingleItem(id: string): Promise<any[]> {
+  readSingleItem(id: string): Promise<any> {
     return new Promise((resolve, reject) => {
       this.backendService.get(this.apiPath + id)
-      .subscribe(
-        (responseItems: any) => {
-          if (this.changeProps2Date) {
-            responseItems.forEach(item => {
-              this.changeProps2Date.forEach(prop => {
-                DataService.changeStringProp2DateProp(item, prop);
+        .subscribe(
+          (responseItems: any) => {
+            if (this.changeProps2Date) {
+              responseItems.forEach(item => {
+                this.changeProps2Date.forEach(prop => {
+                  DataService.changeStringProp2DateProp(item, prop);
+                });
               });
-            });
-          }
+            }
 
-          resolve(responseItems);
-        },
-        error => reject(error)
-      );
+            resolve(responseItems);
+          },
+          error => reject(error)
+        );
     });
   }
 }
@@ -238,19 +240,19 @@ export class CourseService extends DataService {
     const accessKey: string = data.accessKey;
     return new Promise((resolve, reject) => {
       this.backendService.post(this.apiPath + courseId + '/enroll', JSON.stringify({accessKey}))
-      .subscribe(
-        (responseItem: any) => {
-          resolve(responseItem);
-        },
-        error => reject(error)
-      );
+        .subscribe(
+          (responseItem: any) => {
+            resolve(responseItem);
+          },
+          error => reject(error)
+        );
     });
   }
 
   sendMailToSelectedUsers(data: any): Promise<any> {
     return this.backendService
-        .post(this.apiPath + 'mail', JSON.stringify(data))
-        .toPromise();
+      .post(this.apiPath + 'mail', JSON.stringify(data))
+      .toPromise();
   }
 
   leaveStudent(courseId: string): Promise<any[]> {
@@ -267,33 +269,6 @@ export class CourseService extends DataService {
 }
 
 @Injectable()
-export class TaskService extends DataService {
-  constructor(public backendService: BackendService) {
-    super('tasks/', backendService);
-  }
-
-  getTasksForCourse(id: string): Promise<any[]> {
-    return new Promise((resolve, reject) => {
-      this.backendService.get(this.apiPath + 'course/' + id)
-      .subscribe(
-        (responseItems: any) => {
-          if (this.changeProps2Date) {
-            responseItems.forEach(item => {
-              this.changeProps2Date.forEach(prop => {
-                DataService.changeStringProp2DateProp(item, prop);
-              });
-            });
-          }
-
-          resolve(responseItems);
-        },
-        error => reject(error)
-      );
-    });
-  }
-}
-
-@Injectable()
 export class LectureService extends DataService {
   constructor(public backendService: BackendService) {
     super('lecture/', backendService);
@@ -304,30 +279,6 @@ export class LectureService extends DataService {
 export class UnitService extends DataService {
   constructor(public backendService: BackendService) {
     super('units/', backendService);
-  }
-
-  addTaskUnit(taskUnit: ITaskUnit, lectureId: string) {
-    const originalApiPath = this.apiPath;
-    this.apiPath += 'tasks';
-    const promise = this.createItem({model: taskUnit, lectureId: lectureId});
-    this.apiPath = originalApiPath;
-    return promise;
-  }
-
-  updateTaskUnit(taskUnit: ITaskUnit) {
-    const originalApiPath = this.apiPath;
-    this.apiPath += 'tasks/';
-    const promise =  this.updateItem(taskUnit);
-    this.apiPath = originalApiPath;
-    return promise;
-  }
-
-  readTaskUnit(taskUnitId: string) {
-    const originalApiPath = this.apiPath;
-    this.apiPath += 'tasks/';
-    const promise =  this.readSingleItem(taskUnitId);
-    this.apiPath = originalApiPath;
-    return promise;
   }
 
   getUnitForCourse(courseId: string) {
@@ -367,9 +318,19 @@ export class UserDataService extends DataService {
     super('users/', backendService);
   }
 
+  searchUsers(role: string, query: string): Promise<any> {
+    const originalApiPath = this.apiPath;
+    this.apiPath += 'members/search/';
+    this.apiPath += '?role=' + role;
+    this.apiPath += '&query=' + query;
+    const promise = this.readItems();
+    this.apiPath = originalApiPath;
+    return promise;
+  }
+
   getRoles(): Promise<any[]> {
     const originalApiPath = this.apiPath;
-    this.apiPath += 'roles';
+    this.apiPath += 'roles/';
     const promise = this.readItems();
     this.apiPath = originalApiPath;
     return promise;
@@ -379,6 +340,22 @@ export class UserDataService extends DataService {
     const originalApiPath = this.apiPath;
     this.apiPath += 'picture/';
     const promise = this.updateItem(data);
+    this.apiPath = originalApiPath;
+    return promise;
+  }
+}
+
+@Injectable()
+export  class  WhitelistUserService extends DataService {
+  constructor(public backendService: BackendService) {
+    super('whitelist/', backendService);
+  }
+
+  countWhitelistUsers(courseId: string): Promise<any> {
+    const originalApiPath = this.apiPath;
+    this.apiPath += courseId + '/';
+    this.apiPath += 'count/';
+    const promise = this.readItems();
     this.apiPath = originalApiPath;
     return promise;
   }
@@ -401,26 +378,67 @@ export class AboutDataService extends DataService {
   getApiDependencies(): Promise<any[]> {
     return new Promise((resolve, reject) => {
       this.backendService.get(this.apiPath + 'dependencies')
-      .subscribe((responseItems: any) => {
-          if (responseItems.httpCode >= 500) {
-            // FIXME: Just return, right?
-            return resolve([]);
-          }
+        .subscribe((responseItems: any) => {
+            if (responseItems.httpCode >= 500) {
+              // FIXME: Just return, right?
+              return resolve([]);
+            }
 
-          const out = [];
-          responseItems.data.forEach(item => {
-            out.push(new Dependency(
-              item.name,
-              item.version,
-              item.repository,
-              item.license,
-              item.devDependency)
-            );
-          });
-          resolve(out);
-        },
-        error => reject(error)
-      );
+            const out = [];
+            responseItems.data.forEach(item => {
+              out.push(new Dependency(
+                item.name,
+                item.version,
+                item.repository,
+                item.license,
+                item.devDependency)
+              );
+            });
+            resolve(out);
+          },
+          error => reject(error)
+        );
     });
+  }
+}
+
+@Injectable()
+export class DownloadFileService extends DataService {
+  constructor(public backendService: BackendService) {
+    super('download/', backendService);
+  }
+
+  getPackageSize(idl: IDownload) {
+    return new Promise((resolve, reject) => {
+      this.backendService.post(this.apiPath + 'size', idl).subscribe((responseItem: any) => {
+          resolve(responseItem);
+        },
+        error => reject(error));
+    });
+  }
+
+  postDownloadReqForCourse(idl: IDownload) {
+    return new Promise((resolve, reject) => {
+      this.backendService.post(this.apiPath, idl).subscribe((responseItem: any) => {
+          resolve(responseItem);
+        },
+        error => reject(error));
+    });
+  }
+
+  getFile(id: string) {
+    return new Promise((resolve, reject) => {
+      this.backendService.getDownload(this.apiPath + id).subscribe(resp => {
+          resolve(resp);
+        },
+        error => reject(error));
+    });
+  }
+}
+
+@Injectable()
+export class ConfigService extends DataService {
+  constructor(public backendService: BackendService) {
+    super('config/', backendService);
   }
 }

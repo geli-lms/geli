@@ -4,36 +4,11 @@
   padding-top: 1.5em;
 }
 
-.course-form {
-  max-width: 700px;
-}
-
 .mat-input-container {
   width: 100%;
 
   @include bp(md) {
     width: 60%;
-  }
-}
-
-.csv-upload {
-  margin-bottom: 2em;
-}
-
-.upload {
-  min-width: 250px;
-  width: 100%;
-
-  + button {
-    margin-top: 10px;
-  }
-
-  @include bp(sm) {
-    width: auto;
-
-    + button {
-      margin-top: 0;
-    }
   }
 }
 

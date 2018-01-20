@@ -1,6 +1,5 @@
-import {Component, Input, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
-import {ICodeKataProgress} from '../../../../../../shared/models/ICodeKataProgress';
-import {AceEditorComponent} from 'ng2-ace-editor';
+import {Component, Input, OnInit, ViewEncapsulation} from '@angular/core';
+import {ICodeKataUnitProgress} from '../../../../../../shared/models/progress/ICodeKataProgress';
 
 @Component({
   selector: 'app-code-kata-progress',
@@ -10,7 +9,7 @@ import {AceEditorComponent} from 'ng2-ace-editor';
 })
 export class CodeKataProgressComponent implements OnInit {
 
-  @Input() progress: ICodeKataProgress;
+  @Input() progress: ICodeKataUnitProgress;
 
   constructor() { }
 

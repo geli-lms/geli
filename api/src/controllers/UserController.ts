@@ -1,12 +1,14 @@
 import {
-  Body, JsonController, UseBefore, Get, Param, Put, Delete, Authorized, CurrentUser,
-  BadRequestError, ForbiddenError, UploadedFile, Post
+  Body, JsonController, UseBefore, Get, Param, QueryParam, Put, Delete, Authorized, CurrentUser,
+  BadRequestError, ForbiddenError, UploadedFile, Post, HttpError
 } from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import fs = require('fs');
-
 import {IUser} from '../../../shared/models/IUser';
 import {IUserModel, User} from '../models/User';
+import {isNullOrUndefined} from 'util';
+import {errorCodes} from '../config/errorCodes';
+
 const multer = require('multer');
 
 const uploadOptions = {
@@ -24,6 +26,10 @@ const uploadOptions = {
   }),
 };
 
+function escapeRegex(text: string) {
+  return text.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+}
+
 @JsonController('/users')
 @UseBefore(passportJwtMiddleware)
 export class UserController {
@@ -37,8 +43,43 @@ export class UserController {
       });
   }
 
+  @Get('/members/search') // members/search because of conflict with /:id
+  async searchUser(@QueryParam('role') role: string, @QueryParam('query') query: string) {
+    if (role !== 'student' && role !== 'teacher') {
+      throw new BadRequestError('Method not allowed for this role.');
+    }
+    query = query.trim();
+    if (isNullOrUndefined(query)) {
+      throw new BadRequestError(errorCodes.query.empty.code);
+    }
+    const conditions: any = {};
+    const escaped = escapeRegex(query).split(' ');
+    conditions.$or = [];
+    conditions.$or.push({$text: {$search: query}});
+    escaped.forEach(elem => {
+      const re = new RegExp(elem, 'ig');
+      conditions.$or.push({uid: {$regex: re}});
+      conditions.$or.push({email: {$regex: re}});
+      conditions.$or.push({'profile.firstName': {$regex: re}});
+      conditions.$or.push({'profile.lastName': {$regex: re}})
+    });
+    const amountUsers = await User.count({}).where({role: role});
+    const users = await User.find(conditions, {
+      'score': {$meta: 'textScore'}
+    })
+      .where({role: role})
+      .sort({'score': {$meta: 'textScore'}})
+      .limit(20);
+    return {
+      users: users.map((user) => user.toObject({virtuals: true})),
+      meta: {
+        count: amountUsers
+      }
+    };
+  }
+
   @Authorized(['admin'])
-  @Get('/roles')
+  @Get('/roles/')
   getRoles() {
     // TODO: Fix any cast
     return (<any>User.schema.path('role')).enumValues;
@@ -65,7 +106,8 @@ export class UserController {
         user.profile.picture = {
           path: file.path,
           name: file.filename,
-          alias: file.originalname
+          alias: file.originalname,
+          size: file.size
         };
         return user.save();
       })
@@ -81,13 +123,12 @@ export class UserController {
   updateUser(@Param('id') id: string, @Body() user: any, @CurrentUser() currentUser?: IUser) {
     return User.find({'role': 'admin'})
       .then((adminUsers) => {
-        if (adminUsers.length === 1 &&
-          adminUsers[0].get('id') === id &&
-          adminUsers[0].role === 'admin' &&
-          user.role !== 'admin') {
-          throw new BadRequestError('There are no other users with admin privileges.');
+        if (id === currentUser._id
+          && currentUser.role === 'admin'
+          && user.role !== 'admin') {
+          throw new BadRequestError('You can\'t revoke your own privileges');
         } else {
-          return User.find({ $and: [{'email': user.email}, {'_id': { $ne: user._id }}]});
+          return User.find({$and: [{'email': user.email}, {'_id': {$ne: user._id}}]});
         }
       })
       .then((emailInUse) => {
@@ -133,18 +174,18 @@ export class UserController {
   @Delete('/:id')
   deleteUser(@Param('id') id: string) {
     return User.find({'role': 'admin'})
-    .then((adminUsers) => {
-      if (adminUsers.length === 1 &&
-        adminUsers[0].get('id') === id &&
-        adminUsers[0].role === 'admin') {
-        throw new BadRequestError('There are no other users with admin privileges.');
-      } else {
-        return User.findByIdAndRemove(id);
-      }
-    })
-    .then(() => {
-      return {result: true};
-    });
+      .then((adminUsers) => {
+        if (adminUsers.length === 1 &&
+          adminUsers[0].get('id') === id &&
+          adminUsers[0].role === 'admin') {
+          throw new BadRequestError('There are no other users with admin privileges.');
+        } else {
+          return User.findByIdAndRemove(id);
+        }
+      })
+      .then(() => {
+        return {result: true};
+      });
   }
 
   private cleanUserObject(id: string, user: IUserModel, currentUser?: IUser) {

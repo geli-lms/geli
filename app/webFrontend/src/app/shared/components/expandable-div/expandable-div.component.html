@@ -5,12 +5,12 @@
   </button>
 </ng-template>
 
-<div class="clickable" (click)="notify()">
-  <h1 *ngIf="headerTag == 'h1'"><ng-container *ngTemplateOutlet="innerContent"></ng-container></h1>
-  <h2 *ngIf="headerTag == 'h2'"><ng-container *ngTemplateOutlet="innerContent"></ng-container></h2>
-  <h3 *ngIf="headerTag == 'h3'"><ng-container *ngTemplateOutlet="innerContent"></ng-container></h3>
-  <h4 *ngIf="headerTag == 'h4'"><ng-container *ngTemplateOutlet="innerContent"></ng-container></h4>
-  <h5 *ngIf="headerTag == 'h5'"><ng-container *ngTemplateOutlet="innerContent"></ng-container></h5>
-  <h6 *ngIf="headerTag == 'h6'"><ng-container *ngTemplateOutlet="innerContent"></ng-container></h6>
-  <span class="bold" *ngIf="headerTag == 'text'"><ng-container *ngTemplateOutlet="innerContent"></ng-container></span>
+<div class="clickable" (click)="notify()" [ngSwitch]="headerTag">
+  <h1 *ngSwitchCase="'h1'"><ng-container *ngTemplateOutlet="innerContent"></ng-container></h1>
+  <h2 *ngSwitchCase="'h2'"><ng-container *ngTemplateOutlet="innerContent"></ng-container></h2>
+  <h3 *ngSwitchCase="'h3'"><ng-container *ngTemplateOutlet="innerContent"></ng-container></h3>
+  <h4 *ngSwitchCase="'h4'"><ng-container *ngTemplateOutlet="innerContent"></ng-container></h4>
+  <h5 *ngSwitchCase="'h5'"><ng-container *ngTemplateOutlet="innerContent"></ng-container></h5>
+  <h6 *ngSwitchCase="'h6'"><ng-container *ngTemplateOutlet="innerContent"></ng-container></h6>
+  <span *ngSwitchCase="'text'" class="bold"><ng-container *ngTemplateOutlet="innerContent"></ng-container></span>
 </div>

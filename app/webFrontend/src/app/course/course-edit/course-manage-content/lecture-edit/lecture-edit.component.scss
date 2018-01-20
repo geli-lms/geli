@@ -1,0 +1,84 @@
+@import '../../../../../variables';
+
+$unit-height: 64px;
+
+.lecture {
+  .lecture-header {
+    display: flex;
+    align-items: center;
+
+    h2, .lecture-menu-button {
+      font-size: 18px;
+    }
+
+    .flex-spacer {
+      flex-grow: 1;
+    }
+  }
+
+  .lecture-drag-handle, .unit-drag-handle {
+    cursor: move;
+    opacity: 0.2;
+    user-select: none;
+    margin-right: 0.5em;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  .open-toggle {
+    color: map-get($app-primary, 'default');
+    transition: transform 0.3s;
+    transform: rotate(-90deg);
+
+    &.opened {
+      transform: rotate(0);
+    }
+  }
+
+  .lecture-content {
+    margin-bottom: 20px;
+
+    .units {
+      margin-top: 12px;
+      min-height: $unit-height;
+    }
+  }
+}
+
+// Needs to be unnested, otherwise style is lost while dragging
+.unit {
+  border-top: 1px solid map-get($mat-grey, 300);
+
+  &:last-child {
+    border-bottom: 1px solid map-get($mat-grey, 300);
+  }
+
+  .unit-content {
+    height: $unit-height;
+    display: flex;
+    align-items: center;
+
+    .unit-name {
+      flex: 1;
+    }
+
+    .unit-type {
+      flex: 1;
+    }
+
+    .unit-date {
+      flex: 1;
+    }
+
+    .unit-date, .unit-actions .mat-icon {
+      color: map-get($mat-grey, 600);
+    }
+  }
+}
+
+.unit-drop-target {
+  height: $unit-height;
+  border: 1px dashed map-get($mat-grey, 300);
+}
