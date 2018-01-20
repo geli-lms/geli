@@ -1,14 +1,12 @@
 import * as chai from 'chai';
 import {Server} from '../../src/server';
 import {FixtureLoader} from '../../fixtures/FixtureLoader';
-import chaiHttp = require('chai-http');
 import {FixtureUtils} from '../../fixtures/FixtureUtils';
 import {JwtUtils} from '../../src/security/JwtUtils';
 import {API_NOTIFICATION_TYPE_ALL_CHANGES, API_NOTIFICATION_TYPE_NONE, NotificationSettings} from '../../src/models/NotificationSettings';
 import {User} from '../../src/models/User';
 import {Course} from '../../src/models/Course';
-import {ICourse} from '../../../shared/models/ICourse';
-import * as mongoose from 'mongoose';
+import chaiHttp = require('chai-http');
 
 chai.use(chaiHttp);
 const should = chai.should();

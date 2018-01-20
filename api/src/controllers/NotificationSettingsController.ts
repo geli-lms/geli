@@ -41,8 +41,10 @@ export class NotificationSettingsController {
       throw new BadRequestError('NotificationSettings for user:' + data.user + ' with course: ' + data.course + ' already exist');
     }
     const settings: INotificationSettingsModel = await new NotificationSettings({
-      'user': data.user, 'course': data.course,
-      'notificationType': API_NOTIFICATION_TYPE_ALL_CHANGES, 'emailNotification': false
+      'user': data.user,
+      'course': data.course,
+      'notificationType': API_NOTIFICATION_TYPE_ALL_CHANGES,
+      'emailNotification': false
     }).save();
     return settings.toObject();
   }

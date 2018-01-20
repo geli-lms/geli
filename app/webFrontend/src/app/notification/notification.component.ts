@@ -1,10 +1,7 @@
-import {Component, OnChanges, OnInit, SimpleChanges} from '@angular/core';
-import {NotificationService, NotificationSettingsService, UserDataService} from '../shared/services/data.service';
+import {Component, OnInit} from '@angular/core';
+import {NotificationService} from '../shared/services/data.service';
 import {INotification} from '../../../../../shared/models/INotification';
 import {UserService} from '../shared/services/user.service';
-import {ICourse} from '../../../../../shared/models/ICourse';
-import {ILecture} from '../../../../../shared/models/ILecture';
-import {IUnit} from '../../../../../shared/models/units/IUnit';
 
 enum NotificationIcon {
   NOTIFICATIONS = 'notifications',
@@ -104,7 +101,3 @@ function compareIds(a: any, b: any) {
   }
   return 0;
 };
-
-
-
-

@@ -37,7 +37,7 @@ import {RouterOutlet} from '@angular/router';
     DownloadCourseDialogComponent,
     LectureCheckboxComponent,
     UnitCheckboxComponent,
-    UploadUnitCheckboxComponent
+    UploadUnitCheckboxComponent,
   ],
   entryComponents: [
     DownloadCourseDialogComponent,
