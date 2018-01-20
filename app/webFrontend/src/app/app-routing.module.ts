@@ -2,13 +2,13 @@ import {NgModule} from '@angular/core';
 import {LoginComponent} from './auth/login/login.component';
 import {RegisterComponent} from './auth/register/register.component';
 import {ActivationComponent} from './auth/activation/activation.component';
-import {AuthGuardService} from './shared/services/auth-guard.service';
 import {StartComponent} from './start/start.component';
-import {AdminComponent} from './admin/admin.component';
 import {AboutComponent} from './about/about.component';
 import {ResetComponent} from './auth/reset/reset.component';
 import {RouterModule, Routes} from '@angular/router';
+import {ImprintComponent} from './imprint/imprint.component';
 import {UserSettingsComponent} from './user/user-settings/user-settings.component';
+import {AuthGuardService} from './shared/services/auth-guard.service';
 
 const routes: Routes = [
   {path: '', component: StartComponent, pathMatch: 'full'},
@@ -27,13 +27,15 @@ const routes: Routes = [
   },
   {
     path: 'admin',
-    component: AdminComponent,
-    canActivate: [AuthGuardService],
-    data: {roles: ['admin']}
+    loadChildren: 'app/admin/admin.module#AdminModule'
   },
   {
     path: 'about',
     component: AboutComponent
+  },
+  {
+    path: 'imprint',
+    component: ImprintComponent
   },
   {
     path: 'userSettings',

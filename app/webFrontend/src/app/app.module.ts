@@ -15,7 +15,9 @@ import {
   FreeTextUnitService,
   LectureService,
   UnitService,
-  UserDataService
+  UserDataService,
+  WhitelistUserService,
+  ConfigService,
 } from './shared/services/data.service';
 import {BackendService} from './shared/services/backend.service';
 import {ShowProgressService} from './shared/services/show-progress.service';
@@ -31,6 +33,8 @@ import {AboutModule} from './about/about.module';
 import {AdminModule} from './admin/admin.module';
 import {ReportService} from './shared/services/data/report.service';
 import {TitleService} from './shared/services/title.service';
+import {ThemeService} from './shared/services/theme.service';
+import {ImprintModule} from './imprint/imprint.module';
 import {DataSharingService} from './shared/services/data-sharing.service';
 import {NotificationModule} from './notification/notification.module';
 
@@ -39,7 +43,6 @@ import {NotificationModule} from './notification/notification.module';
     AppComponent
   ],
   imports: [
-    AdminModule,
     BrowserModule,
     HttpModule,
     AppRoutingModule,
@@ -49,6 +52,8 @@ import {NotificationModule} from './notification/notification.module';
     AuthModule,
     AboutModule,
     SharedModule,
+    AdminModule,
+    ImprintModule,
     NotificationModule
   ],
   providers: [
@@ -59,6 +64,7 @@ import {NotificationModule} from './notification/notification.module';
     UnitService,
     CourseService,
     UserDataService,
+    WhitelistUserService,
     LectureService,
     BackendService,
     UserDataService,
@@ -72,6 +78,8 @@ import {NotificationModule} from './notification/notification.module';
     TitleService,
     DownloadFileService,
     RavenErrorHandler,
+    ThemeService,
+    ConfigService,
     {
       provide: ErrorHandler,
       useExisting: RavenErrorHandler

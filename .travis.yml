@@ -79,8 +79,8 @@ script:
   # - npm run test        # run test - does not work properly
   - npm run e2e         # run end-to-end-tests
   - sed -i 's/$TRAVIS_COMMIT/'$TRAVIS_COMMIT'/' src/app/shared/services/raven-error-handler.service.ts
-  - npm run build       # build in prod mode
   - cd ../..
+  - .travis/build-fe.sh       # build in prod mode
 
 after_script:
   # send required files to coveralls.io

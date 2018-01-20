@@ -3,12 +3,13 @@ import 'rxjs/add/operator/map';
 import {IUser} from '../../../../../../shared/models/IUser';
 import {User} from '../../models/User';
 import {ICourse} from '../../../../../../shared/models/ICourse';
+import {ThemeService} from './theme.service';
 
 @Injectable()
 export class UserService {
   public user: User = null;
 
-  constructor() {
+  constructor(private themeService: ThemeService) {
     const storedUser: IUser = JSON.parse(localStorage.getItem('user'));
 
     if (storedUser) {
@@ -19,11 +20,13 @@ export class UserService {
   setUser(user: IUser) {
     this.user = new User(user);
     localStorage.setItem('user', JSON.stringify(this.user));
+    this.themeService.setTheme(this.user.profile.theme);
   }
 
   unsetUser() {
     this.user = null;
     localStorage.removeItem('user');
+    this.themeService.setTheme('auto');
   }
 
   isStudent(): boolean {

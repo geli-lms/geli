@@ -43,6 +43,10 @@
           <mat-icon>info</mat-icon>
           <span>About</span>
         </button>
+        <button mat-menu-item routerLink="/imprint" routerLinkActive="active">
+          <mat-icon>info</mat-icon>
+          <span>Imprint</span>
+        </button>
         <button mat-menu-item *ngIf="isLoggedIn()" (click)="logout()" routerLink="" routerLinkActive="active">
           <mat-icon>exit_to_app</mat-icon>
           <span>Logout</span>
