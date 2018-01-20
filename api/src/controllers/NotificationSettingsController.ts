@@ -1,4 +1,4 @@
-import {BadRequestError, Body, Get, JsonController, Param, Post, Put, UseBefore} from 'routing-controllers';
+import {Authorized, BadRequestError, Body, Get, JsonController, Param, Post, Put, UseBefore} from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import {API_NOTIFICATION_TYPE_ALL_CHANGES, INotificationSettingsModel, NotificationSettings} from '../models/NotificationSettings';
 import {INotificationSettings} from '../../../shared/models/INotificationSettings';
@@ -7,16 +7,18 @@ import {INotificationSettings} from '../../../shared/models/INotificationSetting
 @UseBefore(passportJwtMiddleware)
 export class NotificationSettingsController {
 
+  @Authorized(['student', 'teacher', 'admin'])
   @Get('/user/:id')
   async getNotificationSettingsPerUser(@Param('id') id: string) {
     const notificationSettings: INotificationSettingsModel[] = await NotificationSettings.find({'user': id})
       .populate('user')
       .populate('course');
     return notificationSettings.map(settings => {
-      return settings.toObject()
+      return settings.toObject();
     });
   }
 
+  @Authorized(['student', 'teacher', 'admin'])
   @Put('/:id')
   async updateNotificationSettings(@Param('id') id: string, @Body() notificationSettings: INotificationSettings) {
     if (!notificationSettings) {
@@ -26,10 +28,13 @@ export class NotificationSettingsController {
     return settings.toObject();
   }
 
+  @Authorized(['student', 'teacher', 'admin'])
   @Post('/')
   async createNotificationSettings(@Body() data: any) {
+    console.warn('user: ' + data.user._id);
+    console.warn('course: ' + data.course._id);
     if (!data.user || !data.course) {
-      throw new BadRequestError('NotificationSettings need course, user and notificationType');
+      throw new BadRequestError('NotificationSettings need course and user');
     }
     const notificationSettings: INotificationSettingsModel =
       await NotificationSettings.findOne({'user': data.user, 'course': data.course});
@@ -40,6 +45,8 @@ export class NotificationSettingsController {
       'user': data.user, 'course': data.course,
       'notificationType': API_NOTIFICATION_TYPE_ALL_CHANGES, 'emailNotification': false
     }).save();
+    console.warn('settings: ' + settings);
+    console.warn('settingsObject: ' + settings.toObject());
     return settings.toObject();
   }
 
