@@ -1,8 +1,8 @@
 <h2>Add files to unit</h2>
-<span>Files selected: {{fileList.selectedOptions.selected.length}}</span>
+<span>Files selected: {{selectedOptions.length}}</span>
 <mat-dialog-content>
-  <mat-selection-list #fileList dense>
-    <mat-list-option *ngFor="let file of allFiles">
+  <mat-selection-list #fileList dense [(ngModel)]="selectedOptions">
+    <mat-list-option *ngFor="let file of allFiles" [value]="file">
       <span>{{file.name}}</span>
     </mat-list-option>
   </mat-selection-list>

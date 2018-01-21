@@ -14,6 +14,7 @@ export class PickMediaDialog implements OnInit {
   directory: IDirectory;
   allFiles: IFile[];
   @ViewChild('fileList') fileList: MatSelectionList;
+  selectedOptions: IFile[] = [];
 
   constructor(private dialogRef: MatDialogRef<PickMediaDialog>,
               private mediaService: MediaService,
@@ -31,12 +32,12 @@ export class PickMediaDialog implements OnInit {
   }
 
   save(): void {
-    if (this.fileList.selectedOptions.selected.length === 0) {
+    if (this.selectedOptions.length === 0) {
       this.snackBar.open('Please choose at least one file', '', {duration: 2000});
       return;
     }
 
-    this.dialogRef.close(this.fileList.selectedOptions.selected);
+    this.dialogRef.close(this.selectedOptions);
   }
 
   cancel(): void {

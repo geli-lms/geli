@@ -18,7 +18,7 @@ import {FilesizePipe} from './pipes/filesize/filesize.pipe';
 import {UploadFormDialog} from './components/upload-form-dialog/upload-form-dialog.component';
 import {MarkdownEditorComponent} from './components/markdown-editor/markdown-editor.component';
 import {AceEditorModule} from 'ng2-ace-editor';
-import { PickMediaDialog } from './components/pick-media-dialog/pick-media-dialog.component';
+import {PickMediaDialog} from './components/pick-media-dialog/pick-media-dialog.component';
 
 @NgModule({
   imports: [
