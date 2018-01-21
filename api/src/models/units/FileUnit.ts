@@ -3,9 +3,6 @@ import {IUnitModel} from './Unit';
 import {IFileUnit} from '../../../../shared/models/units/IFileUnit';
 import fs = require('fs');
 import {IFile} from '../../../../shared/models/IFile';
-import {IUser} from '../../../../shared/models/IUser';
-import {IUnit} from '../../../../shared/models/units/IUnit';
-import {IProgress} from '../../../../shared/models/progress/IProgress';
 
 interface IFileUnitModel extends IFileUnit, IUnitModel {
   exportJSON: () => Promise<IFileUnit>;
