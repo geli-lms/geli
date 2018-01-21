@@ -9,7 +9,7 @@
       <span>Actions</span>
     </div>
     <div class="file-list-row" *ngFor="let file of model.files">
-      <span class="filename">{{file.alias}}</span>
+      <span class="filename">{{file.name}}</span>
       <span class="filesize">{{file.size | filesize}}</span>
       <mat-action-row>
         <button mat-raised-button color="warn" (click)="removeFile(file)">

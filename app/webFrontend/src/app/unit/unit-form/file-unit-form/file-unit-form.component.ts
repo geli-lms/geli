@@ -6,10 +6,10 @@ import {IFileUnit} from '../../../../../../../shared/models/units/IFileUnit';
 import {UnitGeneralInfoFormComponent} from '../unit-general-info-form/unit-general-info-form.component';
 import {UnitService} from '../../../shared/services/data.service';
 import {FileUnit} from '../../../models/units/FileUnit';
-import {UploadFormComponent} from '../../../shared/components/upload-form/upload-form.component';
 import {ShowProgressService} from '../../../shared/services/show-progress.service';
 import {VideoUnit} from '../../../models/units/VideoUnit';
 import {PickMediaDialog} from '../../../shared/components/pick-media-dialog/pick-media-dialog.component';
+import {IFile} from '../../../../../../../shared/models/mediaManager/IFile';
 
 @Component({
   selector: 'app-file-unit-form',
@@ -28,16 +28,6 @@ export class FileUnitFormComponent implements OnInit {
   @ViewChild(UnitGeneralInfoFormComponent)
   public generalInfo: UnitGeneralInfoFormComponent;
 
-  @ViewChild(UploadFormComponent)
-  public uploadForm: UploadFormComponent;
-
-  private baseUploadPath = '/api/units';
-  uploadPath = this.baseUploadPath;
-  uploadMethod = 'POST';
-  filesSelected = false;
-
-  additionalUploadData: any;
-
   constructor(public snackBar: MatSnackBar,
               private unitService: UnitService,
               private showProgress: ShowProgressService,
@@ -49,7 +39,6 @@ export class FileUnitFormComponent implements OnInit {
       switch (this.fileUnitType) {
         case 'video': {
           this.model = new VideoUnit(this.course);
-          this.uploadForm.allowedMimeTypes = ['video/mp4', 'video/webm', 'video/ogg', 'video/avi'];
           break;
         }
         case 'file': {
@@ -62,59 +51,26 @@ export class FileUnitFormComponent implements OnInit {
         }
       }
     }
+  }
 
-    this.additionalUploadData = {
+  save() {
+    const reqObj = {
       lectureId: this.lecture._id,
       model: this.model
     };
 
-    if (this.model._id) {
-      this.uploadMethod = 'PUT';
-      this.uploadPath += '/' + this.model._id;
-    }
-  }
+    const promise = (reqObj.model._id)
+      ? this.unitService.updateItem(reqObj)
+      : this.unitService.createItem(reqObj);
 
-  onFileSelectedChange(event: boolean) {
-    this.filesSelected = event;
-  }
-
-  onFileUploaded(event: IFileUnit) {
-    this.model = event;
-    this.additionalUploadData.model = this.model;
-    const updatedUploadPath = this.baseUploadPath + '/' + this.model._id;
-    if (this.uploadPath === updatedUploadPath && this.uploadMethod === 'PUT') {
-      this.uploadForm.uploadNextItem();
-    } else {
-      this.uploadMethod = 'PUT';
-      this.uploadPath = updatedUploadPath;
-    }
-  }
-
-  onAllUploaded() {
-    this.onDone();
-  }
-
-  async uploadAll() {
-    this.additionalUploadData.model = {
-      ...this.model,
-      name: this.generalInfo.form.value.name,
-      description: this.generalInfo.form.value.description,
-    };
-
-    if (this.uploadForm.fileUploader.queue.length > 0) {
-      this.uploadForm.uploadNextItem();
-    } else {
-      this.showProgress.toggleLoadingGlobal(true);
-      this.unitService.updateItem(this.model)
-        .then((updatedUnit) => {
-          this.model = updatedUnit;
-          this.onAllUploaded();
-        })
-        .catch((error) => {
-          this.snackBar.open('An error occurred', 'Dismiss');
-          this.showProgress.toggleLoadingGlobal(false);
-        });
-    }
+    promise
+      .then((updatedUnit) => {
+        this.model = <FileUnit><any> updatedUnit;
+        this.onDone();
+      })
+      .catch((error) => {
+        this.snackBar.open('An error occurred', 'Dismiss');
+      });
   }
 
   removeFile(file: any) {
@@ -125,7 +81,7 @@ export class FileUnitFormComponent implements OnInit {
 
   checkSave() {
     if (this.generalInfo.form.value.name) {
-      return !(this.filesSelected || (this.model.files.length > 0));
+      return !(this.model.files.length > 0);
     } else {
       return true;
     }
@@ -138,10 +94,23 @@ export class FileUnitFormComponent implements OnInit {
       },
     });
 
-    res.afterClosed().subscribe(value => {
-      console.log(value);
+    res.afterClosed().subscribe(async value => {
       if (value) {
-        // TODO
+        value.forEach((val: IFile) => {
+          // Check if file already added
+          let alreadyExists = false;
+          this.model.files.forEach(v => {
+            if (val._id === v._id) {
+              alreadyExists = true;
+            }
+          });
+
+          // Add file
+          if (!alreadyExists) {
+            this.model.files.push(val);
+          }
+        });
+        this.snackBar.open('Added files to unit', '', {duration: 2000});
       }
     });
   }

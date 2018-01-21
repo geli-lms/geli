@@ -85,6 +85,7 @@ export class CourseMediaComponent implements OnInit {
     this.currentFolder.subDirectories.sort(sortFnc);
   }
 
+  // Todo: Use filesize directive: `1024 | filesize`
   bytesHumanReadable(bytes: number): string {
     return prettyBytes(bytes);
   }
