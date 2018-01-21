@@ -6,6 +6,7 @@ import {ILecture} from '../../../shared/models/ILecture';
 import {InternalServerError} from 'routing-controllers';
 import {IUser} from '../../../shared/models/IUser';
 import * as winston from 'winston';
+import {ObjectID} from 'bson';
 
 interface ICourseModel extends ICourse, mongoose.Document {
   exportJSON: () => Promise<ICourse>;
@@ -68,7 +69,7 @@ const courseSchema = new mongoose.Schema({
           ret._id = ret._id.toString();
         }
 
-        if (ret.hasOwnProperty('courseAdmin') && ret.courseAdmin !== null) {
+        if (ret.hasOwnProperty('courseAdmin') && ret.courseAdmin !== null && (ret.courseAdmin instanceof ObjectID)) {
           ret.courseAdmin = ret.courseAdmin.toString();
         }
         ret.hasAccessKey = false;
