@@ -10,6 +10,7 @@ import {Lecture} from '../src/models/Lecture';
 import {Unit} from '../src/models/units/Unit';
 import {WhitelistUser} from '../src/models/WhitelistUser';
 import {Progress} from '../src/models/progress/Progress';
+import {ITaskUnitModel} from '../src/models/units/TaskUnit';
 
 
 export class FixtureLoader {
@@ -119,10 +120,10 @@ export class FixtureLoader {
           case 'task': {
             // does not work properly yet
             if (progressType === 1) {
-              newProgress.answers = [];
+              newProgress.answers = FixtureUtils.getAnswersFromTaskUnit(<ITaskUnitModel>unit, false);
               newProgress.done = false;
             } else if (progressType === 2) {
-              newProgress.answers = [];
+              newProgress.answers = FixtureUtils.getAnswersFromTaskUnit(<ITaskUnitModel>unit, true);
               newProgress.done = true;
             }
             newProgress.__t = 'task-unit-progress';
