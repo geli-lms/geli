@@ -1,13 +1,16 @@
 import * as mongoose from 'mongoose';
-import {Unit} from './Unit';
+import {IUnitModel} from './Unit';
 import {IFileUnit} from '../../../../shared/models/units/IFileUnit';
 import fs = require('fs');
-import {InternalServerError} from 'routing-controllers';
-import {Lecture} from '../Lecture';
 import {IFile} from '../../../../shared/models/IFile';
+import {IUser} from '../../../../shared/models/IUser';
+import {IUnit} from '../../../../shared/models/units/IUnit';
+import {IProgress} from '../../../../shared/models/progress/IProgress';
 
-interface IFileUnitModel extends IFileUnit, mongoose.Document {
+interface IFileUnitModel extends IFileUnit, IUnitModel {
   exportJSON: () => Promise<IFileUnit>;
+  calculateProgress: (users: IUser[], progress: IProgress[]) => Promise<IUnit>;
+  toFile: () => Promise<String>;
 }
 
 const fileUnitSchema = new mongoose.Schema({
