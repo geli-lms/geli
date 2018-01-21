@@ -1,7 +1,7 @@
 <h2>Add files to unit</h2>
 <span>Files selected: {{fileList.selectedOptions.selected.length}}</span>
 <mat-dialog-content>
-  <mat-selection-list dense #fileList>
+  <mat-selection-list #fileList dense>
     <mat-list-option *ngFor="let file of allFiles">
       <span>{{file.name}}</span>
     </mat-list-option>
