@@ -64,7 +64,6 @@ export class GeneralTabComponent implements OnInit {
 
       this.courseService.readSingleItem(this.id).then(
         (val: any) => {
-          console.log(val);
           this.course = val.name;
           this.description = val.description;
           this.accessKey = val.accessKey;
