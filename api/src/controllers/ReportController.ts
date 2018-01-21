@@ -231,6 +231,9 @@ export class ReportController {
           { name: 'done', value: progressStats.done }
         ];
         return courseObj;
+      })
+      .filter((courseObj: any) => {
+        return courseObj.lectures.length > 0;
       });
 
     return courseObjectsWithProgress;

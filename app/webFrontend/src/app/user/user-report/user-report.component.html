@@ -1,23 +1,24 @@
-<h2>Your course progress</h2>
-<mat-card *ngFor="let course of report">
-  <mat-card-header>
-    <mat-card-title>{{ course.name }}</mat-card-title>
-  </mat-card-header>
-  <mat-card-content>
-    <div>
-      <ngx-charts-advanced-pie-chart
-        [view]="[800, 200]"
-        [results]="course.progressData"
-        [scheme]="diagramColors">
-      </ngx-charts-advanced-pie-chart>
-    </div>
-  </mat-card-content>
-  <mat-card-actions align="start">
-    <button mat-button [routerLink]="['/', 'course', course._id]" routerLinkActive="active">
-      <mat-icon>arrow_forward</mat-icon>
-      Go to course
-    </button>
+<div class="user-progress" *ngIf="report?.length > 0">
+  <h2>Your course progress</h2>
+  <mat-card *ngFor="let course of report">
+    <mat-card-header>
+      <mat-card-title>{{ course.name }}</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div>
+        <ngx-charts-advanced-pie-chart
+          [view]="[800, 200]"
+          [results]="course.progressData"
+          [scheme]="diagramColors">
+        </ngx-charts-advanced-pie-chart>
+      </div>
+    </mat-card-content>
+    <mat-card-actions align="start">
+      <button mat-button [routerLink]="['/', 'course', course._id]" routerLinkActive="active">
+        <mat-icon>arrow_forward</mat-icon>
+        Go to course
+      </button>
 
-  </mat-card-actions>
-</mat-card>
-
+    </mat-card-actions>
+  </mat-card>
+</div>
