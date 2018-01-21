@@ -19,7 +19,7 @@ export class ReportService extends DataService {
   getCourseResults(courseId: string) {
     const originalApiPath = this.apiPath;
     this.apiPath += 'result/courses/';
-    const promise = this.readSingleItem(courseId);
+    const promise = this.readSingleItem<any>(courseId);
     this.apiPath = originalApiPath;
     return promise;
   }
