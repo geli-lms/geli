@@ -64,9 +64,10 @@ export class GeneralTabComponent implements OnInit {
 
       this.courseService.readSingleItem(this.id).then(
         (val: any) => {
+          console.log(val);
           this.course = val.name;
           this.description = val.description;
-          this.accessKey = val.hasAccessKey ? '****' : '';
+          this.accessKey = val.accessKey;
           this.active = val.active;
           this.enrollType = val.enrollType;
           if (this.enrollType === 'whitelist') {
