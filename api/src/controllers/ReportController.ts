@@ -161,12 +161,15 @@ export class ReportController {
       .select({ students: 1 })
       .populate('students')
       .exec();
+    const unitPromise = Unit.findOne({_id: unitId}).exec();
     const progressPromise = Progress.find({'unit': unitId}).exec();
-    const [course, progresses] = await Promise.all([coursePromise, progressPromise]);
+    const [course, unit, progresses] = await Promise.all([coursePromise, unitPromise, progressPromise]);
     const courseObj: ICourse = <ICourse>course.toObject();
     const students = courseObj.students;
 
-    const progressObjects = progresses.map((progress) => progress.toObject());
+    const progressObjects: IProgress[] = <IProgress[]>progresses.map((progress) => progress.toObject());
+    const unitObjWithProgressStats = await unit.calculateProgress(students, progressObjects);
+
     const studentsWithProgress = students.map((student: IUser) => {
       const studentWithProgress: IUser = student;
       const progressIndex = progressObjects.findIndex((progressObj: any) => {
@@ -174,14 +177,20 @@ export class ReportController {
       });
 
       if (progressIndex > -1) {
-        studentWithProgress.progress = progressObjects[progressIndex];
+        const progressObjForStudent = progressObjects[progressIndex];
+        studentWithProgress.progress = progressObjForStudent;
         progressObjects.splice(progressIndex, 1);
       }
 
       return studentWithProgress;
     });
 
-    return studentsWithProgress;
+    const report = {
+      summary: unitObjWithProgressStats,
+      details: studentsWithProgress
+    };
+
+    return report;
   }
 
   @Get('/overview/users/:id')
