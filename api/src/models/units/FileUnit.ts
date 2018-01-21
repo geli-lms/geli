@@ -9,7 +9,6 @@ import {IProgress} from '../../../../shared/models/progress/IProgress';
 
 interface IFileUnitModel extends IFileUnit, IUnitModel {
   exportJSON: () => Promise<IFileUnit>;
-  calculateProgress: (users: IUser[], progress: IProgress[]) => Promise<IUnit>;
   toFile: () => Promise<String>;
 }
 
