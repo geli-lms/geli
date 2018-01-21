@@ -1,7 +1,6 @@
 import {Injectable} from '@angular/core';
 import {DataService} from '../data.service';
 import {BackendService} from '../backend.service';
-import {IUser} from '../../../../../../../shared/models/IUser';
 
 @Injectable()
 export class ReportService extends DataService {
@@ -28,8 +27,7 @@ export class ReportService extends DataService {
   getUnitDetailForCourse(courseId: string, unitId: string) {
     const originalApiPath = this.apiPath;
     this.apiPath += 'details/courses/' + courseId + '/units/';
-    // FIXME: Why do we expect an array?
-    const promise = this.readSingleItem<IUser[]>(unitId);
+    const promise = this.readSingleItem(unitId);
     this.apiPath = originalApiPath;
     return promise;
   }
