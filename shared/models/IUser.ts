@@ -9,7 +9,8 @@ export interface IUser {
   profile: {
     firstName: string,
     lastName: string;
-    picture: IFile
+    picture: IFile;
+    theme: string;
   };
   role: string;
   progress: any;
