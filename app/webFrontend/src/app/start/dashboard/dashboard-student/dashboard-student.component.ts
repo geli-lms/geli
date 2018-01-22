@@ -20,7 +20,6 @@ export class DashboardStudentComponent extends DashboardBaseComponent {
   }
 
   ngOnInit() {
-
   }
 
   ngOnChanges() {
