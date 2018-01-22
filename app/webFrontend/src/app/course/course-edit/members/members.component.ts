@@ -3,8 +3,8 @@ import {CourseService, UserDataService} from '../../../shared/services/data.serv
 import {ShowProgressService} from '../../../shared/services/show-progress.service';
 import {IUser} from '../../../../../../../shared/models/IUser';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
-import {SortUtil} from '../../../shared/utils/SortUtil';
-import {User} from '../../../models/User';
+import {isNullOrUndefined} from 'util';
+import {IWhitelistUser} from '../../../../../../../shared/models/IWhitelistUser';
 import {ActivatedRoute} from '@angular/router';
 
 @Component({
@@ -13,9 +13,13 @@ import {ActivatedRoute} from '@angular/router';
 })
 export class MembersComponent implements OnInit {
 
-  courseId: string;
   course: ICourse;
-  allStudents: IUser[] = [];
+  courseId: string;
+  totalWhitelist = 0;
+  foundStudents: IUser[] = [];
+  dragableWhitelistUserInCourse: IWhitelistUser[] = [];
+  showWhitelists = false;
+  search = '';
 
   constructor(private route: ActivatedRoute,
               private courseService: CourseService,
@@ -27,20 +31,11 @@ export class MembersComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getStudents().then(this.getCourseStudents);
-  }
-
-  /**
-   * Get all users from api and filter those role student.
-   *
-   * TODO: Never load all users!
-   */
-  getStudents() {
-    return this.userService.readItems()
-      .then(users => {
-        this.allStudents = users.filter(obj => obj.role === 'student');
-        this.allStudents = this.allStudents.map(data => new User(data));
-      });
+    this.courseService.readSingleItem<ICourse>(this.courseId).then((course: ICourse) => {
+      this.course = course;
+      this.course.students.forEach(member =>
+        this.foundStudents = this.foundStudents.filter(user => user._id !== member._id))}
+    );
   }
 
   /**
@@ -48,38 +43,55 @@ export class MembersComponent implements OnInit {
    */
   updateCourseStudents(): void {
     this.showProgress.toggleLoadingGlobal(true);
-
     this.courseService.updateItem({
       '_id': this.course._id,
-      'students': this.course.students.map((user) => user._id)
+      'students': this.course.students.map((user) => user._id),
+      'whitelist': this.course.whitelist.map((wUser) => wUser._id)
     })
-    .then(() => {
-      this.showProgress.toggleLoadingGlobal(false);
-    });
+      .then(() => {
+        this.showProgress.toggleLoadingGlobal(false);
+      });
   }
 
-  /**
-   * Get this course from api and filter all teachers from users.
-   */
-  getCourseStudents = () => {
-    this.courseService.readSingleItem(this.courseId).then(
-      (val: any) => {
-        this.course = val;
-        this.course.students.forEach(member =>
-          this.allStudents = this.allStudents.filter(user => user._id !== member._id));
-        this.course.students = this.course.students.map(data => new User(data));
+  isUserInCourse(user: IUser) {
+    return !isNullOrUndefined(this.course.students.find((elem: IUser) => elem._id === user._id));
+  }
 
-        SortUtil.sortUsers(this.allStudents);
-        SortUtil.sortUsers(this.course.students);
-      });
-  };
+  removeUserFromCoure(draggedUser: IUser) {
+    this.course.students = this.course.students.filter(s => s._id !== draggedUser._id);
+    this.updateCourseStudents();
+  }
+
+  pushUserToCourse(draggedUser: IUser) {
+    this.course.students.push(draggedUser);
+    this.updateCourseStudents();
+  }
+
+  removeWhitelistUserFromCourse(draggedUser: IWhitelistUser) {
+    this.course.whitelist = this.course.whitelist.filter(w => w._id !== draggedUser._id);
+    this.updateCourseStudents();
+  }
+
+  pushWhitelistUserToCourse(draggedUser: IWhitelistUser) {
+    this.course.whitelist.push(draggedUser);
+    this.updateCourseStudents();
+  }
 
   /**
    * @param id Id of an user.
    */
-  removeUser(id: string): void {
-    this.allStudents = this.allStudents.concat(this.course.students.filter(obj => id === obj._id));
+  updateUser(id: string): void {
+    this.foundStudents = this.foundStudents.concat(this.course.students.filter(obj => id === obj._id));
     this.course.students = this.course.students.filter(obj => id !== obj._id);
     this.updateCourseStudents();
+  }
+
+  onSearch(search: string): void {
+    this.search = search;
+    this.showWhitelists = search.length > 0;
+  }
+
+  onFoundWhitelistUserInCourse(users: IWhitelistUser[]) {
+    this.dragableWhitelistUserInCourse = users;
   }
 }
