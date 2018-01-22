@@ -248,11 +248,14 @@ export class ReportController {
   }
 
   private checkAccess(course: ICourse, user: IUser) {
-    const teacherIndex = course.teachers.findIndex((teacher: any) => {
-      return teacher.toString() === user._id;
-    });
+    let teacherIndex = -2;
+    if (course.teachers) {
+      teacherIndex = course.teachers.findIndex((teacher: any) => {
+        return teacher.toString() === user._id;
+      });
+    }
 
-    if (user.role !== 'admin' && course.courseAdmin._id.toString() !== user._id.toString() && teacherIndex === -1) {
+    if (user.role !== 'admin' && course.courseAdmin._id.toString() !== user._id.toString() && teacherIndex < 0) {
       throw new ForbiddenError('You are no admin or teacher for this course.');
     }
   }
