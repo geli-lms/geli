@@ -8,7 +8,7 @@ import {IUnit} from '../../../../../../shared/models/units/IUnit';
 import {IUser} from '../../../../../../shared/models/IUser';
 import {ICourse} from '../../../../../../shared/models/ICourse';
 import {IDownload} from '../../../../../../shared/models/IDownload';
-import {IStudentConfig} from '../../../../../../shared/models/IStudentConfig';
+
 
 export abstract class DataService {
 

@@ -2,7 +2,6 @@ import {Component} from '@angular/core';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
 import {UserService} from '../../../shared/services/user.service';
 import {DashboardBaseComponent} from '../dashboard-base-component';
-import {IStudentConfig} from '../../../../../../../shared/models/IStudentConfig';
 import {SortUtil} from '../../../shared/utils/SortUtil';
 
 
@@ -16,7 +15,6 @@ export class DashboardStudentComponent extends DashboardBaseComponent {
 
   myCourses: ICourse[];
   availableCourses: ICourse[];
-  studentConfig: IStudentConfig;
 
   constructor(public userService: UserService) {
     super();
