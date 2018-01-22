@@ -1,27 +1,45 @@
-.progress-container {
+@import '../../../variables';
 
-  display: flex;
+.progress-summary {
+  width: 100%;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid map-get($mat-grey, 300);
 
-  .profile {
-    margin-right: 2.5rem;
-  }
-
-  .progress-submission {
-
-    flex-grow: 3;
-
-    i.material-icons {
-
-      float: right;
-
-      &.tried {
-        color: #C7B42C;
-      }
-
-      &.done {
-        color: #5AA454;
-      }
-    }
-
+  .ngx-charts {
+    float: none;
   }
 }
+
+.details-container {
+  clear: both;
+
+  .progress-container {
+
+    display: flex;
+    clear: both;
+
+    .profile {
+      margin-right: 2.5rem;
+    }
+
+    .progress-submission {
+
+      flex-grow: 3;
+
+      i.material-icons {
+
+        float: right;
+
+        &.tried {
+          color: #C7B42C;
+        }
+
+        &.done {
+          color: #5AA454;
+        }
+      }
+
+    }
+  }
+}
+
