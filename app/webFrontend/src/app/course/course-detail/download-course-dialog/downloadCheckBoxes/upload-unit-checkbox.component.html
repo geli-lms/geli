@@ -1,5 +1,5 @@
 <mat-list-item class="fileUnit">
-  <h4>{{file.alias}}</h4>
+  <h4>{{file.name}}</h4>
   <span class="spacer"></span>
   <span class="lightgray"> {{unitDesc}} </span>
   <mat-checkbox *ngIf="!this.showDL" [(ngModel)]="chkbox" (change)="emitEvent()" class="chkbox"></mat-checkbox>
