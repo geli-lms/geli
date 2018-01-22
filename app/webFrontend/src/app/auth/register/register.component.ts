@@ -6,7 +6,7 @@ import {ShowProgressService} from '../../shared/services/show-progress.service';
 import {MatSnackBar} from '@angular/material';
 import {errorCodes} from '../../../../../../api/src/config/errorCodes';
 import {TitleService} from '../../shared/services/title.service';
-import {ConfigService} from '../../shared/services/data.service';
+import {APIInfoService} from '../../shared/services/data.service';
 
 @Component({
   selector: 'app-register',
@@ -37,12 +37,12 @@ export class RegisterComponent implements OnInit {
               private snackBar: MatSnackBar,
               private formBuilder: FormBuilder,
               private titleService: TitleService,
-              private configService: ConfigService) {
+              private apiInfoService: APIInfoService, ) {
   }
 
   ngOnInit() {
-    this.configService.getEnvironmentVariable('teacherMailRegex').then(regex => {
-        this.teacherMailRegex = regex;
+    this.apiInfoService.readItems().then((apiInfo: any) => {
+        this.teacherMailRegex = apiInfo.teacherMailRegex;
       }
     );
     this.titleService.setTitle('Register');
@@ -77,7 +77,6 @@ export class RegisterComponent implements OnInit {
         this.registrationDone = true;
       })
       .catch((error) => {
-
         const errormessage = error.json().message || error.json().errmsg;
         switch (errormessage) {
           case errorCodes.mail.duplicate.code: {
@@ -86,7 +85,6 @@ export class RegisterComponent implements OnInit {
           }
           case errorCodes.mail.noTeacher.code: {
             this.mailError = errorCodes.mail.noTeacher.text;
-            this.snackBar.open(this.mailError, 'Dismiss');
             break;
           }
           case errorCodes.duplicateUid.code: {
@@ -118,14 +116,14 @@ export class RegisterComponent implements OnInit {
 
   validateTeacherEmail(control: FormControl) {
     if (this.role === 'teacher' && !(control.value as String).match(this.teacherMailRegex)) {
-      return { teacherEmailError: true };
+      return {teacherEmailError: true};
     }
     return null;
   }
 
   validateMatriculationNumber(control: FormControl) {
     if (this.role === 'student' && (control.value as String).length <= 0) {
-      return { uidValidator: true };
+      return {uidValidator: true};
     }
     return null;
   }

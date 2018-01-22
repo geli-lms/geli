@@ -4,4 +4,5 @@ export interface IAPIInfo {
   build_timestamp: Date;
   commit_hash: string;
   sentryDsn: string;
+  teacherMailRegex: string;
 }

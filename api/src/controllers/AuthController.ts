@@ -11,7 +11,7 @@ import {IUserModel, User} from '../models/User';
 import {JwtUtils} from '../security/JwtUtils';
 import * as errorCodes from '../config/errorCodes'
 import {Course} from '../models/Course';
-import config from '../config/main'
+import config from '../config/main';
 
 @JsonController('/auth')
 export class AuthController {
