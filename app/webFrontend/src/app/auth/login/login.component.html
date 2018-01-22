@@ -1,20 +1,24 @@
 <mat-card class="login-card">
   <mat-card-header>
-    <mat-card-title><h1>Login</h1></mat-card-title>
+    <mat-card-title><h1>{{'common.login'|translate}}</h1></mat-card-title>
   </mat-card-header>
 
   <mat-card-content>
     <form name="form" (ngSubmit)="login()" [formGroup]="loginForm">
       <mat-form-field>
-        <input matInput formControlName="email" placeholder="Mail address">
+        <input matInput formControlName="email" [placeholder]="'common.email'|translate">
       </mat-form-field>
       <mat-form-field>
-        <input matInput type="password" formControlName="password" placeholder="Password">
+        <input matInput type="password" formControlName="password"
+               [placeholder]="'common.password'|translate">
       </mat-form-field>
 
-      <button mat-raised-button color="primary" class="mat-button" type="submit" [disabled]="loading">Login</button>
-      <button mat-raised-button type="button" routerLink="/reset" routerLinkActive="active">Forgot
-        password
+      <button mat-raised-button color="primary" class="mat-button" type="submit"
+              [disabled]="loading">
+        {{'common.login'|translate}}
+      </button>
+      <button mat-raised-button type="button" routerLink="/reset" routerLinkActive="active">
+        {{'auth.forgotPassword'|translate}}
       </button>
     </form>
   </mat-card-content>
