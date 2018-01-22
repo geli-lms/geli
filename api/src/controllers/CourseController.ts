@@ -220,13 +220,16 @@ export class CourseController {
     if (!name.endsWith('.csv')) {
       throw new TypeError(errorCodes.errorCodes.upload.type.notCSV.code);
     }
-    return User.find({role: 'student'})
-      .then((users) => users.map((user) => user.toObject({virtuals: true})))
-      .then((users) => Course.findById(id).then((course) => {
+    return Course.findById(id)
+        .populate('whitelist')
+        .populate('students')
+        .then((course) => {
         return this.parser.parseFile(file).then((buffer: any) =>
-          this.parser.updateCourseFromBuffer(buffer, course, users).save().then((c: ICourseModel) =>
+          this.parser.updateCourseFromBuffer(buffer, course)
+            .then(c => c.save())
+            .then((c: ICourseModel) =>
             c.toObject()));
-      }));
+      });
   }
 
   @Authorized(['teacher', 'admin'])
