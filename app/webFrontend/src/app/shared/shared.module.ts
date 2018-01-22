@@ -17,6 +17,7 @@ import {FileUploadModule} from 'ng2-file-upload';
 import {FilesizePipe} from './pipes/filesize/filesize.pipe';
 import {MarkdownEditorComponent} from './components/markdown-editor/markdown-editor.component';
 import {AceEditorModule} from 'ng2-ace-editor';
+import {TranslateModule} from '@ngx-translate/core';
 
 @NgModule({
   imports: [
@@ -26,7 +27,8 @@ import {AceEditorModule} from 'ng2-ace-editor';
     MaterialImportModule,
     HttpClientModule,
     AceEditorModule,
-    FileUploadModule
+    FileUploadModule,
+    TranslateModule,
   ],
   declarations: [
     GravatarDirective,
@@ -57,6 +59,7 @@ import {AceEditorModule} from 'ng2-ace-editor';
     MarkdownEditorComponent,
     UploadFormComponent,
     FilesizePipe,
+    TranslateModule,
   ]
 })
 export class SharedModule {
