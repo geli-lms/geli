@@ -44,7 +44,8 @@ const userSchema = new mongoose.Schema({
         path: {type: String},
         name: {type: String},
         alias: {type: String}
-      }
+      },
+      theme: {type: String}
     },
     role: {
       type: String,

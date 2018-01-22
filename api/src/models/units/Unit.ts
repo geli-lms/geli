@@ -8,9 +8,13 @@ import {freeTextUnitSchema} from './FreeTextUnit';
 import {codeKataSchema} from './CodeKataUnit';
 import {fileUnitSchema} from './FileUnit';
 import {taskUnitSchema} from './TaskUnit';
+import {IUser} from '../../../../shared/models/IUser';
+import {IProgress} from '../../../../shared/models/progress/IProgress';
 
 interface IUnitModel extends IUnit, mongoose.Document {
   exportJSON: () => Promise<IUnit>;
+  calculateProgress: (users: IUser[], progress: IProgress[]) => Promise<IUnit>;
+  toFile: () => Promise<String>;
 }
 
 const unitSchema = new mongoose.Schema({
@@ -68,6 +72,10 @@ unitSchema.methods.exportJSON = function() {
   delete obj._course;
 
   return obj;
+};
+
+unitSchema.methods.calculateProgress = function(): Promise<IUnit> {
+  return this.toObject();
 };
 
 unitSchema.statics.importJSON = async function(unit: IUnit, courseId: string, lectureId: string) {
