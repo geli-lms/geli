@@ -4,7 +4,8 @@
 </button>
 <mat-menu #notificationMenu="matMenu">
   <span class="headline">Notifications</span>
-  <span class="clearButton" (click)="clearAll()">Clear all</span>
+  <span *ngIf="!isNullOrUndefined(notifications) && notifications.length > 0" class="clearButton" (click)="clearAll()">Clear all</span>
+  <span *ngIf="isNullOrUndefined(notifications) || notifications.length <= 0" class="noNotification">You don't have notifications.</span>
   <mat-nav-list>
     <div *ngFor="let notification of notifications">
       <mat-divider></mat-divider>
