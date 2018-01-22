@@ -6,7 +6,6 @@ import * as crypto from 'crypto';
 import {isNullOrUndefined} from 'util';
 import {isEmail} from 'validator';
 import * as errorCodes from '../config/errorCodes'
-import {ICourse} from '../../../shared/models/ICourse';
 
 interface IUserModel extends IUser, mongoose.Document {
   isValidPassword: (candidatePassword: string) => Promise<boolean>;

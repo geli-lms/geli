@@ -1,5 +1,4 @@
 import {IFile} from './IFile';
-import {ICourse} from './ICourse';
 
 export interface IUser {
   _id: any;

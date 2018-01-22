@@ -37,9 +37,10 @@ export class DashboardTeacherComponent extends DashboardBaseComponent {
     this.furtherCourses = [];
     this.inactiveCourses = [];
 
-    let allCourses = JSON.parse(JSON.stringify(this.allCourses));
-    allCourses = SortUtil.sortByLastVisitedCourses(allCourses, this.userService.user.lastVisitedCourses);
-    for (const course of allCourses) {
+
+
+    SortUtil.sortByLastVisitedCourses(this.allCourses, this.userService.user.lastVisitedCourses);
+    for (const course of this.allCourses) {
       if ((this.filterMyCourses(course) || this.filterAdminCourses(course)) && !course.active) {
         this.inactiveCourses.push(course);
       } else if (this.filterAdminCourses(course)) {

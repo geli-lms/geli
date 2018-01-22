@@ -9,7 +9,6 @@ import {IUser} from '../../../../../../shared/models/IUser';
 import {ICourse} from '../../../../../../shared/models/ICourse';
 import {IDownload} from '../../../../../../shared/models/IDownload';
 
-
 export abstract class DataService {
 
   static changeStringProp2DateProp(item: any, prop: string) {

@@ -18,23 +18,26 @@ export class SortUtil {
   }
 
   public static sortByLastVisitedCourses(courses, lastVisitedCourses) {
-    courses.map(course => course.position = 1000);
-    lastVisitedCourses.map((id, index) => {
-      const currentCourse = courses.find(course => course._id === id);
-      if (currentCourse) {
-        currentCourse.position = index;
-      }
-    });
     courses.sort((a, b) => {
-      if (a.position < b.position) {
+      const posA = lastVisitedCourses.indexOf(a._id);
+      const posB = lastVisitedCourses.indexOf(b._id);
+      if (posA === -1 && posB === -1) {
+        return 0;
+      }
+      if (posA === -1) {
+        return 1;
+      }
+      if (posB === -1) {
         return -1;
       }
-      if (a.position > b.position) {
+      if (posA < posB) {
+        return -1;
+      }
+      if (posA > posB) {
         return 1;
       }
       return 0;
     });
-    courses.map(course  => delete course.position);
     return courses;
   }
 }

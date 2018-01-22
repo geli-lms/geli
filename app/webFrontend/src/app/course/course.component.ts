@@ -9,9 +9,6 @@ import {CourseService} from '../shared/services/data.service';
 import {DialogService} from '../shared/services/dialog.service';
 import {ShowProgressService} from '../shared/services/show-progress.service';
 
-
-
-
 @Component({
   selector: 'app-course',
   templateUrl: './course.component.html',

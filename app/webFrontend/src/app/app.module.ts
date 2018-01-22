@@ -14,7 +14,6 @@ import {
   DownloadFileService,
   FreeTextUnitService,
   LectureService,
-  TaskService,
   UnitService,
   UserDataService,
   WhitelistUserService,

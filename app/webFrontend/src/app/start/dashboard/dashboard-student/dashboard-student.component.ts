@@ -10,7 +10,6 @@ import {SortUtil} from '../../../shared/utils/SortUtil';
   templateUrl: './dashboard-student.component.html',
   styleUrls: ['./dashboard-student.component.scss']
 })
-
 export class DashboardStudentComponent extends DashboardBaseComponent {
 
   myCourses: ICourse[];
