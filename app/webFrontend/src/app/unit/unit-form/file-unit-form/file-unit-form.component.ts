@@ -88,6 +88,11 @@ export class FileUnitFormComponent implements OnInit {
   }
 
   async openAddFilesDialog() {
+    if (this.course.media === undefined) {
+      this.snackBar.open('Please add files first', '', {duration: 3000});
+      return;
+    }
+
     const res = await this.dialog.open(PickMediaDialog, {
       data: {
         directoryId: this.course.media._id,
