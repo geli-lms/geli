@@ -32,9 +32,9 @@ export class ReportService extends DataService {
     return promise;
   }
 
-  getUserProgress(userId: string) {
+  getUserOverview(userId: string) {
     const originalApiPath = this.apiPath;
-    this.apiPath += 'users/';
+    this.apiPath += 'overview/users/';
     const promise = this.readSingleItem(userId);
     this.apiPath = originalApiPath;
     return promise;

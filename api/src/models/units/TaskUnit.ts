@@ -1,9 +1,14 @@
 import * as mongoose from 'mongoose';
-import {TaskUnit, Unit} from './Unit';
+import {IUnitModel} from './Unit';
 import {ITaskUnit} from '../../../../shared/models/units/ITaskUnit';
+import {IUser} from '../../../../shared/models/IUser';
+import {IProgress} from '../../../../shared/models/progress/IProgress';
+import {ITaskUnitProgress} from '../../../../shared/models/progress/ITaskUnitProgress';
+import {ITask} from '../../../../shared/models/task/ITask';
 
-interface ITaskUnitModel extends ITaskUnit, mongoose.Document {
+interface ITaskUnitModel extends ITaskUnit, IUnitModel {
   exportJSON: () => Promise<ITaskUnit>;
+  calculateProgress: (users: IUser[], progress: IProgress[]) => Promise<ITaskUnit>;
   toFile: () => Promise<String>;
 }
 
@@ -50,6 +55,53 @@ const taskUnitSchema = new mongoose.Schema({
   },
 });
 
+taskUnitSchema.methods.calculateProgress = async function (users: IUser[], progress: IProgress[]): Promise<ITaskUnit> {
+  const unitObj = this.toObject();
+  const progressStats: any[] = [];
+
+  unitObj.tasks.forEach((question: ITask) => {
+    const questionStats = {
+      name: question.name,
+      series: [{
+        name: 'correct',
+        value: 0
+      },
+      {
+        name: 'wrong',
+        value: 0
+      },
+      {
+        name: 'no data',
+        value: users.length
+      }]
+    };
+    progress.forEach((userProgress: ITaskUnitProgress) => {
+      let correctedAnswered = true;
+      question.answers.forEach((answer) => {
+        if (
+          !userProgress.answers[question._id.toString()] ||
+          userProgress.answers[question._id.toString()][answer._id.toString()] !== !!answer.value
+        ) {
+          correctedAnswered = false;
+        }
+      });
+
+      if (correctedAnswered) {
+        questionStats.series[0].value++;
+      } else {
+        questionStats.series[1].value++;
+      }
+
+      questionStats.series[2].value--;
+    });
+
+    progressStats.push(questionStats);
+  });
+
+  unitObj.progressData = progressStats;
+  return unitObj;
+};
+
 taskUnitSchema.statics.toFile = async function(unit: ITaskUnit) {
   let fileStream = '';
 
@@ -67,7 +119,5 @@ taskUnitSchema.statics.toFile = async function(unit: ITaskUnit) {
     return resolve(fileStream);
   });
 };
-
-// const TaskUnit = Unit.discriminator('task', taskUnitSchema);
 
 export {taskUnitSchema, ITaskUnitModel};
