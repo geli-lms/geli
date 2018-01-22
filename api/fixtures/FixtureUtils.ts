@@ -6,6 +6,8 @@ import {ICourse} from '../../shared/models/ICourse';
 import {ILecture} from '../../shared/models/ILecture';
 import {IUnit} from '../../shared/models/units/IUnit';
 import {IUser} from '../../shared/models/IUser';
+import {ITaskUnit} from '../../shared/models/units/ITaskUnit';
+import {ITaskUnitModel} from '../src/models/units/TaskUnit';
 import * as mongoose from 'mongoose';
 import ObjectId = mongoose.Types.ObjectId;
 import {IWhitelistUser} from '../../shared/models/IWhitelistUser';
@@ -206,5 +208,30 @@ export class FixtureUtils {
     }
 
     return array;
+  }
+
+  public static getAnswersFromTaskUnit(unit: ITaskUnitModel, success: boolean): any {
+    const answers: any = {};
+    const unitObj: ITaskUnit = <ITaskUnit>unit.toObject();
+    unitObj.tasks.forEach((task) => {
+      answers[task._id.toString()] = {};
+      task.answers.forEach((answer) => {
+        if (success) {
+          if (answer.hasOwnProperty('value')) {
+            answers[task._id.toString()][answer._id.toString()] = true;
+          } else {
+            answers[task._id.toString()][answer._id.toString()] = false;
+          }
+        } else {
+          if (answer.hasOwnProperty('value')) {
+            answers[task._id.toString()][answer._id.toString()] = false;
+          } else {
+            answers[task._id.toString()][answer._id.toString()] = true;
+          }
+        }
+      });
+    });
+
+    return answers;
   }
 }

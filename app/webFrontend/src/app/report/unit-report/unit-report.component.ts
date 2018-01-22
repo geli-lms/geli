@@ -47,7 +47,7 @@ export class UnitReportComponent implements OnInit {
 
   private getReport() {
     this.reportService.getUnitDetailForCourse(this.courseId, this.unitId)
-      .then((userUnitProgress) => {
+      .then((userUnitProgress: any[]) => {
         this.userUnitProgress = userUnitProgress.map((userProgress) => new User(userProgress));
       })
       .catch((err) => {
