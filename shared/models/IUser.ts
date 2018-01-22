@@ -1,5 +1,4 @@
 import {IFile} from './IFile';
-
 export interface IUser {
   _id: any;
   uid: string;
