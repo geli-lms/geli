@@ -30,10 +30,8 @@ export class DashboardStudentComponent extends DashboardBaseComponent {
   async sortCourses() {
     this.myCourses = [];
     this.availableCourses = [];
-
-    let allCourses = JSON.parse(JSON.stringify(this.allCourses));
-    allCourses = SortUtil.sortByLastVisitedCourses(allCourses, this.userService.user.lastVisitedCourses);
-    for (const course of allCourses) {
+    SortUtil.sortByLastVisitedCourses(this.allCourses, this.userService.user.lastVisitedCourses);
+    for (const course of this.allCourses) {
       if (this.isMemberOfCourse(course)) {
         this.myCourses.push(course);
       } else {

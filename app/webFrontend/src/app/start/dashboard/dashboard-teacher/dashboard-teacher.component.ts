@@ -36,9 +36,6 @@ export class DashboardTeacherComponent extends DashboardBaseComponent {
     this.availableCourses = [];
     this.furtherCourses = [];
     this.inactiveCourses = [];
-
-
-
     SortUtil.sortByLastVisitedCourses(this.allCourses, this.userService.user.lastVisitedCourses);
     for (const course of this.allCourses) {
       if ((this.filterMyCourses(course) || this.filterAdminCourses(course)) && !course.active) {
