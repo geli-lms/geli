@@ -111,14 +111,17 @@ export class NotificationController {
   @Delete('/:id')
   async deleteNotification(@Param('id') id: string, @CurrentUser() currentUser: IUser) {
     const notification = await Notification.findOne({_id: id}).populate('user');
-    if (!notification) {
-      throw new NotFoundError('Notification could not be found');
-    }
-    if (notification.user._id.equals(currentUser._id)) {
-      await notification.remove();
-      return {result: true};
-    } else {
-      throw new ForbiddenError('Forbidden!');
-    }
+    return await notification.remove(function(err, product) {
+      if (err) {
+        throw new NotFoundError('Notification could not be found');
+      }
+      if (!err) {
+        if (product.user._id.equals(currentUser._id)) {
+          return {result: true};
+        } else {
+          throw new ForbiddenError('Forbidden!');
+        }
+      }
+    });
   }
 }

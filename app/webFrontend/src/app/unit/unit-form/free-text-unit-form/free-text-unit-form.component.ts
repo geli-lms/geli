@@ -58,12 +58,15 @@ export class FreeTextUnitFormComponent implements OnInit {
       this.unitService.createItem({model: this.model, lectureId: this.lectureId})
         .then(
           (unit) => {
-            this.notificationService.createItem(
-              {changedCourse: this.course, changedLecture: null,
-                changedUnit: unit, text: 'Course ' + this.course.name + ' has a new text unit.'})
-              .catch(console.error);
             this.snackBar.open('Free text unit saved', '', {duration: 3000});
             this.onDone();
+            return this.notificationService.createItem(
+              {
+                changedCourse: this.course,
+                changedLecture: null,
+                changedUnit: unit,
+                text: 'Course ' + this.course.name + ' has a new text unit.'
+              });
           },
           error => {
             this.snackBar.open('Couldn\'t save unit', '', {duration: 3000});
@@ -76,8 +79,10 @@ export class FreeTextUnitFormComponent implements OnInit {
         .then(
           (unit) => {
             this.notificationService.createItem(
-              {changedCourse: this.course, changedLecture: null,
-                changedUnit: unit, text: 'Course ' + this.course.name + ' has an updated text unit.'})
+              {
+                changedCourse: this.course, changedLecture: null,
+                changedUnit: unit, text: 'Course ' + this.course.name + ' has an updated text unit.'
+              })
               .catch(console.error);
             this.snackBar.open('Free text unit saved', 'Update', {duration: 2000});
             this.onDone();

@@ -1,19 +1,7 @@
 import * as mongoose from 'mongoose';
 import {INotification} from '../../../shared/models/INotification';
-import {IUser} from '../../../shared/models/IUser';
-import {ICourse} from '../../../shared/models/ICourse';
-import {ILecture} from '../../../shared/models/ILecture';
-import {IUnit} from '../../../shared/models/units/IUnit';
-import {
-  API_NOTIFICATION_TYPE_ALL_CHANGES, API_NOTIFICATION_TYPE_CHANGES_WITH_RELATIONIONSHIP, API_NOTIFICATION_TYPE_NONE,
-  INotificationSettingsModel,
-  NotificationSettings
-} from './NotificationSettings';
-import {InternalServerError} from 'routing-controllers';
-import emailService from '../services/EmailService';
-import {SendMailOptions} from 'nodemailer';
-import config from '../config/main';
 import {User} from './User';
+import {Lecture} from './Lecture';
 
 interface INotificationModel extends INotification, mongoose.Document {
 }

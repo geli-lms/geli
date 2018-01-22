@@ -42,7 +42,7 @@ export class NotificationComponent implements OnInit {
 
   async clearAll() {
     await Promise.all(this.notifications.map(async notification => {
-      await this.removeNotification(notification);
+      await this.notificationService.deleteItem(notification);
     }));
     this.notifications = [];
   }

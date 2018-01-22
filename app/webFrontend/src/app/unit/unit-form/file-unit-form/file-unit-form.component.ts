@@ -106,11 +106,10 @@ export class FileUnitFormComponent implements OnInit {
       this.unitService.updateItem(this.model)
         .then((updatedUnit) => {
           this.model = updatedUnit;
-          this.notificationService.createItem(
-            {changedCourse: this.course, changedLecture: null,
-              changedUnit: updatedUnit, text: 'Course ' + this.course.name + ' has an updated file unit.'})
-            .catch(console.error);
           this.onAllUploaded();
+          return this.notificationService.createItem(
+            {changedCourse: this.course, changedLecture: null,
+              changedUnit: updatedUnit, text: 'Course ' + this.course.name + ' has an updated file unit.'});
         })
         .catch((error) => {
           this.snackBar.open('An error occurred', 'Dismiss');

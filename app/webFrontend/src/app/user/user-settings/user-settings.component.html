@@ -16,7 +16,7 @@
       </mat-checkbox>
     </mat-cell>
   </ng-container>
-    <!-- Name Column -->
+  <!-- Name Column -->
   <ng-container matColumnDef="name">
     <mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
     <mat-cell *matCellDef="let course">{{course.name}}</mat-cell>
@@ -41,8 +41,6 @@
 
 
   <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-  <mat-row *matRowDef="let row; columns: displayedColumns;">
-           <!--(click)="notificationSelection.toggle(row)">-->
-  </mat-row>
+  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
 </mat-table>
 <button mat-raised-button color="primary" class="mat-button" (click)="saveNotificationSettings()">Save</button>

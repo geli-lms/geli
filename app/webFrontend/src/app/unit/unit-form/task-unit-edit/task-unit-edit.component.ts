@@ -76,13 +76,16 @@ export class TaskUnitEditComponent implements OnInit {
       }
       taskPromise.then(
         (task) => {
-          this.notificationService.createItem(
-            {changedCourse: this.course, changedLecture: null,
-              changedUnit: task, text: text})
-            .catch(console.error);
           const message = `Task ${this.add ? 'created' : 'updated'}`;
           this.snackBar.open(message, '', {duration: 3000});
-          this.onDone();
+          this.onDone()
+          return this.notificationService.createItem(
+            {
+              changedCourse: this.course,
+              changedLecture: null,
+              changedUnit: task,
+              text: text
+            });
         },
         (error) => {
           const message = `Couldn\'t ${this.add ? 'create' : 'update'} task`;
