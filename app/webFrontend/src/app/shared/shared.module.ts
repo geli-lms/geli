@@ -16,6 +16,7 @@ import {UploadFormComponent} from './components/upload-form/upload-form.componen
 import {FileUploadModule} from 'ng2-file-upload';
 import {FilesizePipe} from './pipes/filesize/filesize.pipe';
 import {UploadFormDialog} from './components/upload-form-dialog/upload-form-dialog.component';
+import {ChangePasswordDialogComponent} from './components/change-password-dialog/change-password-dialog.component';
 import {MarkdownEditorComponent} from './components/markdown-editor/markdown-editor.component';
 import {AceEditorModule} from 'ng2-ace-editor';
 import {PickMediaDialog} from './components/pick-media-dialog/pick-media-dialog.component';
@@ -27,6 +28,7 @@ import {PickMediaDialog} from './components/pick-media-dialog/pick-media-dialog.
     ReactiveFormsModule,
     MaterialImportModule,
     HttpClientModule,
+    FileUploadModule,
     AceEditorModule,
     FileUploadModule
   ],
@@ -43,6 +45,7 @@ import {PickMediaDialog} from './components/pick-media-dialog/pick-media-dialog.
     UploadFormComponent,
     FilesizePipe,
     UploadFormDialog,
+    ChangePasswordDialogComponent,
     MarkdownEditorComponent,
     PickMediaDialog,
   ],
@@ -62,6 +65,7 @@ import {PickMediaDialog} from './components/pick-media-dialog/pick-media-dialog.
     UploadFormComponent,
     FilesizePipe,
     UploadFormDialog,
+    ChangePasswordDialogComponent,
     PickMediaDialog,
   ],
   entryComponents: [
