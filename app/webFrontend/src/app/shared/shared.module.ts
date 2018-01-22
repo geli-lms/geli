@@ -15,6 +15,7 @@ import {ButtonSaveCancelComponent} from './components/button-save-cancel/button-
 import {UploadFormComponent} from './components/upload-form/upload-form.component';
 import {FileUploadModule} from 'ng2-file-upload';
 import {FilesizePipe} from './pipes/filesize/filesize.pipe';
+import {ChangePasswordDialogComponent} from './components/change-password-dialog/change-password-dialog.component';
 import {MarkdownEditorComponent} from './components/markdown-editor/markdown-editor.component';
 import {AceEditorModule} from 'ng2-ace-editor';
 import {TranslateModule} from '@ngx-translate/core';
@@ -26,6 +27,7 @@ import {TranslateModule} from '@ngx-translate/core';
     ReactiveFormsModule,
     MaterialImportModule,
     HttpClientModule,
+    FileUploadModule,
     AceEditorModule,
     FileUploadModule,
     TranslateModule,
@@ -42,6 +44,7 @@ import {TranslateModule} from '@ngx-translate/core';
     ButtonSaveCancelComponent,
     UploadFormComponent,
     FilesizePipe,
+    ChangePasswordDialogComponent,
     MarkdownEditorComponent,
   ],
   exports: [
@@ -59,6 +62,7 @@ import {TranslateModule} from '@ngx-translate/core';
     MarkdownEditorComponent,
     UploadFormComponent,
     FilesizePipe,
+    ChangePasswordDialogComponent,
     TranslateModule,
   ]
 })
