@@ -17,7 +17,7 @@ export class ReportController {
 
   @Get('/overview/courses/:id')
   @Authorized(['teacher', 'admin'])
-  async getCourseOverview(@Param('id') id: string) {
+  async getCourseOverview(@Param('id') id: string, @CurrentUser() currentUser: IUser) {
     const coursePromise = this.createCoursePromise(id);
     const progressPromise = Progress.aggregate([
       {$match: { course: new ObjectId(id) }},
@@ -25,6 +25,9 @@ export class ReportController {
     ]).exec();
 
     const [course, unitProgressData] = await Promise.all([coursePromise, progressPromise]);
+
+    this.checkAccess(course, currentUser);
+
     const courseObjUnfiltered: ICourse = <ICourse>course.toObject();
     const courseObj = this.filterUnits(courseObjUnfiltered).courseObj;
     courseObj.lectures.map((lecture: ILecture) => {
@@ -44,7 +47,7 @@ export class ReportController {
 
   @Get('/result/courses/:id')
   @Authorized(['teacher', 'admin'])
-  async getCourseResults(@Param('id') id: string) {
+  async getCourseResults(@Param('id') id: string, @CurrentUser() currentUser: IUser) {
     const coursePromise = this.createCoursePromise(id);
     const progressPromise = Progress.aggregate([
       {$match: { course: new ObjectId(id) }},
@@ -53,6 +56,9 @@ export class ReportController {
     ]).exec();
 
     const [course, userProgressDataRaw] = await Promise.all([coursePromise, progressPromise]);
+
+    this.checkAccess(course, currentUser);
+
     const courseObj: ICourse = <ICourse>course.toObject();
     const students = courseObj.students;
     const progressableUnits: IUnit[] = [];
@@ -156,13 +162,15 @@ export class ReportController {
 
   @Get('/details/courses/:courseId/units/:unitId')
   @Authorized(['teacher', 'admin'])
-  async getUnitProgress(@Param('courseId') courseId: string, @Param('unitId') unitId: string) {
+  async getUnitProgress(@Param('courseId') courseId: string, @Param('unitId') unitId: string, @CurrentUser() currentUser: IUser) {
     const coursePromise = Course.findOne({_id: courseId})
       .select({ students: 1 })
       .populate('students')
       .exec();
     const progressPromise = Progress.find({'unit': unitId}).exec();
     const [course, progresses] = await Promise.all([coursePromise, progressPromise]);
+
+    this.checkAccess(course, currentUser);
     const courseObj: ICourse = <ICourse>course.toObject();
     const students = courseObj.students;
 
@@ -228,6 +236,16 @@ export class ReportController {
       });
 
     return courseObjectsWithProgress;
+  }
+
+  private checkAccess(course: ICourse, user: IUser) {
+    const teacherIndex = course.teachers.findIndex((teacher: any) => {
+      return teacher.toString() === user._id;
+    });
+
+    if (user.role !== 'admin' && course.courseAdmin._id.toString() !== user._id.toString() && teacherIndex === -1) {
+      throw new ForbiddenError('You are no admin or teacher for this course.');
+    }
   }
 
   private filterUnits(courseObj: ICourse) {
