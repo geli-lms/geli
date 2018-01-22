@@ -7,7 +7,6 @@ import {json as bodyParserJson} from 'body-parser';
 import passportLoginMiddleware from '../security/passportLoginMiddleware';
 import emailService from '../services/EmailService';
 import {IUser} from '../../../shared/models/IUser';
-import {StudentConfig} from '../models/StudentConfig';
 import {IUserModel, User} from '../models/User';
 import {JwtUtils} from '../security/JwtUtils';
 import config from '../config/main';
