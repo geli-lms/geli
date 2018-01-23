@@ -92,15 +92,17 @@ export class FileUnitFormComponent implements OnInit {
       return;
     }
 
+    const allowedMimeTypes = (this.fileUnitType !== 'video') ? undefined : [
+      'video/mp4',
+      'video/webm',
+      'video/ogg',
+      'video/avi',
+    ];
+
     const res = await this.dialog.open(PickMediaDialog, {
       data: {
         directoryId: this.course.media._id,
-        allowedMimeTypes: [
-          'video/mp4',
-          'video/webm',
-          'video/ogg',
-          'video/avi',
-        ],
+        allowedMimeTypes: allowedMimeTypes,
       },
     });
 

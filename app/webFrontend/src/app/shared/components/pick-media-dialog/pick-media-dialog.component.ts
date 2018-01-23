@@ -15,7 +15,7 @@ export class PickMediaDialog implements OnInit {
   allFiles: IFile[];
   @ViewChild('fileList') fileList: MatSelectionList;
   selectedOptions: IFile[] = [];
-  allowedMimeTypes: string[] = [];
+  allowedMimeTypes: string[];
 
   constructor(private dialogRef: MatDialogRef<PickMediaDialog>,
               private mediaService: MediaService,
@@ -33,8 +33,6 @@ export class PickMediaDialog implements OnInit {
 
     if (this.data.allowedMimeTypes) {
       this.allowedMimeTypes = this.data.allowedMimeTypes;
-    } else {
-      this.dialogRef.close(false);
     }
   }
 

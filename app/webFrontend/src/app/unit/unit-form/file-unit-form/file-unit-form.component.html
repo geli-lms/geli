@@ -1,4 +1,7 @@
-<h3>Files</h3>
+<ng-container [ngSwitch]="fileUnitType">
+  <h3 *ngSwitchCase="'video'">Add Videos</h3>
+  <h3 *ngSwitchDefault>Add Files</h3>
+</ng-container>
 
 <app-unit-general-info-form [model]="model"></app-unit-general-info-form>
 <div *ngIf="model?.files?.length > 0" class="file-list-container uploaded-files">
