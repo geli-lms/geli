@@ -41,7 +41,7 @@ export class UserSettingsComponent implements OnInit {
   getCourses() {
     this.myCourses = [];
     this.courseService.readItems().then(courses => {
-      courses.forEach(course => {
+      courses.forEach((course: ICourse) => {
         if (this.userService.isMemberOfCourse(course)) {
           this.myCourses.push(course);
         }
@@ -87,7 +87,7 @@ export class UserSettingsComponent implements OnInit {
           }
         });
         if (settings === null || settings === undefined) {
-          settings = await this.notificationSettingsService.createItem({user: this.userService.user, course: course});
+          settings = await this.notificationSettingsService.createItem(new NotificationSettings(this.userService.user, course));
           this.notificationSettings.push(settings);
         }
         if (this.notificationSelection.isSelected(course)) {

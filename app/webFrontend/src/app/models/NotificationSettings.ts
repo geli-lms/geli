@@ -10,11 +10,8 @@ export class NotificationSettings implements INotificationSettings {
   notificationType: string;
   emailNotification: boolean;
 
-  constructor(id: any, course: ICourse, user: IUser, notificationType: string, emailNotification: boolean) {
-    this._id = id;
+  constructor(user: IUser, course: ICourse) {
     this.course = course;
     this.user = user;
-    this.notificationType = notificationType;
-    this.emailNotification = emailNotification;
   }
 }

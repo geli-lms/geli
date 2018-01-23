@@ -45,7 +45,7 @@
         </button>
         <button mat-menu-item *ngIf="isLoggedIn() && isStudent()" routerLink="/userSettings" routerLinkActive="active">
           <mat-icon>settings</mat-icon>
-          <span>User Settings</span>
+          <span>{{ 'mainMenu.userSettings' | translate }}</span>
         </button>
         <button mat-menu-item routerLink="/about" routerLinkActive="active">
           <mat-icon>info</mat-icon>

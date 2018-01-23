@@ -2,14 +2,14 @@
 <h2>Notifications</h2>
 <mat-table #table [dataSource]="dataSource">
   <ng-container matColumnDef="Notifications">
-    <mat-header-cell *matHeaderCellDef>
-      Notifications
+    <mat-header-cell class="header" *matHeaderCellDef>
+      Notification
       <mat-checkbox (change)="$event ? masterToggle(notificationSelection) : null"
                     [checked]="notificationSelection.hasValue() && isAllSelected(notificationSelection)"
                     [indeterminate]="notificationSelection.hasValue() && !isAllSelected(notificationSelection)">
       </mat-checkbox>
     </mat-header-cell>
-    <mat-cell *matCellDef="let course">
+    <mat-cell class="checkBox" *matCellDef="let course">
       <mat-checkbox (click)="$event.stopPropagation()"
                     (change)="$event ? notificationSelection.toggle(course) : null"
                     [checked]="notificationSelection.isSelected(course)">
@@ -18,20 +18,19 @@
   </ng-container>
   <!-- Name Column -->
   <ng-container matColumnDef="name">
-    <mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
+    <mat-header-cell class="header" *matHeaderCellDef>Name</mat-header-cell>
     <mat-cell *matCellDef="let course">{{course.name}}</mat-cell>
   </ng-container>
-
   <!-- Email Column -->
   <ng-container matColumnDef="email">
-    <mat-header-cell *matHeaderCellDef>
+    <mat-header-cell class="header" *matHeaderCellDef>
       Email
       <mat-checkbox (change)="$event ? masterToggle(emailSelection) : null"
                     [checked]="emailSelection.hasValue() && isAllSelected(emailSelection)"
                     [indeterminate]="emailSelection.hasValue() && !isAllSelected(emailSelection)">
       </mat-checkbox>
     </mat-header-cell>
-    <mat-cell *matCellDef="let course">
+    <mat-cell class="checkBox" *matCellDef="let course">
       <mat-checkbox (click)="$event.stopPropagation()"
                     (change)="$event ? emailSelection.toggle(course) : null"
                     [checked]="emailSelection.isSelected(course)">

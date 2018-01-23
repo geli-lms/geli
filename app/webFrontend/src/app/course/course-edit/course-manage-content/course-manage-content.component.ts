@@ -208,10 +208,10 @@ export class CourseManageContentComponent implements OnInit, OnDestroy {
 
   createLecture(lecture: ILecture) {
     this.lectureService.createItem({courseId: this.course._id, lecture: lecture})
-    .then((newLecture: ILecture) => {
+    .then((newLecture: any) => {
       this.dataSharingService.setDataForKey('lecture-create-mode', false);
       this.notificationService.createItem(
-        {changedCourse: this.course, changedLecture: newLecture,
+        {changedCourse: this.course, changedLecture: newLecture._id,
           changedUnit: null, text: 'Course ' + this.course.name + ' has a new lecture.'})
         .catch(console.error);
       return this.reloadCourse();
