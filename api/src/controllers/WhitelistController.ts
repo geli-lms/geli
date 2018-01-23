@@ -1,6 +1,6 @@
 import {
   Authorized, Body, Delete, Get, JsonController, Post, Param, Put, QueryParam, UseBefore,
-  HttpError
+  HttpError, BadRequestError
 } from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import {isNullOrUndefined} from 'util';
@@ -9,6 +9,8 @@ import {IWhitelistUser} from '../../../shared/models/IWhitelistUser';
 import {errorCodes} from '../config/errorCodes';
 import * as mongoose from 'mongoose';
 import ObjectId = mongoose.Types.ObjectId;
+import {Course} from '../models/Course';
+import {User} from '../models/User';
 
 function escapeRegex(text: string) {
   return text.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
@@ -21,7 +23,6 @@ export class WitelistController {
   @Get('/:id')
   getUser(@Param('id') id: string) {
     return WhitelistUser.findById(id)
-      .populate('progress')
       .then((whitelistUser) => {
         return whitelistUser.toObject({virtuals: true});
       });
@@ -29,25 +30,40 @@ export class WitelistController {
 
   @Post('/')
   @Authorized(['teacher', 'admin'])
-  addWhitelistUser(@Body() whitelistUser: IWhitelistUser) {
-    return new WhitelistUser(this.toMongooseObjectId(whitelistUser)).save()
-      .then((w) => w.toObject());
+  async addWhitelistUser(@Body() whitelistUser: IWhitelistUser) {
+    let savedWhitelistUser;
+    try {
+      savedWhitelistUser = await new WhitelistUser(this.toMongooseObjectId(whitelistUser)).save();
+    } catch (err) {
+      throw new BadRequestError(errorCodes.whitelist.duplicateWhitelistUser.text);
+    }
+    await this.addUserIfFound(whitelistUser);
+    return savedWhitelistUser.toObject();
   }
 
   @Put('/:id')
   @Authorized(['teacher', 'admin'])
-  updateWhitelistUser(@Param('id') id: string, @Body() whitelistUser: IWhitelistUser) {
-    return WhitelistUser.findOneAndUpdate(
-      this.toMongooseObjectId(whitelistUser),
-      {'new': true}
-    )
-      .then((w) => w ? w.toObject({}) : undefined);
+  async updateWhitelistUser(@Param('id') id: string, @Body() whitelistUser: IWhitelistUser) {
+    let updatedWhitelistUser;
+    const foundWhitelistUser = await WhitelistUser.findById(id);
+    try {
+      updatedWhitelistUser = await WhitelistUser.findOneAndUpdate(
+        this.toMongooseObjectId(whitelistUser),
+        {'new': true});
+    } catch (err) {
+      throw new BadRequestError(errorCodes.whitelist.duplicateWhitelistUser.text);
+    }
+    await this.deleteUserIfFound(foundWhitelistUser);
+    await this.addUserIfFound(updatedWhitelistUser);
+    return updatedWhitelistUser ? updatedWhitelistUser.toObject() : undefined;
   }
 
   @Delete('/:id')
   @Authorized(['teacher', 'admin'])
-  deleteWhitelistUser(@Param('id') id: string) {
-    return WhitelistUser.findByIdAndRemove(id);
+  async deleteWhitelistUser(@Param('id') id: string) {
+    const whitelistUser = await WhitelistUser.findByIdAndRemove(id);
+    await this.deleteUserIfFound(whitelistUser);
+    return {result: true};
   }
 
   toMongooseObjectId(whitelistUser: IWhitelistUser) {
@@ -57,6 +73,29 @@ export class WitelistController {
       lastName: whitelistUser.lastName,
       uid: whitelistUser.uid,
       courseId: new ObjectId(whitelistUser.courseId)
+    }
+  }
+
+  private async deleteUserIfFound(whitelistUser: IWhitelistUser) {
+    const course = await Course.findById(whitelistUser.courseId)
+      .populate('students');
+    if (course) {
+      course.students = course.students.filter(stud => stud.uid !== whitelistUser.uid);
+      await course.update(course);
+    }
+  }
+
+  private async addUserIfFound(whitelistUser: IWhitelistUser) {
+    const [course, stud] = await Promise.all([
+      Course.findById(whitelistUser.courseId)
+        .populate('students'),
+      User.findOne({
+        uid: whitelistUser.uid,
+        'profile.firstName': whitelistUser.firstName,
+        'profile.lastName': whitelistUser.lastName})]);
+    if (course && stud) {
+      course.students.push(stud);
+      await course.update(course);
     }
   }
 }

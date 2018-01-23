@@ -14,7 +14,7 @@ import {WhitelistShowComponent} from '../whitelist-show/whitelist-show.component
   styleUrls: ['./whitelist-edit.component.scss']
 })
 export class WhitelistEditComponent implements OnInit {
-  static readonly snackBarDuration = 6000;
+  snackBarDuration = 6000;
 
   dragableWhitelistUser: IWhitelistUser[] = [];
   @ViewChild(WhitelistShowComponent)
@@ -62,13 +62,13 @@ export class WhitelistEditComponent implements OnInit {
 
   async createNewWhitelistUser() {
     if (this.whitelistUser.firstName === '') {
-      this.snackBar.open('First name should not be empty.', '', {duration: WhitelistEditComponent.snackBarDuration});
+      this.snackBar.open('First name should not be empty.', '', {duration: this.snackBarDuration});
       return null;
     } else if (this.whitelistUser.lastName === '') {
-      this.snackBar.open('Last name should not be empty.', '', {duration: WhitelistEditComponent.snackBarDuration});
+      this.snackBar.open('Last name should not be empty.', '', {duration: this.snackBarDuration});
       return null;
     } else if (this.whitelistUser.uid === '' || isNaN(Number(this.whitelistUser.uid))) {
-      this.snackBar.open('Unique identification should be a number and not empty', '', {duration: WhitelistEditComponent.snackBarDuration});
+      this.snackBar.open('Unique identification should be a number and not empty', '', {duration: this.snackBarDuration});
       return null;
     }
     this.whitelistUser.courseId = this.course._id;
@@ -77,16 +77,16 @@ export class WhitelistEditComponent implements OnInit {
       this.dragableWhitelistUser.push(newUser);
       this.onDragendPushWhitelist.emit(newUser);
       if (this.showComponent.isInCourse(newUser)) {
-        this.snackBar.open('Create whitelist user. User is in course.', '', {duration: WhitelistEditComponent.snackBarDuration});
+        this.snackBar.open('Create whitelist user. User is in course.', '', {duration: this.snackBarDuration});
       } else if (this.showComponent.isSignedIn(newUser)) {
-        this.snackBar.open('Create whitelist user. User is signed in.', '', {duration: WhitelistEditComponent.snackBarDuration});
+        this.snackBar.open('Create whitelist user. User is signed in.', '', {duration: this.snackBarDuration});
       } else {
-        this.snackBar.open('Create whitelist user. User is not signed in.', '', {duration: WhitelistEditComponent.snackBarDuration});
+        this.snackBar.open('Create whitelist user. User is not signed in.', '', {duration: this.snackBarDuration});
       }
       return newUser;
     } catch (exception) {
       this.snackBar.open('Could not create whitelist user. Error was: '
-        + exception.error.message, '', {duration: WhitelistEditComponent.snackBarDuration});
+        + exception.error.message, '', {duration: this.snackBarDuration});
       return null;
     }
   }
