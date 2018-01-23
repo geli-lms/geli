@@ -44,4 +44,8 @@ export class ReportOverviewComponent implements OnInit {
       this.showProgress.toggleLoadingGlobal(false);
     });
   }
+
+  public editUnit(lectureId, unitId) {
+    this.router.navigate(['../../edit/content/lecture', lectureId, 'unit', unitId], {relativeTo: this.route});
+  }
 }

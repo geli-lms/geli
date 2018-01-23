@@ -1,6 +1,7 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {ErrorHandler, NgModule} from '@angular/core';
 import {HttpModule} from '@angular/http';
+import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {AppComponent} from './app.component';
 import {RavenErrorHandler} from './shared/services/raven-error-handler.service';
 import {UserService} from './shared/services/user.service';
@@ -37,6 +38,13 @@ import {ThemeService} from './shared/services/theme.service';
 import {ImprintModule} from './imprint/imprint.module';
 import {DataSharingService} from './shared/services/data-sharing.service';
 import {NotificationModule} from './notification/notification.module';
+import {HttpClient} from '@angular/common/http';
+import {TranslateHttpLoader} from '@ngx-translate/http-loader';
+
+// AoT requires an exported function for factories
+export function HttpLoaderFactory(http: HttpClient) {
+  return new TranslateHttpLoader(http);
+}
 
 @NgModule({
   declarations: [
@@ -54,6 +62,13 @@ import {NotificationModule} from './notification/notification.module';
     SharedModule,
     AdminModule,
     ImprintModule,
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient]
+      }
+    }),
     NotificationModule
   ],
   providers: [
