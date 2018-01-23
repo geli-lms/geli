@@ -1,10 +1,18 @@
 <h2>Add files to unit</h2>
-<span>Files selected: {{selectedOptions.length}}</span>
+<p>Files selected: {{ selectedOptions.length }}</p>
+<ng-container *ngIf="allowedMimeTypes.length > 0">
+  <p>Allowed MimeTypes:</p>
+  <ul>
+    <li *ngFor="let type of allowedMimeTypes">{{ type }}</li>
+  </ul>
+</ng-container>
 <mat-dialog-content>
   <mat-selection-list #fileList dense [(ngModel)]="selectedOptions">
-    <mat-list-option *ngFor="let file of allFiles" [value]="file">
-      <span>{{file.name}}</span>
-    </mat-list-option>
+    <ng-container *ngFor="let file of allFiles">
+      <mat-list-option *ngIf="allowedMimeTypes.indexOf(file.mimeType) >= 0" [value]="file">
+        <span>{{ file.name }}</span>
+      </mat-list-option>
+    </ng-container>
   </mat-selection-list>
 </mat-dialog-content>
 

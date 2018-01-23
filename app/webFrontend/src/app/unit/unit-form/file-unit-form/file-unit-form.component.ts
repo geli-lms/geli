@@ -36,19 +36,12 @@ export class FileUnitFormComponent implements OnInit {
 
   ngOnInit() {
     if (!this.model) {
-      switch (this.fileUnitType) {
-        case 'video': {
-          this.model = new VideoUnit(this.course);
-          break;
-        }
-        case 'file': {
-          this.model = new FileUnit(this.course);
-          break;
-        }
-        default: {
-          this.model = new FileUnit(this.course);
-          break;
-        }
+      if (this.fileUnitType === 'video') {
+        // 'video'
+        this.model = new VideoUnit(this.course);
+      } else {
+        // default or 'file'
+        this.model = new FileUnit(this.course);
       }
     }
   }
@@ -102,6 +95,12 @@ export class FileUnitFormComponent implements OnInit {
     const res = await this.dialog.open(PickMediaDialog, {
       data: {
         directoryId: this.course.media._id,
+        allowedMimeTypes: [
+          'video/mp4',
+          'video/webm',
+          'video/ogg',
+          'video/avi',
+        ],
       },
     });
 
