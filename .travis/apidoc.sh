@@ -19,7 +19,7 @@ if [ "$TRAVIS_BRANCH" == "master" ] || [ "$TRAVIS_BRANCH" == "develop" ]; then
 
     echo "+ Generate API-Doc"
     cd api
-    npm run generate:apidoc
+    npm run apidoc
     echo "+ Publish API-Doc to h-da/geli-doc"
     ls -lah ./ ./apidocs # for debug only
     cd apidocs
