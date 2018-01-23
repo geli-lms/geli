@@ -91,8 +91,10 @@ export class WitelistController {
         .populate('students'),
       User.findOne({
         uid: whitelistUser.uid,
-        'profile.firstName': { $regex: new RegExp(whitelistUser.firstName, 'i') } ,
-        'profile.lastName': { $regex: new RegExp(whitelistUser.lastName, 'i')}})]);
+        'profile.firstName': { $regex: new RegExp(whitelistUser.firstName.toLowerCase(), 'i') } ,
+        'profile.lastName': { $regex: new RegExp(whitelistUser.lastName.toLowerCase(), 'i')}})]);
+    console.log(whitelistUser);
+    console.log('Gefunden:' + stud);
     if (course && stud) {
       course.students.push(stud);
       await course.update(course);
