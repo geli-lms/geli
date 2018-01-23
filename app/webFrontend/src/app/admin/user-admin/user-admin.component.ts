@@ -33,7 +33,7 @@ export class UserAdminComponent implements OnInit {
   }
 
   getUsers() {
-    this.userService.readItems().then(users => {
+    this.userService.readItems<IUser>().then(users => {
       this.allUsers = users;
     });
   }

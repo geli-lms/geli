@@ -21,7 +21,7 @@ export class MembersComponent implements OnInit {
   showWhitelists = false;
   search = '';
 
-   constructor(private route: ActivatedRoute,
+  constructor(private route: ActivatedRoute,
               private courseService: CourseService,
               private userService: UserDataService,
               private showProgress: ShowProgressService) {
@@ -31,7 +31,7 @@ export class MembersComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.courseService.readSingleItem(this.courseId).then((course: ICourse) => {
+    this.courseService.readSingleItem<ICourse>(this.courseId).then((course: ICourse) => {
       this.course = course;
       this.course.students.forEach(member =>
         this.foundStudents = this.foundStudents.filter(user => user._id !== member._id))}
