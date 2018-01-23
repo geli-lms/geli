@@ -18,6 +18,7 @@ import {FilesizePipe} from './pipes/filesize/filesize.pipe';
 import {ChangePasswordDialogComponent} from './components/change-password-dialog/change-password-dialog.component';
 import {MarkdownEditorComponent} from './components/markdown-editor/markdown-editor.component';
 import {AceEditorModule} from 'ng2-ace-editor';
+import {TranslateModule} from '@ngx-translate/core';
 
 @NgModule({
   imports: [
@@ -28,7 +29,8 @@ import {AceEditorModule} from 'ng2-ace-editor';
     HttpClientModule,
     FileUploadModule,
     AceEditorModule,
-    FileUploadModule
+    FileUploadModule,
+    TranslateModule,
   ],
   declarations: [
     GravatarDirective,
@@ -61,6 +63,7 @@ import {AceEditorModule} from 'ng2-ace-editor';
     UploadFormComponent,
     FilesizePipe,
     ChangePasswordDialogComponent,
+    TranslateModule,
   ]
 })
 export class SharedModule {
