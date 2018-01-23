@@ -12,37 +12,41 @@ echo "+++ Create and publish API-Doc +++"
 echo
 if [[ "$TRAVIS_BRANCH" == "master" ]] || [[ "$TRAVIS_BRANCH" == "develop" ]] || [[ -z $TRAVIS_TAG ]]; then
   if [[ ! "$TRAVIS_PULL_REQUEST" == "false" ]] || [[ -z $TRAVIS_TAG ]]; then
-    if [[ -z $GITHUB_TOKEN ]]; then
-        echo "${RED}+ ERROR: NO GITHUB_TOKEN ENVVAR DEFINED. GO TO TRAVIS-SETTINGS AND DEFINE ONE.${NC}"
+    if [[ -z $GITHUB_DOCU_TOKEN ]]; then
+        echo "${RED}+ ERROR: NO GITHUB_DOCU_TOKEN ENVVAR DEFINED. GO TO TRAVIS-SETTINGS AND DEFINE ONE.${NC}"
         exit 1
     fi
+
+    GITHUB_URL="github.com/h-da/geli-docs.git"
+    GITHUB_FOLDER="geli-docs"
+    DOCU_SOURCE="apidocs"
 
     echo "+ Generate API-Doc"
     cd api
     npm run apidoc
-    echo "+ Publish API-Doc to h-da/geli-docs"
+    echo "+ Publish API-Doc to $GITHUB_URL"
 
     echo "+ git set user.name" ; git config --global user.name 'Travis'
     echo "+ git set user.email" ; git config --global user.email 'travis@travis-ci.org'
 
-    echo "+ Clone geli-docs" ; git clone https://micpah:$GITHUB_TOKEN@github.com/h-da/geli-docs.git -q -b master geli-docs &>/dev/null
-    ls -la geli-docs
-    echo "+ Clear geli-docs" ; find geli-docs | grep -v -E 'geli-docs$|geli-docs/.git$|geli-docs/.git/' | xargs 'rm -rf'
-    ls -la geli-docs
-    echo "+ Copy files" ; cp -rT ./apidocs ./geli-docs
-    ls -la geli-docs
+    echo "+ Clone $GITHUB_FOLDER" ; git clone https://$GITHUB_URL -q -b master $GITHUB_FOLDER &>/dev/null
+    ls -la $GITHUB_FOLDER
+    echo "+ Clear geli-docs" ; find $GITHUB_FOLDER | grep -v -E "$GITHUB_FOLDER$|$GITHUB_FOLDER/.git$|$GITHUB_FOLDER/.git/" | xargs rm -rf
+    ls -la $GITHUB_FOLDER
+    echo "+ Copy files" ; cp -rT ./$DOCU_SOURCE ./$GITHUB_FOLDER
+    ls -la $GITHUB_FOLDER
 
-    cd geli-docs
-    echo "+ git add" ; git add --all &>/dev/null
-    echo "+ git commit" ; git commit -m "Travis build: $TRAVIS_BUILD_NUMBER" &>/dev/null
+    cd $GITHUB_FOLDER
+    echo "+ git add" ; git add --all #&>/dev/null
+    echo "+ git commit" ; git commit -m "Travis build: $TRAVIS_BUILD_NUMBER" #&>/dev/null
 
     if [[ ! -z $TRAVIS_TAG ]]; then
         echo "+ git tag" ; git tag $TRAVIS_TAG
     else
-        echo "${YELLOW}+ skipping: git tag - not tagged build${NC}"
+        echo -e "${YELLOW}+ skipping: git tag - not tagged build${NC}"
     fi
 
-    echo "+ git push" ; git push --all --tags -q &>/dev/null
+    echo "+ git push" ; git push --all --tags -q https://micpah:$GITHUB_DOCU_TOKEN@$GITHUB_URL #&>/dev/null
   else
     echo -e "${YELLOW}+ WARNING: pull request #$TRAVIS_PULL_REQUEST -> skipping api-doc${NC}";
   fi
