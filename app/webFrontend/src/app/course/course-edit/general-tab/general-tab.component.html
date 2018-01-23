@@ -26,7 +26,8 @@
   </mat-form-field>
 
   <div class="csv-upload" *ngIf="enrollType === enrollTypeConstants.ENROLL_TYPE_WHITELIST">
-    <p>Upload your OBS csv file with your course members for whitelisting students.</p>
+    <p>Upload your OBS csv file with your course members for whitelisting students.
+    <br />Old whitelist users are removed by uploading a new file.</p>
     <p>
       <!-- TODO: Replace with shared upload form -->
       <input class="upload" type="file" ng2FileSelect [uploader]="uploader"
