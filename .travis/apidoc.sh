@@ -10,8 +10,8 @@ IPWD="$(pwd)"
 echo
 echo "+++ Create and publish API-Doc +++"
 echo
-if [[ "$TRAVIS_BRANCH" == "master" ]] || [[ "$TRAVIS_BRANCH" == "develop" ]] || [[ -z $TRAVIS_TAG ]]; then
-  if [[ ! "$TRAVIS_PULL_REQUEST" == "false" ]] || [[ -z $TRAVIS_TAG ]]; then
+if [[ "$TRAVIS_BRANCH" == "master" ]] || [[ -z $TRAVIS_TAG ]]; then
+  if [[ "$TRAVIS_PULL_REQUEST" == "false" ]] || [[ -z $TRAVIS_TAG ]]; then
     if [[ -z $GITHUB_DOCU_TOKEN ]]; then
         echo -e "${RED}+ ERROR: NO GITHUB_DOCU_TOKEN ENVVAR DEFINED. GO TO TRAVIS-SETTINGS AND DEFINE ONE.${NC}"
         exit 1
