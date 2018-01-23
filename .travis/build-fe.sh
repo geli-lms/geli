@@ -24,4 +24,3 @@ fi
 
 echo
 echo "+ Needed $SECONDS Seconds"
-echo
