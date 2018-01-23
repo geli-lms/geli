@@ -77,6 +77,7 @@
     "chai-http": "^3.0.0",
     "coveralls": "^3.0.0",
     "gulp": "3.9.1",
+    "gulp-apidoc": "^0.2.6",
     "gulp-istanbul": "1.1.2",
     "gulp-mocha": "4.3.1",
     "gulp-nodemon": "2.2.1",
