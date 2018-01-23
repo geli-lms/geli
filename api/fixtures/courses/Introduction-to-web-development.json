@@ -97,7 +97,8 @@
                   "text": "Halt einfach die Fresse"
                 },
                 {
-                  "text": "Öööhm.... nein..."
+                  "text": "Öööhm.... nein...",
+                  "value": true
                 }
               ]
             },
@@ -110,6 +111,40 @@
                 },
                 {
                   "text": "pfff...."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "progressable": true,
+          "weight": 0,
+          "name": "Noch mehr Nachfragen",
+          "description": null,
+          "deadline": null,
+          "__t": "task",
+          "tasks": [
+            {
+              "name": "Hast du Hunger?",
+              "answers": [
+                {
+                  "text": "Ja",
+                  "value": true
+                },
+                {
+                  "text": "Nein"
+                }
+              ]
+            },
+            {
+              "name": "Bist du dir sicher?",
+              "answers": [
+                {
+                  "text": "Ja"
+                },
+                {
+                  "text": "Öööhm.... nein...",
+                  "value": true
                 }
               ]
             }
