@@ -119,9 +119,9 @@ describe('Notifications', async () => {
         .set('Authorization', `JWT ${JwtUtils.generateToken(students[1])}`)
         .catch(err => err.response);
 
-      res.status.should.be.equal(403);
-      res.body.name.should.be.equal('ForbiddenError');
-      res.body.message.should.be.equal('Forbidden!');
+      res.status.should.be.equal(404);
+      res.body.name.should.be.equal('NotFoundError');
+      res.body.message.should.be.equal('Notification could not be found.');
 
     });
   })
