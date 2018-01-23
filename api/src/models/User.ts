@@ -155,5 +155,4 @@ userSchema.methods.isValidPassword = function (candidatePassword: string) {
 };
 
 const User = mongoose.model<IUserModel>('User', userSchema);
-
 export {User, IUserModel};

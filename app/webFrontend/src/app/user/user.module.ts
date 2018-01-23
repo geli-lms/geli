@@ -21,8 +21,8 @@ import {NgxChartsModule} from '@swimlane/ngx-charts';
   declarations: [
     UserDetailsComponent,
     UserEditComponent,
+    UserProfileComponent,
     UserReportComponent,
-    UserProfileComponent
   ],
   exports: [
     UserProfileComponent
