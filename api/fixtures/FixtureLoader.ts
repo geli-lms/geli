@@ -60,6 +60,9 @@ export class FixtureLoader {
       course.students = await FixtureUtils.getRandomStudents(2, 10, hash);
       // enroll random array of WhitelistUsers
       const randomWhitelistUser = await FixtureUtils.getRandomWhitelistUsers(course.students, course, hash);
+      if (!course.hasOwnProperty('whitelist')) {
+        course.whitelist = [];
+      }
       await Promise.all(randomWhitelistUser.map(async (whitelistUser) => {
         course.whitelist.push(await WhitelistUser.create(whitelistUser));
       }));
