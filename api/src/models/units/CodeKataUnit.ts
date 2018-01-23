@@ -1,12 +1,13 @@
 import * as mongoose from 'mongoose';
-import {Unit} from './Unit';
+import {IUnitModel} from './Unit';
 import {ICodeKataUnit} from '../../../../shared/models/units/ICodeKataUnit';
 import {NativeError} from 'mongoose';
 import {BadRequestError} from 'routing-controllers';
 
-interface ICodeKataModel extends ICodeKataUnit, mongoose.Document {
+interface ICodeKataModel extends ICodeKataUnit, IUnitModel {
   exportJSON: () => Promise<ICodeKataUnit>;
-  toFile: () => String;
+  calculateProgress: () => Promise<ICodeKataUnit>;
+  toFile: () => Promise<String>;
 }
 
 const codeKataSchema = new mongoose.Schema({
@@ -87,11 +88,9 @@ function validateTestArea(testArea: any) {
 codeKataSchema.pre('validate', splitCodeAreas);
 codeKataSchema.path('test').validate(validateTestArea);
 
-codeKataSchema.statics.toFile = function (unit: ICodeKataUnit) {
+codeKataSchema.statics.toFile = async function (unit: ICodeKataUnit) {
   return unit.description + '\n' + unit.definition + '\n' +
     unit.code + '\n' + unit.test;
 };
-
-// const CodeKataUnit = Unit.discriminator('code-kata', codeKataSchema);
 
 export {codeKataSchema, ICodeKataModel}

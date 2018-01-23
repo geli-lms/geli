@@ -3,6 +3,7 @@
 .progress-container {
   border-bottom: 1px solid map-get($mat-grey, 300);
   padding: 1rem;
+  display: block;
 
   .profile {
     width: 25%;
@@ -39,6 +40,6 @@
   }
 
   .content {
-
+    width: 100%;
   }
 }

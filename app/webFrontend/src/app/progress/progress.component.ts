@@ -9,10 +9,14 @@ import {Component, Input, OnInit, ViewEncapsulation} from '@angular/core';
 export class ProgressComponent implements OnInit {
 
   @Input() progress;
+  @Input() unit;
 
   constructor() { }
 
   ngOnInit() {
+    if (!this.progress && this.unit.progressData) {
+      this.progress = this.unit.progressData;
+    }
   }
 
 }

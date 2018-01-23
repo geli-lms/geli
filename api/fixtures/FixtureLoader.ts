@@ -5,12 +5,12 @@ import * as fs from 'fs';
 import {Course} from '../src/models/Course';
 import * as crypto from 'crypto';
 import {FixtureUtils} from './FixtureUtils';
-import {ICodeKataModel} from '../src/models/units/CodeKataUnit';
 import {Lecture} from '../src/models/Lecture';
 import {Unit} from '../src/models/units/Unit';
 import {WhitelistUser} from '../src/models/WhitelistUser';
 import {Progress} from '../src/models/progress/Progress';
 import {ITaskUnitModel} from '../src/models/units/TaskUnit';
+import {ICodeKataUnit} from '../../shared/models/units/ICodeKataUnit';
 
 
 export class FixtureLoader {
@@ -60,6 +60,9 @@ export class FixtureLoader {
       course.students = await FixtureUtils.getRandomStudents(2, 10, hash);
       // enroll random array of WhitelistUsers
       const randomWhitelistUser = await FixtureUtils.getRandomWhitelistUsers(course.students, course, hash);
+      if (!course.hasOwnProperty('whitelist')) {
+        course.whitelist = [];
+      }
       await Promise.all(randomWhitelistUser.map(async (whitelistUser) => {
         course.whitelist.push(await WhitelistUser.create(whitelistUser));
       }));
@@ -87,6 +90,7 @@ export class FixtureLoader {
       const lecture = await Lecture.findOne({units: { $in: [ unit._id ] }});
       const course = await Course.findOne({lectures: { $in: [ lecture._id ] }});
       const students = await User.find({_id: { $in: course.students}});
+      const unitObj = await unit.toObject();
 
       for (const student of students) {
         // do not create a progress if type is zero
@@ -111,7 +115,7 @@ export class FixtureLoader {
               (<any>newProgress).code = '// at least i tried ¯\\\\_(ツ)_/¯';
               newProgress.done = false;
             } else if (progressType === 2) {
-              (<any>newProgress).code = (<ICodeKataModel>unit).code;
+              (<any>newProgress).code = (<ICodeKataUnit>unitObj).code;
               newProgress.done = true;
             }
             newProgress.__t = 'codeKata';
