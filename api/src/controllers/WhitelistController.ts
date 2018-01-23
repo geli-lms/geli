@@ -91,8 +91,8 @@ export class WitelistController {
         .populate('students'),
       User.findOne({
         uid: whitelistUser.uid,
-        'profile.firstName': whitelistUser.firstName,
-        'profile.lastName': whitelistUser.lastName})]);
+        'profile.firstName': { $regex: new RegExp(whitelistUser.firstName, 'i') } ,
+        'profile.lastName': { $regex: new RegExp(whitelistUser.lastName, 'i')}})]);
     if (course && stud) {
       course.students.push(stud);
       await course.update(course);
