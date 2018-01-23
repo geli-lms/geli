@@ -6,6 +6,7 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 IPWD="$(pwd)"
 # Import shared vars
 . ${DIR}/_shared-vars.sh
+SECONDS=0
 
 echo
 echo "+++ Check if this is prod-build"
@@ -20,3 +21,7 @@ else
     echo "+++ is no PR; build with sourcemaps"
     npm run build
 fi
+
+echo
+echo "+ Needed $SECONDS Seconds"
+echo
