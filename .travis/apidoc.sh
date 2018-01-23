@@ -29,16 +29,20 @@ if [[ "$TRAVIS_BRANCH" == "master" ]] || [[ "$TRAVIS_BRANCH" == "develop" ]] || 
     echo "+ git set user.name" ; git config --global user.name 'Travis'
     echo "+ git set user.email" ; git config --global user.email 'travis@travis-ci.org'
 
-    echo "+ Clone $GITHUB_FOLDER" ; git clone https://$GITHUB_URL -q -b master $GITHUB_FOLDER &>/dev/null
-    ls -la $GITHUB_FOLDER
-    echo "+ Clear geli-docs" ; find $GITHUB_FOLDER | grep -v -E "$GITHUB_FOLDER$|$GITHUB_FOLDER/.git$|$GITHUB_FOLDER/.git/" | xargs rm -rf
-    ls -la $GITHUB_FOLDER
-    echo "+ Copy files" ; cp -rT ./$DOCU_SOURCE ./$GITHUB_FOLDER
-    ls -la $GITHUB_FOLDER
+    echo "+ Clone $GITHUB_FOLDER"
+    git clone https://$GITHUB_URL -q -b master $GITHUB_FOLDER &>/dev/null
+
+    echo "+ Clear geli-docs"
+    find $GITHUB_FOLDER | grep -v -E "$GITHUB_FOLDER$|$GITHUB_FOLDER/.git$|$GITHUB_FOLDER/.git/" | xargs rm -rf
+
+    echo "+ Copy files"
+    cp -rT ./$DOCU_SOURCE ./$GITHUB_FOLDER
 
     cd $GITHUB_FOLDER
-    echo "+ git add" ; git add --all #&>/dev/null
-    echo "+ git commit" ; git commit -m "Travis build: $TRAVIS_BUILD_NUMBER" #&>/dev/null
+    echo "+ git add"
+    git add --all &>/dev/null
+    echo "+ git commit"
+    git commit -m "Travis build: $TRAVIS_BUILD_NUMBER" &>/dev/null
 
     if [[ ! -z $TRAVIS_TAG ]]; then
         echo "+ git tag" ; git tag $TRAVIS_TAG
@@ -46,7 +50,8 @@ if [[ "$TRAVIS_BRANCH" == "master" ]] || [[ "$TRAVIS_BRANCH" == "develop" ]] || 
         echo -e "${YELLOW}+ skipping: git tag - not tagged build${NC}"
     fi
 
-    echo "+ git push" ; git push --all --tags -q https://micpah:$GITHUB_DOCU_TOKEN@$GITHUB_URL #&>/dev/null
+    echo "+ git push"
+    git push --follow-tags -q https://micpah:$GITHUB_DOCU_TOKEN@$GITHUB_URL &>/dev/null
   else
     echo -e "${YELLOW}+ WARNING: pull request #$TRAVIS_PULL_REQUEST -> skipping api-doc${NC}";
   fi
