@@ -6,6 +6,7 @@ import {ILecture} from '../../../shared/models/ILecture';
 import {InternalServerError} from 'routing-controllers';
 import {IUser} from '../../../shared/models/IUser';
 import * as winston from 'winston';
+import {ObjectID} from 'bson';
 
 interface ICourseModel extends ICourse, mongoose.Document {
   exportJSON: () => Promise<ICourse>;
@@ -64,8 +65,13 @@ const courseSchema = new mongoose.Schema({
     timestamps: true,
     toObject: {
       transform: function (doc: any, ret: any) {
-        ret._id = ret._id.toString();
-        ret.courseAdmin = ret.courseAdmin.toString();
+        if (ret.hasOwnProperty('_id') && ret._id !== null) {
+          ret._id = ret._id.toString();
+        }
+
+        if (ret.hasOwnProperty('courseAdmin') && ret.courseAdmin !== null && (ret.courseAdmin instanceof ObjectID)) {
+          ret.courseAdmin = ret.courseAdmin.toString();
+        }
         ret.hasAccessKey = false;
         if (ret.accessKey) {
           delete ret.accessKey;
@@ -125,7 +131,7 @@ courseSchema.statics.importJSON = async function (course: ICourse, admin: IUser,
 
   // course shouldn't be visible for students after import
   // until active flag is explicitly set (e.g. fixtures)
-  course.active = (active === true) ? true : false;
+  course.active = (active === true);
 
   // importTest lectures
   const lectures: Array<ILecture> = course.lectures;

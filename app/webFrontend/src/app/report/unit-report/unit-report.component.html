@@ -1,12 +1,24 @@
-<h3>Details for unit {{unit?.name}}</h3>
-<div class="progress-container" *ngFor="let user of userUnitProgress">
-  <app-user-profile [user]="user" [userId]="this.userService.user._id"></app-user-profile>
-  <div class="progress-submission">
-    <div class="progress-content" *ngIf="user.progress">
-      <i class="material-icons" [ngClass]="[user.progress.done ? 'done' : 'tried']">assignment_turned_in</i>
-      <h4>Submission</h4>
-      <app-progress [progress]="user.progress"></app-progress>
+<h3>Details for unit {{report?.summary.name}}</h3>
+<div class="progress-summary" *ngIf="report?.summary.progressData">
+  <h4>Summary</h4>
+  <ngx-charts-bar-vertical-2d
+    [view]="[800, 200]"
+    [results]="report.summary.progressData"
+    [scheme]="diagramColors"
+    [xAxis]="true">
+  </ngx-charts-bar-vertical-2d>
+</div>
+<div class="details-container">
+  <h4>Submission details</h4>
+  <div class="progress-container" *ngFor="let user of report?.details">
+    <app-user-profile [user]="user" [userId]="this.userService.user._id"></app-user-profile>
+    <div class="progress-submission">
+      <div class="progress-content" *ngIf="user.progress">
+        <i class="material-icons" [ngClass]="[user.progress.done ? 'done' : 'tried']">assignment_turned_in</i>
+        <h4>Submission</h4>
+        <app-progress [unit]="report?.summary" [progress]="user.progress"></app-progress>
+      </div>
+      <p *ngIf="!user.progress">This user has no submission for this unit.</p>
     </div>
-    <p *ngIf="!user.progress">This user has no submission for this unit.</p>
   </div>
 </div>

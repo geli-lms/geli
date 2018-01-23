@@ -8,6 +8,8 @@ import {APIInfo} from './models/APIInfo';
 import {isNullOrUndefined} from 'util';
 import {RavenErrorHandler} from './shared/services/raven-error-handler.service';
 import {MatSnackBar} from '@angular/material';
+import {ThemeService} from './shared/services/theme.service';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-root',
@@ -26,7 +28,11 @@ export class AppComponent implements OnInit {
               private showProgress: ShowProgressService,
               private apiInfoService: APIInfoService,
               private ravenErrorHandler: RavenErrorHandler,
-              private snackBar: MatSnackBar) {
+              private snackBar: MatSnackBar,
+              private themeService: ThemeService,
+              private translate: TranslateService) {
+    translate.setDefaultLang('en');
+
     showProgress.toggleSidenav$.subscribe(
       toggle => {
         this.toggleProgressBar();
@@ -35,7 +41,11 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    const lang = localStorage.getItem('lang') || this.translate.getBrowserLang() || this.translate.getDefaultLang();
+    this.translate.use(lang);
+
     this.authenticationService.reloadUser();
+
     this.apiInfoService.readItems()
       .then((info: any) => {
         this.ravenErrorHandler.setup(info.sentryDsn);
@@ -44,6 +54,11 @@ export class AppComponent implements OnInit {
       .catch((err) => {
         this.snackBar.open('Error on init', '', {duration: 3000});
       });
+  }
+
+  changeLanguage(lang) {
+    localStorage.setItem('lang', lang);
+    this.translate.use(lang);
   }
 
   hasWarning() {

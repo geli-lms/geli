@@ -1,0 +1,90 @@
+@import '../../../../../variables';
+
+.opacity {
+  background-color: #000;
+  opacity: .33;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  border-radius: 8px;
+}
+
+.user-drag-handle, .member-drag-handle {
+  cursor: move;
+  opacity: 0.2;
+  user-select: none;
+  margin-right: 0.5em;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.profile {
+  height: 248px;
+  width: 248px;
+  float: left;
+  margin: 10px;
+  border-radius: 8px;
+  background: no-repeat 75px 15px;
+}
+
+.profile:hover {
+  background-color: map-get($app-primary, 700);
+}
+
+.active {
+  height: 248px;
+  width: 248px;
+  float: left;
+  margin: 10px;
+  border-radius: 8px;
+  color: #ffffff;
+  background: #4490E2;
+}
+
+.bg {
+  left: 45px;
+  width: 160px;
+  height: 160px;
+  position: absolute;
+  background: center;
+  border-radius: 80px;
+}
+
+.info {
+  position: absolute;
+  bottom: 10px;
+  left: -22px;
+  margin-bottom: 0;
+  font-size: .9em;
+}
+
+ul {
+  list-style: none;
+}
+
+.userId {
+  opacity: 0.5;
+}
+
+.text-fit {
+  width: auto;
+}
+
+.centered {
+  margin-top: 30%;
+}
+
+button {
+  width: 184px;
+  margin-left: 10px;
+  margin-bottom: 10px;
+  color: #4490E2;
+}
+
+.del {
+  color: #D64C4C;
+}

@@ -7,6 +7,7 @@ import {UploadDialog} from '../components/upload-dialog/upload-dialog.component'
 import {InfoDialog} from '../components/info-dialog/info-dialog.component';
 import {FilepickerDialog} from '../components/filepicker-dialog/filepicker-dialog.component';
 import {WriteMailDialog} from '../components/write-mail-dialog/write-mail-dialog.component';
+import {ChangePasswordDialogComponent} from '../components/change-password-dialog/change-password-dialog.component';
 
 @Injectable()
 export class DialogService {
@@ -82,6 +83,12 @@ export class DialogService {
     dialogRef.componentInstance.markdown = data.markdown;
     dialogRef.componentInstance.subject = data.subject;
 
+    return dialogRef.afterClosed();
+  }
+
+  public changePassword(user: IUser) {
+    const dialogRef: MatDialogRef<ChangePasswordDialogComponent> = this.dialog.open(ChangePasswordDialogComponent);
+    dialogRef.componentInstance.user = user;
     return dialogRef.afterClosed();
   }
 }

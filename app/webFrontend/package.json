@@ -10,6 +10,7 @@
     "start-docker-dev": "ng serve --host 0.0.0.0 --proxy-config docker-proxy.conf.json --poll 3000",
     "start-vagrant-dev": "ng serve --host 0.0.0.0 --proxy-config local-proxy.conf.json --poll 3000",
     "build": "ng build --prod --sourcemaps",
+    "build-pr": "ng build --prod",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
@@ -27,7 +28,8 @@
     "@angular/platform-browser": "^5.1.0",
     "@angular/platform-browser-dynamic": "^5.1.0",
     "@angular/router": "^5.1.0",
-    "@ngx-translate/core": "^9.0.1",
+    "@ngx-translate/core": "^9.1.1",
+    "@ngx-translate/http-loader": "^2.0.1",
     "@swimlane/ngx-charts": "^7.0.1",
     "angular2-lightbox": "^1.2.1",
     "blueimp-md5": "^2.10.0",

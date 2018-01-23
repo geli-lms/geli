@@ -1,3 +1,14 @@
 <h1>Administration</h1>
-
-<app-user-admin></app-user-admin>
+<mat-toolbar>
+  <mat-toolbar-row>
+    <button mat-button routerLink="/admin/users">
+      <span>Users</span>
+    </button>
+    <button mat-button routerLink="/admin/imprint">
+      <span>Imprint</span>
+    </button>
+  </mat-toolbar-row>
+</mat-toolbar>
+<div class="admin-container">
+  <router-outlet></router-outlet>
+</div>

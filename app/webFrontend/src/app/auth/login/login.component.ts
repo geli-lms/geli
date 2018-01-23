@@ -7,6 +7,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ShowProgressService} from '../../shared/services/show-progress.service';
 import {MatSnackBar} from '@angular/material';
 import {TitleService} from '../../shared/services/title.service';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   templateUrl: './login.component.html',
@@ -24,7 +25,8 @@ export class LoginComponent implements OnInit {
               private showProgress: ShowProgressService,
               private snackBar: MatSnackBar,
               private formBuilder: FormBuilder,
-              private titleService: TitleService) {
+              private titleService: TitleService,
+              private translate: TranslateService) {
   }
 
   ngOnInit() {
@@ -39,16 +41,22 @@ export class LoginComponent implements OnInit {
     this.loading = true;
     this.loginForm.value.email = this.loginForm.value.email.replace(/\s/g, '').toLowerCase();
     this.authenticationService.login(this.loginForm.value.email, this.loginForm.value.password).then(
-      (val) => {
+      () => {
         this.router.navigate(['/']);
         this.showProgress.toggleLoadingGlobal(false);
         this.loading = false;
-        this.snackBar.open('Login successful', 'Dismiss', {duration: 2000});
-      }, (error) => {
-        this.showProgress.toggleLoadingGlobal(false);
-        this.snackBar.open('Login failed!', 'Dismiss');
 
+        this.translate.get(['auth.loginSuccess', 'common.dismiss']).subscribe((t: string) => {
+          this.snackBar.open(t['auth.loginSuccess'], t['common.dismiss'], {duration: 2000});
+        });
+      })
+      .catch(error => {
+        this.showProgress.toggleLoadingGlobal(false);
         this.loading = false;
+
+        this.translate.get(['auth.loginFailed', 'common.dismiss']).subscribe((t: string) => {
+          this.snackBar.open(t['auth.loginFailed'], t['common.dismiss'], {duration: 2000});
+        });
       });
   }
 
