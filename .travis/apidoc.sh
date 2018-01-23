@@ -26,7 +26,7 @@ if [ "$TRAVIS_BRANCH" == "master" ] || [ "$TRAVIS_BRANCH" == "develop" ]; then
     echo "+ git init" ; git init
     echo "+ git checkout" ; git checkout -b gh-pages
     echo "+ git add" ; git add . &>/dev/null
-    echo "+ git commit" ; git -c user.name='Travis' -c user.email='travis@travis-ci.org' commit -m 'Travis build: $TRAVIS_BUILD_NUMBER'
+    echo "+ git commit" ; git -c user.name='Travis' -c user.email='travis@travis-ci.org' commit -m "Travis build: $TRAVIS_BUILD_NUMBER" &>/dev/null
     echo "+ git push" ; git push -f -q https://micpah:$GITHUB_TOKEN@github.com/h-da/geli-docs master &>/dev/null
   else
     echo -e "${YELLOW}+ WARNING: pull request #$TRAVIS_PULL_REQUEST -> skipping api-doc${NC}";
