@@ -21,7 +21,8 @@
       "minLength": "At least {{min}} characters required",
       "invalid": "Input is invalid",
       "password": "Password must have at least 8 characters which contain one special character or digit",
-      "passwordsMatch": "Passwords do not match"
+      "passwordsMatch": "Passwords do not match",
+      "instituteMail": "Please register with your institute email"
     }
   },
   "home": {
