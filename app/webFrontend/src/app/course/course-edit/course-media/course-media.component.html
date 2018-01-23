@@ -63,7 +63,7 @@
 
             <ul class="info">
               <li><strong>{{file.name}}</strong></li>
-              <li>{{bytesHumanReadable(file.size)}}</li>
+              <li>{{file.size | filesize}}</li>
               <li>{{file.mimeType}}</li>
             </ul>
 

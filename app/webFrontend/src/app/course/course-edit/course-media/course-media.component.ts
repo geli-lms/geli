@@ -9,8 +9,6 @@ import {IFile} from '../../../../../../../shared/models/mediaManager/IFile';
 import {DialogService} from '../../../shared/services/dialog.service';
 import {RenameDialogComponent} from '../../../shared/components/rename-dialog/rename-dialog.component';
 
-const prettyBytes = require('pretty-bytes');
-
 @Component({
   selector: 'app-course-mediamanager',
   templateUrl: './course-media.component.html',
@@ -83,11 +81,6 @@ export class CourseMediaComponent implements OnInit {
 
     // Sort subdirs by name
     this.currentFolder.subDirectories.sort(sortFnc);
-  }
-
-  // Todo: Use filesize directive: `1024 | filesize`
-  bytesHumanReadable(bytes: number): string {
-    return prettyBytes(bytes);
   }
 
   toggleFolderBarVisibility(): void {
