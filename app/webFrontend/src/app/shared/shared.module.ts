@@ -20,6 +20,7 @@ import {ChangePasswordDialogComponent} from './components/change-password-dialog
 import {MarkdownEditorComponent} from './components/markdown-editor/markdown-editor.component';
 import {AceEditorModule} from 'ng2-ace-editor';
 import {PickMediaDialog} from './components/pick-media-dialog/pick-media-dialog.component';
+import {TranslateModule} from '@ngx-translate/core';
 
 @NgModule({
   imports: [
@@ -30,7 +31,8 @@ import {PickMediaDialog} from './components/pick-media-dialog/pick-media-dialog.
     HttpClientModule,
     FileUploadModule,
     AceEditorModule,
-    FileUploadModule
+    FileUploadModule,
+    TranslateModule,
   ],
   declarations: [
     GravatarDirective,
@@ -67,6 +69,7 @@ import {PickMediaDialog} from './components/pick-media-dialog/pick-media-dialog.
     UploadFormDialog,
     ChangePasswordDialogComponent,
     PickMediaDialog,
+    TranslateModule,
   ],
   entryComponents: [
     UploadFormDialog,

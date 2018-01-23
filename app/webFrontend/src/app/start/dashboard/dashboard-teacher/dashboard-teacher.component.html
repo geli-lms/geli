@@ -1,10 +1,18 @@
-<app-course-container [title]="'My Created Courses'" [courses]="myCourses" [expand]="true" (onEnroll)="enrollCallback()"></app-course-container>
-<app-course-container [title]="'My Teacher Courses'" [courses]="furtherCourses" [expand]="true" (onEnroll)="enrollCallback()" *ngIf="furtherCourses.length"></app-course-container>
-<app-course-container [title]="'Inactive Courses'" [courses]="inactiveCourses" [expand]="true" (onEnroll)="enrollCallback()" *ngIf="inactiveCourses.length"></app-course-container>
-<app-course-container [title]="'Available Courses'" [courses]="availableCourses" [expand]="false" (onEnroll)="enrollCallback()"></app-course-container>
+<app-course-container [title]="'dashboard.createdCourses'|translate" [courses]="myCourses" [expand]="true"
+                      (onEnroll)="enrollCallback()"></app-course-container>
+<app-course-container [title]="'dashboard.teacherCourses'|translate" [courses]="furtherCourses" [expand]="true"
+                      (onEnroll)="enrollCallback()"
+                      *ngIf="furtherCourses.length"></app-course-container>
+<app-course-container [title]="'dashboard.inactiveCourses'|translate" [courses]="inactiveCourses"
+                      [expand]="true"
+                      (onEnroll)="enrollCallback()"
+                      *ngIf="inactiveCourses.length"></app-course-container>
+<app-course-container [title]="'dashboard.availableCourses'|translate" [courses]="availableCourses"
+                      [expand]="false"
+                      (onEnroll)="enrollCallback()"></app-course-container>
 
 <app-mat-fab-menu class="add-course-fab" [open]="fabOpen" [onClick]="onFabClick"
-                  fabTooltip="Add course">
-  <div (click)="onImportCourse()">Import course</div>
-  <div routerLink="course/new">Create course</div>
+                  [fabTooltip]="'dashboard.addCourse'|translate">
+  <div (click)="onImportCourse()">{{ 'dashboard.importCourse'|translate }}</div>
+  <div routerLink="course/new">{{ 'dashboard.createCourse'|translate }}</div>
 </app-mat-fab-menu>
