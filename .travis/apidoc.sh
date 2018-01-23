@@ -10,8 +10,8 @@ IPWD="$(pwd)"
 echo
 echo "+++ Create and publish API-Doc +++"
 echo
-if [[ "$TRAVIS_BRANCH" == "master" ]] || [[ -z $TRAVIS_TAG ]]; then
-  if [[ "$TRAVIS_PULL_REQUEST" == "false" ]] || [[ -z $TRAVIS_TAG ]]; then
+if [[ "$TRAVIS_BRANCH" == "master" ]] || [[ -n "$TRAVIS_TAG" ]]; then
+  if [[ "$TRAVIS_PULL_REQUEST" == "false" ]] || [[ -n "$TRAVIS_TAG" ]]; then
     if [[ -z $GITHUB_DOCU_TOKEN ]]; then
         echo -e "${RED}+ ERROR: NO GITHUB_DOCU_TOKEN ENVVAR DEFINED. GO TO TRAVIS-SETTINGS AND DEFINE ONE.${NC}"
         exit 1
@@ -44,7 +44,7 @@ if [[ "$TRAVIS_BRANCH" == "master" ]] || [[ -z $TRAVIS_TAG ]]; then
     echo "+ git commit"
     git commit -m "Travis build: $TRAVIS_BUILD_NUMBER" &>/dev/null
 
-    if [[ ! -z $TRAVIS_TAG ]]; then
+    if [[ -n "$TRAVIS_TAG" ]]; then
         echo "+ git tag" ; git tag $TRAVIS_TAG
     else
         echo -e "${YELLOW}+ skipping: git tag - not tagged build${NC}"
