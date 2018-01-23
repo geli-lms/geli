@@ -11,7 +11,7 @@ echo
 echo "+++ Create and publish API-Doc +++"
 echo
 if [ "$TRAVIS_BRANCH" == "master" ] || [ "$TRAVIS_BRANCH" == "develop" ]; then
-  if [ "$TRAVIS_PULL_REQUEST" == "true" ]; then
+  if [ ! "$TRAVIS_PULL_REQUEST" == "false" ]; then
     if [[ -z $GITHUB_TOKEN ]]; then
         echo "${RED}+ ERROR: NO GITHUB_TOKEN ENVVAR DEFINED. GO TO TRAVIS-SETTINGS AND DEFINE ONE.${NC}"
         exit 1
