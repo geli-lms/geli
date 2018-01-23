@@ -74,7 +74,6 @@ describe('NotificationSettings', async () => {
         notificationSettings.notificationType.should.be.a('string');
         notificationSettings.emailNotification.should.be.a('boolean');
       });
-      console.warn('res.body: ' + res.text);
     })
   });
 

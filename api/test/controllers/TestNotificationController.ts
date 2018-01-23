@@ -107,17 +107,9 @@ describe('Notifications', async () => {
     it('should fail because the user is not authorized to delete the notification', async () => {
       const course = await FixtureUtils.getRandomCourse();
       const students = await FixtureUtils.getRandomStudents(2, 5);
-      course.students = course.students.concat(students);
-      await Course.update(course, {new: true});
 
       const newNotification = await new Notification({
         user: students[0],
-        changedCourse: course,
-        text: 'Tritratrulala'
-      }).save();
-
-      await new Notification({
-        user: students[1],
         changedCourse: course,
         text: 'Tritratrulala'
       }).save();
