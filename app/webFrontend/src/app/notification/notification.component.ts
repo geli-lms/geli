@@ -73,7 +73,6 @@ export class NotificationComponent implements OnInit {
       }
       return compareIds(a.changedCourse, b.changedCourse);
     });
-    this.notifications = this.notifications.reverse();
   }
 
   isNullOrUndefined(item: any): boolean {
