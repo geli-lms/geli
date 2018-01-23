@@ -13,6 +13,7 @@
   "scripts": {
     "build": "gulp build",
     "doc": "gulp generate:doc",
+    "apidoc": "gulp generate:apidoc",
     "start": "gulp watch",
     "start:debug": "gulp debug",
     "start:inspect": "gulp inspect",
