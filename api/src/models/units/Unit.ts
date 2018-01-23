@@ -14,6 +14,8 @@ import {IProgress} from '../../../../shared/models/progress/IProgress';
 interface IUnitModel extends IUnit, mongoose.Document {
   exportJSON: () => Promise<IUnit>;
   calculateProgress: (users: IUser[], progress: IProgress[]) => Promise<IUnit>;
+  populateUnit: () => Promise<IUnitModel>;
+  secureData: (user: IUser) => Promise<IUnitModel>;
   toFile: () => Promise<String>;
 }
 
@@ -74,8 +76,16 @@ unitSchema.methods.exportJSON = function() {
   return obj;
 };
 
-unitSchema.methods.calculateProgress = function(): Promise<IUnit> {
+unitSchema.methods.calculateProgress = async function(): Promise<IUnit> {
   return this.toObject();
+};
+
+unitSchema.methods.populateUnit = async function(): Promise<IUnit> {
+  return this;
+};
+
+unitSchema.methods.secureData = async function(user: IUser): Promise<IUnitModel> {
+  return this;
 };
 
 unitSchema.statics.importJSON = async function(unit: IUnit, courseId: string, lectureId: string) {

@@ -2,14 +2,11 @@ import {
   Body, Get, Put, Delete, Param, JsonController, UseBefore, NotFoundError, BadRequestError, Post,
   Authorized, UploadedFile
 } from 'routing-controllers';
-import fs = require('fs');
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import crypto = require('crypto');
 
 import {Lecture} from '../models/Lecture';
 import {IUnitModel, Unit} from '../models/units/Unit';
-import {IUnit} from '../../../shared/models/units/IUnit';
-import {IFileUnit} from '../../../shared/models/units/IFileUnit';
 import {ValidationError} from 'mongoose';
 import config from '../config/main'
 
@@ -61,7 +58,7 @@ export class UnitController {
 
   @Authorized(['teacher', 'admin'])
   @Put('/:id')
-  async updateUnit(@UploadedFile('file', {options: uploadOptions}) file: any, @Param('id') id: string, @Body() data: any) {
+  async updateUnit(@Param('id') id: string, @Body() data: any) {
     const oldUnit: IUnitModel = await Unit.findById(id);
 
     if (!oldUnit) {
@@ -104,7 +101,10 @@ export class UnitController {
         return lecture.save();
       })
       .then(() => {
-        return unit.toObject();
+        return unit.populateUnit();
+      })
+      .then((populatedUnit) => {
+        return populatedUnit.toObject();
       })
       .catch((err) => {
         throw new BadRequestError(err);
@@ -112,23 +112,16 @@ export class UnitController {
   }
 
   protected checkPostParam(data: any, file?: any) {
-    try {
-      if (!data.lectureId) {
-        throw new BadRequestError('No lecture ID was submitted.');
-      }
+    if (!data.lectureId) {
+      throw new BadRequestError('No lecture ID was submitted.');
+    }
 
-      if (!data.model) {
-        throw new BadRequestError('No unit was submitted.');
-      }
+    if (!data.model) {
+      throw new BadRequestError('No unit was submitted.');
+    }
 
-      if (!data.model._course) {
-        throw new BadRequestError('Unit has no _course set');
-      }
-    } catch (error) {
-      if (file) {
-        fs.unlinkSync(file.path);
-      }
-      throw error;
+    if (!data.model._course) {
+      throw new BadRequestError('Unit has no _course set');
     }
   }
 }
