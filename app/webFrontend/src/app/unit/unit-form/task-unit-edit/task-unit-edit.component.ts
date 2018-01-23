@@ -82,7 +82,7 @@ export class TaskUnitEditComponent implements OnInit {
           return this.notificationService.createItem(
             {
               changedCourse: this.course,
-              changedLecture: null,
+              changedLecture: this.lectureId,
               changedUnit: task,
               text: text
             });

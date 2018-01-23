@@ -63,7 +63,7 @@ export class FreeTextUnitFormComponent implements OnInit {
             return this.notificationService.createItem(
               {
                 changedCourse: this.course,
-                changedLecture: null,
+                changedLecture: this.lectureId,
                 changedUnit: unit,
                 text: 'Course ' + this.course.name + ' has a new text unit.'
               });
@@ -80,7 +80,7 @@ export class FreeTextUnitFormComponent implements OnInit {
           (unit) => {
             this.notificationService.createItem(
               {
-                changedCourse: this.course, changedLecture: null,
+                changedCourse: this.course, changedLecture: this.lectureId,
                 changedUnit: unit, text: 'Course ' + this.course.name + ' has an updated text unit.'
               })
               .catch(console.error);

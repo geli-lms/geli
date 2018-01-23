@@ -32,7 +32,7 @@ export class NotificationComponent implements OnInit {
 
   getNotifications() {
     this.notificationService.getNotificationsPerUser(this.userService.user).then(notifications => {
-      this.notifications = notifications.reverse();
+      this.notifications = notifications;
       this.sortNotifications();
       if (this.notifications.length > 0) {
         this.notificationIcon = NotificationIcon.ACTIVE;
@@ -53,6 +53,10 @@ export class NotificationComponent implements OnInit {
     await this.notificationService.deleteItem(notification);
   }
 
+  /**
+   * Sorts notifications: at first by the courseID, then by lectureID (if the notification has a reference to it)
+   * and then by the unit (again only if available).
+   */
   sortNotifications() {
     this.notifications = this.notifications.sort((a, b) => {
       if (compareIds(a.changedCourse, b.changedCourse) === 0) {
@@ -69,6 +73,7 @@ export class NotificationComponent implements OnInit {
       }
       return compareIds(a.changedCourse, b.changedCourse);
     });
+    this.notifications = this.notifications.reverse();
   }
 
   isNullOrUndefined(item: any): boolean {

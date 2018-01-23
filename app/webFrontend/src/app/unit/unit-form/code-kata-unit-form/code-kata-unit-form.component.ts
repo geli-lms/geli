@@ -111,7 +111,7 @@ export class CodeKataUnitFormComponent implements OnInit {
             return this.notificationService.createItem(
               {
                 changedCourse: this.course,
-                changedLecture: null,
+                changedLecture: this.lectureId,
                 changedUnit: unit,
                 text: 'Course ' + this.course.name + ' has a new code kata unit.'
               });
@@ -130,7 +130,7 @@ export class CodeKataUnitFormComponent implements OnInit {
             return this.notificationService.createItem(
               {
                 changedCourse: this.course,
-                changedLecture: null,
+                changedLecture: this.lectureId,
                 changedUnit: unit,
                 text: 'Course ' + this.course.name + ' has an updated unit.'
               });
