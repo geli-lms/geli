@@ -1,4 +1,4 @@
-import {IFile} from './IFile';
+import {IFile} from './mediaManager/IFile';
 export interface IUser {
   _id: any;
   uid: string;
