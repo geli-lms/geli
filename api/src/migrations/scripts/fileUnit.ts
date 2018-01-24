@@ -1,11 +1,7 @@
 // tslint:disable:no-console
 import * as mongoose from 'mongoose';
-import {ObjectID} from 'bson';
 import {IUnitModel} from '../../models/units/Unit';
-import {ITaskUnitModel} from '../../models/units/TaskUnit';
-import {ITaskUnit} from '../../../../shared/models/units/ITaskUnit';
-import {ITask} from '../../../../shared/models/task/ITask';
-import {IUnit} from '../../../../shared/models/units/IUnit';
+import {ObjectID} from 'bson';
 
 const unitSchema = new mongoose.Schema({
     _course: {
@@ -80,6 +76,17 @@ class FileUnitMigration {
 
   async up() {
     console.log('FileUnit up was called');
+    try {
+      const fileUnits = await Unit.find({'__t': 'file'}).exec();
+      const updatedFileUnits = await Promise.all(fileUnits.map(async (fileUnit) => {
+        if (fileUnit._id instanceof ObjectID) {
+          const fileUnitObj = fileUnit.toObject();
+        }
+      }));
+    } catch (error) {
+      console.log(error);
+    }
+    return true;
   }
 
   down() {
