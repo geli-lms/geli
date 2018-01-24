@@ -6,5 +6,6 @@
   <p>{{course?.description}}</p>
 </div>
 <div class="lectures" *ngIf="course">
-  <app-lecture [course]="course" [lecture]="lecture" *ngFor="let lecture of course.lectures"></app-lecture>
+  <app-lecture [course]="course" [lecture]="lecture" *ngFor="let lecture of course.lectures">
+  </app-lecture>
 </div>

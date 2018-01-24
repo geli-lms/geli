@@ -9,6 +9,9 @@ import {Lecture} from '../models/Lecture';
 import {IUnitModel, Unit} from '../models/units/Unit';
 import {ValidationError} from 'mongoose';
 import config from '../config/main'
+import {Notification} from '../models/Notification';
+import {ICourse} from '../../../shared/models/ICourse';
+import {Course} from '../models/Course';
 
 const multer = require('multer');
 
