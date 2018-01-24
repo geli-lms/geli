@@ -71,7 +71,6 @@ export class MembersComponent implements OnInit {
   }
 
   async removeWhitelistUserFromCourse(draggedUser: IWhitelistUser) {
-    console.log('Lösche element');
     await this.initCourse();
   }
 
