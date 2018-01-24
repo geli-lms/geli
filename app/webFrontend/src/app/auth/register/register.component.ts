@@ -41,7 +41,7 @@ export class RegisterComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.apiInfoService.readItems().then((apiInfo: any) => {
+    this.apiInfoService.readAPIInfo().then((apiInfo: any) => {
         this.teacherMailRegex = apiInfo.teacherMailRegex;
       }
     );

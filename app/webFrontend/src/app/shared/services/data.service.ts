@@ -153,7 +153,7 @@ export class DuplicationService extends DataService {
 
   duplicateUnit(unit: IUnit, lectureId: string, courseId: string): Promise<IUnit> {
     return this.backendService
-      .post(this.apiPath + 'unit/' + unit._id, JSON.stringify({courseId: courseId , lectureId: lectureId}))
+      .post(this.apiPath + 'unit/' + unit._id, JSON.stringify({courseId: courseId, lectureId: lectureId}))
       .toPromise();
   }
 }
@@ -231,26 +231,26 @@ export class FreeTextUnitService extends DataService {
 
 @Injectable()
 export class NotificationSettingsService extends DataService {
-  constructor (public backendService: BackendService) {
+  constructor(public backendService: BackendService) {
     super('notificationSettings/', backendService);
   }
 
   getNotificationSettingsPerUser(user: IUser): Promise<any[]> {
-      return new Promise((resolve, reject) => {
-        this.backendService.get(this.apiPath + 'user/' + user._id)
-          .subscribe(
-            (responseItem: any) => {
-              resolve(responseItem);
-            },
-            error => reject(error)
-          );
-      });
+    return new Promise((resolve, reject) => {
+      this.backendService.get(this.apiPath + 'user/' + user._id)
+        .subscribe(
+          (responseItem: any) => {
+            resolve(responseItem);
+          },
+          error => reject(error)
+        );
+    });
   }
 }
 
 @Injectable()
 export class NotificationService extends DataService {
-  constructor (public backendService: BackendService) {
+  constructor(public backendService: BackendService) {
     super('notification/', backendService);
   }
 
@@ -302,7 +302,7 @@ export class UserDataService extends DataService {
 }
 
 @Injectable()
-export  class  WhitelistUserService extends DataService {
+export class WhitelistUserService extends DataService {
   constructor(public backendService: BackendService) {
     super('whitelist/', backendService);
   }
@@ -319,9 +319,19 @@ export  class  WhitelistUserService extends DataService {
 
 @Injectable()
 export class APIInfoService extends DataService {
+
+  private apiInfo: any;
+
   constructor(public backendService: BackendService) {
     // use root route
     super('', backendService);
+  }
+
+  async readAPIInfo() {
+    if (!this.apiInfo) {
+      this.apiInfo = await this.readItems();
+    }
+    return this.apiInfo;
   }
 }
 
