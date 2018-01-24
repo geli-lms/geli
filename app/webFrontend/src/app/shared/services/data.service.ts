@@ -352,16 +352,4 @@ export class ConfigService extends DataService {
   constructor(public backendService: BackendService) {
     super('config/', backendService);
   }
-
-  getEnvironmentVariable(name: string): Promise<any> {
-    return new Promise((resolve, reject) => {
-      this.backendService.get(this.apiPath + 'env/' + name)
-        .subscribe(
-          (responseItem: any) => {
-            resolve(responseItem);
-          },
-          error => reject(error)
-        );
-    });
-  }
 }

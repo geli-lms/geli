@@ -27,14 +27,6 @@ function publicConfig(id: string) {
 @JsonController('/config')
 export class ConfigController {
 
-  @Get('/env/:var')
-  async getEnvironmentVariable(@Param('var') variable: string) {
-    switch (variable) {
-      case 'teacherMailRegex': return config.teacherMailRegex;
-      default: throw new NotFoundError('Variable ' + variable + ' not found');
-    }
-  }
-
   @Get('/public/:id')
   async getPublicConfig(@Param('id') name: string) {
     if (publicConfig(name)) {
