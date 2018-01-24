@@ -16,5 +16,29 @@ export class SortUtil {
     });
     return 0;
   }
+
+  public static sortByLastVisitedCourses(courses, lastVisitedCourses) {
+    courses.sort((a, b) => {
+      const posA = lastVisitedCourses.indexOf(a._id);
+      const posB = lastVisitedCourses.indexOf(b._id);
+      if (posA === -1 && posB === -1) {
+        return 0;
+      }
+      if (posA === -1) {
+        return 1;
+      }
+      if (posB === -1) {
+        return -1;
+      }
+      if (posA < posB) {
+        return -1;
+      }
+      if (posA > posB) {
+        return 1;
+      }
+      return 0;
+    });
+    return courses;
+  }
 }
 

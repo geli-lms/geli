@@ -1,0 +1,25 @@
+.notificationItem {
+  font-size: 0.6em;
+  height: auto;
+  white-space: pre-line;
+}
+
+.headline {
+  font-size: 0.8em;
+  font-weight: bold;
+  text-align: center;
+  padding-left: 5%;
+}
+
+.clearButton {
+  font-size: 0.7em;
+  text-decoration: underline;
+  cursor: pointer;
+  padding-left: 5%;
+}
+
+.noNotification {
+  font-size: 0.7em;
+  padding-left: 5%;
+  white-space: pre;
+}
