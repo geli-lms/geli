@@ -5,7 +5,7 @@ import {LectureComponent} from './lecture.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {UnitModule} from '../unit/unit.module';
 import {SharedModule} from '../shared/shared.module';
-import {RouterModule} from '@angular/router';
+import {LectureRoutingModule} from './lecture-routing.module';
 
 @NgModule({
   imports: [
@@ -14,7 +14,7 @@ import {RouterModule} from '@angular/router';
     ReactiveFormsModule,
     SharedModule,
     UnitModule,
-    RouterModule
+    LectureRoutingModule,
   ],
   declarations: [
     LectureComponent,

@@ -7,7 +7,7 @@ export const errorCodes = {
     },
     noTeacher: {
       code: 'no teacher',
-      text: 'You are not allowed to register as teacher'
+      text: 'You are not allowed to register as teacher',
     },
     notSend: {
       code: 'email not send',
