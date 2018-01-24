@@ -193,7 +193,7 @@ export class DownloadController {
             } else if (localUnit.__t === 'task') {
               const taskUnit = <ITaskUnit><any>localUnit;
               archive.append(await TaskUnit.schema.statics.toFile(taskUnit),
-                {name: lecCounter + '_' + lcName + '/' + unitCounter + '. ' + this.replaceCharInFilename(taskUnit.name) + '.txt'});
+                {name: lecCounter + '_' + lcName + '/' + unitCounter + '_' + this.replaceCharInFilename(taskUnit.name) + '.txt'});
             } else {
               throw new NotFoundError();
             }
