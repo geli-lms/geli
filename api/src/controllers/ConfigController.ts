@@ -9,7 +9,6 @@ import {
 } from 'routing-controllers';
 import {Config} from '../models/Config';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
-import config from '../config/main'
 
 const publicConfigs = [
   new RegExp('imprint')
