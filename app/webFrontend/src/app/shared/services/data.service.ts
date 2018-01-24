@@ -5,6 +5,7 @@ import {ILecture} from '../../../../../../shared/models/ILecture';
 import {IUnit} from '../../../../../../shared/models/units/IUnit';
 import {IUser} from '../../../../../../shared/models/IUser';
 import {ICourse} from '../../../../../../shared/models/ICourse';
+import {INotificationSettings} from '../../../../../../shared/models/INotificationSettings';
 import {IDownload} from '../../../../../../shared/models/IDownload';
 import {IDirectory} from '../../../../../../shared/models/mediaManager/IDirectory';
 import {IFile} from '../../../../../../shared/models/mediaManager/IFile';
@@ -281,6 +282,44 @@ export class FreeTextUnitService extends DataService {
 }
 
 @Injectable()
+export class NotificationSettingsService extends DataService {
+  constructor(public backendService: BackendService) {
+    super('notificationSettings/', backendService);
+  }
+
+  getNotificationSettingsPerUser(user: IUser): Promise<any[]> {
+    return new Promise((resolve, reject) => {
+      this.backendService.get(this.apiPath + 'user/' + user._id)
+        .subscribe(
+          (responseItem: any) => {
+            resolve(responseItem);
+          },
+          error => reject(error)
+        );
+    });
+  }
+}
+
+@Injectable()
+export class NotificationService extends DataService {
+  constructor(public backendService: BackendService) {
+    super('notification/', backendService);
+  }
+
+  getNotificationsPerUser(user: IUser): Promise<any[]> {
+    return new Promise((resolve, reject) => {
+      this.backendService.get(this.apiPath + 'user/' + user._id)
+        .subscribe(
+          (responseItem: any) => {
+            resolve(responseItem);
+          },
+          error => reject(error)
+        );
+    });
+  }
+}
+
+@Injectable()
 export class UserDataService extends DataService {
   constructor(public backendService: BackendService) {
     super('users/', backendService);
@@ -332,9 +371,19 @@ export class WhitelistUserService extends DataService {
 
 @Injectable()
 export class APIInfoService extends DataService {
+
+  private apiInfo: any;
+
   constructor(public backendService: BackendService) {
     // use root route
     super('', backendService);
+  }
+
+  async readAPIInfo() {
+    if (!this.apiInfo) {
+      this.apiInfo = await this.readItems();
+    }
+    return this.apiInfo;
   }
 }
 

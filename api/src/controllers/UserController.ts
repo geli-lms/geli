@@ -1,6 +1,6 @@
 import {
   Body, JsonController, UseBefore, Get, Param, QueryParam, Put, Delete, Authorized, CurrentUser,
-  BadRequestError, ForbiddenError, UploadedFile, Post, HttpError
+  BadRequestError, ForbiddenError, UploadedFile, Post
 } from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import fs = require('fs');
@@ -99,18 +99,17 @@ export class UserController {
                  @CurrentUser() currentUser: IUser) {
     return User.findById(id)
       .then((user: IUserModel) => {
-        /* TODO: Update for new file schema
-        if (user.profile.picture && user.profile.picture.path && fs.existsSync(user.profile.picture.path)) {
-          fs.unlinkSync(user.profile.picture.path);
+        if (user.profile.picture && user.profile.picture.link && fs.existsSync(user.profile.picture.link)) {
+          fs.unlinkSync(user.profile.picture.link);
         }
 
         user.profile.picture = {
-          path: file.path,
-          name: file.filename,
-          alias: file.originalname,
-          size: file.size
+          _id: null,
+          name: file.originalname,
+          link: file.filename,
+          size: file.size,
+          mimeType: file.mimeType
         };
-        */
         return user.save();
       })
       .then((user) => {

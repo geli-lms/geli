@@ -71,7 +71,7 @@ export class DownloadController {
           fileUnit.files.forEach((file, index) => {
             if (unit.files.indexOf(index) > -1) {
               if ((file.size / 1024 ) > config.maxFileSize) {
-                // TODO: localTooLargeFiles.push(file.path);
+                localTooLargeFiles.push(file.link);
               }
               localTotalSize += (file.size / 1024 );
             }
@@ -187,13 +187,13 @@ export class DownloadController {
               const fileUnit = <IFileUnit><any>localUnit;
               fileUnit.files.forEach((file, index) => {
                 if (unit.files.indexOf(index) > -1) {
-                  // TODO: archive.file(file.path, {name: lecCounter + '_' + lcName + '/' + unitCounter + '_' + file.alias});
+                  archive.file(file.link, {name: lecCounter + '_' + lcName + '/' + unitCounter + '_' + file.name});
                 }
               });
             } else if (localUnit.__t === 'task') {
               const taskUnit = <ITaskUnit><any>localUnit;
               archive.append(await TaskUnit.schema.statics.toFile(taskUnit),
-                {name: lecCounter + '_' + lcName + '/' + unitCounter + '. ' + this.replaceCharInFilename(taskUnit.name) + '.txt'});
+                {name: lecCounter + '_' + lcName + '/' + unitCounter + '_' + this.replaceCharInFilename(taskUnit.name) + '.txt'});
             } else {
               throw new NotFoundError();
             }

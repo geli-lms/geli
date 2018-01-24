@@ -4,7 +4,7 @@ import {ICourse} from '../../../../../../../shared/models/ICourse';
 import {ILecture} from '../../../../../../../shared/models/ILecture';
 import {IFileUnit} from '../../../../../../../shared/models/units/IFileUnit';
 import {UnitGeneralInfoFormComponent} from '../unit-general-info-form/unit-general-info-form.component';
-import {UnitService} from '../../../shared/services/data.service';
+import {NotificationService, UnitService} from '../../../shared/services/data.service';
 import {FileUnit} from '../../../models/units/FileUnit';
 import {ShowProgressService} from '../../../shared/services/show-progress.service';
 import {VideoUnit} from '../../../models/units/VideoUnit';
@@ -31,7 +31,9 @@ export class FileUnitFormComponent implements OnInit {
   constructor(public snackBar: MatSnackBar,
               private unitService: UnitService,
               private showProgress: ShowProgressService,
-              private dialog: MatDialog) {
+              private dialog: MatDialog,
+              private showProgress: ShowProgressService,
+              private notificationService: NotificationService) {
   }
 
   ngOnInit() {
@@ -64,11 +66,17 @@ export class FileUnitFormComponent implements OnInit {
 
     promise
       .then((updatedUnit) => {
-        this.model = <FileUnit><any> updatedUnit;
+        this.model = <FileUnit><any>updatedUnit;
         this.onDone();
+        return this.notificationService.createItem(
+          {
+            changedCourse: this.course, changedLecture: this.lecture,
+            changedUnit: updatedUnit, text: 'Course ' + this.course.name + ' has an updated file unit.'
+          });
       })
       .catch((error) => {
         this.snackBar.open('An error occurred', 'Dismiss');
+
       });
   }
 

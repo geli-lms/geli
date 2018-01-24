@@ -26,6 +26,8 @@ import emailService from '../services/EmailService';
 const multer = require('multer');
 import crypto = require('crypto');
 import {IUnitModel} from '../models/units/Unit';
+import {API_NOTIFICATION_TYPE_ALL_CHANGES, API_NOTIFICATION_TYPE_NONE, NotificationSettings} from '../models/NotificationSettings';
+import {Notification} from '../models/Notification';
 
 const uploadOptions = {
   storage: multer.diskStorage({
@@ -189,7 +191,11 @@ export class CourseController {
 
         if (course.students.indexOf(currentUser._id) < 0) {
           course.students.push(currentUser);
-
+          new NotificationSettings({
+            'user': currentUser, 'course': course,
+            'notificationType': API_NOTIFICATION_TYPE_ALL_CHANGES,
+            'emailNotification': false
+          }).save();
           return course.save().then((c) => c.toObject());
         }
 
@@ -208,6 +214,7 @@ export class CourseController {
         const index: number = course.students.indexOf(currentUser._id);
         if (index !== 0) {
           course.students.splice(index, 1);
+          NotificationSettings.findOne({'user': currentUser, 'course': course}).remove();
           return course.save().then((c) => c.toObject());
         }
 
@@ -250,7 +257,12 @@ export class CourseController {
       course,
       {'new': true}
     )
-      .then((c) => c ? c.toObject() : undefined);
+      .then((c) => {
+        if (c) {
+          return c.toObject();
+        }
+        return undefined;
+      });
   }
 
   @Authorized(['teacher', 'admin'])
