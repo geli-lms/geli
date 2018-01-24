@@ -5,12 +5,12 @@ import {
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import {isNullOrUndefined} from 'util';
 import {WhitelistUser} from '../models/WhitelistUser';
-import {IWhitelistUser} from '../../../shared/models/IWhitelistUser';
 import {errorCodes} from '../config/errorCodes';
 import * as mongoose from 'mongoose';
 import ObjectId = mongoose.Types.ObjectId;
 import {Course} from '../models/Course';
 import {User} from '../models/User';
+import {IWhitelistUser} from '../../../shared/models/IWhitelistUser';
 
 function escapeRegex(text: string) {
   return text.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
@@ -66,6 +66,27 @@ export class WitelistController {
     return {result: true};
   }
 
+  private async deleteUserIfFound(whitelistUser: IWhitelistUser) {
+    const course = await Course.findById(whitelistUser.courseId).populate('students');
+    if (course) {
+      course.students = course.students.filter(stud => stud.uid.toString() !== whitelistUser.uid);
+      await course.save();
+    }
+  }
+
+  private async addUserIfFound(whitelistUser: IWhitelistUser) {
+    const stud = await User.findOne({
+        uid: whitelistUser.uid,
+        'profile.firstName': { $regex: new RegExp('^' + whitelistUser.firstName.toLowerCase(), 'i')},
+        'profile.lastName': { $regex: new RegExp('^' + whitelistUser.lastName.toLowerCase(), 'i')}
+      });
+    if (stud) {
+      const course = await Course.findById(whitelistUser.courseId);
+      course.students.push(stud);
+      await course.save();
+    }
+  }
+
   toMongooseObjectId(whitelistUser: IWhitelistUser) {
     return {
       _id: whitelistUser._id,
@@ -73,31 +94,6 @@ export class WitelistController {
       lastName: whitelistUser.lastName,
       uid: whitelistUser.uid,
       courseId: new ObjectId(whitelistUser.courseId)
-    }
-  }
-
-  private async deleteUserIfFound(whitelistUser: IWhitelistUser) {
-    const course = await Course.findById(whitelistUser.courseId)
-      .populate('students');
-    if (course) {
-      course.students = course.students.filter(stud => stud.uid !== whitelistUser.uid);
-      await course.update(course);
-    }
-  }
-
-  private async addUserIfFound(whitelistUser: IWhitelistUser) {
-    const [course, stud] = await Promise.all([
-      Course.findById(whitelistUser.courseId)
-        .populate('students'),
-      User.findOne({
-        uid: whitelistUser.uid,
-        'profile.firstName': { $regex: new RegExp(whitelistUser.firstName.toLowerCase(), 'i') } ,
-        'profile.lastName': { $regex: new RegExp(whitelistUser.lastName.toLowerCase(), 'i')}})]);
-    console.log(whitelistUser);
-    console.log('Gefunden:' + stud);
-    if (course && stud) {
-      course.students.push(stud);
-      await course.update(course);
     }
   }
 }

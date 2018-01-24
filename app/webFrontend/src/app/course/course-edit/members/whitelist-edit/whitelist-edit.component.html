@@ -9,8 +9,8 @@
   </mat-expansion-panel-header>
   <p>All users on this list is allowed to join in course. Students are automatically synchronised with this list.</p>
   <app-whitelist-show [show]="expPanel.expanded"
-                      [dragUsers]="dragableWhitelistUser"
-                      [course]="course">
+                      [course]="course"
+    (onDragendRemoveWhitelist) ="removeWhitelistUserFromCourse($event)">
   </app-whitelist-show>
 
   <mat-form-field class="full-width">

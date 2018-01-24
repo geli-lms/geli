@@ -16,12 +16,12 @@ import {WhitelistShowComponent} from '../whitelist-show/whitelist-show.component
 export class WhitelistEditComponent implements OnInit {
   static readonly  snackBarDuration = 6000;
 
-  dragableWhitelistUser: IWhitelistUser[] = [];
   @ViewChild(WhitelistShowComponent)
   showComponent: WhitelistShowComponent;
   @Input() course: ICourse;
   @Input() total = 0;
   @Output() onDragendPushWhitelist = new EventEmitter<IWhitelistUser>();
+  @Output() onDragendRemoveWhitelist = new EventEmitter<IWhitelistUser>();
   whitelistUser: any = {firstName: '', lastName: '', uid: '', courseId: null};
 
   firstNameControl: FormControl = new FormControl();
@@ -74,7 +74,7 @@ export class WhitelistEditComponent implements OnInit {
     this.whitelistUser.courseId = this.course._id;
     try {
       const newUser: IWhitelistUser = await this.whitelistUserService.createItem(this.whitelistUser);
-      this.dragableWhitelistUser.push(newUser);
+      this.course.whitelist.push(newUser);
       this.onDragendPushWhitelist.emit(newUser);
       if (this.showComponent.isInCourse(newUser)) {
         this.snackBar.open('Create whitelist user. User is in course.', '', {duration: WhitelistEditComponent.snackBarDuration});
@@ -89,5 +89,9 @@ export class WhitelistEditComponent implements OnInit {
         + exception.error.message, '', {duration: WhitelistEditComponent.snackBarDuration});
       return null;
     }
+  }
+
+  removeWhitelistUserFromCourse(whitelistUser: IWhitelistUser) {
+    this.onDragendRemoveWhitelist.emit(whitelistUser);
   }
 }
