@@ -21,7 +21,8 @@
       "minLength": "Mindestens {{min}} Zeichen benötigt",
       "invalid": "Keine gültige Eingabe",
       "password": "Passwörter müssen aus mindestens 8 Zeichen, inklusive einem Sonderzeichen und einer Ziffer bestehen",
-      "passwordsMatch": "Die Passwörter stimmen nicht überein"
+      "passwordsMatch": "Die Passwörter stimmen nicht überein",
+      "instituteMail": "Bitte nutzen Sie Ihre Instituts-Email"
     }
   },
   "home": {
@@ -44,7 +45,8 @@
     "admin": "Admin",
     "about": "Über geli",
     "imprint": "Impressum",
-    "logout": "Logout"
+    "logout": "Logout",
+    "userSettings": "Einstellungen"
   },
   "dashboard": {
     "courses": "Kurse",

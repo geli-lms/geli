@@ -1,5 +1,5 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
-import {UnitService} from '../../../shared/services/data.service';
+import {NotificationService, UnitService} from '../../../shared/services/data.service';
 import {Task} from '../../../models/Task';
 import {MatSnackBar} from '@angular/material';
 import {ITaskUnit} from '../../../../../../../shared/models/units/ITaskUnit';
@@ -36,7 +36,8 @@ export class TaskUnitEditComponent implements OnInit {
   private generalInfo: UnitGeneralInfoFormComponent;
 
   constructor(private unitService: UnitService,
-              private snackBar: MatSnackBar) {
+              private snackBar: MatSnackBar,
+              private notificationService: NotificationService) {
   }
 
   ngOnInit() {
@@ -65,16 +66,26 @@ export class TaskUnitEditComponent implements OnInit {
 
     if (this.isTaskUnitValid()) {
       let taskPromise = null;
+      let text: string;
       if (this.add) {
         taskPromise = this.unitService.createItem({model: this.model, lectureId: this.lectureId});
+        text = 'Course ' + this.course.name + ' has a new task unit.';
       } else {
         taskPromise = this.unitService.updateItem(this.model);
+        text = 'Course ' + this.course.name + ' has an updated task unit.';
       }
       taskPromise.then(
         (task) => {
           const message = `Task ${this.add ? 'created' : 'updated'}`;
           this.snackBar.open(message, '', {duration: 3000});
-          this.onDone();
+          this.onDone()
+          return this.notificationService.createItem(
+            {
+              changedCourse: this.course,
+              changedLecture: this.lectureId,
+              changedUnit: task,
+              text: text
+            });
         },
         (error) => {
           const message = `Couldn\'t ${this.add ? 'create' : 'update'} task`;

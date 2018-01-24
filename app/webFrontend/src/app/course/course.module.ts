@@ -16,6 +16,7 @@ import {UploadUnitCheckboxComponent} from './course-detail/download-course-dialo
 import {DuplicationService, ExportService, ImportService} from '../shared/services/data.service';
 import {SaveFileService} from '../shared/services/save-file.service';
 import {ReportModule} from '../report/report.module';
+import {RouterOutlet} from '@angular/router';
 
 @NgModule({
   imports: [

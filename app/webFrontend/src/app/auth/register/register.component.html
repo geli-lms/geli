@@ -57,7 +57,11 @@
           </small>
           <small *ngIf="mailError" class="text-danger">{{mailError}}</small>
           <small
-            *ngIf="registerForm.controls.email.hasError('email') && !registerForm.controls.email.hasError('required')"
+            *ngIf="registerForm.controls.email.hasError('teacherEmailError') && !registerForm.controls.email.hasError('email') && !registerForm.controls.email.hasError('required')"
+            class="text-danger">{{'common.validation.instituteMail'|translate}}
+          </small>
+          <small
+            *ngIf="registerForm.controls.email.hasError('email') && !registerForm.controls.email.hasError('teacherMailError') && !registerForm.controls.email.hasError('required')"
             class="text-danger">
             {{'common.validation.invalid'|translate}}
           </small>
@@ -69,7 +73,7 @@
           <input matInput formControlName="uid" [placeholder]="'common.profile.uid'|translate"/>
           <div *ngIf="registerForm.controls.uid.touched">
             <small *ngIf="uidError" class="text-danger">{{uidError}}</small>
-            <small *ngIf="registerForm.controls.uid.hasError('required')" class="text-danger">
+            <small *ngIf="registerForm.controls.uid.hasError('validateMatriculationNumber')" class="text-danger">
               {{'common.validation.required'|translate}}
             </small>
           </div>

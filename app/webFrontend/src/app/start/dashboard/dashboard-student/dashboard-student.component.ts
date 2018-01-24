@@ -32,7 +32,7 @@ export class DashboardStudentComponent extends DashboardBaseComponent {
 
     SortUtil.sortByLastVisitedCourses(this.allCourses, this.userService.user.lastVisitedCourses);
     for (const course of this.allCourses) {
-      if (this.isMemberOfCourse(course)) {
+      if (this.userService.isMemberOfCourse(course)) {
         this.myCourses.push(course);
       } else {
         this.availableCourses.push(course);
