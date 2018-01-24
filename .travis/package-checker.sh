@@ -22,12 +22,6 @@ echo
 echo "+++ David dependency checker +++"
 echo
 
-echo "+ checking if on branch -develop/master- and not a pull-request"
-if [[ "$TRAVIS_PULL_REQUEST" == "false" && ("$TRAVIS_BRANCH" == "master" || "$TRAVIS_BRANCH" == "develop") ]]; then
-  echo -e "${YELLOW}+ WARNING: not on branch -develop/master- and not a pull-request${NC}"
-  exit 1
-fi
-
 echo "+ checking if david is installed"
 cd ${DIR}
 if [ $(npm_package_is_installed david) == 0 ]; then
