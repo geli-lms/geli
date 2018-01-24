@@ -35,6 +35,10 @@ $app-night-theme: mat-dark-theme($app-night-primary, $app-night-accent, $app-nig
   mat-option.mat-selected {
     color: map-get($app-night-primary, A100) !important;
   }
+
+  .answers{
+    background-color: map-get($mat-grey, 800) !important;;
+  }
 }
 
 * {
