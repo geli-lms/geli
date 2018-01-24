@@ -7,6 +7,8 @@ import {AboutComponent} from './about/about.component';
 import {ResetComponent} from './auth/reset/reset.component';
 import {RouterModule, Routes} from '@angular/router';
 import {ImprintComponent} from './imprint/imprint.component';
+import {UserSettingsComponent} from './user/user-settings/user-settings.component';
+import {AuthGuardService} from './shared/services/auth-guard.service';
 
 const routes: Routes = [
   {path: '', component: StartComponent, pathMatch: 'full'},
@@ -34,6 +36,12 @@ const routes: Routes = [
   {
     path: 'imprint',
     component: ImprintComponent
+  },
+  {
+    path: 'userSettings',
+    component: UserSettingsComponent,
+    canActivate: [AuthGuardService],
+    data: {roles: ['student']}
   }
 ];
 

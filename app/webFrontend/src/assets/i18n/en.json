@@ -44,7 +44,8 @@
     "admin": "Admin",
     "about": "About",
     "imprint": "Imprint",
-    "logout": "Logout"
+    "logout": "Logout",
+    "userSettings": "Settings"
   },
   "dashboard": {
     "courses": "Courses",
