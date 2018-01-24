@@ -8,6 +8,7 @@ IPWD="$(pwd)"
 . ${DIR}/_shared-vars.sh
 
 PATHS_TO_CHECK=(".travis" "api" "app/webFrontend")
+SECONDS=0
 
 # Functions
 function npm_package_is_installed {
@@ -21,11 +22,11 @@ echo
 echo "+++ David dependency checker +++"
 echo
 
-# echo "+ checking if on branch -develop- and no pull-request"
-# if ( [ "$TRAVIS_BRANCH" != "develop" ] || [ "$TRAVIS_PULL_REQUEST" != "false" ] ) && [ ! $DEBUG ]; then
-#   echo -e "${YELLOW}+ WARNING: not on branch -develop- and/or a pull request${NC}"
-#   exit 1
-# fi
+echo "+ checking if on branch -develop- and no pull-request"
+if [[ "$TRAVIS_PULL_REQUEST" == "false" && ("$TRAVIS_BRANCH" == "master" || "$TRAVIS_BRANCH" == "develop") ]]; then
+  echo -e "${YELLOW}+ WARNING: not on branch -develop/master- and/or a pull request${NC}"
+  exit 1
+fi
 
 echo "+ checking if david is installed"
 cd ${DIR}
@@ -42,3 +43,5 @@ do
   echo
 done
 
+echo
+echo "+ Needed $SECONDS seconds"
