@@ -46,7 +46,7 @@ export class AppComponent implements OnInit {
 
     this.authenticationService.reloadUser();
 
-    this.apiInfoService.readItems()
+    this.apiInfoService.readAPIInfo()
       .then((info: any) => {
         this.ravenErrorHandler.setup(info.sentryDsn);
         this.apiInfo = info;
