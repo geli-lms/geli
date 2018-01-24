@@ -1,7 +1,7 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
 import {ILecture} from '../../../../../../../shared/models/ILecture';
-import {CourseService, LectureService} from '../../../shared/services/data.service';
+import {CourseService, LectureService, NotificationService} from '../../../shared/services/data.service';
 import {ShowProgressService} from 'app/shared/services/show-progress.service';
 import {DialogService} from '../../../shared/services/dialog.service';
 import {UserService} from '../../../shared/services/user.service';
@@ -10,6 +10,7 @@ import {DragulaService} from 'ng2-dragula';
 import {ActivatedRoute, Router} from '@angular/router';
 import {DataSharingService} from '../../../shared/services/data-sharing.service';
 import {Subject} from 'rxjs/Subject';
+import {Notification} from '../../../models/Notification';
 
 @Component({
   selector: 'app-course-manage-content',
@@ -33,7 +34,8 @@ export class CourseManageContentComponent implements OnInit, OnDestroy {
               private dialogService: DialogService,
               private dragulaService: DragulaService,
               public userService: UserService,
-              private dataSharingService: DataSharingService) {
+              private dataSharingService: DataSharingService,
+              private notificationService: NotificationService) {
     // setup subjects
     this.dataSharingService.setDataForKey('onCloseAllForms', this.onCloseAllForms);
     this.onCloseAllForms.asObservable().subscribe(() => this.closeAllForms());
@@ -206,8 +208,12 @@ export class CourseManageContentComponent implements OnInit, OnDestroy {
 
   createLecture(lecture: ILecture) {
     this.lectureService.createItem({courseId: this.course._id, lecture: lecture})
-    .then(() => {
+    .then((newLecture: any) => {
       this.dataSharingService.setDataForKey('lecture-create-mode', false);
+      this.notificationService.createItem(
+        {changedCourse: this.course, changedLecture: newLecture._id,
+          changedUnit: null, text: 'Course ' + this.course.name + ' has a new lecture.'})
+        .catch(console.error);
       return this.reloadCourse();
     })
     .catch(console.error);

@@ -19,6 +19,7 @@
           <img class="avatar" src="{{userService.user.getUserImageURL(30)}}" width="30" height="30">
           {{ this.userService.user.profile.firstName }}
         </button>
+        <app-notification *ngIf="isStudent()"></app-notification>
       </span>
 
       <button mat-icon-button [matMenuTriggerFor]="langMenu">
@@ -40,6 +41,11 @@
         <button mat-menu-item *ngIf="isLoggedIn() && isAdmin()" routerLink="/admin" routerLinkActive="active">
           <mat-icon>settings</mat-icon>
           <span>{{ 'mainMenu.admin' | translate }}</span>
+          <span>Admin</span>
+        </button>
+        <button mat-menu-item *ngIf="isLoggedIn() && isStudent()" routerLink="/userSettings" routerLinkActive="active">
+          <mat-icon>settings</mat-icon>
+          <span>{{ 'mainMenu.userSettings' | translate }}</span>
         </button>
         <button mat-menu-item routerLink="/about" routerLinkActive="active">
           <mat-icon>info</mat-icon>

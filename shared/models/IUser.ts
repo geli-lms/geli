@@ -12,4 +12,5 @@ export interface IUser {
   };
   role: string;
   progress: any;
+  lastVisitedCourses: Array<string>;
 }
