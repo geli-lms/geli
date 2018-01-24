@@ -45,7 +45,8 @@
     "admin": "Admin",
     "about": "Über geli",
     "imprint": "Impressum",
-    "logout": "Logout"
+    "logout": "Logout",
+    "userSettings": "Einstellungen"
   },
   "dashboard": {
     "courses": "Kurse",

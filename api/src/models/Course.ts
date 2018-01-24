@@ -74,7 +74,6 @@ const courseSchema = new mongoose.Schema({
         }
         ret.hasAccessKey = false;
         if (ret.accessKey) {
-          delete ret.accessKey;
           ret.hasAccessKey = true;
         }
       }
