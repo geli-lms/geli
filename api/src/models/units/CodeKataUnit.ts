@@ -1,12 +1,15 @@
 import * as mongoose from 'mongoose';
-import {Unit} from './Unit';
+import {IUnitModel} from './Unit';
 import {ICodeKataUnit} from '../../../../shared/models/units/ICodeKataUnit';
 import {NativeError} from 'mongoose';
 import {BadRequestError} from 'routing-controllers';
+import {IUser} from '../../../../shared/models/IUser';
 
-interface ICodeKataModel extends ICodeKataUnit, mongoose.Document {
+interface ICodeKataModel extends ICodeKataUnit, IUnitModel {
   exportJSON: () => Promise<ICodeKataUnit>;
-  toFile: () => String;
+  calculateProgress: () => Promise<ICodeKataUnit>;
+  secureData: (user: IUser) => Promise<ICodeKataModel>;
+  toFile: () => Promise<String>;
 }
 
 const codeKataSchema = new mongoose.Schema({
@@ -26,6 +29,14 @@ const codeKataSchema = new mongoose.Schema({
     type: String
   },
 });
+
+codeKataSchema.methods.secureData = async function (user: IUser): Promise<ICodeKataModel> {
+  if (user.role === 'student') {
+    this.code = null;
+  }
+
+  return this;
+};
 
 function splitCodeAreas(next: (err?: NativeError) => void) {
   const codeKataUnit: ICodeKataModel = this;
@@ -87,11 +98,9 @@ function validateTestArea(testArea: any) {
 codeKataSchema.pre('validate', splitCodeAreas);
 codeKataSchema.path('test').validate(validateTestArea);
 
-codeKataSchema.statics.toFile = function (unit: ICodeKataUnit) {
+codeKataSchema.statics.toFile = async function (unit: ICodeKataUnit) {
   return unit.description + '\n' + unit.definition + '\n' +
     unit.code + '\n' + unit.test;
 };
-
-// const CodeKataUnit = Unit.discriminator('code-kata', codeKataSchema);
 
 export {codeKataSchema, ICodeKataModel}

@@ -3,7 +3,7 @@ import {
   Authorized, BadRequestError,
   Body,
   CurrentUser, Delete, ForbiddenError,
-  Get, HttpError,
+  Get,
   JsonController, NotFoundError,
   Param,
   Post,
@@ -21,11 +21,11 @@ import {ObsCsvController} from './ObsCsvController';
 import {Course, ICourseModel} from '../models/Course';
 import {User} from '../models/User';
 import {WhitelistUser} from '../models/WhitelistUser';
-import {ICodeKataUnit} from '../../../shared/models/units/ICodeKataUnit';
 import emailService from '../services/EmailService';
 
 const multer = require('multer');
 import crypto = require('crypto');
+import {IUnitModel} from '../models/units/Unit';
 
 const uploadOptions = {
   storage: multer.diskStorage({
@@ -82,8 +82,8 @@ export class CourseController {
   }
 
   @Get('/:id')
-  getCourse(@Param('id') id: string, @CurrentUser() currentUser: IUser) {
-    return Course.findOne({
+  async getCourse(@Param('id') id: string, @CurrentUser() currentUser: IUser) {
+    const course = await Course.findOne({
       ...this.userReadConditions(currentUser),
       _id: id
     })
@@ -95,7 +95,7 @@ export class CourseController {
           virtuals: true,
           populate: {
             path: 'progressData',
-            match: { user: { $eq: currentUser._id }}
+            match: {user: {$eq: currentUser._id}}
           }
         }
       })
@@ -104,20 +104,22 @@ export class CourseController {
       .populate('teachers')
       .populate('students')
       .populate('whitelist')
-      .then((course) => {
-        if (!course) {
-          throw new NotFoundError();
-        }
+      .exec();
 
-        course.lectures.forEach((lecture) => {
-          lecture.units.forEach((unit) => {
-            if (unit.__t === 'code-kata' && currentUser.role === 'student') {
-              (<ICodeKataUnit>unit).code = null;
-            }
-          });
-        });
-        return course.toObject({virtuals: true});
-      });
+    if (!course) {
+      throw new NotFoundError();
+    }
+
+    course.lectures = await Promise.all(course.lectures.map(async (lecture) => {
+      lecture.units = await Promise.all(lecture.units.map(async (unit: IUnitModel) => {
+        unit = await unit.populateUnit();
+        return unit.secureData(currentUser);
+      }));
+
+      return lecture;
+    }));
+
+    return course.toObject();
   }
 
   private userReadConditions(currentUser: IUser) {
@@ -204,7 +206,7 @@ export class CourseController {
           throw new NotFoundError();
         }
         const index: number = course.students.indexOf(currentUser._id);
-        if (index  !== 0) {
+        if (index !== 0) {
           course.students.splice(index, 1);
           return course.save().then((c) => c.toObject());
         }
@@ -222,14 +224,14 @@ export class CourseController {
       throw new TypeError(errorCodes.errorCodes.upload.type.notCSV.code);
     }
     return Course.findById(id)
-        .populate('whitelist')
-        .populate('students')
-        .then((course) => {
+      .populate('whitelist')
+      .populate('students')
+      .then((course) => {
         return this.parser.parseFile(file).then((buffer: any) =>
           this.parser.updateCourseFromBuffer(buffer, course)
             .then(c => c.save())
             .then((c: ICourseModel) =>
-            c.toObject()));
+              c.toObject()));
       });
   }
 
@@ -254,13 +256,13 @@ export class CourseController {
   @Authorized(['teacher', 'admin'])
   @Delete('/:id')
   async deleteCourse(@Param('id') id: string, @CurrentUser() currentUser: IUser) {
-    const course = await Course.findOne( {_id : id} );
-    if ( !course ) {
+    const course = await Course.findOne({_id: id});
+    if (!course) {
       throw new NotFoundError();
     }
     const courseAdmin = await User.findOne({_id: course.courseAdmin});
     if (course.teachers.indexOf(currentUser._id) !== -1 || courseAdmin.equals(currentUser._id.toString())
-      || currentUser.role === 'admin' ) {
+      || currentUser.role === 'admin') {
       await course.remove();
       return {result: true};
     } else {

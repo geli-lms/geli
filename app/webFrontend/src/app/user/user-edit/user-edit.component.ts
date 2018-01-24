@@ -1,7 +1,7 @@
 import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {FormGroup, FormBuilder, Validators} from '@angular/forms';
-import {MatSnackBar} from '@angular/material';
+import {MatSnackBar, MatDialog} from '@angular/material';
 import {UserDataService} from '../../shared/services/data.service';
 import {IUser} from '../../../../../../shared/models/IUser';
 import {UserService} from '../../shared/services/user.service';
@@ -76,8 +76,8 @@ export class UserEditComponent implements OnInit {
     this.cdRef.detectChanges();
   }
 
-  onSubmit() {
-    this.user = this.prepareSaveUser();
+  async onSubmit() {
+    this.user = await this.prepareSaveUser();
     this.updateUser();
   }
 
@@ -87,7 +87,6 @@ export class UserEditComponent implements OnInit {
 
   prepareSaveUser(): IUser {
     const userFormModel = this.userForm.value;
-
     const saveUser: any = {};
     const saveIUser: IUser = saveUser;
     for (const key in userFormModel) {
@@ -100,6 +99,7 @@ export class UserEditComponent implements OnInit {
         saveIUser[key] = this.user[key];
       }
     }
+    saveIUser['currentPassword'] = this.user.password;
     return saveIUser;
   }
 
@@ -114,11 +114,11 @@ export class UserEditComponent implements OnInit {
       }
       this.navigateBack();
     } catch (error) {
-      this.snackBar.open(error.json().message, 'Dismiss');
+      const errormsg = error.message;
+      this.snackBar.open(errormsg, 'Dismiss');
     }
     this.showProgress.toggleLoadingGlobal(false);
   }
-
 
   generateForm() {
     this.userForm = this.formBuilder.group({
@@ -182,5 +182,9 @@ export class UserEditComponent implements OnInit {
     }
 
     return pass;
+  }
+
+  async openChangePasswordDialog() {
+    const response = await this.dialogService.changePassword(this.user).toPromise();
   }
 }

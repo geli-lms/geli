@@ -1,10 +1,10 @@
 import * as mongoose from 'mongoose';
-import {Unit} from './Unit';
+import {IUnitModel} from './Unit';
 import {IFreeTextUnit} from '../../../../shared/models/units/IFreeTextUnit';
 
-interface IFreeTextUnitModel extends IFreeTextUnit, mongoose.Document {
+interface IFreeTextUnitModel extends IFreeTextUnit, IUnitModel {
   exportJSON: () => Promise<IFreeTextUnit>;
-  toFile: () => String;
+  toFile: () => Promise<String>;
 }
 
 const freeTextUnitSchema = new mongoose.Schema({
@@ -13,10 +13,8 @@ const freeTextUnitSchema = new mongoose.Schema({
   }
 });
 
-freeTextUnitSchema.statics.toFile = function (unit: IFreeTextUnit) {
+freeTextUnitSchema.statics.toFile = async function (unit: IFreeTextUnit) {
   return unit.name + '\n' + unit.description + '\n' + unit.markdown;
 };
-
-// const FreeTextUnit = Unit.discriminator('free-text', freeTextUnitSchema);
 
 export {freeTextUnitSchema, IFreeTextUnitModel}

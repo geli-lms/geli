@@ -1,4 +1,4 @@
-<div [ngSwitch]="progress.type">
+<div [ngSwitch]="progress.__t">
   <app-code-kata-progress *ngSwitchCase="'codeKata'" [progress]="progress"></app-code-kata-progress>
-  <app-task-progress *ngSwitchCase="'task'"></app-task-progress>
+  <app-task-progress *ngSwitchCase="'task-unit-progress'" [progress]="progress" [unit]="unit"></app-task-progress>
 </div>

@@ -99,6 +99,7 @@ export class UserController {
                  @CurrentUser() currentUser: IUser) {
     return User.findById(id)
       .then((user: IUserModel) => {
+        /* TODO: Update for new file schema
         if (user.profile.picture && user.profile.picture.path && fs.existsSync(user.profile.picture.path)) {
           fs.unlinkSync(user.profile.picture.path);
         }
@@ -109,6 +110,7 @@ export class UserController {
           alias: file.originalname,
           size: file.size
         };
+        */
         return user.save();
       })
       .then((user) => {
