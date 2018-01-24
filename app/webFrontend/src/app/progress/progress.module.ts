@@ -5,10 +5,12 @@ import {CodeKataProgressComponent} from './code-kata-progress/code-kata-progress
 import {TaskProgressComponent} from './task-progress/task-progress.component';
 import {SharedModule} from '../shared/shared.module';
 import {AceEditorModule} from 'ng2-ace-editor';
+import {FormsModule} from '@angular/forms';
 
 @NgModule({
   imports: [
     CommonModule,
+    FormsModule,
     SharedModule,
     AceEditorModule
   ],

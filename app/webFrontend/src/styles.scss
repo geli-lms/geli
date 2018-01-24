@@ -12,10 +12,30 @@
 // Create the theme object (a Sass map containing all of the palettes).
 $app-theme: mat-light-theme($app-primary, $app-accent, $app-warn);
 
+$app-night-theme: mat-dark-theme($app-night-primary, $app-night-accent, $app-night-warn);
+
 // Include theme styles for core and each component used in your app.
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
 @include angular-material-theme($app-theme);
+
+.nightTheme {
+  @include angular-material-theme($app-night-theme);
+  background-color: #303030;
+  color: #ffffff;
+
+  a:link:not(.mat-button):not(.logo) {
+    color: map-get($app-night-primary, A100)
+  }
+
+  a:visited:not(.mat-button):not(.logo) {
+    color: map-get($app-night-primary, A200)
+  }
+
+  mat-option.mat-selected {
+    color: map-get($app-night-primary, A100) !important;
+  }
+}
 
 * {
   box-sizing: border-box;
@@ -25,7 +45,6 @@ body, html {
   height: 100%;
   margin: 0;
   padding: 0;
-  background-color: #ffffff;
 }
 
 app-root > .app-wrapper {
@@ -93,6 +112,10 @@ app-root > .app-wrapper {
   }
 }
 
-.text-danger{
+.text-danger {
   color: red;
+}
+
+.pull-right {
+  float: right;
 }

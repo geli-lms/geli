@@ -66,7 +66,7 @@ export class GeneralTabComponent implements OnInit {
         (val: any) => {
           this.course = val.name;
           this.description = val.description;
-          this.accessKey = val.hasAccessKey ? '****' : '';
+          this.accessKey = val.accessKey;
           this.active = val.active;
           this.enrollType = val.enrollType;
           if (this.enrollType === 'whitelist') {

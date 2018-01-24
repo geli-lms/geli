@@ -43,7 +43,8 @@ const userSchema = new mongoose.Schema({
         path: {type: String},
         name: {type: String},
         alias: {type: String}
-      }
+      },
+      theme: {type: String}
     },
     role: {
       type: String,
@@ -151,5 +152,4 @@ userSchema.methods.isValidPassword = function (candidatePassword: string) {
 };
 
 const User = mongoose.model<IUserModel>('User', userSchema);
-
 export {User, IUserModel};

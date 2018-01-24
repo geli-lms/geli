@@ -88,8 +88,7 @@ describe('Duplicate', async () => {
         // check different types
         switch ((<any>unit).__t) {
           case 'free-text':
-            const freeTextUnit = <IFreeTextUnitModel>unit;
-            (<IFreeTextUnit>unitJson).markdown.should.be.equal(freeTextUnit.markdown);
+            (<IFreeTextUnit>unitJson).markdown.should.be.equal((<IFreeTextUnitModel>unit).markdown);
             break;
           case 'code-kata':
             const codeKataUnit = <ICodeKataModel>unit;

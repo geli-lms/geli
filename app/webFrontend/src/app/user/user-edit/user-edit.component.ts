@@ -1,13 +1,14 @@
 import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {FormGroup, FormBuilder, Validators} from '@angular/forms';
-import {MatSnackBar} from '@angular/material';
+import {MatSnackBar, MatDialog} from '@angular/material';
 import {UserDataService} from '../../shared/services/data.service';
 import {IUser} from '../../../../../../shared/models/IUser';
 import {UserService} from '../../shared/services/user.service';
 import {ShowProgressService} from '../../shared/services/show-progress.service';
 import {DialogService} from '../../shared/services/dialog.service';
 import {TitleService} from '../../shared/services/title.service';
+import {ThemeService} from '../../shared/services/theme.service';
 
 @Component({
   selector: 'app-user-edit',
@@ -21,6 +22,7 @@ export class UserEditComponent implements OnInit {
   userForm: FormGroup;
   passwordPatternText: string;
   changePassword = false;
+  themes: string[];
 
   constructor(private router: Router,
               private route: ActivatedRoute,
@@ -31,7 +33,8 @@ export class UserEditComponent implements OnInit {
               public dialogService: DialogService,
               public snackBar: MatSnackBar,
               private titleService: TitleService,
-              private cdRef: ChangeDetectorRef) {
+              private cdRef: ChangeDetectorRef,
+              private themeService: ThemeService) {
     this.generateForm();
   }
 
@@ -50,6 +53,7 @@ export class UserEditComponent implements OnInit {
         this.id = this.userService.user._id;
       }
     });
+    this.themes = this.themeService.themes;
     this.getUserData();
   }
 
@@ -60,7 +64,8 @@ export class UserEditComponent implements OnInit {
       this.userForm.patchValue({
         profile: {
           firstName: this.user.profile.firstName,
-          lastName: this.user.profile.lastName
+          lastName: this.user.profile.lastName,
+          theme: (this.themes.indexOf(this.user.profile.theme) !== -1 ? this.user.profile.theme : 'default'),
         },
         email: this.user.email,
       });
@@ -71,8 +76,8 @@ export class UserEditComponent implements OnInit {
     this.cdRef.detectChanges();
   }
 
-  onSubmit() {
-    this.user = this.prepareSaveUser();
+  async onSubmit() {
+    this.user = await this.prepareSaveUser();
     this.updateUser();
   }
 
@@ -82,7 +87,6 @@ export class UserEditComponent implements OnInit {
 
   prepareSaveUser(): IUser {
     const userFormModel = this.userForm.value;
-
     const saveUser: any = {};
     const saveIUser: IUser = saveUser;
     for (const key in userFormModel) {
@@ -95,6 +99,7 @@ export class UserEditComponent implements OnInit {
         saveIUser[key] = this.user[key];
       }
     }
+    saveIUser['currentPassword'] = this.user.password;
     return saveIUser;
   }
 
@@ -109,17 +114,18 @@ export class UserEditComponent implements OnInit {
       }
       this.navigateBack();
     } catch (error) {
-      this.snackBar.open(error.json().message, 'Dismiss');
+      const errormsg = error.message;
+      this.snackBar.open(errormsg, 'Dismiss');
     }
     this.showProgress.toggleLoadingGlobal(false);
   }
-
 
   generateForm() {
     this.userForm = this.formBuilder.group({
       profile: this.formBuilder.group({
         firstName: ['', Validators.required],
         lastName: ['', Validators.required],
+        theme: [''],
       }),
       username: [''],
       email: ['', Validators.required],
@@ -176,5 +182,9 @@ export class UserEditComponent implements OnInit {
     }
 
     return pass;
+  }
+
+  async openChangePasswordDialog() {
+    const response = await this.dialogService.changePassword(this.user).toPromise();
   }
 }
