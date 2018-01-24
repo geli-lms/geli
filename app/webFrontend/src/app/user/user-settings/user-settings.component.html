@@ -3,11 +3,11 @@
 <mat-table #table [dataSource]="dataSource">
   <ng-container matColumnDef="Notifications">
     <mat-header-cell class="header" *matHeaderCellDef>
-      Notification
       <mat-checkbox (change)="$event ? masterToggle(notificationSelection) : null"
                     [checked]="notificationSelection.hasValue() && isAllSelected(notificationSelection)"
                     [indeterminate]="notificationSelection.hasValue() && !isAllSelected(notificationSelection)">
       </mat-checkbox>
+      <span>Notification</span>
     </mat-header-cell>
     <mat-cell class="checkBox" *matCellDef="let course">
       <mat-checkbox (click)="$event.stopPropagation()"
@@ -24,11 +24,11 @@
   <!-- Email Column -->
   <ng-container matColumnDef="email">
     <mat-header-cell class="header" *matHeaderCellDef>
-      Email
       <mat-checkbox (change)="$event ? masterToggle(emailSelection) : null"
                     [checked]="emailSelection.hasValue() && isAllSelected(emailSelection)"
                     [indeterminate]="emailSelection.hasValue() && !isAllSelected(emailSelection)">
       </mat-checkbox>
+      <span>Email</span>
     </mat-header-cell>
     <mat-cell class="checkBox" *matCellDef="let course">
       <mat-checkbox (click)="$event.stopPropagation()"
