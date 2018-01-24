@@ -104,8 +104,9 @@ export class UserController {
         }
 
         user.profile.picture = {
+          _id: null,
           name: file.originalname,
-          link: file.path,
+          link: file.filename,
           size: file.size,
           mimeType: file.mimeType
         };

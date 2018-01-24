@@ -1,5 +1,5 @@
 export interface IFile {
-  _id?: any;
+  _id: any;
   name: string;
   link: string;
   size: number;
