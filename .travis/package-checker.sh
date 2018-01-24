@@ -22,9 +22,9 @@ echo
 echo "+++ David dependency checker +++"
 echo
 
-echo "+ checking if on branch -develop- and no pull-request"
+echo "+ checking if on branch -develop/master- and not a pull-request"
 if [[ "$TRAVIS_PULL_REQUEST" == "false" && ("$TRAVIS_BRANCH" == "master" || "$TRAVIS_BRANCH" == "develop") ]]; then
-  echo -e "${YELLOW}+ WARNING: not on branch -develop/master- and/or a pull request${NC}"
+  echo -e "${YELLOW}+ WARNING: not on branch -develop/master- and not a pull-request${NC}"
   exit 1
 fi
 
