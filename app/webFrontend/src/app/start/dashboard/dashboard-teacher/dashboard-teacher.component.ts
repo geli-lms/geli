@@ -5,6 +5,7 @@ import {DashboardBaseComponent} from '../dashboard-base-component';
 import {MatSnackBar} from '@angular/material';
 import {Router} from '@angular/router';
 import {DialogService} from '../../../shared/services/dialog.service';
+import {SortUtil} from '../../../shared/utils/SortUtil';
 
 @Component({
   selector: 'app-dashboard-teacher',
@@ -35,7 +36,7 @@ export class DashboardTeacherComponent extends DashboardBaseComponent {
     this.availableCourses = [];
     this.furtherCourses = [];
     this.inactiveCourses = [];
-
+    SortUtil.sortByLastVisitedCourses(this.allCourses, this.userService.user.lastVisitedCourses);
     for (const course of this.allCourses) {
       if ((this.filterMyCourses(course) || this.filterAdminCourses(course)) && !course.active) {
         this.inactiveCourses.push(course);

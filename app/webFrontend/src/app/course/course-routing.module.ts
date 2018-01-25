@@ -25,6 +25,18 @@ const routes: Routes = [
     path: ':id/report',
     loadChildren: 'app/report/report.module#ReportModule'
   },
+  {
+    path: ':id/lecture/:lecture',
+    component: CourseDetailComponent,
+    canActivate: [AuthGuardService],
+    data: {roles: ['student', 'tutor', 'teacher', 'admin']}
+  },
+  {
+    path: ':id/unit/:unit',
+    component: CourseDetailComponent,
+    canActivate: [AuthGuardService],
+    data: {roles: ['student', 'tutor', 'teacher', 'admin']}
+  }
 ];
 
 @NgModule({

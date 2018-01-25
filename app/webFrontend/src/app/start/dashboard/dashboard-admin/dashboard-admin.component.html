@@ -1,7 +1,8 @@
-<app-course-container [title]="'Courses'" [courses]="allCourses" [expand]="true" (onEnroll)="enrollCallback()"></app-course-container>
+<app-course-container [title]="'dashboard.courses'|translate" [courses]="allCourses" [expand]="true"
+                      (onEnroll)="enrollCallback()"></app-course-container>
 
 <app-mat-fab-menu class="add-course-fab" [open]="fabOpen" [onClick]="onFabClick"
-                  fabTooltip="Add course">
-  <div (click)="onImportCourse()">Import course</div>
-  <div routerLink="course/new">Create course</div>
+                  [fabTooltip]="'dashboard.addCourse'|translate">
+  <div (click)="onImportCourse()">{{ 'dashboard.importCourse'|translate }}</div>
+  <div routerLink="course/new">{{ 'dashboard.createCourse'|translate }}</div>
 </app-mat-fab-menu>

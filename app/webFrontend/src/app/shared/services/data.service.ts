@@ -7,6 +7,7 @@ import {ILecture} from '../../../../../../shared/models/ILecture';
 import {IUnit} from '../../../../../../shared/models/units/IUnit';
 import {IUser} from '../../../../../../shared/models/IUser';
 import {ICourse} from '../../../../../../shared/models/ICourse';
+import {INotificationSettings} from '../../../../../../shared/models/INotificationSettings';
 import {IDownload} from '../../../../../../shared/models/IDownload';
 
 export abstract class DataService {
@@ -23,19 +24,13 @@ export abstract class DataService {
               public dependentID?: string) {
   }
 
-  createItem(createItem: any): Promise<any> {
-    return new Promise((resolve, reject) => {
-      this.backendService.post(this.apiPath, createItem)
-        .subscribe(
-          (responseItem) => {
-            resolve(responseItem);
-          },
-          error => reject(error)
-        );
-    });
+  createItem<T>(createItem: T): Promise<T> {
+    return this.backendService
+      .post(this.apiPath, createItem)
+      .toPromise();
   }
 
-  readItems(): Promise<any[]> {
+  readItems<T>(): Promise<T[]> {
     return new Promise((resolve, reject) => {
       this.backendService.get(this.apiPath)
         .subscribe(
@@ -55,31 +50,19 @@ export abstract class DataService {
     });
   }
 
-  updateItem(updateItem: any): Promise<any> {
-    return new Promise((resolve, reject) => {
-      this.backendService.put(this.apiPath + updateItem._id, JSON.stringify(updateItem))
-        .subscribe(
-          (res) => {
-            resolve(res);
-          },
-          error => reject(error)
-        );
-    });
+  updateItem<T extends any>(updateItem: T): Promise<T> {
+    return this.backendService
+      .put(this.apiPath + updateItem._id, JSON.stringify(updateItem))
+      .toPromise();
   }
 
-  deleteItem(deleteItem: any): Promise<any> {
-    return new Promise((resolve, reject) => {
-      this.backendService.delete(this.apiPath + deleteItem._id)
-        .subscribe(
-          () => {
-            resolve();
-          },
-          error => reject(error)
-        );
-    });
+  deleteItem<T extends any>(deleteItem: T): Promise<any> {
+    return this.backendService
+      .delete(this.apiPath + deleteItem._id)
+      .toPromise();
   }
 
-  readSingleItem(id: string): Promise<any> {
+  readSingleItem<T>(id: string): Promise<T> {
     return new Promise((resolve, reject) => {
       this.backendService.get(this.apiPath + id)
         .subscribe(
@@ -106,40 +89,22 @@ export class ExportService extends DataService {
     super('export/', backendService);
   }
 
-  exportCourse(course: ICourse): Promise<any[]> {
-    return new Promise((resolve, reject) => {
-      this.backendService.get(this.apiPath + 'course/' + course._id)
-        .subscribe(
-          (responseItem: any) => {
-            resolve(responseItem);
-          },
-          error => reject(error)
-        );
-    });
+  exportCourse(course: ICourse): Promise<ICourse> {
+    return this.backendService
+      .get(this.apiPath + 'course/' + course._id)
+      .toPromise();
   }
 
-  exportLecture(lecture: ILecture): Promise<any[]> {
-    return new Promise((resolve, reject) => {
-      this.backendService.get(this.apiPath + 'lecture/' + lecture._id)
-        .subscribe(
-          (responseItem: any) => {
-            resolve(responseItem);
-          },
-          error => reject(error)
-        );
-    });
+  exportLecture(lecture: ILecture): Promise<ILecture> {
+    return this.backendService
+      .get(this.apiPath + 'lecture/' + lecture._id)
+      .toPromise();
   }
 
-  exportUnit(unit: IUnit): Promise<any[]> {
-    return new Promise((resolve, reject) => {
-      this.backendService.get(this.apiPath + 'unit/' + unit._id)
-        .subscribe(
-          (responseItem: any) => {
-            resolve(responseItem);
-          },
-          error => reject(error)
-        );
-    });
+  exportUnit(unit: IUnit): Promise<IUnit> {
+    return this.backendService
+      .get(this.apiPath + 'unit/' + unit._id)
+      .toPromise();
   }
 }
 
@@ -149,40 +114,22 @@ export class ImportService extends DataService {
     super('import/', backendService);
   }
 
-  importCourse(course: ICourse): Promise<any[]> {
-    return new Promise((resolve, reject) => {
-      this.backendService.post(this.apiPath + 'course/', JSON.stringify(course))
-        .subscribe(
-          (responseItem: any) => {
-            resolve(responseItem);
-          },
-          error => reject(error)
-        );
-    });
+  importCourse(course: ICourse): Promise<ICourse> {
+    return this.backendService
+      .post(this.apiPath + 'course/', JSON.stringify(course))
+      .toPromise();
   }
 
-  importLecture(lecture: ILecture, course: ICourse): Promise<any[]> {
-    return new Promise((resolve, reject) => {
-      this.backendService.post(this.apiPath + 'course/' + course._id, JSON.stringify(lecture))
-        .subscribe(
-          (responseItem: any) => {
-            resolve(responseItem);
-          },
-          error => reject(error)
-        );
-    });
+  importLecture(lecture: ILecture, course: ICourse): Promise<ILecture> {
+    return this.backendService
+      .post(this.apiPath + 'course/' + course._id, JSON.stringify(lecture))
+      .toPromise();
   }
 
-  importUnit(unit: IUnit, lecture: ILecture, course: ICourse): Promise<any[]> {
-    return new Promise((resolve, reject) => {
-      this.backendService.post(this.apiPath + 'unit/' + course._id + '/' + lecture._id, JSON.stringify(unit))
-        .subscribe(
-          (responseItem: any) => {
-            resolve(responseItem);
-          },
-          error => reject(error)
-        );
-    });
+  importUnit(unit: IUnit, lecture: ILecture, course: ICourse): Promise<IUnit> {
+    return this.backendService
+      .post(this.apiPath + 'unit/' + course._id + '/' + lecture._id, JSON.stringify(unit))
+      .toPromise();
   }
 }
 
@@ -192,40 +139,22 @@ export class DuplicationService extends DataService {
     super('duplicate/', backendService);
   }
 
-  duplicateCourse(course: ICourse, courseAdmin: IUser): Promise<any[]> {
-    return new Promise((resolve, reject) => {
-      this.backendService.post(this.apiPath + 'course/' + course._id, JSON.stringify({courseAdmin: courseAdmin}))
-        .subscribe(
-          (responseItem: any) => {
-            resolve(responseItem);
-          },
-          error => reject(error)
-        );
-    });
+  duplicateCourse(course: ICourse, courseAdmin: IUser): Promise<ICourse> {
+    return this.backendService
+      .post(this.apiPath + 'course/' + course._id, JSON.stringify({courseAdmin: courseAdmin}))
+      .toPromise();
   }
 
-  duplicateLecture(lecture: ILecture, courseId: string): Promise<any[]> {
-    return new Promise((resolve, reject) => {
-      this.backendService.post(this.apiPath + 'lecture/' + lecture._id, JSON.stringify({courseId: courseId}))
-        .subscribe(
-          (responseItem: any) => {
-            resolve(responseItem);
-          },
-          error => reject(error)
-        );
-    });
+  duplicateLecture(lecture: ILecture, courseId: string): Promise<ILecture> {
+    return this.backendService
+      .post(this.apiPath + 'lecture/' + lecture._id, JSON.stringify({courseId: courseId}))
+      .toPromise();
   }
 
-  duplicateUnit(unit: IUnit, lectureId: string, courseId: string): Promise<any[]> {
-    return new Promise((resolve, reject) => {
-      this.backendService.post(this.apiPath + 'unit/' + unit._id, JSON.stringify({courseId: courseId , lectureId: lectureId}))
-        .subscribe(
-          (responseItem: any) => {
-            resolve(responseItem);
-          },
-          error => reject(error)
-        );
-    });
+  duplicateUnit(unit: IUnit, lectureId: string, courseId: string): Promise<IUnit> {
+    return this.backendService
+      .post(this.apiPath + 'unit/' + unit._id, JSON.stringify({courseId: courseId, lectureId: lectureId}))
+      .toPromise();
   }
 }
 
@@ -236,17 +165,11 @@ export class CourseService extends DataService {
     super('courses/', backendService);
   }
 
-  enrollStudent(courseId: string, data: any): Promise<any[]> {
+  enrollStudent(courseId: string, data: any): Promise<ICourse> {
     const accessKey: string = data.accessKey;
-    return new Promise((resolve, reject) => {
-      this.backendService.post(this.apiPath + courseId + '/enroll', JSON.stringify({accessKey}))
-        .subscribe(
-          (responseItem: any) => {
-            resolve(responseItem);
-          },
-          error => reject(error)
-        );
-    });
+    return this.backendService
+      .post(this.apiPath + courseId + '/enroll', JSON.stringify({accessKey}))
+      .toPromise();
   }
 
   sendMailToSelectedUsers(data: any): Promise<any> {
@@ -255,15 +178,36 @@ export class CourseService extends DataService {
       .toPromise();
   }
 
-  leaveStudent(courseId: string): Promise<any[]> {
+  leaveStudent(courseId: string): Promise<ICourse> {
+    return this.backendService
+      .post(this.apiPath + courseId + '/leave', {})
+      .toPromise();
+  }
+}
+
+@Injectable()
+export class TaskService extends DataService {
+  constructor(public backendService: BackendService) {
+    super('tasks/', backendService);
+  }
+
+  getTasksForCourse(id: string): Promise<any[]> {
     return new Promise((resolve, reject) => {
-      this.backendService.post(this.apiPath + courseId + '/leave', {})
-        .subscribe(
-          (responseItem: any) => {
-            resolve(responseItem);
-          },
-          error => reject(error)
-        );
+      this.backendService.get(this.apiPath + 'course/' + id)
+      .subscribe(
+        (responseItems: any) => {
+          if (this.changeProps2Date) {
+            responseItems.forEach(item => {
+              this.changeProps2Date.forEach(prop => {
+                DataService.changeStringProp2DateProp(item, prop);
+              });
+            });
+          }
+
+          resolve(responseItems);
+        },
+        error => reject(error)
+      );
     });
   }
 }
@@ -281,7 +225,7 @@ export class UnitService extends DataService {
     super('units/', backendService);
   }
 
-  getUnitForCourse(courseId: string) {
+  getUnitForCourse(courseId: string): Promise<any> {
     const originalApiPath = this.apiPath;
     this.apiPath += 'progressable/course/';
     const promise = this.readSingleItem(courseId);
@@ -289,7 +233,7 @@ export class UnitService extends DataService {
     return promise;
   }
 
-  getProgressableUnits(courseId: string) {
+  getProgressableUnits(courseId: string): Promise<any> {
     const originalApiPath = this.apiPath;
     this.apiPath += 'course/progressable/';
     const promise = this.readSingleItem(courseId);
@@ -313,11 +257,50 @@ export class FreeTextUnitService extends DataService {
 }
 
 @Injectable()
+export class NotificationSettingsService extends DataService {
+  constructor(public backendService: BackendService) {
+    super('notificationSettings/', backendService);
+  }
+
+  getNotificationSettingsPerUser(user: IUser): Promise<any[]> {
+    return new Promise((resolve, reject) => {
+      this.backendService.get(this.apiPath + 'user/' + user._id)
+        .subscribe(
+          (responseItem: any) => {
+            resolve(responseItem);
+          },
+          error => reject(error)
+        );
+    });
+  }
+}
+
+@Injectable()
+export class NotificationService extends DataService {
+  constructor(public backendService: BackendService) {
+    super('notification/', backendService);
+  }
+
+  getNotificationsPerUser(user: IUser): Promise<any[]> {
+    return new Promise((resolve, reject) => {
+      this.backendService.get(this.apiPath + 'user/' + user._id)
+        .subscribe(
+          (responseItem: any) => {
+            resolve(responseItem);
+          },
+          error => reject(error)
+        );
+    });
+  }
+}
+
+@Injectable()
 export class UserDataService extends DataService {
   constructor(public backendService: BackendService) {
     super('users/', backendService);
   }
 
+  // FIXME: Which Type comes back?
   searchUsers(role: string, query: string): Promise<any> {
     const originalApiPath = this.apiPath;
     this.apiPath += 'members/search/';
@@ -328,15 +311,15 @@ export class UserDataService extends DataService {
     return promise;
   }
 
-  getRoles(): Promise<any[]> {
+  getRoles(): Promise<string[]> {
     const originalApiPath = this.apiPath;
     this.apiPath += 'roles/';
-    const promise = this.readItems();
+    const promise = this.readItems<string>();
     this.apiPath = originalApiPath;
     return promise;
   }
 
-  addPicture(data: any): Promise<any[]> {
+  addPicture(data: any): Promise<IUser> {
     const originalApiPath = this.apiPath;
     this.apiPath += 'picture/';
     const promise = this.updateItem(data);
@@ -346,7 +329,7 @@ export class UserDataService extends DataService {
 }
 
 @Injectable()
-export  class  WhitelistUserService extends DataService {
+export class WhitelistUserService extends DataService {
   constructor(public backendService: BackendService) {
     super('whitelist/', backendService);
   }
@@ -363,9 +346,19 @@ export  class  WhitelistUserService extends DataService {
 
 @Injectable()
 export class APIInfoService extends DataService {
+
+  private apiInfo: any;
+
   constructor(public backendService: BackendService) {
     // use root route
     super('', backendService);
+  }
+
+  async readAPIInfo() {
+    if (!this.apiInfo) {
+      this.apiInfo = await this.readItems();
+    }
+    return this.apiInfo;
   }
 }
 
@@ -375,7 +368,7 @@ export class AboutDataService extends DataService {
     super('about/', backendService);
   }
 
-  getApiDependencies(): Promise<any[]> {
+  getApiDependencies(): Promise<Dependency[]> {
     return new Promise((resolve, reject) => {
       this.backendService.get(this.apiPath + 'dependencies')
         .subscribe((responseItems: any) => {
@@ -408,31 +401,25 @@ export class DownloadFileService extends DataService {
     super('download/', backendService);
   }
 
+  // FIXME: What does this return? please set return type(not any)
   getPackageSize(idl: IDownload) {
-    return new Promise((resolve, reject) => {
-      this.backendService.post(this.apiPath + 'size', idl).subscribe((responseItem: any) => {
-          resolve(responseItem);
-        },
-        error => reject(error));
-    });
+    return this.backendService
+      .post(this.apiPath + 'size', idl)
+      .toPromise();
   }
 
+  // FIXME: What does this return? please set return type(not any)
   postDownloadReqForCourse(idl: IDownload) {
-    return new Promise((resolve, reject) => {
-      this.backendService.post(this.apiPath, idl).subscribe((responseItem: any) => {
-          resolve(responseItem);
-        },
-        error => reject(error));
-    });
+    return this.backendService
+      .post(this.apiPath, idl)
+      .toPromise();
   }
 
+  // FIXME: What does this return? please set return type(not any)
   getFile(id: string) {
-    return new Promise((resolve, reject) => {
-      this.backendService.getDownload(this.apiPath + id).subscribe(resp => {
-          resolve(resp);
-        },
-        error => reject(error));
-    });
+    return this.backendService
+      .getDownload(this.apiPath + id)
+      .toPromise();
   }
 }
 

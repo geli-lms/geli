@@ -51,6 +51,9 @@ const userSchema = new mongoose.Schema({
       'enum': ['student', 'teacher', 'tutor', 'admin'],
       'default': 'student'
     },
+    lastVisitedCourses: [ {
+      type: String
+  }],
     authenticationToken: {type: String},
     resetPasswordToken: {type: String},
     resetPasswordExpires: {type: Date},
@@ -152,5 +155,4 @@ userSchema.methods.isValidPassword = function (candidatePassword: string) {
 };
 
 const User = mongoose.model<IUserModel>('User', userSchema);
-
 export {User, IUserModel};

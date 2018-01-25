@@ -1,5 +1,5 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
-import {CodeKataUnitService, UnitService} from '../../../shared/services/data.service';
+import {CodeKataUnitService, NotificationService, UnitService} from '../../../shared/services/data.service';
 import {MatSnackBar} from '@angular/material';
 import {ICodeKataUnit} from '../../../../../../../shared/models/units/ICodeKataUnit';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
@@ -33,30 +33,31 @@ export class CodeKataUnitFormComponent implements OnInit {
   // Example code Kata
   example = {
     definition: '// Task: Manipulate the targetSet, so it only contains the values "Hello" and "CodeKata"' +
-      '\n' +
-      '\nlet targetSet = new Set(["Hello", "there"]);',
+    '\n' +
+    '\nlet targetSet = new Set(["Hello", "there"]);',
     code: '// This is your code to validate this section. Only course Teachers and Admins can see this' +
-      '\ntargetSet.add("CodeKata");' +
-      '\ntargetSet.delete("there");',
+    '\ntargetSet.add("CodeKata");' +
+    '\ntargetSet.delete("there");',
     test: '// This is the Test Section use the validate function to test the students code' +
-      '\nvalidate();' +
-      '\n' +
-      '\nfunction validate() {' +
-      '\n\tconst result = targetSet.has("Hello") && targetSet.has("CodeKata") && targetSet.size === 2;' +
-      '\n\tif (result === true) {' +
-      '\n\t\tconsole.log("Well done, you solved this Kata");' +
-      '\n\t} else {' +
-      '\n\t\tconsole.log("Sorry mate, you need to try harder");' +
-      '\n\t}' +
-      '\n\treturn result;' +
-      '\n}'
+    '\nvalidate();' +
+    '\n' +
+    '\nfunction validate() {' +
+    '\n\tconst result = targetSet.has("Hello") && targetSet.has("CodeKata") && targetSet.size === 2;' +
+    '\n\tif (result === true) {' +
+    '\n\t\tconsole.log("Well done, you solved this Kata");' +
+    '\n\t} else {' +
+    '\n\t\tconsole.log("Sorry mate, you need to try harder");' +
+    '\n\t}' +
+    '\n\treturn result;' +
+    '\n}'
   };
 
   logs: string;
 
   constructor(private codeKataUnitService: CodeKataUnitService,
               private unitService: UnitService,
-              private snackBar: MatSnackBar) {
+              private snackBar: MatSnackBar,
+              private notificationService: NotificationService) {
   }
 
   ngOnInit() {
@@ -103,27 +104,41 @@ export class CodeKataUnitFormComponent implements OnInit {
         model: this.model,
         lectureId: this.lectureId
       })
-      .then(
-        () => {
-          this.snackBar.open('Code-Kata created', '', {duration: 3000});
-          this.onDone();
-        },
-        (error) => {
-          const message = error.json().message;
-          this.snackBar.open('Failed to create Code-Kata => ' + message, '', {duration: 3000});
-        });
+        .then(
+          (unit) => {
+            this.snackBar.open('Code-Kata created', '', {duration: 3000});
+            this.onDone();
+            return this.notificationService.createItem(
+              {
+                changedCourse: this.course,
+                changedLecture: this.lectureId,
+                changedUnit: unit,
+                text: 'Course ' + this.course.name + ' has a new code kata unit.'
+              });
+          },
+          (error) => {
+            const message = error.json().message;
+            this.snackBar.open('Failed to create Code-Kata => ' + message, '', {duration: 3000});
+          });
     } else {
       delete this.model._course;
       this.unitService.updateItem(this.model)
-      .then(
-        () => {
-          this.snackBar.open('Code-Kata updated', '', {duration: 3000});
-          this.onDone();
-        },
-        (error) => {
-          const message = error.json().message;
-          this.snackBar.open('Failed to update Code-Kata => ' + message, '', {duration: 3000});
-        });
+        .then(
+          (unit) => {
+            this.snackBar.open('Code-Kata updated', '', {duration: 3000});
+            this.onDone();
+            return this.notificationService.createItem(
+              {
+                changedCourse: this.course,
+                changedLecture: this.lectureId,
+                changedUnit: unit,
+                text: 'Course ' + this.course.name + ' has an updated unit.'
+              });
+          },
+          (error) => {
+            const message = error.json().message;
+            this.snackBar.open('Failed to update Code-Kata => ' + message, '', {duration: 3000});
+          });
     }
   }
 

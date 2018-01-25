@@ -1,6 +1,8 @@
-<mat-expansion-panel>
-  <mat-expansion-panel-header [ngClass]="[unit.progressData.done ? 'done' : 'tried']">
-    <mat-panel-title>{{unit.name}}</mat-panel-title>
-  </mat-expansion-panel-header>
-  <app-progress [progress]="unit.progressData"></app-progress>
-</mat-expansion-panel>
+<div>
+  <mat-expansion-panel *ngIf="unit">
+    <mat-expansion-panel-header [ngClass]="[unit.progressData.done ? 'done' : 'tried']">
+      <mat-panel-title>{{unit.name}}</mat-panel-title>
+    </mat-expansion-panel-header>
+    <app-progress [unit]="unit"></app-progress>
+  </mat-expansion-panel>
+</div>

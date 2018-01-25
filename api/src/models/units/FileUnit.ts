@@ -1,13 +1,12 @@
 import * as mongoose from 'mongoose';
-import {Unit} from './Unit';
+import {IUnitModel} from './Unit';
 import {IFileUnit} from '../../../../shared/models/units/IFileUnit';
 import fs = require('fs');
-import {InternalServerError} from 'routing-controllers';
-import {Lecture} from '../Lecture';
 import {IFile} from '../../../../shared/models/IFile';
 
-interface IFileUnitModel extends IFileUnit, mongoose.Document {
+interface IFileUnitModel extends IFileUnit, IUnitModel {
   exportJSON: () => Promise<IFileUnit>;
+  toFile: () => Promise<String>;
 }
 
 const fileUnitSchema = new mongoose.Schema({
