@@ -59,4 +59,8 @@ export class UserService {
 
     return ( course.teachers.filter(teacher => teacher._id === this.user._id).length)
   }
+
+  isMemberOfCourse(course: ICourse) {
+    return course.students.filter(obj => obj._id === this.user._id).length > 0;
+  }
 }
