@@ -21,7 +21,7 @@
     "@angular/cdk": "^5.0.0",
     "@angular/common": "^5.1.0",
     "@angular/compiler": "^5.1.0",
-    "@angular/core": "^5.1.0",
+    "@angular/core": "^5.2.2",
     "@angular/forms": "^5.1.0",
     "@angular/http": "^5.1.0",
     "@angular/material": "^5.0.0",
@@ -50,7 +50,7 @@
   },
   "devDependencies": {
     "@angular-devkit/schematics": "0.0.40",
-    "@angular/cli": "1.6.0",
+    "@angular/cli": "^1.6.5",
     "@angular/compiler-cli": "^5.1.0",
     "@schematics/angular": "^0.1.10",
     "@types/jasmine": "2.8.2",
