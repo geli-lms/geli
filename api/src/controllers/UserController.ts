@@ -103,7 +103,7 @@ export class UserController {
    *
    * @apiSuccess {Object} result Search result.
    * @apiSuccess {User[]} result.users List of found users.
-   * @apiSuccess {Object} result.meta Meta information.
+   * @apiSuccess {Object} result.meta Meta data.
    * @apiSuccess {Number} meta.count Number of users with given role.
    *
    * @apiSuccessExample {json} Success-Response:
@@ -236,7 +236,7 @@ export class UserController {
    * @apiParam {String} id User ID.
    * @apiParam {IUser} currentUser Currently logged in user.
    *
-   * @apiSuccess {User} user User information.
+   * @apiSuccess {User} user User.
    *
    * @apiSuccessExample {json} Success-Response:
    *     {
@@ -270,13 +270,13 @@ export class UserController {
   }
 
   /**
-   * @api {post} /api/users/picture Post picture to user profile
+   * @api {post} /api/users/picture Add picture to user profile
    * @apiName PostUserPicture
    * @apiGroup User
    *
-   * @apiParam {Object} file Upload file.
+   * @apiParam {Object} file Uploaded file.
    * @apiParam {String} id User ID.
-   * @apiParam {Object} body Data.
+   * @apiParam {Object} data Body.
    * @apiParam {IUser} currentUser Currently logged in user.
    *
    * @apiSuccess {User} user Affected user.
@@ -336,7 +336,7 @@ export class UserController {
    * @apiGroup User
    *
    * @apiParam {String} id User ID.
-   * @apiParam {Object} user New user information.
+   * @apiParam {Object} user New user data.
    * @apiParam {IUser} currentUser Currently logged in user.
    *
    * @apiSuccess {User} user Updated user.

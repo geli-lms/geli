@@ -33,12 +33,50 @@ const uploadOptions = {
 @UseBefore(passportJwtMiddleware)
 export class UnitController {
 
+  /**
+   * @api {get} /api/units Request unit
+   * @apiName GetUnit
+   * @apiGroup Unit
+   *
+   * @apiParam {String} id Unit ID.
+   *
+   * @apiSuccess {Unit} unit Unit.
+   *
+   * @apiSuccessExample {json} Success-Response:
+   *     {
+   *         TODO
+   *     }
+   */
   @Get('/:id')
   getUnit(@Param('id') id: string) {
     return Unit.findById(id)
     .then((u) => u.toObject());
   }
 
+  /**
+   * @api {post} /api/units Add unit
+   * @apiName PostUnit
+   * @apiGroup Unit
+   * @apiPermission teacher
+   * @apiPermission admin
+   *
+   * @apiParam {Object} file Uploaded file.
+   * @apiParam {Object} data New unit data.
+   *
+   * @apiSuccess {Unit} unit Added unit.
+   *
+   * @apiSuccessExample {json} Success-Response:
+   *     {
+   *         TODO
+   *     }
+   *
+   * @apiError BadRequestError Invalid combination of file upload and unit data.
+   * @apiError BadRequestError No lecture ID was submitted.
+   * @apiError BadRequestError No unit was submitted.
+   * @apiError BadRequestError Unit has no _course set.
+   * @apiError BadRequestError TODO
+   * @apiError ValidationError TODO
+   */
   @Authorized(['teacher', 'admin'])
   @Post('/')
   addUnit(@UploadedFile('file', {options: uploadOptions}) file: any, @Body() data: any) {
@@ -74,6 +112,29 @@ export class UnitController {
     });
   }
 
+  /**
+   * @api {put} /api/units Update unit
+   * @apiName PutUnit
+   * @apiGroup Unit
+   * @apiPermission teacher
+   * @apiPermission admin
+   *
+   * @apiParam {Object} file Uploaded file.
+   * @apiParam {String} id Unit ID.
+   * @apiParam {Object} data New unit data.
+   *
+   * @apiSuccess {Unit} unit Updated unit.
+   *
+   * @apiSuccessExample {json} Success-Response:
+   *     {
+   *         TODO
+   *     }
+   *
+   * @apiError NotFoundError TODO
+   * @apiError BadRequestError Invalid combination of file upload and unit data.
+   * @apiError BadRequestError TODO
+   * @apiError ValidationError TODO
+   */
   @Authorized(['teacher', 'admin'])
   @Put('/:id')
   async updateUnit(@UploadedFile('file', {options: uploadOptions}) file: any, @Param('id') id: string, @Body() data: any) {
@@ -105,6 +166,24 @@ export class UnitController {
     }
   }
 
+  /**
+   * @api {delete} /api/units Delete unit
+   * @apiName DeleteUnit
+   * @apiGroup Unit
+   * @apiPermission teacher
+   * @apiPermission admin
+   *
+   * @apiParam {String} id Unit ID.
+   *
+   * @apiSuccess {Boolean} result Confirmation of deletion.
+   *
+   * @apiSuccessExample {json} Success-Response:
+   *     {
+   *         "result": true
+   *     }
+   *
+   * @apiError NotFoundError TODO
+   */
   @Authorized(['teacher', 'admin'])
   @Delete('/:id')
   deleteUnit(@Param('id') id: string) {
