@@ -32,7 +32,6 @@ export class FileUnitFormComponent implements OnInit {
               private unitService: UnitService,
               private showProgress: ShowProgressService,
               private dialog: MatDialog,
-              private showProgress: ShowProgressService,
               private notificationService: NotificationService) {
   }
 
