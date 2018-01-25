@@ -48,8 +48,8 @@ export class CourseContainerComponent implements OnInit {
       this.snackBar.open('Successfully enrolled', '', {duration: 5000});
       // reload courses to update enrollment status
       this.onEnroll.emit();
-    }).catch((error) => {
-      const errormessage = error.json().message || error.json().errmsg;
+    }).catch((exception) => {
+      const errormessage = exception.error.message;
       switch (errormessage) {
         case errorCodes.course.accessKey.code: {
           this.snackBar.open(`${errorCodes.course.accessKey.text}`, 'Dismiss');
