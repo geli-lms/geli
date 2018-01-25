@@ -50,7 +50,7 @@
   },
   "devDependencies": {
     "@angular-devkit/schematics": "0.0.40",
-    "@angular/cli": "1.6.0",
+    "@angular/cli": "^1.6.5",
     "@angular/compiler-cli": "^5.1.0",
     "@schematics/angular": "^0.1.10",
     "@types/jasmine": "2.8.2",
