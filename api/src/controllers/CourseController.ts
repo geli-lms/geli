@@ -57,31 +57,26 @@ export class CourseController {
 
   @Get('/')
   async getCourses(@CurrentUser() currentUser: IUser) {
+    const whitelistUsers = await WhitelistUser.find({uid: currentUser.uid});
     const conditions = this.userReadConditions(currentUser);
     if (conditions.$or) {
       // Everyone is allowed to see free courses in overview
       conditions.$or.push({enrollType: 'free'});
       conditions.$or.push({enrollType: 'accesskey'});
-      conditions.$or.push({enrollType: 'whitelist'});
+      conditions.$or.push({enrollType: 'whitelist', whitelist:  {$elemMatch: {$in: whitelistUsers}}});
     }
 
-    let courses = await Course.find(conditions)
+    const courses = await Course.find(conditions)
     // TODO: Do not send lectures when student has no access
       .populate('lectures')
       .populate('teachers')
       .populate('courseAdmin')
-      .populate('students')
-      .populate('whitelist');
-
-    // TODO: Integrate it in query.
-    courses = courses.filter(c =>
-      c.whitelist.find(user => user.uid === currentUser.uid) || c.enrollType !== 'whitelist');
+      .populate('students');
 
       return courses.map(course => {
         const courseObject: any = course.toObject();
         if (currentUser.role === 'student') {
           delete courseObject.courseAdmin;
-          delete courseObject.whitelist;
 
           courseObject.students = courseObject.students.filter(
             (student: any) => student._id === currentUser._id
