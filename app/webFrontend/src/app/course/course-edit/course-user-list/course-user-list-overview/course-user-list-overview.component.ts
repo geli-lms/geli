@@ -77,9 +77,9 @@ export class CourseUserListOverviewComponent implements OnInit {
     this.resetSelectedUsers();
     try {
       await this.courseService.sendMailToSelectedUsers(mailData);
-      this.snackBar.open('Sending mail succeeded.', '', {duration: 2000});
+      this.snackBar.open('Sending mail succeeded.', 'Dismiss', {duration: 2000});
     } catch (err) {
-      this.snackBar.open('Sending mail failed.', '', {duration: 3000});
+      this.snackBar.open('Sending mail failed.', 'Dismiss', {duration: 3000});
     }
   }
 
