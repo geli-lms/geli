@@ -81,6 +81,7 @@ export class CourseController {
         const courseObject: any = course.toObject();
         if (currentUser.role === 'student') {
           delete courseObject.courseAdmin;
+          delete courseObject.whitelist;
 
           courseObject.students = courseObject.students.filter(
             (student: any) => student._id === currentUser._id
