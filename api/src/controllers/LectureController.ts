@@ -1,5 +1,5 @@
 import {Request} from 'express';
-import {Body, Get, Post, Put, Delete, Param, Req, JsonController, UseBefore, Authorized} from 'routing-controllers';
+import {Authorized, Body, Delete, Get, JsonController, Param, Post, Put, Req, UseBefore} from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 
 import {Lecture} from '../models/Lecture';
@@ -11,7 +11,7 @@ import {Course} from '../models/Course';
 export class LectureController {
 
   /**
-   * @api {get} /api/lecture Request lecture
+   * @api {get} /api/lecture/:id Request lecture
    * @apiName GetLecture
    * @apiGroup Lecture
    *
@@ -21,7 +21,13 @@ export class LectureController {
    *
    * @apiSuccessExample {json} Success-Response:
    *     {
-   *         TODO
+   *         "_id": "5a037e6b60f72236d8e7c857",
+   *         "updatedAt": "2017-11-08T22:00:11.693Z",
+   *         "createdAt": "2017-11-08T22:00:11.693Z",
+   *         "name": "Introduction",
+   *         "description": "something about me, us, whoever",
+   *         "__v": 0,
+   *         "units": []
    *     }
    */
   @Get('/:id')
@@ -31,7 +37,7 @@ export class LectureController {
   }
 
   /**
-   * @api {post} /api/lecture Add lecture
+   * @api {post} /api/lecture/ Add lecture
    * @apiName PostLecture
    * @apiGroup Lecture
    * @apiPermission teacher
@@ -44,7 +50,13 @@ export class LectureController {
    *
    * @apiSuccessExample {json} Success-Response:
    *     {
-   *         TODO
+   *         "_id": "5a037e6b60f72236d8e7c857",
+   *         "updatedAt": "2017-11-08T22:00:11.693Z",
+   *         "createdAt": "2017-11-08T22:00:11.693Z",
+   *         "name": "Introduction",
+   *         "description": "something about me, us, whoever",
+   *         "__v": 0,
+   *         "units": []
    *     }
    */
   @Authorized(['teacher', 'admin'])
@@ -64,7 +76,7 @@ export class LectureController {
   }
 
   /**
-   * @api {put} /api/lecture Update lecture
+   * @api {put} /api/lecture/:id Update lecture
    * @apiName PutLecture
    * @apiGroup Lecture
    * @apiPermission teacher
@@ -77,7 +89,13 @@ export class LectureController {
    *
    * @apiSuccessExample {json} Success-Response:
    *     {
-   *         TODO
+   *         "_id": "5a037e6b60f72236d8e7c857",
+   *         "updatedAt": "2018-01-29T23:43:07.220Z",
+   *         "createdAt": "2017-11-08T22:00:11.693Z",
+   *         "name": "Introduction",
+   *         "description": "something about me, us, whoever",
+   *         "__v": 0,
+   *         "units": []
    *     }
    */
   @Authorized(['teacher', 'admin'])
@@ -88,7 +106,7 @@ export class LectureController {
   }
 
   /**
-   * @api {delete} /api/lecture Delete lecture
+   * @api {delete} /api/lecture/:id Delete lecture
    * @apiName DeleteLecture
    * @apiGroup Lecture
    *

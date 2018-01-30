@@ -35,7 +35,7 @@ function escapeRegex(text: string) {
 export class UserController {
 
   /**
-   * @api {get} /api/users Request all users
+   * @api {get} /api/users/ Request all users
    * @apiName GetUsers
    * @apiGroup User
    * @apiPermission teacher
@@ -51,7 +51,7 @@ export class UserController {
    *             "_id": "5a037e6a60f72236d8e7c81d",
    *             "updatedAt": "2018-01-08T19:27:49.483Z",
    *             "createdAt": "2017-11-08T22:00:10.899Z",
-   *             "uid": null,
+   *             "uid": "123456",
    *             "email": "student1@test.local",
    *             "__v": 0,
    *             "isActive": true,
@@ -206,7 +206,7 @@ export class UserController {
   }
 
   /**
-   * @api {get} /api/users/roles Request all user roles
+   * @api {get} /api/users/roles/ Request all user roles
    * @apiName GetUserRoles
    * @apiGroup User
    * @apiPermission admin
@@ -229,7 +229,7 @@ export class UserController {
   }
 
   /**
-   * @api {get} /api/users Request user with certain ID
+   * @api {get} /api/users/:id Request user with certain ID
    * @apiName GetUser
    * @apiGroup User
    *
@@ -243,7 +243,7 @@ export class UserController {
    *         "_id": "5a037e6a60f72236d8e7c81d",
    *         "updatedAt": "2018-01-08T19:27:49.483Z",
    *         "createdAt": "2017-11-08T22:00:10.899Z",
-   *         "uid": null,
+   *         "uid": "123456",
    *         "email": "student1@test.local",
    *         "__v": 0,
    *         "isActive": true,
@@ -270,7 +270,7 @@ export class UserController {
   }
 
   /**
-   * @api {post} /api/users/picture Add picture to user profile
+   * @api {post} /api/users/picture/:id Add picture to user profile
    * @apiName PostUserPicture
    * @apiGroup User
    *
@@ -286,7 +286,7 @@ export class UserController {
    *         "_id": "5a037e6a60f72236d8e7c81d",
    *         "updatedAt": "2018-01-08T19:27:49.483Z",
    *         "createdAt": "2017-11-08T22:00:10.899Z",
-   *         "uid": null,
+   *         "uid": "123456",
    *         "email": "student1@test.local",
    *         "__v": 0,
    *         "isActive": true,
@@ -303,7 +303,7 @@ export class UserController {
    *         "id": "5a037e6a60f72236d8e7c81d"
    *     }
    *
-   * @apiError BadRequestError TODO.
+   * @apiError BadRequestError
    */
   @Post('/picture/:id')
   addUserPicture(@UploadedFile('file', {options: uploadOptions}) file: any, @Param('id') id: string, @Body() data: any,
@@ -331,7 +331,7 @@ export class UserController {
   }
 
   /**
-   * @api {put} /api/users Update user
+   * @api {put} /api/users/:id Update user
    * @apiName PutUser
    * @apiGroup User
    *
@@ -346,7 +346,7 @@ export class UserController {
    *         "_id": "5a037e6a60f72236d8e7c81d",
    *         "updatedAt": "2018-01-08T19:27:49.483Z",
    *         "createdAt": "2017-11-08T22:00:10.899Z",
-   *         "uid": null,
+   *         "uid": "123456",
    *         "email": "student1@test.local",
    *         "__v": 0,
    *         "isActive": true,
@@ -421,7 +421,7 @@ export class UserController {
   }
 
   /**
-   * @api {delete} /api/users Delete user
+   * @api {delete} /api/users/:id Delete user
    * @apiName DeleteUser
    * @apiGroup User
    * @apiPermission admin

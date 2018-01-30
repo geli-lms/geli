@@ -34,7 +34,7 @@ const uploadOptions = {
 export class UnitController {
 
   /**
-   * @api {get} /api/units Request unit
+   * @api {get} /api/units/:id Request unit
    * @apiName GetUnit
    * @apiGroup Unit
    *
@@ -44,7 +44,15 @@ export class UnitController {
    *
    * @apiSuccessExample {json} Success-Response:
    *     {
-   *         TODO
+   *         "_id": "5a037e6b60f72236d8e7c858",
+   *         "updatedAt": "2017-11-08T22:00:11.500Z",
+   *         "createdAt": "2017-11-08T22:00:11.500Z",
+   *         "name": "What is Lorem Ipsum?",
+   *         "description": "...",
+   *         "markdown": "# What is Lorem Ipsum?\n**Lorem Ipsum** is simply dummy text of the printing and typesetting industry.",
+   *         "_course": "5a037e6b60f72236d8e7c83b",
+   *         "type": "free-text",
+   *         "__v": 0
    *     }
    */
   @Get('/:id')
@@ -54,7 +62,7 @@ export class UnitController {
   }
 
   /**
-   * @api {post} /api/units Add unit
+   * @api {post} /api/units/ Add unit
    * @apiName PostUnit
    * @apiGroup Unit
    * @apiPermission teacher
@@ -67,15 +75,23 @@ export class UnitController {
    *
    * @apiSuccessExample {json} Success-Response:
    *     {
-   *         TODO
+   *         "_id": "5a037e6b60f72236d8e7c858",
+   *         "updatedAt": "2017-11-08T22:00:11.500Z",
+   *         "createdAt": "2017-11-08T22:00:11.500Z",
+   *         "name": "What is Lorem Ipsum?",
+   *         "description": "...",
+   *         "markdown": "# What is Lorem Ipsum?\n**Lorem Ipsum** is simply dummy text of the printing and typesetting industry.",
+   *         "_course": "5a037e6b60f72236d8e7c83b",
+   *         "type": "free-text",
+   *         "__v": 0
    *     }
    *
    * @apiError BadRequestError Invalid combination of file upload and unit data.
    * @apiError BadRequestError No lecture ID was submitted.
    * @apiError BadRequestError No unit was submitted.
    * @apiError BadRequestError Unit has no _course set.
-   * @apiError BadRequestError TODO
-   * @apiError ValidationError TODO
+   * @apiError BadRequestError
+   * @apiError ValidationError
    */
   @Authorized(['teacher', 'admin'])
   @Post('/')
@@ -113,7 +129,7 @@ export class UnitController {
   }
 
   /**
-   * @api {put} /api/units Update unit
+   * @api {put} /api/units/:id Update unit
    * @apiName PutUnit
    * @apiGroup Unit
    * @apiPermission teacher
@@ -127,13 +143,21 @@ export class UnitController {
    *
    * @apiSuccessExample {json} Success-Response:
    *     {
-   *         TODO
+   *         "_id": "5a037e6b60f72236d8e7c858",
+   *         "updatedAt": "2018-01-29T23:43:07.220Z",
+   *         "createdAt": "2017-11-08T22:00:11.500Z",
+   *         "name": "What is Lorem Ipsum?",
+   *         "description": "...",
+   *         "markdown": "# What is Lorem Ipsum?\n**Lorem Ipsum** is simply dummy text of the printing and typesetting industry.",
+   *         "_course": "5a037e6b60f72236d8e7c83b",
+   *         "type": "free-text",
+   *         "__v": 0
    *     }
    *
-   * @apiError NotFoundError TODO
+   * @apiError NotFoundError
    * @apiError BadRequestError Invalid combination of file upload and unit data.
-   * @apiError BadRequestError TODO
-   * @apiError ValidationError TODO
+   * @apiError BadRequestError
+   * @apiError ValidationError
    */
   @Authorized(['teacher', 'admin'])
   @Put('/:id')
@@ -167,7 +191,7 @@ export class UnitController {
   }
 
   /**
-   * @api {delete} /api/units Delete unit
+   * @api {delete} /api/units/:id Delete unit
    * @apiName DeleteUnit
    * @apiGroup Unit
    * @apiPermission teacher
@@ -182,7 +206,7 @@ export class UnitController {
    *         "result": true
    *     }
    *
-   * @apiError NotFoundError TODO
+   * @apiError NotFoundError
    */
   @Authorized(['teacher', 'admin'])
   @Delete('/:id')
