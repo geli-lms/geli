@@ -10,6 +10,7 @@ import {ITaskUnit} from '../../shared/models/units/ITaskUnit';
 import {ITaskUnitModel} from '../src/models/units/TaskUnit';
 import * as mongoose from 'mongoose';
 import ObjectId = mongoose.Types.ObjectId;
+import {IWhitelistUser} from '../../shared/models/IWhitelistUser';
 
 export class FixtureUtils {
   public static async getRandomUser(hash?: string) {
@@ -73,6 +74,7 @@ export class FixtureUtils {
     });
   }
 
+
   public static async getRandomCourse(hash?: string) {
     const array = await this.getCourses();
     return this.getRandom(array, hash);
@@ -132,7 +134,9 @@ export class FixtureUtils {
   }
 
   public static async getCourses() {
-    return Course.find();
+    return Course.find()
+      .populate('students')
+      .populate('whitelist');
   }
 
   public static async getLectures() {
