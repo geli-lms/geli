@@ -9,6 +9,7 @@ import {IUser} from '../../../../../../shared/models/IUser';
 import {ICourse} from '../../../../../../shared/models/ICourse';
 import {INotificationSettings} from '../../../../../../shared/models/INotificationSettings';
 import {IDownload} from '../../../../../../shared/models/IDownload';
+import {IUserSearchMeta} from '../../../../../../shared/models/IUserSearchMeta';
 
 export abstract class DataService {
 
@@ -300,13 +301,15 @@ export class UserDataService extends DataService {
     super('users/', backendService);
   }
 
-  // FIXME: Which Type comes back?
-  searchUsers(role: string, query: string): Promise<any> {
+  async searchUsers(role: string, query: string, limit?: number): Promise<IUserSearchMeta> {
     const originalApiPath = this.apiPath;
     this.apiPath += 'members/search/';
     this.apiPath += '?role=' + role;
     this.apiPath += '&query=' + query;
-    const promise = this.readItems();
+    if (limit) {
+      this.apiPath += '&limit=' + limit;
+    }
+    const promise = this.readSingleItem('') as Promise<IUserSearchMeta>;
     this.apiPath = originalApiPath;
     return promise;
   }
