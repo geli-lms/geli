@@ -301,7 +301,7 @@ export class UserDataService extends DataService {
     super('users/', backendService);
   }
 
-  async searchUsers(role: string, query: string, limit?: number): Promise<IUserSearchMeta> {
+  searchUsers(role: string, query: string, limit?: number): Promise<IUserSearchMeta> {
     const originalApiPath = this.apiPath;
     this.apiPath += 'members/search/';
     this.apiPath += '?role=' + role;
