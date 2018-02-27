@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, Output, OnInit, ViewEncapsulation} from '@angular/core';
 import {MatDialog, MatSnackBar} from '@angular/material';
 import {UserService} from '../../shared/services/user.service';
-import {CourseService} from '../../shared/services/data.service';
+import {CourseService, UserDataService} from '../../shared/services/data.service';
 import {Router} from '@angular/router';
 import {ICourse} from '../../../../../../shared/models/ICourse';
 import {errorCodes} from '../../../../../../api/src/config/errorCodes';
@@ -29,7 +29,8 @@ export class CourseContainerComponent implements OnInit {
               private courseService: CourseService,
               private router: Router,
               private dialog: MatDialog,
-              private snackBar: MatSnackBar) {
+              private snackBar: MatSnackBar,
+              private userDataService: UserDataService) {
 
   }
 
@@ -45,6 +46,7 @@ export class CourseContainerComponent implements OnInit {
       user: this.userService.user,
       accessKey
     }).then((res) => {
+      this.addCourseToLastVisitedCourses(courseId);
       this.snackBar.open('Successfully enrolled', '', {duration: 5000});
       // reload courses to update enrollment status
       this.onEnroll.emit();
@@ -64,6 +66,16 @@ export class CourseContainerComponent implements OnInit {
         }
       }
     });
+  }
+
+  addCourseToLastVisitedCourses(courseId: string) {
+    const user = this.userService.user;
+    user.lastVisitedCourses = user.lastVisitedCourses.filter(id => id !== courseId);
+    user.lastVisitedCourses.unshift(courseId);
+    this.userDataService.updateItem(user)
+      .then((updatedUser) => {
+        this.userService.setUser(updatedUser);
+      });
   }
 
   leaveCallback({courseId}) {
