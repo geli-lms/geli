@@ -7,6 +7,7 @@ import {UserService} from '../../shared/services/user.service';
 import {MatSnackBar, MatDialog} from '@angular/material';
 import {DownloadCourseDialogComponent} from './download-course-dialog/download-course-dialog.component';
 import {TitleService} from '../../shared/services/title.service';
+import {UserUtil} from '../../shared/utils/userUtil';
 
 @Component({
   selector: 'app-course-detail',
@@ -41,23 +42,13 @@ export class CourseDetailComponent implements OnInit {
     this.courseService.readSingleItem(courseId).then(
       (course: any) => {
         this.course = course;
-        this.updateLastVisitedCourses();
+        UserUtil.addCourseToLastVisitedCourses(courseId, this.userService, this.userDataService);
         this.titleService.setTitleCut(['Course: ', this.course.name]);
       },
       (errorResponse: Response) => {
         if (errorResponse.status === 401) {
           this.snackBar.open('You are not authorized to view this course.', '', {duration: 3000});
         }
-      });
-  }
-
-  updateLastVisitedCourses() {
-    const user = this.userService.user;
-    user.lastVisitedCourses = user.lastVisitedCourses.filter(id => id !== this.course._id);
-    user.lastVisitedCourses.unshift(this.course._id);
-    this.userDataService.updateItem(user)
-      .then((updatedUser) => {
-        this.userService.setUser(updatedUser);
       });
   }
 

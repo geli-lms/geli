@@ -5,6 +5,7 @@ import {CourseService, UserDataService} from '../../shared/services/data.service
 import {Router} from '@angular/router';
 import {ICourse} from '../../../../../../shared/models/ICourse';
 import {errorCodes} from '../../../../../../api/src/config/errorCodes';
+import {UserUtil} from '../../shared/utils/userUtil';
 
 @Component({
   selector: 'app-course-container',
@@ -46,7 +47,7 @@ export class CourseContainerComponent implements OnInit {
       user: this.userService.user,
       accessKey
     }).then((res) => {
-      this.addCourseToLastVisitedCourses(courseId);
+      UserUtil.addCourseToLastVisitedCourses(courseId, this.userService, this.userDataService);
       this.snackBar.open('Successfully enrolled', '', {duration: 5000});
       // reload courses to update enrollment status
       this.onEnroll.emit();
@@ -66,16 +67,6 @@ export class CourseContainerComponent implements OnInit {
         }
       }
     });
-  }
-
-  addCourseToLastVisitedCourses(courseId: string) {
-    const user = this.userService.user;
-    user.lastVisitedCourses = user.lastVisitedCourses.filter(id => id !== courseId);
-    user.lastVisitedCourses.unshift(courseId);
-    this.userDataService.updateItem(user)
-      .then((updatedUser) => {
-        this.userService.setUser(updatedUser);
-      });
   }
 
   leaveCallback({courseId}) {
