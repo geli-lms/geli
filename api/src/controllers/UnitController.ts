@@ -1,34 +1,12 @@
 import {
   Body, Get, Put, Delete, Param, JsonController, UseBefore, NotFoundError, BadRequestError, Post,
-  Authorized, UploadedFile
+  Authorized
 } from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
-import crypto = require('crypto');
 
 import {Lecture} from '../models/Lecture';
 import {IUnitModel, Unit} from '../models/units/Unit';
 import {ValidationError} from 'mongoose';
-import config from '../config/main'
-import {Notification} from '../models/Notification';
-import {ICourse} from '../../../shared/models/ICourse';
-import {Course} from '../models/Course';
-
-const multer = require('multer');
-
-const uploadOptions = {
-  storage: multer.diskStorage({
-    destination: (req: any, file: any, cb: any) => {
-      cb(null, config.uploadFolder);
-    },
-    filename: (req: any, file: any, cb: any) => {
-      const extPos = file.originalname.lastIndexOf('.');
-      const ext = (extPos !== -1) ? `.${file.originalname.substr(extPos + 1).toLowerCase()}` : '';
-      crypto.pseudoRandomBytes(16, (err, raw) => {
-        cb(err, err ? undefined : `${raw.toString('hex')}${ext}`);
-      });
-    }
-  }),
-};
 
 @JsonController('/units')
 @UseBefore(passportJwtMiddleware)
@@ -42,9 +20,9 @@ export class UnitController {
 
   @Authorized(['teacher', 'admin'])
   @Post('/')
-  addUnit(@UploadedFile('file', {options: uploadOptions}) file: any, @Body() data: any) {
+  addUnit(@Body() data: any) {
     // discard invalid requests
-    this.checkPostParam(data, file);
+    this.checkPostParam(data);
 
     return Unit.create(data.model)
     .then((createdUnit) => {
@@ -114,7 +92,7 @@ export class UnitController {
       });
   }
 
-  protected checkPostParam(data: any, file?: any) {
+  protected checkPostParam(data: any) {
     if (!data.lectureId) {
       throw new BadRequestError('No lecture ID was submitted.');
     }
