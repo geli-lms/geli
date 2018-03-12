@@ -66,6 +66,7 @@ nohup.out
 /api/build
 /api/coverage
 /api/docs
+/api/apidocs
 /api/store.json
 docker-compose.override.yml
 

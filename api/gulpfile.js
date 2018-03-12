@@ -8,6 +8,7 @@ let tslint = require("tslint");
 let runSequence = require("run-sequence");
 let rimraf = require("rimraf");
 let typedoc = require("gulp-typedoc");
+let apidoc = require("gulp-apidoc");
 let mocha = require("gulp-mocha");
 let istanbul = require("gulp-istanbul");
 let plumber = require("gulp-plumber");
@@ -16,12 +17,14 @@ let remapIstanbul = require("remap-istanbul/lib/gulpRemapIstanbul");
 const CLEAN_BUILD = "clean:build";
 const CLEAN_COVERAGE = "clean:coverage";
 const CLEAN_DOC = "clean:doc";
+const CLEAN_API_DOC = "clean:apidoc";
 const TSLINT = "tslint";
 const TSLINT_DEV = "tslint:dev";
 const COMPILE_TYPESCRIPT = "compile:typescript";
 const BUILD = "build";
 const BUILD_DEV = "build:dev";
 const GENERATE_DOC = "generate:doc";
+const GENERATE_API_DOC = "generate:apidoc";
 const PRETEST = "pretest";
 const RUN_TESTS = "run:tests";
 const COPY_FIXTURES = "copy:fixtures";
@@ -72,6 +75,11 @@ gulp.task(CLEAN_COVERAGE, function (callback) {
 // Removes the ./docs directory with all its content.
 gulp.task(CLEAN_DOC, function (callback) {
   rimraf("./docs", callback);
+});
+
+// Removes the ./apidocs directory with all its content.
+gulp.task(CLEAN_API_DOC, function (callback) {
+  rimraf("./apidocs", callback);
 });
 
 // Checks all *.ts-files if they are conform to the rules specified in tslint.json.
@@ -127,6 +135,15 @@ gulp.task(GENERATE_DOC, [CLEAN_DOC], function () {
       version: true,
       module: "commonjs"
     }));
+});
+
+// Generates an API documentation based on the code comments in the files within ./src/controllers.
+gulp.task(GENERATE_API_DOC, [CLEAN_API_DOC], function(done){
+  apidoc({
+    src: "./src/controllers",
+    dest: "./apidocs",
+    config: "."
+  },done);
 });
 
 // Sets up the istanbul coverage

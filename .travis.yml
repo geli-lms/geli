@@ -89,6 +89,7 @@ after_success:
   - .travis/docker.sh
   - .travis/deploy.sh
   - .travis/sentry.sh
+  - .travis/apidoc.sh
 
 # Configure notification
 notifications:
