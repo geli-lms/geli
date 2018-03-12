@@ -495,7 +495,7 @@ export class CourseController {
    *
    * @apiSuccessExample {json} Success-Response:
    *     {
-   *         Todo
+   *         TODO
    *     }
    *
    * @apiError TypeError Wrong type allowed are just csv files.
@@ -570,7 +570,7 @@ export class CourseController {
   }
 
   /**
-   * @api {get} /api/courses/:id Delete course
+   * @api {delete} /api/courses/:id Delete course
    * @apiName DeleteCourse
    * @apiGroup Course
    *

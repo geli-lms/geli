@@ -16,6 +16,22 @@ import {Course} from '../models/Course';
 @JsonController('/auth')
 export class AuthController {
 
+  /**
+   * @api {post} /api/login Login user
+   * @apiName PostLogin
+   * @apiGroup Auth
+   *
+   * @apiParam {Request} request Login request.
+   *
+   * @apiSuccess {String} token Generated access token.
+   * @apiSuccess {IUserModel} user Authenticated user.
+   *
+   * @apiSuccessExample {json} Success-Response:
+   *     {
+   *         "token": "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YTAzN2U2YTYwZjcyMjM2ZDhlN2M4MTMiLCJpYXQiOjE1MTcyNTI0NDYsImV4cCI6MTUxNzI2MjUyNn0.b53laxHG-b6FbB7JP1GJsIgGWc3EUm0cTuufm1CKCCM",
+   *         "user": TODO
+   *     }
+   */
   @Post('/login')
   @UseBefore(bodyParserJson(), passportLoginMiddleware) // We need body-parser for passport to find the credentials
   postLogin(@Req() request: Request) {
@@ -27,6 +43,26 @@ export class AuthController {
     };
   }
 
+  /**
+   * @api {post} /api/register Register user
+   * @apiName PostRegister
+   * @apiGroup Auth
+   *
+   * @apiParam {IUser} user New user to be registered.
+   *
+   * @apiSuccess {Todo} todo Todo.
+   *
+   * @apiSuccessExample {json} Success-Response:
+   *     {
+   *         TODO
+   *     }
+   *
+   * @apiError BadRequestError That matriculation number is already in use
+   * @apiError BadRequestError That email address is already in use
+   * @apiError BadRequestError You can only sign up as student or teacher
+   * @apiError BadRequestError You are not allowed to register as teacher
+   * @apiError InternalServerError Could not send E-Mail
+   */
   @Post('/register')
   @OnUndefined(204)
   async postRegister(@Body() user: IUser) {
@@ -57,6 +93,22 @@ export class AuthController {
     }
   }
 
+  /**
+   * @api {post} /api/activate Activate user
+   * @apiName PostActivate
+   * @apiGroup Auth
+   *
+   * @apiParam {string} authenticationToken Authentication token.
+   *
+   * @apiSuccess {Boolean} success Confirmation of activation.
+   *
+   * @apiSuccessExample {json} Success-Response:
+   *     {
+   *         "success": true
+   *     }
+   *
+   * @apiError HttpError 422 - could not activate user
+   */
   // TODO If activate user and is in playlist add to course.
   @Post('/activate')
   postActivation(@BodyParam('authenticationToken') authenticationToken: string) {
