@@ -21,6 +21,7 @@ export class DownloadCourseDialogComponent implements OnInit {
   chkbox: boolean;
   keepDialogOpen = false;
   showSpinner: boolean;
+  disableDownloadButton: boolean;
   @ViewChildren(LectureCheckboxComponent)
   childLectures: QueryList<LectureCheckboxComponent>;
 
@@ -33,6 +34,7 @@ export class DownloadCourseDialogComponent implements OnInit {
 
   ngOnInit() {
     this.showSpinner = false;
+    this.disableDownloadButton = false;
     this.course = this.data.course;
     this.chkbox = false;
   }
@@ -81,6 +83,7 @@ export class DownloadCourseDialogComponent implements OnInit {
   }
 
   async downloadAndClose() {
+    this.disableDownloadButton = true;
     const obj = await this.buildObject();
     if (obj.lectures.length === 0) {
       this.snackBar.open('No units selected!', 'Dismiss', {duration: 3000});
@@ -90,16 +93,25 @@ export class DownloadCourseDialogComponent implements OnInit {
     this.showSpinner = true;
     if (this.calcSumFileSize() / 1024 < 204800) {
       const result = await this.downloadReq.postDownloadReqForCourse(downloadObj);
-      const response = <Response> await this.downloadReq.getFile(result.toString());
-      saveAs(response.body, this.saveFileService.replaceCharInFilename(this.course.name) + '.zip');
-      this.showSpinner = false;
-      if (!this.keepDialogOpen) {
-        this.dialogRef.close();
+      try {
+        const response = <Response> await this.downloadReq.getFile(result.toString());
+        saveAs(response.body, this.saveFileService.replaceCharInFilename(this.course.name) + '.zip');
+        this.showSpinner = false;
+        this.disableDownloadButton = false;
+        if (!this.keepDialogOpen) {
+          this.dialogRef.close();
+        }
+      } catch (error) {
+        this.showSpinner = false;
+        this.disableDownloadButton = false;
+        this.snackBar.open('Woops! Something went wrong. Please try again in a few Minutes.',
+          'Dismiss', {duration: 10000});
       }
     } else {
       this.snackBar.open('Requested Download Package is too large! Please Download fewer Units in one Package.',
         'Dismiss', {duration: 10000});
       this.showSpinner = false;
+      this.disableDownloadButton = false;
     }
   }
 
