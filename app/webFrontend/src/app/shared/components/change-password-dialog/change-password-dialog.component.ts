@@ -68,7 +68,7 @@ export class ChangePasswordDialogComponent implements OnInit {
       this.dialogRef.close();
     } catch (error) {
       console.dir(error);
-      const errormsg = error.message;
+      const errormsg = error.error.message;
       this.snackBar.open(errormsg, 'Dismiss');
     }
   }
