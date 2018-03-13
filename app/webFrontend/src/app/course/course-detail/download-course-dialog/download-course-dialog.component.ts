@@ -64,6 +64,22 @@ export class DownloadCourseDialogComponent implements OnInit {
     }
   }
 
+  calcSumFileSize(): number {
+    let sum = 0;
+  this.childLectures.forEach(lecture => {
+    lecture.childUnits.forEach(unit => {
+    if (unit.files) {
+      unit.childUnits.forEach(fileUnit => {
+        if (fileUnit.chkbox) {
+          sum = sum + fileUnit.file.size;
+        }
+      });
+      }
+    });
+  });
+  return sum;
+  }
+
   async downloadAndClose() {
     const obj = await this.buildObject();
     if (obj.lectures.length === 0) {
@@ -72,9 +88,7 @@ export class DownloadCourseDialogComponent implements OnInit {
     }
     const downloadObj = <IDownload> obj;
     this.showSpinner = true;
-    const sizeResult = await this.downloadReq.getPackageSize(downloadObj);
-    const iDownload = <IDownloadSize><any>sizeResult;
-    if (iDownload.totalSize < 204800) {
+    if (this.calcSumFileSize() / 1024 < 204800) {
       const result = await this.downloadReq.postDownloadReqForCourse(downloadObj);
       const response = <Response> await this.downloadReq.getFile(result.toString());
       saveAs(response.body, this.saveFileService.replaceCharInFilename(this.course.name) + '.zip');
@@ -82,6 +96,10 @@ export class DownloadCourseDialogComponent implements OnInit {
       if (!this.keepDialogOpen) {
         this.dialogRef.close();
       }
+    } else {
+      this.snackBar.open('Requested Download Package is too large! Please Download fewer Units in one Package.',
+        'Dismiss', {duration: 10000});
+      this.showSpinner = false;
     }
   }
 
