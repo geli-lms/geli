@@ -401,13 +401,13 @@ export class DownloadFileService extends DataService {
     super('download/', backendService);
   }
 
-  postDownloadReqForCourse(idl: IDownload): Promise<Response>{
+  postDownloadReqForCourse(idl: IDownload): Promise<Response> {
     return this.backendService
       .post(this.apiPath, idl)
       .toPromise();
   }
 
-  getFile(id: string): Promise<Response>{
+  getFile(id: string): Promise<Response> {
     return this.backendService
       .getDownload(this.apiPath + id)
       .toPromise();
