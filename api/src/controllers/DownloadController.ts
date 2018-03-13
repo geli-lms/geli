@@ -97,12 +97,6 @@ export class DownloadController {
     return response;
   }
 
-  @Post('/size/')
-  @ContentType('application/json')
-  async getFileSize(@Body() data: any) {
-    return this.calcPackage(data);
-  }
-
   async createFileHash(pack: IDownload) {
     let data = '';
 
