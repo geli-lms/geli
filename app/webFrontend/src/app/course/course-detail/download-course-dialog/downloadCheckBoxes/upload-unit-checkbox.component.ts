@@ -23,6 +23,9 @@ export class UploadUnitCheckboxComponent implements OnInit {
   }
 
   ngOnInit() {
+    if (this.file.size > 51200) {
+      this.showDL = true;
+    }
   }
 
   emitEvent() {
