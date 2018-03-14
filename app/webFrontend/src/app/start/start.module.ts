@@ -9,6 +9,7 @@ import {DashboardAdminComponent} from './dashboard/dashboard-admin/dashboard-adm
 import {RouterModule} from '@angular/router';
 import {CourseModule} from '../course/course.module';
 import {SharedModule} from '../shared/shared.module';
+import {NotificationModule} from '../notification/notification.module';
 
 @NgModule({
   imports: [

@@ -2,6 +2,7 @@ import {Component} from '@angular/core';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
 import {UserService} from '../../../shared/services/user.service';
 import {DashboardBaseComponent} from '../dashboard-base-component';
+import {SortUtil} from '../../../shared/utils/SortUtil';
 
 
 @Component({
@@ -25,11 +26,13 @@ export class DashboardStudentComponent extends DashboardBaseComponent {
     this.sortCourses();
   }
 
-  sortCourses() {
+  async sortCourses() {
     this.myCourses = [];
     this.availableCourses = [];
+
+    SortUtil.sortByLastVisitedCourses(this.allCourses, this.userService.user.lastVisitedCourses);
     for (const course of this.allCourses) {
-      if (this.isMemberOfCourse(course)) {
+      if (this.userService.isMemberOfCourse(course)) {
         this.myCourses.push(course);
       } else {
         this.availableCourses.push(course);
@@ -41,5 +44,4 @@ export class DashboardStudentComponent extends DashboardBaseComponent {
     const user = this.userService.user;
     return course.students.filter(obj => obj._id === user._id).length > 0;
   }
-
 }

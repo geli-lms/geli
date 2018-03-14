@@ -1,7 +1,10 @@
 import {Component, OnInit, OnDestroy, Input} from '@angular/core';
 import {ICourse} from '../../../../../../../../shared/models/ICourse';
 import {ILecture} from '../../../../../../../../shared/models/ILecture';
-import {DuplicationService, ExportService, LectureService, UnitService} from '../../../../shared/services/data.service';
+import {
+  DuplicationService, ExportService, LectureService, NotificationService,
+  UnitService
+} from '../../../../shared/services/data.service';
 import {ShowProgressService} from 'app/shared/services/show-progress.service';
 import {DialogService} from '../../../../shared/services/dialog.service';
 import {UserService} from '../../../../shared/services/user.service';
@@ -12,6 +15,7 @@ import {SaveFileService} from '../../../../shared/services/save-file.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {DataSharingService} from '../../../../shared/services/data-sharing.service';
 import {Subject} from 'rxjs/Subject';
+import {Notification} from '../../../../models/Notification';
 
 @Component({
   selector: 'app-lecture-edit',
@@ -37,7 +41,8 @@ export class LectureEditComponent implements OnInit, OnDestroy {
               private saveFileService: SaveFileService,
               public userService: UserService,
               private dataSharingService: DataSharingService,
-              private router: Router) {
+              private router: Router,
+              private notificationService: NotificationService) {
   }
 
   ngOnInit() {
@@ -90,6 +95,10 @@ export class LectureEditComponent implements OnInit, OnDestroy {
     this.lectureService.updateItem(lecture)
       .then(() => {
         this.dataSharingService.setDataForKey('lecture-edit-mode', false);
+        this.notificationService.createItem(
+          {changedCourse: this.course, changedLecture: lecture,
+            changedUnit: null, text: 'Course ' + this.course.name + ' has an updated lecture.'})
+          .catch(console.error);
       })
       .catch(console.error)
       .then(() => this.showProgress.toggleLoadingGlobal(false));

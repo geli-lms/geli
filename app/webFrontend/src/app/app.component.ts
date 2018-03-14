@@ -46,7 +46,7 @@ export class AppComponent implements OnInit {
 
     this.authenticationService.reloadUser();
 
-    this.apiInfoService.readItems()
+    this.apiInfoService.readAPIInfo()
       .then((info: any) => {
         this.ravenErrorHandler.setup(info.sentryDsn);
         this.apiInfo = info;
@@ -79,6 +79,10 @@ export class AppComponent implements OnInit {
 
   isAdmin(): boolean {
     return this.userService.isAdmin();
+  }
+
+  isStudent(): boolean {
+    return this.userService.isStudent();
   }
 
   specialContainerStyle(): string {
