@@ -2,6 +2,11 @@
 import * as mongoose from 'mongoose';
 import {IUnitModel} from '../../models/units/Unit';
 import {ObjectID} from 'bson';
+import {IFileUnit} from '../../../../shared/models/units/IFileUnit';
+import fs = require('fs');
+import {IFile} from '../../../../shared/models/IFile';
+import {IFileUnitModel} from '../../models/units/FileUnit';
+import {IFileModel} from '../../models/mediaManager/File';
 
 const unitSchema = new mongoose.Schema({
     _course: {
@@ -34,9 +39,9 @@ const unitSchema = new mongoose.Schema({
   }
 );
 
-const Unit = mongoose.model<IUnitModel>('Unit', unitSchema);
+const Unit = mongoose.model<IUnitModel>('FileOldUnit', unitSchema);
 
-const fileUnitSchema = new mongoose.Schema({
+const fileSchema = new mongoose.Schema({
   files: [
     {
       path: {
@@ -70,7 +75,7 @@ const fileUnitSchema = new mongoose.Schema({
   },
 });
 
-const FileUnit = mongoose.model('File', fileUnitSchema);
+const FileUnit = mongoose.model('File', fileSchema);
 
 class FileUnitMigration {
 
@@ -80,9 +85,25 @@ class FileUnitMigration {
       const fileUnits = await Unit.find({'__t': 'file'}).exec();
       const updatedFileUnits = await Promise.all(fileUnits.map(async (fileUnit) => {
         if (fileUnit._id instanceof ObjectID) {
-          const fileUnitObj = fileUnit.toObject();
+          const fileUnitObj: IFileUnit = <IFileUnit>fileUnit.toObject();
+          const fileUnitWithUpdatedFiles = fileUnitObj.files.map((file) => {
+            if (file instanceof ObjectID) {
+              return;
+            }
+
+            const oldFile = <any>file;
+            const absolutePath = fs.realpathSync('api\\' + oldFile.path);
+            const newFile = {
+              physicalPath: absolutePath,
+              name: oldFile.alias,
+              size: oldFile.size,
+              link: oldFile.name
+            };
+          });
         }
       }));
+
+      const debug = 0;
     } catch (error) {
       console.log(error);
     }
