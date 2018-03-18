@@ -4,9 +4,7 @@ import {IUnitModel} from '../../models/units/Unit';
 import {ObjectID} from 'bson';
 import {IFileUnit} from '../../../../shared/models/units/IFileUnit';
 import fs = require('fs');
-import {IFile} from '../../../../shared/models/IFile';
-import {IFileUnitModel} from '../../models/units/FileUnit';
-import {IFileModel} from '../../models/mediaManager/File';
+import {File} from '../../models/mediaManager/File';
 
 const unitSchema = new mongoose.Schema({
     _course: {
@@ -75,7 +73,7 @@ const fileSchema = new mongoose.Schema({
   },
 });
 
-const FileUnit = mongoose.model('File', fileSchema);
+const FileUnit = mongoose.model('Files', fileSchema);
 
 class FileUnitMigration {
 
@@ -86,9 +84,9 @@ class FileUnitMigration {
       const updatedFileUnits = await Promise.all(fileUnits.map(async (fileUnit) => {
         if (fileUnit._id instanceof ObjectID) {
           const fileUnitObj: IFileUnit = <IFileUnit>fileUnit.toObject();
-          const fileUnitWithUpdatedFiles = fileUnitObj.files.map((file) => {
+          fileUnitObj.files = await Promise.all(fileUnitObj.files.map(async (file) => {
             if (file instanceof ObjectID) {
-              return;
+              return file;
             }
 
             const oldFile = <any>file;
@@ -99,11 +97,18 @@ class FileUnitMigration {
               size: oldFile.size,
               link: oldFile.name
             };
-          });
+
+            const createdFile = await File.create(newFile);
+            return createdFile._id;
+          }));
+
+          fileUnitObj._id = new ObjectID(fileUnitObj._id);
+
+          const unitAfterReplace = await mongoose.connection.collection('units')
+            .findOneAndReplace({'_id': fileUnit._id}, fileUnitObj);
+          return fileUnitObj;
         }
       }));
-
-      const debug = 0;
     } catch (error) {
       console.log(error);
     }
