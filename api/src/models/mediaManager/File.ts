@@ -1,6 +1,8 @@
 import * as mongoose from 'mongoose';
 import {IFile} from '../../../../shared/models/mediaManager/IFile';
 import * as fs from 'fs';
+import {FileUnit} from '../units/Unit';
+import {IFileUnitModel} from '../units/FileUnit';
 
 const {promisify} = require('util');
 
@@ -43,7 +45,15 @@ fileSchema.pre('remove', async function(next: () => void) {
     await promisify(fs.unlink)(this.physicalPath);
   }
 
-  // TODO: look for references
+  const units2Check: IFileUnitModel[] = <IFileUnitModel[]>await FileUnit.find({files: { $in: [ this._id ] }});
+  Promise.all(units2Check.map(async unit => {
+    let index = unit.files.indexOf(this._id);
+    if (index > -1) {
+      unit.files.splice(index, 1);
+      await unit.save();
+    }
+  }));
+
   next();
 });
 
