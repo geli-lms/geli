@@ -10,6 +10,7 @@ export class User implements IUser {
   profile: { firstName: string; lastName: string; picture: IFile; theme: string };
   role: string;
   progress: any;
+  lastVisitedCourses: Array<string>;
 
   constructor(user: IUser) {
     this._id = user._id;
@@ -18,6 +19,7 @@ export class User implements IUser {
     this.profile = user.profile;
     this.role = user.role;
     this.progress = user.progress;
+    this.lastVisitedCourses = user.lastVisitedCourses;
   }
 
   getGravatarURL(size: number = 80) {

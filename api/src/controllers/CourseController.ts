@@ -26,6 +26,8 @@ import emailService from '../services/EmailService';
 
 const multer = require('multer');
 import crypto = require('crypto');
+import {API_NOTIFICATION_TYPE_ALL_CHANGES, API_NOTIFICATION_TYPE_NONE, NotificationSettings} from '../models/NotificationSettings';
+import {Notification} from '../models/Notification';
 
 const uploadOptions = {
   storage: multer.diskStorage({
@@ -209,7 +211,7 @@ export class CourseController {
           virtuals: true,
           populate: {
             path: 'progressData',
-            match: { user: { $eq: currentUser._id }}
+            match: {user: {$eq: currentUser._id}}
           }
         }
       })
@@ -410,7 +412,11 @@ export class CourseController {
 
         if (course.students.indexOf(currentUser._id) < 0) {
           course.students.push(currentUser);
-
+          new NotificationSettings({
+            'user': currentUser, 'course': course,
+            'notificationType': API_NOTIFICATION_TYPE_ALL_CHANGES,
+            'emailNotification': false
+          }).save();
           return course.save().then((c) => c.toObject());
         }
 
@@ -472,8 +478,9 @@ export class CourseController {
           throw new NotFoundError();
         }
         const index: number = course.students.indexOf(currentUser._id);
-        if (index  !== 0) {
+        if (index !== 0) {
           course.students.splice(index, 1);
+          NotificationSettings.findOne({'user': currentUser, 'course': course}).remove();
           return course.save().then((c) => c.toObject());
         }
 
@@ -509,14 +516,14 @@ export class CourseController {
       throw new TypeError(errorCodes.errorCodes.upload.type.notCSV.code);
     }
     return Course.findById(id)
-        .populate('whitelist')
-        .populate('students')
-        .then((course) => {
+      .populate('whitelist')
+      .populate('students')
+      .then((course) => {
         return this.parser.parseFile(file).then((buffer: any) =>
           this.parser.updateCourseFromBuffer(buffer, course)
             .then(c => c.save())
             .then((c: ICourseModel) =>
-            c.toObject()));
+              c.toObject()));
       });
   }
 
@@ -566,7 +573,12 @@ export class CourseController {
       course,
       {'new': true}
     )
-      .then((c) => c ? c.toObject() : undefined);
+      .then((c) => {
+        if (c) {
+          return c.toObject();
+        }
+        return undefined;
+      });
   }
 
   /**
@@ -590,13 +602,13 @@ export class CourseController {
   @Authorized(['teacher', 'admin'])
   @Delete('/:id')
   async deleteCourse(@Param('id') id: string, @CurrentUser() currentUser: IUser) {
-    const course = await Course.findOne( {_id : id} );
-    if ( !course ) {
+    const course = await Course.findOne({_id: id});
+    if (!course) {
       throw new NotFoundError();
     }
     const courseAdmin = await User.findOne({_id: course.courseAdmin});
     if (course.teachers.indexOf(currentUser._id) !== -1 || courseAdmin.equals(currentUser._id.toString())
-      || currentUser.role === 'admin' ) {
+      || currentUser.role === 'admin') {
       await course.remove();
       return {result: true};
     } else {

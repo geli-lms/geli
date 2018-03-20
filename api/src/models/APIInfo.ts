@@ -7,6 +7,7 @@ export class APIInfo implements IAPIInfo {
   nonProductionWarning: string;
   build_timestamp: Date;
   commit_hash: string;
+  teacherMailRegex: string;
 
   constructor(status: string) {
     this.status = status;
@@ -14,5 +15,6 @@ export class APIInfo implements IAPIInfo {
     this.sentryDsn = config.sentryDsnPublic;
     this.build_timestamp = undefined;
     this.commit_hash = undefined;
+    this.teacherMailRegex = config.teacherMailRegex;
   }
 }

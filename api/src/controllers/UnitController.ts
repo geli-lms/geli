@@ -11,6 +11,9 @@ import {IUnitModel, Unit} from '../models/units/Unit';
 import {IUnit} from '../../../shared/models/units/IUnit';
 import {IFileUnit} from '../../../shared/models/units/IFileUnit';
 import {ValidationError} from 'mongoose';
+import {Notification} from '../models/Notification';
+import {ICourse} from '../../../shared/models/ICourse';
+import {Course} from '../models/Course';
 
 const multer = require('multer');
 

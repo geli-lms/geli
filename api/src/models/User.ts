@@ -51,6 +51,9 @@ const userSchema = new mongoose.Schema({
       'enum': ['student', 'teacher', 'tutor', 'admin'],
       'default': 'student'
     },
+    lastVisitedCourses: [ {
+      type: String
+  }],
     authenticationToken: {type: String},
     resetPasswordToken: {type: String},
     resetPasswordExpires: {type: Date},

@@ -7,6 +7,7 @@ import {ILecture} from '../../../../../../shared/models/ILecture';
 import {IUnit} from '../../../../../../shared/models/units/IUnit';
 import {IUser} from '../../../../../../shared/models/IUser';
 import {ICourse} from '../../../../../../shared/models/ICourse';
+import {INotificationSettings} from '../../../../../../shared/models/INotificationSettings';
 import {IDownload} from '../../../../../../shared/models/IDownload';
 
 export abstract class DataService {
@@ -152,7 +153,7 @@ export class DuplicationService extends DataService {
 
   duplicateUnit(unit: IUnit, lectureId: string, courseId: string): Promise<IUnit> {
     return this.backendService
-      .post(this.apiPath + 'unit/' + unit._id, JSON.stringify({courseId: courseId , lectureId: lectureId}))
+      .post(this.apiPath + 'unit/' + unit._id, JSON.stringify({courseId: courseId, lectureId: lectureId}))
       .toPromise();
   }
 }
@@ -181,6 +182,33 @@ export class CourseService extends DataService {
     return this.backendService
       .post(this.apiPath + courseId + '/leave', {})
       .toPromise();
+  }
+}
+
+@Injectable()
+export class TaskService extends DataService {
+  constructor(public backendService: BackendService) {
+    super('tasks/', backendService);
+  }
+
+  getTasksForCourse(id: string): Promise<any[]> {
+    return new Promise((resolve, reject) => {
+      this.backendService.get(this.apiPath + 'course/' + id)
+      .subscribe(
+        (responseItems: any) => {
+          if (this.changeProps2Date) {
+            responseItems.forEach(item => {
+              this.changeProps2Date.forEach(prop => {
+                DataService.changeStringProp2DateProp(item, prop);
+              });
+            });
+          }
+
+          resolve(responseItems);
+        },
+        error => reject(error)
+      );
+    });
   }
 }
 
@@ -229,6 +257,44 @@ export class FreeTextUnitService extends DataService {
 }
 
 @Injectable()
+export class NotificationSettingsService extends DataService {
+  constructor(public backendService: BackendService) {
+    super('notificationSettings/', backendService);
+  }
+
+  getNotificationSettingsPerUser(user: IUser): Promise<any[]> {
+    return new Promise((resolve, reject) => {
+      this.backendService.get(this.apiPath + 'user/' + user._id)
+        .subscribe(
+          (responseItem: any) => {
+            resolve(responseItem);
+          },
+          error => reject(error)
+        );
+    });
+  }
+}
+
+@Injectable()
+export class NotificationService extends DataService {
+  constructor(public backendService: BackendService) {
+    super('notification/', backendService);
+  }
+
+  getNotificationsPerUser(user: IUser): Promise<any[]> {
+    return new Promise((resolve, reject) => {
+      this.backendService.get(this.apiPath + 'user/' + user._id)
+        .subscribe(
+          (responseItem: any) => {
+            resolve(responseItem);
+          },
+          error => reject(error)
+        );
+    });
+  }
+}
+
+@Injectable()
 export class UserDataService extends DataService {
   constructor(public backendService: BackendService) {
     super('users/', backendService);
@@ -263,7 +329,7 @@ export class UserDataService extends DataService {
 }
 
 @Injectable()
-export  class  WhitelistUserService extends DataService {
+export class WhitelistUserService extends DataService {
   constructor(public backendService: BackendService) {
     super('whitelist/', backendService);
   }
@@ -280,9 +346,19 @@ export  class  WhitelistUserService extends DataService {
 
 @Injectable()
 export class APIInfoService extends DataService {
+
+  private apiInfo: any;
+
   constructor(public backendService: BackendService) {
     // use root route
     super('', backendService);
+  }
+
+  async readAPIInfo() {
+    if (!this.apiInfo) {
+      this.apiInfo = await this.readItems();
+    }
+    return this.apiInfo;
   }
 }
 
