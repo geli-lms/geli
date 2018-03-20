@@ -4,7 +4,7 @@ import {IUser} from '../../../../../../../shared/models/IUser';
 import {User} from '../../../models/User';
 import {FormControl} from '@angular/forms';
 import 'rxjs/add/operator/startWith'
-import {UserDataService} from '../../../shared/services/data.service';
+import {NotificationService, UserDataService} from '../../../shared/services/data.service';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
 
 
@@ -34,7 +34,8 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
   @Output() onSearch = new EventEmitter<String>();
 
   constructor(private dragula: DragulaService,
-              private userService: UserDataService) {
+              private userService: UserDataService,
+              private notificationService: NotificationService) {
   }
 
   async searchForUsers(search: string) {
@@ -75,6 +76,9 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
                 const idList: string[] = this.dragableUsers.map(user => user._id);
                 const index: number = idList.indexOf(el.children[0].getAttribute('item-id'));
                 if (index >= 0) {
+                  this.notificationService.createNotification(
+                    this.dragableUsers[index],
+                    {text: 'You have been removed from course ' + this.course.name});
                   this.onDragendRemove.emit(this.dragableUsers[index]);
                 }
               } else if (target.getAttribute('item-id') === 'UserInCourse') {
