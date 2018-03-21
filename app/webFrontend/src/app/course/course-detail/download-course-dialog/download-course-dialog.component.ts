@@ -21,6 +21,7 @@ export class DownloadCourseDialogComponent implements OnInit {
   chkbox: boolean;
   keepDialogOpen = false;
   showSpinner: boolean;
+  disableDownloadButton: boolean;
   @ViewChildren(LectureCheckboxComponent)
   childLectures: QueryList<LectureCheckboxComponent>;
 
@@ -33,6 +34,7 @@ export class DownloadCourseDialogComponent implements OnInit {
 
   ngOnInit() {
     this.showSpinner = false;
+    this.disableDownloadButton = false;
     this.course = this.data.course;
     this.chkbox = false;
   }
@@ -64,7 +66,24 @@ export class DownloadCourseDialogComponent implements OnInit {
     }
   }
 
+  calcSumFileSize(): number {
+    let sum = 0;
+  this.childLectures.forEach(lecture => {
+    lecture.childUnits.forEach(unit => {
+    if (unit.files) {
+      unit.childUnits.forEach(fileUnit => {
+        if (fileUnit.chkbox) {
+          sum = sum + fileUnit.file.size;
+        }
+      });
+      }
+    });
+  });
+  return sum;
+  }
+
   async downloadAndClose() {
+    this.disableDownloadButton = true;
     const obj = await this.buildObject();
     if (obj.lectures.length === 0) {
       this.snackBar.open('No units selected!', 'Dismiss', {duration: 3000});
@@ -72,36 +91,27 @@ export class DownloadCourseDialogComponent implements OnInit {
     }
     const downloadObj = <IDownload> obj;
     this.showSpinner = true;
-    const sizeResult = await this.downloadReq.getPackageSize(downloadObj);
-    const iDownload = <IDownloadSize><any>sizeResult;
-    if (iDownload.tooLargeFiles.length === 0 && iDownload.totalSize < 204800) {
+    if (this.calcSumFileSize() / 1024 < 204800) {
       const result = await this.downloadReq.postDownloadReqForCourse(downloadObj);
-      const response = <Response> await this.downloadReq.getFile(result.toString());
-      saveAs(response.body, this.saveFileService.replaceCharInFilename(this.course.name) + '.zip');
-      this.showSpinner = false;
-      if (!this.keepDialogOpen) {
-        this.dialogRef.close();
+      try {
+        const response = <Response> await this.downloadReq.getFile(result.toString());
+        saveAs(response.body, this.saveFileService.replaceCharInFilename(this.course.name) + '.zip');
+        this.showSpinner = false;
+        this.disableDownloadButton = false;
+        if (!this.keepDialogOpen) {
+          this.dialogRef.close();
+        }
+      } catch (error) {
+        this.showSpinner = false;
+        this.disableDownloadButton = false;
+        this.snackBar.open('Woops! Something went wrong. Please try again in a few Minutes.',
+          'Dismiss', {duration: 10000});
       }
     } else {
-      this.keepDialogOpen = true;
-      this.showSpinner = false;
-      this.snackBar.open('Some selected files are too big! Please download Units with a Download-Button seperately!',
+      this.snackBar.open('Requested Download Package is too large! Please Download fewer Units in one Package.',
         'Dismiss', {duration: 10000});
-        iDownload.tooLargeFiles.forEach(file => {
-          this.childLectures.forEach(lecture => {
-            lecture.childUnits.forEach(unit => {
-              if (unit.files) {
-                unit.childUnits.forEach(fileUnit => {
-                  if (fileUnit.file.link === file ) {
-                      fileUnit.showDL = true;
-                  }
-                });
-              }
-            });
-          });
-        });
-        this.chkbox = false;
-        this.onChange();
+      this.showSpinner = false;
+      this.disableDownloadButton = false;
     }
   }
 

@@ -205,21 +205,19 @@ export class CourseController {
 
   @Authorized(['student'])
   @Post('/:id/leave')
-  leaveStudent(@Param('id') id: string, @Body() data: any, @CurrentUser() currentUser: IUser) {
-    return Course.findById(id)
-      .then(course => {
+  async leaveStudent(@Param('id') id: string, @Body() data: any, @CurrentUser() currentUser: IUser) {
+    const course = await Course.findById(id);
         if (!course) {
           throw new NotFoundError();
         }
         const index: number = course.students.indexOf(currentUser._id);
-        if (index !== 0) {
+        if (index >= 0) {
           course.students.splice(index, 1);
-          NotificationSettings.findOne({'user': currentUser, 'course': course}).remove();
-          return course.save().then((c) => c.toObject());
+          await NotificationSettings.findOne({'user': currentUser, 'course': course}).remove();
+          const savedCourse = await course.save();
+          return savedCourse.toObject();
         }
-
         return course.toObject();
-      });
   }
 
   // TODO: Needs more security
