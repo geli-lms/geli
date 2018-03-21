@@ -322,14 +322,24 @@ export class CourseController {
    * @apiPermission teacher
    * @apiPermission admin
    *
-   * @apiParam {Object} data Mail data.
+   * @apiParam {Object} mailData Mail data.
    * @apiParam {IUser} currentUser Currently logged in user.
    *
-   * @apiSuccess {Todo} todo Todo.
+   * @apiSuccess {Object} freeFormMail Information about sent email.
    *
    * @apiSuccessExample {json} Success-Response:
    *     {
-   *         TODO
+   *         "accepted": ["geli.hda@gmail.com"],
+   *         "rejected": [],
+   *         "envelopeTime": 5,
+   *         "messageTime": 4,
+   *         "messageSize": 874,
+   *         "response": "250 ok:  Message 11936348 accepted",
+   *         "envelope": {
+   *             "from": "staging.geli.fbi@h-da.de",
+   *             "to": ["geli.hda@gmail.com"]
+   *         },
+   *         "messageId": "<f70858d7-d9f4-3f5b-a833-d94d2a440b33@h-da.de>"
    *     }
    */
   @Authorized(['teacher', 'admin'])
@@ -348,7 +358,7 @@ export class CourseController {
    * @apiPermission student
    *
    * @apiParam {String} id Course ID.
-   * @apiParam {Object} data Body.
+   * @apiParam {Object} data Data (with access key).
    * @apiParam {IUser} currentUser Currently logged in user.
    *
    * @apiSuccess {Course} course Enrolled course.
@@ -498,14 +508,37 @@ export class CourseController {
    * @apiParam {String} id Course ID.
    * @apiParam {Object} file Uploaded file.
    *
-   * @apiSuccess {Todo} todo Todo.
+   * @apiSuccess {Course} course Updated course.
    *
    * @apiSuccessExample {json} Success-Response:
    *     {
-   *         TODO
+   *         "_id": "5a037e6b60f72236d8e7c83d",
+   *         "updatedAt": "2018-01-29T23:43:07.220Z",
+   *         "createdAt": "2017-11-08T22:00:11.263Z",
+   *         "name": "Introduction to web development",
+   *         "description": "Whether you're just getting started with Web development or are just expanding your horizons...",
+   *         "courseAdmin": "5a037e6a60f72236d8e7c815",
+   *         "active": true,
+   *         "__v": 1,
+   *         "whitelist": [{
+   *             "_bsontype": "ObjectID",
+   *             "id": {...}
+   *         },{
+   *             "_bsontype": "ObjectID",
+   *             "id": {...}
+   *         },{
+   *             "_bsontype": "ObjectID",
+   *             "id": {...}
+   *         }],
+   *         "enrollType": "whitelist",
+   *         "lectures": [],
+   *         "students": [],
+   *         "teachers": [],
+   *         "hasAccessKey": false
    *     }
    *
    * @apiError TypeError Wrong type allowed are just csv files.
+   * @apiError HttpError UID is not a number 1.
    */
   // TODO: Needs more security
   @Authorized(['teacher', 'admin'])
