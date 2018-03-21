@@ -105,7 +105,8 @@ describe('User', () => {
           query: newUser.uid +
           ' ' + newUser.email +
           ' ' + newUser.profile.firstName +
-          ' ' + newUser.profile.lastName
+          ' ' + newUser.profile.lastName,
+          limit: 1
         })
         .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`);
 

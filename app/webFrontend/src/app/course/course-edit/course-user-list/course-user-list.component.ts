@@ -42,8 +42,8 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
     this.onSearch.emit(search);
     if (search !== '' && this.finishRestCall) {
       this.finishRestCall = false;
-      const foundDatas = await this.userService.searchUsers(this.role, search);
-      const foundUsers = foundDatas.users;
+      const foundDatas = await this.userService.searchUsers(this.role, search, 20);
+      const foundUsers: User[] = foundDatas.users.map(user => new User(user));
       this.usersTotal = foundDatas.meta.count;
       if (foundUsers) {
         const idList: string[] = this.course.students.map((u) => u._id);
