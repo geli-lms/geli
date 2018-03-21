@@ -25,6 +25,26 @@ import emailService from '../services/EmailService';
 export class NotificationController {
 
 
+  /**
+   * @api {post} /api/notification/ Create notifications
+   * @apiName PostNotification
+   * @apiGroup Notification
+   * @apiPermission teacher
+   * @apiPermission admin
+   *
+   * @apiParam {Object} data Notification text and information on changed course, lecture and unit.
+   * @apiParam {Request} request Request.
+   *
+   * @apiSuccess {Boolean} notified Confirmation of notification.
+   *
+   * @apiSuccessExample {json} Success-Response:
+   *     {
+   *         notified: true
+   *     }
+   *
+   * @apiError BadRequestError Notification needs at least the fields course and text
+   * @apiError InternalServerError Failed to create notifications
+   */
   @Authorized(['teacher', 'admin'])
   @Post('/')
   async createNotifications(@Body() data: any, @Req() request: Request) {
@@ -93,6 +113,23 @@ export class NotificationController {
     await emailService.sendFreeFormMail(message);
   }
 
+  /**
+   * @api {get} /api/notification/user/:id Get notifications
+   * @apiName GetNotification
+   * @apiGroup Notification
+   * @apiPermission student
+   * @apiPermission teacher
+   * @apiPermission admin
+   *
+   * @apiParam {String} id User ID.
+   *
+   * @apiSuccess {Notification[]} notifications Notifications.
+   *
+   * @apiSuccessExample {json} Success-Response:
+   *     {
+   *         [todo]
+   *     }
+   */
   @Authorized(['student', 'teacher', 'admin'])
   @Get('/user/:id')
   async getNotifications(@Param('id') id: string) {
@@ -107,6 +144,26 @@ export class NotificationController {
 
   }
 
+  /**
+   * @api {delete} /api/notification/:id Delete notification
+   * @apiName DeleteNotification
+   * @apiGroup Notification
+   * @apiPermission student
+   * @apiPermission teacher
+   * @apiPermission admin
+   *
+   * @apiParam {String} id Notification ID.
+   * @apiParam {IUser} currentUser Currently logged in user.
+   *
+   * @apiSuccess {Todo} x y.
+   *
+   * @apiSuccessExample {json} Success-Response:
+   *     {
+   *         todo
+   *     }
+   *
+   * @apiError NotFoundError Notification could not be found.
+   */
   @Authorized(['student', 'teacher', 'admin'])
   @Delete('/:id')
   async deleteNotification(@Param('id') id: string, @CurrentUser() currentUser: IUser) {
