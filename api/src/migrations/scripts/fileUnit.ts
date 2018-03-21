@@ -2,6 +2,9 @@
 import * as mongoose from 'mongoose';
 import {IUnitModel} from '../../models/units/Unit';
 import {ObjectID} from 'bson';
+import {IFileUnit} from '../../../../shared/models/units/IFileUnit';
+import fs = require('fs');
+import {File} from '../../models/mediaManager/File';
 
 const unitSchema = new mongoose.Schema({
     _course: {
@@ -34,9 +37,9 @@ const unitSchema = new mongoose.Schema({
   }
 );
 
-const Unit = mongoose.model<IUnitModel>('Unit', unitSchema);
+const Unit = mongoose.model<IUnitModel>('FileOldUnit', unitSchema);
 
-const fileUnitSchema = new mongoose.Schema({
+const fileSchema = new mongoose.Schema({
   files: [
     {
       path: {
@@ -70,7 +73,7 @@ const fileUnitSchema = new mongoose.Schema({
   },
 });
 
-const FileUnit = mongoose.model('File', fileUnitSchema);
+const FileUnit = mongoose.model('Files', fileSchema);
 
 class FileUnitMigration {
 
@@ -80,7 +83,40 @@ class FileUnitMigration {
       const fileUnits = await Unit.find({'__t': 'file'}).exec();
       const updatedFileUnits = await Promise.all(fileUnits.map(async (fileUnit) => {
         if (fileUnit._id instanceof ObjectID) {
-          const fileUnitObj = fileUnit.toObject();
+          const fileUnitObj: IFileUnit = <IFileUnit>fileUnit.toObject();
+          fileUnitObj.files = await Promise.all(fileUnitObj.files.map(async (file) => {
+            if (file instanceof ObjectID) {
+              return file;
+            }
+
+            const oldFile = <any>file;
+            let absolutePath = '';
+            try {
+              absolutePath = fs.realpathSync(oldFile.path);
+            } catch (error) {
+              absolutePath = '';
+            }
+
+            if (absolutePath.length === 0) {
+              absolutePath = fs.realpathSync('api/' + oldFile.path);
+            }
+
+            const newFile = {
+              physicalPath: absolutePath,
+              name: oldFile.alias,
+              size: oldFile.size,
+              link: oldFile.name
+            };
+
+            const createdFile = await File.create(newFile);
+            return createdFile._id;
+          }));
+
+          fileUnitObj._id = new ObjectID(fileUnitObj._id);
+
+          const unitAfterReplace = await mongoose.connection.collection('units')
+            .findOneAndReplace({'_id': fileUnit._id}, fileUnitObj);
+          return fileUnitObj;
         }
       }));
     } catch (error) {
