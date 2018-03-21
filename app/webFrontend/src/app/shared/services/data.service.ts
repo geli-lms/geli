@@ -401,22 +401,13 @@ export class DownloadFileService extends DataService {
     super('download/', backendService);
   }
 
-  // FIXME: What does this return? please set return type(not any)
-  getPackageSize(idl: IDownload) {
-    return this.backendService
-      .post(this.apiPath + 'size', idl)
-      .toPromise();
-  }
-
-  // FIXME: What does this return? please set return type(not any)
-  postDownloadReqForCourse(idl: IDownload) {
+  postDownloadReqForCourse(idl: IDownload): Promise<Response> {
     return this.backendService
       .post(this.apiPath, idl)
       .toPromise();
   }
 
-  // FIXME: What does this return? please set return type(not any)
-  getFile(id: string) {
+  getFile(id: string): Promise<Response> {
     return this.backendService
       .getDownload(this.apiPath + id)
       .toPromise();
