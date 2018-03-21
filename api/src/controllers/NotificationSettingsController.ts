@@ -7,6 +7,39 @@ import {INotificationSettings} from '../../../shared/models/INotificationSetting
 @UseBefore(passportJwtMiddleware)
 export class NotificationSettingsController {
 
+  /**
+   * @api {get} /api/notificationSettings/user/:id Get notification settings per user
+   * @apiName GetNotificationSettings
+   * @apiGroup NotificationSettings
+   * @apiPermission student
+   * @apiPermission teacher
+   * @apiPermission admin
+   *
+   * @apiParam {String} id User ID.
+   *
+   * @apiSuccess {INotificationSettingsModel[]} settings List of notification settings.
+   *
+   * @apiSuccessExample {json} Success-Response:
+   *     [{
+   *         "_id": "5ab2829142949f000857b8f8",
+   *         "updatedAt": "2018-03-21T16:04:33.335Z",
+   *         "createdAt": "2018-03-21T16:04:33.335Z",
+   *         "user": {...},
+   *         "course": {...},
+   *         "notificationType": "allChanges",
+   *         "emailNotification": false,
+   *         "__v": 0
+   *     }, {
+   *         "_id": "5ab283b342949f000857b8f9",
+   *         "updatedAt": "2018-03-21T16:09:23.542Z",
+   *         "createdAt": "2018-03-21T16:09:23.542Z",
+   *         "user": {...},
+   *         "course": {...},
+   *         "notificationType": "allChanges",
+   *         "emailNotification": false,
+   *         "__v": 0
+   *     ]}
+   */
   @Authorized(['student', 'teacher', 'admin'])
   @Get('/user/:id')
   async getNotificationSettingsPerUser(@Param('id') id: string) {
@@ -18,6 +51,33 @@ export class NotificationSettingsController {
     });
   }
 
+  /**
+   * @api {put} /api/notificationSettings/user/:id Update notification settings
+   * @apiName PutNotificationSettings
+   * @apiGroup NotificationSettings
+   * @apiPermission student
+   * @apiPermission teacher
+   * @apiPermission admin
+   *
+   * @apiParam {String} id ID of notification settings.
+   * @apiParam {INotificationSettings} notificationSettings New notification settings.
+   *
+   * @apiSuccess {INotificationSettingsModel} settings Updated notification settings.
+   *
+   * @apiSuccessExample {json} Success-Response:
+   *     {
+   *         "_id": "5ab283b342949f000857b8f9",
+   *         "updatedAt": "2018-03-21T16:09:23.542Z",
+   *         "createdAt": "2018-03-21T16:09:23.542Z",
+   *         "user": {...},
+   *         "course": {...},
+   *         "notificationType": "allChanges",
+   *         "emailNotification": true,
+   *         "__v": 0
+   *     }
+   *
+   * @apiError BadRequestError notification needs fields course and user
+   */
   @Authorized(['student', 'teacher', 'admin'])
   @Put('/:id')
   async updateNotificationSettings(@Param('id') id: string, @Body() notificationSettings: INotificationSettings) {
@@ -29,6 +89,26 @@ export class NotificationSettingsController {
     return settings.toObject();
   }
 
+  /**
+   * @api {post} /api/notificationSettings/ Create notification settings
+   * @apiName PostNotificationSettings
+   * @apiGroup NotificationSettings
+   * @apiPermission student
+   * @apiPermission teacher
+   * @apiPermission admin
+   *
+   * @apiParam {Object} data Data for new notification settings.
+   *
+   * @apiSuccess {INotificationSettingsModel} settings Created notification settings.
+   *
+   * @apiSuccessExample {json} Success-Response:
+   *     {
+   *         todo
+   *     }
+   *
+   * @apiError BadRequestError NotificationSettings need course and user
+   * @apiError BadRequestError NotificationSettings for user: x with course: y already exist
+   */
   @Authorized(['student', 'teacher', 'admin'])
   @Post('/')
   async createNotificationSettings(@Body() data: any) {
