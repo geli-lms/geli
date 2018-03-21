@@ -34,6 +34,56 @@ function escapeRegex(text: string) {
 @UseBefore(passportJwtMiddleware)
 export class UserController {
 
+  /**
+   * @api {get} /api/users Request all users
+   * @apiName GetUsers
+   * @apiGroup User
+   * @apiPermission teacher
+   * @apiPermission admin
+   *
+   * @apiParam {IUser} currentUser Currently logged in user.
+   *
+   * @apiSuccess {User[]} users List of users.
+   *
+   * @apiSuccessExample {json} Success-Response:
+   *     [
+   *         {
+   *             "_id": "5a037e6a60f72236d8e7c81d",
+   *             "updatedAt": "2018-01-08T19:27:49.483Z",
+   *             "createdAt": "2017-11-08T22:00:10.899Z",
+   *             "uid": null,
+   *             "email": "student1@test.local",
+   *             "__v": 0,
+   *             "isActive": true,
+   *             "role": "student",
+   *             "profile": {
+   *                 "firstName": "Tick",
+   *                 "lastName": "Studi",
+   *                 "picture": {
+   *                     "alias": "IMG_20141226_211216.jpg",
+   *                     "name": "5a037e6a60f72236d8e7c81d-9558.jpg",
+   *                     "path": "uploads\\users\\5a037e6a60f72236d8e7c81d-9558.jpg"
+   *                 }
+   *             },
+   *             "id": "5a037e6a60f72236d8e7c81d"
+   *         },
+   *         {
+   *             "uid": null,
+   *             "_id": "5a037e6a60f72236d8e7c815",
+   *             "updatedAt": "2017-11-08T22:00:10.898Z",
+   *             "createdAt": "2017-11-08T22:00:10.898Z",
+   *             "email": "teacher2@test.local",
+   *             "__v": 0,
+   *             "isActive": true,
+   *             "role": "teacher",
+   *             "profile": {
+   *                 "firstName": "Ober",
+   *                 "lastName": "Lehrer"
+   *             },
+   *             "id": "5a037e6a60f72236d8e7c815"
+   *         }
+   *     ]
+   */
   @Get('/')
   @Authorized(['teacher', 'admin'])
   getUsers(@CurrentUser() currentUser?: IUser) {
