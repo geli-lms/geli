@@ -15,11 +15,10 @@ import {IUser} from '../../../../../../../../shared/models/IUser';
 })
 export class WhitelistShowComponent implements OnInit {
 
-  @Input() dragUsers: any = [];
-  @Input() dragulaBagId;
-  @Input() fieldId: string;
+  @Output() onDragendRemoveWhitelist = new EventEmitter<IWhitelistUser>();
   @Input() course: ICourse;
   @Input() show: boolean;
+
 
   signedInStudents: IUser[];
 
@@ -46,10 +45,10 @@ export class WhitelistShowComponent implements OnInit {
       });
   }
 
-  remove(user: IWhitelistUser) {
-    const idList: string[] = this.dragUsers.map((u) => u._id);
+  async remove(user: IWhitelistUser) {
+    const idList: string[] = this.course.whitelist.map((u) => u._id);
     const index: number = idList.indexOf(user._id);
-    this.dragUsers.splice(index, 1);
+    this.course.whitelist.splice(index, 1);
 
     const idListCourse: string[] = this.course.whitelist.map((c) => c._id);
     const indexCourse: number = idListCourse.indexOf(user._id);
@@ -57,7 +56,8 @@ export class WhitelistShowComponent implements OnInit {
       this.course.whitelist.splice(indexCourse, 1);
       this.updateCourse();
     }
-    this.whitelistUserService.deleteItem(user);
+    await this.whitelistUserService.deleteItem(user);
+    this.onDragendRemoveWhitelist.emit(user);
   }
 
   isInCourse(user: IWhitelistUser) {

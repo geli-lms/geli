@@ -59,20 +59,24 @@ export class NotificationComponent implements OnInit {
    */
   sortNotifications() {
     this.notifications = this.notifications.sort((a, b) => {
-      if (compareIds(a.changedCourse, b.changedCourse) === 0) {
-        if (!(a.changedLecture === null || a.changedLecture === undefined)
-          && !(b.changedLecture === null || b.changedLecture === undefined)) {
-          if (compareIds(a.changedLecture, b.changedLecture) === 0) {
-            if (!(a.changedUnit === null || a.changedUnit === undefined)
-              && !(b.changedUnit === null || b.changedUnit === undefined)) {
-              return compareIds(a.changedUnit, b.changedUnit);
+        if (!(a.changedCourse === null || a.changedCourse === undefined)
+          && !(b.changedCourse === null || b.changedCourse === undefined)) {
+          if (compareIds(a.changedCourse, b.changedCourse) === 0) {
+            if (!(a.changedLecture === null || a.changedLecture === undefined)
+              && !(b.changedLecture === null || b.changedLecture === undefined)) {
+              if (compareIds(a.changedLecture, b.changedLecture) === 0) {
+                if (!(a.changedUnit === null || a.changedUnit === undefined)
+                  && !(b.changedUnit === null || b.changedUnit === undefined)) {
+                  return compareIds(a.changedUnit, b.changedUnit);
+                }
+              }
+              return compareIds(a.changedLecture, b.changedLecture);
             }
           }
-          return compareIds(a.changedLecture, b.changedLecture);
+          return compareIds(a.changedCourse, b.changedCourse);
         }
       }
-      return compareIds(a.changedCourse, b.changedCourse);
-    });
+    );
   }
 
   isNullOrUndefined(item: any): boolean {

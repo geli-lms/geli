@@ -2,7 +2,7 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {IUser} from '../../../../../../../../shared/models/IUser';
 import {DialogService} from '../../../../shared/services/dialog.service';
 import {MatSnackBar} from '@angular/material';
-import {CourseService} from '../../../../shared/services/data.service';
+import {CourseService, NotificationService} from '../../../../shared/services/data.service';
 import {ICourse} from '../../../../../../../../shared/models/ICourse';
 
 @Component({
@@ -27,7 +27,8 @@ export class CourseUserListOverviewComponent implements OnInit {
   }
 
   constructor(private dialogService: DialogService, private snackBar: MatSnackBar,
-              private courseService: CourseService) {
+              private courseService: CourseService,
+              private notificationService: NotificationService) {
   }
 
   ngOnInit() {
@@ -57,7 +58,12 @@ export class CourseUserListOverviewComponent implements OnInit {
       .toPromise();
     this.toggleBlocked = false;
     if (res) {
-      this.selectedMembers.forEach(user => this.onRemove.emit(user._id));
+      this.selectedMembers.forEach(user => {
+        this.notificationService.createNotification(
+          user,
+          {text: 'You have been removed from course ' + this.course.name});
+        this.onRemove.emit(user._id)
+      });
       this.resetSelectedUsers();
     }
   }
@@ -77,9 +83,9 @@ export class CourseUserListOverviewComponent implements OnInit {
     this.resetSelectedUsers();
     try {
       await this.courseService.sendMailToSelectedUsers(mailData);
-      this.snackBar.open('Sending mail succeeded.', '', {duration: 2000});
+      this.snackBar.open('Sending mail succeeded.', 'Dismiss', {duration: 2000});
     } catch (err) {
-      this.snackBar.open('Sending mail failed.', '', {duration: 3000});
+      this.snackBar.open('Sending mail failed.', 'Dismiss', {duration: 3000});
     }
   }
 
