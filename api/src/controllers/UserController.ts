@@ -34,6 +34,56 @@ function escapeRegex(text: string) {
 @UseBefore(passportJwtMiddleware)
 export class UserController {
 
+  /**
+   * @api {get} /api/users Request all users
+   * @apiName GetUsers
+   * @apiGroup User
+   * @apiPermission teacher
+   * @apiPermission admin
+   *
+   * @apiParam {IUser} currentUser Currently logged in user.
+   *
+   * @apiSuccess {User[]} users List of users.
+   *
+   * @apiSuccessExample {json} Success-Response:
+   *     [
+   *         {
+   *             "_id": "5a037e6a60f72236d8e7c81d",
+   *             "updatedAt": "2018-01-08T19:27:49.483Z",
+   *             "createdAt": "2017-11-08T22:00:10.899Z",
+   *             "uid": null,
+   *             "email": "student1@test.local",
+   *             "__v": 0,
+   *             "isActive": true,
+   *             "role": "student",
+   *             "profile": {
+   *                 "firstName": "Tick",
+   *                 "lastName": "Studi",
+   *                 "picture": {
+   *                     "alias": "IMG_20141226_211216.jpg",
+   *                     "name": "5a037e6a60f72236d8e7c81d-9558.jpg",
+   *                     "path": "uploads\\users\\5a037e6a60f72236d8e7c81d-9558.jpg"
+   *                 }
+   *             },
+   *             "id": "5a037e6a60f72236d8e7c81d"
+   *         },
+   *         {
+   *             "uid": null,
+   *             "_id": "5a037e6a60f72236d8e7c815",
+   *             "updatedAt": "2017-11-08T22:00:10.898Z",
+   *             "createdAt": "2017-11-08T22:00:10.898Z",
+   *             "email": "teacher2@test.local",
+   *             "__v": 0,
+   *             "isActive": true,
+   *             "role": "teacher",
+   *             "profile": {
+   *                 "firstName": "Ober",
+   *                 "lastName": "Lehrer"
+   *             },
+   *             "id": "5a037e6a60f72236d8e7c815"
+   *         }
+   *     ]
+   */
   @Get('/')
   @Authorized(['teacher', 'admin'])
   getUsers(@CurrentUser() currentUser?: IUser) {
@@ -44,7 +94,7 @@ export class UserController {
   }
 
   @Get('/members/search') // members/search because of conflict with /:id
-  async searchUser(@QueryParam('role') role: string, @QueryParam('query') query: string) {
+  async searchUser(@QueryParam('role') role: string, @QueryParam('query') query: string, @QueryParam('limit') limit?: number) {
     if (role !== 'student' && role !== 'teacher') {
       throw new BadRequestError('Method not allowed for this role.');
     }
@@ -68,8 +118,8 @@ export class UserController {
       'score': {$meta: 'textScore'}
     })
       .where({role: role})
-      .sort({'score': {$meta: 'textScore'}})
-      .limit(20);
+      .limit(limit ? limit : Number.MAX_SAFE_INTEGER)
+      .sort({'score': {$meta: 'textScore'}});
     return {
       users: users.map((user) => user.toObject({virtuals: true})),
       meta: {

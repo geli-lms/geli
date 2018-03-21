@@ -17,7 +17,6 @@ export class MembersComponent implements OnInit {
   courseId: string;
   totalWhitelist = 0;
   foundStudents: IUser[] = [];
-  dragableWhitelistUserInCourse: IWhitelistUser[] = [];
   showWhitelists = false;
   search = '';
 
@@ -30,8 +29,12 @@ export class MembersComponent implements OnInit {
     });
   }
 
-  ngOnInit() {
-    this.courseService.readSingleItem<ICourse>(this.courseId).then((course: ICourse) => {
+  async ngOnInit() {
+    await this.initCourse();
+  }
+
+  async initCourse() {
+    await this.courseService.readSingleItem<ICourse>(this.courseId).then((course: ICourse) => {
       this.course = course;
       this.course.students.forEach(member =>
         this.foundStudents = this.foundStudents.filter(user => user._id !== member._id))}
@@ -67,12 +70,12 @@ export class MembersComponent implements OnInit {
     this.updateCourseStudents();
   }
 
-  removeWhitelistUserFromCourse(draggedUser: IWhitelistUser) {
-    this.course.whitelist = this.course.whitelist.filter(w => w._id !== draggedUser._id);
-    this.updateCourseStudents();
+  async removeWhitelistUserFromCourse(draggedUser: IWhitelistUser) {
+    await this.initCourse();
   }
 
-  pushWhitelistUserToCourse(draggedUser: IWhitelistUser) {
+  async pushWhitelistUserToCourse(draggedUser: IWhitelistUser) {
+    await this.initCourse();
     this.course.whitelist.push(draggedUser);
     this.updateCourseStudents();
   }
@@ -89,9 +92,5 @@ export class MembersComponent implements OnInit {
   onSearch(search: string): void {
     this.search = search;
     this.showWhitelists = search.length > 0;
-  }
-
-  onFoundWhitelistUserInCourse(users: IWhitelistUser[]) {
-    this.dragableWhitelistUserInCourse = users;
   }
 }

@@ -9,6 +9,8 @@ import * as mongoose from 'mongoose';
 import ObjectId = mongoose.Types.ObjectId;
 import {FixtureUtils} from '../../fixtures/FixtureUtils';
 import {ICourse} from '../../../shared/models/ICourse';
+import {IUser} from '../../../shared/models/IUser';
+import {Course} from '../../src/models/Course';
 
 const app = new Server().app;
 const BASE_URL = '/api/whitelist';
@@ -73,6 +75,37 @@ describe('Whitelist User', () => {
         .catch(err => err.response);
       res.status.should.be.equal(401);
     });
+
+    it('should add an user by synchronizing', async () => {
+      const teacher = await FixtureUtils.getRandomTeacher();
+      const course: ICourse = await FixtureUtils.getRandomCourse();
+      const user: IUser = await User.create(
+        { uid: '1236456',
+          password: 'test1234',
+          email: 'test@ok.com',
+          profile: {
+          firstName: 'Max',
+          lastName: 'Mustermann'
+        }}
+      );
+      const whitelistUser: any = {
+        firstName: user.profile.firstName,
+        lastName: user.profile.lastName,
+        uid: user.uid,
+        courseId: course._id
+      };
+      const res = await chai.request(app)
+        .post(`${BASE_URL}/`)
+        .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
+        .send(whitelistUser);
+      res.status.should.be.equal(200);
+      const resCourse = await Course.findById(course._id).populate('students');
+      const addedUsers: IUser[] = resCourse.students.filter(stud => stud.uid === user.uid);
+      addedUsers.length.should.be.not.eq(0);
+      addedUsers[0].uid.should.be.eq(whitelistUser.uid);
+      addedUsers[0].profile.firstName.should.be.eq(whitelistUser.firstName);
+      addedUsers[0].profile.lastName.should.be.eq(whitelistUser.lastName);
+    })
   });
 
   describe(`PUT ${BASE_URL}`, () => {
@@ -114,6 +147,7 @@ describe('Whitelist User', () => {
         .catch(err => err.response);
       res.status.should.be.equal(401);
     });
+  });
 
     describe(`DELETE ${BASE_URL}`, () => {
       it('should delete a whitelist user', async () => {
@@ -128,7 +162,6 @@ describe('Whitelist User', () => {
         const createdWhitelistUser = await WhitelistUser.create(newWhitelistUser);
         const res = await chai.request(app)
           .del(`${BASE_URL}/${createdWhitelistUser._id}`)
-          .send(createdWhitelistUser)
           .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`);
         res.status.should.be.equal(200);
       });
@@ -145,11 +178,32 @@ describe('Whitelist User', () => {
         const createdWhitelistUser = await WhitelistUser.create(newWhitelistUser);
         const res = await chai.request(app)
           .del(`${BASE_URL}/${createdWhitelistUser._id}`)
-          .send(createdWhitelistUser)
           .set('Authorization', `JWT awf`)
           .catch(err => err.response);
         res.status.should.be.equal(401);
       });
+
+      it('should delete an user by synchronizing', async () => {
+        const teacher = await FixtureUtils.getRandomTeacher();
+        const course: ICourse = await FixtureUtils.getRandomCourse();
+        const member = course.students[0];
+        const newWhitelistUser: IWhitelistUser = new WhitelistUser({
+          firstName: member.profile.firstName,
+          lastName: member.profile.lastName,
+          uid: member.uid,
+          courseId: course._id
+        });
+        const createdWhitelistUser = await WhitelistUser.create(newWhitelistUser);
+        course.whitelist = course.whitelist.concat(createdWhitelistUser);
+        await Course.findByIdAndUpdate(course._id, course);
+
+        const res = await chai.request(app)
+          .del(`${BASE_URL}/${createdWhitelistUser._id}`)
+          .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`);
+        res.status.should.be.equal(200);
+        const resCourse = await Course.findById(course._id).populate('students');
+        const emptyUsers: IUser[] = resCourse.students.filter(stud => stud.uid === member.uid);
+        emptyUsers.length.should.be.eq(0);
+      })
     });
-  });
 });
