@@ -266,7 +266,7 @@ describe('User', () => {
 
       res.status.should.be.equal(400);
       res.body.name.should.be.equal('BadRequestError');
-      res.body.message.should.be.equal('You must specify your current password if you want to set a new password.');
+      res.body.message.should.be.equal('Invalid Current Password!');
     });
 
     it('should update user data', async () => {
