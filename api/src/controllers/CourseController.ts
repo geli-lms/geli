@@ -3,7 +3,7 @@ import {
   Authorized, BadRequestError,
   Body,
   CurrentUser, Delete, ForbiddenError,
-  Get, HttpError,
+  Get,
   JsonController, NotFoundError,
   Param,
   Post,
@@ -21,11 +21,11 @@ import {ObsCsvController} from './ObsCsvController';
 import {Course, ICourseModel} from '../models/Course';
 import {User} from '../models/User';
 import {WhitelistUser} from '../models/WhitelistUser';
-import {ICodeKataUnit} from '../../../shared/models/units/ICodeKataUnit';
 import emailService from '../services/EmailService';
 
 const multer = require('multer');
 import crypto = require('crypto');
+import {IUnitModel} from '../models/units/Unit';
 import {API_NOTIFICATION_TYPE_ALL_CHANGES, API_NOTIFICATION_TYPE_NONE, NotificationSettings} from '../models/NotificationSettings';
 import {Notification} from '../models/Notification';
 
@@ -84,8 +84,8 @@ export class CourseController {
   }
 
   @Get('/:id')
-  getCourse(@Param('id') id: string, @CurrentUser() currentUser: IUser) {
-    return Course.findOne({
+  async getCourse(@Param('id') id: string, @CurrentUser() currentUser: IUser) {
+    const course = await Course.findOne({
       ...this.userReadConditions(currentUser),
       _id: id
     })
@@ -101,24 +101,27 @@ export class CourseController {
           }
         }
       })
+      .populate('media')
       .populate('courseAdmin')
       .populate('teachers')
       .populate('students')
       .populate('whitelist')
-      .then((course) => {
-        if (!course) {
-          throw new NotFoundError();
-        }
+      .exec();
 
-        course.lectures.forEach((lecture) => {
-          lecture.units.forEach((unit) => {
-            if (unit.__t === 'code-kata' && currentUser.role === 'student') {
-              (<ICodeKataUnit>unit).code = null;
-            }
-          });
-        });
-        return course.toObject({virtuals: true});
-      });
+    if (!course) {
+      throw new NotFoundError();
+    }
+
+    course.lectures = await Promise.all(course.lectures.map(async (lecture) => {
+      lecture.units = await Promise.all(lecture.units.map(async (unit: IUnitModel) => {
+        unit = await unit.populateUnit();
+        return unit.secureData(currentUser);
+      }));
+
+      return lecture;
+    }));
+
+    return course.toObject();
   }
 
   private userReadConditions(currentUser: IUser) {

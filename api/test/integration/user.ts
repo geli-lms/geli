@@ -341,7 +341,7 @@ describe('User', () => {
         .attach('file', fs.readFileSync('test/resources/test.png'), 'test.png');
 
       res.status.should.be.equal(200);
-      res.body.profile.picture.name.should.match(new RegExp(`${admin._id}-[0-9]{4}.png`));
+      res.body.profile.picture.name.should.be.equal('test.png');
     });
   });
 
