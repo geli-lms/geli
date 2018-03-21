@@ -94,7 +94,7 @@ export class UserController {
   }
 
   @Get('/members/search') // members/search because of conflict with /:id
-  async searchUser(@QueryParam('role') role: string, @QueryParam('query') query: string) {
+  async searchUser(@QueryParam('role') role: string, @QueryParam('query') query: string, @QueryParam('limit') limit?: number) {
     if (role !== 'student' && role !== 'teacher') {
       throw new BadRequestError('Method not allowed for this role.');
     }
@@ -118,8 +118,8 @@ export class UserController {
       'score': {$meta: 'textScore'}
     })
       .where({role: role})
-      .sort({'score': {$meta: 'textScore'}})
-      .limit(20);
+      .limit(limit ? limit : Number.MAX_SAFE_INTEGER)
+      .sort({'score': {$meta: 'textScore'}});
     return {
       users: users.map((user) => user.toObject({virtuals: true})),
       meta: {

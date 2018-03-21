@@ -32,6 +32,12 @@ export const errorCodes = {
       text: 'Incorrect or missing access key'
     }
   },
+  whitelist: {
+    duplicateWhitelistUser: {
+      code: 'duplicate uid',
+      text: 'That matriculation number is already in use for this course.'
+    }
+  },
   password: {
     regex: {
       code: '',

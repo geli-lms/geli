@@ -28,6 +28,10 @@ const multer = require('multer');
 import crypto = require('crypto');
 import {API_NOTIFICATION_TYPE_ALL_CHANGES, API_NOTIFICATION_TYPE_NONE, NotificationSettings} from '../models/NotificationSettings';
 import {Notification} from '../models/Notification';
+import * as mongoose from 'mongoose';
+import {Schema} from 'mongoose';
+import ObjectId = mongoose.Types.ObjectId;
+import {IWhitelistUser} from '../../../shared/models/IWhitelistUser';
 
 const uploadOptions = {
   storage: multer.diskStorage({
@@ -52,25 +56,25 @@ export class CourseController {
   parser: ObsCsvController = new ObsCsvController();
 
   @Get('/')
-  getCourses(@CurrentUser() currentUser: IUser) {
+  async getCourses(@CurrentUser() currentUser: IUser) {
+    const whitelistUsers = await WhitelistUser.find({uid: currentUser.uid});
     const conditions = this.userReadConditions(currentUser);
     if (conditions.$or) {
       // Everyone is allowed to see free courses in overview
       conditions.$or.push({enrollType: 'free'});
       conditions.$or.push({enrollType: 'accesskey'});
+      conditions.$or.push({enrollType: 'whitelist', whitelist:  {$elemMatch: {$in: whitelistUsers}}});
     }
 
-    const courseQuery = Course.find(conditions)
+    const courses = await Course.find(conditions)
     // TODO: Do not send lectures when student has no access
       .populate('lectures')
       .populate('teachers')
       .populate('courseAdmin')
       .populate('students');
 
-    return courseQuery
-      .then(courses => courses.map(course => {
+      return courses.map(course => {
         const courseObject: any = course.toObject();
-
         if (currentUser.role === 'student') {
           delete courseObject.courseAdmin;
 
@@ -78,9 +82,8 @@ export class CourseController {
             (student: any) => student._id === currentUser._id
           );
         }
-
         return courseObject;
-      }));
+      })
   }
 
   @Get('/:id')
@@ -166,38 +169,33 @@ export class CourseController {
 
   @Authorized(['student'])
   @Post('/:id/enroll')
-  enrollStudent(@Param('id') id: string, @Body() data: any, @CurrentUser() currentUser: IUser) {
-    return Course.findById(id)
-      .then(course => {
-        if (!course) {
+  async enrollStudent(@Param('id') id: string, @Body() data: any, @CurrentUser() currentUser: IUser) {
+    let course = await Course.findById(id);
+    if (!course) {
           throw new NotFoundError();
         }
-
         if (course.enrollType === 'whitelist') {
-          return WhitelistUser.find(course.whitelist).then((wUsers) => {
+        const wUsers: IWhitelistUser[] = await  WhitelistUser.find().where({courseId: course._id});
             if (wUsers.filter(e =>
                 e.firstName === currentUser.profile.firstName.toLowerCase()
                 && e.lastName === currentUser.profile.lastName.toLowerCase()
                 && e.uid === currentUser.uid).length <= 0) {
               throw new ForbiddenError(errorCodes.errorCodes.course.notOnWhitelist.code);
             }
-          });
         } else if (course.accessKey && course.accessKey !== data.accessKey) {
           throw new ForbiddenError(errorCodes.errorCodes.course.accessKey.code);
         }
 
         if (course.students.indexOf(currentUser._id) < 0) {
           course.students.push(currentUser);
-          new NotificationSettings({
+          await new NotificationSettings({
             'user': currentUser, 'course': course,
             'notificationType': API_NOTIFICATION_TYPE_ALL_CHANGES,
             'emailNotification': false
           }).save();
-          return course.save().then((c) => c.toObject());
+          course = await course.save();
         }
-
         return course.toObject();
-      });
   }
 
   @Authorized(['student'])

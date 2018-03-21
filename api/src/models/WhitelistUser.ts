@@ -41,6 +41,8 @@ const whitelistUserSchema = new mongoose.Schema({
       }
     }
   });
+// Prevent duplicates in one course.
+whitelistUserSchema.index({ uid: 1, courseId: 1}, { unique: true });
 
 const WhitelistUser = mongoose.model<IWhitelistUserModel>('WhitelistUser', whitelistUserSchema);
 
