@@ -90,7 +90,17 @@ class FileUnitMigration {
             }
 
             const oldFile = <any>file;
-            const absolutePath = fs.realpathSync('api\\' + oldFile.path);
+            let absolutePath = '';
+            try {
+              absolutePath = fs.realpathSync(oldFile.path);
+            } catch (error) {
+              absolutePath = '';
+            }
+
+            if (absolutePath.length === 0) {
+              absolutePath = fs.realpathSync('api/' + oldFile.path);
+            }
+
             const newFile = {
               physicalPath: absolutePath,
               name: oldFile.alias,
