@@ -195,20 +195,20 @@ export class TaskService extends DataService {
   getTasksForCourse(id: string): Promise<any[]> {
     return new Promise((resolve, reject) => {
       this.backendService.get(this.apiPath + 'course/' + id)
-      .subscribe(
-        (responseItems: any) => {
-          if (this.changeProps2Date) {
-            responseItems.forEach(item => {
-              this.changeProps2Date.forEach(prop => {
-                DataService.changeStringProp2DateProp(item, prop);
+        .subscribe(
+          (responseItems: any) => {
+            if (this.changeProps2Date) {
+              responseItems.forEach(item => {
+                this.changeProps2Date.forEach(prop => {
+                  DataService.changeStringProp2DateProp(item, prop);
+                });
               });
-            });
-          }
+            }
 
-          resolve(responseItems);
-        },
-        error => reject(error)
-      );
+            resolve(responseItems);
+          },
+          error => reject(error)
+        );
     });
   }
 }
@@ -280,6 +280,12 @@ export class NotificationSettingsService extends DataService {
 export class NotificationService extends DataService {
   constructor(public backendService: BackendService) {
     super('notification/', backendService);
+  }
+
+  createNotification(user: IUser, data: any): Promise<any> {
+    return this.backendService
+      .post(this.apiPath + 'user/' + user._id, JSON.stringify(data))
+      .toPromise();
   }
 
   getNotificationsPerUser(user: IUser): Promise<any[]> {

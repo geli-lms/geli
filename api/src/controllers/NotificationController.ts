@@ -32,51 +32,63 @@ export class NotificationController {
       throw new BadRequestError('Notification needs at least the fields course and text');
     }
     const course = await Course.findById(data.changedCourse._id);
-    /*course.students.forEach(async student => {
-      await this.createNotification(
-        student, data.changedCourse, data.text, data.changedLecture, data.changedUnit);
-    });*/
-    await Promise.all(course.students.map( async student => {
-      await this.createNotification(
-        student, data.changedCourse, data.text, data.changedLecture, data.changedUnit);
+    await Promise.all(course.students.map(async student => {
+      await this.createNotification(student, data.text, data.changedCourse, data.changedLecture, data.changedUnit);
     }));
     return {notified: true};
   }
 
-  async createNotification(user: IUser, changedCourse: ICourse, text: string, changedLecture?: ILecture, changedUnit?: IUnit) {
+  @Authorized(['teacher', 'admin'])
+  @Post('/user/:id')
+  async createNotificationForStudent(@Param('id') userId: string, @Body() data: any) {
+    const user = await User.findById(userId);
+    await this.createNotification(user, data.text, data.changedCourse, data.changedLecture, data.changedUnit)
+    return {notified: true};
+  }
+
+  async createNotification(user: IUser, text: string, changedCourse?: ICourse, changedLecture?: ILecture, changedUnit?: IUnit) {
     try {
-      let settings = await NotificationSettings.findOne({'user': user, 'course': changedCourse});
-      if (settings === undefined || settings === null) {
-        settings = await new NotificationSettings(
-          {
-            user: user,
-            course: changedCourse,
-            notificationType: API_NOTIFICATION_TYPE_ALL_CHANGES,
-            emailNotification: false
-          }).save();
-      }
-      if (settings.notificationType === API_NOTIFICATION_TYPE_ALL_CHANGES) {
-        const notification = new Notification();
-        notification.user = user;
+      const notification = new Notification();
+      notification.user = user;
+      notification.text = text;
+      notification.isOld = false;
+      if (changedCourse) {
         notification.changedCourse = changedCourse;
-        notification.text = text;
-        if (changedLecture) {
-          notification.changedLecture = changedLecture;
+        const settings = await this.getOrCreateSettings(user, changedCourse);
+        if (settings.notificationType === API_NOTIFICATION_TYPE_ALL_CHANGES) {
+          if (changedLecture) {
+            notification.changedLecture = changedLecture;
+          }
+          if (changedUnit) {
+            notification.changedUnit = changedUnit;
+          }
+          if (settings.emailNotification) {
+            await this.sendNotificationMail(user, 'you received new notifications for the course ' + changedCourse.name + '.');
+          }
+          return notification.save();
         }
-        if (changedUnit) {
-          notification.changedUnit = changedUnit;
-        }
-        if (settings.emailNotification) {
-          await this.sendNotificationMail(user, 'you received new notifications for the course ' + changedCourse.name + '.');
-        }
-        notification.isOld = false;
+      } else {
         return notification.save();
       }
     } catch (err) {
-      const newError = new InternalServerError('Failed to create notifications');
+      const newError = new InternalServerError('Failed to create notification');
       newError.stack += '\nCaused by: ' + err.message + '\n' + err.stack;
       throw newError;
     }
+  }
+
+  async getOrCreateSettings(user: IUser, changedCourse: ICourse) {
+    let settings = await NotificationSettings.findOne({'user': user, 'course': changedCourse});
+    if (settings === undefined || settings === null) {
+      settings = await new NotificationSettings(
+        {
+          user: user,
+          course: changedCourse,
+          notificationType: API_NOTIFICATION_TYPE_ALL_CHANGES,
+          emailNotification: false
+        }).save();
+    }
+    return settings;
   }
 
   async sendNotificationMail(user: IUser, text: string) {
