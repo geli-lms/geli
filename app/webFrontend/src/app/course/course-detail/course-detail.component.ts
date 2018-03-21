@@ -7,7 +7,7 @@ import {UserService} from '../../shared/services/user.service';
 import {MatSnackBar, MatDialog} from '@angular/material';
 import {DownloadCourseDialogComponent} from './download-course-dialog/download-course-dialog.component';
 import {TitleService} from '../../shared/services/title.service';
-import {UserUtil} from '../../shared/utils/userUtil';
+import {LastVisitedCourseContainerUpdater} from '../../shared/utils/LastVisitedCourseContainerUpdater';
 
 @Component({
   selector: 'app-course-detail',
@@ -42,7 +42,7 @@ export class CourseDetailComponent implements OnInit {
     this.courseService.readSingleItem(courseId).then(
       (course: any) => {
         this.course = course;
-        UserUtil.addCourseToLastVisitedCourses(courseId, this.userService, this.userDataService);
+        LastVisitedCourseContainerUpdater.addCourseToLastVisitedCourses(courseId, this.userService, this.userDataService);
         this.titleService.setTitleCut(['Course: ', this.course.name]);
       },
       (errorResponse: Response) => {

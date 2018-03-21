@@ -1,7 +1,7 @@
 import {UserService} from '../services/user.service';
 import {UserDataService} from '../services/data.service';
 
-export class UserUtil {
+export class LastVisitedCourseContainerUpdater {
   public static addCourseToLastVisitedCourses(
     courseId: string,
     userService: UserService,

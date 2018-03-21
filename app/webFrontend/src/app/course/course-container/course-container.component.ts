@@ -5,7 +5,7 @@ import {CourseService, UserDataService} from '../../shared/services/data.service
 import {Router} from '@angular/router';
 import {ICourse} from '../../../../../../shared/models/ICourse';
 import {errorCodes} from '../../../../../../api/src/config/errorCodes';
-import {UserUtil} from '../../shared/utils/userUtil';
+import {LastVisitedCourseContainerUpdater} from '../../shared/utils/LastVisitedCourseContainerUpdater';
 
 @Component({
   selector: 'app-course-container',
@@ -47,7 +47,7 @@ export class CourseContainerComponent implements OnInit {
       user: this.userService.user,
       accessKey
     }).then((res) => {
-      UserUtil.addCourseToLastVisitedCourses(courseId, this.userService, this.userDataService);
+      LastVisitedCourseContainerUpdater.addCourseToLastVisitedCourses(courseId, this.userService, this.userDataService);
       this.snackBar.open('Successfully enrolled', '', {duration: 5000});
       // reload courses to update enrollment status
       this.onEnroll.emit();
