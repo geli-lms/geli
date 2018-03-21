@@ -204,7 +204,7 @@ export class UserController {
       .then((isValidPassword) => {
         if (typeof user.password !== 'undefined') {
           if (!(currentUser.role === 'admin' && currentUser._id !== user._id) && !isValidPassword && user.password.length > 0) {
-            throw new BadRequestError('You must specify your current password if you want to set a new password.');
+            throw new BadRequestError('Invalid Current Password!');
           } else {
             if (user.password.length === 0) {
               delete user.password;
