@@ -100,6 +100,7 @@ export class UserController {
    *
    * @apiParam {String="student","teacher"} role User role.
    * @apiParam {String} query Query string.
+   * @apiParam {Number} limit Limit.
    *
    * @apiSuccess {Object} result Search result.
    * @apiSuccess {User[]} result.users List of found users.
@@ -169,6 +170,7 @@ export class UserController {
    *     }
    *
    * @apiError BadRequestError Method not allowed for this role.
+   * @apiError BadRequestError Query was empty.
    */
   @Get('/members/search') // members/search because of conflict with /:id
   async searchUser(@QueryParam('role') role: string, @QueryParam('query') query: string, @QueryParam('limit') limit?: number) {
@@ -365,7 +367,7 @@ export class UserController {
    *
    * @apiError BadRequestError You can't revoke your own privileges.
    * @apiError BadRequestError This mail address is already in use.
-   * @apiError BadRequestError You must specify your current password if you want to set a new password.
+   * @apiError BadRequestError Invalid Current Password!
    * @apiError ForbiddenError Only users with admin privileges can change roles.
    * @apiError ForbiddenError Only users with admin privileges can change uids.
    */

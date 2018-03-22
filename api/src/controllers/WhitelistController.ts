@@ -59,7 +59,7 @@ export class WitelistController {
    *
    * @apiParam {IWhitelistUser} whitelistUser New whitelist user.
    *
-   * @apiSuccess {WhitelistUser} w Added whitelist user.
+   * @apiSuccess {WhitelistUser} savedWhitelistUser Added whitelist user.
    *
    * @apiSuccessExample {json} Success-Response:
    *     {
@@ -73,6 +73,8 @@ export class WitelistController {
    *         "courseId": {...},
    *         "id": "5ab2e92fda32ac2ab0f04b78"
    *     }
+   *
+   * @apiError BadRequestError That matriculation number is already in use for this course.
    */
   @Post('/')
   @Authorized(['teacher', 'admin'])
@@ -97,7 +99,7 @@ export class WitelistController {
    * @apiParam {String} id Whitelist user ID.
    * @apiParam {IWhitelistUser} whitelistUser New whitelist user.
    *
-   * @apiSuccess {WhitelistUser} w Updated whitelist user.
+   * @apiSuccess {WhitelistUser} updatedWhitelistUser Updated whitelist user.
    *
    * @apiSuccessExample {json} Success-Response:
    *     {
@@ -111,6 +113,8 @@ export class WitelistController {
    *         "courseId": {...},
    *         "id": "5ab2e92fda32ac2ab0f04b78"
    *     }
+   *
+   * @apiError BadRequestError That matriculation number is already in use for this course.
    */
   @Put('/:id')
   @Authorized(['teacher', 'admin'])
@@ -138,23 +142,11 @@ export class WitelistController {
    *
    * @apiParam {String} id Whitelist user ID.
    *
-   * @apiSuccess {Object} deletion Object with deleted whitelist user.
+   * @apiSuccess {Boolean} result Confirmation of deletion.
    *
    * @apiSuccessExample {json} Success-Response:
    *     {
-   *         "$__": {...},
-   *         "isNew": false,
-   *         "_doc": {
-   *             "__v": 0,
-   *             "courseId": {...},
-   *             "uid": "876543",
-   *             "lastName": "mustermann",
-   *             "firstName": "max",
-   *             "createdAt": "2018-03-21T23:22:23.758Z",
-   *             "updatedAt": "2018-03-21T23:22:23.758Z",
-   *             "_id": {...}
-   *         },
-   *         "$init": true
+   *         result: true
    *     }
    */
   @Delete('/:id')

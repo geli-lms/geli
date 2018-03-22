@@ -27,7 +27,7 @@ export class NotificationController {
 
   /**
    * @api {post} /api/notification/ Create notifications
-   * @apiName PostNotification
+   * @apiName PostNotifications
    * @apiGroup Notification
    * @apiPermission teacher
    * @apiPermission admin
@@ -43,7 +43,7 @@ export class NotificationController {
    *     }
    *
    * @apiError BadRequestError Notification needs at least the fields course and text
-   * @apiError InternalServerError Failed to create notifications
+   * @apiError InternalServerError Failed to create notification
    */
   @Authorized(['teacher', 'admin'])
   @Post('/')
@@ -58,6 +58,25 @@ export class NotificationController {
     return {notified: true};
   }
 
+  /**
+   * @api {post} /api/notification/user/:id Create notification for user
+   * @apiName PostNotification
+   * @apiGroup Notification
+   * @apiPermission teacher
+   * @apiPermission admin
+   *
+   * @apiParam {String} id User ID.
+   * @apiParam {Object} data Notification text and information on changed course, lecture and unit.
+   *
+   * @apiSuccess {Boolean} notified Confirmation of notification.
+   *
+   * @apiSuccessExample {json} Success-Response:
+   *     {
+   *         notified: true
+   *     }
+   *
+   * @apiError InternalServerError Failed to create notification
+   */
   @Authorized(['teacher', 'admin'])
   @Post('/user/:id')
   async createNotificationForStudent(@Param('id') userId: string, @Body() data: any) {
