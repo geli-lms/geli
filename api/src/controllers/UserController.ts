@@ -171,7 +171,7 @@ export class UserController {
    * @apiError BadRequestError Method not allowed for this role.
    */
   @Get('/members/search') // members/search because of conflict with /:id
-  async searchUser(@QueryParam('role') role: string, @QueryParam('query') query: string) {
+  async searchUser(@QueryParam('role') role: string, @QueryParam('query') query: string, @QueryParam('limit') limit?: number) {
     if (role !== 'student' && role !== 'teacher') {
       throw new BadRequestError('Method not allowed for this role.');
     }
@@ -195,8 +195,8 @@ export class UserController {
       'score': {$meta: 'textScore'}
     })
       .where({role: role})
-      .sort({'score': {$meta: 'textScore'}})
-      .limit(20);
+      .limit(limit ? limit : Number.MAX_SAFE_INTEGER)
+      .sort({'score': {$meta: 'textScore'}});
     return {
       users: users.map((user) => user.toObject({virtuals: true})),
       meta: {
@@ -404,7 +404,7 @@ export class UserController {
       .then((isValidPassword) => {
         if (typeof user.password !== 'undefined') {
           if (!(currentUser.role === 'admin' && currentUser._id !== user._id) && !isValidPassword && user.password.length > 0) {
-            throw new BadRequestError('You must specify your current password if you want to set a new password.');
+            throw new BadRequestError('Invalid Current Password!');
           } else {
             if (user.password.length === 0) {
               delete user.password;

@@ -112,28 +112,6 @@ export class DownloadController {
     return response;
   }
 
-  /**
-   * @api {post} /api/download/size/ Post file size
-   * @apiName PostDownloadSize
-   * @apiGroup Download
-   *
-   * @apiParam {Object} data Course data.
-   *
-   * @apiSuccess {Number} totalSize Total size of course.
-   * @apiSuccess {String[]} tooLargeFiles List of too large files.
-   *
-   * @apiSuccessExample {json} Success-Response:
-   *     {
-   *         "totalSize":0,
-   *         "tooLargeFiles":[]
-   *     }
-   */
-  @Post('/size/')
-  @ContentType('application/json')
-  async getFileSize(@Body() data: any) {
-    return this.calcPackage(data);
-  }
-
   async createFileHash(pack: IDownload) {
     let data = '';
 
@@ -222,12 +200,12 @@ export class DownloadController {
             const localUnit = await Unit.findOne({_id: unit.unitId});
             if (localUnit.__t === 'free-text') {
               const freeTextUnit = <IFreeTextUnit><any>localUnit;
-              archive.append(FreeTextUnit.schema.statics.toFile(freeTextUnit), {
+              archive.append(await FreeTextUnit.schema.statics.toFile(freeTextUnit), {
                 name: lecCounter + '_' + lcName + '/' + unitCounter + '_' + this.replaceCharInFilename(freeTextUnit.name) + '.md'
               });
             } else if (localUnit.__t === 'code-kata') {
               const codeKataUnit = <ICodeKataUnit><any>localUnit;
-              archive.append(CodeKataUnit.schema.statics.toFile(codeKataUnit),
+              archive.append(await CodeKataUnit.schema.statics.toFile(codeKataUnit),
                 {name: lecCounter + '_' + lcName + '/' + unitCounter + '_' + this.replaceCharInFilename(codeKataUnit.name) + '.txt'});
             } else if (localUnit.__t === 'file') {
               const fileUnit = <IFileUnit><any>localUnit;
