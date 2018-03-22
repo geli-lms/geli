@@ -123,12 +123,32 @@ export class NotificationController {
    *
    * @apiParam {String} id User ID.
    *
-   * @apiSuccess {Notification[]} notifications Notifications.
+   * @apiSuccess {Notification[]} notifications List of notifications.
    *
    * @apiSuccessExample {json} Success-Response:
-   *     {
-   *         [todo]
-   *     }
+   *     [{
+   *         "_id": "5ab2fbe464efe60006cef0b1",
+   *         "updatedAt": "2018-03-22T00:42:12.577Z",
+   *         "createdAt": "2018-03-22T00:42:12.577Z",
+   *         "changedUnit": {...},
+   *         "changedLecture": {...},
+   *         "changedCourse": {...},
+   *         "isOld": false,
+   *         "text": "Course ProblemSolver has an updated text unit.",
+   *         "user": {...},
+   *         "__v": 0
+   *     }, {
+   *         "_id": "5ab2fc7b64efe60006cef0bb",
+   *         "updatedAt": "2018-03-22T00:44:43.966Z",
+   *         "createdAt": "2018-03-22T00:44:43.966Z",
+   *         "changedUnit": {...},
+   *         "changedLecture": {...},
+   *         "changedCourse": {...},
+   *         "isOld": false,
+   *         "text": "Course katacourse has an updated unit.",
+   *         "user": {...},
+   *         "__v": 0
+   *     }]
    */
   @Authorized(['student', 'teacher', 'admin'])
   @Get('/user/:id')
@@ -155,11 +175,25 @@ export class NotificationController {
    * @apiParam {String} id Notification ID.
    * @apiParam {IUser} currentUser Currently logged in user.
    *
-   * @apiSuccess {Todo} x y.
+   * @apiSuccess {Object} deletion Object with deleted notification.
    *
    * @apiSuccessExample {json} Success-Response:
    *     {
-   *         todo
+   *         "$__": {...},
+   *         "isNew": false,
+   *         "_doc": {
+   *             "__v": 0,
+   *             "user": {...},
+   *             "text": "Course ProblemSolver has an updated text unit.",
+   *             "isOld": false,
+   *             "changedCourse": {...},
+   *             "changedLecture": {...},
+   *             "changedUnit": {...},
+   *             "createdAt": "2018-03-22T00:42:12.577Z",
+   *             "updatedAt": "2018-03-22T00:42:12.577Z",
+   *             "_id": {...}
+   *         },
+   *         "$init": true
    *     }
    *
    * @apiError NotFoundError Notification could not be found.
