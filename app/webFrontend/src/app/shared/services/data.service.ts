@@ -9,6 +9,7 @@ import {INotificationSettings} from '../../../../../../shared/models/INotificati
 import {IDownload} from '../../../../../../shared/models/IDownload';
 import {IDirectory} from '../../../../../../shared/models/mediaManager/IDirectory';
 import {IFile} from '../../../../../../shared/models/mediaManager/IFile';
+import {IUserSearchMeta} from '../../../../../../shared/models/IUserSearchMeta';
 
 export abstract class DataService {
 
@@ -246,20 +247,20 @@ export class TaskService extends DataService {
   getTasksForCourse(id: string): Promise<any[]> {
     return new Promise((resolve, reject) => {
       this.backendService.get(this.apiPath + 'course/' + id)
-      .subscribe(
-        (responseItems: any) => {
-          if (this.changeProps2Date) {
-            responseItems.forEach(item => {
-              this.changeProps2Date.forEach(prop => {
-                DataService.changeStringProp2DateProp(item, prop);
+        .subscribe(
+          (responseItems: any) => {
+            if (this.changeProps2Date) {
+              responseItems.forEach(item => {
+                this.changeProps2Date.forEach(prop => {
+                  DataService.changeStringProp2DateProp(item, prop);
+                });
               });
-            });
-          }
+            }
 
-          resolve(responseItems);
-        },
-        error => reject(error)
-      );
+            resolve(responseItems);
+          },
+          error => reject(error)
+        );
     });
   }
 }
@@ -333,6 +334,12 @@ export class NotificationService extends DataService {
     super('notification/', backendService);
   }
 
+  createNotification(user: IUser, data: any): Promise<any> {
+    return this.backendService
+      .post(this.apiPath + 'user/' + user._id, JSON.stringify(data))
+      .toPromise();
+  }
+
   getNotificationsPerUser(user: IUser): Promise<any[]> {
     return new Promise((resolve, reject) => {
       this.backendService.get(this.apiPath + 'user/' + user._id)
@@ -352,13 +359,15 @@ export class UserDataService extends DataService {
     super('users/', backendService);
   }
 
-  // FIXME: Which Type comes back?
-  searchUsers(role: string, query: string): Promise<any> {
+  searchUsers(role: string, query: string, limit?: number): Promise<IUserSearchMeta> {
     const originalApiPath = this.apiPath;
     this.apiPath += 'members/search/';
     this.apiPath += '?role=' + role;
     this.apiPath += '&query=' + query;
-    const promise = this.readItems();
+    if (limit) {
+      this.apiPath += '&limit=' + limit;
+    }
+    const promise = this.readSingleItem('') as Promise<IUserSearchMeta>;
     this.apiPath = originalApiPath;
     return promise;
   }

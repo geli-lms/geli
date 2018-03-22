@@ -1,20 +1,19 @@
-<!--<mat-list class="drop" [dragula]='dragulaBagId' [dragulaModel]="dragUsers" [attr.item-id]="fieldId">-->
 <mat-list class="drop" *ngIf="show">
     <div *ngFor="let user of course.whitelist">
       <mat-list-item class="list" [attr.item-id]="user._id">
-        <!--<mat-icon class="user-drag-handle">drag_handle</mat-icon>-->
         <span class="firstName">{{user.firstName}}</span>
         <span class="lastName">{{user.lastName}}</span>
         <span class="uid">{{user.uid}}</span>
-        <button mat-icon-button disabled>
+        <!-- TODO Comment in and implement edit button -->
+        <!-- <button mat-icon-button disabled>
           <mat-icon>edit</mat-icon>
-        </button>
+        </button> -->
         <button mat-icon-button (click)="remove(user)">
           <mat-icon>delete</mat-icon>
         </button>
         <i  *ngIf="isSignedIn(user) && !isInCourse(user)" class="material-icons green" matTooltip="Signed In">done</i>
         <i  *ngIf="!isSignedIn(user) && !isInCourse(user)" class="material-icons red" matTooltip="not Signed In">clear</i>
-        <i *ngIf="isSignedIn(user) && isInCourse(user)" class="material-icons green" matTooltip="In Course">done_all</i>
+        <i *ngIf="isInCourse(user)" class="material-icons green" matTooltip="In Course">done_all</i>
       </mat-list-item>
     </div>
 </mat-list>

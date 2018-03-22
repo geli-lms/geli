@@ -32,6 +32,11 @@
     "forgotPassword": "Forgot password",
     "loginSuccess": "Login successful",
     "loginFailed": "Login failed",
+    "loginFailedError": {
+      "couldNotBeVerified": "Your login details could not be verified. Please try again.",
+      "notActiveYet": "Your account has not been activated yet.",
+      "unknown": "An unknown error occured."
+    },
     "confirmPassword": "Confirm password",
     "registration": {
       "registerAs": "Register as",

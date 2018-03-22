@@ -1,35 +1,35 @@
 import {User} from '../models/User';
 import {Strategy as LocalStrategy} from 'passport-local';
 import {isNullOrUndefined} from 'util';
+import {UnauthorizedError} from 'routing-controllers';
 
 export default new LocalStrategy(
   {
     usernameField: 'email'
   },
-  (email, password, done) => {
-    User.findOne({email: email})
-      .then((user) => {
-        if (!user) {
-          return done(null, false, {message: 'Your login details could not be verified. Please try again.'});
-        }
+  async (email, password, done: (err: any, user: any) => any) => {
+    try {
+      const user = await User.findOne({email: email});
+      if (!user) {
+        return done(new UnauthorizedError('couldNotBeVerified'), null);
+      }
 
-        // dismiss password reset process
-        if (!isNullOrUndefined(user.resetPasswordToken)) {
-          user.resetPasswordToken = undefined;
-          user.resetPasswordExpires = undefined;
-          user.save();
-        }
+      // dismiss password reset process
+      if (!isNullOrUndefined(user.resetPasswordToken)) {
+        user.resetPasswordToken = undefined;
+        user.resetPasswordExpires = undefined;
+        await user.save();
+      }
 
-        user.isValidPassword(password)
-          .then((isValid) => {
-            if (!isValid) {
-              return done(null, false, {message: 'Your login details could not be verified. Please try again.'});
-            } else if (!user.isActive) {
-              return done(null, false, {message: 'Your account has not been activated yet.'});
-            } else {
-              return done(null, user);
-            }
-          });
-      })
-      .catch(done);
+      const isValid = await user.isValidPassword(password);
+      if (!isValid) {
+        return done(new UnauthorizedError('couldNotBeVerified'), null);
+      } else if (!user.isActive) {
+        return done(new UnauthorizedError('notActiveYet'), null);
+      } else {
+        return done(null, user);
+      }
+    } catch (err) {
+      done(new UnauthorizedError('unknown'), null);
+    }
   });
