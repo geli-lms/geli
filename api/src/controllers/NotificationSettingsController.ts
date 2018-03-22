@@ -103,7 +103,14 @@ export class NotificationSettingsController {
    *
    * @apiSuccessExample {json} Success-Response:
    *     {
-   *         todo
+   *         "_id": "5ab283b342949f000857b8f9",
+   *         "updatedAt": "2018-03-21T16:09:23.542Z",
+   *         "createdAt": "2018-03-21T16:09:23.542Z",
+   *         "user": {...},
+   *         "course": {...},
+   *         "notificationType": "allChanges",
+   *         "emailNotification": true,
+   *         "__v": 0
    *     }
    *
    * @apiError BadRequestError NotificationSettings need course and user
