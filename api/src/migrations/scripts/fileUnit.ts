@@ -113,6 +113,7 @@ class FileUnitMigration {
           }));
 
           fileUnitObj._id = new ObjectID(fileUnitObj._id);
+          fileUnitObj._course = new ObjectID(fileUnitObj._course);
 
           const unitAfterReplace = await mongoose.connection.collection('units')
             .findOneAndReplace({'_id': fileUnit._id}, fileUnitObj);
