@@ -1,6 +1,6 @@
 import {IUser} from '../../../../../shared/models/IUser';
-import md5 from 'blueimp-md5';
 import {IFile} from '../../../../../shared/models/IFile';
+const md5 = require('blueimp-md5');
 
 export class User implements IUser {
   _id: any;

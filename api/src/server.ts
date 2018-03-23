@@ -60,7 +60,7 @@ export class Server {
   }
 
   start() {
-    mongoose.connect(config.database, {useMongoClient: true});
+    mongoose.connect(config.database);
 
     // Request logger
     this.app.use(morgan('combined'));
