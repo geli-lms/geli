@@ -35,7 +35,7 @@ function escapeRegex(text: string) {
 export class UserController {
 
   /**
-   * @api {get} /api/users Request all users
+   * @api {get} /api/users/ Request all users
    * @apiName GetUsers
    * @apiGroup User
    * @apiPermission teacher
@@ -51,7 +51,7 @@ export class UserController {
    *             "_id": "5a037e6a60f72236d8e7c81d",
    *             "updatedAt": "2018-01-08T19:27:49.483Z",
    *             "createdAt": "2017-11-08T22:00:10.899Z",
-   *             "uid": null,
+   *             "uid": "123456",
    *             "email": "student1@test.local",
    *             "__v": 0,
    *             "isActive": true,
@@ -93,6 +93,85 @@ export class UserController {
       });
   }
 
+  /**
+   * @api {get} /api/users/members/search Request users with certain role and query
+   * @apiName SearchUser
+   * @apiGroup User
+   *
+   * @apiParam {String="student","teacher"} role User role.
+   * @apiParam {String} query Query string.
+   * @apiParam {Number} limit Limit.
+   *
+   * @apiSuccess {Object} result Search result.
+   * @apiSuccess {User[]} result.users List of found users.
+   * @apiSuccess {Object} result.meta Meta data.
+   * @apiSuccess {Number} meta.count Number of users with given role.
+   *
+   * @apiSuccessExample {json} Success-Response:
+   *     {
+   *         "users": [
+   *             {
+   *                 "_id": "5a037e6a60f72236d8e7c81d",
+   *                 "updatedAt": "2018-01-08T19:27:49.483Z",
+   *                 "createdAt": "2017-11-08T22:00:10.899Z",
+   *                 "uid": "123456",
+   *                 "email": "student1@test.local",
+   *                 "__v": 0,
+   *                 "score": 1.1,
+   *                 "isActive": true,
+   *                 "role": "student",
+   *                 "profile": {
+   *                     "firstName": "Tick",
+   *                     "lastName": "Studi",
+   *                     "picture": {
+   *                         "alias": "IMG_20141226_211216.jpg",
+   *                         "name": "5a037e6a60f72236d8e7c81d-9558.jpg",
+   *                         "path": "uploads\\users\\5a037e6a60f72236d8e7c81d-9558.jpg"
+   *                     }
+   *                 },
+   *                 "id": "5a037e6a60f72236d8e7c81d"
+   *             },
+   *             {
+   *                 "_id": "5a037e6a60f72236d8e7c81f",
+   *                 "updatedAt": "2017-11-08T22:00:10.900Z",
+   *                 "createdAt": "2017-11-08T22:00:10.900Z",
+   *                 "uid": "345678",
+   *                 "email": "student3@test.local",
+   *                 "__v": 0,
+   *                 "score": 1.1,
+   *                 "isActive": true,
+   *                 "role": "student",
+   *                 "profile": {
+   *                     "firstName": "Track",
+   *                     "lastName": "Studi"
+   *                 },
+   *                 "id": "5a037e6a60f72236d8e7c81f"
+   *             },
+   *             {
+   *                 "_id": "5a037e6a60f72236d8e7c81e",
+   *                 "updatedAt": "2017-11-08T22:00:10.900Z",
+   *                 "createdAt": "2017-11-08T22:00:10.900Z",
+   *                 "uid": "234567",
+   *                 "email": "student2@test.local",
+   *                 "__v": 0,
+   *                 "score": 1.1,
+   *                 "isActive": true,
+   *                 "role": "student",
+   *                 "profile": {
+   *                     "firstName": "Trick",
+   *                     "lastName": "Studi"
+   *                 },
+   *                 "id": "5a037e6a60f72236d8e7c81e"
+   *             }
+   *         ],
+   *         "meta": {
+   *             "count": 31
+   *         }
+   *     }
+   *
+   * @apiError BadRequestError Method not allowed for this role.
+   * @apiError BadRequestError Query was empty.
+   */
   @Get('/members/search') // members/search because of conflict with /:id
   async searchUser(@QueryParam('role') role: string, @QueryParam('query') query: string, @QueryParam('limit') limit?: number) {
     if (role !== 'student' && role !== 'teacher') {
@@ -128,6 +207,22 @@ export class UserController {
     };
   }
 
+  /**
+   * @api {get} /api/users/roles/ Request all user roles
+   * @apiName GetUserRoles
+   * @apiGroup User
+   * @apiPermission admin
+   *
+   * @apiSuccess {String[]} roles List of user roles.
+   *
+   * @apiSuccessExample {json} Success-Response:
+   *     [
+   *         "student",
+   *         "teacher",
+   *         "tutor",
+   *         "admin"
+   *     ]
+   */
   @Authorized(['admin'])
   @Get('/roles/')
   getRoles() {
@@ -135,6 +230,38 @@ export class UserController {
     return (<any>User.schema.path('role')).enumValues;
   }
 
+  /**
+   * @api {get} /api/users/:id Request user with certain ID
+   * @apiName GetUser
+   * @apiGroup User
+   *
+   * @apiParam {String} id User ID.
+   * @apiParam {IUser} currentUser Currently logged in user.
+   *
+   * @apiSuccess {User} user User.
+   *
+   * @apiSuccessExample {json} Success-Response:
+   *     {
+   *         "_id": "5a037e6a60f72236d8e7c81d",
+   *         "updatedAt": "2018-01-08T19:27:49.483Z",
+   *         "createdAt": "2017-11-08T22:00:10.899Z",
+   *         "uid": "123456",
+   *         "email": "student1@test.local",
+   *         "__v": 0,
+   *         "isActive": true,
+   *         "role": "student",
+   *         "profile": {
+   *             "firstName": "Tick",
+   *             "lastName": "Studi",
+   *             "picture": {
+   *                 "alias": "IMG_20141226_211216.jpg",
+   *                 "name": "5a037e6a60f72236d8e7c81d-9558.jpg",
+   *                 "path": "uploads\\users\\5a037e6a60f72236d8e7c81d-9558.jpg"
+   *             }
+   *         },
+   *         "id": "5a037e6a60f72236d8e7c81d"
+   *     }
+   */
   @Get('/:id')
   getUser(@Param('id') id: string, @CurrentUser() currentUser?: IUser) {
     return User.findById(id)
@@ -144,6 +271,42 @@ export class UserController {
       });
   }
 
+  /**
+   * @api {post} /api/users/picture/:id Add picture to user profile
+   * @apiName PostUserPicture
+   * @apiGroup User
+   *
+   * @apiParam {Object} file Uploaded file.
+   * @apiParam {String} id User ID.
+   * @apiParam {Object} data Body.
+   * @apiParam {IUser} currentUser Currently logged in user.
+   *
+   * @apiSuccess {User} user Affected user.
+   *
+   * @apiSuccessExample {json} Success-Response:
+   *     {
+   *         "_id": "5a037e6a60f72236d8e7c81d",
+   *         "updatedAt": "2018-01-08T19:27:49.483Z",
+   *         "createdAt": "2017-11-08T22:00:10.899Z",
+   *         "uid": "123456",
+   *         "email": "student1@test.local",
+   *         "__v": 0,
+   *         "isActive": true,
+   *         "role": "student",
+   *         "profile": {
+   *             "firstName": "Tick",
+   *             "lastName": "Studi",
+   *             "picture": {
+   *                 "alias": "IMG_20141226_211216.jpg",
+   *                 "name": "5a037e6a60f72236d8e7c81d-9558.jpg",
+   *                 "path": "uploads\\users\\5a037e6a60f72236d8e7c81d-9558.jpg"
+   *             }
+   *         },
+   *         "id": "5a037e6a60f72236d8e7c81d"
+   *     }
+   *
+   * @apiError BadRequestError
+   */
   @Post('/picture/:id')
   addUserPicture(@UploadedFile('file', {options: uploadOptions}) file: any, @Param('id') id: string, @Body() data: any,
                  @CurrentUser() currentUser: IUser) {
@@ -170,6 +333,45 @@ export class UserController {
       });
   }
 
+  /**
+   * @api {put} /api/users/:id Update user
+   * @apiName PutUser
+   * @apiGroup User
+   *
+   * @apiParam {String} id User ID.
+   * @apiParam {Object} user New user data.
+   * @apiParam {IUser} currentUser Currently logged in user.
+   *
+   * @apiSuccess {User} user Updated user.
+   *
+   * @apiSuccessExample {json} Success-Response:
+   *     {
+   *         "_id": "5a037e6a60f72236d8e7c81d",
+   *         "updatedAt": "2018-01-08T19:27:49.483Z",
+   *         "createdAt": "2017-11-08T22:00:10.899Z",
+   *         "uid": "123456",
+   *         "email": "student1@test.local",
+   *         "__v": 0,
+   *         "isActive": true,
+   *         "role": "student",
+   *         "profile": {
+   *             "firstName": "Tick",
+   *             "lastName": "Studi",
+   *             "picture": {
+   *                 "alias": "IMG_20141226_211216.jpg",
+   *                 "name": "5a037e6a60f72236d8e7c81d-9558.jpg",
+   *                 "path": "uploads\\users\\5a037e6a60f72236d8e7c81d-9558.jpg"
+   *             }
+   *         },
+   *         "id": "5a037e6a60f72236d8e7c81d"
+   *     }
+   *
+   * @apiError BadRequestError You can't revoke your own privileges.
+   * @apiError BadRequestError This mail address is already in use.
+   * @apiError BadRequestError Invalid Current Password!
+   * @apiError ForbiddenError Only users with admin privileges can change roles.
+   * @apiError ForbiddenError Only users with admin privileges can change uids.
+   */
   @Put('/:id')
   updateUser(@Param('id') id: string, @Body() user: any, @CurrentUser() currentUser?: IUser) {
     return User.find({'role': 'admin'})
@@ -221,6 +423,23 @@ export class UserController {
       });
   }
 
+  /**
+   * @api {delete} /api/users/:id Delete user
+   * @apiName DeleteUser
+   * @apiGroup User
+   * @apiPermission admin
+   *
+   * @apiParam {String} id User ID.
+   *
+   * @apiSuccess {Boolean} result Confirmation of deletion.
+   *
+   * @apiSuccessExample {json} Success-Response:
+   *     {
+   *         "result": true
+   *     }
+   *
+   * @apiError BadRequestError There are no other users with admin privileges.
+   */
   @Authorized('admin')
   @Delete('/:id')
   deleteUser(@Param('id') id: string) {
