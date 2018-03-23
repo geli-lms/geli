@@ -41,7 +41,7 @@ The API is based on [Node.js](https://nodejs.org) together with [Express](http:/
 [MongoDB](https://www.mongodb.com).
 Have a look at our [API documentation](https://h-da.github.io/geli-docs/).
 
-The web frontend is built with [Angular](https://angular.io/) 4 and 
+The web frontend is built with [Angular](https://angular.io/) 5 and 
 [Angular Material](https://material.angular.io/) components.
 
 
