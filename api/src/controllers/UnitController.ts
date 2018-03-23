@@ -36,12 +36,66 @@ const uploadOptions = {
 @UseBefore(passportJwtMiddleware)
 export class UnitController {
 
+  /**
+   * @api {get} /api/units/:id Request unit
+   * @apiName GetUnit
+   * @apiGroup Unit
+   *
+   * @apiParam {String} id Unit ID.
+   *
+   * @apiSuccess {Unit} unit Unit.
+   *
+   * @apiSuccessExample {json} Success-Response:
+   *     {
+   *         "_id": "5a037e6b60f72236d8e7c858",
+   *         "updatedAt": "2017-11-08T22:00:11.500Z",
+   *         "createdAt": "2017-11-08T22:00:11.500Z",
+   *         "name": "What is Lorem Ipsum?",
+   *         "description": "...",
+   *         "markdown": "# What is Lorem Ipsum?\n**Lorem Ipsum** is simply dummy text of the printing and typesetting industry.",
+   *         "_course": "5a037e6b60f72236d8e7c83b",
+   *         "type": "free-text",
+   *         "__v": 0
+   *     }
+   */
   @Get('/:id')
   getUnit(@Param('id') id: string) {
     return Unit.findById(id)
     .then((u) => u.toObject());
   }
 
+  /**
+   * @api {post} /api/units/ Add unit
+   * @apiName PostUnit
+   * @apiGroup Unit
+   * @apiPermission teacher
+   * @apiPermission admin
+   *
+   * @apiParam {Object} file Uploaded file.
+   * @apiParam {Object} data New unit data.
+   *
+   * @apiSuccess {Unit} unit Added unit.
+   *
+   * @apiSuccessExample {json} Success-Response:
+   *     {
+   *         "_id": "5a037e6b60f72236d8e7c858",
+   *         "updatedAt": "2017-11-08T22:00:11.500Z",
+   *         "createdAt": "2017-11-08T22:00:11.500Z",
+   *         "name": "What is Lorem Ipsum?",
+   *         "description": "...",
+   *         "markdown": "# What is Lorem Ipsum?\n**Lorem Ipsum** is simply dummy text of the printing and typesetting industry.",
+   *         "_course": "5a037e6b60f72236d8e7c83b",
+   *         "type": "free-text",
+   *         "__v": 0
+   *     }
+   *
+   * @apiError BadRequestError Invalid combination of file upload and unit data.
+   * @apiError BadRequestError No lecture ID was submitted.
+   * @apiError BadRequestError No unit was submitted.
+   * @apiError BadRequestError Unit has no _course set.
+   * @apiError BadRequestError
+   * @apiError ValidationError
+   */
   @Authorized(['teacher', 'admin'])
   @Post('/')
   addUnit(@UploadedFile('file', {options: uploadOptions}) file: any, @Body() data: any) {
@@ -77,6 +131,37 @@ export class UnitController {
     });
   }
 
+  /**
+   * @api {put} /api/units/:id Update unit
+   * @apiName PutUnit
+   * @apiGroup Unit
+   * @apiPermission teacher
+   * @apiPermission admin
+   *
+   * @apiParam {Object} file Uploaded file.
+   * @apiParam {String} id Unit ID.
+   * @apiParam {Object} data New unit data.
+   *
+   * @apiSuccess {Unit} unit Updated unit.
+   *
+   * @apiSuccessExample {json} Success-Response:
+   *     {
+   *         "_id": "5a037e6b60f72236d8e7c858",
+   *         "updatedAt": "2018-01-29T23:43:07.220Z",
+   *         "createdAt": "2017-11-08T22:00:11.500Z",
+   *         "name": "What is Lorem Ipsum?",
+   *         "description": "...",
+   *         "markdown": "# What is Lorem Ipsum?\n**Lorem Ipsum** is simply dummy text of the printing and typesetting industry.",
+   *         "_course": "5a037e6b60f72236d8e7c83b",
+   *         "type": "free-text",
+   *         "__v": 0
+   *     }
+   *
+   * @apiError NotFoundError
+   * @apiError BadRequestError Invalid combination of file upload and unit data.
+   * @apiError BadRequestError
+   * @apiError ValidationError
+   */
   @Authorized(['teacher', 'admin'])
   @Put('/:id')
   async updateUnit(@UploadedFile('file', {options: uploadOptions}) file: any, @Param('id') id: string, @Body() data: any) {
@@ -108,6 +193,24 @@ export class UnitController {
     }
   }
 
+  /**
+   * @api {delete} /api/units/:id Delete unit
+   * @apiName DeleteUnit
+   * @apiGroup Unit
+   * @apiPermission teacher
+   * @apiPermission admin
+   *
+   * @apiParam {String} id Unit ID.
+   *
+   * @apiSuccess {Boolean} result Confirmation of deletion.
+   *
+   * @apiSuccessExample {json} Success-Response:
+   *     {
+   *         "result": true
+   *     }
+   *
+   * @apiError NotFoundError
+   */
   @Authorized(['teacher', 'admin'])
   @Delete('/:id')
   deleteUnit(@Param('id') id: string) {

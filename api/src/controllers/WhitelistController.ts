@@ -20,6 +20,28 @@ function escapeRegex(text: string) {
 @UseBefore(passportJwtMiddleware)
 export class WitelistController {
 
+  /**
+   * @api {get} /api/whitelist/:id Request whitelist user
+   * @apiName GetWhitelistUser
+   * @apiGroup Whitelist
+   *
+   * @apiParam {String} id Whitelist user ID.
+   *
+   * @apiSuccess {WhitelistUser} whitelistUser Whitelist user.
+   *
+   * @apiSuccessExample {json} Success-Response:
+   *     {
+   *         "__v": 0,
+   *         "updatedAt": "2018-03-21T23:22:23.758Z",
+   *         "createdAt": "2018-03-21T23:22:23.758Z",
+   *         "_id": "5ab2e92fda32ac2ab0f04b78",
+   *         "firstName": "max",
+   *         "lastName": "mustermann",
+   *         "uid": "876543",
+   *         "courseId": {...},
+   *         "id": "5ab2e92fda32ac2ab0f04b78"
+   *     }
+   */
   @Get('/:id')
   getUser(@Param('id') id: string) {
     return WhitelistUser.findById(id)
@@ -28,6 +50,32 @@ export class WitelistController {
       });
   }
 
+  /**
+   * @api {post} /api/whitelist/ Add whitelist user
+   * @apiName PostWhitelistUser
+   * @apiGroup Whitelist
+   * @apiPermission teacher
+   * @apiPermission admin
+   *
+   * @apiParam {IWhitelistUser} whitelistUser New whitelist user.
+   *
+   * @apiSuccess {WhitelistUser} savedWhitelistUser Added whitelist user.
+   *
+   * @apiSuccessExample {json} Success-Response:
+   *     {
+   *         "__v": 0,
+   *         "updatedAt": "2018-03-21T23:22:23.758Z",
+   *         "createdAt": "2018-03-21T23:22:23.758Z",
+   *         "_id": "5ab2e92fda32ac2ab0f04b78",
+   *         "firstName": "max",
+   *         "lastName": "mustermann",
+   *         "uid": "876543",
+   *         "courseId": {...},
+   *         "id": "5ab2e92fda32ac2ab0f04b78"
+   *     }
+   *
+   * @apiError BadRequestError That matriculation number is already in use for this course.
+   */
   @Post('/')
   @Authorized(['teacher', 'admin'])
   async addWhitelistUser(@Body() whitelistUser: IWhitelistUser) {
@@ -41,6 +89,33 @@ export class WitelistController {
     return savedWhitelistUser.toObject();
   }
 
+  /**
+   * @api {put} /api/whitelist/:id Update whitelist user
+   * @apiName PutWhitelistUser
+   * @apiGroup Whitelist
+   * @apiPermission teacher
+   * @apiPermission admin
+   *
+   * @apiParam {String} id Whitelist user ID.
+   * @apiParam {IWhitelistUser} whitelistUser New whitelist user.
+   *
+   * @apiSuccess {WhitelistUser} updatedWhitelistUser Updated whitelist user.
+   *
+   * @apiSuccessExample {json} Success-Response:
+   *     {
+   *         "__v": 0,
+   *         "updatedAt": "2018-03-21T23:24:56.758Z",
+   *         "createdAt": "2018-03-21T23:22:23.758Z",
+   *         "_id": "5ab2e92fda32ac2ab0f04b78",
+   *         "firstName": "maximilian",
+   *         "lastName": "mustermann",
+   *         "uid": "876543",
+   *         "courseId": {...},
+   *         "id": "5ab2e92fda32ac2ab0f04b78"
+   *     }
+   *
+   * @apiError BadRequestError That matriculation number is already in use for this course.
+   */
   @Put('/:id')
   @Authorized(['teacher', 'admin'])
   async updateWhitelistUser(@Param('id') id: string, @Body() whitelistUser: IWhitelistUser) {
@@ -58,6 +133,22 @@ export class WitelistController {
     return updatedWhitelistUser ? updatedWhitelistUser.toObject() : undefined;
   }
 
+  /**
+   * @api {delete} /api/whitelist/:id Delete whitelist user
+   * @apiName DeleteWhitelistUser
+   * @apiGroup Whitelist
+   * @apiPermission teacher
+   * @apiPermission admin
+   *
+   * @apiParam {String} id Whitelist user ID.
+   *
+   * @apiSuccess {Boolean} result Confirmation of deletion.
+   *
+   * @apiSuccessExample {json} Success-Response:
+   *     {
+   *         result: true
+   *     }
+   */
   @Delete('/:id')
   @Authorized(['teacher', 'admin'])
   async deleteWhitelistUser(@Param('id') id: string) {

@@ -83,6 +83,21 @@ export class DownloadController {
     return size;
   }
 
+  /**
+   * @api {get} /api/download/:id Request archived file
+   * @apiName GetDownload
+   * @apiGroup Download
+   *
+   * @apiParam {String} id Course name.
+   * @apiParam {Response} response Response (input).
+   *
+   * @apiSuccess {Response} response Response (output).
+   *
+   * @apiSuccessExample {json} Success-Response:
+   *     UEsFBgAAAAAAAAAAAAAAAAAAAAAAAA==
+   *
+   * @apiError NotFoundError
+   */
   @Get('/:id')
   async getArchivedFile(@Param('id') id: string, @Res() response: Response) {
     const filePath = config.tmpFileCacheFolder + id + '.zip';
@@ -121,6 +136,21 @@ export class DownloadController {
     return crypto.createHash('sha1').update(data).digest('hex');
   }
 
+  /**
+   * @api {post} /api/download/ Post download request
+   * @apiName PostDownload
+   * @apiGroup Download
+   *
+   * @apiParam {IDownload} data Course data.
+   * @apiParam {IUser} currentUser Currently logged in user.
+   *
+   * @apiSuccess {String} hash Hash value.
+   *
+   * @apiSuccessExample {json} Success-Response:
+   *     "da39a3ee5e6b4b0d3255bfef95601890afd80709"
+   *
+   * @apiError NotFoundError
+   */
   @Post('/')
   @ContentType('application/json')
   async postDownloadRequest(@Body() data: IDownload, @CurrentUser() user: IUser) {
