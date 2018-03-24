@@ -1,45 +1,96 @@
 import * as mongoose from 'mongoose';
-import {Unit} from './Unit';
+import {IUnitModel} from './Unit';
 import {ICodeKataUnit} from '../../../../shared/models/units/ICodeKataUnit';
-import {InternalServerError} from 'routing-controllers';
-import {ILectureModel, Lecture} from '../Lecture';
+import {NativeError} from 'mongoose';
+import {BadRequestError} from 'routing-controllers';
 
-interface ICodeKataModel extends ICodeKataUnit, mongoose.Document {
+interface ICodeKataModel extends ICodeKataUnit, IUnitModel {
   exportJSON: () => Promise<ICodeKataUnit>;
+  calculateProgress: () => Promise<ICodeKataUnit>;
+  toFile: () => Promise<String>;
 }
 
 const codeKataSchema = new mongoose.Schema({
   definition: {
-    type: String
+    type: String,
+    required: [true, 'A Kata must contain a definition area']
   },
   code: {
-    type: String
+    type: String,
+    required: [true, 'A Kata must contain a code area']
   },
   test: {
-    type: String
+    type: String,
+    required: [true, 'A Kata must contain a test area']
   },
   deadline: {
     type: String
   },
 });
 
-codeKataSchema.statics.importJSON = async function(unit: ICodeKataUnit, courseId: string, lectureId: string) {
-  unit._course = courseId;
+function splitCodeAreas(next: (err?: NativeError) => void) {
+  const codeKataUnit: ICodeKataModel = this;
 
-  try {
-    const savedKata = await new CodeKataUnit(unit).save();
-    const lecture = await Lecture.findById(lectureId);
-    lecture.units.push(<ICodeKataModel>savedKata);
-    await lecture.save();
-
-    return savedKata.toObject();
-  } catch (err) {
-    const newError = new InternalServerError('Failed to import code-kata');
-    newError.stack += '\nCaused by: ' + err.message + '\n' + err.stack;
-    throw newError;
+  if (codeKataUnit.definition !== undefined || codeKataUnit.test !== undefined || codeKataUnit.code === undefined) {
+    return next();
   }
+
+  const separator = '\/\/#+';
+  const firstSeparator: number = findFirstIndexOf(codeKataUnit.code, separator);
+  const lastSeparator: number = findLastIndexOf(codeKataUnit.code, separator);
+
+  codeKataUnit.definition = codeKataUnit.code.substring(0, firstSeparator).trim();
+  codeKataUnit.test = codeKataUnit.code.substring(lastSeparator, codeKataUnit.code.length).trim();
+  codeKataUnit.code = codeKataUnit.code.substring(firstSeparator, lastSeparator).trim();
+
+  codeKataUnit.code = codeKataUnit.code.slice(codeKataUnit.code.search('\n')).trim();
+  codeKataUnit.test = codeKataUnit.test.slice(codeKataUnit.test.search('\n')).trim();
+  next();
+}
+
+function findFirstIndexOf(source: string, value: string): number {
+  return source.search(value);
+}
+
+function findLastIndexOf(source: string, value: string): number {
+  const regex = new RegExp(value, '');
+  let i = -1;
+
+  // limit execution time (prevent deadlocks)
+  let j = 10;
+  while (j > 0) {
+    j--;
+    const result = regex.exec(source.slice(++i));
+    if (result != null) {
+      i += result.index;
+    } else {
+      i--;
+      break;
+    }
+  }
+  return i;
+}
+
+function validateTestArea(testArea: any) {
+  if (!testArea.match(new RegExp('function(.|\t)*validate\\(\\)(.|\n|\t)*{(.|\n|\t)*}', 'gmi'))) {
+    throw new BadRequestError('The test section must contain a validate function');
+  }
+  if (!testArea.match(new RegExp('function(.|\t)*validate\\(\\)(.|\n|\t)*{(.|\n|\t)*return(.|\n|\t)*}', 'gmi'))) {
+    throw new BadRequestError('The validate function must return something');
+  }
+  if (!testArea.match(new RegExp('validate\\(\\);', 'gmi'))) {
+    throw new BadRequestError('The test section must call the validate function');
+  }
+
+  return true;
+}
+
+codeKataSchema.pre('validate', splitCodeAreas);
+codeKataSchema.path('test').validate(validateTestArea);
+
+codeKataSchema.statics.toFile = async function (unit: ICodeKataUnit) {
+  return unit.description + '\n' + unit.definition + '\n' +
+    unit.code + '\n' + unit.test;
 };
 
-const CodeKataUnit = Unit.discriminator('code-kata', codeKataSchema);
-
-export {CodeKataUnit, ICodeKataModel}
+export {codeKataSchema, ICodeKataModel}

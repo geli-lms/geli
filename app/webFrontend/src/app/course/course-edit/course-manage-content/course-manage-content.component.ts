@@ -1,17 +1,16 @@
-import {Component, Input, OnInit, OnDestroy} from '@angular/core';
+import {Component, OnInit, OnDestroy} from '@angular/core';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
 import {ILecture} from '../../../../../../../shared/models/ILecture';
-import {
-  CourseService, DuplicationService, ExportService, ImportService, LectureService,
-  UnitService
-} from '../../../shared/services/data.service';
+import {CourseService, LectureService, NotificationService} from '../../../shared/services/data.service';
 import {ShowProgressService} from 'app/shared/services/show-progress.service';
 import {DialogService} from '../../../shared/services/dialog.service';
 import {UserService} from '../../../shared/services/user.service';
 import {MatSnackBar} from '@angular/material';
-import {IUnit} from '../../../../../../../shared/models/units/IUnit';
 import {DragulaService} from 'ng2-dragula';
-import {SaveFileService} from '../../../shared/services/save-file.service';
+import {ActivatedRoute, Router} from '@angular/router';
+import {DataSharingService} from '../../../shared/services/data-sharing.service';
+import {Subject} from 'rxjs/Subject';
+import {Notification} from '../../../models/Notification';
 
 @Component({
   selector: 'app-course-manage-content',
@@ -19,27 +18,42 @@ import {SaveFileService} from '../../../shared/services/save-file.service';
   styleUrls: ['./course-manage-content.component.scss']
 })
 export class CourseManageContentComponent implements OnInit, OnDestroy {
-  @Input() course: ICourse;
-  openedLecture: ILecture;
-  lectureCreateMode = false;
-  lectureEditMode = false;
-  unitCreateMode = false;
-  unitCreateType: string;
-  unitEditMode = false;
-  unitEditElement: IUnit;
+  course: ICourse;
+
   fabOpen = false;
 
-  constructor(private lectureService: LectureService,
+  onCloseAllForms = new Subject();
+  onReloadCourse = new Subject();
+
+  constructor(private route: ActivatedRoute,
+              private router: Router,
+              private lectureService: LectureService,
               private courseService: CourseService,
-              private unitService: UnitService,
               private showProgress: ShowProgressService,
               private snackBar: MatSnackBar,
               private dialogService: DialogService,
               private dragulaService: DragulaService,
-              private duplicationService: DuplicationService,
-              private exportService: ExportService,
-              private saveFileService: SaveFileService,
-              public userService: UserService) {
+              public userService: UserService,
+              private dataSharingService: DataSharingService,
+              private notificationService: NotificationService) {
+    // setup subjects
+    this.dataSharingService.setDataForKey('onCloseAllForms', this.onCloseAllForms);
+    this.onCloseAllForms.asObservable().subscribe(() => this.closeAllForms());
+    this.dataSharingService.setDataForKey('onReloadCourse', this.onReloadCourse);
+    this.onReloadCourse.asObservable().subscribe(async (resolve: Function) => {
+      await this.reloadCourse();
+      return resolve();
+    });
+    // setup course object
+    const course = this.dataSharingService.getDataForKey('course');
+    if (course) {
+      this.course = course;
+      this.setOpenedLectureAndUnit();
+      this.setAddLectureIfPresent();
+      this.setAddUnitIfPresent();
+    } else {
+      this.getCourse();
+    }
   }
 
   ngOnInit() {
@@ -75,13 +89,99 @@ export class CourseManageContentComponent implements OnInit, OnDestroy {
     });
   }
 
-  isDraggingUnit() {
-    return this.dragulaService.find('units').drake.dragging;
-  }
-
   ngOnDestroy() {
     this.dragulaService.destroy('lectures');
     this.dragulaService.destroy('units');
+  }
+
+  isInMode(lecture, create) {
+    return this.dataSharingService.getDataForKey(`${lecture}-${create}-mode`) || false;
+  }
+
+  isLectureOpen() {
+    return this.dataSharingService.getDataForKey('openLectureId') !== null;
+  }
+
+  getCourse() {
+    this.route.parent.parent.params.subscribe(params => {
+      const courseId = params['id'];
+
+      this.courseService.readSingleItem(courseId).then(
+        (val: any) => {
+          this.course = val;
+          this.dataSharingService.setDataForKey('course', this.course);
+          this.setOpenedLectureAndUnit();
+          this.setAddLectureIfPresent();
+          this.setAddUnitIfPresent();
+        }, (error) => {
+          this.snackBar.open('Couldn\'t load Course-Item', '', {duration: 3000});
+        });
+    });
+  }
+
+  setOpenedLectureAndUnit() {
+    this.route.params.subscribe((params) => {
+      const lectureId = params['lecture'];
+      if (!lectureId) {
+        this.dataSharingService.setDataForKey('openLectureId', null);
+        return;
+      }
+      const lecture = this.course.lectures.find(lec => lec._id === lectureId);
+      if (!lecture) {
+        // invalid lecture, discard and navigate to root
+        return this.route.url.subscribe(segments => {
+          const path = segments.map(() => '../').join('') || '';
+          this.router.navigate([path], {relativeTo: this.route});
+        });
+      }
+      this.dataSharingService.setDataForKey('openLectureId', lecture._id);
+
+      const unitId = params['unit'];
+      if (!unitId) {
+        this.dataSharingService.setDataForKey('unit-edit-mode', false);
+        this.dataSharingService.setDataForKey('unit-edit-element', null);
+        return;
+      }
+      const openUnit = lecture.units.find(unit => unit._id === unitId);
+      if (!openUnit) {
+        // invalid unit, discard and navigate to lecture
+        return this.route.url.subscribe(segments => {
+          let path = segments.map(() => '../').join('') || '';
+          path += `lecture/${lectureId}`;
+          this.router.navigate([path], {relativeTo: this.route});
+        });
+      }
+      this.dataSharingService.setDataForKey('unit-edit-mode', true);
+      this.dataSharingService.setDataForKey('unit-edit-element', openUnit);
+    });
+  }
+
+  setAddLectureIfPresent() {
+    this.route.url.subscribe(segments => {
+      if (!segments.length) {
+        this.dataSharingService.setDataForKey('lecture-create-mode', false);
+        return;
+      }
+      if (segments.length === 2 && segments[0].path === 'lecture' && segments[1].path === 'add') {
+        this.dataSharingService.setDataForKey('lecture-create-mode', true);
+      }
+    });
+  }
+
+  setAddUnitIfPresent() {
+    this.route.url.subscribe(segments => {
+      if (!segments.length) {
+        this.dataSharingService.setDataForKey('unit-create-mode', false);
+        this.dataSharingService.setDataForKey('unit-create-type', null);
+        return;
+      }
+      const url = segments.map(segment => segment.path).join('/');
+      if (url.indexOf('/unit/add/') !== -1) {
+        const type = segments[segments.length - 1].path; // last segment is type
+        this.dataSharingService.setDataForKey('unit-create-mode', true);
+        this.dataSharingService.setDataForKey('unit-create-type', type);
+      }
+    });
   }
 
   updateLectureOrder() {
@@ -92,148 +192,41 @@ export class CourseManageContentComponent implements OnInit, OnDestroy {
   }
 
   updateUnitOrder(id: string = null) {
-    let lecture;
-
-    if (id) {
-      lecture = this.course.lectures.filter(l => l._id === id)[0];
-    } else {
-      lecture = this.openedLecture;
+    if (!id) {
+      id = this.dataSharingService.getDataForKey('openLectureId');
     }
+    const lecture = this.course.lectures.find(l => l._id === id);
 
+    if (!lecture) {
+      return;
+    }
     this.lectureService.updateItem({
       '_id': lecture._id,
       'units': lecture.units.map((unit) => unit._id)
     });
   }
 
-  duplicateLecture(lecture: ILecture) {
-    this.duplicationService.duplicateLecture(lecture, this.course._id)
-      .then(() => {
-        this.snackBar.open('Lecture duplicated.', '', {duration: 3000});
-        this.reloadCourse();
-      })
-      .catch((error) => {
-      this.snackBar.open(error, '', {duration: 3000});
-    });
-  }
-
-  duplicateUnit(unit: IUnit) {
-    this.duplicationService.duplicateUnit(unit, this.openedLecture._id , this.course._id)
-    .then(() => {
-      this.snackBar.open('Unit duplicated.', '', {duration: 3000});
-      this.reloadCourse();
-    })
-    .catch((error) => {
-      this.snackBar.open(error, '', {duration: 3000});
-    });
-  }
-
-  async exportLecture(lecture: ILecture) {
-    try {
-      const lectureJSON = await this.exportService.exportLecture(lecture);
-
-      this.saveFileService.save(lecture.name, JSON.stringify(lectureJSON, null, 2));
-    } catch (err) {
-      this.snackBar.open('Export lecture failed ' + err.json().message, 'Dismiss');
-    }
-  }
-
-  deleteObjectIds(object: any) {
-    if (object != null && typeof(object) !== 'string' && typeof(object) !== 'boolean' && typeof(object) !== 'number') {
-      // object.length is undefined, if the object isn't an array.
-      // go through all properties recursively and delete all _ids
-      if (typeof(object.length) === 'undefined') {
-        delete object._id;
-        Object.keys(object).forEach(key => {
-          this.deleteObjectIds(object[key]);
-        } );
-      } else {
-        // iterate through all sub-objects
-        for (let i = 0; i < object.length; i++) {
-          this.deleteObjectIds(object[i]);
-        }
-      }
-    }
-  }
-
   createLecture(lecture: ILecture) {
     this.lectureService.createItem({courseId: this.course._id, lecture: lecture})
-    .then(() => {
-      this.lectureCreateMode = false;
+    .then((newLecture: any) => {
+      this.dataSharingService.setDataForKey('lecture-create-mode', false);
+      this.notificationService.createItem(
+        {changedCourse: this.course, changedLecture: newLecture._id,
+          changedUnit: null, text: 'Course ' + this.course.name + ' has a new lecture.'})
+        .catch(console.error);
       return this.reloadCourse();
     })
     .catch(console.error);
   }
 
-  updateLecture(lecture: ILecture) {
-    this.showProgress.toggleLoadingGlobal(true);
-
-    this.lectureService.updateItem(lecture)
-    .then(() => {
-      this.lectureEditMode = false;
-    })
-    .catch(console.error)
-    .then(() => this.showProgress.toggleLoadingGlobal(false));
-  }
-
-
-
-  deleteUnit(unit: IUnit) {
-    this.dialogService
-    .confirmDelete('unit', unit.type)
-    .subscribe(res => {
-      if (res) {
-        this.showProgress.toggleLoadingGlobal(true);
-        this.unitService.deleteItem(unit)
-        .then(() => {
-          this.snackBar.open('Unit deleted.', '', {duration: 3000});
-          this.closeEditUnit();
-          this.reloadCourse();
-        })
-        .catch((error) => {
-          this.snackBar.open(error, '', {duration: 3000});
-        })
-        .then(() => {
-          this.showProgress.toggleLoadingGlobal(false);
-        });
-      }
-    });
-  }
-
-  deleteLecture(lecture: ILecture) {
-    this.dialogService
-    .confirmDelete('lecture', lecture.name)
-    .subscribe(res => {
-      if (res) {
-        this.showProgress.toggleLoadingGlobal(true);
-        this.lectureService.deleteItem(lecture)
-        .then((val) => {
-            this.snackBar.open('Lecture deleted.', '', {duration: 3000});
-            this.closeEditUnit();
-            this.closeEditLecture();
-            this.reloadCourse();
-        })
-        .catch((error) => {
-          this.snackBar.open(error, '', {duration: 3000});
-        })
-        .then(() => {
-          this.showProgress.toggleLoadingGlobal(false);
-        });
-      }
-    });
-  }
-
-  reloadCourse() {
-    return this.courseService.readSingleItem(this.course._id)
-    .then((val: any) => {
-      this.course = val;
-    })
-    .catch((error) => {
+  async reloadCourse() {
+    try {
+      this.course =  <any>(await this.courseService.readSingleItem(this.course._id));
+      this.dataSharingService.setDataForKey('course', this.course);
+    } catch (err) {
       this.snackBar.open('Couldn\'t reload Course', '', {duration: 3000});
-    })
-    .then(() => {
-      this.showProgress.toggleLoadingGlobal(false)
-    });
+    }
+    return this.showProgress.toggleLoadingGlobal(false);
   }
 
   onImportLecture = () => {
@@ -244,8 +237,8 @@ export class CourseManageContentComponent implements OnInit, OnDestroy {
         if (res.success) {
           this.reloadCourse();
           // This does not work as expected
-          this.unitEditElement = res.result;
-          this.unitEditMode = true;
+          this.dataSharingService.setDataForKey('unit-edit-element', res.result);
+          this.dataSharingService.setDataForKey('unit-edit-mode', true);
           this.snackBar.open('Lecture successfully imported', '', {duration: 3000});
         } else if (res.result) {
           this.snackBar.open(res.error.message, '', {duration: 3000});
@@ -254,81 +247,47 @@ export class CourseManageContentComponent implements OnInit, OnDestroy {
   };
 
   onAddLecture() {
-    this.closeAllForms();
+    this.onCloseAllForms.next();
+    this.dataSharingService.setDataForKey('openLectureId', null);
 
-    this.lectureCreateMode = true;
+    this.dataSharingService.setDataForKey('lecture-create-mode', true);
+    this.route.url.subscribe(segments => {
+      let path = segments.map(() => '../').join('') || '';
+      path += 'lecture/add';
+      this.router.navigate([path], {relativeTo: this.route});
+    });
   }
 
-  onEditLecture(lecture: ILecture) {
-    this.closeAllForms();
+  onAddUnit = (type: string) => {
+    this.onCloseAllForms.next();
 
-    this.lectureEditMode = true;
-    this.openedLecture = lecture;
-  }
-
-  closeEditLecture = () => {
-    this.lectureEditMode = false;
+    this.dataSharingService.setDataForKey('unit-create-mode', true);
+    this.dataSharingService.setDataForKey('unit-create-type', type);
+    const lectureId = this.dataSharingService.getDataForKey('openLectureId');
+    this.route.url.subscribe(segments => {
+      let path = segments.map(() => '../').join('') || '';
+      path += `lecture/${lectureId}/unit/add/${type}`;
+      this.router.navigate([path], {relativeTo: this.route});
+    });
   };
 
   onImportUnit = () => {
+    const openLectureId = this.dataSharingService.getDataForKey('openLectureId');
     this.dialogService
       .chooseFile('Choose a unit.json to import',
-        '/api/import/unit/' + this.course._id + '/' + this.openedLecture._id)
+        '/api/import/unit/' + this.course._id + '/' + openLectureId)
       .subscribe(async res => {
         if (res.success) {
           this.reloadCourse();
           // This does not work as expected
-          this.openedLecture = res.result;
-          this.lectureEditMode = true;
+          const lecture = res.result;
+          this.dataSharingService.setDataForKey('openLectureId', lecture._id);
+          this.dataSharingService.setDataForKey('lecture-edit-mode', true);
           this.snackBar.open('Unit successfully imported', '', {duration: 3000});
         } else if (res.result) {
           this.snackBar.open(res.error.message, '', {duration: 3000});
         }
       });
-  };
-
-  onAddUnit = (type: string) => {
-    this.closeAllForms();
-
-    this.unitCreateMode = true;
-    this.unitCreateType = type;
-  };
-
-  onAddUnitDone = () => {
-    this.reloadCourse();
-    this.closeAddUnit();
-  };
-
-  closeAddUnit = () => {
-    this.unitCreateMode = false;
-    this.unitCreateType = null;
-  };
-
-  onEditUnit = (unit: IUnit) => {
-    this.closeAllForms();
-
-    this.unitEditMode = true;
-    this.unitEditElement = unit;
-  };
-
-  onExportUnit = async (unit: IUnit) => {
-    try {
-      const unitJSON = await this.exportService.exportUnit(unit);
-
-      this.saveFileService.save(unit.name, JSON.stringify(unitJSON, null, 2));
-    } catch (err) {
-      this.snackBar.open('Export unit failed ' + err.json().message, 'Dismiss');
-    }
-  };
-
-  onEditUnitDone = () => {
-    this.reloadCourse();
-    this.closeEditUnit();
-  };
-
-  closeEditUnit = () => {
-    this.unitEditMode = false;
-    this.unitEditElement = null;
   };
 
   closeFab = () => {
@@ -340,24 +299,11 @@ export class CourseManageContentComponent implements OnInit, OnDestroy {
   };
 
   closeAddLecture = () => {
-    this.lectureCreateMode = false;
+    this.dataSharingService.setDataForKey('lecture-create-mode', false);
   };
 
   private closeAllForms() {
     this.closeFab();
     this.closeAddLecture();
-    this.closeEditLecture();
-    this.closeAddUnit();
-    this.closeEditUnit();
-  }
-
-  openToggleLecture(lecture: ILecture) {
-    this.closeAllForms();
-
-    if (this.openedLecture && this.openedLecture._id === lecture._id) {
-      this.openedLecture = null;
-    } else {
-      this.openedLecture = lecture;
-    }
   }
 }

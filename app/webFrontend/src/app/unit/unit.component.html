@@ -11,11 +11,12 @@
           matTooltip="{{getFormattedDeadline(unit.deadline)}}">
       {{getDeadlineDiffText(unit.deadline)}}<strong>{{getDeadlineDiffTime(unit.deadline)}}</strong>
     </span>
-    <mat-card-content [ngSwitch]="unit.type">
+    <div id={{unit._id}}></div>
+    <mat-card-content [ngSwitch]="unit.__t">
       <app-video-unit *ngSwitchCase="'video'" [videoUnit]="unit"></app-video-unit>
       <app-file-unit *ngSwitchCase="'file'" [fileUnit]="unit"></app-file-unit>
       <app-task-unit *ngSwitchCase="'task'" [taskUnit]="unit"></app-task-unit>
-      <app-code-kata *ngSwitchCase="'code-kata'" [codeKata]="unit"></app-code-kata>
+      <app-code-kata *ngSwitchCase="'code-kata'" [codeKataUnit]="unit"></app-code-kata>
       <app-free-text-unit *ngSwitchCase="'free-text'" [freeTextUnit]="unit"></app-free-text-unit>
     </mat-card-content>
   </mat-card>

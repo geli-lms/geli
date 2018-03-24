@@ -1,0 +1,67 @@
+{
+  "common": {
+    "geli": "geli",
+    "login": "Login",
+    "register": "Registrieren",
+    "email": "E-Mail",
+    "password": "Passwort",
+    "dismiss": "Schließen",
+    "back": "Zurück",
+    "profile": {
+      "firstName": "Vorname",
+      "lastName": "Nachname",
+      "uid": "Matrikelnummer"
+    },
+    "roles": {
+      "student": "Student",
+      "teacher": "Lehrer"
+    },
+    "validation": {
+      "required": "Eingabe notwendig",
+      "minLength": "Mindestens {{min}} Zeichen benötigt",
+      "invalid": "Keine gültige Eingabe",
+      "password": "Passwörter müssen aus mindestens 8 Zeichen, inklusive einem Sonderzeichen und einer Ziffer bestehen",
+      "passwordsMatch": "Die Passwörter stimmen nicht überein",
+      "instituteMail": "Bitte nutzen Sie Ihre Instituts-Email"
+    }
+  },
+  "home": {
+    "welcomeTo": "Willkommen auf"
+  },
+  "auth": {
+    "forgotPassword": "Passwort vergessen",
+    "loginSuccess": "Login erfolgreich",
+    "loginFailed": "Login fehlgeschlagen",
+    "loginFailedError": {
+      "couldNotBeVerified": "Ihre Login-Daten konnten nicht verifiziert werden. Bitte versuchen sie es noch ein mal.",
+      "notActiveYet": "Ihr Account wurde noch nicht aktiviert.",
+      "unknown": "Es ist ein unbekannter Fehler aufgetreten."
+    },
+    "confirmPassword": "Passwort bestätigen",
+    "registration": {
+      "registerAs": "Registrieren als",
+      "successful": "Registrierung erfolgreich",
+      "mailSent": "Wir haben Ihnen einen Aktivierungslink an Ihre E-Mail-Adresse gesendet.",
+      "back": "Zurück zur Startseite",
+      "teacherRegistrationButton": "Kein Student?"
+    }
+  },
+  "mainMenu": {
+    "admin": "Admin",
+    "about": "Über geli",
+    "imprint": "Impressum",
+    "logout": "Logout",
+    "userSettings": "Einstellungen"
+  },
+  "dashboard": {
+    "courses": "Kurse",
+    "myCourses": "Meine Kurse",
+    "availableCourses": "Verfügbare Kurse",
+    "inactiveCourses": "Inaktive Kurse",
+    "teacherCourses": "Meine Lehrveranstaltungen",
+    "createdCourses": "Meine erstellten Kurse",
+    "addCourse": "Kurs hinzufügen",
+    "createCourse": "Kurs erstellen",
+    "importCourse": "Kurs importieren"
+  }
+}

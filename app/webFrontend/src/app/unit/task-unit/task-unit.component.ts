@@ -2,7 +2,10 @@ import {Component, OnInit, Input} from '@angular/core';
 import {MatSnackBar} from '@angular/material';
 import {ActivatedRoute} from '@angular/router';
 import {ProgressService} from '../../shared/services/data/progress.service';
-import {IProgress} from '../../../../../../shared/models/IProgress';
+import {ITaskUnit} from '../../../../../../shared/models/units/ITaskUnit';
+import {ITaskUnitProgress} from '../../../../../../shared/models/progress/ITaskUnitProgress';
+import {TaskUnitProgress} from '../../models/progress/TaskUnitProgress';
+
 const knuth = require('knuth-shuffle').knuthShuffle;
 
 @Component({
@@ -12,9 +15,9 @@ const knuth = require('knuth-shuffle').knuthShuffle;
 })
 export class TaskUnitComponent implements OnInit {
 
-  @Input() taskUnit: any;
+  @Input() taskUnit: ITaskUnit;
 
-  progress: IProgress;
+  progress: ITaskUnitProgress;
   validationMode = false;
   courseId: string;
 
@@ -24,63 +27,68 @@ export class TaskUnitComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.route.params.subscribe(
-      params => {
-        this.courseId = decodeURIComponent(params['id']);
-      });
+    if (!this.taskUnit.progressData) {
+      this.progress = new TaskUnitProgress(this.taskUnit);
+    } else {
+      this.progress = this.taskUnit.progressData;
+    }
 
-    this.progressService.getUnitProgress(this.taskUnit._id).then((value) => {
-      if (value && value.length > 0) {
-        this.progress = (<IProgress>value[0]);
-      }
-    });
+    if (!this.progress.answers) {
+      this.resetProgressAnswers();
+    } else {
+      this.taskUnit.tasks.forEach(task => {
+        if (!this.progress.answers[task._id]) {
+          this.progress.answers[task._id] = {};
+          task.answers.forEach(answer => this.progress.answers[task._id][answer._id] = false);
+        } else {
+          task.answers.forEach(answer => {
+            if (!this.progress.answers[task._id][answer._id]) {
+              this.progress.answers[task._id][answer._id] = false;
+            }
+          });
+        }
+      });
+    }
     this.shuffleAnswers();
+  }
+
+  resetProgressAnswers() {
+    this.taskUnit.tasks.forEach(task => {
+      // Initialize all as unchecked
+      this.progress.answers[task._id] = {};
+      task.answers.forEach(answer => this.progress.answers[task._id][answer._id] = false);
+    });
   }
 
   reset() {
-    this.taskUnit.tasks.forEach((task) => {
-      task.answers.forEach((answer) => {
-        answer.userAnswer = null;
-      });
-    });
+    this.resetProgressAnswers();
     this.validationMode = false;
     this.shuffleAnswers();
-  }
-
-  isAnswerCorrect(answer) {
-    return ((typeof answer.value === 'undefined' || !answer.value) && !answer.userAnswer) || (answer.value && answer.userAnswer);
   }
 
   validate() {
     this.validationMode = true;
 
-    let done = true;
+    const handleSave = (promise: Promise<any>) => {
+      promise
+        .then((savedProgress) => {
+          this.progress = savedProgress;
+          this.snackBar.open('Progress has been saved', '', {duration: 3000});
+        })
+        .catch((err) => {
+          this.snackBar.open(`An error occurred: ${err.json().message}`, '', {duration: 3000})
+        });
+    };
 
-    this.taskUnit.tasks.forEach((task) => {
-      task.answers.forEach((answer) => {
-        // One wrong answer will mark the TaskUnit as failed
-        if (!this.isAnswerCorrect(answer)) {
-          done = false;
-        }
-      });
-    });
-
-    if (!this.progress && done) {
-      const progress = {
-        unit: this.taskUnit._id,
-        course: this.courseId,
-        done
-      };
-
-      this.progressService.createItem(progress)
-      .then((savedProgress) => {
-        this.progress = savedProgress;
-        this.snackBar.open('Progress has been saved', '', {duration: 3000});
-      })
-      .catch((err) => {
-        this.snackBar.open(`An error occurred: ${err.json().message}`, '', {duration: 3000})
-      });
+    if (!this.progress._id) {
+      handleSave(this.progressService.createItem(this.progress));
+    } else {
+      handleSave(this.progressService.updateItem({
+        _id: this.progress._id,
+        answers: this.progress.answers,
+      }));
     }
+
   }
 
   shuffleAnswers() {

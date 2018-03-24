@@ -3,10 +3,10 @@
     <p><strong>Question:</strong> {{task.name}}</p>
     <ul class="answers">
       <li *ngFor="let answer of task.answers"
-          [class.correct]="validationMode && isAnswerCorrect(answer)"
-          [class.incorrect]="validationMode && !isAnswerCorrect(answer)">
+          [class.correct]="validationMode && answer.value"
+          [class.incorrect]="validationMode && !answer.value">
 
-        <mat-checkbox [disabled]="validationMode" [(ngModel)]="answer.userAnswer">
+        <mat-checkbox [disabled]="validationMode" [(ngModel)]="progress.answers[task._id][answer._id]">
           <span class="answer-text">{{answer.text}}</span>
         </mat-checkbox>
       </li>
@@ -15,7 +15,9 @@
 </div>
 
 <p>
-  <button mat-button [disabled]="validationMode" (click)="validate()">Submit answers</button>
-  <button mat-button (click)="reset()">Reset</button>
-  <span *ngIf="progress && progress.done" class="progress-done"><mat-icon>check</mat-icon>You have completed this task.</span>
+  <button mat-raised-button color="primary" [disabled]="validationMode" (click)="validate()">Submit answers</button>
+  <button mat-raised-button (click)="reset()">Reset</button>
+  <span *ngIf="progress && progress.done" class="progress-done">
+    <mat-icon>check</mat-icon>You have completed this task.
+  </span>
 </p>

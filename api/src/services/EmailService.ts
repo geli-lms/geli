@@ -4,12 +4,14 @@ import {IUserModel} from '../models/User';
 import config from '../config/main';
 import {SendMailOptions, Transporter} from 'nodemailer';
 
+const markdown = require('nodemailer-markdown').markdown;
+
 class EmailService {
 
   private transporter: Transporter = null;
   private mailTransportConfig: any = {
     debug: false // include SMTP traffic in the logs
-  };
+};
   private mailDefaultConfig: any = {
     // default message fields
     // sender info
@@ -17,6 +19,10 @@ class EmailService {
   };
 
   constructor() {
+    if (process.env.NODE_ENV && process.env.NODE_ENV.includes('test')) {
+      this.mailTransportConfig.streamTransport = true;
+    }
+
     // define endpoint and login-credentials for smtp server
     if (config.mailSMTPServer === undefined) {
       this.mailTransportConfig.service = config.mailProvider;
@@ -32,6 +38,7 @@ class EmailService {
     }
 
     this.transporter = nodemailer.createTransport(this.mailTransportConfig, this.mailDefaultConfig);
+    this.transporter.use('compile', markdown());
   };
 
   public sendActivation(user: IUserModel) {
@@ -89,13 +96,7 @@ class EmailService {
   }
 
   public sendFreeFormMail(mailData: any) {
-    const message: SendMailOptions = {
-      subject: mailData.subject,
-      text: mailData.text,
-      bcc: mailData.to,
-    };
-
-    return this.sendMail(message);
+    return this.sendMail(mailData);
   }
 
   private sendMail(message: SendMailOptions) {

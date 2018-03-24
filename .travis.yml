@@ -64,12 +64,13 @@ install:
   - cd ..
 
 script:
+  # check for versions
+  - .travis/check-version.sh
   # run license checker and write license.json / dependencies.ts
-  - cd .travis
-  - node license.js
-  - cd ..
+  - .travis/license-crawler.sh
   # run backend-tests and return back to root for following steps
   - cd api
+  - sed -i 's/$TRAVIS_COMMIT/'$TRAVIS_COMMIT'/' src/server.ts
   - npm run test        # run backend test
   - cd ..
   # run frontend-tests and return back to root for following steps
@@ -77,8 +78,9 @@ script:
   - npm run lint        # run linter
   # - npm run test        # run test - does not work properly
   - npm run e2e         # run end-to-end-tests
-  - npm run build       # build in prod mode
+  - sed -i 's/$TRAVIS_COMMIT/'$TRAVIS_COMMIT'/' src/app/shared/services/raven-error-handler.service.ts
   - cd ../..
+  - .travis/build-fe.sh       # build in prod mode
 
 after_script:
   # send required files to coveralls.io
@@ -88,8 +90,10 @@ after_success:
   - .travis/package-checker.sh
   - .travis/docker.sh
   - .travis/deploy.sh
+  - .travis/sentry.sh
+  - .travis/apidoc.sh
 
-# Configure notifications
+# Configure notification
 notifications:
   webhooks:
     urls:

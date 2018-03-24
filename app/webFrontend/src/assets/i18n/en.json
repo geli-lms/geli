@@ -1,0 +1,67 @@
+{
+  "common": {
+    "geli": "geli",
+    "login": "Login",
+    "register": "Register",
+    "email": "Email",
+    "password": "Password",
+    "dismiss": "Dismiss",
+    "back": "Back",
+    "profile": {
+      "firstName": "First name",
+      "lastName": "Last name",
+      "uid": "Matriculation number"
+    },
+    "roles": {
+      "student": "Student",
+      "teacher": "Teacher"
+    },
+    "validation": {
+      "required": "Input required",
+      "minLength": "At least {{min}} characters required",
+      "invalid": "Input is invalid",
+      "password": "Password must have at least 8 characters which contain one special character or digit",
+      "passwordsMatch": "Passwords do not match",
+      "instituteMail": "Please register with your institute email"
+    }
+  },
+  "home": {
+    "welcomeTo": "Welcome to"
+  },
+  "auth": {
+    "forgotPassword": "Forgot password",
+    "loginSuccess": "Login successful",
+    "loginFailed": "Login failed",
+    "loginFailedError": {
+      "couldNotBeVerified": "Your login details could not be verified. Please try again.",
+      "notActiveYet": "Your account has not been activated yet.",
+      "unknown": "An unknown error occured."
+    },
+    "confirmPassword": "Confirm password",
+    "registration": {
+      "registerAs": "Register as",
+      "successful": "Registration was successful",
+      "mailSent": "We have send you an activation link to your specified email address.",
+      "back": "Back to frontpage",
+      "teacherRegistrationButton": "Not a student?"
+    }
+  },
+  "mainMenu": {
+    "admin": "Admin",
+    "about": "About",
+    "imprint": "Imprint",
+    "logout": "Logout",
+    "userSettings": "Settings"
+  },
+  "dashboard": {
+    "courses": "Courses",
+    "myCourses": "My courses",
+    "availableCourses": "Available courses",
+    "inactiveCourses": "Inactive courses",
+    "teacherCourses": "My teacher courses",
+    "createdCourses": "My created courses",
+    "addCourse": "Add course",
+    "createCourse": "Create course",
+    "importCourse": "Import course"
+  }
+}

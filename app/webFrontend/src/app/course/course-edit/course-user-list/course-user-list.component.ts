@@ -1,11 +1,12 @@
-import {Component, Input, OnInit, EventEmitter, Output, OnDestroy} from '@angular/core';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {DragulaService} from 'ng2-dragula';
 import {IUser} from '../../../../../../../shared/models/IUser';
+import {User} from '../../../models/User';
 import {FormControl} from '@angular/forms';
-import {DialogService} from '../../../shared/services/dialog.service';
 import 'rxjs/add/operator/startWith'
-import {CourseService} from '../../../shared/services/data.service';
-import {MatSnackBar} from '@angular/material';
+import {NotificationService, UserDataService} from '../../../shared/services/data.service';
+import {ICourse} from '../../../../../../../shared/models/ICourse';
+
 
 @Component({
   selector: 'app-course-user-list',
@@ -14,116 +15,102 @@ import {MatSnackBar} from '@angular/material';
 })
 export class CourseUserListComponent implements OnInit, OnDestroy {
 
-  @Input() courseId;
-  @Input() usersInCourse: IUser[];
-  @Input() users: IUser[];
+  @Input() course: ICourse;
+  @Input() users: User[] = [];
+  @Input() dragableUsersInCourse: User[] = [];
+  @Input() dragableUsers: User[] = [];
   @Input() dragulaBagId;
   @Input() role;
 
-  selectedMembers: IUser[] = [];
-  fuzzySearch: String = '';
+  search = '';
   userCtrl: FormControl;
   filteredStates: any;
-  toggleBlocked = false;
+  finishRestCall = true;
+  usersTotal = 0;
 
-  @Output() onDragendUpdate = new EventEmitter<IUser[]>();
-  @Output() onRemove = new EventEmitter<String>();
+  @Output() onDragendRemove = new EventEmitter<IUser>();
+  @Output() onDragendPush = new EventEmitter<IUser>();
+  @Output() onUpdate = new EventEmitter<String>();
+  @Output() onSearch = new EventEmitter<String>();
 
   constructor(private dragula: DragulaService,
-              public dialogService: DialogService,
-              private courseService: CourseService,
-              private snackBar: MatSnackBar) {
-    this.userCtrl = new FormControl();
-    this.filteredStates = this.userCtrl.valueChanges
-    .startWith(null)
-    .map(name => this.filterStates(name));
+              private userService: UserDataService,
+              private notificationService: NotificationService) {
+  }
+
+  async searchForUsers(search: string) {
+    this.onSearch.emit(search);
+    if (search !== '' && this.finishRestCall) {
+      this.finishRestCall = false;
+      const foundDatas = await this.userService.searchUsers(this.role, search, 20);
+      const foundUsers: User[] = foundDatas.users.map(user => new User(user));
+      this.usersTotal = foundDatas.meta.count;
+      if (foundUsers) {
+        const idList: string[] = this.course.students.map((u) => u._id);
+        this.dragableUsersInCourse = foundUsers.filter(user => (idList.indexOf(user._id) >= 0
+          && this.course.courseAdmin._id !== user._id));
+        this.dragableUsers = foundUsers.filter(user => (idList.indexOf(user._id) < 0
+          && this.course.courseAdmin._id !== user._id));
+      } else {
+        this.dragableUsers = [];
+        this.dragableUsersInCourse = [];
+      }
+      this.finishRestCall = true;
+    } else {
+      this.finishRestCall = true;
+    }
   }
 
   ngOnInit() {
     // Make items only draggable by dragging the handle
     this.dragula.setOptions(this.dragulaBagId, {
-    moves: (el, container, handle) => {
-      return handle.classList.contains('user-drag-handle') || handle.classList.contains('member-drag-handle');
-    }
-    });
-    this.dragula.dropModel.subscribe(value => {
-      const bagName = value[0];
-
-      if (bagName === this.dragulaBagId) {
-        this.onDragendUpdate.emit(this.usersInCourse);
+      moves: (el, container, handle) => {
+        return handle.classList.contains('user-drag-handle');
       }
     });
+    this.dragula.dropModel.subscribe(value => {
+      const [bagName, el, target, source] = value;
+      if (source.getAttribute('item-id') !== target.getAttribute('item-id')) {
+        if (bagName === this.dragulaBagId) {
+              if (target.getAttribute('item-id') === 'UserNotInCourse') {
+                const idList: string[] = this.dragableUsers.map(user => user._id);
+                const index: number = idList.indexOf(el.children[0].getAttribute('item-id'));
+                if (index >= 0) {
+                  this.notificationService.createNotification(
+                    this.dragableUsers[index],
+                    {text: 'You have been removed from course ' + this.course.name});
+                  this.onDragendRemove.emit(this.dragableUsers[index]);
+                }
+              } else if (target.getAttribute('item-id') === 'UserInCourse') {
+                const idList: string[] = this.dragableUsersInCourse.map(user => user._id);
+                const index: number = idList.indexOf(el.children[0].getAttribute('item-id'));
+                if (index >= 0) {
+                  this.onDragendPush.emit(this.dragableUsersInCourse[index]);
+                }
+              }
+        }
+      }
+    });
+    this.userCtrl = new FormControl();
+    this.filteredStates = this.userCtrl.valueChanges
+      .startWith(null)
+      .map(name => this.filterStates(name));
   }
 
   ngOnDestroy() {
     this.dragula.destroy(this.dragulaBagId);
   }
 
-  toggleMember(member: IUser) {
-    if (this.toggleBlocked) {
-      return;
-    }
-    const position = this.selectedMembers.indexOf(member);
-    if (position !== -1) {
-      this.selectedMembers.splice(position, 1);
-    } else {
-      this.selectedMembers.push(member);
-    }
-  }
-
-  isInSelectedMembers(member: IUser) {
-    return this.selectedMembers.indexOf(member) !== -1;
-  }
 
   filterStates(val: string) {
-    return val ? this.users.filter(s => this.fuzzysearch(val, s))
-      .map(e => e.profile.firstName + ' ' + e.profile.lastName + ' ' + e.email)
+    return val ? this.dragableUsers.concat(this.dragableUsersInCourse)
+        .map(e =>
+          e.profile.firstName + ' ' + e.profile.lastName + ' ' + e.email)
+        .slice(0, 3)
       : [];
   }
 
-  // TODO: do levenshtein in backend
-  fuzzysearch(toSearch: string, user: IUser): boolean {
-    const lowerToSearch: string = toSearch.toLowerCase();
-    const elementsToFind = lowerToSearch.split(' ');
-    if (user.uid === undefined) {
-      user.uid = '';
-    }
-    const resArray = elementsToFind.filter(e => user.profile.firstName.toLowerCase().includes(e) ||
-      user.profile.lastName.toLowerCase().includes(e) ||
-      user.email.toLowerCase().includes(e)
-    );
-    return resArray.length > 0;
-  }
-
-  async removeSelectedUsers() {
-    this.toggleBlocked = true;
-    const res = await this.dialogService
-      .confirmRemove('selected members', '', 'course')
-      .toPromise();
-    this.toggleBlocked = false;
-    if (res) {
-      this.selectedMembers.forEach(user => this.onRemove.emit(user._id));
-      this.selectedMembers = [];
-    }
-  }
-
-  async openWriteMailDialog() {
-    this.toggleBlocked = true;
-    const mailData = await this.dialogService.writeMail(
-      this.selectedMembers
-        .map((user: IUser) => `${user.profile.firstName} ${user.profile.lastName}<${user.email}>`)
-        .join(', ')
-    ).toPromise();
-    this.toggleBlocked = false;
-    if (!mailData) {
-      return;
-    }
-    this.selectedMembers = [];
-    try {
-      await this.courseService.sendMailToSelectedUsers(mailData);
-      this.snackBar.open('Sending mail succeeded.', '', {duration: 2000});
-    } catch (err) {
-      this.snackBar.open('Sending mail failed.', '', {duration: 3000});
-    }
+  updateUser(id: string) {
+    this.onUpdate.emit(id);
   }
 }

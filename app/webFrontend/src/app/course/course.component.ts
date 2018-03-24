@@ -9,8 +9,6 @@ import {CourseService} from '../shared/services/data.service';
 import {DialogService} from '../shared/services/dialog.service';
 import {ShowProgressService} from '../shared/services/show-progress.service';
 
-
-
 @Component({
   selector: 'app-course',
   templateUrl: './course.component.html',
@@ -78,21 +76,6 @@ export class CourseComponent {
             });
         }
       });
-  }
-
-  isCourseTeacherOrAdmin(course: ICourse) {
-    if (this.userService.isStudent()) {
-      return false;
-    }
-    if (this.userService.isAdmin()) {
-      return true;
-    }
-
-    if (course.courseAdmin._id === this.userService.user._id) {
-      return true;
-    }
-
-    return ( course.teachers.filter(teacher => teacher._id === this.userService.user._id).length)
   }
 
   isMemberOfCourse(course: ICourse) {

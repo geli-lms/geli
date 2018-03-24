@@ -22,7 +22,7 @@ export class ContributorsList {
       , new Contributor('Ken', 'Hasenbank', '17SuSe', 'Student', 'khase', '17WiSe')
       , new Contributor('Lukas', 'Korte', '17SuSe', 'Student', 'lukaskorte', '17WiSe')
       , new Contributor('Oliver', 'Neff', '17SuSe', 'Student', 'OliverNeff', '17WiSe')
-      , new Contributor('Alexaner', 'Weinfurter', '17SuSe', 'Student', 'alexweinfurter', '17WiSe')
+      , new Contributor('Alexander', 'Weinfurter', '17SuSe', 'Student', 'alexweinfurter', '17WiSe')
       // Old Students
       , new Contributor('Bernd', 'Noetscher', '17SuSe', 'Student', 'bernd-hda', '17SuSe')
     ];

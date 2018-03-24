@@ -1,7 +1,11 @@
 <div class="course-header">
+  <button mat-icon-button color="primary" (click)= "openDownloadDialog()" class="download-button">
+    <mat-icon aria-label="Download Units" mat-tooltip="Download Units">get_app</mat-icon>
+  </button>
   <h1>{{course?.name}}</h1>
   <p>{{course?.description}}</p>
 </div>
 <div class="lectures" *ngIf="course">
-  <app-lecture [course]="course" [lecture]="lecture" *ngFor="let lecture of course.lectures"></app-lecture>
+  <app-lecture [course]="course" [lecture]="lecture" *ngFor="let lecture of course.lectures">
+  </app-lecture>
 </div>

@@ -12,11 +12,9 @@ import {errorCodes} from '../../../../../../../api/src/config/errorCodes';
 
 export class PasswordInputComponent implements OnInit {
   @Input() form: FormGroup;
-  passwordPatternText: string;
   constructor() { }
 
   ngOnInit() {
-    this.passwordPatternText = errorCodes.password.regex.text;
     this.form.addControl('password', new FormControl('', Validators.compose(
       [Validators.required, Validators.pattern(errorCodes.password.regex.regex)])));
     this.form.addControl('confirmPassword', new FormControl('', Validators.required));

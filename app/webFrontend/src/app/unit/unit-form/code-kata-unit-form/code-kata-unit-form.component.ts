@@ -1,9 +1,9 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
-import {CodeKataUnitService} from '../../../shared/services/data.service';
+import {CodeKataUnitService, NotificationService, UnitService} from '../../../shared/services/data.service';
 import {MatSnackBar} from '@angular/material';
 import {ICodeKataUnit} from '../../../../../../../shared/models/units/ICodeKataUnit';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
-import {CodeKataUnit} from '../../../models/CodeKataUnit';
+import {CodeKataUnit} from '../../../models/units/CodeKataUnit';
 import {UnitGeneralInfoFormComponent} from '../unit-general-info-form/unit-general-info-form.component';
 import {AceEditorComponent} from 'ng2-ace-editor';
 import 'brace';
@@ -33,29 +33,31 @@ export class CodeKataUnitFormComponent implements OnInit {
   // Example code Kata
   example = {
     definition: '// Task: Manipulate the targetSet, so it only contains the values "Hello" and "CodeKata"' +
-      '\n' +
-      '\nlet targetSet = new Set(["Hello", "there"]);',
+    '\n' +
+    '\nlet targetSet = new Set(["Hello", "there"]);',
     code: '// This is your code to validate this section. Only course Teachers and Admins can see this' +
-      '\ntargetSet.add("CodeKata");' +
-      '\ntargetSet.delete("there");',
+    '\ntargetSet.add("CodeKata");' +
+    '\ntargetSet.delete("there");',
     test: '// This is the Test Section use the validate function to test the students code' +
-      '\nvalidate();' +
-      '\n' +
-      '\nfunction validate() {' +
-      '\n\tlet result = targetSet.has("Hello") && targetSet.has("CodeKata") && targetSet.size === 2;' +
-      '\n\tif (result === true) {' +
-      '\n\t\tconsole.log("Well done, you solved this Kata");' +
-      '\n\t} else {' +
-      '\n\t\tconsole.log("Sorry mate, you need to try harder");' +
-      '\n\t}' +
-      '\n\treturn result;' +
-      '\n}'
+    '\nvalidate();' +
+    '\n' +
+    '\nfunction validate() {' +
+    '\n\tconst result = targetSet.has("Hello") && targetSet.has("CodeKata") && targetSet.size === 2;' +
+    '\n\tif (result === true) {' +
+    '\n\t\tconsole.log("Well done, you solved this Kata");' +
+    '\n\t} else {' +
+    '\n\t\tconsole.log("Sorry mate, you need to try harder");' +
+    '\n\t}' +
+    '\n\treturn result;' +
+    '\n}'
   };
 
   logs: string;
 
   constructor(private codeKataUnitService: CodeKataUnitService,
-              private snackBar: MatSnackBar) {
+              private unitService: UnitService,
+              private snackBar: MatSnackBar,
+              private notificationService: NotificationService) {
   }
 
   ngOnInit() {
@@ -98,36 +100,54 @@ export class CodeKataUnitFormComponent implements OnInit {
     };
 
     if (this.model._id === undefined) {
-      this.codeKataUnitService.createItem({
+      this.unitService.createItem({
         model: this.model,
-        lectureId: this.lectureId,
+        lectureId: this.lectureId
       })
-      .then(
-        () => {
-          this.snackBar.open('Code-Kata created', '', {duration: 3000});
-          this.onDone();
-        },
-        (error) => {
-          const message = error.json().message;
-          this.snackBar.open('Failed to create Code-Kata => ' + message, '', {duration: 3000});
-        });
+        .then(
+          (unit) => {
+            this.snackBar.open('Code-Kata created', '', {duration: 3000});
+            this.onDone();
+            return this.notificationService.createItem(
+              {
+                changedCourse: this.course,
+                changedLecture: this.lectureId,
+                changedUnit: unit,
+                text: 'Course ' + this.course.name + ' has a new code kata unit.'
+              });
+          },
+          (error) => {
+            const message = error.json().message;
+            this.snackBar.open('Failed to create Code-Kata => ' + message, '', {duration: 3000});
+          });
     } else {
       delete this.model._course;
-      this.codeKataUnitService.updateItem(this.model)
-      .then(
-        () => {
-          this.snackBar.open('Code-Kata updated', '', {duration: 3000});
-          this.onDone();
-        },
-        (error) => {
-          const message = error.json().message;
-          this.snackBar.open('Failed to update Code-Kata => ' + message, '', {duration: 3000});
-        });
+      this.unitService.updateItem(this.model)
+        .then(
+          (unit) => {
+            this.snackBar.open('Code-Kata updated', '', {duration: 3000});
+            this.onDone();
+            return this.notificationService.createItem(
+              {
+                changedCourse: this.course,
+                changedLecture: this.lectureId,
+                changedUnit: unit,
+                text: 'Course ' + this.course.name + ' has an updated unit.'
+              });
+          },
+          (error) => {
+            const message = error.json().message;
+            this.snackBar.open('Failed to update Code-Kata => ' + message, '', {duration: 3000});
+          });
     }
   }
 
 // refactor this to use the same as in code-kata-unit
   validate() {
+    if (!this.validateStructure()) {
+      return false;
+    }
+
     const codeToTest: string = this.model.code;
 
     this.logs = undefined;
@@ -166,6 +186,24 @@ export class CodeKataUnitFormComponent implements OnInit {
       console.log(result);
       return false;
     }
+  }
+
+  // this code gets unnessessary with the Implementation of Issue #44 (all validation parts should happen on the server)
+  private validateStructure(): boolean {
+    if (!this.model.code.match(new RegExp('function(.|\t)*validate\\(\\)(.|\n|\t)*{(.|\n|\t)*}', 'gmi'))) {
+      this.snackBar.open('The test section must contain a validate function', 'Dismiss');
+      return false;
+    }
+    if (!this.model.code.match(new RegExp('function(.|\t)*validate\\(\\)(.|\n|\t)*{(.|\n|\t)*return(.|\n|\t)*}', 'gmi'))) {
+      this.snackBar.open('The validate function must return something', 'Dismiss');
+      return false;
+    }
+    if (!this.model.code.match(new RegExp('validate\\(\\);', 'gmi'))) {
+      this.snackBar.open('The test section must call the validate function', 'Dismiss');
+      return false;
+    }
+
+    return true;
   }
 
 }

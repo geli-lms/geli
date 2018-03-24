@@ -1,12 +1,13 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {IFreeTextUnit} from '../../../../../../../shared/models/units/IFreeTextUnit';
 import {MatDialog, MatSnackBar} from '@angular/material';
-import {FreeTextUnitService} from '../../../shared/services/data.service';
-import {FreeTextUnit} from '../../../models/FreeTextUnit';
+import {FreeTextUnitService, NotificationService, UnitService} from '../../../shared/services/data.service';
+import {FreeTextUnit} from '../../../models/units/FreeTextUnit';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
 import {UnitGeneralInfoFormComponent} from '../unit-general-info-form/unit-general-info-form.component';
 import {FreeTextUnitEditorComponent} from './free-text-unit-editor/free-text-unit-editor.component';
 import {FreeTextUnitEditorDialog} from './free-text-unit-editor/free-text-unit-editor-dialog/free-text-unit-editor.dialog';
+import {isUndefined} from 'util';
 
 @Component({
   selector: 'app-free-text-unit-form',
@@ -26,8 +27,10 @@ export class FreeTextUnitFormComponent implements OnInit {
   private freeTextEditor: FreeTextUnitEditorComponent;
 
   constructor(private freeTextUnitService: FreeTextUnitService,
+              private unitService: UnitService,
               private snackBar: MatSnackBar,
-              public dialog: MatDialog) {
+              public dialog: MatDialog,
+              private notificationService: NotificationService) {
   }
 
   ngOnInit() {
@@ -45,18 +48,25 @@ export class FreeTextUnitFormComponent implements OnInit {
     };
 
     // If markdown was left empty, define field for db-consistency
-    if (typeof this.model.markdown === 'undefined') {
+    if (isUndefined(this.model.markdown)) {
       this.model.markdown = '';
     }
 
     // Checks if we have to create a new unit or update an existing
     if (this.isModelNewObj()) {
       // Create new one
-      this.freeTextUnitService.createItem({model: this.model, lectureId: this.lectureId})
+      this.unitService.createItem({model: this.model, lectureId: this.lectureId})
         .then(
-          () => {
+          (unit) => {
             this.snackBar.open('Free text unit saved', '', {duration: 3000});
             this.onDone();
+            return this.notificationService.createItem(
+              {
+                changedCourse: this.course,
+                changedLecture: this.lectureId,
+                changedUnit: unit,
+                text: 'Course ' + this.course.name + ' has a new text unit.'
+              });
           },
           error => {
             this.snackBar.open('Couldn\'t save unit', '', {duration: 3000});
@@ -64,10 +74,16 @@ export class FreeTextUnitFormComponent implements OnInit {
         );
     } else {
       // Update existing
-      delete this.model._course;
-      this.freeTextUnitService.updateItem(this.model)
+      // delete this.model._course;
+      this.unitService.updateItem(this.model)
         .then(
-          () => {
+          (unit) => {
+            this.notificationService.createItem(
+              {
+                changedCourse: this.course, changedLecture: this.lectureId,
+                changedUnit: unit, text: 'Course ' + this.course.name + ' has an updated text unit.'
+              })
+              .catch(console.error);
             this.snackBar.open('Free text unit saved', 'Update', {duration: 2000});
             this.onDone();
           },

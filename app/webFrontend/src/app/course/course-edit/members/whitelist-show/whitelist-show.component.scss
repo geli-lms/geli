@@ -1,0 +1,37 @@
+.list {
+  padding-bottom: 10px;
+  width: 99%;
+  margin-left: 0.2rem;
+  .listBg {
+    width: 40px;
+    background: center;
+    border-radius: 20px;
+    background-size: 40px 40px;
+    margin-left: 10px;
+  }
+
+  .firstName {
+    padding-left: 5%;
+    display: inline-block;
+    flex: 1;
+    text-transform:capitalize;
+  }
+
+  .lastName {
+    flex: 1rem;
+    text-transform:capitalize;
+  }
+
+  .uid {
+    flex: 1;
+  }
+
+  .green {
+    color: green;
+  }
+
+  .red {
+    color: red;
+  }
+
+}

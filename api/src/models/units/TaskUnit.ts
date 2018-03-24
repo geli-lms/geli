@@ -1,87 +1,123 @@
 import * as mongoose from 'mongoose';
-import {Unit} from './Unit';
+import {IUnitModel} from './Unit';
 import {ITaskUnit} from '../../../../shared/models/units/ITaskUnit';
-import {ITaskModel, Task} from '../Task';
+import {IUser} from '../../../../shared/models/IUser';
+import {IProgress} from '../../../../shared/models/progress/IProgress';
+import {ITaskUnitProgress} from '../../../../shared/models/progress/ITaskUnitProgress';
 import {ITask} from '../../../../shared/models/task/ITask';
-import {InternalServerError} from 'routing-controllers';
-import {ILectureModel, Lecture} from '../Lecture';
 
-interface ITaskUnitModel extends ITaskUnit, mongoose.Document {
+interface ITaskUnitModel extends ITaskUnit, IUnitModel {
   exportJSON: () => Promise<ITaskUnit>;
+  calculateProgress: (users: IUser[], progress: IProgress[]) => Promise<ITaskUnit>;
+  toFile: () => Promise<String>;
 }
 
-const taskUnitSchema = new mongoose.Schema({
-  tasks: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Task'
+const taskSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String
+    },
+    unitId: {
+      type: String
     }
-  ],
+    ,
+    answers: {
+      type: [{
+        value: Boolean,
+        text: String
+      }],
+      required: true
+    },
+  }, {
+    timestamps: true,
+    toObject: {
+      transform: function (doc: any, ret: any) {
+        if (ret.hasOwnProperty('_id') && ret._id !== null) {
+          ret._id =  ret._id.toString();
+        }
+
+        if (ret.hasOwnProperty('id') && ret.id !== null) {
+          ret.id = ret.id.toString();
+        }
+        ret.answers = ret.answers.map((answer: any) => {
+          answer._id = answer._id.toString();
+          return answer;
+        });
+      }
+    }
+  }
+);
+
+const taskUnitSchema = new mongoose.Schema({
+  tasks: [taskSchema],
   deadline: {
     type: String
   },
 });
 
-// Cascade delete
-taskUnitSchema.pre('remove', function(next: () => void) {
-  Task.find({'_id': {$in: this.tasks}}).exec()
-    .then((tasks) => Promise.all(tasks.map(task => task.remove())))
-    .then(next)
-    .catch(next);
-});
+taskUnitSchema.methods.calculateProgress = async function (users: IUser[], progress: IProgress[]): Promise<ITaskUnit> {
+  const unitObj = this.toObject();
+  const progressStats: any[] = [];
 
-taskUnitSchema.methods.exportJSON = async function() {
-  const obj = this.toObject();
+  unitObj.tasks.forEach((question: ITask) => {
+    const questionStats = {
+      name: question.name,
+      series: [{
+        name: 'correct',
+        value: 0
+      },
+      {
+        name: 'wrong',
+        value: 0
+      },
+      {
+        name: 'no data',
+        value: users.length
+      }]
+    };
+    progress.forEach((userProgress: ITaskUnitProgress) => {
+      let correctedAnswered = true;
+      question.answers.forEach((answer) => {
+        if (
+          !userProgress.answers[question._id.toString()] ||
+          userProgress.answers[question._id.toString()][answer._id.toString()] !== !!answer.value
+        ) {
+          correctedAnswered = false;
+        }
+      });
 
-  // remove unwanted informations
-  // mongo properties
-  delete obj._id;
-  delete obj.createdAt;
-  delete obj.__v;
-  delete obj.updatedAt;
+      if (correctedAnswered) {
+        questionStats.series[0].value++;
+      } else {
+        questionStats.series[1].value++;
+      }
 
-  // custom properties
-  delete obj._course;
+      questionStats.series[2].value--;
+    });
 
-  // "populate" tasks
-  const tasks: Array<mongoose.Types.ObjectId>  = obj.tasks;
-  obj.tasks = [];
+    progressStats.push(questionStats);
+  });
 
-  for (const taskId of tasks) {
-    const task: ITaskModel = await Task.findById(taskId);
-    const taskExport = await task.exportJSON();
-    obj.tasks.push(taskExport);
-  }
-
-  return obj;
+  unitObj.progressData = progressStats;
+  return unitObj;
 };
 
-taskUnitSchema.statics.importJSON = async function(taskUnit: ITaskUnit, courseId: string, lectureId: string) {
-  taskUnit._course = courseId;
+taskUnitSchema.statics.toFile = async function(unit: ITaskUnit) {
+  let fileStream = '';
 
-  const tasks: Array<ITask>  = taskUnit.tasks;
-  taskUnit.tasks = [];
+  for (const task of unit.tasks) {
+    fileStream = fileStream + task.name + '\n';
 
-  try {
-  const savedTaskUnit = await new TaskUnit(taskUnit).save();
+    for (const answer of task.answers) {
+      fileStream = fileStream + answer.text + ': [ ]\n';
+    }
+    fileStream = fileStream + '-------------------------------------\n';
 
-  for (const task of tasks) {
-    const newTask: ITask = await Task.schema.statics.importJSON(task, savedTaskUnit._id);
-    taskUnit.tasks.push(newTask);
   }
 
-  const lecture = await Lecture.findById(lectureId);
-  lecture.units.push(<ITaskUnitModel>savedTaskUnit);
-  await lecture.save();
-
-  return savedTaskUnit.toObject();
-  } catch (err) {
-    const newError = new InternalServerError('Failed to import tasks');
-    newError.stack += '\nCaused by: ' + err.message + '\n' + err.stack;
-    throw newError;
-  }
+  return new Promise((resolve) => {
+    return resolve(fileStream);
+  });
 };
 
-const TaskUnit = Unit.discriminator('task', taskUnitSchema);
-
-export {TaskUnit, ITaskUnitModel};
+export {taskUnitSchema, ITaskUnitModel};

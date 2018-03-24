@@ -1,5 +1,6 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
+import {HttpClientModule} from '@angular/common/http';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {GravatarDirective} from './directives/gravatar.directive';
 import {DialogModule} from './modules/dialog.module';
@@ -11,6 +12,13 @@ import {MatFabMenuComponent} from './components/mat-fab-menu/mat-fab-menu.compon
 import {PasswordInputComponent} from './components/password-input/password-input.component';
 import {ExpandableDivComponent} from './components/expandable-div/expandable-div.component';
 import {ButtonSaveCancelComponent} from './components/button-save-cancel/button-save-cancel.component';
+import {UploadFormComponent} from './components/upload-form/upload-form.component';
+import {FileUploadModule} from 'ng2-file-upload';
+import {FilesizePipe} from './pipes/filesize/filesize.pipe';
+import {ChangePasswordDialogComponent} from './components/change-password-dialog/change-password-dialog.component';
+import {MarkdownEditorComponent} from './components/markdown-editor/markdown-editor.component';
+import {AceEditorModule} from 'ng2-ace-editor';
+import {TranslateModule} from '@ngx-translate/core';
 
 @NgModule({
   imports: [
@@ -18,6 +26,11 @@ import {ButtonSaveCancelComponent} from './components/button-save-cancel/button-
     FormsModule,
     ReactiveFormsModule,
     MaterialImportModule,
+    HttpClientModule,
+    FileUploadModule,
+    AceEditorModule,
+    FileUploadModule,
+    TranslateModule,
   ],
   declarations: [
     GravatarDirective,
@@ -29,6 +42,10 @@ import {ButtonSaveCancelComponent} from './components/button-save-cancel/button-
     BadgeComponent,
     ExpandableDivComponent,
     ButtonSaveCancelComponent,
+    UploadFormComponent,
+    FilesizePipe,
+    ChangePasswordDialogComponent,
+    MarkdownEditorComponent,
   ],
   exports: [
     GravatarDirective,
@@ -42,6 +59,11 @@ import {ButtonSaveCancelComponent} from './components/button-save-cancel/button-
     BadgeComponent,
     ExpandableDivComponent,
     ButtonSaveCancelComponent,
+    MarkdownEditorComponent,
+    UploadFormComponent,
+    FilesizePipe,
+    ChangePasswordDialogComponent,
+    TranslateModule,
   ]
 })
 export class SharedModule {

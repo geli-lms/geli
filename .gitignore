@@ -63,10 +63,12 @@ nohup.out
 /api/build
 /api/coverage
 /api/docs
+/api/apidocs
+/api/store.json
 docker-compose.override.yml
 
 # Web Frontend
-# nothing so far
+app/webFrontend/dist
 
 # Never ignore .gitkeep files
 # Note that the ignore has to look like: /some/path/* and not eg. /some/path

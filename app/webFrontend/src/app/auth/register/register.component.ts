@@ -1,11 +1,12 @@
 import {Component, OnInit} from '@angular/core';
-import {Validators, FormGroup, FormBuilder} from '@angular/forms';
+import {Validators, FormGroup, FormBuilder, FormControl} from '@angular/forms';
 import {AuthenticationService} from '../../shared/services/authentication.service';
 import {Router} from '@angular/router';
 import {ShowProgressService} from '../../shared/services/show-progress.service';
 import {MatSnackBar} from '@angular/material';
 import {errorCodes} from '../../../../../../api/src/config/errorCodes';
 import {TitleService} from '../../shared/services/title.service';
+import {APIInfoService} from '../../shared/services/data.service';
 
 @Component({
   selector: 'app-register',
@@ -19,6 +20,7 @@ export class RegisterComponent implements OnInit {
   loading = false;
   uidError = null;
   mailError = null;
+  teacherMailRegex: string;
 
   private trimFormFields() {
     this.registerForm.value.email = this.registerForm.value.email.trim();
@@ -34,10 +36,15 @@ export class RegisterComponent implements OnInit {
               private showProgress: ShowProgressService,
               private snackBar: MatSnackBar,
               private formBuilder: FormBuilder,
-              private titleService: TitleService) {
+              private titleService: TitleService,
+              private apiInfoService: APIInfoService, ) {
   }
 
   ngOnInit() {
+    this.apiInfoService.readAPIInfo().then((apiInfo: any) => {
+        this.teacherMailRegex = apiInfo.teacherMailRegex;
+      }
+    );
     this.titleService.setTitle('Register');
     // reset login status
     this.authenticationService.unsetAuthData();
@@ -46,6 +53,8 @@ export class RegisterComponent implements OnInit {
 
   changeRole(role) {
     this.role = role;
+    this.registerForm.controls.email.updateValueAndValidity();
+    this.registerForm.controls.uid.updateValueAndValidity();
   }
 
   clearAllErrors() {
@@ -100,8 +109,24 @@ export class RegisterComponent implements OnInit {
         firstName: ['', Validators.compose([Validators.required, Validators.minLength(2)])],
         lastName: ['', Validators.compose([Validators.required, Validators.minLength(2)])],
       }),
-      email: ['', Validators.compose([Validators.required, Validators.email])],
-      uid: [null, Validators.required],
+      email: ['', Validators.compose([Validators.required, Validators.email, this.validateTeacherEmail.bind(this)])],
+      uid: ['', [this.validateMatriculationNumber.bind(this)]]
     })
   }
+
+  validateTeacherEmail(control: FormControl) {
+    if (this.role === 'teacher' && !(control.value as String).match(this.teacherMailRegex)) {
+      return {teacherEmailError: true};
+    }
+    return null;
+  }
+
+  validateMatriculationNumber(control: FormControl) {
+    if (this.role === 'student' && (control.value as String).length <= 0) {
+      return {uidValidator: true};
+    }
+    return null;
+  }
 }
+
+

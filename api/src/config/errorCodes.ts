@@ -7,7 +7,7 @@ export const errorCodes = {
     },
     noTeacher: {
       code: 'no teacher',
-      text: 'You are not allowed to register as teacher'
+      text: 'You are not allowed to register as teacher',
     },
     notSend: {
       code: 'email not send',
@@ -32,6 +32,12 @@ export const errorCodes = {
       text: 'Incorrect or missing access key'
     }
   },
+  whitelist: {
+    duplicateWhitelistUser: {
+      code: 'duplicate uid',
+      text: 'That matriculation number is already in use for this course.'
+    }
+  },
   password: {
     regex: {
       code: '',
@@ -45,6 +51,18 @@ export const errorCodes = {
         code: 'wrongTypeCSV',
         text: 'Wrong type allowed are just csv files.'
       }
+    }
+  },
+  save: {
+    couldNotSaveImprint: {
+      code: 'coldNotSaveImprint',
+      text: 'Could not save Imprint'
+    }
+  },
+  query: {
+    empty: {
+      code: 'emptyQuery',
+      text: 'Query was empty.'
     }
   }
 };
