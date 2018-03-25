@@ -91,14 +91,22 @@ class FileUnitMigration {
 
             const oldFile = <any>file;
             let absolutePath = '';
+            let fileStats = null;
             try {
               absolutePath = fs.realpathSync(oldFile.path);
+              fileStats = fs.statSync(oldFile.path);
             } catch (error) {
+              fileStats = null;
               absolutePath = '';
             }
 
             if (absolutePath.length === 0) {
               absolutePath = fs.realpathSync('api/' + oldFile.path);
+              fileStats = fs.statSync('api/' + oldFile.path);
+            }
+
+            if (typeof oldFile.size === 'undefined') {
+              oldFile.size = fileStats.size;
             }
 
             const newFile = {
@@ -114,9 +122,10 @@ class FileUnitMigration {
 
           fileUnitObj._id = new ObjectID(fileUnitObj._id);
           fileUnitObj._course = new ObjectID(fileUnitObj._course);
-
+          /*
           const unitAfterReplace = await mongoose.connection.collection('units')
             .findOneAndReplace({'_id': fileUnit._id}, fileUnitObj);
+            */
           return fileUnitObj;
         }
       }));
