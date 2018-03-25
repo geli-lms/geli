@@ -67,8 +67,11 @@ export class ChangePasswordDialogComponent implements OnInit {
       this.snackBar.open('Password successfully updated.', '', {duration: 3000});
       this.dialogRef.close();
     } catch (error) {
-      console.dir(error);
-      const errormsg = error.message;
+      // console.dir(error);
+      let errormsg = error.error.message;
+      if (!errormsg || 0 === errormsg.length) {
+        errormsg = 'Woops! Sth. went wrong. Please provide the correct Data and try again in a few Minutes!';
+      }
       this.snackBar.open(errormsg, 'Dismiss');
     }
   }

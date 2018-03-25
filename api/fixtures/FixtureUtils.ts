@@ -11,6 +11,7 @@ import {ITaskUnit} from '../../shared/models/units/ITaskUnit';
 import {ITaskUnitModel} from '../src/models/units/TaskUnit';
 import * as mongoose from 'mongoose';
 import ObjectId = mongoose.Types.ObjectId;
+import {IWhitelistUser} from '../../shared/models/IWhitelistUser';
 
 export class FixtureUtils {
   public static async getRandomUser(hash?: string): Promise<IUser> {
@@ -61,7 +62,8 @@ export class FixtureUtils {
     return this.getRandomArray<IUser>(array, min, max, hash);
   }
 
-  public static async getRandomWhitelistUsers(students: IUser[], course: ICourseModel, hash?: string): Promise<IWhitelistUser[]> {
+  // FIXME: This should return a valid type. (Promise<IWhitelistUser[]>)
+  public static async getRandomWhitelistUsers(students: IUser[], course: ICourseModel, hash?: string) {
     const randomArray = students.splice(0, this.getRandomNumber(0, students.length - 1));
     const array = await this.getRandomArray(randomArray, 0, students.length - 1, hash);
     return array.map( (stud: IUser) => {
@@ -133,7 +135,9 @@ export class FixtureUtils {
   }
 
   public static async getCourses(): Promise<ICourse[]> {
-    return Course.find();
+    return Course.find()
+      .populate('students')
+      .populate('whitelist');
   }
 
   public static async getLectures(): Promise<ILecture[]> {

@@ -54,8 +54,16 @@ export class LoginComponent implements OnInit {
         this.showProgress.toggleLoadingGlobal(false);
         this.loading = false;
 
-        this.translate.get(['auth.loginFailed', 'common.dismiss']).subscribe((t: string) => {
-          this.snackBar.open(t['auth.loginFailed'], t['common.dismiss'], {duration: 2000});
+        this.translate.get([
+          'auth.loginFailed',
+          'common.dismiss',
+          `auth.loginFailedError.${error.error.message}`
+        ]).subscribe((t: string) => {
+          this.snackBar.open(
+            t['auth.loginFailed'] + ': ' + t[`auth.loginFailedError.${error.error.message}`],
+            t['common.dismiss'],
+            {duration: 2000}
+          );
         });
       });
   }

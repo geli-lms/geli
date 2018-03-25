@@ -16,6 +16,38 @@ import config from '../config/main';
 @JsonController('/auth')
 export class AuthController {
 
+  /**
+   * @api {post} /api/auth/login Login user
+   * @apiName PostAuthLogin
+   * @apiGroup Auth
+   *
+   * @apiParam {Request} request Login request (with email and password).
+   *
+   * @apiSuccess {String} token Generated access token.
+   * @apiSuccess {IUserModel} user Authenticated user.
+   *
+   * @apiSuccessExample {json} Success-Response:
+   *     {
+   *         "token": "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YTAzN2U2YTYwZjcyMjM2ZDhlN2M4MTMiLCJpYXQiOjE1
+   *         MTcyNTI0NDYsImV4cCI6MTUxNzI2MjUyNn0.b53laxHG-b6FbB7JP1GJsIgGWc3EUm0cTuufm1CKCCM",
+   *         "user": {
+   *             "_id": "5a037e6a60f72236d8e7c813",
+   *             "updatedAt": "2018-01-08T19:24:26.522Z",
+   *             "createdAt": "2017-11-08T22:00:10.897Z",
+   *             "email": "admin@test.local",
+   *             "__v": 0,
+   *             "isActive": true,
+   *             "lastVisitedCourses": [],
+   *             "role": "admin",
+   *             "profile": {
+   *                 "firstName": "Dago",
+   *                 "lastName": "Adminman",
+   *                 "picture": {}
+   *             },
+   *             "id": "5a037e6a60f72236d8e7c813"
+   *         }
+   *     }
+   */
   @Post('/login')
   @UseBefore(bodyParserJson(), passportLoginMiddleware) // We need body-parser for passport to find the credentials
   postLogin(@Req() request: Request) {
@@ -27,6 +59,19 @@ export class AuthController {
     };
   }
 
+  /**
+   * @api {post} /api/auth/register Register user
+   * @apiName PostAuthRegister
+   * @apiGroup Auth
+   *
+   * @apiParam {IUser} user New user to be registered.
+   *
+   * @apiError BadRequestError That matriculation number is already in use
+   * @apiError BadRequestError That email address is already in use
+   * @apiError BadRequestError You can only sign up as student or teacher
+   * @apiError BadRequestError You are not allowed to register as teacher
+   * @apiError InternalServerError Could not send E-Mail
+   */
   @Post('/register')
   @OnUndefined(204)
   async postRegister(@Body() user: IUser) {
@@ -57,6 +102,22 @@ export class AuthController {
     }
   }
 
+  /**
+   * @api {post} /api/auth/activate Activate user
+   * @apiName PostAuthActivate
+   * @apiGroup Auth
+   *
+   * @apiParam {string} authenticationToken Authentication token.
+   *
+   * @apiSuccess {Boolean} success Confirmation of activation.
+   *
+   * @apiSuccessExample {json} Success-Response:
+   *     {
+   *         "success": true
+   *     }
+   *
+   * @apiError HttpError 422 - could not activate user
+   */
   // TODO If activate user and is in playlist add to course.
   @Post('/activate')
   postActivation(@BodyParam('authenticationToken') authenticationToken: string) {
@@ -75,6 +136,24 @@ export class AuthController {
       });
   }
 
+  /**
+   * @api {post} /api/auth/reset Reset password
+   * @apiName PostAuthReset
+   * @apiGroup Auth
+   *
+   * @apiParam {string} resetPasswordToken Authentication token.
+   * @apiParam {string} newPassword New password.
+   *
+   * @apiSuccess {Boolean} success Confirmation of reset.
+   *
+   * @apiSuccessExample {json} Success-Response:
+   *     {
+   *         "success": true
+   *     }
+   *
+   * @apiError HttpError 422 - could not reset users password
+   * @apiError ForbiddenError your reset password token is expired
+   */
   @Post('/reset')
   postPasswordReset(@BodyParam('resetPasswordToken') resetPasswordToken: string, @BodyParam('newPassword') newPassword: string) {
     return User.findOne({resetPasswordToken: resetPasswordToken})
@@ -97,6 +176,23 @@ export class AuthController {
       });
   }
 
+  /**
+   * @api {post} /api/auth/requestreset Request password reset
+   * @apiName PostAuthRequestReset
+   * @apiGroup Auth
+   *
+   * @apiParam {string} email Email to notify.
+   *
+   * @apiSuccess {Boolean} success Confirmation of email transmission.
+   *
+   * @apiSuccessExample {json} Success-Response:
+   *     {
+   *         "success": true
+   *     }
+   *
+   * @apiError HttpError 422 - could not reset users password
+   * @apiError InternalServerError Could not send E-Mail
+   */
   @Post('/requestreset')
   postRequestPasswordReset(@BodyParam('email') email: string) {
     return User.findOne({email: email})

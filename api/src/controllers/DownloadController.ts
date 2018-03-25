@@ -83,6 +83,21 @@ export class DownloadController {
     return size;
   }
 
+  /**
+   * @api {get} /api/download/:id Request archived file
+   * @apiName GetDownload
+   * @apiGroup Download
+   *
+   * @apiParam {String} id Course name.
+   * @apiParam {Response} response Response (input).
+   *
+   * @apiSuccess {Response} response Response (output).
+   *
+   * @apiSuccessExample {json} Success-Response:
+   *     UEsFBgAAAAAAAAAAAAAAAAAAAAAAAA==
+   *
+   * @apiError NotFoundError
+   */
   @Get('/:id')
   async getArchivedFile(@Param('id') id: string, @Res() response: Response) {
     const filePath = config.tmpFileCacheFolder + id + '.zip';
@@ -95,12 +110,6 @@ export class DownloadController {
     response.setHeader('Access-Control-Expose-Headers', 'Content-Disposition');
     await promisify<string, void>(response.download.bind(response))(filePath);
     return response;
-  }
-
-  @Post('/size/')
-  @ContentType('application/json')
-  async getFileSize(@Body() data: any) {
-    return this.calcPackage(data);
   }
 
   async createFileHash(pack: IDownload) {
@@ -127,6 +136,21 @@ export class DownloadController {
     return crypto.createHash('sha1').update(data).digest('hex');
   }
 
+  /**
+   * @api {post} /api/download/ Post download request
+   * @apiName PostDownload
+   * @apiGroup Download
+   *
+   * @apiParam {IDownload} data Course data.
+   * @apiParam {IUser} currentUser Currently logged in user.
+   *
+   * @apiSuccess {String} hash Hash value.
+   *
+   * @apiSuccessExample {json} Success-Response:
+   *     "da39a3ee5e6b4b0d3255bfef95601890afd80709"
+   *
+   * @apiError NotFoundError
+   */
   @Post('/')
   @ContentType('application/json')
   async postDownloadRequest(@Body() data: IDownload, @CurrentUser() user: IUser) {
@@ -176,12 +200,12 @@ export class DownloadController {
             const localUnit = await Unit.findOne({_id: unit.unitId});
             if (localUnit.__t === 'free-text') {
               const freeTextUnit = <IFreeTextUnit><any>localUnit;
-              archive.append(FreeTextUnit.schema.statics.toFile(freeTextUnit), {
+              archive.append(await FreeTextUnit.schema.statics.toFile(freeTextUnit), {
                 name: lecCounter + '_' + lcName + '/' + unitCounter + '_' + this.replaceCharInFilename(freeTextUnit.name) + '.md'
               });
             } else if (localUnit.__t === 'code-kata') {
               const codeKataUnit = <ICodeKataUnit><any>localUnit;
-              archive.append(CodeKataUnit.schema.statics.toFile(codeKataUnit),
+              archive.append(await CodeKataUnit.schema.statics.toFile(codeKataUnit),
                 {name: lecCounter + '_' + lcName + '/' + unitCounter + '_' + this.replaceCharInFilename(codeKataUnit.name) + '.txt'});
             } else if (localUnit.__t === 'file') {
               const fileUnit = <IFileUnit><any>localUnit;
