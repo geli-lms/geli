@@ -11,7 +11,6 @@ import {ITaskUnit} from '../../shared/models/units/ITaskUnit';
 import {ITaskUnitModel} from '../src/models/units/TaskUnit';
 import * as mongoose from 'mongoose';
 import ObjectId = mongoose.Types.ObjectId;
-import {IWhitelistUser} from '../../shared/models/IWhitelistUser';
 
 export class FixtureUtils {
   public static async getRandomUser(hash?: string): Promise<IUser> {
