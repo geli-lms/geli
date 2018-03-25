@@ -86,10 +86,10 @@ after_script:
 
 after_success:
   - .travis/package-checker.sh
+  - .travis/apidoc.sh
   - .travis/docker.sh
   - .travis/deploy.sh
   - .travis/sentry.sh
-  - .travis/apidoc.sh
 
 # Configure notification
 notifications:
