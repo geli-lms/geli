@@ -1,6 +1,6 @@
 <div *ngIf="fileUnit.fileUnitType === 'video'">
   <div *ngFor="let file of fileUnit.files;">
-    <video src="{{'/api/uploads/' + file.name}}" controls></video>
+    <video src="{{'/api/uploads/' + file.link}}" controls></video>
   </div>
 </div>
 <div *ngIf="fileUnit.fileUnitType !== 'video'">
