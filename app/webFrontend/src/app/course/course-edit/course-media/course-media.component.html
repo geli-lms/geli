@@ -1,0 +1,95 @@
+<div class="mm-container debug">
+  <!-- Left part: Folders -->
+  <div class="part part--left" [ngClass]="{'hide': !folderBarVisible}">
+    <mat-toolbar>
+      <mat-toolbar-row>
+        <button mat-icon-button (click)="toggleFolderBarVisibility()">
+          <mat-icon *ngIf="folderBarVisible">close</mat-icon>
+          <mat-icon *ngIf="!folderBarVisible">arrow_right</mat-icon>
+        </button>
+        <span *ngIf="folderBarVisible">Folder</span>
+      </mat-toolbar-row>
+    </mat-toolbar>
+    <div class="folder-wrapper">
+      <p>
+        <mat-icon class="inline-mat-icon">folder</mat-icon>
+        <span>{{ course?.media?.name }}</span>
+      </p>
+    </div>
+  </div>
+
+  <!-- Center part: search/files -->
+  <div class="part part--center">
+
+    <!-- Todo: Add search here -->
+
+    <!-- Files cards -->
+    <div class="area--files">
+
+      <!-- Multi-Select button area -->
+      <div class="btn__area">
+        <button class="text-fit" mat-raised-button matTooltip="Upload file"
+                (click)="addFile()">
+          <mat-icon>add</mat-icon>
+        </button>
+        <!--<button class="text-fit" mat-raised-button matTooltip="Select all" (click)="selectAll()">-->
+        <!--<mat-icon>select_all</mat-icon>-->
+        <!--</button>-->
+        <button [disabled]="selectedFiles.length <= 1"
+                class="text-fit" mat-raised-button matTooltip="Remove file"
+                color="warn"
+                (click)="removeSelectedFile()">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+
+      <!-- File Cards -->
+      <div class="file-wrapper">
+        <ng-container *ngFor="let file of currentFolder?.files">
+          <mat-card
+            [ngClass]="isInSelectedFiles(file) ? 'card_active' : 'card'"
+            (click)="toggleSelection(file)">
+
+            <div class="icon-wrapper">
+              <ng-container [ngSwitch]="getSimpleMimeType(file)">
+                <mat-icon *ngSwitchCase="'video'">movie</mat-icon>
+                <mat-icon *ngSwitchCase="'image'">image</mat-icon>
+                <mat-icon *ngSwitchCase="'pdf'">picture_as_pdf</mat-icon>
+                <mat-icon *ngSwitchCase="'archive'">archive</mat-icon>
+                <mat-icon *ngSwitchCase="'text'">subject</mat-icon>
+                <mat-icon *ngSwitchDefault>insert_drive_file</mat-icon>
+              </ng-container>
+            </div>
+
+            <ul class="info">
+              <li><strong>{{file.name}}</strong></li>
+              <li>{{file.size | filesize}}</li>
+              <li>{{file.mimeType}}</li>
+            </ul>
+
+            <div class="opacity" *ngIf="isInSelectedFiles(file)"></div>
+
+            <div class="card-btn-wrapper" *ngIf="isInSelectedFiles(file)">
+              <button mat-raised-button *ngIf="selectedFiles.length <= 1" (click)="initFileDownload(file)"
+                      matTooltip="Open in new Tab">
+                <mat-icon>open_in_new</mat-icon>
+              </button>
+              <button mat-raised-button *ngIf="selectedFiles.length <= 1" (click)="renameFile(file)"
+                      matTooltip="Rename">
+                <mat-icon>mode_edit</mat-icon>
+              </button>
+              <button mat-raised-button color="warn" (click)="removeSelectedFile()" *ngIf="selectedFiles.length <= 1"
+                      matTooltip="Delete">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+
+          </mat-card>
+        </ng-container>
+        <p *ngIf="currentFolder?.files.length === 0">
+          No Files so far.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

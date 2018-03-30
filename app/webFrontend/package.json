@@ -2,7 +2,7 @@
   "name": "geli-web-frontend",
   "description": "This is the WebFronted-Package.json for geli.",
   "repository": "h-da/geli",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "license": "GPL-3.0",
   "scripts": {
     "ng": "ng",

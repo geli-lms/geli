@@ -13,6 +13,7 @@ export class CourseEditComponent implements OnInit {
   tabs = [
     { path: '.', label: 'General' },
     { path: 'content', label: 'Content' },
+    { path: 'media', label: 'Media' },
     { path: 'members', label: 'Members' },
     { path: 'teachers', label: 'Teachers' },
   ];

@@ -4,8 +4,6 @@ import {IUser} from '../../../../../../../shared/models/IUser';
 import {ShowProgressService} from '../../../shared/services/show-progress.service';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
 import {isNullOrUndefined} from 'util';
-import {SortUtil} from '../../../shared/utils/SortUtil';
-import {User} from '../../../models/User';
 import {ActivatedRoute} from '@angular/router';
 
 @Component({

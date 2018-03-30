@@ -11,17 +11,19 @@
       <mat-icon>email</mat-icon>
     </button>
     <button [disabled]="selectedMembers.length <= 1"
-            class="del text-fit" mat-raised-button matTooltip="Remove selected members"
+            class="text-fit" mat-raised-button color="warn" matTooltip="Remove selected members"
             (click)="removeSelectedUsers()">
       <mat-icon>delete</mat-icon>
     </button>
   </div>
 
   <ng-container *ngFor="let user of usersInCourse">
-    <mat-card [ngClass]="isInSelectedMembers(user) ? 'active':'profile'"
+    <mat-card [ngClass]="isInSelectedMembers(user) ? 'card_active' : 'card'"
               (click)="toggleMember(user)">
 
-      <div class="bg" user-image [user-image]="user" [size]="160"></div>
+      <div class="icon-wrapper">
+        <div class="user-image" user-image [user-image]="user"></div>
+      </div>
 
       <ul class="info" ng-class="{opacity: isInSelectedMembers(user)}">
         <li><strong>{{user.profile.firstName}}</strong></li>
@@ -31,13 +33,13 @@
 
       <div class="opacity" *ngIf="isInSelectedMembers(user)"></div>
 
-      <div *ngIf="isInSelectedMembers(user)">
+      <div class="card-btn-wrapper" *ngIf="isInSelectedMembers(user)">
         <button mat-raised-button routerLink="/profile/{{user._id}}" routerLinkActive="active"
                 [ngClass]="selectedMembers.length > 1 ? 'centered':''">
           DETAILS
         </button>
         <button mat-raised-button (click)="openWriteMailDialog()" *ngIf="selectedMembers.length <= 1">SEND MAIL</button>
-        <button class="del" mat-raised-button (click)="removeSelectedUsers()" *ngIf="selectedMembers.length <= 1">
+        <button mat-raised-button color="warn" (click)="removeSelectedUsers()" *ngIf="selectedMembers.length <= 1">
           REMOVE
         </button>
       </div>

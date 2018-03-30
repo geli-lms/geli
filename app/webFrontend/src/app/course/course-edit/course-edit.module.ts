@@ -14,6 +14,7 @@ import {CourseUserListOverviewComponent} from './course-user-list/course-user-li
 import {CourseUserListShowComponent} from './course-user-list/course-user-list-show/course-user-list-show.component';
 import {WhitelistShowComponent} from './members/whitelist-show/whitelist-show.component';
 import {GeneralTabComponent} from './general-tab/general-tab.component';
+import {CourseMediaComponent} from './course-media/course-media.component';
 import {MatFabMenuComponent} from '../../shared/components/mat-fab-menu/mat-fab-menu.component';
 
 @NgModule({
@@ -31,6 +32,8 @@ import {MatFabMenuComponent} from '../../shared/components/mat-fab-menu/mat-fab-
     CourseUserListComponent,
     MembersComponent,
     TeachersComponent,
+    GeneralTabComponent,
+    CourseMediaComponent,
     WhitelistEditComponent,
     CourseUserListOverviewComponent,
     CourseUserListShowComponent,

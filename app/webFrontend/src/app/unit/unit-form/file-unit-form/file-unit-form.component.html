@@ -1,4 +1,7 @@
-<h3>Files</h3>
+<ng-container [ngSwitch]="fileUnitType">
+  <h3 *ngSwitchCase="'video'">Add Videos</h3>
+  <h3 *ngSwitchDefault>Add Files</h3>
+</ng-container>
 
 <app-unit-general-info-form [model]="model"></app-unit-general-info-form>
 <div *ngIf="model?.files?.length > 0" class="file-list-container uploaded-files">
@@ -9,27 +12,31 @@
       <span>Actions</span>
     </div>
     <div class="file-list-row" *ngFor="let file of model.files">
-      <span class="filename">{{file.alias}}</span>
+      <span class="filename">{{file.name}}</span>
       <span class="filesize">{{file.size | filesize}}</span>
       <mat-action-row>
         <button mat-raised-button color="warn" (click)="removeFile(file)">
-          <mat-icon>delete</mat-icon>Remove
+          <mat-icon>delete</mat-icon>
+          Remove
         </button>
       </mat-action-row>
     </div>
   </div>
 </div>
-<app-upload-form [uploadPath]="uploadPath"
-                 [uploadMethod]="uploadMethod"
-                 [additionalData]="additionalUploadData"
-                 (onFileSelectedChange)="onFileSelectedChange($event)"
-                 (onFileUploaded)="onFileUploaded($event)"
-                 (onAllUploaded)="onAllUploaded()"></app-upload-form>
+
+<p>
+  <button mat-raised-button (click)="openAddFilesDialog()">
+    Add files
+  </button>
+</p>
 <p>
   <button mat-raised-button color="primary"
-          (click)="uploadAll()" [disabled]="checkSave()">
-    <mat-icon>file_upload</mat-icon>
-    Upload and save
+          (click)="save()" [disabled]="checkSave()">
+    <mat-icon>save</mat-icon>
+    Save
   </button>
-  <button mat-raised-button (click)="onCancel()">Cancel</button>
+  <button mat-raised-button
+          (click)="onCancel()">
+    Cancel
+  </button>
 </p>

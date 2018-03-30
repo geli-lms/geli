@@ -6,61 +6,62 @@ import {ICourse} from '../../shared/models/ICourse';
 import {ILecture} from '../../shared/models/ILecture';
 import {IUnit} from '../../shared/models/units/IUnit';
 import {IUser} from '../../shared/models/IUser';
+import {IWhitelistUser} from '../../shared/models/IWhitelistUser';
 import {ITaskUnit} from '../../shared/models/units/ITaskUnit';
 import {ITaskUnitModel} from '../src/models/units/TaskUnit';
 import * as mongoose from 'mongoose';
 import ObjectId = mongoose.Types.ObjectId;
-import {IWhitelistUser} from '../../shared/models/IWhitelistUser';
 
 export class FixtureUtils {
-  public static async getRandomUser(hash?: string) {
+  public static async getRandomUser(hash?: string): Promise<IUser> {
     const array = await this.getUser();
-    return this.getRandom(array, hash);
+    return this.getRandom<IUser>(array, hash);
   }
 
-  public static async getRandomUsers(min: number, max: number, hash?: string) {
+  public static async getRandomUsers(min: number, max: number, hash?: string): Promise<IUser[]> {
     const array = await this.getUser();
-    return this.getRandomArray(array, min, max, hash);
+    return this.getRandomArray<IUser>(array, min, max, hash);
   }
 
-  public static async getRandomAdmin(hash?: string) {
+  public static async getRandomAdmin(hash?: string): Promise<IUser> {
     const array = await this.getAdmins();
-    return this.getRandom(array, hash);
+    return this.getRandom<IUser>(array, hash);
   }
 
-  public static async getRandomAdmins(min: number, max: number, hash?: string) {
+  public static async getRandomAdmins(min: number, max: number, hash?: string): Promise<IUser[]> {
     const array = await this.getAdmins();
-    return this.getRandomArray(array, min, max, hash);
+    return this.getRandomArray<IUser>(array, min, max, hash);
   }
 
-  public static async getRandomTeacher(hash?: string) {
+  public static async getRandomTeacher(hash?: string): Promise<IUser> {
     const array = await this.getTeacher();
-    return this.getRandom(array, hash);
+    return this.getRandom<IUser>(array, hash);
   }
 
-  public static async getRandomTeacherForCourse(course: ICourse, hash?: string) {
+  public static async getRandomTeacherForCourse(course: ICourse, hash?: string): Promise<IUser> {
     let array: IUser[] = [];
     array = array.concat(course.teachers);
     array.push(course.courseAdmin);
-    const user = await this.getRandom(array, hash);
+    const user = await this.getRandom<IUser>(array, hash);
     return User.findById(user);
   }
 
-  public static async getRandomTeachers(min: number, max: number, hash?: string) {
+  public static async getRandomTeachers(min: number, max: number, hash?: string): Promise<IUser[]> {
     const array = await this.getTeacher();
-    return this.getRandomArray(array, min, max, hash);
+    return this.getRandomArray<IUser>(array, min, max, hash);
   }
 
-  public static async getRandomStudent(hash?: string) {
+  public static async getRandomStudent(hash?: string): Promise<IUser> {
     const array = await this.getStudents();
-    return this.getRandom(array, hash);
+    return this.getRandom<IUser>(array, hash);
   }
 
-  public static async getRandomStudents(min: number, max: number, hash?: string) {
+  public static async getRandomStudents(min: number, max: number, hash?: string): Promise<IUser[]> {
     const array = await this.getStudents();
-    return this.getRandomArray(array, min, max, hash);
+    return this.getRandomArray<IUser>(array, min, max, hash);
   }
 
+  // FIXME: This should return a valid type. (Promise<IWhitelistUser[]>)
   public static async getRandomWhitelistUsers(students: IUser[], course: ICourseModel, hash?: string) {
     const randomArray = students.splice(0, this.getRandomNumber(0, students.length - 1));
     const array = await this.getRandomArray(randomArray, 0, students.length - 1, hash);
@@ -74,80 +75,79 @@ export class FixtureUtils {
     });
   }
 
-
-  public static async getRandomCourse(hash?: string) {
+  public static async getRandomCourse(hash?: string): Promise<ICourse> {
     const array = await this.getCourses();
-    return this.getRandom(array, hash);
+    return this.getRandom<ICourse>(array, hash);
   }
 
-  public static async getCoursesFromLecture(lecture: ILecture) {
+  public static async getCoursesFromLecture(lecture: ILecture): Promise<ICourse> {
     return Course.findOne({lectures: { $in: [ lecture._id ] }});
   }
 
-  public static async getCoursesFromUnit(unit: IUnit) {
+  public static async getCoursesFromUnit(unit: IUnit): Promise<ICourse> {
     return Course.findById(unit._course);
   }
 
-  public static async getRandomLecture(hash?: string) {
+  public static async getRandomLecture(hash?: string): Promise<ILecture> {
     const array = await this.getLectures();
-    return this.getRandom(array, hash);
+    return this.getRandom<ILecture>(array, hash);
   }
 
-  public static async getRandomLectureFromCourse(course: ICourse, hash?: string) {
-    const lectureId = await this.getRandom(course.lectures, hash);
+  public static async getRandomLectureFromCourse(course: ICourse, hash?: string): Promise<ILecture> {
+    const lectureId = await this.getRandom<ILecture>(course.lectures, hash);
     return Lecture.findById(lectureId);
   }
 
-  public static async getLectureFromUnit(unit: IUnit) {
+  public static async getLectureFromUnit(unit: IUnit): Promise<ILecture> {
     return Lecture.findOne({units: { $in: [ unit._id ] }});
   }
 
-  public static async getRandomUnit(hash?: string) {
+  public static async getRandomUnit(hash?: string): Promise<IUnit> {
     const array = await this.getUnits();
-    return this.getRandom(array, hash);
+    return this.getRandom<IUnit>(array, hash);
   }
 
-  public static async getRandomUnitFromLecture(lecture: ILecture, hash?: string) {
-    const unitId = await this.getRandom(lecture.units, hash);
+  public static async getRandomUnitFromLecture(lecture: ILecture, hash?: string): Promise<IUnit> {
+    const unitId = await this.getRandom<IUnit>(lecture.units, hash);
     return Unit.findById(unitId);
   }
 
-  public static async getRandomUnitFromCourse(course: ICourse, hash?: string) {
+  public static async getRandomUnitFromCourse(course: ICourse, hash?: string): Promise<IUnit> {
     let units: Array<IUnit> = [];
     for (const lecture of course.lectures) {
       units = units.concat(lecture.units);
     }
-    const unitId = await this.getRandom(units, hash);
+    const unitId = await this.getRandom<IUnit>(units, hash);
     return Unit.findById(unitId);
   }
 
-  private static async getAdmins() {
+  private static async getAdmins(): Promise<IUser[]> {
     return this.getUser('admin');
   }
 
-  private static async getTeacher() {
+  private static async getTeacher(): Promise<IUser[]> {
     return this.getUser('teacher');
   }
 
-  private static async getStudents() {
+  private static async getStudents(): Promise<IUser[]> {
     return this.getUser('student');
   }
 
-  public static async getCourses() {
+  public static async getCourses(): Promise<ICourse[]> {
     return Course.find()
       .populate('students')
       .populate('whitelist');
   }
 
-  public static async getLectures() {
+  public static async getLectures(): Promise<ILecture[]> {
     return Lecture.find();
   }
 
-  public static async getUnits() {
+  public static async getUnits(): Promise<IUnit[]> {
     return Unit.find();
   }
 
-  private static async getUser(role?: string) {
+  private static async getUser(role?: string): Promise<IUser[]> {
     if (!role) {
       return User.find();
     }
@@ -156,7 +156,7 @@ export class FixtureUtils {
 
   // returns a random entry out of the array
   // returns always the same entry when you provide the same hash (given the fixture base did not change)
-  private static async getRandom(array: any[], hash?: string) {
+  private static async getRandom<T>(array: T[], hash?: string): Promise<T> {
     if (hash) {
       return array[this.getNumberFromString(hash, 0, array.length)];
     } else {
@@ -166,7 +166,7 @@ export class FixtureUtils {
 
   // returns an random subarray
   // returns always the same array when you provide the same hash (given the fixture base did not change)
-  private static async getRandomArray(array: any[], min: number, max: number, hash?: string) {
+  private static async getRandomArray<T>(array: T[], min: number, max: number, hash?: string): Promise<T[]> {
     if (hash) {
       const count = this.getNumberFromString(hash, min, max);
       const start = this.getNumberFromString(hash, 0, array.length - count);
@@ -193,7 +193,7 @@ export class FixtureUtils {
     return start + (hash % (end - start));
   }
 
-  private static shuffleArray (array: Array<any>) {
+  private static shuffleArray<T>(array: Array<T>): T[] {
     let tmp;
     let current;
     let top = array.length;
@@ -206,7 +206,6 @@ export class FixtureUtils {
         array[top] = tmp;
       }
     }
-
     return array;
   }
 
