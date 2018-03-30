@@ -132,8 +132,12 @@ class FileUnitMigration {
             }
 
             if (absolutePath.length === 0) {
-              absolutePath = fs.realpathSync('api/' + oldFile.path);
-              fileStats = fs.statSync('api/' + oldFile.path);
+              try {
+                absolutePath = fs.realpathSync('api/' + oldFile.path);
+                fileStats = fs.statSync('api/' + oldFile.path);
+              } catch (error) {
+                return null;
+              }
             }
 
             if (typeof oldFile.size === 'undefined') {
@@ -144,12 +148,17 @@ class FileUnitMigration {
               physicalPath: absolutePath,
               name: oldFile.alias,
               size: oldFile.size,
-              link: oldFile.name
+              link: oldFile.name,
+              mimeType: 'plain/text'
             };
 
             const createdFile = await File.create(newFile);
             return createdFile._id;
           }));
+
+          fileUnitObj.files = await fileUnitObj.files.filter((element, index, array) => {
+            return (element !== null);
+          });
 
           const directoryId = updatedCoursesMap[fileUnitObj._course].media.toString();
           fileUnitObj._id = new ObjectID(fileUnitObj._id);
