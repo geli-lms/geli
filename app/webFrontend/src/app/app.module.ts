@@ -1,6 +1,6 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {ErrorHandler, NgModule} from '@angular/core';
-import {HttpModule} from '@angular/http';
+import {HttpClientModule} from '@angular/common/http';
 import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {AppComponent} from './app.component';
 import {RavenErrorHandler} from './shared/services/raven-error-handler.service';
@@ -15,6 +15,7 @@ import {
   DownloadFileService,
   FreeTextUnitService,
   LectureService,
+  MediaService,
   UnitService,
   UserDataService,
   WhitelistUserService,
@@ -52,7 +53,7 @@ export function HttpLoaderFactory(http: HttpClient) {
   ],
   imports: [
     BrowserModule,
-    HttpModule,
+    HttpClientModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     StartModule,
@@ -93,6 +94,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     TitleService,
     DownloadFileService,
     RavenErrorHandler,
+    MediaService,
     ThemeService,
     ConfigService,
     {

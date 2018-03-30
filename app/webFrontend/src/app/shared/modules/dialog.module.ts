@@ -13,6 +13,7 @@ import {AceEditorModule} from 'ng2-ace-editor';
 import {InfoDialog} from '../components/info-dialog/info-dialog.component';
 import {FocusDirective} from '../directives/focus.directive';
 import {ChangePasswordDialogComponent} from '../components/change-password-dialog/change-password-dialog.component';
+import {RenameDialogComponent} from '../components/rename-dialog/rename-dialog.component';
 
 @NgModule({
   imports: [
@@ -30,6 +31,7 @@ import {ChangePasswordDialogComponent} from '../components/change-password-dialo
     UploadDialog,
     FilepickerDialog,
     WriteMailDialog,
+    RenameDialogComponent,
     FocusDirective,
   ],
   declarations: [
@@ -39,6 +41,7 @@ import {ChangePasswordDialogComponent} from '../components/change-password-dialo
     UploadDialog,
     FilepickerDialog,
     WriteMailDialog,
+    RenameDialogComponent,
     FocusDirective,
   ],
   providers: [
@@ -50,6 +53,7 @@ import {ChangePasswordDialogComponent} from '../components/change-password-dialo
     AccessKeyDialog,
     UploadDialog,
     FilepickerDialog,
+    RenameDialogComponent,
     WriteMailDialog,
     ChangePasswordDialogComponent,
   ]

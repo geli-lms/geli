@@ -6,7 +6,7 @@ import {IUser} from '../../../../../../shared/models/IUser';
 export class UserImageDirective implements OnInit {
 
   @Input('user-image') user: IUser;
-  @Input('size') size = 160;
+  @Input('size') size = '100%';
 
   @HostBinding('style.backgroundImage')
   backgroundImage: string;
@@ -26,9 +26,9 @@ export class UserImageDirective implements OnInit {
   ngOnInit(): void {
     const user = new User(this.user);
     this.backgroundImage = `url(${user.getUserImageURL()})`;
-    this.width = this.size.toString() + 'px';
-    this.height = this.size.toString() + 'px';
-    this.borderRadius = (this.size / 2).toString() + 'px';
+    this.width = this.size;
+    this.height = this.size;
+    this.borderRadius = '50%';
   }
 
 }

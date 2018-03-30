@@ -1,36 +1,12 @@
 import {
   Body, Get, Put, Delete, Param, JsonController, UseBefore, NotFoundError, BadRequestError, Post,
-  Authorized, UploadedFile
+  Authorized
 } from 'routing-controllers';
-import fs = require('fs');
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
-import crypto = require('crypto');
 
 import {Lecture} from '../models/Lecture';
 import {IUnitModel, Unit} from '../models/units/Unit';
-import {IUnit} from '../../../shared/models/units/IUnit';
-import {IFileUnit} from '../../../shared/models/units/IFileUnit';
 import {ValidationError} from 'mongoose';
-import {Notification} from '../models/Notification';
-import {ICourse} from '../../../shared/models/ICourse';
-import {Course} from '../models/Course';
-
-const multer = require('multer');
-
-const uploadOptions = {
-  storage: multer.diskStorage({
-    destination: (req: any, file: any, cb: any) => {
-      cb(null, 'uploads/');
-    },
-    filename: (req: any, file: any, cb: any) => {
-      const extPos = file.originalname.lastIndexOf('.');
-      const ext = (extPos !== -1) ? `.${file.originalname.substr(extPos + 1).toLowerCase()}` : '';
-      crypto.pseudoRandomBytes(16, (err, raw) => {
-        cb(err, err ? undefined : `${raw.toString('hex')}${ext}`);
-      });
-    }
-  }),
-};
 
 @JsonController('/units')
 @UseBefore(passportJwtMiddleware)
@@ -98,31 +74,15 @@ export class UnitController {
    */
   @Authorized(['teacher', 'admin'])
   @Post('/')
-  addUnit(@UploadedFile('file', {options: uploadOptions}) file: any, @Body() data: any) {
-    if (file) {
-      try {
-        data = JSON.parse(data.data);
-      } catch (error) {
-        throw new BadRequestError('Invalid combination of file upload and unit data.');
-      }
-    }
-
+  addUnit(@Body() data: any) {
     // discard invalid requests
-    this.checkPostParam(data, file);
-
-    if (file) {
-      data.model = this.handleUploadedFile(file, data.model);
-    }
+    this.checkPostParam(data);
 
     return Unit.create(data.model)
     .then((createdUnit) => {
       return this.pushToLecture(data.lectureId, createdUnit);
     })
     .catch((err) => {
-      if (file) {
-        fs.unlinkSync(file.path);
-      }
-
       if (err.name === 'ValidationError') {
         throw err;
       } else {
@@ -164,20 +124,11 @@ export class UnitController {
    */
   @Authorized(['teacher', 'admin'])
   @Put('/:id')
-  async updateUnit(@UploadedFile('file', {options: uploadOptions}) file: any, @Param('id') id: string, @Body() data: any) {
+  async updateUnit(@Param('id') id: string, @Body() data: any) {
     const oldUnit: IUnitModel = await Unit.findById(id);
 
     if (!oldUnit) {
       throw new NotFoundError();
-    }
-
-    if (file) {
-      try {
-        data = JSON.parse(data.data);
-        data = await this.handleUploadedFile(file, data.model);
-      } catch (error) {
-        throw new BadRequestError('Invalid combination of file upload and unit data.');
-      }
     }
 
     try {
@@ -234,40 +185,27 @@ export class UnitController {
         return lecture.save();
       })
       .then(() => {
-        return unit.toObject();
+        return unit.populateUnit();
+      })
+      .then((populatedUnit) => {
+        return populatedUnit.toObject();
       })
       .catch((err) => {
         throw new BadRequestError(err);
       });
   }
 
-  protected checkPostParam(data: any, file?: any) {
-    try {
-      if (!data.lectureId) {
-        throw new BadRequestError('No lecture ID was submitted.');
-      }
-
-      if (!data.model) {
-        throw new BadRequestError('No unit was submitted.');
-      }
-
-      if (!data.model._course) {
-        throw new BadRequestError('Unit has no _course set');
-      }
-    } catch (error) {
-      if (file) {
-        fs.unlinkSync(file.path);
-      }
-      throw error;
-    }
-  }
-
-  private handleUploadedFile(file: any, unit: IFileUnit): IUnit {
-    if (!unit.hasOwnProperty('files')) {
-      unit.files = []
+  protected checkPostParam(data: any) {
+    if (!data.lectureId) {
+      throw new BadRequestError('No lecture ID was submitted.');
     }
 
-    unit.files.push({path: file.path, name: file.filename, alias: file.originalname, size: file.size});
-    return unit;
+    if (!data.model) {
+      throw new BadRequestError('No unit was submitted.');
+    }
+
+    if (!data.model._course) {
+      throw new BadRequestError('Unit has no _course set');
+    }
   }
 }

@@ -23,6 +23,7 @@ export class MigrationHandler {
         this.scripts[filename] = new requiredFile();
       } catch (error) {
         console.log('The file ' + file + ' is missing a class definition.');
+        console.log(error);
         return false;
       }
     });

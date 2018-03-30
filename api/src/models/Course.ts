@@ -28,6 +28,11 @@ const courseSchema = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User'
     },
+    media:
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Directory'
+    },
     teachers: [
       {
         type: mongoose.Schema.Types.ObjectId,

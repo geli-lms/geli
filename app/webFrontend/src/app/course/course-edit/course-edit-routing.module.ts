@@ -5,6 +5,7 @@ import {AuthGuardService} from '../../shared/services/auth-guard.service';
 import {GeneralTabComponent} from './general-tab/general-tab.component';
 import {MembersComponent} from './members/members.component';
 import {TeachersComponent} from './teachers/teachers.component';
+import {CourseMediaComponent} from './course-media/course-media.component';
 
 const routes: Routes = [
   {
@@ -23,6 +24,12 @@ const routes: Routes = [
       {
         path: 'content',
         loadChildren: 'app/course/course-edit/course-manage-content/course-manage-content.module#CourseManageContentModule',
+      },
+      {
+        path: 'media',
+        component: CourseMediaComponent,
+        canActivate: [AuthGuardService],
+        data: {roles: ['teacher', 'admin']},
       },
       {
         path: 'members',
