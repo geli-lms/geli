@@ -171,6 +171,10 @@ export class CourseMediaComponent implements OnInit {
   }
 
   getSimpleMimeType(file: IFile): string {
+    if (file.mimeType === undefined) {
+      return 'unknown';
+    }
+
     const mimeType = file.mimeType.toLowerCase();
     const archives = [
       'application/x-bzip',
