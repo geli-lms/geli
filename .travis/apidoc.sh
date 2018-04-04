@@ -1,5 +1,6 @@
 #!/bin/bash
 
+TRAVIS_TAG='test0.6.0'
 # Path to this file
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 # Path the script was called from
