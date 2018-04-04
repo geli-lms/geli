@@ -44,16 +44,16 @@ if [[ "$TRAVIS_BRANCH" == "master" ]] || [[ -n "$TRAVIS_TAG" ]]; then
     echo "+ git commit"
     git commit -m "Travis build: $TRAVIS_BUILD_NUMBER" &>/dev/null
 
+    echo "+ git push"
+    git push -q https://micpah:$GITHUB_DOCU_TOKEN@$GITHUB_URL &>/dev/null
+
     if [[ -n "$TRAVIS_TAG" ]]; then
         echo "+ git tag" ; git tag $TRAVIS_TAG
+        echo "+ git push tag"
+        git push origin $TRAVIS_TAG -q https://micpah:$GITHUB_DOCU_TOKEN@$GITHUB_URL &>/dev/null
     else
         echo -e "${YELLOW}+ skipping: git tag - not tagged build${NC}"
     fi
-
-    echo "+ git push"
-    git push -q https://micpah:$GITHUB_DOCU_TOKEN@$GITHUB_URL &>/dev/null
-    echo "+ git push tags"
-    git push --tags -q https://micpah:$GITHUB_DOCU_TOKEN@$GITHUB_URL &>/dev/null
   else
     echo -e "${YELLOW}+ WARNING: pull request #$TRAVIS_PULL_REQUEST -> skipping api-doc${NC}";
   fi
