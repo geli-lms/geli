@@ -13,7 +13,6 @@ echo
 # if [[ "$TRAVIS_BRANCH" == "master" ]] || [[ -n "$TRAVIS_TAG" ]]; then
 if [[ "$TRAVIS_BRANCH" == "develop" ]] || [[ -n "$TRAVIS_TAG" ]]; then
   # if [[ "$TRAVIS_PULL_REQUEST" == "false" ]] || [[ -n "$TRAVIS_TAG" ]]; then
-  if [[ "$TRAVIS_PULL_REQUEST" == "true" ]] || [[ -n "$TRAVIS_TAG" ]]; then
     if [[ -z $GITHUB_DOCU_TOKEN ]]; then
         echo -e "${RED}+ ERROR: NO GITHUB_DOCU_TOKEN ENVVAR DEFINED. GO TO TRAVIS-SETTINGS AND DEFINE ONE.${NC}"
         exit 1
@@ -57,9 +56,9 @@ if [[ "$TRAVIS_BRANCH" == "develop" ]] || [[ -n "$TRAVIS_TAG" ]]; then
     else
         echo -e "${YELLOW}+ skipping: git tag - not tagged build${NC}"
     fi
-  else
-    echo -e "${YELLOW}+ WARNING: pull request #$TRAVIS_PULL_REQUEST -> skipping api-doc${NC}";
-  fi
+  # else
+  #   echo -e "${YELLOW}+ WARNING: pull request #$TRAVIS_PULL_REQUEST -> skipping api-doc${NC}";
+  # fi
 else
   echo -e "${YELLOW}+ WARNING: branch $TRAVIS_BRANCH is not whitelisted -> skipping api-doc${NC}";
 fi
