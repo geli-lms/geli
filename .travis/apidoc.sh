@@ -10,8 +10,10 @@ IPWD="$(pwd)"
 echo
 echo "+++ Create and publish API-Doc +++"
 echo
-if [[ "$TRAVIS_BRANCH" == "master" ]] || [[ -n "$TRAVIS_TAG" ]]; then
-  if [[ "$TRAVIS_PULL_REQUEST" == "false" ]] || [[ -n "$TRAVIS_TAG" ]]; then
+# if [[ "$TRAVIS_BRANCH" == "master" ]] || [[ -n "$TRAVIS_TAG" ]]; then
+if [[ "$TRAVIS_BRANCH" == "develop" ]] || [[ -n "$TRAVIS_TAG" ]]; then
+  # if [[ "$TRAVIS_PULL_REQUEST" == "false" ]] || [[ -n "$TRAVIS_TAG" ]]; then
+  if [[ "$TRAVIS_PULL_REQUEST" == "true" ]] || [[ -n "$TRAVIS_TAG" ]]; then
     if [[ -z $GITHUB_DOCU_TOKEN ]]; then
         echo -e "${RED}+ ERROR: NO GITHUB_DOCU_TOKEN ENVVAR DEFINED. GO TO TRAVIS-SETTINGS AND DEFINE ONE.${NC}"
         exit 1
@@ -30,7 +32,8 @@ if [[ "$TRAVIS_BRANCH" == "master" ]] || [[ -n "$TRAVIS_TAG" ]]; then
     echo "+ git set user.email" ; git config --global user.email 'travis@travis-ci.org'
 
     echo "+ Clone $GITHUB_FOLDER"
-    git clone https://$GITHUB_URL -q -b master $GITHUB_FOLDER &>/dev/null
+    # git clone https://$GITHUB_URL -q -b master $GITHUB_FOLDER &>/dev/null
+    git clone https://$GITHUB_URL -q -b dev $GITHUB_FOLDER &>/dev/null
 
     echo "+ Clear geli-docs"
     find $GITHUB_FOLDER | grep -v -E "$GITHUB_FOLDER$|$GITHUB_FOLDER/.git$|$GITHUB_FOLDER/.git/" | xargs rm -rf
