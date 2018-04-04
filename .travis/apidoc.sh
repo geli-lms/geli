@@ -32,8 +32,7 @@ if [[ "$TRAVIS_BRANCH" == "develop" ]] || [[ -n "$TRAVIS_TAG" ]]; then
     echo "+ git set user.email" ; git config --global user.email 'travis@travis-ci.org'
 
     echo "+ Clone $GITHUB_FOLDER"
-    # git clone https://$GITHUB_URL -q -b master $GITHUB_FOLDER &>/dev/null
-    git clone https://$GITHUB_URL -q -b dev $GITHUB_FOLDER &>/dev/null
+    git clone https://$GITHUB_URL -q -b master $GITHUB_FOLDER &>/dev/null
 
     echo "+ Clear geli-docs"
     find $GITHUB_FOLDER | grep -v -E "$GITHUB_FOLDER$|$GITHUB_FOLDER/.git$|$GITHUB_FOLDER/.git/" | xargs rm -rf
@@ -47,14 +46,14 @@ if [[ "$TRAVIS_BRANCH" == "develop" ]] || [[ -n "$TRAVIS_TAG" ]]; then
     echo "+ git commit"
     git commit -m "Travis build: $TRAVIS_BUILD_NUMBER" &>/dev/null
 
-    echo "+ git push"
-    git push -q https://micpah:$GITHUB_DOCU_TOKEN@$GITHUB_URL &>/dev/null
+    # echo "+ git push"
+    # git push -q https://micpah:$GITHUB_DOCU_TOKEN@$GITHUB_URL &>/dev/null
 
     if [[ -n "$TRAVIS_TAG" ]]; then
         echo "+ git tag" ; git tag $TRAVIS_TAG
         echo "+ git push tag"
         # git push origin $TRAVIS_TAG -q https://micpah:$GITHUB_DOCU_TOKEN@$GITHUB_URL &>/dev/null
-        git push origin $TRAVIS_TAG https://micpah:$GITHUB_DOCU_TOKEN@$GITHUB_URL
+        git push origin $TRAVIS_TAG -q https://micpah:$GITHUB_DOCU_TOKEN@$GITHUB_URL
     else
         echo -e "${YELLOW}+ skipping: git tag - not tagged build${NC}"
     fi
