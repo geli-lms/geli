@@ -1,5 +1,5 @@
 <div class="profile" *ngIf="user">
-  <span class="user-icon" user-image [user-image]="user" [size]="50"></span>
+  <span class="user-icon" user-image [user-image]="user" [size]="'50px'"></span>
   <h3 class="name">
     <a *ngIf="!isCurrentProfile()" [routerLink]="['/profile', user._id]" routerLinkActive="active">
       <span>{{user.profile.firstName}} {{user.profile.lastName}}</span>

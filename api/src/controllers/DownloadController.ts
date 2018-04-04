@@ -71,7 +71,7 @@ export class DownloadController {
           fileUnit.files.forEach((file, index) => {
             if (unit.files.indexOf(index) > -1) {
               if ((file.size / 1024 ) > config.maxFileSize) {
-                localTooLargeFiles.push(file.path);
+                localTooLargeFiles.push(file.link);
               }
               localTotalSize += (file.size / 1024 );
             }
@@ -83,6 +83,21 @@ export class DownloadController {
     return size;
   }
 
+  /**
+   * @api {get} /api/download/:id Request archived file
+   * @apiName GetDownload
+   * @apiGroup Download
+   *
+   * @apiParam {String} id Course name.
+   * @apiParam {Response} response Response (input).
+   *
+   * @apiSuccess {Response} response Response (output).
+   *
+   * @apiSuccessExample {json} Success-Response:
+   *     UEsFBgAAAAAAAAAAAAAAAAAAAAAAAA==
+   *
+   * @apiError NotFoundError
+   */
   @Get('/:id')
   async getArchivedFile(@Param('id') id: string, @Res() response: Response) {
     const filePath = config.tmpFileCacheFolder + id + '.zip';
@@ -121,6 +136,21 @@ export class DownloadController {
     return crypto.createHash('sha1').update(data).digest('hex');
   }
 
+  /**
+   * @api {post} /api/download/ Post download request
+   * @apiName PostDownload
+   * @apiGroup Download
+   *
+   * @apiParam {IDownload} data Course data.
+   * @apiParam {IUser} currentUser Currently logged in user.
+   *
+   * @apiSuccess {String} hash Hash value.
+   *
+   * @apiSuccessExample {json} Success-Response:
+   *     "da39a3ee5e6b4b0d3255bfef95601890afd80709"
+   *
+   * @apiError NotFoundError
+   */
   @Post('/')
   @ContentType('application/json')
   async postDownloadRequest(@Body() data: IDownload, @CurrentUser() user: IUser) {
@@ -181,13 +211,13 @@ export class DownloadController {
               const fileUnit = <IFileUnit><any>localUnit;
               fileUnit.files.forEach((file, index) => {
                 if (unit.files.indexOf(index) > -1) {
-                  archive.file(file.path, {name: lecCounter + '_' + lcName + '/' + unitCounter + '_' + file.alias});
+                  archive.file(file.link, {name: lecCounter + '_' + lcName + '/' + unitCounter + '_' + file.name});
                 }
               });
             } else if (localUnit.__t === 'task') {
               const taskUnit = <ITaskUnit><any>localUnit;
               archive.append(await TaskUnit.schema.statics.toFile(taskUnit),
-                {name: lecCounter + '_' + lcName + '/' + unitCounter + '. ' + this.replaceCharInFilename(taskUnit.name) + '.txt'});
+                {name: lecCounter + '_' + lcName + '/' + unitCounter + '_' + this.replaceCharInFilename(taskUnit.name) + '.txt'});
             } else {
               throw new NotFoundError();
             }

@@ -58,6 +58,9 @@ nohup.out
 
 # API
 /api/uploads/*
+!/api/uploads/.gitkeep
+!/api/uploads/users
+/api/uploads/users/*
 !/api/uploads/users/.gitkeep
 /api/temp/*
 /api/build

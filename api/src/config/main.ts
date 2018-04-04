@@ -36,4 +36,5 @@ export default {
   maxFileSize: 51200,
   maxZipSize: 204800,
 
+  uploadFolder: process.env.UPLOADFOLDER || (appRoot + '/uploads/'),
 };

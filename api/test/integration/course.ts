@@ -93,7 +93,7 @@ describe('Course', () => {
         name: 'Test Course',
         description: 'Test description',
         active: true,
-        courseAdmin: teacher.id
+        courseAdmin: teacher._id
       });
       const savedCourse = await testData.save();
 
@@ -113,7 +113,7 @@ describe('Course', () => {
         name: 'Test Course',
         description: 'Test description',
         active: true,
-        courseAdmin: teacher[0].id
+        courseAdmin: teacher[0]._id
       });
       const savedCourse = await testData.save();
 
@@ -134,14 +134,14 @@ describe('Course', () => {
           name: 'Test Course Update',
           description: 'Test description update',
           active: true,
-          courseAdmin: teacher.id
+          courseAdmin: teacher._id
         });
       const testData = new Course(
         {
           name: 'Test Course',
           description: 'Test description',
           active: false,
-          courseAdmin: teacher.id
+          courseAdmin: teacher._id
         });
       const savedCourse = await testData.save();
       testDataUpdate._id = savedCourse._id;

@@ -1,6 +1,7 @@
 import {IUser} from './IUser';
 import {ILecture} from './ILecture';
 import {IWhitelistUser} from './IWhitelistUser';
+import {IDirectory} from './mediaManager/IDirectory';
 
 export const ENROLL_TYPE_WHITELIST = 'whitelist';
 export const ENROLL_TYPE_FREE = 'free';
@@ -13,6 +14,7 @@ export interface ICourse {
     active: boolean;
     description: string;
     courseAdmin: IUser;
+    media: IDirectory;
     teachers: IUser[];
     students: IUser[];
     lectures: ILecture[];

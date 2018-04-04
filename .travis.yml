@@ -2,7 +2,7 @@
 
 # required for chrome to install
 dist: trusty
-# required for e2e tests to complete succesfully (page crash???)
+# required for e2e tests to complete successfully (page crash???)
 sudo: required
 language: node_js
 node_js:
@@ -28,10 +28,8 @@ branches:
   only:
     - develop
     - master
-    # This matches tags wit a format of v{MAJOR}.{MINOR}.{FIX} were major minor and fix is supposed to be a number.
+    # This matches tags wit a format of v{MAJOR}.{MINOR}.{FIX} were major, minor and fix is supposed to be a number.
     - /^v(\d+).(\d+).(\d+)$/
-    # Only for development purposes
-    # - feature/14-travis-new
 
 cache:
   directories:
@@ -88,10 +86,10 @@ after_script:
 
 after_success:
   - .travis/package-checker.sh
+  - .travis/apidoc.sh
   - .travis/docker.sh
   - .travis/deploy.sh
   - .travis/sentry.sh
-  - .travis/apidoc.sh
 
 # Configure notification
 notifications:

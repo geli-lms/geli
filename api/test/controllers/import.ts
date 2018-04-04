@@ -61,7 +61,7 @@ describe('Import', async () => {
 
         let unitJson: IUnit;
         const importResult = await chai.request(app)
-          .post(`${BASE_URL}/unit/${course.id}/${lecture.id}`)
+          .post(`${BASE_URL}/unit/${course._id}/${lecture._id}`)
           .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
           .attach('file', fs.readFileSync(tmpUnitFile.path), unit.name)
           .catch((err) => err.response);
@@ -145,7 +145,7 @@ describe('Import', async () => {
 
         let lectureJson: ILecture;
         const importResult = await chai.request(app)
-          .post(`${BASE_URL}/lecture/${course.id}`)
+          .post(`${BASE_URL}/lecture/${course._id}`)
           .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
           .attach('file', fs.readFileSync(tmpLectureFile.path), lecture.name)
           .catch((err) => err.response);
@@ -193,7 +193,7 @@ describe('Import', async () => {
         should.exist(importResult.body.updatedAt);
         should.exist(courseJson._id);
         courseJson.active.should.be.equal(false);
-        courseJson.courseAdmin.should.be.equal(teacher.id);
+        courseJson.courseAdmin.should.be.equal(teacher._id.toString());
         courseJson.name.startsWith(course.name).should.be.equal(true);
         courseJson.description.should.be.equal(course.description);
         courseJson.lectures.should.be.instanceOf(Array).and.have.lengthOf(course.lectures.length);

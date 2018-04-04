@@ -25,6 +25,26 @@ import emailService from '../services/EmailService';
 export class NotificationController {
 
 
+  /**
+   * @api {post} /api/notification/ Create notifications
+   * @apiName PostNotifications
+   * @apiGroup Notification
+   * @apiPermission teacher
+   * @apiPermission admin
+   *
+   * @apiParam {Object} data Notification text and information on changed course, lecture and unit.
+   * @apiParam {Request} request Request.
+   *
+   * @apiSuccess {Boolean} notified Confirmation of notification.
+   *
+   * @apiSuccessExample {json} Success-Response:
+   *     {
+   *         notified: true
+   *     }
+   *
+   * @apiError BadRequestError Notification needs at least the fields course and text
+   * @apiError InternalServerError Failed to create notification
+   */
   @Authorized(['teacher', 'admin'])
   @Post('/')
   async createNotifications(@Body() data: any, @Req() request: Request) {
@@ -38,6 +58,25 @@ export class NotificationController {
     return {notified: true};
   }
 
+  /**
+   * @api {post} /api/notification/user/:id Create notification for user
+   * @apiName PostNotification
+   * @apiGroup Notification
+   * @apiPermission teacher
+   * @apiPermission admin
+   *
+   * @apiParam {String} id User ID.
+   * @apiParam {Object} data Notification text and information on changed course, lecture and unit.
+   *
+   * @apiSuccess {Boolean} notified Confirmation of notification.
+   *
+   * @apiSuccessExample {json} Success-Response:
+   *     {
+   *         notified: true
+   *     }
+   *
+   * @apiError InternalServerError Failed to create notification
+   */
   @Authorized(['teacher', 'admin'])
   @Post('/user/:id')
   async createNotificationForStudent(@Param('id') userId: string, @Body() data: any) {
@@ -105,6 +144,43 @@ export class NotificationController {
     await emailService.sendFreeFormMail(message);
   }
 
+  /**
+   * @api {get} /api/notification/user/:id Get notifications
+   * @apiName GetNotification
+   * @apiGroup Notification
+   * @apiPermission student
+   * @apiPermission teacher
+   * @apiPermission admin
+   *
+   * @apiParam {String} id User ID.
+   *
+   * @apiSuccess {Notification[]} notifications List of notifications.
+   *
+   * @apiSuccessExample {json} Success-Response:
+   *     [{
+   *         "_id": "5ab2fbe464efe60006cef0b1",
+   *         "updatedAt": "2018-03-22T00:42:12.577Z",
+   *         "createdAt": "2018-03-22T00:42:12.577Z",
+   *         "changedUnit": {...},
+   *         "changedLecture": {...},
+   *         "changedCourse": {...},
+   *         "isOld": false,
+   *         "text": "Course ProblemSolver has an updated text unit.",
+   *         "user": {...},
+   *         "__v": 0
+   *     }, {
+   *         "_id": "5ab2fc7b64efe60006cef0bb",
+   *         "updatedAt": "2018-03-22T00:44:43.966Z",
+   *         "createdAt": "2018-03-22T00:44:43.966Z",
+   *         "changedUnit": {...},
+   *         "changedLecture": {...},
+   *         "changedCourse": {...},
+   *         "isOld": false,
+   *         "text": "Course katacourse has an updated unit.",
+   *         "user": {...},
+   *         "__v": 0
+   *     }]
+   */
   @Authorized(['student', 'teacher', 'admin'])
   @Get('/user/:id')
   async getNotifications(@Param('id') id: string) {
@@ -119,6 +195,40 @@ export class NotificationController {
 
   }
 
+  /**
+   * @api {delete} /api/notification/:id Delete notification
+   * @apiName DeleteNotification
+   * @apiGroup Notification
+   * @apiPermission student
+   * @apiPermission teacher
+   * @apiPermission admin
+   *
+   * @apiParam {String} id Notification ID.
+   * @apiParam {IUser} currentUser Currently logged in user.
+   *
+   * @apiSuccess {Object} deletion Object with deleted notification.
+   *
+   * @apiSuccessExample {json} Success-Response:
+   *     {
+   *         "$__": {...},
+   *         "isNew": false,
+   *         "_doc": {
+   *             "__v": 0,
+   *             "user": {...},
+   *             "text": "Course ProblemSolver has an updated text unit.",
+   *             "isOld": false,
+   *             "changedCourse": {...},
+   *             "changedLecture": {...},
+   *             "changedUnit": {...},
+   *             "createdAt": "2018-03-22T00:42:12.577Z",
+   *             "updatedAt": "2018-03-22T00:42:12.577Z",
+   *             "_id": {...}
+   *         },
+   *         "$init": true
+   *     }
+   *
+   * @apiError NotFoundError Notification could not be found.
+   */
   @Authorized(['student', 'teacher', 'admin'])
   @Delete('/:id')
   async deleteNotification(@Param('id') id: string, @CurrentUser() currentUser: IUser) {

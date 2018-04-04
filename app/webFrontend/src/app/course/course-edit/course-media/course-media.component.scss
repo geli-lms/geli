@@ -1,0 +1,63 @@
+@import '../../../../variables';
+@import '../../../../styles/card';
+
+$margin__card: 10px;
+$width__left: 30%;
+$toolbar__height: 50px;
+
+.mm-container {
+  display: flex;
+}
+
+.part {
+  margin: 0;
+  padding: 0 1ex;
+
+  &--left {
+    width: $width__left;
+    padding-left: 0;
+    min-width: 6em;
+    transition: width 300ms ease;
+
+    &.hide {
+      min-width: 4rem;
+      width: 4rem;
+
+      .folder-wrapper {
+        display: none;
+      }
+    }
+
+    .mat-toolbar-multiple-rows {
+      min-height: 50px;
+
+      .mat-toolbar-row {
+        height: $toolbar__height;
+        padding: 0 10px;
+      }
+
+      .mat-icon-button {
+        cursor: pointer;
+      }
+    }
+  }
+
+  &--center {
+    transition: width 300ms ease;
+    flex-grow: 1;
+    padding-right: 0;
+  }
+}
+
+.file-wrapper {
+  margin-left: -$margin__card;
+  margin-right: -$margin__card;
+}
+
+.inline-mat-icon {
+  font-size: 1.2em;
+}
+
+.btn__area {
+  height: $toolbar__height;
+}

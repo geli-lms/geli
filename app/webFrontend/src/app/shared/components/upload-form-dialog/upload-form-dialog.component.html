@@ -1,0 +1,19 @@
+<mat-dialog-content>
+  <h2>Add files</h2>
+
+  <app-upload-form [uploadMethod]="'POST'"
+                   [uploadPath]="uploadPath"
+                   [additionalData]="null"
+                   (onFileSelectedChange)="null"
+                   (onFileUploaded)="onFileUploaded($event)"
+                   (onAllUploaded)="onAllUploaded()"></app-upload-form>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button mat-raised-button color="primary"
+          (click)="uploadAll()" [disabled]="!checkSave()">
+    <mat-icon>file_upload</mat-icon>
+    Upload and save
+  </button>
+  <button mat-raised-button (click)="cancel()">Cancel</button>
+</mat-dialog-actions>

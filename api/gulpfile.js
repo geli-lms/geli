@@ -225,7 +225,7 @@ gulp.task(LOAD_FIXTURES, [BUILD_DEV], function () {
 });
 
 gulp.task(MIGRATE, [BUILD], function () {
-  require(__dirname + "/build/migrations/migrate");
+  require(__dirname + "/build/src/migrations");
 });
 
 gulp.task(DEBUG, [BUILD_DEV], function () {
@@ -251,7 +251,7 @@ gulp.task(INSPECT, [BUILD_DEV], function () {
 gulp.task(INSPECT_MIGRATOR, [BUILD_DEV], function () {
   return nodemon({
     ext: "ts js json",
-    script: "build/migrations/migrate.js",
+    script: "build/src/migrate.js",
     watch: ["migrations/*"],
     tasks: [BUILD_DEV],
     nodeArgs: ["--inspect=0.0.0.0:9229"]

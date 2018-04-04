@@ -18,9 +18,9 @@ export class FileUnitComponent implements OnInit {
   ngOnInit() {
     this.fileUnit.files.forEach(file => {
       if (this.isPicture(file.name)) {
-        const src = '/api/uploads/' + file.name;
+        const src = '/api/uploads/' + file.link;
         const thumb = src;
-        const caption = file.alias;
+        const caption = file.name;
         const image = {
           src: src,
           thumb: thumb,

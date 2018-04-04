@@ -15,9 +15,11 @@ import {ButtonSaveCancelComponent} from './components/button-save-cancel/button-
 import {UploadFormComponent} from './components/upload-form/upload-form.component';
 import {FileUploadModule} from 'ng2-file-upload';
 import {FilesizePipe} from './pipes/filesize/filesize.pipe';
+import {UploadFormDialog} from './components/upload-form-dialog/upload-form-dialog.component';
 import {ChangePasswordDialogComponent} from './components/change-password-dialog/change-password-dialog.component';
 import {MarkdownEditorComponent} from './components/markdown-editor/markdown-editor.component';
 import {AceEditorModule} from 'ng2-ace-editor';
+import {PickMediaDialog} from './components/pick-media-dialog/pick-media-dialog.component';
 import {TranslateModule} from '@ngx-translate/core';
 
 @NgModule({
@@ -44,8 +46,10 @@ import {TranslateModule} from '@ngx-translate/core';
     ButtonSaveCancelComponent,
     UploadFormComponent,
     FilesizePipe,
+    UploadFormDialog,
     ChangePasswordDialogComponent,
     MarkdownEditorComponent,
+    PickMediaDialog,
   ],
   exports: [
     GravatarDirective,
@@ -62,9 +66,15 @@ import {TranslateModule} from '@ngx-translate/core';
     MarkdownEditorComponent,
     UploadFormComponent,
     FilesizePipe,
+    UploadFormDialog,
     ChangePasswordDialogComponent,
+    PickMediaDialog,
     TranslateModule,
-  ]
+  ],
+  entryComponents: [
+    UploadFormDialog,
+    PickMediaDialog,
+  ],
 })
 export class SharedModule {
 }

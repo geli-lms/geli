@@ -38,7 +38,7 @@ const unitSchema = new mongoose.Schema({
   }
 );
 
-const Unit = mongoose.model<IUnitModel>('Unit', unitSchema);
+const Unit = mongoose.model<IUnitModel>('OldUnitForTask', unitSchema);
 
 const taskSchema = new mongoose.Schema(
   {

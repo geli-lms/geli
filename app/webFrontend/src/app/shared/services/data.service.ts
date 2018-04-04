@@ -1,14 +1,14 @@
 import {Injectable} from '@angular/core';
 import {BackendService} from './backend.service';
 import {Dependency} from '../../about/licenses/dependency.model';
-import {ITaskUnit} from '../../../../../../shared/models/units/ITaskUnit';
-import construct = Reflect.construct;
 import {ILecture} from '../../../../../../shared/models/ILecture';
 import {IUnit} from '../../../../../../shared/models/units/IUnit';
 import {IUser} from '../../../../../../shared/models/IUser';
 import {ICourse} from '../../../../../../shared/models/ICourse';
 import {INotificationSettings} from '../../../../../../shared/models/INotificationSettings';
 import {IDownload} from '../../../../../../shared/models/IDownload';
+import {IDirectory} from '../../../../../../shared/models/mediaManager/IDirectory';
+import {IFile} from '../../../../../../shared/models/mediaManager/IFile';
 import {IUserSearchMeta} from '../../../../../../shared/models/IUserSearchMeta';
 
 export abstract class DataService {
@@ -159,6 +159,58 @@ export class DuplicationService extends DataService {
   }
 }
 
+@Injectable()
+export class MediaService extends DataService {
+  constructor(public backendService: BackendService) {
+    super('media/', backendService);
+  }
+
+  createRootDir(rootDirName: string): Promise<IDirectory> {
+    return this.backendService.post(this.apiPath + 'directory', JSON.stringify({name: rootDirName}))
+      .toPromise();
+  }
+
+  createDirectory(newDirName: string, parentDir: IDirectory): Promise<IDirectory> {
+    return this.backendService.post(this.apiPath + 'directory/' + parentDir._id, JSON.stringify({name: newDirName}))
+      .toPromise();
+  }
+
+  addFile(directory: IDirectory): Promise<IFile> {
+    return this.backendService.post(this.apiPath + 'file/' + directory._id, JSON.stringify({}))
+      .toPromise();
+  }
+
+  getDirectory(dirId: string, lazy: boolean = false): Promise<IDirectory> {
+    const path = this.apiPath + 'directory/' + dirId + (lazy ? '/lazy' : '');
+    return this.backendService.get(path)
+      .toPromise();
+  }
+
+  getFile(fileId: string): Promise<IFile> {
+    return this.backendService.get(this.apiPath + 'file/' + fileId)
+      .toPromise();
+  }
+
+  updateDirectory(dir: IDirectory): Promise<IDirectory> {
+    return this.backendService.put(this.apiPath + 'directory/' + dir._id, JSON.stringify(dir))
+      .toPromise();
+  }
+
+  updateFile(file: IFile): Promise<IFile> {
+    return this.backendService.put(this.apiPath + 'file/' + file._id, JSON.stringify(file))
+      .toPromise();
+  }
+
+  deleteDirectory(dir: IDirectory): Promise<any> {
+    return this.backendService.delete(this.apiPath + 'directory/' + dir._id)
+      .toPromise();
+  }
+
+  deleteFile(file: IFile): Promise<any> {
+    return this.backendService.delete(this.apiPath + 'file/' + file._id)
+      .toPromise();
+  }
+}
 
 @Injectable()
 export class CourseService extends DataService {
