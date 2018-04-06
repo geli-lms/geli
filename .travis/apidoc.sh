@@ -1,6 +1,6 @@
 #!/bin/bash
 
-TRAVIS_TAG='test0.6.0'
+TRAVIS_TAG='0.1.2'
 # Path to this file
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 # Path the script was called from
@@ -47,17 +47,16 @@ if [[ "$TRAVIS_BRANCH" == "develop" ]] || [[ -n "$TRAVIS_TAG" ]]; then
     echo "+ git commit"
     git commit -m "Travis build: $TRAVIS_BUILD_NUMBER" &>/dev/null
 
-    echo "+ git push"
-    git push -q https://micpah:$GITHUB_DOCU_TOKEN@$GITHUB_URL &>/dev/null
-
     if [[ -n "$TRAVIS_TAG" ]]; then
-        echo "+ git tag" ; git tag $TRAVIS_TAG
-        echo "+ git push tag"
-        # git push origin $TRAVIS_TAG -q https://micpah:$GITHUB_DOCU_TOKEN@$GITHUB_URL &>/dev/null
-        git push -q https://micpah:$GITHUB_DOCU_TOKEN@$GITHUB_URL origin $TRAVIS_TAG
+        echo "+ git tag" ; git tag -a $TRAVIS_TAG -m 'Current geli version'
     else
         echo -e "${YELLOW}+ skipping: git tag - not tagged build${NC}"
     fi
+
+    echo "+ git push"
+    # git push -q https://micpah:$GITHUB_DOCU_TOKEN@$GITHUB_URL &>/dev/null
+    git push --follow-tags -q https://micpah:$GITHUB_DOCU_TOKEN@$GITHUB_URL &>/dev/null
+
   # else
   #   echo -e "${YELLOW}+ WARNING: pull request #$TRAVIS_PULL_REQUEST -> skipping api-doc${NC}";
   # fi
