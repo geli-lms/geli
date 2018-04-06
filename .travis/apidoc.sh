@@ -1,6 +1,6 @@
 #!/bin/bash
 
-TRAVIS_TAG='0.1.2'
+TRAVIS_TAG='0.2.0'
 # Path to this file
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 # Path the script was called from
@@ -48,13 +48,12 @@ if [[ "$TRAVIS_BRANCH" == "develop" ]] || [[ -n "$TRAVIS_TAG" ]]; then
     git commit -m "Travis build: $TRAVIS_BUILD_NUMBER" &>/dev/null
 
     if [[ -n "$TRAVIS_TAG" ]]; then
-        echo "+ git tag" ; git tag -a $TRAVIS_TAG -m 'Current geli version'
+        echo "+ git tag" ; git tag -a $TRAVIS_TAG -m "Release $TRAVIS_TAG"
     else
         echo -e "${YELLOW}+ skipping: git tag - not tagged build${NC}"
     fi
 
     echo "+ git push"
-    # git push -q https://micpah:$GITHUB_DOCU_TOKEN@$GITHUB_URL &>/dev/null
     git push --follow-tags -q https://micpah:$GITHUB_DOCU_TOKEN@$GITHUB_URL &>/dev/null
 
   # else
