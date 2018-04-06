@@ -48,14 +48,13 @@ if [[ "$TRAVIS_BRANCH" == "develop" ]] || [[ -n "$TRAVIS_TAG" ]]; then
     git commit -m "Travis build: $TRAVIS_BUILD_NUMBER" &>/dev/null
 
     echo "+ git push"
-    # git push -q https://micpah:$GITHUB_DOCU_TOKEN@$GITHUB_URL &>/dev/null
-    git push https://micpah:$GITHUB_DOCU_TOKEN@$GITHUB_URL
+    git push -q https://micpah:$GITHUB_DOCU_TOKEN@$GITHUB_URL &>/dev/null
 
     if [[ -n "$TRAVIS_TAG" ]]; then
         echo "+ git tag" ; git tag $TRAVIS_TAG
         echo "+ git push tag"
         # git push origin $TRAVIS_TAG -q https://micpah:$GITHUB_DOCU_TOKEN@$GITHUB_URL &>/dev/null
-        git push origin $TRAVIS_TAG -q https://micpah:$GITHUB_DOCU_TOKEN@$GITHUB_URL
+        git push -q https://micpah:$GITHUB_DOCU_TOKEN@$GITHUB_URL origin $TRAVIS_TAG
     else
         echo -e "${YELLOW}+ skipping: git tag - not tagged build${NC}"
     fi
