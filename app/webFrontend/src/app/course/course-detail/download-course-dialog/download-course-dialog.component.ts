@@ -126,7 +126,7 @@ export class DownloadCourseDialogComponent implements OnInit {
               const files = [];
               unit.childUnits.forEach((file, index) => {
                 if (file.chkbox && !file.showDL) {
-                  files.push(index);
+                  files.push(file.file._id);
                 }
               });
               units.push({unitId: unit.unit._id, files: files});

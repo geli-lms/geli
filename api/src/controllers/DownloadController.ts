@@ -20,6 +20,7 @@ const fs = require('fs');
 const archiver = require('archiver');
 import crypto = require('crypto');
 import {User} from '../models/User';
+import {File} from '../models/mediaManager/File';
 
 const cache = require('node-file-cache').create({life: config.timeToLiveCacheValue});
 
@@ -208,12 +209,10 @@ export class DownloadController {
               archive.append(await CodeKataUnit.schema.statics.toFile(codeKataUnit),
                 {name: lecCounter + '_' + lcName + '/' + unitCounter + '_' + this.replaceCharInFilename(codeKataUnit.name) + '.txt'});
             } else if (localUnit.__t === 'file') {
-              const fileUnit = <IFileUnit><any>localUnit;
-              fileUnit.files.forEach((file, index) => {
-                if (unit.files.indexOf(index) > -1) {
-                  archive.file(file.link, {name: lecCounter + '_' + lcName + '/' + unitCounter + '_' + file.name});
-                }
-              });
+              for (const fileId of unit.files) {
+                const file = await File.findById(fileId);
+                archive.file( 'uploads/' + file.link, {name: lecCounter + '_' + lcName + '/' + unitCounter + '_' + file.name});
+              }
             } else if (localUnit.__t === 'task') {
               const taskUnit = <ITaskUnit><any>localUnit;
               archive.append(await TaskUnit.schema.statics.toFile(taskUnit),
