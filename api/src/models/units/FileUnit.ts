@@ -4,7 +4,7 @@ import {IFileUnit} from '../../../../shared/models/units/IFileUnit';
 
 interface IFileUnitModel extends IFileUnit, IUnitModel {
   populateUnit: () => Promise<IFileUnitModel>;
-  toFile: () => Promise<String>;
+  toFile: () => String;
 }
 
 const fileUnitSchema = new mongoose.Schema({
@@ -30,5 +30,9 @@ const fileUnitSchema = new mongoose.Schema({
 fileUnitSchema.methods.populateUnit = async function() {
   return this.populate('files').execPopulate();
 };
+
+fileUnitSchema.methods.toFile = function() {
+  return '';
+}
 
 export {fileUnitSchema, IFileUnitModel}

@@ -16,7 +16,7 @@ interface IUnitModel extends IUnit, mongoose.Document {
   calculateProgress: (users: IUser[], progress: IProgress[]) => Promise<IUnit>;
   populateUnit: () => Promise<IUnitModel>;
   secureData: (user: IUser) => Promise<IUnitModel>;
-  toFile: () => Promise<String>;
+  toFile: () => String;
 }
 
 const unitSchema = new mongoose.Schema({
@@ -86,6 +86,10 @@ unitSchema.methods.populateUnit = async function(): Promise<IUnit> {
 
 unitSchema.methods.secureData = async function(user: IUser): Promise<IUnitModel> {
   return this;
+};
+
+unitSchema.methods.toFile = function(): String {
+  return '';
 };
 
 unitSchema.statics.importJSON = async function(unit: IUnit, courseId: string, lectureId: string) {
