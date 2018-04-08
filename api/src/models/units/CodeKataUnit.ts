@@ -9,7 +9,7 @@ interface ICodeKataModel extends ICodeKataUnit, IUnitModel {
   exportJSON: () => Promise<ICodeKataUnit>;
   calculateProgress: () => Promise<ICodeKataUnit>;
   secureData: (user: IUser) => Promise<ICodeKataModel>;
-  toFile: () => Promise<String>;
+  toFile: () => String;
 }
 
 const codeKataSchema = new mongoose.Schema({
@@ -98,9 +98,15 @@ function validateTestArea(testArea: any) {
 codeKataSchema.pre('validate', splitCodeAreas);
 codeKataSchema.path('test').validate(validateTestArea);
 
-codeKataSchema.statics.toFile = async function (unit: ICodeKataUnit) {
-  return unit.description + '\n' + unit.definition + '\n' +
-    unit.code + '\n' + unit.test;
+codeKataSchema.methods.toFile = function (): String  {
+  return this.description + '\n'
+    + '####################################'
+    + '\n' + this.definition + '\n' +
+    + '####################################'
+    + '\n'
+    + this.code + '\n'
+    + '####################################'
+    + '\n' + this.test;
 };
 
 export {codeKataSchema, ICodeKataModel}

@@ -197,28 +197,20 @@ export class DownloadController {
           let unitCounter = 1;
 
           for (const unit of lec.units) {
-
             const localUnit = await Unit.findOne({_id: unit.unitId});
-            if (localUnit.__t === 'free-text') {
-              const freeTextUnit = <IFreeTextUnit><any>localUnit;
-              archive.append(await FreeTextUnit.schema.statics.toFile(freeTextUnit), {
-                name: lecCounter + '_' + lcName + '/' + unitCounter + '_' + this.replaceCharInFilename(freeTextUnit.name) + '.md'
-              });
-            } else if (localUnit.__t === 'code-kata') {
-              const codeKataUnit = <ICodeKataUnit><any>localUnit;
-              archive.append(await CodeKataUnit.schema.statics.toFile(codeKataUnit),
-                {name: lecCounter + '_' + lcName + '/' + unitCounter + '_' + this.replaceCharInFilename(codeKataUnit.name) + '.txt'});
-            } else if (localUnit.__t === 'file') {
+
+          if (!localUnit) {
+              throw new NotFoundError();
+            }
+
+            if (localUnit.__t === 'file') {
               for (const fileId of unit.files) {
                 const file = await File.findById(fileId);
                 archive.file( 'uploads/' + file.link, {name: lecCounter + '_' + lcName + '/' + unitCounter + '_' + file.name});
               }
-            } else if (localUnit.__t === 'task') {
-              const taskUnit = <ITaskUnit><any>localUnit;
-              archive.append(await TaskUnit.schema.statics.toFile(taskUnit),
-                {name: lecCounter + '_' + lcName + '/' + unitCounter + '_' + this.replaceCharInFilename(taskUnit.name) + '.txt'});
             } else {
-              throw new NotFoundError();
+              archive.append(localUnit.toFile(),
+                {name: lecCounter + '_' + lcName + '/' + unitCounter + '_' + this.replaceCharInFilename(localUnit.name) + '.txt'});
             }
             unitCounter++;
           }
