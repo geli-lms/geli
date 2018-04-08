@@ -1,5 +1,5 @@
 import {IUser} from '../../../../../shared/models/IUser';
-import {IFile} from '../../../../../shared/models/IFile';
+import {IFile} from '../../../../../shared/models/mediaManager/IFile';
 const md5 = require('blueimp-md5');
 
 export class User implements IUser {
