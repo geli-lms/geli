@@ -38,6 +38,8 @@ export class Server {
     // Do not use mpromise
     (<any>mongoose).Promise = global.Promise;
 
+    mongoose.set('debug', true);
+
     this.app = createExpressServer({
       routePrefix: '/api',
       controllers: [__dirname + '/controllers/*.js'], // register all controller's routes
