@@ -52,18 +52,35 @@ describe('Auth', () => {
       res.body.message.should.be.equal(errorCodes.errorCodes.duplicateUid.code);
     });
 
+    it('should pass', async () => {
+      const registerUser = { uid: '5468907',
+        firstName: 'firstName',
+        lastName: 'lastName',
+        role: 'student',
+        password: 'test1234',
+        email: 'local@test.local.de'};
+
+      const res = await chai.request(app)
+        .post(`${BASE_URL}/register`)
+        .send(registerUser)
+        .catch(err => err.response);
+
+      res.status.should.be.equal(204);
+    });
+
+
     it('should pass and enroll into course', async () => {
-      const registerUser: IUser = new User();
-      registerUser.uid = '5468907';
-      registerUser.profile.firstName = 'firstName';
-      registerUser.profile.lastName = 'lastName';
-      registerUser.role = 'student';
-      registerUser.password = 'test1234';
-      registerUser.email = 'local@test.local.de';
+      const registerUser = { uid: '5468907',
+      firstName: 'firstName',
+      lastName: 'lastName',
+      role: 'student',
+      password: 'test1234',
+      email: 'local@test.local.de'};
+
       const whitelistUser = await WhitelistUser.create({
         uid: registerUser.uid,
-        firstName: registerUser.profile.firstName,
-        lastName: registerUser.profile.lastName
+        firstName: registerUser.firstName,
+        lastName: registerUser.lastName
       });
       const noElemCourse = await Course.create({
         name: 'Test Course 1',
@@ -93,9 +110,6 @@ describe('Auth', () => {
       resultElemCourse.whitelist.length.should.be.equal(1);
       resultElemCourse.students.length.should.be.equal(1);
       resultElemCourse.whitelist[0].uid.should.be.equal(resultElemCourse.students[0].uid);
-      resultElemCourse.whitelist[0].firstName.should.be.equal(resultElemCourse.students[0].profile.firstName.toLowerCase());
-      resultElemCourse.whitelist[0].lastName.should.be.equal(resultElemCourse.students[0].profile.lastName.toLowerCase());
-
     });
 
     it('should fail (registration as admin)', async () => {
