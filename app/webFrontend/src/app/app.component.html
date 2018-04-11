@@ -41,7 +41,6 @@
         <button mat-menu-item *ngIf="isLoggedIn() && isAdmin()" routerLink="/admin" routerLinkActive="active">
           <mat-icon>settings</mat-icon>
           <span>{{ 'mainMenu.admin' | translate }}</span>
-          <span>Admin</span>
         </button>
         <button mat-menu-item *ngIf="isLoggedIn() && isStudent()" routerLink="/userSettings" routerLinkActive="active">
           <mat-icon>settings</mat-icon>
