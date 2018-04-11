@@ -75,29 +75,27 @@ describe('Auth', () => {
         enrollType: 'whitelist',
         whitelist: [whitelistUser]
       });
-      return new Promise((resolve, reject) => {
-        chai.request(app)
+      const res = await chai.request(app)
           .post(`${BASE_URL}/register`)
           .send(registerUser)
-          .end(async (err, res) => {
-            res.status.should.be.equal(204);
-            // Get updated Course.
-            const resultNoElemCourse = await Course.findById(noElemCourse._id)
-              .populate('whitelist')
-              .populate('students');
-            const resultElemCourse = await Course.findById(elemCourse._id)
-              .populate('whitelist')
-              .populate('students');
-            resultNoElemCourse.whitelist.length.should.be.equal(0);
-            resultNoElemCourse.students.length.should.be.equal(0);
-            resultElemCourse.whitelist.length.should.be.equal(1);
-            resultElemCourse.students.length.should.be.equal(1);
-            resultElemCourse.whitelist[0].uid.should.be.equal(resultElemCourse.students[0].uid);
-            resultElemCourse.whitelist[0].firstName.should.be.equal(resultElemCourse.students[0].profile.firstName.toLowerCase());
-            resultElemCourse.whitelist[0].lastName.should.be.equal(resultElemCourse.students[0].profile.lastName.toLowerCase());
-            resolve();
-          });
-      });
+          .catch(err => err.response);
+
+      res.status.should.be.equal(204);
+      // Get updated Course.
+      const resultNoElemCourse = await Course.findById(noElemCourse._id)
+        .populate('whitelist')
+        .populate('students');
+      const resultElemCourse = await Course.findById(elemCourse._id)
+        .populate('whitelist')
+        .populate('students');
+      resultNoElemCourse.whitelist.length.should.be.equal(0);
+      resultNoElemCourse.students.length.should.be.equal(0);
+      resultElemCourse.whitelist.length.should.be.equal(1);
+      resultElemCourse.students.length.should.be.equal(1);
+      resultElemCourse.whitelist[0].uid.should.be.equal(resultElemCourse.students[0].uid);
+      resultElemCourse.whitelist[0].firstName.should.be.equal(resultElemCourse.students[0].profile.firstName.toLowerCase());
+      resultElemCourse.whitelist[0].lastName.should.be.equal(resultElemCourse.students[0].profile.lastName.toLowerCase());
+
     });
 
     it('should fail (registration as admin)', async () => {
