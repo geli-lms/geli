@@ -38,7 +38,7 @@ export class Server {
     // Do not use mpromise
     (<any>mongoose).Promise = global.Promise;
 
-    mongoose.set('debug', true);
+    // mongoose.set('debug', true);
 
     this.app = createExpressServer({
       routePrefix: '/api',
