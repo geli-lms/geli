@@ -6,7 +6,7 @@ import {FormControl} from '@angular/forms';
 import 'rxjs/add/operator/startWith'
 import {NotificationService, UserDataService} from '../../../shared/services/data.service';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
-import {IUserSearchMeta} from "../../../../../../../shared/models/IUserSearchMeta";
+import {IUserSearchMeta} from '../../../../../../../shared/models/IUserSearchMeta';
 
 
 @Component({
