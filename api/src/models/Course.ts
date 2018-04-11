@@ -88,10 +88,11 @@ const courseSchema = new mongoose.Schema({
 );
 
 // Cascade delete
-courseSchema.pre('remove', async function (next: () => void) {
+courseSchema.pre('remove', async function (next) {
+  const localCourse = <ICourseModel><any>this;
   try {
-    const deletedLectures = await Lecture.deleteMany({'_id': {$in: this.lectures}}).exec();
-    const deletedDirs = await Directory.deleteMany({'_id': {$in: this.media}}).exec();
+    const deletedLectures = await Lecture.deleteMany({'_id': {$in: localCourse.lectures}}).exec();
+    const deletedDirs = await Directory.deleteMany({'_id': {$in: localCourse.media}}).exec();
   } catch (error) {
     const debug = 0;
     next();
