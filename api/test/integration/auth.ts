@@ -37,6 +37,21 @@ describe('Auth', () => {
       res.body.message.should.be.equal(errorCodes.errorCodes.mail.duplicate.code);
     });
 
+    it('should fail (register as teacher without teacher email)', async () => {
+      const teacher = await FixtureUtils.getRandomTeacher();
+      const registerUser = teacher;
+      registerUser.email = 'teacher@student.local';
+
+      const res = await chai.request(app)
+        .post(`${BASE_URL}/register`)
+        .send(registerUser)
+        .catch(err => err.response);
+
+      res.status.should.be.equal(400);
+      res.body.name.should.be.equal('BadRequestError');
+      res.body.message.should.be.equal(errorCodes.errorCodes.mail.noTeacher.code);
+    });
+
     it('should fail (matriculation number is already in use)', async () => {
       const student = await FixtureUtils.getRandomStudent();
       const registerUser = student;
