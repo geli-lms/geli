@@ -76,8 +76,8 @@ export class RegisterComponent implements OnInit {
       (val) => {
         this.registrationDone = true;
       })
-      .catch((error) => {
-        this.handleError(error);
+      .catch((err) => {
+        this.handleError(err);
       })
       .then(() => {
         this.loading = false;
@@ -86,8 +86,8 @@ export class RegisterComponent implements OnInit {
     ;
   }
 
-  private handleError(error) {
-    switch (error.error.message) {
+  private handleError(err) {
+    switch (err.error.message) {
       case errorCodes.mail.duplicate.code: {
         this.mailError = errorCodes.mail.duplicate.text;
         break;
