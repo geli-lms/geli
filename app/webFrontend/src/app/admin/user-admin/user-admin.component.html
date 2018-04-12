@@ -13,7 +13,7 @@
     <td><a [routerLink]="['/profile', user._id]">{{user.profile.firstName}} {{user.profile.lastName}}</a></td>
     <td>{{user.email}}</td>
     <td>
-      <mat-select [(ngModel)]="user.role" name="role" (change)="updateRole(i)">
+      <mat-select disabled="{{ userService.user._id === user._id }}" [(ngModel)]="user.role" name="role" (change)="updateRole(i)">
         <mat-option *ngFor="let role of availableRoles" [value]="role">
           {{role}}
         </mat-option>

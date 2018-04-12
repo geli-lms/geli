@@ -5,6 +5,7 @@ import {ShowProgressService} from '../../shared/services/show-progress.service';
 import {MatSnackBar} from '@angular/material';
 import {IUser} from '../../../../../../shared/models/IUser';
 import {DialogService} from '../../shared/services/dialog.service';
+import {UserService} from "../../shared/services/user.service";
 
 @Component({
   selector: 'app-user-admin',
@@ -16,11 +17,12 @@ export class UserAdminComponent implements OnInit {
   allUsers: IUser[];
   availableRoles: String[];
 
-  constructor(private userService: UserDataService,
+  constructor(private userServiceData: UserDataService,
               private router: Router,
               private showProgress: ShowProgressService,
               public  snackBar: MatSnackBar,
-              public  dialogService: DialogService) {
+              public  dialogService: DialogService,
+              private userService: UserService) {
   }
 
   ngOnInit() {
@@ -33,20 +35,20 @@ export class UserAdminComponent implements OnInit {
   }
 
   getUsers() {
-    this.userService.readItems<IUser>().then(users => {
+    this.userServiceData.readItems<IUser>().then(users => {
       this.allUsers = users;
     });
   }
 
   getRoles() {
-    this.userService.getRoles().then(roles => {
+    this.userServiceData.getRoles().then(roles => {
       this.availableRoles = roles;
     });
   }
 
   updateRole(userIndex: number) {
     this.showProgress.toggleLoadingGlobal(true);
-    this.userService.updateItem(this.allUsers[userIndex]).then(
+    this.userServiceData.updateItem(this.allUsers[userIndex]).then(
       (val) => {
         this.showProgress.toggleLoadingGlobal(false);
         this.snackBar.open('Role of user ' + val.email + ' successfully updated to ' + val.role, '', {duration: 3000});
@@ -69,7 +71,7 @@ export class UserAdminComponent implements OnInit {
     .subscribe(res => {
       if (res) {
         this.showProgress.toggleLoadingGlobal(true);
-        this.userService.deleteItem(this.allUsers[userIndex]).then(
+        this.userServiceData.deleteItem(this.allUsers[userIndex]).then(
           (val) => {
             this.showProgress.toggleLoadingGlobal(false);
             this.snackBar.open('User ' + val + ' was successfully deleted.', '', {duration: 3000});
