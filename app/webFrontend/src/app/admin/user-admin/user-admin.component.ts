@@ -5,7 +5,7 @@ import {ShowProgressService} from '../../shared/services/show-progress.service';
 import {MatSnackBar} from '@angular/material';
 import {IUser} from '../../../../../../shared/models/IUser';
 import {DialogService} from '../../shared/services/dialog.service';
-import {UserService} from "../../shared/services/user.service";
+import {UserService} from '../../shared/services/user.service';
 
 @Component({
   selector: 'app-user-admin',
