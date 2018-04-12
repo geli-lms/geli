@@ -17,7 +17,7 @@ export class UserAdminComponent implements OnInit {
   allUsers: IUser[];
   availableRoles: String[];
 
-  constructor(private userServiceData: UserDataService,
+  constructor(private userDataService: UserDataService,
               private router: Router,
               private showProgress: ShowProgressService,
               public  snackBar: MatSnackBar,
@@ -35,20 +35,20 @@ export class UserAdminComponent implements OnInit {
   }
 
   getUsers() {
-    this.userServiceData.readItems<IUser>().then(users => {
+    this.userDataService.readItems<IUser>().then(users => {
       this.allUsers = users;
     });
   }
 
   getRoles() {
-    this.userServiceData.getRoles().then(roles => {
+    this.userDataService.getRoles().then(roles => {
       this.availableRoles = roles;
     });
   }
 
   updateRole(userIndex: number) {
     this.showProgress.toggleLoadingGlobal(true);
-    this.userServiceData.updateItem(this.allUsers[userIndex]).then(
+    this.userDataService.updateItem(this.allUsers[userIndex]).then(
       (val) => {
         this.showProgress.toggleLoadingGlobal(false);
         this.snackBar.open('Role of user ' + val.email + ' successfully updated to ' + val.role, '', {duration: 3000});
@@ -71,7 +71,7 @@ export class UserAdminComponent implements OnInit {
     .subscribe(res => {
       if (res) {
         this.showProgress.toggleLoadingGlobal(true);
-        this.userServiceData.deleteItem(this.allUsers[userIndex]).then(
+        this.userDataService.deleteItem(this.allUsers[userIndex]).then(
           (val) => {
             this.showProgress.toggleLoadingGlobal(false);
             this.snackBar.open('User ' + val + ' was successfully deleted.', '', {duration: 3000});
