@@ -35,7 +35,7 @@ export class GeneralTabComponent implements OnInit {
   id: string;
   courseOb: ICourse;
   uploader: FileUploader = null;
-  enrollTypes =  ENROLL_TYPES;
+  enrollTypes = ENROLL_TYPES;
   enrollTypeConstants = {
     ENROLL_TYPE_WHITELIST,
     ENROLL_TYPE_FREE,
@@ -154,7 +154,7 @@ export class GeneralTabComponent implements OnInit {
 
       this.saveFileService.save(this.courseOb.name, JSON.stringify(courseJSON, null, 2));
     } catch (err) {
-      this.snackBar.open('Export course failed ' + err.json().message, 'Dismiss');
+      this.snackBar.open('Export course failed ' + err.error.message, 'Dismiss');
     }
   }
 
