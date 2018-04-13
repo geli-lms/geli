@@ -65,6 +65,25 @@ describe('Course', () => {
         .catch(err => err.response);
         res.status.should.be.equal(401);
     });
+
+
+    it('should have a course fixture with "accesskey" enrollType', async () => {
+      const course = await Course.findOne({enrollType: 'accesskey'});
+      should.exist(course);
+    });
+
+    it('should not leak access keys to students', async () => {
+      const student = await FixtureUtils.getRandomStudent();
+
+      const res = await chai.request(app)
+        .get(BASE_URL)
+        .set('Authorization', `JWT ${JwtUtils.generateToken(student)}`);
+      res.status.should.be.equal(200);
+
+      res.body.forEach((course: any) => {
+        should.equal(course.accessKey, undefined);
+      });
+    });
   });
 
   describe(`POST ${BASE_URL}`, () => {
