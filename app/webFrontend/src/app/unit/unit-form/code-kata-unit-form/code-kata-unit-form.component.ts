@@ -65,20 +65,16 @@ export class CodeKataUnitFormComponent implements OnInit {
     if (!this.model) {
       this.model = new CodeKataUnit(this.course._id);
       this.model.definition = this.example.definition;
-      this.model.code = this.example.code
+      this.model.code = this.example.code;
       this.model.test = this.example.test;
-    } else {
-      this.model.code = this.model.code
-      this.model.definition = this.model.definition;
-      this.model.test = this.model.test;
     }
 
     this.wholeInputCode =
       this.model.definition
-      + '\n\n' + this.areaSeperator + '\n\n'
+      + '\n' + this.areaSeperator + '\n'
       + this.model.code
-      + '\n\n' + this.areaSeperator + '\n\n'
-      + this.model.test
+      + '\n' + this.areaSeperator + '\n'
+      + this.model.test;
     this.editor.getEditor().setOptions({
       maxLines: 9999,
     });
@@ -89,7 +85,7 @@ export class CodeKataUnitFormComponent implements OnInit {
       this.snackBar.open('Your code does not validate. Check logs for information', '', {duration: 3000});
     }
 
-    let inputCodeArray = this.wholeInputCode.split(this.areaSeperator);
+    let inputCodeArray = this.wholeInputCode.split('\n' + this.areaSeperator + '\n');
     this.model = {
       ...this.model,
       definition: inputCodeArray[0],
