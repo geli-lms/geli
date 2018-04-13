@@ -9,7 +9,7 @@ import * as winston from 'winston';
 import {ObjectID} from 'bson';
 
 interface ICourseModel extends ICourse, mongoose.Document {
-  exportJSON: () => Promise<ICourse>;
+  exportJSON: (sanitize?: boolean) => Promise<ICourse>;
 }
 
 const courseSchema = new mongoose.Schema({
@@ -94,23 +94,27 @@ courseSchema.pre('remove', function (next: () => void) {
     .catch(next);
 });
 
-courseSchema.methods.exportJSON = async function () {
+courseSchema.methods.exportJSON = async function (sanitize: boolean = true) {
   const obj = this.toObject();
 
   // remove unwanted informations
-  // mongo properties
-  delete obj._id;
-  delete obj.createdAt;
-  delete obj.__v;
-  delete obj.updatedAt;
+  {
+    // mongo properties
+    delete obj._id;
+    delete obj.createdAt;
+    delete obj.__v;
+    delete obj.updatedAt;
 
-  // custom properties
-  delete obj.accessKey;
-  delete obj.active;
-  delete obj.whitelist;
-  delete obj.students;
-  delete obj.courseAdmin;
-  delete obj.teachers;
+    // custom properties
+    if (sanitize) {
+      delete obj.accessKey;
+      delete obj.active;
+      delete obj.whitelist;
+      delete obj.students;
+      delete obj.courseAdmin;
+      delete obj.teachers;
+    }
+  }
 
   // "populate" lectures
   const lectures: Array<mongoose.Types.ObjectId> = obj.lectures;
