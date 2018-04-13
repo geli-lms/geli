@@ -53,7 +53,7 @@ export class CodeKataUnitFormComponent implements OnInit {
   };
 
   logs: string;
-  wholeInputCode:string;
+  wholeInputCode: string;
 
   constructor(private codeKataUnitService: CodeKataUnitService,
               private unitService: UnitService,
@@ -85,7 +85,7 @@ export class CodeKataUnitFormComponent implements OnInit {
       this.snackBar.open('Your code does not validate. Check logs for information', '', {duration: 3000});
     }
 
-    let inputCodeArray = this.wholeInputCode.split('\n' + this.areaSeperator + '\n');
+    const inputCodeArray = this.wholeInputCode.split('\n' + this.areaSeperator + '\n');
     this.model = {
       ...this.model,
       definition: inputCodeArray[0],
@@ -186,7 +186,7 @@ export class CodeKataUnitFormComponent implements OnInit {
 
   // this code gets unnessessary with the Implementation of Issue #44 (all validation parts should happen on the server)
   private validateStructure(): boolean {
-    let separatorCount = (this.wholeInputCode.match(new RegExp(this.areaSeperator, 'gmi')) || []).length;
+    const separatorCount = (this.wholeInputCode.match(new RegExp(this.areaSeperator, 'gmi')) || []).length;
     if (separatorCount > 2) {
       this.snackBar.open('There are too many area separators', 'Dismiss');
       return false;
