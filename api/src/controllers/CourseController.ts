@@ -32,6 +32,7 @@ import * as mongoose from 'mongoose';
 import {Schema} from 'mongoose';
 import ObjectId = mongoose.Types.ObjectId;
 import {IWhitelistUser} from '../../../shared/models/IWhitelistUser';
+import Pick from '../utilities/Pick';
 
 const uploadOptions = {
   storage: multer.diskStorage({
@@ -144,17 +145,62 @@ export class CourseController {
       .populate('courseAdmin')
       .populate('students');
 
-      return courses.map(course => {
-        const courseObject: any = course.toObject();
-        if (currentUser.role === 'student') {
-          delete courseObject.courseAdmin;
+    return courses.map(course => {
+      const courseObject: any = course.toObject();
 
-          courseObject.students = courseObject.students.filter(
-            (student: any) => student._id === currentUser._id
-          );
-        }
-        return courseObject;
-      })
+      // These keys can safely be transmitted to the user.
+      const safeKeys = [
+        '_id',
+        'active',
+        'createdAt',
+        'description',
+        'enrollType',
+        'hasAccessKey',
+        'name',
+        'updatedAt',
+      ];
+
+      // These keys will be transmitted as empty stubs (for frontend compatibility).
+      const emptyKeys = [
+      ];
+
+      // These keys are only relevant for users that can edit the course.
+      const editorKeys = [
+        'courseAdmin',
+        'lectures',
+        'teachers',
+        'whitelist',
+      ];
+
+      const roleIsTeacher: boolean = currentUser.role === 'teacher';
+      const roleIsAdmin: boolean = currentUser.role === 'admin';
+      const roleCanEditCourse: boolean = roleIsTeacher || roleIsAdmin;
+
+      const userIsCourseAdmin: boolean = currentUser._id === courseObject.courseAdmin._id;
+      const userIsCourseTeacher: boolean = courseObject.teachers.some((teacher: IUser) => teacher._id === currentUser._id);
+      const userCanEditCourse: boolean = roleCanEditCourse && (userIsCourseAdmin || userIsCourseTeacher);
+
+      if (userCanEditCourse) {
+        safeKeys.push(...editorKeys);
+      } else if (roleCanEditCourse) {
+        emptyKeys.push(...editorKeys);
+      }
+
+      const sanitizedCourseObject = Pick.only(safeKeys, courseObject);
+      Pick.asEmpty(emptyKeys, courseObject, sanitizedCourseObject);
+
+      sanitizedCourseObject.students = courseObject.students.filter(
+        (student: any) => student._id === currentUser._id
+      );
+
+      // (for frontend compatibility)
+      if (roleCanEditCourse && !userCanEditCourse) {
+        const courseAdmin = courseObject.courseAdmin;
+        sanitizedCourseObject['courseAdmin'] = Pick.only(['_id'], courseAdmin);
+      }
+
+      return sanitizedCourseObject;
+    })
   }
 
   /**
