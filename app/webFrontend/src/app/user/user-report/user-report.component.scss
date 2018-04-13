@@ -1,3 +1,15 @@
+$min-screen-size: 520px;
+
 mat-card {
   margin-bottom: 1rem;
+
+  ngx-charts-advanced-pie-chart > div:first-child {
+    display: flex;
+    height: 100% !important; // !important to override the inline style of the ngx-charts-advanced-pie-chart component. Don't use it in other cases!
+    width: 100% !important;
+
+    @media screen and (max-width: $min-screen-size) {
+      flex-direction: column;
+    }
+  }
 }
