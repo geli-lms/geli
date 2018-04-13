@@ -77,8 +77,8 @@ export class UserEditComponent implements OnInit {
   }
 
   async onSubmit() {
-    this.user = await this.prepareSaveUser();
-    this.updateUser();
+    this.user = this.prepareSaveUser();
+    await this.updateUser();
   }
 
   onCancel() {
@@ -86,20 +86,16 @@ export class UserEditComponent implements OnInit {
   }
 
   prepareSaveUser(): IUser {
-    const userFormModel = this.userForm.value;
-    const saveUser: any = {};
-    const saveIUser: IUser = saveUser;
-    for (const key in userFormModel) {
-      if (userFormModel.hasOwnProperty(key)) {
-        saveIUser[key] = userFormModel[key];
-      }
+    const userFormModel = this.userForm.value
+
+    if (this.user.profile.picture) {
+      userFormModel.profile['picture'] = this.user.profile.picture;
     }
-    for (const key in this.user) {
-      if (typeof saveIUser[key] === 'undefined') {
-        saveIUser[key] = this.user[key];
-      }
-    }
+
+    const saveIUser: IUser = {...this.user, ...userFormModel};
+
     saveIUser['currentPassword'] = this.user.password;
+
     return saveIUser;
   }
 
@@ -159,6 +155,7 @@ export class UserEditComponent implements OnInit {
     const response = await this.dialogService.upload(this.user).toPromise();
     if (response && response.success && response.user) {
       if (this.userService.isLoggedInUser(response.user)) {
+        this.user = response.user;
         this.userService.setUser(response.user);
       }
       this.snackBar.open('User image successfully uploaded.', '', {duration: 3000});
