@@ -2,6 +2,19 @@ ace-editor {
   margin-top: 0.5em;
   margin-bottom: 1em;
   margin-left: 1em;
-  width: 90%;
+  width: calc(100% - 1em);
+}
+
+.user-code-editor {
   min-height: 15em;
+}
+
+.logs-title {
+  margin-top: 0.5em;
+}
+
+pre {
+  margin-top: 0.5em;
+  margin-left: 1em;
+  font-size: 0.9em;
 }
