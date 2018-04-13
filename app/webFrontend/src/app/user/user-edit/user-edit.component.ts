@@ -88,7 +88,7 @@ export class UserEditComponent implements OnInit {
   prepareSaveUser(): IUser {
     const userFormModel = this.userForm.value
 
-    if(this.user.profile.picture) {
+    if (this.user.profile.picture) {
       userFormModel.profile['picture'] = this.user.profile.picture;
     }
 
