@@ -1,12 +1,13 @@
 import {
   Body, Get, Put, Delete, Param, JsonController, UseBefore, NotFoundError, BadRequestError, Post,
-  Authorized
+  Authorized, CurrentUser
 } from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 
 import {Lecture} from '../models/Lecture';
 import {IUnitModel, Unit} from '../models/units/Unit';
 import {ValidationError} from 'mongoose';
+import {IUser} from '../../../shared/models/IUser';
 
 @JsonController('/units')
 @UseBefore(passportJwtMiddleware)
@@ -74,8 +75,9 @@ export class UnitController {
    */
   @Authorized(['teacher', 'admin'])
   @Post('/')
-  addUnit(@Body() data: any) {
+  addUnit(@Body() data: any, @CurrentUser() currentUser: IUser) {
     // discard invalid requests
+    data.model.unitCreator = currentUser._id;
     this.checkPostParam(data);
 
     return Unit.create(data.model)

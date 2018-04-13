@@ -39,6 +39,10 @@ const unitSchema = new mongoose.Schema({
     },
     type: {
       type: String
+    },
+    unitCreator: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User'
     }
   },
   {
