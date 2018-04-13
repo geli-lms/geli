@@ -144,7 +144,6 @@ export class CodeKataUnitFormComponent implements OnInit {
     if (!this.validateStructure()) {
       return false;
     }
-
     const codeToTest: string = this.wholeInputCode;
 
     this.logs = undefined;
@@ -187,6 +186,15 @@ export class CodeKataUnitFormComponent implements OnInit {
 
   // this code gets unnessessary with the Implementation of Issue #44 (all validation parts should happen on the server)
   private validateStructure(): boolean {
+    let separatorCount = (this.wholeInputCode.match(new RegExp(this.areaSeperator, 'gmi')) || []).length;
+    if (separatorCount > 2) {
+      this.snackBar.open('There are too many area separators', 'Dismiss');
+      return false;
+    }
+    if (separatorCount < 2) {
+      this.snackBar.open('There must be 2 area separators', 'Dismiss');
+      return false;
+    }
     if (!this.wholeInputCode.match(new RegExp('function(.|\t)*validate\\(\\)(.|\n|\t)*{(.|\n|\t)*}', 'gmi'))) {
       this.snackBar.open('The test section must contain a validate function', 'Dismiss');
       return false;
