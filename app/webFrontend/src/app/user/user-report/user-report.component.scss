@@ -2,12 +2,6 @@ $min-screen-size: 520px;
 $small-box-size: 280px;
 $large-box-size: 500px;
 
-app-user-details {
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-}
-
 mat-card {
   margin-bottom: 1rem;
 
@@ -25,7 +19,7 @@ mat-card {
     height: 100% !important; // !important to override the inline style of the ngx-charts-advanced-pie-chart component. Don't use it in other cases!
     width: 100% !important;
 
-    .advanced-pie-legend-wrapper, .advanced-pie-legend {
+    .advanced-pie-legend-wrapper, .advanced-pie-legend, .ngx-charts-outer {
       width: 100% !important;
     }
 
