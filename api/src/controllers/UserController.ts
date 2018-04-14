@@ -312,16 +312,15 @@ export class UserController {
                  @CurrentUser() currentUser: IUser) {
     return User.findById(id)
       .then((user: IUserModel) => {
-        if (user.profile.picture && user.profile.picture.link && fs.existsSync(user.profile.picture.link)) {
-          fs.unlinkSync(user.profile.picture.link);
+        if (user.profile.picture && user.profile.picture.path && fs.existsSync(user.profile.picture.path)) {
+          fs.unlinkSync(user.profile.picture.path);
         }
-
         user.profile.picture = {
           _id: null,
-          name: file.originalname,
-          link: file.filename,
-          size: file.size,
-          mimeType: file.mimeType
+          name: file.filename,
+          alias: file.originalname,
+          path: file.path,
+          size: file.size
         };
         return user.save();
       })
