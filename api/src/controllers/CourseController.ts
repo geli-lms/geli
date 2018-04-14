@@ -138,69 +138,40 @@ export class CourseController {
       conditions.$or.push({enrollType: 'whitelist', whitelist:  {$elemMatch: {$in: whitelistUsers}}});
     }
 
-    const courses = await Course.find(conditions)
-    // TODO: Do not send lectures when student has no access
-      .populate('lectures')
-      .populate('teachers')
-      .populate('courseAdmin')
-      .populate('students');
-
-    return courses.map(course => {
-      const courseObject: any = course.toObject();
-
-      // These keys can safely be transmitted to the user.
-      const safeKeys = [
-        '_id',
-        'active',
-        'createdAt',
-        'description',
-        'enrollType',
-        'hasAccessKey',
-        'name',
-        'updatedAt',
-      ];
-
-      // These keys will be transmitted as empty stubs (for frontend compatibility).
-      const emptyKeys = [
-      ];
-
-      // These keys are only relevant for users that can edit the course.
-      const editorKeys = [
-        'courseAdmin',
-        'lectures',
-        'teachers',
-        'whitelist',
-      ];
-
-      const roleIsTeacher: boolean = currentUser.role === 'teacher';
-      const roleIsAdmin: boolean = currentUser.role === 'admin';
-      const roleCanEditCourse: boolean = roleIsTeacher || roleIsAdmin;
-
-      const userIsCourseAdmin: boolean = currentUser._id === courseObject.courseAdmin._id;
-      const userIsCourseTeacher: boolean = courseObject.teachers.some((teacher: IUser) => teacher._id === currentUser._id);
-      const userCanEditCourse: boolean = roleCanEditCourse && (userIsCourseAdmin || userIsCourseTeacher);
-
-      if (userCanEditCourse) {
-        safeKeys.push(...editorKeys);
-      } else if (roleCanEditCourse) {
-        emptyKeys.push(...editorKeys);
+    const courses = await Course.find(conditions);
+    return await Course.getSanitized(
+      currentUser, courses,
+      {
+        all: {
+          copy: [
+            '_id',
+            'active',
+            'createdAt',
+            'description',
+            'enrollType',
+            'hasAccessKey',
+            'name',
+            'updatedAt',
+          ],
+          onlyid: [
+            'courseAdmin',
+          ]
+        },
+        safe: {
+          empty: [
+            'teachers'
+          ],
+          selfid: [
+            'students'
+          ]
+        },
+        editor: {
+          onlyid: [
+            'teachers'
+          ]
+        }
       }
-
-      const sanitizedCourseObject = Pick.only(safeKeys, courseObject);
-      Pick.asEmpty(emptyKeys, courseObject, sanitizedCourseObject);
-
-      sanitizedCourseObject.students = courseObject.students.filter(
-        (student: any) => student._id === currentUser._id
-      );
-
-      // (for frontend compatibility)
-      if (roleCanEditCourse && !userCanEditCourse) {
-        const courseAdmin = courseObject.courseAdmin;
-        sanitizedCourseObject['courseAdmin'] = Pick.only(['_id'], courseAdmin);
-      }
-
-      return sanitizedCourseObject;
-    })
+    );
   }
 
   /**
