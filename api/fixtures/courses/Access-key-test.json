@@ -1,0 +1,23 @@
+{
+  "name": "Access key test",
+  "description": "This course is used to test the access key course enroll type.",
+  "active": true,
+  "whitelist": [],
+  "enrollType": "accesskey",
+  "accessKey": "accessKey1234",
+  "hasAccessKey": true,
+  "lectures": [
+    {
+      "name": "Documentation",
+      "description": "Documents the course fixture.",
+      "units": [
+        {
+          "name": "What is course fixture for?",
+          "description": "",
+          "markdown": "To test the 'accesskey' enrollType.",
+          "__t": "free-text"
+        }
+      ]
+    }
+  ]
+}
