@@ -97,45 +97,50 @@ export class CodeKataUnitFormComponent implements OnInit {
     };
 
     if (this.model._id === undefined) {
-      this.unitService.createItem({
+      this.createCodeKata();
+    } else {
+      this.updateCodeKata();
+    }
+  }
+
+  private async createCodeKata() {
+    try {
+      const unit = await this.unitService.createItem({
         model: this.model,
         lectureId: this.lectureId
-      })
-        .then(
-          (unit) => {
-            this.snackBar.open('Code-Kata created', '', {duration: 3000});
-            this.onDone();
-            return this.notificationService.createItem(
-              {
-                changedCourse: this.course,
-                changedLecture: this.lectureId,
-                changedUnit: unit,
-                text: 'Course ' + this.course.name + ' has a new code kata unit.'
-              });
-          },
-          (error) => {
-            const message = error.json().message;
-            this.snackBar.open('Failed to create Code-Kata => ' + message, '', {duration: 3000});
-          });
-    } else {
+      });
+
+      this.notificationService.createItem({
+        changedCourse: this.course,
+        changedLecture: this.lectureId,
+        changedUnit: unit,
+        text: 'Course ' + this.course.name + ' has a new code kata unit.'
+      });
+
+      this.snackBar.open('Code-Kata created', 'Dismiss', {duration: 3000});
+      this.onDone();
+    } catch (err) {
+      this.snackBar.open('Failed to create Code-Kata: ' + err.error.message, 'Dismiss', {duration: 3000});
+    }
+  }
+
+  private async updateCodeKata() {
+    try {
       delete this.model._course;
-      this.unitService.updateItem(this.model)
-        .then(
-          (unit) => {
-            this.snackBar.open('Code-Kata updated', '', {duration: 3000});
-            this.onDone();
-            return this.notificationService.createItem(
-              {
-                changedCourse: this.course,
-                changedLecture: this.lectureId,
-                changedUnit: unit,
-                text: 'Course ' + this.course.name + ' has an updated unit.'
-              });
-          },
-          (error) => {
-            const message = error.json().message;
-            this.snackBar.open('Failed to update Code-Kata => ' + message, '', {duration: 3000});
-          });
+      const unit = await this.unitService.updateItem(this.model);
+
+      this.notificationService.createItem(
+        {
+          changedCourse: this.course,
+          changedLecture: this.lectureId,
+          changedUnit: unit,
+          text: 'Course ' + this.course.name + ' has an updated unit.'
+        });
+
+      this.snackBar.open('Code-Kata updated', 'Dismiss', {duration: 3000});
+      this.onDone();
+    } catch (err) {
+      this.snackBar.open('Failed to update Code-Kata: ' + err.error.message, 'Dismiss', {duration: 3000});
     }
   }
 
@@ -174,10 +179,10 @@ export class CodeKataUnitFormComponent implements OnInit {
     window.console.log = origLogger;
 
     if (result === true || result === undefined) {
-      this.snackBar.open('Success', '', {duration: 3000});
+      // this.snackBar.open('Success', '', {duration: 3000});
       return true;
     } else {
-      this.snackBar.open('Your code failed.', '', {duration: 3000});
+      // this.snackBar.open('Your code failed.', '', {duration: 3000});
       // tslint:disable-next-line:no-console
       console.log(result);
       return false;
