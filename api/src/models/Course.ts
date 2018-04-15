@@ -219,11 +219,11 @@ courseSchema.methods.checkPrivileges = function (user: IUser) {
 
   const userCanEditCourse: boolean = roleCanEditCourse && (userIsCourseAdmin || userIsCourseTeacher);
   const userIsParticipant: boolean = userIsCourseStudent || userCanEditCourse;
-  const userCanView: boolean = (this.active && userIsCourseStudent) || userCanEditCourse || userIsAdmin;
+  const userCanViewCourse: boolean = (this.active && userIsCourseStudent) || userCanEditCourse || userIsAdmin;
 
   return {roleCanEditCourse, userIsAdmin, courseAdmin,
       userIsCourseAdmin, userIsCourseTeacher, userIsCourseStudent,
-      userCanEditCourse, userIsParticipant, userCanView};
+      userCanEditCourse, userIsParticipant, userCanViewCourse};
 }
 
 

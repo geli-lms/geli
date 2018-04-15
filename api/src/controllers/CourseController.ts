@@ -231,7 +231,7 @@ export class CourseController {
 
     // This is currently a redundant check, because userReadConditions above already restricts access!
     // (I.e. just in case future changes break something.)
-    if (!course.checkPrivileges(currentUser).userCanView) {
+    if (!course.checkPrivileges(currentUser).userCanViewCourse) {
       throw new ForbiddenError();
     }
 
