@@ -511,53 +511,37 @@ export class CourseController {
    * @apiSuccess {Course} course Updated course.
    *
    * @apiSuccessExample {json} Success-Response:
-   *     {
-   *         "_id": "5a037e6b60f72236d8e7c83d",
-   *         "updatedAt": "2018-01-29T23:43:07.220Z",
-   *         "createdAt": "2017-11-08T22:00:11.263Z",
-   *         "name": "Introduction to web development",
-   *         "description": "Whether you're just getting started with Web development or are just expanding your horizons...",
-   *         "courseAdmin": "5a037e6a60f72236d8e7c815",
-   *         "active": true,
-   *         "__v": 1,
-   *         "whitelist": [{
-   *             "_bsontype": "ObjectID",
-   *             "id": {...}
-   *         },{
-   *             "_bsontype": "ObjectID",
-   *             "id": {...}
-   *         },{
-   *             "_bsontype": "ObjectID",
-   *             "id": {...}
-   *         }],
-   *         "enrollType": "whitelist",
-   *         "lectures": [],
-   *         "students": [],
-   *         "teachers": [],
-   *         "hasAccessKey": false
-   *     }
+   *    {
+   *      success: true,
+   *      newlength: 10
+   *    }
    *
-   * @apiError TypeError Wrong type allowed are just csv files.
+   * @apiError TypeError Only CSV files are allowed.
    * @apiError HttpError UID is not a number 1.
+   * @apiError ForbiddenError Unauthorized user.
    */
-  // TODO: Needs more security
   @Authorized(['teacher', 'admin'])
   @Post('/:id/whitelist')
-  whitelistStudents(@Param('id') id: string, @UploadedFile('file', {options: uploadOptions}) file: any) {
+  async whitelistStudents(
+      @Param('id') id: string,
+      @UploadedFile('file', {options: uploadOptions}) file: any,
+      @CurrentUser() currentUser: IUser) {
     const name: string = file.originalname;
     if (!name.endsWith('.csv')) {
       throw new TypeError(errorCodes.errorCodes.upload.type.notCSV.code);
     }
-    return Course.findById(id)
+    const course = await Course.findById(id);
+    if (!course.checkPrivileges(currentUser).userCanEditCourse) {
+      throw new ForbiddenError();
+    }
+    await course
       .populate('whitelist')
       .populate('students')
-      .then((course) => {
-        return this.parser.parseFile(file).then((buffer: any) =>
-          this.parser.updateCourseFromBuffer(buffer, course)
-            .then(c => c.save())
-            .then((c: ICourseModel) =>
-              c.toObject()));
-      });
+      .execPopulate();
+    const buffer = <string> await this.parser.parseFile(file);
+    await this.parser.updateCourseFromBuffer(buffer, course);
+    await course.save();
+    return {success: true, newlength: course.whitelist.length};
   }
 
   /**
