@@ -96,8 +96,8 @@ export class GeneralTabComponent implements OnInit {
     };
     this.uploader.onCompleteItem = (item: any, response: any, status: any) => {
       if (status === 200) {
-        const course = JSON.parse(response);
-        this.snackBar.open('Item is uploaded there where ' + course.whitelist.length + ' users parsed!', '', {duration: 10000});
+        const result = JSON.parse(response);
+        this.snackBar.open('Upload complete, there now are ' + result.newlength + ' whitelisted users!', '', {duration: 10000});
         setTimeout(() => {
           this.uploader.clearQueue();
         }, 3000);

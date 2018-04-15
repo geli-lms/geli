@@ -137,24 +137,40 @@ export class CourseController {
       conditions.$or.push({enrollType: 'whitelist', whitelist:  {$elemMatch: {$in: whitelistUsers}}});
     }
 
-    const courses = await Course.find(conditions)
-    // TODO: Do not send lectures when student has no access
-      .populate('lectures')
-      .populate('teachers')
-      .populate('courseAdmin')
-      .populate('students');
-
-      return courses.map(course => {
-        const courseObject: any = course.toObject();
-        if (currentUser.role === 'student') {
-          delete courseObject.courseAdmin;
-
-          courseObject.students = courseObject.students.filter(
-            (student: any) => student._id === currentUser._id
-          );
+    const courses = await Course.find(conditions);
+    return await Course.getSanitized(
+      currentUser, courses,
+      {
+        all: {
+          copy: [
+            '_id',
+            'active',
+            'createdAt',
+            'description',
+            'enrollType',
+            'hasAccessKey',
+            'name',
+            'updatedAt',
+          ],
+          onlyid: [
+            'courseAdmin',
+          ]
+        },
+        safe: {
+          empty: [
+            'teachers'
+          ],
+          selfid: [
+            'students'
+          ]
+        },
+        editor: {
+          onlyid: [
+            'teachers'
+          ]
         }
-        return courseObject;
-      })
+      }
+    );
   }
 
   /**
@@ -198,16 +214,27 @@ export class CourseController {
    *         "hasAccessKey": false
    *     }
    *
-   * @apiError NotFoundError
+   * @apiError NotFoundError Includes implicit authorization check.
+   * @apiError ForbiddenError (Redundant) Authorization check.
    */
   @Get('/:id')
   async getCourse(@Param('id') id: string, @CurrentUser() currentUser: IUser) {
     const course = await Course.findOne({
       ...this.userReadConditions(currentUser),
       _id: id
-    })
-    // TODO: Do not send lectures when student has no access
-      .populate({
+    });
+
+    if (!course) {
+      throw new NotFoundError();
+    }
+
+    // This is currently a redundant check, because userReadConditions above already restricts access!
+    // (I.e. just in case future changes break something.)
+    if (!course.checkPrivileges(currentUser).userCanViewCourse) {
+      throw new ForbiddenError();
+    }
+
+    await course.populate({
         path: 'lectures',
         populate: {
           path: 'units',
@@ -223,11 +250,7 @@ export class CourseController {
       .populate('teachers')
       .populate('students')
       .populate('whitelist')
-      .exec();
-
-    if (!course) {
-      throw new NotFoundError();
-    }
+      .execPopulate();
 
     course.lectures = await Promise.all(course.lectures.map(async (lecture) => {
       lecture.units = await Promise.all(lecture.units.map(async (unit: IUnitModel) => {
@@ -309,16 +332,17 @@ export class CourseController {
    */
   @Authorized(['teacher', 'admin'])
   @Post('/')
-  addCourse(@Body() course: ICourse, @Req() request: Request, @CurrentUser() currentUser: IUser) {
+  async addCourse(@Body() course: ICourse, @Req() request: Request, @CurrentUser() currentUser: IUser) {
+    // Note that this might technically have a race condition, but it should never matter because the new course ids remain unique.
+    // If a strict version is deemed important, see mongoose Model.findOneAndUpdate for a potential approach.
+    const existingCourse = await Course.findOne({name: course.name});
+    if (existingCourse) {
+      throw new BadRequestError(errorCodes.errorCodes.course.duplicateName.code);
+    }
     course.courseAdmin = currentUser;
-    return Course.findOne({name: course.name})
-      .then((existingCourse) => {
-        if (existingCourse) {
-          throw new BadRequestError(errorCodes.errorCodes.course.duplicateName.code);
-        }
-        return new Course(course).save()
-          .then((c) => c.toObject());
-      });
+    const newCourse = new Course(course);
+    await newCourse.save();
+    return newCourse.toObject();
   }
 
   /**
@@ -448,54 +472,30 @@ export class CourseController {
    * @apiSuccess {Course} course Left course.
    *
    * @apiSuccessExample {json} Success-Response:
-   *     {
-   *         "_id": "5a037e6b60f72236d8e7c83d",
-   *         "updatedAt": "2017-11-08T22:00:11.869Z",
-   *         "createdAt": "2017-11-08T22:00:11.263Z",
-   *         "name": "Introduction to web development",
-   *         "description": "Whether you're just getting started with Web development or are just expanding your horizons...",
-   *         "courseAdmin": {
-   *             "_id": "5a037e6a60f72236d8e7c815",
-   *             "updatedAt": "2017-11-08T22:00:10.898Z",
-   *             "createdAt": "2017-11-08T22:00:10.898Z",
-   *             "email": "teacher2@test.local",
-   *             "isActive": true,
-   *             "role": "teacher",
-   *             "profile": {
-   *                 "firstName": "Ober",
-   *                 "lastName": "Lehrer"
-   *             },
-   *             "id": "5a037e6a60f72236d8e7c815"
-   *         },
-   *         "active": true,
-   *         "__v": 1,
-   *         "whitelist": [],
-   *         "enrollType": "free",
-   *         "lectures": [],
-   *         "students": [],
-   *         "teachers": [],
-   *         "id": "5a037e6b60f72236d8e7c83d",
-   *         "hasAccessKey": false
-   *     }
+   *      {result: true}
    *
    * @apiError NotFoundError
+   * @apiError ForbiddenError
    */
   @Authorized(['student'])
   @Post('/:id/leave')
   async leaveStudent(@Param('id') id: string, @Body() data: any, @CurrentUser() currentUser: IUser) {
     const course = await Course.findById(id);
-        if (!course) {
-          throw new NotFoundError();
-        }
-        const index: number = course.students.indexOf(currentUser._id);
-        if (index >= 0) {
-          course.students.splice(index, 1);
-          await NotificationSettings.findOne({'user': currentUser, 'course': course}).remove();
-          const savedCourse = await course.save();
-          return savedCourse.toObject();
-        }
-        return course.toObject();
+    if (!course) {
+      throw new NotFoundError();
+    }
+    const index: number = course.students.indexOf(currentUser._id);
+    if (index >= 0) {
+      course.students.splice(index, 1);
+      await NotificationSettings.findOne({'user': currentUser, 'course': course}).remove();
+      await course.save();
+      return {result: true};
+    } else {
+      // This equals an implicit !course.checkPrivileges(currentUser).userIsCourseStudent check.
+      throw new ForbiddenError();
+    }
   }
+
 
   /**
    * @api {post} /api/courses/:id/whitelist Whitelist students for course
@@ -510,53 +510,37 @@ export class CourseController {
    * @apiSuccess {Course} course Updated course.
    *
    * @apiSuccessExample {json} Success-Response:
-   *     {
-   *         "_id": "5a037e6b60f72236d8e7c83d",
-   *         "updatedAt": "2018-01-29T23:43:07.220Z",
-   *         "createdAt": "2017-11-08T22:00:11.263Z",
-   *         "name": "Introduction to web development",
-   *         "description": "Whether you're just getting started with Web development or are just expanding your horizons...",
-   *         "courseAdmin": "5a037e6a60f72236d8e7c815",
-   *         "active": true,
-   *         "__v": 1,
-   *         "whitelist": [{
-   *             "_bsontype": "ObjectID",
-   *             "id": {...}
-   *         },{
-   *             "_bsontype": "ObjectID",
-   *             "id": {...}
-   *         },{
-   *             "_bsontype": "ObjectID",
-   *             "id": {...}
-   *         }],
-   *         "enrollType": "whitelist",
-   *         "lectures": [],
-   *         "students": [],
-   *         "teachers": [],
-   *         "hasAccessKey": false
-   *     }
+   *    {
+   *      success: true,
+   *      newlength: 10
+   *    }
    *
-   * @apiError TypeError Wrong type allowed are just csv files.
+   * @apiError TypeError Only CSV files are allowed.
    * @apiError HttpError UID is not a number 1.
+   * @apiError ForbiddenError Unauthorized user.
    */
-  // TODO: Needs more security
   @Authorized(['teacher', 'admin'])
   @Post('/:id/whitelist')
-  whitelistStudents(@Param('id') id: string, @UploadedFile('file', {options: uploadOptions}) file: any) {
+  async whitelistStudents(
+      @Param('id') id: string,
+      @UploadedFile('file', {options: uploadOptions}) file: any,
+      @CurrentUser() currentUser: IUser) {
     const name: string = file.originalname;
     if (!name.endsWith('.csv')) {
       throw new TypeError(errorCodes.errorCodes.upload.type.notCSV.code);
     }
-    return Course.findById(id)
+    const course = await Course.findById(id);
+    if (!course.checkPrivileges(currentUser).userCanEditCourse) {
+      throw new ForbiddenError();
+    }
+    await course
       .populate('whitelist')
       .populate('students')
-      .then((course) => {
-        return this.parser.parseFile(file).then((buffer: any) =>
-          this.parser.updateCourseFromBuffer(buffer, course)
-            .then(c => c.save())
-            .then((c: ICourseModel) =>
-              c.toObject()));
-      });
+      .execPopulate();
+    const buffer = <string> await this.parser.parseFile(file);
+    await this.parser.updateCourseFromBuffer(buffer, course);
+    await course.save();
+    return {success: true, newlength: course.whitelist.length};
   }
 
   /**
@@ -573,26 +557,17 @@ export class CourseController {
    * @apiSuccess {Course} course Updated course.
    *
    * @apiSuccessExample {json} Success-Response:
-   *     {
-   *         "_id": "5a037e6b60f72236d8e7c83d",
-   *         "updatedAt": "2018-01-29T23:43:07.220Z",
-   *         "createdAt": "2017-11-08T22:00:11.263Z",
-   *         "name": "Introduction to web development",
-   *         "description": "Whether you're just getting started with Web development or are just expanding your horizons...",
-   *         "courseAdmin": "5a037e6a60f72236d8e7c815",
-   *         "active": true,
-   *         "__v": 1,
-   *         "whitelist": [],
-   *         "enrollType": "free",
-   *         "lectures": [],
-   *         "students": [],
-   *         "teachers": [],
-   *         "hasAccessKey": false
-   *     }
+   *    {
+   *      _id: "5a037e6b60f72236d8e7c83d",
+   *      name: "Introduction to web development",
+   *      success: true
+   *    }
+   *
+   * @apiError NotFoundError Can't find the course. (Includes implicit authorization check.)
    */
   @Authorized(['teacher', 'admin'])
   @Put('/:id')
-  updateCourse(@Param('id') id: string, @Body() course: ICourse, @CurrentUser() currentUser: IUser) {
+  async updateCourse(@Param('id') id: string, @Body() course: ICourse, @CurrentUser() currentUser: IUser) {
     const conditions: any = {_id: id};
     if (currentUser.role !== 'admin') {
       conditions.$or = [
@@ -600,17 +575,12 @@ export class CourseController {
         {courseAdmin: currentUser._id}
       ];
     }
-    return Course.findOneAndUpdate(
-      conditions,
-      course,
-      {'new': true}
-    )
-      .then((c) => {
-        if (c) {
-          return c.toObject();
-        }
-        return undefined;
-      });
+    const updatedCourse = await Course.findOneAndUpdate(conditions, course, {'new': true});
+    if (updatedCourse) {
+      return {_id: updatedCourse.id, name: updatedCourse.name, success: true};
+    } else {
+      throw new NotFoundError();
+    }
   }
 
   /**
@@ -629,22 +599,19 @@ export class CourseController {
    *     }
    *
    * @apiError NotFoundError
-   * @apiError ForbiddenError Forbidden!
+   * @apiError ForbiddenError
    */
   @Authorized(['teacher', 'admin'])
   @Delete('/:id')
   async deleteCourse(@Param('id') id: string, @CurrentUser() currentUser: IUser) {
-    const course = await Course.findOne({_id: id});
+    const course = await Course.findById(id);
     if (!course) {
       throw new NotFoundError();
     }
-    const courseAdmin = await User.findOne({_id: course.courseAdmin});
-    if (course.teachers.indexOf(currentUser._id) !== -1 || courseAdmin.equals(currentUser._id.toString())
-      || currentUser.role === 'admin') {
-      await course.remove();
-      return {result: true};
-    } else {
-      throw new ForbiddenError('Forbidden!');
+    if (!course.checkPrivileges(currentUser).userCanEditCourse) {
+      throw new ForbiddenError();
     }
+    await course.remove();
+    return {result: true};
   }
 }
