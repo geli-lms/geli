@@ -85,7 +85,7 @@ export class LectureEditComponent implements OnInit, OnDestroy {
 
       this.saveFileService.save(lecture.name, JSON.stringify(lectureJSON, null, 2));
     } catch (err) {
-      this.snackBar.open('Export lecture failed ' + err.json().message, 'Dismiss');
+      this.snackBar.open('Export lecture failed ' + err.error.message, 'Dismiss');
     }
   }
 
@@ -215,7 +215,7 @@ export class LectureEditComponent implements OnInit, OnDestroy {
 
       this.saveFileService.save(unit.name, JSON.stringify(unitJSON, null, 2));
     } catch (err) {
-      this.snackBar.open('Export unit failed ' + err.json().message, 'Dismiss');
+      this.snackBar.open('Export unit failed ' + err.error.message, 'Dismiss');
     }
   };
 
