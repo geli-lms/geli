@@ -1,14 +1,16 @@
-<h1>Profile</h1>
+<div class="user-detail-wrapper">
+    <h1>Profile</h1>
 
-<app-user-profile *ngIf="user" [user]="user"
-                  [userId]="this.userService.user._id"></app-user-profile>
+    <app-user-profile *ngIf="user" [user]="user"
+                      [userId]="this.userService.user._id"></app-user-profile>
 
-<p *ngIf="user && (userService.isLoggedInUser(user) || userService.isAdmin())">
-  <button mat-raised-button color="primary"
-          routerLink="{{ getEditLink() }}">
-    <mat-icon>edit</mat-icon>
-    Edit profile
-  </button>
-</p>
+    <p *ngIf="user && (userService.isLoggedInUser(user) || userService.isAdmin())">
+        <button mat-raised-button color="primary"
+                routerLink="{{ getEditLink() }}">
+            <mat-icon>edit</mat-icon>
+            Edit profile
+        </button>
+    </p>
 
-<app-user-report *ngIf="user" [user]="user"></app-user-report>
+    <app-user-report *ngIf="user" [user]="user"></app-user-report>
+</div>
