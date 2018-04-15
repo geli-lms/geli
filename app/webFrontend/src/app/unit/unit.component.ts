@@ -64,7 +64,7 @@ export class UnitComponent implements OnInit, AfterViewInit {
     for(const unit of this.units) {
       if (unit.unitCreator) {
         console.dir(unit);
-        const user = <IUser> await this.userDataService.readSingleItem(unit.unitCreator.id);
+        const user = <IUser> await this.userDataService.readSingleItem(unit.unitCreator);
         this.users.push(user);
       }
     }

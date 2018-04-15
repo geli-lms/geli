@@ -1,6 +1,6 @@
 import {
   Body, JsonController, UseBefore, Get, Param, QueryParam, Put, Delete, Authorized, CurrentUser,
-  BadRequestError, ForbiddenError, UploadedFile, Post
+  BadRequestError, ForbiddenError, UploadedFile, Post, NotFoundError
 } from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import fs = require('fs');
@@ -263,12 +263,14 @@ export class UserController {
    *     }
    */
   @Get('/:id')
-  getUser(@Param('id') id: string, @CurrentUser() currentUser?: IUser) {
-    return User.findById(id)
-      .populate('progress')
-      .then((user) => {
-        return this.cleanUserObject(id, user, currentUser);
-      });
+  async getUser(@Param('id') id: string, @CurrentUser() currentUser?: IUser) {
+    const user = await User.findById(id)
+      .populate('progress');
+
+    if (user) {
+      throw new NotFoundError('');
+    }
+    return this.cleanUserObject(id, user, currentUser);
   }
 
   /**

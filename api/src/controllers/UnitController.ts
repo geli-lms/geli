@@ -36,9 +36,13 @@ export class UnitController {
    *     }
    */
   @Get('/:id')
-  getUnit(@Param('id') id: string) {
-    return Unit.findById(id)
-    .then((u) => u.toObject());
+  async getUnit(@Param('id') id: string) {
+    const unit = await Unit.findById(id);
+
+    if (unit) {
+      throw new NotFoundError('');
+    }
+    return unit;
   }
 
   /**
@@ -77,7 +81,7 @@ export class UnitController {
   @Post('/')
   addUnit(@Body() data: any, @CurrentUser() currentUser: IUser) {
     // discard invalid requests
-    data.model.unitCreator = currentUser._id;
+    data.model.unitCreator = currentUser._id.toString();
     this.checkPostParam(data);
 
     return Unit.create(data.model)
