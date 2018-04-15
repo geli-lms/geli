@@ -51,6 +51,10 @@ export const errorCodes = {
         code: 'wrongTypeCSV',
         text: 'Wrong type allowed are just csv files.'
       }
+    },
+    cancel: {
+      code: 'UploadCancel',
+      text: 'File upload was cancelled.'
     }
   },
   save: {

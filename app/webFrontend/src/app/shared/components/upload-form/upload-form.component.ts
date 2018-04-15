@@ -1,6 +1,7 @@
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {FileUploader, FileUploaderOptions} from 'ng2-file-upload';
 import {MatSnackBar} from '@angular/material';
+import {errorCodes} from '../../../../../../../api/src/config/errorCodes';
 
 @Component({
   selector: 'app-upload-form',
@@ -60,6 +61,7 @@ export class UploadFormComponent implements OnInit, OnChanges {
 
     this.fileUploader.onCancelItem = () => {
       this.fileUploader.isUploading = false;
+      throw(errorCodes.upload.cancel);
     };
 
     this.fileUploader.onBuildItemForm = (fileItem: any, form: any) => {
