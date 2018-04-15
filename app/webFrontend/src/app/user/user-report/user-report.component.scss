@@ -1,12 +1,31 @@
 $min-screen-size: 520px;
+$small-box-size: 280px;
+$large-box-size: 500px;
 
 mat-card {
   margin-bottom: 1rem;
+
+  &.ng-star-inserted {
+    max-width: 500px;
+    min-width: $small-box-size;
+
+    @media screen and (max-width: $min-screen-size) {
+      max-width: $small-box-size;
+    }
+  }
 
   ngx-charts-advanced-pie-chart > div:first-child {
     display: flex;
     height: 100% !important; // !important to override the inline style of the ngx-charts-advanced-pie-chart component. Don't use it in other cases!
     width: 100% !important;
+
+    .advanced-pie-legend-wrapper, .advanced-pie-legend, .ngx-charts-outer {
+      width: 100% !important;
+    }
+
+    .ngx-charts {
+      width: 200px;
+    }
 
     @media screen and (max-width: $min-screen-size) {
       flex-direction: column;
