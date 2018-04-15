@@ -65,6 +65,25 @@ describe('Course', () => {
         .catch(err => err.response);
         res.status.should.be.equal(401);
     });
+
+
+    it('should have a course fixture with "accesskey" enrollType', async () => {
+      const course = await Course.findOne({enrollType: 'accesskey'});
+      should.exist(course);
+    });
+
+    it('should not leak access keys to students', async () => {
+      const student = await FixtureUtils.getRandomStudent();
+
+      const res = await chai.request(app)
+        .get(BASE_URL)
+        .set('Authorization', `JWT ${JwtUtils.generateToken(student)}`);
+      res.status.should.be.equal(200);
+
+      res.body.forEach((course: any) => {
+        should.equal(course.accessKey, undefined);
+      });
+    });
   });
 
   describe(`POST ${BASE_URL}`, () => {
@@ -146,10 +165,19 @@ describe('Course', () => {
       const savedCourse = await testData.save();
       testDataUpdate._id = savedCourse._id;
 
-      const res = await chai.request(app)
+      let res = await chai.request(app)
         .put(`${BASE_URL}/${testDataUpdate._id}`)
         .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
         .send(testDataUpdate);
+
+      res.should.have.status(200);
+      res.body.success.should.be.eq(true);
+      res.body.name.should.be.eq(testDataUpdate.name);
+      res.body._id.should.be.eq(testDataUpdate.id);
+
+      res = await chai.request(app)
+        .get(`${BASE_URL}/${res.body._id}`)
+        .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`);
 
       res.should.have.status(200);
       res.body.name.should.be.eq(testDataUpdate.name);
