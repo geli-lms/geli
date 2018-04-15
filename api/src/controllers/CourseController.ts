@@ -333,16 +333,17 @@ export class CourseController {
    */
   @Authorized(['teacher', 'admin'])
   @Post('/')
-  addCourse(@Body() course: ICourse, @Req() request: Request, @CurrentUser() currentUser: IUser) {
+  async addCourse(@Body() course: ICourse, @Req() request: Request, @CurrentUser() currentUser: IUser) {
+    // Note that this might technically have a race condition, but it should never matter because the new course ids remain unique.
+    // If a strict version is deemed important, see mongoose Model.findOneAndUpdate for a potential approach.
+    const existingCourse = await Course.findOne({name: course.name});
+    if (existingCourse) {
+      throw new BadRequestError(errorCodes.errorCodes.course.duplicateName.code);
+    }
     course.courseAdmin = currentUser;
-    return Course.findOne({name: course.name})
-      .then((existingCourse) => {
-        if (existingCourse) {
-          throw new BadRequestError(errorCodes.errorCodes.course.duplicateName.code);
-        }
-        return new Course(course).save()
-          .then((c) => c.toObject());
-      });
+    const newCourse = new Course(course);
+    await newCourse.save();
+    return newCourse.toObject();
   }
 
   /**
