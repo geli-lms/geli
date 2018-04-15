@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {UserService} from '../../shared/services/user.service';
-import {IFile} from '../../../../../../shared/models/mediaManager/IFile';
+import {IFile} from '../../../../../../shared/models/IFile';
 import {User} from '../../models/User';
 
 @Component({
