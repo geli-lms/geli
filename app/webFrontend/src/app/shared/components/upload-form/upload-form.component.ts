@@ -1,7 +1,6 @@
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {FileUploader, FileUploaderOptions} from 'ng2-file-upload';
 import {MatSnackBar} from '@angular/material';
-import {errorCodes} from '../../../../../../../api/src/config/errorCodes';
 
 @Component({
   selector: 'app-upload-form',
@@ -59,9 +58,10 @@ export class UploadFormComponent implements OnInit, OnChanges {
 
     this.fileUploader = new FileUploader(uploadOptions);
 
-    this.fileUploader.onCancelItem = () => {
-      this.fileUploader.isUploading = false;
-      throw(errorCodes.upload.cancel);
+    this.fileUploader.onCancelItem = (file) => {
+      // set error true, so dialog is not closed automatically
+      this.error = true;
+      this.snackBar.open(`upload cancelled for ${file._file.name}`, 'Dismiss');
     };
 
     this.fileUploader.onBuildItemForm = (fileItem: any, form: any) => {
@@ -86,16 +86,21 @@ export class UploadFormComponent implements OnInit, OnChanges {
     };
 
     this.fileUploader.onCompleteItem = (file, response, status, headers) => {
-      const responseObject = JSON.parse(response);
-      if (status === 200) {
-        this.error = false;
-      }
-      if (responseObject._id && status === 200) {
-        if (this.first) {
-          this.first = false;
+      try {
+        const responseObject = JSON.parse(response);
+
+        if (status === 200) {
+          this.error = false;
         }
-        // all subsequent (if any) uploads will be added to this unit
-        this.onFileUploaded.emit(responseObject);
+        if (responseObject._id && status === 200) {
+          if (this.first) {
+            this.first = false;
+          }
+          // all subsequent (if any) uploads will be added to this unit
+          this.onFileUploaded.emit(responseObject);
+        }
+      } catch (e) {
+
       }
     };
 
@@ -109,7 +114,6 @@ export class UploadFormComponent implements OnInit, OnChanges {
       item.isError = false;
       item.isUploaded = false;
       this.snackBar.open(`${item._file.name} failed to upload`, 'Dismiss');
-      this.fileUploader.isUploading = false;
     };
   }
 
