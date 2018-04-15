@@ -70,8 +70,8 @@ export class UserEditComponent implements OnInit {
         email: this.user.email,
       });
       this.titleService.setTitleCut(['Edit User: ', this.user.profile.firstName]);
-    } catch (error) {
-      this.snackBar.open(error.json().message, 'Dismiss');
+    } catch (err) {
+      this.snackBar.open(err.error.message, 'Dismiss');
     }
     this.cdRef.detectChanges();
   }
