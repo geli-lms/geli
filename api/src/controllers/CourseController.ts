@@ -473,54 +473,30 @@ export class CourseController {
    * @apiSuccess {Course} course Left course.
    *
    * @apiSuccessExample {json} Success-Response:
-   *     {
-   *         "_id": "5a037e6b60f72236d8e7c83d",
-   *         "updatedAt": "2017-11-08T22:00:11.869Z",
-   *         "createdAt": "2017-11-08T22:00:11.263Z",
-   *         "name": "Introduction to web development",
-   *         "description": "Whether you're just getting started with Web development or are just expanding your horizons...",
-   *         "courseAdmin": {
-   *             "_id": "5a037e6a60f72236d8e7c815",
-   *             "updatedAt": "2017-11-08T22:00:10.898Z",
-   *             "createdAt": "2017-11-08T22:00:10.898Z",
-   *             "email": "teacher2@test.local",
-   *             "isActive": true,
-   *             "role": "teacher",
-   *             "profile": {
-   *                 "firstName": "Ober",
-   *                 "lastName": "Lehrer"
-   *             },
-   *             "id": "5a037e6a60f72236d8e7c815"
-   *         },
-   *         "active": true,
-   *         "__v": 1,
-   *         "whitelist": [],
-   *         "enrollType": "free",
-   *         "lectures": [],
-   *         "students": [],
-   *         "teachers": [],
-   *         "id": "5a037e6b60f72236d8e7c83d",
-   *         "hasAccessKey": false
-   *     }
+   *      {result: true}
    *
    * @apiError NotFoundError
+   * @apiError ForbiddenError
    */
   @Authorized(['student'])
   @Post('/:id/leave')
   async leaveStudent(@Param('id') id: string, @Body() data: any, @CurrentUser() currentUser: IUser) {
     const course = await Course.findById(id);
-        if (!course) {
-          throw new NotFoundError();
-        }
-        const index: number = course.students.indexOf(currentUser._id);
-        if (index >= 0) {
-          course.students.splice(index, 1);
-          await NotificationSettings.findOne({'user': currentUser, 'course': course}).remove();
-          const savedCourse = await course.save();
-          return savedCourse.toObject();
-        }
-        return course.toObject();
+    if (!course) {
+      throw new NotFoundError();
+    }
+    const index: number = course.students.indexOf(currentUser._id);
+    if (index >= 0) {
+      course.students.splice(index, 1);
+      await NotificationSettings.findOne({'user': currentUser, 'course': course}).remove();
+      const savedCourse = await course.save();
+      return {result: true};
+    } else {
+      // This equals an implicit !course.checkPrivileges(currentUser).userIsCourseStudent check.
+      throw new ForbiddenError();
+    }
   }
+
 
   /**
    * @api {post} /api/courses/:id/whitelist Whitelist students for course
