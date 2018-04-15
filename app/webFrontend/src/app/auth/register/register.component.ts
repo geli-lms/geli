@@ -77,7 +77,7 @@ export class RegisterComponent implements OnInit {
         this.registrationDone = true;
       })
       .catch((error) => {
-        const errormessage = error.json().message || error.json().errmsg;
+        const errormessage = error.error.message || error.error.errmsg;
         switch (errormessage) {
           case errorCodes.mail.duplicate.code: {
             this.mailError = errorCodes.mail.duplicate.text;
