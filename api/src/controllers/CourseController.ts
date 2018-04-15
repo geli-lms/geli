@@ -215,16 +215,27 @@ export class CourseController {
    *         "hasAccessKey": false
    *     }
    *
-   * @apiError NotFoundError
+   * @apiError NotFoundError Includes implicit authorization check.
+   * @apiError ForbiddenError (Redundant) Authorization check.
    */
   @Get('/:id')
   async getCourse(@Param('id') id: string, @CurrentUser() currentUser: IUser) {
     const course = await Course.findOne({
       ...this.userReadConditions(currentUser),
       _id: id
-    })
-    // TODO: Do not send lectures when student has no access
-      .populate({
+    });
+
+    if (!course) {
+      throw new NotFoundError();
+    }
+
+    // This is currently a redundant check, because userReadConditions above already restricts access!
+    // (I.e. just in case future changes break something.)
+    if (!course.checkPrivileges(currentUser).userCanView) {
+      throw new ForbiddenError();
+    }
+
+    await course.populate({
         path: 'lectures',
         populate: {
           path: 'units',
@@ -240,11 +251,7 @@ export class CourseController {
       .populate('teachers')
       .populate('students')
       .populate('whitelist')
-      .exec();
-
-    if (!course) {
-      throw new NotFoundError();
-    }
+      .execPopulate();
 
     course.lectures = await Promise.all(course.lectures.map(async (lecture) => {
       lecture.units = await Promise.all(lecture.units.map(async (unit: IUnitModel) => {
