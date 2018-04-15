@@ -231,10 +231,10 @@ export class CourseService extends DataService {
       .toPromise();
   }
 
-  leaveStudent(courseId: string): Promise<ICourse> {
-    return this.backendService
+  async leaveStudent(courseId: string): Promise<boolean> {
+    return (await this.backendService
       .post(this.apiPath + courseId + '/leave', {})
-      .toPromise();
+      .toPromise()).result;
   }
 }
 
