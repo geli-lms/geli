@@ -165,10 +165,19 @@ describe('Course', () => {
       const savedCourse = await testData.save();
       testDataUpdate._id = savedCourse._id;
 
-      const res = await chai.request(app)
+      let res = await chai.request(app)
         .put(`${BASE_URL}/${testDataUpdate._id}`)
         .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
         .send(testDataUpdate);
+
+      res.should.have.status(200);
+      res.body.success.should.be.eq(true);
+      res.body.name.should.be.eq(testDataUpdate.name);
+      res.body._id.should.be.eq(testDataUpdate.id);
+
+      res = await chai.request(app)
+        .get(`${BASE_URL}/${res.body._id}`)
+        .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`);
 
       res.should.have.status(200);
       res.body.name.should.be.eq(testDataUpdate.name);

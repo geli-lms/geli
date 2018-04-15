@@ -558,26 +558,17 @@ export class CourseController {
    * @apiSuccess {Course} course Updated course.
    *
    * @apiSuccessExample {json} Success-Response:
-   *     {
-   *         "_id": "5a037e6b60f72236d8e7c83d",
-   *         "updatedAt": "2018-01-29T23:43:07.220Z",
-   *         "createdAt": "2017-11-08T22:00:11.263Z",
-   *         "name": "Introduction to web development",
-   *         "description": "Whether you're just getting started with Web development or are just expanding your horizons...",
-   *         "courseAdmin": "5a037e6a60f72236d8e7c815",
-   *         "active": true,
-   *         "__v": 1,
-   *         "whitelist": [],
-   *         "enrollType": "free",
-   *         "lectures": [],
-   *         "students": [],
-   *         "teachers": [],
-   *         "hasAccessKey": false
-   *     }
+   *    {
+   *      _id: "5a037e6b60f72236d8e7c83d",
+   *      name: "Introduction to web development",
+   *      success: true
+   *    }
+   *
+   * @apiError NotFoundError Can't find the course. (Includes implicit authorization check.)
    */
   @Authorized(['teacher', 'admin'])
   @Put('/:id')
-  updateCourse(@Param('id') id: string, @Body() course: ICourse, @CurrentUser() currentUser: IUser) {
+  async updateCourse(@Param('id') id: string, @Body() course: ICourse, @CurrentUser() currentUser: IUser) {
     const conditions: any = {_id: id};
     if (currentUser.role !== 'admin') {
       conditions.$or = [
@@ -585,17 +576,12 @@ export class CourseController {
         {courseAdmin: currentUser._id}
       ];
     }
-    return Course.findOneAndUpdate(
-      conditions,
-      course,
-      {'new': true}
-    )
-      .then((c) => {
-        if (c) {
-          return c.toObject();
-        }
-        return undefined;
-      });
+    const updatedCourse = await Course.findOneAndUpdate(conditions, course, {'new': true});
+    if (updatedCourse) {
+      return {_id: updatedCourse.id, name: updatedCourse.name, success: true};
+    } else {
+      throw new NotFoundError();
+    }
   }
 
   /**
