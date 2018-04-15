@@ -32,7 +32,6 @@ import * as mongoose from 'mongoose';
 import {Schema} from 'mongoose';
 import ObjectId = mongoose.Types.ObjectId;
 import {IWhitelistUser} from '../../../shared/models/IWhitelistUser';
-import Pick from '../utilities/Pick';
 
 const uploadOptions = {
   storage: multer.diskStorage({
@@ -489,7 +488,7 @@ export class CourseController {
     if (index >= 0) {
       course.students.splice(index, 1);
       await NotificationSettings.findOne({'user': currentUser, 'course': course}).remove();
-      const savedCourse = await course.save();
+      await course.save();
       return {result: true};
     } else {
       // This equals an implicit !course.checkPrivileges(currentUser).userIsCourseStudent check.
