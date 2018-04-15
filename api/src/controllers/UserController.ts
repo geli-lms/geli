@@ -240,6 +240,8 @@ export class UserController {
    *
    * @apiSuccess {User} user User.
    *
+   * @apiError NotFoundError User was not found.
+   *
    * @apiSuccessExample {json} Success-Response:
    *     {
    *         "_id": "5a037e6a60f72236d8e7c81d",
@@ -263,18 +265,13 @@ export class UserController {
    *     }
    */
   @Get('/:id([a-fA-F0-9]{24})')
-  getUser(@Param('id') id: string, @CurrentUser() currentUser?: IUser) {
-    return User.findById(id)
-      .populate('progress')
-      .then((user) => {
-        if (!user) {
-          throw new NotFoundError(`User was not found.`)
-        }
-        return this.cleanUserObject(id, user, currentUser);
-      })
-      .catch((error) => {
-        throw new InternalServerError(error);
-      });
+  async getUser(@Param('id') id: string, @CurrentUser() currentUser?: IUser) {
+    const user = await User.findById(id).populate('progress')
+
+    if (!user) {
+      throw new NotFoundError(`User was not found.`)
+    }
+    return this.cleanUserObject(id, user, currentUser);
   }
 
   /**
