@@ -58,6 +58,10 @@ export class UploadFormComponent implements OnInit, OnChanges {
 
     this.fileUploader = new FileUploader(uploadOptions);
 
+    this.fileUploader.onCancelItem = () => {
+      this.fileUploader.isUploading = false;
+    };
+
     this.fileUploader.onBuildItemForm = (fileItem: any, form: any) => {
       form.append('data', JSON.stringify(this.additionalData))
     };
@@ -103,6 +107,7 @@ export class UploadFormComponent implements OnInit, OnChanges {
       item.isError = false;
       item.isUploaded = false;
       this.snackBar.open(`${item._file.name} failed to upload`, 'Dismiss');
+      this.fileUploader.isUploading = false;
     };
   }
 
