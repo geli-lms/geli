@@ -653,22 +653,19 @@ export class CourseController {
    *     }
    *
    * @apiError NotFoundError
-   * @apiError ForbiddenError Forbidden!
+   * @apiError ForbiddenError
    */
   @Authorized(['teacher', 'admin'])
   @Delete('/:id')
   async deleteCourse(@Param('id') id: string, @CurrentUser() currentUser: IUser) {
-    const course = await Course.findOne({_id: id});
+    const course = await Course.findById(id);
     if (!course) {
       throw new NotFoundError();
     }
-    const courseAdmin = await User.findOne({_id: course.courseAdmin});
-    if (course.teachers.indexOf(currentUser._id) !== -1 || courseAdmin.equals(currentUser._id.toString())
-      || currentUser.role === 'admin') {
-      await course.remove();
-      return {result: true};
-    } else {
-      throw new ForbiddenError('Forbidden!');
+    if (!course.checkPrivileges(currentUser).userCanEditCourse) {
+      throw new ForbiddenError();
     }
+    await course.remove();
+    return {result: true};
   }
 }
