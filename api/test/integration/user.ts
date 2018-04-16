@@ -326,7 +326,9 @@ describe('User', () => {
         .attach('file', fs.readFileSync('test/resources/test.png'), 'test.png');
 
       res.status.should.be.equal(200);
-      res.body.profile.picture.name.should.be.equal('test.png');
+      res.body.profile.picture.should.be.an('object');
+      res.body.profile.picture.should.have.all.keys('alias', 'name', 'path');
+      res.body.profile.picture.alias.should.be.equal('test.png');
     });
   });
 

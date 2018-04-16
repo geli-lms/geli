@@ -14,7 +14,7 @@
 
   <ace-editor class="user-code-editor"
               #codeEditor
-              [(text)]="model.code"
+              [(text)]="wholeInputCode"
               [mode]="'javascript'"
               [theme]="'github'"
               [readOnly]="false">
@@ -22,6 +22,8 @@
 
   <button mat-raised-button (click)="validate()">Validate</button>
   <app-button-save-cancel (save)="addUnit()" (cancel) ="onCancel()"></app-button-save-cancel>
-  <div *ngIf="logs!==undefined"><strong>Logs</strong></div>
-  <pre>{{logs}}</pre>
+  <div *ngIf="logs!==undefined" class="logs-title">
+    Logs:
+    <pre>{{logs}}</pre>
+  </div>
 </div>
