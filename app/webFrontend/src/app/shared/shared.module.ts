@@ -21,6 +21,8 @@ import {MarkdownEditorComponent} from './components/markdown-editor/markdown-edi
 import {AceEditorModule} from 'ng2-ace-editor';
 import {PickMediaDialog} from './components/pick-media-dialog/pick-media-dialog.component';
 import {TranslateModule} from '@ngx-translate/core';
+import {AdminMarkdownEditComponent} from './components/admin-markdown-edit/admin-markdown-edit.component';
+import {ImprintAndInfoService} from './services/imprint-and-info.service';
 
 @NgModule({
   imports: [
@@ -50,6 +52,7 @@ import {TranslateModule} from '@ngx-translate/core';
     ChangePasswordDialogComponent,
     MarkdownEditorComponent,
     PickMediaDialog,
+    AdminMarkdownEditComponent,
   ],
   exports: [
     GravatarDirective,
@@ -70,6 +73,7 @@ import {TranslateModule} from '@ngx-translate/core';
     ChangePasswordDialogComponent,
     PickMediaDialog,
     TranslateModule,
+    AdminMarkdownEditComponent,
   ],
   entryComponents: [
     UploadFormDialog,

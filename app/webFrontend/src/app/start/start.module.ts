@@ -10,6 +10,7 @@ import {RouterModule} from '@angular/router';
 import {CourseModule} from '../course/course.module';
 import {SharedModule} from '../shared/shared.module';
 import {NotificationModule} from '../notification/notification.module';
+import {InfoBoxComponent} from './homescreen/info-box/info-box.component';
 
 @NgModule({
   imports: [
@@ -25,6 +26,7 @@ import {NotificationModule} from '../notification/notification.module';
     DashboardStudentComponent,
     DashboardTeacherComponent,
     DashboardAdminComponent,
+    InfoBoxComponent,
   ],
   exports: [
     StartComponent,

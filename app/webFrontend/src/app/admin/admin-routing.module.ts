@@ -4,6 +4,7 @@ import {AuthGuardService} from '../shared/services/auth-guard.service';
 import {UserAdminComponent} from './user-admin/user-admin.component';
 import {ImprintAdminComponent} from './imprint-admin/imprint-admin.component';
 import {AdminComponent} from './admin.component';
+import {InfoboxAdminComponent} from "./infobox-admin/infobox-admin.component";
 
 const routes: Routes = [
   {
@@ -26,6 +27,12 @@ const routes: Routes = [
       {
         path: 'imprint',
         component: ImprintAdminComponent,
+        canActivate: [AuthGuardService],
+        data: {roles: ['admin']}
+      },
+      {
+        path: 'infoBox',
+        component: InfoboxAdminComponent,
         canActivate: [AuthGuardService],
         data: {roles: ['admin']}
       },

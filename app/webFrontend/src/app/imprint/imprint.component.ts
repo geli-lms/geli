@@ -1,7 +1,5 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {IConfig} from '../../../../../shared/models/IConfig';
-import {MarkdownService} from '../shared/services/markdown.service';
-import {ConfigService} from '../shared/services/data.service';
+import {ImprintAndInfoService} from '../shared/services/imprint-and-info.service';
 import {TitleService} from '../shared/services/title.service';
 
 @Component({
@@ -10,25 +8,16 @@ import {TitleService} from '../shared/services/title.service';
   styleUrls: ['./imprint.component.scss']
 })
 export class ImprintComponent implements OnInit {
-  imprint: IConfig;
-  imprintRendered: string;
-  constructor(private service: ConfigService,
-              private mdService: MarkdownService,
+  renderedContent: string;
+  constructor(private imprintService: ImprintAndInfoService,
               private titleService: TitleService) { }
 
   ngOnInit() {
     this.titleService.setTitle('Imprint');
-    void this.loadImprint();
+    this.getData();
   }
-  async loadImprint() {
-    try {
-      this.imprint = <IConfig><any> await this.service.readSingleItem('public/imprint');
-      this.renderHtml();
-    } catch (error) {
-      this.imprintRendered = '';
-    }
-  }
-  renderHtml() {
-    this.imprintRendered = this.mdService.render(this.imprint.value) || 'No imprint yet!';
+
+  async getData() {
+    this.renderedContent = await this.imprintService.loadConfig('infoBox');
   }
 }

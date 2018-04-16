@@ -41,6 +41,7 @@ import {DataSharingService} from './shared/services/data-sharing.service';
 import {NotificationModule} from './notification/notification.module';
 import {HttpClient} from '@angular/common/http';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
+import {ImprintAndInfoService} from './shared/services/imprint-and-info.service';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -49,7 +50,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
   ],
   imports: [
     BrowserModule,
@@ -102,6 +103,7 @@ export function HttpLoaderFactory(http: HttpClient) {
       useExisting: RavenErrorHandler
     },
     DataSharingService,
+    ImprintAndInfoService,
   ],
   bootstrap: [AppComponent]
 })
