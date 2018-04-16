@@ -3,3 +3,4 @@ build/test/**/*.js
 --reporter spec
 --require test/mocha.env.js
 --timeout 10000
+--exit

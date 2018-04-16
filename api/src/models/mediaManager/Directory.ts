@@ -45,7 +45,8 @@ const directorySchema = new mongoose.Schema({
 });
 
 directorySchema.pre('remove', async function(next: () => void) {
-  for (const subdir of this.subDirectories) {
+  const localDir = <IDirectoryModel><any>this;
+  for (const subdir of localDir.subDirectories) {
     // linting won't let us use 'Directory' before it is actually declared
     // tslint:disable-next-line:no-use-before-declare
     const model = await Directory.findById(subdir);
@@ -53,7 +54,7 @@ directorySchema.pre('remove', async function(next: () => void) {
       await model.remove();
     }
   }
-  for (const file of this.files) {
+  for (const file of localDir.files) {
     const model = await File.findById(file);
     if (model) {
       await model.remove();

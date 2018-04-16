@@ -41,13 +41,14 @@ const fileSchema = new mongoose.Schema({
 });
 
 fileSchema.pre('remove', async function(next: () => void) {
-  if (fs.existsSync(this.physicalPath)) {
-    await promisify(fs.unlink)(this.physicalPath);
+  const localFile = <IFileModel><any>this;
+  if (fs.existsSync(localFile.physicalPath)) {
+    await promisify(fs.unlink)(localFile.physicalPath);
   }
 
-  const units2Check: IFileUnitModel[] = <IFileUnitModel[]>await FileUnit.find({files: { $in: [ this._id ] }});
+  const units2Check: IFileUnitModel[] = <IFileUnitModel[]>await FileUnit.find({files: { $in: [ localFile._id ] }});
   Promise.all(units2Check.map(async unit => {
-    const index = unit.files.indexOf(this._id);
+    const index = unit.files.indexOf(localFile._id);
     if (index > -1) {
       unit.files.splice(index, 1);
       await unit.save();
