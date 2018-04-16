@@ -60,6 +60,7 @@ install:
   - npm install
   - npm prune          # remove not (anymore) in package.json required packages (to keep the cache clean)
   - cd ..
+  - travis_wait 30 mvn install
 
 script:
   # check for versions
