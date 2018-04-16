@@ -7,6 +7,7 @@ import {InternalServerError} from 'routing-controllers';
 import {IUser} from '../../../shared/models/IUser';
 import * as winston from 'winston';
 import {ObjectID} from 'bson';
+import {Directory} from './mediaManager/Directory';
 import {IProperties} from '../../../shared/models/IProperties';
 import Pick from '../utilities/Pick';
 
@@ -94,11 +95,17 @@ const courseSchema = new mongoose.Schema({
 );
 
 // Cascade delete
-courseSchema.pre('remove', function (next: () => void) {
-  Lecture.find({'_id': {$in: this.lectures}}).exec()
-    .then((lectures) => Promise.all(lectures.map(lecture => lecture.remove())))
-    .then(next)
-    .catch(next);
+courseSchema.pre('remove', async function (next) {
+  const localCourse = <ICourseModel><any>this;
+  try {
+    const deletedLectures = await Lecture.deleteMany({'_id': {$in: localCourse.lectures}}).exec();
+    const deletedDirs = await Directory.deleteMany({'_id': {$in: localCourse.media}}).exec();
+  } catch (error) {
+    const debug = 0;
+    next();
+  }
+
+  next();
 });
 
 courseSchema.methods.exportJSON = async function (sanitize: boolean = true) {
