@@ -65,7 +65,7 @@ export class UploadFormComponent implements OnInit, OnChanges {
     };
 
     this.fileUploader.onBuildItemForm = (fileItem: any, form: any) => {
-      form.append('data', JSON.stringify(this.additionalData))
+      form.append('data', JSON.stringify(this.additionalData));
     };
 
     this.fileUploader.onBeforeUploadItem = (fileItem) => {
@@ -127,7 +127,7 @@ export class UploadFormComponent implements OnInit, OnChanges {
   clearQueue() {
     this.fileUploader.clearQueue();
     if (this.fileUploader.queue.length > 0) {
-      this.snackBar.open('Queue couldn\'t be cleared.', 'Dismiss')
+      this.snackBar.open('Queue couldn\'t be cleared.', 'Dismiss');
     } else {
       this.onFileSelectedChange.emit(false);
     }

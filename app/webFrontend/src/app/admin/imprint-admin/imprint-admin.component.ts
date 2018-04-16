@@ -21,7 +21,7 @@ export class ImprintAdminComponent implements OnInit {
               private snackBar: MatSnackBar) { }
 
   ngOnInit() {
-    void this.loadImprint()
+    void this.loadImprint();
   }
 
   async loadImprint() {
@@ -35,9 +35,9 @@ export class ImprintAdminComponent implements OnInit {
   onSave(markdown: string ) {
     try {
       void this.service.updateItem({_id: 'imprint', data: markdown});
-      this.snackBar.open('Imprint saved', '', {duration: 3000})
+      this.snackBar.open('Imprint saved', '', {duration: 3000});
     } catch (error) {
-      this.snackBar.open(errorCodes.save.couldNotSaveImprint.text, '', {duration: 3000})
+      this.snackBar.open(errorCodes.save.couldNotSaveImprint.text, '', {duration: 3000});
     }
     void this.loadImprint();
   }

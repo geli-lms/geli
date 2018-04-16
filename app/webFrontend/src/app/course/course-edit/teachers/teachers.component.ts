@@ -30,8 +30,9 @@ export class TeachersComponent implements OnInit {
     this.courseService.readSingleItem(this.courseId).then((course: ICourse) => {
       this.course = course;
       this.course.teachers.forEach(member =>
-        this.foundTeachers = this.foundTeachers.filter(user => user._id !== member._id))}
-    );
+        this.foundTeachers = this.foundTeachers.filter(user => user._id !== member._id)
+      );
+    });
   }
 
   isUserInCourse(user: IUser) {

@@ -78,7 +78,7 @@ export class FixtureLoader {
 
       for (const file of files) {
         if (!fs.existsSync(file.path) && fs.existsSync(this.binaryDirectory + file.alias)) {
-          fs.copyFileSync(this.binaryDirectory + file.alias, file.path)
+          fs.copyFileSync(this.binaryDirectory + file.alias, file.path);
         }
       }
     }));
