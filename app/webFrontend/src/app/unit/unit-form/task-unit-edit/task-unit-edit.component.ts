@@ -78,7 +78,7 @@ export class TaskUnitEditComponent implements OnInit {
         (task) => {
           const message = `Task ${this.add ? 'created' : 'updated'}`;
           this.snackBar.open(message, '', {duration: 3000});
-          this.onDone()
+          this.onDone();
           return this.notificationService.createItem(
             {
               changedCourse: this.course,
@@ -92,7 +92,7 @@ export class TaskUnitEditComponent implements OnInit {
           this.snackBar.open(message, '', {duration: 3000});
         });
     }
-  };
+  }
 
   isTaskUnitValid() {
     const taskUnit = this.model;
@@ -100,45 +100,45 @@ export class TaskUnitEditComponent implements OnInit {
     if (taskUnit.name === null || taskUnit.name.trim() === '') {
       const message = 'Task not valid: Name is required';
       this.snackBar.open(message, '', {duration: 3000});
-      return false
+      return false;
     } else if (taskUnit.tasks.length === 0) {
       const message = 'Task not valid: At least one question is required';
       this.snackBar.open(message, '', {duration: 3000});
-      return false
+      return false;
     } else {
       // Check if all tasks i.e. questions are valid
       for (const task of taskUnit.tasks) {
         if (task.name === undefined || task.name.trim() === '') {
           const message = 'Task not valid: Every question requires some text';
           this.snackBar.open(message, '', {duration: 3000});
-          return false
+          return false;
         } else if (task.answers.length < 2) {
           const message = 'Task not valid: Every question requires at least two answers';
           this.snackBar.open(message, '', {duration: 3000});
-          return false
+          return false;
         } else {
           // Check if answers are valid
           let noAnswersChecked = true;
 
           for (const answer of task.answers) {
             if (noAnswersChecked) {
-              noAnswersChecked = !answer.value
+              noAnswersChecked = !answer.value;
             }
             if (answer.text === undefined || answer.text.trim() === '') {
               const message = 'Task not valid: Every answer requires some text';
               this.snackBar.open(message, '', {duration: 3000});
-              return false
+              return false;
             }
           }
           if (noAnswersChecked) {
             const message = 'Task not valid: Every question requires at least one checked answer';
             this.snackBar.open(message, '', {duration: 3000});
-            return false
+            return false;
           }
         }
       }
     }
-    return true
+    return true;
   }
 
   addTask() {

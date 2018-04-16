@@ -39,7 +39,7 @@ class EmailService {
 
     this.transporter = nodemailer.createTransport(this.mailTransportConfig, this.mailDefaultConfig);
     this.transporter.use('compile', markdown());
-  };
+  }
 
   public sendActivation(user: IUserModel) {
     if (!user) {

@@ -89,7 +89,7 @@ export class ReportController {
           { name: 'tried', value: progressStats.tried },
           { name: 'done', value: progressStats.done }
         ];
-      })
+      });
     });
 
     return courseObj;
@@ -246,7 +246,7 @@ export class ReportController {
       return {
         ...userProgress,
         progresses: remappedProgresses
-      }
+      };
     });
 
     const studentsWithUnitsAndProgress = await students.map((student: IUser) => {

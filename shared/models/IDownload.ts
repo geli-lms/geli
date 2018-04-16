@@ -6,5 +6,5 @@ export interface IDownload {
       unitId: string;
       files?: Array<Number>
     }]
-  }]
+  }];
 }
