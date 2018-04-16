@@ -24,11 +24,11 @@ export class DashboardAdminComponent extends DashboardBaseComponent {
 
   closeFab = () => {
     this.fabOpen = false;
-  };
+  }
 
   onFabClick = () => {
     this.fabOpen = !this.fabOpen;
-  };
+  }
 
   onImportCourse = () => {
     this.dialogService
@@ -43,5 +43,5 @@ export class DashboardAdminComponent extends DashboardBaseComponent {
           this.snackBar.open(res.result.message, '', {duration: 3000});
         }
       });
-  };
+  }
 }
