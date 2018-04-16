@@ -109,4 +109,4 @@ codeKataSchema.methods.toFile = function (): String  {
     + '\n' + this.test;
 };
 
-export {codeKataSchema, ICodeKataModel}
+export {codeKataSchema, ICodeKataModel};

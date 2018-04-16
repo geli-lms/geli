@@ -33,6 +33,6 @@ fileUnitSchema.methods.populateUnit = async function() {
 
 fileUnitSchema.methods.toFile = function() {
   return '';
-}
+};
 
-export {fileUnitSchema, IFileUnitModel}
+export {fileUnitSchema, IFileUnitModel};

@@ -2,7 +2,7 @@ import * as chai from 'chai';
 import {Server} from '../../src/server';
 import {FixtureLoader} from '../../fixtures/FixtureLoader';
 import {User} from '../../src/models/User';
-import * as errorCodes from '../../src/config/errorCodes'
+import * as errorCodes from '../../src/config/errorCodes';
 import {WhitelistUser} from '../../src/models/WhitelistUser';
 import {IUser} from '../../../shared/models/IUser';
 import {Course} from '../../src/models/Course';

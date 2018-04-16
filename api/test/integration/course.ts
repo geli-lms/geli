@@ -101,7 +101,7 @@ describe('Course', () => {
       res.status.should.be.equal(200);
       res.body.name.should.equal(testData.name);
       res.body.description.should.equal(testData.description);
-    })
+    });
   });
 
 
