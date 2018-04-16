@@ -191,14 +191,14 @@ function canUserRoleEditCourse(user: IUser) {
   const roleIsTeacher: boolean = user.role === 'teacher';
   const roleIsAdmin: boolean = user.role === 'admin';
   return roleIsTeacher || roleIsAdmin;
-};
+}
 
 function extractId(value: any, fallback?: any) {
   if (value instanceof Object) {
     if (value._bsontype === 'ObjectID') {
       return {_id: value.toString()};
     } else if ('id' in value) {
-      return {_id: value.id}
+      return {_id: value.id};
     }
   }
   return fallback;
@@ -231,7 +231,7 @@ courseSchema.methods.checkPrivileges = function (user: IUser) {
   return {roleCanEditCourse, userIsAdmin, courseAdmin,
       userIsCourseAdmin, userIsCourseTeacher, userIsCourseStudent,
       userCanEditCourse, userIsParticipant, userCanViewCourse};
-}
+};
 
 
 function arrayUnion(...arrays: any[]) {
