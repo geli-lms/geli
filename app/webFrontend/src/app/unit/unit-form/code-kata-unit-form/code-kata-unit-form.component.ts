@@ -129,13 +129,12 @@ export class CodeKataUnitFormComponent implements OnInit {
       delete this.model._course;
       const unit = await this.unitService.updateItem(this.model);
 
-      this.notificationService.createItem(
-        {
-          changedCourse: this.course,
-          changedLecture: this.lectureId,
-          changedUnit: unit,
-          text: 'Course ' + this.course.name + ' has an updated unit.'
-        });
+      this.notificationService.createItem({
+        changedCourse: this.course,
+        changedLecture: this.lectureId,
+        changedUnit: unit,
+        text: 'Course ' + this.course.name + ' has an updated unit.'
+      });
 
       this.snackBar.open('Code-Kata updated', 'Dismiss', {duration: 3000});
       this.onDone();

@@ -136,8 +136,10 @@ export class GeneralTabComponent implements OnInit {
       const course = await this.courseService.updateItem(request);
 
       this.notificationService.createItem({
-        changedCourse: course, changedLecture: null,
-        changedUnit: null, text: 'Course ' + course.name + ' has been updated.'
+        changedCourse: course,
+        changedLecture: null,
+        changedUnit: null,
+        text: 'Course ' + course.name + ' has been updated.'
       });
 
       this.showProgress.toggleLoadingGlobal(false);
@@ -181,14 +183,14 @@ export class GeneralTabComponent implements OnInit {
         if (!res) {
           return;
         }
-        this.notificationService.createItem(
-          {
-            changedCourse: this.courseOb, changedLecture: null,
-            changedUnit: null, text: 'Course ' + this.courseOb.name + ' has been deleted.'
-          })
-          .catch(console.error);
         await this.courseService.deleteItem(this.courseOb);
         await this.router.navigate(['/']);
+        this.notificationService.createItem({
+          changedCourse: this.courseOb,
+          changedLecture: null,
+          changedUnit: null,
+          text: 'Course ' + this.courseOb.name + ' has been deleted.'
+        });
       });
   }
 }
