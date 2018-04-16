@@ -24,7 +24,7 @@ export class BackendService {
     }
 
     return Observable.throw(err);
-  };
+  }
 
   get(serviceUrl: string): Observable<any> {
     return this.http.get(BackendService.API_URL + serviceUrl, {headers: this.authenticationService.authHeader()})
