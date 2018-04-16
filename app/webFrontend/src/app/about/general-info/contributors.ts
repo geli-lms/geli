@@ -15,7 +15,7 @@ export class ContributorsList {
       , new Contributor('Daniel', 'Kesselberg', '18SuSe', 'Student', 'danielkesselberg')
       , new Contributor('Max', 'Leppla', '18SuSe', 'Student', 'mleppla')
       , new Contributor('Michael', 'Narkus', '18SuSe', 'Student', 'MichaelNarkus')
-      , new Contributor('Torsten', 'Schlett', '18SuSe', 'Student', 'tross')
+      , new Contributor('Torsten', 'Schlett', '18SuSe', 'Student', 'torss')
       , new Contributor('Clara', 'Wurm', '18SuSe', 'Student', 'wurmc')
       , new Contributor('Lukas', 'Schardt', '18SuSe', 'Student', 'lukas-schardt')
       , new Contributor('Alper', 'Uygun', '18SuSe', 'Student', 'AlperUygun')
