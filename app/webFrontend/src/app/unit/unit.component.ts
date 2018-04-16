@@ -71,10 +71,7 @@ export class UnitComponent implements OnInit, AfterViewInit {
   }
 
   readUser(_id: any): string {
-    if(_id) {
-      const user = this.users.find(u => u._id == _id);
-      return user.profile.firstName + ' ' + user.profile.lastName;
-      }
+    return '@Paaddy';
   }
 
   ngOnInit() {

@@ -266,7 +266,7 @@ export class UserController {
   async getUser(@Param('id') id: string, @CurrentUser() currentUser?: IUser) {
     const user = await User.findById(id)
       .populate('progress');
-
+    console.dir(user);
     if (user) {
       throw new NotFoundError('');
     }
