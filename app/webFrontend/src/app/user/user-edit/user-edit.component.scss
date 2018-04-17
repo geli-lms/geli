@@ -1,7 +1,13 @@
-.user-form {
-  width: 300px;
+.edit-user-wrapper {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
 
-  .full-width {
-    width: 100%;
+  .user-form {
+    width: 300px;
+
+    .full-width {
+      width: 100%;
+    }
   }
 }
