@@ -10,6 +10,7 @@ import {isNullOrUndefined} from 'util';
 import {errorCodes} from '../config/errorCodes';
 
 const multer = require('multer');
+const mime = require('mime-types');
 
 const uploadOptions = {
   storage: multer.diskStorage({
@@ -318,14 +319,20 @@ export class UserController {
         if (user.profile.picture && user.profile.picture.path && fs.existsSync(user.profile.picture.path)) {
           fs.unlinkSync(user.profile.picture.path);
         }
-        user.profile.picture = {
-          _id: null,
-          name: file.filename,
-          alias: file.originalname,
-          path: file.path,
-          size: file.size
-        };
-        return user.save();
+        // look up mime-type of uploaded file (f.e. a jpg will return 'image/jpg'
+        const mimeFamily = mime.lookup(file.originalname).split('/', 1)[0]; // split received string at '/' to return family
+        if ( mimeFamily === 'image' ) {
+          user.profile.picture = {
+            _id: null,
+            name: file.filename,
+            alias: file.originalname,
+            path: file.path,
+            size: file.size
+          };
+          return user.save();
+        } else {
+          throw new ForbiddenError('Forbidden format in uploaded picture: ' + mimeFamily);
+        }
       })
       .then((user) => {
         return this.cleanUserObject(id, user, currentUser);
