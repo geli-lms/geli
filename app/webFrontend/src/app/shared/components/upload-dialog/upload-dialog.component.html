@@ -2,7 +2,7 @@
   <mat-tab label="Upload image">
     <div class="tab-content">
       <!-- TODO: Replace with shared upload form -->
-      <input type="file" name="fileupload" ng2FileSelect [uploader]="uploader" placeholder="Upload picture"/>
+      <input type="file" name="fileupload" ng2FileSelect [uploader]="uploader" placeholder="Upload picture" accept="image/*"/>
       <button mat-raised-button color="primary" disabled="{{!uploader.queue.length}}" (click)="uploadImage()">
         Upload picture
       </button>
