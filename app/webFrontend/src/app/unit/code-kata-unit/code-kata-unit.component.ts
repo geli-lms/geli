@@ -90,7 +90,7 @@ export class CodeKataComponent implements OnInit {
           this.progress = item;
         })
         .catch((err) => {
-          this.snackBar.open(`An error occurred: ${err.error.message}`, '', {duration: 3000})
+          this.snackBar.open(`An error occurred: ${err.error.message}`, '', {duration: 3000});
         });
     }
   }

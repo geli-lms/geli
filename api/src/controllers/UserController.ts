@@ -190,7 +190,7 @@ export class UserController {
       conditions.$or.push({uid: {$regex: re}});
       conditions.$or.push({email: {$regex: re}});
       conditions.$or.push({'profile.firstName': {$regex: re}});
-      conditions.$or.push({'profile.lastName': {$regex: re}})
+      conditions.$or.push({'profile.lastName': {$regex: re}});
     });
     const amountUsers = await User.count({}).where({role: role});
     const users = await User.find(conditions, {
@@ -266,10 +266,10 @@ export class UserController {
    */
   @Get('/:id([a-fA-F0-9]{24})')
   async getUser(@Param('id') id: string, @CurrentUser() currentUser?: IUser) {
-    const user = await User.findById(id).populate('progress')
+    const user = await User.findById(id).populate('progress');
 
     if (!user) {
-      throw new NotFoundError(`User was not found.`)
+      throw new NotFoundError(`User was not found.`);
     }
     return this.cleanUserObject(id, user, currentUser);
   }

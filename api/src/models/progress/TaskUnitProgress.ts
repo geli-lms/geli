@@ -30,7 +30,7 @@ taskUnitProgressSchema.pre('save', async function (next: () => void) {
       ) {
         localProg.done = false;
       }
-    })
+    });
   });
 
   next();

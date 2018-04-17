@@ -114,7 +114,7 @@ export class RegisterComponent implements OnInit {
       }),
       email: ['', Validators.compose([Validators.required, Validators.email, this.validateTeacherEmail.bind(this)])],
       uid: ['', [this.validateMatriculationNumber.bind(this)]]
-    })
+    });
   }
 
   validateTeacherEmail(control: FormControl) {

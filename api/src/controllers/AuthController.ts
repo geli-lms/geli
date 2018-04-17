@@ -9,7 +9,7 @@ import emailService from '../services/EmailService';
 import {IUser} from '../../../shared/models/IUser';
 import {IUserModel, User} from '../models/User';
 import {JwtUtils} from '../security/JwtUtils';
-import * as errorCodes from '../config/errorCodes'
+import * as errorCodes from '../config/errorCodes';
 import {Course} from '../models/Course';
 import config from '../config/main';
 

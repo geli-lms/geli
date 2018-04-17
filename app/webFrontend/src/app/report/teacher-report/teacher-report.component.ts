@@ -42,6 +42,6 @@ export class TeacherReportComponent implements OnInit {
       })
       .catch((err) => {
         this.showProgress.toggleLoadingGlobal(false);
-      })
+      });
   }
 }

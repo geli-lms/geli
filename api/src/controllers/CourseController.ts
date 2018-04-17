@@ -13,7 +13,7 @@ import {
   UseBefore
 } from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
-import * as errorCodes from '../config/errorCodes'
+import * as errorCodes from '../config/errorCodes';
 
 import {ICourse} from '../../../shared/models/ICourse';
 import {IUser} from '../../../shared/models/IUser';
