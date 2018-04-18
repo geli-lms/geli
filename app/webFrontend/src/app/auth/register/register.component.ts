@@ -37,7 +37,7 @@ export class RegisterComponent implements OnInit {
               private snackBar: MatSnackBar,
               private formBuilder: FormBuilder,
               private titleService: TitleService,
-              private apiInfoService: APIInfoService, ) {
+              private apiInfoService: APIInfoService) {
   }
 
   ngOnInit() {
@@ -76,31 +76,34 @@ export class RegisterComponent implements OnInit {
       (val) => {
         this.registrationDone = true;
       })
-      .catch((error) => {
-        const errormessage = error.json().message || error.json().errmsg;
-        switch (errormessage) {
-          case errorCodes.mail.duplicate.code: {
-            this.mailError = errorCodes.mail.duplicate.text;
-            break;
-          }
-          case errorCodes.mail.noTeacher.code: {
-            this.mailError = errorCodes.mail.noTeacher.text;
-            break;
-          }
-          case errorCodes.duplicateUid.code: {
-            this.uidError = errorCodes.duplicateUid.text;
-            break;
-          }
-          default: {
-            this.snackBar.open('Registration failed', 'Dismiss');
-          }
-        }
+      .catch((err) => {
+        this.handleError(err);
       })
       .then(() => {
         this.loading = false;
         this.showProgress.toggleLoadingGlobal(this.loading);
       })
     ;
+  }
+
+  private handleError(err) {
+    switch (err.error.message) {
+      case errorCodes.mail.duplicate.code: {
+        this.mailError = errorCodes.mail.duplicate.text;
+        break;
+      }
+      case errorCodes.mail.noTeacher.code: {
+        this.mailError = errorCodes.mail.noTeacher.text;
+        break;
+      }
+      case errorCodes.duplicateUid.code: {
+        this.uidError = errorCodes.duplicateUid.text;
+        break;
+      }
+      default: {
+        this.snackBar.open('Registration failed', 'Dismiss');
+      }
+    }
   }
 
   generateForm() {

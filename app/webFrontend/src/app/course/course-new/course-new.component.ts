@@ -37,15 +37,12 @@ export class CourseNewComponent implements OnInit {
     this.courseService.createItem(this.newCourse.value).then(
       (val) => {
         this.snackBar.open('Course created', 'Dismiss', {duration: 5000});
-        const url = '/course/' + val._id + '/edit';
-        void this.router.navigate([url]);
-      }, (error) => {
-        // Mongodb uses the error field errmsg
-        const errormessage = error.json().message || error.json().errmsg;
-        if (errormessage === errorCodes.course.duplicateName.code) {
+        this.router.navigate(['course', val._id, 'edit']);
+      }, (err) => {
+        if (err.error.message === errorCodes.course.duplicateName.code) {
           this.nameError = errorCodes.course.duplicateName.text;
         } else {
-          this.snackBar.open('Error creating course ' + errormessage, 'Dismiss');
+          this.snackBar.open('Error creating course ' + err.error.message, 'Dismiss');
         }
       });
   }
