@@ -5,6 +5,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {UserDataService} from '../shared/services/data.service';
 import {UserService} from "../shared/services/user.service";
 import {IUser} from "../../../../../shared/models/IUser";
+import {isLowerCase} from 'tslint/lib/utils';
 
 @Component({
   selector: 'app-unit',
@@ -63,7 +64,6 @@ export class UnitComponent implements OnInit, AfterViewInit {
   async getUsers() {
     for(const unit of this.units) {
       if (unit.unitCreator) {
-        console.dir(unit);
         const user = <IUser> await this.userDataService.readSingleItem(unit.unitCreator);
         this.users.push(user);
       }
@@ -71,7 +71,13 @@ export class UnitComponent implements OnInit, AfterViewInit {
   }
 
   readUser(_id: any): string {
-    return '@Paaddy';
+    const localUnit = this.units.find(unit => unit._id == _id);
+    if(localUnit.unitCreator) {
+      const localUser = this.users.find(user => user._id.toString() == localUnit.unitCreator);
+      return localUser.profile.firstName + ' ' +  localUser.profile.lastName;
+    } else {
+      return '';
+    }
   }
 
   ngOnInit() {
