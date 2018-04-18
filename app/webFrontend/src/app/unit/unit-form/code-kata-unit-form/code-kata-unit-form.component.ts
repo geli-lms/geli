@@ -178,10 +178,8 @@ export class CodeKataUnitFormComponent implements OnInit {
     window.console.log = origLogger;
 
     if (result === true || result === undefined) {
-      // this.snackBar.open('Success', '', {duration: 3000});
       return true;
     } else {
-      // this.snackBar.open('Your code failed.', '', {duration: 3000});
       // tslint:disable-next-line:no-console
       console.log(result);
       return false;
