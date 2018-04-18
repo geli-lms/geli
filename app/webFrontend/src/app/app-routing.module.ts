@@ -9,8 +9,10 @@ import {RouterModule, Routes} from '@angular/router';
 import {ImprintComponent} from './imprint/imprint.component';
 import {UserSettingsComponent} from './user/user-settings/user-settings.component';
 import {AuthGuardService} from './shared/services/auth-guard.service';
+import {NotfoundComponent} from './shared/components/notfound/notfound.component'
 
 const routes: Routes = [
+  {path: 'not-found', component: NotfoundComponent},
   {path: '', component: StartComponent, pathMatch: 'full'},
   {path: 'login', component: LoginComponent},
   {path: 'register', component: RegisterComponent},
@@ -42,7 +44,8 @@ const routes: Routes = [
     component: UserSettingsComponent,
     canActivate: [AuthGuardService],
     data: {roles: ['student']}
-  }
+  },
+  {path: '**', redirectTo: 'not-found'}
 ];
 
 @NgModule({
