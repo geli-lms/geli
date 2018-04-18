@@ -1,13 +1,20 @@
+$viewWidth: 300px;
+
 .edit-user-wrapper {
   align-items: center;
   display: flex;
   flex-direction: column;
 
   .user-form {
-    width: 300px;
+    width: $viewWidth;
 
     .full-width {
       width: 100%;
     }
+  }
+
+  .button-wrapper {
+    margin-top: 10px;
+    width: $viewWidth;
   }
 }
