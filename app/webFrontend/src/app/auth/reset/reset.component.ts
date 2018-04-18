@@ -7,6 +7,7 @@ import {MatSnackBar} from '@angular/material';
 import {ActivatedRoute, Router} from '@angular/router';
 import {isNullOrUndefined} from 'util';
 import {TitleService} from '../../shared/services/title.service';
+import {emailValidator} from '../../shared/validators/validators';
 
 @Component({
   templateUrl: './reset.component.html',
@@ -85,7 +86,7 @@ export class ResetComponent implements OnInit {
       this.resetForm = this.formBuilder.group({});
     } else {
       this.resetForm = this.formBuilder.group({
-        email: ['', Validators.email ]
+        email: ['', emailValidator ]
       });
     }
   }
