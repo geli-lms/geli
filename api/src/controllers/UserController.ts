@@ -10,7 +10,6 @@ import {isNullOrUndefined} from 'util';
 import {errorCodes} from '../config/errorCodes';
 
 const multer = require('multer');
-const mime = require('mime-types');
 
 const uploadOptions = {
   storage: multer.diskStorage({
@@ -320,7 +319,8 @@ export class UserController {
           fs.unlinkSync(user.profile.picture.path);
         }
         // look up mime-type of uploaded file (f.e. a jpg will return 'image/jpg'
-        const mimeFamily = mime.lookup(file.originalname).split('/', 1)[0]; // split received string at '/' to return family
+        const mimeFamily = file.mimetype.split('/', 1)[0];
+
         if ( mimeFamily === 'image' ) {
           user.profile.picture = {
             _id: null,
