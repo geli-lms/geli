@@ -53,6 +53,7 @@ export class CodeKataUnitFormComponent implements OnInit {
   };
 
   logs: string;
+  wholeInputCode: string;
 
   constructor(private codeKataUnitService: CodeKataUnitService,
               private unitService: UnitService,
@@ -63,25 +64,17 @@ export class CodeKataUnitFormComponent implements OnInit {
   ngOnInit() {
     if (!this.model) {
       this.model = new CodeKataUnit(this.course._id);
-      this.model.code =
-        this.example.definition
-        + '\n\n' + this.areaSeperator + ' code-section' + ((this.example.code.startsWith('//')) ? '\n' : '\n\n')
-        + this.example.code
-        + '\n\n' + this.areaSeperator + ' test-section' + ((this.example.test.startsWith('//')) ? '\n' : '\n\n')
-        + this.example.test;
-      this.model.definition = undefined;
-      this.model.test = undefined;
-    } else {
-      this.model.code =
-        this.model.definition
-        + '\n\n' + this.areaSeperator + '\n\n'
-        + this.model.code
-        + '\n\n' + this.areaSeperator + '\n\n'
-        + this.model.test;
-      this.model.definition = undefined;
-      this.model.test = undefined;
+      this.model.definition = this.example.definition;
+      this.model.code = this.example.code;
+      this.model.test = this.example.test;
     }
 
+    this.wholeInputCode =
+      this.model.definition
+      + '\n' + this.areaSeperator + '\n'
+      + this.model.code
+      + '\n' + this.areaSeperator + '\n'
+      + this.model.test;
     this.editor.getEditor().setOptions({
       maxLines: 9999,
     });
@@ -92,8 +85,12 @@ export class CodeKataUnitFormComponent implements OnInit {
       this.snackBar.open('Your code does not validate. Check logs for information', '', {duration: 3000});
     }
 
+    const inputCodeArray = this.wholeInputCode.split('\n' + this.areaSeperator + '\n');
     this.model = {
       ...this.model,
+      definition: inputCodeArray[0],
+      code: inputCodeArray[1],
+      test: inputCodeArray[2],
       name: this.generalInfo.form.value.name,
       description: this.generalInfo.form.value.description,
       deadline: this.generalInfo.form.value.deadline,
@@ -147,8 +144,7 @@ export class CodeKataUnitFormComponent implements OnInit {
     if (!this.validateStructure()) {
       return false;
     }
-
-    const codeToTest: string = this.model.code;
+    const codeToTest: string = this.wholeInputCode;
 
     this.logs = undefined;
 
@@ -190,15 +186,24 @@ export class CodeKataUnitFormComponent implements OnInit {
 
   // this code gets unnessessary with the Implementation of Issue #44 (all validation parts should happen on the server)
   private validateStructure(): boolean {
-    if (!this.model.code.match(new RegExp('function(.|\t)*validate\\(\\)(.|\n|\t)*{(.|\n|\t)*}', 'gmi'))) {
+    const separatorCount = (this.wholeInputCode.match(new RegExp(this.areaSeperator, 'gmi')) || []).length;
+    if (separatorCount > 2) {
+      this.snackBar.open('There are too many area separators', 'Dismiss');
+      return false;
+    }
+    if (separatorCount < 2) {
+      this.snackBar.open('There must be 2 area separators', 'Dismiss');
+      return false;
+    }
+    if (!this.wholeInputCode.match(new RegExp('function(.|\t)*validate\\(\\)(.|\n|\t)*{(.|\n|\t)*}', 'gmi'))) {
       this.snackBar.open('The test section must contain a validate function', 'Dismiss');
       return false;
     }
-    if (!this.model.code.match(new RegExp('function(.|\t)*validate\\(\\)(.|\n|\t)*{(.|\n|\t)*return(.|\n|\t)*}', 'gmi'))) {
+    if (!this.wholeInputCode.match(new RegExp('function(.|\t)*validate\\(\\)(.|\n|\t)*{(.|\n|\t)*return(.|\n|\t)*}', 'gmi'))) {
       this.snackBar.open('The validate function must return something', 'Dismiss');
       return false;
     }
-    if (!this.model.code.match(new RegExp('validate\\(\\);', 'gmi'))) {
+    if (!this.wholeInputCode.match(new RegExp('validate\\(\\);', 'gmi'))) {
       this.snackBar.open('The test section must call the validate function', 'Dismiss');
       return false;
     }

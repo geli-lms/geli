@@ -21,7 +21,7 @@ if (process.argv.length === 3) {
     .then((res) => {
       console.log(res);
       console.log('Disconnect');
-      mongoose.disconnect()
+      mongoose.disconnect();
     });
 }
 

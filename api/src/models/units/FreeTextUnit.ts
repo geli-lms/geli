@@ -17,4 +17,4 @@ freeTextUnitSchema.methods.toFile = function (): String {
   return this.name + '\n' + this.description + '\n' + this.markdown;
 };
 
-export {freeTextUnitSchema, IFreeTextUnitModel}
+export {freeTextUnitSchema, IFreeTextUnitModel};
