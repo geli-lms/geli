@@ -1,10 +1,6 @@
 import {
   Body, JsonController, UseBefore, Get, Param, QueryParam, Put, Delete, Authorized, CurrentUser,
-<<<<<<< HEAD
-  BadRequestError, ForbiddenError, UploadedFile, Post, NotFoundError
-=======
   BadRequestError, ForbiddenError, InternalServerError, NotFoundError, UploadedFile, Post
->>>>>>> develop
 } from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import fs = require('fs');
