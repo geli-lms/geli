@@ -5,7 +5,7 @@ import {NativeError} from 'mongoose';
 import * as crypto from 'crypto';
 import {isNullOrUndefined} from 'util';
 import {isEmail} from 'validator';
-import * as errorCodes from '../config/errorCodes'
+import * as errorCodes from '../config/errorCodes';
 
 interface IUserModel extends IUser, mongoose.Document {
   isValidPassword: (candidatePassword: string) => Promise<boolean>;

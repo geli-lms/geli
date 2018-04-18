@@ -70,15 +70,15 @@ export class UserEditComponent implements OnInit {
         email: this.user.email,
       });
       this.titleService.setTitleCut(['Edit User: ', this.user.profile.firstName]);
-    } catch (error) {
-      this.snackBar.open(error.json().message, 'Dismiss');
+    } catch (err) {
+      this.snackBar.open(err.error.message, 'Dismiss');
     }
     this.cdRef.detectChanges();
   }
 
   async onSubmit() {
-    this.user = await this.prepareSaveUser();
-    this.updateUser();
+    this.user = this.prepareSaveUser();
+    await this.updateUser();
   }
 
   onCancel() {
@@ -87,19 +87,15 @@ export class UserEditComponent implements OnInit {
 
   prepareSaveUser(): IUser {
     const userFormModel = this.userForm.value;
-    const saveUser: any = {};
-    const saveIUser: IUser = saveUser;
-    for (const key in userFormModel) {
-      if (userFormModel.hasOwnProperty(key)) {
-        saveIUser[key] = userFormModel[key];
-      }
+
+    if (this.user.profile.picture) {
+      userFormModel.profile['picture'] = this.user.profile.picture;
     }
-    for (const key in this.user) {
-      if (typeof saveIUser[key] === 'undefined') {
-        saveIUser[key] = this.user[key];
-      }
-    }
+
+    const saveIUser: IUser = {...this.user, ...userFormModel};
+
     saveIUser['currentPassword'] = this.user.password;
+
     return saveIUser;
   }
 
@@ -140,17 +136,14 @@ export class UserEditComponent implements OnInit {
     }
     this.user.password = this.generatePass(12);
     this.showProgress.toggleLoadingGlobal(true);
-    const user = await this.userDataService.updateItem(this.user);
     try {
-      if (!user) {
-        throw new Error('an unknown error occured');
-      }
-      await this.dialogService.info(
+      await this.userDataService.updateItem(this.user);
+      this.dialogService.info(
         'Password successfully updated',
-        'Password for user ' + this.user.email + ' was updated to: \'' + this.user.password + '\'').toPromise();
-      this.snackBar.open('Password updated', '', {duration: 3000});
-    } catch (error) {
-      this.snackBar.open(error.json().message, '', {duration: 3000});
+        'Password for user ' + this.user.email + ' was updated to: \'' + this.user.password + '\''
+      );
+    } catch (err) {
+      this.snackBar.open(err.error.message, 'Dismiss', {duration: 3000});
     }
     this.showProgress.toggleLoadingGlobal(false);
   }
@@ -159,6 +152,7 @@ export class UserEditComponent implements OnInit {
     const response = await this.dialogService.upload(this.user).toPromise();
     if (response && response.success && response.user) {
       if (this.userService.isLoggedInUser(response.user)) {
+        this.user = response.user;
         this.userService.setUser(response.user);
       }
       this.snackBar.open('User image successfully uploaded.', '', {duration: 3000});

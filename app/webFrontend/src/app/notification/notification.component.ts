@@ -95,4 +95,4 @@ function compareIds(a: any, b: any) {
     return -1;
   }
   return 0;
-};
+}
