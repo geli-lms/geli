@@ -84,7 +84,7 @@ export class UnitController {
   addUnit(@Body() data: any, @CurrentUser() currentUser: IUser) {
     // discard invalid requests
     this.checkPostParam(data);
-    //Set current user as creator, old unit's dont have a creator
+    // Set current user as creator, old unit's dont have a creator
     data.model.unitCreator = currentUser._id.toString();
 
     return Unit.create(data.model)
