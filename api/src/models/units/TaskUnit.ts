@@ -9,7 +9,7 @@ import {ITask} from '../../../../shared/models/task/ITask';
 interface ITaskUnitModel extends ITaskUnit, IUnitModel {
   exportJSON: () => Promise<ITaskUnit>;
   calculateProgress: (users: IUser[], progress: IProgress[]) => Promise<ITaskUnit>;
-  toFile: () => Promise<String>;
+  toFile: () => String;
 }
 
 const taskSchema = new mongoose.Schema(
@@ -102,10 +102,10 @@ taskUnitSchema.methods.calculateProgress = async function (users: IUser[], progr
   return unitObj;
 };
 
-taskUnitSchema.statics.toFile = async function(unit: ITaskUnit) {
+taskUnitSchema.methods.toFile = function(): String {
   let fileStream = '';
 
-  for (const task of unit.tasks) {
+  for (const task of this.tasks) {
     fileStream = fileStream + task.name + '\n';
 
     for (const answer of task.answers) {
@@ -115,9 +115,7 @@ taskUnitSchema.statics.toFile = async function(unit: ITaskUnit) {
 
   }
 
-  return new Promise((resolve) => {
-    return resolve(fileStream);
-  });
+  return fileStream;
 };
 
 export {taskUnitSchema, ITaskUnitModel};

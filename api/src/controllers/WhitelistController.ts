@@ -185,6 +185,6 @@ export class WitelistController {
       lastName: whitelistUser.lastName,
       uid: whitelistUser.uid,
       courseId: new ObjectId(whitelistUser.courseId)
-    }
+    };
   }
 }

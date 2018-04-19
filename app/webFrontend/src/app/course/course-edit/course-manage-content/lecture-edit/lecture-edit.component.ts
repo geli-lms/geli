@@ -85,7 +85,7 @@ export class LectureEditComponent implements OnInit, OnDestroy {
 
       this.saveFileService.save(lecture.name, JSON.stringify(lectureJSON, null, 2));
     } catch (err) {
-      this.snackBar.open('Export lecture failed ' + err.json().message, 'Dismiss');
+      this.snackBar.open('Export lecture failed ' + err.error.message, 'Dismiss');
     }
   }
 
@@ -173,18 +173,18 @@ export class LectureEditComponent implements OnInit, OnDestroy {
 
   closeEditLecture = () => {
     this.dataSharingService.setDataForKey('lecture-edit-mode', false);
-  };
+  }
 
 
   onAddUnitDone = async () => {
     await this.reloadCourse();
     this.closeAddUnit();
-  };
+  }
 
   closeAddUnit = () => {
     this.unsetAddUnit();
     this.navigateToThisLecture();
-  };
+  }
 
   unsetAddUnit() {
     this.dataSharingService.setDataForKey('unit-create-mode', false);
@@ -201,7 +201,7 @@ export class LectureEditComponent implements OnInit, OnDestroy {
     this.dataSharingService.setDataForKey('unit-edit-mode', true);
     this.dataSharingService.setDataForKey('unit-edit-element', unit);
     this.navigateToUnitEdit(unit._id);
-  };
+  }
 
   isUnitCurrentlyOpen(unit: IUnit) {
     const isInEditMode = this.dataSharingService.getDataForKey('unit-edit-mode');
@@ -215,19 +215,19 @@ export class LectureEditComponent implements OnInit, OnDestroy {
 
       this.saveFileService.save(unit.name, JSON.stringify(unitJSON, null, 2));
     } catch (err) {
-      this.snackBar.open('Export unit failed ' + err.json().message, 'Dismiss');
+      this.snackBar.open('Export unit failed ' + err.error.message, 'Dismiss');
     }
-  };
+  }
 
   onEditUnitDone = async () => {
     await this.reloadCourse();
     this.closeEditUnit();
-  };
+  }
 
   closeEditUnit = () => {
     this.unsetUnitEdit();
     this.navigateToThisLecture();
-  };
+  }
 
   unsetUnitEdit() {
     this.dataSharingService.setDataForKey('unit-edit-mode', false);

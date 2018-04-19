@@ -36,7 +36,7 @@ export class UploadUnitCheckboxComponent implements OnInit {
   }
 
   downloadFile() {
-    const downloadLink = BackendService.API_URL + 'uploads/' + this.file.name;
+    const downloadLink = BackendService.API_URL + 'uploads/' + this.file.link;
 
     if (window.navigator && window.navigator.msSaveOrOpenBlob) {
       window.navigator.msSaveOrOpenBlob(downloadLink, this.file.name);

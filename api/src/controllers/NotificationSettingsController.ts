@@ -82,7 +82,7 @@ export class NotificationSettingsController {
   @Put('/:id')
   async updateNotificationSettings(@Param('id') id: string, @Body() notificationSettings: INotificationSettings) {
     if (!notificationSettings) {
-      throw new BadRequestError('notification needs fields course and user')
+      throw new BadRequestError('notification needs fields course and user');
     }
     const settings: INotificationSettingsModel =
       await NotificationSettings.findOneAndUpdate({'_id': id}, notificationSettings, {new: true});

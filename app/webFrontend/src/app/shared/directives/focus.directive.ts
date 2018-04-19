@@ -5,7 +5,7 @@ import { Directive, OnInit, ElementRef } from '@angular/core';
 })
 export class FocusDirective implements OnInit {
 
-  constructor(private elementRef: ElementRef) { };
+  constructor(private elementRef: ElementRef) { }
 
   ngOnInit(): void {
     // set directly so the changeDetector knows it's set to true later
