@@ -63,9 +63,9 @@ export abstract class DataService {
       .toPromise();
   }
 
-  readSingleItem<T>(id: string): Promise<T> {
+  readSingleItem<T>(id: string, apiPath = this.apiPath): Promise<T> {
     return new Promise((resolve, reject) => {
-      this.backendService.get(this.apiPath + id)
+      this.backendService.get(apiPath + id)
         .subscribe(
           (responseItems: any) => {
             if (this.changeProps2Date) {

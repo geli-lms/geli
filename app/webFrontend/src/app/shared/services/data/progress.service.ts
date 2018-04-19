@@ -8,12 +8,11 @@ export class ProgressService extends DataService {
     super('progress/', backendService);
   }
 
-  getUnitProgress(unitId: string) {
-    const originalApiPath = this.apiPath;
-    this.apiPath += 'units/';
-    const promise = this.readSingleItem(unitId);
-    this.apiPath = originalApiPath;
-    return promise;
+  async getUnitProgress<T>(unitId: string): Promise<T> {
+    // The readSingleItem method seems to always return an array. But we don't need an array, we should update
+    // the progress and not add another progress field
+    const unitProgress = await this.readSingleItem<any[]>(unitId, this.apiPath + 'units/');
+    return unitProgress.length > 0 ? unitProgress[0] : null;
   }
 
   getCourseProgress(courseId: string) {
