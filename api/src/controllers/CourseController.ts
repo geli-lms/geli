@@ -221,7 +221,7 @@ export class CourseController {
   async getCourse(@Param('id') id: string, @CurrentUser() currentUser: IUser) {
       const regex = /[g-z]/gi; // Check if id only contains characters from a-f
 
-      if (id.search(regex) !== -1 || id.length === 24) {
+      if (id.search(regex) !== -1 || id.length !== 24) {
           throw new NotFoundError();
       }
 
