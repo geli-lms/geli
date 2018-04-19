@@ -10,25 +10,21 @@ $viewWidth: 300px;
   width: 2.5rem;
 }
 
-.user-form {
-  width: $viewWidth;
+.edit-user-wrapper {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
 
-  .edit-user-wrapper {
-    align-items: center;
-    display: flex;
-    flex-direction: column;
+  .user-form {
+    width: $viewWidth;
 
-    .user-form {
-      width: $viewWidth;
-
-      .full-width {
-        width: 100%;
-      }
+    .full-width {
+      width: 100%;
     }
+  }
 
-    .button-wrapper {
-      margin-top: 10px;
-      width: $viewWidth;
-    }
+  .button-wrapper {
+    margin-top: 10px;
+    width: $viewWidth;
   }
 }
