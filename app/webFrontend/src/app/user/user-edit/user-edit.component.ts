@@ -156,6 +156,7 @@ export class UserEditComponent implements OnInit {
         this.userService.setUser(response.user);
       }
       this.snackBar.open('User image successfully uploaded.', '', {duration: 3000});
+      this.updateUser();
     }
   }
 
