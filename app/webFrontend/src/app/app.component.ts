@@ -31,7 +31,7 @@ export class AppComponent implements OnInit {
               private snackBar: MatSnackBar,
               private themeService: ThemeService,
               private translate: TranslateService) {
-    translate.setDefaultLang('en');
+    translate.setDefaultLang('de');
 
     showProgress.toggleSidenav$.subscribe(
       toggle => {
@@ -56,7 +56,7 @@ export class AppComponent implements OnInit {
       });
   }
 
-  changeLanguage(lang) {
+  changeLanguage(lang: string) {
     localStorage.setItem('lang', lang);
     this.translate.use(lang);
   }
