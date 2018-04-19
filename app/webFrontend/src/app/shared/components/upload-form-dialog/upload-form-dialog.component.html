@@ -3,6 +3,7 @@
 
   <app-upload-form [uploadMethod]="'POST'"
                    [uploadPath]="uploadPath"
+                   [allowedMimeTypes]="allowedMimeTypes"
                    [additionalData]="null"
                    (onFileSelectedChange)="null"
                    (onFileUploaded)="onFileUploaded($event)"

@@ -74,6 +74,7 @@ import {TranslateModule} from '@ngx-translate/core';
   entryComponents: [
     UploadFormDialog,
     PickMediaDialog,
+    UploadFormComponent
   ],
 })
 export class SharedModule {

@@ -93,7 +93,7 @@ export class CourseMediaComponent implements OnInit {
       maxHeight: '90vh',
       minWidth: '50vw',
       data: {
-        targetDir: this.currentFolder,
+        targetDir: this.currentFolder._id,
       },
     });
 

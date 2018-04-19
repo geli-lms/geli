@@ -16,11 +16,14 @@ export class UploadFormDialog implements OnInit {
 
   uploadPathTmp = '/api/media/file/';
   uploadPath: string;
+  allowedMimeTypes: string[];
 
   constructor(public dialogRef: MatDialogRef<UploadDialog>,
               private snackBar: MatSnackBar,
               @Inject(MAT_DIALOG_DATA) public data: any) {
     this.uploadPath = this.uploadPathTmp + data.targetDir._id;
+
+
   }
 
   ngOnInit() {

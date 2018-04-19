@@ -7,7 +7,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {SharedModule} from '../shared/shared.module';
 import {UserProfileComponent} from './user-profile/user-profile.component';
 import {UserSettingsComponent} from './user-settings/user-settings.component';
-import {MatHeaderCell, MatTableModule} from '@angular/material';
+import { MatTableModule} from '@angular/material';
 import {UserReportComponent} from './user-report/user-report.component';
 import {NgxChartsModule} from '@swimlane/ngx-charts';
 
@@ -19,7 +19,7 @@ import {NgxChartsModule} from '@swimlane/ngx-charts';
     ReactiveFormsModule,
     NgxChartsModule,
     UserRoutingModule,
-    MatTableModule
+    MatTableModule,
   ],
   declarations: [
     UserDetailsComponent,
