@@ -219,11 +219,11 @@ export class CourseController {
    */
   @Get('/:id')
   async getCourse(@Param('id') id: string, @CurrentUser() currentUser: IUser) {
-      const regex = '/[g-z]/'; // Check if id only contains characters from a-f and numbers
+      const regex = /[g-z]/gi; // Check if id only contains characters from a-f
 
-    if (id.match(regex) !== null || id.length > 24) {
-        throw new NotFoundError();
-    }
+      if (id.search(regex) !== -1 || id.length === 24) {
+          throw new NotFoundError();
+      }
 
     const course = await Course.findOne({
       ...this.userReadConditions(currentUser),
