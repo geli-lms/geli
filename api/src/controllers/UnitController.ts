@@ -31,6 +31,7 @@ export class UnitController {
    *         "description": "...",
    *         "markdown": "# What is Lorem Ipsum?\n**Lorem Ipsum** is simply dummy text of the printing and typesetting industry.",
    *         "_course": "5a037e6b60f72236d8e7c83b",
+   *         "unitCreator": "5a037e6b60f72236d8e7c834",
    *         "type": "free-text",
    *         "__v": 0
    *     }
@@ -67,6 +68,7 @@ export class UnitController {
    *         "markdown": "# What is Lorem Ipsum?\n**Lorem Ipsum** is simply dummy text of the printing and typesetting industry.",
    *         "_course": "5a037e6b60f72236d8e7c83b",
    *         "type": "free-text",
+   *         "unitCreator": "5a037e6b60f72236d8e7c834",
    *         "__v": 0
    *     }
    *
@@ -82,6 +84,7 @@ export class UnitController {
   addUnit(@Body() data: any, @CurrentUser() currentUser: IUser) {
     // discard invalid requests
     this.checkPostParam(data);
+    //Set current user as creator, old unit's dont have a creator
     data.model.unitCreator = currentUser._id.toString();
 
     return Unit.create(data.model)
