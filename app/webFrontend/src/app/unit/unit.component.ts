@@ -5,7 +5,6 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {UserDataService} from '../shared/services/data.service';
 import {UserService} from "../shared/services/user.service";
 import {IUser} from "../../../../../shared/models/IUser";
-import {isLowerCase} from 'tslint/lib/utils';
 
 @Component({
   selector: 'app-unit',
