@@ -40,6 +40,10 @@ export class UnitComponent implements OnInit, AfterViewInit {
     return moment(deadline).format('DD.MM.YYYY HH:mm');
   }
 
+  private getFormattedDate(date: string) {
+    return moment(date).format('DD.MM.YYYY');
+  }
+
   private selectColorForDeadline(deadline: string) {
     const diffInHours = moment(deadline).diff(moment(), 'hours');
     const diffInDays = moment(deadline).diff(moment(), 'days');
