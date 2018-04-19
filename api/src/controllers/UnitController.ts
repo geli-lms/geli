@@ -81,8 +81,8 @@ export class UnitController {
   @Post('/')
   addUnit(@Body() data: any, @CurrentUser() currentUser: IUser) {
     // discard invalid requests
-    data.model.unitCreator = currentUser._id.toString();
     this.checkPostParam(data);
+    data.model.unitCreator = currentUser._id.toString();
 
     return Unit.create(data.model)
     .then((createdUnit) => {
