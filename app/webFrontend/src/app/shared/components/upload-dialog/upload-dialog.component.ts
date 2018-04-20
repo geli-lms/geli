@@ -124,12 +124,19 @@ export class UploadDialog implements OnInit {
   }
 
   public openDialog(){
-    this.dialog.open(UploadFormDialog, {
+    const uploadDialog = this.dialog.open(UploadFormDialog, {
       maxHeight: '90vh',
       minWidth: '50vw',
       data: {
         targetDir: '/api/users/picture/' + this.user._id,
-        allowedMimeTypes: ['image/png'],
+        allowedMimeTypes: ['image/png', 'image/gif', 'image/jpg', 'image/bmp', 'image/jpeg'], // TODO: Generate array for 'image/*'-types
+        maxFileNumber: 1
+      }
+    });
+    uploadDialog.afterClosed().subscribe(value => {
+      if (value) {
+        // Reload current folder
+        this.dialogRef.close(value);
       }
     });
   }

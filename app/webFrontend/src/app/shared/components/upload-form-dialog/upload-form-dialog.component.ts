@@ -16,11 +16,19 @@ export class UploadFormDialog implements OnInit {
 
   uploadPath: string;
   allowedMimeTypes: string[];
+  maxFileNumber: number;
 
   constructor(public dialogRef: MatDialogRef<UploadDialog>,
               private snackBar: MatSnackBar,
               @Inject(MAT_DIALOG_DATA) public data: any) {
     this.uploadPath = data.targetDir;
+
+    if(data.allowedMimeTypes) {
+      this.allowedMimeTypes = data.allowedMimeTypes;
+    }
+    if(data.maxFileNumber) {
+      this.maxFileNumber = data.maxFileNumber;
+    }
 
 
   }
