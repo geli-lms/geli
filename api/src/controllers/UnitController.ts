@@ -41,7 +41,7 @@ export class UnitController {
     const unit = await Unit.findById(id);
 
     if (unit) {
-      throw new NotFoundError('');
+      throw new NotFoundError();
     }
     return unit;
   }
