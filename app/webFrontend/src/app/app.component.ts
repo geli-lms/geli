@@ -56,7 +56,7 @@ export class AppComponent implements OnInit {
       });
   }
 
-  changeLanguage(lang) {
+  changeLanguage(lang: string) {
     localStorage.setItem('lang', lang);
     this.translate.use(lang);
   }

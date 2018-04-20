@@ -24,6 +24,7 @@
 
       <button mat-icon-button [matMenuTriggerFor]="langMenu">
         <mat-icon>language</mat-icon>
+        <span>{{translate.currentLang | uppercase}}</span>
       </button>
       <mat-menu #langMenu="matMenu">
         <button mat-menu-item (click)="changeLanguage('de')">
