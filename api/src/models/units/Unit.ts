@@ -39,6 +39,9 @@ const unitSchema = new mongoose.Schema({
     },
     type: {
       type: String
+    },
+    visible: {
+      type: Boolean
     }
   },
   {

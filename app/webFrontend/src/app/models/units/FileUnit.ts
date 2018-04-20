@@ -13,6 +13,7 @@ export class FileUnit implements IFileUnit {
   weight: number;
   updatedAt: string;
   createdAt: string;
+  visible: boolean;
 
   files: IFile[] = [];
   fileUnitType: string;
@@ -24,4 +25,5 @@ export class FileUnit implements IFileUnit {
     this.progressable = false;
     this.weight = 0;
   }
+
 }
