@@ -23,10 +23,10 @@ export class UploadFormDialog implements OnInit {
               @Inject(MAT_DIALOG_DATA) public data: any) {
     this.uploadPath = data.targetDir;
 
-    if(data.allowedMimeTypes) {
+    if (data.allowedMimeTypes) {
       this.allowedMimeTypes = data.allowedMimeTypes;
     }
-    if(data.maxFileNumber) {
+    if (data.maxFileNumber) {
       this.maxFileNumber = data.maxFileNumber;
     }
 

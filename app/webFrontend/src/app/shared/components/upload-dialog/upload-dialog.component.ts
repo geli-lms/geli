@@ -2,7 +2,7 @@ import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {FileItem, FileUploader} from 'ng2-file-upload';
 import {IUser} from '../../../../../../../shared/models/IUser';
 import {MatDialog, MatDialogRef, MatSnackBar} from '@angular/material';
-import {UploadFormDialog} from "../upload-form-dialog/upload-form-dialog.component";
+import {UploadFormDialog} from '../upload-form-dialog/upload-form-dialog.component';
 
 @Component({
   selector: 'app-upload-dialog',
@@ -123,7 +123,7 @@ export class UploadDialog implements OnInit {
     this.dialogRef.close(false);
   }
 
-  public openDialog(){
+  public openDialog() {
     const uploadDialog = this.dialog.open(UploadFormDialog, {
       maxHeight: '90vh',
       minWidth: '50vw',
