@@ -16,10 +16,10 @@ cd app/webFrontend
 
 if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
     echo "+++ in PR; do not build sourcemaps"
-    travis_wait 30 npm run build-pr
+    npm run build-pr
 else
     echo "+++ is no PR; build with sourcemaps"
-    travis_wait 30 npm run build
+    npm run build
 fi
 
 echo
