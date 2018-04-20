@@ -187,12 +187,6 @@ courseSchema.statics.importJSON = async function (course: ICourse, admin: IUser,
 };
 
 
-function canUserRoleEditCourse(user: IUser) {
-  const roleIsTeacher: boolean = user.role === 'teacher';
-  const roleIsAdmin: boolean = user.role === 'admin';
-  return roleIsTeacher || roleIsAdmin;
-}
-
 function extractId(value: any, fallback?: any) {
   if (value instanceof Object) {
     if (value._bsontype === 'ObjectID') {
@@ -216,21 +210,26 @@ function extractIds(values: any[], fallback?: any) {
 }
 
 courseSchema.methods.checkPrivileges = function (user: IUser) {
-  const roleCanEditCourse: boolean = canUserRoleEditCourse(user);
   const userIsAdmin: boolean = user.role === 'admin';
+  const userIsTeacher: boolean = user.role === 'teacher';
+  const userIsStudent: boolean = user.role === 'student';
+  // NOTE: The 'tutor' role exists and has fixtures, but currently appears to be unimplemented.
+  // const userIsTutor: boolean = user.role === 'tutor';
+
   const courseAdmin = extractId(this.courseAdmin);
 
   const userIsCourseAdmin: boolean = user._id === courseAdmin._id;
   const userIsCourseTeacher: boolean = this.teachers.some((teacher: IUserModel) => user._id === extractId(teacher)._id);
   const userIsCourseStudent: boolean = this.students.some((student: IUserModel) => user._id === extractId(student)._id);
 
-  const userCanEditCourse: boolean = roleCanEditCourse && (userIsAdmin || userIsCourseAdmin || userIsCourseTeacher);
+  const userCanEditCourse: boolean = userIsAdmin || userIsCourseAdmin || userIsCourseTeacher;
+  const userCanViewCourse: boolean = (this.active && userIsCourseStudent) || userCanEditCourse;
   const userIsParticipant: boolean = userIsCourseStudent || userCanEditCourse;
-  const userCanViewCourse: boolean = (this.active && userIsCourseStudent) || userCanEditCourse || userIsAdmin;
 
-  return {roleCanEditCourse, userIsAdmin, courseAdmin,
+  return {userIsAdmin, userIsTeacher, userIsStudent,
+      courseAdmin,
       userIsCourseAdmin, userIsCourseTeacher, userIsCourseStudent,
-      userCanEditCourse, userIsParticipant, userCanViewCourse};
+      userCanEditCourse, userCanViewCourse, userIsParticipant};
 };
 
 
