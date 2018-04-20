@@ -7,6 +7,7 @@ import {MatSnackBar} from '@angular/material';
 import {ActivatedRoute, Router} from '@angular/router';
 import {isNullOrUndefined} from 'util';
 import {TitleService} from '../../shared/services/title.service';
+import {emailValidator} from '../../shared/validators/validators';
 
 @Component({
   templateUrl: './reset.component.html',
@@ -43,6 +44,11 @@ export class ResetComponent implements OnInit {
   }
 
   requestReset() {
+    if (!this.resetForm.valid) {
+      this.snackBar.open('The email address you entered is not valid.', 'Dismiss');
+      return;
+    }
+
     this.showProgress.toggleLoadingGlobal(true);
     this.loading = true;
     this.authenticationService.requestReset(this.resetForm.value.email.replace(/\s/g, '').toLowerCase())
@@ -80,7 +86,7 @@ export class ResetComponent implements OnInit {
       this.resetForm = this.formBuilder.group({});
     } else {
       this.resetForm = this.formBuilder.group({
-        email: ['', Validators.required]
+        email: ['', emailValidator ]
       });
     }
   }
