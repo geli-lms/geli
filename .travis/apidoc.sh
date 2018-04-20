@@ -45,7 +45,7 @@ if [[ "$TRAVIS_BRANCH" == "master" ]] || [[ -n "$TRAVIS_TAG" ]]; then
     git commit -m "Travis build: $TRAVIS_BUILD_NUMBER" &>/dev/null
 
     if [[ -n "$TRAVIS_TAG" ]]; then
-        echo "+ git tag" ; git tag $TRAVIS_TAG
+        echo "+ git tag" ; git tag -a $TRAVIS_TAG -m "Release $TRAVIS_TAG"
     else
         echo -e "${YELLOW}+ skipping: git tag - not tagged build${NC}"
     fi
