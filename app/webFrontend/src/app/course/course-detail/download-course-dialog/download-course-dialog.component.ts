@@ -92,6 +92,7 @@ export class DownloadCourseDialogComponent implements OnInit {
     const obj = await this.buildObject();
     if (obj.lectures.length === 0) {
       this.snackBar.open('No units selected!', 'Dismiss', {duration: 3000});
+      this.disableDownloadButton = false;
       return;
     }
     const downloadObj = <IDownload> obj;
