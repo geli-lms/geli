@@ -30,7 +30,7 @@ export class AppComponent implements OnInit {
               private ravenErrorHandler: RavenErrorHandler,
               private snackBar: MatSnackBar,
               private themeService: ThemeService,
-              private translate: TranslateService) {
+              public translate: TranslateService) {
     translate.setDefaultLang('en');
 
     showProgress.toggleSidenav$.subscribe(
