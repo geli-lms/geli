@@ -39,7 +39,8 @@ const lectureSchema = new mongoose.Schema({
 lectureSchema.pre('remove', function(next: () => void) {
   // We cannot do this, because we need actual Unit instances so that their pre remove middleware gets called
   // Unit.remove({'_id': {$in: this.units}}).exec().then(next).catch(next);
-  Unit.find({'_id': {$in: this.units}}).exec()
+  const localLecture = <ILectureModel><any>this;
+  Unit.find({'_id': {$in: localLecture.units}}).exec()
     .then((units) => Promise.all(units.map(unit => unit.remove())))
     .then(next)
     .catch(next);

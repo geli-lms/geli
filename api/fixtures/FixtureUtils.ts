@@ -71,7 +71,7 @@ export class FixtureUtils {
         lastName: stud.profile.lastName,
         uid: stud.uid,
         courseId: new ObjectId(course._id)
-      }
+      };
     });
   }
 
@@ -175,7 +175,7 @@ export class FixtureUtils {
       const shuffeledArray = this.shuffleArray(array);
       const count = this.getRandomNumber(min, max);
       const start = this.getRandomNumber(0, shuffeledArray.length - count);
-      return shuffeledArray.slice(start, start + count)
+      return shuffeledArray.slice(start, start + count);
     }
   }
 

@@ -16,19 +16,21 @@ const taskUnitProgressSchema = new mongoose.Schema({
 );
 
 taskUnitProgressSchema.pre('save', async function (next: () => void) {
-  const taskUnit = <ITaskUnitModel> await Unit.findById(this.unit);
+  const localProg = <ITaskUnitProgressModel><any>this;
+  const taskUnit = <ITaskUnitModel> await Unit.findById(localProg.unit);
 
-  this.done = true;
+  localProg.done = true;
 
   taskUnit.tasks.forEach(question => {
     question.answers.forEach(answer => {
       if (
-        !this.answers[question._id.toString()] ||
-        this.answers[question._id.toString()][answer._id.toString()] !== !!answer.value // !! is necessary, because value can be undefined
+        // !! is necessary, because value can be undefined
+        !localProg.answers[question._id.toString()] ||
+        localProg.answers[question._id.toString()][answer._id.toString()] !== !!answer.value
       ) {
-        this.done = false;
+        localProg.done = false;
       }
-    })
+    });
   });
 
   next();

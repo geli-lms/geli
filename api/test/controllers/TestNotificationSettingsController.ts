@@ -12,7 +12,7 @@ chai.use(chaiHttp);
 const should = chai.should();
 const app = new Server().app;
 const BASE_URL = '/api/notificationSettings';
-const fixtureLoader = new FixtureLoader()
+const fixtureLoader = new FixtureLoader();
 
 describe('NotificationSettings', async () => {
   beforeEach(async () => {
@@ -39,7 +39,7 @@ describe('NotificationSettings', async () => {
       const notificationSettings = await NotificationSettings.findById(res.body._id);
       notificationSettings.user.toString().should.be.equal(newSettings.user._id.toString());
       notificationSettings.course.toString().should.be.equal(newSettings.course._id.toString());
-    })
+    });
   });
 
   describe(`GET ${BASE_URL} user :id`, () => {
@@ -74,7 +74,7 @@ describe('NotificationSettings', async () => {
         notificationSettings.notificationType.should.be.a('string');
         notificationSettings.emailNotification.should.be.a('boolean');
       });
-    })
+    });
   });
 
   describe(`PUT ${BASE_URL} :id`, () => {
@@ -101,7 +101,7 @@ describe('NotificationSettings', async () => {
       res.body.should.have.property('user');
       res.body.should.have.property('course');
       res.body._id.should.be.a('string');
-    })
-  })
+    });
+  });
 });
 

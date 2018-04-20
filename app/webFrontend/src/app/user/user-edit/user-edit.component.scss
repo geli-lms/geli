@@ -1,7 +1,30 @@
-.user-form {
-  width: 300px;
+$viewWidth: 300px;
 
-  .full-width {
-    width: 100%;
+.user-icon {
+  background-size: cover;
+  border-radius: 1.25rem;
+  display: inline-block;
+  height: 2.5rem;
+  margin-bottom: 20px;
+  vertical-align: middle;
+  width: 2.5rem;
+}
+
+.edit-user-wrapper {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+
+  .user-form {
+    width: $viewWidth;
+
+    .full-width {
+      width: 100%;
+    }
+  }
+
+  .button-wrapper {
+    margin-top: 10px;
+    width: $viewWidth;
   }
 }
