@@ -234,14 +234,14 @@ export class CourseController {
       throw new ForbiddenError();
     }
 
-    const isTeacherOrAdmin= (currentUser.role === 'teacher' || currentUser.role === 'admin');
+    const isTeacherOrAdmin = (currentUser.role === 'teacher' || currentUser.role === 'admin');
 
     await course.populate({
         path: 'lectures',
         populate: {
           path: 'units',
           virtuals: true,
-          match: {$or: [{visible: undefined},{visible: true},{visible: !isTeacherOrAdmin}]},
+          match: {$or: [{visible: undefined}, {visible: true}, {visible: !isTeacherOrAdmin}]},
           populate: {
             path: 'progressData',
             match: {user: {$eq: currentUser._id}}
