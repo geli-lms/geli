@@ -6,11 +6,11 @@ import {SimpleSnackBar} from '@angular/material/snack-bar/typings/simple-snack-b
 @Injectable()
 export class SnackBarService {
 
-  public static readonly durationShort = 2000;
-  public static readonly durationLong = 8000;
+  public static readonly durationShort = 3000;
+  public static readonly durationLong = 9000;
 
   public static readonly defaultAction = 'Dismiss';
-  public static readonly defaultDuration = 4000;
+  public static readonly defaultDuration = 6000;
 
   /**
    * @param {MatSnackBar} matSnackBar
