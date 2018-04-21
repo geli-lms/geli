@@ -41,6 +41,7 @@ import {DataSharingService} from './shared/services/data-sharing.service';
 import {NotificationModule} from './notification/notification.module';
 import {HttpClient} from '@angular/common/http';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
+import {SnackBarService} from './shared/services/snack-bar.service';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -102,6 +103,7 @@ export function HttpLoaderFactory(http: HttpClient) {
       useExisting: RavenErrorHandler
     },
     DataSharingService,
+    SnackBarService,
   ],
   bootstrap: [AppComponent]
 })

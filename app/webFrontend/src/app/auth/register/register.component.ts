@@ -3,7 +3,7 @@ import {Validators, FormGroup, FormBuilder, FormControl} from '@angular/forms';
 import {AuthenticationService} from '../../shared/services/authentication.service';
 import {Router} from '@angular/router';
 import {ShowProgressService} from '../../shared/services/show-progress.service';
-import {MatSnackBar} from '@angular/material';
+import {SnackBarService} from '../../shared/services/snack-bar.service';
 import {errorCodes} from '../../../../../../api/src/config/errorCodes';
 import {TitleService} from '../../shared/services/title.service';
 import {APIInfoService} from '../../shared/services/data.service';
@@ -34,7 +34,7 @@ export class RegisterComponent implements OnInit {
   constructor(private router: Router,
               private authenticationService: AuthenticationService,
               private showProgress: ShowProgressService,
-              private snackBar: MatSnackBar,
+              private snackBar: SnackBarService,
               private formBuilder: FormBuilder,
               private titleService: TitleService,
               private apiInfoService: APIInfoService) {
@@ -82,8 +82,7 @@ export class RegisterComponent implements OnInit {
       .then(() => {
         this.loading = false;
         this.showProgress.toggleLoadingGlobal(this.loading);
-      })
-    ;
+      });
   }
 
   private handleError(err) {
@@ -101,7 +100,7 @@ export class RegisterComponent implements OnInit {
         break;
       }
       default: {
-        this.snackBar.open('Registration failed', 'Dismiss');
+        this.snackBar.open('Registration failed');
       }
     }
   }
