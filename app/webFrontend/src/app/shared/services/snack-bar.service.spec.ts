@@ -31,10 +31,10 @@ describe('SnackBarService', () => {
     const matSnackBar: MatSnackBar = TestBed.get(MatSnackBar);
 
     const snackBar: SnackBarService = TestBed.get(SnackBarService);
-    snackBar.openShort('awesome middle message');
+    snackBar.openShort('awesome short message');
 
     expect(matSnackBar.open)
-      .toHaveBeenCalledWith('awesome middle message', SnackBarService.defaultAction, {duration: SnackBarService.durationShort});
+      .toHaveBeenCalledWith('awesome short message', SnackBarService.defaultAction, {duration: SnackBarService.durationShort});
   });
 
   it('should have been called with dismiss and long duration', () => {
