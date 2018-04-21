@@ -1,7 +1,7 @@
 import {Component, Input} from '@angular/core';
 import {MatDialogRef} from '@angular/material';
-import {User} from "../../../models/User";
-import {UserService} from "../../services/user.service";
+import {User} from '../../../models/User';
+import {UserService} from '../../services/user.service';
 
 @Component({
   selector: 'app-user-profile-dialog',

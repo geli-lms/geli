@@ -8,8 +8,8 @@ import {InfoDialog} from '../components/info-dialog/info-dialog.component';
 import {FilepickerDialog} from '../components/filepicker-dialog/filepicker-dialog.component';
 import {WriteMailDialog} from '../components/write-mail-dialog/write-mail-dialog.component';
 import {ChangePasswordDialogComponent} from '../components/change-password-dialog/change-password-dialog.component';
-import {UserProfileDialog} from "../components/user-profile-dialog/user-profile-dialog.component";
-import {User} from "../../models/User";
+import {UserProfileDialog} from '../components/user-profile-dialog/user-profile-dialog.component';
+import {User} from '../../models/User';
 
 @Injectable()
 export class DialogService {

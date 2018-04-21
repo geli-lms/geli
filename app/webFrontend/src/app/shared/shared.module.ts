@@ -21,7 +21,7 @@ import {MarkdownEditorComponent} from './components/markdown-editor/markdown-edi
 import {AceEditorModule} from 'ng2-ace-editor';
 import {PickMediaDialog} from './components/pick-media-dialog/pick-media-dialog.component';
 import {TranslateModule} from '@ngx-translate/core';
-import {UserProfileDialog} from "app/shared/components/user-profile-dialog/user-profile-dialog.component";
+import {UserProfileDialog} from 'app/shared/components/user-profile-dialog/user-profile-dialog.component';
 
 @NgModule({
   imports: [

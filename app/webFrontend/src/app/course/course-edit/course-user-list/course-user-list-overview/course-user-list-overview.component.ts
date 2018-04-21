@@ -4,7 +4,7 @@ import {DialogService} from '../../../../shared/services/dialog.service';
 import {MatSnackBar} from '@angular/material';
 import {CourseService, NotificationService} from '../../../../shared/services/data.service';
 import {ICourse} from '../../../../../../../../shared/models/ICourse';
-import {User} from "../../../../models/User";
+import {User} from '../../../../models/User';
 
 @Component({
   selector: 'app-course-user-list-overview',
