@@ -10,6 +10,7 @@ import {ObjectID} from 'bson';
 import {Directory} from './mediaManager/Directory';
 import {IProperties} from '../../../shared/models/IProperties';
 import Pick from '../utilities/Pick';
+import {extractId} from '../utilities/ExtractId';
 
 interface ICourseModel extends ICourse, mongoose.Document {
   exportJSON: (sanitize?: boolean) => Promise<ICourse>;
@@ -187,28 +188,6 @@ courseSchema.statics.importJSON = async function (course: ICourse, admin: IUser,
 };
 
 
-function extractId(value: any, fallback?: any) {
-  if (value instanceof Object) {
-    if (value._bsontype === 'ObjectID') {
-      return {_id: value.toString()};
-    } else if ('id' in value) {
-      return {_id: value.id};
-    }
-  }
-  return fallback;
-}
-
-function extractIds(values: any[], fallback?: any) {
-  const results: any[] = [];
-  for (const value of values) {
-    const result = extractId(value, fallback);
-    if (result !== undefined) {
-      results.push(result);
-    }
-  }
-  return results;
-}
-
 courseSchema.methods.checkPrivileges = function (user: IUser) {
   const userIsAdmin: boolean = user.role === 'admin';
   const userIsTeacher: boolean = user.role === 'teacher';
@@ -216,18 +195,18 @@ courseSchema.methods.checkPrivileges = function (user: IUser) {
   // NOTE: The 'tutor' role exists and has fixtures, but currently appears to be unimplemented.
   // const userIsTutor: boolean = user.role === 'tutor';
 
-  const courseAdmin = extractId(this.courseAdmin);
+  const courseAdminId = extractId(this.courseAdmin);
 
-  const userIsCourseAdmin: boolean = user._id === courseAdmin._id;
-  const userIsCourseTeacher: boolean = this.teachers.some((teacher: IUserModel) => user._id === extractId(teacher)._id);
-  const userIsCourseStudent: boolean = this.students.some((student: IUserModel) => user._id === extractId(student)._id);
+  const userIsCourseAdmin: boolean = user._id === courseAdminId;
+  const userIsCourseTeacher: boolean = this.teachers.some((teacher: IUserModel) => user._id === extractId(teacher));
+  const userIsCourseStudent: boolean = this.students.some((student: IUserModel) => user._id === extractId(student));
 
   const userCanEditCourse: boolean = userIsAdmin || userIsCourseAdmin || userIsCourseTeacher;
   const userCanViewCourse: boolean = (this.active && userIsCourseStudent) || userCanEditCourse;
   const userIsParticipant: boolean = userIsCourseStudent || userCanEditCourse;
 
   return {userIsAdmin, userIsTeacher, userIsStudent,
-      courseAdmin,
+      courseAdminId,
       userIsCourseAdmin, userIsCourseTeacher, userIsCourseStudent,
       userCanEditCourse, userCanViewCourse, userIsParticipant};
 };
@@ -310,6 +289,8 @@ function normalizeCourseObt(obt: ICourseObt): ICourseNormObt {
 }
 
 courseSchema.statics.getSanitized = async function(user: IUser, courses: ICourseModel[], targets: ICourseObt) {
+  const toIdObj = (_id: string) => ({_id});
+
   const options = normalizeCourseObt(targets);
 
   return await Promise.all(courses.map(async (course) => {
@@ -321,14 +302,14 @@ courseSchema.statics.getSanitized = async function(user: IUser, courses: ICourse
     const sanitizedCourseObject = Pick.only(typeOptions.pickKeys, courseObject);
     for (const key of typeOptions.onlyid) {
       const value = (<IProperties>course)[key];
-      sanitizedCourseObject[key] = Array.isArray(value) ? extractIds(value) : extractId(value);
+      sanitizedCourseObject[key] = Array.isArray(value) ? extractId(value).map(toIdObj) : toIdObj(extractId(value));
     }
     for (const key of typeOptions.selfid) {
       const value = (<IProperties>course)[key];
       if (Array.isArray(value)) {
-        sanitizedCourseObject[key] = extractIds(value).filter(x => user._id === x._id);
+        sanitizedCourseObject[key] = extractId(value).filter((_id: string) => user._id === _id).map(toIdObj);
       } else {
-        const extracted = extractId(value);
+        const extracted = toIdObj(extractId(value));
         if (user._id === extracted._id) {
           sanitizedCourseObject[key] = extracted;
         }
