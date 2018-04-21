@@ -242,7 +242,7 @@ export class CourseController {
         populate: {
           path: 'units',
           virtuals: true,
-          match: {$or: [{visible: !isTeacherOrAdmin},{visible: true}]},
+          match: {$or: [{visible: undefined},{visible: true},{visible: !isTeacherOrAdmin}]},
           populate: {
             path: 'progressData',
             match: {user: {$eq: currentUser._id}}
