@@ -32,6 +32,7 @@ import * as mongoose from 'mongoose';
 import {Schema} from 'mongoose';
 import ObjectId = mongoose.Types.ObjectId;
 import {IWhitelistUser} from '../../../shared/models/IWhitelistUser';
+import {match} from "minimatch";
 
 const uploadOptions = {
   storage: multer.diskStorage({
@@ -234,11 +235,14 @@ export class CourseController {
       throw new ForbiddenError();
     }
 
+    const isTeacherOrAdmin= (currentUser.role === 'teacher' || currentUser.role === 'admin');
+
     await course.populate({
         path: 'lectures',
         populate: {
           path: 'units',
           virtuals: true,
+          match: {$or: [{visible: !isTeacherOrAdmin},{visible: true}]},
           populate: {
             path: 'progressData',
             match: {user: {$eq: currentUser._id}}
