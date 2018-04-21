@@ -34,11 +34,7 @@
       <div class="opacity" *ngIf="isInSelectedMembers(user)"></div>
 
       <div class="card-btn-wrapper" *ngIf="isInSelectedMembers(user)">
-        <button mat-raised-button routerLink="/profile/{{user._id}}" routerLinkActive="active"
-                [ngClass]="selectedMembers.length > 1 ? 'centered':''">
-          DETAILS
-        </button>
-        <button mat-raised-button (click)="openUserProfileDialog(user)" *ngIf="selectedMembers.length <= 1">DETAILS2</button>
+        <button mat-raised-button (click)="openUserProfileDialog(user)" >DETAILS</button>
         <button mat-raised-button (click)="openWriteMailDialog()" *ngIf="selectedMembers.length <= 1">SEND MAIL</button>
         <button mat-raised-button color="warn" (click)="removeSelectedUsers()" *ngIf="selectedMembers.length <= 1">
           REMOVE
