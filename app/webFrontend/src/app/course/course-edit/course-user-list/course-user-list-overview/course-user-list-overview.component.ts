@@ -67,7 +67,7 @@ export class CourseUserListOverviewComponent implements OnInit {
       this.resetSelectedUsers();
     }
   }
-
+  // change!!!
   async openWriteMailDialog() {
     this.toggleBlocked = true;
     const mailData = await this.dialogService.writeMail({
