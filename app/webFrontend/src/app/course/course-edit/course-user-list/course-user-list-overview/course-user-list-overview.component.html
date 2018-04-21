@@ -38,6 +38,7 @@
                 [ngClass]="selectedMembers.length > 1 ? 'centered':''">
           DETAILS
         </button>
+        <button mat-raised-button (click)="openUserProfileDialog(user)" *ngIf="selectedMembers.length <= 1">DETAILS2</button>
         <button mat-raised-button (click)="openWriteMailDialog()" *ngIf="selectedMembers.length <= 1">SEND MAIL</button>
         <button mat-raised-button color="warn" (click)="removeSelectedUsers()" *ngIf="selectedMembers.length <= 1">
           REMOVE

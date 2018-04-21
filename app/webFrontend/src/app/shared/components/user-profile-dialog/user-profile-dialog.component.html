@@ -1,0 +1,9 @@
+<h3> <span>{{user.profile.firstName}} {{user.profile.lastName}}</span> </h3>
+<div class="user-data">
+  <div><strong>E-Mail: </strong><a href="mailto:{{user.email}}">{{user.email}}</a></div>
+  <div>
+      <strong>Matrikelnummer: </strong>{{user.uid}}
+  </div>
+</div>
+
+<button mat-raised-button color="primary" (click)="dialogRef.close(true)">OK</button>
