@@ -10,5 +10,6 @@ export interface IUnit {
     updatedAt: string;
     createdAt: string;
     visible: boolean;
+    unitCreator: string;
     __t: string;
 }

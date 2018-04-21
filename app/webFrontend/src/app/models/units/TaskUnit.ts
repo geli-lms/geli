@@ -15,6 +15,7 @@ export class TaskUnit implements ITaskUnit {
   progressable: boolean;
   weight: number;
   visible: boolean;
+  unitCreator: any;
 
   tasks: ITask[] = [];
   deadline: string;
