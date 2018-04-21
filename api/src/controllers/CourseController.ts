@@ -32,7 +32,6 @@ import * as mongoose from 'mongoose';
 import {Schema} from 'mongoose';
 import ObjectId = mongoose.Types.ObjectId;
 import {IWhitelistUser} from '../../../shared/models/IWhitelistUser';
-import {match} from "minimatch";
 
 const uploadOptions = {
   storage: multer.diskStorage({
