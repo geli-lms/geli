@@ -36,11 +36,12 @@ export class DownloadCourseDialogComponent implements OnInit {
     this.showSpinner = false;
     this.disableDownloadButton = false;
     this.course = this.data.course;
-    this.chkbox = false;
+    this.chkbox = true;
   }
 
   onChange() {
     if (this.chkbox) {
+    this.disableDownloadButton = false;
       this.childLectures.forEach(lecture => {
 
           lecture.chkbox = true;
