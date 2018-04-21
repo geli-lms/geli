@@ -4,8 +4,8 @@ import {
 } from '@angular/core';
 import {IUnit} from '../../../../../../../../shared/models/units/IUnit';
 import {IFileUnit} from '../../../../../../../../shared/models/units/IFileUnit';
-import {IVideoUnit} from '../../../../../../../../shared/models/units/IVideoUnit';
 import {UploadUnitCheckboxComponent} from './upload-unit-checkbox.component';
+import {MatSnackBar} from '@angular/material';
 
 
 @Component({
@@ -30,7 +30,7 @@ export class UnitCheckboxComponent implements OnInit {
   files;
   childUnitDesc: string;
 
-  constructor() {
+  constructor(public snackBar: MatSnackBar) {
 
   }
 
@@ -57,6 +57,9 @@ export class UnitCheckboxComponent implements OnInit {
 
   onChange() {
     if (this.files) {
+      if (this.hasLargeFile()) {
+        this.snackBar.open('Some Units are not selected because they content large files.Please download them separately', 'Dismiss');
+      }
       if (this.chkbox) {
         this.childUnits.forEach(upUnit => {
           if (upUnit.chkbox === false && !upUnit.showDL) {
@@ -96,4 +99,13 @@ export class UnitCheckboxComponent implements OnInit {
     }
     this.valueChanged.emit();
   }
+
+  hasLargeFile() {
+    const result = this.childUnits.find(unit => {
+      return unit.showDL;
+    });
+
+    return !!result;
+  }
+
 }
