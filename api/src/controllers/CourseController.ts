@@ -16,6 +16,7 @@ import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import * as errorCodes from '../config/errorCodes';
 
 import {ICourse} from '../../../shared/models/ICourse';
+import {ICourseDashboard} from '../../../shared/models/ICourseDashboard';
 import {IUser} from '../../../shared/models/IUser';
 import {ObsCsvController} from './ObsCsvController';
 import {Course, ICourseModel} from '../models/Course';
@@ -62,67 +63,45 @@ export class CourseController {
    *
    * @apiParam {IUser} currentUser Currently logged in user.
    *
-   * @apiSuccess {Course[]} courses List of courses.
+   * @apiSuccess {ICourseDashboard[]} courses List of ICourseDashboard objects.
    *
    * @apiSuccessExample {json} Success-Response:
    *     [
    *         {
-   *             "_id": "5a037e6b60f72236d8e7c83b",
-   *             "updatedAt": "2018-01-29T20:26:35.204Z",
-   *             "createdAt": "2017-11-08T22:00:11.262Z",
-   *             "name": "Advanced web development",
-   *             "description": "Learn all the things! Angular, Node, Express, MongoDB, TypeScript ...",
-   *             "courseAdmin": {
-   *                 "_id": "5a037e6a60f72236d8e7c817",
-   *                 "updatedAt": "2017-11-08T22:00:10.899Z",
-   *                 "createdAt": "2017-11-08T22:00:10.899Z",
-   *                 "email": "teacher4@test.local",
-   *                 "__v": 0,
-   *                 "isActive": true,
-   *                 "role": "teacher",
-   *                 "profile": {
-   *                     "firstName": "Severus",
-   *                     "lastName": "Snap"
-   *                 },
-   *                 "id": "5a037e6a60f72236d8e7c817"
-   *             },
-   *             "active": true,
-   *             "__v": 3,
-   *             "whitelist": [],
+   *             "_id": "5ad0f9b56ff514268c5adc8c",
+   *             "name": "Inactive Test",
+   *             "active": false,
+   *             "description": "An inactive course.",
    *             "enrollType": "free",
-   *             "lectures": [],
-   *             "students": [],
-   *             "teachers": [],
-   *             "hasAccessKey": false
+   *             "userCanEditCourse": true,
+   *             "userCanViewCourse": true,
+   *             "userIsCourseAdmin": true,
+   *             "userIsCourseTeacher": false,
+   *             "userIsCourseMember": true
    *         },
    *         {
-   *             "_id": "5a037e6b60f72236d8e7c83d",
-   *             "updatedAt": "2017-11-08T22:00:11.869Z",
-   *             "createdAt": "2017-11-08T22:00:11.263Z",
-   *             "name": "Introduction to web development",
-   *             "description": "Whether you're just getting started with Web development or are just expanding your horizons...",
-   *             "courseAdmin": {
-   *                 "_id": "5a037e6a60f72236d8e7c815",
-   *                 "updatedAt": "2017-11-08T22:00:10.898Z",
-   *                 "createdAt": "2017-11-08T22:00:10.898Z",
-   *                 "email": "teacher2@test.local",
-   *                 "__v": 0,
-   *                 "isActive": true,
-   *                 "role": "teacher",
-   *                 "profile": {
-   *                     "firstName": "Ober",
-   *                     "lastName": "Lehrer"
-   *                 },
-   *                 "id": "5a037e6a60f72236d8e7c815"
-   *             },
+   *             "_id": "5ad0f9b56ff514268c5adc8d",
+   *             "name": "Access key test",
    *             "active": true,
-   *             "__v": 1,
-   *             "whitelist": [],
+   *             "description": "This course is used to test the access key course enroll type.",
+   *             "enrollType": "accesskey",
+   *             "userCanEditCourse": true,
+   *             "userCanViewCourse": true,
+   *             "userIsCourseAdmin": false,
+   *             "userIsCourseTeacher": true,
+   *             "userIsCourseMember": true
+   *         },
+   *         {
+   *             "_id": "5ad0f9b56ff514268c5adc8e",
+   *             "name": "Advanced web development",
+   *             "active": true,
+   *             "description": "Learn all the things! Angular, Node, Express, MongoDB, TypeScript ...",
    *             "enrollType": "free",
-   *             "lectures": [],
-   *             "students": [],
-   *             "teachers": [],
-   *             "hasAccessKey": false
+   *             "userCanEditCourse": false,
+   *             "userCanViewCourse": false,
+   *             "userIsCourseAdmin": false,
+   *             "userIsCourseTeacher": false,
+   *             "userIsCourseMember": false
    *         }
    *     ]
    */
@@ -138,39 +117,10 @@ export class CourseController {
     }
 
     const courses = await Course.find(conditions);
-    return await Course.getSanitized(
-      currentUser, courses,
-      {
-        all: {
-          copy: [
-            '_id',
-            'active',
-            'createdAt',
-            'description',
-            'enrollType',
-            'hasAccessKey',
-            'name',
-            'updatedAt',
-          ],
-          onlyid: [
-            'courseAdmin',
-          ]
-        },
-        safe: {
-          empty: [
-            'teachers'
-          ],
-          selfid: [
-            'students'
-          ]
-        },
-        editor: {
-          onlyid: [
-            'teachers'
-          ]
-        }
-      }
-    );
+    const dashboardCourses: ICourseDashboard[] = await Promise.all(courses.map(async (course) => {
+      return course.getForDashboard(currentUser);
+    }));
+    return dashboardCourses;
   }
 
   /**
