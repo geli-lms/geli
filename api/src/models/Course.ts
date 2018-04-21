@@ -1,4 +1,5 @@
 import {ICourse} from '../../../shared/models/ICourse';
+import {ICourseDashboard} from '../../../shared/models/ICourseDashboard';
 import * as mongoose from 'mongoose';
 import {User, IUserModel} from './User';
 import {ILectureModel, Lecture} from './Lecture';
@@ -15,6 +16,7 @@ import {extractId} from '../utilities/ExtractId';
 interface ICourseModel extends ICourse, mongoose.Document {
   exportJSON: (sanitize?: boolean) => Promise<ICourse>;
   checkPrivileges: (user: IUser) => IProperties;
+  getForDashboard: (user: IUser) => ICourseDashboard;
 }
 interface ICourseMongoose extends mongoose.Model<ICourseModel> {
   getSanitized: (user: IUser, courses: ICourseModel[], targets: ICourseObt) => Promise<IProperties[]>;
@@ -200,17 +202,34 @@ courseSchema.methods.checkPrivileges = function (user: IUser) {
   const userIsCourseAdmin: boolean = user._id === courseAdminId;
   const userIsCourseTeacher: boolean = this.teachers.some((teacher: IUserModel) => user._id === extractId(teacher));
   const userIsCourseStudent: boolean = this.students.some((student: IUserModel) => user._id === extractId(student));
+  const userIsCourseMember: boolean = userIsCourseAdmin || userIsCourseTeacher || userIsCourseStudent;
 
   const userCanEditCourse: boolean = userIsAdmin || userIsCourseAdmin || userIsCourseTeacher;
   const userCanViewCourse: boolean = (this.active && userIsCourseStudent) || userCanEditCourse;
-  const userIsParticipant: boolean = userIsCourseStudent || userCanEditCourse;
 
   return {userIsAdmin, userIsTeacher, userIsStudent,
       courseAdminId,
-      userIsCourseAdmin, userIsCourseTeacher, userIsCourseStudent,
-      userCanEditCourse, userCanViewCourse, userIsParticipant};
+      userIsCourseAdmin, userIsCourseTeacher, userIsCourseStudent, userIsCourseMember,
+      userCanEditCourse, userCanViewCourse};
 };
 
+courseSchema.methods.getForDashboard = function (user: IUser) {
+  const {
+    name, active, description, enrollType
+  } = this;
+  const {
+    userCanEditCourse, userCanViewCourse, userIsCourseAdmin, userIsCourseTeacher, userIsCourseMember
+  } = this.checkPrivileges(user);
+  const dashboardCourse: ICourseDashboard = {
+    // As in ICourse:
+    _id: <string>extractId(this._id),
+    name, active, description, enrollType,
+
+    // Special properties for the dashboard:
+    userCanEditCourse, userCanViewCourse, userIsCourseAdmin, userIsCourseTeacher, userIsCourseMember
+  };
+  return dashboardCourse;
+};
 
 function arrayUnion(...arrays: any[]) {
   return [...new Set([].concat(...arrays))];
