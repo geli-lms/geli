@@ -3,6 +3,12 @@
     <mat-icon aria-label="Download Units" mat-tooltip="Download Units">get_app</mat-icon>
   </button>
   <h1>{{course?.name}}</h1>
+  <div class="chip">
+    <div *ngFor="let teacher of course.teachers">
+     <img class="avatar" src="{{userService.user.getUserImageURL(30)}}" width="96" height="96">
+       {{teacher.profile.firstName + " " + teacher.profile.lastName }}
+    </div>
+  </div>
   <p>{{course?.description}}</p>
 </div>
 <div class="lectures" *ngIf="course">
