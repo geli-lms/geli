@@ -34,7 +34,7 @@ export class MembersComponent implements OnInit {
   }
 
   async initCourse() {
-    await this.courseService.readSingleItem<ICourse>(this.courseId).then((course: ICourse) => {
+    await this.courseService.readCourseToEdit(this.courseId).then((course: ICourse) => {
       this.course = course;
       this.course.students.forEach(member =>
         this.foundStudents = this.foundStudents.filter(user => user._id !== member._id)

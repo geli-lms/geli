@@ -39,8 +39,8 @@ export class CourseDetailComponent implements OnInit {
   }
 
   getCourse(courseId: string) {
-    this.courseService.readSingleItem(courseId).then(
-      (course: any) => {
+    this.courseService.readCourseToView(courseId).then(
+      (course: ICourse) => {
         this.course = course;
         LastVisitedCourseContainerUpdater.addCourseToLastVisitedCourses(courseId, this.userService, this.userDataService);
         this.titleService.setTitleCut(['Course: ', this.course.name]);
