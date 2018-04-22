@@ -177,6 +177,13 @@ describe('Course', () => {
       res.body.should.have.property('stack');
     });
 
+    it('should not get edit info for course as unauthorized teacher', async () => {
+      const {savedCourse, unauthorizedTeacher} = await prepareTestCourse();
+      const res = await testUnauthorizedGetCourseEdit(savedCourse, unauthorizedTeacher);
+      res.body.name.should.be.oneOf(['NotFoundError', 'ForbiddenError']);
+      res.body.should.have.property('stack');
+    });
+
     it('should not get course not a teacher of course', async () => {
       const teacher = await FixtureUtils.getRandomTeachers(2, 2);
       const testData = new Course({
