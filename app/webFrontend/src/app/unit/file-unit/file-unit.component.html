@@ -1,6 +1,7 @@
 <div *ngIf="fileUnit.fileUnitType === 'video'">
   <div *ngFor="let file of fileUnit.files;">
-    <video class = "video" src="{{'/api/uploads/' + file.link}}" controls></video>
+    <video class="video" (loadedmetadata)="loadedVideos($event)" src="{{'/api/uploads/' + file.link}}" controls #vid></video>
+    <!--<app-video ></app-video>-->
   </div>
 </div>
 <div *ngIf="fileUnit.fileUnitType !== 'video'">
