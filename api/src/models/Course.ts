@@ -17,6 +17,7 @@ interface ICourseModel extends ICourse, mongoose.Document {
   exportJSON: (sanitize?: boolean) => Promise<ICourse>;
   checkPrivileges: (user: IUser) => IProperties;
   forDashboard: (user: IUser) => ICourseDashboard;
+  processLecturesFor: (user: IUser) => Promise<this>;
 }
 interface ICourseMongoose extends mongoose.Model<ICourseModel> {
   getSanitized: (user: IUser, courses: ICourseModel[], targets: ICourseObt) => Promise<IProperties[]>;
@@ -228,6 +229,13 @@ courseSchema.methods.forDashboard = function (user: IUser): ICourseDashboard {
     // Special properties for the dashboard:
     userCanEditCourse, userCanViewCourse, userIsCourseAdmin, userIsCourseTeacher, userIsCourseMember
   };
+};
+
+courseSchema.methods.processLecturesFor = async function (user: IUser) {
+  this.lectures = await Promise.all(this.lectures.map(async (lecture: ILectureModel) => {
+    return await lecture.processUnitsFor(user);
+  }));
+  return this;
 };
 
 function arrayUnion(...arrays: any[]) {
