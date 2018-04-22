@@ -81,7 +81,7 @@ export class NotificationController {
   @Post('/user/:id')
   async createNotificationForStudent(@Param('id') userId: string, @Body() data: any) {
     const user = await User.findById(userId);
-    await this.createNotification(user, data.text, data.changedCourse, data.changedLecture, data.changedUnit)
+    await this.createNotification(user, data.text, data.changedCourse, data.changedLecture, data.changedUnit);
     return {notified: true};
   }
 
@@ -190,7 +190,7 @@ export class NotificationController {
       .populate('changedLecture')
       .populate('changedUnit');
     return notifications.map(notification => {
-      return notification.toObject()
+      return notification.toObject();
     });
 
   }

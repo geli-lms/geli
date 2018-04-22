@@ -47,7 +47,7 @@ export class UserSettingsComponent implements OnInit {
         }
       });
       this.dataSource = new MatTableDataSource<ICourse>(this.myCourses);
-    })
+    });
   }
 
   async getNotificationSettings() {
@@ -56,7 +56,7 @@ export class UserSettingsComponent implements OnInit {
         await Promise.all(this.myCourses.map(async (course) => {
           const newSetting = await this.notificationSettingsService.createItem({user: this.userService.user, course: course});
           settings.push(newSetting);
-        }))
+        }));
     }
     this.notificationSettings = settings;
   }

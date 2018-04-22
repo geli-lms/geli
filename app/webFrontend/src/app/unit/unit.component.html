@@ -18,6 +18,11 @@
       <app-task-unit *ngSwitchCase="'task'" [taskUnit]="unit"></app-task-unit>
       <app-code-kata *ngSwitchCase="'code-kata'" [codeKataUnit]="unit"></app-code-kata>
       <app-free-text-unit *ngSwitchCase="'free-text'" [freeTextUnit]="unit"></app-free-text-unit>
+      <div class="unit-detail">
+        <div class="user-detail">{{readUser(unit._id)}}</div>
+      <span *ngIf="unit.createdAt === unit.updatedAt">Published on: {{getFormattedDate(unit.createdAt)}}</span>
+      <span *ngIf="unit.createdAt !== unit.updatedAt">Changed on: {{getFormattedDate(unit.updatedAt)}}</span>
+      </div>
     </mat-card-content>
   </mat-card>
 </div>

@@ -244,7 +244,7 @@ export class CourseManageContentComponent implements OnInit, OnDestroy {
           this.snackBar.open(res.error.message, '', {duration: 3000});
         }
       });
-  };
+  }
 
   onAddLecture() {
     this.onCloseAllForms.next();
@@ -269,7 +269,7 @@ export class CourseManageContentComponent implements OnInit, OnDestroy {
       path += `lecture/${lectureId}/unit/add/${type}`;
       this.router.navigate([path], {relativeTo: this.route});
     });
-  };
+  }
 
   onImportUnit = () => {
     const openLectureId = this.dataSharingService.getDataForKey('openLectureId');
@@ -288,19 +288,19 @@ export class CourseManageContentComponent implements OnInit, OnDestroy {
           this.snackBar.open(res.error.message, '', {duration: 3000});
         }
       });
-  };
+  }
 
   closeFab = () => {
     this.fabOpen = false;
-  };
+  }
 
   onFabClick = () => {
     this.fabOpen = !this.fabOpen;
-  };
+  }
 
   closeAddLecture = () => {
     this.dataSharingService.setDataForKey('lecture-create-mode', false);
-  };
+  }
 
   private closeAllForms() {
     this.closeFab();

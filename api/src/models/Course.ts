@@ -7,6 +7,7 @@ import {InternalServerError} from 'routing-controllers';
 import {IUser} from '../../../shared/models/IUser';
 import * as winston from 'winston';
 import {ObjectID} from 'bson';
+import {Directory} from './mediaManager/Directory';
 import {IProperties} from '../../../shared/models/IProperties';
 import Pick from '../utilities/Pick';
 
@@ -94,11 +95,17 @@ const courseSchema = new mongoose.Schema({
 );
 
 // Cascade delete
-courseSchema.pre('remove', function (next: () => void) {
-  Lecture.find({'_id': {$in: this.lectures}}).exec()
-    .then((lectures) => Promise.all(lectures.map(lecture => lecture.remove())))
-    .then(next)
-    .catch(next);
+courseSchema.pre('remove', async function (next) {
+  const localCourse = <ICourseModel><any>this;
+  try {
+    const deletedLectures = await Lecture.deleteMany({'_id': {$in: localCourse.lectures}}).exec();
+    const deletedDirs = await Directory.deleteMany({'_id': {$in: localCourse.media}}).exec();
+  } catch (error) {
+    const debug = 0;
+    next();
+  }
+
+  next();
 });
 
 courseSchema.methods.exportJSON = async function (sanitize: boolean = true) {
@@ -184,14 +191,14 @@ function canUserRoleEditCourse(user: IUser) {
   const roleIsTeacher: boolean = user.role === 'teacher';
   const roleIsAdmin: boolean = user.role === 'admin';
   return roleIsTeacher || roleIsAdmin;
-};
+}
 
 function extractId(value: any, fallback?: any) {
   if (value instanceof Object) {
     if (value._bsontype === 'ObjectID') {
       return {_id: value.toString()};
     } else if ('id' in value) {
-      return {_id: value.id}
+      return {_id: value.id};
     }
   }
   return fallback;
@@ -217,14 +224,14 @@ courseSchema.methods.checkPrivileges = function (user: IUser) {
   const userIsCourseTeacher: boolean = this.teachers.some((teacher: IUserModel) => user._id === extractId(teacher)._id);
   const userIsCourseStudent: boolean = this.students.some((student: IUserModel) => user._id === extractId(student)._id);
 
-  const userCanEditCourse: boolean = roleCanEditCourse && (userIsCourseAdmin || userIsCourseTeacher);
+  const userCanEditCourse: boolean = roleCanEditCourse && (userIsAdmin || userIsCourseAdmin || userIsCourseTeacher);
   const userIsParticipant: boolean = userIsCourseStudent || userCanEditCourse;
   const userCanViewCourse: boolean = (this.active && userIsCourseStudent) || userCanEditCourse || userIsAdmin;
 
   return {roleCanEditCourse, userIsAdmin, courseAdmin,
       userIsCourseAdmin, userIsCourseTeacher, userIsCourseStudent,
       userCanEditCourse, userIsParticipant, userCanViewCourse};
-}
+};
 
 
 function arrayUnion(...arrays: any[]) {

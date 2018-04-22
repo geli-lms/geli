@@ -32,7 +32,7 @@ export class FilepickerDialog {
     };
     this.uploader.onErrorItem = (item: FileItem, response: string, status: number, headers: ParsedResponseHeaders) => {
       return this.dialogRef.close({success: false, result: JSON.parse(response)});
-    }
+    };
   }
 
   public upload() {

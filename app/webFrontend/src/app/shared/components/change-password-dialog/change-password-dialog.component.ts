@@ -34,7 +34,7 @@ export class ChangePasswordDialogComponent implements OnInit {
 
   isSameUser() {
     if (this.user) {
-      return this.userService.user._id === this.user._id
+      return this.userService.user._id === this.user._id;
     }
     return false;
   }

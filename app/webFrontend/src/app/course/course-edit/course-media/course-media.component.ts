@@ -50,7 +50,7 @@ export class CourseMediaComponent implements OnInit {
         await this.changeDirectory(this.course.media._id, true);
       },
       error => {
-        this.snackBar.open('Could not load course', '', {duration: 3000})
+        this.snackBar.open('Could not load course', '', {duration: 3000});
       }
     );
   }
