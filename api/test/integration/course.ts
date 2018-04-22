@@ -4,6 +4,9 @@ import {FixtureLoader} from '../../fixtures/FixtureLoader';
 import {JwtUtils} from '../../src/security/JwtUtils';
 import {User} from '../../src/models/User';
 import {Course} from '../../src/models/Course';
+import {ICourse} from '../../../shared/models/ICourse';
+import {ICourseView} from '../../../shared/models/ICourseView';
+import {IUser} from '../../../shared/models/IUser';
 import {FixtureUtils} from '../../fixtures/FixtureUtils';
 import chaiHttp = require('chai-http');
 
@@ -106,24 +109,55 @@ describe('Course', () => {
 
 
   describe(`GET ${BASE_URL} :id`, () => {
-    it('should get course with given id', async () => {
-      const teacher = await FixtureUtils.getRandomTeacher();
+    async function prepareTestCourse() {
+      const teachers = await FixtureUtils.getRandomTeachers(2, 2);
+      const teacher = teachers[0];
+      const unauthorizedTeacher = teachers[1];
+      const student = await FixtureUtils.getRandomStudent();
       const testData = new Course({
         name: 'Test Course',
         description: 'Test description',
         active: true,
-        courseAdmin: teacher._id
+        courseAdmin: teacher._id,
+        enrollType: 'accesskey',
+        accessKey: 'accessKey1234',
+        students: [student._id]
       });
       const savedCourse = await testData.save();
+      return {teacher, unauthorizedTeacher, student, testData, savedCourse};
+    }
+
+    it('should get view info for course with given id', async () => {
+      const {student, testData, savedCourse} = await prepareTestCourse();
 
       const res = await chai.request(app)
         .get(`${BASE_URL}/${savedCourse._id}`)
+        .set('Authorization', `JWT ${JwtUtils.generateToken(student)}`);
+
+      res.should.have.status(200);
+
+      const body: ICourseView = res.body;
+      body.name.should.be.equal(testData.name);
+      body.description.should.be.equal(testData.description);
+
+      should.equal(res.body.accessKey, undefined);
+    });
+
+    it('should get edit info for course with given id', async () => {
+      const {teacher, testData, savedCourse} = await prepareTestCourse();
+
+      const res = await chai.request(app)
+        .get(`${BASE_URL}/${savedCourse._id}/edit`)
         .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`);
 
       res.should.have.status(200);
-      res.body.name.should.be.equal(testData.name);
-      res.body.description.should.be.equal(testData.description);
-      res.body.active.should.be.equal(testData.active);
+
+      const body: ICourse = res.body;
+      body.name.should.be.equal(testData.name);
+      body.description.should.be.equal(testData.description);
+      body.active.should.be.equal(testData.active);
+      body.enrollType.should.be.equal(testData.enrollType);
+      body.accessKey.should.be.equal(testData.accessKey);
     });
 
     it('should not get course not a teacher of course', async () => {
@@ -176,7 +210,7 @@ describe('Course', () => {
       res.body._id.should.be.eq(testDataUpdate.id);
 
       res = await chai.request(app)
-        .get(`${BASE_URL}/${res.body._id}`)
+        .get(`${BASE_URL}/${res.body._id}/edit`)
         .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`);
 
       res.should.have.status(200);
