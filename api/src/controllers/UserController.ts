@@ -8,6 +8,8 @@ import {IUser} from '../../../shared/models/IUser';
 import {IUserModel, User} from '../models/User';
 import {isNullOrUndefined} from 'util';
 import {errorCodes} from '../config/errorCodes';
+import * as sharp from 'sharp';
+import config from '../config/main';
 
 const multer = require('multer');
 
@@ -311,19 +313,28 @@ export class UserController {
    * @apiError BadRequestError
    */
   @Post('/picture/:id')
-  addUserPicture(@UploadedFile('file', {options: uploadOptions}) file: any, @Param('id') id: string, @Body() data: any,
-                 @CurrentUser() currentUser: IUser) {
+   addUserPicture(@UploadedFile('file', {options: uploadOptions}) file: any, @Param('id') id: string, @Body()
+    data: any, @CurrentUser() currentUser: IUser) {
     return User.findById(id)
-      .then((user: IUserModel) => {
+      .then(async (user: IUserModel) =>  {
         if (user.profile.picture && user.profile.picture.path && fs.existsSync(user.profile.picture.path)) {
           fs.unlinkSync(user.profile.picture.path);
         }
+
+        const resizedImageBuffer = await sharp(file.path)
+          .resize(config.maxProfileImageWidth, config.maxProfileImageHeight)
+          .withoutEnlargement(true)
+          .max()
+          .toBuffer({resolveWithObject: true});
+
+        fs.writeFileSync(file.path, resizedImageBuffer.data);
+
         user.profile.picture = {
           _id: null,
           name: file.filename,
           alias: file.originalname,
           path: file.path,
-          size: file.size
+          size: resizedImageBuffer.info.size
         };
         return user.save();
       })
