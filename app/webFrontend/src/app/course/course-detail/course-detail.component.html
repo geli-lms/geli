@@ -1,15 +1,21 @@
 <div class="course-header">
-  <button mat-icon-button color="primary" (click)= "openDownloadDialog()" class="download-button">
+  <button mat-icon-button color="primary" (click)="openDownloadDialog()" class="download-button">
     <mat-icon aria-label="Download Units" mat-tooltip="Download Units">get_app</mat-icon>
   </button>
   <h1>{{course?.name}}</h1>
-  <div class="chip">
-    <div *ngFor="let teacher of course.teachers">
-      <!-- dummie picture because of problems to access picture of teacher-->
-     <img class="avatar" src="{{userService.user.getUserImageURL(30)}}" width="96" height="96">
-       {{teacher.profile.firstName + " " + teacher.profile.lastName + " " + teacher.email}}
+  <span>Teacher:</span>
+  <mat-chip-list>
+    <div *ngFor="let teacher of course?.teachers">
+      <mat-chip>
+        <div class="img-wrapper">
+          <div class="teacher-image" user-image [user-image]="teacher"></div>
+        </div>
+        <div class="teacher-name">
+          {{teacher.profile.firstName + " " + teacher.profile.lastName}}
+        </div>
+      </mat-chip>
     </div>
-  </div>
+  </mat-chip-list>
   <p>{{course?.description}}</p>
 </div>
 <div class="lectures" *ngIf="course">

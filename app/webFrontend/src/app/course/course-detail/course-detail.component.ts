@@ -17,7 +17,6 @@ import {LastVisitedCourseContainerUpdater} from '../../shared/utils/LastVisitedC
 export class CourseDetailComponent implements OnInit {
 
   course: ICourse;
-
   id: string;
 
   constructor(private router: Router,

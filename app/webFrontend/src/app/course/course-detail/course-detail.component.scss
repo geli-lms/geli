@@ -11,20 +11,29 @@
   display: block;
 }
 
-.chip {
+.mat-chip-list {
   display: inline-block;
-  padding: 0 25px;
-  height: 50px;
-  font-size: 16px;
-  line-height: 50px;
-  border-radius: 25px;
-  background-color: #f1f1f1;
+  margin-left: 5px
 }
 
-.chip img {
-  float: left;
-  margin: 0 10px 0 -25px;
-  height: 50px;
-  width: 50px;
+.mat-chip {
+  position: relative;
+}
+
+.img-wrapper {
+  left: -7px;
+  width: 40px;
+  height: 40px;
+  position: absolute;
   border-radius: 50%;
+
+}
+
+.teacher-name{
+  margin-left: 25px;
+}
+
+.teacher-image {
+  background-size: cover;
+  vertical-align: middle;
 }
