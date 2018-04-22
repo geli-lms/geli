@@ -16,7 +16,7 @@ import {extractId} from '../utilities/ExtractId';
 interface ICourseModel extends ICourse, mongoose.Document {
   exportJSON: (sanitize?: boolean) => Promise<ICourse>;
   checkPrivileges: (user: IUser) => IProperties;
-  getForDashboard: (user: IUser) => ICourseDashboard;
+  forDashboard: (user: IUser) => ICourseDashboard;
 }
 interface ICourseMongoose extends mongoose.Model<ICourseModel> {
   getSanitized: (user: IUser, courses: ICourseModel[], targets: ICourseObt) => Promise<IProperties[]>;
@@ -213,14 +213,14 @@ courseSchema.methods.checkPrivileges = function (user: IUser) {
       userCanEditCourse, userCanViewCourse};
 };
 
-courseSchema.methods.getForDashboard = function (user: IUser) {
+courseSchema.methods.forDashboard = function (user: IUser): ICourseDashboard {
   const {
     name, active, description, enrollType
   } = this;
   const {
     userCanEditCourse, userCanViewCourse, userIsCourseAdmin, userIsCourseTeacher, userIsCourseMember
   } = this.checkPrivileges(user);
-  const dashboardCourse: ICourseDashboard = {
+  return {
     // As in ICourse:
     _id: <string>extractId(this._id),
     name, active, description, enrollType,
@@ -228,7 +228,6 @@ courseSchema.methods.getForDashboard = function (user: IUser) {
     // Special properties for the dashboard:
     userCanEditCourse, userCanViewCourse, userIsCourseAdmin, userIsCourseTeacher, userIsCourseMember
   };
-  return dashboardCourse;
 };
 
 function arrayUnion(...arrays: any[]) {
