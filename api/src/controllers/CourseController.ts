@@ -20,19 +20,14 @@ import {ICourseDashboard} from '../../../shared/models/ICourseDashboard';
 import {ICourseView} from '../../../shared/models/ICourseView';
 import {IUser} from '../../../shared/models/IUser';
 import {ObsCsvController} from './ObsCsvController';
-import {Course, ICourseModel} from '../models/Course';
+import {Course} from '../models/Course';
 import {User} from '../models/User';
 import {WhitelistUser} from '../models/WhitelistUser';
 import emailService from '../services/EmailService';
 
 const multer = require('multer');
 import crypto = require('crypto');
-import {IUnitModel} from '../models/units/Unit';
-import {API_NOTIFICATION_TYPE_ALL_CHANGES, API_NOTIFICATION_TYPE_NONE, NotificationSettings} from '../models/NotificationSettings';
-import {Notification} from '../models/Notification';
-import * as mongoose from 'mongoose';
-import {Schema} from 'mongoose';
-import ObjectId = mongoose.Types.ObjectId;
+import {API_NOTIFICATION_TYPE_ALL_CHANGES, NotificationSettings} from '../models/NotificationSettings';
 import {IWhitelistUser} from '../../../shared/models/IWhitelistUser';
 
 const uploadOptions = {
