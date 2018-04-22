@@ -62,6 +62,16 @@ install:
   - cd ..
 
 script:
+  #check for change in changelog
+   - curl https://raw.githubusercontent.com/h-da/geli/develop/CHANGELOG.md --output CHANGELOG.file
+   - diff CHANGELOG.md CHANGELOG.file > diff.file
+
+   - if grep -P '^< - .{8,100}' -q diff.file; then
+   -     echo "Update in CHANGELOG.md found"
+   - else
+   -     echo "No Update in CHANGELOG.md found exit"
+   -     exit 1
+   - fi
   # check for versions
   - .travis/check-version.sh
   # run license checker and write license.json / dependencies.ts
