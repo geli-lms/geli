@@ -224,7 +224,7 @@ courseSchema.methods.checkPrivileges = function (user: IUser) {
   const userIsCourseTeacher: boolean = this.teachers.some((teacher: IUserModel) => user._id === extractId(teacher)._id);
   const userIsCourseStudent: boolean = this.students.some((student: IUserModel) => user._id === extractId(student)._id);
 
-  const userCanEditCourse: boolean = roleCanEditCourse && (userIsCourseAdmin || userIsCourseTeacher);
+  const userCanEditCourse: boolean = roleCanEditCourse && (userIsAdmin || userIsCourseAdmin || userIsCourseTeacher);
   const userIsParticipant: boolean = userIsCourseStudent || userCanEditCourse;
   const userCanViewCourse: boolean = (this.active && userIsCourseStudent) || userCanEditCourse || userIsAdmin;
 

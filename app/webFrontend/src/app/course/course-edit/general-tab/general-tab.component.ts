@@ -183,14 +183,14 @@ export class GeneralTabComponent implements OnInit {
         if (!res) {
           return;
         }
-        await this.courseService.deleteItem(this.courseOb);
-        await this.router.navigate(['/']);
-        this.notificationService.createItem({
+        await this.notificationService.createItem({
           changedCourse: this.courseOb,
           changedLecture: null,
           changedUnit: null,
           text: 'Course ' + this.courseOb.name + ' has been deleted.'
         });
+        await this.courseService.deleteItem(this.courseOb);
+        this.router.navigate(['/']);
       });
   }
 }
