@@ -17,6 +17,7 @@ interface ICourseModel extends ICourse, mongoose.Document {
   exportJSON: (sanitize?: boolean) => Promise<ICourse>;
   checkPrivileges: (user: IUser) => IProperties;
   forDashboard: (user: IUser) => ICourseDashboard;
+  populateLecturesFor: (user: IUser) => this;
   processLecturesFor: (user: IUser) => Promise<this>;
 }
 interface ICourseMongoose extends mongoose.Model<ICourseModel> {
@@ -229,6 +230,20 @@ courseSchema.methods.forDashboard = function (user: IUser): ICourseDashboard {
     // Special properties for the dashboard:
     userCanEditCourse, userCanViewCourse, userIsCourseAdmin, userIsCourseTeacher, userIsCourseMember
   };
+};
+
+courseSchema.methods.populateLecturesFor = function (user: IUser) {
+  return this.populate({
+    path: 'lectures',
+    populate: {
+      path: 'units',
+      virtuals: true,
+      populate: {
+        path: 'progressData',
+        match: {user: {$eq: user._id}}
+      }
+    }
+  });
 };
 
 courseSchema.methods.processLecturesFor = async function (user: IUser) {
