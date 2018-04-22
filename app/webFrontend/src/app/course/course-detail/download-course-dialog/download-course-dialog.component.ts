@@ -37,6 +37,9 @@ export class DownloadCourseDialogComponent implements OnInit {
     this.disableDownloadButton = false;
     this.course = this.data.course;
     this.chkbox = true;
+    if (!this.course.lectures.length) {
+    	    this.disableDownloadButton = true;
+    }
   }
 
   onChange() {
