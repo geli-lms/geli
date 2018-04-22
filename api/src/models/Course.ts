@@ -11,7 +11,6 @@ import * as winston from 'winston';
 import {ObjectID} from 'bson';
 import {Directory} from './mediaManager/Directory';
 import {IProperties} from '../../../shared/models/IProperties';
-import Pick from '../utilities/Pick';
 import {extractId} from '../utilities/ExtractId';
 
 interface ICourseModel extends ICourse, mongoose.Document {
@@ -23,7 +22,6 @@ interface ICourseModel extends ICourse, mongoose.Document {
   processLecturesFor: (user: IUser) => Promise<this>;
 }
 interface ICourseMongoose extends mongoose.Model<ICourseModel> {
-  getSanitized: (user: IUser, courses: ICourseModel[], targets: ICourseObt) => Promise<IProperties[]>;
 }
 let Course: ICourseMongoose;
 
@@ -264,115 +262,6 @@ courseSchema.methods.processLecturesFor = async function (user: IUser) {
     return await lecture.processUnitsFor(user);
   }));
   return this;
-};
-
-function arrayUnion(...arrays: any[]) {
-  return [...new Set([].concat(...arrays))];
-}
-
-function keysToPath(keys: string[]) {
-  return keys.map(path => ({path}));
-}
-
-// ICourse(Model)-Obtain option interfaces:
-type ICourseObtMode = string[];
-interface ICourseObtType {
-  empty?: ICourseObtMode;
-  selfid?: ICourseObtMode;
-  onlyid?: ICourseObtMode;
-  copy?: ICourseObtMode;
-  populate?: ICourseObtMode;
-}
-interface ICourseObt {
-  safe?: ICourseObtType;
-  editor?: ICourseObtType;
-  all?: ICourseObtType;
-}
-// Normalized:
-type ICourseNormObtMode = ICourseObtMode;
-interface ICourseNormObtType {
-  empty: ICourseNormObtMode;
-  selfid: ICourseNormObtMode;
-  onlyid: ICourseNormObtMode;
-  copy: ICourseNormObtMode;
-  populate: ICourseNormObtMode;
-  populatePaths: IProperties;
-  pickKeys: string[];
-}
-interface ICourseNormObt {
-  safe: ICourseNormObtType;
-  editor: ICourseNormObtType;
-}
-
-function normalizeCourseObtMode(modeObt?: ICourseObtMode): ICourseNormObtMode {
-  if (modeObt !== undefined) {
-    return modeObt.slice();
-  } else {
-    return [];
-  }
-}
-
-function normalizeCourseObt(obt: ICourseObt): ICourseNormObt {
-  const regularTypes = ['safe', 'editor']; // i.e. non-'all'
-  const modes = ['empty', 'selfid', 'onlyid', 'copy', 'populate'];
-  const result: IProperties = {};
-
-  for (const type of regularTypes) {
-    const typeResult = result[type] = <IProperties>{};
-    const typeObt = (<IProperties>obt)[type] || {};
-    for (const mode of modes) {
-      typeResult[mode] = normalizeCourseObtMode(typeObt[mode]);
-    }
-  }
-
-  const allTypeObt = obt.all || {};
-  for (const mode of modes) {
-    const normMode = normalizeCourseObtMode((<IProperties>allTypeObt)[mode]);
-    for (const type of regularTypes) {
-      result[type][mode].push(...normMode);
-    }
-  }
-
-  for (const type of regularTypes) {
-    const typeResult = <ICourseNormObtType>result[type];
-    typeResult.pickKeys = arrayUnion(typeResult.copy, typeResult.populate, typeResult.selfid);
-    typeResult.populatePaths = keysToPath(typeResult.populate);
-  }
-
-  return <ICourseNormObt>result;
-}
-
-courseSchema.statics.getSanitized = async function(user: IUser, courses: ICourseModel[], targets: ICourseObt) {
-  const toIdObj = (_id: string) => ({_id});
-
-  const options = normalizeCourseObt(targets);
-
-  return await Promise.all(courses.map(async (course) => {
-    const {userCanEditCourse} = course.checkPrivileges(user);
-    const typeOptions: IProperties = userCanEditCourse ? options.editor : options.safe;
-    await Course.populate(course, typeOptions.populatePaths);
-
-    const courseObject: IProperties = course.toObject();
-    const sanitizedCourseObject = Pick.only(typeOptions.pickKeys, courseObject);
-    for (const key of typeOptions.onlyid) {
-      const value = (<IProperties>course)[key];
-      sanitizedCourseObject[key] = Array.isArray(value) ? extractId(value).map(toIdObj) : toIdObj(extractId(value));
-    }
-    for (const key of typeOptions.selfid) {
-      const value = (<IProperties>course)[key];
-      if (Array.isArray(value)) {
-        sanitizedCourseObject[key] = extractId(value).filter((_id: string) => user._id === _id).map(toIdObj);
-      } else {
-        const extracted = toIdObj(extractId(value));
-        if (user._id === extracted._id) {
-          sanitizedCourseObject[key] = extracted;
-        }
-      }
-    }
-    Pick.asEmpty(typeOptions.empty, courseObject, sanitizedCourseObject);
-
-    return sanitizedCourseObject;
-  }));
 };
 
 Course = mongoose.model<ICourseModel, ICourseMongoose>('Course', courseSchema);
