@@ -5,8 +5,9 @@
   <h1>{{course?.name}}</h1>
   <div class="chip">
     <div *ngFor="let teacher of course.teachers">
+      <!-- dummie picture because of problems to access picture of teacher-->
      <img class="avatar" src="{{userService.user.getUserImageURL(30)}}" width="96" height="96">
-       {{teacher.profile.firstName + " " + teacher.profile.lastName }}
+       {{teacher.profile.firstName + " " + teacher.profile.lastName + " " + teacher.email}}
     </div>
   </div>
   <p>{{course?.description}}</p>
