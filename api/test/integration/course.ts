@@ -3,7 +3,7 @@ import {Server} from '../../src/server';
 import {FixtureLoader} from '../../fixtures/FixtureLoader';
 import {JwtUtils} from '../../src/security/JwtUtils';
 import {User} from '../../src/models/User';
-import {Course} from '../../src/models/Course';
+import {Course, ICourseModel} from '../../src/models/Course';
 import {ICourse} from '../../../shared/models/ICourse';
 import {ICourseView} from '../../../shared/models/ICourseView';
 import {IUser} from '../../../shared/models/IUser';
@@ -125,6 +125,15 @@ describe('Course', () => {
       });
       const savedCourse = await testData.save();
       return {teacher, unauthorizedTeacher, student, testData, savedCourse};
+    }
+
+    async function testUnauthorizedGetCourseEdit(savedCourse: ICourseModel, user: IUser) {
+      const res = await chai.request(app)
+        .get(`${BASE_URL}/${savedCourse._id}/edit`)
+        .set('Authorization', `JWT ${JwtUtils.generateToken(user)}`);
+
+      res.should.not.have.status(200);
+      return res;
     }
 
     it('should get view info for course with given id', async () => {
@@ -281,9 +290,3 @@ describe('Course', () => {
     });
   });
 });
-
-
-
-
-
-
