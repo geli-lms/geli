@@ -29,9 +29,9 @@ export class UnitCheckboxComponent implements OnInit {
 
   files;
   childUnitDesc: string;
+  showCheckBox = true;
 
   constructor(public snackBar: MatSnackBar) {
-
   }
 
   ngOnInit() {
@@ -41,6 +41,7 @@ export class UnitCheckboxComponent implements OnInit {
         this.files = fileUnit.files;
         this.unitDesc = 'File Unit';
         this.childUnitDesc = 'File';
+        this.showCheckBox = !this.hasOnlyLargeFiles();
         break;
       case 'task':
         this.unitDesc = 'Task Unit';
@@ -57,9 +58,6 @@ export class UnitCheckboxComponent implements OnInit {
 
   onChange() {
     if (this.files) {
-      if (this.hasLargeFile()) {
-        this.snackBar.open('Some Units are not selected because they content large files.Please download them separately', 'Dismiss');
-      }
       if (this.chkbox) {
         this.childUnits.forEach(upUnit => {
           if (upUnit.chkbox === false && !upUnit.showDL) {
@@ -100,12 +98,14 @@ export class UnitCheckboxComponent implements OnInit {
     this.valueChanged.emit();
   }
 
-  hasLargeFile() {
-    const result = this.childUnits.find(unit => {
-      return unit.showDL;
-    });
-
-    return !!result;
+  hasOnlyLargeFiles(): boolean {
+    if (!this.files) {
+      return false;
+    } else {
+      return this.files.every(file => {
+        return file.size / 1024 > 51200;
+      });
+    }
   }
 
 }
