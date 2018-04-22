@@ -236,6 +236,14 @@ export class CourseService extends DataService {
       .post(this.apiPath + courseId + '/leave', {})
       .toPromise()).result;
   }
+
+  readCourseToView(id: string): Promise<ICourse> {
+    return this.readSingleItem<ICourse>(id);
+  }
+
+  readCourseToEdit(id: string): Promise<ICourse> {
+    return this.readSingleItem<ICourse>(id + '/edit');
+  }
 }
 
 @Injectable()
