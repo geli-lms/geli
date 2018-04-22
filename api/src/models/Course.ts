@@ -1,5 +1,6 @@
 import {ICourse} from '../../../shared/models/ICourse';
 import {ICourseDashboard} from '../../../shared/models/ICourseDashboard';
+import {ICourseView} from '../../../shared/models/ICourseView';
 import * as mongoose from 'mongoose';
 import {User, IUserModel} from './User';
 import {ILectureModel, Lecture} from './Lecture';
@@ -17,6 +18,7 @@ interface ICourseModel extends ICourse, mongoose.Document {
   exportJSON: (sanitize?: boolean) => Promise<ICourse>;
   checkPrivileges: (user: IUser) => IProperties;
   forDashboard: (user: IUser) => ICourseDashboard;
+  forView: () => ICourseView;
   populateLecturesFor: (user: IUser) => this;
   processLecturesFor: (user: IUser) => Promise<this>;
 }
@@ -229,6 +231,17 @@ courseSchema.methods.forDashboard = function (user: IUser): ICourseDashboard {
 
     // Special properties for the dashboard:
     userCanEditCourse, userCanViewCourse, userIsCourseAdmin, userIsCourseTeacher, userIsCourseMember
+  };
+};
+
+courseSchema.methods.forView = function (): ICourseView {
+  const {
+    name, description
+  } = this;
+  return {
+    _id: <string>extractId(this._id),
+    name, description,
+    lectures: this.lectures.map((lecture: any) => lecture.toObject())
   };
 };
 
