@@ -6,7 +6,7 @@
   <span>Teacher:</span>
   <mat-chip-list>
     <div *ngFor="let teacher of course?.teachers">
-      <mat-chip>
+      <mat-chip (click)="showTeacherProfile(teacher)">
         <div class="img-wrapper">
           <div class="teacher-image" user-image [user-image]="teacher"></div>
         </div>

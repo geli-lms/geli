@@ -8,6 +8,8 @@ import {MatSnackBar, MatDialog} from '@angular/material';
 import {DownloadCourseDialogComponent} from './download-course-dialog/download-course-dialog.component';
 import {TitleService} from '../../shared/services/title.service';
 import {LastVisitedCourseContainerUpdater} from '../../shared/utils/LastVisitedCourseContainerUpdater';
+import {DialogService} from '../../shared/services/dialog.service';
+
 
 @Component({
   selector: 'app-course-detail',
@@ -26,7 +28,8 @@ export class CourseDetailComponent implements OnInit {
               private snackBar: MatSnackBar,
               private dialog: MatDialog,
               private titleService: TitleService,
-              private userDataService: UserDataService) {
+              private userDataService: UserDataService,
+              private dialogService: DialogService) {
   }
 
   ngOnInit() {
@@ -57,4 +60,9 @@ export class CourseDetailComponent implements OnInit {
       width: '800px'
     });
   }
+
+  showTeacherProfile(teacher) {
+    this.dialogService.userProfile(teacher);
+  }
+
 }
