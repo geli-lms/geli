@@ -4,10 +4,10 @@
     <button mat-button routerLink="/admin/users">
       <span>Users</span>
     </button>
-    <button mat-button routerLink="/admin/imprint">
+    <button [routerLink]="['/admin/markdownEdit']" [queryParams]="{type: 'imprint', header: 'Imprint'}" mat-button>
       <span>Imprint</span>
     </button>
-    <button mat-button routerLink="/admin/infoBox">
+    <button mat-button [routerLink]="['/admin/markdownEdit']" [queryParams]="{type: 'infoBox', header: 'InfoBox'}">
       <span>InfoBox</span>
     </button>
   </mat-toolbar-row>

@@ -2,9 +2,8 @@ import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {AuthGuardService} from '../shared/services/auth-guard.service';
 import {UserAdminComponent} from './user-admin/user-admin.component';
-import {ImprintAdminComponent} from './imprint-admin/imprint-admin.component';
 import {AdminComponent} from './admin.component';
-import {InfoboxAdminComponent} from "./infobox-admin/infobox-admin.component";
+import {AdminMarkdownEditComponent} from '../shared/components/admin-markdown-edit/admin-markdown-edit.component';
 
 const routes: Routes = [
   {
@@ -25,14 +24,8 @@ const routes: Routes = [
         data: {roles: ['admin']}
       },
       {
-        path: 'imprint',
-        component: ImprintAdminComponent,
-        canActivate: [AuthGuardService],
-        data: {roles: ['admin']}
-      },
-      {
-        path: 'infoBox',
-        component: InfoboxAdminComponent,
+        path: 'markdownEdit',
+        component: AdminMarkdownEditComponent,
         canActivate: [AuthGuardService],
         data: {roles: ['admin']}
       },

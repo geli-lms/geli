@@ -4,6 +4,7 @@ import {ConfigService} from '../../services/data.service';
 import {MarkdownService} from '../../services/markdown.service';
 import {errorCodes} from '../../../../../../../api/src/config/errorCodes';
 import {MatSnackBar} from '@angular/material';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'app-admin-markdown-edit',
@@ -12,7 +13,6 @@ import {MatSnackBar} from '@angular/material';
 })
 export class AdminMarkdownEditComponent implements OnInit {
 
-
   config: IConfig;
   text: string;
   @Input() type: string;
@@ -20,10 +20,15 @@ export class AdminMarkdownEditComponent implements OnInit {
 
   constructor(private service: ConfigService,
               private mdService: MarkdownService,
-              private snackBar: MatSnackBar) { }
+              private snackBar: MatSnackBar,
+              private route: ActivatedRoute) { }
 
   ngOnInit() {
-    void this.loadConfig()
+    this.route.queryParams.subscribe(params => {
+      this.headingType = params['header'];
+      this.type = params['type'];
+      void this.loadConfig()
+    });
   }
 
   async loadConfig() {
