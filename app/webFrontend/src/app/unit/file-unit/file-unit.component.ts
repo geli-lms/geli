@@ -2,12 +2,6 @@ import {Component, OnInit, Input, ViewChildren, QueryList, Directive, AfterViewI
 import {IFileUnit} from '../../../../../../shared/models/units/IFileUnit';
 import {Lightbox, IAlbum} from 'angular2-lightbox';
 
-// @Directive({selector: 'Video'})
-// export class Video {
-//   @Input() width;
-//   constructor() {}
-// }
-
 @Component({
   selector: 'app-file-unit',
   templateUrl: './file-unit.component.html',
@@ -80,7 +74,4 @@ export class FileUnitComponent implements OnInit {
     const ext = fileName.substr(extPos + 1);
     return pictureExt.includes(ext);
   }
-
-
-
 }
