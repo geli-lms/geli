@@ -1,1 +1,5 @@
-<mat-card *ngIf="contentRendered!=='No Content yet!' && contentRendered!=='' && contentRendered!==undefined" [innerHtml]="contentRendered" class="infoBox"></mat-card>
+<mat-card *ngIf="contentRendered!=='No Content yet!' && contentRendered!=='' && contentRendered!==undefined"
+          class="infoBox">
+  <i class="material-icons icon">info_outline</i>
+  <div [innerHtml]="contentRendered"></div>
+</mat-card>

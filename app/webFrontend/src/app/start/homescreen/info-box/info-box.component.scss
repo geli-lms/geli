@@ -1,6 +1,15 @@
 .infoBox {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
   max-width: 400px;
   width: 100%;
   margin-top: 8em;
-  //background-color: rgba(63, 81, 181,0.5);
+
+  .icon {
+    justify-content: center;
+    background-color: white;
+    font-size: 80px;
+    margin-right: 0.5em;
+  }
 }

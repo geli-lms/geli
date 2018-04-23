@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ImprintAndInfoService} from '../../../shared/services/imprint-and-info.service';
 
 @Component({
@@ -10,7 +10,8 @@ export class InfoBoxComponent implements OnInit {
   contentRendered: string;
 
 
-  constructor(private infoBoxService: ImprintAndInfoService) { }
+  constructor(private infoBoxService: ImprintAndInfoService) {
+  }
 
   ngOnInit() {
     this.getData();
