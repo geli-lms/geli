@@ -4,16 +4,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [NEXT]  - 2018-05-03
+## [NEXT]
 
-## [0.6.1] - 2018-04-22 - a lot of bug fixes  
+## [0.7.0] - 2018-05-03 - a lot of bug fixes  
+
 ### Added
+
 - New contributors
 - The date and the teacher under each unit
 - E-Mail validation to reset password
 - Language code to translation
 
 ### Fixed
+
 - Route `/users/roles`
 - Profile picture will be deleted after changing any other profile data
 - Some UI issues in create code kata unit
@@ -30,10 +33,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [0.6.0] - 2018-03-31 - Introduces MediaManager and some minor changes
 
+### Added
+
+- MediaManager for file management in courses
 
 ## [0.5.0] - 2018-03-24 - WS 17/18 intermediate Release
 
 ### Added
+
 - selective download of the course
 - progress dashboard for teacher
 - translateable frontend with i18n
