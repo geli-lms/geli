@@ -38,10 +38,9 @@ export class UserSettingsComponent implements OnInit, AfterContentInit {
       this.setSelection();
     });
   }
-  ngAfterContentInit() {
-    this.getNotificationSettings().then(() => {
+  async ngAfterContentInit() {
+    await this.getNotificationSettings();
       this.setSelection();
-    });
   }
 
   getCourses() {
