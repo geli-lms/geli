@@ -9,7 +9,7 @@ import {RouterModule, Routes} from '@angular/router';
 import {ImprintComponent} from './imprint/imprint.component';
 import {UserSettingsComponent} from './user/user-settings/user-settings.component';
 import {AuthGuardService} from './shared/services/auth-guard.service';
-import {NotfoundComponent} from './shared/components/notfound/notfound.component'
+import {NotfoundComponent} from './shared/components/notfound/notfound.component';
 
 const routes: Routes = [
   {path: 'not-found', component: NotfoundComponent},
