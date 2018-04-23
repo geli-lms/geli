@@ -10,6 +10,7 @@ import {
 } from '../../../../../../shared/models/INotificationSettings';
 import {NotificationSettings} from '../../models/NotificationSettings';
 import {isNullOrUndefined} from 'util';
+import {AfterContentInit} from "@angular/core/src/metadata/lifecycle_hooks";
 
 @Component({
   selector: 'app-user-settings',
