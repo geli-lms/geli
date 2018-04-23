@@ -16,7 +16,7 @@ import {isNullOrUndefined} from 'util';
   templateUrl: './user-settings.component.html',
   styleUrls: ['./user-settings.component.scss']
 })
-export class UserSettingsComponent implements OnInit {
+export class UserSettingsComponent implements OnInit, AfterContentInit {
 
   myCourses: ICourse[];
   displayedColumns = ['name', 'Notifications', 'email'];
@@ -33,6 +33,11 @@ export class UserSettingsComponent implements OnInit {
 
   ngOnInit() {
     this.getCourses();
+    this.getNotificationSettings().then(() => {
+      this.setSelection();
+    });
+  }
+    ngAfterContentInit(){
     this.getNotificationSettings().then(() => {
       this.setSelection();
     });
