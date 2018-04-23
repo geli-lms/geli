@@ -157,7 +157,11 @@ export class UserEditComponent implements OnInit {
       }
       this.snackBar.open('User image successfully uploaded.', '', {duration: 3000});
       this.updateUser();
-    }
+    } else {
+      if (response && !response.user) {
+        window.location.reload();
+      }
+    } 
   }
 
   private navigateBack() {
