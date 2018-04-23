@@ -11,7 +11,7 @@ import * as winston from 'winston';
 import {ObjectID} from 'bson';
 import {Directory} from './mediaManager/Directory';
 import {IProperties} from '../../../shared/models/IProperties';
-import {extractId} from '../utilities/ExtractId';
+import {extractMongoId} from '../utilities/ExtractMongoId';
 
 interface ICourseModel extends ICourse, mongoose.Document {
   exportJSON: (sanitize?: boolean) => Promise<ICourse>;
@@ -199,11 +199,11 @@ courseSchema.methods.checkPrivileges = function (user: IUser) {
   // NOTE: The 'tutor' role exists and has fixtures, but currently appears to be unimplemented.
   // const userIsTutor: boolean = user.role === 'tutor';
 
-  const courseAdminId = extractId(this.courseAdmin);
+  const courseAdminId = extractMongoId(this.courseAdmin);
 
   const userIsCourseAdmin: boolean = user._id === courseAdminId;
-  const userIsCourseTeacher: boolean = this.teachers.some((teacher: IUserModel) => user._id === extractId(teacher));
-  const userIsCourseStudent: boolean = this.students.some((student: IUserModel) => user._id === extractId(student));
+  const userIsCourseTeacher: boolean = this.teachers.some((teacher: IUserModel) => user._id === extractMongoId(teacher));
+  const userIsCourseStudent: boolean = this.students.some((student: IUserModel) => user._id === extractMongoId(student));
   const userIsCourseMember: boolean = userIsCourseAdmin || userIsCourseTeacher || userIsCourseStudent;
 
   const userCanEditCourse: boolean = userIsAdmin || userIsCourseAdmin || userIsCourseTeacher;
@@ -224,7 +224,7 @@ courseSchema.methods.forDashboard = function (user: IUser): ICourseDashboard {
   } = this.checkPrivileges(user);
   return {
     // As in ICourse:
-    _id: <string>extractId(this._id),
+    _id: <string>extractMongoId(this._id),
     name, active, description, enrollType,
 
     // Special properties for the dashboard:
@@ -237,7 +237,7 @@ courseSchema.methods.forView = function (): ICourseView {
     name, description
   } = this;
   return {
-    _id: <string>extractId(this._id),
+    _id: <string>extractMongoId(this._id),
     name, description,
     lectures: this.lectures.map((lecture: any) => lecture.toObject())
   };

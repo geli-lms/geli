@@ -6,7 +6,7 @@
  * @param from A mongoose object.
  * @param fallback Return this if no id is found.
  */
-function extractIdImpl(from: any, fallback?: any) {
+function extractMongoIdImpl(from: any, fallback?: any) {
   if (from instanceof Object) {
     if (from._bsontype === 'ObjectID') {
       return from.toString();
@@ -26,17 +26,17 @@ function extractIdImpl(from: any, fallback?: any) {
  * @param from A mongoose object or array of such.
  * @param fallback Return this if no id is found.
  */
-export function extractId(from: any | any[], fallback?: any) {
+export function extractMongoId(from: any | any[], fallback?: any) {
   if (Array.isArray(from)) {
     const results: any[] = [];
     for (const value of from) {
-      const result = extractIdImpl(value, fallback);
+      const result = extractMongoIdImpl(value, fallback);
       if (result !== undefined) {
         results.push(result);
       }
     }
     return results;
   } else {
-    return extractIdImpl(from, fallback);
+    return extractMongoIdImpl(from, fallback);
   }
 }
