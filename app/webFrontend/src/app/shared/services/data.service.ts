@@ -10,6 +10,7 @@ import {IDownload} from '../../../../../../shared/models/IDownload';
 import {IDirectory} from '../../../../../../shared/models/mediaManager/IDirectory';
 import {IFile} from '../../../../../../shared/models/mediaManager/IFile';
 import {IUserSearchMeta} from '../../../../../../shared/models/IUserSearchMeta';
+import {IConfig} from '../../../../../../shared/models/IConfig';
 
 export abstract class DataService {
 
@@ -477,7 +478,18 @@ export class DownloadFileService extends DataService {
 
 @Injectable()
 export class ConfigService extends DataService {
+  downloadMaxFileSize: number;
   constructor(public backendService: BackendService) {
     super('config/', backendService);
   }
+
+  async getDownloadMaxFileSize () {
+    const res = <IConfig><any> await this.readSingleItem('public/downloadMaxFileSize');
+    const _value =  Number.parseInt(res.value);
+    const  value = isNaN(_value) ? 11200 : _value;
+    this.downloadMaxFileSize = value;
+
+    return value;
+  }
+
 }
