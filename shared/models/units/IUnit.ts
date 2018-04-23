@@ -9,5 +9,6 @@ export interface IUnit {
     weight: number;
     updatedAt: string;
     createdAt: string;
+    unitCreator: string;
     __t: string;
 }
