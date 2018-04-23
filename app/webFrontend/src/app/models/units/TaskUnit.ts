@@ -14,6 +14,7 @@ export class TaskUnit implements ITaskUnit {
   __t: string;
   progressable: boolean;
   weight: number;
+  unitCreator: any;
 
   tasks: ITask[] = [];
   deadline: string;
