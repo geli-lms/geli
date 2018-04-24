@@ -16,8 +16,9 @@
   a new 'stable' image on Docker-Hub. 
   The livesysten then pulls that new image and starts up with the latest stable version
 
-If we have bugfixes we create a `bugfix/{descriptive-name}` and open a PR, issues are not required 
+If we have a small bugfixes we create a `bugfix/{descriptive-name}` and open a PR, issues are not required 
 for that. But it's important to have a good description of the bugfix in the PR-Comment.
+If it is not small please create a issue for it so we can decide the importance of it.
 
 
 ## Branching model
