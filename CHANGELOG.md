@@ -4,19 +4,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [NEXT]
-
-## [0.7.0] - 2018-05-03 - a lot of bug fixes  
-
+## [NEXT] - 2018-05-03 - a lot of bug fixes and new small features  
 ### Added
-
 - New contributors
 - The date and the teacher under each unit
 - E-Mail validation to reset password
 - Language code to translation
 
 ### Fixed
-
 - Route `/users/roles`
 - Profile picture will be deleted after changing any other profile data
 - Some UI issues in create code kata unit
@@ -32,15 +27,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - An issue with deleting a course and the notification was not triggered
 
 ## [0.6.0] - 2018-03-31 - Introduces MediaManager and some minor changes
-
 ### Added
-
 - MediaManager for file management in courses
 
 ## [0.5.0] - 2018-03-24 - WS 17/18 intermediate Release
-
 ### Added
-
 - selective download of the course
 - progress dashboard for teacher
 - translateable frontend with i18n
@@ -53,9 +44,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - adds imprint
 
 ## [0.4.0] - 2017-12-04 - WS 17/18 Second feature release
-
-###Added
-
+### Added
 - Responsivness improved
 - leave course function
 - delete course
@@ -69,44 +58,29 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 
 ## [0.3.1] - 2017-11-05 - Dynamic db name update
-
-##Added
-
+### Added
 - The possibility to use a other database name then 'test'
 
 ## [0.3.0] - 2017-11-02
-
-###Added
-
+### Added
 - a lot of major bugfixes and optimizations
 
 
 ## [0.2.2] - 2017-10-19 - Security improvements
-
-###Added 
-
+### Added 
 - security for free courses
 
 
 ## [0.2.1] - 2017-10-03 - First Live-Ready release
-
-###Added
-
+### Added
 - first live functionality
 
 
 ## [0.2.0] - 2017-06-29 - Almost production ready
-
-###Added
-
+### Added
 - Many new feature for production
 
 
 ## [0.1.0] - 2017-05-11 - Basics implemented
-
-###Added
-
+### Added
 - Many basic implementations of ground functionality
-
-
-

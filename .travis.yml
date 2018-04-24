@@ -62,7 +62,7 @@ install:
   - cd ..
 
 script:
-  #check for change in changelog
+  # check for change in changelog
   - .travis/changelog.sh
   # check for versions
   - .travis/check-version.sh
