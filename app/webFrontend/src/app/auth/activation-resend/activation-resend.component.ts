@@ -51,12 +51,6 @@ export class ActivationResendComponent implements OnInit {
     this.generateForm();
   }
 
-  changeRole(role) {
-    this.role = role;
-    this.registerForm.controls.email.updateValueAndValidity();
-    this.registerForm.controls.uid.updateValueAndValidity();
-  }
-
   clearAllErrors() {
     this.mailError = null;
     this.uidError = null;

@@ -13,8 +13,7 @@
 </mat-card>
 <mat-card class="register-card" *ngIf="!registrationDone">
   <mat-card-header>
-    <mat-card-title><h1 class="title">{{'auth.registration.registerAs'|translate}}
-      {{'common.roles.'+role|translate}}</h1></mat-card-title>
+    <mat-card-title><h1 class="title">{{'auth.registration.resendActivation'|translate}}</h1></mat-card-title>
   </mat-card-header>
   <mat-card-content>
     <form name="form" (ngSubmit)="register()" [formGroup]="registerForm">
@@ -49,26 +48,7 @@
         </mat-form-field>
       </div>
 
-      <mat-form-field>
-        <input matInput formControlName="email" [placeholder]="'common.email'|translate"/>
-        <div *ngIf="registerForm.controls.email.touched">
-          <small *ngIf="registerForm.controls.email.hasError('required')" class="text-danger">
-            {{'common.validation.required'|translate}}
-          </small>
-          <small *ngIf="mailError" class="text-danger">{{mailError}}</small>
-          <small
-            *ngIf="registerForm.controls.email.hasError('teacherEmailError') && !registerForm.controls.email.hasError('email') && !registerForm.controls.email.hasError('required')"
-            class="text-danger">{{'common.validation.instituteMail'|translate}}
-          </small>
-          <small
-            *ngIf="registerForm.controls.email.hasError('email') && !registerForm.controls.email.hasError('teacherMailError') && !registerForm.controls.email.hasError('required')"
-            class="text-danger">
-            {{'common.validation.invalid'|translate}}
-          </small>
-        </div>
-      </mat-form-field>
-
-      <div *ngIf="role == 'student'">
+      <div>
         <mat-form-field>
           <input matInput formControlName="uid" [placeholder]="'common.profile.uid'|translate"/>
           <div *ngIf="registerForm.controls.uid.touched">
@@ -80,19 +60,13 @@
         </mat-form-field>
       </div>
 
-      <app-password-input [form]="registerForm"></app-password-input>
 
       <button mat-raised-button color="primary" type="submit"
               [disabled]="loading || !registerForm?.valid">{{'common.register'|translate}}
       </button>
+      <button mat-raised-button type="button" routerLink="/register" routerLinkActive="active">
+        Back to Registration
+      </button>
     </form>
-
-    <button mat-button *ngIf="role==='student'" (click)="changeRole('teacher')" class="pull-right">
-      {{'auth.registration.teacherRegistrationButton'|translate}}
-    </button>
-
-    <button mat-button *ngIf="role!=='student'" (click)="changeRole('student')" class="pull-right">
-      {{'common.back'|translate}}
-    </button>
   </mat-card-content>
 </mat-card>

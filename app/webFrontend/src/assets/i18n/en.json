@@ -43,7 +43,8 @@
       "successful": "Registration was successful",
       "mailSent": "We have send you an activation link to your specified email address.",
       "back": "Back to frontpage",
-      "teacherRegistrationButton": "Not a student?"
+      "teacherRegistrationButton": "Not a student?",
+      "resendActivation": "Resend activation"
     }
   },
   "mainMenu": {
