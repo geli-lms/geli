@@ -217,14 +217,8 @@ export class CourseController {
    * @apiError NotFoundError Includes implicit authorization check.
    * @apiError ForbiddenError (Redundant) Authorization check.
    */
-  @Get('/:id')
+  @Get('/:id([a-fA-F0-9]{24})')
   async getCourse(@Param('id') id: string, @CurrentUser() currentUser: IUser) {
-      const regex = /[g-z]/gi; // Check if id only contains characters from a-f
-
-      if (id.search(regex) !== -1 || id.length !== 24) {
-          throw new NotFoundError();
-      }
-
     const course = await Course.findOne({
       ...this.userReadConditions(currentUser),
       _id: id
