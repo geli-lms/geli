@@ -2,7 +2,7 @@ import {Component} from '@angular/core';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
 import {UserService} from '../../../shared/services/user.service';
 import {DashboardBaseComponent} from '../dashboard-base-component';
-import {MatSnackBar} from '@angular/material';
+import {SnackBarService} from '../../../shared/services/snack-bar.service';
 import {Router} from '@angular/router';
 import {DialogService} from '../../../shared/services/dialog.service';
 import {SortUtil} from '../../../shared/utils/SortUtil';
@@ -23,7 +23,7 @@ export class DashboardTeacherComponent extends DashboardBaseComponent {
   constructor(public userService: UserService,
               private router: Router,
               private dialogService: DialogService,
-              private snackBar: MatSnackBar) {
+              private snackBar: SnackBarService) {
     super();
   }
 
@@ -72,11 +72,11 @@ export class DashboardTeacherComponent extends DashboardBaseComponent {
         '/api/import/course/')
       .subscribe(res => {
         if (res.success) {
-          this.snackBar.open('Course successfully imported', '', {duration: 3000});
+          this.snackBar.open('Course successfully imported');
           const url = '/course/' + res.result._id + '/edit';
           this.router.navigate([url]);
         } else if (res.result) {
-          this.snackBar.open(res.result.message, '', {duration: 3000});
+          this.snackBar.open(res.result.message);
         }
       });
   }
