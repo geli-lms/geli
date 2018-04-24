@@ -8,7 +8,7 @@
       {{course.description}}
     </p>
   </mat-card-content>
-  <mat-card-actions >
+  <mat-card-actions>
     <span class="course-admin-actions" *ngIf="this.userService.isCourseTeacherOrAdmin(course)">
       <button mat-icon-button (click)="editCourse(course._id)">
         <mat-icon>mode_edit</mat-icon>
@@ -23,13 +23,23 @@
       </button>
     </span>
     <span class="course-student-actions" *ngIf="this.userService.isStudent()">
-      <button mat-icon-button *ngIf="!this.isMemberOfCourse(course)"
-              (click)="enroll()" matTooltip="Enroll">
-      <mat-icon>add_circle_outline</mat-icon>
-    </button>
+      <div style="float:left">
+        <i class="material-icons" style="margin-top: 8px;"
+            matTooltip="course locked by access key"
+           *ngIf="course.enrollType == 'accesskey'">lock</i>
+        <i class="material-icons" style="margin-top: 8px;"
+           matTooltip="free course"
+           *ngIf="course.enrollType != 'accesskey'">lock_open</i>
+      </div>
+      <div style="float:left">
+        <button mat-icon-button *ngIf="!this.isMemberOfCourse(course)"
+                (click)="enroll()" matTooltip="Enroll">
+        <mat-icon>add_circle_outline</mat-icon>
+        </button>
+      </div>
 
-    <button mat-icon-button *ngIf="this.isMemberOfCourse(course)"
-            (click)="leave()" matTooltip="Leave">
+      <button mat-icon-button *ngIf="this.isMemberOfCourse(course)"
+              (click)="leave()" matTooltip="Leave">
       <mat-icon>remove_circle_outline</mat-icon>
     </button>
     </span>
