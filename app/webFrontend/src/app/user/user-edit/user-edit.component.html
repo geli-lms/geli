@@ -7,11 +7,11 @@
 <form name="form" class="user-form" (ngSubmit)="onSubmit()" [formGroup]="userForm">
   <div class="form-group" formGroupName="profile">
     <mat-form-field class="full-width">
-      <input matInput formControlName="firstName" placeholder="First name"/>
+      <input matInput formControlName="firstName" placeholder="First name" maxlength="64"/>
     </mat-form-field>
 
     <mat-form-field class="full-width">
-      <input matInput formControlName="lastName" placeholder="Last name"/>
+      <input matInput formControlName="lastName" placeholder="Last name" maxlength="64"/>
     </mat-form-field>
 
     <mat-form-field class="full-width">
