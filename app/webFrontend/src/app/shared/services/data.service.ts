@@ -486,7 +486,7 @@ export class ConfigService extends DataService {
   async getDownloadMaxFileSize () {
     const res = <IConfig><any> await this.readSingleItem('public/downloadMaxFileSize');
     const _value =  Number.parseInt(res.value);
-    const  value = isNaN(_value) ? 11200 : _value;
+    const  value = isNaN(_value) ? 51200 : _value;
     this.downloadMaxFileSize = value;
 
     return value;

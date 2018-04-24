@@ -30,7 +30,7 @@ export class UnitCheckboxComponent implements OnInit {
 
   files;
   childUnitDesc: string;
-  showCheckBox = true;
+  showCheckBox = true; // false if the unit has only large files
 
   constructor(public snackBar: MatSnackBar, private configService: ConfigService) {
   }
