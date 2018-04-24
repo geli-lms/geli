@@ -3,7 +3,8 @@ import 'rxjs/add/operator/switchMap';
 import {UserService} from '../shared/services/user.service';
 import {ICourse} from '../../../../../shared/models/ICourse';
 import {Router} from '@angular/router';
-import {MatDialog, MatSnackBar} from '@angular/material';
+import {MatDialog} from '@angular/material';
+import {SnackBarService} from '../shared/services/snack-bar.service';
 import {AccessKeyDialog} from '../shared/components/access-key-dialog/access-key-dialog.component';
 import {CourseService} from '../shared/services/data.service';
 import {DialogService} from '../shared/services/dialog.service';
@@ -27,7 +28,7 @@ export class CourseComponent {
   constructor(public userService: UserService,
               private router: Router,
               private dialog: MatDialog,
-              private snackBar: MatSnackBar,
+              private snackBar: SnackBarService,
               private dialogService: DialogService,
               private showProgress: ShowProgressService,
               private courseService: CourseService) {
@@ -57,24 +58,27 @@ export class CourseComponent {
     }
   }
 
+  /**
+   * Leave course when user confirms
+   */
   leave() {
     this.dialogService
       .confirm('Leave course ?', 'Do you really want to leave the course?', 'Leave')
-      .subscribe(res => {
-        if (res) {
-          this.showProgress.toggleLoadingGlobal(true);
-          this.courseService.leaveStudent(this.course._id)
-            .then(() => {
-              this.onLeave.emit({'courseId': this.course._id});
-              this.snackBar.open('Left course successfully', '', {duration: 3000});
-            })
-            .catch((error) => {
-              this.snackBar.open(error, '', {duration: 3000});
-            })
-            .then(() => {
-               this.showProgress.toggleLoadingGlobal(false);
-            });
+      .subscribe(async (leaveCourse) => {
+        if (leaveCourse === false) {
+          return;
         }
+
+        this.showProgress.toggleLoadingGlobal(true);
+
+        try {
+          await this.courseService.leaveStudent(this.course._id);
+          this.onLeave.emit({'courseId': this.course._id});
+        } catch (err) {
+          this.snackBar.open(err.error.message);
+        }
+
+        this.showProgress.toggleLoadingGlobal(false);
       });
   }
 
