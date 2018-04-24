@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
-import {MatDialog, MatSnackBar} from '@angular/material';
+import {MatDialog} from '@angular/material';
+import {SnackBarService} from '../../../shared/services/snack-bar.service';
 import {CourseService, MediaService} from '../../../shared/services/data.service';
 import {ActivatedRoute} from '@angular/router';
 import {IDirectory} from '../../../../../../../shared/models/mediaManager/IDirectory';
@@ -26,14 +27,14 @@ export class CourseMediaComponent implements OnInit {
               public dialogService: DialogService,
               private courseService: CourseService,
               private route: ActivatedRoute,
-              private snackBar: MatSnackBar) {
+              private snackBar: SnackBarService) {
   }
 
   async ngOnInit() {
     this.folderBarVisible = false;
 
-    this.route.parent.params.subscribe(
-      async (params) => {
+    this.route.parent.params.subscribe(async (params) => {
+      try {
         // retrieve course
         this.course = await this.courseService.readSingleItem<ICourse>(params['id']);
 
@@ -48,11 +49,10 @@ export class CourseMediaComponent implements OnInit {
         }
 
         await this.changeDirectory(this.course.media._id, true);
-      },
-      error => {
-        this.snackBar.open('Could not load course', '', {duration: 3000});
+      } catch (err) {
+        this.snackBar.open(err.error.message);
       }
-    );
+    });
   }
 
   async reloadDirectory() {
@@ -121,27 +121,39 @@ export class CourseMediaComponent implements OnInit {
     }
   }
 
+  /**
+   * Remove selected files when user confirms
+   * @returns {Promise<void>}
+   */
   async removeSelectedFile() {
     this.toggleBlocked = true;
-    const res = await this.dialogService
+
+    const deleteSelectedFiles = await this.dialogService
       .confirmRemove('selected files', '', 'course')
       .toPromise();
-    this.toggleBlocked = false;
-    if (res) {
-      let failed = false;
-      this.selectedFiles.forEach(async file => {
-        await this.mediaService.deleteFile(file)
-          .catch(reason => {
-            this.snackBar.open('Could not remove file: ' + file.name, '', {duration: 2000});
-            failed = true;
-          });
-      });
-      if (!failed) {
-        this.snackBar.open('Removed all selected files', '', {duration: 3000});
-      }
-      this.selectedFiles = [];
-      await this.reloadDirectory();
+
+    if (deleteSelectedFiles === false) {
+      return;
     }
+
+    const filesFailed = [];
+    for (const file of this.selectedFiles) {
+      try {
+        await this.mediaService.deleteFile(file);
+      } catch (err) {
+        filesFailed.push(file.name);
+      }
+    }
+
+    if (filesFailed.length === 0) {
+      this.snackBar.open('Removed all selected files');
+    } else {
+      this.snackBar.openLong('Could not remove: ' + filesFailed.join(', '));
+    }
+
+    this.selectedFiles = [];
+    await this.reloadDirectory();
+    this.toggleBlocked = false;
   }
 
   initFileDownload(file: IFile) {
@@ -163,8 +175,8 @@ export class CourseMediaComponent implements OnInit {
         // Update file attributes
         file.name = value;
         await this.mediaService.updateFile(file)
-          .then(value2 => this.snackBar.open('Renamed file', '', {duration: 2000}))
-          .catch(reason => this.snackBar.open('Rename failed, Server error', '', {duration: 2000}));
+          .then(value2 => this.snackBar.open('Renamed file'))
+          .catch(reason => this.snackBar.open('Rename failed, Server error'));
         await this.reloadDirectory();
       }
     });
