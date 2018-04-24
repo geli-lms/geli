@@ -1,15 +1,8 @@
 .infoBox {
   display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  max-width: 400px;
+  max-width: 600px;
   width: 100%;
-  margin-top: 8em;
-
-  .icon {
-    justify-content: center;
-    background-color: white;
-    font-size: 80px;
-    margin-right: 0.5em;
-  }
+  padding: 1em;
+  flex-direction: column;
+  background-color: rgba(255 ,255 ,255 ,0.9);
 }

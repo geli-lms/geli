@@ -18,6 +18,6 @@ export class ImprintComponent implements OnInit {
   }
 
   async getData() {
-    this.renderedContent = await this.imprintService.loadConfig('infoBox');
+    this.renderedContent = await this.imprintService.loadConfig('imprint');
   }
 }

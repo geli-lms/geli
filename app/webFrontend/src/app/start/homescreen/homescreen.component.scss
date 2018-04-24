@@ -3,15 +3,16 @@
 :host {
   flex-grow: 1;
   display: flex;
-  flex-direction: column;
   justify-content: center;
-  align-items: center;
+  align-items: flex-end;
 }
 
 h1 {
   color: white;
   text-align: center;
   text-shadow: 0 0 5px gray;
+  position: absolute;
+  bottom: 50%;
 }
 
 .logo-font {
