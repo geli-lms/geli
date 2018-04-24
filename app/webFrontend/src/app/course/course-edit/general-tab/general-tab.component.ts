@@ -35,7 +35,7 @@ export class GeneralTabComponent implements OnInit {
   id: string;
   courseOb: ICourse;
   uploader: FileUploader = null;
-  enrollTypes =  ENROLL_TYPES;
+  enrollTypes = ENROLL_TYPES;
   enrollTypeConstants = {
     ENROLL_TYPE_WHITELIST,
     ENROLL_TYPE_FREE,
@@ -119,7 +119,7 @@ export class GeneralTabComponent implements OnInit {
     });
   }
 
-  createCourse() {
+  async createCourse() {
     this.showProgress.toggleLoadingGlobal(true);
 
     const request: any = {
@@ -132,40 +132,40 @@ export class GeneralTabComponent implements OnInit {
       request.accessKey = this.accessKey;
     }
 
-    this.courseService.updateItem(request).then(
-      (val) => {
-        this.notificationService.createItem(
-          {changedCourse: val, changedLecture: null,
-            changedUnit: null, text: 'Course ' + val.name + ' has been updated.'})
-          .catch(console.error);
-        this.showProgress.toggleLoadingGlobal(false);
-        this.snackBar.open('Saved successfully', '', {duration: 5000});
-      }, (error) => {
-        this.showProgress.toggleLoadingGlobal(false);
-        // Mongodb uses the error field errmsg
-        const errormessage = error.json().message || error.json().errmsg;
-        this.snackBar.open('Saving course failed ' + errormessage, 'Dismiss');
+    try {
+      const course = await this.courseService.updateItem(request);
+
+      this.notificationService.createItem({
+        changedCourse: course,
+        changedLecture: null,
+        changedUnit: null,
+        text: 'Course ' + course.name + ' has been updated.'
       });
+
+      this.showProgress.toggleLoadingGlobal(false);
+      this.snackBar.open('Saved successfully', '', {duration: 5000});
+    } catch (err) {
+      this.showProgress.toggleLoadingGlobal(false);
+      this.snackBar.open('Saving course failed ' + err.error.message, 'Dismiss');
+    }
   }
 
   async onExport() {
     try {
       const courseJSON = await this.exportService.exportCourse(this.courseOb);
-
       this.saveFileService.save(this.courseOb.name, JSON.stringify(courseJSON, null, 2));
     } catch (err) {
-      this.snackBar.open('Export course failed ' + err.json().message, 'Dismiss');
+      this.snackBar.open('Export course failed ' + err.error.message, 'Dismiss');
     }
   }
 
   async onDuplicate() {
     try {
       const course = await this.duplicationService.duplicateCourse(this.courseOb, this.userService.user);
-      const url = '/course/' + (<any>course)._id + '/edit';
-      this.router.navigate([url]);
+      this.router.navigate(['course', course._id, 'edit']);
       this.snackBar.open('Course successfully duplicated', '', {duration: 3000});
     } catch (err) {
-      this.snackBar.open('Duplication of the course failed ' + err.json().message, 'Dismiss');
+      this.snackBar.open('Duplication of the course failed ' + err.error.message, 'Dismiss');
     }
   }
 
@@ -183,12 +183,14 @@ export class GeneralTabComponent implements OnInit {
         if (!res) {
           return;
         }
-        this.notificationService.createItem(
-          {changedCourse: this.courseOb, changedLecture: null,
-            changedUnit: null, text: 'Course ' + this.courseOb.name + ' has been deleted.'})
-          .catch(console.error);
+        await this.notificationService.createItem({
+          changedCourse: this.courseOb,
+          changedLecture: null,
+          changedUnit: null,
+          text: 'Course ' + this.courseOb.name + ' has been deleted.'
+        });
         await this.courseService.deleteItem(this.courseOb);
-        await this.router.navigate(['/']);
+        this.router.navigate(['/']);
       });
   }
 }
