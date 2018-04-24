@@ -15,7 +15,6 @@ export class CodeKataUnitProgress implements ICodeKataUnitProgress {
     this.unit = unit;
     this.course = this.unit._course;
     this.code = '';
-    this.type = 'codeKata';
-    this.type = 'codeKata';
+    this.__t = 'codeKata';
   }
 }
