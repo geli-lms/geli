@@ -320,12 +320,9 @@ export class UserController {
         if (user.profile.picture && user.profile.picture.path && fs.existsSync(user.profile.picture.path)) {
           fs.unlinkSync(user.profile.picture.path);
         }
-      
         // look up mime-type of uploaded file (f.e. a jpg will return 'image/jpg'
         const mimeFamily = file.mimetype.split('/', 1)[0];
-
         if ( mimeFamily === 'image' ) {
-          
           const resizedImageBuffer = await sharp(file.path)
           .resize(config.maxProfileImageWidth, config.maxProfileImageHeight)
           .withoutEnlargement(true)
@@ -333,7 +330,6 @@ export class UserController {
           .toBuffer({resolveWithObject: true});
 
           fs.writeFileSync(file.path, resizedImageBuffer.data);
-          
           user.profile.picture = {
             _id: null,
             name: file.filename,

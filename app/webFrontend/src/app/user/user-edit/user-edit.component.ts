@@ -161,7 +161,7 @@ export class UserEditComponent implements OnInit {
       if (response && !response.user) {
         window.location.reload();
       }
-    } 
+    }
   }
 
   private navigateBack() {
