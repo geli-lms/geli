@@ -68,8 +68,7 @@ export class DashboardTeacherComponent extends DashboardBaseComponent {
 
   onImportCourse = () => {
     this.dialogService
-      .chooseFile('Choose a course.json to import',
-        '/api/import/course/')
+      .chooseFile('Choose a course.json to import', '/api/import/course/')
       .subscribe(res => {
         if (res.success) {
           this.snackBar.open('Course successfully imported');
