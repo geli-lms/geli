@@ -1,0 +1,24 @@
+.user-profile-dialog-wrapper{
+  text-align: center;
+}
+
+.profile {
+
+  .user-icon {
+    display: block;
+    width: 7rem;
+    height: 7rem;
+    background-size: cover;
+    margin: auto;
+  }
+
+  .name {
+    margin-top: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .user-data {
+    text-align: left;
+    margin-bottom: 1.5rem;
+  }
+}

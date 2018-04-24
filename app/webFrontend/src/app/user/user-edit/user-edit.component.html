@@ -1,4 +1,8 @@
+<div class="edit-user-wrapper">
 <h1>Edit profile</h1>
+<div class="profile" *ngIf="user">
+    <span class="user-icon" user-image [user-image]="user" [size]="'100px'"></span>
+</div>
 
 <form name="form" class="user-form" (ngSubmit)="onSubmit()" [formGroup]="userForm">
   <div class="form-group" formGroupName="profile">
@@ -28,11 +32,12 @@
 <p *ngIf="!showPwFields()">
   <button mat-raised-button class="mat-button" (click)="resetPassword()">Generate new Password</button>
 </p>
-<p>
+<div class="button-wrapper">
   <button mat-raised-button class="mat-button" (click)="openAddPictureDialog()">
     Upload new picture
   </button>
   <button mat-raised-button class="mat-button" (click)="openChangePasswordDialog()">
     Change Password
   </button>
-</p>
+</div>
+</div>

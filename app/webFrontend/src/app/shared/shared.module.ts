@@ -23,6 +23,7 @@ import {PickMediaDialog} from './components/pick-media-dialog/pick-media-dialog.
 import {TranslateModule} from '@ngx-translate/core';
 import {AdminMarkdownEditComponent} from './components/admin-markdown-edit/admin-markdown-edit.component';
 import {ImprintAndInfoService} from './services/imprint-and-info.service';
+import {UserProfileDialog} from 'app/shared/components/user-profile-dialog/user-profile-dialog.component';
 
 @NgModule({
   imports: [
@@ -52,7 +53,11 @@ import {ImprintAndInfoService} from './services/imprint-and-info.service';
     ChangePasswordDialogComponent,
     MarkdownEditorComponent,
     PickMediaDialog,
+<<<<<<< HEAD
     AdminMarkdownEditComponent,
+=======
+    UserProfileDialog,
+>>>>>>> develop
   ],
   exports: [
     GravatarDirective,
@@ -73,11 +78,16 @@ import {ImprintAndInfoService} from './services/imprint-and-info.service';
     ChangePasswordDialogComponent,
     PickMediaDialog,
     TranslateModule,
+<<<<<<< HEAD
     AdminMarkdownEditComponent,
+=======
+    UserProfileDialog,
+>>>>>>> develop
   ],
   entryComponents: [
     UploadFormDialog,
     PickMediaDialog,
+    UserProfileDialog,
   ],
 })
 export class SharedModule {

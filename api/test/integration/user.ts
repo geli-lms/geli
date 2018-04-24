@@ -254,22 +254,6 @@ describe('User', () => {
               res.body.email.should.be.equal('student2@updated.local');
     });
 
-    it('should fail with missing password', async () => {
-      const student = await FixtureUtils.getRandomStudent();
-      const updatedUser = student;
-      updatedUser.password = '1234test';
-
-      const res = await chai.request(app)
-        .put(`${BASE_URL}/${student._id}`)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(student)}`)
-        .send(updatedUser)
-        .catch(err => err.response);
-
-      res.status.should.be.equal(400);
-      res.body.name.should.be.equal('BadRequestError');
-      res.body.message.should.be.equal('Invalid Current Password!');
-    });
-
     it('should update user data', async () => {
       const student = await FixtureUtils.getRandomStudent();
       const updatedUser = student;
@@ -342,7 +326,9 @@ describe('User', () => {
         .attach('file', fs.readFileSync('test/resources/test.png'), 'test.png');
 
       res.status.should.be.equal(200);
-      res.body.profile.picture.name.should.be.equal('test.png');
+      res.body.profile.picture.should.be.an('object');
+      res.body.profile.picture.should.have.all.keys('alias', 'name', 'path');
+      res.body.profile.picture.alias.should.be.equal('test.png');
     });
   });
 

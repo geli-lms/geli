@@ -62,7 +62,8 @@ export class CodeKataComponent implements OnInit {
     });
     this.testEditor.setOptions({
       maxLines: 9999,
-      firstLineNumber: ((this.codeKataUnit.definition.split('\n').length) || 0) + 1,
+      firstLineNumber: ((this.codeKataUnit.definition.split('\n').length || 0) +
+        (this.codeEditor.text.split('\n').length || 0) + 1),
     });
   }
 
@@ -80,7 +81,7 @@ export class CodeKataComponent implements OnInit {
           this.progress = item;
         })
         .catch((err) => {
-          this.snackBar.open(`An error occurred: ${err.json().message}`, '', {duration: 3000});
+          this.snackBar.open(`An error occurred: ${err.error.message}`, '', {duration: 3000});
         });
     } else {
       this.progressService.updateItem(this.progress)
@@ -89,7 +90,7 @@ export class CodeKataComponent implements OnInit {
           this.progress = item;
         })
         .catch((err) => {
-          this.snackBar.open(`An error occurred: ${err.json().message}`, '', {duration: 3000})
+          this.snackBar.open(`An error occurred: ${err.error.message}`, '', {duration: 3000});
         });
     }
   }

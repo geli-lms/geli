@@ -1,6 +1,6 @@
 import {
   Body, JsonController, UseBefore, Get, Param, QueryParam, Put, Delete, Authorized, CurrentUser,
-  BadRequestError, ForbiddenError, UploadedFile, Post
+  BadRequestError, ForbiddenError, InternalServerError, NotFoundError, UploadedFile, Post
 } from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import fs = require('fs');
@@ -8,6 +8,8 @@ import {IUser} from '../../../shared/models/IUser';
 import {IUserModel, User} from '../models/User';
 import {isNullOrUndefined} from 'util';
 import {errorCodes} from '../config/errorCodes';
+import * as sharp from 'sharp';
+import config from '../config/main';
 
 const multer = require('multer');
 
@@ -190,7 +192,7 @@ export class UserController {
       conditions.$or.push({uid: {$regex: re}});
       conditions.$or.push({email: {$regex: re}});
       conditions.$or.push({'profile.firstName': {$regex: re}});
-      conditions.$or.push({'profile.lastName': {$regex: re}})
+      conditions.$or.push({'profile.lastName': {$regex: re}});
     });
     const amountUsers = await User.count({}).where({role: role});
     const users = await User.find(conditions, {
@@ -240,6 +242,8 @@ export class UserController {
    *
    * @apiSuccess {User} user User.
    *
+   * @apiError NotFoundError User was not found.
+   *
    * @apiSuccessExample {json} Success-Response:
    *     {
    *         "_id": "5a037e6a60f72236d8e7c81d",
@@ -262,13 +266,14 @@ export class UserController {
    *         "id": "5a037e6a60f72236d8e7c81d"
    *     }
    */
-  @Get('/:id')
-  getUser(@Param('id') id: string, @CurrentUser() currentUser?: IUser) {
-    return User.findById(id)
-      .populate('progress')
-      .then((user) => {
-        return this.cleanUserObject(id, user, currentUser);
-      });
+  @Get('/:id([a-fA-F0-9]{24})')
+  async getUser(@Param('id') id: string, @CurrentUser() currentUser?: IUser) {
+    const user = await User.findById(id).populate('progress');
+
+    if (!user) {
+      throw new NotFoundError(`User was not found.`);
+    }
+    return this.cleanUserObject(id, user, currentUser);
   }
 
   /**
@@ -308,20 +313,28 @@ export class UserController {
    * @apiError BadRequestError
    */
   @Post('/picture/:id')
-  addUserPicture(@UploadedFile('file', {options: uploadOptions}) file: any, @Param('id') id: string, @Body() data: any,
-                 @CurrentUser() currentUser: IUser) {
+   addUserPicture(@UploadedFile('file', {options: uploadOptions}) file: any, @Param('id') id: string, @Body()
+    data: any, @CurrentUser() currentUser: IUser) {
     return User.findById(id)
-      .then((user: IUserModel) => {
-        if (user.profile.picture && user.profile.picture.link && fs.existsSync(user.profile.picture.link)) {
-          fs.unlinkSync(user.profile.picture.link);
+      .then(async (user: IUserModel) =>  {
+        if (user.profile.picture && user.profile.picture.path && fs.existsSync(user.profile.picture.path)) {
+          fs.unlinkSync(user.profile.picture.path);
         }
+
+        const resizedImageBuffer = await sharp(file.path)
+          .resize(config.maxProfileImageWidth, config.maxProfileImageHeight)
+          .withoutEnlargement(true)
+          .max()
+          .toBuffer({resolveWithObject: true});
+
+        fs.writeFileSync(file.path, resizedImageBuffer.data);
 
         user.profile.picture = {
           _id: null,
-          name: file.originalname,
-          link: file.filename,
-          size: file.size,
-          mimeType: file.mimeType
+          name: file.filename,
+          alias: file.originalname,
+          path: file.path,
+          size: resizedImageBuffer.info.size
         };
         return user.save();
       })

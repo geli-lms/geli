@@ -55,7 +55,8 @@ export class DuplicationController {
     const courseAdmin = data.courseAdmin;
     try {
       const courseModel: ICourseModel = await Course.findById(id);
-      const exportedCourse: ICourse = await courseModel.exportJSON();
+      const exportedCourse: ICourse = await courseModel.exportJSON(false);
+      delete exportedCourse.students;
       return Course.schema.statics.importJSON(exportedCourse, courseAdmin);
     } catch (err) {
         const newError = new InternalServerError('Failed to duplicate course');

@@ -105,7 +105,7 @@ describe('Whitelist User', () => {
       addedUsers[0].uid.should.be.eq(whitelistUser.uid);
       addedUsers[0].profile.firstName.should.be.eq(whitelistUser.firstName);
       addedUsers[0].profile.lastName.should.be.eq(whitelistUser.lastName);
-    })
+    });
   });
 
   describe(`PUT ${BASE_URL}`, () => {
@@ -204,6 +204,6 @@ describe('Whitelist User', () => {
         const resCourse = await Course.findById(course._id).populate('students');
         const emptyUsers: IUser[] = resCourse.students.filter(stud => stud.uid === member.uid);
         emptyUsers.length.should.be.eq(0);
-      })
+      });
     });
 });

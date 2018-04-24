@@ -3,9 +3,10 @@ import {DragulaService} from 'ng2-dragula';
 import {IUser} from '../../../../../../../shared/models/IUser';
 import {User} from '../../../models/User';
 import {FormControl} from '@angular/forms';
-import 'rxjs/add/operator/startWith'
+import 'rxjs/add/operator/startWith';
 import {NotificationService, UserDataService} from '../../../shared/services/data.service';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
+import {IUserSearchMeta} from '../../../../../../../shared/models/IUserSearchMeta';
 
 
 @Component({
@@ -42,7 +43,7 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
     this.onSearch.emit(search);
     if (search !== '' && this.finishRestCall) {
       this.finishRestCall = false;
-      const foundDatas = await this.userService.searchUsers(this.role, search, 20);
+      const foundDatas: IUserSearchMeta = await this.userService.searchUsers(this.role, search, 20);
       const foundUsers: User[] = foundDatas.users.map(user => new User(user));
       this.usersTotal = foundDatas.meta.count;
       if (foundUsers) {

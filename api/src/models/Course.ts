@@ -1,16 +1,24 @@
 import {ICourse} from '../../../shared/models/ICourse';
 import * as mongoose from 'mongoose';
-import {User} from './User';
+import {User, IUserModel} from './User';
 import {ILectureModel, Lecture} from './Lecture';
 import {ILecture} from '../../../shared/models/ILecture';
 import {InternalServerError} from 'routing-controllers';
 import {IUser} from '../../../shared/models/IUser';
 import * as winston from 'winston';
 import {ObjectID} from 'bson';
+import {Directory} from './mediaManager/Directory';
+import {IProperties} from '../../../shared/models/IProperties';
+import Pick from '../utilities/Pick';
 
 interface ICourseModel extends ICourse, mongoose.Document {
-  exportJSON: () => Promise<ICourse>;
+  exportJSON: (sanitize?: boolean) => Promise<ICourse>;
+  checkPrivileges: (user: IUser) => IProperties;
 }
+interface ICourseMongoose extends mongoose.Model<ICourseModel> {
+  getSanitized: (user: IUser, courses: ICourseModel[], targets: ICourseObt) => Promise<IProperties[]>;
+}
+let Course: ICourseMongoose;
 
 const courseSchema = new mongoose.Schema({
     name: {
@@ -87,30 +95,40 @@ const courseSchema = new mongoose.Schema({
 );
 
 // Cascade delete
-courseSchema.pre('remove', function (next: () => void) {
-  Lecture.find({'_id': {$in: this.lectures}}).exec()
-    .then((lectures) => Promise.all(lectures.map(lecture => lecture.remove())))
-    .then(next)
-    .catch(next);
+courseSchema.pre('remove', async function (next) {
+  const localCourse = <ICourseModel><any>this;
+  try {
+    const deletedLectures = await Lecture.deleteMany({'_id': {$in: localCourse.lectures}}).exec();
+    const deletedDirs = await Directory.deleteMany({'_id': {$in: localCourse.media}}).exec();
+  } catch (error) {
+    const debug = 0;
+    next();
+  }
+
+  next();
 });
 
-courseSchema.methods.exportJSON = async function () {
+courseSchema.methods.exportJSON = async function (sanitize: boolean = true) {
   const obj = this.toObject();
 
   // remove unwanted informations
-  // mongo properties
-  delete obj._id;
-  delete obj.createdAt;
-  delete obj.__v;
-  delete obj.updatedAt;
+  {
+    // mongo properties
+    delete obj._id;
+    delete obj.createdAt;
+    delete obj.__v;
+    delete obj.updatedAt;
 
-  // custom properties
-  delete obj.accessKey;
-  delete obj.active;
-  delete obj.whitelist;
-  delete obj.students;
-  delete obj.courseAdmin;
-  delete obj.teachers;
+    // custom properties
+    if (sanitize) {
+      delete obj.accessKey;
+      delete obj.active;
+      delete obj.whitelist;
+      delete obj.students;
+      delete obj.courseAdmin;
+      delete obj.teachers;
+    }
+  }
 
   // "populate" lectures
   const lectures: Array<mongoose.Types.ObjectId> = obj.lectures;
@@ -168,6 +186,161 @@ courseSchema.statics.importJSON = async function (course: ICourse, admin: IUser,
   }
 };
 
-const Course = mongoose.model<ICourseModel>('Course', courseSchema);
+
+function canUserRoleEditCourse(user: IUser) {
+  const roleIsTeacher: boolean = user.role === 'teacher';
+  const roleIsAdmin: boolean = user.role === 'admin';
+  return roleIsTeacher || roleIsAdmin;
+}
+
+function extractId(value: any, fallback?: any) {
+  if (value instanceof Object) {
+    if (value._bsontype === 'ObjectID') {
+      return {_id: value.toString()};
+    } else if ('id' in value) {
+      return {_id: value.id};
+    }
+  }
+  return fallback;
+}
+
+function extractIds(values: any[], fallback?: any) {
+  const results: any[] = [];
+  for (const value of values) {
+    const result = extractId(value, fallback);
+    if (result !== undefined) {
+      results.push(result);
+    }
+  }
+  return results;
+}
+
+courseSchema.methods.checkPrivileges = function (user: IUser) {
+  const roleCanEditCourse: boolean = canUserRoleEditCourse(user);
+  const userIsAdmin: boolean = user.role === 'admin';
+  const courseAdmin = extractId(this.courseAdmin);
+
+  const userIsCourseAdmin: boolean = user._id === courseAdmin._id;
+  const userIsCourseTeacher: boolean = this.teachers.some((teacher: IUserModel) => user._id === extractId(teacher)._id);
+  const userIsCourseStudent: boolean = this.students.some((student: IUserModel) => user._id === extractId(student)._id);
+
+  const userCanEditCourse: boolean = roleCanEditCourse && (userIsAdmin || userIsCourseAdmin || userIsCourseTeacher);
+  const userIsParticipant: boolean = userIsCourseStudent || userCanEditCourse;
+  const userCanViewCourse: boolean = (this.active && userIsCourseStudent) || userCanEditCourse || userIsAdmin;
+
+  return {roleCanEditCourse, userIsAdmin, courseAdmin,
+      userIsCourseAdmin, userIsCourseTeacher, userIsCourseStudent,
+      userCanEditCourse, userIsParticipant, userCanViewCourse};
+};
+
+
+function arrayUnion(...arrays: any[]) {
+  return [...new Set([].concat(...arrays))];
+}
+
+function keysToPath(keys: string[]) {
+  return keys.map(path => ({path}));
+}
+
+// ICourse(Model)-Obtain option interfaces:
+type ICourseObtMode = string[];
+interface ICourseObtType {
+  empty?: ICourseObtMode;
+  selfid?: ICourseObtMode;
+  onlyid?: ICourseObtMode;
+  copy?: ICourseObtMode;
+  populate?: ICourseObtMode;
+}
+interface ICourseObt {
+  safe?: ICourseObtType;
+  editor?: ICourseObtType;
+  all?: ICourseObtType;
+}
+// Normalized:
+type ICourseNormObtMode = ICourseObtMode;
+interface ICourseNormObtType {
+  empty: ICourseNormObtMode;
+  selfid: ICourseNormObtMode;
+  onlyid: ICourseNormObtMode;
+  copy: ICourseNormObtMode;
+  populate: ICourseNormObtMode;
+  populatePaths: IProperties;
+  pickKeys: string[];
+}
+interface ICourseNormObt {
+  safe: ICourseNormObtType;
+  editor: ICourseNormObtType;
+}
+
+function normalizeCourseObtMode(modeObt?: ICourseObtMode): ICourseNormObtMode {
+  if (modeObt !== undefined) {
+    return modeObt.slice();
+  } else {
+    return [];
+  }
+}
+
+function normalizeCourseObt(obt: ICourseObt): ICourseNormObt {
+  const regularTypes = ['safe', 'editor']; // i.e. non-'all'
+  const modes = ['empty', 'selfid', 'onlyid', 'copy', 'populate'];
+  const result: IProperties = {};
+
+  for (const type of regularTypes) {
+    const typeResult = result[type] = <IProperties>{};
+    const typeObt = (<IProperties>obt)[type] || {};
+    for (const mode of modes) {
+      typeResult[mode] = normalizeCourseObtMode(typeObt[mode]);
+    }
+  }
+
+  const allTypeObt = obt.all || {};
+  for (const mode of modes) {
+    const normMode = normalizeCourseObtMode((<IProperties>allTypeObt)[mode]);
+    for (const type of regularTypes) {
+      result[type][mode].push(...normMode);
+    }
+  }
+
+  for (const type of regularTypes) {
+    const typeResult = <ICourseNormObtType>result[type];
+    typeResult.pickKeys = arrayUnion(typeResult.copy, typeResult.populate, typeResult.selfid);
+    typeResult.populatePaths = keysToPath(typeResult.populate);
+  }
+
+  return <ICourseNormObt>result;
+}
+
+courseSchema.statics.getSanitized = async function(user: IUser, courses: ICourseModel[], targets: ICourseObt) {
+  const options = normalizeCourseObt(targets);
+
+  return await Promise.all(courses.map(async (course) => {
+    const {userCanEditCourse} = course.checkPrivileges(user);
+    const typeOptions: IProperties = userCanEditCourse ? options.editor : options.safe;
+    await Course.populate(course, typeOptions.populatePaths);
+
+    const courseObject: IProperties = course.toObject();
+    const sanitizedCourseObject = Pick.only(typeOptions.pickKeys, courseObject);
+    for (const key of typeOptions.onlyid) {
+      const value = (<IProperties>course)[key];
+      sanitizedCourseObject[key] = Array.isArray(value) ? extractIds(value) : extractId(value);
+    }
+    for (const key of typeOptions.selfid) {
+      const value = (<IProperties>course)[key];
+      if (Array.isArray(value)) {
+        sanitizedCourseObject[key] = extractIds(value).filter(x => user._id === x._id);
+      } else {
+        const extracted = extractId(value);
+        if (user._id === extracted._id) {
+          sanitizedCourseObject[key] = extracted;
+        }
+      }
+    }
+    Pick.asEmpty(typeOptions.empty, courseObject, sanitizedCourseObject);
+
+    return sanitizedCourseObject;
+  }));
+};
+
+Course = mongoose.model<ICourseModel, ICourseMongoose>('Course', courseSchema);
 
 export {Course, ICourseModel};

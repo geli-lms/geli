@@ -18,6 +18,6 @@ export class PasswordInputComponent implements OnInit {
     this.form.addControl('password', new FormControl('', Validators.compose(
       [Validators.required, Validators.pattern(errorCodes.password.regex.regex)])));
     this.form.addControl('confirmPassword', new FormControl('', Validators.required));
-    this.form.setValidators(matchPasswords('password', 'confirmPassword'))
+    this.form.setValidators(matchPasswords('password', 'confirmPassword'));
   }
 }
