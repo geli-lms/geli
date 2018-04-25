@@ -40,12 +40,12 @@ const userSchema = new mongoose.Schema({
       firstName: {
         type: String,
         index: true,
-        max: 64
+        maxlength: 64
       },
       lastName: {
         type: String,
         index: true,
-        max: 64
+        maxlength: 64
       },
       picture: {
         path: {type: String},
