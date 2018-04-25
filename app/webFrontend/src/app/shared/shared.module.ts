@@ -24,6 +24,8 @@ import {TranslateModule} from '@ngx-translate/core';
 import {AdminMarkdownEditComponent} from './components/admin-markdown-edit/admin-markdown-edit.component';
 import {ImprintAndInfoService} from './services/imprint-and-info.service';
 import {UserProfileDialog} from 'app/shared/components/user-profile-dialog/user-profile-dialog.component';
+import {NotfoundComponent} from './components/notfound/notfound.component';
+import {UserProfileDialog} from 'app/shared/components/user-profile-dialog/user-profile-dialog.component';
 
 @NgModule({
   imports: [
@@ -54,6 +56,8 @@ import {UserProfileDialog} from 'app/shared/components/user-profile-dialog/user-
     MarkdownEditorComponent,
     PickMediaDialog,
     AdminMarkdownEditComponent,
+    UserProfileDialog,
+    NotfoundComponent,
     UserProfileDialog,
   ],
   exports: [

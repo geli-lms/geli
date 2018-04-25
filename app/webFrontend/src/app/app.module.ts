@@ -42,6 +42,7 @@ import {NotificationModule} from './notification/notification.module';
 import {HttpClient} from '@angular/common/http';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import {ImprintAndInfoService} from './shared/services/imprint-and-info.service';
+import {NotfoundComponent} from './shared/components/notfound/notfound.component';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -98,6 +99,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     MediaService,
     ThemeService,
     ConfigService,
+    NotfoundComponent,
     {
       provide: ErrorHandler,
       useExisting: RavenErrorHandler

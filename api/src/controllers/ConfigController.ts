@@ -2,7 +2,7 @@ import {
   Authorized,
   Body,
   Get, InternalServerError,
-  JsonController, NotFoundError,
+  JsonController,
   Param,
   Put, UnauthorizedError,
   UseBefore
@@ -12,6 +12,7 @@ import passportJwtMiddleware from '../security/passportJwtMiddleware';
 
 const publicConfigs = [
   new RegExp('imprint|infoBox')
+  new RegExp('downloadMaxFileSize')
 ];
 
 function publicConfig(id: string) {
