@@ -13,6 +13,7 @@ export class FreeTextUnit implements IFreeTextUnit {
   progressable: boolean;
   weight: number;
   visible: boolean;
+  unitCreator: any;
 
   markdown: string;
 

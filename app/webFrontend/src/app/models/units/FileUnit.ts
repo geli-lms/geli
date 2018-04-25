@@ -14,6 +14,7 @@ export class FileUnit implements IFileUnit {
   updatedAt: string;
   createdAt: string;
   visible: boolean;
+  unitCreator: any;
 
   files: IFile[] = [];
   fileUnitType: string;

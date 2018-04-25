@@ -42,6 +42,9 @@ const unitSchema = new mongoose.Schema({
     },
     visible: {
       type: Boolean
+    },
+    unitCreator: {
+      type: String
     }
   },
   {
