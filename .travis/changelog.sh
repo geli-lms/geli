@@ -13,24 +13,26 @@ echo
 
 
 if [ "$TRAVIS_PULL_REQUEST" != "false" ] && [ "$TRAVIS_BRANCH" == "develop" ]; then
- curl https://raw.githubusercontent.com/h-da/geli/develop/CHANGELOG.md |
- diff CHANGELOG.md - | 
- grep -P '^< - .{8,100}' - -q 
+ echo "+ detected pull request from ($TRAVIS_PULL_REQUEST_BRANCH) to $TRAVIS_BRANCH"
+ curl https://raw.githubusercontent.com/h-da/geli/develop/CHANGELOG.md \
+ | diff CHANGELOG.md - \
+ | grep -P '^< - .{8,100}' - -q 
 
  if [ $? ]; then
-  echo "${GREEN}+ Update in CHANGELOG.md found, exit${NC}"
+  echo -e "${GREEN}+ Update in CHANGELOG.md found, exit${NC}"
   else
    echo -e "${RED}+ ERROR: No Update in CHANGELOG.md found!"
    echo -e "+ Please check if a line was added in the CHANGELOG.md.${NC}"
    exit 1
   fi
 elif [ "$TRAVIS_PULL_REQUEST" != "false" ] && [ "$TRAVIS_BRANCH" == "master" ]; then
- curl https://raw.githubusercontent.com/h-da/geli/master/CHANGELOG.md |
- diff CHANGELOG.md - | 
- grep -P '^< ## \[\d\.\d\.\d\] - .{6,20}' - -q 
+ echo "+ detected pull request from ($TRAVIS_PULL_REQUEST_BRANCH) to $TRAVIS_BRANCH"
+ curl https://raw.githubusercontent.com/h-da/geli/master/CHANGELOG.md \
+ | diff CHANGELOG.md - \
+ | grep -P '^< ## \[\d{1,3}\.\d{1,3}\.\d{1,3}\] - \d{4}-\d{2}-\d{2} - .{10,}' - -q 
 
  if [ $? ]; then
-  echo "${GREEN}+ Update in CHANGELOG.md found, exit${NC}"
+  echo -e "${GREEN}+ Update in CHANGELOG.md found, exit${NC}"
   else
    echo -e "${RED}+ ERROR: No Update in CHANGELOG.md found!"
    echo -e "+ Please check if a new version was added in the CHANGELOG.md."
