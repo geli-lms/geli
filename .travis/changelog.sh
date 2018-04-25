@@ -40,5 +40,5 @@ elif [ "$TRAVIS_PULL_REQUEST" != "false" ] && [ "$TRAVIS_BRANCH" == "master" ]; 
     exit 1
   fi
 else
-   echo -e "${YELLOW}+ WARNING: No Pull Request agiainst Develop or Master -> skipping automate changelog checking${NC}";
+  echo -e "${YELLOW}+ WARNING: No Pull Request agiainst Develop or Master -> skipping automate changelog checking${NC}";
 fi
