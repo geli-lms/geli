@@ -27,7 +27,7 @@ export class AdminMarkdownEditComponent implements OnInit {
     this.route.queryParams.subscribe(params => {
       this.headingType = params['header'];
       this.type = params['type'];
-      void this.loadConfig()
+      void this.loadConfig();
     });
   }
 
@@ -42,9 +42,9 @@ export class AdminMarkdownEditComponent implements OnInit {
   onSave(markdown: string ) {
     try {
       void this.service.updateItem({_id: this.type, data: markdown});
-      this.snackBar.open( this.headingType + ' saved', '', {duration: 3000})
+      this.snackBar.open( this.headingType + ' saved', '', {duration: 3000});
     } catch (error) {
-      this.snackBar.open(errorCodes.save.couldNotSaveImprint.text, '', {duration: 3000})
+      this.snackBar.open(errorCodes.save.couldNotSaveImprint.text, '', {duration: 3000});
     }
     void this.loadConfig();
   }

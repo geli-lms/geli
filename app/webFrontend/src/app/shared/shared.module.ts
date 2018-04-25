@@ -53,11 +53,8 @@ import {UserProfileDialog} from 'app/shared/components/user-profile-dialog/user-
     ChangePasswordDialogComponent,
     MarkdownEditorComponent,
     PickMediaDialog,
-<<<<<<< HEAD
     AdminMarkdownEditComponent,
-=======
     UserProfileDialog,
->>>>>>> develop
   ],
   exports: [
     GravatarDirective,
@@ -78,11 +75,8 @@ import {UserProfileDialog} from 'app/shared/components/user-profile-dialog/user-
     ChangePasswordDialogComponent,
     PickMediaDialog,
     TranslateModule,
-<<<<<<< HEAD
     AdminMarkdownEditComponent,
-=======
     UserProfileDialog,
->>>>>>> develop
   ],
   entryComponents: [
     UploadFormDialog,
