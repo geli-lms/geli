@@ -1,6 +1,6 @@
 import {
   Component, OnInit, ViewEncapsulation, Input, ViewChildren, QueryList, Output,
-  EventEmitter
+  EventEmitter, AfterViewChecked, ChangeDetectorRef
 } from '@angular/core';
 import {ILecture} from '../../../../../../../../shared/models/ILecture';
 import {UnitCheckboxComponent} from './unit-checkbox.component';
@@ -11,7 +11,7 @@ import {UnitCheckboxComponent} from './unit-checkbox.component';
   styleUrls: ['./lecture-checkbox.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class LectureCheckboxComponent implements OnInit {
+export class LectureCheckboxComponent implements OnInit, AfterViewChecked {
   @Input()
   chkbox: boolean;
   @Input()
@@ -20,13 +20,24 @@ export class LectureCheckboxComponent implements OnInit {
   childUnits: QueryList<UnitCheckboxComponent>;
   @Output()
   valueChanged: EventEmitter<any> = new EventEmitter();
+  showCheckBox = true;
 
-  constructor() {
+  constructor(private changeDetector: ChangeDetectorRef) {
     this.chkbox = false;
   }
 
   ngOnInit() {
   }
+
+  ngAfterViewChecked() {
+    this.showCheckBox = this.childUnits.toArray().some((unit: UnitCheckboxComponent) => {
+      return unit.showCheckBox === true;
+    });
+    // force angular to detect the change otherwise an error(ExpressionChangedAfterItHasBeenCheckedError) is threw.
+    // see: https://github.com/angular/angular/issues/17572
+    this.changeDetector.detectChanges();
+  }
+
 
   onChange() {
     if (this.chkbox) {
