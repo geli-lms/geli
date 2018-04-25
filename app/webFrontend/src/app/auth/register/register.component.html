@@ -21,7 +21,7 @@
       <div class="form-group" formGroupName="profile">
         <mat-form-field>
           <input matInput formControlName="firstName"
-                 [placeholder]="'common.profile.firstName'|translate"/>
+                 [placeholder]="'common.profile.firstName'|translate" maxlength="64"/>
           <div *ngIf="registerForm.get('profile').get('firstName').touched">
             <small *ngIf="registerForm.get('profile').get('firstName').hasError('required')"
                    class="text-danger">
@@ -35,7 +35,7 @@
         </mat-form-field>
         <mat-form-field>
           <input matInput formControlName="lastName"
-                 [placeholder]="'common.profile.lastName'|translate"/>
+                 [placeholder]="'common.profile.lastName'|translate" maxlength="64"/>
           <div *ngIf="registerForm.get('profile').get('lastName').touched">
             <small *ngIf="registerForm.get('profile').get('lastName').hasError('required')"
                    class="text-danger">
