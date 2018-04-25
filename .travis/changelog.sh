@@ -16,7 +16,7 @@ if [ "$TRAVIS_PULL_REQUEST" != "false" ] && [ "$TRAVIS_BRANCH" == "develop" ]; t
   echo "+ detected pull request from ($TRAVIS_PULL_REQUEST_BRANCH) to $TRAVIS_BRANCH"
   curl https://raw.githubusercontent.com/h-da/geli/develop/CHANGELOG.md \
   | diff CHANGELOG.md - \
-  | grep -P '^< - .{8,100}' - -q 
+  | grep -P '^< - .{8,}' - -q 
 
   if [ $? ]; then
     echo -e "${GREEN}+ Update in CHANGELOG.md found, exit${NC}"
