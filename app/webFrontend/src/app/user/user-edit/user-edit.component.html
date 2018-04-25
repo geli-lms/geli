@@ -8,10 +8,38 @@
   <div class="form-group" formGroupName="profile">
     <mat-form-field class="full-width">
       <input matInput formControlName="firstName" placeholder="First name" maxlength="64"/>
+      <div *ngIf="userForm.get('profile').get('firstName').touched">
+        <small *ngIf="userForm.get('profile').get('firstName').hasError('required')"
+               class="text-danger">
+          {{'common.validation.required'|translate}}
+        </small>
+        <small *ngIf="userForm.get('profile').get('firstName').hasError('minlength')"
+               class="text-danger" translate [translateParams]="{min:2}">
+          common.validation.minLength
+        </small>
+        <small *ngIf="userForm.get('profile').get('firstName').hasError('maxlength')"
+               class="text-danger" translate [translateParams]="{max:64}">
+          common.validation.maxLength
+        </small>
+      </div>
     </mat-form-field>
 
     <mat-form-field class="full-width">
       <input matInput formControlName="lastName" placeholder="Last name" maxlength="64"/>
+      <div *ngIf="userForm.get('profile').get('lastName').touched">
+        <small *ngIf="userForm.get('profile').get('lastName').hasError('required')"
+               class="text-danger">
+          {{'common.validation.required'|translate}}
+        </small>
+        <small *ngIf="userForm.get('profile').get('lastName').hasError('minlength')"
+               class="text-danger" translate [translateParams]="{min:2}">
+          common.validation.minLength
+        </small>
+        <small *ngIf="userForm.get('profile').get('lastName').hasError('maxlength')"
+               class="text-danger" translate [translateParams]="{max:64}">
+          common.validation.maxLength
+        </small>
+      </div>
     </mat-form-field>
 
     <mat-form-field class="full-width">

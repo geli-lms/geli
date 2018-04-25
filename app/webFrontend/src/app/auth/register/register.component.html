@@ -31,7 +31,7 @@
                    class="text-danger" translate [translateParams]="{min:2}">
               common.validation.minLength
             </small>
-            <small *ngIf="registerForm.get('profile').get('firstName').hasError('maxLength')"
+            <small *ngIf="registerForm.get('profile').get('firstName').hasError('maxlength')"
                    class="text-danger" translate [translateParams]="{max:64}">
               common.validation.maxLength
             </small>
@@ -49,7 +49,7 @@
                    class="text-danger" translate [translateParams]="{min:2}">
               common.validation.minLength
             </small>
-            <small *ngIf="registerForm.get('profile').get('lastName').hasError('maxLength')"
+            <small *ngIf="registerForm.get('profile').get('lastName').hasError('maxlength')"
                    class="text-danger" translate [translateParams]="{max:64}">
               common.validation.maxLength
             </small>
