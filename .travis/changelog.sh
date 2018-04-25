@@ -18,7 +18,7 @@ if [ "$TRAVIS_PULL_REQUEST" != "false" ] && [ "$TRAVIS_BRANCH" == "develop" ]; t
   | diff CHANGELOG.md - \
   | grep -P '^< - .{8,}' - -q
 
-  if [ $? ]; then
+  if [[ $? == 0 ]]; then
     echo -e "${GREEN}+ Update in CHANGELOG.md found, exit${NC}"
   else
     echo -e "${RED}+ ERROR: No Update in CHANGELOG.md found!"
@@ -31,7 +31,7 @@ elif [ "$TRAVIS_PULL_REQUEST" != "false" ] && [ "$TRAVIS_BRANCH" == "master" ]; 
   | diff CHANGELOG.md - \
   | grep -P '^< ## \[\d{1,3}\.\d{1,3}\.\d{1,3}\] - \d{4}-\d{2}-\d{2} - .{10,}' - -q
 
-  if [ $? ]; then
+  if [[ $? == 0 ]]; then
     echo -e "${GREEN}+ Update in CHANGELOG.md found, exit${NC}"
   else
     echo -e "${RED}+ ERROR: No Update in CHANGELOG.md found!"
