@@ -133,14 +133,17 @@ export class LectureController {
       return Lecture.findById(id).then((l) => {
         const lectureObject = l.toObject();
         const unitInObject = lectureObject['units'];
-
-        return Unit.remove({ _id : { $in: unitInObject}}, function (err) {
+        if (unitInObject != null && unitInObject.length !== 0) {
+          return Unit.remove({_id: {$in: unitInObject}}, function (err) {
             if (err) {
               return false;
             } else {
               return true;
             }
-      });
+          });
+        } else {
+          return true;
+        }
     });
     }).then (() => {
       return Lecture.deleteOne({_id: id}, function (err) {
