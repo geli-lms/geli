@@ -17,6 +17,7 @@ export class CodeKataUnit implements ICodeKataUnit {
   code: string;
   test: string;
   deadline: string;
+  unitCreator: any;
 
   constructor(_course: ICourse) {
     this._course = _course;

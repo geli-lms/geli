@@ -42,10 +42,10 @@ export class DownloadCourseDialogComponent implements OnInit {
   onChange() {
     if (this.chkbox) {
       this.childLectures.forEach(lecture => {
-        if (lecture.chkbox === false) {
+
           lecture.chkbox = true;
           lecture.onChange();
-        }
+
       });
     } else {
       this.childLectures.forEach(lecture => lecture.chkbox = false);
@@ -54,15 +54,20 @@ export class DownloadCourseDialogComponent implements OnInit {
   }
 
   onChildEvent() {
-    let childChecked = false;
+    const childChecked: boolean[] = new Array();
+
     this.childLectures.forEach(lec => {
-      if (lec.chkbox === true) {
-        childChecked = true;
-        this.chkbox = true;
+      if (lec.chkbox === true && !lec.childUnits.find(unit => unit.chkbox === false)) {
+        childChecked.push(true);
+      } else {
+        childChecked.push(false);
       }
     });
-    if (!childChecked) {
+
+    if (childChecked.find(bol => bol === false) !== undefined) {
       this.chkbox = false;
+    } else {
+      this.chkbox = true;
     }
   }
 
@@ -87,6 +92,7 @@ export class DownloadCourseDialogComponent implements OnInit {
     const obj = await this.buildObject();
     if (obj.lectures.length === 0) {
       this.snackBar.open('No units selected!', 'Dismiss', {duration: 3000});
+      this.disableDownloadButton = false;
       return;
     }
     const downloadObj = <IDownload> obj;
