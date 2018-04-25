@@ -8,6 +8,7 @@
 - Develop your code
 - Commit and push in regular intervalls
 - Run the tests locally
+- Add a line to the [CHANGELOG.md](https://github.com/h-da/geli/blob/develop/CHANGELOG.md) under the "NEXT" section
 - Open a Pull-Request
 - If CI/Coverage give their OK we can merge
 - The PR gets merged to `develop`, which will push a new Docker-Image-Version with the tag `develop` and `latest`
@@ -16,8 +17,9 @@
   a new 'stable' image on Docker-Hub. 
   The livesysten then pulls that new image and starts up with the latest stable version
 
-If we have bugfixes we create a `bugfix/{descriptive-name}` and open a PR, issues are not required 
+If we have a small bugfixes we create a `bugfix/{descriptive-name}` and open a PR, issues are not required 
 for that. But it's important to have a good description of the bugfix in the PR-Comment.
+If it is not small please create a issue for it so we can decide the importance of it.
 
 
 ## Branching model

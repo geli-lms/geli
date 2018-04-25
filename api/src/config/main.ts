@@ -37,4 +37,6 @@ export default {
   maxZipSize: 204800,
 
   uploadFolder: process.env.UPLOADFOLDER || (appRoot + '/uploads/'),
+  maxProfileImageWidth: 512,
+  maxProfileImageHeight: 512,
 };
