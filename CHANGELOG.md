@@ -4,27 +4,8 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [NEXT] - 2018-05-03 - a lot of bug fixes and new small features  
-### Added
-- New contributors
-- The date and the teacher under each unit
-- E-Mail validation to reset password
-- Language code to translation
+## [NEXT] 
 
-### Fixed
-- Route `/users/roles`
-- Profile picture will be deleted after changing any other profile data
-- Some UI issues in create code kata unit
-- Some UI issues in general tab in edit course
-- Some UI issues in profile and edit profile
-- Course controller returns complete course with access key and other secured data
-- Reading wrong error message across the whole application
-- Admin can changed his own role
-- A typo in admin panel
-- Some documentation error's
-- An admin cannot delete any courses
-- Fixed some issues with download a course
-- An issue with deleting a course and the notification was not triggered
 
 ## [0.6.0] - 2018-03-31 - Introduces MediaManager and some minor changes
 ### Added
@@ -84,3 +65,4 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [0.1.0] - 2017-05-11 - Basics implemented
 ### Added
 - Many basic implementations of ground functionality
+
