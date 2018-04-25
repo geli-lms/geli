@@ -31,6 +31,16 @@ export class Contributor {
       return compare;
     }
 
+    // Check for position
+    compare = a.position.localeCompare(b.position);
+    if (compare !== 0) {
+      if (a.position === 'Lecturer') {
+        return -1;
+      } else {
+        return 1;
+      }
+    }
+
     // Check for NAME
     compare = a.name.localeCompare(b.name);
     if (compare !== 0) {
