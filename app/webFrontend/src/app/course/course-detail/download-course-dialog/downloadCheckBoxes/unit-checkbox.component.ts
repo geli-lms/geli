@@ -4,8 +4,9 @@ import {
 } from '@angular/core';
 import {IUnit} from '../../../../../../../../shared/models/units/IUnit';
 import {IFileUnit} from '../../../../../../../../shared/models/units/IFileUnit';
-import {IVideoUnit} from '../../../../../../../../shared/models/units/IVideoUnit';
 import {UploadUnitCheckboxComponent} from './upload-unit-checkbox.component';
+import {MatSnackBar} from '@angular/material';
+import {ConfigService} from '../../../../shared/services/data.service';
 
 
 @Component({
@@ -29,9 +30,9 @@ export class UnitCheckboxComponent implements OnInit {
 
   files;
   childUnitDesc: string;
+  showCheckBox = true; // false if the unit has only large files
 
-  constructor() {
-
+  constructor(public snackBar: MatSnackBar, private configService: ConfigService) {
   }
 
   ngOnInit() {
@@ -41,6 +42,7 @@ export class UnitCheckboxComponent implements OnInit {
         this.files = fileUnit.files;
         this.unitDesc = 'File Unit';
         this.childUnitDesc = 'File';
+        this.hasOnlyLargeFiles().then((result: boolean) => this.showCheckBox = !result);
         break;
       case 'task':
         this.unitDesc = 'Task Unit';
@@ -96,4 +98,18 @@ export class UnitCheckboxComponent implements OnInit {
     }
     this.valueChanged.emit();
   }
+
+  async hasOnlyLargeFiles() {
+    const _downloadMaxFileSize = this.configService.downloadMaxFileSize;
+    const downloadMaxFileSize = _downloadMaxFileSize ? _downloadMaxFileSize : await this.configService.getDownloadMaxFileSize();
+
+    if (!this.files) {
+      return false;
+    } else {
+      return this.files.every(file => {
+        return file.size / 1024 > downloadMaxFileSize;
+      });
+    }
+  }
+
 }
