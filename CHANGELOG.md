@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - MediaManager for file management in courses
 
+
 ## [0.5.0] - 2018-03-24 - WS 17/18 intermediate Release
 ### Added
 - selective download of the course
@@ -23,6 +24,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - courses are ordered by last visit
 - user password edit
 - adds imprint
+
 
 ## [0.4.0] - 2017-12-04 - WS 17/18 Second feature release
 ### Added
@@ -41,6 +43,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [0.3.1] - 2017-11-05 - Dynamic db name update
 ### Added
 - The possibility to use a other database name then 'test'
+
 
 ## [0.3.0] - 2017-11-02
 ### Added
@@ -65,4 +68,3 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [0.1.0] - 2017-05-11 - Basics implemented
 ### Added
 - Many basic implementations of ground functionality
-
