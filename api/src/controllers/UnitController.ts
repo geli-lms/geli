@@ -174,17 +174,22 @@ export class UnitController {
   @Authorized(['teacher', 'admin'])
   @Delete('/:id')
   deleteUnit(@Param('id') id: string) {
-    return Unit.findById(id).then((unit) => {
-      if (!unit) {
-        throw new NotFoundError();
-      }
-
-      return Lecture.update({}, {$pull: {units: id}})
-        .then(() => unit.remove())
-        .then(() => {
-          return {result: true};
+      return Lecture.update({}, {$pull: {units: id}}, function (err, val) {
+        if (!err) {
+          return true;
+        } else {
+          return false;
+        }
+      }).then (() => {
+        return Unit.deleteOne({_id: id}, function (err) {
+          if (err) {
+            return false;
+          } else {
+            return true;
+          }
         });
-    });
+      }
+  );
   }
 
   protected pushToLecture(lectureId: string, unit: any) {
