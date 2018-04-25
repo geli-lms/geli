@@ -46,6 +46,15 @@ export class CodeKataComponent implements OnInit {
         this.progress = this.codeKataUnit.progressData;
       }
     }
+
+    this.applyProgressData();
+  }
+
+  async applyProgressData() {
+    const progress = await this.progressService.getUnitProgress<ICodeKataUnitProgress>(this.codeKataUnit._id);
+    if (progress) {
+      this.progress = progress;
+    }
   }
 
   ngAfterViewInit() {

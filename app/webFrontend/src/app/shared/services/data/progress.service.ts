@@ -9,8 +9,6 @@ export class ProgressService extends DataService {
   }
 
   async getUnitProgress<T>(unitId: string): Promise<T> {
-    // The readSingleItem method seems to always return an array. But we don't need an array, we should update
-    // the progress and not add another progress field
     const unitProgress = await this.readSingleItem<any[]>(unitId, this.apiPath + 'units/');
     return unitProgress.length > 0 ? unitProgress[0] : null;
   }
