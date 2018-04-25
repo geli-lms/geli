@@ -14,9 +14,9 @@ echo
 
 if [ "$TRAVIS_PULL_REQUEST" != "false" ] && [ "$TRAVIS_BRANCH" == "develop" ]; then
   echo "+ detected pull request from ($TRAVIS_PULL_REQUEST_BRANCH) to $TRAVIS_BRANCH"
-  curl https://raw.githubusercontent.com/h-da/geli/develop/CHANGELOG.md \
+  curl --silent https://raw.githubusercontent.com/h-da/geli/$TRAVIS_BRANCH/CHANGELOG.md \
   | diff CHANGELOG.md - \
-  | grep -P '^< - .{8,}' - -q 
+  | grep -P '^< - .{8,}' - -q
 
   if [ $? ]; then
     echo -e "${GREEN}+ Update in CHANGELOG.md found, exit${NC}"
@@ -27,9 +27,9 @@ if [ "$TRAVIS_PULL_REQUEST" != "false" ] && [ "$TRAVIS_BRANCH" == "develop" ]; t
   fi
 elif [ "$TRAVIS_PULL_REQUEST" != "false" ] && [ "$TRAVIS_BRANCH" == "master" ]; then
   echo "+ detected pull request from ($TRAVIS_PULL_REQUEST_BRANCH) to $TRAVIS_BRANCH"
-  curl https://raw.githubusercontent.com/h-da/geli/master/CHANGELOG.md \
+  curl --silent https://raw.githubusercontent.com/h-da/geli/$TRAVIS_BRANCH/CHANGELOG.md \
   | diff CHANGELOG.md - \
-  | grep -P '^< ## \[\d{1,3}\.\d{1,3}\.\d{1,3}\] - \d{4}-\d{2}-\d{2} - .{10,}' - -q 
+  | grep -P '^< ## \[\d{1,3}\.\d{1,3}\.\d{1,3}\] - \d{4}-\d{2}-\d{2} - .{10,}' - -q
 
   if [ $? ]; then
     echo -e "${GREEN}+ Update in CHANGELOG.md found, exit${NC}"
