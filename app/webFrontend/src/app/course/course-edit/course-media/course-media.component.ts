@@ -35,7 +35,7 @@ export class CourseMediaComponent implements OnInit {
     this.route.parent.params.subscribe(
       async (params) => {
         // retrieve course
-        this.course = await this.courseService.readSingleItem<ICourse>(params['id']);
+        this.course = await this.courseService.readCourseToEdit(params['id']);
 
         // Check if course has root dir
         if (this.course.media === undefined) {
@@ -44,7 +44,7 @@ export class CourseMediaComponent implements OnInit {
           // Update course
           await this.courseService.updateItem<ICourse>(this.course);
           // Reload course
-          this.course = await this.courseService.readSingleItem<ICourse>(this.course._id);
+          this.course = await this.courseService.readCourseToEdit(this.course._id);
         }
 
         await this.changeDirectory(this.course.media._id, true);

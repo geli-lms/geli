@@ -57,3 +57,32 @@
   background: url('/assets/people-woman-coffee-meeting.jpg') no-repeat;
   background-size: cover;
 }
+
+.firstname-wrapper {
+  @media screen and (max-width: $bp-width--md) {
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    @media screen and (max-width: 1065px) {
+      max-width: 40rem;
+
+      @media screen and (max-width: 750px) {
+        max-width: 15rem;
+
+        @media screen and (max-width: 500px) {
+          max-width: 10rem;
+
+          @media screen and (max-width: 400px) {
+            max-width: 5rem;
+
+            @media screen and (max-width: 320px) {
+              max-width: 2.5rem;
+            }
+          }
+        }
+      }
+    }
+  }
+}
