@@ -124,6 +124,20 @@ export class DownloadCourseDialogComponent implements OnInit {
     }
   }
 
+  displayDownloadContent(): boolean {
+    if (!this.course.lectures.length) {
+      return false;
+    }
+
+    for (const lec of this.course.lectures) {
+      if (!lec.units.length) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
   buildObject() {
     const lectures = [];
     this.childLectures.forEach(lec => {

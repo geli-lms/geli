@@ -1,6 +1,6 @@
 <h2>{{course.name}}</h2>
 <ng-container *ngIf="!course.lectures.length">No lectures to download!</ng-container>
-<div *ngIf="course.lectures.length">
+<div *ngIf="displayDownloadContent()">
 <p>Select units or files which you want to download</p>
 
 <mat-dialog-content class="layout">
