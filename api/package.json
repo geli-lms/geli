@@ -25,6 +25,7 @@
     "test": "istanbul cover --report json node_modules/mocha/bin/_mocha",
     "posttest": "gulp remap:coverage",
     "lint": "gulp tslint",
+    "lint:fix": "tslint --fix -c ./tslint.json 'src/**/*{.ts,.tsx}'",
     "debug": "gulp debug",
     "load:fixtures": "gulp load:fixtures",
     "migrate": "gulp build && node ./build/src/migrate.js",
