@@ -318,7 +318,7 @@ export class CourseController {
    * @apiError ForbiddenError (Redundant) Authorization check.
    */
   @Authorized(['teacher', 'admin'])
-  @Get('/:id/edit')
+  @Get('/:id([a-fA-F0-9]{24})/edit')
   async getCourseEdit(@Param('id') id: string, @CurrentUser() currentUser: IUser): Promise<ICourse> {
     const course = await this.getCourse(id, currentUser);
 

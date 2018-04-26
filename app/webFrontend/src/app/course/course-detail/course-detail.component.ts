@@ -46,6 +46,9 @@ export class CourseDetailComponent implements OnInit {
     } catch (errorResponse) {
       if (errorResponse.status === 401) {
         this.snackBar.open('You are not authorized to view this course.', '', {duration: 3000});
+      } else if (errorResponse.status === 404) {
+        this.snackBar.open('Your selected course is not available.', '', {duration: 3000});
+        this.router.navigate(['/not-found']);
       } else {
         this.snackBar.open('Something went wrong: ' + errorResponse.message, '', {duration: 3000});
       }
