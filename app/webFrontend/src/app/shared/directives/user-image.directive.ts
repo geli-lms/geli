@@ -23,12 +23,26 @@ export class UserImageDirective implements OnInit {
   constructor() {
   }
 
+  ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
+    for (let propName in changes) {
+      let changedProp = changes[propName];
+      this[propName] = changedProp.currentValue;
+    }
+    this.getImage();
+  }
+
   ngOnInit(): void {
-    const user = new User(this.user);
-    this.backgroundImage = `url(${user.getUserImageURL()})`;
-    this.width = this.size;
-    this.height = this.size;
-    this.borderRadius = '50%';
+    this.getImage();
+  }
+
+  getImage() {
+    if (this.user) {
+      const user = new User(this.user);
+      this.backgroundImage = `url(${user.getUserImageURL()})`;
+      this.width = this.size;
+      this.height = this.size;
+      this.borderRadius = '50%';
+    }
   }
 
 }

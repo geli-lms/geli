@@ -3,15 +3,25 @@
     <mat-icon aria-label="Download Units" mat-tooltip="Download Units">get_app</mat-icon>
   </button>
   <h1>{{course?.name}}</h1>
-  <span>Teacher:</span>
+
   <mat-chip-list>
+    <mat-chip style="cursor:pointer" (click)="showUserProfile(course?.courseAdmin)">
+      <div class="img-wrapper">
+        <div class="admin-image" [user-image]="course?.courseAdmin"></div>
+      </div>
+      <div class="admin-name">
+        {{course?.courseAdmin.profile.firstName + " " + course?.courseAdmin.profile.lastName}} <br>
+        <i>Admin</i>
+      </div>
+    </mat-chip>
     <div *ngFor="let teacher of course?.teachers">
-      <mat-chip (click)="showTeacherProfile(teacher)">
+      <mat-chip style="cursor:pointer" (click)="showUserProfile(teacher)">
         <div class="img-wrapper">
-          <div class="teacher-image" user-image [user-image]="teacher"></div>
+          <div class="teacher-image" [user-image]="teacher"></div>
         </div>
         <div class="teacher-name">
-          {{teacher.profile.firstName + " " + teacher.profile.lastName}}
+          {{teacher.profile.firstName + " " + teacher.profile.lastName}} <br>
+          <i>Teacher</i>
         </div>
       </mat-chip>
     </div>

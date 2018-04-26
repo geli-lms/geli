@@ -4,6 +4,8 @@ import 'rxjs/add/operator/switchMap';
 import {CourseService, UserDataService} from '../../shared/services/data.service';
 import {ICourse} from '../../../../../../shared/models/ICourse';
 import {UserService} from '../../shared/services/user.service';
+import {IUser} from '../../../../../../shared/models/IUser';
+import {User} from '../../models/User';
 import {MatSnackBar, MatDialog} from '@angular/material';
 import {DownloadCourseDialogComponent} from './download-course-dialog/download-course-dialog.component';
 import {TitleService} from '../../shared/services/title.service';
@@ -61,7 +63,7 @@ export class CourseDetailComponent implements OnInit {
     });
   }
 
-  showTeacherProfile(teacher) {
+  showUserProfile(teacher: User) {
     this.dialogService.userProfile(teacher);
   }
 

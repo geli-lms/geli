@@ -13,27 +13,42 @@
 
 .mat-chip-list {
   display: inline-block;
-  margin-left: 5px
+  margin-left: 5px;
 }
 
 .mat-chip {
   position: relative;
+  cursor: pointer;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  margin-right: 20px;
 }
 
 .img-wrapper {
-  left: -7px;
-  width: 32px;
-  height: 32px;
+  left: -10px;
+  width: 50px;
+  height: 50px;
   position: absolute;
   border-radius: 50%;
 
 }
 
 .teacher-name{
-  margin-left: 20px;
+  margin-left: 35px;
+  text-align: center;
 }
 
 .teacher-image {
+  background-size: cover;
+  vertical-align: middle;
+}
+
+.admin-name{
+  margin-left: 35px;
+  text-align: center;
+}
+
+.admin-image {
   background-size: cover;
   vertical-align: middle;
 }
