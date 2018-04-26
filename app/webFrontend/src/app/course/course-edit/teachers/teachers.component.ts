@@ -27,7 +27,7 @@ export class TeachersComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.courseService.readSingleItem(this.courseId).then((course: ICourse) => {
+    this.courseService.readCourseToEdit(this.courseId).then((course: ICourse) => {
       this.course = course;
       this.course.teachers.forEach(member =>
         this.foundTeachers = this.foundTeachers.filter(user => user._id !== member._id)

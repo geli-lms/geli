@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {ICourse} from '../../../../../../shared/models/ICourse';
+import {ICourseDashboard} from '../../../../../../shared/models/ICourseDashboard';
 import {UserService} from '../../shared/services/user.service';
 import {CourseService} from '../../shared/services/data.service';
 import {TitleService} from '../../shared/services/title.service';
@@ -11,7 +11,7 @@ import {TitleService} from '../../shared/services/title.service';
 })
 export class DashboardComponent implements OnInit {
 
-  allCourses: ICourse[];
+  allCourses: ICourseDashboard[];
 
   // UserService for HTML page
   constructor(private courseService: CourseService,
@@ -25,13 +25,11 @@ export class DashboardComponent implements OnInit {
     this.getCourses();
   }
 
-  getCourses() {
-    this.courseService.readItems<ICourse>().then(courses => {
-      this.allCourses = courses;
-      });
+  async getCourses() {
+    this.allCourses = await this.courseService.readItems<ICourseDashboard>();
   }
 
   onUpdateCallback() {
-      this.getCourses();
+    this.getCourses();
   }
 }
