@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [NEXT]
 ### Fixed
-- add correct E-Mail validator to edit-profile and register component
+- add correct E-Mail validator to edit-profile and register component [#564]
 
 ## [0.6.0] - 2018-03-31 - Introduces MediaManager and some minor changes
 ### Added
