@@ -44,7 +44,11 @@
       "mailSent": "We have send you an activation link to your specified email address.",
       "back": "Back to frontpage",
       "teacherRegistrationButton": "Not a student?",
-      "resendActivation": "Resend activation"
+      "resendActivationButton": "Resend activation"
+    },
+    "resendActivation": {
+      "checkButton": "Check",
+      "back": "Back to registration"
     }
   },
   "mainMenu": {

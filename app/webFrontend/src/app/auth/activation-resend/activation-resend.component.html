@@ -13,7 +13,7 @@
 </mat-card>
 <mat-card class="register-card" *ngIf="!registrationDone">
   <mat-card-header>
-    <mat-card-title><h1 class="title">{{'auth.registration.resendActivation'|translate}}</h1></mat-card-title>
+    <mat-card-title><h1 class="title">{{'auth.registration.resendActivationButton'|translate}}</h1></mat-card-title>
   </mat-card-header>
   <mat-card-content>
     <form name="form" (ngSubmit)="register()" [formGroup]="registerForm">
@@ -62,10 +62,10 @@
 
 
       <button mat-raised-button color="primary" type="submit"
-              [disabled]="loading || !registerForm?.valid">{{'common.register'|translate}}
+              [disabled]="loading || !registerForm?.valid">{{'auth.resendActivation.checkButton'|translate}}
       </button>
       <button mat-raised-button type="button" routerLink="/register" routerLinkActive="active">
-        Back to Registration
+        {{'auth.resendActivation.back'|translate}}
       </button>
     </form>
   </mat-card-content>

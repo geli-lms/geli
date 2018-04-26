@@ -1,5 +1,19 @@
 // TODO move to shared folder
 export const errorCodes = {
+  user : {
+      userNotFound: {
+        code: 'user not found',
+        text: 'User was not found',
+      },
+      retryAfter: {
+        code: 'retry after',
+        text: 'You can only try every 10 minutes. Your next chance is in:',
+      },
+      userAlreadyActive: {
+        code: 'user already active',
+        text: 'User is already activated'
+      }
+  },
   mail: {
     duplicate: {
       code: 'duplicate mail',

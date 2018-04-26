@@ -1,7 +1,7 @@
-import {Request} from 'express';
+import {Request, Response} from 'express';
 import {
   Body, Post, JsonController, Req, HttpError, UseBefore, BodyParam, ForbiddenError,
-  InternalServerError, BadRequestError, OnUndefined
+  InternalServerError, BadRequestError, OnUndefined, Res
 } from 'routing-controllers';
 import {json as bodyParserJson} from 'body-parser';
 import passportLoginMiddleware from '../security/passportLoginMiddleware';
@@ -136,6 +136,38 @@ export class AuthController {
       });
   }
 
+
+  @Post('/activationresend')
+
+  ActivationResend (@BodyParam('firstname') firstname: string,
+                                      @BodyParam('lastname') lastname: string,
+                                      @BodyParam('uid') uid: string,
+                                      @BodyParam('email') email:string,
+                                      @Res() response: Response) {
+    return User.findOne({'profile.firstName': firstname,'profile.lastName': lastname,uid: uid})
+      .then((user) => {
+        if(!user){
+          throw new BadRequestError(errorCodes.errorCodes.user.userNotFound.code);
+        }
+        if(user.isActive)
+        {
+          throw new BadRequestError(errorCodes.errorCodes.user.userAlreadyActive.code);
+        }
+        const timeSinceUpdate: number = (Date.now() - user.updatedAt.getTime() ) /60000;
+        if (timeSinceUpdate < 10){
+          const retryAfter: number = (10-timeSinceUpdate) * 60;
+          response.set('Retry-After',retryAfter.toString());
+          throw new HttpError(503,errorCodes.errorCodes.user.retryAfter.code);
+        }
+
+        user.email = email;
+        user.save();
+
+        return user.toObject();
+      })
+
+  }
+
   /**
    * @api {post} /api/auth/reset Reset password
    * @apiName PostAuthReset
@@ -220,6 +252,8 @@ export class AuthController {
       });
   }
 
+
+
   /**
    * Add new user to all whitelistet courses in example after registration.
    * @param {IUser} user
@@ -240,4 +274,5 @@ export class AuthController {
         }
       }));
   }
+
 }

@@ -44,7 +44,11 @@
       "mailSent": "Wir haben Ihnen einen Aktivierungslink an Ihre E-Mail-Adresse gesendet.",
       "back": "Zurück zur Startseite",
       "teacherRegistrationButton": "Kein Student?",
-      "resendActivation": "Aktivierung erneut senden"
+      "resendActivationButton": "Aktivierung erneut senden"
+    },
+    "resendActivation": {
+      "checkButton": "Prüfen",
+      "back": "Zurück zur Registrierung"
     }
   },
   "mainMenu": {
