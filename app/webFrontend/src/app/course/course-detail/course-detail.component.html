@@ -1,11 +1,19 @@
 <div class="course-header">
-  <button mat-icon-button color="primary" (click)= "openDownloadDialog()" class="download-button">
-    <mat-icon aria-label="Download Units" mat-tooltip="Download Units">get_app</mat-icon>
-  </button>
   <h1>{{course?.name}}</h1>
   <p>{{course?.description}}</p>
+  <mat-toolbar>
+    <mat-toolbar-row>
+      <button mat-button routerLink="overview">
+        <span>Overview</span>
+      </button>
+      <button mat-button routerLink="fileview">
+        <span>Fileview</span>
+      </button>
+      <button mat-icon-button color="primary" (click)="openDownloadDialog()" class="download-button">
+        <mat-icon aria-label="Download Units" mat-tooltip="Download Units">get_app</mat-icon>
+        Download
+      </button>
+    </mat-toolbar-row>
+  </mat-toolbar>
 </div>
-<div class="lectures" *ngIf="course">
-  <app-lecture [lecture]="lecture" *ngFor="let lecture of course.lectures">
-  </app-lecture>
-</div>
+<router-outlet></router-outlet>

@@ -17,6 +17,8 @@ import {DuplicationService, ExportService, ImportService} from '../shared/servic
 import {SaveFileService} from '../shared/services/save-file.service';
 import {ReportModule} from '../report/report.module';
 import {RouterOutlet} from '@angular/router';
+import {FileViewComponent} from './course-detail/file-view/file-view.component';
+import {CourseOverviewComponent} from './course-detail/course-overview/course-overview.component';
 
 @NgModule({
   imports: [
@@ -38,6 +40,8 @@ import {RouterOutlet} from '@angular/router';
     LectureCheckboxComponent,
     UnitCheckboxComponent,
     UploadUnitCheckboxComponent,
+    FileViewComponent,
+    CourseOverviewComponent
   ],
   entryComponents: [
     DownloadCourseDialogComponent,

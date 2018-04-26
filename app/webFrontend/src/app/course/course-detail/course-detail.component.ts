@@ -62,4 +62,15 @@ export class CourseDetailComponent implements OnInit {
       width: '800px'
     });
   }
+
+  fileview(id: string) {
+    const url = '/course/' + id + '/fileview';
+    this.router.navigate([url],{ queryParams: { course: this.course } });
+  }
+
+  overview(id: string) {
+    const url = '/course/' + id + '/overview';
+    this.router.navigate([url],{ queryParams: { course: this.course } });
+  }
+
 }
