@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, Validators, FormControl} from '@angular/forms';
 
 @Component({
   selector: 'app-unit-general-info-form',
@@ -8,8 +8,8 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 })
 export class UnitGeneralInfoFormComponent implements OnInit {
 
-  @Input()
-  public model: any;
+  @Input() public model: any;
+  @Input() unitForm: FormGroup;
 
   public form: FormGroup;
 
@@ -17,11 +17,10 @@ export class UnitGeneralInfoFormComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.form = this.formBuilder.group({
-      name: [this.model ? this.model.name : '', Validators.required],
-      description: [this.model ? this.model.description : '', Validators.required],
-      deadline: [this.model ? this.model.deadline : '']
-    });
+    this.unitForm.addControl("name", new FormControl(this.model.name, Validators.required));
+    this.unitForm.addControl("description", new FormControl(this.model.description, Validators.required));
+    this.unitForm.addControl("deadline", new FormControl(this.model.deadline));
+    //this.unitForm.addControl("visible", new FormControl(this.model.visible));
   }
 
   updateDateTime(date: Date) {

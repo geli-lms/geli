@@ -1,15 +1,13 @@
-<form [formGroup]="form">
-  <mat-form-field>
+  <mat-form-field [formGroup]="unitForm">
     <input matInput required formControlName="name" placeholder="Name">
   </mat-form-field>
 
-  <mat-form-field>
+  <mat-form-field [formGroup]="unitForm">
     <textarea matInput formControlName="description" placeholder="Description" rows="4"></textarea>
   </mat-form-field>
 
-  <mat-form-field *ngIf="model?.progressable">
+  <mat-form-field *ngIf="model?.progressable" [formGroup]="unitForm">
     <input matInput formControlName="deadline" [matDatepicker]="deadlineDatepicker" placeholder="Optional deadline">
     <mat-datepicker-toggle matSuffix [for]="deadlineDatepicker"></mat-datepicker-toggle>
     <mat-datepicker #deadlineDatepicker (selectedChanged)="updateDateTime($event)"></mat-datepicker>
   </mat-form-field>
-</form>

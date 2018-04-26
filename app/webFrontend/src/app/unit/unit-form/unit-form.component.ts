@@ -2,6 +2,7 @@ import {Component, OnInit, Input} from '@angular/core';
 import {ICourse} from '../../../../../../shared/models/ICourse';
 import {ILecture} from '../../../../../../shared/models/ILecture';
 import {IUnit} from '../../../../../../shared/models/units/IUnit';
+import {FormBuilder, FormGroup} from "@angular/forms";
 
 @Component({
   selector: 'app-unit-form',
@@ -17,8 +18,11 @@ export class UnitFormComponent implements OnInit {
   @Input() onDone: () => void;
   @Input() onCancel: () => void;
 
-  constructor() {
+  unitForm: FormGroup;
+  constructor(private formBuilder: FormBuilder) {
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.unitForm = new FormGroup({});
+  }
 }

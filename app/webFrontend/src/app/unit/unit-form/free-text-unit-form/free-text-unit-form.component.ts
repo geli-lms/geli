@@ -8,6 +8,7 @@ import {UnitGeneralInfoFormComponent} from '../unit-general-info-form/unit-gener
 import {FreeTextUnitEditorComponent} from './free-text-unit-editor/free-text-unit-editor.component';
 import {FreeTextUnitEditorDialog} from './free-text-unit-editor/free-text-unit-editor-dialog/free-text-unit-editor.dialog';
 import {isUndefined} from 'util';
+import {FormGroup} from "@angular/forms";
 
 @Component({
   selector: 'app-free-text-unit-form',
@@ -20,6 +21,7 @@ export class FreeTextUnitFormComponent implements OnInit {
   @Input() model: IFreeTextUnit;
   @Input() onDone: () => void;
   @Input() onCancel: () => void;
+  @Input() unitForm: FormGroup;
 
   @ViewChild(UnitGeneralInfoFormComponent)
   private generalInfo: UnitGeneralInfoFormComponent;
