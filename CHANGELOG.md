@@ -5,7 +5,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [NEXT] 
-
+- added details of courseAdmin and teacher to course detail view. on click profiles are shown.[#598] (https://github.com/h-da/geli/issues/598)
 
 ## [0.6.0] - 2018-03-31 - Introduces MediaManager and some minor changes
 ### Added
