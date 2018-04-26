@@ -1,10 +1,10 @@
 <div class="profile" *ngIf="user">
   <span class="user-icon" user-image [user-image]="user" [size]="'50px'"></span>
-  <h3 class="name">
+  <h3 class="name-section">
     <a *ngIf="!isCurrentProfile()" [routerLink]="['/profile', user._id]" routerLinkActive="active">
-      <span>{{user.profile.firstName}} {{user.profile.lastName}}</span>
+      <span class="name">{{user.profile.firstName}} {{user.profile.lastName}}</span>
     </a>
-    <span *ngIf="isCurrentProfile()">{{user.profile.firstName}} {{user.profile.lastName}}</span>
+    <span class="name" *ngIf="isCurrentProfile()">{{user.profile.firstName}} {{user.profile.lastName}}</span>
   </h3>
   <div class="user-data">
     <span><strong>E-Mail: </strong><a href="mailto:{{user.email}}">{{user.email}}</a></span>
