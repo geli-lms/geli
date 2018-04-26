@@ -38,18 +38,18 @@ export class CourseDetailComponent implements OnInit {
     this.titleService.setTitle('Course');
   }
 
-  getCourse(courseId: string) {
-    this.courseService.readCourseToView(courseId).then(
-      (course: ICourse) => {
-        this.course = course;
-        LastVisitedCourseContainerUpdater.addCourseToLastVisitedCourses(courseId, this.userService, this.userDataService);
-        this.titleService.setTitleCut(['Course: ', this.course.name]);
-      },
-      (errorResponse: Response) => {
-        if (errorResponse.status === 401) {
-          this.snackBar.open('You are not authorized to view this course.', '', {duration: 3000});
-        }
-      });
+  async getCourse(courseId: string) {
+    try {
+      this.course = await this.courseService.readCourseToView(courseId);
+      this.titleService.setTitleCut(['Course: ', this.course.name]);
+      LastVisitedCourseContainerUpdater.addCourseToLastVisitedCourses(courseId, this.userService, this.userDataService);
+    } catch (errorResponse) {
+      if (errorResponse.status === 401) {
+        this.snackBar.open('You are not authorized to view this course.', '', {duration: 3000});
+      } else {
+        this.snackBar.open('Something went wrong: ' + errorResponse.message, '', {duration: 3000});
+      }
+    }
   }
 
   openDownloadDialog() {
