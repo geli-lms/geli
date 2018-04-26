@@ -5,8 +5,7 @@ import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import {Lecture} from '../models/Lecture';
 import {ILecture} from '../../../shared/models/ILecture';
 import {Course} from '../models/Course';
-import {Notification} from '../models/Notification';
-import {Unit} from "../models/units/Unit";
+import {Unit} from '../models/units/Unit';
 
 @JsonController('/lecture')
 @UseBefore(passportJwtMiddleware)
