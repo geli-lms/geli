@@ -19,6 +19,7 @@
     "validation": {
       "required": "Eingabe notwendig",
       "minLength": "Mindestens {{min}} Zeichen benötigt",
+      "maxLength": "Maximal {{max}} Zeichen erlaubt",
       "invalid": "Keine gültige Eingabe",
       "password": "Passwörter müssen aus mindestens 8 Zeichen, inklusive einem Sonderzeichen und einer Ziffer bestehen",
       "passwordsMatch": "Die Passwörter stimmen nicht überein",

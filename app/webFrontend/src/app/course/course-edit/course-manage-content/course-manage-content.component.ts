@@ -106,9 +106,9 @@ export class CourseManageContentComponent implements OnInit, OnDestroy {
     this.route.parent.parent.params.subscribe(params => {
       const courseId = params['id'];
 
-      this.courseService.readSingleItem(courseId).then(
-        (val: any) => {
-          this.course = val;
+      this.courseService.readCourseToEdit(courseId).then(
+        (course: ICourse) => {
+          this.course = course;
           this.dataSharingService.setDataForKey('course', this.course);
           this.setOpenedLectureAndUnit();
           this.setAddLectureIfPresent();
@@ -221,7 +221,7 @@ export class CourseManageContentComponent implements OnInit, OnDestroy {
 
   async reloadCourse() {
     try {
-      this.course =  <any>(await this.courseService.readSingleItem(this.course._id));
+      this.course = await this.courseService.readCourseToEdit(this.course._id);
       this.dataSharingService.setDataForKey('course', this.course);
     } catch (err) {
       this.snackBar.open('Couldn\'t reload Course', '', {duration: 3000});
