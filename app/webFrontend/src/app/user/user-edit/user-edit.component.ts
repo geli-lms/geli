@@ -9,6 +9,7 @@ import {ShowProgressService} from '../../shared/services/show-progress.service';
 import {DialogService} from '../../shared/services/dialog.service';
 import {TitleService} from '../../shared/services/title.service';
 import {ThemeService} from '../../shared/services/theme.service';
+import {emailValidator} from '../../shared/validators/validators';
 
 @Component({
   selector: 'app-user-edit',
@@ -124,7 +125,7 @@ export class UserEditComponent implements OnInit {
         theme: [''],
       }),
       username: [''],
-      email: ['', Validators.required],
+      email: ['', emailValidator],
       currentPassword: ['']
     });
   }
