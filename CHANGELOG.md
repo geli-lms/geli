@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Fixed
 - Fixed wasteful course data usage #654 via specialized course model interfaces.
 
+### Security
+- Fixed multiple severe course related security issues #594, #653.
 
 ## [0.6.0] - 2018-03-31 - Introduces MediaManager and some minor changes
 ### Added
