@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [NEXT] 
 ### Fixed
 - Fixed wasteful course data usage #654 via specialized course model interfaces.
+- Fixed a broken documentation link #583.
 
 ### Security
 - Fixed multiple severe course related security issues #594, #653.
