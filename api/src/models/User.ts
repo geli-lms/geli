@@ -94,8 +94,8 @@ function hashPassword(next: (err?: NativeError) => void) {
 }
 
 function generateActivationToken(next: (err?: NativeError) => void) {
-  // check if user is new and wasn't activated by the creator
-  if (this.isNew && !this.isActive && isNullOrUndefined(this.authenticationToken)) {
+  // check if user wasn't activated by the creator
+  if ( !this.isActive && isNullOrUndefined(this.authenticationToken)) {
     // set new authenticationToken
     this.authenticationToken = generateSecureToken();
   }

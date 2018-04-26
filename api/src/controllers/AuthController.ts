@@ -137,34 +137,50 @@ export class AuthController {
   }
 
 
+  /**
+   * @api {post} /api/auth/activationresend Resend Activation
+   * @apiName ActivationResend
+   * @apiGroup Auth
+   *
+   * @apiParam {string} firstname firstname of user which activation should be resend.
+   * @apiParam {string} lastname lastname of user which activation should be resend.
+   * @apiParam {string} uid matriculation number of user which activation should be resend.
+   * @apiParam {string} email email the new activation should be sent to.
+   *
+   * @apiError BadRequestError That user not found
+   * @apiError BadRequestError That user is already activated
+   * @apiError BadRequestError Can only try ever 10min with time left till next try
+   * @apiError InternalServerError Could not send E-Mail
+   */
   @Post('/activationresend')
-
-  ActivationResend (@BodyParam('firstname') firstname: string,
+  async ActivationResend (@BodyParam('firstname') firstname: string,
                                       @BodyParam('lastname') lastname: string,
                                       @BodyParam('uid') uid: string,
-                                      @BodyParam('email') email:string,
+                                      @BodyParam('email') email: string,
                                       @Res() response: Response) {
-    return User.findOne({'profile.firstName': firstname,'profile.lastName': lastname,uid: uid})
-      .then((user) => {
-        if(!user){
+    const user = await User.findOne({'profile.firstName': firstname, 'profile.lastName': lastname, uid: uid});
+
+        if (!user) {
           throw new BadRequestError(errorCodes.errorCodes.user.userNotFound.code);
         }
-        if(user.isActive)
-        {
+        if (user.isActive) {
           throw new BadRequestError(errorCodes.errorCodes.user.userAlreadyActive.code);
         }
-        const timeSinceUpdate: number = (Date.now() - user.updatedAt.getTime() ) /60000;
-        if (timeSinceUpdate < 10){
-          const retryAfter: number = (10-timeSinceUpdate) * 60;
-          response.set('Retry-After',retryAfter.toString());
-          throw new HttpError(503,errorCodes.errorCodes.user.retryAfter.code);
+        const timeSinceUpdate: number = (Date.now() - user.updatedAt.getTime() ) / 60000;
+        if (timeSinceUpdate < 10) {
+          const retryAfter: number = (10 - timeSinceUpdate) * 60;
+          response.set('Retry-After', retryAfter.toString());
+          throw new HttpError(503, errorCodes.errorCodes.user.retryAfter.code);
         }
-
+        user.authenticationToken = undefined;
         user.email = email;
-        user.save();
+        const savedUser = await user.save();
 
-        return user.toObject();
-      })
+        try {
+          emailService.resendActivation(savedUser);
+        } catch (err) {
+          throw new InternalServerError(err.toString());
+        }
 
   }
 
