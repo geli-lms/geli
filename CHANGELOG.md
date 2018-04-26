@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Security
 - Fixed multiple severe course related security issues #594, #653.
 
+
 ## [0.6.0] - 2018-03-31 - Introduces MediaManager and some minor changes
 ### Added
 - MediaManager for file management in courses
