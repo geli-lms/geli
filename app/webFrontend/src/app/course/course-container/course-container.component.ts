@@ -3,7 +3,7 @@ import {MatDialog, MatSnackBar} from '@angular/material';
 import {UserService} from '../../shared/services/user.service';
 import {CourseService, UserDataService} from '../../shared/services/data.service';
 import {Router} from '@angular/router';
-import {ICourse} from '../../../../../../shared/models/ICourse';
+import {ICourseDashboard} from '../../../../../../shared/models/ICourseDashboard';
 import {errorCodes} from '../../../../../../api/src/config/errorCodes';
 import {LastVisitedCourseContainerUpdater} from '../../shared/utils/LastVisitedCourseContainerUpdater';
 
@@ -15,7 +15,7 @@ import {LastVisitedCourseContainerUpdater} from '../../shared/utils/LastVisitedC
 
 export class CourseContainerComponent implements OnInit {
   @Input()
-  courses: ICourse[];
+  courses: ICourseDashboard[];
   @Input()
   expand: boolean;
   @Input()

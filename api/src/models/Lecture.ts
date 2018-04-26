@@ -2,12 +2,14 @@ import * as mongoose from 'mongoose';
 import {ILecture} from '../../../shared/models/ILecture';
 import {IUnitModel, Unit} from './units/Unit';
 import {IUnit} from '../../../shared/models/units/IUnit';
+import {IUser} from '../../../shared/models/IUser';
 import {InternalServerError} from 'routing-controllers';
 import {Course} from './Course';
 import * as winston from 'winston';
 
 interface ILectureModel extends ILecture, mongoose.Document {
   exportJSON: () => Promise<ILecture>;
+  processUnitsFor: (user: IUser) => Promise<this>;
 }
 
 const lectureSchema = new mongoose.Schema({
@@ -71,6 +73,14 @@ lectureSchema.methods.exportJSON = async function() {
   }
 
   return obj;
+};
+
+lectureSchema.methods.processUnitsFor = async function (user: IUser) {
+  this.units = await Promise.all(this.units.map(async (unit: IUnitModel) => {
+    unit = await unit.populateUnit();
+    return unit.secureData(user);
+  }));
+  return this;
 };
 
 lectureSchema.statics.importJSON = async function(lecture: ILecture, courseId: string) {

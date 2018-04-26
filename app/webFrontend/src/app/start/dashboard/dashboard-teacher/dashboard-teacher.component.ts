@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {ICourse} from '../../../../../../../shared/models/ICourse';
+import {ICourseDashboard} from '../../../../../../../shared/models/ICourseDashboard';
 import {UserService} from '../../../shared/services/user.service';
 import {DashboardBaseComponent} from '../dashboard-base-component';
 import {MatSnackBar} from '@angular/material';
@@ -14,10 +14,10 @@ import {SortUtil} from '../../../shared/utils/SortUtil';
 })
 export class DashboardTeacherComponent extends DashboardBaseComponent {
 
-  myCourses: ICourse[];
-  furtherCourses: ICourse[];
-  inactiveCourses: ICourse[];
-  availableCourses: ICourse[];
+  myCourses: ICourseDashboard[];
+  furtherCourses: ICourseDashboard[];
+  inactiveCourses: ICourseDashboard[];
+  availableCourses: ICourseDashboard[];
   fabOpen = false;
 
   constructor(public userService: UserService,
@@ -38,24 +38,18 @@ export class DashboardTeacherComponent extends DashboardBaseComponent {
     this.inactiveCourses = [];
     SortUtil.sortByLastVisitedCourses(this.allCourses, this.userService.user.lastVisitedCourses);
     for (const course of this.allCourses) {
-      if ((this.filterMyCourses(course) || this.filterAdminCourses(course)) && !course.active) {
-        this.inactiveCourses.push(course);
-      } else if (this.filterAdminCourses(course)) {
-        this.myCourses.push(course);
-      } else if (this.filterMyCourses(course)) {
-        this.furtherCourses.push(course);
+      if (course.userIsCourseAdmin || course.userIsCourseTeacher) {
+        if (!course.active) {
+          this.inactiveCourses.push(course);
+        } else if (course.userIsCourseAdmin) {
+          this.myCourses.push(course);
+        } else {
+          this.furtherCourses.push(course);
+        }
       } else {
         this.availableCourses.push(course);
       }
     }
-  }
-
-  filterAdminCourses(course: ICourse) {
-    return (course.courseAdmin._id === this.userService.user._id);
-  }
-
-  filterMyCourses(course: ICourse) {
-    return (course.teachers.filter(teacher => teacher._id === this.userService.user._id).length);
   }
 
   closeFab = () => {
