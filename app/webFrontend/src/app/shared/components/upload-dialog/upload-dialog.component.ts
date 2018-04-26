@@ -1,7 +1,8 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {FileItem, FileUploader} from 'ng2-file-upload';
 import {IUser} from '../../../../../../../shared/models/IUser';
-import {MatDialogRef, MatSnackBar} from '@angular/material';
+import {MatDialog, MatDialogRef, MatSnackBar} from '@angular/material';
+import {UploadFormDialog} from '../upload-form-dialog/upload-form-dialog.component';
 
 @Component({
   selector: 'app-upload-dialog',
@@ -21,6 +22,7 @@ export class UploadDialog implements OnInit {
   showProgressBar = false;
 
   constructor(
+    public dialog: MatDialog,
     public dialogRef: MatDialogRef<UploadDialog>,
     private snackBar: MatSnackBar) { }
 
@@ -119,6 +121,24 @@ export class UploadDialog implements OnInit {
     this.stopWebcam();
     this.uploader.cancelAll();
     this.dialogRef.close(false);
+  }
+
+  public openDialog() {
+    const uploadDialog = this.dialog.open(UploadFormDialog, {
+      maxHeight: '90vh',
+      minWidth: '50vw',
+      data: {
+        targetDir: '/api/users/picture/' + this.user._id,
+        allowedMimeTypes: ['image/png', 'image/gif', 'image/jpg', 'image/bmp', 'image/jpeg'], // TODO: Generate array for 'image/*'-types
+        maxFileNumber: 1
+      }
+    });
+    uploadDialog.afterClosed().subscribe(value => {
+      if (value) {
+        // Reload current folder
+        this.dialogRef.close(value);
+      }
+    });
   }
 
 }

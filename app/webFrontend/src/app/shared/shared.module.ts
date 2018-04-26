@@ -80,6 +80,7 @@ import {UserProfileDialog} from 'app/shared/components/user-profile-dialog/user-
         UploadFormDialog,
         PickMediaDialog,
         UserProfileDialog,
+        UploadFormComponent
     ],
 })
 export class SharedModule {

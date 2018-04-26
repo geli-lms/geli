@@ -71,7 +71,7 @@ export function HttpLoaderFactory(http: HttpClient) {
         deps: [HttpClient]
       }
     }),
-    NotificationModule
+    NotificationModule,
   ],
   providers: [
     UserService,

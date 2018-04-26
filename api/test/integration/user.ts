@@ -330,6 +330,18 @@ describe('User', () => {
       res.body.profile.picture.should.have.all.keys('alias', 'name', 'path');
       res.body.profile.picture.alias.should.be.equal('test.png');
     });
+
+    it('should block non images when uploading new user picture', async () => {
+      const admin = await FixtureUtils.getRandomAdmin();
+
+      const res = await chai.request(app)
+        .post(`${BASE_URL}/picture/${admin._id}`)
+        .set('Authorization', `JWT ${JwtUtils.generateToken(admin)}`)
+        .attach('file', fs.readFileSync('test/resources/wrong-format.txt'), 'wrong-format.txt');
+
+      res.status.should.be.equal(400);
+      res.body.name.should.be.equal('BadRequestError');
+    });
   });
 
   describe(`DELETE ${BASE_URL}`, () => {
