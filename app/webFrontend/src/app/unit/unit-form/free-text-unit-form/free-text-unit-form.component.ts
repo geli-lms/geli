@@ -8,7 +8,7 @@ import {UnitGeneralInfoFormComponent} from '../unit-general-info-form/unit-gener
 import {FreeTextUnitEditorComponent} from './free-text-unit-editor/free-text-unit-editor.component';
 import {FreeTextUnitEditorDialog} from './free-text-unit-editor/free-text-unit-editor-dialog/free-text-unit-editor.dialog';
 import {isUndefined} from 'util';
-import {FormGroup} from "@angular/forms";
+import {FormControl, FormGroup} from "@angular/forms";
 
 @Component({
   selector: 'app-free-text-unit-form',
@@ -20,7 +20,6 @@ export class FreeTextUnitFormComponent implements OnInit {
   @Input() lectureId: string;
   @Input() model: IFreeTextUnit;
   @Input() onDone: () => void;
-  @Input() onCancel: () => void;
   @Input() unitForm: FormGroup;
 
   @ViewChild(UnitGeneralInfoFormComponent)
@@ -32,13 +31,14 @@ export class FreeTextUnitFormComponent implements OnInit {
               private unitService: UnitService,
               private snackBar: MatSnackBar,
               public dialog: MatDialog,
-              private notificationService: NotificationService) {
-  }
+              private notificationService: NotificationService) {}
 
   ngOnInit() {
     if (!this.model) {
       this.model = new FreeTextUnit(this.course._id);
     }
+    // add a virtual FormControl which binds to model.markdown
+    this.unitForm.addControl('markdown',new FormControl(this.model.markdown));
   }
 
   saveUnit() {

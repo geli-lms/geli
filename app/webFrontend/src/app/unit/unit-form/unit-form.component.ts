@@ -25,4 +25,13 @@ export class UnitFormComponent implements OnInit {
   ngOnInit() {
     this.unitForm = new FormGroup({});
   }
+
+  save(){
+    if(!this.unitForm.valid){
+      console.log("invalid form")
+      return;
+    }
+    console.log(this.unitForm.value.markdown);
+
+    }
 }

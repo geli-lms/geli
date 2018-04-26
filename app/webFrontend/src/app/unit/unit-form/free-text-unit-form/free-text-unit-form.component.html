@@ -1,8 +1,6 @@
-<div class="free-text-unit-edit">
-  <app-free-text-unit-editor [(markdown)]="this.model.markdown"></app-free-text-unit-editor>
+<app-free-text-unit-editor [(markdown)]="this.model.markdown"></app-free-text-unit-editor>
 
-  <div class="btn-wrapper">
-    <button mat-raised-button color="secondary" (click)="openFullscreen()">Fullscreen</button>
-    <app-button-save-cancel (save)="saveUnit()" (cancel)="onCancel()"></app-button-save-cancel>
-  </div>
+<div class="btn-wrapper">
+  <button mat-raised-button color="secondary" (click)="openFullscreen()">Fullscreen</button>
+  <app-button-save-cancel (save)="saveUnit()" (cancel)="onCancel()"></app-button-save-cancel>
 </div>

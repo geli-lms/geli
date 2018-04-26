@@ -1,4 +1,4 @@
-<form class="edit-unit" *ngIf="course" [formGroup]="unitForm">
+<form class="edit-unit" *ngIf="course" [formGroup]="unitForm" (submit)="save()">
   <app-unit-general-info-form [model]="model" [unitForm]="unitForm"></app-unit-general-info-form>
   <!--<app-file-unit-form
     *ngIf="(type == 'video' || type == 'file')"
@@ -30,7 +30,7 @@
     [model]="model"
     [lectureId]="lecture._id"
     [onDone]="onDone"
-    [onCancel]="onCancel"
     [unitForm]="unitForm"></app-free-text-unit-form>
-
+  <button type="submit" mat-raised-button color="primary" [disabled]="!unitForm.valid">Save</button>
+  <button (click)="onCancel()" mat-raised-button >Cancel</button>
 </form>
