@@ -5,7 +5,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [NEXT] 
-
+- Added an Box for Information on the Homescreen [#216] (https://github.com/h-da/geli/issues/216)
 
 ## [0.6.0] - 2018-03-31 - Introduces MediaManager and some minor changes
 ### Added
