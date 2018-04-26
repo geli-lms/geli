@@ -1,12 +1,20 @@
 <mat-tab-group *ngIf="!showProgressBar" (selectChange)="changedTab($event)">
   <mat-tab label="Upload image">
     <div class="tab-content">
-      <!-- TODO: Replace with shared upload form -->
-      <input type="file" name="fileupload" ng2FileSelect [uploader]="uploader" placeholder="Upload picture"/>
-      <button mat-raised-button color="primary" disabled="{{!uploader.queue.length}}" (click)="uploadImage()">
-        Upload picture
-      </button>
-      <button mat-raised-button (click)="cancel()">Cancel</button>
+      <label ng2FileDrop
+             [ngClass]="{'nv-file-over': true}"
+             [uploader]="uploader"
+             class="file-dropzone"
+              (onFileDrop)="startUpload()">
+        <span>Drop files here or click here to add files</span>
+        <input type="file"
+               ng2FileSelect
+               [uploader]="uploader"
+               (onFileSelected)="startUpload()"
+               placeholder="Upload files"
+               hidden
+        />
+      </label>
     </div>
   </mat-tab>
   <mat-tab id="webcam-tab" label="Take webcam picture">
