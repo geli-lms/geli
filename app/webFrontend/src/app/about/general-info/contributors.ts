@@ -8,6 +8,11 @@ export class ContributorsList {
       new Contributor('Thomas', 'Sauer', '16WiSe', 'Initiator', 'thomassss')
       , new Contributor('Ute', 'Trapp', '17SuSe', 'Lecturer', 'utetrapp')
       , new Contributor('David', 'Müller', '17SuSe', 'Lecturer', 'd89')
+      // Contributors
+      , new Contributor('Steffen', 'Großpersky', '17SuSe', 'Contributor', 'grosspersky')
+      , new Contributor('Alexander', 'Eimer', '17SuSe', 'Contributor', 'aeimer')
+      , new Contributor('Ken', 'Hasenbank', '17SuSe', 'Contributor', 'khase')
+
       // Students
       , new Contributor('Tobias', 'Neumann', '18SuSe', 'Student', 'Gargamil')
       , new Contributor('Armel', 'Siewe', '18SuSe', 'Student', 'armel22')
@@ -28,15 +33,12 @@ export class ContributorsList {
       , new Contributor('Henrik', 'Ochs', '17WiSe', 'Student', 'HPunktOchs')
       , new Contributor('Felix', 'Brucker', '17SuSe', 'Student', 'felixbrucker', '17WiSe')
 
+      // Old Students
       , new Contributor('Patrick', 'Schmelmer', '17WiSe', 'Student', 'shelmz', '17WiSe')
       , new Contributor('Michael', 'Pahlke', '17WiSe', 'Student', 'micpah', '17WiSe')
-      , new Contributor('Alexander', 'Eimer', '17SuSe', 'Student', 'aeimer', '17WiSe')
-      , new Contributor('Steffen', 'Großpersky', '17SuSe', 'Student', 'grosspersky', '17WiSe')
-      , new Contributor('Ken', 'Hasenbank', '17SuSe', 'Student', 'khase', '17WiSe')
       , new Contributor('Lukas', 'Korte', '17SuSe', 'Student', 'lukaskorte', '17WiSe')
       , new Contributor('Oliver', 'Neff', '17SuSe', 'Student', 'OliverNeff', '17WiSe')
       , new Contributor('Alexander', 'Weinfurter', '17SuSe', 'Student', 'alexweinfurter', '17WiSe')
-      // Old Students
       , new Contributor('Bernd', 'Noetscher', '17SuSe', 'Student', 'bernd-hda', '17SuSe')
     ];
   }
