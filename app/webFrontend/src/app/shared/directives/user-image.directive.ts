@@ -1,4 +1,4 @@
-import {Directive, HostBinding, Input, OnInit} from '@angular/core';
+import {Directive, HostBinding, Input, OnInit, SimpleChange} from '@angular/core';
 import {User} from '../../models/User';
 import {IUser} from '../../../../../../shared/models/IUser';
 
@@ -24,8 +24,8 @@ export class UserImageDirective implements OnInit {
   }
 
   ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
-    for (let propName in changes) {
-      let changedProp = changes[propName];
+    for (const propName in changes) {
+      const changedProp = changes[propName];
       this[propName] = changedProp.currentValue;
     }
     this.getImage();
