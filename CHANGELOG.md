@@ -6,10 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [NEXT] 
 ### Fixed
-- Fixed wasteful course data usage #654 via specialized course model interfaces.
-- Fixed a broken documentation link #583.
+- wasteful course data usage #654 via specialized course model interfaces.
+- a broken documentation link #583.
 - Limited the first- and lastname to 64 characters in registration- and edit page. [#585](https://github.com/h-da/geli/issues/585)
 - add correct E-Mail validator to edit-profile and register component [#564]
+- the view of downloading a empty course [#659](https://github.com/h-da/geli/issues/659)
 
 ### Security
 - Fixed multiple severe course related security issues #594, #653.
