@@ -5,6 +5,7 @@
     "register": "Registrieren",
     "email": "E-Mail",
     "password": "Passwort",
+    "send": "Senden",
     "dismiss": "Schließen",
     "back": "Zurück",
     "profile": {
@@ -47,8 +48,9 @@
       "resendActivationButton": "Aktivierung erneut senden"
     },
     "resendActivation": {
-      "checkButton": "Prüfen",
-      "back": "Zurück zur Registrierung"
+      "back": "Zurück zur Registrierung",
+      "successful": "Aktivierung erneut senden erfolgreich",
+      "mailSent": "Wir haben Ihnen einen neuen Aktivierungslink an Ihre E-Mail-Adresse gesendet."
     }
   },
   "mainMenu": {

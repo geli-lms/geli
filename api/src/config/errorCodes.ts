@@ -3,15 +3,15 @@ export const errorCodes = {
   user : {
       userNotFound: {
         code: 'user not found',
-        text: 'User was not found',
+        text: 'User was not found.',
       },
       retryAfter: {
         code: 'retry after',
-        text: 'You can only try every 10 minutes. Your next chance is in:',
+        text: 'You can only resend the activation every 10 minutes. You can resend again in ',
       },
       userAlreadyActive: {
         code: 'user already active',
-        text: 'User is already activated'
+        text: 'User is already activated.'
       }
   },
   mail: {

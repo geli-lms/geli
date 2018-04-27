@@ -13,19 +13,20 @@ import {TitleService} from '../../shared/services/title.service';
   styleUrls: ['./activation-resend.component.scss']
 })
 export class ActivationResendComponent implements OnInit {
-  registerForm: FormGroup;
-  registrationDone = false;
+  resendActivationForm: FormGroup;
+  resendActivationDone = false;
   loading = false;
   uidError = null;
   mailError = null;
+  formError = null;
 
   private trimFormFields() {
-    this.registerForm.value.email = this.registerForm.value.email.trim();
-    this.registerForm.value.profile.firstName = this.registerForm.value.profile.firstName.trim();
-    this.registerForm.value.profile.lastName = this.registerForm.value.profile.lastName.trim();
-    if (this.registerForm.value.uid) {
-      this.registerForm.value.uid = this.registerForm.value.uid.trim();
-    }
+
+    this.resendActivationForm.value.profile.firstName = this.resendActivationForm.value.profile.firstName.trim();
+    this.resendActivationForm.value.profile.lastName = this.resendActivationForm.value.profile.lastName.trim();
+    this.resendActivationForm.value.uid = this.resendActivationForm.value.uid.trim();
+    this.resendActivationForm.value.email = this.resendActivationForm.value.email.trim();
+
   }
 
   constructor(private router: Router,
@@ -46,30 +47,30 @@ export class ActivationResendComponent implements OnInit {
   clearAllErrors() {
     this.mailError = null;
     this.uidError = null;
+    this.formError = null;
   }
 
   check() {
     this.trimFormFields();
   };
 
-  register() {
+  async resendActivation() {
     this.clearAllErrors();
     this.loading = true;
     this.showProgress.toggleLoadingGlobal(this.loading);
-    this.registerForm.value.email = this.registerForm.value.email.replace(/\s/g, '').toLowerCase();
+    this.resendActivationForm.value.email = this.resendActivationForm.value.email.replace(/\s/g, '').toLowerCase();
     this.trimFormFields();
-    this.authenticationService.register(this.registerForm.value).then(
-      (val) => {
-        this.registrationDone = true;
-      })
-      .catch((err) => {
-        this.handleError(err);
-      })
-      .then(() => {
-        this.loading = false;
-        this.showProgress.toggleLoadingGlobal(this.loading);
-      })
-    ;
+    try{
+     await this.authenticationService.resendActivation(this.resendActivationForm.value.profile.firstName,
+        this.resendActivationForm.value.profile.lastName,this.resendActivationForm.value.uid,this.resendActivationForm.value.email);
+     this.resendActivationDone = true;
+    }
+    catch(err){
+      this.handleError(err);
+    }
+    this.loading = false;
+    this.showProgress.toggleLoadingGlobal(this.loading);
+
   }
 
   private handleError(err) {
@@ -78,24 +79,35 @@ export class ActivationResendComponent implements OnInit {
         this.mailError = errorCodes.mail.duplicate.text;
         break;
       }
-      case errorCodes.duplicateUid.code: {
-        this.uidError = errorCodes.duplicateUid.text;
+      case errorCodes.user.userNotFound.code: {
+        this.formError = errorCodes.user.userNotFound.text;
+        break;
+      }
+      case errorCodes.user.userAlreadyActive.code: {
+        this.formError = errorCodes.user.userAlreadyActive.text;
+        break;
+      }
+      case errorCodes.user.retryAfter.code: {
+        const timeTillNextTry = err.headers.get('retry-after');
+        const timeTillNextTrySec = timeTillNextTry%60;
+        const timeTillNextTryMin = (timeTillNextTry/60);
+        this.formError = errorCodes.user.retryAfter.text + Math.floor(timeTillNextTryMin)+" min "+ Math.floor(timeTillNextTrySec)+" sec";
         break;
       }
       default: {
-        this.snackBar.open('Registration failed', 'Dismiss');
+        this.snackBar.open('Activation Resend failed', 'Dismiss');
       }
     }
   }
 
   generateForm() {
-    this.registerForm = this.formBuilder.group({
+    this.resendActivationForm = this.formBuilder.group({
       profile: this.formBuilder.group({
         firstName: ['', Validators.compose([Validators.required, Validators.minLength(2)])],
         lastName: ['', Validators.compose([Validators.required, Validators.minLength(2)])],
       }),
-      email: ['', Validators.compose([Validators.required, Validators.email])],
-      uid: ['', [this.validateMatriculationNumber.bind(this)]]
+      uid: ['', Validators.compose([Validators.required, this.validateMatriculationNumber.bind(this)])],
+      email: ['', Validators.compose([Validators.required, Validators.email])]
     });
   }
 

@@ -5,7 +5,7 @@
   align-items: center;
 }
 
-.register-card {
+.resendActivation-card {
   width: 100%;
   max-width: 400px;
 
@@ -14,13 +14,8 @@
     width: 100%;
   }
 
-  .div-change-role {
-    margin-top: 10px;
-    font-size: small;
-    .material-icons {
-      font-size: small;
-      vertical-align: middle;
-    }
-  }
+}
 
+#resendActivationFormError{
+  margin-bottom: 20px;
 }

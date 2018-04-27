@@ -16,6 +16,8 @@ import config from '../config/main';
 @JsonController('/auth')
 export class AuthController {
 
+  private timeTillNextResendInMin: number = 10;
+
   /**
    * @api {post} /api/auth/login Login user
    * @apiName PostAuthLogin
@@ -147,9 +149,10 @@ export class AuthController {
    * @apiParam {string} uid matriculation number of user which activation should be resend.
    * @apiParam {string} email email the new activation should be sent to.
    *
-   * @apiError BadRequestError That user not found
-   * @apiError BadRequestError That user is already activated
-   * @apiError BadRequestError Can only try ever 10min with time left till next try
+   * @apiError BadRequestError User was not found.
+   * @apiError BadRequestError That email address is already in use
+   * @apiError BadRequestError User is already activated.
+   * @apiError HttpError 503 You can only resend the activation every 10 minutes. Your next chance is in   time left till next try in 'try-after' header in second
    * @apiError InternalServerError Could not send E-Mail
    */
   @Post('/activationresend')
@@ -158,30 +161,39 @@ export class AuthController {
                                       @BodyParam('uid') uid: string,
                                       @BodyParam('email') email: string,
                                       @Res() response: Response) {
-    const user = await User.findOne({'profile.firstName': firstname, 'profile.lastName': lastname, uid: uid});
+        const user = await User.findOne({'profile.firstName': firstname, 'profile.lastName': lastname, uid: uid});
 
         if (!user) {
           throw new BadRequestError(errorCodes.errorCodes.user.userNotFound.code);
         }
+
         if (user.isActive) {
           throw new BadRequestError(errorCodes.errorCodes.user.userAlreadyActive.code);
         }
+
         const timeSinceUpdate: number = (Date.now() - user.updatedAt.getTime() ) / 60000;
-        if (timeSinceUpdate < 10) {
-          const retryAfter: number = (10 - timeSinceUpdate) * 60;
+        if (timeSinceUpdate < this.timeTillNextResendInMin) {
+          const retryAfter: number = (this.timeTillNextResendInMin - timeSinceUpdate) * 60;
           response.set('Retry-After', retryAfter.toString());
           throw new HttpError(503, errorCodes.errorCodes.user.retryAfter.code);
         }
+
+        const existingUser = await User.findOne({email: email});
+        if(existingUser && existingUser.uid !== uid){
+          throw new BadRequestError(errorCodes.errorCodes.mail.duplicate.code);
+        }
+
         user.authenticationToken = undefined;
         user.email = email;
         const savedUser = await user.save();
 
         try {
-          emailService.resendActivation(savedUser);
+          await emailService.resendActivation(savedUser);
         } catch (err) {
           throw new InternalServerError(err.toString());
         }
 
+        return {success: true};
   }
 
   /**

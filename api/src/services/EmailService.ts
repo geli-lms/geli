@@ -79,11 +79,13 @@ class EmailService {
     message.to = user.profile.firstName + ' ' + user.profile.lastName + '<' + user.email + '>';
     message.subject = 'Welcome again to GELI :)';
     message.text = 'Hello ' + user.profile.firstName + ', \n\n' +
-      'you requested a new email verification. Please use the following link to verify your E-Mail:\n' +
+      'you requested a new email verification. Your previous email verification link is invalid from now on.\n' +
+      'Please use the following link to verify your E-Mail:\n' +
       config.baseurl + '/activate/' + encodeURIComponent(user.authenticationToken) + '\n\n' +
       'Your GELI Team.';
     message.html = '<p>Hello ' + user.profile.firstName + ',</p><br>' +
-      '<p>you requested a new email verification. Please use the following link to verify your E-Mail:' +
+      '<p>you requested a new email verification. Your previous email verification link is invalid from now on.<br>'+
+      'Please use the following link to verify your E-Mail:<br>' +
       `<a href='` + config.baseurl + '/activate/' + encodeURIComponent(user.authenticationToken) +
       `'>` + config.baseurl + '/activate/' + encodeURIComponent(user.authenticationToken) + '</a></p><br>' +
       '<p>Your GELI Team.</p>';
