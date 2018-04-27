@@ -1,3 +1,4 @@
+<div *ngIf="this.lecture.length">
 <mat-divider></mat-divider>
 <mat-list-item class="lecture">
   <h4>{{lecture.name}}</h4>
@@ -8,5 +9,4 @@
 <mat-list>
     <app-unit-checkbox (valueChanged)="onChildEvent($event)" *ngFor=" let unit of this.lecture.units" [unit]= "unit"></app-unit-checkbox>
 </mat-list>
-
-
+</div>
