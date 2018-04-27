@@ -198,6 +198,7 @@ courseSchema.methods.checkPrivileges = function (user: IUser) {
   const userIsStudent: boolean = user.role === 'student';
   // NOTE: The 'tutor' role exists and has fixtures, but currently appears to be unimplemented.
   // const userIsTutor: boolean = user.role === 'tutor';
+
   const courseAdminId = extractMongoId(this.courseAdmin);
 
   const userIsCourseAdmin: boolean = user._id === courseAdminId;
@@ -209,9 +210,9 @@ courseSchema.methods.checkPrivileges = function (user: IUser) {
   const userCanViewCourse: boolean = (this.active && userIsCourseStudent) || userCanEditCourse;
 
   return {userIsAdmin, userIsTeacher, userIsStudent,
-    courseAdminId,
-    userIsCourseAdmin, userIsCourseTeacher, userIsCourseStudent, userIsCourseMember,
-    userCanEditCourse, userCanViewCourse};
+      courseAdminId,
+      userIsCourseAdmin, userIsCourseTeacher, userIsCourseStudent, userIsCourseMember,
+      userCanEditCourse, userCanViewCourse};
 };
 
 courseSchema.methods.forDashboard = function (user: IUser): ICourseDashboard {
@@ -250,7 +251,7 @@ courseSchema.methods.populateLecturesFor = function (user: IUser) {
       path: 'units',
       virtuals: true,
       match: {$or: [{visible: undefined}, {visible: true}, {visible: !isTeacherOrAdmin}]},
-    populate: {
+      populate: {
         path: 'progressData',
         match: {user: {$eq: user._id}}
       }

@@ -12,7 +12,7 @@
       "description": "Documents the course fixture.",
       "units": [
         {
-          "name": "What is course fixture for?",
+          "name": "What is the purpose of this course fixture?",
           "description": "",
           "markdown": "To test the 'accesskey' enrollType.",
           "__t": "free-text"
