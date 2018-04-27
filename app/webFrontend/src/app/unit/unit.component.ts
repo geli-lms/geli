@@ -77,10 +77,12 @@ export class UnitComponent implements OnInit, AfterViewInit {
     const localUnit = this.units.find(unit => unit._id === _id);
     if (localUnit.unitCreator) {
       const localUser = this.users.find(user => user._id.toString() === localUnit.unitCreator);
-      return localUser.profile.firstName + ' ' +  localUser.profile.lastName;
-    } else {
-      return '';
+      if(localUser !== undefined){
+        return localUser.profile.firstName + ' ' +  localUser.profile.lastName;
+      }
     }
+    return '';
+
   }
 
   ngOnInit() {

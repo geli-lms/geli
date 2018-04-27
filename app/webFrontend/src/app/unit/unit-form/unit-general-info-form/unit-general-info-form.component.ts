@@ -17,6 +17,9 @@ export class UnitGeneralInfoFormComponent implements OnInit {
   }
 
   ngOnInit() {
+    if (this.model != null && this.model != undefined && this.model.visible == undefined ){
+      this.model.visible = true;
+    }
     this.form = this.formBuilder.group({
       name: [this.model ? this.model.name : '', Validators.required],
       description: [this.model ? this.model.description : '', Validators.required],
