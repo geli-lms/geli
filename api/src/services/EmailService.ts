@@ -84,7 +84,7 @@ class EmailService {
       config.baseurl + '/activate/' + encodeURIComponent(user.authenticationToken) + '\n\n' +
       'Your GELI Team.';
     message.html = '<p>Hello ' + user.profile.firstName + ',</p><br>' +
-      '<p>you requested a new email verification. Your previous email verification link is invalid from now on.<br>'+
+      '<p>you requested a new email verification. Your previous email verification link is invalid from now on.<br>' +
       'Please use the following link to verify your E-Mail:<br>' +
       `<a href='` + config.baseurl + '/activate/' + encodeURIComponent(user.authenticationToken) +
       `'>` + config.baseurl + '/activate/' + encodeURIComponent(user.authenticationToken) + '</a></p><br>' +

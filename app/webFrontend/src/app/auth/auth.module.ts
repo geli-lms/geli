@@ -3,7 +3,7 @@ import {CommonModule} from '@angular/common';
 import {LoginComponent} from './login/login.component';
 import {RegisterComponent} from './register/register.component';
 import {ActivationComponent} from './activation/activation.component';
-import {ActivationResendComponent} from "./activation-resend/activation-resend.component";
+import {ActivationResendComponent} from './activation-resend/activation-resend.component';
 import {ResetComponent} from './reset/reset.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {SharedModule} from '../shared/shared.module';

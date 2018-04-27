@@ -86,7 +86,7 @@ export class AuthenticationService {
 
   }
 
-  resendActivation(firstname: string, lastname: string, uid: string, email:string) {
+  resendActivation(firstname: string, lastname: string, uid: string, email: string) {
     return new Promise((resolve, reject) => {
 
       return this.http.post(

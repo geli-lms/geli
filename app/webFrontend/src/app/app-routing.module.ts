@@ -9,7 +9,7 @@ import {RouterModule, Routes} from '@angular/router';
 import {ImprintComponent} from './imprint/imprint.component';
 import {UserSettingsComponent} from './user/user-settings/user-settings.component';
 import {AuthGuardService} from './shared/services/auth-guard.service';
-import {ActivationResendComponent} from "./auth/activation-resend/activation-resend.component";
+import {ActivationResendComponent} from './auth/activation-resend/activation-resend.component';
 
 const routes: Routes = [
   {path: '', component: StartComponent, pathMatch: 'full'},

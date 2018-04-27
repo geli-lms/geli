@@ -34,7 +34,7 @@ export class ActivationResendComponent implements OnInit {
               private showProgress: ShowProgressService,
               private snackBar: MatSnackBar,
               private formBuilder: FormBuilder,
-              private titleService: TitleService,) {
+              private titleService: TitleService, ) {
   }
 
   ngOnInit() {
@@ -52,7 +52,7 @@ export class ActivationResendComponent implements OnInit {
 
   check() {
     this.trimFormFields();
-  };
+  }
 
   async resendActivation() {
     this.clearAllErrors();
@@ -60,12 +60,11 @@ export class ActivationResendComponent implements OnInit {
     this.showProgress.toggleLoadingGlobal(this.loading);
     this.resendActivationForm.value.email = this.resendActivationForm.value.email.replace(/\s/g, '').toLowerCase();
     this.trimFormFields();
-    try{
+    try {
      await this.authenticationService.resendActivation(this.resendActivationForm.value.profile.firstName,
-        this.resendActivationForm.value.profile.lastName,this.resendActivationForm.value.uid,this.resendActivationForm.value.email);
+        this.resendActivationForm.value.profile.lastName, this.resendActivationForm.value.uid, this.resendActivationForm.value.email);
      this.resendActivationDone = true;
-    }
-    catch(err){
+    } catch (err) {
       this.handleError(err);
     }
     this.loading = false;
@@ -89,9 +88,10 @@ export class ActivationResendComponent implements OnInit {
       }
       case errorCodes.user.retryAfter.code: {
         const timeTillNextTry = err.headers.get('retry-after');
-        const timeTillNextTrySec = timeTillNextTry%60;
-        const timeTillNextTryMin = (timeTillNextTry/60);
-        this.formError = errorCodes.user.retryAfter.text + Math.floor(timeTillNextTryMin)+" min "+ Math.floor(timeTillNextTrySec)+" sec";
+        const timeTillNextTrySec = timeTillNextTry % 60;
+        const timeTillNextTryMin = (timeTillNextTry / 60);
+        this.formError = errorCodes.user.retryAfter.text + Math.floor(timeTillNextTryMin) + ' min '
+          + Math.floor(timeTillNextTrySec) + ' sec.';
         break;
       }
       default: {

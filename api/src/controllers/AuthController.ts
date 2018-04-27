@@ -16,7 +16,7 @@ import config from '../config/main';
 @JsonController('/auth')
 export class AuthController {
 
-  private timeTillNextResendInMin: number = 10;
+  private timeTillNextResendInMin = 10;
 
   /**
    * @api {post} /api/auth/login Login user
@@ -149,11 +149,12 @@ export class AuthController {
    * @apiParam {string} uid matriculation number of user which activation should be resend.
    * @apiParam {string} email email the new activation should be sent to.
    *
-   * @apiError BadRequestError User was not found.
-   * @apiError BadRequestError That email address is already in use
-   * @apiError BadRequestError User is already activated.
-   * @apiError HttpError 503 You can only resend the activation every 10 minutes. Your next chance is in   time left till next try in 'try-after' header in second
-   * @apiError InternalServerError Could not send E-Mail
+   * @apiError (BadRequestError) 400 User was not found.
+   * @apiError (BadRequestError) 400 That email address is already in use
+   * @apiError (BadRequestError) 400 User is already activated.
+   * @apiError (HttpError) 503 You can only resend the activation every 10 minutes. Your next chance is in
+   * time left till next try in 'try-after' header in seconds
+   * @apiError (InternalServerError) Could not send E-Mail
    */
   @Post('/activationresend')
   async ActivationResend (@BodyParam('firstname') firstname: string,
@@ -179,7 +180,7 @@ export class AuthController {
         }
 
         const existingUser = await User.findOne({email: email});
-        if(existingUser && existingUser.uid !== uid){
+        if (existingUser && existingUser.uid !== uid) {
           throw new BadRequestError(errorCodes.errorCodes.mail.duplicate.code);
         }
 
