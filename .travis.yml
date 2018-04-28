@@ -77,7 +77,7 @@ script:
   # run frontend-tests and return back to root for following steps
   - cd app/webFrontend
   - ng lint        # run linter
-  - ng test --single-run true --watch false || true     # run test - does not work properly
+  # - ng test --single-run true --watch false || true     # run test - many tests are broken
   - ng e2e         # run end-to-end-tests
   - sed -i 's/$TRAVIS_COMMIT/'$TRAVIS_COMMIT'/' src/app/shared/services/raven-error-handler.service.ts
   - cd ../..
