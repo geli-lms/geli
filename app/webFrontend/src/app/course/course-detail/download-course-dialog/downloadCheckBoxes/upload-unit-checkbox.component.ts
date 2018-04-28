@@ -1,6 +1,8 @@
 import {Component, Input, Output, OnInit, EventEmitter} from '@angular/core';
 import {IFile} from '../../../../../../../../shared/models/mediaManager/IFile';
 import {BackendService} from '../../../../shared/services/backend.service';
+import {ConfigService} from '../../../../shared/services/data.service';
+
 
 @Component({
   selector: 'app-upload-unit-checkbox',
@@ -19,13 +21,11 @@ export class UploadUnitCheckboxComponent implements OnInit {
   @Output()
   valueChanged: EventEmitter<any> = new EventEmitter();
 
-  constructor() {
+  constructor(private configService: ConfigService) {
   }
 
   ngOnInit() {
-    if (this.file.size / 1024 > 51200) {
-      this.showDL = true;
-    }
+    this.showDownloadButton().then((result: boolean) =>  this.showDL = result);
   }
 
   emitEvent() {
@@ -50,7 +50,11 @@ export class UploadUnitCheckboxComponent implements OnInit {
       a.dispatchEvent(e);
     }
   }
-
+  async showDownloadButton () {
+    const _downloadMaxFileSize = this.configService.downloadMaxFileSize;
+    const downloadMaxFileSize = _downloadMaxFileSize ? _downloadMaxFileSize : await  this.configService.getDownloadMaxFileSize();
+    return (this.file.size / 1024 > downloadMaxFileSize);
+  }
 }
 
 

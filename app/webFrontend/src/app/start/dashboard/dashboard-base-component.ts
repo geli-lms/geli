@@ -1,10 +1,10 @@
 import {OnInit, Input, Output, EventEmitter} from '@angular/core';
-import {ICourse} from '../../../../../../shared/models/ICourse';
+import {ICourseDashboard} from '../../../../../../shared/models/ICourseDashboard';
 
 export abstract class DashboardBaseComponent implements OnInit {
 
   @Input()
-  allCourses: ICourse[];
+  allCourses: ICourseDashboard[];
 
   @Output()
   onEnroll = new EventEmitter();

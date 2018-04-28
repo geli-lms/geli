@@ -10,6 +10,7 @@ import {ShowProgressService} from '../../shared/services/show-progress.service';
 import {DialogService} from '../../shared/services/dialog.service';
 import {TitleService} from '../../shared/services/title.service';
 import {ThemeService} from '../../shared/services/theme.service';
+import {emailValidator} from '../../shared/validators/validators';
 
 @Component({
   selector: 'app-user-edit',
@@ -119,12 +120,12 @@ export class UserEditComponent implements OnInit {
   generateForm() {
     this.userForm = this.formBuilder.group({
       profile: this.formBuilder.group({
-        firstName: ['', Validators.required],
-        lastName: ['', Validators.required],
+          firstName: ['', Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(64)])],
+          lastName: ['', Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(64)])],
         theme: [''],
       }),
       username: [''],
-      email: ['', Validators.required],
+      email: ['', emailValidator],
       currentPassword: ['']
     });
   }

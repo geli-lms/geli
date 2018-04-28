@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import 'rxjs/add/operator/switchMap';
 import {UserService} from '../shared/services/user.service';
-import {ICourse} from '../../../../../shared/models/ICourse';
+import {ICourseDashboard, ENROLL_TYPE_ACCESSKEY} from '../../../../../shared/models/ICourseDashboard';
 import {Router} from '@angular/router';
 import {MatDialog} from '@angular/material';
 import {SnackBarService} from '../shared/services/snack-bar.service';
@@ -18,7 +18,7 @@ import {ShowProgressService} from '../shared/services/show-progress.service';
 export class CourseComponent {
 
   @Input()
-  course: ICourse;
+  course: ICourseDashboard;
 
   @Output()
   onEnroll = new EventEmitter();
@@ -45,7 +45,7 @@ export class CourseComponent {
   }
 
   enroll() {
-    if (this.course.hasAccessKey) {
+    if (this.course.enrollType === ENROLL_TYPE_ACCESSKEY) {
       // open dialog for accesskey
       const dialogRef = this.dialog.open(AccessKeyDialog);
       dialogRef.afterClosed().subscribe(result => {
@@ -80,11 +80,5 @@ export class CourseComponent {
 
         this.showProgress.toggleLoadingGlobal(false);
       });
-  }
-
-  isMemberOfCourse(course: ICourse) {
-    const user = this.userService.user;
-    return this.userService.isStudent() &&
-      course.students.filter(obj => obj._id === user._id).length > 0;
   }
 }

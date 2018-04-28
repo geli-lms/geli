@@ -10,7 +10,7 @@ import {
 } from '../../../../../../../shared/models/ICourse';
 import {ActivatedRoute, Router} from '@angular/router';
 import {CourseService, DuplicationService, ExportService, NotificationService} from '../../../shared/services/data.service';
-import {SnackBarService} from '../../../shared/services/snack-bar.service';
+import {MatSnackBar} from '@angular/material';
 import {ShowProgressService} from '../../../shared/services/show-progress.service';
 import {TitleService} from '../../../shared/services/title.service';
 import {SaveFileService} from '../../../shared/services/save-file.service';
@@ -48,7 +48,7 @@ export class GeneralTabComponent implements OnInit {
               private router: Router,
               private formBuilder: FormBuilder,
               private courseService: CourseService,
-              private snackBar: SnackBarService,
+              private snackBar: MatSnackBar,
               private ref: ChangeDetectorRef,
               private showProgress: ShowProgressService,
               private titleService: TitleService,
@@ -58,25 +58,27 @@ export class GeneralTabComponent implements OnInit {
               private userService: UserService,
               private dataSharingService: DataSharingService,
               private dialogService: DialogService,
-              private notificationService: NotificationService
-  ) {
-    this.route.params.subscribe(async (params) => {
+              private notificationService: NotificationService) {
+
+    this.route.params.subscribe(params => {
       this.id = params['id'];
 
-      try {
-        const course = await this.courseService.readSingleItem(this.id);
-        this.course = course.name;
-        this.description = course.description;
-        this.accessKey = course.accessKey;
-        this.active = course.active;
-        this.enrollType = course.enrollType;
-        this.mode = (this.enrollType === 'whitelist');
-        this.courseOb = course;
-        this.dataSharingService.setDataForKey('course', this.courseOb);
-        this.titleService.setTitleCut(['Edit Course: ', this.course]);
-      } catch (err) {
-        this.snackBar.openLong('Couldn\'t load Course-Item');
-      }
+      this.courseService.readCourseToEdit(this.id).then(
+        (val: any) => {
+          this.course = val.name;
+          this.description = val.description;
+          this.accessKey = val.accessKey;
+          this.active = val.active;
+          this.enrollType = val.enrollType;
+          if (this.enrollType === 'whitelist') {
+            this.mode = true;
+          }
+          this.courseOb = val;
+          this.dataSharingService.setDataForKey('course', this.courseOb);
+          this.titleService.setTitleCut(['Edit Course: ', this.course]);
+        }, (error) => {
+          this.snackBar.open('Couldn\'t load Course-Item', '', {duration: 3000});
+        });
     });
   }
 
@@ -95,13 +97,13 @@ export class GeneralTabComponent implements OnInit {
     this.uploader.onCompleteItem = (item: any, response: any, status: any) => {
       if (status === 200) {
         const result = JSON.parse(response);
-        this.snackBar.openLong('Upload complete, there now are ' + result.newlength + ' whitelisted users!');
+        this.snackBar.open('Upload complete, there now are ' + result.newlength + ' whitelisted users!', '', {duration: 10000});
         setTimeout(() => {
           this.uploader.clearQueue();
         }, 3000);
       } else {
         const error = JSON.parse(response);
-        this.snackBar.openLong('Upload failed with status ' + status + ' message was: ' + error.message);
+        this.snackBar.open('Upload failed with status ' + status + ' message was: ' + error.message, '', {duration: 20000});
         setTimeout(() => {
           this.uploader.clearQueue();
         }, 6000);
@@ -141,10 +143,10 @@ export class GeneralTabComponent implements OnInit {
       });
 
       this.showProgress.toggleLoadingGlobal(false);
-      this.snackBar.open('Saved successfully');
+      this.snackBar.open('Saved successfully', '', {duration: 5000});
     } catch (err) {
       this.showProgress.toggleLoadingGlobal(false);
-      this.snackBar.open('Saving course failed ' + err.error.message);
+      this.snackBar.open('Saving course failed ' + err.error.message, 'Dismiss');
     }
   }
 
@@ -153,7 +155,7 @@ export class GeneralTabComponent implements OnInit {
       const courseJSON = await this.exportService.exportCourse(this.courseOb);
       this.saveFileService.save(this.courseOb.name, JSON.stringify(courseJSON, null, 2));
     } catch (err) {
-      this.snackBar.open('Export course failed ' + err.error.message);
+      this.snackBar.open('Export course failed ' + err.error.message, 'Dismiss');
     }
   }
 
@@ -161,9 +163,9 @@ export class GeneralTabComponent implements OnInit {
     try {
       const course = await this.duplicationService.duplicateCourse(this.courseOb, this.userService.user);
       this.router.navigate(['course', course._id, 'edit']);
-      this.snackBar.open('Course successfully duplicated');
+      this.snackBar.open('Course successfully duplicated', '', {duration: 3000});
     } catch (err) {
-      this.snackBar.open('Duplication of the course failed ' + err.error.message);
+      this.snackBar.open('Duplication of the course failed ' + err.error.message, 'Dismiss');
     }
   }
 
