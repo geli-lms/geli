@@ -63,7 +63,7 @@ export class GeneralTabComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.id = params['id'];
 
-      this.courseService.readSingleItem(this.id).then(
+      this.courseService.readCourseToEdit(this.id).then(
         (val: any) => {
           this.course = val.name;
           this.description = val.description;
