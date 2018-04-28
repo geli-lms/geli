@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [NEXT] 
+### Added
+- SnackBarService as Wrapper for MatSnackBar
+
 ### Fixed
 - Fixed wasteful course data usage #654 via specialized course model interfaces.
 - Fixed a broken documentation link #583.
