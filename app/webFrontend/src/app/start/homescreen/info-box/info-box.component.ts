@@ -14,11 +14,8 @@ export class InfoBoxComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getData();
+    this.infoBoxService.loadConfig('infoBox').then((str => {
+      this.contentRendered = str;
+    }));
   }
-
-  async getData() {
-    this.contentRendered = await this.infoBoxService.loadConfig('infoBox');
-  }
-
 }
