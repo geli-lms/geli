@@ -1,19 +1,15 @@
 <div class="course-header">
   <h1>{{course?.name}}</h1>
   <p>{{course?.description}}</p>
-  <mat-toolbar>
-    <mat-toolbar-row>
-      <button mat-button routerLink="overview">
-        <span>Overview</span>
-      </button>
-      <button mat-button routerLink="fileview">
-        <span>Fileview</span>
-      </button>
-      <button mat-icon-button color="primary" (click)="openDownloadDialog()" class="download-button">
-        <mat-icon aria-label="Download Units" mat-tooltip="Download Units">get_app</mat-icon>
-        Download
-      </button>
-    </mat-toolbar-row>
-  </mat-toolbar>
+  <nav mat-tab-nav-bar>
+    <a mat-tab-link *ngFor="let tab of tabs"
+       [routerLink]="tab.path"
+       routerLinkActive
+       #rla="routerLinkActive"
+       [routerLinkActiveOptions]="{exact: true}"
+       [active]="rla.isActive">
+      {{tab.label}}
+    </a>
+  </nav>
 </div>
 <router-outlet></router-outlet>

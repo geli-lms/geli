@@ -15,9 +15,7 @@ const routes: Routes = [
   },
   {
     path: ':id',
-    component: CourseDetailComponent,
-    canActivate: [AuthGuardService],
-    data: {roles: ['student', 'tutor', 'teacher', 'admin']}
+    loadChildren: 'app/course/course-detail/course-detail.module#CourseDetailModule'
   },
   {
     path: ':id/edit',
@@ -38,18 +36,6 @@ const routes: Routes = [
     component: CourseDetailComponent,
     canActivate: [AuthGuardService],
     data: {roles: ['student', 'tutor', 'teacher', 'admin']}
-  },
-  {
-    path: ':id/overview',
-    component: CourseOverviewComponent,
-    canActivate: [AuthGuardService],
-    data: {roles: ['student', 'tutor', 'teacher', 'admin']},
-  },
-  {
-    path: ':id/fileview',
-    component: FileViewComponent,
-    canActivate: [AuthGuardService],
-    data: {roles: ['student', 'tutor', 'teacher', 'admin']},
   }
 ];
 

@@ -2,6 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
 import {CourseService} from '../../../shared/services/data.service';
+import {DataSharingService} from '../../../shared/services/data-sharing.service';
 
 
 @Component({
@@ -10,21 +11,17 @@ import {CourseService} from '../../../shared/services/data.service';
   styleUrls: ['./file-view.component.scss']
 })
 export class FileViewComponent implements OnInit {
-  @Input() course: ICourse;
+  course: ICourse;
 
-  constructor(private route: ActivatedRoute,
-              private courseService: CourseService,) {
+  constructor(private dataSharingService: DataSharingService) {
   }
 
   ngOnInit() {
-    this.route.queryParams.subscribe(params => {
-      const courseId = decodeURIComponent(params['id']);
-      console.log(courseId);
-      this.courseService.readSingleItem(courseId).then(
-        (course: any) => {
-          this.course = course;
-        });
-    });
+    this.course = this.dataSharingService.getDataForKey('course');
+
+
+
+
   }
 
 

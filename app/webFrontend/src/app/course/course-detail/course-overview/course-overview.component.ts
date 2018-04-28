@@ -2,6 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
 import {ActivatedRoute} from '@angular/router';
 import {CourseService} from '../../../shared/services/data.service';
+import {DataSharingService} from '../../../shared/services/data-sharing.service';
 
 
 @Component({
@@ -12,18 +13,11 @@ import {CourseService} from '../../../shared/services/data.service';
 export class CourseOverviewComponent implements OnInit {
   course: ICourse;
 
-  constructor(private route: ActivatedRoute,
-              private courseService: CourseService,) {
+  constructor(private dataSharingService: DataSharingService) {
   }
 
   ngOnInit() {
-    this.route.queryParams.subscribe(params => {
-      const courseId = decodeURIComponent(params['id']);
-      this.courseService.readSingleItem(courseId).then(
-              (course: any) => {
-                this.course = course;
-         });
-    });
+    this.course = this.dataSharingService.getDataForKey('course');
   }
 
 

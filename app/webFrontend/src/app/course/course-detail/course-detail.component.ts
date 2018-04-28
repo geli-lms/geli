@@ -8,6 +8,7 @@ import {MatSnackBar, MatDialog} from '@angular/material';
 import {DownloadCourseDialogComponent} from './download-course-dialog/download-course-dialog.component';
 import {TitleService} from '../../shared/services/title.service';
 import {LastVisitedCourseContainerUpdater} from '../../shared/utils/LastVisitedCourseContainerUpdater';
+import {DataSharingService} from '../../shared/services/data-sharing.service';
 
 @Component({
   selector: 'app-course-detail',
@@ -15,10 +16,12 @@ import {LastVisitedCourseContainerUpdater} from '../../shared/utils/LastVisitedC
   styleUrls: ['./course-detail.component.scss']
 })
 export class CourseDetailComponent implements OnInit {
-
   course: ICourse;
-
   id: string;
+  tabs = [
+    { path: 'overview', label: 'Overview' },
+    { path: 'fileview', label: 'Fileview' }
+  ];
 
   constructor(private router: Router,
               private route: ActivatedRoute,
@@ -27,15 +30,16 @@ export class CourseDetailComponent implements OnInit {
               private snackBar: MatSnackBar,
               private dialog: MatDialog,
               private titleService: TitleService,
-              private userDataService: UserDataService) {
+              private userDataService: UserDataService,
+              private dataSharingService: DataSharingService) {
   }
 
   ngOnInit() {
     this.route.params.subscribe(params => {
       this.id = decodeURIComponent(params['id']);
     });
-    this.getCourse(this.id);
     this.titleService.setTitle('Course');
+    this.getCourse(this.id);
   }
 
   getCourse(courseId: string) {
@@ -44,6 +48,9 @@ export class CourseDetailComponent implements OnInit {
         this.course = course;
         LastVisitedCourseContainerUpdater.addCourseToLastVisitedCourses(courseId, this.userService, this.userDataService);
         this.titleService.setTitleCut(['Course: ', this.course.name]);
+        this.dataSharingService.setDataForKey('course', this.course);
+        console.log('fetched course');
+        console.dir(this.course);
       },
       (errorResponse: Response) => {
         if (errorResponse.status === 401) {
@@ -63,14 +70,16 @@ export class CourseDetailComponent implements OnInit {
     });
   }
 
-  fileview(id: string) {
-    const url = '/course/' + id + '/fileview';
-    this.router.navigate([url],{ queryParams: { course: this.course } });
+  fileview() {
+    console.log(this.id);
+    const url = '/course/' + this.course._id + '/fileview';
+    this.router.navigate([url]);
   }
 
-  overview(id: string) {
-    const url = '/course/' + id + '/overview';
-    this.router.navigate([url],{ queryParams: { course: this.course } });
+  overview () {
+    console.log(this.id);
+    const url = '/course/' + this.course._id + '/overview';
+    this.router.navigate([url]);
   }
 
 }
