@@ -25,8 +25,10 @@ export class UserImageDirective implements OnInit {
 
   ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
     for (const propName in changes) {
-      const changedProp = changes[propName];
-      this[propName] = changedProp.currentValue;
+      if (changes.hasOwnProperty(propName)) {
+        const changedProp = changes[propName];
+        this[propName] = changedProp.currentValue;
+      }
     }
     this.getImage();
   }
