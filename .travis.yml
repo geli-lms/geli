@@ -63,6 +63,8 @@ install:
   - cd ..
 
 script:
+  # check for change in changelog
+  - .travis/changelog.sh
   # check for versions
   - .travis/check-version.sh
   # run license checker and write license.json / dependencies.ts
