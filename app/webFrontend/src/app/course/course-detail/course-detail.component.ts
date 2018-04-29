@@ -19,8 +19,8 @@ export class CourseDetailComponent implements OnInit, OnDestroy {
   course: ICourse;
   id: string;
   tabs = [
-    { path: 'overview', label: 'Overview' },
-    { path: 'fileview', label: 'Fileview' }
+    {path: 'overview', label: 'Overview'},
+    {path: 'fileview', label: 'Fileview'}
   ];
 
   constructor(private router: Router,
@@ -36,16 +36,10 @@ export class CourseDetailComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     const data: any = this.route.snapshot.data;
-    const course: ICourse = <ICourse> data.course.then;
-    console.dir(course);
-    if (course) {
-      console.log('found course');
-      this.course = course;
-      this.id = this.course._id;
-      LastVisitedCourseContainerUpdater.addCourseToLastVisitedCourses(this.id, this.userService, this.userDataService);
-      this.titleService.setTitleCut(['Course: ', this.course.name]);
-    }
-
+    this.course = <ICourse> data.course;
+    this.id = this.course._id;
+    LastVisitedCourseContainerUpdater.addCourseToLastVisitedCourses(this.id, this.userService, this.userDataService);
+    this.titleService.setTitleCut(['Course: ', this.course.name]);
   }
 
   /*
