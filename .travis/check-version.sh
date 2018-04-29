@@ -10,7 +10,7 @@ IPWD="$(pwd)"
 PATHS_TO_CHECK=("api" "app/webFrontend")
 
 echo
-echo "+++ Check if current version already used"
+echo "+++ Check if current version already used +++"
 echo
 
 # If is PR against master

@@ -10,6 +10,7 @@ import {IDownload} from '../../../../../../shared/models/IDownload';
 import {IDirectory} from '../../../../../../shared/models/mediaManager/IDirectory';
 import {IFile} from '../../../../../../shared/models/mediaManager/IFile';
 import {IUserSearchMeta} from '../../../../../../shared/models/IUserSearchMeta';
+import {IConfig} from '../../../../../../shared/models/IConfig';
 
 export abstract class DataService {
 
@@ -235,6 +236,14 @@ export class CourseService extends DataService {
     return (await this.backendService
       .post(this.apiPath + courseId + '/leave', {})
       .toPromise()).result;
+  }
+
+  readCourseToView(id: string): Promise<ICourse> {
+    return this.readSingleItem<ICourse>(id);
+  }
+
+  readCourseToEdit(id: string): Promise<ICourse> {
+    return this.readSingleItem<ICourse>(id + '/edit');
   }
 }
 
@@ -477,7 +486,18 @@ export class DownloadFileService extends DataService {
 
 @Injectable()
 export class ConfigService extends DataService {
+  downloadMaxFileSize: number;
   constructor(public backendService: BackendService) {
     super('config/', backendService);
   }
+
+  async getDownloadMaxFileSize () {
+    const res = <IConfig><any> await this.readSingleItem('public/downloadMaxFileSize');
+    const _value =  Number.parseInt(res.value);
+    const  value = isNaN(_value) ? 51200 : _value;
+    this.downloadMaxFileSize = value;
+
+    return value;
+  }
+
 }

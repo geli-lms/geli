@@ -21,7 +21,10 @@ import {MarkdownEditorComponent} from './components/markdown-editor/markdown-edi
 import {AceEditorModule} from 'ng2-ace-editor';
 import {PickMediaDialog} from './components/pick-media-dialog/pick-media-dialog.component';
 import {TranslateModule} from '@ngx-translate/core';
+import {AdminMarkdownEditComponent} from './components/admin-markdown-edit/admin-markdown-edit.component';
+import {ImprintAndInfoService} from './services/imprint-and-info.service';
 import {UserProfileDialog} from 'app/shared/components/user-profile-dialog/user-profile-dialog.component';
+import {NotfoundComponent} from './components/notfound/notfound.component';
 
 @NgModule({
   imports: [
@@ -51,6 +54,9 @@ import {UserProfileDialog} from 'app/shared/components/user-profile-dialog/user-
     ChangePasswordDialogComponent,
     MarkdownEditorComponent,
     PickMediaDialog,
+    AdminMarkdownEditComponent,
+    UserProfileDialog,
+    NotfoundComponent,
     UserProfileDialog,
   ],
   exports: [
@@ -72,6 +78,7 @@ import {UserProfileDialog} from 'app/shared/components/user-profile-dialog/user-
     ChangePasswordDialogComponent,
     PickMediaDialog,
     TranslateModule,
+    AdminMarkdownEditComponent,
     UserProfileDialog,
   ],
   entryComponents: [

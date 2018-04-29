@@ -38,8 +38,16 @@ const userSchema = new mongoose.Schema({
       validate: new RegExp(errorCodes.errorCodes.password.regex.regex)
     },
     profile: {
-      firstName: {type: String, index: true},
-      lastName: {type: String, index: true},
+      firstName: {
+        type: String,
+        index: true,
+        maxlength: 64
+      },
+      lastName: {
+        type: String,
+        index: true,
+        maxlength: 64
+      },
       picture: {
         path: {type: String},
         name: {type: String},
