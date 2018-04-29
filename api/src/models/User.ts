@@ -214,7 +214,7 @@ userSchema.methods.forTeacher = function (): IUserSubTeacher {
 
 userSchema.methods.forUser = function (otherUser: IUser): IUserSubSafe | IUserSubTeacher | IUser {
   const {userIsTeacher, userIsAdmin} = User.checkPrivileges(otherUser);
-  const isSelf = extractMongoId(this._id) === otherUser._id;
+  const isSelf = extractMongoId(this._id) === extractMongoId(otherUser._id);
   if (isSelf || userIsAdmin) {
     return this.toObject();
   } else if (userIsTeacher) {
