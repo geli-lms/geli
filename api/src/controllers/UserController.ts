@@ -273,7 +273,7 @@ export class UserController {
     if (!user) {
       throw new NotFoundError(`User was not found.`);
     }
-    return this.cleanUserObject(id, user, currentUser);
+    return user.forUser(currentUser);
   }
 
   /**
