@@ -11,6 +11,7 @@ import {CourseDetailRoutingModule} from './course-detail-routing.module';
 import {SharedModule} from '../../shared/shared.module';
 import {LectureModule} from '../../lecture/lecture.module';
 import {FormsModule} from '@angular/forms';
+import {CourseDetailDataResolve} from '../../shared/services/course-detail-data-resolve.service';
 
 @NgModule({
   imports: [
@@ -37,6 +38,9 @@ import {FormsModule} from '@angular/forms';
     DownloadCourseDialogComponent,
     LectureCheckboxComponent,
     UnitCheckboxComponent,
+  ],
+  providers: [
+    CourseDetailDataResolve,
   ]
 })
 export class CourseDetailModule {

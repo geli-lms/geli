@@ -19,6 +19,4 @@ export class CourseOverviewComponent implements OnInit {
   ngOnInit() {
     this.course = this.dataSharingService.getDataForKey('course');
   }
-
-
 }

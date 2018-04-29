@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnInit} from '@angular/core';
+import {AfterViewInit, Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import 'rxjs/add/operator/switchMap';
 import {CourseService, UserDataService} from '../../shared/services/data.service';
@@ -15,7 +15,7 @@ import {DataSharingService} from '../../shared/services/data-sharing.service';
   templateUrl: './course-detail.component.html',
   styleUrls: ['./course-detail.component.scss']
 })
-export class CourseDetailComponent implements OnInit {
+export class CourseDetailComponent implements OnInit, OnDestroy {
   course: ICourse;
   id: string;
   tabs = [
@@ -35,13 +35,15 @@ export class CourseDetailComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.route.params.subscribe(params => {
-      this.id = decodeURIComponent(params['id']);
-    });
-    this.titleService.setTitle('Course');
-    this.getCourse(this.id);
+      this.route.snapshot.data.course.then(course => {
+        this.course = this.dataSharingService.getDataForKey('course');
+        this.id = this.course._id;
+        LastVisitedCourseContainerUpdater.addCourseToLastVisitedCourses(this.id, this.userService, this.userDataService);
+        this.titleService.setTitleCut(['Course: ', this.course.name]);
+      });
   }
 
+  /*
   getCourse(courseId: string) {
     this.courseService.readSingleItem(courseId).then(
       (course: any) => {
@@ -49,8 +51,7 @@ export class CourseDetailComponent implements OnInit {
         LastVisitedCourseContainerUpdater.addCourseToLastVisitedCourses(courseId, this.userService, this.userDataService);
         this.titleService.setTitleCut(['Course: ', this.course.name]);
         this.dataSharingService.setDataForKey('course', this.course);
-        console.log('fetched course');
-        console.dir(this.course);
+        console.log('set course: ' + this.course.name);
       },
       (errorResponse: Response) => {
         if (errorResponse.status === 401) {
@@ -62,6 +63,11 @@ export class CourseDetailComponent implements OnInit {
         }
       });
   }
+*/
+
+  ngOnDestroy() {
+    this.dataSharingService.deleteDataForKey('course');
+  }
 
   openDownloadDialog() {
     const diaRef = this.dialog.open(DownloadCourseDialogComponent, {
@@ -69,17 +75,4 @@ export class CourseDetailComponent implements OnInit {
       width: '800px'
     });
   }
-
-  fileview() {
-    console.log(this.id);
-    const url = '/course/' + this.course._id + '/fileview';
-    this.router.navigate([url]);
-  }
-
-  overview () {
-    console.log(this.id);
-    const url = '/course/' + this.course._id + '/overview';
-    this.router.navigate([url]);
-  }
-
 }

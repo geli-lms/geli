@@ -4,12 +4,14 @@ import {AuthGuardService} from '../../shared/services/auth-guard.service';
 import {CourseOverviewComponent} from './course-overview/course-overview.component';
 import {FileViewComponent} from './file-view/file-view.component';
 import {CourseDetailComponent} from './course-detail.component';
+import {CourseDetailDataResolve} from '../../shared/services/course-detail-data-resolve.service';
 
 
 const routes: Routes = [
   {
     path: '',
     component: CourseDetailComponent,
+    resolve: {course: CourseDetailDataResolve},
     canActivate: [AuthGuardService],
     data: {roles: ['student', 'tutor', 'teacher', 'admin']},
     children: [
