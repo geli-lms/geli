@@ -18,6 +18,7 @@ interface IUserModel extends IUser, mongoose.Document {
   forSafeBase: () => IUserSubSafeBase;
   forSafe: () => IUserSubSafe;
   forTeacher: () => IUserSubTeacher;
+  forUser: (otherUser: IUser) => IUserSubSafe | IUserSubTeacher | IUser;
   authenticationToken: string;
   resetPasswordToken: string;
   resetPasswordExpires: Date;
@@ -209,6 +210,18 @@ userSchema.methods.forTeacher = function (): IUserSubTeacher {
     ...this.forSafeBase(),
     uid, email
   };
+};
+
+userSchema.methods.forUser = function (otherUser: IUser): IUserSubSafe | IUserSubTeacher | IUser {
+  const {userIsTeacher, userIsAdmin} = User.checkPrivileges(otherUser);
+  const isSelf = extractMongoId(this._id) === otherUser._id;
+  if (isSelf || userIsAdmin) {
+    return this.toObject();
+  } else if (userIsTeacher) {
+    return this.forTeacher();
+  } else {
+    return this.forSafe();
+  }
 };
 
 userSchema.statics.checkPrivileges = function (user: IUser): IProperties {
