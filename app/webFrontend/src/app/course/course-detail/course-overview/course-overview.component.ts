@@ -13,10 +13,13 @@ import {DataSharingService} from '../../../shared/services/data-sharing.service'
 export class CourseOverviewComponent implements OnInit {
   course: ICourse;
 
-  constructor(private dataSharingService: DataSharingService) {
+  constructor(private dataSharingService: DataSharingService,
+              private route: ActivatedRoute,) {
   }
 
   ngOnInit() {
-    this.course = this.dataSharingService.getDataForKey('course');
+    const course = this.route.snapshot.data.course;
+    console.dir(course);
+    //this.course = this.dataSharingService.getDataForKey('course');
   }
 }

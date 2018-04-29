@@ -10,7 +10,7 @@ import {DataSharingService} from './data-sharing.service';
 import {Observable} from 'rxjs/Rx';
 
 @Injectable()
-export class CourseDetailDataResolve implements Resolve<any> {
+export class CourseDetailDataResolve implements Resolve<ICourse> {
 
   constructor(private courseService: CourseService,
               private router: Router,
@@ -20,8 +20,21 @@ export class CourseDetailDataResolve implements Resolve<any> {
               private shareDataService: DataSharingService) {
   }
 
-  resolve(route: ActivatedRouteSnapshot): Promise<any> {
+  resolve(route: ActivatedRouteSnapshot): Observable<ICourse> {
     const id = route.paramMap.get('id');
-    return this.courseService.readSingleItem(id);
+    this.courseService.readSingleItem(id).then(
+      (course: any) => {
+        return Observable.of(course);
+      },(errorResponse: Response) => {
+        if (errorResponse.status === 401) {
+          this.snackBar.open('You are not authorized to view this course.', '', {duration: 3000});
+        }
+        if (errorResponse.status === 404) {
+          this.snackBar.open('Your selected course is not available.', '', {duration: 3000});
+          this.router.navigate(['/not-found']);
+
+        }
+      });
+    return Observable.empty();
   }
 }

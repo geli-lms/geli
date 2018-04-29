@@ -35,12 +35,18 @@ export class CourseDetailComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-      this.route.snapshot.data.course.then(course => {
-        this.course = this.dataSharingService.getDataForKey('course');
-        this.id = this.course._id;
-        LastVisitedCourseContainerUpdater.addCourseToLastVisitedCourses(this.id, this.userService, this.userDataService);
-        this.titleService.setTitleCut(['Course: ', this.course.name]);
-      });
+
+    // this.route.data.route.subscribe
+    //const course: ICourse = <ICourse> this.route.snapshot.data.course;
+    console.dir(course);
+    if (course) {
+      console.log('found course');
+      this.course = course;
+      this.id = this.course._id;
+      LastVisitedCourseContainerUpdater.addCourseToLastVisitedCourses(this.id, this.userService, this.userDataService);
+      this.titleService.setTitleCut(['Course: ', this.course.name]);
+    }
+
   }
 
   /*
