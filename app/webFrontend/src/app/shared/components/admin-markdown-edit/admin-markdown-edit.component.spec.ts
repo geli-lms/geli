@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ImprintAdminComponent } from './imprint-admin.component';
+import { AdminMarkdownEditComponent } from './admin-markdown-edit.component';
 
-describe('ImprintAdminComponent', () => {
-  let component: ImprintAdminComponent;
-  let fixture: ComponentFixture<ImprintAdminComponent>;
+describe('AdminMarkdownEditComponent', () => {
+  let component: AdminMarkdownEditComponent;
+  let fixture: ComponentFixture<AdminMarkdownEditComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ImprintAdminComponent ]
+      declarations: [ AdminMarkdownEditComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ImprintAdminComponent);
+    fixture = TestBed.createComponent(AdminMarkdownEditComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
