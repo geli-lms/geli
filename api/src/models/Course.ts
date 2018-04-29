@@ -193,11 +193,7 @@ courseSchema.statics.importJSON = async function (course: ICourse, admin: IUser,
 
 
 courseSchema.methods.checkPrivileges = function (user: IUser) {
-  const userIsAdmin: boolean = user.role === 'admin';
-  const userIsTeacher: boolean = user.role === 'teacher';
-  const userIsStudent: boolean = user.role === 'student';
-  // NOTE: The 'tutor' role exists and has fixtures, but currently appears to be unimplemented.
-  // const userIsTutor: boolean = user.role === 'tutor';
+  const {userIsAdmin, ...userIs} = User.checkPrivileges(user);
 
   const courseAdminId = extractMongoId(this.courseAdmin);
 
@@ -209,7 +205,7 @@ courseSchema.methods.checkPrivileges = function (user: IUser) {
   const userCanEditCourse: boolean = userIsAdmin || userIsCourseAdmin || userIsCourseTeacher;
   const userCanViewCourse: boolean = (this.active && userIsCourseStudent) || userCanEditCourse;
 
-  return {userIsAdmin, userIsTeacher, userIsStudent,
+  return {userIsAdmin, ...userIs,
       courseAdminId,
       userIsCourseAdmin, userIsCourseTeacher, userIsCourseStudent, userIsCourseMember,
       userCanEditCourse, userCanViewCourse};
