@@ -157,6 +157,7 @@ export class AuthController {
    * @apiError (InternalServerError) Could not send E-Mail
    */
   @Post('/activationresend')
+  @OnUndefined(204)
   async ActivationResend (@BodyParam('firstname') firstname: string,
                                       @BodyParam('lastname') lastname: string,
                                       @BodyParam('uid') uid: string,
@@ -175,7 +176,7 @@ export class AuthController {
         const timeSinceUpdate: number = (Date.now() - user.updatedAt.getTime() ) / 60000;
         if (timeSinceUpdate < this.timeTillNextResendInMin) {
           const retryAfter: number = (this.timeTillNextResendInMin - timeSinceUpdate) * 60;
-          response.set('Retry-After', retryAfter.toString());
+          response.set('retry-after', retryAfter.toString());
           throw new HttpError(503, errorCodes.errorCodes.user.retryAfter.code);
         }
 
@@ -194,7 +195,6 @@ export class AuthController {
           throw new InternalServerError(err.toString());
         }
 
-        return {success: true};
   }
 
   /**

@@ -15,6 +15,10 @@ const app = new Server().app;
 const BASE_URL = '/api/auth';
 const fixtureLoader = new FixtureLoader();
 
+function delay(ms: number) {
+  return new Promise( resolve => setTimeout(resolve, ms) );
+}
+
 describe('Auth', () => {
   // Before each test we reset the database
   beforeEach(async () => {
@@ -142,6 +146,102 @@ describe('Auth', () => {
       res.body.name.should.be.equal('BadRequestError');
       res.body.message.should.be.equal('You can only sign up as student or teacher');
     });
+  })
+  ;
+
+  describe(`POST ${BASE_URL}/activationresend`, () => {
+
+    it('should fail (user not found)', async () => {
+      const user = await FixtureUtils.getRandomUser();
+      const resendActivationUser = user;
+      resendActivationUser.uid = '99999999';
+
+      const res = await chai.request(app)
+        .post(`${BASE_URL}/activationresend`)
+        .send({'firstname': resendActivationUser.profile.firstName,
+          'lastname': resendActivationUser.profile.lastName,
+          'uid': resendActivationUser.uid,
+          'email': resendActivationUser.email })
+        .catch(err => err.response);
+
+      res.status.should.be.equal(400);
+      res.body.name.should.be.equal('BadRequestError');
+      res.body.message.should.be.equal(errorCodes.errorCodes.user.userNotFound.code);
+    });
+
+    it('should fail (user already activated)', async () => {
+      const user = await FixtureUtils.getRandomActiveStudent();
+      const resendActivationUser = user;
+
+      const res = await chai.request(app)
+        .post(`${BASE_URL}/activationresend`)
+        .send({'firstname': resendActivationUser.profile.firstName,
+          'lastname': resendActivationUser.profile.lastName,
+          'uid': resendActivationUser.uid,
+          'email': resendActivationUser.email })
+        .catch(err => err.response);
+
+      res.status.should.be.equal(400);
+      res.body.name.should.be.equal('BadRequestError');
+      res.body.message.should.be.equal(errorCodes.errorCodes.user.userAlreadyActive.code);
+    });
+
+    it('should fail (can only send ever 10min)', async () => {
+      const student = await FixtureUtils.getRandomInactiveStudent();
+      const resendActivationUser = student;
+
+      const res = await chai.request(app)
+        .post(`${BASE_URL}/activationresend`)
+        .send({'firstname': resendActivationUser.profile.firstName,
+          'lastname': resendActivationUser.profile.lastName,
+          'uid': resendActivationUser.uid,
+          'email': resendActivationUser.email })
+        .catch(err => err.response);
+
+      res.status.should.be.equal(503);
+      res.body.name.should.be.equal('HttpError');
+      res.should.have.header('retry-after');
+      res.body.message.should.be.equal(errorCodes.errorCodes.user.retryAfter.code);
+    });
+
+    it('should fail (email already in use)', async () => {
+      await delay(600000);
+      const student = await FixtureUtils.getRandomInactiveStudent();
+      const resendActivationUser = student;
+      const student2 = await FixtureUtils.getRandomActiveStudent();
+      const existingUser = student2;
+      resendActivationUser.email = existingUser.email;
+
+      const res = await chai.request(app)
+        .post(`${BASE_URL}/activationresend`)
+        .send({'firstname': resendActivationUser.profile.firstName,
+          'lastname': resendActivationUser.profile.lastName,
+          'uid': resendActivationUser.uid,
+          'email': resendActivationUser.email })
+        .catch(err => err.response);
+
+      res.status.should.be.equal(400);
+      res.body.name.should.be.equal('BadRequestError');
+      res.body.message.should.be.equal(errorCodes.errorCodes.mail.duplicate.code);
+    }).timeout(601000);
+
+    it('should pass', async () => {
+      await delay(600000);
+      const student = await FixtureUtils.getRandomInactiveStudent();
+      const resendActivationUser = student;
+
+      const res = await chai.request(app)
+        .post(`${BASE_URL}/activationresend`)
+        .send({'firstname': resendActivationUser.profile.firstName,
+          'lastname': resendActivationUser.profile.lastName,
+          'uid': resendActivationUser.uid,
+          'email': resendActivationUser.email })
+        .catch(err => err.response);
+
+      res.status.should.be.equal(204);
+    }).timeout(601000);
+
+
   })
   ;
 })
