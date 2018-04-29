@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [NEXT] 
 ### Added
+- Added an Box for Information on the Homescreen [#216] (https://github.com/h-da/geli/issues/216)
 - SnackBarService as Wrapper for MatSnackBar
 
 ### Fixed
@@ -13,6 +14,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Fixed a broken documentation link #583.
 - Limited the first- and lastname to 64 characters in registration- and edit page. [#585](https://github.com/h-da/geli/issues/585)
 - add correct E-Mail validator to edit-profile and register component [#564]
+- Videos in the Course Section now get equally sized and cant grow too big in mobile views. [#534] (https://github.com/h-da/geli/issues/534) 
 
 ### Security
 - Fixed multiple severe course related security issues #594, #653.
