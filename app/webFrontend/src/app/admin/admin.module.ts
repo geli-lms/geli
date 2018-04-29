@@ -5,7 +5,6 @@ import {AdminComponent} from './admin.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {RouterModule} from '@angular/router';
 import {SharedModule} from '../shared/shared.module';
-import {ImprintAdminComponent} from './imprint-admin/imprint-admin.component';
 import {AceEditorModule} from 'ng2-ace-editor';
 import {AdminRoutingModule} from './admin-routing.module';
 
@@ -22,7 +21,6 @@ import {AdminRoutingModule} from './admin-routing.module';
   declarations: [
     AdminComponent,
     UserAdminComponent,
-    ImprintAdminComponent
   ]
 })
 export class AdminModule {
