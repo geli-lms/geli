@@ -29,6 +29,7 @@ const multer = require('multer');
 import crypto = require('crypto');
 import {API_NOTIFICATION_TYPE_ALL_CHANGES, NotificationSettings} from '../models/NotificationSettings';
 import {IWhitelistUser} from '../../../shared/models/IWhitelistUser';
+import {DocumentToObjectOptions} from 'mongoose';
 
 const uploadOptions = {
   storage: multer.diskStorage({
@@ -336,7 +337,7 @@ export class CourseController {
       .populate('whitelist')
       .execPopulate();
     await course.processLecturesFor(currentUser);
-    return course.toObject();
+    return course.toObject(<DocumentToObjectOptions>{currentUser});
   }
 
   private userReadConditions(currentUser: IUser) {
