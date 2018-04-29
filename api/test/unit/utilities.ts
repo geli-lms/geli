@@ -28,8 +28,9 @@ describe('Testing utilities', () => {
   describe('ExtractMongoId', () => {
     const idAsObjectId = mongooseTypes.ObjectId();
     const idDirect = {id: idAsObjectId.toHexString()};
-    const idArray = [idAsObjectId, idDirect, {}, idAsObjectId, idDirect, 1, 'id', idDirect];
+    const idString = new String(idDirect.id); // tslint:disable-line
     const idExpect = idDirect.id;
+    const idArray = [idAsObjectId, idDirect, {}, idAsObjectId, idString, 1, idExpect, idDirect];
     const fallback = 'fallback';
 
     it('should extract an id from an ObjectID object', () => {
@@ -40,24 +41,30 @@ describe('Testing utilities', () => {
       expect(extractMongoId(idDirect)).to.eq(idExpect);
     });
 
+    it('should return an id String object as string', () => {
+      expect(extractMongoId(idString)).to.eq(idExpect);
+    });
+
+    it('should return an id string unmodified', () => {
+      expect(extractMongoId(idExpect)).to.eq(idExpect);
+    });
+
     it('should yield undefined for invalid input', () => {
       expect(extractMongoId({})).to.eq(undefined);
       expect(extractMongoId(1)).to.eq(undefined);
-      expect(extractMongoId('id')).to.eq(undefined);
     });
 
     it('should return a specified fallback for invalid input', () => {
       expect(extractMongoId({}, fallback)).to.eq(fallback);
       expect(extractMongoId(1, fallback)).to.eq(fallback);
-      expect(extractMongoId('id', fallback)).to.eq(fallback);
     });
 
     it('should only extract ids for valid objects in an array', () => {
-      expect(extractMongoId(idArray)).to.eql([idExpect, idExpect, idExpect, idExpect, idExpect]);
+      expect(extractMongoId(idArray)).to.eql([idExpect, idExpect, idExpect, idExpect, idExpect, idExpect]);
     });
 
     it('should extract ids for valid objects or return fallback values in an array', () => {
-      expect(extractMongoId(idArray, 'fallback')).to.eql([idExpect, idExpect, fallback, idExpect, idExpect, fallback, fallback, idExpect]);
+      expect(extractMongoId(idArray, 'fallback')).to.eql([idExpect, idExpect, fallback, idExpect, idExpect, fallback, idExpect, idExpect]);
     });
   });
 });
