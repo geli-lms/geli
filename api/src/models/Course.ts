@@ -82,7 +82,7 @@ const courseSchema = new mongoose.Schema({
   {
     timestamps: true,
     toObject: {
-      transform: function (doc: any, ret: any) {
+      transform: function (doc: ICourseModel, ret: any, {currentUser}: {currentUser?: IUser}) {
         if (ret.hasOwnProperty('_id') && ret._id !== null) {
           ret._id = ret._id.toString();
         }
@@ -93,6 +93,15 @@ const courseSchema = new mongoose.Schema({
         ret.hasAccessKey = false;
         if (ret.accessKey) {
           ret.hasAccessKey = true;
+        }
+
+        if (currentUser !== undefined) {
+          if (doc.populated('teachers') !== undefined) {
+            ret.teachers = doc.teachers.map((user: IUserModel) => user.forUser(currentUser));
+          }
+          if (doc.populated('students') !== undefined) {
+            ret.students = doc.students.map((user: IUserModel) => user.forUser(currentUser));
+          }
         }
       }
     }
