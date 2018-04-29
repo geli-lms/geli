@@ -6,14 +6,20 @@ import * as crypto from 'crypto';
 import {isNullOrUndefined} from 'util';
 import {isEmail} from 'validator';
 import * as errorCodes from '../config/errorCodes';
+import {IProperties} from '../../../shared/models/IProperties';
 
 interface IUserModel extends IUser, mongoose.Document {
   isValidPassword: (candidatePassword: string) => Promise<boolean>;
+  checkPrivileges: () => IProperties;
   authenticationToken: string;
   resetPasswordToken: string;
   resetPasswordExpires: Date;
   isActive: boolean;
 }
+interface IUserMongoose extends mongoose.Model<IUserModel> {
+  checkPrivileges: (user: IUser) => IProperties;
+}
+let User: IUserMongoose;
 
 const userSchema = new mongoose.Schema({
     uid: {
@@ -162,5 +168,20 @@ userSchema.methods.isValidPassword = function (candidatePassword: string) {
   return bcrypt.compare(candidatePassword, this.password);
 };
 
-const User = mongoose.model<IUserModel>('User', userSchema);
+userSchema.methods.checkPrivileges = function (): IProperties {
+  return User.checkPrivileges(this);
+};
+
+userSchema.statics.checkPrivileges = function (user: IUser): IProperties {
+  const userIsAdmin: boolean = user.role === 'admin';
+  const userIsTeacher: boolean = user.role === 'teacher';
+  const userIsStudent: boolean = user.role === 'student';
+  // NOTE: The 'tutor' role exists and has fixtures, but currently appears to be unimplemented.
+  // const userIsTutor: boolean = user.role === 'tutor';
+
+  return {userIsAdmin, userIsTeacher, userIsStudent};
+};
+
+User = mongoose.model<IUserModel, IUserMongoose>('User', userSchema);
+
 export {User, IUserModel};
