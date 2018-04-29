@@ -13,7 +13,9 @@ export class User implements IUser {
     progress: any;
     lastVisitedCourses: Array<string>;
 
-    constructor(user: IUser) {
+    gravatar: string;
+
+    constructor(user: any) {
         this._id = user._id;
         this.uid = user.uid;
         this.email = user.email;
@@ -21,10 +23,12 @@ export class User implements IUser {
         this.role = user.role;
         this.progress = user.progress;
         this.lastVisitedCourses = user.lastVisitedCourses;
+
+        this.gravatar = user.gravatar ? user.gravatar : md5(user.email.toLowerCase());
     }
 
     getGravatarURL(size: number = 80) {
-        return `https://www.gravatar.com/avatar/${md5(this.email.toLowerCase())}.jpg?s=${size}&d=retro`;
+        return `https://www.gravatar.com/avatar/${this.gravatar}.jpg?s=${size}&d=retro`;
     }
 
     getUserImageURL(size: number = 80) {
