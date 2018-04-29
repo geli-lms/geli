@@ -2,6 +2,7 @@ import * as mongoose from 'mongoose';
 import * as bcrypt from 'bcrypt';
 import {IUser} from '../../../shared/models/IUser';
 import {IUserSubSafeBase} from '../../../shared/models/IUserSubSafeBase';
+import {IUserSubSafe} from '../../../shared/models/IUserSubSafe';
 import {NativeError} from 'mongoose';
 import * as crypto from 'crypto';
 import {isNullOrUndefined} from 'util';
@@ -14,6 +15,7 @@ interface IUserModel extends IUser, mongoose.Document {
   isValidPassword: (candidatePassword: string) => Promise<boolean>;
   checkPrivileges: () => IProperties;
   forSafeBase: () => IUserSubSafeBase;
+  forSafe: () => IUserSubSafe;
   authenticationToken: string;
   resetPasswordToken: string;
   resetPasswordExpires: Date;
@@ -188,6 +190,13 @@ userSchema.methods.forSafeBase = function (): IUserSubSafeBase {
     result.profile.picture = picture;
   }
   return result;
+};
+
+userSchema.methods.forSafe = function (): IUserSubSafe {
+  return {
+    ...this.forSafeBase(),
+    gravatar: crypto.createHash('md5').update(this.email).digest('hex')
+  };
 };
 
 userSchema.statics.checkPrivileges = function (user: IUser): IProperties {
