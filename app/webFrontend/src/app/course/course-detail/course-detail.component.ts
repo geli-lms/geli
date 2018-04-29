@@ -35,9 +35,8 @@ export class CourseDetailComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-
-    // this.route.data.route.subscribe
-    //const course: ICourse = <ICourse> this.route.snapshot.data.course;
+    const data: any = this.route.snapshot.data;
+    const course: ICourse = <ICourse> data.course.then;
     console.dir(course);
     if (course) {
       console.log('found course');
