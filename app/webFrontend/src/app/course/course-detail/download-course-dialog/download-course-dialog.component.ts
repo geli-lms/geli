@@ -37,7 +37,7 @@ export class DownloadCourseDialogComponent implements OnInit {
     this.disableDownloadButton = false;
     this.course = this.data.course;
     this.chkbox = false;
-    if (!this.course.lectures.length) {
+    if (!this.checkForEmptyLectures()) {
     this.disableDownloadButton = true;
     }
   }
@@ -88,6 +88,22 @@ export class DownloadCourseDialogComponent implements OnInit {
     });
   });
   return sum;
+  }
+
+  checkForEmptyLectures(): boolean {
+  	if (!this.course.lectures.length) {
+  		return false;
+  	}
+
+  	let foundUnits = false;
+
+  	for (const lec of this.course.lectures) {
+  		if (lec.units.length) {
+  			foundUnits = true;
+  		}
+  	}
+
+  	return foundUnits;
   }
 
   async downloadAndClose() {
