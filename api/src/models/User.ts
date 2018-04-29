@@ -1,16 +1,19 @@
 import * as mongoose from 'mongoose';
 import * as bcrypt from 'bcrypt';
 import {IUser} from '../../../shared/models/IUser';
+import {IUserSubSafeBase} from '../../../shared/models/IUserSubSafeBase';
 import {NativeError} from 'mongoose';
 import * as crypto from 'crypto';
 import {isNullOrUndefined} from 'util';
 import {isEmail} from 'validator';
 import * as errorCodes from '../config/errorCodes';
 import {IProperties} from '../../../shared/models/IProperties';
+import {extractMongoId} from '../utilities/ExtractMongoId';
 
 interface IUserModel extends IUser, mongoose.Document {
   isValidPassword: (candidatePassword: string) => Promise<boolean>;
   checkPrivileges: () => IProperties;
+  forSafeBase: () => IUserSubSafeBase;
   authenticationToken: string;
   resetPasswordToken: string;
   resetPasswordExpires: Date;
@@ -170,6 +173,21 @@ userSchema.methods.isValidPassword = function (candidatePassword: string) {
 
 userSchema.methods.checkPrivileges = function (): IProperties {
   return User.checkPrivileges(this);
+};
+
+userSchema.methods.forSafeBase = function (): IUserSubSafeBase {
+  const {
+    profile: {firstName, lastName}
+  } = this;
+  const result: IUserSubSafeBase = {
+    _id: <string>extractMongoId(this._id),
+    profile: {firstName, lastName}
+  };
+  const picture = this.profile.picture.toObject();
+  if (Object.keys(picture).length) {
+    result.profile.picture = picture;
+  }
+  return result;
 };
 
 userSchema.statics.checkPrivileges = function (user: IUser): IProperties {
