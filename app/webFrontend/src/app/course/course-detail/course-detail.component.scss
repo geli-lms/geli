@@ -1,5 +1,11 @@
 .download-button {
-  float: right;
+  position: absolute;
+  top: 4em;
+  right: 6em;
+}
+
+::ng-deep .dl-icon {
+  font-size:48px !important;
 }
 
 .report-button {

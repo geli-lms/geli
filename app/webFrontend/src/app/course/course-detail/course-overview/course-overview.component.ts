@@ -18,8 +18,6 @@ export class CourseOverviewComponent implements OnInit {
   }
 
   ngOnInit() {
-    // const data: any = this.route.snapshot.data;
-    // this.course = <ICourse> data.course;
     this.course = this.dataSharingService.getDataForKey('course');
   }
 }
