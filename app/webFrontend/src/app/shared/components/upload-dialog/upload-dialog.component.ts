@@ -120,7 +120,12 @@ export class UploadDialog implements OnInit {
   }
 
   public startUpload() {
-    this.uploader.uploadAll();
+    try {
+      this.uploader.uploadAll();
+    } catch (error) {
+      this.snackBar.open('An error occured during the Upload', '', { duration: 3000 });
+    }
+
   }
 
 
