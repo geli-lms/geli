@@ -21,7 +21,7 @@
       <div class="form-group" formGroupName="profile">
         <mat-form-field>
           <input matInput formControlName="firstName"
-                 [placeholder]="'common.profile.firstName'|translate"/>
+                 [placeholder]="'common.profile.firstName'|translate" maxlength="64"/>
           <div *ngIf="registerForm.get('profile').get('firstName').touched">
             <small *ngIf="registerForm.get('profile').get('firstName').hasError('required')"
                    class="text-danger">
@@ -31,11 +31,15 @@
                    class="text-danger" translate [translateParams]="{min:2}">
               common.validation.minLength
             </small>
+            <small *ngIf="registerForm.get('profile').get('firstName').hasError('maxlength')"
+                   class="text-danger" translate [translateParams]="{max:64}">
+              common.validation.maxLength
+            </small>
           </div>
         </mat-form-field>
         <mat-form-field>
           <input matInput formControlName="lastName"
-                 [placeholder]="'common.profile.lastName'|translate"/>
+                 [placeholder]="'common.profile.lastName'|translate" maxlength="64"/>
           <div *ngIf="registerForm.get('profile').get('lastName').touched">
             <small *ngIf="registerForm.get('profile').get('lastName').hasError('required')"
                    class="text-danger">
@@ -44,6 +48,10 @@
             <small *ngIf="registerForm.get('profile').get('lastName').hasError('minlength')"
                    class="text-danger" translate [translateParams]="{min:2}">
               common.validation.minLength
+            </small>
+            <small *ngIf="registerForm.get('profile').get('lastName').hasError('maxlength')"
+                   class="text-danger" translate [translateParams]="{max:64}">
+              common.validation.maxLength
             </small>
           </div>
         </mat-form-field>
@@ -84,6 +92,9 @@
 
       <button mat-raised-button color="primary" type="submit"
               [disabled]="loading || !registerForm?.valid">{{'common.register'|translate}}
+      </button>
+      <button *ngIf="role == 'student'" mat-raised-button type="button" routerLink="/activation-resend" routerLinkActive="active">
+        {{'auth.registration.resendActivationButton'|translate}}
       </button>
     </form>
 

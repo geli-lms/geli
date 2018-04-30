@@ -8,6 +8,8 @@ import {IUser} from '../../../shared/models/IUser';
 import {IUserModel, User} from '../models/User';
 import {isNullOrUndefined} from 'util';
 import {errorCodes} from '../config/errorCodes';
+import * as sharp from 'sharp';
+import config from '../config/main';
 
 const multer = require('multer');
 
@@ -311,21 +313,36 @@ export class UserController {
    * @apiError BadRequestError
    */
   @Post('/picture/:id')
-  addUserPicture(@UploadedFile('file', {options: uploadOptions}) file: any, @Param('id') id: string, @Body() data: any,
-                 @CurrentUser() currentUser: IUser) {
+   addUserPicture(@UploadedFile('file', {options: uploadOptions}) file: any, @Param('id') id: string, @Body()
+    data: any, @CurrentUser() currentUser: IUser) {
     return User.findById(id)
-      .then((user: IUserModel) => {
+      .then(async (user: IUserModel) =>  {
         if (user.profile.picture && user.profile.picture.path && fs.existsSync(user.profile.picture.path)) {
           fs.unlinkSync(user.profile.picture.path);
         }
-        user.profile.picture = {
-          _id: null,
-          name: file.filename,
-          alias: file.originalname,
-          path: file.path,
-          size: file.size
-        };
-        return user.save();
+
+        const mimeFamily = file.mimetype.split('/', 1)[0];
+
+        if ( mimeFamily === 'image' ) {
+          const resizedImageBuffer = await sharp(file.path)
+            .resize(config.maxProfileImageWidth, config.maxProfileImageHeight)
+            .withoutEnlargement(true)
+            .max()
+            .toBuffer({resolveWithObject: true});
+
+          fs.writeFileSync(file.path, resizedImageBuffer.data);
+
+          user.profile.picture = {
+            _id: null,
+            name: file.filename,
+            alias: file.originalname,
+            path: file.path,
+            size: resizedImageBuffer.info.size
+          };
+          return user.save();
+        } else {
+          throw new ForbiddenError('Forbidden format in uploaded picture: ' + mimeFamily);
+        }
       })
       .then((user) => {
         return this.cleanUserObject(id, user, currentUser);
