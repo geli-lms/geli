@@ -1,2 +1,6 @@
 <app-course-container [title]="'dashboard.myCourses' | translate" [courses]="myCourses" [expand]="true" (onLeave)="leaveCallback()" (onEnroll)="enrollCallback()"></app-course-container>
 <app-course-container [title]="'Available Courses'" [courses]="availableCourses" [expand]="false" (onEnroll)="enrollCallback()"></app-course-container>
+<button mat-raised-button color="primary"
+        (click)="sortAlphabetically()">
+  sort courses alphabetically
+</button>
