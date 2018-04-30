@@ -222,10 +222,7 @@ userSchema.statics.forSafeBase = function (user: IUser | IUserModel): IUserSubSa
 };
 
 userSchema.statics.forSafe = function (user: IUser | IUserModel): IUserSubSafe {
-  return {
-    ...User.forSafeBase(user),
-    gravatar: crypto.createHash('md5').update(user.email).digest('hex')
-  };
+  return User.forSafeBase(user);
 };
 
 userSchema.statics.forTeacher = function (user: IUser | IUserModel): IUserSubTeacher {
