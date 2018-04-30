@@ -1,7 +1,9 @@
 <ng-template #innerContent>
   {{title}}
-  <button class="toggle" [class.opened] = "opened" mat-icon-button>
-    <mat-icon>arrow_drop_down</mat-icon>
+  <button class="open-toggle" [class.opened] = "opened" mat-icon-button >
+    <mat-icon class="arrow">
+      arrow_drop_down
+    </mat-icon>
   </button>
 </ng-template>
 
