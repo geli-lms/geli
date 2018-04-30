@@ -88,16 +88,16 @@ export class UnitController {
     data.model.unitCreator = currentUser._id.toString();
 
     return Unit.create(data.model)
-    .then((createdUnit) => {
-      return this.pushToLecture(data.lectureId, createdUnit);
-    })
-    .catch((err) => {
-      if (err.name === 'ValidationError') {
-        throw err;
-      } else {
-        throw new BadRequestError(err);
-      }
-    });
+      .then((createdUnit) => {
+        return this.pushToLecture(data.lectureId, createdUnit);
+      })
+      .catch((err) => {
+        if (err.name === 'ValidationError') {
+          throw err;
+        } else {
+          throw new BadRequestError(err);
+        }
+      });
   }
 
   /**
@@ -173,23 +173,17 @@ export class UnitController {
    */
   @Authorized(['teacher', 'admin'])
   @Delete('/:id')
-  deleteUnit(@Param('id') id: string) {
-      return Lecture.update({}, {$pull: {units: id}}, function (err, val) {
-        if (!err) {
-          return true;
-        } else {
-          return false;
-        }
-      }).then (() => {
-        return Unit.deleteOne({_id: id}, function (err) {
-          if (err) {
-            return false;
-          } else {
-            return true;
-          }
-        });
+  async deleteUnit(@Param('id') id: string) {
+    return Unit.findById(id).then(async (unit) => {
+      if (!unit) {
+        throw new NotFoundError();
       }
-  );
+      await Lecture.update({}, {$pull: {units: id}});
+      await unit.remove();
+
+    }).then(() => {
+      return true;
+    });
   }
 
   protected pushToLecture(lectureId: string, unit: any) {
