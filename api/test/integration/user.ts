@@ -32,7 +32,7 @@ describe('User', () => {
 
       res.status.should.be.equal(200);
       res.body.should.be.a('array');
-      res.body.length.should.be.equal(40);
+      res.body.length.should.be.equal(42);
     });
 
     it('should fail with wrong authorization', async () => {

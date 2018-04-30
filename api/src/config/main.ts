@@ -39,4 +39,6 @@ export default {
   uploadFolder: process.env.UPLOADFOLDER || (appRoot + '/uploads/'),
   maxProfileImageWidth: 512,
   maxProfileImageHeight: 512,
+
+  timeTilNextActivationResendMin: 10,
 };
