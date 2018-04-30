@@ -3,7 +3,7 @@ import {IUnit} from '../../../../shared/models/units/IUnit';
 import {Progress} from '../progress/Progress';
 import {InternalServerError} from 'routing-controllers';
 
-import {Lecture} from '../Lecture';
+import {ILectureModel, Lecture} from '../Lecture';
 import {freeTextUnitSchema} from './FreeTextUnit';
 import {codeKataSchema} from './CodeKataUnit';
 import {fileUnitSchema} from './FileUnit';
@@ -118,7 +118,8 @@ unitSchema.statics.importJSON = async function(unit: IUnit, courseId: string, le
 
 // Cascade delete
 unitSchema.pre('remove', function(next: () => void) {
-  Progress.remove({'unit': this._id}).exec().then(next).catch(next);
+
+  this.model('Unit').remove({ unit: this._id }, next);
 });
 
 const Unit = mongoose.model<IUnitModel>('Unit', unitSchema);
