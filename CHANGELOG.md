@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [NEXT] 
 ### Added
 - Added an Box for Information on the Homescreen [#216] (https://github.com/h-da/geli/issues/216)
+- Added possibility to sort all courses alphabetically. [#567](https://github.com/h-da/geli/issues/567)
 
 ### Fixed
 - wasteful course data usage #654 via specialized course model interfaces.
