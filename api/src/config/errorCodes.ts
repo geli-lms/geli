@@ -1,4 +1,6 @@
 // TODO move to shared folder
+import config from '../config/main';
+
 export const errorCodes = {
   user : {
       userNotFound: {
@@ -7,7 +9,7 @@ export const errorCodes = {
       },
       retryAfter: {
         code: 'retry after',
-        text: 'You can only resend the activation every 10 minutes. You can resend again in ',
+        text: 'You can only resend the activation every ' + config.timeTilNextActivationResendMin + ' minutes. You can resend again in ',
       },
       userAlreadyActive: {
         code: 'user already active',

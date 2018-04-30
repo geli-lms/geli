@@ -16,8 +16,6 @@ import config from '../config/main';
 @JsonController('/auth')
 export class AuthController {
 
-  private timeTillNextResendInMin = 10;
-
   /**
    * @api {post} /api/auth/login Login user
    * @apiName PostAuthLogin
@@ -158,7 +156,7 @@ export class AuthController {
    */
   @Post('/activationresend')
   @OnUndefined(204)
-  async ActivationResend (@BodyParam('firstname') firstname: string,
+  async activationResend (@BodyParam('firstname') firstname: string,
                                       @BodyParam('lastname') lastname: string,
                                       @BodyParam('uid') uid: string,
                                       @BodyParam('email') email: string,
@@ -174,8 +172,8 @@ export class AuthController {
         }
 
         const timeSinceUpdate: number = (Date.now() - user.updatedAt.getTime() ) / 60000;
-        if (timeSinceUpdate < this.timeTillNextResendInMin) {
-          const retryAfter: number = (this.timeTillNextResendInMin - timeSinceUpdate) * 60;
+        if (timeSinceUpdate < Number(config.timeTilNextActivationResendMin)) {
+          const retryAfter: number = (Number(config.timeTilNextActivationResendMin) - timeSinceUpdate) * 60;
           response.set('retry-after', retryAfter.toString());
           throw new HttpError(503, errorCodes.errorCodes.user.retryAfter.code);
         }

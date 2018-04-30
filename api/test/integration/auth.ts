@@ -8,6 +8,7 @@ import {IUser} from '../../../shared/models/IUser';
 import {Course} from '../../src/models/Course';
 import {FixtureUtils} from '../../fixtures/FixtureUtils';
 import chaiHttp = require('chai-http');
+import config from '../../src/config/main';
 
 chai.use(chaiHttp);
 const should = chai.should();
@@ -186,7 +187,7 @@ describe('Auth', () => {
       res.body.message.should.be.equal(errorCodes.errorCodes.user.userAlreadyActive.code);
     });
 
-    it('should fail (can only send ever 10min)', async () => {
+    it('should fail (can only send every ' + config.timeTilNextActivationResendMin + ' min)', async () => {
       const student = await FixtureUtils.getRandomInactiveStudent();
       const resendActivationUser = student;
 
@@ -205,7 +206,7 @@ describe('Auth', () => {
     });
 
     it('should fail (email already in use)', async () => {
-      await delay(600000);
+      await delay(Number(config.timeTilNextActivationResendMin) * 60000);
       const student = await FixtureUtils.getRandomInactiveStudent();
       const resendActivationUser = student;
       const student2 = await FixtureUtils.getRandomActiveStudent();
@@ -223,10 +224,10 @@ describe('Auth', () => {
       res.status.should.be.equal(400);
       res.body.name.should.be.equal('BadRequestError');
       res.body.message.should.be.equal(errorCodes.errorCodes.mail.duplicate.code);
-    }).timeout(601000);
+    }).timeout(Number(config.timeTilNextActivationResendMin) * 61000);
 
     it('should pass', async () => {
-      await delay(600000);
+      await delay(Number(config.timeTilNextActivationResendMin) * 60000);
       const student = await FixtureUtils.getRandomInactiveStudent();
       const resendActivationUser = student;
 
@@ -239,7 +240,7 @@ describe('Auth', () => {
         .catch(err => err.response);
 
       res.status.should.be.equal(204);
-    }).timeout(601000);
+    }).timeout(Number(config.timeTilNextActivationResendMin) * 61000);
 
 
   })
