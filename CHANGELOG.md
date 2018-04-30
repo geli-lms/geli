@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - add correct E-Mail validator to edit-profile and register component [#564]
 - the view of downloading a empty course [#659](https://github.com/h-da/geli/issues/659)
 - Videos in the Course Section now get equally sized and cant grow too big in mobile views. [#534] (https://github.com/h-da/geli/issues/534) 
+- Fix space in the topbar for notification icon for student. [#696] (https://github.com/h-da/geli/issues/696)
 
 ### Security
 - Fixed multiple severe course related security issues #594, #653.
