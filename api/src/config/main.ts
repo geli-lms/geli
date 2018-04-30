@@ -40,5 +40,5 @@ export default {
   maxProfileImageWidth: 512,
   maxProfileImageHeight: 512,
 
-  timeTilNextActivationResendMin: process.env.TIMETILLACTIVATIONRESEND || 1,
+  timeTilNextActivationResendMin: 10,
 };

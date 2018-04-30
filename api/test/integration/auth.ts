@@ -187,6 +187,9 @@ describe('Auth', () => {
       res.body.message.should.be.equal(errorCodes.errorCodes.user.userAlreadyActive.code);
     });
 
+    // reduce timeTillNextActivationResendMin for testing to 15s
+    config.timeTilNextActivationResendMin = 0.25;
+
     it('should fail (can only send every ' + config.timeTilNextActivationResendMin + ' min)', async () => {
       const student = await FixtureUtils.getRandomInactiveStudent();
       const resendActivationUser = student;

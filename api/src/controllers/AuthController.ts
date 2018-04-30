@@ -150,7 +150,7 @@ export class AuthController {
    * @apiError (BadRequestError) 400 User was not found.
    * @apiError (BadRequestError) 400 That email address is already in use
    * @apiError (BadRequestError) 400 User is already activated.
-   * @apiError (HttpError) 503 You can only resend the activation every 10 minutes. Your next chance is in
+   * @apiError (HttpError) 503 You can only resend the activation every X minutes. Your next chance is in
    * time left till next try in 'try-after' header in seconds
    * @apiError (InternalServerError) Could not send E-Mail
    */
@@ -161,7 +161,7 @@ export class AuthController {
                                       @BodyParam('uid') uid: string,
                                       @BodyParam('email') email: string,
                                       @Res() response: Response) {
-        const user = await User.findOne({'profile.firstName': firstname, 'profile.lastName': lastname, uid: uid});
+        const user = await User.findOne({'profile.firstName': firstname, 'profile.lastName': lastname, uid: uid, role: 'student'});
 
         if (!user) {
           throw new BadRequestError(errorCodes.errorCodes.user.userNotFound.code);
@@ -192,7 +192,6 @@ export class AuthController {
         } catch (err) {
           throw new InternalServerError(err.toString());
         }
-
   }
 
   /**
@@ -279,8 +278,6 @@ export class AuthController {
       });
   }
 
-
-
   /**
    * Add new user to all whitelistet courses in example after registration.
    * @param {IUser} user
@@ -301,5 +298,4 @@ export class AuthController {
         }
       }));
   }
-
 }
