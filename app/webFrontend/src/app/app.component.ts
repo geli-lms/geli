@@ -86,7 +86,7 @@ export class AppComponent implements OnInit {
   }
 
   specialContainerStyle(): string {
-    const routeTest = /^(\/|\/login|\/register|\/activation-resend)$/.test(this.router.url);
+    const routeTest = /^(\/|\/login|\/register|\/reset|\/activation-resend)$/.test(this.router.url);
 
     return (routeTest && !this.isLoggedIn()) ? 'special-style' : '';
   }
