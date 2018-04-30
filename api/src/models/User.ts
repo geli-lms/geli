@@ -11,11 +11,11 @@ import {isEmail} from 'validator';
 import * as errorCodes from '../config/errorCodes';
 import {IProperties} from '../../../shared/models/IProperties';
 import {extractMongoId} from '../utilities/ExtractMongoId';
+import {ensureMongoToObject} from '../utilities/EnsureMongoToObject';
 
 interface IUserModel extends IUser, mongoose.Document {
   isValidPassword: (candidatePassword: string) => Promise<boolean>;
   checkPrivileges: () => IProperties;
-  forSafeBase: () => IUserSubSafeBase;
   forSafe: () => IUserSubSafe;
   forTeacher: () => IUserSubTeacher;
   forUser: (otherUser: IUser) => IUserSubSafe | IUserSubTeacher | IUser;
@@ -26,6 +26,10 @@ interface IUserModel extends IUser, mongoose.Document {
 }
 interface IUserMongoose extends mongoose.Model<IUserModel> {
   checkPrivileges: (user: IUser) => IProperties;
+  forSafeBase: (user: IUser | IUserModel) => IUserSubSafeBase;
+  forSafe: (user: IUser | IUserModel) => IUserSubSafe;
+  forTeacher: (user: IUser | IUserModel) => IUserSubTeacher;
+  forUser: (user: IUser | IUserModel, otherUser: IUser) => IUserSubSafe | IUserSubTeacher | IUser;
 }
 let User: IUserMongoose;
 
@@ -180,48 +184,16 @@ userSchema.methods.checkPrivileges = function (): IProperties {
   return User.checkPrivileges(this);
 };
 
-userSchema.methods.forSafeBase = function (): IUserSubSafeBase {
-  const {
-    profile: {firstName, lastName}
-  } = this;
-  const result: IUserSubSafeBase = {
-    _id: <string>extractMongoId(this._id),
-    profile: {firstName, lastName}
-  };
-  const picture = this.profile.picture.toObject();
-  if (Object.keys(picture).length) {
-    result.profile.picture = picture;
-  }
-  return result;
-};
-
 userSchema.methods.forSafe = function (): IUserSubSafe {
-  return {
-    ...this.forSafeBase(),
-    gravatar: crypto.createHash('md5').update(this.email).digest('hex')
-  };
+  return User.forSafe(this);
 };
 
 userSchema.methods.forTeacher = function (): IUserSubTeacher {
-  const {
-    uid, email
-  } = this;
-  return {
-    ...this.forSafeBase(),
-    uid, email
-  };
+  return User.forTeacher(this);
 };
 
 userSchema.methods.forUser = function (otherUser: IUser): IUserSubSafe | IUserSubTeacher | IUser {
-  const {userIsTeacher, userIsAdmin} = User.checkPrivileges(otherUser);
-  const isSelf = extractMongoId(this._id) === extractMongoId(otherUser._id);
-  if (isSelf || userIsAdmin) {
-    return this.toObject();
-  } else if (userIsTeacher) {
-    return this.forTeacher();
-  } else {
-    return this.forSafe();
-  }
+  return User.forUser(this, otherUser);
 };
 
 userSchema.statics.checkPrivileges = function (user: IUser): IProperties {
@@ -232,6 +204,50 @@ userSchema.statics.checkPrivileges = function (user: IUser): IProperties {
   // const userIsTutor: boolean = user.role === 'tutor';
 
   return {userIsAdmin, userIsTeacher, userIsStudent};
+};
+
+userSchema.statics.forSafeBase = function (user: IUser | IUserModel): IUserSubSafeBase {
+  const {
+    profile: {firstName, lastName}
+  } = user;
+  const result: IUserSubSafeBase = {
+    _id: <string>extractMongoId(user._id),
+    profile: {firstName, lastName}
+  };
+  const picture = ensureMongoToObject(user.profile.picture);
+  if (Object.keys(picture).length) {
+    result.profile.picture = picture;
+  }
+  return result;
+};
+
+userSchema.statics.forSafe = function (user: IUser | IUserModel): IUserSubSafe {
+  return {
+    ...User.forSafeBase(user),
+    gravatar: crypto.createHash('md5').update(user.email).digest('hex')
+  };
+};
+
+userSchema.statics.forTeacher = function (user: IUser | IUserModel): IUserSubTeacher {
+  const {
+    uid, email
+  } = user;
+  return {
+    ...User.forSafeBase(user),
+    uid, email
+  };
+};
+
+userSchema.statics.forUser = function (user: IUser | IUserModel, otherUser: IUser): IUserSubSafe | IUserSubTeacher | IUser {
+  const {userIsTeacher, userIsAdmin} = User.checkPrivileges(otherUser);
+  const isSelf = extractMongoId(user._id) === extractMongoId(otherUser._id);
+  if (isSelf || userIsAdmin) {
+    return ensureMongoToObject(user);
+  } else if (userIsTeacher) {
+    return User.forTeacher(user);
+  } else {
+    return User.forSafe(user);
+  }
 };
 
 User = mongoose.model<IUserModel, IUserMongoose>('User', userSchema);
