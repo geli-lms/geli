@@ -6,6 +6,14 @@ import {IProperties} from '../../../shared/models/IProperties';
 import {extractMongoId} from '../../src/utilities/ExtractMongoId';
 import {Types as mongooseTypes} from 'mongoose';
 
+import {ensureMongoToObject} from '../../src/utilities/EnsureMongoToObject';
+import {DocumentToObjectOptions} from 'mongoose';
+import {Course, ICourseModel} from '../../src/models/Course';
+import {ICourse} from '../../../shared/models/ICourse';
+import {FixtureLoader} from '../../fixtures/FixtureLoader';
+
+const fixtureLoader = new FixtureLoader();
+
 describe('Testing utilities', () => {
   describe('Pick', () => {
     let input: IProperties;
@@ -65,6 +73,35 @@ describe('Testing utilities', () => {
 
     it('should extract ids for valid objects or return fallback values in an array', () => {
       expect(extractMongoId(idArray, 'fallback')).to.eql([idExpect, idExpect, fallback, idExpect, idExpect, fallback, idExpect, idExpect]);
+    });
+  });
+
+  describe('EnsureMongoToObject', () => {
+    // Before each test we reset the database
+    beforeEach(async () => {
+      await fixtureLoader.load();
+    });
+
+    it('should return the (ICourse) object without modification', async () => {
+      const course: ICourse = (await Course.findOne()).toObject();
+      expect(ensureMongoToObject<ICourse>(course)).to.eql(course);
+    });
+
+    it('should call the mongoose (ICourseModel) toObject function and return the result', async () => {
+      const course = await Course.findOne();
+      expect(ensureMongoToObject<ICourse>(course)).to.eql(course.toObject());
+    });
+
+    it('should call the mongoose (ICourseModel) toObject function with a transform option and return the result', async () => {
+      const course = await Course.findOne();
+      const options: DocumentToObjectOptions = {
+        transform: (doc: ICourseModel, ret: any) => {
+          ret._id = doc._id.toString() + '-transform-test';
+        }
+      };
+      const expectedResult = course.toObject(options);
+      expect(expectedResult._id).to.eq(course._id.toString() + '-transform-test');
+      expect(ensureMongoToObject<ICourse>(course, options)).to.eql(expectedResult);
     });
   });
 });
