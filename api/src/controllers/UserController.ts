@@ -505,12 +505,4 @@ export class UserController {
         return {result: true};
       });
   }
-
-  private cleanUserObject(id: string, user: IUserModel, currentUser?: IUser) {
-    user.password = '';
-    if (currentUser._id !== id && (currentUser.role !== <string>'teacher' || currentUser.role !== <string>'admin')) {
-      user.uid = null;
-    }
-    return user.toObject({virtuals: true});
-  }
 }
