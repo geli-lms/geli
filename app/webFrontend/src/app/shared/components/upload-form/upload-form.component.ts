@@ -22,6 +22,9 @@ export class UploadFormComponent implements OnInit, OnChanges {
   additionalData: any;
 
   @Input()
+  uploadSingleFile: boolean;
+
+  @Input()
   maxFileNumber: number;
 
   @Output()
@@ -134,12 +137,18 @@ export class UploadFormComponent implements OnInit, OnChanges {
   }
 
   uploadNextItem() {
-    if (this.fileUploader.getNotUploadedItems().length) {
+      if (this.fileUploader.getNotUploadedItems().length) {
       this.fileUploader.uploadItem(this.fileUploader.getNotUploadedItems()[0]);
     }
   }
 
   onFileOverDropzone(event) {
-    this.hasDropZoneOver = event;
+      this.hasDropZoneOver = event;
   }
+
+    public onInputChange() {
+      if (this.fileUploader.queue.length === 0) {
+          this.snackBar.open('Couldn\'t upload file.', 'Dismiss');
+      }
+    }
 }

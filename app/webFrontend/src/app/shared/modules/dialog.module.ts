@@ -14,6 +14,9 @@ import {InfoDialog} from '../components/info-dialog/info-dialog.component';
 import {FocusDirective} from '../directives/focus.directive';
 import {ChangePasswordDialogComponent} from '../components/change-password-dialog/change-password-dialog.component';
 import {RenameDialogComponent} from '../components/rename-dialog/rename-dialog.component';
+import {UploadFormComponent} from '../components/upload-form/upload-form.component';
+import {FilesizePipe} from '../pipes/filesize/filesize.pipe';
+import {UploadFormDialog} from '../components/upload-form-dialog/upload-form-dialog.component';
 
 @NgModule({
   imports: [
@@ -33,6 +36,9 @@ import {RenameDialogComponent} from '../components/rename-dialog/rename-dialog.c
     WriteMailDialog,
     RenameDialogComponent,
     FocusDirective,
+    UploadFormComponent,
+    FilesizePipe,
+    UploadFormDialog,
   ],
   declarations: [
     InfoDialog,
@@ -43,6 +49,9 @@ import {RenameDialogComponent} from '../components/rename-dialog/rename-dialog.c
     WriteMailDialog,
     RenameDialogComponent,
     FocusDirective,
+    UploadFormComponent,
+    FilesizePipe,
+    UploadFormDialog,
   ],
   providers: [
     DialogService
@@ -56,6 +65,8 @@ import {RenameDialogComponent} from '../components/rename-dialog/rename-dialog.c
     RenameDialogComponent,
     WriteMailDialog,
     ChangePasswordDialogComponent,
+    UploadFormComponent,
+    UploadFormDialog,
   ]
 })
 export class DialogModule {

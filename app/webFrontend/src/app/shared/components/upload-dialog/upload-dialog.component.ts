@@ -1,7 +1,11 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
-import {FileItem, FileUploader} from 'ng2-file-upload';
+import {FileItem} from 'ng2-file-upload';
 import {IUser} from '../../../../../../../shared/models/IUser';
 import {MatDialogRef, MatSnackBar} from '@angular/material';
+import {UploadFormComponent} from '../upload-form/upload-form.component';
+import {IFileUnit} from "../../../../../../../shared/models/units/IFileUnit";
+import {FileUploaderOptions, FilterFunction} from "ng2-file-upload/file-upload/file-uploader.class";
+import {FileLikeObject} from "ng2-file-upload/file-upload/file-like-object.class";
 
 
 @Component({
@@ -15,32 +19,26 @@ export class UploadDialog implements OnInit {
   @ViewChild('webcam') webcam: any;
   @ViewChild('preview') previewPicture: any;
 
-  public uploader: FileUploader;
+  @ViewChild(UploadFormComponent)
+  public uploadForm: UploadFormComponent;
+  uploadPath: string;
+  allowedMimeTypes: string[];
+
   mediastream: MediaStreamTrack;
 
+  @Input() isWebcamActive: boolean;
   public pictureTaken: boolean;
   showProgressBar = false;
 
   constructor(
     public dialogRef: MatDialogRef<UploadDialog>,
-    private snackBar: MatSnackBar) { }
+    private snackBar: MatSnackBar) {
+  }
 
   ngOnInit() {
-    this.uploader = new FileUploader({
-      url: '/api/users/picture/' + this.user._id,
-      headers: [{
-        name: 'Authorization',
-        value: localStorage.getItem('token')
-      }],
-      allowedFileType: ['image'],
-    });
-
-    this.uploader.onCompleteItem = (item: any, response: any, status: any, headers: any) => {
-      this.stopWebcam();
-
-      return this.dialogRef.close({success: true, user: JSON.parse(response)});
-    };
-
+      this.uploadPath = '/api/users/picture/' + this.user._id;
+      this.allowedMimeTypes =   ['image/png', 'image/gif', 'image/jpg', 'image/bmp', 'image/jpeg'];
+      this.isWebcamActive = true;
   }
 
   changedTab($event: any) {
@@ -53,6 +51,7 @@ export class UploadDialog implements OnInit {
 
 
   private startWebcam() {
+      if(!this.isWebcamActive) {
     const nativeVideo = this.webcam.nativeElement;
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
       navigator.mediaDevices.getUserMedia({video: true})
@@ -62,9 +61,11 @@ export class UploadDialog implements OnInit {
         nativeVideo.play();
       })
       .catch(error => {
+        this.isWebcamActive = false;
         this.snackBar.open('Couldn\'t start webcam', '', {duration: 3000});
       });
     }
+      }
   }
 
   private stopWebcam() {
@@ -96,8 +97,8 @@ export class UploadDialog implements OnInit {
     const imageData = this.previewPicture.nativeElement.src;
     this.convertToFile(imageData, 'webcam.png', 'image/png')
     .then((file) => {
-      const fileItem = new FileItem(this.uploader, file, {});
-      this.uploader.queue.push(fileItem);
+      const fileItem = new FileItem(this.uploadForm.fileUploader, file, {});
+        this.uploadForm.fileUploader.queue.push(fileItem);
       fileItem.upload();
     });
   }
@@ -115,18 +116,23 @@ export class UploadDialog implements OnInit {
 
   public cancel() {
     this.stopWebcam();
-    this.uploader.cancelAll();
+      this.uploadForm.fileUploader.cancelAll();
     this.dialogRef.close(false);
   }
 
   public startUpload() {
     try {
-      this.uploader.uploadAll();
+      this.uploadForm.fileUploader.uploadAll();
     } catch (error) {
       this.snackBar.open('An error occured during the Upload', '', { duration: 3000 });
     }
-
   }
 
+  public onFileUploaded(event: IFileUnit) {
+  }
+
+  onAllUploaded() {
+      this.dialogRef.close(true);
+  }
 
 }

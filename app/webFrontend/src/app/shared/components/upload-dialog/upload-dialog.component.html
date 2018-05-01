@@ -1,39 +1,38 @@
 <mat-tab-group *ngIf="!showProgressBar" (selectChange)="changedTab($event)">
   <mat-tab label="Upload image">
     <div class="tab-content">
-      <label ng2FileDrop
-             [ngClass]="{'nv-file-over': true}"
-             [uploader]="uploader"
-             class="file-dropzone"
-              (onFileDrop)="startUpload()">
-        <span>Drop files here or click here to add files</span>
-        <input type="file"
-               ng2FileSelect
-               [uploader]="uploader"
-               (onFileSelected)="startUpload()"
-               placeholder="Upload files"
-               accept="image/*"
-               hidden
-        />
-      </label>
+      <app-upload-form [uploadMethod]="'POST'"
+                       [uploadPath]="uploadPath"
+                       [additionalData]="null"
+                       [allowedMimeTypes]="allowedMimeTypes"
+                       [uploadSingleFile]="true"
+                       [maxFileNumber]="1"
+                       (onFileUploaded)="onFileUploaded($event)"
+                       (onAllUploaded)="onAllUploaded()"
+      ></app-upload-form>
+      <div class="upload-button-group">
+        <button mat-raised-button color="primary" (click)="startUpload()">
+          Upload picture
+        </button>
+        <button mat-raised-button (click)="cancel()">Cancel</button>
+      </div>
     </div>
   </mat-tab>
   <mat-tab id="webcam-tab" label="Take webcam picture">
     <div class="tab-content">
-      <div class="camera">
-        <video #webcam>No video stream is available.</video>
-      </div>
+      <div *ngIf="!isWebcamActive" class="camera">
       <p>
         <button mat-raised-button (click)="takePicture()">Take picture</button>
       </p>
+      </div>
       <div class="preview">
         <h3 *ngIf="pictureTaken">Preview image</h3>
         <img #preview>
       </div>
-      <button mat-raised-button color="primary" disabled="{{!pictureTaken}}" (click)="addImage()">
-        Upload picture
-      </button>
-      <button mat-raised-button (click)="cancel()">Cancel</button>
+        <button mat-raised-button color="primary" disabled="{{!pictureTaken}}" (click)="addImage()">
+          Upload picture
+        </button>
+        <button mat-raised-button (click)="cancel()">Cancel</button>
     </div>
   </mat-tab>
 </mat-tab-group>
