@@ -154,7 +154,7 @@ describe('User', () => {
     });
   });
 
-  describe.only(`PUT ${BASE_URL}`, () => {
+  describe(`PUT ${BASE_URL}`, () => {
     it('should fail with bad request (revoke own admin privileges)', async () => {
       const admin = await FixtureUtils.getRandomAdmin();
 
@@ -220,19 +220,19 @@ describe('User', () => {
 
     it('should update user base data without password', async () => {
       const student = await FixtureUtils.getRandomStudent();
-          const updatedUser = student;
-          updatedUser.password = undefined;
-          updatedUser.profile.firstName = 'Updated';
-          updatedUser.profile.lastName = 'User';
-          updatedUser.email = 'student2@updated.local';
-          const res = await chai.request(app)
-            .put(`${BASE_URL}/${student._id}`)
-            .set('Authorization', `JWT ${JwtUtils.generateToken(student)}`)
-            .send(updatedUser);
-              res.status.should.be.equal(200);
-              res.body.profile.firstName.should.be.equal('Updated');
-              res.body.profile.lastName.should.be.equal('User');
-              res.body.email.should.be.equal('student2@updated.local');
+      const updatedUser = student;
+      updatedUser.password = undefined;
+      updatedUser.profile.firstName = 'Updated';
+      updatedUser.profile.lastName = 'User';
+      updatedUser.email = 'student2@updated.local';
+      const res = await chai.request(app)
+        .put(`${BASE_URL}/${student._id}`)
+        .set('Authorization', `JWT ${JwtUtils.generateToken(student)}`)
+        .send(updatedUser);
+      res.status.should.be.equal(200);
+      res.body.profile.firstName.should.be.equal('Updated');
+      res.body.profile.lastName.should.be.equal('User');
+      res.body.email.should.be.equal('student2@updated.local');
     });
 
     it('should update user data', async () => {
