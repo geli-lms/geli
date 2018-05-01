@@ -480,38 +480,10 @@ export class CourseController {
    * @apiParam {Object} data Data (with access key).
    * @apiParam {IUser} currentUser Currently logged in user.
    *
-   * @apiSuccess {Course} course Enrolled course.
+   * @apiSuccess {{}} result Empty object.
    *
    * @apiSuccessExample {json} Success-Response:
-   *     {
-   *         "_id": "5a037e6b60f72236d8e7c83d",
-   *         "updatedAt": "2017-11-08T22:00:11.869Z",
-   *         "createdAt": "2017-11-08T22:00:11.263Z",
-   *         "name": "Introduction to web development",
-   *         "description": "Whether you're just getting started with Web development or are just expanding your horizons...",
-   *         "courseAdmin": {
-   *             "_id": "5a037e6a60f72236d8e7c815",
-   *             "updatedAt": "2017-11-08T22:00:10.898Z",
-   *             "createdAt": "2017-11-08T22:00:10.898Z",
-   *             "email": "teacher2@test.local",
-   *             "isActive": true,
-   *             "role": "teacher",
-   *             "profile": {
-   *                 "firstName": "Ober",
-   *                 "lastName": "Lehrer"
-   *             },
-   *             "id": "5a037e6a60f72236d8e7c815"
-   *         },
-   *         "active": true,
-   *         "__v": 1,
-   *         "whitelist": [],
-   *         "enrollType": "free",
-   *         "lectures": [],
-   *         "students": [],
-   *         "teachers": [],
-   *         "id": "5a037e6b60f72236d8e7c83d",
-   *         "hasAccessKey": false
-   *     }
+   *      {}
    *
    * @apiError NotFoundError
    * @apiError ForbiddenError Not allowed to join, you are not on whitelist.
@@ -520,7 +492,7 @@ export class CourseController {
   @Authorized(['student'])
   @Post('/:id/enroll')
   async enrollStudent(@Param('id') id: string, @Body() data: any, @CurrentUser() currentUser: IUser) {
-    let course = await Course.findById(id);
+    const course = await Course.findById(id);
     if (!course) {
       throw new NotFoundError();
     }
@@ -544,9 +516,9 @@ export class CourseController {
         'notificationType': API_NOTIFICATION_TYPE_ALL_CHANGES,
         'emailNotification': false
       }).save();
-      course = await course.save();
+      await course.save();
     }
-    return course.toObject();
+    return {};
   }
 
   /**

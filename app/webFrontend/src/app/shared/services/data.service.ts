@@ -219,7 +219,7 @@ export class CourseService extends DataService {
     super('courses/', backendService);
   }
 
-  enrollStudent(courseId: string, data: any): Promise<ICourse> {
+  enrollStudent(courseId: string, data: any): Promise<{}> {
     const accessKey: string = data.accessKey;
     return this.backendService
       .post(this.apiPath + courseId + '/enroll', JSON.stringify({accessKey}))
