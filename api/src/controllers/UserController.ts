@@ -357,8 +357,8 @@ export class UserController {
    * @apiPermission teacher
    * @apiPermission admin
    *
-   * @apiParam {String} id User ID.
-   * @apiParam {Object} user New user data.
+   * @apiParam {String} id User target ID.
+   * @apiParam {Object} newUser New user data.
    * @apiParam {IUser} currentUser Currently logged in user.
    *
    * @apiSuccess {User} user Updated user.
