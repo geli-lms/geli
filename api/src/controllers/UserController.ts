@@ -401,27 +401,14 @@ export class UserController {
   @Authorized(['student', 'teacher', 'admin'])
   @Put('/:id')
   async updateUser(@Param('id') id: string, @Body() newUser: any, @CurrentUser() currentUser: IUser) {
-    const selfModification = id === currentUser._id;
-    const {
-      userIsAdmin: currentUserIsAdmin,
-      userEditLevel: currentEditLevel
-    } = User.checkPrivileges(currentUser);
-
-    if (selfModification && currentUser.role !== newUser.role) {
+    if (id === currentUser._id && currentUser.role !== newUser.role) {
       throw new BadRequestError(errorCodes.user.cantChangeOwnRole.text);
     }
 
-    {
-      const sameEmail = {$and: [{'email': newUser.email}, {'_id': {$ne: newUser._id}}]};
-      const users = await User.find(sameEmail).limit(1);
-      if (users.length > 0) {
-        throw new BadRequestError(errorCodes.user.emailAlreadyInUse.text);
-      }
-    }
-
     const oldUser = await User.findById(id);
+    const {userIsAdmin, editAllowed} = oldUser.checkEditableBy(currentUser);
 
-    if (!User.checkEditUser(currentUser, oldUser).editAllowed) {
+    if (!editAllowed) {
       throw new ForbiddenError(errorCodes.user.cantChangeUserWithHigherRole.text);
     }
 
@@ -434,7 +421,7 @@ export class UserController {
       throw new BadRequestError(errorCodes.user.invalidNewUserRole.text);
     }
 
-    if (!currentUserIsAdmin) {
+    if (!userIsAdmin) {
       if (newUser.role !== oldUser.role) {
         throw new ForbiddenError(errorCodes.user.onlyAdminsCanChangeRoles.text);
       }
@@ -449,6 +436,14 @@ export class UserController {
       const isValidPassword = await oldUser.isValidPassword(newUser.currentPassword);
       if (!isValidPassword) {
         throw new BadRequestError(errorCodes.user.invalidPassword.text);
+      }
+    }
+
+    {
+      const sameEmail = {$and: [{'email': newUser.email}, {'_id': {$ne: newUser._id}}]};
+      const users = await User.find(sameEmail).limit(1);
+      if (users.length > 0) {
+        throw new BadRequestError(errorCodes.user.emailAlreadyInUse.text);
       }
     }
 
