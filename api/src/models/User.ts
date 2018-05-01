@@ -8,7 +8,7 @@ import {NativeError} from 'mongoose';
 import * as crypto from 'crypto';
 import {isNullOrUndefined} from 'util';
 import {isEmail} from 'validator';
-import * as errorCodes from '../config/errorCodes';
+import {errorCodes} from '../config/errorCodes';
 import {IProperties} from '../../../shared/models/IProperties';
 import {extractMongoId} from '../utilities/ExtractMongoId';
 import {ensureMongoToObject} from '../utilities/EnsureMongoToObject';
@@ -54,7 +54,7 @@ const userSchema = new mongoose.Schema({
     password: {
       type: String,
       required: true,
-      validate: new RegExp(errorCodes.errorCodes.password.regex.regex)
+      validate: new RegExp(errorCodes.password.regex.regex)
     },
     profile: {
       firstName: {
