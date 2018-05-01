@@ -3,6 +3,7 @@ import {Server} from '../../src/server';
 import {FixtureLoader} from '../../fixtures/FixtureLoader';
 import {JwtUtils} from '../../src/security/JwtUtils';
 import {User} from '../../src/models/User';
+import {errorCodes} from '../../src/config/errorCodes';
 import {FixtureUtils} from '../../fixtures/FixtureUtils';
 import {IUser} from '../../../shared/models/IUser';
 import chaiHttp = require('chai-http');
@@ -153,7 +154,7 @@ describe('User', () => {
     });
   });
 
-  describe(`PUT ${BASE_URL}`, () => {
+  describe.only(`PUT ${BASE_URL}`, () => {
     it('should fail with bad request (revoke own admin privileges)', async () => {
       const admin = await FixtureUtils.getRandomAdmin();
 
@@ -167,7 +168,7 @@ describe('User', () => {
 
       res.status.should.be.equal(400);
       res.body.name.should.be.equal('BadRequestError');
-      res.body.message.should.be.equal('You can\'t change your own role.');
+      res.body.message.should.be.equal(errorCodes.user.cantChangeOwnRole.text);
     });
 
     it('should fail with bad request (email already in use)', async () => {
@@ -183,7 +184,7 @@ describe('User', () => {
 
       res.status.should.be.equal(400);
       res.body.name.should.be.equal('BadRequestError');
-      res.body.message.should.be.equal('This email address is already in use.');
+      res.body.message.should.be.equal(errorCodes.user.emailAlreadyInUse.text);
     });
 
     it('should fail changing other user\'s uid with wrong authorization (not admin)', async () => {
@@ -199,7 +200,7 @@ describe('User', () => {
 
       res.status.should.be.equal(403);
       res.body.name.should.be.equal('ForbiddenError');
-      res.body.message.should.be.equal('Only users with admin privileges can change uids.');
+      res.body.message.should.be.equal(errorCodes.user.onlyAdminsCanChangeUids.text);
     });
 
     it('should fail changing other user\'s name with wrong authorization (low edit level)', async () => {
@@ -214,7 +215,7 @@ describe('User', () => {
 
       res.status.should.be.equal(403);
       res.body.name.should.be.equal('ForbiddenError');
-      res.body.message.should.be.equal('You don\'t have the authorization to change a user of this role.');
+      res.body.message.should.be.equal(errorCodes.user.cantChangeUserWithHigherRole.text);
     });
 
     it('should fail with wrong authorization (uid) - other user', async () => {
@@ -230,7 +231,7 @@ describe('User', () => {
 
       res.status.should.be.equal(403);
       res.body.name.should.be.equal('ForbiddenError');
-      res.body.message.should.be.equal('Only users with admin privileges can change uids.');
+      res.body.message.should.be.equal(errorCodes.user.onlyAdminsCanChangeUids.text);
     });
 
     it('should update user base data without password', async () => {

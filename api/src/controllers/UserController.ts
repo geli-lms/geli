@@ -407,28 +407,28 @@ export class UserController {
 
     if (!editLevels.hasOwnProperty(currentUser.role)) {
       // This should never be possible, due to the @Authorized access restriction.
-      throw new InternalServerError('Invalid current user role.');
+      throw new InternalServerError(errorCodes.user.invalidCurrentUserRole.text);
     }
     const currentEditLevel: number = editLevels[currentUser.role];
     const selfModification = id === currentUser._id;
     const {userIsAdmin: currentUserIsAdmin} = User.checkPrivileges(currentUser);
 
     if (selfModification && currentUser.role !== newUser.role) {
-      throw new BadRequestError('You can\'t change your own role.');
+      throw new BadRequestError(errorCodes.user.cantChangeOwnRole.text);
     }
 
     {
       const sameEmail = {$and: [{'email': newUser.email}, {'_id': {$ne: newUser._id}}]};
       const users = await User.find(sameEmail).limit(1);
       if (users.length > 0) {
-        throw new BadRequestError('This email address is already in use.');
+        throw new BadRequestError(errorCodes.user.emailAlreadyInUse.text);
       }
     }
 
     const oldUser = await User.findById(id);
     if (!editLevels.hasOwnProperty(oldUser.role)) {
       // This should not be possible as long as the editLevels are kept up to date.
-      throw new InternalServerError('Invalid old user role.');
+      throw new InternalServerError(errorCodes.user.invalidOldUserRole.text);
     }
     const oldEditLevel: number = editLevels[oldUser.role];
 
@@ -438,18 +438,18 @@ export class UserController {
     if (oldUser.role && typeof newUser.role === 'undefined') {
       newUser.role = oldUser.role;
     } else if (!editLevels.hasOwnProperty(newUser.role)) {
-      throw new BadRequestError('Invalid update role.');
+      throw new BadRequestError(errorCodes.user.invalidNewUserRole.text);
     }
 
     if (!currentUserIsAdmin) {
       if (currentEditLevel <= oldEditLevel && !selfModification) {
-        throw new ForbiddenError('You don\'t have the authorization to change a user of this role.');
+        throw new ForbiddenError(errorCodes.user.cantChangeUserWithHigherRole.text);
       }
       if (newUser.role !== oldUser.role) {
-        throw new ForbiddenError('Only users with admin privileges can change roles.');
+        throw new ForbiddenError(errorCodes.user.onlyAdminsCanChangeRoles.text);
       }
       if (newUser.uid !== oldUser.uid) {
-        throw new ForbiddenError('Only users with admin privileges can change uids.');
+        throw new ForbiddenError(errorCodes.user.onlyAdminsCanChangeUids.text);
       }
     }
 
@@ -458,7 +458,7 @@ export class UserController {
     } else {
       const isValidPassword = await oldUser.isValidPassword(newUser.currentPassword);
       if (!isValidPassword) {
-        throw new BadRequestError('Invalid current password!');
+        throw new BadRequestError(errorCodes.user.invalidPassword.text);
       }
     }
 
