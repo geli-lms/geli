@@ -218,22 +218,6 @@ describe('User', () => {
       res.body.message.should.be.equal(errorCodes.user.cantChangeUserWithHigherRole.text);
     });
 
-    it('should fail with wrong authorization (uid) - other user', async () => {
-      const teacher = await FixtureUtils.getRandomTeacher();
-      const updatedUser = await FixtureUtils.getRandomStudent();
-      updatedUser.uid = '987456';
-
-      const res = await chai.request(app)
-        .put(`${BASE_URL}/${updatedUser._id}`)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
-        .send(updatedUser)
-        .catch(err => err.response);
-
-      res.status.should.be.equal(403);
-      res.body.name.should.be.equal('ForbiddenError');
-      res.body.message.should.be.equal(errorCodes.user.onlyAdminsCanChangeUids.text);
-    });
-
     it('should update user base data without password', async () => {
       const student = await FixtureUtils.getRandomStudent();
           const updatedUser = student;
