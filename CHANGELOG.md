@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [NEXT] 
 ### Added
 - Added an Box for Information on the Homescreen [#216] (https://github.com/h-da/geli/issues/216)
+- Added account activation resend feature [#601] (https://github.com/h-da/geli/issues/601)
 
 ### Fixed
 - wasteful course data usage #654 via specialized course model interfaces.
@@ -16,9 +17,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Upload of profile pictures now prevents files with wrong extensions [#581] (https://github.com/h-da/geli/issues/581)
 - the view of downloading a empty course [#659](https://github.com/h-da/geli/issues/659)
 - Videos in the Course Section now get equally sized and cant grow too big in mobile views. [#534] (https://github.com/h-da/geli/issues/534) 
+- Background on password reset page is missing [#673] (https://github.com/h-da/geli/issues/673)
+- Fix space in the topbar for notification icon for student. [#696] (https://github.com/h-da/geli/issues/696)
 
 ### Security
 - Fixed multiple severe course related security issues #594, #653.
+- Updated the dependencies for security
 
 
 ## [0.6.0] - 2018-03-31 - Introduces MediaManager and some minor changes

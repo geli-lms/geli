@@ -86,6 +86,26 @@ export class AuthenticationService {
 
   }
 
+  resendActivation(firstname: string, lastname: string, uid: string, email: string) {
+    return new Promise((resolve, reject) => {
+
+      return this.http.post(
+        AuthenticationService.API_URL + 'auth/activationresend',
+        {firstname: firstname,
+                lastname: lastname,
+                uid: uid,
+                email: email}
+      )
+        .subscribe(
+          (json) => {
+            resolve();
+          }, (err) => {
+            reject(err);
+          });
+    });
+
+  }
+
   activate(token: string) {
     return new Promise((resolve, reject) => {
 
