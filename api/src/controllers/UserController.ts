@@ -320,6 +320,7 @@ export class UserController {
       @UploadedFile('file', {options: uploadOptions}) file: any,
       @Param('id') id: string, @Body() data: any,
       @CurrentUser() currentUser: IUser) {
+    // FIXME: This function needs at least some security checks!
     let user = await User.findById(id);
     if (user.profile.picture) {
       const path = user.profile.picture.path;
