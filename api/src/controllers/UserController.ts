@@ -405,9 +405,6 @@ export class UserController {
       admin: 2,
     };
 
-    if (!editLevels.hasOwnProperty(newUser.role)) {
-      throw new BadRequestError('Invalid update role.');
-    }
     if (!editLevels.hasOwnProperty(currentUser.role)) {
       // This should never be possible, due to the @Authorized access restriction.
       throw new InternalServerError('Invalid current user role.');
@@ -435,6 +432,15 @@ export class UserController {
     }
     const oldEditLevel: number = editLevels[oldUser.role];
 
+    if (oldUser.uid && newUser.uid === null) {
+      newUser.uid = oldUser.uid;
+    }
+    if (oldUser.role && typeof newUser.role === 'undefined') {
+      newUser.role = oldUser.role;
+    } else if (!editLevels.hasOwnProperty(newUser.role)) {
+      throw new BadRequestError('Invalid update role.');
+    }
+
     if (!currentUserIsAdmin) {
       if (currentEditLevel <= oldEditLevel && !selfModification) {
         throw new ForbiddenError('You don\'t have the authorization to change a user of this role.');
@@ -445,9 +451,6 @@ export class UserController {
       if (newUser.uid !== oldUser.uid) {
         throw new ForbiddenError('Only users with admin privileges can change uids.');
       }
-    }
-    if (oldUser.uid && newUser.uid === null) {
-      newUser.uid = oldUser.uid;
     }
 
     if (typeof newUser.password === 'undefined' || newUser.password.length === 0) {
