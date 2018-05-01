@@ -1,4 +1,5 @@
 import * as chai from 'chai';
+import * as request from 'superagent';
 import {Server} from '../../src/server';
 import {FixtureLoader} from '../../fixtures/FixtureLoader';
 import {JwtUtils} from '../../src/security/JwtUtils';
@@ -300,28 +301,29 @@ describe('User', () => {
   });
 
   describe(`POST ${BASE_URL}/picture`, () => {
-    it('should upload a new user picture', async () => {
-      const admin = await FixtureUtils.getRandomAdmin();
-
-      const res = await chai.request(app)
-        .post(`${BASE_URL}/picture/${admin._id}`)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(admin)}`)
+    async function requestAddUserPicture(currentUser: IUser, targetUser: IUser) {
+      return await chai.request(app)
+        .post(`${BASE_URL}/picture/${targetUser._id}`)
+        .set('Authorization', `JWT ${JwtUtils.generateToken(currentUser)}`)
         .attach('file', fs.readFileSync('test/resources/test.png'), 'test.png');
+    }
 
+    function assertSuccess(res: request.Response) {
       res.status.should.be.equal(200);
       res.body.profile.picture.should.be.an('object');
       res.body.profile.picture.should.have.all.keys('alias', 'name', 'path');
       res.body.profile.picture.alias.should.be.equal('test.png');
+    }
+
+    it('should upload a new user picture', async () => {
+      const admin = await FixtureUtils.getRandomAdmin();
+      const res = await requestAddUserPicture(admin, admin);
+      assertSuccess(res);
     });
 
     it('should fail to upload a new picture for another user (as student)', async () => {
       const [student, targetUser] = await FixtureUtils.getRandomStudents(2, 2);
-
-      const res = await chai.request(app)
-        .post(`${BASE_URL}/picture/${targetUser._id}`)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(student)}`)
-        .attach('file', fs.readFileSync('test/resources/test.png'), 'test.png');
-
+      const res = await requestAddUserPicture(student, targetUser);
       res.status.should.be.equal(403);
       res.body.name.should.be.equal('ForbiddenError');
       res.body.message.should.be.equal(errorCodes.user.cantChangeUserWithHigherRole.text);
@@ -330,16 +332,8 @@ describe('User', () => {
     it('should upload a new picture for another user (as admin)', async () => {
       const admin = await FixtureUtils.getRandomAdmin();
       const targetUser = await FixtureUtils.getRandomStudent();
-
-      const res = await chai.request(app)
-        .post(`${BASE_URL}/picture/${targetUser._id}`)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(admin)}`)
-        .attach('file', fs.readFileSync('test/resources/test.png'), 'test.png');
-
-      res.status.should.be.equal(200);
-      res.body.profile.picture.should.be.an('object');
-      res.body.profile.picture.should.have.all.keys('alias', 'name', 'path');
-      res.body.profile.picture.alias.should.be.equal('test.png');
+      const res = await requestAddUserPicture(admin, targetUser);
+      assertSuccess(res);
     });
   });
 
