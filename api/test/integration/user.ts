@@ -313,6 +313,19 @@ describe('User', () => {
       res.body.profile.picture.should.have.all.keys('alias', 'name', 'path');
       res.body.profile.picture.alias.should.be.equal('test.png');
     });
+
+    it('should fail to upload a new picture for another user (as student)', async () => {
+      const [student, targetUser] = await FixtureUtils.getRandomStudents(2, 2);
+
+      const res = await chai.request(app)
+        .post(`${BASE_URL}/picture/${targetUser._id}`)
+        .set('Authorization', `JWT ${JwtUtils.generateToken(student)}`)
+        .attach('file', fs.readFileSync('test/resources/test.png'), 'test.png');
+
+      res.status.should.be.equal(403);
+      res.body.name.should.be.equal('ForbiddenError');
+      res.body.message.should.be.equal(errorCodes.user.cantChangeUserWithHigherRole.text);
+    });
   });
 
   describe(`DELETE ${BASE_URL}`, () => {
