@@ -312,14 +312,18 @@ export class UserController {
    *         "id": "5a037e6a60f72236d8e7c81d"
    *     }
    *
+   * @apiError ForbiddenError You don't have the authorization to change a user of this role.
    * @apiError BadRequestError
    */
   @Post('/picture/:id')
   async addUserPicture(
       @UploadedFile('file', {options: uploadOptions}) file: any,
       @Param('id') id: string, @CurrentUser() currentUser: IUser) {
-    // FIXME: This function needs at least some security checks!
     let user = await User.findById(id);
+
+    if (!user.checkEditableBy(currentUser).editAllowed) {
+      throw new ForbiddenError(errorCodes.user.cantChangeUserWithHigherRole.text);
+    }
 
     if (user.profile.picture) {
       const path = user.profile.picture.path;
