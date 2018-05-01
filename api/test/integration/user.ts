@@ -333,6 +333,29 @@ describe('User', () => {
       res.body.message.should.be.equal(errorCodes.user.noOtherAdmins.text);
     });
 
+    it('should (promote a teacher to admin and) let the old admin delete itself', async () => {
+      const admin = await ensureOnlyOneAdmin();
+      const promotedUser = await FixtureUtils.getRandomTeacher();
+      { // Promote the teacher to admin
+        promotedUser.role = 'admin';
+
+        const res = await chai.request(app)
+          .put(`${BASE_URL}/${promotedUser._id}`)
+          .set('Authorization', `JWT ${JwtUtils.generateToken(admin)}`)
+          .send(promotedUser);
+
+        res.status.should.be.equal(200);
+        res.body.role.should.be.equal('admin');
+      }
+      { // Delete the old admin
+        const res = await chai.request(app)
+          .del(`${BASE_URL}/${admin._id}`)
+          .set('Authorization', `JWT ${JwtUtils.generateToken(admin)}`);
+
+        res.status.should.be.equal(200);
+      }
+    });
+
     it('should fail to delete (wrong role)', async () => {
       const teacher = await FixtureUtils.getRandomTeacher();
 
