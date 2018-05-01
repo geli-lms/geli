@@ -88,11 +88,9 @@ export class UserController {
    */
   @Get('/')
   @Authorized(['teacher', 'admin'])
-  getUsers(@CurrentUser() currentUser?: IUser) {
-    return User.find({})
-      .then((users) => {
-        return users.map((user) => this.cleanUserObject(null, user, currentUser));
-      });
+  async getUsers(@CurrentUser() currentUser: IUser) {
+    const users = await User.find();
+    return users.map(user => user.forUser(currentUser));
   }
 
   /**
