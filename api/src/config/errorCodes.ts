@@ -68,6 +68,10 @@ export const errorCodes = {
     invalidPassword: {
       code: 'invalidPassword',
       text: 'Invalid current password!'
+    },
+    noOtherAdmins: {
+      code: 'noOtherAdmins',
+      text: 'There are no other users with admin privileges.'
     }
   },
   whitelist: {
