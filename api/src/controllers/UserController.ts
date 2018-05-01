@@ -494,7 +494,7 @@ export class UserController {
     if (id === currentUser._id) {
       const otherAdmin = await User.findOne({$and: [{'role': 'admin'}, {'_id': {$ne: id}}]});
       if (otherAdmin === null) {
-        throw new BadRequestError('There are no other users with admin privileges.');
+        throw new BadRequestError(errorCodes.user.noOtherAdmins.text);
       }
     }
     await User.findByIdAndRemove(id);

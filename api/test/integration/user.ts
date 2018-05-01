@@ -324,7 +324,7 @@ describe('User', () => {
 
       res.status.should.be.equal(400);
       res.body.name.should.be.equal('BadRequestError');
-      res.body.message.should.be.equal('There are no other users with admin privileges.');
+      res.body.message.should.be.equal(errorCodes.user.noOtherAdmins.text);
     });
 
     it('should fail to delete (wrong role)', async () => {
