@@ -225,10 +225,12 @@ describe('User', () => {
       updatedUser.profile.firstName = 'Updated';
       updatedUser.profile.lastName = 'User';
       updatedUser.email = 'student2@updated.local';
+
       const res = await chai.request(app)
         .put(`${BASE_URL}/${student._id}`)
         .set('Authorization', `JWT ${JwtUtils.generateToken(student)}`)
         .send(updatedUser);
+
       res.status.should.be.equal(200);
       res.body.profile.firstName.should.be.equal('Updated');
       res.body.profile.lastName.should.be.equal('User');
