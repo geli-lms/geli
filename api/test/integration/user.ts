@@ -46,7 +46,7 @@ describe('User', () => {
       res.status.should.be.equal(401);
     });
 
-    it('should return the a user object', async () => {
+    it('should return the requested user object', async () => {
       const admin = await FixtureUtils.getRandomAdmin();
 
       const res = await chai.request(app)
