@@ -1,7 +1,13 @@
-import {IUserSubSafeBase} from './IUserSubSafeBase';
+import {IFile} from './IFile';
 
 /**
- * This interface is no longer required and could be combined with IUserSubSafeBase.
+ * Safe subset of IUser that any logged-in user may see.
  */
-export interface IUserSubSafe extends IUserSubSafeBase {
+export interface IUserSubSafe {
+  _id: any;
+  profile: {
+    firstName: string,
+    lastName: string;
+    picture?: IFile;
+  };
 }

@@ -1,7 +1,6 @@
 import * as mongoose from 'mongoose';
 import * as bcrypt from 'bcrypt';
 import {IUser} from '../../../shared/models/IUser';
-import {IUserSubSafeBase} from '../../../shared/models/IUserSubSafeBase';
 import {IUserSubSafe} from '../../../shared/models/IUserSubSafe';
 import {IUserSubTeacher} from '../../../shared/models/IUserSubTeacher';
 import {NativeError} from 'mongoose';
@@ -31,7 +30,6 @@ interface IUserMongoose extends mongoose.Model<IUserModel> {
   getEditLevelUnsafe: (user: any) => number | undefined;
   checkPrivileges: (user: IUser) => IProperties;
   checkEditUser: (currentUser: IUser, targetUser: IUser) => IProperties;
-  forSafeBase: (user: IUser | IUserModel) => IUserSubSafeBase;
   forSafe: (user: IUser | IUserModel) => IUserSubSafe;
   forTeacher: (user: IUser | IUserModel) => IUserSubTeacher;
   forUser: (user: IUser | IUserModel, otherUser: IUser) => IUserSubSafe | IUserSubTeacher | IUser;
@@ -260,11 +258,11 @@ userSchema.statics.checkEditUser = function (currentUser: IUser, targetUser: IUs
   };
 };
 
-userSchema.statics.forSafeBase = function (user: IUser | IUserModel): IUserSubSafeBase {
+userSchema.statics.forSafe = function (user: IUser | IUserModel): IUserSubSafe {
   const {
     profile: {firstName, lastName}
   } = user;
-  const result: IUserSubSafeBase = {
+  const result: IUserSubSafe = {
     _id: <string>extractMongoId(user._id),
     profile: {firstName, lastName}
   };
@@ -275,16 +273,12 @@ userSchema.statics.forSafeBase = function (user: IUser | IUserModel): IUserSubSa
   return result;
 };
 
-userSchema.statics.forSafe = function (user: IUser | IUserModel): IUserSubSafe {
-  return User.forSafeBase(user);
-};
-
 userSchema.statics.forTeacher = function (user: IUser | IUserModel): IUserSubTeacher {
   const {
     uid, email
   } = user;
   return {
-    ...User.forSafeBase(user),
+    ...User.forSafe(user),
     uid, email
   };
 };
