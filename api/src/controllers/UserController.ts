@@ -285,8 +285,7 @@ export class UserController {
    * @apiGroup User
    *
    * @apiParam {Object} file Uploaded file.
-   * @apiParam {String} id User ID.
-   * @apiParam {Object} data Body.
+   * @apiParam {String} id User target ID.
    * @apiParam {IUser} currentUser Currently logged in user.
    *
    * @apiSuccess {User} user Affected user.
@@ -318,16 +317,17 @@ export class UserController {
   @Post('/picture/:id')
   async addUserPicture(
       @UploadedFile('file', {options: uploadOptions}) file: any,
-      @Param('id') id: string, @Body() data: any,
-      @CurrentUser() currentUser: IUser) {
+      @Param('id') id: string, @CurrentUser() currentUser: IUser) {
     // FIXME: This function needs at least some security checks!
     let user = await User.findById(id);
+
     if (user.profile.picture) {
       const path = user.profile.picture.path;
       if (path && fs.existsSync(path)) {
         fs.unlinkSync(path);
       }
     }
+
     const resizedImageBuffer =
         await sharp(file.path)
             .resize(config.maxProfileImageWidth, config.maxProfileImageHeight)
