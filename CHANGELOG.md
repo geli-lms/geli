@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [NEXT] 
 ### Fixed
+- refactoring of unit-remove-function [#682]
+- fix the pre-hook of unit-model
+
+
+### Fixed
 - Fixed wasteful course data usage #654 via specialized course model interfaces.
 - Fixed a broken documentation link #583.
 - Limited the first- and lastname to 64 characters in registration- and edit page. [#585](https://github.com/h-da/geli/issues/585)
