@@ -33,10 +33,6 @@ export const errorCodes = {
     }
   },
   user: {
-    invalidCurrentUserRole: {
-      code: 'invalidCurrentUserRole',
-      text: 'Invalid current user role.'
-    },
     cantChangeOwnRole: {
       code: 'cantChangeOwnRole',
       text: 'You can\'t change your own role.'

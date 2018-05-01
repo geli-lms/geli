@@ -397,26 +397,15 @@ export class UserController {
    * @apiError ForbiddenError You don't have the authorization to change a user of this role.
    * @apiError ForbiddenError Only users with admin privileges can change roles.
    * @apiError ForbiddenError Only users with admin privileges can change uids.
-   * @apiError InternalServerError Invalid current user role.
    */
   @Authorized(['student', 'teacher', 'admin'])
   @Put('/:id')
   async updateUser(@Param('id') id: string, @Body() newUser: any, @CurrentUser() currentUser: IUser) {
-    // The intent is to only allow updates if the currentUser has a higher "edit level" than the target,
-    // or when the currentUser is an admin or targets itself.
-    const editLevels: {[key: string]: number} = {
-      student: 0,
-      teacher: 1,
-      admin: 2,
-    };
-
-    if (!editLevels.hasOwnProperty(currentUser.role)) {
-      // This should never be possible, due to the @Authorized access restriction.
-      throw new InternalServerError(errorCodes.user.invalidCurrentUserRole.text);
-    }
-    const currentEditLevel: number = editLevels[currentUser.role];
     const selfModification = id === currentUser._id;
-    const {userIsAdmin: currentUserIsAdmin} = User.checkPrivileges(currentUser);
+    const {
+      userIsAdmin: currentUserIsAdmin,
+      userEditLevel: currentEditLevel
+    } = User.checkPrivileges(currentUser);
 
     if (selfModification && currentUser.role !== newUser.role) {
       throw new BadRequestError(errorCodes.user.cantChangeOwnRole.text);
@@ -431,18 +420,14 @@ export class UserController {
     }
 
     const oldUser = await User.findById(id);
-    if (!editLevels.hasOwnProperty(oldUser.role)) {
-      // This should not be possible as long as the editLevels are kept up to date.
-      throw new InternalServerError(errorCodes.user.invalidOldUserRole.text);
-    }
-    const oldEditLevel: number = editLevels[oldUser.role];
+    const {userEditLevel: oldEditLevel} = oldUser.checkPrivileges();
 
     if (oldUser.uid && newUser.uid === null) {
       newUser.uid = oldUser.uid;
     }
     if (oldUser.role && typeof newUser.role === 'undefined') {
       newUser.role = oldUser.role;
-    } else if (!editLevels.hasOwnProperty(newUser.role)) {
+    } else if (typeof User.getEditLevelUnsafe(newUser) === 'undefined') {
       throw new BadRequestError(errorCodes.user.invalidNewUserRole.text);
     }
 

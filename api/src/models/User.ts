@@ -25,6 +25,8 @@ interface IUserModel extends IUser, mongoose.Document {
   isActive: boolean;
 }
 interface IUserMongoose extends mongoose.Model<IUserModel> {
+  getEditLevel: (user: IUser) => number;
+  getEditLevelUnsafe: (user: any) => number | undefined;
   checkPrivileges: (user: IUser) => IProperties;
   forSafeBase: (user: IUser | IUserModel) => IUserSubSafeBase;
   forSafe: (user: IUser | IUserModel) => IUserSubSafe;
@@ -196,6 +198,22 @@ userSchema.methods.forUser = function (otherUser: IUser): IUserSubSafe | IUserSu
   return User.forUser(this, otherUser);
 };
 
+// The idea behind the editLevels is to only allow updates if the currentUser "has a higher level" than the target.
+// (Or when the currentUser is an admin or targets itself.)
+const editLevels: {[key: string]: number} = {
+  student: 0,
+  teacher: 1,
+  admin: 2,
+};
+
+userSchema.statics.getEditLevel = function (user: IUser): number {
+  return editLevels[user.role];
+};
+
+userSchema.statics.getEditLevelUnsafe = function (user: any): number | undefined {
+  return editLevels[user.role];
+};
+
 userSchema.statics.checkPrivileges = function (user: IUser): IProperties {
   const userIsAdmin: boolean = user.role === 'admin';
   const userIsTeacher: boolean = user.role === 'teacher';
@@ -203,7 +221,9 @@ userSchema.statics.checkPrivileges = function (user: IUser): IProperties {
   // NOTE: The 'tutor' role exists and has fixtures, but currently appears to be unimplemented.
   // const userIsTutor: boolean = user.role === 'tutor';
 
-  return {userIsAdmin, userIsTeacher, userIsStudent};
+  const userEditLevel: number = User.getEditLevel(user);
+
+  return {userIsAdmin, userIsTeacher, userIsStudent, userEditLevel};
 };
 
 userSchema.statics.forSafeBase = function (user: IUser | IUserModel): IUserSubSafeBase {
