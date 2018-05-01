@@ -1,7 +1,7 @@
-import {Request} from 'express';
+import {Request, Response} from 'express';
 import {
   Body, Post, JsonController, Req, HttpError, UseBefore, BodyParam, ForbiddenError,
-  InternalServerError, BadRequestError, OnUndefined
+  InternalServerError, BadRequestError, OnUndefined, Res
 } from 'routing-controllers';
 import {json as bodyParserJson} from 'body-parser';
 import passportLoginMiddleware from '../security/passportLoginMiddleware';
@@ -134,6 +134,64 @@ export class AuthController {
       .then((user) => {
         return {success: true};
       });
+  }
+
+
+  /**
+   * @api {post} /api/auth/activationresend Resend Activation
+   * @apiName ActivationResend
+   * @apiGroup Auth
+   *
+   * @apiParam {string} firstname firstname of user which activation should be resend.
+   * @apiParam {string} lastname lastname of user which activation should be resend.
+   * @apiParam {string} uid matriculation number of user which activation should be resend.
+   * @apiParam {string} email email the new activation should be sent to.
+   *
+   * @apiError (BadRequestError) 400 User was not found.
+   * @apiError (BadRequestError) 400 That email address is already in use
+   * @apiError (BadRequestError) 400 User is already activated.
+   * @apiError (HttpError) 503 You can only resend the activation every X minutes. Your next chance is in
+   * time left till next try in 'try-after' header in seconds
+   * @apiError (InternalServerError) Could not send E-Mail
+   */
+  @Post('/activationresend')
+  @OnUndefined(204)
+  async activationResend (@BodyParam('firstname') firstname: string,
+                                      @BodyParam('lastname') lastname: string,
+                                      @BodyParam('uid') uid: string,
+                                      @BodyParam('email') email: string,
+                                      @Res() response: Response) {
+        const user = await User.findOne({'profile.firstName': firstname, 'profile.lastName': lastname, uid: uid, role: 'student'});
+
+        if (!user) {
+          throw new BadRequestError(errorCodes.errorCodes.user.userNotFound.code);
+        }
+
+        if (user.isActive) {
+          throw new BadRequestError(errorCodes.errorCodes.user.userAlreadyActive.code);
+        }
+
+        const timeSinceUpdate: number = (Date.now() - user.updatedAt.getTime() ) / 60000;
+        if (timeSinceUpdate < Number(config.timeTilNextActivationResendMin)) {
+          const retryAfter: number = (Number(config.timeTilNextActivationResendMin) - timeSinceUpdate) * 60;
+          response.set('retry-after', retryAfter.toString());
+          throw new HttpError(503, errorCodes.errorCodes.user.retryAfter.code);
+        }
+
+        const existingUser = await User.findOne({email: email});
+        if (existingUser && existingUser.uid !== uid) {
+          throw new BadRequestError(errorCodes.errorCodes.mail.duplicate.code);
+        }
+
+        user.authenticationToken = undefined;
+        user.email = email;
+        const savedUser = await user.save();
+
+        try {
+          await emailService.resendActivation(savedUser);
+        } catch (err) {
+          throw new InternalServerError(err.toString());
+        }
   }
 
   /**
