@@ -97,6 +97,8 @@ export class UserController {
    * @api {get} /api/users/members/search Request users with certain role and query
    * @apiName SearchUser
    * @apiGroup User
+   * @apiPermission teacher
+   * @apiPermission admin
    *
    * @apiParam {String="student","teacher"} role User role.
    * @apiParam {String} query Query string.
@@ -173,7 +175,10 @@ export class UserController {
    * @apiError BadRequestError Query was empty.
    */
   @Get('/members/search') // members/search because of conflict with /:id
-  async searchUser(@QueryParam('role') role: string, @QueryParam('query') query: string, @QueryParam('limit') limit?: number) {
+  @Authorized(['teacher', 'admin'])
+  async searchUser(
+      @CurrentUser() currentUser: IUser, @QueryParam('role') role: string,
+      @QueryParam('query') query: string, @QueryParam('limit') limit?: number) {
     if (role !== 'student' && role !== 'teacher') {
       throw new BadRequestError('Method not allowed for this role.');
     }
@@ -200,7 +205,7 @@ export class UserController {
       .limit(limit ? limit : Number.MAX_SAFE_INTEGER)
       .sort({'score': {$meta: 'textScore'}});
     return {
-      users: users.map((user) => user.toObject({virtuals: true})),
+      users: users.map(user => user.forUser(currentUser)),
       meta: {
         count: amountUsers
       }
