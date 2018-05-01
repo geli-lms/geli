@@ -522,30 +522,31 @@ export class CourseController {
   async enrollStudent(@Param('id') id: string, @Body() data: any, @CurrentUser() currentUser: IUser) {
     let course = await Course.findById(id);
     if (!course) {
-          throw new NotFoundError();
-        }
-        if (course.enrollType === 'whitelist') {
-        const wUsers: IWhitelistUser[] = await  WhitelistUser.find().where({courseId: course._id});
-            if (wUsers.filter(e =>
-                e.firstName === currentUser.profile.firstName.toLowerCase()
-                && e.lastName === currentUser.profile.lastName.toLowerCase()
-                && e.uid === currentUser.uid).length <= 0) {
-              throw new ForbiddenError(errorCodes.course.notOnWhitelist.code);
-            }
-        } else if (course.accessKey && course.accessKey !== data.accessKey) {
-          throw new ForbiddenError(errorCodes.course.accessKey.code);
-        }
+      throw new NotFoundError();
+    }
+    if (course.enrollType === 'whitelist') {
+      const wUsers: IWhitelistUser[] = await  WhitelistUser.find().where({courseId: course._id});
+      if (wUsers.filter(e =>
+          e.firstName === currentUser.profile.firstName.toLowerCase()
+          && e.lastName === currentUser.profile.lastName.toLowerCase()
+          && e.uid === currentUser.uid).length <= 0) {
+        throw new ForbiddenError(errorCodes.course.notOnWhitelist.code);
+      }
+    } else if (course.accessKey && course.accessKey !== data.accessKey) {
+      throw new ForbiddenError(errorCodes.course.accessKey.code);
+    }
 
-        if (course.students.indexOf(currentUser._id) < 0) {
-          course.students.push(currentUser);
-          await new NotificationSettings({
-            'user': currentUser, 'course': course,
-            'notificationType': API_NOTIFICATION_TYPE_ALL_CHANGES,
-            'emailNotification': false
-          }).save();
-          course = await course.save();
-        }
-        return course.toObject();
+    if (course.students.indexOf(currentUser._id) < 0) {
+      course.students.push(currentUser);
+      await new NotificationSettings({
+        'user': currentUser,
+        'course': course,
+        'notificationType': API_NOTIFICATION_TYPE_ALL_CHANGES,
+        'emailNotification': false
+      }).save();
+      course = await course.save();
+    }
+    return course.toObject();
   }
 
   /**
