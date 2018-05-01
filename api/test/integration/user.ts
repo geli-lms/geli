@@ -326,6 +326,21 @@ describe('User', () => {
       res.body.name.should.be.equal('ForbiddenError');
       res.body.message.should.be.equal(errorCodes.user.cantChangeUserWithHigherRole.text);
     });
+
+    it('should upload a new picture for another user (as admin)', async () => {
+      const admin = await FixtureUtils.getRandomAdmin();
+      const targetUser = await FixtureUtils.getRandomStudent();
+
+      const res = await chai.request(app)
+        .post(`${BASE_URL}/picture/${targetUser._id}`)
+        .set('Authorization', `JWT ${JwtUtils.generateToken(admin)}`)
+        .attach('file', fs.readFileSync('test/resources/test.png'), 'test.png');
+
+      res.status.should.be.equal(200);
+      res.body.profile.picture.should.be.an('object');
+      res.body.profile.picture.should.have.all.keys('alias', 'name', 'path');
+      res.body.profile.picture.alias.should.be.equal('test.png');
+    });
   });
 
   describe(`DELETE ${BASE_URL}`, () => {
