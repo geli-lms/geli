@@ -167,36 +167,17 @@ describe('User', () => {
 
       res.status.should.be.equal(400);
       res.body.name.should.be.equal('BadRequestError');
-      res.body.message.should.be.equal('You can\'t revoke your own admin privileges.');
-    });
-
-    it('should fail with wrong authorization (uid)', (done) => {
-      User.findOne({email: 'teacher1@test.local'})
-        .then((user) => {
-          const updatedUser = user;
-          updatedUser.uid = '987456';
-          chai.request(app)
-            .put(`${BASE_URL}/${user._id}`)
-            .set('Authorization', `JWT ${JwtUtils.generateToken(user)}`)
-            .send(updatedUser)
-            .end((err, res) => {
-              res.status.should.be.equal(403);
-              res.body.name.should.be.equal('ForbiddenError');
-              res.body.message.should.be.equal('Only users with admin privileges can change uids.');
-              done();
-            });
-        })
-        .catch(done);
+      res.body.message.should.be.equal('You can\'t change your own role.');
     });
 
     it('should fail with bad request (email already in use)', async () => {
-      const users = await FixtureUtils.getRandomUsers(2, 2);
-      const updatedUser = users[0];
-      updatedUser.email = users[1].email;
+      const admin = await FixtureUtils.getRandomAdmin();
+      const updatedUser = await FixtureUtils.getRandomStudent();
+      updatedUser.email = admin.email;
 
       const res = await chai.request(app)
-        .put(`${BASE_URL}/${users[0]._id}`)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(users[0])}`)
+        .put(`${BASE_URL}/${updatedUser._id}`)
+        .set('Authorization', `JWT ${JwtUtils.generateToken(admin)}`)
         .send(updatedUser)
         .catch(err => err.response);
 
@@ -205,29 +186,29 @@ describe('User', () => {
       res.body.message.should.be.equal('This email address is already in use.');
     });
 
-    it('should fail with wrong authorization (role edit)', async () => {
+    it('should fail changing other user\'s uid with wrong authorization (not admin)', async () => {
       const teacher = await FixtureUtils.getRandomTeacher();
-      const updatedUser = teacher;
-      updatedUser.role = 'admin';
+      const updatedUser = await FixtureUtils.getRandomStudent();
+      updatedUser.uid = '987456';
 
       const res = await chai.request(app)
-        .put(`${BASE_URL}/${teacher._id}`)
+        .put(`${BASE_URL}/${updatedUser._id}`)
         .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
         .send(updatedUser)
         .catch(err => err.response);
 
       res.status.should.be.equal(403);
       res.body.name.should.be.equal('ForbiddenError');
-      res.body.message.should.be.equal('Only users with admin privileges can change roles.');
+      res.body.message.should.be.equal('Only users with admin privileges can change uids.');
     });
 
-    it('should fail with wrong authorization (uid)', async () => {
+    it('should fail with wrong authorization (uid) - other user', async () => {
       const teacher = await FixtureUtils.getRandomTeacher();
-      const updatedUser = teacher;
+      const updatedUser = await FixtureUtils.getRandomStudent();
       updatedUser.uid = '987456';
 
       const res = await chai.request(app)
-        .put(`${BASE_URL}/${teacher._id}`)
+        .put(`${BASE_URL}/${updatedUser._id}`)
         .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
         .send(updatedUser)
         .catch(err => err.response);

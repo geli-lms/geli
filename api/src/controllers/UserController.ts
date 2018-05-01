@@ -353,6 +353,9 @@ export class UserController {
    * @api {put} /api/users/:id Update user
    * @apiName PutUser
    * @apiGroup User
+   * @apiPermission student
+   * @apiPermission teacher
+   * @apiPermission admin
    *
    * @apiParam {String} id User ID.
    * @apiParam {Object} user New user data.
@@ -382,24 +385,39 @@ export class UserController {
    *         "id": "5a037e6a60f72236d8e7c81d"
    *     }
    *
-   * @apiError BadRequestError You can't revoke your own privileges.
-   * @apiError BadRequestError This mail address is already in use.
-   * @apiError BadRequestError Invalid Current Password!
+   * @apiError BadRequestError Invalid update role.
+   * @apiError BadRequestError You can't change your own role.
+   * @apiError BadRequestError This email address is already in use.
+   * @apiError BadRequestError Invalid current password!
+   * @apiError ForbiddenError You don't have the authorization to change a user of this role.
    * @apiError ForbiddenError Only users with admin privileges can change roles.
    * @apiError ForbiddenError Only users with admin privileges can change uids.
+   * @apiError InternalServerError Invalid current user role.
    */
+  @Authorized(['student', 'teacher', 'admin'])
   @Put('/:id')
   async updateUser(@Param('id') id: string, @Body() newUser: any, @CurrentUser() currentUser: IUser) {
-    const {userIsAdmin: currentUserIsAdmin} = User.checkPrivileges(currentUser);
-    const selfModification = id === currentUser._id;
+    // The intent is to only allow updates if the currentUser has a higher "edit level" than the target,
+    // or when the currentUser is an admin or targets itself.
+    const editLevels: {[key: string]: number} = {
+      student: 0,
+      teacher: 1,
+      admin: 2,
+    };
 
-    if (selfModification) {
-      if (currentUserIsAdmin && newUser.role !== 'admin') {
-        // TODO: Maybe extend that to generally forbid self-demotion?
-        throw new BadRequestError('You can\'t revoke your own admin privileges.');
-      }
-    } else if (!currentUserIsAdmin) {
-      throw new ForbiddenError('Only administrators can update someone else\'s user data.');
+    if (!editLevels.hasOwnProperty(newUser.role)) {
+      throw new BadRequestError('Invalid update role.');
+    }
+    if (!editLevels.hasOwnProperty(currentUser.role)) {
+      // This should never be possible, due to the @Authorized access restriction.
+      throw new InternalServerError('Invalid current user role.');
+    }
+    const currentEditLevel: number = editLevels[currentUser.role];
+    const selfModification = id === currentUser._id;
+    const {userIsAdmin: currentUserIsAdmin} = User.checkPrivileges(currentUser);
+
+    if (selfModification && currentUser.role !== newUser.role) {
+      throw new BadRequestError('You can\'t change your own role.');
     }
 
     {
@@ -411,7 +429,16 @@ export class UserController {
     }
 
     const oldUser = await User.findById(id);
+    if (!editLevels.hasOwnProperty(oldUser.role)) {
+      // This should not be possible as long as the editLevels are kept up to date.
+      throw new InternalServerError('Invalid old user role.');
+    }
+    const oldEditLevel: number = editLevels[oldUser.role];
+
     if (!currentUserIsAdmin) {
+      if (currentEditLevel <= oldEditLevel && !selfModification) {
+        throw new ForbiddenError('You don\'t have the authorization to change a user of this role.');
+      }
       if (newUser.role !== oldUser.role) {
         throw new ForbiddenError('Only users with admin privileges can change roles.');
       }
@@ -423,16 +450,16 @@ export class UserController {
       newUser.uid = oldUser.uid;
     }
 
-    const isValidPassword = await oldUser.isValidPassword(newUser.currentPassword);
-    if (typeof newUser.password !== 'undefined') {
-      if (newUser.password.length === 0) {
-        delete newUser.password;
-      } else if (!(currentUserIsAdmin && !selfModification) && !isValidPassword) {
+    if (typeof newUser.password === 'undefined' || newUser.password.length === 0) {
+      delete newUser.password;
+    } else {
+      const isValidPassword = await oldUser.isValidPassword(newUser.currentPassword);
+      if (!isValidPassword) {
         throw new BadRequestError('Invalid current password!');
       }
     }
-    // TODO: Executing findOneAndUpdate if no new password is given without checking isValidPassword seems flawed.
-    const updatedUser = await User.findOneAndUpdate({'_id': id}, newUser, {new: true});
+
+    const updatedUser = await User.findOneAndUpdate({_id: id}, newUser, {new: true});
     return updatedUser.forUser(currentUser);
   }
 
