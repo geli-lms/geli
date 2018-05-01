@@ -395,6 +395,7 @@ export class UserController {
         if (id === currentUser._id
           && currentUser.role === 'admin'
           && user.role !== 'admin') {
+          // TODO: Maybe extend that to generally forbid self-demotion?
           throw new BadRequestError('You can\'t revoke your own privileges');
         } else {
           return User.find({$and: [{'email': user.email}, {'_id': {$ne: user._id}}]});
@@ -431,6 +432,7 @@ export class UserController {
             return User.findOneAndUpdate({'_id': id}, user, {new: true});
           }
         } else {
+          // TODO: Executing findOneAndUpdate if no new password is given without checking isValidPassword seems flawed.
           return User.findOneAndUpdate({'_id': id}, user, {new: true});
         }
       })
