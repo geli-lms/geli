@@ -314,8 +314,14 @@ describe('User', () => {
   });
 
   describe(`DELETE ${BASE_URL}`, () => {
+    async function ensureOnlyOneAdmin() {
+      const admins = await FixtureUtils.getRandomAdmins(1, 2);
+      admins.length.should.be.eq(1);
+      return admins[0];
+    }
+
     it('should fail to delete the only admin', async () => {
-      const admin = await FixtureUtils.getRandomAdmin();
+      const admin = await ensureOnlyOneAdmin();
 
       const res = await chai.request(app)
         .del(`${BASE_URL}/${admin._id}`)
