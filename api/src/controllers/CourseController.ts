@@ -569,11 +569,10 @@ export class CourseController {
    * @apiParam {String} id Course ID.
    * @apiParam {Object} file Uploaded file.
    *
-   * @apiSuccess {Course} course Updated course.
+   * @apiSuccess {Object} result Returns the new whitelist length.
    *
    * @apiSuccessExample {json} Success-Response:
    *    {
-   *      success: true,
    *      newlength: 10
    *    }
    *
@@ -602,7 +601,7 @@ export class CourseController {
     const buffer = <string> await this.parser.parseFile(file);
     await this.parser.updateCourseFromBuffer(buffer, course);
     await course.save();
-    return {success: true, newlength: course.whitelist.length};
+    return {newlength: course.whitelist.length};
   }
 
   /**
