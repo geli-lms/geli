@@ -389,56 +389,51 @@ export class UserController {
    * @apiError ForbiddenError Only users with admin privileges can change uids.
    */
   @Put('/:id')
-  updateUser(@Param('id') id: string, @Body() user: any, @CurrentUser() currentUser?: IUser) {
-    return User.find({'role': 'admin'})
-      .then((adminUsers) => {
-        if (id === currentUser._id
-          && currentUser.role === 'admin'
-          && user.role !== 'admin') {
-          // TODO: Maybe extend that to generally forbid self-demotion?
-          throw new BadRequestError('You can\'t revoke your own privileges');
-        } else {
-          return User.find({$and: [{'email': user.email}, {'_id': {$ne: user._id}}]});
-        }
-      })
-      .then((emailInUse) => {
-        if (emailInUse.length > 0) {
-          throw new BadRequestError('This mail address is already in use.');
-        } else {
-          return User.findById(id);
-        }
-      })
-      .then((oldUser: IUserModel) => {
-        if (user.role !== oldUser.role && currentUser.role !== 'admin') {
-          throw new ForbiddenError('Only users with admin privileges can change roles');
-        } else if (user.uid !== oldUser.uid && currentUser.role !== 'admin') {
-          throw new ForbiddenError('Only users with admin privileges can change uids');
-        } else {
-          if (oldUser.uid && user.uid === null) {
-            user.uid = oldUser.uid;
-          }
+  async updateUser(@Param('id') id: string, @Body() newUser: any, @CurrentUser() currentUser: IUser) {
+    const {userIsAdmin: currentUserIsAdmin} = User.checkPrivileges(currentUser);
+    const selfModification = id === currentUser._id;
 
-          return oldUser.isValidPassword(user.currentPassword);
-        }
-      })
-      .then((isValidPassword) => {
-        if (typeof user.password !== 'undefined') {
-          if (!(currentUser.role === 'admin' && currentUser._id !== user._id) && !isValidPassword && user.password.length > 0) {
-            throw new BadRequestError('Invalid Current Password!');
-          } else {
-            if (user.password.length === 0) {
-              delete user.password;
-            }
-            return User.findOneAndUpdate({'_id': id}, user, {new: true});
-          }
-        } else {
-          // TODO: Executing findOneAndUpdate if no new password is given without checking isValidPassword seems flawed.
-          return User.findOneAndUpdate({'_id': id}, user, {new: true});
-        }
-      })
-      .then((updatedUser) => {
-        return updatedUser.toObject({virtuals: true});
-      });
+    if (selfModification) {
+      if (currentUserIsAdmin && newUser.role !== 'admin') {
+        // TODO: Maybe extend that to generally forbid self-demotion?
+        throw new BadRequestError('You can\'t revoke your own admin privileges.');
+      }
+    } else if (!currentUserIsAdmin) {
+      throw new ForbiddenError('Only administrators can update someone else\'s user data.');
+    }
+
+    {
+      const sameEmail = {$and: [{'email': newUser.email}, {'_id': {$ne: newUser._id}}]};
+      const users = await User.find(sameEmail).limit(1);
+      if (users.length > 0) {
+        throw new BadRequestError('This email address is already in use.');
+      }
+    }
+
+    const oldUser = await User.findById(id);
+    if (!currentUserIsAdmin) {
+      if (newUser.role !== oldUser.role) {
+        throw new ForbiddenError('Only users with admin privileges can change roles.');
+      }
+      if (newUser.uid !== oldUser.uid) {
+        throw new ForbiddenError('Only users with admin privileges can change uids.');
+      }
+    }
+    if (oldUser.uid && newUser.uid === null) {
+      newUser.uid = oldUser.uid;
+    }
+
+    const isValidPassword = await oldUser.isValidPassword(newUser.currentPassword);
+    if (typeof newUser.password !== 'undefined') {
+      if (newUser.password.length === 0) {
+        delete newUser.password;
+      } else if (!(currentUserIsAdmin && !selfModification) && !isValidPassword) {
+        throw new BadRequestError('Invalid current password!');
+      }
+    }
+    // TODO: Executing findOneAndUpdate if no new password is given without checking isValidPassword seems flawed.
+    const updatedUser = await User.findOneAndUpdate({'_id': id}, newUser, {new: true});
+    return updatedUser.forUser(currentUser);
   }
 
   /**

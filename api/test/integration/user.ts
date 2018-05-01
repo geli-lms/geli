@@ -167,7 +167,7 @@ describe('User', () => {
 
       res.status.should.be.equal(400);
       res.body.name.should.be.equal('BadRequestError');
-      res.body.message.should.be.equal('You can\'t revoke your own privileges');
+      res.body.message.should.be.equal('You can\'t revoke your own admin privileges.');
     });
 
     it('should fail with wrong authorization (uid)', (done) => {
@@ -182,7 +182,7 @@ describe('User', () => {
             .end((err, res) => {
               res.status.should.be.equal(403);
               res.body.name.should.be.equal('ForbiddenError');
-              res.body.message.should.be.equal('Only users with admin privileges can change uids');
+              res.body.message.should.be.equal('Only users with admin privileges can change uids.');
               done();
             });
         })
@@ -202,7 +202,7 @@ describe('User', () => {
 
       res.status.should.be.equal(400);
       res.body.name.should.be.equal('BadRequestError');
-      res.body.message.should.be.equal('This mail address is already in use.');
+      res.body.message.should.be.equal('This email address is already in use.');
     });
 
     it('should fail with wrong authorization (role edit)', async () => {
@@ -218,7 +218,7 @@ describe('User', () => {
 
       res.status.should.be.equal(403);
       res.body.name.should.be.equal('ForbiddenError');
-      res.body.message.should.be.equal('Only users with admin privileges can change roles');
+      res.body.message.should.be.equal('Only users with admin privileges can change roles.');
     });
 
     it('should fail with wrong authorization (uid)', async () => {
@@ -234,7 +234,7 @@ describe('User', () => {
 
       res.status.should.be.equal(403);
       res.body.name.should.be.equal('ForbiddenError');
-      res.body.message.should.be.equal('Only users with admin privileges can change uids');
+      res.body.message.should.be.equal('Only users with admin privileges can change uids.');
     });
 
     it('should update user base data without password', async () => {
