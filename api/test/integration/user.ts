@@ -202,6 +202,21 @@ describe('User', () => {
       res.body.message.should.be.equal('Only users with admin privileges can change uids.');
     });
 
+    it('should fail changing other user\'s name with wrong authorization (low edit level)', async () => {
+      const [student, updatedUser] = await FixtureUtils.getRandomStudents(2, 2);
+      updatedUser.profile.firstName = 'TEST';
+
+      const res = await chai.request(app)
+        .put(`${BASE_URL}/${updatedUser._id}`)
+        .set('Authorization', `JWT ${JwtUtils.generateToken(student)}`)
+        .send(updatedUser)
+        .catch(err => err.response);
+
+      res.status.should.be.equal(403);
+      res.body.name.should.be.equal('ForbiddenError');
+      res.body.message.should.be.equal('You don\'t have the authorization to change a user of this role.');
+    });
+
     it('should fail with wrong authorization (uid) - other user', async () => {
       const teacher = await FixtureUtils.getRandomTeacher();
       const updatedUser = await FixtureUtils.getRandomStudent();
