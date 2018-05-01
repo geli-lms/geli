@@ -490,19 +490,14 @@ export class UserController {
    */
   @Authorized('admin')
   @Delete('/:id')
-  deleteUser(@Param('id') id: string) {
-    return User.find({'role': 'admin'})
-      .then((adminUsers) => {
-        if (adminUsers.length === 1 &&
-          adminUsers[0].get('id') === id &&
-          adminUsers[0].role === 'admin') {
-          throw new BadRequestError('There are no other users with admin privileges.');
-        } else {
-          return User.findByIdAndRemove(id);
-        }
-      })
-      .then(() => {
-        return {result: true};
-      });
+  async deleteUser(@Param('id') id: string) {
+    const adminUsers = await User.find({'role': 'admin'});
+    if (adminUsers.length === 1 &&
+      adminUsers[0].get('id') === id &&
+      adminUsers[0].role === 'admin') {
+      throw new BadRequestError('There are no other users with admin privileges.');
+    }
+    await User.findByIdAndRemove(id);
+    return {result: true};
   }
 }
