@@ -16,6 +16,7 @@ import {ensureMongoToObject} from '../utilities/EnsureMongoToObject';
 interface IUserModel extends IUser, mongoose.Document {
   isValidPassword: (candidatePassword: string) => Promise<boolean>;
   checkPrivileges: () => IProperties;
+  checkEditUser: (targetUser: IUser) => IProperties;
   forSafe: () => IUserSubSafe;
   forTeacher: () => IUserSubTeacher;
   forUser: (otherUser: IUser) => IUserSubSafe | IUserSubTeacher | IUser;
@@ -185,6 +186,10 @@ userSchema.methods.isValidPassword = function (candidatePassword: string) {
 
 userSchema.methods.checkPrivileges = function (): IProperties {
   return User.checkPrivileges(this);
+};
+
+userSchema.methods.checkEditUser = function (targetUser: IUser): IProperties {
+  return User.checkEditUser(this, targetUser);
 };
 
 userSchema.methods.forSafe = function (): IUserSubSafe {
