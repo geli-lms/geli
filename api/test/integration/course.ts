@@ -229,7 +229,6 @@ describe('Course', () => {
         .send(testDataUpdate);
 
       res.should.have.status(200);
-      res.body.success.should.be.eq(true);
       res.body.name.should.be.eq(testDataUpdate.name);
       res.body._id.should.be.eq(testDataUpdate.id);
 

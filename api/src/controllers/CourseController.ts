@@ -615,13 +615,12 @@ export class CourseController {
    * @apiParam {ICourse} course New course data.
    * @apiParam {IUser} currentUser Currently logged in user.
    *
-   * @apiSuccess {Course} course Updated course.
+   * @apiSuccess {Object} result ID and name of the course.
    *
    * @apiSuccessExample {json} Success-Response:
    *    {
    *      _id: "5a037e6b60f72236d8e7c83d",
-   *      name: "Introduction to web development",
-   *      success: true
+   *      name: "Introduction to web development"
    *    }
    *
    * @apiError NotFoundError Can't find the course. (Includes implicit authorization check.)
@@ -638,7 +637,7 @@ export class CourseController {
     }
     const updatedCourse = await Course.findOneAndUpdate(conditions, course, {'new': true});
     if (updatedCourse) {
-      return {_id: updatedCourse.id, name: updatedCourse.name, success: true};
+      return {_id: updatedCourse.id, name: updatedCourse.name};
     } else {
       throw new NotFoundError();
     }
