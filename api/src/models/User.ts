@@ -17,6 +17,7 @@ interface IUserModel extends IUser, mongoose.Document {
   isValidPassword: (candidatePassword: string) => Promise<boolean>;
   checkPrivileges: () => IProperties;
   checkEditUser: (targetUser: IUser) => IProperties;
+  checkEditableBy: (currentUser: IUser) => IProperties;
   forSafe: () => IUserSubSafe;
   forTeacher: () => IUserSubTeacher;
   forUser: (otherUser: IUser) => IUserSubSafe | IUserSubTeacher | IUser;
@@ -190,6 +191,10 @@ userSchema.methods.checkPrivileges = function (): IProperties {
 
 userSchema.methods.checkEditUser = function (targetUser: IUser): IProperties {
   return User.checkEditUser(this, targetUser);
+};
+
+userSchema.methods.checkEditableBy = function (currentUser: IUser): IProperties {
+  return User.checkEditUser(currentUser, this);
 };
 
 userSchema.methods.forSafe = function (): IUserSubSafe {
