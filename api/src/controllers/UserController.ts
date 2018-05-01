@@ -316,37 +316,41 @@ export class UserController {
    * @apiError BadRequestError
    */
   @Post('/picture/:id')
-   addUserPicture(@UploadedFile('file', {options: uploadOptions}) file: any, @Param('id') id: string, @Body()
-    data: any, @CurrentUser() currentUser: IUser) {
-    return User.findById(id)
-      .then(async (user: IUserModel) =>  {
-        if (user.profile.picture && user.profile.picture.path && fs.existsSync(user.profile.picture.path)) {
-          fs.unlinkSync(user.profile.picture.path);
-        }
+  async addUserPicture(
+      @UploadedFile('file', {options: uploadOptions}) file: any,
+      @Param('id') id: string, @Body() data: any,
+      @CurrentUser() currentUser: IUser) {
+    let user = await User.findById(id);
+    if (user.profile.picture) {
+      const path = user.profile.picture.path;
+      if (path && fs.existsSync(path)) {
+        fs.unlinkSync(path);
+      }
+    }
+    const resizedImageBuffer =
+        await sharp(file.path)
+            .resize(config.maxProfileImageWidth, config.maxProfileImageHeight)
+            .withoutEnlargement(true)
+            .max()
+            .toBuffer({resolveWithObject: true});
 
-        const resizedImageBuffer = await sharp(file.path)
-          .resize(config.maxProfileImageWidth, config.maxProfileImageHeight)
-          .withoutEnlargement(true)
-          .max()
-          .toBuffer({resolveWithObject: true});
+    fs.writeFileSync(file.path, resizedImageBuffer.data);
 
-        fs.writeFileSync(file.path, resizedImageBuffer.data);
+    user.profile.picture = {
+      _id: null,
+      name: file.filename,
+      alias: file.originalname,
+      path: file.path,
+      size: resizedImageBuffer.info.size
+    };
 
-        user.profile.picture = {
-          _id: null,
-          name: file.filename,
-          alias: file.originalname,
-          path: file.path,
-          size: resizedImageBuffer.info.size
-        };
-        return user.save();
-      })
-      .then((user) => {
-        return this.cleanUserObject(id, user, currentUser);
-      })
-      .catch((error) => {
-        throw new BadRequestError(error);
-      });
+    try {
+      user = await user.save();
+    } catch (error) {
+      throw new BadRequestError(error);
+    }
+
+    return user.forUser(currentUser);
   }
 
   /**
