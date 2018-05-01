@@ -420,7 +420,10 @@ export class UserController {
     }
 
     const oldUser = await User.findById(id);
-    const {userEditLevel: oldEditLevel} = oldUser.checkPrivileges();
+
+    if (!User.checkEditUser(currentUser, oldUser).editAllowed) {
+      throw new ForbiddenError(errorCodes.user.cantChangeUserWithHigherRole.text);
+    }
 
     if (oldUser.uid && newUser.uid === null) {
       newUser.uid = oldUser.uid;
@@ -432,9 +435,6 @@ export class UserController {
     }
 
     if (!currentUserIsAdmin) {
-      if (currentEditLevel <= oldEditLevel && !selfModification) {
-        throw new ForbiddenError(errorCodes.user.cantChangeUserWithHigherRole.text);
-      }
       if (newUser.role !== oldUser.role) {
         throw new ForbiddenError(errorCodes.user.onlyAdminsCanChangeRoles.text);
       }
