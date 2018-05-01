@@ -28,6 +28,7 @@ interface IUserMongoose extends mongoose.Model<IUserModel> {
   getEditLevel: (user: IUser) => number;
   getEditLevelUnsafe: (user: any) => number | undefined;
   checkPrivileges: (user: IUser) => IProperties;
+  checkEditUser: (currentUser: IUser, targetUser: IUser) => IProperties;
   forSafeBase: (user: IUser | IUserModel) => IUserSubSafeBase;
   forSafe: (user: IUser | IUserModel) => IUserSubSafe;
   forTeacher: (user: IUser | IUserModel) => IUserSubTeacher;
@@ -224,6 +225,29 @@ userSchema.statics.checkPrivileges = function (user: IUser): IProperties {
   const userEditLevel: number = User.getEditLevel(user);
 
   return {userIsAdmin, userIsTeacher, userIsStudent, userEditLevel};
+};
+
+userSchema.statics.checkEditUser = function (currentUser: IUser, targetUser: IUser): IProperties {
+  const {userIsAdmin} = User.checkPrivileges(currentUser);
+
+  const currentEditLevel = User.getEditLevel(currentUser);
+  const targetEditLevel = User.getEditLevel(targetUser);
+
+  const editSelf = extractMongoId(currentUser._id) === extractMongoId(targetUser._id);
+  const editLevelHigher = currentEditLevel > targetEditLevel;
+
+  // Note that editAllowed only means authorization to edit SOME (herein unspecified) properties.
+  // If false, it serves as a definite indicator that absolutely NO edit access is to be granted,
+  // but if true, it by itself is not enough information to know what exactly is allowed.
+  // (I.e. it DOES NOT mean unrestricted editing capabilties.)
+  const editAllowed = userIsAdmin || editSelf || editLevelHigher;
+
+  return {
+    userIsAdmin,
+    currentEditLevel, targetEditLevel,
+    editSelf, editLevelHigher,
+    editAllowed
+  };
 };
 
 userSchema.statics.forSafeBase = function (user: IUser | IUserModel): IUserSubSafeBase {
