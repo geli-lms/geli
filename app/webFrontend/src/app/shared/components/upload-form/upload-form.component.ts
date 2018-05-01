@@ -1,6 +1,7 @@
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {FileUploader, FileUploaderOptions} from 'ng2-file-upload';
 import {MatSnackBar} from '@angular/material';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-upload-form',
@@ -43,7 +44,8 @@ export class UploadFormComponent implements OnInit, OnChanges {
   private updateUploadParams = false;
   private error = false;
 
-  constructor(private snackBar: MatSnackBar) {
+  constructor(private snackBar: MatSnackBar,
+              private translate: TranslateService) {
   }
 
   ngOnInit() {
@@ -146,9 +148,14 @@ export class UploadFormComponent implements OnInit, OnChanges {
       this.hasDropZoneOver = event;
   }
 
-    public onInputChange() {
-      if (this.fileUploader.queue.length === 0) {
-          this.snackBar.open('Couldn\'t upload file.', 'Dismiss');
+    public checkMimeTypeOfFile(event) {
+      if (this.uploadSingleFile && this.fileUploader.queue.length === 0) {
+          const fileType = event.target.files[0];
+          if(fileType === '' || this.allowedMimeTypes.findIndex(item => item === fileType) === -1) {
+            this.translate.get(['common.validation.wrong_mimeType', 'common.dismiss']).subscribe((t: string) => {
+                this.snackBar.open(t['common.validation.wrong_mimeType'], t['common.dismiss']);
+            });
+          }
       }
     }
 }

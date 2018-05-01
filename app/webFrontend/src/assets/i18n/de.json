@@ -23,7 +23,8 @@
       "invalid": "Keine gültige Eingabe",
       "password": "Passwörter müssen aus mindestens 8 Zeichen, inklusive einem Sonderzeichen und einer Ziffer bestehen",
       "passwordsMatch": "Die Passwörter stimmen nicht überein",
-      "instituteMail": "Bitte nutzen Sie Ihre Instituts-Email"
+      "instituteMail": "Bitte nutzen Sie Ihre Instituts-Email",
+      "wrong_mimeType": "Falsches Dateiformat. Es sind nur Bilder erlaubt!"
     }
   },
   "home": {

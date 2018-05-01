@@ -10,7 +10,7 @@
            [uploader]="fileUploader"
            placeholder="Upload files"
            [multiple]="maxFileNumber !== 1"
-           (change)="onInputChange()"
+           (change)="checkMimeTypeOfFile($event)"
            hidden
     />
   </label>

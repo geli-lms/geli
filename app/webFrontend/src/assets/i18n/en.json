@@ -23,7 +23,8 @@
       "invalid": "Input is invalid",
       "password": "Password must have at least 8 characters which contain one special character or digit",
       "passwordsMatch": "Passwords do not match",
-      "instituteMail": "Please register with your institute email"
+      "instituteMail": "Please register with your institute email",
+      "wrong_mimeType": "Wrong filetype. Only image types are allowed!"
     }
   },
   "home": {
