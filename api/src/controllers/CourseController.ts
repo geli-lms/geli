@@ -651,12 +651,10 @@ export class CourseController {
    * @apiParam {String} id Course ID.
    * @apiParam {IUser} currentUser Currently logged in user.
    *
-   * @apiSuccess {Boolean} result Confirmation of deletion.
+   * @apiSuccess {{}} result Empty object.
    *
    * @apiSuccessExample {json} Success-Response:
-   *     {
-   *         "result": true
-   *     }
+   *      {}
    *
    * @apiError NotFoundError
    * @apiError ForbiddenError
@@ -672,6 +670,6 @@ export class CourseController {
       throw new ForbiddenError();
     }
     await course.remove();
-    return {result: true};
+    return {};
   }
 }
