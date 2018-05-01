@@ -13,7 +13,7 @@ import {
   UseBefore
 } from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
-import * as errorCodes from '../config/errorCodes';
+import {errorCodes} from '../config/errorCodes';
 
 import {ICourse} from '../../../shared/models/ICourse';
 import {ICourseDashboard} from '../../../shared/models/ICourseDashboard';
@@ -426,7 +426,7 @@ export class CourseController {
     // If a strict version is deemed important, see mongoose Model.findOneAndUpdate for a potential approach.
     const existingCourse = await Course.findOne({name: course.name});
     if (existingCourse) {
-      throw new BadRequestError(errorCodes.errorCodes.course.duplicateName.code);
+      throw new BadRequestError(errorCodes.course.duplicateName.code);
     }
     course.courseAdmin = currentUser;
     const newCourse = new Course(course);
@@ -530,10 +530,10 @@ export class CourseController {
                 e.firstName === currentUser.profile.firstName.toLowerCase()
                 && e.lastName === currentUser.profile.lastName.toLowerCase()
                 && e.uid === currentUser.uid).length <= 0) {
-              throw new ForbiddenError(errorCodes.errorCodes.course.notOnWhitelist.code);
+              throw new ForbiddenError(errorCodes.course.notOnWhitelist.code);
             }
         } else if (course.accessKey && course.accessKey !== data.accessKey) {
-          throw new ForbiddenError(errorCodes.errorCodes.course.accessKey.code);
+          throw new ForbiddenError(errorCodes.course.accessKey.code);
         }
 
         if (course.students.indexOf(currentUser._id) < 0) {
@@ -616,7 +616,7 @@ export class CourseController {
       @CurrentUser() currentUser: IUser) {
     const name: string = file.originalname;
     if (!name.endsWith('.csv')) {
-      throw new TypeError(errorCodes.errorCodes.upload.type.notCSV.code);
+      throw new TypeError(errorCodes.upload.type.notCSV.code);
     }
     const course = await Course.findById(id);
     if (!course.checkPrivileges(currentUser).userCanEditCourse) {
