@@ -531,10 +531,10 @@ export class CourseController {
    * @apiParam {Object} data Body.
    * @apiParam {IUser} currentUser Currently logged in user.
    *
-   * @apiSuccess {Course} course Left course.
+   * @apiSuccess {{}} result Empty object.
    *
    * @apiSuccessExample {json} Success-Response:
-   *      {result: true}
+   *      {}
    *
    * @apiError NotFoundError
    * @apiError ForbiddenError
@@ -551,7 +551,7 @@ export class CourseController {
       course.students.splice(index, 1);
       await NotificationSettings.findOne({'user': currentUser, 'course': course}).remove();
       await course.save();
-      return {result: true};
+      return {};
     } else {
       // This equals an implicit !course.checkPrivileges(currentUser).userIsCourseStudent check.
       throw new ForbiddenError();

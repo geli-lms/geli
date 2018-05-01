@@ -232,10 +232,10 @@ export class CourseService extends DataService {
       .toPromise();
   }
 
-  async leaveStudent(courseId: string): Promise<boolean> {
-    return (await this.backendService
+  async leaveStudent(courseId: string): Promise<{}> {
+    return await this.backendService
       .post(this.apiPath + courseId + '/leave', {})
-      .toPromise()).result;
+      .toPromise();
   }
 
   readCourseToView(id: string): Promise<ICourse> {
