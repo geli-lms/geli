@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Background on password reset page is missing [#673] (https://github.com/h-da/geli/issues/673)
 - Fix space in the topbar for notification icon for student. [#696] (https://github.com/h-da/geli/issues/696)
 - Repair angular cli code generation [#701] (https://github.com/h-da/geli/pull/701)
+- Fix tsconfig.spec.ts for ng test [#656] (https://github.com/h-da/geli/pull/656)
 
 ### Security
 - Fixed multiple severe course related security issues #594, #653.
