@@ -5,14 +5,21 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [NEXT] 
+## Added
+- New course & user API unit tests [#654](https://github.com/h-da/geli/issues/654), [#691](https://github.com/h-da/geli/issues/691).
+
+## Changed
+- Refactored or slightly altered various course & user related APIs [#654](https://github.com/h-da/geli/issues/654), [#691](https://github.com/h-da/geli/issues/691).
+
 ### Fixed
-- Fixed wasteful course data usage #654 via specialized course model interfaces.
-- Fixed a broken documentation link #583.
+- Fixed wasteful course data usage [#654](https://github.com/h-da/geli/issues/654) via specialized course model interfaces.
+- Fixed a broken documentation link [#583](https://github.com/h-da/geli/issues/583).
 - Limited the first- and lastname to 64 characters in registration- and edit page. [#585](https://github.com/h-da/geli/issues/585)
 - add correct E-Mail validator to edit-profile and register component [#564]
 
 ### Security
-- Fixed multiple severe course related security issues #594, #653.
+- Fixed numerous severe user related security issues [#691](https://github.com/h-da/geli/issues/691).
+- Fixed multiple severe course related security issues [#594](https://github.com/h-da/geli/issues/594), [#653](https://github.com/h-da/geli/issues/653), [#691](https://github.com/h-da/geli/issues/691).
 
 
 ## [0.6.0] - 2018-03-31 - Introduces MediaManager and some minor changes
