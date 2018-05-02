@@ -6,33 +6,31 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [NEXT] 
 ### Added
-- An Box for Information on the Homescreen [#216](https://github.com/h-da/geli/issues/216)
-- Account activation resend feature [#601](https://github.com/h-da/geli/issues/601)
-- SnackBarService as Wrapper for MatSnackBar [#574](https://github.com/h-da/geli/issues/574)
-- New course & user API unit tests. [#654](https://github.com/h-da/geli/issues/654) [#691](https://github.com/h-da/geli/issues/691)
+- Added a box for information on the homescreen. [#216](https://github.com/h-da/geli/issues/216)
+- Added an account activation resend feature. [#601](https://github.com/h-da/geli/issues/601)
+- Added `SnackBarService` as wrapper for `MatSnackBar`. [#574](https://github.com/h-da/geli/issues/574)
+- Added new course & user API unit tests. [#654](https://github.com/h-da/geli/issues/654) [#691](https://github.com/h-da/geli/issues/691)
 
 ### Changed
 - Refactored or slightly altered various course & user related APIs. [#654](https://github.com/h-da/geli/issues/654) [#691](https://github.com/h-da/geli/issues/691)
 
 ### Fixed
-- Asteful course data usage #654 via specialized course model interfaces.
-- A broken documentation link #583.
-- Limited the first- and lastname to 64 characters in registration- and edit page. [#585](https://github.com/h-da/geli/issues/585)
-- Correct E-Mail validator to edit-profile and register component [#564]
-- Upload of profile pictures now prevents files with wrong extensions [#581] (https://github.com/h-da/geli/issues/581)
-- The view of downloading a empty course [#659](https://github.com/h-da/geli/issues/659)
-- Videos in the Course Section now get equally sized and cant grow too big in mobile views. [#534](https://github.com/h-da/geli/issues/534) 
-- Background on password reset page is missing [#673](https://github.com/h-da/geli/issues/673)
-- space in the topbar for notification icon for student. [#696](https://github.com/h-da/geli/issues/696)
-- Repair angular cli code generation [#701](https://github.com/h-da/geli/pull/701)
-- tsconfig.spec.ts for ng test [#656](https://github.com/h-da/geli/pull/656)
+- Fixed wasteful course data usage via specialized course model interfaces. [#654](https://github.com/h-da/geli/issues/654)
+- Fixed a broken documentation link. [#583](https://github.com/h-da/geli/issues/583)
+- Limited the first and last name to 64 characters in the registration- and edit page. [#585](https://github.com/h-da/geli/issues/585)
+- Added a correct email validator to the `user-edit` and `register` components. [#564](https://github.com/h-da/geli/issues/564)
+- Upload of profile pictures now prevents files with forbidden extensions. [#581](https://github.com/h-da/geli/issues/581)
+- Fixed empty course downloads. [#659](https://github.com/h-da/geli/issues/659)
+- Videos in the course now get sized equally and can't grow too big in mobile views. [#534](https://github.com/h-da/geli/issues/534)
+- Fixed missing background on the password reset page. [#673](https://github.com/h-da/geli/issues/673)
+- Fixed notification icon spacing in the navbar for students. [#696](https://github.com/h-da/geli/issues/696)
+- Repair Angular CLI code generation. [#701](https://github.com/h-da/geli/pull/701)
+- Fixed `tsconfig.spec.ts` for `ng test`. [#656](https://github.com/h-da/geli/pull/656)
 
 ### Security
 - Fixed numerous severe user related security issues. [#691](https://github.com/h-da/geli/issues/691)
 - Fixed multiple severe course related security issues. [#594](https://github.com/h-da/geli/issues/594) [#653](https://github.com/h-da/geli/issues/653) [#691](https://github.com/h-da/geli/issues/691)
-- Updated the dependencies for security.
-- Fixed multiple severe course related security issues #594(https://github.com/h-da/geli/issues/594), #653(https://github.com/h-da/geli/issues/653).
-- Updated the dependencies for security
+- Updated the dependencies for security. [#661](https://github.com/h-da/geli/issues/661)
 
 
 ## [0.6.0] - 2018-03-31 - Introduces MediaManager and some minor changes
