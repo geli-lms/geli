@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit, QueryList, ViewChildren, ViewEncapsulation} from '@angular/core';
+import {Component, Inject, Input, OnInit, QueryList, ViewChildren, ViewEncapsulation} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef, MatSnackBar} from '@angular/material';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
 import {LectureCheckboxComponent} from './downloadCheckBoxes/lecture-checkbox.component';
@@ -17,7 +17,7 @@ import { saveAs } from 'file-saver/FileSaver';
 })
 
 export class DownloadCourseDialogComponent implements OnInit {
-  course: ICourse;
+  @Input() course: ICourse;
   chkbox: boolean;
   keepDialogOpen = false;
   showSpinner: boolean;

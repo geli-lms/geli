@@ -12,6 +12,7 @@ import {SharedModule} from '../../shared/shared.module';
 import {LectureModule} from '../../lecture/lecture.module';
 import {FormsModule} from '@angular/forms';
 import {CourseDetailDataResolve} from '../../shared/services/course-detail-data-resolve.service';
+import {ListViewComponent} from './file-view/list-view/list-view.component';
 
 @NgModule({
   imports: [
@@ -29,6 +30,7 @@ import {CourseDetailDataResolve} from '../../shared/services/course-detail-data-
     LectureCheckboxComponent,
     UnitCheckboxComponent,
     UploadUnitCheckboxComponent,
+    ListViewComponent,
   ],
   entryComponents: [
     DownloadCourseDialogComponent,

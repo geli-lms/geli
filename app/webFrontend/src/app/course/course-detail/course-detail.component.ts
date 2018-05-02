@@ -20,7 +20,8 @@ export class CourseDetailComponent implements OnInit, OnDestroy {
   id: string;
   tabs = [
     {path: 'overview', label: 'Overview'},
-    {path: 'fileview', label: 'Fileview'}
+    {path: 'fileview', label: 'Fileview'},
+    {path: 'download', label: 'Download'}
   ];
 
   constructor(private router: Router,
@@ -41,28 +42,6 @@ export class CourseDetailComponent implements OnInit, OnDestroy {
     LastVisitedCourseContainerUpdater.addCourseToLastVisitedCourses(this.id, this.userService, this.userDataService);
     this.titleService.setTitleCut(['Course: ', this.course.name]);
   }
-
-  /*
-  getCourse(courseId: string) {
-    this.courseService.readSingleItem(courseId).then(
-      (course: any) => {
-        this.course = course;
-        LastVisitedCourseContainerUpdater.addCourseToLastVisitedCourses(courseId, this.userService, this.userDataService);
-        this.titleService.setTitleCut(['Course: ', this.course.name]);
-        this.dataSharingService.setDataForKey('course', this.course);
-        console.log('set course: ' + this.course.name);
-      },
-      (errorResponse: Response) => {
-        if (errorResponse.status === 401) {
-          this.snackBar.open('You are not authorized to view this course.', '', {duration: 3000});
-        }
-        if (errorResponse.status === 404) {
-          this.snackBar.open('Your selected course is not available.', '', {duration: 3000});
-          this.router.navigate(['/not-found']);
-        }
-      });
-  }
-*/
 
   ngOnDestroy() {
     this.dataSharingService.deleteDataForKey('course');

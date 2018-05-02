@@ -1,11 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
-import {CourseService} from '../../../shared/services/data.service';
 import {DataSharingService} from '../../../shared/services/data-sharing.service';
-import {IUnit} from '../../../../../../../shared/models/units/IUnit';
 import {IFileUnit} from '../../../../../../../shared/models/units/IFileUnit';
-import {IFile} from '../../../../../../../shared/models/mediaManager/IFile';
 
 @Component({
   selector: 'app-file-view',
@@ -40,6 +36,7 @@ export class FileViewComponent implements OnInit {
 
   checkSelection() {
     if (this.selectedValue === 'file') {
+      this.listview();
       this.disableGridViewButton = true;
     } else if (this.selectedValue === 'video') {
       this.disableGridViewButton = false;
