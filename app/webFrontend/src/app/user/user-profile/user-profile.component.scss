@@ -10,10 +10,33 @@
     vertical-align: middle;
   }
 
-  .name {
+  .name-section {
     display: inline-block;
     vertical-align: middle;
     padding-left: 1rem;
+
+    .name {
+      display: inline-block;
+
+      @media screen and (max-width: 1275px) {
+        overflow: hidden;
+        max-width: 60rem;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+
+        @media screen and (max-width: 1070px) {
+          max-width: 40rem;
+
+          @media screen and (max-width: 750px) {
+            max-width: 15rem;
+
+            @media screen and (max-width: 350px) {
+              max-width: 10rem;
+            }
+          }
+        }
+      }
+    }
   }
 
   .user-data {

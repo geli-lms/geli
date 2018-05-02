@@ -1,5 +1,5 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
-import {MatSnackBar} from '@angular/material';
+import {SnackBarService} from '../../shared/services/snack-bar.service';
 import {ProgressService} from 'app/shared/services/data/progress.service';
 import {ICodeKataUnitProgress} from '../../../../../../shared/models/progress/ICodeKataProgress';
 import {UserService} from '../../shared/services/user.service';
@@ -31,7 +31,7 @@ export class CodeKataComponent implements OnInit {
   isExampleCode = false;
 
   constructor(private route: ActivatedRoute,
-              private snackBar: MatSnackBar,
+              private snackBar: SnackBarService,
               private progressService: ProgressService,
               private userService: UserService) {
     this.logs = undefined;
@@ -79,27 +79,27 @@ export class CodeKataComponent implements OnInit {
   async submitProgress() {
     this.progress.done = this.validate();
     if (!this.progress.done) {
-      this.snackBar.open('Your code does not validate.', '', {duration: 3000});
+      this.snackBar.open('Your code does not validate.');
     }
 
     if (!this.progress._id) {
       this.progress.user = this.userService.user._id;
       this.progressService.createItem(this.progress)
         .then((item) => {
-          this.snackBar.open('Progress has been saved', '', {duration: 3000});
+          this.snackBar.open('Progress has been saved');
           this.progress = item;
         })
         .catch((err) => {
-          this.snackBar.open(`An error occurred: ${err.error.message}`, '', {duration: 3000});
+          this.snackBar.open(`An error occurred: ${err.error.message}`);
         });
     } else {
       this.progressService.updateItem(this.progress)
         .then((item) => {
-          this.snackBar.open('Progress has been updated', '', {duration: 3000});
+          this.snackBar.open('Progress has been updated');
           this.progress = item;
         })
         .catch((err) => {
-          this.snackBar.open(`An error occurred: ${err.error.message}`, '', {duration: 3000});
+          this.snackBar.open(`An error occurred: ${err.error.message}`);
         });
     }
   }
@@ -140,10 +140,10 @@ export class CodeKataComponent implements OnInit {
     window.console.log = origLogger;
 
     if (result === true || result === undefined) {
-      this.snackBar.open('Success', '', {duration: 3000});
+      this.snackBar.open('Success');
       return true;
     } else {
-      this.snackBar.open('Your code failed.', '', {duration: 3000});
+      this.snackBar.open('Your code failed.');
       // tslint:disable-next-line:no-console
       console.log(result);
       return false;

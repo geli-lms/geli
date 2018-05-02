@@ -1,4 +1,6 @@
 import {ICourse} from '../../../shared/models/ICourse';
+import {ICourseDashboard} from '../../../shared/models/ICourseDashboard';
+import {ICourseView} from '../../../shared/models/ICourseView';
 import * as mongoose from 'mongoose';
 import {User, IUserModel} from './User';
 import {ILectureModel, Lecture} from './Lecture';
@@ -9,14 +11,17 @@ import * as winston from 'winston';
 import {ObjectID} from 'bson';
 import {Directory} from './mediaManager/Directory';
 import {IProperties} from '../../../shared/models/IProperties';
-import Pick from '../utilities/Pick';
+import {extractMongoId} from '../utilities/ExtractMongoId';
 
 interface ICourseModel extends ICourse, mongoose.Document {
   exportJSON: (sanitize?: boolean) => Promise<ICourse>;
   checkPrivileges: (user: IUser) => IProperties;
+  forDashboard: (user: IUser) => ICourseDashboard;
+  forView: () => ICourseView;
+  populateLecturesFor: (user: IUser) => this;
+  processLecturesFor: (user: IUser) => Promise<this>;
 }
 interface ICourseMongoose extends mongoose.Model<ICourseModel> {
-  getSanitized: (user: IUser, courses: ICourseModel[], targets: ICourseObt) => Promise<IProperties[]>;
 }
 let Course: ICourseMongoose;
 
@@ -187,158 +192,76 @@ courseSchema.statics.importJSON = async function (course: ICourse, admin: IUser,
 };
 
 
-function canUserRoleEditCourse(user: IUser) {
-  const roleIsTeacher: boolean = user.role === 'teacher';
-  const roleIsAdmin: boolean = user.role === 'admin';
-  return roleIsTeacher || roleIsAdmin;
-}
-
-function extractId(value: any, fallback?: any) {
-  if (value instanceof Object) {
-    if (value._bsontype === 'ObjectID') {
-      return {_id: value.toString()};
-    } else if ('id' in value) {
-      return {_id: value.id};
-    }
-  }
-  return fallback;
-}
-
-function extractIds(values: any[], fallback?: any) {
-  const results: any[] = [];
-  for (const value of values) {
-    const result = extractId(value, fallback);
-    if (result !== undefined) {
-      results.push(result);
-    }
-  }
-  return results;
-}
-
 courseSchema.methods.checkPrivileges = function (user: IUser) {
-  const roleCanEditCourse: boolean = canUserRoleEditCourse(user);
   const userIsAdmin: boolean = user.role === 'admin';
-  const courseAdmin = extractId(this.courseAdmin);
+  const userIsTeacher: boolean = user.role === 'teacher';
+  const userIsStudent: boolean = user.role === 'student';
+  // NOTE: The 'tutor' role exists and has fixtures, but currently appears to be unimplemented.
+  // const userIsTutor: boolean = user.role === 'tutor';
 
-  const userIsCourseAdmin: boolean = user._id === courseAdmin._id;
-  const userIsCourseTeacher: boolean = this.teachers.some((teacher: IUserModel) => user._id === extractId(teacher)._id);
-  const userIsCourseStudent: boolean = this.students.some((student: IUserModel) => user._id === extractId(student)._id);
+  const courseAdminId = extractMongoId(this.courseAdmin);
 
-  const userCanEditCourse: boolean = roleCanEditCourse && (userIsAdmin || userIsCourseAdmin || userIsCourseTeacher);
-  const userIsParticipant: boolean = userIsCourseStudent || userCanEditCourse;
-  const userCanViewCourse: boolean = (this.active && userIsCourseStudent) || userCanEditCourse || userIsAdmin;
+  const userIsCourseAdmin: boolean = user._id === courseAdminId;
+  const userIsCourseTeacher: boolean = this.teachers.some((teacher: IUserModel) => user._id === extractMongoId(teacher));
+  const userIsCourseStudent: boolean = this.students.some((student: IUserModel) => user._id === extractMongoId(student));
+  const userIsCourseMember: boolean = userIsCourseAdmin || userIsCourseTeacher || userIsCourseStudent;
 
-  return {roleCanEditCourse, userIsAdmin, courseAdmin,
-      userIsCourseAdmin, userIsCourseTeacher, userIsCourseStudent,
-      userCanEditCourse, userIsParticipant, userCanViewCourse};
+  const userCanEditCourse: boolean = userIsAdmin || userIsCourseAdmin || userIsCourseTeacher;
+  const userCanViewCourse: boolean = (this.active && userIsCourseStudent) || userCanEditCourse;
+
+  return {userIsAdmin, userIsTeacher, userIsStudent,
+      courseAdminId,
+      userIsCourseAdmin, userIsCourseTeacher, userIsCourseStudent, userIsCourseMember,
+      userCanEditCourse, userCanViewCourse};
 };
 
+courseSchema.methods.forDashboard = function (user: IUser): ICourseDashboard {
+  const {
+    name, active, description, enrollType
+  } = this;
+  const {
+    userCanEditCourse, userCanViewCourse, userIsCourseAdmin, userIsCourseTeacher, userIsCourseMember
+  } = this.checkPrivileges(user);
+  return {
+    // As in ICourse:
+    _id: <string>extractMongoId(this._id),
+    name, active, description, enrollType,
 
-function arrayUnion(...arrays: any[]) {
-  return [...new Set([].concat(...arrays))];
-}
+    // Special properties for the dashboard:
+    userCanEditCourse, userCanViewCourse, userIsCourseAdmin, userIsCourseTeacher, userIsCourseMember
+  };
+};
 
-function keysToPath(keys: string[]) {
-  return keys.map(path => ({path}));
-}
+courseSchema.methods.forView = function (): ICourseView {
+  const {
+    name, description
+  } = this;
+  return {
+    _id: <string>extractMongoId(this._id),
+    name, description,
+    lectures: this.lectures.map((lecture: any) => lecture.toObject())
+  };
+};
 
-// ICourse(Model)-Obtain option interfaces:
-type ICourseObtMode = string[];
-interface ICourseObtType {
-  empty?: ICourseObtMode;
-  selfid?: ICourseObtMode;
-  onlyid?: ICourseObtMode;
-  copy?: ICourseObtMode;
-  populate?: ICourseObtMode;
-}
-interface ICourseObt {
-  safe?: ICourseObtType;
-  editor?: ICourseObtType;
-  all?: ICourseObtType;
-}
-// Normalized:
-type ICourseNormObtMode = ICourseObtMode;
-interface ICourseNormObtType {
-  empty: ICourseNormObtMode;
-  selfid: ICourseNormObtMode;
-  onlyid: ICourseNormObtMode;
-  copy: ICourseNormObtMode;
-  populate: ICourseNormObtMode;
-  populatePaths: IProperties;
-  pickKeys: string[];
-}
-interface ICourseNormObt {
-  safe: ICourseNormObtType;
-  editor: ICourseNormObtType;
-}
-
-function normalizeCourseObtMode(modeObt?: ICourseObtMode): ICourseNormObtMode {
-  if (modeObt !== undefined) {
-    return modeObt.slice();
-  } else {
-    return [];
-  }
-}
-
-function normalizeCourseObt(obt: ICourseObt): ICourseNormObt {
-  const regularTypes = ['safe', 'editor']; // i.e. non-'all'
-  const modes = ['empty', 'selfid', 'onlyid', 'copy', 'populate'];
-  const result: IProperties = {};
-
-  for (const type of regularTypes) {
-    const typeResult = result[type] = <IProperties>{};
-    const typeObt = (<IProperties>obt)[type] || {};
-    for (const mode of modes) {
-      typeResult[mode] = normalizeCourseObtMode(typeObt[mode]);
-    }
-  }
-
-  const allTypeObt = obt.all || {};
-  for (const mode of modes) {
-    const normMode = normalizeCourseObtMode((<IProperties>allTypeObt)[mode]);
-    for (const type of regularTypes) {
-      result[type][mode].push(...normMode);
-    }
-  }
-
-  for (const type of regularTypes) {
-    const typeResult = <ICourseNormObtType>result[type];
-    typeResult.pickKeys = arrayUnion(typeResult.copy, typeResult.populate, typeResult.selfid);
-    typeResult.populatePaths = keysToPath(typeResult.populate);
-  }
-
-  return <ICourseNormObt>result;
-}
-
-courseSchema.statics.getSanitized = async function(user: IUser, courses: ICourseModel[], targets: ICourseObt) {
-  const options = normalizeCourseObt(targets);
-
-  return await Promise.all(courses.map(async (course) => {
-    const {userCanEditCourse} = course.checkPrivileges(user);
-    const typeOptions: IProperties = userCanEditCourse ? options.editor : options.safe;
-    await Course.populate(course, typeOptions.populatePaths);
-
-    const courseObject: IProperties = course.toObject();
-    const sanitizedCourseObject = Pick.only(typeOptions.pickKeys, courseObject);
-    for (const key of typeOptions.onlyid) {
-      const value = (<IProperties>course)[key];
-      sanitizedCourseObject[key] = Array.isArray(value) ? extractIds(value) : extractId(value);
-    }
-    for (const key of typeOptions.selfid) {
-      const value = (<IProperties>course)[key];
-      if (Array.isArray(value)) {
-        sanitizedCourseObject[key] = extractIds(value).filter(x => user._id === x._id);
-      } else {
-        const extracted = extractId(value);
-        if (user._id === extracted._id) {
-          sanitizedCourseObject[key] = extracted;
-        }
+courseSchema.methods.populateLecturesFor = function (user: IUser) {
+  return this.populate({
+    path: 'lectures',
+    populate: {
+      path: 'units',
+      virtuals: true,
+      populate: {
+        path: 'progressData',
+        match: {user: {$eq: user._id}}
       }
     }
-    Pick.asEmpty(typeOptions.empty, courseObject, sanitizedCourseObject);
+  });
+};
 
-    return sanitizedCourseObject;
+courseSchema.methods.processLecturesFor = async function (user: IUser) {
+  this.lectures = await Promise.all(this.lectures.map(async (lecture: ILectureModel) => {
+    return await lecture.processUnitsFor(user);
   }));
+  return this;
 };
 
 Course = mongoose.model<ICourseModel, ICourseMongoose>('Course', courseSchema);

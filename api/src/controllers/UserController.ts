@@ -321,22 +321,28 @@ export class UserController {
           fs.unlinkSync(user.profile.picture.path);
         }
 
-        const resizedImageBuffer = await sharp(file.path)
-          .resize(config.maxProfileImageWidth, config.maxProfileImageHeight)
-          .withoutEnlargement(true)
-          .max()
-          .toBuffer({resolveWithObject: true});
+        const mimeFamily = file.mimetype.split('/', 1)[0];
 
-        fs.writeFileSync(file.path, resizedImageBuffer.data);
+        if ( mimeFamily === 'image' ) {
+          const resizedImageBuffer = await sharp(file.path)
+            .resize(config.maxProfileImageWidth, config.maxProfileImageHeight)
+            .withoutEnlargement(true)
+            .max()
+            .toBuffer({resolveWithObject: true});
 
-        user.profile.picture = {
-          _id: null,
-          name: file.filename,
-          alias: file.originalname,
-          path: file.path,
-          size: resizedImageBuffer.info.size
-        };
-        return user.save();
+          fs.writeFileSync(file.path, resizedImageBuffer.data);
+
+          user.profile.picture = {
+            _id: null,
+            name: file.filename,
+            alias: file.originalname,
+            path: file.path,
+            size: resizedImageBuffer.info.size
+          };
+          return user.save();
+        } else {
+          throw new ForbiddenError('Forbidden format in uploaded picture: ' + mimeFamily);
+        }
       })
       .then((user) => {
         return this.cleanUserObject(id, user, currentUser);
