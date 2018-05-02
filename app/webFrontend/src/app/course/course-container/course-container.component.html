@@ -2,7 +2,7 @@
 
   <app-badge [displayNumber]="courses.length"></app-badge>
 
-  <button class="open-toggle" [class.opened]="expand" mat-icon-button>
+  <button class="open-toggle" matTooltip="{{ 'common.tooltipClickToOpen' | translate }}" [class.opened]="expand" mat-icon-button>
     <mat-icon>arrow_drop_down</mat-icon>
   </button></div>
 

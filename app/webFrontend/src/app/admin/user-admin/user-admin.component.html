@@ -20,10 +20,10 @@
       </mat-select>
     </td>
     <td>
-      <button mat-icon-button (click)="editUser(i)">
+      <button matTooltip="{{ 'user.editUser' | translate }}" mat-icon-button (click)="editUser(i)">
         <mat-icon>edit</mat-icon>
       </button>
-      <button mat-icon-button (click)="deleteUser(i)">
+      <button matTooltip="{{ 'user.deleteUser' | translate }}" mat-icon-button (click)="deleteUser(i)">
         <mat-icon>delete</mat-icon>
       </button>
     </td>

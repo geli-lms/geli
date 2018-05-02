@@ -7,7 +7,9 @@
     "password": "Passwort",
     "send": "Senden",
     "dismiss": "Schließen",
+    "delete": "Löschen",
     "back": "Zurück",
+    "tooltipClickToOpen" : "Auf-/ zuklappen",
     "profile": {
       "firstName": "Vorname",
       "lastName": "Nachname",
@@ -31,16 +33,18 @@
     "welcomeTo": "Willkommen auf"
   },
   "auth": {
+    "tooltipForgotPassword":"Klicken Sie hier, um ein neues Password anzufordern",
     "forgotPassword": "Passwort vergessen",
     "loginSuccess": "Login erfolgreich",
     "loginFailed": "Login fehlgeschlagen",
     "loginFailedError": {
-      "couldNotBeVerified": "Ihre Login-Daten konnten nicht verifiziert werden. Bitte versuchen sie es noch ein mal.",
+      "couldNotBeVerified": "Ihre Login-Daten konnten nicht verifiziert werden. Bitte versuchen Sie es noch ein mal.",
       "notActiveYet": "Ihr Account wurde noch nicht aktiviert.",
       "unknown": "Es ist ein unbekannter Fehler aufgetreten."
     },
     "confirmPassword": "Passwort bestätigen",
     "registration": {
+      "tooltipRegister": "Klicken Sie hier, um Ihre Registrierung abzuschießen",
       "registerAs": "Registrieren als",
       "successful": "Registrierung erfolgreich",
       "mailSent": "Wir haben Ihnen einen Aktivierungslink an Ihre E-Mail-Adresse gesendet.",
@@ -51,7 +55,8 @@
     "resendActivation": {
       "back": "Zurück zur Registrierung",
       "successful": "Aktivierung erneut senden erfolgreich",
-      "mailSent": "Wir haben Ihnen einen neuen Aktivierungslink an Ihre E-Mail-Adresse gesendet."
+      "mailSent": "Wir haben Ihnen einen neuen Aktivierungslink an Ihre E-Mail-Adresse gesendet.",
+      "tooltipResendAction" : "Klicken Sie hier, um einen neuen Aktivierungslink anzufordern"
     }
   },
   "mainMenu": {
@@ -71,5 +76,13 @@
     "addCourse": "Kurs hinzufügen",
     "createCourse": "Kurs erstellen",
     "importCourse": "Kurs importieren"
+  },
+  "user" : {
+    "editUser" : "Benutzer bearbeiten",
+    "deleteUser" : "Benutzer löschen"
+  },
+  "course" : {
+    "tooltipAdd" : "Kurs hinzufügen",
+    "ShowCourse" : "Kurs anzeigen"
   }
 }

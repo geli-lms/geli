@@ -83,7 +83,7 @@
 
       <div *ngIf="formError" class="text-danger" id="resendActivationFormError">{{formError}}</div>
 
-      <button mat-raised-button color="primary" type="submit"
+      <button matTooltip="{{ 'auth.resendActivation.tooltipResendAction' | translate }}" mat-raised-button color="primary" type="submit"
               [disabled]="loading || !resendActivationForm?.valid">{{'common.send'|translate}}
       </button>
       <button mat-raised-button type="button" routerLink="/register" routerLinkActive="active">

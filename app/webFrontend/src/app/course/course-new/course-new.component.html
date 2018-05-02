@@ -13,7 +13,7 @@
         <textarea matInput formControlName="description" placeholder="Course Description"></textarea>
       </mat-form-field>
       <br/>
-      <button mat-raised-button color="primary" class="mat-button" type="submit">Add</button>
+      <button mat-raised-button color="primary" matTooltip="{{ course.tooltipAdd | translate }}" class="mat-button" type="submit">Add</button>
     </form>
   </mat-card>
 </div>
