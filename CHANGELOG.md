@@ -6,31 +6,33 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [NEXT] 
 ### Added
-- An Box for Information on the Homescreen [#216] (https://github.com/h-da/geli/issues/216)
-- Account activation resend feature [#601] (https://github.com/h-da/geli/issues/601)
-- SnackBarService as Wrapper for MatSnackBar
+- An Box for Information on the Homescreen [#216](https://github.com/h-da/geli/issues/216)
+- Account activation resend feature [#601](https://github.com/h-da/geli/issues/601)
+- SnackBarService as Wrapper for MatSnackBar [#574](https://github.com/h-da/geli/issues/574)
 - New course & user API unit tests. [#654](https://github.com/h-da/geli/issues/654) [#691](https://github.com/h-da/geli/issues/691)
 
 ### Changed
 - Refactored or slightly altered various course & user related APIs. [#654](https://github.com/h-da/geli/issues/654) [#691](https://github.com/h-da/geli/issues/691)
 
 ### Fixed
-- wasteful course data usage #654 via specialized course model interfaces.
-- a broken documentation link #583.
+- Asteful course data usage #654 via specialized course model interfaces.
+- A broken documentation link #583.
 - Limited the first- and lastname to 64 characters in registration- and edit page. [#585](https://github.com/h-da/geli/issues/585)
-- add correct E-Mail validator to edit-profile and register component [#564]
+- Correct E-Mail validator to edit-profile and register component [#564]
 - Upload of profile pictures now prevents files with wrong extensions [#581] (https://github.com/h-da/geli/issues/581)
-- the view of downloading a empty course [#659](https://github.com/h-da/geli/issues/659)
-- Videos in the Course Section now get equally sized and cant grow too big in mobile views. [#534] (https://github.com/h-da/geli/issues/534) 
-- Background on password reset page is missing [#673] (https://github.com/h-da/geli/issues/673)
-- Fix space in the topbar for notification icon for student. [#696] (https://github.com/h-da/geli/issues/696)
-- Repair angular cli code generation [#701] (https://github.com/h-da/geli/pull/701)
-- Fix tsconfig.spec.ts for ng test [#656] (https://github.com/h-da/geli/pull/656)
+- The view of downloading a empty course [#659](https://github.com/h-da/geli/issues/659)
+- Videos in the Course Section now get equally sized and cant grow too big in mobile views. [#534](https://github.com/h-da/geli/issues/534) 
+- Background on password reset page is missing [#673](https://github.com/h-da/geli/issues/673)
+- space in the topbar for notification icon for student. [#696](https://github.com/h-da/geli/issues/696)
+- Repair angular cli code generation [#701](https://github.com/h-da/geli/pull/701)
+- tsconfig.spec.ts for ng test [#656](https://github.com/h-da/geli/pull/656)
 
 ### Security
 - Fixed numerous severe user related security issues. [#691](https://github.com/h-da/geli/issues/691)
 - Fixed multiple severe course related security issues. [#594](https://github.com/h-da/geli/issues/594) [#653](https://github.com/h-da/geli/issues/653) [#691](https://github.com/h-da/geli/issues/691)
 - Updated the dependencies for security.
+- Fixed multiple severe course related security issues #594(https://github.com/h-da/geli/issues/594), #653(https://github.com/h-da/geli/issues/653).
+- Updated the dependencies for security
 
 
 ## [0.6.0] - 2018-03-31 - Introduces MediaManager and some minor changes
