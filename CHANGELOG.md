@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Videos in the Course Section now get equally sized and cant grow too big in mobile views. [#534] (https://github.com/h-da/geli/issues/534) 
 - Background on password reset page is missing [#673] (https://github.com/h-da/geli/issues/673)
 - Fix space in the topbar for notification icon for student. [#696] (https://github.com/h-da/geli/issues/696)
+- Repair angular cli code generation [#701] (https://github.com/h-da/geli/pull/701)
 
 ### Security
 - Fixed multiple severe course related security issues #594, #653.
