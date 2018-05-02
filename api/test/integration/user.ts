@@ -344,8 +344,8 @@ describe('User', () => {
         .set('Authorization', `JWT ${JwtUtils.generateToken(admin)}`)
         .attach('file', fs.readFileSync('test/resources/wrong-format.rtf'), 'wrong-format.txt');
 
-      res.status.should.be.equal(400);
-      res.body.name.should.be.equal('BadRequestError');
+      res.status.should.be.equal(403);
+      res.body.name.should.be.equal('ForbiddenError');
     });
   });
 
