@@ -2,20 +2,6 @@
 import config from '../config/main';
 
 export const errorCodes = {
-  user : {
-      userNotFound: {
-        code: 'user not found',
-        text: 'User was not found.',
-      },
-      retryAfter: {
-        code: 'retry after',
-        text: 'You can only resend the activation every ' + config.timeTilNextActivationResendMin + ' minutes. You can resend again in ',
-      },
-      userAlreadyActive: {
-        code: 'user already active',
-        text: 'User is already activated.'
-      }
-  },
   mail: {
     duplicate: {
       code: 'duplicate mail',
@@ -46,6 +32,56 @@ export const errorCodes = {
     accessKey: {
       code: 'incorrectAccessKey',
       text: 'Incorrect or missing access key'
+    }
+  },
+  user: {
+    cantChangeOwnRole: {
+      code: 'cantChangeOwnRole',
+      text: 'You can\'t change your own role.'
+    },
+    emailAlreadyInUse: {
+      code: 'emailAlreadyInUse',
+      text: 'This email address is already in use.'
+    },
+    invalidOldUserRole: {
+      code: 'invalidOldUserRole',
+      text: 'Invalid old user role.'
+    },
+    invalidNewUserRole: {
+      code: 'invalidNewUserRole',
+      text: 'Invalid update role.'
+    },
+    cantChangeUserWithHigherRole: {
+      code: 'cantChangeUserWithHigherRole',
+      text: 'You don\'t have the authorization to change a user of this role.'
+    },
+    onlyAdminsCanChangeRoles: {
+      code: 'onlyAdminsCanChangeRoles',
+      text: 'Only users with admin privileges can change roles.'
+    },
+    onlyAdminsCanChangeUids: {
+      code: 'onlyAdminsCanChangeUids',
+      text: 'Only users with admin privileges can change uids.'
+    },
+    invalidPassword: {
+      code: 'invalidPassword',
+      text: 'Invalid current password!'
+    },
+    noOtherAdmins: {
+      code: 'noOtherAdmins',
+      text: 'There are no other users with admin privileges.'
+    },
+    userNotFound: {
+      code: 'user not found',
+      text: 'User was not found.',
+    },
+    retryAfter: {
+      code: 'retry after',
+      text: 'You can only resend the activation every ' + config.timeTilNextActivationResendMin + ' minutes. You can resend again in ',
+    },
+    userAlreadyActive: {
+      code: 'user already active',
+      text: 'User is already activated.'
     }
   },
   whitelist: {
