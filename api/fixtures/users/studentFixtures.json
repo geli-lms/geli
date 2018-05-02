@@ -328,5 +328,27 @@
       "lastName": "Mollenhauer"
     },
     "isActive": true
+  },
+  {
+    "uid": "987654",
+    "email": "student31@test.local",
+    "password": "test1234",
+    "role": "student",
+    "profile": {
+      "firstName": "Robert",
+      "lastName": "Kapinski"
+    },
+    "isActive": false
+  },
+  {
+    "uid": "987653",
+    "email": "student32@test.local",
+    "password": "test1234",
+    "role": "student",
+    "profile": {
+      "firstName": "Horst",
+      "lastName": "Mengalo"
+    },
+    "isActive": false
   }
 ]
