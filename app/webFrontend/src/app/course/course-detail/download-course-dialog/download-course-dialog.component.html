@@ -1,27 +1,25 @@
-<h2>{{course.name}}</h2>
-<ng-container *ngIf="!course.lectures.length">No lectures to download!</ng-container>
-<p>Select units or files which you want to download</p>
-
-<!--<mat-dialog-content class="layout">-->
-<mat-card-content>
-  <mat-list>
-    <mat-list-item class="selectAll">
-      <h3>Select All</h3>
-      <span class="spacer"></span>
-      <span class="lightgray"> Course </span>
-      <mat-checkbox [(ngModel)]="chkbox" (change)="onChange()" class="chkbox"></mat-checkbox>
-    </mat-list-item>
-    <app-lecture-checkbox (valueChanged)="onChildEvent($event)" *ngFor=" let lecture of course.lectures" [lecture]= "lecture"></app-lecture-checkbox>
-  </mat-list>
-</mat-card-content>
-<!--</mat-dialog-content>-->
-<!--<mat-dialog-actions>-->
-<mat-card-actions>
-  <button mat-raised-button color="primary" [disabled]="this.disableDownloadButton" (click)="downloadAndClose()">Download</button>
-  <button mat-button [mat-dialog-close]="true">Cancel</button>
-  <span class="spacer"></span>
-  <ng-container *ngIf="showSpinner">
-    <mat-spinner [diameter]=20 [strokeWidth]=2 class="spinner"></mat-spinner>
-  </ng-container>
-</mat-card-actions>
-<!--</mat-dialog-actions>-->
+<mat-card class="card">
+  <mat-card-content>
+    <ng-container *ngIf="!course.lectures.length">No lectures to download!</ng-container>
+    <mat-list>
+      <mat-list-item class="selectAll">
+        <h3>Select All</h3>
+        <span class="spacer"></span>
+        <span class="lightgray"> Course </span>
+        <mat-checkbox [(ngModel)]="chkbox" (change)="onChange()" class="chkbox"></mat-checkbox>
+      </mat-list-item>
+      <app-lecture-checkbox (valueChanged)="onChildEvent($event)" *ngFor=" let lecture of course.lectures"
+                            [lecture]="lecture"></app-lecture-checkbox>
+    </mat-list>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-raised-button color="primary" [disabled]="this.disableDownloadButton" (click)="downloadAndClose()">
+      Download
+    </button>
+    <button mat-button [mat-dialog-close]="true">Cancel</button>
+    <span class="spacer"></span>
+    <ng-container *ngIf="showSpinner">
+      <mat-spinner [diameter]=20 [strokeWidth]=2 class="spinner"></mat-spinner>
+    </ng-container>
+  </mat-card-actions>
+</mat-card>

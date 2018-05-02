@@ -19,9 +19,9 @@ export class CourseDetailComponent implements OnInit, OnDestroy {
   course: ICourse;
   id: string;
   tabs = [
-    {path: 'overview', label: 'Overview'},
-    {path: 'fileview', label: 'Fileview'},
-    {path: 'download', label: 'Download'}
+    {path: 'overview', label: 'Overview', img: 'work'},
+    {path: 'fileview', label: 'Files', img: 'video_library'},
+    {path: 'download', label: 'Download', img: 'get_app'}
   ];
 
   constructor(private router: Router,

@@ -8,6 +8,7 @@ import {IDownloadSize} from '../../../../../../../shared/models/IDownloadSize';
 import {SaveFileService} from '../../../shared/services/save-file.service';
 
 import { saveAs } from 'file-saver/FileSaver';
+import {DataSharingService} from '../../../shared/services/data-sharing.service';
 
 @Component({
   selector: 'app-download-course-dialog',
@@ -25,17 +26,16 @@ export class DownloadCourseDialogComponent implements OnInit {
   @ViewChildren(LectureCheckboxComponent)
   childLectures: QueryList<LectureCheckboxComponent>;
 
-  constructor(public dialogRef: MatDialogRef<DownloadCourseDialogComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: any,
-              private downloadReq: DownloadFileService,
+  constructor(private downloadReq: DownloadFileService,
               public snackBar: MatSnackBar,
-              private saveFileService: SaveFileService) {
+              private saveFileService: SaveFileService,
+              private dataSharingService: DataSharingService) {
   }
 
   ngOnInit() {
+    this.course = this.dataSharingService.getDataForKey('course');
     this.showSpinner = false;
     this.disableDownloadButton = false;
-    this.course = this.data.course;
     this.chkbox = false;
   }
 
@@ -105,7 +105,7 @@ export class DownloadCourseDialogComponent implements OnInit {
         this.showSpinner = false;
         this.disableDownloadButton = false;
         if (!this.keepDialogOpen) {
-          this.dialogRef.close();
+          //this.dialogRef.close();
         }
       } catch (error) {
         this.showSpinner = false;

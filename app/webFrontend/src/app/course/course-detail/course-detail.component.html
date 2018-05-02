@@ -8,11 +8,8 @@
        #rla="routerLinkActive"
        [routerLinkActiveOptions]="{exact: true}"
        [active]="rla.isActive">
-      {{tab.label}}
+      <mat-icon class="icon">{{tab.img}}</mat-icon>{{tab.label}}
     </a>
   </nav>
 </div>
-<button mat-icon-button color="primary" (click)= "openDownloadDialog()" class="download-button">
-  <mat-icon aria-label="Download Units" mat-tooltip="Download Units" class ="dl-icon">get_app</mat-icon>
-</button>
 <router-outlet></router-outlet>
