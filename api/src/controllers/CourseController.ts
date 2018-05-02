@@ -13,7 +13,7 @@ import {
   UseBefore
 } from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
-import * as errorCodes from '../config/errorCodes';
+import {errorCodes} from '../config/errorCodes';
 
 import {ICourse} from '../../../shared/models/ICourse';
 import {ICourseDashboard} from '../../../shared/models/ICourseDashboard';
@@ -29,6 +29,7 @@ const multer = require('multer');
 import crypto = require('crypto');
 import {API_NOTIFICATION_TYPE_ALL_CHANGES, NotificationSettings} from '../models/NotificationSettings';
 import {IWhitelistUser} from '../../../shared/models/IWhitelistUser';
+import {DocumentToObjectOptions} from 'mongoose';
 
 const uploadOptions = {
   storage: multer.diskStorage({
@@ -172,6 +173,8 @@ export class CourseController {
     }
 
     await course.populateLecturesFor(currentUser)
+      .populate('courseAdmin')
+      .populate('teachers')
       .execPopulate();
     await course.processLecturesFor(currentUser);
     return course.forView();
@@ -336,7 +339,7 @@ export class CourseController {
       .populate('whitelist')
       .execPopulate();
     await course.processLecturesFor(currentUser);
-    return course.toObject();
+    return course.toObject(<DocumentToObjectOptions>{currentUser});
   }
 
   private userReadConditions(currentUser: IUser) {
@@ -425,7 +428,7 @@ export class CourseController {
     // If a strict version is deemed important, see mongoose Model.findOneAndUpdate for a potential approach.
     const existingCourse = await Course.findOne({name: course.name});
     if (existingCourse) {
-      throw new BadRequestError(errorCodes.errorCodes.course.duplicateName.code);
+      throw new BadRequestError(errorCodes.course.duplicateName.code);
     }
     course.courseAdmin = currentUser;
     const newCourse = new Course(course);
@@ -479,38 +482,10 @@ export class CourseController {
    * @apiParam {Object} data Data (with access key).
    * @apiParam {IUser} currentUser Currently logged in user.
    *
-   * @apiSuccess {Course} course Enrolled course.
+   * @apiSuccess {{}} result Empty object.
    *
    * @apiSuccessExample {json} Success-Response:
-   *     {
-   *         "_id": "5a037e6b60f72236d8e7c83d",
-   *         "updatedAt": "2017-11-08T22:00:11.869Z",
-   *         "createdAt": "2017-11-08T22:00:11.263Z",
-   *         "name": "Introduction to web development",
-   *         "description": "Whether you're just getting started with Web development or are just expanding your horizons...",
-   *         "courseAdmin": {
-   *             "_id": "5a037e6a60f72236d8e7c815",
-   *             "updatedAt": "2017-11-08T22:00:10.898Z",
-   *             "createdAt": "2017-11-08T22:00:10.898Z",
-   *             "email": "teacher2@test.local",
-   *             "isActive": true,
-   *             "role": "teacher",
-   *             "profile": {
-   *                 "firstName": "Ober",
-   *                 "lastName": "Lehrer"
-   *             },
-   *             "id": "5a037e6a60f72236d8e7c815"
-   *         },
-   *         "active": true,
-   *         "__v": 1,
-   *         "whitelist": [],
-   *         "enrollType": "free",
-   *         "lectures": [],
-   *         "students": [],
-   *         "teachers": [],
-   *         "id": "5a037e6b60f72236d8e7c83d",
-   *         "hasAccessKey": false
-   *     }
+   *      {}
    *
    * @apiError NotFoundError
    * @apiError ForbiddenError Not allowed to join, you are not on whitelist.
@@ -519,32 +494,33 @@ export class CourseController {
   @Authorized(['student'])
   @Post('/:id/enroll')
   async enrollStudent(@Param('id') id: string, @Body() data: any, @CurrentUser() currentUser: IUser) {
-    let course = await Course.findById(id);
+    const course = await Course.findById(id);
     if (!course) {
       throw new NotFoundError();
     }
     if (course.enrollType === 'whitelist') {
       const wUsers: IWhitelistUser[] = await  WhitelistUser.find().where({courseId: course._id});
       if (wUsers.filter(e =>
-        e.firstName === currentUser.profile.firstName.toLowerCase()
-        && e.lastName === currentUser.profile.lastName.toLowerCase()
-        && e.uid === currentUser.uid).length <= 0) {
-        throw new ForbiddenError(errorCodes.errorCodes.course.notOnWhitelist.code);
+          e.firstName === currentUser.profile.firstName.toLowerCase()
+          && e.lastName === currentUser.profile.lastName.toLowerCase()
+          && e.uid === currentUser.uid).length <= 0) {
+        throw new ForbiddenError(errorCodes.course.notOnWhitelist.code);
       }
     } else if (course.accessKey && course.accessKey !== data.accessKey) {
-      throw new ForbiddenError(errorCodes.errorCodes.course.accessKey.code);
+      throw new ForbiddenError(errorCodes.course.accessKey.code);
     }
 
     if (course.students.indexOf(currentUser._id) < 0) {
       course.students.push(currentUser);
       await new NotificationSettings({
-        'user': currentUser, 'course': course,
+        'user': currentUser,
+        'course': course,
         'notificationType': API_NOTIFICATION_TYPE_ALL_CHANGES,
         'emailNotification': false
       }).save();
-      course = await course.save();
+      await course.save();
     }
-    return course.toObject();
+    return {};
   }
 
   /**
@@ -557,10 +533,10 @@ export class CourseController {
    * @apiParam {Object} data Body.
    * @apiParam {IUser} currentUser Currently logged in user.
    *
-   * @apiSuccess {Course} course Left course.
+   * @apiSuccess {{}} result Empty object.
    *
    * @apiSuccessExample {json} Success-Response:
-   *      {result: true}
+   *      {}
    *
    * @apiError NotFoundError
    * @apiError ForbiddenError
@@ -577,7 +553,7 @@ export class CourseController {
       course.students.splice(index, 1);
       await NotificationSettings.findOne({'user': currentUser, 'course': course}).remove();
       await course.save();
-      return {result: true};
+      return {};
     } else {
       // This equals an implicit !course.checkPrivileges(currentUser).userIsCourseStudent check.
       throw new ForbiddenError();
@@ -595,11 +571,10 @@ export class CourseController {
    * @apiParam {String} id Course ID.
    * @apiParam {Object} file Uploaded file.
    *
-   * @apiSuccess {Course} course Updated course.
+   * @apiSuccess {Object} result Returns the new whitelist length.
    *
    * @apiSuccessExample {json} Success-Response:
    *    {
-   *      success: true,
    *      newlength: 10
    *    }
    *
@@ -615,7 +590,7 @@ export class CourseController {
     @CurrentUser() currentUser: IUser) {
     const name: string = file.originalname;
     if (!name.endsWith('.csv')) {
-      throw new TypeError(errorCodes.errorCodes.upload.type.notCSV.code);
+      throw new TypeError(errorCodes.upload.type.notCSV.code);
     }
     const course = await Course.findById(id);
     if (!course.checkPrivileges(currentUser).userCanEditCourse) {
@@ -628,7 +603,7 @@ export class CourseController {
     const buffer = <string> await this.parser.parseFile(file);
     await this.parser.updateCourseFromBuffer(buffer, course);
     await course.save();
-    return {success: true, newlength: course.whitelist.length};
+    return {newlength: course.whitelist.length};
   }
 
   /**
@@ -642,13 +617,12 @@ export class CourseController {
    * @apiParam {ICourse} course New course data.
    * @apiParam {IUser} currentUser Currently logged in user.
    *
-   * @apiSuccess {Course} course Updated course.
+   * @apiSuccess {Object} result ID and name of the course.
    *
    * @apiSuccessExample {json} Success-Response:
    *    {
    *      _id: "5a037e6b60f72236d8e7c83d",
-   *      name: "Introduction to web development",
-   *      success: true
+   *      name: "Introduction to web development"
    *    }
    *
    * @apiError NotFoundError Can't find the course. (Includes implicit authorization check.)
@@ -665,7 +639,7 @@ export class CourseController {
     }
     const updatedCourse = await Course.findOneAndUpdate(conditions, course, {'new': true});
     if (updatedCourse) {
-      return {_id: updatedCourse.id, name: updatedCourse.name, success: true};
+      return {_id: updatedCourse.id, name: updatedCourse.name};
     } else {
       throw new NotFoundError();
     }
@@ -679,12 +653,10 @@ export class CourseController {
    * @apiParam {String} id Course ID.
    * @apiParam {IUser} currentUser Currently logged in user.
    *
-   * @apiSuccess {Boolean} result Confirmation of deletion.
+   * @apiSuccess {{}} result Empty object.
    *
    * @apiSuccessExample {json} Success-Response:
-   *     {
-   *         "result": true
-   *     }
+   *      {}
    *
    * @apiError NotFoundError
    * @apiError ForbiddenError
@@ -700,6 +672,6 @@ export class CourseController {
       throw new ForbiddenError();
     }
     await course.remove();
-    return {result: true};
+    return {};
   }
 }

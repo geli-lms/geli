@@ -43,6 +43,7 @@ import {HttpClient} from '@angular/common/http';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import {ImprintAndInfoService} from './shared/services/imprint-and-info.service';
 import {NotfoundComponent} from './shared/components/notfound/notfound.component';
+import {SnackBarService} from './shared/services/snack-bar.service';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -106,6 +107,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     },
     DataSharingService,
     ImprintAndInfoService,
+    SnackBarService,
   ],
   bootstrap: [AppComponent]
 })

@@ -5,7 +5,7 @@ import {AuthenticationService} from '../../shared/services/authentication.servic
 import {AuthGuardService} from '../../shared/services/auth-guard.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ShowProgressService} from '../../shared/services/show-progress.service';
-import {MatSnackBar} from '@angular/material';
+import {SnackBarService} from '../../shared/services/snack-bar.service';
 import {TitleService} from '../../shared/services/title.service';
 import {TranslateService} from '@ngx-translate/core';
 
@@ -23,7 +23,7 @@ export class LoginComponent implements OnInit {
               private authGuard: AuthGuardService,
               private authenticationService: AuthenticationService,
               private showProgress: ShowProgressService,
-              private snackBar: MatSnackBar,
+              private snackBar: SnackBarService,
               private formBuilder: FormBuilder,
               private titleService: TitleService,
               private translate: TranslateService) {
@@ -47,7 +47,7 @@ export class LoginComponent implements OnInit {
         this.loading = false;
 
         this.translate.get(['auth.loginSuccess', 'common.dismiss']).subscribe((t: string) => {
-          this.snackBar.open(t['auth.loginSuccess'], t['common.dismiss'], {duration: 2000});
+          this.snackBar.open(t['auth.loginSuccess']);
         });
       })
       .catch(error => {
@@ -56,14 +56,9 @@ export class LoginComponent implements OnInit {
 
         this.translate.get([
           'auth.loginFailed',
-          'common.dismiss',
           `auth.loginFailedError.${error.error.message}`
         ]).subscribe((t: string) => {
-          this.snackBar.open(
-            t['auth.loginFailed'] + ': ' + t[`auth.loginFailedError.${error.error.message}`],
-            t['common.dismiss'],
-            {duration: 2000}
-          );
+          this.snackBar.open(t['auth.loginFailed'] + ': ' + t[`auth.loginFailedError.${error.error.message}`]);
         });
       });
   }

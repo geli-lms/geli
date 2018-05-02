@@ -82,7 +82,7 @@ const courseSchema = new mongoose.Schema({
   {
     timestamps: true,
     toObject: {
-      transform: function (doc: any, ret: any) {
+      transform: function (doc: ICourseModel, ret: any, {currentUser}: {currentUser?: IUser}) {
         if (ret.hasOwnProperty('_id') && ret._id !== null) {
           ret._id = ret._id.toString();
         }
@@ -93,6 +93,15 @@ const courseSchema = new mongoose.Schema({
         ret.hasAccessKey = false;
         if (ret.accessKey) {
           ret.hasAccessKey = true;
+        }
+
+        if (currentUser !== undefined) {
+          if (doc.populated('teachers') !== undefined) {
+            ret.teachers = doc.teachers.map((user: IUserModel) => user.forUser(currentUser));
+          }
+          if (doc.populated('students') !== undefined) {
+            ret.students = doc.students.map((user: IUserModel) => user.forUser(currentUser));
+          }
         }
       }
     }
@@ -193,11 +202,7 @@ courseSchema.statics.importJSON = async function (course: ICourse, admin: IUser,
 
 
 courseSchema.methods.checkPrivileges = function (user: IUser) {
-  const userIsAdmin: boolean = user.role === 'admin';
-  const userIsTeacher: boolean = user.role === 'teacher';
-  const userIsStudent: boolean = user.role === 'student';
-  // NOTE: The 'tutor' role exists and has fixtures, but currently appears to be unimplemented.
-  // const userIsTutor: boolean = user.role === 'tutor';
+  const {userIsAdmin, ...userIs} = User.checkPrivileges(user);
 
   const courseAdminId = extractMongoId(this.courseAdmin);
 
@@ -209,7 +214,7 @@ courseSchema.methods.checkPrivileges = function (user: IUser) {
   const userCanEditCourse: boolean = userIsAdmin || userIsCourseAdmin || userIsCourseTeacher;
   const userCanViewCourse: boolean = (this.active && userIsCourseStudent) || userCanEditCourse;
 
-  return {userIsAdmin, userIsTeacher, userIsStudent,
+  return {userIsAdmin, ...userIs,
       courseAdminId,
       userIsCourseAdmin, userIsCourseTeacher, userIsCourseStudent, userIsCourseMember,
       userCanEditCourse, userCanViewCourse};
@@ -234,12 +239,16 @@ courseSchema.methods.forDashboard = function (user: IUser): ICourseDashboard {
 
 courseSchema.methods.forView = function (): ICourseView {
   const {
-    name, description
+    name, description,
+    courseAdmin, teachers,
+    lectures
   } = this;
   return {
     _id: <string>extractMongoId(this._id),
     name, description,
-    lectures: this.lectures.map((lecture: any) => lecture.toObject())
+    courseAdmin: User.forCourseView(courseAdmin),
+    teachers: teachers.map((teacher: IUser) =>  User.forCourseView(teacher)),
+    lectures: lectures.map((lecture: any) => lecture.toObject())
   };
 };
 
