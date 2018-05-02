@@ -6,6 +6,7 @@ import {User} from '../../src/models/User';
 import {Course, ICourseModel} from '../../src/models/Course';
 import {ICourse} from '../../../shared/models/ICourse';
 import {ICourseView} from '../../../shared/models/ICourseView';
+import {IUserSubCourseView} from '../../../shared/models/IUserSubCourseView';
 import {IUser} from '../../../shared/models/IUser';
 import {FixtureUtils} from '../../fixtures/FixtureUtils';
 import chaiHttp = require('chai-http');
@@ -118,10 +119,11 @@ describe('Course', () => {
         name: 'Test Course',
         description: 'Test description',
         active: true,
-        courseAdmin: teacher._id,
+        courseAdmin: teacher,
+        teachers: [teacher],
         enrollType: 'accesskey',
         accessKey: 'accessKey1234',
-        students: [student._id]
+        students: [student]
       });
       const savedCourse = await testData.save();
       return {teacher, unauthorizedTeacher, student, testData, savedCourse};
@@ -136,6 +138,13 @@ describe('Course', () => {
       return res;
     }
 
+    function assertUserCourseViewEquality(actual: IUserSubCourseView, expected: IUserSubCourseView) {
+      actual._id.should.be.equal(expected._id.toString());
+      actual.profile.firstName.should.be.equal(expected.profile.firstName);
+      actual.profile.lastName.should.be.equal(expected.profile.lastName);
+      actual.email.should.be.equal(expected.email);
+    }
+
     it('should get view info for course with given id', async () => {
       const {student, testData, savedCourse} = await prepareTestCourse();
 
@@ -148,6 +157,10 @@ describe('Course', () => {
       const body: ICourseView = res.body;
       body.name.should.be.equal(testData.name);
       body.description.should.be.equal(testData.description);
+      assertUserCourseViewEquality(body.courseAdmin, testData.courseAdmin);
+      for (const [index, actual] of body.teachers.entries()) {
+        assertUserCourseViewEquality(actual, testData.teachers[index]);
+      }
 
       should.equal(res.body.accessKey, undefined);
     });

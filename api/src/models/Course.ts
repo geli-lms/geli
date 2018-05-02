@@ -239,12 +239,16 @@ courseSchema.methods.forDashboard = function (user: IUser): ICourseDashboard {
 
 courseSchema.methods.forView = function (): ICourseView {
   const {
-    name, description
+    name, description,
+    courseAdmin, teachers,
+    lectures
   } = this;
   return {
     _id: <string>extractMongoId(this._id),
     name, description,
-    lectures: this.lectures.map((lecture: any) => lecture.toObject())
+    courseAdmin: User.forCourseView(courseAdmin),
+    teachers: teachers.map((teacher: IUser) =>  User.forCourseView(teacher)),
+    lectures: lectures.map((lecture: any) => lecture.toObject())
   };
 };
 

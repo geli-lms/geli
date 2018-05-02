@@ -3,6 +3,7 @@ import * as bcrypt from 'bcrypt';
 import {IUser} from '../../../shared/models/IUser';
 import {IUserSubSafe} from '../../../shared/models/IUserSubSafe';
 import {IUserSubTeacher} from '../../../shared/models/IUserSubTeacher';
+import {IUserSubCourseView} from '../../../shared/models/IUserSubCourseView';
 import {NativeError} from 'mongoose';
 import * as crypto from 'crypto';
 import {isNullOrUndefined} from 'util';
@@ -19,6 +20,7 @@ interface IUserModel extends IUser, mongoose.Document {
   checkEditableBy: (currentUser: IUser) => IProperties;
   forSafe: () => IUserSubSafe;
   forTeacher: () => IUserSubTeacher;
+  forCourseView: () => IUserSubCourseView;
   forUser: (otherUser: IUser) => IUserSubSafe | IUserSubTeacher | IUser;
   authenticationToken: string;
   resetPasswordToken: string;
@@ -32,6 +34,7 @@ interface IUserMongoose extends mongoose.Model<IUserModel> {
   checkEditUser: (currentUser: IUser, targetUser: IUser) => IProperties;
   forSafe: (user: IUser | IUserModel) => IUserSubSafe;
   forTeacher: (user: IUser | IUserModel) => IUserSubTeacher;
+  forCourseView: (user: IUser | IUserModel) => IUserSubCourseView;
   forUser: (user: IUser | IUserModel, otherUser: IUser) => IUserSubSafe | IUserSubTeacher | IUser;
 }
 let User: IUserMongoose;
@@ -203,6 +206,10 @@ userSchema.methods.forTeacher = function (): IUserSubTeacher {
   return User.forTeacher(this);
 };
 
+userSchema.methods.forCourseView = function (): IUserSubCourseView {
+  return User.forCourseView(this);
+};
+
 userSchema.methods.forUser = function (otherUser: IUser): IUserSubSafe | IUserSubTeacher | IUser {
   return User.forUser(this, otherUser);
 };
@@ -280,6 +287,16 @@ userSchema.statics.forTeacher = function (user: IUser | IUserModel): IUserSubTea
   return {
     ...User.forSafe(user),
     uid, email
+  };
+};
+
+userSchema.statics.forCourseView = function (user: IUser | IUserModel): IUserSubCourseView {
+  const {
+    email
+  } = user;
+  return {
+    ...User.forSafe(user),
+    email
   };
 };
 

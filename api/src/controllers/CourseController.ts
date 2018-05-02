@@ -173,6 +173,8 @@ export class CourseController {
     }
 
     await course.populateLecturesFor(currentUser)
+      .populate('courseAdmin')
+      .populate('teachers')
       .execPopulate();
     await course.processLecturesFor(currentUser);
     return course.forView();
