@@ -7,7 +7,7 @@ import {APIInfoService} from './shared/services/data.service';
 import {APIInfo} from './models/APIInfo';
 import {isNullOrUndefined} from 'util';
 import {RavenErrorHandler} from './shared/services/raven-error-handler.service';
-import {MatSnackBar} from '@angular/material';
+import {SnackBarService} from './shared/services/snack-bar.service';
 import {ThemeService} from './shared/services/theme.service';
 import {TranslateService} from '@ngx-translate/core';
 
@@ -28,7 +28,7 @@ export class AppComponent implements OnInit {
               private showProgress: ShowProgressService,
               private apiInfoService: APIInfoService,
               private ravenErrorHandler: RavenErrorHandler,
-              private snackBar: MatSnackBar,
+              private snackBar: SnackBarService,
               private themeService: ThemeService,
               public translate: TranslateService) {
     translate.setDefaultLang('en');
@@ -52,7 +52,7 @@ export class AppComponent implements OnInit {
         this.apiInfo = info;
       })
       .catch((err) => {
-        this.snackBar.open('Error on init', '', {duration: 3000});
+        this.snackBar.open('Could not connect to backend', null);
       });
   }
 
