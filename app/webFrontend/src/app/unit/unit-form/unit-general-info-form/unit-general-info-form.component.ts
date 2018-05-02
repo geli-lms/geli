@@ -17,10 +17,10 @@ export class UnitGeneralInfoFormComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.unitForm.addControl("name", new FormControl(this.model.name, Validators.required));
-    this.unitForm.addControl("description", new FormControl(this.model.description, Validators.required));
-    this.unitForm.addControl("deadline", new FormControl(this.model.deadline));
-    //this.unitForm.addControl("visible", new FormControl(this.model.visible));
+    this.unitForm.addControl('name', new FormControl(this.model.name, Validators.required));
+    this.unitForm.addControl('description', new FormControl(this.model.description, Validators.required));
+    this.unitForm.addControl('deadline', new FormControl(this.model.deadline));
+    // this.unitForm.addControl("visible", new FormControl(this.model.visible));
   }
 
   updateDateTime(date: Date) {

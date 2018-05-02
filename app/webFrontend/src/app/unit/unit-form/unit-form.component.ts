@@ -2,7 +2,7 @@ import {Component, OnInit, Input} from '@angular/core';
 import {ICourse} from '../../../../../../shared/models/ICourse';
 import {ILecture} from '../../../../../../shared/models/ILecture';
 import {IUnit} from '../../../../../../shared/models/units/IUnit';
-import {FormBuilder, FormGroup} from "@angular/forms";
+import {FormBuilder, FormGroup} from '@angular/forms';
 
 @Component({
   selector: 'app-unit-form',
@@ -26,12 +26,11 @@ export class UnitFormComponent implements OnInit {
     this.unitForm = new FormGroup({});
   }
 
-  save(){
-    if(!this.unitForm.valid){
-      console.log("invalid form")
+  save() {
+    if (!this.unitForm.valid) {
+      // console.log("invalid form")
       return;
     }
-    console.log(this.unitForm.value.markdown);
-
+    // console.log(this.unitForm.value.markdown);
     }
 }

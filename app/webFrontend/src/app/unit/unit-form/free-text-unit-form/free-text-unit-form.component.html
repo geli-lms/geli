@@ -1,6 +1,15 @@
 <app-free-text-unit-editor [(markdown)]="this.model.markdown"></app-free-text-unit-editor>
 
 <div class="btn-wrapper">
-  <button mat-raised-button color="secondary" (click)="openFullscreen()">Fullscreen</button>
-  <app-button-save-cancel (save)="saveUnit()" (cancel)="onCancel()"></app-button-save-cancel>
+  <app-button-save-cancel (save)="saveUnit()" (cancel)="onDone()">
+    <ng-container before>
+      <button mat-raised-button color="secondary">Demo 1</button>
+      <button mat-raised-button color="secondary">Demo 2</button>
+    </ng-container>
+    <ng-container after>
+      <button mat-raised-button color="secondary"  (click)="openFullscreen()">Fullscreen</button>
+      <button mat-raised-button color="secondary">Demo 3</button>
+      <button mat-raised-button color="secondary">Demo 4</button>
+    </ng-container>
+  </app-button-save-cancel>
 </div>

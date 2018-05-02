@@ -8,7 +8,7 @@ import {UnitGeneralInfoFormComponent} from '../unit-general-info-form/unit-gener
 import {FreeTextUnitEditorComponent} from './free-text-unit-editor/free-text-unit-editor.component';
 import {FreeTextUnitEditorDialog} from './free-text-unit-editor/free-text-unit-editor-dialog/free-text-unit-editor.dialog';
 import {isUndefined} from 'util';
-import {FormControl, FormGroup} from "@angular/forms";
+import {FormControl, FormGroup} from '@angular/forms';
 
 @Component({
   selector: 'app-free-text-unit-form',
@@ -38,7 +38,7 @@ export class FreeTextUnitFormComponent implements OnInit {
       this.model = new FreeTextUnit(this.course._id);
     }
     // add a virtual FormControl which binds to model.markdown
-    this.unitForm.addControl('markdown',new FormControl(this.model.markdown));
+    this.unitForm.addControl('markdown', new FormControl(this.model.markdown));
   }
 
   saveUnit() {
@@ -55,7 +55,7 @@ export class FreeTextUnitFormComponent implements OnInit {
     }
 
     // Checks if we have to create a new unit or update an existing
-    if (this.isModelNewObj()) {
+    if (this.lectureId) {
       // Create new one
       this.unitService.createItem({model: this.model, lectureId: this.lectureId})
         .then(
