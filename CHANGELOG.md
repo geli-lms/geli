@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [NEXT] 
 ### Added
+- Added the possibility to sort all courses alphabetically. [#567](https://github.com/h-da/geli/issues/567)
 - Added a box for information on the homescreen. [#216](https://github.com/h-da/geli/issues/216)
 - Added an account activation resend feature. [#601](https://github.com/h-da/geli/issues/601)
 - Added `SnackBarService` as wrapper for `MatSnackBar`. [#574](https://github.com/h-da/geli/issues/574)
