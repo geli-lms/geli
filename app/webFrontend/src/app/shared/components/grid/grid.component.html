@@ -1,0 +1,8 @@
+<mat-card>
+<mat-card-header>
+  {{file.name}}
+</mat-card-header>
+  <mat-card-content>
+    <video src="{{'/api/uploads/' + file.link}}" [width]="210" [height]="120"></video>
+  </mat-card-content>
+</mat-card>

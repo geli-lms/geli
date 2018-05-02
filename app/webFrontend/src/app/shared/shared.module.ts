@@ -23,6 +23,7 @@ import {PickMediaDialog} from './components/pick-media-dialog/pick-media-dialog.
 import {TranslateModule} from '@ngx-translate/core';
 import {NotfoundComponent} from './components/notfound/notfound.component';
 import {UserProfileDialog} from 'app/shared/components/user-profile-dialog/user-profile-dialog.component';
+import {GridComponent} from './components/grid/grid.component';
 
 @NgModule({
     imports: [
@@ -54,6 +55,7 @@ import {UserProfileDialog} from 'app/shared/components/user-profile-dialog/user-
         PickMediaDialog,
         NotfoundComponent,
         UserProfileDialog,
+        GridComponent,
     ],
     exports: [
         GravatarDirective,
@@ -75,6 +77,7 @@ import {UserProfileDialog} from 'app/shared/components/user-profile-dialog/user-
         PickMediaDialog,
         TranslateModule,
         UserProfileDialog,
+        GridComponent,
     ],
     entryComponents: [
         UploadFormDialog,

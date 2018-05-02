@@ -1,1 +1,49 @@
-<p>this is the fileview!</p>
+<div class="selectArea">
+  <mat-form-field>
+    <mat-select [(ngModel)]="selectedValue" (selectionChange)="checkSelection()">
+      <mat-option *ngFor="let type of types" [value]="type.value">
+        {{ type.label }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <div class="buttonArea">
+    <button mat-button color="primary" (click)="listview()" mat-tooltip="List View" class="btn">
+      <i class="material-icons iconSize">view_list</i> List
+    </button>
+    <button mat-button color="primary" [disabled]="this.disableGridViewButton" (click)="gridview()" mat-tooltip="Grid View" class="btn">
+      <i class="material-icons iconSize">view_module</i> Grid
+    </button>
+  </div>
+</div>
+
+<div *ngIf="displayGrid == false">
+  <mat-list>
+    <ng-container *ngFor="let lec of course.lectures">
+      <ng-container *ngFor="let unit of lec.units">
+        <ng-container *ngIf="unit.__t === 'file'">
+          <ng-container *ngFor="let fileUnit of unit.files">
+            <ng-container *ngIf="fileUnit.fileUnitType == selectedValue">
+            <mat-list-item>
+              {{fileUnit.name}}
+            </mat-list-item>
+            </ng-container>
+          </ng-container>
+        </ng-container>
+      </ng-container>
+    </ng-container>
+  </mat-list>
+</div>
+<div *ngIf="displayGrid == true">
+  <ng-container *ngFor="let lec of course.lectures">
+    <ng-container *ngFor="let unit of lec.units">
+      <ng-container *ngIf="unit.__t === 'file'">
+        <ng-container *ngFor="let fileUnit of unit.files">
+          <ng-container *ngIf="fileUnit.fileUnitType == selectedValue">
+          <app-grid [file]="fileUnit"></app-grid>
+          </ng-container>
+        </ng-container>
+      </ng-container>
+    </ng-container>
+  </ng-container>
+</div>
+

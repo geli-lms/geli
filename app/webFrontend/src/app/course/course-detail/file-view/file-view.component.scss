@@ -1,0 +1,40 @@
+.selectArea {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+ // vertical-align: middle;
+
+  .buttonArea {
+    // margin-bottom: -0.1em;
+  }
+
+}
+
+::ng-deep .iconSize {
+  font-size:40px !important;
+}
+
+.iconFlex {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  align-content: center;
+}
+
+.btn {
+  border: none;
+  outline: none;
+  padding: 2px 6px;
+  background-color: #f1f1f1;
+  cursor: pointer;
+  vertical-align: middle;
+}
+
+.btn:hover {
+  background-color: #ddd;
+}
+
+.btn.active {
+  background-color: #666;
+  color: white;
+}
