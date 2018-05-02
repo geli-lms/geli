@@ -1,4 +1,6 @@
 // TODO move to shared folder
+import config from '../config/main';
+
 export const errorCodes = {
   mail: {
     duplicate: {
@@ -68,6 +70,18 @@ export const errorCodes = {
     noOtherAdmins: {
       code: 'noOtherAdmins',
       text: 'There are no other users with admin privileges.'
+    },
+    userNotFound: {
+      code: 'user not found',
+      text: 'User was not found.',
+    },
+    retryAfter: {
+      code: 'retry after',
+      text: 'You can only resend the activation every ' + config.timeTilNextActivationResendMin + ' minutes. You can resend again in ',
+    },
+    userAlreadyActive: {
+      code: 'user already active',
+      text: 'User is already activated.'
     }
   },
   whitelist: {

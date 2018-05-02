@@ -312,6 +312,7 @@ export class UserController {
    *         "id": "5a037e6a60f72236d8e7c81d"
    *     }
    *
+   * @apiError ForbiddenError Forbidden format of uploaded picture.
    * @apiError ForbiddenError You don't have the authorization to change a user of this role.
    * @apiError BadRequestError
    */
@@ -319,6 +320,11 @@ export class UserController {
   async addUserPicture(
       @UploadedFile('file', {options: uploadOptions}) file: any,
       @Param('id') id: string, @CurrentUser() currentUser: IUser) {
+    const mimeFamily = file.mimetype.split('/', 1)[0];
+    if (mimeFamily !== 'image') {
+      throw new ForbiddenError('Forbidden format of uploaded picture: ' + mimeFamily);
+    }
+
     let user = await User.findById(id);
 
     if (!user.checkEditableBy(currentUser).editAllowed) {

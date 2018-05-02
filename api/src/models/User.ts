@@ -26,6 +26,7 @@ interface IUserModel extends IUser, mongoose.Document {
   resetPasswordToken: string;
   resetPasswordExpires: Date;
   isActive: boolean;
+  updatedAt: Date;
 }
 interface IUserMongoose extends mongoose.Model<IUserModel> {
   getEditLevel: (user: IUser) => number;
@@ -89,7 +90,8 @@ const userSchema = new mongoose.Schema({
     authenticationToken: {type: String},
     resetPasswordToken: {type: String},
     resetPasswordExpires: {type: Date},
-    isActive: {type: Boolean, 'default': false}
+    isActive: {type: Boolean, 'default': false},
+    updatedAt: { type: Date, required: true, default: Date.now }
   },
   {
     timestamps: true,
@@ -124,8 +126,8 @@ function hashPassword(next: (err?: NativeError) => void) {
 }
 
 function generateActivationToken(next: (err?: NativeError) => void) {
-  // check if user is new and wasn't activated by the creator
-  if (this.isNew && !this.isActive && isNullOrUndefined(this.authenticationToken)) {
+  // check if user wasn't activated by the creator
+  if ( !this.isActive && isNullOrUndefined(this.authenticationToken)) {
     // set new authenticationToken
     this.authenticationToken = generateSecureToken();
   }

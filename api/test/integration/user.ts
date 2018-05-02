@@ -34,7 +34,7 @@ describe('User', () => {
 
       res.status.should.be.equal(200);
       res.body.should.be.a('array');
-      res.body.length.should.be.equal(40);
+      res.body.length.should.be.equal(42);
     });
 
     it('should fail with wrong authorization', async () => {
@@ -334,6 +334,18 @@ describe('User', () => {
       const targetUser = await FixtureUtils.getRandomStudent();
       const res = await requestAddUserPicture(admin, targetUser);
       assertSuccess(res);
+    });
+
+    it('should block non images when uploading new user picture', async () => {
+      const admin = await FixtureUtils.getRandomAdmin();
+
+      const res = await chai.request(app)
+        .post(`${BASE_URL}/picture/${admin._id}`)
+        .set('Authorization', `JWT ${JwtUtils.generateToken(admin)}`)
+        .attach('file', fs.readFileSync('test/resources/wrong-format.rtf'), 'wrong-format.txt');
+
+      res.status.should.be.equal(400);
+      res.body.name.should.be.equal('BadRequestError');
     });
   });
 

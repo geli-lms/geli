@@ -1,3 +1,5 @@
+@import "../../../../variables";
+@import "../../../../styles/file-list";
 .tab-content {
   margin-top: 1rem;
 
@@ -12,4 +14,23 @@
 
 .preview img, .camera video {
   width: 320px;
+}
+
+.file-dropzone {
+  display: table;
+  height: 7.5rem;
+  width: 100%;
+  cursor: pointer;
+
+  border: dotted 2px map-get($app-primary, 'default');
+
+  &.nv-file-over {
+    border-color: map-get($app-accent, 'default');
+  }
+
+  span {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+  }
 }

@@ -5,21 +5,29 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [NEXT] 
-## Added
-- New course & user API unit tests [#654](https://github.com/h-da/geli/issues/654), [#691](https://github.com/h-da/geli/issues/691).
+### Added
+- Added a box for information on the homescreen. [#216](https://github.com/h-da/geli/issues/216)
+- Added account activation resend feature. [#601](https://github.com/h-da/geli/issues/601)
+- New course & user API unit tests. [#654](https://github.com/h-da/geli/issues/654) [#691](https://github.com/h-da/geli/issues/691)
 
-## Changed
-- Refactored or slightly altered various course & user related APIs [#654](https://github.com/h-da/geli/issues/654), [#691](https://github.com/h-da/geli/issues/691).
+### Changed
+- Refactored or slightly altered various course & user related APIs. [#654](https://github.com/h-da/geli/issues/654) [#691](https://github.com/h-da/geli/issues/691)
 
 ### Fixed
-- Fixed wasteful course data usage [#654](https://github.com/h-da/geli/issues/654) via specialized course model interfaces.
-- Fixed a broken documentation link [#583](https://github.com/h-da/geli/issues/583).
-- Limited the first- and lastname to 64 characters in registration- and edit page. [#585](https://github.com/h-da/geli/issues/585)
-- add correct E-Mail validator to edit-profile and register component [#564]
+- Fixed wasteful course data usage via specialized course model interfaces. [#654](https://github.com/h-da/geli/issues/654)
+- Fixed a broken documentation link. [#583](https://github.com/h-da/geli/issues/583)
+- Limited the first and last name to 64 characters in the registration- and edit page. [#585](https://github.com/h-da/geli/issues/585)
+- Added a correct email validator to the edit-profile and register components. [#564](https://github.com/h-da/geli/issues/564)
+- Upload of profile pictures now prevents files with wrong extensions. [#581](https://github.com/h-da/geli/issues/581)
+- Fixed empty course downloads. [#659](https://github.com/h-da/geli/issues/659)
+- Videos in the course now get sized equally and can't grow too big in mobile views. [#534](https://github.com/h-da/geli/issues/534)
+- Fixed missing background on the password reset page. [#673](https://github.com/h-da/geli/issues/673)
+- Fixed notification icon spacing in the navbar for students. [#696](https://github.com/h-da/geli/issues/696)
 
 ### Security
-- Fixed numerous severe user related security issues [#691](https://github.com/h-da/geli/issues/691).
-- Fixed multiple severe course related security issues [#594](https://github.com/h-da/geli/issues/594), [#653](https://github.com/h-da/geli/issues/653), [#691](https://github.com/h-da/geli/issues/691).
+- Fixed numerous severe user related security issues. [#691](https://github.com/h-da/geli/issues/691)
+- Fixed multiple severe course related security issues. [#594](https://github.com/h-da/geli/issues/594) [#653](https://github.com/h-da/geli/issues/653) [#691](https://github.com/h-da/geli/issues/691)
+- Updated the dependencies for security.
 
 
 ## [0.6.0] - 2018-03-31 - Introduces MediaManager and some minor changes
