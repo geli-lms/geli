@@ -58,6 +58,14 @@
   background-size: cover;
 }
 
+.app-notification{
+  padding-right: 16px;
+}
+
+.menu-button{
+  margin-left: 8px;
+}
+
 .firstname-wrapper {
   @media screen and (max-width: $bp-width--md) {
     display: inline-block;

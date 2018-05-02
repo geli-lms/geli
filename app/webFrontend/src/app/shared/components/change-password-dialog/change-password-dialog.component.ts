@@ -1,6 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {IUser} from '../../../../../../../shared/models/IUser';
-import {MatDialogRef, MatSnackBar} from '@angular/material';
+import {MatDialogRef} from '@angular/material';
+import {SnackBarService} from '../../services/snack-bar.service';
 import {FormGroup, FormBuilder} from '@angular/forms';
 import {UserDataService} from '../../services/data.service';
 import {UserService} from '../../services/user.service';
@@ -18,7 +19,7 @@ export class ChangePasswordDialogComponent implements OnInit {
                private formBuilder: FormBuilder,
                private userService: UserService,
               private userDataService: UserDataService,
-               public snackBar: MatSnackBar) {
+               public snackBar: SnackBarService) {
     this.generateForm();
   }
 
@@ -64,15 +65,14 @@ export class ChangePasswordDialogComponent implements OnInit {
     this.user = await this.prepUser();
     try {
       const user = await this.userDataService.updateItem(this.user);
-      this.snackBar.open('Password successfully updated.', '', {duration: 3000});
+      this.snackBar.open('Password successfully updated.');
       this.dialogRef.close();
     } catch (error) {
-      // console.dir(error);
       let errormsg = error.error.message;
       if (!errormsg || 0 === errormsg.length) {
         errormsg = 'Woops! Sth. went wrong. Please provide the correct Data and try again in a few Minutes!';
       }
-      this.snackBar.open(errormsg, 'Dismiss');
+      this.snackBar.open(errormsg);
     }
   }
 }
