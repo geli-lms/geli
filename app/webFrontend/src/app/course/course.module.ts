@@ -14,9 +14,10 @@ import {LectureCheckboxComponent} from './course-detail/download-course-dialog/d
 import {UnitCheckboxComponent} from './course-detail/download-course-dialog/downloadCheckBoxes/unit-checkbox.component';
 import {UploadUnitCheckboxComponent} from './course-detail/download-course-dialog/downloadCheckBoxes/upload-unit-checkbox.component';
 import {DuplicationService, ExportService, ImportService} from '../shared/services/data.service';
+import {DialogService} from '../shared/services/dialog.service';
 import {SaveFileService} from '../shared/services/save-file.service';
 import {ReportModule} from '../report/report.module';
-import {RouterOutlet} from '@angular/router';
+
 
 @NgModule({
   imports: [
@@ -47,6 +48,7 @@ import {RouterOutlet} from '@angular/router';
     ExportService,
     DuplicationService,
     SaveFileService,
+    DialogService
   ],
   exports: [
     CourseComponent,

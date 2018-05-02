@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Added an account activation resend feature. [#601](https://github.com/h-da/geli/issues/601)
 - Added `SnackBarService` as wrapper for `MatSnackBar`. [#574](https://github.com/h-da/geli/issues/574)
 - Added new course & user API unit tests. [#654](https://github.com/h-da/geli/issues/654) [#691](https://github.com/h-da/geli/issues/691)
+- Added details of courseAdmin and teacher to course detail view. on click profiles are shown.[#598] (https://github.com/h-da/geli/issues/598)
 
 ### Changed
 - Refactored or slightly altered various course & user related APIs. [#654](https://github.com/h-da/geli/issues/654) [#691](https://github.com/h-da/geli/issues/691)
@@ -31,7 +32,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Fixed numerous severe user related security issues. [#691](https://github.com/h-da/geli/issues/691)
 - Fixed multiple severe course related security issues. [#594](https://github.com/h-da/geli/issues/594) [#653](https://github.com/h-da/geli/issues/653) [#691](https://github.com/h-da/geli/issues/691)
 - Updated the dependencies for security. [#661](https://github.com/h-da/geli/issues/661)
-
 
 ## [0.6.0] - 2018-03-31 - Introduces MediaManager and some minor changes
 ### Added
