@@ -12,10 +12,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Added `SnackBarService` as wrapper for `MatSnackBar`. [#574](https://github.com/h-da/geli/issues/574)
 - Added new course & user API unit tests. [#654](https://github.com/h-da/geli/issues/654) [#691](https://github.com/h-da/geli/issues/691)
 - Added details of courseAdmin and teacher to course detail view. on click profiles are shown.[#598] (https://github.com/h-da/geli/issues/598)
+- Added changed size of drop down arrows for better usability. [#686] (https://github.com/h-da/geli/issues/686)
 
 ### Changed
 - Refactored or slightly altered various course & user related APIs. [#654](https://github.com/h-da/geli/issues/654) [#691](https://github.com/h-da/geli/issues/691)
 - Removed firstname from resend activation feature and change button positioning. [#711] (https://github.com/h-da/geli/issues/711)
+- Refactored register and resend activation to use geli email validator with top level domain check. [#713] (https://github.com/h-da/geli/issues/713)
 
 ### Fixed
 - Fixed wasteful course data usage via specialized course model interfaces. [#654](https://github.com/h-da/geli/issues/654)

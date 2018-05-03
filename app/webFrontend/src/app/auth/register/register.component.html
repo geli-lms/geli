@@ -65,11 +65,11 @@
           </small>
           <small *ngIf="mailError" class="text-danger">{{mailError}}</small>
           <small
-            *ngIf="registerForm.controls.email.hasError('teacherEmailError') && !registerForm.controls.email.hasError('email') && !registerForm.controls.email.hasError('required')"
+            *ngIf="registerForm.controls.email.hasError('teacherEmailError') && !registerForm.controls.email.hasError('emailValidator') && !registerForm.controls.email.hasError('required')"
             class="text-danger">{{'common.validation.instituteMail'|translate}}
           </small>
           <small
-            *ngIf="registerForm.controls.email.hasError('email') && !registerForm.controls.email.hasError('teacherMailError') && !registerForm.controls.email.hasError('required')"
+            *ngIf="registerForm.controls.email.hasError('emailValidator') && !registerForm.controls.email.hasError('teacherMailError') && !registerForm.controls.email.hasError('required')"
             class="text-danger">
             {{'common.validation.invalid'|translate}}
           </small>
