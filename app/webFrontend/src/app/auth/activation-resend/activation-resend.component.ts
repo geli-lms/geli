@@ -6,6 +6,7 @@ import {ShowProgressService} from '../../shared/services/show-progress.service';
 import {MatSnackBar} from '@angular/material';
 import {errorCodes} from '../../../../../../api/src/config/errorCodes';
 import {TitleService} from '../../shared/services/title.service';
+import {emailValidator} from '../../shared/validators/validators';
 
 @Component({
   selector: 'app-activation-resend',
@@ -107,7 +108,7 @@ export class ActivationResendComponent implements OnInit {
         lastName: ['', Validators.compose([Validators.required, Validators.minLength(2)])],
       }),
       uid: ['', Validators.compose([Validators.required, this.validateMatriculationNumber.bind(this)])],
-      email: ['', Validators.compose([Validators.required, Validators.email])]
+      email: ['', Validators.compose([Validators.required, emailValidator])]
     });
   }
 

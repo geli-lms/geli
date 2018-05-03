@@ -72,7 +72,7 @@
             </small>
             <small *ngIf="mailError" class="text-danger">{{mailError}}</small>
             <small
-              *ngIf="resendActivationForm.controls.email.hasError('email') && !resendActivationForm.controls.email.hasError('required')"
+              *ngIf="resendActivationForm.controls.email.hasError('emailValidator') && !resendActivationForm.controls.email.hasError('required')"
               class="text-danger">
               {{'common.validation.invalid'|translate}}
             </small>
