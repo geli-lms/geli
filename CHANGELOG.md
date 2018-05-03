@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+<!--
+################################################################################
+### PLEASE LINK THE ISSUES IF THERE IS ONE, OTHERWISE LINK THE PULL-REQUESTS ###
+################################################################################
+-->
+
 ## [NEXT] 
 ### Added
 - Added the possibility to sort all courses alphabetically. [#567](https://github.com/h-da/geli/issues/567)
@@ -11,7 +17,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Added an account activation resend feature. [#601](https://github.com/h-da/geli/issues/601)
 - Added `SnackBarService` as wrapper for `MatSnackBar`. [#574](https://github.com/h-da/geli/issues/574)
 - Added new course & user API unit tests. [#654](https://github.com/h-da/geli/issues/654) [#691](https://github.com/h-da/geli/issues/691)
-- Added details of courseAdmin and teacher to course detail view. on click profiles are shown.[#598] (https://github.com/h-da/geli/issues/598)
+- Added details of courseAdmin and teacher to course detail view. on click profiles are shown. [#598](https://github.com/h-da/geli/issues/598)
 
 ### Changed
 - Refactored or slightly altered various course & user related APIs. [#654](https://github.com/h-da/geli/issues/654) [#691](https://github.com/h-da/geli/issues/691)
