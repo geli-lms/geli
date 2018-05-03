@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
 - Refactored or slightly altered various course & user related APIs. [#654](https://github.com/h-da/geli/issues/654) [#691](https://github.com/h-da/geli/issues/691)
+- Removed firstname from resend activation feature and change button positioning. [#711] (https://github.com/h-da/geli/issues/711)
 
 ### Fixed
 - Fixed wasteful course data usage via specialized course model interfaces. [#654](https://github.com/h-da/geli/issues/654)

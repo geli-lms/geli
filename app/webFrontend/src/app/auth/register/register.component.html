@@ -93,17 +93,19 @@
       <button mat-raised-button color="primary" type="submit"
               [disabled]="loading || !registerForm?.valid">{{'common.register'|translate}}
       </button>
-      <button *ngIf="role == 'student'" mat-raised-button type="button" routerLink="/activation-resend" routerLinkActive="active">
+    </form>
+    <div class="bottom-buttons">
+      <button *ngIf="role == 'student'" mat-button type="button" routerLink="/activation-resend" routerLinkActive="active">
         {{'auth.registration.resendActivationButton'|translate}}
       </button>
-    </form>
 
-    <button mat-button *ngIf="role==='student'" (click)="changeRole('teacher')" class="pull-right">
-      {{'auth.registration.teacherRegistrationButton'|translate}}
-    </button>
+      <button mat-button *ngIf="role==='student'" (click)="changeRole('teacher')" class="pull-right">
+        {{'auth.registration.teacherRegistrationButton'|translate}}
+      </button>
 
-    <button mat-button *ngIf="role!=='student'" (click)="changeRole('student')" class="pull-right">
-      {{'common.back'|translate}}
-    </button>
+      <button mat-button *ngIf="role!=='student'" (click)="changeRole('student')" class="pull-right">
+        {{'common.back'|translate}}
+      </button>
+    </div>
   </mat-card-content>
 </mat-card>

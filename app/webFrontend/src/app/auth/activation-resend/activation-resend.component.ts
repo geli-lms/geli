@@ -22,7 +22,6 @@ export class ActivationResendComponent implements OnInit {
 
   private trimFormFields() {
 
-    this.resendActivationForm.value.profile.firstName = this.resendActivationForm.value.profile.firstName.trim();
     this.resendActivationForm.value.profile.lastName = this.resendActivationForm.value.profile.lastName.trim();
     this.resendActivationForm.value.uid = this.resendActivationForm.value.uid.trim();
     this.resendActivationForm.value.email = this.resendActivationForm.value.email.trim();
@@ -61,8 +60,8 @@ export class ActivationResendComponent implements OnInit {
     this.resendActivationForm.value.email = this.resendActivationForm.value.email.replace(/\s/g, '').toLowerCase();
     this.trimFormFields();
     try {
-     await this.authenticationService.resendActivation(this.resendActivationForm.value.profile.firstName,
-        this.resendActivationForm.value.profile.lastName, this.resendActivationForm.value.uid, this.resendActivationForm.value.email);
+     await this.authenticationService.resendActivation(this.resendActivationForm.value.profile.lastName,
+       this.resendActivationForm.value.uid, this.resendActivationForm.value.email);
      this.resendActivationDone = true;
     } catch (err) {
       this.handleError(err);
@@ -103,7 +102,6 @@ export class ActivationResendComponent implements OnInit {
   generateForm() {
     this.resendActivationForm = this.formBuilder.group({
       profile: this.formBuilder.group({
-        firstName: ['', Validators.compose([Validators.required, Validators.minLength(2)])],
         lastName: ['', Validators.compose([Validators.required, Validators.minLength(2)])],
       }),
       uid: ['', Validators.compose([Validators.required, this.validateMatriculationNumber.bind(this)])],

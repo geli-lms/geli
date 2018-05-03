@@ -159,8 +159,7 @@ describe('Auth', () => {
 
       const res = await chai.request(app)
         .post(`${BASE_URL}/activationresend`)
-        .send({'firstname': resendActivationUser.profile.firstName,
-          'lastname': resendActivationUser.profile.lastName,
+        .send({'lastname': resendActivationUser.profile.lastName,
           'uid': resendActivationUser.uid,
           'email': resendActivationUser.email })
         .catch(err => err.response);
@@ -176,8 +175,7 @@ describe('Auth', () => {
 
       const res = await chai.request(app)
         .post(`${BASE_URL}/activationresend`)
-        .send({'firstname': resendActivationUser.profile.firstName,
-          'lastname': resendActivationUser.profile.lastName,
+        .send({'lastname': resendActivationUser.profile.lastName,
           'uid': resendActivationUser.uid,
           'email': resendActivationUser.email })
         .catch(err => err.response);
@@ -196,8 +194,7 @@ describe('Auth', () => {
 
       const res = await chai.request(app)
         .post(`${BASE_URL}/activationresend`)
-        .send({'firstname': resendActivationUser.profile.firstName,
-          'lastname': resendActivationUser.profile.lastName,
+        .send({'lastname': resendActivationUser.profile.lastName,
           'uid': resendActivationUser.uid,
           'email': resendActivationUser.email })
         .catch(err => err.response);
@@ -218,8 +215,7 @@ describe('Auth', () => {
 
       const res = await chai.request(app)
         .post(`${BASE_URL}/activationresend`)
-        .send({'firstname': resendActivationUser.profile.firstName,
-          'lastname': resendActivationUser.profile.lastName,
+        .send({'lastname': resendActivationUser.profile.lastName,
           'uid': resendActivationUser.uid,
           'email': resendActivationUser.email })
         .catch(err => err.response);
@@ -236,8 +232,7 @@ describe('Auth', () => {
 
       const res = await chai.request(app)
         .post(`${BASE_URL}/activationresend`)
-        .send({'firstname': resendActivationUser.profile.firstName,
-          'lastname': resendActivationUser.profile.lastName,
+        .send({'lastname': resendActivationUser.profile.lastName,
           'uid': resendActivationUser.uid,
           'email': resendActivationUser.email })
         .catch(err => err.response);
