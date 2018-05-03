@@ -42,4 +42,4 @@ const chatSchema = new mongoose.Schema({
 
 const Chat = mongoose.model<IChatModel>('Chat', chatSchema);
 
-export {Chat, IChat};
+export {Chat, IChatModel};

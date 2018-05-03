@@ -13,6 +13,7 @@ import passportJwtStrategy from './security/passportJwtStrategy';
 import {RoleAuthorization} from './security/RoleAuthorization';
 import {CurrentUserDecorator} from './security/CurrentUserDecorator';
 import './utilities/FilterErrorHandler';
+import ChatServer from './Chatserver';
 
 if (config.sentryDsn) {
   Raven.config(config.sentryDsn, {
@@ -67,9 +68,12 @@ export class Server {
     // Request logger
     this.app.use(morgan('combined'));
 
-    this.app.listen(config.port, () => {
+    const server = this.app.listen(config.port, () => {
       winston.log('info', '--> Server successfully started at port %d', config.port);
     });
+
+    const chatServer = new ChatServer(server);
+    chatServer.init();
   }
 }
 
