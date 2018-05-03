@@ -75,9 +75,9 @@ script:
   - cd ..
   # run frontend-tests and return back to root for following steps
   - cd app/webFrontend
-  - npm lint        # run linter
-  - npm test-ci || true     # run test - many tests are broken
-  - nom e2e         # run end-to-end-tests
+  - npm run lint        # run linter
+  - npm run test-ci || true     # run test - many tests are broken
+  - nom run e2e         # run end-to-end-tests
   - sed -i 's/$TRAVIS_COMMIT/'$TRAVIS_COMMIT'/' src/app/shared/services/raven-error-handler.service.ts
   - cd ../..
   - travis_wait 30 .travis/build-fe.sh       # build in prod mode
