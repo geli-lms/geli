@@ -86,6 +86,7 @@ import {NotfoundComponent} from './components/notfound/notfound.component';
     PickMediaDialog,
     UserProfileDialog,
   ],
+  providers: [],
 })
 export class SharedModule {
 }

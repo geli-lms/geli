@@ -1,0 +1,39 @@
+.chat-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-input {
+  padding-top: 20px;
+  width: 80%;
+}
+
+.chat-list {
+  top: 90px;
+  left: 25px;
+  right: 25px;
+  bottom: 120px;
+}
+
+.chat-list-item {
+  margin-top: 2px;
+  margin-bottom: 2px;
+  border-radius: 5px;
+  background-color: #E8EAF6;
+}
+
+.main-card {
+  height: 100%;
+}
+
+.chat-footer-container {
+  bottom:25px;
+  left:25px;
+  right:25px;
+}
+
+.chat-notification {
+  text-align: center;
+}

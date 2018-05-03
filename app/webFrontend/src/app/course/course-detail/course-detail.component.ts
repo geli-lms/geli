@@ -1,10 +1,9 @@
-import {AfterViewInit, Component, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import 'rxjs/add/operator/switchMap';
 import {CourseService, UserDataService} from '../../shared/services/data.service';
 import {ICourse} from '../../../../../../shared/models/ICourse';
 import {UserService} from '../../shared/services/user.service';
-import {IUser} from '../../../../../../shared/models/IUser';
 import {User} from '../../models/User';
 import {MatSnackBar, MatDialog} from '@angular/material';
 import {DownloadCourseDialogComponent} from './download-course-dialog/download-course-dialog.component';
@@ -22,6 +21,7 @@ export class CourseDetailComponent implements OnInit {
 
   course: ICourse;
   id: string;
+  showChat = false;
 
   constructor(private router: Router,
               private route: ActivatedRoute,
@@ -68,6 +68,10 @@ export class CourseDetailComponent implements OnInit {
 
   showUserProfile(teacher: User) {
     this.dialogService.userProfile(teacher);
+  }
+
+  displayChat() {
+    this.showChat = true;
   }
 
 }

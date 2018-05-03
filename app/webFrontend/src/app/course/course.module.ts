@@ -17,6 +17,7 @@ import {DuplicationService, ExportService, ImportService} from '../shared/servic
 import {DialogService} from '../shared/services/dialog.service';
 import {SaveFileService} from '../shared/services/save-file.service';
 import {ReportModule} from '../report/report.module';
+import { ChatComponent } from './chat/chat.component';
 
 
 @NgModule({
@@ -39,6 +40,7 @@ import {ReportModule} from '../report/report.module';
     LectureCheckboxComponent,
     UnitCheckboxComponent,
     UploadUnitCheckboxComponent,
+    ChatComponent,
   ],
   entryComponents: [
     DownloadCourseDialogComponent,

@@ -20,10 +20,9 @@ const messageSchema = new mongoose.Schema({
       type: Boolean,
       default: true,
     },
-    refType: String,
-    ref: {
-      type: mongoose.Schema.Types.ObjectId,
-      refPath: 'refType'
+    room: {
+      type: String,
+      required: true
     }
   },
   {

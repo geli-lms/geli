@@ -4,5 +4,5 @@ export interface IMessage {
   author: IUser;
   content: string;
   visible: boolean;
-  chatId: string;
+  room: string;
 }
