@@ -188,6 +188,9 @@ describe('User', () => {
       res.body.message.should.be.equal(errorCodes.user.emailAlreadyInUse.text);
     });
 
+    // This test is disabled because there currently is no role beneath 'admin' that is allowed to edit other users.
+    // (Previously teachers had permission to change some parts of any student's profile.)
+    /*
     it('should fail changing other user\'s uid with wrong authorization (not admin)', async () => {
       const teacher = await FixtureUtils.getRandomTeacher();
       const updatedUser = await FixtureUtils.getRandomStudent();
@@ -203,6 +206,7 @@ describe('User', () => {
       res.body.name.should.be.equal('ForbiddenError');
       res.body.message.should.be.equal(errorCodes.user.onlyAdminsCanChangeUids.text);
     });
+    */
 
     it('should fail changing other user\'s name with wrong authorization (low edit level)', async () => {
       const [student, updatedUser] = await FixtureUtils.getRandomStudents(2, 2);
