@@ -40,12 +40,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Fixed multiple severe course related security issues. [#594](https://github.com/h-da/geli/issues/594) [#653](https://github.com/h-da/geli/issues/653) [#691](https://github.com/h-da/geli/issues/691)
 - Updated the dependencies for security. [#661](https://github.com/h-da/geli/issues/661)
 
-## [0.6.0] - 2018-03-31 - Introduces MediaManager and some minor changes
+## [[0.6.0](https://github.com/h-da/geli/releases/tag/v0.6.0)] - 2018-03-31 - Introduces MediaManager and some minor changes
 ### Added
 - MediaManager for file management in courses
 
 
-## [0.5.0] - 2018-03-24 - WS 17/18 intermediate Release
+## [[0.5.0](https://github.com/h-da/geli/releases/tag/v0.5.0)] - 2018-03-24 - WS 17/18 intermediate Release
 ### Added
 - selective download of the course
 - progress dashboard for teacher
@@ -59,7 +59,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - adds imprint
 
 
-## [0.4.0] - 2017-12-04 - WS 17/18 Second feature release
+## [[0.4.0](https://github.com/h-da/geli/releases/tag/v0.4.0)] - 2017-12-04 - WS 17/18 Second feature release
 ### Added
 - Responsivness improved
 - leave course function
@@ -73,31 +73,31 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - randomize tasks after validation
 
 
-## [0.3.1] - 2017-11-05 - Dynamic db name update
+## [[0.3.1](https://github.com/h-da/geli/releases/tag/v0.3.1)] - 2017-11-05 - Dynamic db name update
 ### Added
 - The possibility to use a other database name then 'test'
 
 
-## [0.3.0] - 2017-11-02
+## [[0.3.0](https://github.com/h-da/geli/releases/tag/v0.3.0)] - 2017-11-02
 ### Added
 - a lot of major bugfixes and optimizations
 
 
-## [0.2.2] - 2017-10-19 - Security improvements
+## [[0.2.2](https://github.com/h-da/geli/releases/tag/v0.2.2)] - 2017-10-19 - Security improvements
 ### Added 
 - security for free courses
 
 
-## [0.2.1] - 2017-10-03 - First Live-Ready release
+## [[0.2.1](https://github.com/h-da/geli/releases/tag/v0.2.1)] - 2017-10-03 - First Live-Ready release
 ### Added
 - first live functionality
 
 
-## [0.2.0] - 2017-06-29 - Almost production ready
+## [[0.2.0](https://github.com/h-da/geli/releases/tag/v0.2.0)] - 2017-06-29 - Almost production ready
 ### Added
 - Many new feature for production
 
 
-## [0.1.0] - 2017-05-11 - Basics implemented
+## [[0.1.0](https://github.com/h-da/geli/releases/tag/v0.1.0)] - 2017-05-11 - Basics implemented
 ### Added
 - Many basic implementations of ground functionality
