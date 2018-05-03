@@ -7,7 +7,7 @@ import {IDownload} from '../../../../../../../shared/models/IDownload';
 import {IDownloadSize} from '../../../../../../../shared/models/IDownloadSize';
 import {SaveFileService} from '../../../shared/services/save-file.service';
 
-import { saveAs } from 'file-saver/FileSaver';
+import {saveAs} from 'file-saver/FileSaver';
 
 @Component({
   selector: 'app-download-course-dialog',
@@ -37,15 +37,18 @@ export class DownloadCourseDialogComponent implements OnInit {
     this.disableDownloadButton = false;
     this.course = this.data.course;
     this.chkbox = false;
+    if (!this.checkForEmptyLectures()) {
+      this.disableDownloadButton = true;
+    }
   }
 
   onChange() {
     if (this.chkbox) {
       this.childLectures.forEach(lecture => {
-        if (lecture.chkbox === false) {
-          lecture.chkbox = true;
-          lecture.onChange();
-        }
+
+        lecture.chkbox = true;
+        lecture.onChange();
+
       });
     } else {
       this.childLectures.forEach(lecture => lecture.chkbox = false);
@@ -54,32 +57,52 @@ export class DownloadCourseDialogComponent implements OnInit {
   }
 
   onChildEvent() {
-    let childChecked = false;
+    const childChecked: boolean[] = new Array();
+
     this.childLectures.forEach(lec => {
-      if (lec.chkbox === true) {
-        childChecked = true;
-        this.chkbox = true;
+      if (lec.chkbox === true && !lec.childUnits.find(unit => unit.chkbox === false)) {
+        childChecked.push(true);
+      } else {
+        childChecked.push(false);
       }
     });
-    if (!childChecked) {
+
+    if (childChecked.find(bol => bol === false) !== undefined) {
       this.chkbox = false;
+    } else {
+      this.chkbox = true;
     }
   }
 
   calcSumFileSize(): number {
     let sum = 0;
-  this.childLectures.forEach(lecture => {
-    lecture.childUnits.forEach(unit => {
-    if (unit.files) {
-      unit.childUnits.forEach(fileUnit => {
-        if (fileUnit.chkbox) {
-          sum = sum + fileUnit.file.size;
+    this.childLectures.forEach(lecture => {
+      lecture.childUnits.forEach(unit => {
+        if (unit.files) {
+          unit.childUnits.forEach(fileUnit => {
+            if (fileUnit.chkbox) {
+              sum = sum + fileUnit.file.size;
+            }
+          });
         }
       });
-      }
     });
-  });
-  return sum;
+    return sum;
+  }
+
+  checkForEmptyLectures(): boolean {
+    if (!this.course.lectures.length) {
+      return false;
+    }
+
+    let foundUnits = false;
+
+    for (const lec of this.course.lectures) {
+      if (lec.units.length) {
+        foundUnits = true;
+      }
+    }
+    return foundUnits;
   }
 
   async downloadAndClose() {
@@ -87,6 +110,7 @@ export class DownloadCourseDialogComponent implements OnInit {
     const obj = await this.buildObject();
     if (obj.lectures.length === 0) {
       this.snackBar.open('No units selected!', 'Dismiss', {duration: 3000});
+      this.disableDownloadButton = false;
       return;
     }
     const downloadObj = <IDownload> obj;

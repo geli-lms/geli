@@ -1,3 +1,5 @@
+$viewWidth: 300px;
+
 .user-icon {
   background-size: cover;
   border-radius: 1.25rem;
@@ -8,10 +10,21 @@
   width: 2.5rem;
 }
 
-.user-form {
-  width: 300px;
+.edit-user-wrapper {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
 
-  .full-width {
-    width: 100%;
+  .user-form {
+    width: $viewWidth;
+
+    .full-width {
+      width: 100%;
+    }
+  }
+
+  .button-wrapper {
+    margin-top: 10px;
+    width: $viewWidth;
   }
 }

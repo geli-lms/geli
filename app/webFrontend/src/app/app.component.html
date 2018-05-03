@@ -17,13 +17,14 @@
       <span *ngIf="isLoggedIn()">
         <button mat-button routerLink="/profile">
           <img class="avatar" src="{{userService.user.getUserImageURL(30)}}" width="30" height="30">
-          {{ this.userService.user.profile.firstName }}
+          <span class="firstname-wrapper">{{ this.userService.user.profile.firstName }}</span>
         </button>
-        <app-notification *ngIf="isStudent()"></app-notification>
+        <app-notification *ngIf="isStudent()" class="app-notification"></app-notification>
       </span>
 
       <button mat-icon-button [matMenuTriggerFor]="langMenu">
         <mat-icon>language</mat-icon>
+        <span>{{translate.currentLang | uppercase}}</span>
       </button>
       <mat-menu #langMenu="matMenu">
         <button mat-menu-item (click)="changeLanguage('de')">
@@ -34,7 +35,7 @@
         </button>
       </mat-menu>
 
-      <button mat-icon-button [matMenuTriggerFor]="menu">
+      <button mat-icon-button [matMenuTriggerFor]="menu" class="menu-button">
         <mat-icon>more_vert</mat-icon>
       </button>
       <mat-menu #menu="matMenu">

@@ -10,6 +10,7 @@ import {IDownload} from '../../../../../../shared/models/IDownload';
 import {IDirectory} from '../../../../../../shared/models/mediaManager/IDirectory';
 import {IFile} from '../../../../../../shared/models/mediaManager/IFile';
 import {IUserSearchMeta} from '../../../../../../shared/models/IUserSearchMeta';
+import {IConfig} from '../../../../../../shared/models/IConfig';
 
 export abstract class DataService {
 
@@ -218,7 +219,7 @@ export class CourseService extends DataService {
     super('courses/', backendService);
   }
 
-  enrollStudent(courseId: string, data: any): Promise<ICourse> {
+  enrollStudent(courseId: string, data: any): Promise<{}> {
     const accessKey: string = data.accessKey;
     return this.backendService
       .post(this.apiPath + courseId + '/enroll', JSON.stringify({accessKey}))
@@ -231,10 +232,18 @@ export class CourseService extends DataService {
       .toPromise();
   }
 
-  async leaveStudent(courseId: string): Promise<boolean> {
-    return (await this.backendService
+  async leaveStudent(courseId: string): Promise<{}> {
+    return await this.backendService
       .post(this.apiPath + courseId + '/leave', {})
-      .toPromise()).result;
+      .toPromise();
+  }
+
+  readCourseToView(id: string): Promise<ICourse> {
+    return this.readSingleItem<ICourse>(id);
+  }
+
+  readCourseToEdit(id: string): Promise<ICourse> {
+    return this.readSingleItem<ICourse>(id + '/edit');
   }
 }
 
@@ -477,7 +486,18 @@ export class DownloadFileService extends DataService {
 
 @Injectable()
 export class ConfigService extends DataService {
+  downloadMaxFileSize: number;
   constructor(public backendService: BackendService) {
     super('config/', backendService);
   }
+
+  async getDownloadMaxFileSize () {
+    const res = <IConfig><any> await this.readSingleItem('public/downloadMaxFileSize');
+    const _value =  Number.parseInt(res.value);
+    const  value = isNaN(_value) ? 51200 : _value;
+    this.downloadMaxFileSize = value;
+
+    return value;
+  }
+
 }

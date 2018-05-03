@@ -63,7 +63,7 @@ export class GeneralTabComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.id = params['id'];
 
-      this.courseService.readSingleItem(this.id).then(
+      this.courseService.readCourseToEdit(this.id).then(
         (val: any) => {
           this.course = val.name;
           this.description = val.description;
@@ -183,14 +183,14 @@ export class GeneralTabComponent implements OnInit {
         if (!res) {
           return;
         }
-        await this.courseService.deleteItem(this.courseOb);
-        await this.router.navigate(['/']);
-        this.notificationService.createItem({
+        await this.notificationService.createItem({
           changedCourse: this.courseOb,
           changedLecture: null,
           changedUnit: null,
           text: 'Course ' + this.courseOb.name + ' has been deleted.'
         });
+        await this.courseService.deleteItem(this.courseOb);
+        this.router.navigate(['/']);
       });
   }
 }

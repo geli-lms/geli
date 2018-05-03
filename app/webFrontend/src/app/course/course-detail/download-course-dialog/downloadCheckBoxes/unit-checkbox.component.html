@@ -2,7 +2,7 @@
   <h4>{{unit.name}}</h4>
   <span class="spacer"></span>
   <span class="lightgray"> {{unitDesc}} </span>
-  <mat-checkbox [(ngModel)]="chkbox" (change)="onChange()" class="chkbox"></mat-checkbox>
+  <mat-checkbox *ngIf="showCheckBox" [(ngModel)]="chkbox" (change)="onChange()" class="chkbox"></mat-checkbox>
  </mat-list-item>
 <ng-container *ngIf="files">
   <mat-list>
