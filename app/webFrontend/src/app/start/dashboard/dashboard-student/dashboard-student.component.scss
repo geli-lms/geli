@@ -4,3 +4,12 @@
   flex-wrap: wrap;
 }
 
+
+
+@media screen and (max-width: 475px){
+  .pull-right{
+    float: none;
+  }
+}
+
+
