@@ -30,7 +30,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Fixed `tsconfig.spec.ts` for `ng test`. [#656](https://github.com/h-da/geli/pull/656)
 
 ### Security
-- Fixed numerous severe user related security issues. [#691](https://github.com/h-da/geli/issues/691)
+- Fixed numerous severe user related security issues. [#691](https://github.com/h-da/geli/issues/691) [#709](https://github.com/h-da/geli/pull/709)
 - Fixed multiple severe course related security issues. [#594](https://github.com/h-da/geli/issues/594) [#653](https://github.com/h-da/geli/issues/653) [#691](https://github.com/h-da/geli/issues/691)
 - Updated the dependencies for security. [#661](https://github.com/h-da/geli/issues/661)
 
