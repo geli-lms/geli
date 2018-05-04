@@ -22,7 +22,7 @@ export class UnitGeneralInfoFormComponent implements OnInit {
     }
     this.form = this.formBuilder.group({
       name: [this.model ? this.model.name : '', Validators.required],
-      description: [this.model ? this.model.description : '', Validators.required],
+      description: [this.model ? this.model.description : ''],
       deadline: [this.model ? this.model.deadline : ''],
       visible: [this.model ? this.model.visible : false]
     });
