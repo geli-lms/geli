@@ -2,8 +2,6 @@ import {Component, OnInit, Input, AfterViewInit} from '@angular/core';
 import {IUnit} from '../../../../../shared/models/units/IUnit';
 import * as moment from 'moment';
 import {ActivatedRoute, Router} from '@angular/router';
-import {UserDataService} from '../shared/services/data.service';
-import {UserService} from '../shared/services/user.service';
 import {IUser} from '../../../../../shared/models/IUser';
 
 @Component({
@@ -60,36 +58,13 @@ export class UnitComponent implements OnInit, AfterViewInit {
   }
 
   constructor(private route: ActivatedRoute,
-              private router: Router,
-              private userDataService: UserDataService) {
-  }
-
-  async getUsers() {
-    for (const unit of this.units) {
-      if (unit.unitCreator) {
-        const user = <IUser> await this.userDataService.readSingleItem(unit.unitCreator);
-        this.users.push(user);
-      }
-    }
-  }
-
-  readUser(_id: any): string {
-    const localUnit = this.units.find(unit => unit._id === _id);
-    if (localUnit.unitCreator) {
-      const localUser = this.users.find(user => user._id.toString() === localUnit.unitCreator);
-      if (localUser !== undefined) {
-        return localUser.profile.firstName + ' ' +  localUser.profile.lastName;
-      }
-    }
-    return '';
-
+              private router: Router) {
   }
 
   ngOnInit() {
     this.route.params.subscribe(params => {
       this.unitId = decodeURIComponent(params['unit']);
     });
-    this.getUsers();
   }
 
   ngAfterViewInit(): void {
