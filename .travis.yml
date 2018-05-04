@@ -43,7 +43,6 @@ before_script:
   - sh -e /etc/init.d/xvfb start
   # required for MongoDB to have time to start up
   - sleep 15
-  - npm install -g @angular/cli
 
 install:
   # install api and return back to root for following steps
@@ -76,9 +75,9 @@ script:
   - cd ..
   # run frontend-tests and return back to root for following steps
   - cd app/webFrontend
-  - ng lint        # run linter
-  # - ng test --single-run true --watch false || true     # run test - many tests are broken
-  - ng e2e         # run end-to-end-tests
+  - npm run lint        # run linter
+  # - npm run test-ci || true     # run test - many tests are broken
+  - npm run e2e         # run end-to-end-tests
   - sed -i 's/$TRAVIS_COMMIT/'$TRAVIS_COMMIT'/' src/app/shared/services/raven-error-handler.service.ts
   - cd ../..
   - travis_wait 30 .travis/build-fe.sh       # build in prod mode

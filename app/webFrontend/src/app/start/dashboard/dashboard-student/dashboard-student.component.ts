@@ -25,6 +25,10 @@ export class DashboardStudentComponent extends DashboardBaseComponent {
   ngOnChanges() {
     this.sortCourses();
   }
+  async sortAlphabetically() {
+    SortUtil.sortCoursesByName(this.myCourses);
+    SortUtil.sortCoursesByName(this.availableCourses);
+  }
 
   async sortCourses() {
     this.myCourses = [];
