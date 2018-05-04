@@ -9,7 +9,7 @@ import {
   MatProgressBarModule, MatRadioModule,
   MatSelectModule, MatSlideToggleModule,
   MatSnackBarModule, MatTabsModule,
-  MatToolbarModule, MatTooltipModule, MatExpansionModule, DateAdapter, MatProgressSpinnerModule
+  MatToolbarModule, MatTooltipModule, MatExpansionModule, DateAdapter, MatProgressSpinnerModule, MatChipsModule
 } from '@angular/material';
 import {CustomDateAdapter} from '../classes/CustomDateAdapter';
 
@@ -37,6 +37,7 @@ import {CustomDateAdapter} from '../classes/CustomDateAdapter';
     MatToolbarModule,
     MatTooltipModule,
     MatProgressSpinnerModule,
+    MatChipsModule,
   ],
   exports: [
     MatAutocompleteModule,
@@ -61,6 +62,7 @@ import {CustomDateAdapter} from '../classes/CustomDateAdapter';
     MatToolbarModule,
     MatTooltipModule,
     MatProgressSpinnerModule,
+    MatChipsModule,
   ],
   providers: [
     {provide: DateAdapter, useClass: CustomDateAdapter},
