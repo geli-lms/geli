@@ -10,6 +10,7 @@ import {fileUnitSchema} from './FileUnit';
 import {taskUnitSchema} from './TaskUnit';
 import {IUser} from '../../../../shared/models/IUser';
 import {IProgress} from '../../../../shared/models/progress/IProgress';
+import {User} from '../User';
 
 interface IUnitModel extends IUnit, mongoose.Document {
   exportJSON: () => Promise<IUnit>;
@@ -41,8 +42,9 @@ const unitSchema = new mongoose.Schema({
       type: String
     },
     unitCreator: {
-      type: String
-    }
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+      }
   },
   {
     collection: 'units',
@@ -85,10 +87,16 @@ unitSchema.methods.calculateProgress = async function(): Promise<IUnit> {
 };
 
 unitSchema.methods.populateUnit = async function(): Promise<IUnit> {
+  if (this.unitCreator) {
+    this.unitCreator = await User.findById(this.unitCreator);
+  }
   return this;
 };
 
 unitSchema.methods.secureData = async function(user: IUser): Promise<IUnitModel> {
+  if (this.unitCreator) {
+    this.unitCreator = User.forSafe(this.unitCreator);
+  }
   return this;
 };
 
