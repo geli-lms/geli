@@ -19,20 +19,6 @@
     <form name="form" (ngSubmit)="resendActivation()" [formGroup]="resendActivationForm">
       <div class="form-group" formGroupName="profile">
         <mat-form-field>
-          <input matInput formControlName="firstName"
-                 [placeholder]="'common.profile.firstName'|translate"/>
-          <div *ngIf="resendActivationForm.get('profile').get('firstName').touched">
-            <small *ngIf="resendActivationForm.get('profile').get('firstName').hasError('required')"
-                   class="text-danger">
-              {{'common.validation.required'|translate}}
-            </small>
-            <small *ngIf="resendActivationForm.get('profile').get('firstName').hasError('minlength')"
-                   class="text-danger" translate [translateParams]="{min:2}">
-              common.validation.minLength
-            </small>
-          </div>
-        </mat-form-field>
-        <mat-form-field>
           <input matInput formControlName="lastName"
                  [placeholder]="'common.profile.lastName'|translate"/>
           <div *ngIf="resendActivationForm.get('profile').get('lastName').touched">
@@ -72,7 +58,7 @@
             </small>
             <small *ngIf="mailError" class="text-danger">{{mailError}}</small>
             <small
-              *ngIf="resendActivationForm.controls.email.hasError('email') && !resendActivationForm.controls.email.hasError('required')"
+              *ngIf="resendActivationForm.controls.email.hasError('emailValidator') && !resendActivationForm.controls.email.hasError('required')"
               class="text-danger">
               {{'common.validation.invalid'|translate}}
             </small>
@@ -86,9 +72,12 @@
       <button matTooltip="{{ 'auth.resendActivation.tooltipResendAction' | translate }}" mat-raised-button color="primary" type="submit"
               [disabled]="loading || !resendActivationForm?.valid">{{'common.send'|translate}}
       </button>
-      <button mat-raised-button type="button" routerLink="/register" routerLinkActive="active">
+    </form>
+    <div class="bottom-buttons">
+      <button mat-button type="button" routerLink="/register" routerLinkActive="active">
         {{'auth.resendActivation.back'|translate}}
       </button>
-    </form>
+    </div>
+
   </mat-card-content>
 </mat-card>

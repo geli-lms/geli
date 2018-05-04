@@ -76,7 +76,7 @@ script:
   # run frontend-tests and return back to root for following steps
   - cd app/webFrontend
   - npm run lint        # run linter
-  # - npm run test        # run test - does not work properly
+  # - npm run test-ci || true     # run test - many tests are broken
   - npm run e2e         # run end-to-end-tests
   - sed -i 's/$TRAVIS_COMMIT/'$TRAVIS_COMMIT'/' src/app/shared/services/raven-error-handler.service.ts
   - cd ../..

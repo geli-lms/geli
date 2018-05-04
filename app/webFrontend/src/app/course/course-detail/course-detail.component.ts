@@ -4,10 +4,14 @@ import 'rxjs/add/operator/switchMap';
 import {CourseService, UserDataService} from '../../shared/services/data.service';
 import {ICourse} from '../../../../../../shared/models/ICourse';
 import {UserService} from '../../shared/services/user.service';
+import {IUser} from '../../../../../../shared/models/IUser';
+import {User} from '../../models/User';
 import {MatSnackBar, MatDialog} from '@angular/material';
 import {DownloadCourseDialogComponent} from './download-course-dialog/download-course-dialog.component';
 import {TitleService} from '../../shared/services/title.service';
 import {LastVisitedCourseContainerUpdater} from '../../shared/utils/LastVisitedCourseContainerUpdater';
+import {DialogService} from '../../shared/services/dialog.service';
+
 
 @Component({
   selector: 'app-course-detail',
@@ -17,7 +21,6 @@ import {LastVisitedCourseContainerUpdater} from '../../shared/utils/LastVisitedC
 export class CourseDetailComponent implements OnInit {
 
   course: ICourse;
-
   id: string;
 
   constructor(private router: Router,
@@ -27,7 +30,8 @@ export class CourseDetailComponent implements OnInit {
               private snackBar: MatSnackBar,
               private dialog: MatDialog,
               private titleService: TitleService,
-              private userDataService: UserDataService) {
+              private userDataService: UserDataService,
+              private dialogService: DialogService) {
   }
 
   ngOnInit() {
@@ -61,4 +65,9 @@ export class CourseDetailComponent implements OnInit {
       width: '800px'
     });
   }
+
+  showUserProfile(teacher: User) {
+    this.dialogService.userProfile(teacher);
+  }
+
 }

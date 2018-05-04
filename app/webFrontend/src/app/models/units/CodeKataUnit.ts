@@ -12,6 +12,7 @@ export class CodeKataUnit implements ICodeKataUnit {
   weight: number;
   updatedAt: string;
   createdAt: string;
+  visible: boolean;
 
   definition: string;
   code: string;
@@ -25,4 +26,5 @@ export class CodeKataUnit implements ICodeKataUnit {
     this.weight = 0;
     this.__t = 'code-kata';
   }
+
 }
