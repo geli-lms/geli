@@ -2,7 +2,7 @@
   <h1>Edit course</h1>
   <a mat-button [routerLink]="['/course', id]" target="_blank" class="md-raised md-primary course-link">
     <mat-icon>open_in_new</mat-icon>
-    Go to course
+    {{ course.text.goToCourse | translate }}
   </a>
 </div>
 

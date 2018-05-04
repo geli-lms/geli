@@ -1,6 +1,11 @@
 {
   "common": {
     "geli": "geli",
+    "settings" : "Settings",
+    "notifications" : "Notifications",
+    "name" : "Name",
+    "role" : "Role",
+    "actions" : "Actions",
     "login": "Login",
     "register": "Registrieren",
     "email": "E-Mail",
@@ -9,6 +14,7 @@
     "export" : "Export",
     "duplicate" : "Duplicate",
     "send": "Senden",
+    "save" : "Save",
     "dismiss": "Schließen",
     "delete": "Löschen",
     "edit" : "edit",
@@ -67,6 +73,15 @@
       "tooltipResendAction" : "Klicken Sie hier, um einen neuen Aktivierungslink anzufordern"
     }
   },
+  "user" : {
+    "editUser" : "Benutzer bearbeiten",
+    "deleteUser" : "Benutzer löschen",
+    "text" : {
+      "signedIn": "Signed in",
+      "notSignedIn": "Not Signed in"
+    }
+  },
+
   "mainMenu": {
     "admin": "Admin",
     "about": "Über geli",
@@ -85,21 +100,23 @@
     "createCourse": "Kurs erstellen",
     "importCourse": "Kurs importieren"
   },
-  "user" : {
-    "editUser" : "Benutzer bearbeiten",
-    "deleteUser" : "Benutzer löschen"
-  },
   "course" : {
     "delete" : "Delete course",
     "tooltipAdd" : "Kurs hinzufügen",
     "ShowCourse" : "Kurs anzeigen",
     "text" : {
+      "yourCourseProgress" : "Your course progress",
+      "goToCourse" : "Go to Course",
       "canSeenByStudents" : "Course can be seen by students",
       "canNotSeenByStudents" : "Course cannot be seen by students",
       "isFreeForEveryone" : "The course is free and accessible for everyone",
       "enterAccessKeyForStudents" : "Enter an access key for the students",
       "selectAccessType" : "Please select your course access typ",
       "uploadWhitelist" : "Upload your OBS csv file with your course members for whitelisting students.<br />Old whitelist users are removed by uploading a new file."
+    },
+    "placeholder" : {
+      "Name" : "Course Name",
+      "Description" : "Course Description"
     }
   } ,
   "lecture" :
