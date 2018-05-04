@@ -65,11 +65,11 @@
           </small>
           <small *ngIf="mailError" class="text-danger">{{mailError}}</small>
           <small
-            *ngIf="registerForm.controls.email.hasError('teacherEmailError') && !registerForm.controls.email.hasError('email') && !registerForm.controls.email.hasError('required')"
+            *ngIf="registerForm.controls.email.hasError('teacherEmailError') && !registerForm.controls.email.hasError('emailValidator') && !registerForm.controls.email.hasError('required')"
             class="text-danger">{{'common.validation.instituteMail'|translate}}
           </small>
           <small
-            *ngIf="registerForm.controls.email.hasError('email') && !registerForm.controls.email.hasError('teacherMailError') && !registerForm.controls.email.hasError('required')"
+            *ngIf="registerForm.controls.email.hasError('emailValidator') && !registerForm.controls.email.hasError('teacherMailError') && !registerForm.controls.email.hasError('required')"
             class="text-danger">
             {{'common.validation.invalid'|translate}}
           </small>
@@ -93,17 +93,19 @@
       <button mat-raised-button color="primary" type="submit"
               [disabled]="loading || !registerForm?.valid">{{'common.register'|translate}}
       </button>
-      <button *ngIf="role == 'student'" mat-raised-button type="button" routerLink="/activation-resend" routerLinkActive="active">
+    </form>
+    <div class="bottom-buttons">
+      <button *ngIf="role == 'student'" mat-button type="button" routerLink="/activation-resend" routerLinkActive="active">
         {{'auth.registration.resendActivationButton'|translate}}
       </button>
-    </form>
 
-    <button mat-button *ngIf="role==='student'" (click)="changeRole('teacher')" class="pull-right">
-      {{'auth.registration.teacherRegistrationButton'|translate}}
-    </button>
+      <button mat-button *ngIf="role==='student'" (click)="changeRole('teacher')" class="pull-right">
+        {{'auth.registration.teacherRegistrationButton'|translate}}
+      </button>
 
-    <button mat-button *ngIf="role!=='student'" (click)="changeRole('student')" class="pull-right">
-      {{'common.back'|translate}}
-    </button>
+      <button mat-button *ngIf="role!=='student'" (click)="changeRole('student')" class="pull-right">
+        {{'common.back'|translate}}
+      </button>
+    </div>
   </mat-card-content>
 </mat-card>
