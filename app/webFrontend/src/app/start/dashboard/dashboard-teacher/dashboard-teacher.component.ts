@@ -1,8 +1,8 @@
 import {Component} from '@angular/core';
-import {ICourse} from '../../../../../../../shared/models/ICourse';
+import {ICourseDashboard} from '../../../../../../../shared/models/ICourseDashboard';
 import {UserService} from '../../../shared/services/user.service';
 import {DashboardBaseComponent} from '../dashboard-base-component';
-import {MatSnackBar} from '@angular/material';
+import {SnackBarService} from '../../../shared/services/snack-bar.service';
 import {Router} from '@angular/router';
 import {DialogService} from '../../../shared/services/dialog.service';
 import {SortUtil} from '../../../shared/utils/SortUtil';
@@ -14,16 +14,16 @@ import {SortUtil} from '../../../shared/utils/SortUtil';
 })
 export class DashboardTeacherComponent extends DashboardBaseComponent {
 
-  myCourses: ICourse[];
-  furtherCourses: ICourse[];
-  inactiveCourses: ICourse[];
-  availableCourses: ICourse[];
+  myCourses: ICourseDashboard[];
+  furtherCourses: ICourseDashboard[];
+  inactiveCourses: ICourseDashboard[];
+  availableCourses: ICourseDashboard[];
   fabOpen = false;
 
   constructor(public userService: UserService,
               private router: Router,
               private dialogService: DialogService,
-              private snackBar: MatSnackBar) {
+              private snackBar: SnackBarService) {
     super();
   }
 
@@ -38,24 +38,18 @@ export class DashboardTeacherComponent extends DashboardBaseComponent {
     this.inactiveCourses = [];
     SortUtil.sortByLastVisitedCourses(this.allCourses, this.userService.user.lastVisitedCourses);
     for (const course of this.allCourses) {
-      if ((this.filterMyCourses(course) || this.filterAdminCourses(course)) && !course.active) {
-        this.inactiveCourses.push(course);
-      } else if (this.filterAdminCourses(course)) {
-        this.myCourses.push(course);
-      } else if (this.filterMyCourses(course)) {
-        this.furtherCourses.push(course);
+      if (course.userIsCourseAdmin || course.userIsCourseTeacher) {
+        if (!course.active) {
+          this.inactiveCourses.push(course);
+        } else if (course.userIsCourseAdmin) {
+          this.myCourses.push(course);
+        } else {
+          this.furtherCourses.push(course);
+        }
       } else {
         this.availableCourses.push(course);
       }
     }
-  }
-
-  filterAdminCourses(course: ICourse) {
-    return (course.courseAdmin._id === this.userService.user._id);
-  }
-
-  filterMyCourses(course: ICourse) {
-    return (course.teachers.filter(teacher => teacher._id === this.userService.user._id).length);
   }
 
   closeFab = () => {
@@ -68,15 +62,14 @@ export class DashboardTeacherComponent extends DashboardBaseComponent {
 
   onImportCourse = () => {
     this.dialogService
-      .chooseFile('Choose a course.json to import',
-        '/api/import/course/')
+      .chooseFile('Choose a course.json to import', '/api/import/course/')
       .subscribe(res => {
         if (res.success) {
-          this.snackBar.open('Course successfully imported', '', {duration: 3000});
+          this.snackBar.open('Course successfully imported');
           const url = '/course/' + res.result._id + '/edit';
           this.router.navigate([url]);
         } else if (res.result) {
-          this.snackBar.open(res.result.message, '', {duration: 3000});
+          this.snackBar.open(res.result.message);
         }
       });
   }

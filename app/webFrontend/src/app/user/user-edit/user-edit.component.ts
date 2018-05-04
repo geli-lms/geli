@@ -1,7 +1,8 @@
 import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {FormGroup, FormBuilder, Validators} from '@angular/forms';
-import {MatSnackBar, MatDialog} from '@angular/material';
+import {MatDialog} from '@angular/material';
+import {SnackBarService} from '../../shared/services/snack-bar.service';
 import {UserDataService} from '../../shared/services/data.service';
 import {IUser} from '../../../../../../shared/models/IUser';
 import {UserService} from '../../shared/services/user.service';
@@ -9,6 +10,7 @@ import {ShowProgressService} from '../../shared/services/show-progress.service';
 import {DialogService} from '../../shared/services/dialog.service';
 import {TitleService} from '../../shared/services/title.service';
 import {ThemeService} from '../../shared/services/theme.service';
+import {emailValidator} from '../../shared/validators/validators';
 
 @Component({
   selector: 'app-user-edit',
@@ -31,7 +33,7 @@ export class UserEditComponent implements OnInit {
               private showProgress: ShowProgressService,
               private formBuilder: FormBuilder,
               public dialogService: DialogService,
-              public snackBar: MatSnackBar,
+              public snackBar: SnackBarService,
               private titleService: TitleService,
               private cdRef: ChangeDetectorRef,
               private themeService: ThemeService) {
@@ -71,7 +73,7 @@ export class UserEditComponent implements OnInit {
       });
       this.titleService.setTitleCut(['Edit User: ', this.user.profile.firstName]);
     } catch (err) {
-      this.snackBar.open(err.error.message, 'Dismiss');
+      this.snackBar.open(err.error.message);
     }
     this.cdRef.detectChanges();
   }
@@ -103,15 +105,14 @@ export class UserEditComponent implements OnInit {
     this.showProgress.toggleLoadingGlobal(true);
     try {
       const user = await this.userDataService.updateItem(this.user);
-      this.snackBar.open('Profile successfully updated.', '', {duration: 3000});
+      this.snackBar.open('Profile successfully updated.');
 
       if (this.userService.isLoggedInUser(user)) {
         this.userService.setUser(user);
       }
       this.navigateBack();
-    } catch (error) {
-      const errormsg = error.message;
-      this.snackBar.open(errormsg, 'Dismiss');
+    } catch (err) {
+      this.snackBar.open(err.error.message);
     }
     this.showProgress.toggleLoadingGlobal(false);
   }
@@ -119,12 +120,12 @@ export class UserEditComponent implements OnInit {
   generateForm() {
     this.userForm = this.formBuilder.group({
       profile: this.formBuilder.group({
-        firstName: ['', Validators.required],
-        lastName: ['', Validators.required],
+          firstName: ['', Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(64)])],
+          lastName: ['', Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(64)])],
         theme: [''],
       }),
       username: [''],
-      email: ['', Validators.required],
+      email: ['', emailValidator],
       currentPassword: ['']
     });
   }
@@ -143,7 +144,7 @@ export class UserEditComponent implements OnInit {
         'Password for user ' + this.user.email + ' was updated to: \'' + this.user.password + '\''
       );
     } catch (err) {
-      this.snackBar.open(err.error.message, 'Dismiss', {duration: 3000});
+      this.snackBar.open(err.error.message);
     }
     this.showProgress.toggleLoadingGlobal(false);
   }
@@ -155,7 +156,6 @@ export class UserEditComponent implements OnInit {
         this.user = response.user;
         this.userService.setUser(response.user);
       }
-      this.snackBar.open('User image successfully uploaded.', '', {duration: 3000});
       this.updateUser();
     }
   }

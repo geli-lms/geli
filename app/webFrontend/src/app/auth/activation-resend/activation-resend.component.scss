@@ -1,0 +1,25 @@
+:host {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.resendActivation-card {
+  width: 100%;
+  max-width: 400px;
+
+  .mat-form-field,
+  .mat-radio-group {
+    width: 100%;
+  }
+
+}
+
+#resendActivationFormError{
+  margin-bottom: 20px;
+}
+
+.bottom-buttons{
+  margin-top: 20px;
+}

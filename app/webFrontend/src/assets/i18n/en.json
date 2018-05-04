@@ -5,6 +5,7 @@
     "register": "Register",
     "email": "Email",
     "password": "Password",
+    "send": "Send",
     "dismiss": "Dismiss",
     "back": "Back",
     "profile": {
@@ -19,6 +20,7 @@
     "validation": {
       "required": "Input required",
       "minLength": "At least {{min}} characters required",
+      "maxLength": "At least {{max}} characters required",
       "invalid": "Input is invalid",
       "password": "Password must have at least 8 characters which contain one special character or digit",
       "passwordsMatch": "Passwords do not match",
@@ -41,9 +43,15 @@
     "registration": {
       "registerAs": "Register as",
       "successful": "Registration was successful",
-      "mailSent": "We have send you an activation link to your specified email address.",
+      "mailSent": "We have sent you an activation link to your specified email address.",
       "back": "Back to frontpage",
-      "teacherRegistrationButton": "Not a student?"
+      "teacherRegistrationButton": "Not a student?",
+      "resendActivationButton": "Resend activation"
+    },
+    "resendActivation": {
+      "back": "Back to registration",
+      "successful": "Resend activation was successful",
+      "mailSent": "We have sent you a new activation link to your specified email address."
     }
   },
   "mainMenu": {
