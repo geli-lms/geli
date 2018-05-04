@@ -40,22 +40,25 @@ const fileSchema = new mongoose.Schema({
   },
 });
 
-fileSchema.pre('remove', async function(next: () => void) {
+fileSchema.pre('remove', async function() {
   const localFile = <IFileModel><any>this;
-  if (fs.existsSync(localFile.physicalPath)) {
-    await promisify(fs.unlink)(localFile.physicalPath);
+  try {
+    if (fs.existsSync(localFile.physicalPath)) {
+      await promisify(fs.unlink)(localFile.physicalPath);
+    }
+
+    const units2Check: IFileUnitModel[] = <IFileUnitModel[]>await FileUnit.find({files: {$in: [localFile._id]}});
+    Promise.all(units2Check.map(async unit => {
+      const index = unit.files.indexOf(localFile._id);
+      if (index > -1) {
+        unit.files.splice(index, 1);
+        await unit.save();
+      }
+    }));
+  } catch(err) {
+    throw new Error('Delete Error: ' + err.toString());
   }
 
-  const units2Check: IFileUnitModel[] = <IFileUnitModel[]>await FileUnit.find({files: { $in: [ localFile._id ] }});
-  Promise.all(units2Check.map(async unit => {
-    const index = unit.files.indexOf(localFile._id);
-    if (index > -1) {
-      unit.files.splice(index, 1);
-      await unit.save();
-    }
-  }));
-
-  next();
 });
 
 const File = mongoose.model<IFileModel>('File', fileSchema);

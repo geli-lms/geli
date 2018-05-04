@@ -42,9 +42,9 @@ const unitSchema = new mongoose.Schema({
       type: String
     },
     unitCreator: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
-      }
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User'
+    }
   },
   {
     collection: 'units',
@@ -66,7 +66,7 @@ unitSchema.virtual('progressData', {
   justOne: true
 });
 
-unitSchema.methods.exportJSON = function() {
+unitSchema.methods.exportJSON = function () {
   const obj = this.toObject();
 
   // remove unwanted informations
@@ -82,29 +82,29 @@ unitSchema.methods.exportJSON = function() {
   return obj;
 };
 
-unitSchema.methods.calculateProgress = async function(): Promise<IUnit> {
+unitSchema.methods.calculateProgress = async function (): Promise<IUnit> {
   return this.toObject();
 };
 
-unitSchema.methods.populateUnit = async function(): Promise<IUnit> {
+unitSchema.methods.populateUnit = async function (): Promise<IUnit> {
   if (this.unitCreator) {
     this.unitCreator = await User.findById(this.unitCreator);
   }
   return this;
 };
 
-unitSchema.methods.secureData = async function(user: IUser): Promise<IUnitModel> {
+unitSchema.methods.secureData = async function (user: IUser): Promise<IUnitModel> {
   if (this.unitCreator) {
     this.unitCreator = User.forSafe(this.unitCreator);
   }
   return this;
 };
 
-unitSchema.methods.toFile = function(): String {
+unitSchema.methods.toFile = function (): String {
   return '';
 };
 
-unitSchema.statics.importJSON = async function(unit: IUnit, courseId: string, lectureId: string) {
+unitSchema.statics.importJSON = async function (unit: IUnit, courseId: string, lectureId: string) {
   unit._course = courseId;
 
   try {
@@ -125,8 +125,12 @@ unitSchema.statics.importJSON = async function(unit: IUnit, courseId: string, le
 };
 
 // Cascade delete
-unitSchema.pre('remove', function(next: () => void) {
-  Progress.remove({'unit': this._id}).exec().then(next).catch(next);
+unitSchema.pre('remove', async function () {
+  try {
+    await Progress.remove({'unit': this._id}).exec();
+  } catch (err) {
+    throw new Error('Delete Error: ' + err.toString());
+  }
 });
 
 const Unit = mongoose.model<IUnitModel>('Unit', unitSchema);
