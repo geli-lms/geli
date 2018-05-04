@@ -88,13 +88,15 @@ unitSchema.methods.calculateProgress = async function(): Promise<IUnit> {
 
 unitSchema.methods.populateUnit = async function(): Promise<IUnit> {
   if (this.unitCreator) {
-  this.unitCreator = await User.findById(this.unitCreator);
-  this.unitCreator = await User.forSafe(this.unitCreator);
+    this.unitCreator = await User.findById(this.unitCreator);
   }
   return this;
 };
 
 unitSchema.methods.secureData = async function(user: IUser): Promise<IUnitModel> {
+  if (this.unitCreator) {
+    this.unitCreator = User.forSafe(this.unitCreator);
+  }
   return this;
 };
 
