@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Refactored register and resend activation to use geli email validator with top level domain check. [#713] (https://github.com/h-da/geli/issues/713)
 
 ### Fixed
+- Fixed Course progress mechanism
 - Fixed wasteful course data usage via specialized course model interfaces. [#654](https://github.com/h-da/geli/issues/654)
 - Fixed a broken documentation link. [#583](https://github.com/h-da/geli/issues/583)
 - Limited the first and last name to 64 characters in the registration- and edit page. [#585](https://github.com/h-da/geli/issues/585)
