@@ -12,7 +12,9 @@
     "build": "ng build --prod --sourcemaps",
     "build-pr": "ng build --prod",
     "test": "ng test",
+    "test-ci": "ng test --single-run",
     "lint": "ng lint",
+    "lint:fix": "ng lint --fix",
     "e2e": "ng e2e"
   },
   "private": true,

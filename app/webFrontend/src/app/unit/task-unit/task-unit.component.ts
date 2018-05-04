@@ -33,6 +33,16 @@ export class TaskUnitComponent implements OnInit {
       this.progress = this.taskUnit.progressData;
     }
 
+    this.applyProgressData();
+    this.shuffleAnswers();
+  }
+
+  async applyProgressData() {
+    const progress = await this.progressService.getUnitProgress<ITaskUnitProgress>(this.taskUnit._id);
+    if (progress) {
+      this.progress = progress;
+    }
+
     if (!this.progress.answers) {
       this.resetProgressAnswers();
     } else {
@@ -49,7 +59,6 @@ export class TaskUnitComponent implements OnInit {
         }
       });
     }
-    this.shuffleAnswers();
   }
 
   resetProgressAnswers() {

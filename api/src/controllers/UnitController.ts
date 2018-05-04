@@ -85,7 +85,7 @@ export class UnitController {
     // discard invalid requests
     this.checkPostParam(data);
     // Set current user as creator, old unit's dont have a creator
-    data.model.unitCreator = currentUser._id.toString();
+    data.model.unitCreator = currentUser._id;
 
     return Unit.create(data.model)
     .then((createdUnit) => {
