@@ -115,7 +115,7 @@ courseSchema.pre('remove', async function () {
   const localCourse = <ICourseModel><any>this;
   try {
     await Lecture.deleteMany({'_id': {$in: localCourse.lectures}}).exec();
-    await Directory.deleteMany({'_id': {$in: localCourse.media}}).exec();
+    await Directory.deleteOne({_id: localCourse.media}).exec();
   } catch (error) {
     winston.log('warn', 'course (' + localCourse._id + ') cloud not be deleted!');
     throw new Error('Delete Error: ' + error.toString());

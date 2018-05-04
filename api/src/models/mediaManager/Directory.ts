@@ -1,6 +1,7 @@
 import {IDirectory} from '../../../../shared/models/mediaManager/IDirectory';
 import {File} from './File';
 import * as mongoose from 'mongoose';
+import {Unit} from '../units/Unit';
 
 interface IDirectoryModel extends IDirectory, mongoose.Document {
 
@@ -55,14 +56,8 @@ directorySchema.pre('remove', async function () {
         await model.remove();
       }
     }
-    for (const file of localDir.files) {
-      const model = await File.findById(file);
-      if (model) {
-        await model.remove();
-      }
-    }
-  }
-  catch (err) {
+    await Unit.deleteMany({'_id': {$in: localDir.files}}).exec();
+  } catch (err) {
     throw new Error('Delete Error: ' + err.toString());
   }
 });

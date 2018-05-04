@@ -39,11 +39,9 @@ const lectureSchema = new mongoose.Schema({
 
 // Cascade delete
 lectureSchema.pre('remove', async function () {
-  // We cannot do this, because we need actual Unit instances so that their pre remove middleware gets called
-  // Unit.remove({'_id': {$in: this.units}}).exec().then(next).catch(next);
   const localLecture = <ILectureModel><any>this;
   try {
-    await Lecture.deleteMany({'_id': {$in: localLecture.units}}).exec();
+    await Unit.deleteMany({'_id': {$in: localLecture.units}}).exec();
   } catch (err) {
     throw new Error('Delete Error: ' + err.toString());
   }

@@ -55,10 +55,9 @@ fileSchema.pre('remove', async function() {
         await unit.save();
       }
     }));
-  } catch(err) {
+  } catch (err) {
     throw new Error('Delete Error: ' + err.toString());
   }
-
 });
 
 const File = mongoose.model<IFileModel>('File', fileSchema);
