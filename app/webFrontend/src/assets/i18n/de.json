@@ -4,11 +4,18 @@
     "login": "Login",
     "register": "Registrieren",
     "email": "E-Mail",
+    "description" : "description",
     "password": "Passwort",
+    "export" : "Export",
+    "duplicate" : "Duplicate",
     "send": "Senden",
     "dismiss": "Schließen",
     "delete": "Löschen",
+    "edit" : "edit",
+    "upload" : "upload",
+    "download" : "download",
     "back": "Zurück",
+    "tooltipDownloadUnit" : "Download this Unit",
     "tooltipClickToOpen" : "Auf-/ zuklappen",
     "profile": {
       "firstName": "Vorname",
@@ -33,7 +40,8 @@
     "welcomeTo": "Willkommen auf"
   },
   "auth": {
-    "tooltipForgotPassword":"Klicken Sie hier, um ein neues Password anzufordern",
+    "tooltipResetPassword" : "Klicken Sie hier, um das Passwort zu resetten",
+    "tooltipForgotPassword":"Klicken Sie hier, um ein neues Passwort anzufordern",
     "forgotPassword": "Passwort vergessen",
     "loginSuccess": "Login erfolgreich",
     "loginFailed": "Login fehlgeschlagen",
@@ -82,7 +90,52 @@
     "deleteUser" : "Benutzer löschen"
   },
   "course" : {
+    "delete" : "Delete course",
     "tooltipAdd" : "Kurs hinzufügen",
-    "ShowCourse" : "Kurs anzeigen"
+    "ShowCourse" : "Kurs anzeigen",
+    "text" : {
+      "canSeenByStudents" : "Course can be seen by students",
+      "canNotSeenByStudents" : "Course cannot be seen by students",
+      "isFreeForEveryone" : "The course is free and accessible for everyone",
+      "enterAccessKeyForStudents" : "Enter an access key for the students",
+      "selectAccessType" : "Please select your course access typ",
+      "uploadWhitelist" : "Upload your OBS csv file with your course members for whitelisting students.<br />Old whitelist users are removed by uploading a new file."
+    }
+  } ,
+  "lecture" :
+  {
+    "tooltip" :
+    {
+      "download" : "Download this Unit",
+      "delete" : "Download this Unit",
+      "edit" : "Download this Unit",
+      "duplicate" : "Copy this lecture",
+      "add" : "Download this Unit"
+    }
+  },
+  "file" :
+  {
+    "placeholder" :
+    {
+      "uploadFiles" : "UploadFiles"
+    }
+  },
+  "unit" :
+  {
+    "tooltip" :
+    {
+      "download" : "Download this Unit",
+      "delete" : "Download this Unit",
+      "duplicate" : "Copy this Unit",
+      "edit" : "Download this Unit",
+      "add" : "Download this Unit"
+    },
+    "import":"Import Unit",
+    "addContent" : "Add content",
+    "addTasks" : "Add tasks",
+    "addFiles" : "Add files",
+    "addCodeKata" : "Add code-kata",
+    "addVideos" : "Add Videos",
+    "addFreeText" : "Add free text"
   }
 }

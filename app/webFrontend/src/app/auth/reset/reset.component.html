@@ -9,7 +9,7 @@
         <input matInput formControlName="email" placeholder="Mail address">
       </mat-form-field>
 
-      <button mat-raised-button color="primary" class="mat-button" type="submit" [disabled]="loading">Submit</button>
+      <button mat-raised-button color="primary" matTooltip="{{ auth.tooltipResetPass }}" class="mat-button" type="submit" [disabled]="loading">Request password reset</button>
       <br>
     </form>
   </mat-card-content>
@@ -24,7 +24,7 @@
 
       <app-password-input [form]="resetForm"></app-password-input>
 
-      <button mat-raised-button color="primary" type="submit" [disabled]="loading">Reset</button>
+      <button mat-raised-button  matTooltip="{{ auth.tooltipResetPassword | translate }}" color="primary" type="submit" [disabled]="loading">Reset</button>
     </form>
   </mat-card-content>
 </mat-card>

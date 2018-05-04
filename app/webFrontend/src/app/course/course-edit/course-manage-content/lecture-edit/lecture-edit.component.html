@@ -14,19 +14,19 @@
     </button>
 
     <mat-menu #lectureMenu="matMenu">
-      <button mat-menu-item (click)="onEditLecture(lecture)">
+      <button mat-menu-item matTooltip="{{ lecture.tooltipEdit | translate }}" (click)="onEditLecture(lecture)">
         <mat-icon>edit</mat-icon>
         Edit
       </button>
-      <button mat-menu-item (click)="exportLecture(lecture)">
+      <button mat-menu-item matTooltip="{{ lecture.tooltipDownloadLecture | translate }}"  (click)="exportLecture(lecture)">
         <mat-icon>file_download</mat-icon>
         Export
       </button>
-      <button mat-menu-item (click)="duplicateLecture(lecture)">
+      <button mat-menu-item matTooltip="{{ lecture.tooltipDuplicate | translate}}" (click)="duplicateLecture(lecture)">
         <mat-icon>content_copy</mat-icon>
         Duplicate
       </button>
-      <button mat-menu-item (click)="deleteLecture(lecture)">
+      <button mat-menu-item matTooltip="{{ lecture.tooltipDelete | translate }}" (click)="deleteLecture(lecture)">
         <mat-icon>delete</mat-icon>
         Delete
       </button>
@@ -47,20 +47,20 @@
           <span class="unit-type">{{ unit.__t }}</span>
           <span class="unit-date">{{ unit.updatedAt | date:"y-MM-dd" }}</span>
           <span class="unit-actions">
-              <button mat-icon-button matTooltip="Edit" (click)="onEditUnit(unit)">
+              <button mat-icon-button matTooltip="{{ common.edit | translate }}" (click)="onEditUnit(unit)">
                 <mat-icon>edit</mat-icon>
               </button>
               <button class="unit-menu-button" mat-icon-button [matMenuTriggerFor]="unitMenu">
                 <mat-icon>more_vert</mat-icon>
               </button>
               <mat-menu #unitMenu="matMenu">
-                <button mat-icon-button matTooltip="Delete" (click)="deleteUnit(unit)">
+                <button mat-icon-button matTooltip="{{ lecture.tooltip.delete | translate }}" (click)="deleteUnit(unit)">
                   <mat-icon>delete</mat-icon>
                 </button>
-                <button mat-icon-button matTooltip="Duplicate" (click)="duplicateUnit(unit)">
+                <button mat-icon-button matTooltip="{{ lecture.tooltip.duplicate | translate }}" (click)="duplicateUnit(unit)">
                   <mat-icon>content_copy</mat-icon>
                 </button>
-                <button mat-icon-button matTooltip="Export" (click)="onExportUnit(unit)">
+                <button mat-icon-button matTooltip="{{ lecture.tooltip.download | translate }}" (click)="onExportUnit(unit)">
                   <mat-icon>file_download</mat-icon>
               </button>
               </mat-menu>
