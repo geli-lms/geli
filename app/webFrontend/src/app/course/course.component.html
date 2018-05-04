@@ -22,19 +22,6 @@
         <mat-icon color="warn">visibility_off</mat-icon>
       </button>
     </span>
-    <span class="course-admin-actions" *ngIf="course.userCanEditCourse">
-      <button mat-icon-button (click)="editCourse(course._id)">
-        <mat-icon>mode_edit</mat-icon>
-      </button>
-
-      <button mat-icon-button (click)="showReport(course._id)">
-        <mat-icon>show_chart</mat-icon>
-      </button>
-
-      <button mat-icon-button *ngIf="!course.active" disabled>
-        <mat-icon color="warn">visibility_off</mat-icon>
-      </button>
-    </span>
     <span class="course-student-actions" *ngIf="this.userService.isStudent()">
       <div style="float:left">
         <i class="material-icons" style="margin-top: 8px;"

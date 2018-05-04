@@ -11,6 +11,7 @@ export interface IUnit {
     weight: number;
     updatedAt: string;
     createdAt: string;
+    unitCreator: IUser;
     visible: boolean;
     __t: string;
 }
