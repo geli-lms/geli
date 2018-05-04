@@ -39,6 +39,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Fixed wording of progress display on profile page. [#715](https://github.com/h-da/geli/issues/715)
 - Fixed form validator in create task [#579](https://github.com/h-da/geli/issues/579)
 
+### Added
+- Unit visibility toggle [#582](https://github.com/h-da/geli/issues/582)
+
 ### Security
 - Fixed numerous severe user related security issues. [#691](https://github.com/h-da/geli/issues/691) [#709](https://github.com/h-da/geli/pull/709)
 - Fixed multiple severe course related security issues. [#594](https://github.com/h-da/geli/issues/594) [#653](https://github.com/h-da/geli/issues/653) [#691](https://github.com/h-da/geli/issues/691)
