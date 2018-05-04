@@ -13,9 +13,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Added new course & user API unit tests. [#654](https://github.com/h-da/geli/issues/654) [#691](https://github.com/h-da/geli/issues/691)
 - Added details of courseAdmin and teacher to course detail view. on click profiles are shown.[#598] (https://github.com/h-da/geli/issues/598)
 - Added small auto linting scripts to package.json [#688](https://github.com/h-da/geli/issues/688)
+- Added changed size of drop down arrows for better usability. [#686] (https://github.com/h-da/geli/issues/686)
 
 ### Changed
 - Refactored or slightly altered various course & user related APIs. [#654](https://github.com/h-da/geli/issues/654) [#691](https://github.com/h-da/geli/issues/691)
+- Removed firstname from resend activation feature and change button positioning. [#711] (https://github.com/h-da/geli/issues/711)
+- Refactored register and resend activation to use geli email validator with top level domain check. [#713] (https://github.com/h-da/geli/issues/713)
 
 ### Fixed
 - Fixed wasteful course data usage via specialized course model interfaces. [#654](https://github.com/h-da/geli/issues/654)
@@ -31,7 +34,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Fixed `tsconfig.spec.ts` for `ng test`. [#656](https://github.com/h-da/geli/pull/656)
 
 ### Security
-- Fixed numerous severe user related security issues. [#691](https://github.com/h-da/geli/issues/691)
+- Fixed numerous severe user related security issues. [#691](https://github.com/h-da/geli/issues/691) [#709](https://github.com/h-da/geli/pull/709)
 - Fixed multiple severe course related security issues. [#594](https://github.com/h-da/geli/issues/594) [#653](https://github.com/h-da/geli/issues/653) [#691](https://github.com/h-da/geli/issues/691)
 - Updated the dependencies for security. [#661](https://github.com/h-da/geli/issues/661)
 
