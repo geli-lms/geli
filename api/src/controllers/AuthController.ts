@@ -142,7 +142,6 @@ export class AuthController {
    * @apiName ActivationResend
    * @apiGroup Auth
    *
-   * @apiParam {string} firstname firstname of user which activation should be resend.
    * @apiParam {string} lastname lastname of user which activation should be resend.
    * @apiParam {string} uid matriculation number of user which activation should be resend.
    * @apiParam {string} email email the new activation should be sent to.
@@ -156,12 +155,11 @@ export class AuthController {
    */
   @Post('/activationresend')
   @OnUndefined(204)
-  async activationResend (@BodyParam('firstname') firstname: string,
-                                      @BodyParam('lastname') lastname: string,
+  async activationResend (@BodyParam('lastname') lastname: string,
                                       @BodyParam('uid') uid: string,
                                       @BodyParam('email') email: string,
                                       @Res() response: Response) {
-        const user = await User.findOne({'profile.firstName': firstname, 'profile.lastName': lastname, uid: uid, role: 'student'});
+        const user = await User.findOne({'profile.lastName': lastname, uid: uid, role: 'student'});
 
         if (!user) {
           throw new BadRequestError(errorCodes.errorCodes.user.userNotFound.code);

@@ -156,20 +156,30 @@ describe('User', () => {
   });
 
   describe(`PUT ${BASE_URL}`, () => {
+    function requestUserUpdate(currentUser: IUser, updatedUser: IUser) {
+      return chai.request(app)
+        .put(`${BASE_URL}/${updatedUser._id}`)
+        .set('Authorization', `JWT ${JwtUtils.generateToken(currentUser)}`)
+        .send(updatedUser);
+    }
+
+    function requestUserUpdateAndCatch(currentUser: IUser, updatedUser: IUser) {
+      return requestUserUpdate(currentUser, updatedUser).catch(err => err.response);
+    }
+
+    function assertFailure(res: request.Response, status: number, name: string, message: string) {
+      res.status.should.be.equal(status);
+      res.body.name.should.be.equal(name);
+      res.body.message.should.be.equal(message);
+    }
+
     it('should fail with bad request (revoke own admin privileges)', async () => {
       const admin = await FixtureUtils.getRandomAdmin();
-
       const updatedUser = admin;
       updatedUser.role = 'teacher';
-      const res = await chai.request(app)
-        .put(`${BASE_URL}/${admin._id}`)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(admin)}`)
-        .send(updatedUser)
-        .catch(err => err.response);
 
-      res.status.should.be.equal(400);
-      res.body.name.should.be.equal('BadRequestError');
-      res.body.message.should.be.equal(errorCodes.user.cantChangeOwnRole.text);
+      const res = await requestUserUpdateAndCatch(admin, updatedUser);
+      assertFailure(res, 400, 'BadRequestError', errorCodes.user.cantChangeOwnRole.text);
     });
 
     it('should fail with bad request (email already in use)', async () => {
@@ -177,46 +187,30 @@ describe('User', () => {
       const updatedUser = await FixtureUtils.getRandomStudent();
       updatedUser.email = admin.email;
 
-      const res = await chai.request(app)
-        .put(`${BASE_URL}/${updatedUser._id}`)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(admin)}`)
-        .send(updatedUser)
-        .catch(err => err.response);
-
-      res.status.should.be.equal(400);
-      res.body.name.should.be.equal('BadRequestError');
-      res.body.message.should.be.equal(errorCodes.user.emailAlreadyInUse.text);
+      const res = await requestUserUpdateAndCatch(admin, updatedUser);
+      assertFailure(res, 400, 'BadRequestError', errorCodes.user.emailAlreadyInUse.text);
     });
 
+    // This test is disabled because there currently is no role beneath 'admin' that is allowed to edit other users.
+    // Reactivate and adjust this test if such a role should become available in the future.
+    // (Previously teachers had permission to change some parts of any student's profile.)
+    /*
     it('should fail changing other user\'s uid with wrong authorization (not admin)', async () => {
       const teacher = await FixtureUtils.getRandomTeacher();
       const updatedUser = await FixtureUtils.getRandomStudent();
       updatedUser.uid = '987456';
 
-      const res = await chai.request(app)
-        .put(`${BASE_URL}/${updatedUser._id}`)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
-        .send(updatedUser)
-        .catch(err => err.response);
-
-      res.status.should.be.equal(403);
-      res.body.name.should.be.equal('ForbiddenError');
-      res.body.message.should.be.equal(errorCodes.user.onlyAdminsCanChangeUids.text);
+      const res = await requestUserUpdateAndCatch(teacher, updatedUser);
+      assertFailure(res, 403, 'ForbiddenError', errorCodes.user.onlyAdminsCanChangeUids.text);
     });
+    */
 
     it('should fail changing other user\'s name with wrong authorization (low edit level)', async () => {
       const [student, updatedUser] = await FixtureUtils.getRandomStudents(2, 2);
       updatedUser.profile.firstName = 'TEST';
 
-      const res = await chai.request(app)
-        .put(`${BASE_URL}/${updatedUser._id}`)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(student)}`)
-        .send(updatedUser)
-        .catch(err => err.response);
-
-      res.status.should.be.equal(403);
-      res.body.name.should.be.equal('ForbiddenError');
-      res.body.message.should.be.equal(errorCodes.user.cantChangeUserWithHigherRole.text);
+      const res = await requestUserUpdateAndCatch(student, updatedUser);
+      assertFailure(res, 403, 'ForbiddenError', errorCodes.user.cantChangeUserWithHigherRole.text);
     });
 
     it('should update user base data without password', async () => {
@@ -227,11 +221,7 @@ describe('User', () => {
       updatedUser.profile.lastName = 'User';
       updatedUser.email = 'student2@updated.local';
 
-      const res = await chai.request(app)
-        .put(`${BASE_URL}/${student._id}`)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(student)}`)
-        .send(updatedUser);
-
+      const res = await requestUserUpdate(student, updatedUser);
       res.status.should.be.equal(200);
       res.body.profile.firstName.should.be.equal('Updated');
       res.body.profile.lastName.should.be.equal('User');
@@ -246,11 +236,7 @@ describe('User', () => {
       updatedUser.profile.lastName = 'User';
       updatedUser.email = 'student1@updated.local';
 
-      const res = await chai.request(app)
-        .put(`${BASE_URL}/${student._id}`)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(student)}`)
-        .send(updatedUser);
-
+      const res = await requestUserUpdate(student, updatedUser);
       res.status.should.be.equal(200);
       res.body.profile.firstName.should.be.equal('Updated');
       res.body.profile.lastName.should.be.equal('User');
@@ -265,11 +251,7 @@ describe('User', () => {
       updatedUser.profile.lastName = 'User';
       updatedUser.email = 'student@updated.local';
 
-      const res = await chai.request(app)
-        .put(`${BASE_URL}/${student._id}`)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(student)}`)
-        .send(updatedUser);
-
+      const res = await requestUserUpdate(student, updatedUser);
       res.status.should.be.equal(200);
       res.body.profile.firstName.should.be.equal('Updated');
       res.body.profile.lastName.should.be.equal('User');
@@ -287,11 +269,7 @@ describe('User', () => {
       updatedUser.profile.lastName = 'User';
       updatedUser.email = 'student@updated.local';
 
-      const res = await chai.request(app)
-        .put(`${BASE_URL}/${student._id}`)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(admin)}`)
-        .send(updatedUser);
-
+      const res = await requestUserUpdate(admin, updatedUser);
       res.status.should.be.equal(200);
       res.body.uid.should.be.equal(origUid);
       res.body.profile.firstName.should.be.equal('Updated');
