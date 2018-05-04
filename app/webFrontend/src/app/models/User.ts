@@ -13,7 +13,7 @@ export class User implements IUser {
     progress: any;
     lastVisitedCourses: Array<string>;
 
-    constructor(user: IUser) {
+    constructor(user: any) {
         this._id = user._id;
         this.uid = user.uid;
         this.email = user.email;
@@ -24,7 +24,10 @@ export class User implements IUser {
     }
 
     getGravatarURL(size: number = 80) {
-        return `https://www.gravatar.com/avatar/${md5(this.email.toLowerCase())}.jpg?s=${size}&d=retro`;
+        // Gravatar wants us to hash the email (for site to site consistency),
+        // - see https://en.gravatar.com/site/implement/hash/ -
+        // but we don't do that (anymore) for the sake of security & privacy.
+        return `https://www.gravatar.com/avatar/${md5(this._id)}.jpg?s=${size}&d=retro`;
     }
 
     getUserImageURL(size: number = 80) {

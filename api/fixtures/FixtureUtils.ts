@@ -56,6 +56,17 @@ export class FixtureUtils {
     return this.getRandom<IUser>(array, hash);
   }
 
+  public static async getRandomActiveStudent(hash?: string): Promise<IUser> {
+    const array = await User.find({role:  'student', isActive: true});
+    return this.getRandom<IUser>(array, hash);
+  }
+
+
+  public static async getRandomInactiveStudent(hash?: string): Promise<IUser> {
+    const array = await User.find({role:  'student', isActive: false});
+    return this.getRandom<IUser>(array, hash);
+  }
+
   public static async getRandomStudents(min: number, max: number, hash?: string): Promise<IUser[]> {
     const array = await this.getStudents();
     return this.getRandomArray<IUser>(array, min, max, hash);

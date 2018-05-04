@@ -1,9 +1,10 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import 'rxjs/add/operator/switchMap';
 import {UserService} from '../shared/services/user.service';
-import {ICourse} from '../../../../../shared/models/ICourse';
+import {ICourseDashboard, ENROLL_TYPE_ACCESSKEY} from '../../../../../shared/models/ICourseDashboard';
 import {Router} from '@angular/router';
-import {MatDialog, MatSnackBar} from '@angular/material';
+import {MatDialog} from '@angular/material';
+import {SnackBarService} from '../shared/services/snack-bar.service';
 import {AccessKeyDialog} from '../shared/components/access-key-dialog/access-key-dialog.component';
 import {CourseService} from '../shared/services/data.service';
 import {DialogService} from '../shared/services/dialog.service';
@@ -17,7 +18,7 @@ import {ShowProgressService} from '../shared/services/show-progress.service';
 export class CourseComponent {
 
   @Input()
-  course: ICourse;
+  course: ICourseDashboard;
 
   @Output()
   onEnroll = new EventEmitter();
@@ -27,7 +28,7 @@ export class CourseComponent {
   constructor(public userService: UserService,
               private router: Router,
               private dialog: MatDialog,
-              private snackBar: MatSnackBar,
+              private snackBar: SnackBarService,
               private dialogService: DialogService,
               private showProgress: ShowProgressService,
               private courseService: CourseService) {
@@ -44,7 +45,7 @@ export class CourseComponent {
   }
 
   enroll() {
-    if (this.course.hasAccessKey) {
+    if (this.course.enrollType === ENROLL_TYPE_ACCESSKEY) {
       // open dialog for accesskey
       const dialogRef = this.dialog.open(AccessKeyDialog);
       dialogRef.afterClosed().subscribe(result => {
@@ -57,30 +58,27 @@ export class CourseComponent {
     }
   }
 
+  /**
+   * Leave course when user confirms
+   */
   leave() {
     this.dialogService
       .confirm('Leave course ?', 'Do you really want to leave the course?', 'Leave')
-      .subscribe(res => {
-        if (res) {
-          this.showProgress.toggleLoadingGlobal(true);
-          this.courseService.leaveStudent(this.course._id)
-            .then(() => {
-              this.onLeave.emit({'courseId': this.course._id});
-              this.snackBar.open('Left course successfully', '', {duration: 3000});
-            })
-            .catch((error) => {
-              this.snackBar.open(error, '', {duration: 3000});
-            })
-            .then(() => {
-               this.showProgress.toggleLoadingGlobal(false);
-            });
+      .subscribe(async (leaveCourse) => {
+        if (leaveCourse === false) {
+          return;
         }
-      });
-  }
 
-  isMemberOfCourse(course: ICourse) {
-    const user = this.userService.user;
-    return this.userService.isStudent() &&
-      course.students.filter(obj => obj._id === user._id).length > 0;
+        this.showProgress.toggleLoadingGlobal(true);
+
+        try {
+          await this.courseService.leaveStudent(this.course._id);
+          this.onLeave.emit({'courseId': this.course._id});
+        } catch (err) {
+          this.snackBar.open(err.error.message);
+        }
+
+        this.showProgress.toggleLoadingGlobal(false);
+      });
   }
 }
