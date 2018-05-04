@@ -12,5 +12,6 @@ export interface IUnit {
     updatedAt: string;
     createdAt: string;
     unitCreator: IUser;
+    visible: boolean;
     __t: string;
 }

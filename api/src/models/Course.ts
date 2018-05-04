@@ -255,11 +255,13 @@ courseSchema.methods.forView = function (): ICourseView {
 };
 
 courseSchema.methods.populateLecturesFor = function (user: IUser) {
+  const isTeacherOrAdmin = (user.role === 'teacher' || user.role === 'admin');
   return this.populate({
     path: 'lectures',
     populate: {
       path: 'units',
       virtuals: true,
+      match: {$or: [{visible: undefined}, {visible: true}, {visible: !isTeacherOrAdmin}]},
       populate: {
         path: 'progressData',
         match: {user: {$eq: user._id}}

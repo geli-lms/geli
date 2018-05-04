@@ -41,6 +41,9 @@ const unitSchema = new mongoose.Schema({
     type: {
       type: String
     },
+    visible: {
+      type: Boolean
+    },
     unitCreator: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User'
