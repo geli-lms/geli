@@ -220,7 +220,7 @@ userSchema.methods.forUser = function (otherUser: IUser): IUserSubSafe | IUserSu
 // (Or when the currentUser is an admin or targets itself.)
 const editLevels: {[key: string]: number} = {
   student: 0,
-  teacher: 1,
+  teacher: 0,
   admin: 2,
 };
 
