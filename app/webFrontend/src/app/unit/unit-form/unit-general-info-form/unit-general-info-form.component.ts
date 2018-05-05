@@ -21,10 +21,20 @@ export class UnitGeneralInfoFormComponent implements OnInit {
       this.model.visible = true;
     }
 
-    this.unitForm.addControl('name', new FormControl(this.model.name, Validators.required));
-    this.unitForm.addControl('description', new FormControl(this.model.description, Validators.required));
-    this.unitForm.addControl('deadline', new FormControl(this.model.deadline));
-    this.unitForm.addControl("visible", new FormControl(this.model.visible));
+    this.unitForm.addControl('name', new FormControl(null, Validators.required));
+    this.unitForm.addControl('description', new FormControl(null, Validators.required));
+    this.unitForm.addControl('deadline', new FormControl());
+    this.unitForm.addControl('visible', new FormControl());
+
+    if(this.model){
+      this.unitForm.patchValue({
+        name: this.model.name,
+        description: this.model.description,
+        deadline: this.model.deadline,
+        visible: this.model.visible
+      })
+    }
+
   }
 
   updateDateTime(date: Date) {

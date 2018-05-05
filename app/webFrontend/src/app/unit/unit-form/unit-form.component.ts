@@ -23,6 +23,7 @@ export class UnitFormComponent implements OnInit {
   @Input() onDone: () => void;
   @Input() onCancel: () => void;
 
+  // add all child-components here for extra Buttons etc. (see other unit types, eg. full-text)
   @ViewChild(FreeTextUnitFormComponent)
   private freeTextUnitFormComponent: FreeTextUnitFormComponent;
 
@@ -42,12 +43,18 @@ export class UnitFormComponent implements OnInit {
   ngOnInit() {
     this.unitForm = new FormGroup({});
 
-    if(this.model._id){
-
-    }
   }
 
   async save() {
+    // check if form is valid.
+    if (!this.unitForm.valid) {
+      const snackErrMessage = `Given input is not valid. Please fill fields correctly.`;
+      this.snackBar.open(snackErrMessage, '', {duration: 3000});
+
+      return
+    }
+
+
     this.model = {
       ...this.model,
       ...this.unitForm.getRawValue()
@@ -77,26 +84,24 @@ export class UnitFormComponent implements OnInit {
 
       console.log(responseUnit);
 
-      this.snackBar.open('Free text unit saved', '', {duration: 3000});
+      const snackSuccMessage = `Unit ${this.model.name? `'${this.model.name}'`: ''} successfully ${isUpdate ? 'updated' : 'created'}`;
+
+      const notifyMessage =`Course '${this.course.name}' has ${isUpdate ? 'a new' : 'an updated'} Unit '${this.model.name}'`;
+
+      this.snackBar.open(snackSuccMessage, '', {duration: 3000});
       this.onDone();
       this.notificationService.createItem(
         {
           changedCourse: this.course,
           changedLecture: this.lecture._id,
           changedUnit: responseUnit,
-          text: 'Course ' + this.course.name + ' has a new text unit.'
+          text: notifyMessage
         });
 
     }catch(err){
-      this.snackBar.open('Couldn\'t update unit', '', {duration: 3000});
+      const snackErrMessage = `Couldn't ${isUpdate ? 'update' : 'create'} Unit '${this.model.name? `'${this.model.name}'`: ''}'`;
+
+      this.snackBar.open(snackErrMessage, '', {duration: 3000});
     }
 
-
-
-    if (!this.unitForm.valid) {
-      // console.log("invalid form")
-      return;
-    }
-    // console.log(this.unitForm.value.markdown);
-    }
 }

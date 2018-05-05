@@ -19,7 +19,7 @@ export class FreeTextUnitCoreComponent implements OnInit {
   }
 
   public renderHtml(): string {
-    if (this.mdService) {
+    if (this.mdService && this.markdown) {
       return this.renderedHtml = this.mdService.render(this.markdown);
     }
   }
