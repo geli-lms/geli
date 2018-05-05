@@ -1,10 +1,9 @@
 import {Component, Inject, OnInit, QueryList, ViewChildren, ViewEncapsulation} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialog, MatDialogRef, MatSnackBar} from '@angular/material';
+import {MatSnackBar} from '@angular/material';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
 import {LectureCheckboxComponent} from './downloadCheckBoxes/lecture-checkbox.component';
 import {DownloadFileService} from 'app/shared/services/data.service';
 import {IDownload} from '../../../../../../../shared/models/IDownload';
-import {IDownloadSize} from '../../../../../../../shared/models/IDownloadSize';
 import {SaveFileService} from '../../../shared/services/save-file.service';
 
 import {saveAs} from 'file-saver/FileSaver';
@@ -36,7 +35,6 @@ export class DownloadCourseDialogComponent implements OnInit {
     this.course = this.dataSharingService.getDataForKey('course');
     this.showSpinner = false;
     this.disableDownloadButton = false;
-    this.course = this.data.course;
     this.chkbox = false;
     if (!this.checkForEmptyLectures()) {
       this.disableDownloadButton = true;
@@ -124,7 +122,7 @@ export class DownloadCourseDialogComponent implements OnInit {
         this.showSpinner = false;
         this.disableDownloadButton = false;
         if (!this.keepDialogOpen) {
-          //this.dialogRef.close();
+          // this.dialogRef.close();
         }
       } catch (error) {
         this.showSpinner = false;

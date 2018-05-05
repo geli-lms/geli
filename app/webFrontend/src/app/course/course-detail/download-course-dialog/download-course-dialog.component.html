@@ -1,8 +1,8 @@
 <mat-card class="card">
   <mat-card-content>
-    <ng-container *ngIf="!this.checkForEmptyLectures()">No course material available for download</ng-container>
     <div *ngIf="this.checkForEmptyLectures()">
-      <p>Select units or files which you want to download in a zip</p>
+    <ng-container *ngIf="!this.checkForEmptyLectures()">No course material available for download</ng-container>
+       <p>Select units or files which you want to download in a zip</p>
     <mat-list>
       <mat-list-item class="selectAll">
         <h3>Select All</h3>
@@ -13,6 +13,7 @@
       <app-lecture-checkbox (valueChanged)="onChildEvent($event)" *ngFor=" let lecture of course.lectures"
                             [lecture]="lecture"></app-lecture-checkbox>
     </mat-list>
+    </div>
   </mat-card-content>
   <mat-card-actions>
     <button mat-raised-button color="primary" [disabled]="this.disableDownloadButton" (click)="downloadAndClose()">
