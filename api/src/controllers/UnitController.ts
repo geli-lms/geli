@@ -81,23 +81,21 @@ export class UnitController {
    */
   @Authorized(['teacher', 'admin'])
   @Post('/')
-  addUnit(@Body() data: any, @CurrentUser() currentUser: IUser) {
+  async addUnit(@Body() data: any, @CurrentUser() currentUser: IUser) {
     // discard invalid requests
     this.checkPostParam(data);
     // Set current user as creator, old unit's dont have a creator
-    data.model.unitCreator = currentUser._id.toString();
-
-    return Unit.create(data.model)
-    .then((createdUnit) => {
-      return this.pushToLecture(data.lectureId, createdUnit);
-    })
-    .catch((err) => {
+    data.model.unitCreator = currentUser._id;
+    try {
+      const createdUnit = await Unit.create(data.model);
+      return await this.pushToLecture(data.lectureId, createdUnit);
+    } catch (err) {
       if (err.name === 'ValidationError') {
         throw err;
       } else {
         throw new BadRequestError(err);
       }
-    });
+    }
   }
 
   /**

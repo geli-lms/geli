@@ -51,7 +51,9 @@ export class FileUnitFormComponent implements OnInit {
     this.model = {
       ...this.model,
       name: this.generalInfo.form.value.name,
-      description: this.generalInfo.form.value.description
+      description: this.generalInfo.form.value.description,
+      visible: this.generalInfo.form.value.visible
+
     };
 
     const reqObj = {

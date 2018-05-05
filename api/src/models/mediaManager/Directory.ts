@@ -24,43 +24,46 @@ const directorySchema = new mongoose.Schema({
     }
   ]
 }, {
-    timestamps: true,
-    toObject: {
-      transform: function (doc: IDirectoryModel, ret: any) {
-        ret._id = ret._id.toString();
-        ret.subDirectories = ret.subDirectories.map((dir: any) => {
-          if (!dir._id) {
-            dir = dir.toString();
-          }
-          return dir;
-        });
-        ret.files = ret.files.map((file: any) => {
-          if (!file._id) {
-            file = file.toString();
-          }
-          return file;
-        });
-      }
-    },
+  timestamps: true,
+  toObject: {
+    transform: function (doc: IDirectoryModel, ret: any) {
+      ret._id = ret._id.toString();
+      ret.subDirectories = ret.subDirectories.map((dir: any) => {
+        if (!dir._id) {
+          dir = dir.toString();
+        }
+        return dir;
+      });
+      ret.files = ret.files.map((file: any) => {
+        if (!file._id) {
+          file = file.toString();
+        }
+        return file;
+      });
+    }
+  },
 });
 
-directorySchema.pre('remove', async function(next: () => void) {
+directorySchema.pre('remove', async function () {
   const localDir = <IDirectoryModel><any>this;
-  for (const subdir of localDir.subDirectories) {
-    // linting won't let us use 'Directory' before it is actually declared
-    // tslint:disable-next-line:no-use-before-declare
-    const model = await Directory.findById(subdir);
-    if (model) {
-      await model.remove();
+  try {
+    for (const subdir of localDir.subDirectories) {
+      // linting won't let us use 'Directory' before it is actually declared
+      // tslint:disable-next-line:no-use-before-declare
+      const model = await Directory.findById(subdir);
+      if (model) {
+        await model.remove();
+      }
     }
-  }
-  for (const file of localDir.files) {
-    const model = await File.findById(file);
-    if (model) {
-      await model.remove();
+    for (const file of localDir.files) {
+      const model = await File.findById(file);
+      if (model) {
+        await model.remove();
+      }
     }
+  } catch (err) {
+    throw new Error('Delete Error: ' + err.toString());
   }
-  next();
 });
 
 const Directory = mongoose.model<IDirectoryModel>('Directory', directorySchema);
