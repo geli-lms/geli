@@ -28,7 +28,7 @@ export class UnitFormComponent implements OnInit {
   private freeTextUnitFormComponent: FreeTextUnitFormComponent;
 
   @ViewChild(CodeKataComponent)
-  private codeKataComponent:CodeKataComponent;
+  private codeKataComponent: CodeKataComponent;
 
   unitForm: FormGroup;
 
@@ -74,19 +74,19 @@ export class UnitFormComponent implements OnInit {
       isUpdate = true;
       promise = this.unitService.updateItem(this.model);
 
-    }else{
+    } else {
       isUpdate = false;
       promise = this.unitService.createItem(reqObj);
     }
 
-    try{
+    try {
       let responseUnit = await promise;
 
       console.log(responseUnit);
 
-      const snackSuccMessage = `Unit ${this.model.name? `'${this.model.name}'`: ''} successfully ${isUpdate ? 'updated' : 'created'}`;
+      const snackSuccMessage = `Unit ${this.model.name ? `'${this.model.name}'` : ''} successfully ${isUpdate ? 'updated' : 'created'}`;
 
-      const notifyMessage =`Course '${this.course.name}' has ${isUpdate ? 'a new' : 'an updated'} Unit '${this.model.name}'`;
+      const notifyMessage = `Course '${this.course.name}' has ${isUpdate ? 'a new' : 'an updated'} Unit '${this.model.name}'`;
 
       this.snackBar.open(snackSuccMessage, '', {duration: 3000});
       this.onDone();
@@ -98,10 +98,11 @@ export class UnitFormComponent implements OnInit {
           text: notifyMessage
         });
 
-    }catch(err){
-      const snackErrMessage = `Couldn't ${isUpdate ? 'update' : 'create'} Unit '${this.model.name? `'${this.model.name}'`: ''}'`;
+    } catch (err) {
+      const snackErrMessage = `Couldn't ${isUpdate ? 'update' : 'create'} Unit '${this.model.name ? `'${this.model.name}'` : ''}'`;
 
       this.snackBar.open(snackErrMessage, '', {duration: 3000});
     }
 
+  }
 }
