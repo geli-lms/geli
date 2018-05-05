@@ -6,7 +6,7 @@
           [class.correct]="validationMode && answer.value"
           [class.incorrect]="validationMode && !answer.value">
 
-        <mat-checkbox [disabled]="validationMode" [(ngModel)]="progress.answers[task._id][answer._id]">
+        <mat-checkbox [disabled]="validationMode" *ngIf="progress.answers[task._id]" [(ngModel)]="progress.answers[task._id][answer._id]">
           <span class="answer-text">{{answer.text}}</span>
         </mat-checkbox>
       </li>

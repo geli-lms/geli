@@ -4,10 +4,14 @@ import 'rxjs/add/operator/switchMap';
 import {CourseService, UserDataService} from '../../shared/services/data.service';
 import {ICourse} from '../../../../../../shared/models/ICourse';
 import {UserService} from '../../shared/services/user.service';
+import {IUser} from '../../../../../../shared/models/IUser';
+import {User} from '../../models/User';
 import {MatSnackBar, MatDialog} from '@angular/material';
 import {DownloadCourseDialogComponent} from './download-course-dialog/download-course-dialog.component';
 import {TitleService} from '../../shared/services/title.service';
 import {LastVisitedCourseContainerUpdater} from '../../shared/utils/LastVisitedCourseContainerUpdater';
+import {DialogService} from '../../shared/services/dialog.service';
+
 import {DataSharingService} from '../../shared/services/data-sharing.service';
 
 @Component({
@@ -32,7 +36,8 @@ export class CourseDetailComponent implements OnInit, OnDestroy {
               private dialog: MatDialog,
               private titleService: TitleService,
               private userDataService: UserDataService,
-              private dataSharingService: DataSharingService) {
+              private dataSharingService: DataSharingService,
+              private dialogService: DialogService) {
   }
 
   ngOnInit() {
@@ -53,4 +58,9 @@ export class CourseDetailComponent implements OnInit, OnDestroy {
       width: '800px'
     });
   }
+
+  showUserProfile(teacher: User) {
+    this.dialogService.userProfile(teacher);
+  }
+
 }

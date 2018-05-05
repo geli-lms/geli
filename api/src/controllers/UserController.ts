@@ -88,17 +88,17 @@ export class UserController {
    */
   @Get('/')
   @Authorized(['teacher', 'admin'])
-  getUsers(@CurrentUser() currentUser?: IUser) {
-    return User.find({})
-      .then((users) => {
-        return users.map((user) => this.cleanUserObject(null, user, currentUser));
-      });
+  async getUsers(@CurrentUser() currentUser: IUser) {
+    const users = await User.find();
+    return users.map(user => user.forUser(currentUser));
   }
 
   /**
    * @api {get} /api/users/members/search Request users with certain role and query
    * @apiName SearchUser
    * @apiGroup User
+   * @apiPermission teacher
+   * @apiPermission admin
    *
    * @apiParam {String="student","teacher"} role User role.
    * @apiParam {String} query Query string.
@@ -175,7 +175,10 @@ export class UserController {
    * @apiError BadRequestError Query was empty.
    */
   @Get('/members/search') // members/search because of conflict with /:id
-  async searchUser(@QueryParam('role') role: string, @QueryParam('query') query: string, @QueryParam('limit') limit?: number) {
+  @Authorized(['teacher', 'admin'])
+  async searchUser(
+      @CurrentUser() currentUser: IUser, @QueryParam('role') role: string,
+      @QueryParam('query') query: string, @QueryParam('limit') limit?: number) {
     if (role !== 'student' && role !== 'teacher') {
       throw new BadRequestError('Method not allowed for this role.');
     }
@@ -202,7 +205,7 @@ export class UserController {
       .limit(limit ? limit : Number.MAX_SAFE_INTEGER)
       .sort({'score': {$meta: 'textScore'}});
     return {
-      users: users.map((user) => user.toObject({virtuals: true})),
+      users: users.map(user => user.forUser(currentUser)),
       meta: {
         count: amountUsers
       }
@@ -273,7 +276,7 @@ export class UserController {
     if (!user) {
       throw new NotFoundError(`User was not found.`);
     }
-    return this.cleanUserObject(id, user, currentUser);
+    return user.forUser(currentUser);
   }
 
   /**
@@ -282,8 +285,7 @@ export class UserController {
    * @apiGroup User
    *
    * @apiParam {Object} file Uploaded file.
-   * @apiParam {String} id User ID.
-   * @apiParam {Object} data Body.
+   * @apiParam {String} id User target ID.
    * @apiParam {IUser} currentUser Currently logged in user.
    *
    * @apiSuccess {User} user Affected user.
@@ -310,49 +312,68 @@ export class UserController {
    *         "id": "5a037e6a60f72236d8e7c81d"
    *     }
    *
+   * @apiError ForbiddenError Forbidden format of uploaded picture.
+   * @apiError ForbiddenError You don't have the authorization to change a user of this role.
    * @apiError BadRequestError
    */
   @Post('/picture/:id')
-   addUserPicture(@UploadedFile('file', {options: uploadOptions}) file: any, @Param('id') id: string, @Body()
-    data: any, @CurrentUser() currentUser: IUser) {
-    return User.findById(id)
-      .then(async (user: IUserModel) =>  {
-        if (user.profile.picture && user.profile.picture.path && fs.existsSync(user.profile.picture.path)) {
-          fs.unlinkSync(user.profile.picture.path);
-        }
+  async addUserPicture(
+      @UploadedFile('file', {options: uploadOptions}) file: any,
+      @Param('id') id: string, @CurrentUser() currentUser: IUser) {
+    const mimeFamily = file.mimetype.split('/', 1)[0];
+    if (mimeFamily !== 'image') {
+      throw new ForbiddenError('Forbidden format of uploaded picture: ' + mimeFamily);
+    }
 
-        const resizedImageBuffer = await sharp(file.path)
-          .resize(config.maxProfileImageWidth, config.maxProfileImageHeight)
-          .withoutEnlargement(true)
-          .max()
-          .toBuffer({resolveWithObject: true});
+    let user = await User.findById(id);
 
-        fs.writeFileSync(file.path, resizedImageBuffer.data);
+    if (!user.checkEditableBy(currentUser).editAllowed) {
+      throw new ForbiddenError(errorCodes.user.cantChangeUserWithHigherRole.text);
+    }
 
-        user.profile.picture = {
-          _id: null,
-          name: file.filename,
-          alias: file.originalname,
-          path: file.path,
-          size: resizedImageBuffer.info.size
-        };
-        return user.save();
-      })
-      .then((user) => {
-        return this.cleanUserObject(id, user, currentUser);
-      })
-      .catch((error) => {
-        throw new BadRequestError(error);
-      });
+    if (user.profile.picture) {
+      const path = user.profile.picture.path;
+      if (path && fs.existsSync(path)) {
+        fs.unlinkSync(path);
+      }
+    }
+
+    const resizedImageBuffer =
+        await sharp(file.path)
+            .resize(config.maxProfileImageWidth, config.maxProfileImageHeight)
+            .withoutEnlargement(true)
+            .max()
+            .toBuffer({resolveWithObject: true});
+
+    fs.writeFileSync(file.path, resizedImageBuffer.data);
+
+    user.profile.picture = {
+      _id: null,
+      name: file.filename,
+      alias: file.originalname,
+      path: file.path,
+      size: resizedImageBuffer.info.size
+    };
+
+    try {
+      user = await user.save();
+    } catch (error) {
+      throw new BadRequestError(error);
+    }
+
+    return user.forUser(currentUser);
   }
 
   /**
    * @api {put} /api/users/:id Update user
    * @apiName PutUser
    * @apiGroup User
+   * @apiPermission student
+   * @apiPermission teacher
+   * @apiPermission admin
    *
-   * @apiParam {String} id User ID.
-   * @apiParam {Object} user New user data.
+   * @apiParam {String} id User target ID.
+   * @apiParam {Object} newUser New user data.
    * @apiParam {IUser} currentUser Currently logged in user.
    *
    * @apiSuccess {User} user Updated user.
@@ -379,61 +400,65 @@ export class UserController {
    *         "id": "5a037e6a60f72236d8e7c81d"
    *     }
    *
-   * @apiError BadRequestError You can't revoke your own privileges.
-   * @apiError BadRequestError This mail address is already in use.
-   * @apiError BadRequestError Invalid Current Password!
+   * @apiError BadRequestError Invalid update role.
+   * @apiError BadRequestError You can't change your own role.
+   * @apiError BadRequestError This email address is already in use.
+   * @apiError BadRequestError Invalid current password!
+   * @apiError ForbiddenError You don't have the authorization to change a user of this role.
    * @apiError ForbiddenError Only users with admin privileges can change roles.
    * @apiError ForbiddenError Only users with admin privileges can change uids.
    */
+  @Authorized(['student', 'teacher', 'admin'])
   @Put('/:id')
-  updateUser(@Param('id') id: string, @Body() user: any, @CurrentUser() currentUser?: IUser) {
-    return User.find({'role': 'admin'})
-      .then((adminUsers) => {
-        if (id === currentUser._id
-          && currentUser.role === 'admin'
-          && user.role !== 'admin') {
-          throw new BadRequestError('You can\'t revoke your own privileges');
-        } else {
-          return User.find({$and: [{'email': user.email}, {'_id': {$ne: user._id}}]});
-        }
-      })
-      .then((emailInUse) => {
-        if (emailInUse.length > 0) {
-          throw new BadRequestError('This mail address is already in use.');
-        } else {
-          return User.findById(id);
-        }
-      })
-      .then((oldUser: IUserModel) => {
-        if (user.role !== oldUser.role && currentUser.role !== 'admin') {
-          throw new ForbiddenError('Only users with admin privileges can change roles');
-        } else if (user.uid !== oldUser.uid && currentUser.role !== 'admin') {
-          throw new ForbiddenError('Only users with admin privileges can change uids');
-        } else {
-          if (oldUser.uid && user.uid === null) {
-            user.uid = oldUser.uid;
-          }
+  async updateUser(@Param('id') id: string, @Body() newUser: any, @CurrentUser() currentUser: IUser) {
+    if (id === currentUser._id && currentUser.role !== newUser.role) {
+      throw new BadRequestError(errorCodes.user.cantChangeOwnRole.text);
+    }
 
-          return oldUser.isValidPassword(user.currentPassword);
-        }
-      })
-      .then((isValidPassword) => {
-        if (typeof user.password !== 'undefined') {
-          if (!(currentUser.role === 'admin' && currentUser._id !== user._id) && !isValidPassword && user.password.length > 0) {
-            throw new BadRequestError('Invalid Current Password!');
-          } else {
-            if (user.password.length === 0) {
-              delete user.password;
-            }
-            return User.findOneAndUpdate({'_id': id}, user, {new: true});
-          }
-        } else {
-          return User.findOneAndUpdate({'_id': id}, user, {new: true});
-        }
-      })
-      .then((updatedUser) => {
-        return updatedUser.toObject({virtuals: true});
-      });
+    const oldUser = await User.findById(id);
+    const {userIsAdmin, editAllowed} = oldUser.checkEditableBy(currentUser);
+
+    if (!editAllowed) {
+      throw new ForbiddenError(errorCodes.user.cantChangeUserWithHigherRole.text);
+    }
+
+    if (oldUser.uid && newUser.uid === null) {
+      newUser.uid = oldUser.uid;
+    }
+    if (oldUser.role && typeof newUser.role === 'undefined') {
+      newUser.role = oldUser.role;
+    } else if (typeof User.getEditLevelUnsafe(newUser) === 'undefined') {
+      throw new BadRequestError(errorCodes.user.invalidNewUserRole.text);
+    }
+
+    if (!userIsAdmin) {
+      if (newUser.role !== oldUser.role) {
+        throw new ForbiddenError(errorCodes.user.onlyAdminsCanChangeRoles.text);
+      }
+      if (newUser.uid !== oldUser.uid) {
+        throw new ForbiddenError(errorCodes.user.onlyAdminsCanChangeUids.text);
+      }
+    }
+
+    if (typeof newUser.password === 'undefined' || newUser.password.length === 0) {
+      delete newUser.password;
+    } else {
+      const isValidPassword = await oldUser.isValidPassword(newUser.currentPassword);
+      if (!isValidPassword) {
+        throw new BadRequestError(errorCodes.user.invalidPassword.text);
+      }
+    }
+
+    {
+      const sameEmail = {$and: [{'email': newUser.email}, {'_id': {$ne: newUser._id}}]};
+      const users = await User.find(sameEmail).limit(1);
+      if (users.length > 0) {
+        throw new BadRequestError(errorCodes.user.emailAlreadyInUse.text);
+      }
+    }
+
+    const updatedUser = await User.findOneAndUpdate({_id: id}, newUser, {new: true});
+    return updatedUser.forUser(currentUser);
   }
 
   /**
@@ -455,27 +480,14 @@ export class UserController {
    */
   @Authorized('admin')
   @Delete('/:id')
-  deleteUser(@Param('id') id: string) {
-    return User.find({'role': 'admin'})
-      .then((adminUsers) => {
-        if (adminUsers.length === 1 &&
-          adminUsers[0].get('id') === id &&
-          adminUsers[0].role === 'admin') {
-          throw new BadRequestError('There are no other users with admin privileges.');
-        } else {
-          return User.findByIdAndRemove(id);
-        }
-      })
-      .then(() => {
-        return {result: true};
-      });
-  }
-
-  private cleanUserObject(id: string, user: IUserModel, currentUser?: IUser) {
-    user.password = '';
-    if (currentUser._id !== id && (currentUser.role !== <string>'teacher' || currentUser.role !== <string>'admin')) {
-      user.uid = null;
+  async deleteUser(@Param('id') id: string, @CurrentUser() currentUser: IUser) {
+    if (id === currentUser._id) {
+      const otherAdmin = await User.findOne({$and: [{'role': 'admin'}, {'_id': {$ne: id}}]});
+      if (otherAdmin === null) {
+        throw new BadRequestError(errorCodes.user.noOtherAdmins.text);
+      }
     }
-    return user.toObject({virtuals: true});
+    await User.findByIdAndRemove(id);
+    return {result: true};
   }
 }

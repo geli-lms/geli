@@ -5,6 +5,7 @@
     "register": "Registrieren",
     "email": "E-Mail",
     "password": "Passwort",
+    "send": "Senden",
     "dismiss": "Schließen",
     "back": "Zurück",
     "profile": {
@@ -19,6 +20,7 @@
     "validation": {
       "required": "Eingabe notwendig",
       "minLength": "Mindestens {{min}} Zeichen benötigt",
+      "maxLength": "Maximal {{max}} Zeichen erlaubt",
       "invalid": "Keine gültige Eingabe",
       "password": "Passwörter müssen aus mindestens 8 Zeichen, inklusive einem Sonderzeichen und einer Ziffer bestehen",
       "passwordsMatch": "Die Passwörter stimmen nicht überein",
@@ -43,7 +45,13 @@
       "successful": "Registrierung erfolgreich",
       "mailSent": "Wir haben Ihnen einen Aktivierungslink an Ihre E-Mail-Adresse gesendet.",
       "back": "Zurück zur Startseite",
-      "teacherRegistrationButton": "Kein Student?"
+      "teacherRegistrationButton": "Kein Student?",
+      "resendActivationButton": "Aktivierung erneut senden"
+    },
+    "resendActivation": {
+      "back": "Zurück zur Registrierung",
+      "successful": "Aktivierung erneut senden erfolgreich",
+      "mailSent": "Wir haben Ihnen einen neuen Aktivierungslink an Ihre E-Mail-Adresse gesendet."
     }
   },
   "mainMenu": {

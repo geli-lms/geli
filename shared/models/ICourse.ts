@@ -9,17 +9,17 @@ export const ENROLL_TYPE_ACCESSKEY = 'accesskey';
 export const ENROLL_TYPES = [ENROLL_TYPE_WHITELIST, ENROLL_TYPE_FREE, ENROLL_TYPE_ACCESSKEY];
 
 export interface ICourse {
-    _id: any;
-    name: string;
-    active: boolean;
-    description: string;
-    courseAdmin: IUser;
-    media: IDirectory;
-    teachers: IUser[];
-    students: IUser[];
-    lectures: ILecture[];
-    accessKey: string;
-    whitelist: IWhitelistUser[];
-    enrollType: string;
-    hasAccessKey: boolean;
+  _id: any;
+  name: string;
+  active: boolean;
+  description: string;
+  courseAdmin: IUser;
+  media: IDirectory;
+  teachers: IUser[];
+  students: IUser[];
+  lectures: ILecture[];
+  accessKey: string;
+  whitelist: IWhitelistUser[];
+  enrollType: string;
+  hasAccessKey: boolean;
 }

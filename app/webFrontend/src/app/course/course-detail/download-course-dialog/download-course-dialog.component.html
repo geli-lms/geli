@@ -1,6 +1,8 @@
 <mat-card class="card">
   <mat-card-content>
-    <ng-container *ngIf="!course.lectures.length">No lectures to download!</ng-container>
+    <ng-container *ngIf="!this.checkForEmptyLectures()">No course material available for download</ng-container>
+    <div *ngIf="this.checkForEmptyLectures()">
+      <p>Select units or files which you want to download in a zip</p>
     <mat-list>
       <mat-list-item class="selectAll">
         <h3>Select All</h3>
