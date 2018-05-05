@@ -1,3 +1,5 @@
+@import '../../../../variables';
+
 .selectArea {
   display: inline-flex;
   flex-wrap: wrap;
@@ -25,18 +27,12 @@
 .btn {
   border: none;
   outline: none;
-  //padding: 2px 6px;
   cursor: pointer;
   vertical-align: middle;
 }
 
-.btn:hover {
-  background-color: #ddd;
-}
-
-.btn.active {
-  background-color: #666;
-  color: white;
+.activeBtn {
+  background-color: map-get($app-primary,'default');
 }
 
 .grid {

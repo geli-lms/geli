@@ -1,5 +1,6 @@
 import {Component, Input} from '@angular/core';
-import {IFile} from '../../../../../../../shared/models/mediaManager/IFile';
+import {IFile} from '../../../../../../../../shared/models/mediaManager/IFile';
+
 
 @Component({
   selector: 'app-grid',

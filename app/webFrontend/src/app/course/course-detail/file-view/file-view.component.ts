@@ -23,7 +23,6 @@ export class FileViewComponent implements OnInit {
 
   ngOnInit() {
     this.course = this.dataSharingService.getDataForKey('course');
-    console.dir(this.course);
   }
 
   listview() {

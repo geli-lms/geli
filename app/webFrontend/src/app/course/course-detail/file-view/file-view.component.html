@@ -7,11 +7,11 @@
     </mat-select>
   </mat-form-field>
   <div class="buttonArea">
-    <button mat-raised-button color="secondary" (click)="listview()" mat-tooltip="List View" class="btn">
+    <button mat-raised-button color="secondary" (click)="listview()" mat-tooltip="List View" class="btn" [class.activeBtn]="displayGrid==false">
       <i class="material-icons iconSize">view_list</i> List
     </button>
     <button mat-raised-button color="secondary" [disabled]="this.disableGridViewButton" (click)="gridview()"
-            mat-tooltip="Grid View" class="btn">
+            mat-tooltip="Grid View" class="btn" [class.activeBtn]="displayGrid==true">
       <i class="material-icons iconSize">view_module</i> Grid
     </button>
   </div>
