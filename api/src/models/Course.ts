@@ -115,7 +115,9 @@ courseSchema.pre('remove', async function () {
   const localCourse = <ICourseModel><any>this;
   try {
     const dic = await Directory.findById(localCourse.media);
+      if (dic) {
     await dic.remove();
+    }
     for (const lec of localCourse.lectures) {
       const lecDoc = await Lecture.findById(lec);
       await lecDoc.remove();
