@@ -21,8 +21,10 @@ interface ICourseModel extends ICourse, mongoose.Document {
   populateLecturesFor: (user: IUser) => this;
   processLecturesFor: (user: IUser) => Promise<this>;
 }
+
 interface ICourseMongoose extends mongoose.Model<ICourseModel> {
 }
+
 let Course: ICourseMongoose;
 
 const courseSchema = new mongoose.Schema({
@@ -82,7 +84,7 @@ const courseSchema = new mongoose.Schema({
   {
     timestamps: true,
     toObject: {
-      transform: function (doc: ICourseModel, ret: any, {currentUser}: {currentUser?: IUser}) {
+      transform: function (doc: ICourseModel, ret: any, {currentUser}: { currentUser?: IUser }) {
         if (ret.hasOwnProperty('_id') && ret._id !== null) {
           ret._id = ret._id.toString();
         }
@@ -109,17 +111,21 @@ const courseSchema = new mongoose.Schema({
 );
 
 // Cascade delete
-courseSchema.pre('remove', async function (next) {
+courseSchema.pre('remove', async function () {
   const localCourse = <ICourseModel><any>this;
   try {
-    const deletedLectures = await Lecture.deleteMany({'_id': {$in: localCourse.lectures}}).exec();
-    const deletedDirs = await Directory.deleteMany({'_id': {$in: localCourse.media}}).exec();
+    const dic = await Directory.findById(localCourse.media);
+      if (dic) {
+    await dic.remove();
+    }
+    for (const lec of localCourse.lectures) {
+      const lecDoc = await Lecture.findById(lec);
+      await lecDoc.remove();
+    }
   } catch (error) {
-    const debug = 0;
-    next();
+    winston.log('warn', 'course (' + localCourse._id + ') cloud not be deleted!');
+    throw new Error('Delete Error: ' + error.toString());
   }
-
-  next();
 });
 
 courseSchema.methods.exportJSON = async function (sanitize: boolean = true) {
@@ -214,10 +220,12 @@ courseSchema.methods.checkPrivileges = function (user: IUser) {
   const userCanEditCourse: boolean = userIsAdmin || userIsCourseAdmin || userIsCourseTeacher;
   const userCanViewCourse: boolean = (this.active && userIsCourseStudent) || userCanEditCourse;
 
-  return {userIsAdmin, ...userIs,
-      courseAdminId,
-      userIsCourseAdmin, userIsCourseTeacher, userIsCourseStudent, userIsCourseMember,
-      userCanEditCourse, userCanViewCourse};
+  return {
+    userIsAdmin, ...userIs,
+    courseAdminId,
+    userIsCourseAdmin, userIsCourseTeacher, userIsCourseStudent, userIsCourseMember,
+    userCanEditCourse, userCanViewCourse
+  };
 };
 
 courseSchema.methods.forDashboard = function (user: IUser): ICourseDashboard {
@@ -247,7 +255,7 @@ courseSchema.methods.forView = function (): ICourseView {
     _id: <string>extractMongoId(this._id),
     name, description,
     courseAdmin: User.forCourseView(courseAdmin),
-    teachers: teachers.map((teacher: IUser) =>  User.forCourseView(teacher)),
+    teachers: teachers.map((teacher: IUser) => User.forCourseView(teacher)),
     lectures: lectures.map((lecture: any) => lecture.toObject())
   };
 };
