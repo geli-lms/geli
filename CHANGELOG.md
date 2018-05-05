@@ -20,6 +20,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Added details of courseAdmin and teacher to course detail view. on click profiles are shown. [#598](https://github.com/h-da/geli/issues/598)
 - Added small auto linting scripts to package.json [#688](https://github.com/h-da/geli/issues/688)
 - Added changed size of drop down arrows for better usability. [#686](https://github.com/h-da/geli/issues/686)
+- Added new contributors [#624](https://github.com/h-da/geli/issues/624)
+- Added the date and the teacher under each unit [#582](https://github.com/h-da/geli/issues/582)
+- Added E-Mail validation to reset password [#597](https://github.com/h-da/geli/issues/597)
+- Added Language code to header [#554](https://github.com/h-da/geli/issues/554)
 
 ### Changed
 - Refactored or slightly altered various course & user related APIs. [#654](https://github.com/h-da/geli/issues/654) [#691](https://github.com/h-da/geli/issues/691)
@@ -27,7 +31,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Refactored register and resend activation to use geli email validator with top level domain check. [#713](https://github.com/h-da/geli/issues/713)
 
 ### Fixed
-- Fixed Course progress mechanism
+- Fixed route `/users/roles` [#204](https://github.com/h-da/geli/issues/204)
+- Fixed profile picture will be deleted after changing any other profile data [#504](https://github.com/h-da/geli/issues/504)
+- Fixed some UI issues in create code kata unit [#543](https://github.com/h-da/geli/issues/543)
+- Fixed reading wrong error message across the whole application [#572](https://github.com/h-da/geli/issues/572)
+- Fixed admin can changed his own role [#606](https://github.com/h-da/geli/issues/606)
+- Fixed a typo in admin panel [#533](https://github.com/h-da/geli/issues/533)
+- Fixed an admin cannot delete any courses [#647](https://github.com/h-da/geli/issues/647)
+- Fixed some issues with download a course [#659](https://github.com/h-da/geli/issues/659)
+- Fixed an issue with deleting a course and the notification was not triggered [#642](https://github.com/h-da/geli/issues/543)
+- Fixed Course progress mechanism [#593](https://github.com/h-da/geli/issues/593)
 - Fixed wasteful course data usage via specialized course model interfaces. [#654](https://github.com/h-da/geli/issues/654)
 - Fixed a broken documentation link. [#583](https://github.com/h-da/geli/issues/583)
 - Limited the first and last name to 64 characters in the registration- and edit page. [#585](https://github.com/h-da/geli/issues/585)
