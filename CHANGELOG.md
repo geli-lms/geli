@@ -38,6 +38,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Fixed `.travis.yml`. [#706](https://github.com/h-da/geli/pull/706)
 - Fixed wording of progress display on profile page. [#715](https://github.com/h-da/geli/issues/715)
 - Fixed form validator in create task [#579](https://github.com/h-da/geli/issues/579)
+- Fixed Mongoose pre hook usage [#680](https://github.com/h-da/geli/issues/680) [#677](https://github.com/h-da/geli/issues/677)
 
 ### Added
 - Unit visibility toggle [#582](https://github.com/h-da/geli/issues/582)

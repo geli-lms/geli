@@ -46,8 +46,7 @@ fileSchema.pre('remove', async function() {
     if (fs.existsSync(localFile.physicalPath)) {
       await promisify(fs.unlink)(localFile.physicalPath);
     }
-
-    const units2Check: IFileUnitModel[] = <IFileUnitModel[]>await FileUnit.find({files: {$in: [localFile._id]}});
+    const units2Check: IFileUnitModel[] = <IFileUnitModel[]> await FileUnit.find({files: {$in: [localFile._id]}});
     Promise.all(units2Check.map(async unit => {
       const index = unit.files.indexOf(localFile._id);
       if (index > -1) {

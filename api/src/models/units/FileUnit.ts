@@ -1,7 +1,7 @@
 import * as mongoose from 'mongoose';
 import {IUnitModel} from './Unit';
 import {IFileUnit} from '../../../../shared/models/units/IFileUnit';
-import {User} from "../User";
+import {User} from '../User';
 
 interface IFileUnitModel extends IFileUnit, IUnitModel {
   populateUnit: () => Promise<IFileUnitModel>;

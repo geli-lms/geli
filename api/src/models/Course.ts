@@ -114,8 +114,12 @@ const courseSchema = new mongoose.Schema({
 courseSchema.pre('remove', async function () {
   const localCourse = <ICourseModel><any>this;
   try {
-    await Lecture.deleteMany({'_id': {$in: localCourse.lectures}}).exec();
-    await Directory.deleteOne({_id: localCourse.media}).exec();
+    const dic = await Directory.findById(localCourse.media);
+    await dic.remove();
+    for (const lec of localCourse.lectures) {
+      const lecDoc = await Lecture.findById(lec);
+      await lecDoc.remove();
+    }
   } catch (error) {
     winston.log('warn', 'course (' + localCourse._id + ') cloud not be deleted!');
     throw new Error('Delete Error: ' + error.toString());
