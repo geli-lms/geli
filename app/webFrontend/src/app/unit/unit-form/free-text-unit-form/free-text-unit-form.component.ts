@@ -22,8 +22,6 @@ export class FreeTextUnitFormComponent implements OnInit {
   @Input() onDone: () => void;
   @Input() unitForm: FormGroup;
 
-  @ViewChild(UnitGeneralInfoFormComponent)
-  private generalInfo: UnitGeneralInfoFormComponent;
   @ViewChild(FreeTextUnitEditorComponent)
   private freeTextEditor: FreeTextUnitEditorComponent;
 
@@ -42,11 +40,12 @@ export class FreeTextUnitFormComponent implements OnInit {
   }
 
   saveUnit() {
+
     this.model = {
       ...this.model,
-      name: this.generalInfo.form.value.name,
-      description: this.generalInfo.form.value.description,
-      visible: this.generalInfo.form.value.visible,
+      /*name: this.generalInfo.form.value.name,*/
+      /*description: this.generalInfo.form.value.description,*/
+      /*visible: this.generalInfo.form.value.visible,*/
 
       markdown: this.freeTextEditor.markdown
     };
@@ -98,20 +97,22 @@ export class FreeTextUnitFormComponent implements OnInit {
     }
   }
 
-  openFullscreen(): void {
+  public openFullscreen(): void {
     const dialogRef = this.dialog.open(FreeTextUnitEditorDialog, {
       width: '94vw',
       height: '94vh',
       maxWidth: '100vw',
       maxHeight: '100vh',
       data: {
-        markdown: this.freeTextEditor.markdown ? this.freeTextEditor.markdown : ''
+        markdown: this.unitForm.controls.markdown ? this.unitForm.controls.markdown : '',
+        unitForm: this.unitForm
       }
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (typeof result !== 'undefined') {
         this.model.markdown = result;
+        this.unitForm.patchValue({markdown:result})
       }
     });
   }

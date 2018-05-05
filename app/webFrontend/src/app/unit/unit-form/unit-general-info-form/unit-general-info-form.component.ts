@@ -20,12 +20,11 @@ export class UnitGeneralInfoFormComponent implements OnInit {
     if (this.model !== null && this.model !== undefined && this.model.visible === undefined) {
       this.model.visible = true;
     }
-    this.form = this.formBuilder.group({
-      name: [this.model ? this.model.name : '', Validators.required],
-      description: [this.model ? this.model.description : ''],
-      deadline: [this.model ? this.model.deadline : ''],
-      visible: [this.model ? this.model.visible : false]
-    });
+
+    this.unitForm.addControl('name', new FormControl(this.model.name, Validators.required));
+    this.unitForm.addControl('description', new FormControl(this.model.description, Validators.required));
+    this.unitForm.addControl('deadline', new FormControl(this.model.deadline));
+    this.unitForm.addControl("visible", new FormControl(this.model.visible));
   }
 
   updateDateTime(date: Date) {

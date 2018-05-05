@@ -32,4 +32,19 @@
     [lectureId]="lecture._id"
     [onDone]="onDone"
     [unitForm]="unitForm"></app-free-text-unit-form>
+
+
+  <div class="btn-wrapper">
+    <app-button-save-cancel (cancel)="onDone()">
+      <ng-container before>
+        <!-- Add here Elements before save & cancel buttons -->
+      </ng-container>
+      <ng-container after>
+        <!-- Add here Elements after save & cancel buttons -->
+        <button  *ngIf="type == 'free-text'" mat-raised-button color="secondary"  (click)="freeTextUnitFormComponent.openFullscreen()">Fullscreen</button>
+      </ng-container>
+    </app-button-save-cancel>
+  </div>
+
+
 </form>
