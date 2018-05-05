@@ -585,9 +585,9 @@ export class CourseController {
   @Authorized(['teacher', 'admin'])
   @Post('/:id/whitelist')
   async whitelistStudents(
-      @Param('id') id: string,
-      @UploadedFile('file', {options: uploadOptions}) file: any,
-      @CurrentUser() currentUser: IUser) {
+    @Param('id') id: string,
+    @UploadedFile('file', {options: uploadOptions}) file: any,
+    @CurrentUser() currentUser: IUser) {
     const name: string = file.originalname;
     if (!name.endsWith('.csv')) {
       throw new TypeError(errorCodes.upload.type.notCSV.code);

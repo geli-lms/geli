@@ -11,3 +11,11 @@
     <mat-datepicker-toggle matSuffix [for]="deadlineDatepicker"></mat-datepicker-toggle>
     <mat-datepicker #deadlineDatepicker (selectedChanged)="updateDateTime($event)"></mat-datepicker>
   </mat-form-field>
+
+  <div>
+    <mat-slide-toggle formControlName="visible">
+      <span *ngIf="form.value.visible">Unit can be seen by students</span>
+      <span *ngIf="!form.value.visible">Unit cannot be seen by students</span>
+    </mat-slide-toggle>
+  </div>
+</form>
