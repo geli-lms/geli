@@ -17,16 +17,22 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Added an account activation resend feature. [#601](https://github.com/h-da/geli/issues/601)
 - Added `SnackBarService` as wrapper for `MatSnackBar`. [#574](https://github.com/h-da/geli/issues/574)
 - Added new course & user API unit tests. [#654](https://github.com/h-da/geli/issues/654) [#691](https://github.com/h-da/geli/issues/691)
-- Added details of courseAdmin and teacher to course detail view. on click profiles are shown. [#598](https://github.com/h-da/geli/issues/598)
+- Added details of courseAdmin and teacher to course detail view. on click profiles are shown.[#598](https://github.com/h-da/geli/issues/598)
 - Added small auto linting scripts to package.json [#688](https://github.com/h-da/geli/issues/688)
 - Added changed size of drop down arrows for better usability. [#686](https://github.com/h-da/geli/issues/686)
 - Added new contributors [#624](https://github.com/h-da/geli/issues/624)
 - Added the date and the teacher under each unit [#582](https://github.com/h-da/geli/issues/582)
 - Added E-Mail validation to reset password [#597](https://github.com/h-da/geli/issues/597)
 - Added Language code to header [#554](https://github.com/h-da/geli/issues/554)
+- Added icon for access key [#547](https://github.com/h-da/geli/issues/574)
+- Unit visibility toggle [#582](https://github.com/h-da/geli/issues/582)
 
 ### Changed
 - Refactored or slightly altered various course & user related APIs. [#654](https://github.com/h-da/geli/issues/654) [#691](https://github.com/h-da/geli/issues/691)
+- Removed firstname from resend activation feature and change button positioning. [#711](https://github.com/h-da/geli/issues/711)
+- Refactored register and resend activation to use geli email validator with top level domain check. [#713](https://github.com/h-da/geli/issues/713)
+- Refactored the unitCreator with a forsafe user object. [#717](https://github.com/h-da/geli/pull/717)
+- Changed the text in download course[#718](https://github.com/h-da/geli/pull/718)
 - Removed firstname from resend activation feature and change button positioning. [#711](https://github.com/h-da/geli/issues/711)
 - Refactored register and resend activation to use geli email validator with top level domain check. [#713](https://github.com/h-da/geli/issues/713)
 
@@ -52,8 +58,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Fixed notification icon spacing in the navbar for students. [#696](https://github.com/h-da/geli/issues/696)
 - Repair Angular CLI code generation. [#701](https://github.com/h-da/geli/pull/701)
 - Fixed `tsconfig.spec.ts` for `ng test`. [#656](https://github.com/h-da/geli/pull/656)
-- Fixed and prettified the `CHANGELOG.md` [#707](https://github.com/h-da/geli/pull/707)
-- Fixed `.travis.yml` [#706](https://github.com/h-da/geli/pull/706)
+- Fixed `.travis.yml`. [#706](https://github.com/h-da/geli/pull/706)
+- Fixed wording of progress display on profile page. [#715](https://github.com/h-da/geli/issues/715)
+- Fixed form validator in create task [#579](https://github.com/h-da/geli/issues/579)
+- Fixed Mongoose pre hook usage [#680](https://github.com/h-da/geli/issues/680) [#677](https://github.com/h-da/geli/issues/677)
 
 ### Security
 - Fixed numerous severe user related security issues. [#691](https://github.com/h-da/geli/issues/691) [#709](https://github.com/h-da/geli/pull/709)
