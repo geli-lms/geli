@@ -4,7 +4,7 @@ import {IFreeTextUnit} from '../../../../shared/models/units/IFreeTextUnit';
 
 interface IFreeTextUnitModel extends IFreeTextUnit, IUnitModel {
   exportJSON: () => Promise<IFreeTextUnit>;
-  toFile: () => Promise<String>;
+  toFile: () => String;
 }
 
 const freeTextUnitSchema = new mongoose.Schema({
@@ -13,8 +13,8 @@ const freeTextUnitSchema = new mongoose.Schema({
   }
 });
 
-freeTextUnitSchema.statics.toFile = async function (unit: IFreeTextUnit) {
-  return unit.name + '\n' + unit.description + '\n' + unit.markdown;
+freeTextUnitSchema.methods.toFile = function (): String {
+  return this.name + '\n' + this.description + '\n' + this.markdown;
 };
 
-export {freeTextUnitSchema, IFreeTextUnitModel}
+export {freeTextUnitSchema, IFreeTextUnitModel};

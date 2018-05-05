@@ -1,3 +1,5 @@
+import {IUser} from '../IUser';
+
 export interface IUnit {
     _id: any;
     _course: any;
@@ -9,5 +11,7 @@ export interface IUnit {
     weight: number;
     updatedAt: string;
     createdAt: string;
+    unitCreator: IUser;
+    visible: boolean;
     __t: string;
 }

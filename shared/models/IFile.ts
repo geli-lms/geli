@@ -3,7 +3,7 @@
  * This comes in with the use of the MediaManger.
  */
 export interface IFile {
-  _id?: any,
+  _id?: any;
   path: string;
   name: string;
   alias: string;

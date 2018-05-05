@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {ICourse} from '../../../../../../../shared/models/ICourse';
+import {ICourseDashboard} from '../../../../../../../shared/models/ICourseDashboard';
 import {UserService} from '../../../shared/services/user.service';
 import {DashboardBaseComponent} from '../dashboard-base-component';
 import {SortUtil} from '../../../shared/utils/SortUtil';
@@ -12,8 +12,8 @@ import {SortUtil} from '../../../shared/utils/SortUtil';
 })
 export class DashboardStudentComponent extends DashboardBaseComponent {
 
-  myCourses: ICourse[];
-  availableCourses: ICourse[];
+  myCourses: ICourseDashboard[];
+  availableCourses: ICourseDashboard[];
 
   constructor(public userService: UserService) {
     super();
@@ -25,6 +25,10 @@ export class DashboardStudentComponent extends DashboardBaseComponent {
   ngOnChanges() {
     this.sortCourses();
   }
+  async sortAlphabetically() {
+    SortUtil.sortCoursesByName(this.myCourses);
+    SortUtil.sortCoursesByName(this.availableCourses);
+  }
 
   async sortCourses() {
     this.myCourses = [];
@@ -32,16 +36,11 @@ export class DashboardStudentComponent extends DashboardBaseComponent {
 
     SortUtil.sortByLastVisitedCourses(this.allCourses, this.userService.user.lastVisitedCourses);
     for (const course of this.allCourses) {
-      if (this.userService.isMemberOfCourse(course)) {
+      if (course.userCanViewCourse) {
         this.myCourses.push(course);
       } else {
         this.availableCourses.push(course);
       }
     }
-  }
-
-  isMemberOfCourse(course: ICourse) {
-    const user = this.userService.user;
-    return course.students.filter(obj => obj._id === user._id).length > 0;
   }
 }

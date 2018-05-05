@@ -4,6 +4,7 @@ import {DialogService} from '../../../../shared/services/dialog.service';
 import {MatSnackBar} from '@angular/material';
 import {CourseService, NotificationService} from '../../../../shared/services/data.service';
 import {ICourse} from '../../../../../../../../shared/models/ICourse';
+import {User} from '../../../../models/User';
 
 @Component({
   selector: 'app-course-user-list-overview',
@@ -62,7 +63,7 @@ export class CourseUserListOverviewComponent implements OnInit {
         this.notificationService.createNotification(
           user,
           {text: 'You have been removed from course ' + this.course.name});
-        this.onRemove.emit(user._id)
+        this.onRemove.emit(user._id);
       });
       this.resetSelectedUsers();
     }
@@ -87,6 +88,12 @@ export class CourseUserListOverviewComponent implements OnInit {
     } catch (err) {
       this.snackBar.open('Sending mail failed.', 'Dismiss', {duration: 3000});
     }
+  }
+
+  async openUserProfileDialog(user: User) {
+    this.toggleBlocked = true;
+    await this.dialogService.userProfile(user).toPromise();
+    this.toggleBlocked = false;
   }
 
   toggleAllUsers() {

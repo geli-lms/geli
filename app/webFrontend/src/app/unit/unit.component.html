@@ -1,5 +1,8 @@
 <div *ngFor="let unit of units;">
   <mat-card class="unit-card">
+    <button mat-icon-button *ngIf="unit.visible === false" disabled>
+      <mat-icon color="warn">visibility_off</mat-icon>
+    </button>
     <mat-card-title class="unit-card-title">
       {{unit.name}}
     </mat-card-title>
@@ -18,6 +21,13 @@
       <app-task-unit *ngSwitchCase="'task'" [taskUnit]="unit"></app-task-unit>
       <app-code-kata *ngSwitchCase="'code-kata'" [codeKataUnit]="unit"></app-code-kata>
       <app-free-text-unit *ngSwitchCase="'free-text'" [freeTextUnit]="unit"></app-free-text-unit>
+      <div class="unit-detail">
+        <div class="user-detail" *ngIf="unit.unitCreator">{{unit.unitCreator.profile.firstName + ' ' +
+          unit.unitCreator.profile.lastName}}
+        </div>
+        <span *ngIf="unit.createdAt === unit.updatedAt">Published on: {{getFormattedDate(unit.createdAt)}}</span>
+        <span *ngIf="unit.createdAt !== unit.updatedAt">Changed on: {{getFormattedDate(unit.updatedAt)}}</span>
+      </div>
     </mat-card-content>
   </mat-card>
 </div>

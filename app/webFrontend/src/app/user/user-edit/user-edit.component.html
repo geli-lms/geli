@@ -1,13 +1,45 @@
+<div class="edit-user-wrapper">
 <h1>Edit profile</h1>
+<div class="profile" *ngIf="user">
+    <span class="user-icon" user-image [user-image]="user" [size]="'100px'"></span>
+</div>
 
 <form name="form" class="user-form" (ngSubmit)="onSubmit()" [formGroup]="userForm">
   <div class="form-group" formGroupName="profile">
     <mat-form-field class="full-width">
-      <input matInput formControlName="firstName" placeholder="First name"/>
+      <input matInput formControlName="firstName" placeholder="First name" maxlength="64"/>
+      <div *ngIf="userForm.get('profile').get('firstName').touched">
+        <small *ngIf="userForm.get('profile').get('firstName').hasError('required')"
+               class="text-danger">
+          {{'common.validation.required'|translate}}
+        </small>
+        <small *ngIf="userForm.get('profile').get('firstName').hasError('minlength')"
+               class="text-danger" translate [translateParams]="{min:2}">
+          common.validation.minLength
+        </small>
+        <small *ngIf="userForm.get('profile').get('firstName').hasError('maxlength')"
+               class="text-danger" translate [translateParams]="{max:64}">
+          common.validation.maxLength
+        </small>
+      </div>
     </mat-form-field>
 
     <mat-form-field class="full-width">
-      <input matInput formControlName="lastName" placeholder="Last name"/>
+      <input matInput formControlName="lastName" placeholder="Last name" maxlength="64"/>
+      <div *ngIf="userForm.get('profile').get('lastName').touched">
+        <small *ngIf="userForm.get('profile').get('lastName').hasError('required')"
+               class="text-danger">
+          {{'common.validation.required'|translate}}
+        </small>
+        <small *ngIf="userForm.get('profile').get('lastName').hasError('minlength')"
+               class="text-danger" translate [translateParams]="{min:2}">
+          common.validation.minLength
+        </small>
+        <small *ngIf="userForm.get('profile').get('lastName').hasError('maxlength')"
+               class="text-danger" translate [translateParams]="{max:64}">
+          common.validation.maxLength
+        </small>
+      </div>
     </mat-form-field>
 
     <mat-form-field class="full-width">
@@ -18,7 +50,7 @@
   </div>
 
   <mat-form-field class="full-width">
-    <input matInput formControlName="email" placeholder="e-mail"/>
+    <input matInput formControlName="email" [placeholder]="'common.email'|translate"/>
   </mat-form-field>
   <button mat-raised-button color="primary" class="mat-button" type="submit" [disabled]="!userForm?.valid">Save</button>
   <button mat-raised-button class="mat-button" routerLink="/profile" routerLinkActive="active">
@@ -28,11 +60,12 @@
 <p *ngIf="!showPwFields()">
   <button mat-raised-button class="mat-button" (click)="resetPassword()">Generate new Password</button>
 </p>
-<p>
+<div class="button-wrapper">
   <button mat-raised-button class="mat-button" (click)="openAddPictureDialog()">
     Upload new picture
   </button>
   <button mat-raised-button class="mat-button" (click)="openChangePasswordDialog()">
     Change Password
   </button>
-</p>
+</div>
+</div>

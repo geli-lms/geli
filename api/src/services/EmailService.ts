@@ -39,7 +39,7 @@ class EmailService {
 
     this.transporter = nodemailer.createTransport(this.mailTransportConfig, this.mailDefaultConfig);
     this.transporter.use('compile', markdown());
-  };
+  }
 
   public sendActivation(user: IUserModel) {
     if (!user) {
@@ -59,6 +59,33 @@ class EmailService {
       'Your GELI Team.';
     message.html = '<p>Hello ' + user.profile.firstName + ',</p><br>' +
       '<p>your account was successfully created. Please use the following link to verify your E-Mail:' +
+      `<a href='` + config.baseurl + '/activate/' + encodeURIComponent(user.authenticationToken) +
+      `'>` + config.baseurl + '/activate/' + encodeURIComponent(user.authenticationToken) + '</a></p><br>' +
+      '<p>Your GELI Team.</p>';
+
+    return this.sendMail(message);
+  }
+
+  public resendActivation(user: IUserModel) {
+    if (!user) {
+      throw new Error('user not defined');
+    }
+    if (!user.authenticationToken) {
+      throw new Error('this user has no authenticationToken defined');
+    }
+
+    const message: SendMailOptions = {};
+
+    message.to = user.profile.firstName + ' ' + user.profile.lastName + '<' + user.email + '>';
+    message.subject = 'Welcome again to GELI :)';
+    message.text = 'Hello ' + user.profile.firstName + ', \n\n' +
+      'you requested a new email verification. Your previous email verification link is invalid from now on.\n' +
+      'Please use the following link to verify your E-Mail:\n' +
+      config.baseurl + '/activate/' + encodeURIComponent(user.authenticationToken) + '\n\n' +
+      'Your GELI Team.';
+    message.html = '<p>Hello ' + user.profile.firstName + ',</p><br>' +
+      '<p>you requested a new email verification. Your previous email verification link is invalid from now on.<br>' +
+      'Please use the following link to verify your E-Mail:<br>' +
       `<a href='` + config.baseurl + '/activate/' + encodeURIComponent(user.authenticationToken) +
       `'>` + config.baseurl + '/activate/' + encodeURIComponent(user.authenticationToken) + '</a></p><br>' +
       '<p>Your GELI Team.</p>';

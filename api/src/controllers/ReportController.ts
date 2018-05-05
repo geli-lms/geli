@@ -89,7 +89,7 @@ export class ReportController {
           { name: 'tried', value: progressStats.tried },
           { name: 'done', value: progressStats.done }
         ];
-      })
+      });
     });
 
     return courseObj;
@@ -246,7 +246,7 @@ export class ReportController {
       return {
         ...userProgress,
         progresses: remappedProgresses
-      }
+      };
     });
 
     const studentsWithUnitsAndProgress = await students.map((student: IUser) => {
@@ -577,9 +577,9 @@ export class ReportController {
       .map(({courseObj, progressableUnitCount}: any) => {
         const progressStats = this.calculateProgress(userProgressData, progressableUnitCount, courseObj);
         courseObj.progressData = [
-          { name: 'nothing', value: progressStats.nothing },
+          { name: 'not tried', value: progressStats.nothing },
           { name: 'tried', value: progressStats.tried },
-          { name: 'done', value: progressStats.done }
+          { name: 'solved', value: progressStats.done }
         ];
         return courseObj;
       })

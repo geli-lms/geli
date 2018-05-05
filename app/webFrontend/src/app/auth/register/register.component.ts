@@ -3,10 +3,11 @@ import {Validators, FormGroup, FormBuilder, FormControl} from '@angular/forms';
 import {AuthenticationService} from '../../shared/services/authentication.service';
 import {Router} from '@angular/router';
 import {ShowProgressService} from '../../shared/services/show-progress.service';
-import {MatSnackBar} from '@angular/material';
+import {SnackBarService} from '../../shared/services/snack-bar.service';
 import {errorCodes} from '../../../../../../api/src/config/errorCodes';
 import {TitleService} from '../../shared/services/title.service';
 import {APIInfoService} from '../../shared/services/data.service';
+import {emailValidator} from '../../shared/validators/validators';
 
 @Component({
   selector: 'app-register',
@@ -34,10 +35,10 @@ export class RegisterComponent implements OnInit {
   constructor(private router: Router,
               private authenticationService: AuthenticationService,
               private showProgress: ShowProgressService,
-              private snackBar: MatSnackBar,
+              private snackBar: SnackBarService,
               private formBuilder: FormBuilder,
               private titleService: TitleService,
-              private apiInfoService: APIInfoService, ) {
+              private apiInfoService: APIInfoService) {
   }
 
   ngOnInit() {
@@ -76,42 +77,44 @@ export class RegisterComponent implements OnInit {
       (val) => {
         this.registrationDone = true;
       })
-      .catch((error) => {
-        const errormessage = error.json().message || error.json().errmsg;
-        switch (errormessage) {
-          case errorCodes.mail.duplicate.code: {
-            this.mailError = errorCodes.mail.duplicate.text;
-            break;
-          }
-          case errorCodes.mail.noTeacher.code: {
-            this.mailError = errorCodes.mail.noTeacher.text;
-            break;
-          }
-          case errorCodes.duplicateUid.code: {
-            this.uidError = errorCodes.duplicateUid.text;
-            break;
-          }
-          default: {
-            this.snackBar.open('Registration failed', 'Dismiss');
-          }
-        }
+      .catch((err) => {
+        this.handleError(err);
       })
       .then(() => {
         this.loading = false;
         this.showProgress.toggleLoadingGlobal(this.loading);
-      })
-    ;
+      });
+  }
+
+  private handleError(err) {
+    switch (err.error.message) {
+      case errorCodes.mail.duplicate.code: {
+        this.mailError = errorCodes.mail.duplicate.text;
+        break;
+      }
+      case errorCodes.mail.noTeacher.code: {
+        this.mailError = errorCodes.mail.noTeacher.text;
+        break;
+      }
+      case errorCodes.duplicateUid.code: {
+        this.uidError = errorCodes.duplicateUid.text;
+        break;
+      }
+      default: {
+        this.snackBar.open('Registration failed');
+      }
+    }
   }
 
   generateForm() {
     this.registerForm = this.formBuilder.group({
       profile: this.formBuilder.group({
-        firstName: ['', Validators.compose([Validators.required, Validators.minLength(2)])],
-        lastName: ['', Validators.compose([Validators.required, Validators.minLength(2)])],
+        firstName: ['', Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(64)])],
+        lastName: ['', Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(64)])],
       }),
-      email: ['', Validators.compose([Validators.required, Validators.email, this.validateTeacherEmail.bind(this)])],
+      email: ['', Validators.compose([emailValidator, Validators.required, this.validateTeacherEmail.bind(this)])],
       uid: ['', [this.validateMatriculationNumber.bind(this)]]
-    })
+    });
   }
 
   validateTeacherEmail(control: FormControl) {

@@ -1,10 +1,11 @@
 import * as mongoose from 'mongoose';
 import {IUnitModel} from './Unit';
 import {IFileUnit} from '../../../../shared/models/units/IFileUnit';
+import {User} from '../User';
 
 interface IFileUnitModel extends IFileUnit, IUnitModel {
   populateUnit: () => Promise<IFileUnitModel>;
-  toFile: () => Promise<String>;
+  toFile: () => String;
 }
 
 const fileUnitSchema = new mongoose.Schema({
@@ -28,7 +29,14 @@ const fileUnitSchema = new mongoose.Schema({
 });
 
 fileUnitSchema.methods.populateUnit = async function() {
+  if (this.unitCreator) {
+    this.unitCreator = await User.findById(this.unitCreator);
+  }
   return this.populate('files').execPopulate();
 };
 
-export {fileUnitSchema, IFileUnitModel}
+fileUnitSchema.methods.toFile = function() {
+  return '';
+};
+
+export {fileUnitSchema, IFileUnitModel};

@@ -3,6 +3,7 @@ import {FileItem, FileUploader} from 'ng2-file-upload';
 import {IUser} from '../../../../../../../shared/models/IUser';
 import {MatDialogRef, MatSnackBar} from '@angular/material';
 
+
 @Component({
   selector: 'app-upload-dialog',
   templateUrl: './upload-dialog.component.html',
@@ -30,7 +31,8 @@ export class UploadDialog implements OnInit {
       headers: [{
         name: 'Authorization',
         value: localStorage.getItem('token')
-      }]
+      }],
+      allowedFileType: ['image'],
     });
 
     this.uploader.onCompleteItem = (item: any, response: any, status: any, headers: any) => {
@@ -38,6 +40,7 @@ export class UploadDialog implements OnInit {
 
       return this.dialogRef.close({success: true, user: JSON.parse(response)});
     };
+
   }
 
   changedTab($event: any) {
@@ -47,6 +50,7 @@ export class UploadDialog implements OnInit {
       this.stopWebcam();
     }
   }
+
 
   private startWebcam() {
     const nativeVideo = this.webcam.nativeElement;
@@ -86,12 +90,6 @@ export class UploadDialog implements OnInit {
     this.pictureTaken = true;
   }
 
-  public uploadImage() {
-    this.dialogRef.disableClose = true;
-    this.showProgressBar = true;
-    this.uploader.uploadAll();
-  }
-
   public addImage() {
     this.dialogRef.disableClose = true;
     this.showProgressBar = true;
@@ -120,5 +118,15 @@ export class UploadDialog implements OnInit {
     this.uploader.cancelAll();
     this.dialogRef.close(false);
   }
+
+  public startUpload() {
+    try {
+      this.uploader.uploadAll();
+    } catch (error) {
+      this.snackBar.open('An error occured during the Upload', '', { duration: 3000 });
+    }
+
+  }
+
 
 }

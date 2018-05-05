@@ -2,6 +2,7 @@ import {Component, OnInit, Input, AfterViewInit} from '@angular/core';
 import {IUnit} from '../../../../../shared/models/units/IUnit';
 import * as moment from 'moment';
 import {ActivatedRoute, Router} from '@angular/router';
+import {IUser} from '../../../../../shared/models/IUser';
 
 @Component({
   selector: 'app-unit',
@@ -12,6 +13,7 @@ export class UnitComponent implements OnInit, AfterViewInit {
 
   @Input() units: IUnit[];
   unitId: string;
+  users: IUser[] = [];
 
   private getDeadlineDiffTime (deadline: string) {
     const momentDeadline = moment(deadline);
@@ -33,6 +35,10 @@ export class UnitComponent implements OnInit, AfterViewInit {
 
   private getFormattedDeadline(deadline: string) {
     return moment(deadline).format('DD.MM.YYYY HH:mm');
+  }
+
+  private getFormattedDate(date: string) {
+    return moment(date).format('DD.MM.YYYY');
   }
 
   private selectColorForDeadline(deadline: string) {

@@ -13,7 +13,7 @@ chai.use(chaiHttp);
 const should = chai.should();
 const app = new Server().app;
 const BASE_URL = '/api/notification';
-const fixtureLoader = new FixtureLoader()
+const fixtureLoader = new FixtureLoader();
 
 describe('Notifications', async () => {
   beforeEach(async () => {
@@ -58,7 +58,7 @@ describe('Notifications', async () => {
       const notifications = await Notification.find({changedCourse: course});
       notifications.length.should.be.equal(course.students.length);
     });
-  })
+  });
 
   describe(`GET ${BASE_URL} user :id`, () => {
     it('should return all notifications for one user', async () => {
@@ -78,8 +78,8 @@ describe('Notifications', async () => {
         notification._id.should.be.a('string');
         notification.user._id.toString().should.be.equal(student._id.toString());
         notification.text.should.be.a('string');
-      })
-    })
+      });
+    });
   });
 
   describe(`DELETE ${BASE_URL} :id`, () => {
@@ -124,5 +124,5 @@ describe('Notifications', async () => {
       res.body.message.should.be.equal('Notification could not be found.');
 
     });
-  })
+  });
 });

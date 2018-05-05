@@ -10,13 +10,14 @@ import {
 } from '../../../../../../shared/models/INotificationSettings';
 import {NotificationSettings} from '../../models/NotificationSettings';
 import {isNullOrUndefined} from 'util';
+import {AfterContentInit} from '@angular/core/src/metadata/lifecycle_hooks';
 
 @Component({
   selector: 'app-user-settings',
   templateUrl: './user-settings.component.html',
   styleUrls: ['./user-settings.component.scss']
 })
-export class UserSettingsComponent implements OnInit {
+export class UserSettingsComponent implements OnInit, AfterContentInit {
 
   myCourses: ICourse[];
   displayedColumns = ['name', 'Notifications', 'email'];
@@ -37,6 +38,10 @@ export class UserSettingsComponent implements OnInit {
       this.setSelection();
     });
   }
+  async ngAfterContentInit() {
+    await this.getNotificationSettings();
+      this.setSelection();
+  }
 
   getCourses() {
     this.myCourses = [];
@@ -47,7 +52,7 @@ export class UserSettingsComponent implements OnInit {
         }
       });
       this.dataSource = new MatTableDataSource<ICourse>(this.myCourses);
-    })
+    });
   }
 
   async getNotificationSettings() {
@@ -56,7 +61,7 @@ export class UserSettingsComponent implements OnInit {
         await Promise.all(this.myCourses.map(async (course) => {
           const newSetting = await this.notificationSettingsService.createItem({user: this.userService.user, course: course});
           settings.push(newSetting);
-        }))
+        }));
     }
     this.notificationSettings = settings;
   }

@@ -12,11 +12,13 @@ export class CodeKataUnit implements ICodeKataUnit {
   weight: number;
   updatedAt: string;
   createdAt: string;
+  visible: boolean;
 
   definition: string;
   code: string;
   test: string;
   deadline: string;
+  unitCreator: any;
 
   constructor(_course: ICourse) {
     this._course = _course;
@@ -24,4 +26,5 @@ export class CodeKataUnit implements ICodeKataUnit {
     this.weight = 0;
     this.__t = 'code-kata';
   }
+
 }

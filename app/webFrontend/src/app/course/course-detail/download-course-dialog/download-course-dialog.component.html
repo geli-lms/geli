@@ -1,6 +1,7 @@
 <h2>{{course.name}}</h2>
-<ng-container *ngIf="!course.lectures.length">No lectures to download!</ng-container>
-<p>Select units or files which you want to download</p>
+<ng-container *ngIf="!this.checkForEmptyLectures()">No course material available for download</ng-container>
+<div *ngIf="this.checkForEmptyLectures()">
+<p>Select units or files which you want to download in a zip</p>
 
 <mat-dialog-content class="layout">
   <mat-list>
@@ -13,6 +14,7 @@
     <app-lecture-checkbox (valueChanged)="onChildEvent($event)" *ngFor=" let lecture of course.lectures" [lecture]= "lecture"></app-lecture-checkbox>
   </mat-list>
 </mat-dialog-content>
+</div>
 <mat-dialog-actions>
   <button mat-raised-button color="primary" [disabled]="this.disableDownloadButton" (click)="downloadAndClose()">Download</button>
   <button mat-button [mat-dialog-close]="true">Cancel</button>

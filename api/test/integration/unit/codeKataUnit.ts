@@ -117,6 +117,8 @@ describe(`CodeKataUnit ${BASE_URL}`, () => {
       res.status.should.be.equal(200);
       res.body.name.should.equal(model.name);
       res.body.description.should.equal(model.description);
+      res.body.unitCreator.profile.lastName.should.equal(courseAdmin.profile.lastName);
+      res.body.unitCreator.profile.firstName.should.equal(courseAdmin.profile.firstName);
     });
 
     it('should update a codeKata', async () => {

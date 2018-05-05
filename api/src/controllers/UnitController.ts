@@ -1,12 +1,13 @@
 import {
   Body, Get, Put, Delete, Param, JsonController, UseBefore, NotFoundError, BadRequestError, Post,
-  Authorized
+  Authorized, CurrentUser
 } from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 
 import {Lecture} from '../models/Lecture';
 import {IUnitModel, Unit} from '../models/units/Unit';
 import {ValidationError} from 'mongoose';
+import {IUser} from '../../../shared/models/IUser';
 
 @JsonController('/units')
 @UseBefore(passportJwtMiddleware)
@@ -30,14 +31,19 @@ export class UnitController {
    *         "description": "...",
    *         "markdown": "# What is Lorem Ipsum?\n**Lorem Ipsum** is simply dummy text of the printing and typesetting industry.",
    *         "_course": "5a037e6b60f72236d8e7c83b",
+   *         "unitCreator": "5a037e6b60f72236d8e7c834",
    *         "type": "free-text",
    *         "__v": 0
    *     }
    */
   @Get('/:id')
-  getUnit(@Param('id') id: string) {
-    return Unit.findById(id)
-    .then((u) => u.toObject());
+  async getUnit(@Param('id') id: string) {
+    const unit = await Unit.findById(id);
+
+    if (unit) {
+      throw new NotFoundError();
+    }
+    return unit;
   }
 
   /**
@@ -62,6 +68,7 @@ export class UnitController {
    *         "markdown": "# What is Lorem Ipsum?\n**Lorem Ipsum** is simply dummy text of the printing and typesetting industry.",
    *         "_course": "5a037e6b60f72236d8e7c83b",
    *         "type": "free-text",
+   *         "unitCreator": "5a037e6b60f72236d8e7c834",
    *         "__v": 0
    *     }
    *
@@ -74,21 +81,21 @@ export class UnitController {
    */
   @Authorized(['teacher', 'admin'])
   @Post('/')
-  addUnit(@Body() data: any) {
+  async addUnit(@Body() data: any, @CurrentUser() currentUser: IUser) {
     // discard invalid requests
     this.checkPostParam(data);
-
-    return Unit.create(data.model)
-    .then((createdUnit) => {
-      return this.pushToLecture(data.lectureId, createdUnit);
-    })
-    .catch((err) => {
+    // Set current user as creator, old unit's dont have a creator
+    data.model.unitCreator = currentUser._id;
+    try {
+      const createdUnit = await Unit.create(data.model);
+      return await this.pushToLecture(data.lectureId, createdUnit);
+    } catch (err) {
       if (err.name === 'ValidationError') {
         throw err;
       } else {
         throw new BadRequestError(err);
       }
-    });
+    }
   }
 
   /**
