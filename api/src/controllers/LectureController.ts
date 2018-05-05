@@ -5,7 +5,7 @@ import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import {Lecture} from '../models/Lecture';
 import {ILecture} from '../../../shared/models/ILecture';
 import {Course} from '../models/Course';
-import {Notification} from '../models/Notification';
+import {Unit} from '../models/units/Unit';
 
 @JsonController('/lecture')
 @UseBefore(passportJwtMiddleware)
@@ -122,8 +122,36 @@ export class LectureController {
    */
   @Delete('/:id')
   deleteLecture(@Param('id') id: string) {
-    return Course.update({}, {$pull: {lectures: id}})
-      .then(() => Lecture.findById(id))
-      .then((lecture) => lecture.remove());
+    return Course.update({}, {$pull: {lectures: id}}, function (err, val) {
+      if (!err) {
+        return true;
+      } else {
+        return false;
+      }
+    }).then ( () => {
+      return Lecture.findById(id).then((l) => {
+        const lectureObject = l.toObject();
+        const unitInObject = lectureObject['units'];
+        if (unitInObject != null && unitInObject.length !== 0) {
+          return Unit.remove({_id: {$in: unitInObject}}, function (err) {
+            if (err) {
+              return false;
+            } else {
+              return true;
+            }
+          });
+        } else {
+          return true;
+        }
+    });
+    }).then (() => {
+      return Lecture.deleteOne({_id: id}, function (err) {
+        if (err) {
+          return false;
+        } else {
+          return true;
+        }
+      });
+    });
   }
 }
