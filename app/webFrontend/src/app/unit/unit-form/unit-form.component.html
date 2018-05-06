@@ -10,14 +10,6 @@
     [onDone]="onDone"
     [onCancel]="onCancel">
   </app-file-unit-form>
-
-  <app-task-unit-edit
-    *ngIf="type == 'task'"
-    [course]="course"
-    [model]="model"
-    [lectureId]="lecture._id"
-    [onDone]="onDone"
-    [onCancel]="onCancel"></app-task-unit-edit>
   <app-code-kata-unit-form
     *ngIf="type == 'code-kata'"
     [course]="course"
@@ -25,6 +17,15 @@
     [lectureId]="lecture._id"
     [onDone]="onDone"
     [onCancel]="onCancel"></app-code-kata-unit-form>!-->
+  <app-task-unit-edit
+    *ngIf="type == 'task'"
+    [course]="course"
+    [model]="model"
+    [lectureId]="lecture._id"
+    [onDone]="onDone"
+    [onCancel]="onCancel"
+    [unitForm]="unitForm"></app-task-unit-edit>
+
   <app-free-text-unit-form
     *ngIf="type == 'free-text'"
     [course]="course"
@@ -41,7 +42,11 @@
       </ng-container>
       <ng-container right>
         <!-- Add here Elements after save & cancel buttons -->
-        <button  *ngIf="type == 'free-text'" mat-raised-button color="secondary"  (click)="freeTextUnitFormComponent.openFullscreen()">Fullscreen</button>
+        <button  *ngIf="type == 'free-text'" mat-raised-button color="secondary"
+                 (click)="freeTextUnitFormComponent.openFullscreen()">Fullscreen</button>
+
+        <button *ngIf="type == 'task'" mat-raised-button (click)="taskUnitEditComponent.addTask()">
+          <mat-icon>add</mat-icon> Add question</button>
       </ng-container>
     </app-button-save-cancel>
   </div>

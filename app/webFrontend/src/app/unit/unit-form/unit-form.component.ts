@@ -8,6 +8,7 @@ import {CodeKataComponent} from "../code-kata-unit/code-kata-unit.component";
 import {MatDialog, MatSnackBar} from "@angular/material";
 import {FreeTextUnitService, NotificationService, UnitService} from "../../shared/services/data.service";
 import {FileUnit} from "../../models/units/FileUnit";
+import {TaskUnitEditComponent} from "./task-unit-edit/task-unit-edit.component";
 
 @Component({
   selector: 'app-unit-form',
@@ -29,6 +30,10 @@ export class UnitFormComponent implements OnInit {
 
   @ViewChild(CodeKataComponent)
   private codeKataComponent: CodeKataComponent;
+
+  @ViewChild(TaskUnitEditComponent)
+  private taskUnitEditComponent:TaskUnitEditComponent;
+
 
   unitForm: FormGroup;
 

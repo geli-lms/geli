@@ -8,6 +8,7 @@ import {ITask} from '../../../../../../../shared/models/task/ITask';
 import {Answer} from '../../../models/Answer';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
 import {UnitGeneralInfoFormComponent} from '../unit-general-info-form/unit-general-info-form.component';
+import {FormArray, FormBuilder, FormControl, FormGroup} from "@angular/forms";
 
 @Component({
   selector: 'app-task-unit-edit',
@@ -30,6 +31,9 @@ export class TaskUnitEditComponent implements OnInit {
   @Input()
   onCancel: () => void;
 
+  @Input() unitForm: FormGroup;
+
+
   add = false;
 
   @ViewChild(UnitGeneralInfoFormComponent)
@@ -37,7 +41,8 @@ export class TaskUnitEditComponent implements OnInit {
 
   constructor(private unitService: UnitService,
               private snackBar: MatSnackBar,
-              private notificationService: NotificationService) {
+              private notificationService: NotificationService,
+              private formBuilder: FormBuilder) {
   }
 
   ngOnInit() {
@@ -48,15 +53,34 @@ export class TaskUnitEditComponent implements OnInit {
     } else {
       this.reloadTaskUnit();
     }
+
+
+    this.unitForm.addControl('tasks', this.formBuilder.array([]));
+    this.buildForm();
+
+    this.unitForm.valueChanges.subscribe(data => {
+      console.log(data)
+      this.isTaskUnitValid();
+    })
+
+
+  }
+
+  buildForm() {
+    for(const task of this.model.tasks){
+      const taskControl = this.addTask(task);
+    }
   }
 
   async reloadTaskUnit() {
     // Reload task unit from database to make sure that tasks (and answers)
     // are populated properly (e.g. necessary after a Cancel)
-    this.model = <ITaskUnit><any>await this.unitService.readSingleItem(this.model._id);
+    this.model = <TaskUnit><any>await this.unitService.readSingleItem(this.model._id);
   }
 
   saveUnit() {
+
+    /* TODO: SAVE */
     this.model = {
       ...this.model,
       name: this.generalInfo.form.value.name,
@@ -96,7 +120,7 @@ export class TaskUnitEditComponent implements OnInit {
   }
 
   isTaskUnitValid() {
-    const taskUnit = this.model;
+    const taskUnit = this.unitForm.value;
 
     if (taskUnit.name === null || taskUnit.name.trim() === '') {
       const message = 'Task not valid: Name is required';
@@ -142,21 +166,51 @@ export class TaskUnitEditComponent implements OnInit {
     return true;
   }
 
-  addTask() {
-    const task = new Task();
-    this.model.tasks.push(task);
-    this.addAnswerAtEnd(task);
-    this.addAnswerAtEnd(task);
+  addTask(task?: Task) {
+    const taskControl = this.formBuilder.group({
+      _id: new FormControl(),
+      name: new FormControl(),
+      answers: new FormArray([])
+    });
+
+    if(task){
+      taskControl.patchValue({
+        ...task
+      })
+
+      for(const answer of task.answers) {
+        this.addAnswerAtEnd(taskControl, answer);
+      }
+    }else{
+      this.addAnswerAtEnd(taskControl);
+      this.addAnswerAtEnd(taskControl);
+    }
+
+
+    (<FormArray>this.unitForm.controls['tasks']).push(taskControl);
+    return taskControl;
   }
 
-  addAnswerAtEnd(task: ITask) {
-    task.answers.push(new Answer());
+  addAnswerAtEnd(taskControl, answer?: Answer) {
+    const answerControl = this.formBuilder.group({
+      _id: new FormControl(),
+      value: new FormControl(),
+      text: new FormControl()
+    });
+
+    if(answer){
+      answerControl.patchValue({
+        ...answer
+      })
+    }
+
+    (<FormArray>taskControl.controls['answers']).push(answerControl)
   }
 
-  removeAnswer(task: ITask, index: number) {
-    if (task.answers.length > 2) {
+  removeAnswer(taskControl, index: number) {
+    if (taskControl.controls.answers.controls.length > 2) {
       if (index > -1) {
-        task.answers.splice(index, 1);
+        taskControl.controls.answers.controls.splice(index, 1);
       }
     } else {
       const message = 'Not possible: Every question requires at least two answers';
@@ -164,16 +218,21 @@ export class TaskUnitEditComponent implements OnInit {
     }
   }
 
-  removeTask(task: ITask) {
-    if (this.model.tasks.length > 1) {
-      if (!task._id) {
-        this.model.tasks = this.model.tasks.filter(obj => task !== obj);
+  removeTask(taskControl) {
+    let tasks = (<FormArray>this.unitForm.controls.tasks).controls;
+
+    if (tasks.length > 1) {
+      if (!taskControl.value._id) {
+        tasks = tasks.filter(obj => taskControl.value !== obj.value);
       } else {
-        this.model.tasks = this.model.tasks.filter(obj => task._id !== obj._id);
+        tasks = tasks.filter(obj => taskControl.value._id !== (obj).value._id);
       }
     } else {
       const message = 'Not possible: At least one question is required';
       this.snackBar.open(message, '', {duration: 3000});
     }
+
+    (<FormArray>this.unitForm.controls.tasks).controls = tasks;
+
   }
 }

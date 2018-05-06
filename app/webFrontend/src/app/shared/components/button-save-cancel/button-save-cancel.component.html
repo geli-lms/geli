@@ -1,7 +1,7 @@
 <ng-container>
   <ng-content select="[left]"></ng-content>
   <button mat-raised-button color="primary" class="add-unit" (click)="emitSave()" type="submit">Save</button>
-  <button mat-raised-button color="secondary" (click)="emitCancel()">Cancel</button>
+  <button mat-raised-button color="secondary" type="reset" (click)="emitCancel()">Cancel</button>
   <ng-content select="[right]"></ng-content>
 </ng-container>
 <!--Example to add content before/after:

@@ -18,7 +18,7 @@ import 'brace/theme/github';
 export class CodeKataUnitFormComponent implements OnInit {
   @Input() course: ICourse;
   @Input() lectureId: string;
-  @Input() model: ICodeKataUnit;
+  @Input() model: CodeKataUnit;
   @Input() onDone: () => void;
   @Input() onCancel: () => void;
 
