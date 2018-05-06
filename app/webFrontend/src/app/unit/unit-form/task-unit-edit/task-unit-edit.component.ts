@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, ViewChild} from '@angular/core';
 import {NotificationService, UnitService} from '../../../shared/services/data.service';
 import {Task} from '../../../models/Task';
 import {MatSnackBar} from '@angular/material';
@@ -8,7 +8,9 @@ import {ITask} from '../../../../../../../shared/models/task/ITask';
 import {Answer} from '../../../models/Answer';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
 import {UnitGeneralInfoFormComponent} from '../unit-general-info-form/unit-general-info-form.component';
-import {FormArray, FormBuilder, FormControl, FormGroup} from "@angular/forms";
+import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import {Subject} from "rxjs/Subject";
+import {UnitFormService} from "../../../shared/services/unit-form.service";
 
 @Component({
   selector: 'app-task-unit-edit',
@@ -31,7 +33,8 @@ export class TaskUnitEditComponent implements OnInit {
   @Input()
   onCancel: () => void;
 
-  @Input() unitForm: FormGroup;
+
+  unitForm: FormGroup;
 
 
   add = false;
@@ -42,10 +45,14 @@ export class TaskUnitEditComponent implements OnInit {
   constructor(private unitService: UnitService,
               private snackBar: MatSnackBar,
               private notificationService: NotificationService,
-              private formBuilder: FormBuilder) {
-  }
+              private formBuilder: FormBuilder,
+              private unitFormService: UnitFormService) {}
+
 
   ngOnInit() {
+
+    this.unitForm = this.unitFormService.unitForm;
+
     if (!this.model) {
       this.model = new TaskUnit(this.course._id);
       this.add = true;
@@ -54,15 +61,12 @@ export class TaskUnitEditComponent implements OnInit {
       this.reloadTaskUnit();
     }
 
-
     this.unitForm.addControl('tasks', this.formBuilder.array([]));
     this.buildForm();
 
-    this.unitForm.valueChanges.subscribe(data => {
-      console.log(data)
-      this.isTaskUnitValid();
-    })
-
+    this.unitFormService.beforeSubmit = () => {
+      return this.isTaskUnitValid();
+    }
 
   }
 
@@ -169,7 +173,7 @@ export class TaskUnitEditComponent implements OnInit {
   addTask(task?: Task) {
     const taskControl = this.formBuilder.group({
       _id: new FormControl(),
-      name: new FormControl(),
+      name: new FormControl(null, Validators.required),
       answers: new FormArray([])
     });
 

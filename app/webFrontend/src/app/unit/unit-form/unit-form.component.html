@@ -1,4 +1,4 @@
-<form class="edit-unit" *ngIf="course" [formGroup]="unitForm" (submit)="save()">
+<form class="edit-unit" *ngIf="course" [formGroup]="unitForm" (submit)="save()" novalidate>
   <app-unit-general-info-form [model]="model" [unitForm]="unitForm"></app-unit-general-info-form>
 
   <!--<app-file-unit-form
@@ -24,7 +24,7 @@
     [lectureId]="lecture._id"
     [onDone]="onDone"
     [onCancel]="onCancel"
-    [unitForm]="unitForm"></app-task-unit-edit>
+    ></app-task-unit-edit>
 
   <app-free-text-unit-form
     *ngIf="type == 'free-text'"
@@ -42,10 +42,10 @@
       </ng-container>
       <ng-container right>
         <!-- Add here Elements after save & cancel buttons -->
-        <button  *ngIf="type == 'free-text'" mat-raised-button color="secondary"
+        <button  type="button" *ngIf="type == 'free-text'" mat-raised-button color="secondary"
                  (click)="freeTextUnitFormComponent.openFullscreen()">Fullscreen</button>
 
-        <button *ngIf="type == 'task'" mat-raised-button (click)="taskUnitEditComponent.addTask()">
+        <button type="button" *ngIf="type == 'task'" mat-raised-button (click)="taskUnitEditComponent.addTask()">
           <mat-icon>add</mat-icon> Add question</button>
       </ng-container>
     </app-button-save-cancel>

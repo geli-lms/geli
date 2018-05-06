@@ -11,7 +11,7 @@
       <textarea matInput id="name" placeholder="Enter question here *" [formControl]="task.controls.name"></textarea>
     </mat-form-field>
 
-    <button mat-button class="remove" (click)="removeTask(task)">
+    <button mat-button class="remove" type="button" (click)="removeTask(task)">
       <mat-icon>delete</mat-icon> Remove question
     </button>
 
@@ -22,13 +22,13 @@
           <mat-form-field>
             <input matInput placeholder="Enter answer here *" [formControl]="answer.controls.text">
           </mat-form-field>
-          <button mat-button class="remove" (click)="removeAnswer(task, idx)" matTooltip="Remove answer">
+          <button mat-button type="button" class="remove" (click)="removeAnswer(task, idx)" matTooltip="Remove answer">
             <mat-icon>delete</mat-icon>
           </button>
         </div>
       </div>
       <div class="add-answer">
-        <button mat-button (click)="addAnswerAtEnd(task)">
+        <button mat-button type="button" (click)="addAnswerAtEnd(task)">
           <mat-icon>add</mat-icon> Add answer
         </button>
       </div>

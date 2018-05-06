@@ -1,4 +1,4 @@
-import {Component, OnInit, Input, ViewChild} from '@angular/core';
+import {Component, OnInit, Input, ViewChild, EventEmitter} from '@angular/core';
 import {ICourse} from '../../../../../../shared/models/ICourse';
 import {ILecture} from '../../../../../../shared/models/ILecture';
 import {IUnit} from '../../../../../../shared/models/units/IUnit';
@@ -9,6 +9,8 @@ import {MatDialog, MatSnackBar} from "@angular/material";
 import {FreeTextUnitService, NotificationService, UnitService} from "../../shared/services/data.service";
 import {FileUnit} from "../../models/units/FileUnit";
 import {TaskUnitEditComponent} from "./task-unit-edit/task-unit-edit.component";
+import {Subject} from "rxjs/Subject";
+import {UnitFormService} from "../../shared/services/unit-form.service";
 
 @Component({
   selector: 'app-unit-form',
@@ -42,20 +44,28 @@ export class UnitFormComponent implements OnInit {
               private unitService: UnitService,
               private snackBar: MatSnackBar,
               public dialog: MatDialog,
-              private notificationService: NotificationService) {
+              private notificationService: NotificationService,
+              private unitFormService: UnitFormService) {
   }
 
   ngOnInit() {
-    this.unitForm = new FormGroup({});
-
+    this.unitForm = this.unitFormService.unitForm;
   }
 
+
+
   async save() {
+
+
+    if(this.unitFormService.beforeSubmit){
+      this.unitFormService.beforeSubmit();
+    }
+
     // check if form is valid.
     if (!this.unitForm.valid) {
-      const snackErrMessage = `Given input is not valid. Please fill fields correctly.`;
+      /*const snackErrMessage = `Given input is not valid. Please fill fields correctly.`;
       this.snackBar.open(snackErrMessage, '', {duration: 3000});
-
+      */
       return
     }
 

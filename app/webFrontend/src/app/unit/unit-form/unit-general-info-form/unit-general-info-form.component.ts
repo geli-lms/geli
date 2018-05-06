@@ -22,7 +22,7 @@ export class UnitGeneralInfoFormComponent implements OnInit {
     }
 
     this.unitForm.addControl('name', new FormControl(null, Validators.required));
-    this.unitForm.addControl('description', new FormControl(null, Validators.required));
+    this.unitForm.addControl('description', new FormControl(null));
     this.unitForm.addControl('deadline', new FormControl());
     this.unitForm.addControl('visible', new FormControl());
 

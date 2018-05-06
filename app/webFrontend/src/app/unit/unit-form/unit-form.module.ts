@@ -14,6 +14,7 @@ import {UnitModule} from '../unit.module';
 import {FreeTextUnitEditorComponent} from './free-text-unit-form/free-text-unit-editor/free-text-unit-editor.component';
 import {FreeTextUnitEditorDialog} from './free-text-unit-form/free-text-unit-editor/free-text-unit-editor-dialog/free-text-unit-editor.dialog';
 import {SharedModule} from '../../shared/shared.module';
+import {UnitFormService} from "../../shared/services/unit-form.service";
 
 @NgModule({
   imports: [
@@ -41,6 +42,9 @@ import {SharedModule} from '../../shared/shared.module';
     TaskUnitEditComponent,
     UnitFormComponent,
     UnitGeneralInfoFormComponent
+  ],
+  providers: [
+    UnitFormService
   ],
   entryComponents: [
     FreeTextUnitEditorDialog
