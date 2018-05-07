@@ -61,16 +61,28 @@ export class TaskUnitEditComponent implements OnInit {
       this.reloadTaskUnit();
     }
 
-    this.unitForm.addControl('tasks', this.formBuilder.array([]));
     this.buildForm();
 
-    this.unitFormService.beforeSubmit = () => {
-      return this.isTaskUnitValid();
+    console.log(this.model);
+
+    this.unitFormService.beforeSubmit = async () => {
+      return await this.isTaskUnitValid();
     }
+
+    this.unitFormService.submitDone.subscribe(()=>{
+      this.onDone();
+    })
 
   }
 
   buildForm() {
+    // first reset
+    this.unitForm.removeControl('tasks');
+
+    // add new control
+    this.unitForm.addControl('tasks', this.formBuilder.array([]));
+
+
     for(const task of this.model.tasks){
       const taskControl = this.addTask(task);
     }
@@ -82,51 +94,11 @@ export class TaskUnitEditComponent implements OnInit {
     this.model = <TaskUnit><any>await this.unitService.readSingleItem(this.model._id);
   }
 
-  saveUnit() {
-
-    /* TODO: SAVE */
-    this.model = {
-      ...this.model,
-      name: this.generalInfo.form.value.name,
-      description: this.generalInfo.form.value.description,
-      deadline: this.generalInfo.form.value.deadline,
-      visible: this.generalInfo.form.value.visible
-    };
-
-    if (this.isTaskUnitValid()) {
-      let taskPromise = null;
-      let text: string;
-      if (this.add) {
-        taskPromise = this.unitService.createItem({model: this.model, lectureId: this.lectureId});
-        text = 'Course ' + this.course.name + ' has a new task unit.';
-      } else {
-        taskPromise = this.unitService.updateItem(this.model);
-        text = 'Course ' + this.course.name + ' has an updated task unit.';
-      }
-      taskPromise.then(
-        (task) => {
-          const message = `Task ${this.add ? 'created' : 'updated'}`;
-          this.snackBar.open(message, '', {duration: 3000});
-          this.onDone();
-          return this.notificationService.createItem(
-            {
-              changedCourse: this.course,
-              changedLecture: this.lectureId,
-              changedUnit: task,
-              text: text
-            });
-        },
-        (error) => {
-          const message = `Couldn\'t ${this.add ? 'create' : 'update'} task`;
-          this.snackBar.open(message, '', {duration: 3000});
-        });
-    }
-  }
 
   isTaskUnitValid() {
     const taskUnit = this.unitForm.value;
-
-    if (taskUnit.name === null || taskUnit.name.trim() === '') {
+    console.log(taskUnit);
+    if (!taskUnit.name || taskUnit.name === null || taskUnit.name.trim() === '') {
       const message = 'Task not valid: Name is required';
       this.snackBar.open(message, '', {duration: 3000});
       return false;
@@ -137,7 +109,7 @@ export class TaskUnitEditComponent implements OnInit {
     } else {
       // Check if all tasks i.e. questions are valid
       for (const task of taskUnit.tasks) {
-        if (task.name === undefined || task.name.trim() === '') {
+        if (task.name === null || task.name.trim() === '') {
           const message = 'Task not valid: Every question requires some text';
           this.snackBar.open(message, '', {duration: 3000});
           return false;
@@ -153,7 +125,7 @@ export class TaskUnitEditComponent implements OnInit {
             if (noAnswersChecked) {
               noAnswersChecked = !answer.value;
             }
-            if (answer.text === undefined || answer.text.trim() === '') {
+            if (answer.text === null || answer.text.trim() === '') {
               const message = 'Task not valid: Every answer requires some text';
               this.snackBar.open(message, '', {duration: 3000});
               return false;
@@ -186,6 +158,7 @@ export class TaskUnitEditComponent implements OnInit {
         this.addAnswerAtEnd(taskControl, answer);
       }
     }else{
+      taskControl.removeControl('_id');
       this.addAnswerAtEnd(taskControl);
       this.addAnswerAtEnd(taskControl);
     }
@@ -206,7 +179,10 @@ export class TaskUnitEditComponent implements OnInit {
       answerControl.patchValue({
         ...answer
       })
+    }else{
+      answerControl.removeControl('_id');
     }
+
 
     (<FormArray>taskControl.controls['answers']).push(answerControl)
   }

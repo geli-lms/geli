@@ -9,6 +9,7 @@ import {FreeTextUnitEditorComponent} from './free-text-unit-editor/free-text-uni
 import {FreeTextUnitEditorDialog} from './free-text-unit-editor/free-text-unit-editor-dialog/free-text-unit-editor.dialog';
 import {isUndefined} from 'util';
 import {FormControl, FormGroup} from '@angular/forms';
+import {UnitFormService} from "../../../shared/services/unit-form.service";
 
 @Component({
   selector: 'app-free-text-unit-form',
@@ -20,7 +21,9 @@ export class FreeTextUnitFormComponent implements OnInit {
   @Input() lectureId: string;
   @Input() model: IFreeTextUnit;
   @Input() onDone: () => void;
-  @Input() unitForm: FormGroup;
+
+
+  unitForm: FormGroup;
 
   @ViewChild(FreeTextUnitEditorComponent)
   private freeTextEditor: FreeTextUnitEditorComponent;
@@ -29,9 +32,14 @@ export class FreeTextUnitFormComponent implements OnInit {
               private unitService: UnitService,
               private snackBar: MatSnackBar,
               public dialog: MatDialog,
-              private notificationService: NotificationService) {}
+              private notificationService: NotificationService,
+              private unitFormService: UnitFormService) {}
 
   ngOnInit() {
+
+    this.unitForm = this.unitFormService.unitForm;
+
+
     if (!this.model) {
       this.model = new FreeTextUnit(this.course._id);
     }
@@ -39,63 +47,6 @@ export class FreeTextUnitFormComponent implements OnInit {
     this.unitForm.addControl('markdown', new FormControl(this.model.markdown));
   }
 
-  saveUnit() {
-
-    this.model = {
-      ...this.model,
-      /*name: this.generalInfo.form.value.name,*/
-      /*description: this.generalInfo.form.value.description,*/
-      /*visible: this.generalInfo.form.value.visible,*/
-
-      markdown: this.freeTextEditor.markdown
-    };
-
-    // If markdown was left empty, define field for db-consistency
-    if (isUndefined(this.model.markdown)) {
-      this.model.markdown = '';
-    }
-
-    // Checks if we have to create a new unit or update an existing
-    if (this.lectureId) {
-      // Create new one
-      this.unitService.createItem({model: this.model, lectureId: this.lectureId})
-        .then(
-          (unit) => {
-            this.snackBar.open('Free text unit saved', '', {duration: 3000});
-            this.onDone();
-            return this.notificationService.createItem(
-              {
-                changedCourse: this.course,
-                changedLecture: this.lectureId,
-                changedUnit: unit,
-                text: 'Course ' + this.course.name + ' has a new text unit.'
-              });
-          },
-          error => {
-            this.snackBar.open('Couldn\'t save unit', '', {duration: 3000});
-          }
-        );
-    } else {
-      // Update existing
-      // delete this.model._course;
-      this.unitService.updateItem(this.model)
-        .then(
-          (unit) => {
-            this.notificationService.createItem(
-              {
-                changedCourse: this.course, changedLecture: this.lectureId,
-                changedUnit: unit, text: 'Course ' + this.course.name + ' has an updated text unit.'
-              })
-              .catch(console.error);
-            this.snackBar.open('Free text unit saved', 'Update', {duration: 2000});
-            this.onDone();
-          },
-          error => {
-            this.snackBar.open('Couldn\'t update unit', '', {duration: 3000});
-          }
-        );
-    }
-  }
 
   public openFullscreen(): void {
     const dialogRef = this.dialog.open(FreeTextUnitEditorDialog, {

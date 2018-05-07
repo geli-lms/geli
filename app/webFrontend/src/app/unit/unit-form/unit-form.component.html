@@ -1,4 +1,4 @@
-<form class="edit-unit" *ngIf="course" [formGroup]="unitForm" (submit)="save()" novalidate>
+<form class="edit-unit" *ngIf="course" [formGroup]="unitForm" (reset)="reset()"  (submit)="save()" novalidate>
   <app-unit-general-info-form [model]="model" [unitForm]="unitForm"></app-unit-general-info-form>
 
   <!--<app-file-unit-form
@@ -32,11 +32,11 @@
     [model]="model"
     [lectureId]="lecture._id"
     [onDone]="onDone"
-    [unitForm]="unitForm"></app-free-text-unit-form>
+    ></app-free-text-unit-form>
 
 
   <div class="btn-wrapper">
-    <app-button-save-cancel (cancel)="onDone()">
+    <app-button-save-cancel>
       <ng-container left>
         <!-- Add here Elements before save & cancel buttons -->
       </ng-container>
