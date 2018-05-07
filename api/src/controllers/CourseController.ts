@@ -162,7 +162,7 @@ export class CourseController {
    * @apiError NotFoundError Includes implicit authorization check. (In getCourse helper method.)
    * @apiError ForbiddenError (Redundant) Authorization check.
    */
-  @Get('/:id')
+  @Get('/:id([a-fA-F0-9]{24})')
   async getCourseView(@Param('id') id: string, @CurrentUser() currentUser: IUser): Promise<ICourseView> {
     const course = await this.getCourse(id, currentUser);
 
