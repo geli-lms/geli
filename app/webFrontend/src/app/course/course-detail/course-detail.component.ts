@@ -7,6 +7,7 @@ import {UserService} from '../../shared/services/user.service';
 import {IUser} from '../../../../../../shared/models/IUser';
 import {User} from '../../models/User';
 import {MatSnackBar, MatDialog} from '@angular/material';
+import {SnackBarService} from '../../shared/services/snack-bar.service';
 import {DownloadCourseDialogComponent} from './download-course-dialog/download-course-dialog.component';
 import {TitleService} from '../../shared/services/title.service';
 import {LastVisitedCourseContainerUpdater} from '../../shared/utils/LastVisitedCourseContainerUpdater';
@@ -27,7 +28,7 @@ export class CourseDetailComponent implements OnInit {
               private route: ActivatedRoute,
               private courseService: CourseService,
               public userService: UserService,
-              private snackBar: MatSnackBar,
+              private snackBar: SnackBarService,
               private dialog: MatDialog,
               private titleService: TitleService,
               private userDataService: UserDataService,
@@ -47,14 +48,12 @@ export class CourseDetailComponent implements OnInit {
       this.course = await this.courseService.readCourseToView(courseId);
       this.titleService.setTitleCut(['Course: ', this.course.name]);
       LastVisitedCourseContainerUpdater.addCourseToLastVisitedCourses(courseId, this.userService, this.userDataService);
-    } catch (errorResponse) {
-      if (errorResponse.status === 401) {
-        this.snackBar.open('You are not authorized to view this course.', '', {duration: 3000});
-      } else if (errorResponse.status === 404) {
-        this.snackBar.open('Your selected course is not available.', '', {duration: 3000});
+    } catch (err) {
+      if (err.status === 404) {
+        this.snackBar.open('Your selected course is not available.');
         this.router.navigate(['/not-found']);
       } else {
-        this.snackBar.open('Something went wrong: ' + errorResponse.message, '', {duration: 3000});
+        this.snackBar.open('Something went wrong: ' + err.error.message);
       }
     }
   }

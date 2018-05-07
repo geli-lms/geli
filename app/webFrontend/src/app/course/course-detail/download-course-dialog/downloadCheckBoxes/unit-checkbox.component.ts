@@ -5,7 +5,6 @@ import {
 import {IUnit} from '../../../../../../../../shared/models/units/IUnit';
 import {IFileUnit} from '../../../../../../../../shared/models/units/IFileUnit';
 import {UploadUnitCheckboxComponent} from './upload-unit-checkbox.component';
-import {MatSnackBar} from '@angular/material';
 import {ConfigService} from '../../../../shared/services/data.service';
 
 
@@ -32,7 +31,7 @@ export class UnitCheckboxComponent implements OnInit {
   childUnitDesc: string;
   showCheckBox = true; // false if the unit has only large files
 
-  constructor(public snackBar: MatSnackBar, private configService: ConfigService) {
+  constructor(private configService: ConfigService) {
   }
 
   ngOnInit() {
