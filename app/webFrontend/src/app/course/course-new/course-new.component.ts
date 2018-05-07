@@ -34,10 +34,10 @@ export class CourseNewComponent implements OnInit {
 
   createCourse() {
     this.resetErrors();
-    this.courseService.createItem(this.newCourse.value).then((val) => {
+    this.courseService.createItem(this.newCourse.value).then(val => {
       this.snackBar.open('Course created');
       this.router.navigate(['course', val._id, 'edit']);
-    }).catch((err) => {
+    }).catch(err => {
       if (err.error.message === errorCodes.course.duplicateName.code) {
         this.nameError = errorCodes.course.duplicateName.text;
       } else {
