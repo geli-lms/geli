@@ -38,7 +38,7 @@
       </app-lecture>
     </div>
   </div>
-  <div class="course-chat">
+  <div class="course-chat" *ngIf="showChat">
     <app-chat [room]="course?._id"></app-chat>
   </div>
 </div>

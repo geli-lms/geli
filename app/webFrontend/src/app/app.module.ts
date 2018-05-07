@@ -44,8 +44,9 @@ import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import {ImprintAndInfoService} from './shared/services/imprint-and-info.service';
 import {NotfoundComponent} from './shared/components/notfound/notfound.component';
 import {SnackBarService} from './shared/services/snack-bar.service';
-import {SocketService} from './shared/services/socket.service';
+import {ChatService} from './shared/services/chat.service';
 import {MessageService} from './shared/services/message.service';
+
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -102,7 +103,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     MediaService,
     ThemeService,
     ConfigService,
-    SocketService,
+    ChatService,
     MessageService,
     NotfoundComponent,
     {

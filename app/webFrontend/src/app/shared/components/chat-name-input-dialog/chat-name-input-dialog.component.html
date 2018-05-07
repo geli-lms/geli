@@ -1,0 +1,8 @@
+<div>
+  <p> This is a private chat. Please enter a temporary name</p>
+  <form [formGroup]="form" (ngSubmit)="saveName()">
+    <mat-form-field>
+      <input matInput placeholder="Temporary name for chat" class="form-control" formControlName="name">
+    </mat-form-field>
+  </form>
+</div>

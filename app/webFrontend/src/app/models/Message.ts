@@ -6,10 +6,12 @@ export class Message implements IMessage {
   content: string;
   visible: boolean;
   room: string;
+  chatName: string;
 
-  constructor(author, content, room, visible){
+  constructor(author,chatName, content, room, visible){
     this.author = author;
     this.content = content;
+    this.chatName = chatName;
     this.room = room;
     this.visible = visible;
   }

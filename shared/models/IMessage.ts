@@ -5,4 +5,5 @@ export interface IMessage {
   content: string;
   visible: boolean;
   room: string;
+  chatName: string;
 }

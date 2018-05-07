@@ -8,7 +8,7 @@ import {
   UseBefore
 } from 'routing-controllers';
 import {IMessage} from '../../../shared/models/IMessage';
-import {Message} from '../models/Message';
+import {IMessageModel, Message} from '../models/Message';
 
 
 @JsonController('/message')
@@ -32,6 +32,7 @@ export default class MessageController {
     if(!room){
       throw new BadRequestError()
     }
-    return await Message.find({room: 'room'});
+    const messages: IMessageModel[] = await Message.find({room: room});
+    return messages;
   }
 }
