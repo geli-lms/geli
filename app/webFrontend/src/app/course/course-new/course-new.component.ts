@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CourseService} from '../../shared/services/data.service';
-import {MatSnackBar} from '@angular/material';
+import {SnackBarService} from '../../shared/services/snack-bar.service';
 import {Router} from '@angular/router';
 import {errorCodes} from '../../../../../../api/src/config/errorCodes';
 import {TitleService} from '../../shared/services/title.service';
@@ -19,7 +19,7 @@ export class CourseNewComponent implements OnInit {
   constructor(private router: Router,
               private formBuilder: FormBuilder,
               private courseService: CourseService,
-              public snackBar: MatSnackBar,
+              private snackBar: SnackBarService,
               private titleService: TitleService) {
   }
 
@@ -34,17 +34,16 @@ export class CourseNewComponent implements OnInit {
 
   createCourse() {
     this.resetErrors();
-    this.courseService.createItem(this.newCourse.value).then(
-      (val) => {
-        this.snackBar.open('Course created', 'Dismiss', {duration: 5000});
-        this.router.navigate(['course', val._id, 'edit']);
-      }, (err) => {
-        if (err.error.message === errorCodes.course.duplicateName.code) {
-          this.nameError = errorCodes.course.duplicateName.text;
-        } else {
-          this.snackBar.open('Error creating course ' + err.error.message, 'Dismiss');
-        }
-      });
+    this.courseService.createItem(this.newCourse.value).then((val) => {
+      this.snackBar.open('Course created');
+      this.router.navigate(['course', val._id, 'edit']);
+    }).catch((err) => {
+      if (err.error.message === errorCodes.course.duplicateName.code) {
+        this.nameError = errorCodes.course.duplicateName.text;
+      } else {
+        this.snackBar.open('Error creating course ' + err.error.message);
+      }
+    });
   }
 
   generateForm() {
