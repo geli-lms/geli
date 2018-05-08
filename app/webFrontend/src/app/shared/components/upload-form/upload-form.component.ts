@@ -81,7 +81,6 @@ export class UploadFormComponent implements OnInit, OnChanges {
     this.fileUploader.onCompleteAll = () => {
       if (!this.error && this.fileUploader.queue.length === 0) {
         this.onAllUploaded.emit();
-        this.snackBar.open('All items uploaded!');
       }
     };
 
