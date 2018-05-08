@@ -1,5 +1,6 @@
 import {Component, Inject, OnInit, ViewChild} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef, MatSelectionList, MatSnackBar} from '@angular/material';
+import {MAT_DIALOG_DATA, MatDialogRef, MatSelectionList} from '@angular/material';
+import {SnackBarService} from '../../services/snack-bar.service';
 import {IFile} from '../../../../../../../shared/models/mediaManager/IFile';
 import {IDirectory} from '../../../../../../../shared/models/mediaManager/IDirectory';
 import {MediaService} from '../../services/data.service';
@@ -19,7 +20,7 @@ export class PickMediaDialog implements OnInit {
 
   constructor(private dialogRef: MatDialogRef<PickMediaDialog>,
               private mediaService: MediaService,
-              private snackBar: MatSnackBar,
+              private snackBar: SnackBarService,
               @Inject(MAT_DIALOG_DATA) public data: any) {
   }
 
@@ -38,7 +39,7 @@ export class PickMediaDialog implements OnInit {
 
   save(): void {
     if (this.selectedOptions.length === 0) {
-      this.snackBar.open('Please choose at least one file', '', {duration: 2000});
+      this.snackBar.open('Please choose at least one file');
       return;
     }
 
@@ -48,5 +49,4 @@ export class PickMediaDialog implements OnInit {
   cancel(): void {
     this.dialogRef.close(false);
   }
-
 }
