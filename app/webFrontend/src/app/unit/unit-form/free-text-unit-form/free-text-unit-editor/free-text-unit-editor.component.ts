@@ -4,7 +4,7 @@ import {AceEditorComponent} from 'ng2-ace-editor';
 import 'brace';
 import 'brace/mode/markdown';
 import 'brace/theme/github';
-import {FormGroup} from "@angular/forms";
+import {FormGroup} from '@angular/forms';
 
 
 @Component({

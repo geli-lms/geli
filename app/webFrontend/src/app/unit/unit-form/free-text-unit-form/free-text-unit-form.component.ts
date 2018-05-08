@@ -9,7 +9,7 @@ import {FreeTextUnitEditorComponent} from './free-text-unit-editor/free-text-uni
 import {FreeTextUnitEditorDialog} from './free-text-unit-editor/free-text-unit-editor-dialog/free-text-unit-editor.dialog';
 import {isUndefined} from 'util';
 import {FormControl, FormGroup} from '@angular/forms';
-import {UnitFormService} from "../../../shared/services/unit-form.service";
+import {UnitFormService} from '../../../shared/services/unit-form.service';
 
 @Component({
   selector: 'app-free-text-unit-form',
@@ -63,7 +63,7 @@ export class FreeTextUnitFormComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (typeof result !== 'undefined') {
         this.model.markdown = result;
-        this.unitForm.patchValue({markdown:result})
+        this.unitForm.patchValue({ markdown: result });
       }
     });
   }

@@ -9,14 +9,14 @@
     [fileUnitType]="type"
     [onDone]="onDone"
     [onCancel]="onCancel">
-  </app-file-unit-form>
+  </app-file-unit-form>-->
   <app-code-kata-unit-form
     *ngIf="type == 'code-kata'"
     [course]="course"
     [model]="model"
     [lectureId]="lecture._id"
     [onDone]="onDone"
-    [onCancel]="onCancel"></app-code-kata-unit-form>!-->
+    [onCancel]="onCancel"></app-code-kata-unit-form>
   <app-task-unit-edit
     *ngIf="type == 'task'"
     [course]="course"
@@ -39,6 +39,7 @@
     <app-button-save-cancel>
       <ng-container left>
         <!-- Add here Elements before save & cancel buttons -->
+        <button *ngIf="type == 'code-kata'" mat-raised-button (click)="codeKataUnitFormComponent.validate()">Validate</button>
       </ng-container>
       <ng-container right>
         <!-- Add here Elements after save & cancel buttons -->

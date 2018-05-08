@@ -1,10 +1,10 @@
 import {EventEmitter, Injectable} from '@angular/core';
-import {FormBuilder, FormGroup} from "@angular/forms";
-import {IUnit} from "../../../../../../shared/models/units/IUnit";
-import {ICourse} from "../../../../../../shared/models/ICourse";
-import {ILecture} from "../../../../../../shared/models/ILecture";
-import {MatDialog, MatSnackBar} from "@angular/material";
-import {FreeTextUnitService, NotificationService, UnitService} from "./data.service";
+import {FormBuilder, FormGroup} from '@angular/forms';
+import {IUnit} from '../../../../../../shared/models/units/IUnit';
+import {ICourse} from '../../../../../../shared/models/ICourse';
+import {ILecture} from '../../../../../../shared/models/ILecture';
+import {MatDialog, MatSnackBar} from '@angular/material';
+import {FreeTextUnitService, NotificationService, UnitService} from './data.service';
 
 @Injectable()
 export class UnitFormService {
@@ -33,16 +33,17 @@ export class UnitFormService {
     this.reset();
   }
 
-  reset(){
+  reset() {
     this.unitForm = new FormGroup({});
     this.submitDone = new EventEmitter<any>();
+    this.beforeSubmit = undefined;
   }
 
 
   async save() {
 
 
-    if(this.beforeSubmit){
+    if (this.beforeSubmit) {
       const success = await this.beforeSubmit();
       if (!success) {
         return;
@@ -53,9 +54,8 @@ export class UnitFormService {
     if (!this.unitForm.valid) {
       const snackErrMessage = `Given input is not valid. Please fill fields correctly.`;
       this.snackBar.open(snackErrMessage, '', {duration: 3000});
-      return
+      return;
     }
-
 
     this.model = {
       ...this.model,
@@ -82,7 +82,7 @@ export class UnitFormService {
     }
 
     try {
-      let responseUnit = await promise;
+      const responseUnit = await promise;
 
       console.log(responseUnit);
 

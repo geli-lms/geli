@@ -9,7 +9,7 @@
   </div>
   <div class="info-text">
     <mat-icon>info</mat-icon>
-    Your students can only edit the code area.
+    Students can only edit the code area.
   </div>
 
   <ace-editor class="user-code-editor"
@@ -19,9 +19,6 @@
               [theme]="'github'"
               [readOnly]="false">
   </ace-editor>
-
-  <button mat-raised-button (click)="validate()">Validate</button>
-  <app-button-save-cancel (save)="addUnit()" (cancel) ="onCancel()"></app-button-save-cancel>
   <div *ngIf="logs!==undefined" class="logs-title">
     Logs:
     <pre>{{logs}}</pre>

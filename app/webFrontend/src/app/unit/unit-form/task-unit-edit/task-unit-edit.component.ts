@@ -7,10 +7,8 @@ import {TaskUnit} from '../../../models/units/TaskUnit';
 import {ITask} from '../../../../../../../shared/models/task/ITask';
 import {Answer} from '../../../models/Answer';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
-import {UnitGeneralInfoFormComponent} from '../unit-general-info-form/unit-general-info-form.component';
-import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {Subject} from "rxjs/Subject";
-import {UnitFormService} from "../../../shared/services/unit-form.service";
+import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {UnitFormService} from '../../../shared/services/unit-form.service';
 
 @Component({
   selector: 'app-task-unit-edit',
@@ -35,12 +33,7 @@ export class TaskUnitEditComponent implements OnInit {
 
 
   unitForm: FormGroup;
-
-
   add = false;
-
-  @ViewChild(UnitGeneralInfoFormComponent)
-  private generalInfo: UnitGeneralInfoFormComponent;
 
   constructor(private unitService: UnitService,
               private snackBar: MatSnackBar,
@@ -67,11 +60,11 @@ export class TaskUnitEditComponent implements OnInit {
 
     this.unitFormService.beforeSubmit = async () => {
       return await this.isTaskUnitValid();
-    }
+    };
 
-    this.unitFormService.submitDone.subscribe(()=>{
+    this.unitFormService.submitDone.subscribe(() => {
       this.onDone();
-    })
+    });
 
   }
 
@@ -83,7 +76,7 @@ export class TaskUnitEditComponent implements OnInit {
     this.unitForm.addControl('tasks', this.formBuilder.array([]));
 
 
-    for(const task of this.model.tasks){
+    for (const task of this.model.tasks) {
       const taskControl = this.addTask(task);
     }
   }
@@ -149,15 +142,15 @@ export class TaskUnitEditComponent implements OnInit {
       answers: new FormArray([])
     });
 
-    if(task){
+    if (task) {
       taskControl.patchValue({
         ...task
-      })
+      });
 
-      for(const answer of task.answers) {
+      for (const answer of task.answers) {
         this.addAnswerAtEnd(taskControl, answer);
       }
-    }else{
+    } else {
       taskControl.removeControl('_id');
       this.addAnswerAtEnd(taskControl);
       this.addAnswerAtEnd(taskControl);
@@ -175,16 +168,15 @@ export class TaskUnitEditComponent implements OnInit {
       text: new FormControl()
     });
 
-    if(answer){
+    if (answer) {
       answerControl.patchValue({
         ...answer
-      })
-    }else{
+      });
+    } else {
       answerControl.removeControl('_id');
     }
 
-
-    (<FormArray>taskControl.controls['answers']).push(answerControl)
+    (<FormArray>taskControl.controls['answers']).push(answerControl);
   }
 
   removeAnswer(taskControl, index: number) {

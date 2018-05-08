@@ -26,13 +26,13 @@ export class UnitGeneralInfoFormComponent implements OnInit {
     this.unitForm.addControl('deadline', new FormControl());
     this.unitForm.addControl('visible', new FormControl());
 
-    if(this.model){
+    if (this.model) {
       this.unitForm.patchValue({
         name: this.model.name,
         description: this.model.description,
         deadline: this.model.deadline,
         visible: this.model.visible
-      })
+      });
     }
 
   }

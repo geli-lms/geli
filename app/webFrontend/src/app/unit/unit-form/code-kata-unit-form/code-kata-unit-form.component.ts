@@ -9,6 +9,8 @@ import {AceEditorComponent} from 'ng2-ace-editor';
 import 'brace';
 import 'brace/mode/javascript';
 import 'brace/theme/github';
+import {FormGroup} from '@angular/forms';
+import {UnitFormService} from '../../../shared/services/unit-form.service';
 
 @Component({
   selector: 'app-code-kata-unit-form',
@@ -16,17 +18,25 @@ import 'brace/theme/github';
   styleUrls: ['./code-kata-unit-form.component.scss']
 })
 export class CodeKataUnitFormComponent implements OnInit {
-  @Input() course: ICourse;
-  @Input() lectureId: string;
-  @Input() model: CodeKataUnit;
-  @Input() onDone: () => void;
-  @Input() onCancel: () => void;
+  @Input()
+  course: ICourse;
 
-  @ViewChild(UnitGeneralInfoFormComponent)
-  private generalInfo: UnitGeneralInfoFormComponent;
+  @Input()
+  lectureId: string;
+
+  @Input()
+  model: CodeKataUnit;
+
+  @Input()
+  onDone: () => void;
+
+  @Input()
+  onCancel: () => void;
 
   @ViewChild('codeEditor')
   editor: AceEditorComponent;
+
+  unitFrom: FormGroup;
 
   areaSeperator = '//####################';
 
@@ -58,7 +68,8 @@ export class CodeKataUnitFormComponent implements OnInit {
   constructor(private codeKataUnitService: CodeKataUnitService,
               private unitService: UnitService,
               private snackBar: SnackBarService,
-              private notificationService: NotificationService) {
+              private notificationService: NotificationService,
+              private unitFormService: UnitFormService) {
   }
 
   ngOnInit() {
@@ -75,76 +86,32 @@ export class CodeKataUnitFormComponent implements OnInit {
       + this.model.code
       + '\n' + this.areaSeperator + '\n'
       + this.model.test;
-    this.editor.getEditor().setOptions({
-      maxLines: 9999,
+
+    this.editor.getEditor().setOptions({maxLines: 9999});
+
+    this.unitFrom = this.unitFormService.unitForm;
+
+    this.unitFormService.beforeSubmit = async () => {
+      const success = this.validate();
+      if (!success) {
+        return false;
+      }
+
+      const inputCodeArray = this.wholeInputCode.split('\n' + this.areaSeperator + '\n');
+      this.model = {
+        ...this.model,
+        definition: inputCodeArray[0],
+        code: inputCodeArray[1],
+        test: inputCodeArray[2],
+      };
+      return true;
+    };
+
+    this.unitFormService.submitDone.subscribe(() => {
+      this.onDone();
     });
   }
 
-  addUnit() {
-    if (!this.validate()) {
-      this.snackBar.open('Your code does not validate. Check logs for information');
-    }
-
-    const inputCodeArray = this.wholeInputCode.split('\n' + this.areaSeperator + '\n');
-    this.model = {
-      ...this.model,
-      definition: inputCodeArray[0],
-      code: inputCodeArray[1],
-      test: inputCodeArray[2],
-      name: this.generalInfo.form.value.name,
-      description: this.generalInfo.form.value.description,
-      deadline: this.generalInfo.form.value.deadline,
-      visible: this.generalInfo.form.value.visible
-    };
-
-    if (this.model._id === undefined) {
-      this.createCodeKata();
-    } else {
-      this.updateCodeKata();
-    }
-  }
-
-  private async createCodeKata() {
-    try {
-      const unit = await this.unitService.createItem({
-        model: this.model,
-        lectureId: this.lectureId
-      });
-
-      this.notificationService.createItem({
-        changedCourse: this.course,
-        changedLecture: this.lectureId,
-        changedUnit: unit,
-        text: 'Course ' + this.course.name + ' has a new code kata unit.'
-      });
-
-      this.snackBar.open('Code-Kata created');
-      this.onDone();
-    } catch (err) {
-      this.snackBar.open('Failed to create Code-Kata: ' + err.error.message);
-    }
-  }
-
-  private async updateCodeKata() {
-    try {
-      delete this.model._course;
-      const unit = await this.unitService.updateItem(this.model);
-
-      this.notificationService.createItem({
-        changedCourse: this.course,
-        changedLecture: this.lectureId,
-        changedUnit: unit,
-        text: 'Course ' + this.course.name + ' has an updated unit.'
-      });
-
-      this.snackBar.open('Code-Kata updated');
-      this.onDone();
-    } catch (err) {
-      this.snackBar.open('Failed to update Code-Kata: ' + err.error.message);
-    }
-  }
-
-// refactor this to use the same as in code-kata-unit
   validate() {
     if (!this.validateStructure()) {
       return false;

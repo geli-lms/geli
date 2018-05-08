@@ -3,14 +3,13 @@ import {ICourse} from '../../../../../../shared/models/ICourse';
 import {ILecture} from '../../../../../../shared/models/ILecture';
 import {IUnit} from '../../../../../../shared/models/units/IUnit';
 import {FormBuilder, FormGroup} from '@angular/forms';
-import {FreeTextUnitFormComponent} from "./free-text-unit-form/free-text-unit-form.component";
-import {CodeKataComponent} from "../code-kata-unit/code-kata-unit.component";
-import {MatDialog, MatSnackBar} from "@angular/material";
-import {FreeTextUnitService, NotificationService, UnitService} from "../../shared/services/data.service";
-import {FileUnit} from "../../models/units/FileUnit";
-import {TaskUnitEditComponent} from "./task-unit-edit/task-unit-edit.component";
-import {Subject} from "rxjs/Subject";
-import {UnitFormService} from "../../shared/services/unit-form.service";
+import {FreeTextUnitFormComponent} from './free-text-unit-form/free-text-unit-form.component';
+import {CodeKataComponent} from '../code-kata-unit/code-kata-unit.component';
+import {MatDialog, MatSnackBar} from '@angular/material';
+import {FreeTextUnitService, NotificationService, UnitService} from '../../shared/services/data.service';
+import {TaskUnitEditComponent} from './task-unit-edit/task-unit-edit.component';
+import {UnitFormService} from '../../shared/services/unit-form.service';
+import {CodeKataUnitFormComponent} from './code-kata-unit-form/code-kata-unit-form.component';
 
 @Component({
   selector: 'app-unit-form',
@@ -34,8 +33,10 @@ export class UnitFormComponent implements OnInit {
   private codeKataComponent: CodeKataComponent;
 
   @ViewChild(TaskUnitEditComponent)
-  private taskUnitEditComponent:TaskUnitEditComponent;
+  private taskUnitEditComponent: TaskUnitEditComponent;
 
+  @ViewChild(CodeKataUnitFormComponent)
+  private codeKataUnitFormComponent: CodeKataUnitFormComponent;
 
   unitForm: FormGroup;
 
@@ -59,13 +60,12 @@ export class UnitFormComponent implements OnInit {
 
   }
 
-
-  reset(){
+  reset() {
    this.unitFormService.reset();
    this.onCancel();
   }
 
-  async save(){
+  async save() {
     return this.unitFormService.save();
   }
 }
