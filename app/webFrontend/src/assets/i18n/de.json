@@ -40,8 +40,6 @@
     "upload" : "upload",
     "download" : "download",
     "back": "Zurück",
-    "tooltipDownloadUnit" : "Download this Unit",
-    "tooltipClickToOpen" : "Auf-/ zuklappen",
     "profile": {
       "firstName": "Vorname",
       "lastName": "Nachname",
@@ -61,15 +59,19 @@
       "instituteMail": "Bitte nutzen Sie Ihre Instituts-Email"
     },
     "tooltip" : {
-      "quitFullscreenMode" : "Quit Fullscreen"
+      "quitFullscreenMode" : "Quit Fullscreen",
+      "downloadUnit": "Download this Unit",
+      "clickToOpen": "Auf-/ zuklappen"
     }
   },
   "home": {
     "welcomeTo": "Willkommen auf"
   },
   "auth": {
-    "tooltipResetPassword" : "Klicken Sie hier, um das Passwort zu resetten",
-    "tooltipForgotPassword":"Klicken Sie hier, um ein neues Passwort anzufordern",
+    "tooltip" : {
+      "ResetPassword": "Klicken Sie hier, um das Passwort zu resetten",
+      "ForgotPassword": "Klicken Sie hier, um ein neues Passwort anzufordern"
+    },
     "forgotPassword": "Passwort vergessen",
     "loginSuccess": "Login erfolgreich",
     "loginFailed": "Login fehlgeschlagen",
@@ -93,6 +95,10 @@
       "successful": "Aktivierung erneut senden erfolgreich",
       "mailSent": "Wir haben Ihnen einen neuen Aktivierungslink an Ihre E-Mail-Adresse gesendet.",
       "tooltipResendAction" : "Klicken Sie hier, um einen neuen Aktivierungslink anzufordern"
+    },
+    "resetPassword" : {
+      "reset" : "Reset",
+      "requestReset" : "Request password reset"
     }
   },
   "user" : {
@@ -127,6 +133,9 @@
     "tooltipAdd" : "Kurs hinzufügen",
     "ShowCourse" : "Kurs anzeigen",
     "text" : {
+      "inCourse" : "In Course",
+      "notInCourse" : "Not in Course",
+      "editCourse" : "Edit Course",
       "addMarkdownToCourse" : "Add Markdown to add text to this Course.",
       "yourCourseProgress" : "Your course progress",
       "goToCourse" : "Go to Course",
@@ -191,7 +200,7 @@
     },
     "placeholder" : {
       "optionalDeadline" : "Optional Deadline",
-      "enterAnswer" : "Enter answer here",
+      "enterAnswer" : "Enter answer here"
     },
     "import" : "Import Unit",
     "addContent" : "Add content",
@@ -218,6 +227,12 @@
     "alphabetically" : "alphabetically",
     "placeholder" : {
       "sortedBy" : "Sorted by"
+    }
+  },
+  "notifications" : {
+    "text" : {
+      "clearAll" : "Clear all",
+      "noNotifications" : "You haven't any notifications"
     }
   }
 }
