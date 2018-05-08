@@ -1,10 +1,10 @@
 <div class="task-unit-edit">
-  <strong>Tasks</strong>
+  <strong>{{ unit.text.tasks | translate }}</strong>
 
   <app-unit-general-info-form [model]="model"></app-unit-general-info-form>
 
   <mat-hint>
-    Add questions with any number of possible answers. Mark the correct answer(s) with the checkbox.
+    {{ unit.text.hintAddQuestionAndAnswers | translate}}
   </mat-hint>
 
   <div *ngFor="let task of model.tasks" class="question-answer">
@@ -12,8 +12,8 @@
       <textarea matInput id="name" placeholder="Enter question here *" [(ngModel)]="task.name"></textarea>
     </mat-form-field>
 
-    <button mat-button class="remove" (click)="removeTask(task)">
-      <mat-icon>delete</mat-icon> Remove question
+    <button mat-button class="remove" (click)="removeTask(task)" matTooltip="{{ task.tooltip.deleteQuestion | translate }}">
+      <mat-icon>delete</mat-icon>
     </button>
 
     <div matLine class="answers">
@@ -21,16 +21,16 @@
         <div class="check-answer">
           <mat-checkbox [(ngModel)]="answer.value" name="value_{{idx}}"></mat-checkbox>
           <mat-form-field>
-            <input matInput placeholder="Enter answer here *" [(ngModel)]="answer.text">
+            <input matInput placeholder="{{ unit.placeholder.enterAnswer | translater }} *" [(ngModel)]="answer.text">
           </mat-form-field>
-          <button mat-button class="remove" (click)="removeAnswer(task, idx)" matTooltip="Remove answer">
+          <button mat-bwutton class="remove" (click)="removeAnswer(task, idx)" matTooltip="{{ task.tooltip.deleteAnswer | translate }}">
             <mat-icon>delete</mat-icon>
           </button>
         </div>
       </div>
       <div class="add-answer">
         <button mat-button (click)="addAnswerAtEnd(task)">
-          <mat-icon>add</mat-icon> Add answer
+          <mat-icon>add</mat-icon> {{ unit.text.addAnswer | translate }}
         </button>
       </div>
     </div>
@@ -38,7 +38,7 @@
 
   <p>
     <button mat-raised-button (click)="addTask()">
-      <mat-icon>add</mat-icon> Add question
+      <mat-icon>add</mat-icon> {{ unit.text.addQuestion | translate }}
     </button>
 
     <app-button-save-cancel (save)="saveUnit()" (cancel)="onCancel()"></app-button-save-cancel>

@@ -1,19 +1,38 @@
 {
+ "activation" :  {
+   "text" : {
+     "pleaseClick" : "Please click ",
+     "toActivate" : "to activate your account",
+     "toUseYourAccount" : "to use your account"
+   }
+ },
   "common": {
     "geli": "geli",
     "settings" : "Settings",
     "notifications" : "Notifications",
     "name" : "Name",
     "role" : "Role",
+    "about" : "About",
+    "administration" : "Administration",
+    "imprint" : "imprint",
+    "infobox" : "InfoBox",
+    "users" : "users",
+    "here" : "hier",
     "actions" : "Actions",
     "login": "Login",
     "register": "Registrieren",
     "email": "E-Mail",
     "description" : "description",
     "password": "Passwort",
+    "fullscreenMode" : "Fullscreen Mode",
+    "profile" : "Profil",
+    "cheatSheetYouFind" : "A Cheatsheet you can find ",
+    "editProfile" : "Profil bearbeiten",
     "export" : "Export",
     "duplicate" : "Duplicate",
     "send": "Senden",
+    "validate" : "Validate",
+    "submit" : "Submit",
     "save" : "Save",
     "dismiss": "Schließen",
     "delete": "Löschen",
@@ -40,6 +59,9 @@
       "password": "Passwörter müssen aus mindestens 8 Zeichen, inklusive einem Sonderzeichen und einer Ziffer bestehen",
       "passwordsMatch": "Die Passwörter stimmen nicht überein",
       "instituteMail": "Bitte nutzen Sie Ihre Instituts-Email"
+    },
+    "tooltip" : {
+      "quitFullscreenMode" : "Quit Fullscreen"
     }
   },
   "home": {
@@ -105,6 +127,7 @@
     "tooltipAdd" : "Kurs hinzufügen",
     "ShowCourse" : "Kurs anzeigen",
     "text" : {
+      "addMarkdownToCourse" : "Add Markdown to add text to this Course.",
       "yourCourseProgress" : "Your course progress",
       "goToCourse" : "Go to Course",
       "canSeenByStudents" : "Course can be seen by students",
@@ -135,6 +158,12 @@
     "placeholder" :
     {
       "uploadFiles" : "UploadFiles"
+    },
+    "text" : {
+      "addFile" : "Add File",
+      "filename" : "Filename",
+      "filesize" : "Filesize",
+      "actions" : "Actions"
     }
   },
   "unit" :
@@ -142,17 +171,53 @@
     "tooltip" :
     {
       "download" : "Download this Unit",
-      "delete" : "Download this Unit",
+      "delete" : "delete Unit",
       "duplicate" : "Copy this Unit",
-      "edit" : "Download this Unit",
-      "add" : "Download this Unit"
+      "edit" : "edit Unit",
+      "add" : "add Unit",
+      "deleteAnswer" : "Delete answer",
+      "deleteQuestion" : "Delete question"
     },
-    "import":"Import Unit",
+    "text" : {
+      "fullscreen" : "Fullscreen",
+      "tasks" : "Tasks",
+      "publishedOn" : "Published on",
+      "changedOn" : "Changed on",
+      "canBeSeenByStudents" : "Unit can be seen by students",
+      "canNotBeSeenByStudents" : "Unit cannot be seen by students",
+      "addAnswer" : "Add answer",
+      "addQuestion" : "Add question",
+      "hintAddQuestionAndAnswers" : "Add questions with any number of possible answers. Mark the correct answer(s) with the checkbox."
+    },
+    "placeholder" : {
+      "optionalDeadline" : "Optional Deadline",
+      "enterAnswer" : "Enter answer here",
+    },
+    "import" : "Import Unit",
     "addContent" : "Add content",
     "addTasks" : "Add tasks",
     "addFiles" : "Add files",
     "addCodeKata" : "Add code-kata",
     "addVideos" : "Add Videos",
     "addFreeText" : "Add free text"
+  },
+  "code-kata" : {
+    "information" : {
+      "info1" : "Separate definition, coding and test areas with ",
+      "info2" : "Your students can only edit the code area."
+    },
+    "text" : {
+      "logs" : "Logs",
+      "codeHere" : "Your code goes here",
+      "codeExample" : "This is the provided example solution",
+      "testsNeedToSuccees" : "These tests need to success"
+    }
+  },
+  "sort" : {
+    "lastVisited" : "last visited",
+    "alphabetically" : "alphabetically",
+    "placeholder" : {
+      "sortedBy" : "Sorted by"
+    }
   }
 }

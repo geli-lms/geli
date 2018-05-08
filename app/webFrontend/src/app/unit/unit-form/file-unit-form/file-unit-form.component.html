@@ -1,15 +1,15 @@
 <ng-container [ngSwitch]="fileUnitType">
-  <h3 *ngSwitchCase="'video'">Add Videos</h3>
-  <h3 *ngSwitchDefault>Add Files</h3>
+  <h3 *ngSwitchCase="'video'">{{ unit.addVideos | translate }}</h3>
+  <h3 *ngSwitchDefault>{{ unit.addFiles | translate}}</h3>
 </ng-container>
 
 <app-unit-general-info-form [model]="model"></app-unit-general-info-form>
 <div *ngIf="model?.files?.length > 0" class="file-list-container uploaded-files">
   <div class="file-list">
     <div class="file-list-row file-list-header">
-      <span>Filename</span>
-      <span>Filesize</span>
-      <span>Actions</span>
+      <span>{{ file.text.filename | translate }}</span>
+      <span>{{ file.text.filesize | translate }}</span>
+      <span>{{ file.text.actions | translate }}</span>
     </div>
     <div class="file-list-row" *ngFor="let file of model.files">
       <span class="filename">{{file.name}}</span>
@@ -17,7 +17,7 @@
       <mat-action-row>
         <button mat-raised-button color="warn" (click)="removeFile(file)">
           <mat-icon>delete</mat-icon>
-          Remove
+          {{ common.delete | translate }}
         </button>
       </mat-action-row>
     </div>
@@ -26,17 +26,17 @@
 
 <p>
   <button mat-raised-button (click)="openAddFilesDialog()">
-    Add files
+    {{ file.text.addFile || translate }}
   </button>
 </p>
 <p>
   <button mat-raised-button color="primary"
           (click)="save()" [disabled]="checkSave()">
     <mat-icon>save</mat-icon>
-    Save
+    {{ common.save | translate }}
   </button>
   <button mat-raised-button
           (click)="onCancel()">
-    Cancel
+    {{ common.cancel | translate }}
   </button>
 </p>

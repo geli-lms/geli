@@ -1,22 +1,22 @@
 <form [formGroup]="form">
   <mat-form-field>
-    <input matInput required formControlName="name" placeholder="Name">
+    <input matInput required formControlName="name" placeholder="{{ common.name | translate }}">
   </mat-form-field>
 
   <mat-form-field>
-    <textarea matInput formControlName="description" placeholder="Description" rows="4"></textarea>
+    <textarea matInput formControlName="description" placeholder="{{ common.description | translate }}" rows="4"></textarea>
   </mat-form-field>
 
   <mat-form-field *ngIf="model?.progressable">
-    <input matInput formControlName="deadline" [matDatepicker]="deadlineDatepicker" placeholder="Optional deadline">
+    <input matInput formControlName="deadline" [matDatepicker]="deadlineDatepicker" placeholder="{{ unit.placeholder.optionalDeadline | translate }}">
     <mat-datepicker-toggle matSuffix [for]="deadlineDatepicker"></mat-datepicker-toggle>
     <mat-datepicker #deadlineDatepicker (selectedChanged)="updateDateTime($event)"></mat-datepicker>
   </mat-form-field>
 
   <div>
     <mat-slide-toggle formControlName="visible">
-      <span *ngIf="form.value.visible">Unit can be seen by students</span>
-      <span *ngIf="!form.value.visible">Unit cannot be seen by students</span>
+      <span *ngIf="form.value.visible">{{ unit.text.canBeSeenByStudents | translate }}</span>
+      <span *ngIf="!form.value.visible">{{ unit.text.canNotBeSeenByStudents | translate }}s</span>
     </mat-slide-toggle>
   </div>
 </form>

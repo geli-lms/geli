@@ -28,7 +28,7 @@
                     [checked]="emailSelection.hasValue() && isAllSelected(emailSelection)"
                     [indeterminate]="emailSelection.hasValue() && !isAllSelected(emailSelection)">
       </mat-checkbox>
-      <span>Email</span>
+      <span>{{ common.email | translate}}</span>
     </mat-header-cell>
     <mat-cell class="checkBox" *matCellDef="let course">
       <mat-checkbox (click)="$event.stopPropagation()"
