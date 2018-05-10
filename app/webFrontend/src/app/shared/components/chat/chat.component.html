@@ -1,8 +1,8 @@
 <div class="chat-container">
   <mat-list class="chat-list">
-    <mat-list-item *ngFor="let message of messages">
+    <mat-list-item *ngFor="let message of messages" [ngClass]="[(message.author._id === userService.user._id)? 'chat-list-item': '']">
       <h4 mat-line>
-        <b>{{message.author.profile.firstName}}</b>
+        <b>{{message.chatName}}</b>
       </h4>
       <p mat-line>
         <span> {{message.content}} </span>
@@ -17,7 +17,7 @@
              maxlength="140"
              placeholder="Type your message"
              [(ngModel)]="inputValue"
-             (keyup.enter)="postMessage()">
+             (keyup.enter)="onEnter()">
       <mat-hint align="end">{{inputMessage.value.length}}/140</mat-hint>
     </mat-form-field>
   </div>

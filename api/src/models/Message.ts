@@ -2,8 +2,8 @@ import * as mongoose from 'mongoose';
 import {IMessage} from '../../../shared/models/IMessage';
 
 
+
 interface IMessageModel extends IMessage, mongoose.Document {
-  exportJSON: () => Promise<IMessage>;
 }
 
 const messageSchema = new mongoose.Schema({

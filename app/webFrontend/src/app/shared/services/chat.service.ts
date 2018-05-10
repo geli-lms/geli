@@ -13,7 +13,7 @@ export class ChatService {
   private readonly SERVER_URL = 'http://localhost:3030'; // TODO: Change this
 
   constructor() {
-    const chatName = sessionStorage.getItem('chatName');
+    const chatName = localStorage.getItem('chatName');
     if(chatName){
       this.chatName$.next(chatName);
     }
@@ -23,10 +23,15 @@ export class ChatService {
     this.socket = socketIo(this.SERVER_URL, {
       path: '/chat',
       query: {
-        room: room,
+        room: room
         //TODO:  add authentication token to param
       }
     });
+  }
+
+  public setChatName(chatName: string): void {
+    localStorage.setItem('chatName', chatName)
+    this.chatName$.next(chatName);
   }
 
   public send(message: any): void {

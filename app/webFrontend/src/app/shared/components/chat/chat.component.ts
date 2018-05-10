@@ -29,6 +29,7 @@ export class ChatComponent implements OnInit, OnDestroy {
     this.anonymous = true;
     if(this.anonymous){
       this.chatNameSubscription = this.chatService.chatName$.subscribe(chatName => {
+        console.log('getting new value')
           this.chatName = chatName;
       })
     }
@@ -69,19 +70,28 @@ export class ChatComponent implements OnInit, OnDestroy {
   }
 
 
-   postMessage() {
+  onEnter() {
     if(!this.chatName){
       const temporaryNameDialog = this.dialog.open(ChatNameInputDialogComponent);
       temporaryNameDialog.afterClosed()
         .subscribe((chatName : string)=> {
-          this.chatService.chatName$.next(chatName);
-          const message = new Message(this.userService.user, chatName , this.inputValue, this.room, true);
-          this.chatService.send(message)
+          this.chatService.setChatName(chatName);
+          this.postMessage();
         });
     }else {
-      const message = new Message(this.userService.user,this.chatName,  this.inputValue, this.room, true);
-      this.chatService.send(message)
+      this.postMessage();
     }
+  }
+
+  postMessage() {
+    const message = {
+      chatName: this.chatName,
+      content: this.inputValue,
+      room: this.room,
+      author: this.chatName ? {_id: this.userService.user._id}:  this.userService.user  // TODO: send only required information
+    };
+    this.chatService.send(message);
+    this.inputValue = null;
   }
 
 }

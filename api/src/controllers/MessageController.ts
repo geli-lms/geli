@@ -3,12 +3,13 @@ import {
   BadRequestError,
   Body,
   Get,
-  JsonController,
+  JsonController, NotFoundError,
   Post, QueryParam,
   UseBefore
 } from 'routing-controllers';
 import {IMessage} from '../../../shared/models/IMessage';
 import {IMessageModel, Message} from '../models/Message';
+import {Course} from '../models/Course';
 
 
 @JsonController('/message')
@@ -28,11 +29,25 @@ export default class MessageController {
 
 
   @Get('/')
-  async get(@QueryParam("room") room: string) {
-    if(!room){
-      throw new BadRequestError()
+  async get(@QueryParam('room') room: string) {
+    if (!room) {
+      throw new BadRequestError();
     }
-    const messages: IMessageModel[] = await Message.find({room: room});
-    return messages;
+
+    const course = await Course.findById(room);
+
+    if (!course) {
+      throw new NotFoundError('Course not Found.');
+    }
+
+    const messages: IMessageModel[] = await Message.find({room: room}).populate({path: 'author', select: 'profile'});
+
+    return messages.map((message: IMessageModel) => {
+      message = message.toObject();
+      if (message.chatName) {
+        delete  message.author.profile
+      }
+      return message
+    });
   }
 }

@@ -18,7 +18,7 @@ export class ChatNameInputDialogComponent implements OnInit {
   ngOnInit() {
   }
 
-  saveName () {
+  onSubmit () {
     const { name }= this.form.value;
     if(name.trim().length !== 0){
       this.dialogRef.close(name);
