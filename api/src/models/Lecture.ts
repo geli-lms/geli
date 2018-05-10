@@ -38,17 +38,17 @@ const lectureSchema = new mongoose.Schema({
 );
 
 // Cascade delete
-lectureSchema.pre('remove', function(next: () => void) {
-  // We cannot do this, because we need actual Unit instances so that their pre remove middleware gets called
-  // Unit.remove({'_id': {$in: this.units}}).exec().then(next).catch(next);
+lectureSchema.pre('remove', async function () {
   const localLecture = <ILectureModel><any>this;
-  Unit.find({'_id': {$in: localLecture.units}}).exec()
-    .then((units) => Promise.all(units.map(unit => unit.remove())))
-    .then(next)
-    .catch(next);
+  try {
+    await Unit.deleteMany({'_id': {$in: localLecture.units}}).exec();
+  } catch (err) {
+    throw new Error('Delete Error: ' + err.toString());
+  }
+
 });
 
-lectureSchema.methods.exportJSON = async function() {
+lectureSchema.methods.exportJSON = async function () {
   const obj = this.toObject();
 
   // remove unwanted informations
@@ -59,7 +59,7 @@ lectureSchema.methods.exportJSON = async function() {
   delete obj.updatedAt;
 
   // "populate" lectures
-  const units: Array<mongoose.Types.ObjectId>  = obj.units;
+  const units: Array<mongoose.Types.ObjectId> = obj.units;
   obj.units = [];
 
   for (const unitId of units) {
@@ -83,9 +83,9 @@ lectureSchema.methods.processUnitsFor = async function (user: IUser) {
   return this;
 };
 
-lectureSchema.statics.importJSON = async function(lecture: ILecture, courseId: string) {
+lectureSchema.statics.importJSON = async function (lecture: ILecture, courseId: string) {
   // importTest lectures
-  const units: Array<IUnit>  = lecture.units;
+  const units: Array<IUnit> = lecture.units;
   lecture.units = [];
 
   try {

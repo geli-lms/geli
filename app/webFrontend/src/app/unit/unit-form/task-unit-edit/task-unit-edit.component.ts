@@ -62,6 +62,7 @@ export class TaskUnitEditComponent implements OnInit {
       name: this.generalInfo.form.value.name,
       description: this.generalInfo.form.value.description,
       deadline: this.generalInfo.form.value.deadline,
+      visible: this.generalInfo.form.value.visible
     };
 
     if (this.isTaskUnitValid()) {

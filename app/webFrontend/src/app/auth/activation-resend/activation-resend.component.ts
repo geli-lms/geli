@@ -3,9 +3,10 @@ import {Validators, FormGroup, FormBuilder, FormControl} from '@angular/forms';
 import {AuthenticationService} from '../../shared/services/authentication.service';
 import {Router} from '@angular/router';
 import {ShowProgressService} from '../../shared/services/show-progress.service';
-import {MatSnackBar} from '@angular/material';
+import {SnackBarService} from '../../shared/services/snack-bar.service';
 import {errorCodes} from '../../../../../../api/src/config/errorCodes';
 import {TitleService} from '../../shared/services/title.service';
+import {emailValidator} from '../../shared/validators/validators';
 
 @Component({
   selector: 'app-activation-resend',
@@ -22,7 +23,6 @@ export class ActivationResendComponent implements OnInit {
 
   private trimFormFields() {
 
-    this.resendActivationForm.value.profile.firstName = this.resendActivationForm.value.profile.firstName.trim();
     this.resendActivationForm.value.profile.lastName = this.resendActivationForm.value.profile.lastName.trim();
     this.resendActivationForm.value.uid = this.resendActivationForm.value.uid.trim();
     this.resendActivationForm.value.email = this.resendActivationForm.value.email.trim();
@@ -32,7 +32,7 @@ export class ActivationResendComponent implements OnInit {
   constructor(private router: Router,
               private authenticationService: AuthenticationService,
               private showProgress: ShowProgressService,
-              private snackBar: MatSnackBar,
+              private snackBar: SnackBarService,
               private formBuilder: FormBuilder,
               private titleService: TitleService, ) {
   }
@@ -61,8 +61,8 @@ export class ActivationResendComponent implements OnInit {
     this.resendActivationForm.value.email = this.resendActivationForm.value.email.replace(/\s/g, '').toLowerCase();
     this.trimFormFields();
     try {
-     await this.authenticationService.resendActivation(this.resendActivationForm.value.profile.firstName,
-        this.resendActivationForm.value.profile.lastName, this.resendActivationForm.value.uid, this.resendActivationForm.value.email);
+     await this.authenticationService.resendActivation(this.resendActivationForm.value.profile.lastName,
+       this.resendActivationForm.value.uid, this.resendActivationForm.value.email);
      this.resendActivationDone = true;
     } catch (err) {
       this.handleError(err);
@@ -95,7 +95,7 @@ export class ActivationResendComponent implements OnInit {
         break;
       }
       default: {
-        this.snackBar.open('Activation Resend failed', 'Dismiss');
+        this.snackBar.open('Activation Resend failed');
       }
     }
   }
@@ -103,11 +103,10 @@ export class ActivationResendComponent implements OnInit {
   generateForm() {
     this.resendActivationForm = this.formBuilder.group({
       profile: this.formBuilder.group({
-        firstName: ['', Validators.compose([Validators.required, Validators.minLength(2)])],
         lastName: ['', Validators.compose([Validators.required, Validators.minLength(2)])],
       }),
       uid: ['', Validators.compose([Validators.required, this.validateMatriculationNumber.bind(this)])],
-      email: ['', Validators.compose([Validators.required, Validators.email])]
+      email: ['', Validators.compose([Validators.required, emailValidator])]
     });
   }
 

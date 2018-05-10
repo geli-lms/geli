@@ -1,6 +1,6 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {CodeKataUnitService, NotificationService, UnitService} from '../../../shared/services/data.service';
-import {MatSnackBar} from '@angular/material';
+import {SnackBarService} from '../../../shared/services/snack-bar.service';
 import {ICodeKataUnit} from '../../../../../../../shared/models/units/ICodeKataUnit';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
 import {CodeKataUnit} from '../../../models/units/CodeKataUnit';
@@ -57,7 +57,7 @@ export class CodeKataUnitFormComponent implements OnInit {
 
   constructor(private codeKataUnitService: CodeKataUnitService,
               private unitService: UnitService,
-              private snackBar: MatSnackBar,
+              private snackBar: SnackBarService,
               private notificationService: NotificationService) {
   }
 
@@ -82,7 +82,7 @@ export class CodeKataUnitFormComponent implements OnInit {
 
   addUnit() {
     if (!this.validate()) {
-      this.snackBar.open('Your code does not validate. Check logs for information', '', {duration: 3000});
+      this.snackBar.open('Your code does not validate. Check logs for information');
     }
 
     const inputCodeArray = this.wholeInputCode.split('\n' + this.areaSeperator + '\n');
@@ -94,6 +94,7 @@ export class CodeKataUnitFormComponent implements OnInit {
       name: this.generalInfo.form.value.name,
       description: this.generalInfo.form.value.description,
       deadline: this.generalInfo.form.value.deadline,
+      visible: this.generalInfo.form.value.visible
     };
 
     if (this.model._id === undefined) {
@@ -117,10 +118,10 @@ export class CodeKataUnitFormComponent implements OnInit {
         text: 'Course ' + this.course.name + ' has a new code kata unit.'
       });
 
-      this.snackBar.open('Code-Kata created', 'Dismiss', {duration: 3000});
+      this.snackBar.open('Code-Kata created');
       this.onDone();
     } catch (err) {
-      this.snackBar.open('Failed to create Code-Kata: ' + err.error.message, 'Dismiss', {duration: 3000});
+      this.snackBar.open('Failed to create Code-Kata: ' + err.error.message);
     }
   }
 
@@ -136,10 +137,10 @@ export class CodeKataUnitFormComponent implements OnInit {
         text: 'Course ' + this.course.name + ' has an updated unit.'
       });
 
-      this.snackBar.open('Code-Kata updated', 'Dismiss', {duration: 3000});
+      this.snackBar.open('Code-Kata updated');
       this.onDone();
     } catch (err) {
-      this.snackBar.open('Failed to update Code-Kata: ' + err.error.message, 'Dismiss', {duration: 3000});
+      this.snackBar.open('Failed to update Code-Kata: ' + err.error.message);
     }
   }
 
@@ -190,23 +191,23 @@ export class CodeKataUnitFormComponent implements OnInit {
   private validateStructure(): boolean {
     const separatorCount = (this.wholeInputCode.match(new RegExp(this.areaSeperator, 'gmi')) || []).length;
     if (separatorCount > 2) {
-      this.snackBar.open('There are too many area separators', 'Dismiss');
+      this.snackBar.open('There are too many area separators');
       return false;
     }
     if (separatorCount < 2) {
-      this.snackBar.open('There must be 2 area separators', 'Dismiss');
+      this.snackBar.open('There must be 2 area separators');
       return false;
     }
     if (!this.wholeInputCode.match(new RegExp('function(.|\t)*validate\\(\\)(.|\n|\t)*{(.|\n|\t)*}', 'gmi'))) {
-      this.snackBar.open('The test section must contain a validate function', 'Dismiss');
+      this.snackBar.open('The test section must contain a validate function');
       return false;
     }
     if (!this.wholeInputCode.match(new RegExp('function(.|\t)*validate\\(\\)(.|\n|\t)*{(.|\n|\t)*return(.|\n|\t)*}', 'gmi'))) {
-      this.snackBar.open('The validate function must return something', 'Dismiss');
+      this.snackBar.open('The validate function must return something');
       return false;
     }
     if (!this.wholeInputCode.match(new RegExp('validate\\(\\);', 'gmi'))) {
-      this.snackBar.open('The test section must call the validate function', 'Dismiss');
+      this.snackBar.open('The test section must call the validate function');
       return false;
     }
 
