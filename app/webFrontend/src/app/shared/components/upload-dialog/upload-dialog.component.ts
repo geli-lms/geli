@@ -6,7 +6,8 @@ import {UploadFormComponent} from '../upload-form/upload-form.component';
 import {IFileUnit} from "../../../../../../../shared/models/units/IFileUnit";
 import {FileUploaderOptions, FilterFunction} from "ng2-file-upload/file-upload/file-uploader.class";
 import {FileLikeObject} from "ng2-file-upload/file-upload/file-like-object.class";
-
+import {Router} from "@angular/router";
+import {UserService} from "../../services/user.service";
 
 @Component({
   selector: 'app-upload-dialog',
@@ -32,7 +33,9 @@ export class UploadDialog implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<UploadDialog>,
-    private snackBar: MatSnackBar) {
+    private snackBar: MatSnackBar,
+    private userService: UserService,
+    private router: Router) {
   }
 
   ngOnInit() {
@@ -133,6 +136,12 @@ export class UploadDialog implements OnInit {
 
   public onAllUploaded() {
       this.dialogRef.close(true);
+      
+      if (this.userService.isLoggedInUser(this.user)) {
+          this.router.navigate(['/profile']);
+      } else {
+          this.router.navigate(['/profile', this.user._id]);
+      }
   }
 
   public isObjectInQueue() {
