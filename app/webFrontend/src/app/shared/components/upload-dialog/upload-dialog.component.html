@@ -11,10 +11,10 @@
                        (onAllUploaded)="onAllUploaded()"
       ></app-upload-form>
       <div class="upload-button-group">
-        <button mat-raised-button color="primary" (click)="startUpload()">
+        <button mat-raised-button color="primary" (click)="startUpload()" [disabled]="!isObjectInQueue()">
+          <mat-icon>file_upload</mat-icon>
           Upload picture
         </button>
-        <button mat-raised-button (click)="cancel()">Cancel</button>
       </div>
     </div>
   </mat-tab>
@@ -30,11 +30,12 @@
         <img #preview>
       </div>
         <button mat-raised-button color="primary" disabled="{{!pictureTaken}}" (click)="addImage()">
+          <mat-icon>file_upload</mat-icon>
           Upload picture
         </button>
-        <button mat-raised-button (click)="cancel()">Cancel</button>
     </div>
   </mat-tab>
+  <button mat-raised-button (click)="cancel()">Cancel</button>
 </mat-tab-group>
 <div *ngIf="showProgressBar">
   <h2>Uploading...</h2>

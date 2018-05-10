@@ -151,31 +151,31 @@ export class UploadFormComponent implements OnInit, OnChanges {
       this.hasDropZoneOver = event;
   }
 
-    onSelectFile(event) {
-        this.preparePreviewImage(event);
-        this.checkMimeTypeOfFile(event);
-    }
+  onSelectFile(event) {
+      this.preparePreviewImage(event);
+      this.checkMimeTypeOfFile(event);
+  }
 
-    checkMimeTypeOfFile(event) {
-        if (this.maxFileNumber === 1 && this.fileUploader.queue.length === 0) {
-            const fileType = event.target.files[0];
-            if(fileType === '' || this.allowedMimeTypes.findIndex(item => item === fileType) === -1) {
-                this.translate.get(['common.validation.wrong_mimeType', 'common.dismiss']).subscribe((t: string) => {
-                    this.snackBar.open(t['common.validation.wrong_mimeType'], t['common.dismiss']);
-                });
-            }
-        }
-    }
+  checkMimeTypeOfFile(event) {
+      if (this.maxFileNumber === 1 && this.fileUploader.queue.length === 0) {
+          const fileType = event.target.files[0];
+          if(fileType === '' || this.allowedMimeTypes.findIndex(item => item === fileType) === -1) {
+              this.translate.get(['common.validation.wrong_mimeType', 'common.dismiss']).subscribe((t: string) => {
+                  this.snackBar.open(t['common.validation.wrong_mimeType'], t['common.dismiss']);
+              });
+          }
+      }
+  }
 
-    preparePreviewImage(event) {
-        if (event.target.files && event.target.files[0]) {
-            const reader = new FileReader();
+  preparePreviewImage(event) {
+      if (event.target.files && event.target.files[0]) {
+          const reader = new FileReader();
 
-            reader.readAsDataURL(event.target.files[0]);
-            
-            reader.onload = (event) => {
-                this.profilePictureUrl = event.target.result;
-            }
-        }
-    }
+          reader.readAsDataURL(event.target.files[0]);
+
+          reader.onload = (event) => {
+              this.profilePictureUrl = event.target.result;
+          }
+      }
+  }
 }

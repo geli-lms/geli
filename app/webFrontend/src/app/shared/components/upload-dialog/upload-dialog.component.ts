@@ -131,8 +131,13 @@ export class UploadDialog implements OnInit {
   public onFileUploaded(event: IFileUnit) {
   }
 
-  onAllUploaded() {
+  public onAllUploaded() {
       this.dialogRef.close(true);
   }
 
+  public isObjectInQueue() {
+      if(this.uploadForm) {
+          return this.uploadForm.fileUploader.queue.length > 0;
+      }
+  }
 }
