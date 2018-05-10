@@ -15,6 +15,7 @@
           <mat-icon>file_upload</mat-icon>
           Upload picture
         </button>
+        <button mat-raised-button (click)="cancel()">Cancel</button>
       </div>
     </div>
   </mat-tab>
@@ -33,9 +34,9 @@
           <mat-icon>file_upload</mat-icon>
           Upload picture
         </button>
+      <button mat-raised-button (click)="cancel()">Cancel</button>
     </div>
   </mat-tab>
-  <button mat-raised-button (click)="cancel()">Cancel</button>
 </mat-tab-group>
 <div *ngIf="showProgressBar">
   <h2>Uploading...</h2>
