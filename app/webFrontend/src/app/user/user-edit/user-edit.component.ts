@@ -151,13 +151,15 @@ export class UserEditComponent implements OnInit {
 
   async openAddPictureDialog() {
     const response = await this.dialogService.upload(this.user).toPromise();
+
     if (response && response.success && response.user) {
       if (this.userService.isLoggedInUser(response.user)) {
         this.user = response.user;
         this.userService.setUser(response.user);
       }
-      this.updateUser();
     }
+
+      this.getUserData();
   }
 
   private navigateBack() {
