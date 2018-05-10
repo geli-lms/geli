@@ -10,7 +10,7 @@
            [uploader]="fileUploader"
            placeholder="Upload files"
            [multiple]="maxFileNumber !== 1"
-           (change)="checkMimeTypeOfFile($event)"
+           (change)="onSelectFile($event)"
            hidden
     />
   </label>
@@ -46,5 +46,9 @@
           </div>
         </mat-action-row>
     </div>
+  </div>
+  <div *ngIf="uploadSingleFile" class="image-preview-group">
+    <h3>Image preview</h3>
+    <img class="preview-image" [src]="profilePictureUrl">
   </div>
 </div>
