@@ -10,6 +10,7 @@ import {ShowProgressService} from '../../../shared/services/show-progress.servic
 import {VideoUnit} from '../../../models/units/VideoUnit';
 import {PickMediaDialog} from '../../../shared/components/pick-media-dialog/pick-media-dialog.component';
 import {IFile} from '../../../../../../../shared/models/mediaManager/IFile';
+import {UnitFormService} from "../../../shared/services/unit-form.service";
 
 @Component({
   selector: 'app-file-unit-form',
@@ -32,7 +33,7 @@ export class FileUnitFormComponent implements OnInit {
               private unitService: UnitService,
               private showProgress: ShowProgressService,
               private dialog: MatDialog,
-              private notificationService: NotificationService) {
+              private unitFormService: UnitFormService) {
   }
 
   ngOnInit() {
@@ -45,53 +46,13 @@ export class FileUnitFormComponent implements OnInit {
         this.model = new FileUnit(this.course);
       }
     }
-  }
 
-  save() {
-    this.model = {
-      ...this.model,
-      name: this.generalInfo.form.value.name,
-      description: this.generalInfo.form.value.description,
-      visible: this.generalInfo.form.value.visible
-
-    };
-
-    const reqObj = {
-      lectureId: this.lecture._id,
-      model: this.model
-    };
-
-    const promise = (reqObj.model._id)
-      ? this.unitService.updateItem(reqObj)
-      : this.unitService.createItem(reqObj);
-
-    promise
-      .then((updatedUnit) => {
-        this.model = <FileUnit><any>updatedUnit;
-        this.onDone();
-        return this.notificationService.createItem(
-          {
-            changedCourse: this.course, changedLecture: this.lecture,
-            changedUnit: updatedUnit, text: 'Course ' + this.course.name + ' has an updated file unit.'
-          });
-      })
-      .catch((error) => {
-        this.snackBar.open('An error occurred', 'Dismiss');
-
-      });
+    this.unitFormService.headline = this.fileUnitType === 'video' ? 'Add Videos' : 'Add Files';
   }
 
   removeFile(file: any) {
     if (this.model) {
       this.model.files = this.model.files.filter((currFile: any) => currFile !== file);
-    }
-  }
-
-  checkSave() {
-    if (this.generalInfo.form.value.name) {
-      return !(this.model.files.length > 0);
-    } else {
-      return true;
     }
   }
 

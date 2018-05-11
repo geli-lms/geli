@@ -1,9 +1,3 @@
-<ng-container [ngSwitch]="fileUnitType">
-  <h3 *ngSwitchCase="'video'">Add Videos</h3>
-  <h3 *ngSwitchDefault>Add Files</h3>
-</ng-container>
-
-<app-unit-general-info-form [model]="model"></app-unit-general-info-form>
 <div *ngIf="model?.files?.length > 0" class="file-list-container uploaded-files">
   <div class="file-list">
     <div class="file-list-row file-list-header">
@@ -23,20 +17,3 @@
     </div>
   </div>
 </div>
-
-<p>
-  <button mat-raised-button (click)="openAddFilesDialog()">
-    Add files
-  </button>
-</p>
-<p>
-  <button mat-raised-button color="primary"
-          (click)="save()" [disabled]="checkSave()">
-    <mat-icon>save</mat-icon>
-    Save
-  </button>
-  <button mat-raised-button
-          (click)="onCancel()">
-    Cancel
-  </button>
-</p>

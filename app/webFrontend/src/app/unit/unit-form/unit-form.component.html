@@ -1,7 +1,7 @@
 <form class="edit-unit" *ngIf="course" [formGroup]="unitForm" (reset)="reset()"  (submit)="save()" novalidate>
   <app-unit-general-info-form [model]="model" [unitForm]="unitForm"></app-unit-general-info-form>
 
-  <!--<app-file-unit-form
+  <app-file-unit-form
     *ngIf="(type == 'video' || type == 'file')"
     [course]="course"
     [lecture]="lecture"
@@ -9,7 +9,7 @@
     [fileUnitType]="type"
     [onDone]="onDone"
     [onCancel]="onCancel">
-  </app-file-unit-form>-->
+  </app-file-unit-form>
   <app-code-kata-unit-form
     *ngIf="type == 'code-kata'"
     [course]="course"
@@ -40,8 +40,9 @@
       <ng-container left>
         <!-- Add here Elements before save & cancel buttons -->
         <!-- Don't forget type="button" on Buttons -->
-
         <button type="button" *ngIf="type == 'code-kata'" mat-raised-button (click)="codeKataUnitFormComponent.validate()">Validate</button>
+        <button type="button" *ngIf="type == 'file'" mat-raised-button (click)="fileUnitFormComponent.openAddFilesDialog()">Add Files</button>
+        <button type="button" *ngIf="type == 'video'" mat-raised-button (click)="fileUnitFormComponent.openAddFilesDialog()">Add Videos</button>
       </ng-container>
       <ng-container right>
         <!-- Add here Elements after save & cancel buttons -->

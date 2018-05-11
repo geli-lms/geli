@@ -11,6 +11,7 @@ import {TaskUnitEditComponent} from './task-unit-edit/task-unit-edit.component';
 import {UnitFormService} from '../../shared/services/unit-form.service';
 import {CodeKataUnitFormComponent} from './code-kata-unit-form/code-kata-unit-form.component';
 import {Observable} from 'rxjs/Observable';
+import {FileUnitFormComponent} from "./file-unit-form/file-unit-form.component";
 
 @Component({
   selector: 'app-unit-form',
@@ -38,6 +39,9 @@ export class UnitFormComponent implements OnInit {
 
   @ViewChild(CodeKataUnitFormComponent)
   private codeKataUnitFormComponent: CodeKataUnitFormComponent;
+
+  @ViewChild(FileUnitFormComponent)
+  private fileUnitFormComponent: FileUnitFormComponent;
 
   unitForm: FormGroup;
 
