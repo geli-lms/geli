@@ -9,7 +9,7 @@ import {AceEditorComponent} from 'ng2-ace-editor';
 import 'brace';
 import 'brace/mode/javascript';
 import 'brace/theme/github';
-import {FormGroup} from '@angular/forms';
+import {FormControl, FormGroup} from '@angular/forms';
 import {UnitFormService} from '../../../shared/services/unit-form.service';
 
 @Component({
@@ -36,7 +36,7 @@ export class CodeKataUnitFormComponent implements OnInit {
   @ViewChild('codeEditor')
   editor: AceEditorComponent;
 
-  unitFrom: FormGroup;
+  unitForm: FormGroup;
 
   areaSeperator = '//####################';
 
@@ -80,6 +80,17 @@ export class CodeKataUnitFormComponent implements OnInit {
       this.model.test = this.example.test;
     }
 
+
+    this.unitForm = this.unitFormService.unitForm;
+
+    this.unitFormService.headline = 'Code-Kata';
+
+    this.unitFormService.infos = [
+      'Separate definition, coding and test areas with "'+this.areaSeperator+'"',
+      'Students can only edit the code area.'
+    ];
+
+
     this.wholeInputCode =
       this.model.definition
       + '\n' + this.areaSeperator + '\n'
@@ -87,23 +98,30 @@ export class CodeKataUnitFormComponent implements OnInit {
       + '\n' + this.areaSeperator + '\n'
       + this.model.test;
 
+    this.unitForm.addControl('wholeInputCode', new FormControl(this.wholeInputCode));
+    this.unitForm.addControl('definition', new FormControl(this.model.definition));
+    this.unitForm.addControl('code', new FormControl(this.model.code));
+    this.unitForm.addControl('test', new FormControl( this.model.test));
+
     this.editor.getEditor().setOptions({maxLines: 9999});
 
-    this.unitFrom = this.unitFormService.unitForm;
 
     this.unitFormService.beforeSubmit = async () => {
-      const success = this.validate();
+      const success = this.validateStructure();
       if (!success) {
         return false;
       }
 
-      const inputCodeArray = this.wholeInputCode.split('\n' + this.areaSeperator + '\n');
-      this.model = {
-        ...this.model,
-        definition: inputCodeArray[0],
-        code: inputCodeArray[1],
-        test: inputCodeArray[2],
-      };
+      const inputCodeArray =  this.unitForm.controls.wholeInputCode.value.split('\n' + this.areaSeperator + '\n');
+
+      this.unitForm.patchValue({
+        'definition': inputCodeArray[0],
+        'code': inputCodeArray[1],
+        'test': inputCodeArray[2]
+      });
+
+      console.log(this.model)
+      console.log(this.unitFormService.model);
       return true;
     };
 
@@ -116,7 +134,7 @@ export class CodeKataUnitFormComponent implements OnInit {
     if (!this.validateStructure()) {
       return false;
     }
-    const codeToTest: string = this.wholeInputCode;
+    const codeToTest: string = this.unitForm.controls.wholeInputCode.value;
 
     this.logs = undefined;
 
@@ -156,7 +174,7 @@ export class CodeKataUnitFormComponent implements OnInit {
 
   // this code gets unnessessary with the Implementation of Issue #44 (all validation parts should happen on the server)
   private validateStructure(): boolean {
-    const separatorCount = (this.wholeInputCode.match(new RegExp(this.areaSeperator, 'gmi')) || []).length;
+    const separatorCount = (this.unitForm.controls.wholeInputCode.value.match(new RegExp(this.areaSeperator, 'gmi')) || []).length;
     if (separatorCount > 2) {
       this.snackBar.open('There are too many area separators');
       return false;
@@ -165,15 +183,15 @@ export class CodeKataUnitFormComponent implements OnInit {
       this.snackBar.open('There must be 2 area separators');
       return false;
     }
-    if (!this.wholeInputCode.match(new RegExp('function(.|\t)*validate\\(\\)(.|\n|\t)*{(.|\n|\t)*}', 'gmi'))) {
+    if (!this.unitForm.controls.wholeInputCode.value.match(new RegExp('function(.|\t)*validate\\(\\)(.|\n|\t)*{(.|\n|\t)*}', 'gmi'))) {
       this.snackBar.open('The test section must contain a validate function');
       return false;
     }
-    if (!this.wholeInputCode.match(new RegExp('function(.|\t)*validate\\(\\)(.|\n|\t)*{(.|\n|\t)*return(.|\n|\t)*}', 'gmi'))) {
+    if (!this.unitForm.controls.wholeInputCode.value.match(new RegExp('function(.|\t)*validate\\(\\)(.|\n|\t)*{(.|\n|\t)*return(.|\n|\t)*}', 'gmi'))) {
       this.snackBar.open('The validate function must return something');
       return false;
     }
-    if (!this.wholeInputCode.match(new RegExp('validate\\(\\);', 'gmi'))) {
+    if (!this.unitForm.controls.wholeInputCode.value.match(new RegExp('validate\\(\\);', 'gmi'))) {
       this.snackBar.open('The test section must call the validate function');
       return false;
     }

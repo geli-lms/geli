@@ -1,10 +1,12 @@
-import {EventEmitter, Injectable} from '@angular/core';
+import {ApplicationRef, EventEmitter, Injectable} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {IUnit} from '../../../../../../shared/models/units/IUnit';
 import {ICourse} from '../../../../../../shared/models/ICourse';
 import {ILecture} from '../../../../../../shared/models/ILecture';
 import {MatDialog, MatSnackBar} from '@angular/material';
 import {FreeTextUnitService, NotificationService, UnitService} from './data.service';
+import {BehaviorSubject} from "rxjs/BehaviorSubject";
+import {Observable} from "rxjs/Observable";
 
 @Injectable()
 export class UnitFormService {
@@ -14,6 +16,10 @@ export class UnitFormService {
   public model: IUnit;
   public course: ICourse;
   public lecture: ILecture;
+
+  public headline: string;
+  public unitDescription:string;
+  public infos:[string];
 
 
   /**
@@ -29,15 +35,22 @@ export class UnitFormService {
               private unitService: UnitService,
               private snackBar: MatSnackBar,
               public dialog: MatDialog,
-              private notificationService: NotificationService) {
+              private notificationService: NotificationService,
+              private ref: ApplicationRef) {
     this.reset();
+
   }
 
   reset() {
     this.unitForm = new FormGroup({});
     this.submitDone = new EventEmitter<any>();
     this.beforeSubmit = undefined;
+
+    this.headline = null;
+    this.unitDescription = null;
+    this.infos = null;
   }
+
 
 
   async save() {

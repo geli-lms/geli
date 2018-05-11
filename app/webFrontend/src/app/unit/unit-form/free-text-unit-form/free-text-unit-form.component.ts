@@ -39,6 +39,8 @@ export class FreeTextUnitFormComponent implements OnInit {
 
     this.unitForm = this.unitFormService.unitForm;
 
+    this.unitFormService.headline = 'Free-text';
+
 
     if (!this.model) {
       this.model = new FreeTextUnit(this.course._id);

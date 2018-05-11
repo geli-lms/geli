@@ -39,7 +39,9 @@
     <app-button-save-cancel>
       <ng-container left>
         <!-- Add here Elements before save & cancel buttons -->
-        <button *ngIf="type == 'code-kata'" mat-raised-button (click)="codeKataUnitFormComponent.validate()">Validate</button>
+        <!-- Don't forget type="button" on Buttons -->
+
+        <button type="button" *ngIf="type == 'code-kata'" mat-raised-button (click)="codeKataUnitFormComponent.validate()">Validate</button>
       </ng-container>
       <ng-container right>
         <!-- Add here Elements after save & cancel buttons -->

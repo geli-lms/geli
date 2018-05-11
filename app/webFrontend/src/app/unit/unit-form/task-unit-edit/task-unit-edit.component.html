@@ -1,11 +1,5 @@
 <ng-container [formGroup]="unitForm">
 <div class="task-unit-edit" formArrayName="tasks">
-  <strong>Tasks</strong>
-
-  <mat-hint>
-    Add questions with any number of possible answers. Mark the correct answer(s) with the checkbox.
-  </mat-hint>
-
   <div *ngFor="let task of unitForm.controls.tasks.controls;" class="question-answer">
     <mat-form-field matLine class="question">
       <textarea matInput id="name" placeholder="Enter question here *" [formControl]="task.controls.name"></textarea>

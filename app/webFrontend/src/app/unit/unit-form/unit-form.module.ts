@@ -1,5 +1,5 @@
 /* tslint:disable:max-line-length */
-import {NgModule} from '@angular/core';
+import {ChangeDetectorRef, NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {CodeKataUnitFormComponent} from './code-kata-unit-form/code-kata-unit-form.component';
 import {FreeTextUnitFormComponent} from './free-text-unit-form/free-text-unit-form.component';

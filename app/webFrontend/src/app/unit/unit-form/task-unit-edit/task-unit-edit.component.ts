@@ -46,6 +46,12 @@ export class TaskUnitEditComponent implements OnInit {
 
     this.unitForm = this.unitFormService.unitForm;
 
+
+    this.unitFormService.headline = 'Tasks';
+    this.unitFormService.unitDescription =
+      'Add questions with any number of possible answers. Mark the correct answer(s) with the checkbox.';
+
+
     if (!this.model) {
       this.model = new TaskUnit(this.course._id);
       this.add = true;
