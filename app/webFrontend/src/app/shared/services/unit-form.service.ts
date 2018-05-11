@@ -5,8 +5,6 @@ import {ICourse} from '../../../../../../shared/models/ICourse';
 import {ILecture} from '../../../../../../shared/models/ILecture';
 import {MatDialog, MatSnackBar} from '@angular/material';
 import {FreeTextUnitService, NotificationService, UnitService} from './data.service';
-import {BehaviorSubject} from "rxjs/BehaviorSubject";
-import {Observable} from "rxjs/Observable";
 
 @Injectable()
 export class UnitFormService {
@@ -18,8 +16,8 @@ export class UnitFormService {
   public lecture: ILecture;
 
   public headline: string;
-  public unitDescription:string;
-  public infos:[string];
+  public unitDescription: string;
+  public infos: [string];
 
 
   /**
@@ -30,7 +28,7 @@ export class UnitFormService {
 
 
 
-  constructor(private formBuilder: FormBuilder,
+  constructor (private formBuilder: FormBuilder,
               private freeTextUnitService: FreeTextUnitService,
               private unitService: UnitService,
               private snackBar: MatSnackBar,

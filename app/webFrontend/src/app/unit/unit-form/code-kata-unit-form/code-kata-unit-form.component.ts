@@ -86,7 +86,7 @@ export class CodeKataUnitFormComponent implements OnInit {
     this.unitFormService.headline = 'Code-Kata';
 
     this.unitFormService.infos = [
-      'Separate definition, coding and test areas with "'+this.areaSeperator+'"',
+      'Separate definition, coding and test areas with "' + this.areaSeperator + '"',
       'Students can only edit the code area.'
     ];
 
@@ -120,7 +120,7 @@ export class CodeKataUnitFormComponent implements OnInit {
         'test': inputCodeArray[2]
       });
 
-      console.log(this.model)
+      console.log(this.model);
       console.log(this.unitFormService.model);
       return true;
     };
@@ -187,7 +187,9 @@ export class CodeKataUnitFormComponent implements OnInit {
       this.snackBar.open('The test section must contain a validate function');
       return false;
     }
-    if (!this.unitForm.controls.wholeInputCode.value.match(new RegExp('function(.|\t)*validate\\(\\)(.|\n|\t)*{(.|\n|\t)*return(.|\n|\t)*}', 'gmi'))) {
+    if (!this.unitForm.controls.wholeInputCode.value.match(
+      new RegExp('function(.|\t)*validate\\(\\)(.|\n|\t)*{(.|\n|\t)*return(.|\n|\t)*}', 'gmi'))
+    ) {
       this.snackBar.open('The validate function must return something');
       return false;
     }

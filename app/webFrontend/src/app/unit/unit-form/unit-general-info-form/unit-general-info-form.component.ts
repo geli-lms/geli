@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators, FormControl} from '@angular/forms';
-import {UnitFormService} from "../../../shared/services/unit-form.service";
+import {UnitFormService} from '../../../shared/services/unit-form.service';
 
 @Component({
   selector: 'app-unit-general-info-form',
