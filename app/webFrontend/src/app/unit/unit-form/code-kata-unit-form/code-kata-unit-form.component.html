@@ -1,4 +1,11 @@
 <div class="code-kata-unit-form" [formGroup]="unitForm">
+  <mat-hint>
+    <mat-icon>info</mat-icon>
+    Separate definition, coding and test areas with {{this.areaSeperator}}
+    <mat-icon>info</mat-icon>
+    Students can only edit the code area.
+  </mat-hint>
+
   <ace-editor class="user-code-editor"
               #codeEditor
 
