@@ -62,6 +62,7 @@ export class TaskUnitEditComponent implements OnInit {
 
     this.buildForm();
 
+    // tslint:disable-next-line:no-console
     console.log(this.model);
 
     this.unitFormService.beforeSubmit = async () => {
@@ -96,6 +97,7 @@ export class TaskUnitEditComponent implements OnInit {
 
   isTaskUnitValid() {
     const taskUnit = this.unitForm.value;
+    // tslint:disable-next-line:no-console
     console.log(taskUnit);
     if (!taskUnit.name || taskUnit.name === null || taskUnit.name.trim() === '') {
       const message = 'Task not valid: Name is required';

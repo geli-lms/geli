@@ -120,7 +120,9 @@ export class CodeKataUnitFormComponent implements OnInit {
         'test': inputCodeArray[2]
       });
 
+      // tslint:disable-next-line:no-console
       console.log(this.model);
+      // tslint:disable-next-line:no-console
       console.log(this.unitFormService.model);
       return true;
     };
@@ -158,6 +160,7 @@ export class CodeKataUnitFormComponent implements OnInit {
       const msg = 'Error: ' + e.message; //  + ' (line: ' + err.lineNumber + ')';
       // tslint:disable-next-line:no-console
       console.log(msg);
+      // tslint:disable-next-line:no-console
       console.error(err);
     }
 
