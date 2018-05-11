@@ -105,6 +105,7 @@ export class UnitFormService {
 
       this.snackBar.open(snackSuccMessage, '', {duration: 3000});
 
+      //TODO call onDone() given to the unit form component or give the on done Method directly to the unit form service
       this.submitDone.emit(true);
 
       this.notificationService.createItem(

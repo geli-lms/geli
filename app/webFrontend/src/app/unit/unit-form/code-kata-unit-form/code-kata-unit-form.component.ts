@@ -113,11 +113,6 @@ export class CodeKataUnitFormComponent implements OnInit {
         'code': inputCodeArray[1],
         'test': inputCodeArray[2]
       });
-
-      // tslint:disable-next-line:no-console
-      console.log(this.model);
-      // tslint:disable-next-line:no-console
-      console.log(this.unitFormService.model);
       return true;
     };
 
