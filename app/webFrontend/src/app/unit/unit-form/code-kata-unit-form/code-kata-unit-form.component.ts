@@ -85,12 +85,6 @@ export class CodeKataUnitFormComponent implements OnInit {
 
     this.unitFormService.headline = 'Code-Kata';
 
-    this.unitFormService.infos = [
-      'Separate definition, coding and test areas with "' + this.areaSeperator + '"',
-      'Students can only edit the code area.'
-    ];
-
-
     this.wholeInputCode =
       this.model.definition
       + '\n' + this.areaSeperator + '\n'

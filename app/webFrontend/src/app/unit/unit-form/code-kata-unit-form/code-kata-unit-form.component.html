@@ -8,10 +8,9 @@
 
   <ace-editor class="user-code-editor"
               #codeEditor
-
+              formControlName="wholeInputCode"
               [mode]="'javascript'"
               [theme]="'github'"
-              formControlName="wholeInputCode"
               [readOnly]="false">
   </ace-editor>
   <div *ngIf="logs!==undefined" class="logs-title">
