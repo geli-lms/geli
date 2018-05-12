@@ -71,21 +71,28 @@ export class CodeKataUnitFormComponent implements OnInit {
   }
 
   ngOnInit() {
-    // set example Values if undefined
-    this.model.definition = this.model.definition || this.example.definition;
-    this.model.code = this.model.code || this.example.code;
-    this.model.test = this.model.test || this.example.test;
+    // set example Values if all values are undefined
+    if(!this.model.definition && !this.model.code && !this.model.test) {
+      this.model.definition = this.example.definition;
+      this.model.code = this.example.code;
+      this.model.test = this.example.test;
+    }
+    // set empty string if single value is undefined
+    this.model.definition = this.model.definition? this.model.definition : '';
+    this.model.code = this.model.code? this.model.code: '';
+    this.model.test = this.model.test? this.model.test: '';
 
 
-    this.unitForm = this.unitFormService.unitForm;
+
+      this.unitForm = this.unitFormService.unitForm;
 
     this.unitFormService.headline = 'Code-Kata';
 
     this.wholeInputCode =
       this.model.definition
-      + '\n' + this.areaSeperator + '\n'
+      + '\n' + this.areaSeperator
       + this.model.code
-      + '\n' + this.areaSeperator + '\n'
+      + '\n' + this.areaSeperator
       + this.model.test;
 
     this.unitForm.addControl('wholeInputCode', new FormControl(this.wholeInputCode));
@@ -97,12 +104,12 @@ export class CodeKataUnitFormComponent implements OnInit {
 
 
     this.unitFormService.beforeSubmit = async () => {
-      const success = this.validateStructure();
+      const success = this.validate();
       if (!success) {
         return false;
       }
 
-      const inputCodeArray =  this.unitForm.controls.wholeInputCode.value.split('\n' + this.areaSeperator + '\n');
+      const inputCodeArray =  this.unitForm.controls.wholeInputCode.value.split('\n' + this.areaSeperator);
 
       this.unitForm.patchValue({
         'definition': inputCodeArray[0],
