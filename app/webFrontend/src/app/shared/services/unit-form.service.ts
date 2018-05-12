@@ -73,9 +73,6 @@ export class UnitFormService {
       ...this.unitForm.getRawValue()
     };
 
-    // tslint:disable-next-line:no-console
-    console.log(this.model);
-
     const reqObj = {
       lectureId: this.lecture._id,
       model: this.model
@@ -95,9 +92,6 @@ export class UnitFormService {
 
     try {
       const responseUnit = await promise;
-
-      // tslint:disable-next-line:no-console
-      console.log(responseUnit);
 
       const snackSuccMessage = `Unit ${this.model.name ? `'${this.model.name}'` : ''} successfully ${isUpdate ? 'updated' : 'created'}`;
 

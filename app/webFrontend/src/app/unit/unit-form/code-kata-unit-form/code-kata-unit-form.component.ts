@@ -90,9 +90,9 @@ export class CodeKataUnitFormComponent implements OnInit {
 
     this.wholeInputCode =
       this.model.definition
-      + '\n' + this.areaSeperator
+      + '\n' + this.areaSeperator +'\n'
       + this.model.code
-      + '\n' + this.areaSeperator
+      + '\n' + this.areaSeperator +'\n'
       + this.model.test;
 
     this.unitForm.addControl('wholeInputCode', new FormControl(this.wholeInputCode));
@@ -109,7 +109,7 @@ export class CodeKataUnitFormComponent implements OnInit {
         return false;
       }
 
-      const inputCodeArray =  this.unitForm.controls.wholeInputCode.value.split('\n' + this.areaSeperator);
+      const inputCodeArray =  this.unitForm.controls.wholeInputCode.value.split('\n' + this.areaSeperator + '\n');
 
       this.unitForm.patchValue({
         'definition': inputCodeArray[0],
@@ -159,23 +159,25 @@ export class CodeKataUnitFormComponent implements OnInit {
     window.console.log = origLogger;
 
     if (result === true || result === undefined) {
+      this.snackBar.open('Validation succesful');
       return true;
     } else {
       // tslint:disable-next-line:no-console
       console.log(result);
+      this.snackBar.open('Validation failed');
       return false;
     }
   }
 
   // this code gets unnessessary with the Implementation of Issue #44 (all validation parts should happen on the server)
   private validateStructure(): boolean {
-    const separatorCount = (this.unitForm.controls.wholeInputCode.value.match(new RegExp(this.areaSeperator, 'gmi')) || []).length;
+    const separatorCount = (this.unitForm.controls.wholeInputCode.value.match(new RegExp('\n' + this.areaSeperator + '\n', 'gmi')) || []).length;
     if (separatorCount > 2) {
       this.snackBar.open('There are too many area separators');
       return false;
     }
     if (separatorCount < 2) {
-      this.snackBar.open('There must be 2 area separators');
+      this.snackBar.open('There must 3 separated areas');
       return false;
     }
     if (!this.unitForm.controls.wholeInputCode.value.match(new RegExp('function(.|\t)*validate\\(\\)(.|\n|\t)*{(.|\n|\t)*}', 'gmi'))) {
