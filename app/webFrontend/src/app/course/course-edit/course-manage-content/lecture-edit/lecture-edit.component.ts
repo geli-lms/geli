@@ -16,6 +16,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {DataSharingService} from '../../../../shared/services/data-sharing.service';
 import {Subject} from 'rxjs/Subject';
 import {Notification} from '../../../../models/Notification';
+import {UnitFactoryService} from '../../../../shared/services/unit-factory.service';
 
 @Component({
   selector: 'app-lecture-edit',
@@ -42,7 +43,8 @@ export class LectureEditComponent implements OnInit, OnDestroy {
               public userService: UserService,
               private dataSharingService: DataSharingService,
               private router: Router,
-              private notificationService: NotificationService) {
+              private notificationService: NotificationService,
+              private unitFactoryService: UnitFactoryService) {
   }
 
   ngOnInit() {
@@ -173,18 +175,18 @@ export class LectureEditComponent implements OnInit, OnDestroy {
 
   closeEditLecture = () => {
     this.dataSharingService.setDataForKey('lecture-edit-mode', false);
-  }
+  };
 
 
   onAddUnitDone = async () => {
     await this.reloadCourse();
     this.closeAddUnit();
-  }
+  };
 
   closeAddUnit = () => {
     this.unsetAddUnit();
     this.navigateToThisLecture();
-  }
+  };
 
   unsetAddUnit() {
     this.dataSharingService.setDataForKey('unit-create-mode', false);
@@ -201,7 +203,7 @@ export class LectureEditComponent implements OnInit, OnDestroy {
     this.dataSharingService.setDataForKey('unit-edit-mode', true);
     this.dataSharingService.setDataForKey('unit-edit-element', unit);
     this.navigateToUnitEdit(unit._id);
-  }
+  };
 
   isUnitCurrentlyOpen(unit: IUnit) {
     const isInEditMode = this.dataSharingService.getDataForKey('unit-edit-mode');
@@ -217,17 +219,17 @@ export class LectureEditComponent implements OnInit, OnDestroy {
     } catch (err) {
       this.snackBar.open('Export unit failed ' + err.error.message, 'Dismiss');
     }
-  }
+  };
 
   onEditUnitDone = async () => {
     await this.reloadCourse();
     this.closeEditUnit();
-  }
+  };
 
   closeEditUnit = () => {
     this.unsetUnitEdit();
     this.navigateToThisLecture();
-  }
+  };
 
   unsetUnitEdit() {
     this.dataSharingService.setDataForKey('unit-edit-mode', false);

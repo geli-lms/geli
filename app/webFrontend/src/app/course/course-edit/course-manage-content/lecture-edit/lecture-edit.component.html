@@ -84,6 +84,7 @@
                    [course]="course"
                    [lecture]="lecture"
                    [type]="getDataForKey('unit-create-type')"
+                   [model]="unitFactoryService.createNewUnit(getDataForKey('unit-create-type'),course)"
                    [onDone]="onAddUnitDone"
                    [onCancel]="closeAddUnit">
     </app-unit-form>

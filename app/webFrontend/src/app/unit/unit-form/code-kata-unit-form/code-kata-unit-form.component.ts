@@ -73,12 +73,9 @@ export class CodeKataUnitFormComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (!this.model) {
-      this.model = new CodeKataUnit(this.course._id);
-      this.model.definition = this.example.definition;
-      this.model.code = this.example.code;
-      this.model.test = this.example.test;
-    }
+    this.model.definition = this.model.definition || this.example.definition;
+    this.model.code = this.model.code || this.example.code;
+    this.model.test = this.model.test || this.example.test;
 
 
     this.unitForm = this.unitFormService.unitForm;
