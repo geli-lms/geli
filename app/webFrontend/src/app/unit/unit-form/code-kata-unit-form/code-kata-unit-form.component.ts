@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {CodeKataUnitService, NotificationService, UnitService} from '../../../shared/services/data.service';
 import {SnackBarService} from '../../../shared/services/snack-bar.service';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
@@ -84,7 +84,7 @@ export class CodeKataUnitFormComponent implements OnInit {
 
 
 
-      this.unitForm = this.unitFormService.unitForm;
+    this.unitForm = this.unitFormService.unitForm;
 
     this.unitFormService.headline = 'Code-Kata';
 

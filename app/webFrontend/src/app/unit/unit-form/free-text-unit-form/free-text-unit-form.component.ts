@@ -33,10 +33,8 @@ export class FreeTextUnitFormComponent implements OnInit {
               private unitFormService: UnitFormService) {}
 
   ngOnInit() {
-
-    this.unitForm = this.unitFormService.unitForm;
-
     this.unitFormService.headline = 'Free-text';
+    this.unitForm = this.unitFormService.unitForm;
 
     // add a virtual FormControl which binds to model.markdown
     this.unitForm.addControl('markdown', new FormControl(this.model.markdown));

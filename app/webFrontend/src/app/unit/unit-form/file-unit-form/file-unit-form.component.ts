@@ -37,7 +37,6 @@ export class FileUnitFormComponent implements OnInit {
 
   ngOnInit() {
     this.unitFormService.headline = this.fileUnitType === 'video' ? 'Add Videos' : 'Add Files';
-
     this.unitFormService.unitForm.addControl('files',new FormControl(this.model.files));
   }
 
