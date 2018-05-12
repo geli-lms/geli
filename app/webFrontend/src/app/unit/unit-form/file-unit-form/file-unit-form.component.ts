@@ -22,8 +22,6 @@ export class FileUnitFormComponent implements OnInit {
   @Input() lecture: ILecture;
   @Input() model: IFileUnit;
   @Input() fileUnitType: string;
-  @Input() onDone: () => void;
-  @Input() onCancel: () => void;
 
   @ViewChild(UnitGeneralInfoFormComponent)
   public generalInfo: UnitGeneralInfoFormComponent;

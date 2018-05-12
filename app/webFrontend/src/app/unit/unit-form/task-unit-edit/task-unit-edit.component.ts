@@ -14,21 +14,9 @@ import {UnitFormService} from '../../../shared/services/unit-form.service';
   styleUrls: ['./task-unit-edit.component.scss']
 })
 export class TaskUnitEditComponent implements OnInit {
-  @Input()
-  course: ICourse;
-
-  @Input()
-  lectureId: string;
-
-  @Input()
-  model: ITaskUnit;
-
-  @Input()
-  onDone: () => void;
-
-  @Input()
-  onCancel: () => void;
-
+  @Input() course: ICourse;
+  @Input() lectureId: string;
+  @Input() model: ITaskUnit;
 
   unitForm: FormGroup;
 
@@ -51,11 +39,6 @@ export class TaskUnitEditComponent implements OnInit {
     this.unitFormService.beforeSubmit = async () => {
       return await this.isTaskUnitValid();
     };
-
-    this.unitFormService.submitDone.subscribe(() => {
-      this.onDone();
-    });
-
   }
 
   buildForm() {

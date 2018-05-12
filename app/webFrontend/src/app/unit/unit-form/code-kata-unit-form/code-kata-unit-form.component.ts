@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {CodeKataUnitService, NotificationService, UnitService} from '../../../shared/services/data.service';
 import {SnackBarService} from '../../../shared/services/snack-bar.service';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
@@ -16,20 +16,9 @@ import {UnitFormService} from '../../../shared/services/unit-form.service';
   styleUrls: ['./code-kata-unit-form.component.scss']
 })
 export class CodeKataUnitFormComponent implements OnInit {
-  @Input()
-  course: ICourse;
-
-  @Input()
-  lectureId: string;
-
-  @Input()
-  model: CodeKataUnit;
-
-  @Input()
-  onDone: () => void;
-
-  @Input()
-  onCancel: () => void;
+  @Input() course: ICourse;
+  @Input() lectureId: string;
+  @Input() model: CodeKataUnit;
 
   @ViewChild('codeEditor')
   editor: AceEditorComponent;
@@ -118,10 +107,6 @@ export class CodeKataUnitFormComponent implements OnInit {
       });
       return true;
     };
-
-    this.unitFormService.submitDone.subscribe(() => {
-      this.onDone();
-    });
   }
 
   validate() {

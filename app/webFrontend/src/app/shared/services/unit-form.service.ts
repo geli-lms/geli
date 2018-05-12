@@ -1,4 +1,4 @@
-import {ApplicationRef, EventEmitter, Injectable} from '@angular/core';
+import {EventEmitter, Injectable} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {IUnit} from '../../../../../../shared/models/units/IUnit';
 import {ICourse} from '../../../../../../shared/models/ICourse';
@@ -33,8 +33,7 @@ export class UnitFormService {
               private unitService: UnitService,
               private snackBar: MatSnackBar,
               public dialog: MatDialog,
-              private notificationService: NotificationService,
-              private ref: ApplicationRef) {
+              private notificationService: NotificationService) {
     this.reset();
 
   }
@@ -51,7 +50,7 @@ export class UnitFormService {
 
 
 
-  async save() {
+  async save(onDone: () => void ) {
 
 
     if (this.beforeSubmit) {
@@ -99,8 +98,7 @@ export class UnitFormService {
 
       this.snackBar.open(snackSuccMessage, '', {duration: 3000});
 
-      //TODO call onDone() given to the unit form component or give the on done Method directly to the unit form service
-      this.submitDone.emit(true);
+      onDone();
 
       this.notificationService.createItem(
         {

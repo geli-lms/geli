@@ -1,4 +1,4 @@
-import {Component, OnInit, Input, ViewChild, EventEmitter, ChangeDetectorRef, NgZone} from '@angular/core';
+import {Component, OnInit, Input, ViewChild} from '@angular/core';
 import {ICourse} from '../../../../../../shared/models/ICourse';
 import {ILecture} from '../../../../../../shared/models/ILecture';
 import {IUnit} from '../../../../../../shared/models/units/IUnit';
@@ -10,7 +10,6 @@ import {FreeTextUnitService, NotificationService, UnitService} from '../../share
 import {TaskUnitEditComponent} from './task-unit-edit/task-unit-edit.component';
 import {UnitFormService} from '../../shared/services/unit-form.service';
 import {CodeKataUnitFormComponent} from './code-kata-unit-form/code-kata-unit-form.component';
-import {Observable} from 'rxjs/Observable';
 import {FileUnitFormComponent} from "./file-unit-form/file-unit-form.component";
 
 @Component({
@@ -65,8 +64,6 @@ export class UnitFormComponent implements OnInit {
     this.unitForm = this.unitFormService.unitForm;
 
     this.unitFormService.submitDone.subscribe(() => this.onDone());
-
-
   }
 
   reset() {
@@ -75,6 +72,6 @@ export class UnitFormComponent implements OnInit {
   }
 
   async save() {
-    return this.unitFormService.save();
+    return this.unitFormService.save(this.onDone);
   }
 }

@@ -6,33 +6,25 @@
     [course]="course"
     [lecture]="lecture"
     [model]="model"
-    [fileUnitType]="type"
-    [onDone]="onDone"
-    [onCancel]="onCancel">
+    [fileUnitType]="type">
   </app-file-unit-form>
   <app-code-kata-unit-form
     *ngIf="type == 'code-kata'"
     [course]="course"
     [model]="model"
-    [lectureId]="lecture._id"
-    [onDone]="onDone"
-    [onCancel]="onCancel"></app-code-kata-unit-form>
+    [lectureId]="lecture._id"></app-code-kata-unit-form>
   <app-task-unit-edit
     *ngIf="type == 'task'"
     [course]="course"
     [model]="model"
     [lectureId]="lecture._id"
-    [onDone]="onDone"
-    [onCancel]="onCancel"
     ></app-task-unit-edit>
 
   <app-free-text-unit-form
     *ngIf="type == 'free-text'"
     [course]="course"
     [model]="model"
-    [lectureId]="lecture._id"
-    [onDone]="onDone"
-    ></app-free-text-unit-form>
+    [lectureId]="lecture._id"></app-free-text-unit-form>
 
 
   <div class="btn-wrapper">

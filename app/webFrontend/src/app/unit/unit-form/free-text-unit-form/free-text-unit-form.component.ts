@@ -17,7 +17,6 @@ export class FreeTextUnitFormComponent implements OnInit {
   @Input() course: ICourse;
   @Input() lectureId: string;
   @Input() model: IFreeTextUnit;
-  @Input() onDone: () => void;
 
 
   unitForm: FormGroup;
