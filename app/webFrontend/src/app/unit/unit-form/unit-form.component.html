@@ -38,14 +38,13 @@
   <div class="btn-wrapper">
     <app-button-save-cancel>
       <ng-container left>
-        <!-- Add here Elements before save & cancel buttons -->
-        <!-- Don't forget type="button" on Buttons -->
+        <!-- Add Elements left to the save & cancel buttons -->
         <button type="button" *ngIf="type == 'code-kata'" mat-raised-button (click)="codeKataUnitFormComponent.validate()">Validate</button>
         <button type="button" *ngIf="type == 'file'" mat-raised-button (click)="fileUnitFormComponent.openAddFilesDialog()">Add Files</button>
         <button type="button" *ngIf="type == 'video'" mat-raised-button (click)="fileUnitFormComponent.openAddFilesDialog()">Add Videos</button>
       </ng-container>
       <ng-container right>
-        <!-- Add here Elements after save & cancel buttons -->
+        <!-- Add here Elements right to the save & cancel buttons -->
         <button  type="button" *ngIf="type == 'free-text'" mat-raised-button color="secondary"
                  (click)="freeTextUnitFormComponent.openFullscreen()">Fullscreen</button>
 
