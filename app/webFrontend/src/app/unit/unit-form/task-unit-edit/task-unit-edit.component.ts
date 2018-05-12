@@ -1,10 +1,8 @@
-import {Component, EventEmitter, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {NotificationService, UnitService} from '../../../shared/services/data.service';
 import {Task} from '../../../models/Task';
 import {MatSnackBar} from '@angular/material';
 import {ITaskUnit} from '../../../../../../../shared/models/units/ITaskUnit';
-import {TaskUnit} from '../../../models/units/TaskUnit';
-import {ITask} from '../../../../../../../shared/models/task/ITask';
 import {Answer} from '../../../models/Answer';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
 import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
@@ -33,7 +31,6 @@ export class TaskUnitEditComponent implements OnInit {
 
 
   unitForm: FormGroup;
-  add = false;
 
   constructor(private unitService: UnitService,
               private snackBar: MatSnackBar,
@@ -43,27 +40,13 @@ export class TaskUnitEditComponent implements OnInit {
 
 
   ngOnInit() {
-
     this.unitForm = this.unitFormService.unitForm;
-
 
     this.unitFormService.headline = 'Tasks';
     this.unitFormService.unitDescription =
       'Add questions with any number of possible answers. Mark the correct answer(s) with the checkbox.';
 
-
-    if (!this.model) {
-      this.model = new TaskUnit(this.course._id);
-      this.add = true;
-      this.addTask();
-    } else {
-      this.reloadTaskUnit();
-    }
-
     this.buildForm();
-
-    // tslint:disable-next-line:no-console
-    console.log(this.model);
 
     this.unitFormService.beforeSubmit = async () => {
       return await this.isTaskUnitValid();
@@ -84,16 +67,9 @@ export class TaskUnitEditComponent implements OnInit {
 
 
     for (const task of this.model.tasks) {
-      const taskControl = this.addTask(task);
+      this.addTask(task);
     }
   }
-
-  async reloadTaskUnit() {
-    // Reload task unit from database to make sure that tasks (and answers)
-    // are populated properly (e.g. necessary after a Cancel)
-    this.model = <TaskUnit><any>await this.unitService.readSingleItem(this.model._id);
-  }
-
 
   isTaskUnitValid() {
     const taskUnit = this.unitForm.value;

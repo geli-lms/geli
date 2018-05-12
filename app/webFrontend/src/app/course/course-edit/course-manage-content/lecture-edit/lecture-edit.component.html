@@ -84,7 +84,7 @@
                    [course]="course"
                    [lecture]="lecture"
                    [type]="getDataForKey('unit-create-type')"
-                   [model]="unitFactoryService.createNewUnit(getDataForKey('unit-create-type'),course)"
+                   [model]="getUnitModel()"
                    [onDone]="onAddUnitDone"
                    [onCancel]="closeAddUnit">
     </app-unit-form>
@@ -92,9 +92,7 @@
 </div>
 
 <div class="unit-drop-target"
-     *ngIf="getDataForKey('openLectureId') &&
-     (getDataForKey('openLectureId') !== lecture._id || !lecture.units.length) &&
-     isDraggingUnit()"
+     *ngIf="getDataForKey('openLectureId') && (getDataForKey('openLectureId') !== lecture._id || !lecture.units.length) && isDraggingUnit()"
      dragula="units"
      [dragulaModel]="lecture.units"
      [attr.data-lecture-id]="lecture._id">

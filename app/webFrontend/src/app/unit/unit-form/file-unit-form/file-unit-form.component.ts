@@ -4,14 +4,12 @@ import {ICourse} from '../../../../../../../shared/models/ICourse';
 import {ILecture} from '../../../../../../../shared/models/ILecture';
 import {IFileUnit} from '../../../../../../../shared/models/units/IFileUnit';
 import {UnitGeneralInfoFormComponent} from '../unit-general-info-form/unit-general-info-form.component';
-import {NotificationService, UnitService} from '../../../shared/services/data.service';
-import {FileUnit} from '../../../models/units/FileUnit';
+import {UnitService} from '../../../shared/services/data.service';
 import {ShowProgressService} from '../../../shared/services/show-progress.service';
-import {VideoUnit} from '../../../models/units/VideoUnit';
 import {PickMediaDialog} from '../../../shared/components/pick-media-dialog/pick-media-dialog.component';
 import {IFile} from '../../../../../../../shared/models/mediaManager/IFile';
 import {UnitFormService} from "../../../shared/services/unit-form.service";
-import {FormControl, FormGroup} from '@angular/forms';
+import {FormControl} from '@angular/forms';
 
 @Component({
   selector: 'app-file-unit-form',
@@ -38,17 +36,6 @@ export class FileUnitFormComponent implements OnInit {
   }
 
   ngOnInit() {
-    //TODO write high level model factory, so that all instances above use the same model-object at the same time.
-    if (!this.model) {
-      if (this.fileUnitType === 'video') {
-        // 'video'
-        this.model = new VideoUnit(this.course);
-      } else {
-        // default or 'file'
-        this.model = new FileUnit(this.course);
-      }
-    }
-
     this.unitFormService.headline = this.fileUnitType === 'video' ? 'Add Videos' : 'Add Files';
 
     this.unitFormService.unitForm.addControl('files',new FormControl(this.model.files));

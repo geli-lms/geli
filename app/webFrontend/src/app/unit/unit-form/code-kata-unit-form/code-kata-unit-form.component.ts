@@ -1,10 +1,8 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {CodeKataUnitService, NotificationService, UnitService} from '../../../shared/services/data.service';
 import {SnackBarService} from '../../../shared/services/snack-bar.service';
-import {ICodeKataUnit} from '../../../../../../../shared/models/units/ICodeKataUnit';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
 import {CodeKataUnit} from '../../../models/units/CodeKataUnit';
-import {UnitGeneralInfoFormComponent} from '../unit-general-info-form/unit-general-info-form.component';
 import {AceEditorComponent} from 'ng2-ace-editor';
 import 'brace';
 import 'brace/mode/javascript';
@@ -73,6 +71,7 @@ export class CodeKataUnitFormComponent implements OnInit {
   }
 
   ngOnInit() {
+    // set example Values if undefined
     this.model.definition = this.model.definition || this.example.definition;
     this.model.code = this.model.code || this.example.code;
     this.model.test = this.model.test || this.example.test;

@@ -2,12 +2,9 @@ import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {IFreeTextUnit} from '../../../../../../../shared/models/units/IFreeTextUnit';
 import {MatDialog, MatSnackBar} from '@angular/material';
 import {FreeTextUnitService, NotificationService, UnitService} from '../../../shared/services/data.service';
-import {FreeTextUnit} from '../../../models/units/FreeTextUnit';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
-import {UnitGeneralInfoFormComponent} from '../unit-general-info-form/unit-general-info-form.component';
 import {FreeTextUnitEditorComponent} from './free-text-unit-editor/free-text-unit-editor.component';
 import {FreeTextUnitEditorDialog} from './free-text-unit-editor/free-text-unit-editor-dialog/free-text-unit-editor.dialog';
-import {isUndefined} from 'util';
 import {FormControl, FormGroup} from '@angular/forms';
 import {UnitFormService} from '../../../shared/services/unit-form.service';
 
@@ -41,10 +38,6 @@ export class FreeTextUnitFormComponent implements OnInit {
 
     this.unitFormService.headline = 'Free-text';
 
-
-    if (!this.model) {
-      this.model = new FreeTextUnit(this.course._id);
-    }
     // add a virtual FormControl which binds to model.markdown
     this.unitForm.addControl('markdown', new FormControl(this.model.markdown));
   }
@@ -68,9 +61,5 @@ export class FreeTextUnitFormComponent implements OnInit {
         this.unitForm.patchValue({ markdown: result });
       }
     });
-  }
-
-  private isModelNewObj(): boolean {
-    return typeof this.model._id === 'undefined';
   }
 }
