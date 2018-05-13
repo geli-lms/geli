@@ -13,17 +13,8 @@
                     actionLabel="Add"></app-lecture-form>
 </div>
 
-<div class="mat-fab-menu-spacer"></div>
-
-<app-mat-fab-menu class="fab" [open]="fabOpen" [onClick]="onFabClick"
-                  [disabled]="isInMode('lecture', 'create') || isInMode('lecture', 'edit') || isInMode('unit', 'create') || isInMode('unit', 'edit')"
-                  fabTooltip="Add content">
-  <div *ngIf="isLectureOpen()" (click)="onImportUnit()">Import unit</div>
-  <div *ngIf="isLectureOpen()" (click)="onAddUnit('task')">Add tasks</div>
-  <div *ngIf="isLectureOpen()" (click)="onAddUnit('file')">Add files</div>
-  <div *ngIf="isLectureOpen()" (click)="onAddUnit('code-kata')">Add code-kata</div>
-  <div *ngIf="isLectureOpen()" (click)="onAddUnit('video')">Add videos</div>
-  <div *ngIf="isLectureOpen()" (click)="onAddUnit('free-text')">Add free text</div>
-  <div (click)="onImportLecture()">Import lecture</div>
-  <div (click)="onAddLecture()">Add lecture</div>
-</app-mat-fab-menu>
+<div class="button-row alignright">
+  <button mat-button (click)="onAddLecture()">Add Lecture</button>
+  <button mat-button>Add Unit</button>
+  <button mat-button>Import Unit</button>
+</div>

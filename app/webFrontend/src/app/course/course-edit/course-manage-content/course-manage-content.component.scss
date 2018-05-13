@@ -1,11 +1,15 @@
 @import '../../../../variables';
 
 .container {
-  min-height: 500px;
+  min-height: 400px;
 }
 
 .fab {
   @include globalFabBtn;
+}
+
+.alignright {
+  float: right;
 }
 
 .mat-fab-menu-spacer {
