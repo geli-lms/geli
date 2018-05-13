@@ -69,6 +69,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Fixed wording of progress display on profile page. [#715](https://github.com/h-da/geli/issues/715)
 - Fixed form validator in create task [#579](https://github.com/h-da/geli/issues/579)
 - Fixed Mongoose pre hook usage [#680](https://github.com/h-da/geli/issues/680) [#677](https://github.com/h-da/geli/issues/677)
+- Fixed broken Apidoc [#737](https://github.com/h-da/geli/issues/737)
 
 ### Security
 - Fixed numerous severe user related security issues. [#691](https://github.com/h-da/geli/issues/691) [#709](https://github.com/h-da/geli/pull/709)
