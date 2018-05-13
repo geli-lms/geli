@@ -17,6 +17,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Validate form before submit when creating a new course. [#724](https://github.com/h-da/geli/pull/724)
 - Validate :id for CourseController details route. [#724](https://github.com/h-da/geli/pull/724)
 
+### Fixed
+- Fixed broken Apidoc [#737](https://github.com/h-da/geli/issues/737)
+
 ## [[0.7.0](https://github.com/h-da/geli/releases/tag/v0.7.0)] - 2018-05-05 - SS 18 intermediate Release
 ### Added
 - Added the possibility to sort all courses alphabetically. [#567](https://github.com/h-da/geli/issues/567)
@@ -69,7 +72,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Fixed wording of progress display on profile page. [#715](https://github.com/h-da/geli/issues/715)
 - Fixed form validator in create task [#579](https://github.com/h-da/geli/issues/579)
 - Fixed Mongoose pre hook usage [#680](https://github.com/h-da/geli/issues/680) [#677](https://github.com/h-da/geli/issues/677)
-- Fixed broken Apidoc [#737](https://github.com/h-da/geli/issues/737)
 
 ### Security
 - Fixed numerous severe user related security issues. [#691](https://github.com/h-da/geli/issues/691) [#709](https://github.com/h-da/geli/pull/709)
