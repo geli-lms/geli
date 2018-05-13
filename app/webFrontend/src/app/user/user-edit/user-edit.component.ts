@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit, OnDestroy} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {FormGroup, FormBuilder, Validators} from '@angular/forms';
 import {MatDialog} from '@angular/material';
@@ -17,7 +17,7 @@ import {emailValidator} from '../../shared/validators/validators';
   templateUrl: './user-edit.component.html',
   styleUrls: ['./user-edit.component.scss']
 })
-export class UserEditComponent implements OnInit {
+export class UserEditComponent implements OnInit, OnDestroy {
 
   id: string;
   user: IUser;
@@ -25,6 +25,7 @@ export class UserEditComponent implements OnInit {
   passwordPatternText: string;
   changePassword = false;
   themes: string[];
+  actualProfilePicturePath: string;
 
   constructor(private router: Router,
               private route: ActivatedRoute,
@@ -59,10 +60,17 @@ export class UserEditComponent implements OnInit {
     this.getUserData();
   }
 
+  ngOnDestroy() {
+    this.cdRef.detach();
+  }
+
   async getUserData() {
     try {
       const user = await this.userDataService.readSingleItem(this.id);
       this.user = <any>user;
+      if (user.profile.picture) {
+        this.userService.updateProfilePicture(user.profile.picture.path);
+      }
       this.userForm.patchValue({
         profile: {
           firstName: this.user.profile.firstName,
@@ -73,6 +81,7 @@ export class UserEditComponent implements OnInit {
       });
       this.titleService.setTitleCut(['Edit User: ', this.user.profile.firstName]);
     } catch (err) {
+      console.error(err);
       this.snackBar.open(err.error.message);
     }
     this.cdRef.detectChanges();
@@ -158,16 +167,15 @@ export class UserEditComponent implements OnInit {
         this.userService.setUser(response.user);
       }
     }
-
       this.getUserData();
   }
 
   private navigateBack() {
-    if (this.userService.isLoggedInUser(this.user)) {
-      this.router.navigate(['/profile']);
-    } else {
-      this.router.navigate(['/profile', this.user._id]);
-    }
+    // if (this.userService.isLoggedInUser(this.user)) {
+    //   this.router.navigate(['/profile']);
+    // } else {
+    //   this.router.navigate(['/profile', this.user._id]);
+    // }
   }
 
   private generatePass(length: number): string {

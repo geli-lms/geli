@@ -174,7 +174,9 @@ export class UploadFormComponent implements OnInit, OnChanges {
           reader.readAsDataURL(event.target.files[0]);
 
           reader.onload = (event) => {
-              this.profilePictureUrl = event.target.result;
+              const target: any = event.target;
+              const content: string = target.result;
+              this.profilePictureUrl = content;
           }
       }
   }

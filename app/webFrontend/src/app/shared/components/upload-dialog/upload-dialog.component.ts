@@ -136,13 +136,6 @@ export class UploadDialog implements OnInit {
 
   public onAllUploaded() {
       this.dialogRef.close(true);
-      
-      // TODO: Refresh profilepicture after upload
-      if (this.userService.isLoggedInUser(this.user)) {
-          this.router.navigate(['/profile']);
-      } else {
-          this.router.navigate(['/profile', this.user._id]);
-      }
   }
 
   public isObjectInQueue() {
