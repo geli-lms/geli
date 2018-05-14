@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Reload user list after deleting an account. [#724](https://github.com/h-da/geli/pull/724)
 - Validate form before submit when creating a new course. [#724](https://github.com/h-da/geli/pull/724)
 - Validate :id for CourseController details route. [#724](https://github.com/h-da/geli/pull/724)
+- - Added search function for available courses [#723](https://github.com/h-da/geli/issues/723)
 
 ## [[0.7.0](https://github.com/h-da/geli/releases/tag/v0.7.0)] - 2018-05-05 - SS 18 intermediate Release
 ### Added
@@ -33,7 +34,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Added Language code to header [#554](https://github.com/h-da/geli/issues/554)
 - Added icon for access key [#547](https://github.com/h-da/geli/issues/574)
 - Unit visibility toggle [#582](https://github.com/h-da/geli/issues/582)
-- Added search function for available courses [#723](https://github.com/h-da/geli/issues/723)
 
 ### Changed
 - Refactored or slightly altered various course & user related APIs. [#654](https://github.com/h-da/geli/issues/654) [#691](https://github.com/h-da/geli/issues/691)
