@@ -17,6 +17,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Validate form before submit when creating a new course. [#724](https://github.com/h-da/geli/pull/724)
 - Validate :id for CourseController details route. [#724](https://github.com/h-da/geli/pull/724)
 
+### Fixed
+- Fixed broken Apidoc [#737](https://github.com/h-da/geli/issues/737)
+
 ## [[0.7.0](https://github.com/h-da/geli/releases/tag/v0.7.0)] - 2018-05-05 - SS 18 intermediate Release
 ### Added
 - Added the possibility to sort all courses alphabetically. [#567](https://github.com/h-da/geli/issues/567)
