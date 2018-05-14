@@ -16,12 +16,10 @@ if [ "$TRAVIS_PULL_REQUEST" != "false" ] && [ "$TRAVIS_BRANCH" == "develop" ]; t
   echo "+ detected pull request from ($TRAVIS_PULL_REQUEST_BRANCH) to $TRAVIS_BRANCH"
   cd api
   npm run apidoc
-  fi
 elif [ "$TRAVIS_PULL_REQUEST" != "false" ] && [ "$TRAVIS_BRANCH" == "master" ]; then
   echo "+ detected pull request from ($TRAVIS_PULL_REQUEST_BRANCH) to $TRAVIS_BRANCH"
   cd api
   npm run apidoc
-  fi
 else
   echo -e "${YELLOW}+ WARNING: No Pull Request agiainst Develop or Master -> skipping automate api doc check${NC}";
 fi
