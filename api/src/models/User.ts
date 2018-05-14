@@ -237,7 +237,7 @@ userSchema.statics.checkPrivileges = function (user: IUser): IProperties {
   const userIsAdmin: boolean = user.role === 'admin';
   const userIsTeacher: boolean = user.role === 'teacher';
   const userIsStudent: boolean = user.role === 'student';
-  // NOTE: The 'tutor' role exists and has fixtures, but currently appears to be unimplemented.
+  // NOTE: The 'tutor' role is currently unused / disabled.
   // const userIsTutor: boolean = user.role === 'tutor';
 
   const userEditLevel: number = User.getEditLevel(user);
