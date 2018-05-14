@@ -22,6 +22,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Fixed
 - Fixed broken notification settings. [#731](https://github.com/h-da/geli/issues/731)
 
+### Fixed
+- Fixed broken Apidoc [#737](https://github.com/h-da/geli/issues/737)
+
 ## [[0.7.0](https://github.com/h-da/geli/releases/tag/v0.7.0)] - 2018-05-05 - SS 18 intermediate Release
 ### Added
 - Added the possibility to sort all courses alphabetically. [#567](https://github.com/h-da/geli/issues/567)
