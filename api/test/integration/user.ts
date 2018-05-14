@@ -34,7 +34,7 @@ describe('User', () => {
 
       res.status.should.be.equal(200);
       res.body.should.be.a('array');
-      res.body.length.should.be.equal(42);
+      res.body.length.should.be.equal(await FixtureUtils.getUserCount());
     });
 
     it('should fail with wrong authorization', async () => {
