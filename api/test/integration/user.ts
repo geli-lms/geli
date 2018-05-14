@@ -7,6 +7,7 @@ import {User} from '../../src/models/User';
 import {errorCodes} from '../../src/config/errorCodes';
 import {FixtureUtils} from '../../fixtures/FixtureUtils';
 import {IUser} from '../../../shared/models/IUser';
+import {allRoles} from '../../src/config/roles';
 import chaiHttp = require('chai-http');
 import fs = require('fs');
 
@@ -79,11 +80,10 @@ describe('User', () => {
         .get(ROLE_URL)
         .set('Authorization', `JWT ${JwtUtils.generateToken(admin)}`);
 
-      const expected = ['student', 'teacher', 'admin']; // Currently unused / disabled: 'tutor',
       res.status.should.be.equal(200);
       res.body.should.be.a('array');
-      res.body.length.should.be.equal(expected.length);
-      res.body.should.have.same.members(expected);
+      res.body.length.should.be.equal(allRoles.length);
+      res.body.should.have.same.members(allRoles);
     });
   });
 

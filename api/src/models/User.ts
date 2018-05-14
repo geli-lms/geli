@@ -9,6 +9,7 @@ import * as crypto from 'crypto';
 import {isNullOrUndefined} from 'util';
 import {isEmail} from 'validator';
 import {errorCodes} from '../config/errorCodes';
+import {allRoles} from '../config/roles';
 import {IProperties} from '../../../shared/models/IProperties';
 import {extractMongoId} from '../utilities/ExtractMongoId';
 import {ensureMongoToObject} from '../utilities/EnsureMongoToObject';
@@ -81,7 +82,7 @@ const userSchema = new mongoose.Schema({
     },
     role: {
       type: String,
-      'enum': ['student', 'teacher', 'admin'], // Currently unused / disabled: 'tutor',
+      'enum': allRoles,
       'default': 'student'
     },
     lastVisitedCourses: [ {
