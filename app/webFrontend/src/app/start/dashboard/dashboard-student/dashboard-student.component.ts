@@ -22,19 +22,19 @@ export class DashboardStudentComponent extends DashboardBaseComponent {
   }
 
   ngOnInit() {
-    this.searchValue = "";
+    this.searchValue = '';
   }
 
   ngOnChanges() {
     this.sortCourses();
   }
-  async filterCourses(event: any){
+  async filterCourses(event: any) {
     this.searchValue = event.target.value;
     this.availableCourses = this.availableCoursesHolder;
     this.filteredCourses = [];
-    for(var i = 0; i < this.availableCourses.length; i++){
-      var temp = this.availableCourses[i].name.toLowerCase();
-      if(temp.includes(event.target.value)){
+    for (let i = 0; i < this.availableCourses.length; i++) {
+      const temp = this.availableCourses[i].name.toLowerCase();
+      if (temp.includes(event.target.value)) {
         this.filteredCourses.push(this.availableCourses[i]);
       }
     }
@@ -56,8 +56,8 @@ export class DashboardStudentComponent extends DashboardBaseComponent {
         this.myCourses.push(course);
       } else {
         this.availableCoursesHolder.push(course);
-        var temp = course.name.toLowerCase();
-        if(temp.includes(this.searchValue)){
+        const temp = course.name.toLowerCase();
+        if (temp.includes(this.searchValue)) {
           this.availableCourses.push(course);
         }
       }
