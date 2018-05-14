@@ -79,10 +79,11 @@ describe('User', () => {
         .get(ROLE_URL)
         .set('Authorization', `JWT ${JwtUtils.generateToken(admin)}`);
 
+      const expected = ['student', 'teacher', 'admin']; // Currently unused / disabled: 'tutor',
       res.status.should.be.equal(200);
       res.body.should.be.a('array');
-      res.body.length.should.be.equal(4);
-      res.body.should.have.same.members(['student', 'tutor', 'teacher', 'admin']);
+      res.body.length.should.be.equal(expected.length);
+      res.body.should.have.same.members(expected);
     });
   });
 
