@@ -1,8 +1,11 @@
 <mat-form-field class="pull-right">
   <mat-select placeholder="Sorted by">
     <mat-option value="last visited" (click)="sortCourses()">last visited</mat-option>
-    <mat-option value="alphabetically" (click)="sortAlphabetically()">alphabetically</mat-option>    
+    <mat-option value="alphabetically" (click)="sortAlphabetically()">alphabetically</mat-option>
   </mat-select>
 </mat-form-field>
 <app-course-container [title]="'dashboard.myCourses' | translate" [courses]="myCourses" [expand]="true" (onLeave)="leaveCallback()" (onEnroll)="enrollCallback()"></app-course-container>
+<mat-form-field class="pull-right">
+<input matInput (change)="filterCourses($event)" placeholder="search course" maxlength="64"/>
+</mat-form-field>
 <app-course-container [title]="'Available Courses'" [courses]="availableCourses" [expand]="false" (onEnroll)="enrollCallback()"></app-course-container>

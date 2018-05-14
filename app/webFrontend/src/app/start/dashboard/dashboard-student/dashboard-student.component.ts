@@ -14,16 +14,31 @@ export class DashboardStudentComponent extends DashboardBaseComponent {
 
   myCourses: ICourseDashboard[];
   availableCourses: ICourseDashboard[];
-
+  filteredCourses: ICourseDashboard[];
+  availableCoursesHolder: ICourseDashboard[];
+  searchValue: string;
   constructor(public userService: UserService) {
     super();
   }
 
   ngOnInit() {
+    this.searchValue = "";
   }
 
   ngOnChanges() {
     this.sortCourses();
+  }
+  async filterCourses(event: any){
+    this.searchValue = event.target.value;
+    this.availableCourses = this.availableCoursesHolder;
+    this.filteredCourses = [];
+    for(var i = 0; i < this.availableCourses.length; i++){
+      var temp = this.availableCourses[i].name.toLowerCase();
+      if(temp.includes(event.target.value)){
+        this.filteredCourses.push(this.availableCourses[i]);
+      }
+    }
+    this.availableCourses = this.filteredCourses;
   }
   async sortAlphabetically() {
     SortUtil.sortCoursesByName(this.myCourses);
@@ -33,13 +48,18 @@ export class DashboardStudentComponent extends DashboardBaseComponent {
   async sortCourses() {
     this.myCourses = [];
     this.availableCourses = [];
+    this.availableCoursesHolder = [];
 
     SortUtil.sortByLastVisitedCourses(this.allCourses, this.userService.user.lastVisitedCourses);
     for (const course of this.allCourses) {
       if (course.userCanViewCourse) {
         this.myCourses.push(course);
       } else {
-        this.availableCourses.push(course);
+        this.availableCoursesHolder.push(course);
+        var temp = course.name.toLowerCase();
+        if(temp.includes(this.searchValue)){
+          this.availableCourses.push(course);
+        }
       }
     }
   }
