@@ -40,6 +40,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Added Language code to header [#554](https://github.com/h-da/geli/issues/554)
 - Added icon for access key [#547](https://github.com/h-da/geli/issues/574)
 - Unit visibility toggle [#582](https://github.com/h-da/geli/issues/582)
+- Add bootstrap grid system [#613](https://github.com/h-da/geli/issues/613)
 
 ### Changed
 - Refactored or slightly altered various course & user related APIs. [#654](https://github.com/h-da/geli/issues/654) [#691](https://github.com/h-da/geli/issues/691)
