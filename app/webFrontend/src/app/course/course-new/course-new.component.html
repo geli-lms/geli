@@ -1,7 +1,7 @@
 <div class="center-both">
   <h1>Create Course</h1>
   <mat-card>
-    <form class="course-form" (ngSubmit)="createCourse()" [formGroup]="newCourse">
+    <form class="course-form" (ngSubmit)="newCourse.valid && createCourse()" [formGroup]="newCourse">
       <mat-form-field class="full-width">
         <input matInput formControlName="name" placeholder="{{ course.placeholder.name | translate }}">
         <div *ngIf="nameError">
