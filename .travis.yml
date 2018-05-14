@@ -72,8 +72,8 @@ script:
   - cd api
   - sed -i 's/$TRAVIS_COMMIT/'$TRAVIS_COMMIT'/' src/server.ts
   - npm run test        # run backend test
-  - .travis/apidoc_check.sh
   - cd ..
+  - .travis/apidoc_check.sh
   # run frontend-tests and return back to root for following steps
   - cd app/webFrontend
   - npm run lint        # run linter
