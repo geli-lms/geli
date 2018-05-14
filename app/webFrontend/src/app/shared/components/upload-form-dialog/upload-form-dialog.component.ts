@@ -1,5 +1,6 @@
 import {Component, Inject, OnInit, ViewChild} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef, MatSnackBar} from '@angular/material';
+import {SnackBarService} from '../../services/snack-bar.service';
 import {UploadDialog} from '../upload-dialog/upload-dialog.component';
 import {IFileUnit} from '../../../../../../../shared/models/units/IFileUnit';
 import {UploadFormComponent} from '../upload-form/upload-form.component';
@@ -18,7 +19,7 @@ export class UploadFormDialog implements OnInit {
   uploadPath: string;
 
   constructor(public dialogRef: MatDialogRef<UploadDialog>,
-              private snackBar: MatSnackBar,
+              private snackBar: SnackBarService,
               @Inject(MAT_DIALOG_DATA) public data: any) {
     this.uploadPath = this.uploadPathTmp + data.targetDir._id;
   }
@@ -31,15 +32,14 @@ export class UploadFormDialog implements OnInit {
 
   onAllUploaded() {
     this.dialogRef.close(true);
+    this.snackBar.open('All items uploaded!');
   }
 
   uploadAll() {
     this.uploadForm.fileUploader.uploadAll();
     this.uploadForm.onAllUploaded.subscribe(
-      result =>
-        this.onAllUploaded()
-      , error =>
-        this.snackBar.open('Could not upload files', '', {duration: 3000})
+      result => this.onAllUploaded(),
+      error => this.snackBar.open('Could not upload files')
     );
   }
 
