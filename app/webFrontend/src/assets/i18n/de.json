@@ -77,7 +77,7 @@
     "notifications": "Benachrichtigungen",
     "password": "Passwort",
     "profile": "Profil",
-    "profile": {
+    "profileDetails": {
       "firstName": "Vorname",
       "lastName": "Nachname",
       "uid": "Matrikelnummer"
