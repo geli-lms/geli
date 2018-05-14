@@ -12,7 +12,7 @@ echo
 echo "+++ Check API-Doc +++"
 echo
 
-if [ "$TRAVIS_PULL_REQUEST" != "false" ] && [ "$TRAVIS_BRANCH" == "develop" ] || [ "$TRAVIS_PULL_REQUEST" != "false" ] && [ "$TRAVIS_BRANCH" == "master" ]; then
+if ([ "$TRAVIS_PULL_REQUEST" != "false" ] && [ "$TRAVIS_BRANCH" == "develop" ]) || ([ "$TRAVIS_PULL_REQUEST" != "false" ] && [ "$TRAVIS_BRANCH" == "master" ]); then
   echo "+ detected pull request from ($TRAVIS_PULL_REQUEST_BRANCH) to $TRAVIS_BRANCH"
   cd api
   npm run apidoc
