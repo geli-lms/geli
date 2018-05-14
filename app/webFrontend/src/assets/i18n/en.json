@@ -1,75 +1,231 @@
 {
-  "common": {
-    "geli": "geli",
-    "login": "Login",
-    "register": "Register",
-    "email": "Email",
-    "password": "Password",
-    "send": "Send",
-    "dismiss": "Dismiss",
-    "back": "Back",
-    "profile": {
-      "firstName": "First name",
-      "lastName": "Last name",
-      "uid": "Matriculation number"
-    },
-    "roles": {
-      "student": "Student",
-      "teacher": "Teacher"
-    },
-    "validation": {
-      "required": "Input required",
-      "minLength": "At least {{min}} characters required",
-      "maxLength": "At least {{max}} characters required",
-      "invalid": "Input is invalid",
-      "password": "Password must have at least 8 characters which contain one special character or digit",
-      "passwordsMatch": "Passwords do not match",
-      "instituteMail": "Please register with your institute email"
+  "activation": {
+    "text": {
+      "pleaseClick": "Please click ",
+      "toActivate": "to activate your account",
+      "toUseYourAccount": "to use your account"
     }
   },
-  "home": {
-    "welcomeTo": "Welcome to"
-  },
   "auth": {
+    "confirmPassword": "Confirm password",
     "forgotPassword": "Forgot password",
-    "loginSuccess": "Login successful",
     "loginFailed": "Login failed",
     "loginFailedError": {
       "couldNotBeVerified": "Your login details could not be verified. Please try again.",
       "notActiveYet": "Your account has not been activated yet.",
       "unknown": "An unknown error occured."
     },
-    "confirmPassword": "Confirm password",
+    "loginSuccess": "Login successful",
     "registration": {
-      "registerAs": "Register as",
-      "successful": "Registration was successful",
-      "mailSent": "We have sent you an activation link to your specified email address.",
       "back": "Back to frontpage",
+      "mailSent": "We have sent you an activation link to your specified email address.",
+      "registerAs": "Register as",
+      "resendActivationButton": "Resend activation",
+      "successful": "Registration was successful",
       "teacherRegistrationButton": "Not a student?",
-      "resendActivationButton": "Resend activation"
+      "tooltipRegister": "Click here to complete your registration."
     },
     "resendActivation": {
       "back": "Back to registration",
-      "successful": "Resend activation was successful",
-      "mailSent": "We have sent you a new activation link to your specified email address."
+      "mailSent": "We have sent you a new activation link to your specified email address.",
+      "successful": "Resend activation was successful.",
+      "tooltipResendAction": "Click here to request new activation link."
+    },
+    "resetPassword": {
+      "requestReset": "Request password reset",
+      "reset": "Reset"
+    },
+    "tooltip": {
+      "ForgotPassword": "Click here to request a new password.",
+      "ResetPassword": "Click here to reset password."
+    }
+  },
+  "code-kata": {
+    "information": {
+      "info1": "Separate definition, coding and test areas with",
+      "info2": "Your students can only edit the code area."
+    },
+    "text": {
+      "codeExample": "This is the provided example solution.",
+      "codeHere": "Your code goes here.",
+      "logs": "Logs",
+      "testsNeedToSuccees": "These tests need to succeed."
+    }
+  },
+  "common": {
+    "about": "About",
+    "actions": "Actions",
+    "administration": "Administration",
+    "back": "Back",
+    "cheatSheetYouFind": "A cheat sheet you can find ",
+    "delete": "Delete",
+    "description": "Description",
+    "dismiss": "Dismiss",
+    "download": "Download",
+    "duplicate": "Duplicate",
+    "edit": "Ddit",
+    "editProfile": "Edit profile",
+    "email": "Email",
+    "export": "Export",
+    "fullscreenMode": "Fullscreen Mode",
+    "geli": "geli",
+    "here": "here",
+    "imprint": "imprint",
+    "infobox": "InfoBox",
+    "login": "Login",
+    "name": "Name",
+    "notifications": "Notifications",
+    "password": "Password",
+    "profile": "Profile",
+    "profile": {
+      "firstName": "First name",
+      "lastName": "Last name",
+      "uid": "Matriculation number"
+    },
+    "register": "Register",
+    "role": "Role",
+    "roles": {
+      "student": "Student",
+      "teacher": "Teacher"
+    },
+    "save": "Save",
+    "send": "Send",
+    "settings": "Settings",
+    "submit": "Submit",
+    "tooltip": {
+      "quitFullscreenMode": "Quit Fullscreen",
+      "downloadUnit": "Download this Unit",
+      "clickToOpen": "open up/close"
+    },
+    "upload": "upload",
+    "users": "users",
+    "validate": "Validate",
+    "validation": {
+      "instituteMail": "Please register with your institute email.",
+      "invalid": "Input is invalid",
+      "maxLength": "At least {{max}} characters required",
+      "minLength": "At least {{min}} characters required",
+      "password": "Password must have at least 8 characters which contain one special character and one digit.",
+      "passwordsMatch": "Passwords do not match.",
+      "required": "Input required"
+    }
+  },
+  "course": {
+    "delete": "Delete course",
+    "placeholder": {
+      "Description": "Course description",
+      "Name": "Course name"
+    },
+    "ShowCourse": "Show course",
+    "text": {
+      "addMarkdownToCourse": "Add markdown to add text to this course.",
+      "canNotSeenByStudents": "Course cannot be seen by students.",
+      "canSeenByStudents": "Course can be seen by students.",
+      "editCourse": "Edit course",
+      "enterAccessKeyForStudents": "Enter an access key for the students.",
+      "goToCourse": "Go to course",
+      "inCourse": "In Course",
+      "isFreeForEveryone": "The course is free and accessible for everyone.",
+      "notInCourse": "Not in course",
+      "selectAccessType": "Please select your course access type.",
+      "uploadWhitelist": "Upload your OBS csv file with your course members for whitelisting students.<br />Old whitelist users are removed by uploading a new file.",
+      "yourCourseProgress": "Your course progress"
+    },
+    "tooltipAdd": "Add course"
+  },
+  "dashboard": {
+    "addCourse": "Add course",
+    "availableCourses": "Available courses",
+    "courses": "Courses",
+    "createCourse": "Create course",
+    "createdCourses": "My created courses",
+    "importCourse": "Import course",
+    "inactiveCourses": "Inactive courses",
+    "myCourses": "My courses",
+    "teacherCourses": "My teacher courses"
+  },
+  "file": {
+    "placeholder": {
+      "uploadFiles": "UploadFiles"
+    },
+    "text": {
+      "actions": "Actions",
+      "addFile": "Add file",
+      "filename": "File name",
+      "filesize": "File size"
+    }
+  },
+  "home": {
+    "welcomeTo": "Welcome to"
+  },
+  "lecture": {
+    "tooltip": {
+      "add": "Add new unit",
+      "delete": "Delete unit",
+      "download": "Download this unit",
+      "duplicate": "Copy this lecture",
+      "edit": "Edit this unit"
     }
   },
   "mainMenu": {
-    "admin": "Admin",
     "about": "About",
+    "admin": "Admin",
     "imprint": "Imprint",
     "logout": "Logout",
     "userSettings": "Settings"
   },
-  "dashboard": {
-    "courses": "Courses",
-    "myCourses": "My courses",
-    "availableCourses": "Available courses",
-    "inactiveCourses": "Inactive courses",
-    "teacherCourses": "My teacher courses",
-    "createdCourses": "My created courses",
-    "addCourse": "Add course",
-    "createCourse": "Create course",
-    "importCourse": "Import course"
+  "notifications": {
+    "text": {
+      "clearAll": "Clear all",
+      "noNotifications": "You have no notifications"
+    }
+  },
+  "sort": {
+    "alphabetically": "alphabetically",
+    "lastVisited": "last visited",
+    "placeholder": {
+      "sortedBy": "Sorted by"
+    }
+  },
+  "unit": {
+    "addCodeKata": "Add code-kata",
+    "addContent": "Add content",
+    "addFiles": "Add files",
+    "addFreeText": "Add free text",
+    "addTasks": "Add tasks",
+    "addVideos": "Add videos",
+    "import": "Import unit",
+    "placeholder": {
+      "enterAnswer": "Enter answer here",
+      "optionalDeadline": "Optional deadline"
+    },
+    "text": {
+      "addAnswer": "Add answer",
+      "addQuestion": "Add question",
+      "canBeSeenByStudents": "Unit can be seen by students.",
+      "canNotBeSeenByStudents": "Unit cannot be seen by students.",
+      "changedOn": "Changed on",
+      "fullscreen": "Fullscreen",
+      "hintAddQuestionAndAnswers": "Add questions with any number of possible answers. Mark the correct answer(s) with the checkbox.",
+      "publishedOn": "Published on",
+      "tasks": "Tasks"
+    },
+    "tooltip": {
+      "add": "add unit",
+      "delete": "delete unit",
+      "deleteAnswer": "Delete answer",
+      "deleteQuestion": "Delete question",
+      "download": "Download this unit",
+      "duplicate": "Copy this unit",
+      "edit": "Edit unit"
+    }
+  },
+  "user": {
+    "deleteUser": "Delete user",
+    "editUser": "Edit user",
+    "text": {
+      "notSignedIn": "Not Signed in",
+      "signedIn": "Signed in"
+    }
   }
 }
