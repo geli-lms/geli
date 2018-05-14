@@ -15,7 +15,7 @@ const routes: Routes = [
     path: ':id',
     component: CourseDetailComponent,
     canActivate: [AuthGuardService],
-    data: {roles: ['student', 'tutor', 'teacher', 'admin']}
+    data: {roles: ['student', 'teacher', 'admin']} // Currently unused / disabled: 'tutor',
   },
   {
     path: ':id/edit',
@@ -29,13 +29,13 @@ const routes: Routes = [
     path: ':id/lecture/:lecture',
     component: CourseDetailComponent,
     canActivate: [AuthGuardService],
-    data: {roles: ['student', 'tutor', 'teacher', 'admin']}
+    data: {roles: ['student', 'teacher', 'admin']} // Currently unused / disabled: 'tutor',
   },
   {
     path: ':id/unit/:unit',
     component: CourseDetailComponent,
     canActivate: [AuthGuardService],
-    data: {roles: ['student', 'tutor', 'teacher', 'admin']}
+    data: {roles: ['student', 'teacher', 'admin']} // Currently unused / disabled: 'tutor',
   }
 ];
 

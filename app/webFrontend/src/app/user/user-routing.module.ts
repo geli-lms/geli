@@ -10,19 +10,19 @@ const routes: Routes = [
     pathMatch: 'full',
     component: UserDetailsComponent,
     canActivate: [AuthGuardService],
-    data: {roles: ['student', 'tutor', 'teacher', 'admin']}
+    data: {roles: ['student', 'teacher', 'admin']} // Currently unused / disabled: 'tutor',
   },
   {
     path: 'edit',
     component: UserEditComponent,
     canActivate: [AuthGuardService],
-    data: {roles: ['student', 'tutor', 'teacher', 'admin']}
+    data: {roles: ['student', 'teacher', 'admin']} // Currently unused / disabled: 'tutor',
   },
   {
     path: ':id',
     component: UserDetailsComponent,
     canActivate: [AuthGuardService],
-    data: {roles: ['student', 'tutor', 'teacher', 'admin']}
+    data: {roles: ['student', 'teacher', 'admin']} // Currently unused / disabled: 'tutor',
   },
   {
     path: ':id/edit',
