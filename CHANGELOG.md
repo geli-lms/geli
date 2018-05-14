@@ -16,6 +16,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Reload user list after deleting an account. [#724](https://github.com/h-da/geli/pull/724)
 - Validate form before submit when creating a new course. [#724](https://github.com/h-da/geli/pull/724)
 - Validate :id for CourseController details route. [#724](https://github.com/h-da/geli/pull/724)
+- `getNotificationSettings` does not create new notification settings. [#731](https://github.com/h-da/geli/issues/731)
+- Remove `isCourseTeacherOrAdmin` and `isMemberOfCourse`from UserService. [#731](https://github.com/h-da/geli/issues/731)
+
+### Fixed
+- Fixed broken notification settings. [#731](https://github.com/h-da/geli/issues/731)
 
 ### Fixed
 - Fixed broken Apidoc [#737](https://github.com/h-da/geli/issues/737)
