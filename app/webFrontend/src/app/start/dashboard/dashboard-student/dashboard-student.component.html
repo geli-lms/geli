@@ -1,7 +1,7 @@
 <mat-form-field class="pull-right">
-  <mat-select placeholder="{{ sort.placeholder.sortedBy | translate }}">
-    <mat-option value="last visited" (click)="sortCourses()">{{ sort.lastVisited | translate }}</mat-option>
-    <mat-option value="alphabetically" (click)="sortAlphabetically()">{{ sort.alphabetically | translate }}</mat-option>
+  <mat-select [placeholder]="'sort.placeholder.sorstedBy | translate '">
+    <mat-option value="last visited" (click)="sortCourses()">{{ 'sort.lastVisited' | translate }}</mat-option>
+    <mat-option value="alphabetically" (click)="sortAlphabetically()">{{ 'sort.alphabetically' | translate }}</mat-option>
   </mat-select>
 </mat-form-field>
 <app-course-container [title]="'dashboard.myCourses' | translate" [courses]="myCourses" [expand]="true" (onLeave)="leaveCallback()" (onEnroll)="enrollCallback()"></app-course-container>

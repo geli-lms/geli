@@ -1,10 +1,10 @@
 <form [formGroup]="lectureForm" (ngSubmit)="formSubmit()">
   <mat-form-field>
-    <input matInput formControlName="name" placeholder="{{ common.name | translator }}">
+    <input matInput formControlName="name" [placeholder]="'common.name' | translate">
   </mat-form-field>
 
   <mat-form-field>
-    <textarea matInput formControlName="description" placeholder="{{ common.description | translator }}"></textarea>
+    <textarea matInput formControlName="description" [placeholder]="'common.description' | translate"></textarea>
   </mat-form-field>
 
   <p>

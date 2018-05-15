@@ -90,7 +90,7 @@
 
       <app-password-input [form]="registerForm"></app-password-input>
 
-      <button matTooltip="{'auth.registration.tooltipRegister'|translate}}" mat-raised-button color="primary" type="submit"
+      <button [matTooltip]="'auth.registration.tooltipRegister' | translate" mat-raised-button color="primary" type="submit"
               [disabled]="loading || !registerForm?.valid">{{'common.register'|translate}}
       </button>
     </form>

@@ -41,7 +41,7 @@
     </button>
     </span>
     <button mat-mini-fab *ngIf="course.userCanViewCourse"
-            color="primary" matTooltip="{{ course.tooltipResetPassword | translate }}" class="details-button" [routerLink]="['course', course._id]">
+            color="primary" [matTooltip]="'course.tooltip.resetPassword' | translate" class="details-button" [routerLink]="['course', course._id]">
       <mat-icon>arrow_forward</mat-icon>
     </button>
   </mat-card-actions>

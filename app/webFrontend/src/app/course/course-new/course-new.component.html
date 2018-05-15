@@ -3,17 +3,17 @@
   <mat-card>
     <form class="course-form" (ngSubmit)="createCourse()" [formGroup]="newCourse">
       <mat-form-field class="full-width">
-        <input matInput formControlName="name" placeholder="{{ course.placeholder.name | translate }}">
+        <input matInput formControlName="name" [placeholder]="'course.placeholder.name' | translate">
         <div *ngIf="nameError">
           <small class="text-danger">{{nameError}}</small>
         </div>
       </mat-form-field>
       <br/>
       <mat-form-field class="full-width">
-        <textarea matInput formControlName="description" placeholder="{{ course.placeholder.description | translate}}"></textarea>
+        <textarea matInput formControlName="description" [placeholder]="'course.placeholder.description' | translate"></textarea>
       </mat-form-field>
       <br/>
-      <button mat-raised-button color="primary" matTooltip="{{ course.tooltipAdd | translate }}" class="mat-button" type="submit">Add</button>
+      <button mat-raised-button color="primary" [matTooltip]="'course.tooltipAdd' | translate" class="mat-button" type="submit">Add</button>
     </form>
   </mat-card>
 </div>

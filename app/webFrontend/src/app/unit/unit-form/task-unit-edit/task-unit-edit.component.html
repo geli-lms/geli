@@ -12,7 +12,7 @@
       <textarea matInput id="name" placeholder="Enter question here *" [(ngModel)]="task.name"></textarea>
     </mat-form-field>
 
-    <button mat-button class="remove" (click)="removeTask(task)" matTooltip="{{ task.tooltip.deleteQuestion | translate }}">
+    <button mat-button class="remove" (click)="removeTask(task)" [matTooltip]="'task.tooltip.deleteQuestion' | translate">
       <mat-icon>delete</mat-icon>
     </button>
 
@@ -21,9 +21,9 @@
         <div class="check-answer">
           <mat-checkbox [(ngModel)]="answer.value" name="value_{{idx}}"></mat-checkbox>
           <mat-form-field>
-            <input matInput placeholder="{{ unit.placeholder.enterAnswer | translater }} *" [(ngModel)]="answer.text">
+            <input matInput [placeholder]="'unit.placeholder.enterAnswer' | translate" [(ngModel)]="answer.text">
           </mat-form-field>
-          <button mat-bwutton class="remove" (click)="removeAnswer(task, idx)" matTooltip="{{ task.tooltip.deleteAnswer | translate }}">
+          <button mat-button class="remove" (click)="removeAnswer(task, idx)" [matTooltip]="'task.tooltip.deleteAnswer' | translate">
             <mat-icon>delete</mat-icon>
           </button>
         </div>

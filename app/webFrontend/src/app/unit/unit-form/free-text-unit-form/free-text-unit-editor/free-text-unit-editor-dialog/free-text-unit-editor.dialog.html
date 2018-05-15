@@ -2,7 +2,7 @@
   <mat-toolbar-row>
     <span>{{ common.fullscreenMode | translate }}</span>
     <span class="toolbar-fill"></span>
-    <button mat-mini-fab color="primary" (click)="onCloseClick()" matTooltip="{{ common.tooltip.quitFullscreenMode | translate }}">
+    <button mat-mini-fab color="primary" (click)="onCloseClick()" [matTooltip]="'common.tooltip.quitFullscreenMode' | translate">
       <mat-icon>close</mat-icon>
     </button>
   </mat-toolbar-row>

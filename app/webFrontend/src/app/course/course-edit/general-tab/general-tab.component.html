@@ -5,12 +5,12 @@
   </mat-form-field>
 
   <mat-form-field class="full-width">
-        <textarea matInput id="description" placeholder="{{ common.description | translate }}" [(ngModel)]="description"
+        <textarea matInput id="description" [placeholder]="'common.description' | translate" [(ngModel)]="description"
                   [ngModelOptions]="{standalone: true}"></textarea>
   </mat-form-field>
 
   <mat-form-field class="full-width">
-    <mat-select name="courseTypes" placeholder="{{ course.text.selectAccessType | translate }}" id="courseTypes" [(ngModel)]="enrollType">
+    <mat-select name="courseTypes" placeholder="'course.text.selectAccessType' | translate" id="courseTypes" [(ngModel)]="enrollType">
       <mat-option *ngFor="let enrollType of enrollTypes" [value]="enrollType">{{enrollType}}</mat-option>
     </mat-select><br>
   </mat-form-field>
@@ -30,7 +30,7 @@
     <p>
       <!-- TODO: Replace with shared upload form -->
       <input class="upload" type="file" ng2FileSelect [uploader]="uploader"
-             placeholder="{{ file.placeholder.uploadFiles | translate }}" accept=".csv"/>
+             [placeholder]="'file.placeholder.uploadFiles' | translate" accept=".csv"/>
       <button mat-raised-button color="primary"
               (click)="uploader.uploadAll()"
               [disabled]="!uploader.getNotUploadedItems().length">
