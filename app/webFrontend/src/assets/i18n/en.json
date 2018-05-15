@@ -7,8 +7,10 @@
     }
   },
   "auth": {
+    "changePassword": "Change password",
     "confirmPassword": "Confirm password",
     "forgotPassword": "Forgot password",
+    "generatePassword": "Generate new password",
     "loginFailed": "Login failed",
     "loginFailedError": {
       "couldNotBeVerified": "Your login details could not be verified. Please try again.",
@@ -56,7 +58,9 @@
     "about": "About",
     "actions": "Actions",
     "administration": "Administration",
+    "amount": "Amount",
     "back": "Back",
+    "cancel": "Cancel",
     "cheatSheetYouFind": "A cheat sheet you can find ",
     "delete": "Delete",
     "description": "Description",
@@ -80,9 +84,12 @@
     "profileDetails": {
       "firstName": "First name",
       "lastName": "Last name",
-      "uid": "Matriculation number"
+      "uid": "Matriculation number",
+      "uploadPicture": "Upload picture"
     },
+    "question": "Question",
     "register": "Register",
+    "reset": "Reset",
     "role": "Role",
     "roles": {
       "student": "Student",
@@ -92,6 +99,7 @@
     "send": "Send",
     "settings": "Settings",
     "submit": "Submit",
+    "theme": "Theme",
     "tooltip": {
       "quitFullscreenMode": "Quit Fullscreen",
       "downloadUnit": "Download this Unit",
@@ -113,8 +121,11 @@
   "course": {
     "delete": "Delete course",
     "placeholder": {
+      "accessKey": "Access key",
       "Description": "Course description",
-      "Name": "Course name"
+      "Name": "Course name",
+      "searchAdd": "Search and add",
+      "searchAddBy": "by name, id and email"
     },
     "ShowCourse": "Show course",
     "text": {
@@ -125,15 +136,23 @@
       "enterAccessKeyForStudents": "Enter an access key for the students.",
       "goToCourse": "Go to course",
       "inCourse": "In Course",
+      "infoWhitelist": "All users on this list are allowed to join this course.",
       "isFreeForEveryone": "The course is free and accessible for everyone.",
       "notInCourse": "Not in course",
+      "overview": "Overview",
+      "reportFor": "Report for",
       "selectAccessType": "Please select your course access type.",
       "uploadWhitelist": "Upload your OBS csv file with your course members for whitelisting students.<br />Old whitelist users are removed by uploading a new file.",
-      "yourCourseProgress": "Your course progress"
+      "userResults": "User results",
+      "yourCourseProgress": "Your course progress",
+      "whitelist": "Whitelist"
     },
     "tooltip" : {
       "add": "Add Course",
+      "addUserToWhitelist": "Add user to whitelist",
+      "enroll": "Enroll",
       "keyRequired" : "Access key required",
+      "leave": "Leave",
       "noKeyRequired" : "Free access"
     }
   },
@@ -156,7 +175,12 @@
       "actions": "Actions",
       "addFile": "Add file",
       "filename": "File name",
-      "filesize": "File size"
+      "filesize": "File size",
+      "infoDropAddFiles": "Drop files here or click here to select files.",
+      "noVideo": "No video available.",
+      "progress": "Progress",
+      "RemoveFromQueue": "Remove file from queue.",
+      "takePicture": "Take picture"
     }
   },
   "home": {
@@ -169,6 +193,12 @@
       "download": "Download this unit",
       "duplicate": "Copy this lecture",
       "edit": "Edit this unit"
+    }
+  },
+  "mail":{
+    "send": "Send mail",
+    "tooltip":{
+      "sendToMembers": "Send mail to selected members."
     }
   },
   "mainMenu": {
@@ -200,7 +230,8 @@
     "addVideos": "Add videos",
     "import": "Import unit",
     "placeholder": {
-      "enterAnswer": "Enter answer here",
+      "enterAnswer": "Enter answer here*",
+      "enterQuestion": "Enter question here*",
       "optionalDeadline": "Optional deadline"
     },
     "text": {
@@ -212,6 +243,8 @@
       "fullscreen": "Fullscreen",
       "hintAddQuestionAndAnswers": "Add questions with any number of possible answers. Mark the correct answer(s) with the checkbox.",
       "publishedOn": "Published on",
+      "submitAnswers": "Submit answers",
+      "taskCompleted": "Task completed",
       "tasks": "Tasks"
     },
     "tooltip": {
@@ -220,6 +253,7 @@
       "deleteAnswer": "Delete answer",
       "deleteQuestion": "Delete question",
       "download": "Download this unit",
+      "downloadUnits": "Download units",
       "duplicate": "Copy this unit",
       "edit": "Edit unit"
     }
@@ -230,6 +264,9 @@
     "text": {
       "notSignedIn": "Not Signed in",
       "signedIn": "Signed in"
+    },
+    "tooltip":{
+      "deleteUSers": "Delete selected Members."
     }
   }
 }
