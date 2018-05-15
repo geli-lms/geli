@@ -17,6 +17,8 @@ import {SaveFileService} from '../../../shared/services/save-file.service';
 import {UserService} from '../../../shared/services/user.service';
 import {DataSharingService} from '../../../shared/services/data-sharing.service';
 import {DialogService} from '../../../shared/services/dialog.service';
+import ResponsiveImage from "../../../models/ResponsiveImage";
+import {BreakpointSize} from "../../../../../../../shared/models/mediaManager/IResponsiveImage";
 
 @Component({
   selector: 'app-course-edit-general-tab',
@@ -116,6 +118,27 @@ export class GeneralTabComponent implements OnInit {
       description: ['', Validators.required],
       teacher: '',
     });
+  }
+
+  /**
+   * Opens the {@link FilepickerDialog} which will handle the choosing / uploading of the image file.
+   *
+   * @returns {Promise<void>}
+   */
+  async openImageChooserDialog() {
+    const apiPath = 'api/courses/picture/' + this.id;
+
+    const responsiveImage =
+      ResponsiveImage.create()
+        .breakpoint(BreakpointSize.MOBILE, { width: 284, height: 190 });
+
+    const result = await this.dialogService
+      .uploadResponsiveImage('Choose a picture for the course.', apiPath, responsiveImage).toPromise();
+
+
+
+
+    console.log(result);
   }
 
   async createCourse() {

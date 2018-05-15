@@ -14,6 +14,7 @@ import {InfoDialog} from '../components/info-dialog/info-dialog.component';
 import {FocusDirective} from '../directives/focus.directive';
 import {ChangePasswordDialogComponent} from '../components/change-password-dialog/change-password-dialog.component';
 import {RenameDialogComponent} from '../components/rename-dialog/rename-dialog.component';
+import {ResponsiveImageUploadDialog} from "../components/responsive-image-upload-dialog/responsive-image-upload-dialog.component";
 
 @NgModule({
   imports: [
@@ -30,6 +31,7 @@ import {RenameDialogComponent} from '../components/rename-dialog/rename-dialog.c
     AccessKeyDialog,
     UploadDialog,
     FilepickerDialog,
+    ResponsiveImageUploadDialog,
     WriteMailDialog,
     RenameDialogComponent,
     FocusDirective,
@@ -40,6 +42,7 @@ import {RenameDialogComponent} from '../components/rename-dialog/rename-dialog.c
     AccessKeyDialog,
     UploadDialog,
     FilepickerDialog,
+    ResponsiveImageUploadDialog,
     WriteMailDialog,
     RenameDialogComponent,
     FocusDirective,
@@ -53,6 +56,7 @@ import {RenameDialogComponent} from '../components/rename-dialog/rename-dialog.c
     AccessKeyDialog,
     UploadDialog,
     FilepickerDialog,
+    ResponsiveImageUploadDialog,
     RenameDialogComponent,
     WriteMailDialog,
     ChangePasswordDialogComponent,

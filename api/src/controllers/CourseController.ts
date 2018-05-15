@@ -30,6 +30,9 @@ import crypto = require('crypto');
 import {API_NOTIFICATION_TYPE_ALL_CHANGES, NotificationSettings} from '../models/NotificationSettings';
 import {IWhitelistUser} from '../../../shared/models/IWhitelistUser';
 import {DocumentToObjectOptions} from 'mongoose';
+import * as sharp from 'sharp';
+import * as fs from "fs";
+import {IResponsiveImage} from "../../../shared/models/mediaManager/IResponsiveImage";
 
 const uploadOptions = {
   storage: multer.diskStorage({
@@ -46,6 +49,19 @@ const uploadOptions = {
   }),
 };
 
+const coursePictureUploadOptions = {
+  storage: multer.diskStorage({
+    destination: (req: any, file: any, cb: any) => {
+      cb(null, 'uploads/courses/');
+    },
+    filename: (req: any, file: any, cb: any) => {
+      const id = req.params.id;
+      const extPos = file.originalname.lastIndexOf('.');
+      const ext = (extPos !== -1) ? `.${file.originalname.substr(extPos + 1).toLowerCase()}` : '';
+      cb(null, id + ext);
+    }
+  }),
+};
 
 @JsonController('/courses')
 @UseBefore(passportJwtMiddleware)
@@ -673,5 +689,46 @@ export class CourseController {
     }
     await course.remove();
     return {};
+  }
+
+
+  @Post('/picture/:id')
+  async addCoursePicture(
+      @UploadedFile('file', {options: uploadOptions}) file: any,
+      @Param('id') id: string,
+      @Body() responsiveImageDataRaw: any,
+      @CurrentUser() currentUser: IUser) {
+
+    const responsiveImageData = <IResponsiveImage>responsiveImageDataRaw.imageData;
+
+    const mimeFamily = file.mimetype.split('/', 1)[0];
+    if (mimeFamily !== 'image') {
+      throw new ForbiddenError('Forbidden format of uploaded picture: ' + mimeFamily);
+    }
+
+    const course = await Course.findById(id);
+    const destination = 'uploads/courses/' + id;
+    const resizedImageBuffer = await sharp(file.path)
+      .resize(300)
+      .withoutEnlargement(true)
+      .max()
+      .toBuffer({resolveWithObject: true});
+
+    fs.writeFileSync('', resizedImageBuffer.data);
+
+    course.image = {
+      _id: null,
+      name: file.filename,
+      link: file.path,
+      size: resizedImageBuffer.info.size,
+      mimeType: file.mimetype
+    };
+
+    try {
+      await course.save();
+      return course;
+    } catch (error) {
+      throw new BadRequestError(error);
+    }
   }
 }

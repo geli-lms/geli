@@ -9,6 +9,12 @@
                   [ngModelOptions]="{standalone: true}"></textarea>
   </mat-form-field>
 
+  <br />
+
+  <button mat-raised-button color="primary" class="mat-button" (click)="openImageChooserDialog()">Choose Image</button>
+
+  <br />
+
   <mat-form-field class="full-width">
     <mat-select name="courseTypes" placeholder="Please select your course access type" id="courseTypes" [(ngModel)]="enrollType">
       <mat-option *ngFor="let enrollType of enrollTypes" [value]="enrollType">{{enrollType}}</mat-option>

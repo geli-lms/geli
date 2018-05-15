@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {TitleService} from '../../shared/services/title.service';
+import {DialogService} from "../../shared/services/dialog.service";
 
 @Component({
   selector: 'app-course-edit',
