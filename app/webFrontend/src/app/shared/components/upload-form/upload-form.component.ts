@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {FileUploader, FileUploaderOptions} from 'ng2-file-upload';
-import {MatSnackBar} from '@angular/material';
+import {SnackBarService} from '../../services/snack-bar.service';
 
 @Component({
   selector: 'app-upload-form',
@@ -40,7 +40,7 @@ export class UploadFormComponent implements OnInit, OnChanges {
   private updateUploadParams = false;
   private error = false;
 
-  constructor(private snackBar: MatSnackBar) {
+  constructor(private snackBar: SnackBarService) {
   }
 
   ngOnInit() {
@@ -61,7 +61,7 @@ export class UploadFormComponent implements OnInit, OnChanges {
     this.fileUploader.onCancelItem = (file) => {
       // set error true, so dialog is not closed automatically
       this.error = true;
-      this.snackBar.open(`upload cancelled for ${file._file.name}`, 'Dismiss');
+      this.snackBar.open(`upload cancelled for ${file._file.name}`);
     };
 
     this.fileUploader.onBuildItemForm = (fileItem: any, form: any) => {
@@ -81,7 +81,6 @@ export class UploadFormComponent implements OnInit, OnChanges {
     this.fileUploader.onCompleteAll = () => {
       if (!this.error && this.fileUploader.queue.length === 0) {
         this.onAllUploaded.emit();
-        this.snackBar.open('All items uploaded!', '', {duration: 3000});
       }
     };
 
@@ -113,7 +112,7 @@ export class UploadFormComponent implements OnInit, OnChanges {
       // reset the error state to try again later
       item.isError = false;
       item.isUploaded = false;
-      this.snackBar.open(`${item._file.name} failed to upload`, 'Dismiss');
+      this.snackBar.open(`${item._file.name} failed to upload`);
     };
   }
 
@@ -127,7 +126,7 @@ export class UploadFormComponent implements OnInit, OnChanges {
   clearQueue() {
     this.fileUploader.clearQueue();
     if (this.fileUploader.queue.length > 0) {
-      this.snackBar.open('Queue couldn\'t be cleared.', 'Dismiss');
+      this.snackBar.open('Queue couldn\'t be cleared.');
     } else {
       this.onFileSelectedChange.emit(false);
     }
