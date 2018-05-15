@@ -131,7 +131,11 @@
       "uploadWhitelist": "Laden Sie Ihre OBS-csv-Datei mit Ihren Kursteilnehmern hoch, um sie auf die Freigabeliste zu setzen.<br />Alte Freigabelisten-Benutzer werden durch Hochladen einer neuen Datei entfernt.",
       "yourCourseProgress": "Ihr Kursfortschritt"
     },
-    "tooltipAdd": "Kurs hinzufügen"
+    "tooltip" : {
+      "add": "Kurs hinzufügen",
+      "keyRequired" : "Zugangscode benötigt",
+      "noKeyRequired" : "Frei zugänglich"
+    }
   },
   "dashboard": {
     "addCourse": "Kurs hinzufügen",

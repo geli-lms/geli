@@ -25,10 +25,10 @@
     <span class="course-student-actions" *ngIf="this.userService.isStudent()">
       <div style="float:left">
         <i class="material-icons" style="margin-top: 8px;"
-           matTooltip="Key Required"
+           [matTooltip]="'course.tooltip.keyRequired' | translate"
            *ngIf="course.enrollType === 'accesskey'">lock</i>
         <i class="material-icons" style="margin-top: 8px;"
-           matTooltip="No Key Required"
+           [matTooltip]="'course.tooltip.noKeyRequired' | translate"
            *ngIf="course.enrollType !== 'accesskey'">lock_open</i>
       </div>
       <button mat-icon-button *ngIf="!course.userIsCourseMember"

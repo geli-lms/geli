@@ -131,7 +131,11 @@
       "uploadWhitelist": "Upload your OBS csv file with your course members for whitelisting students.<br />Old whitelist users are removed by uploading a new file.",
       "yourCourseProgress": "Your course progress"
     },
-    "tooltipAdd": "Add course"
+    "tooltip" : {
+      "add": "Add Course",
+      "keyRequired" : "Access key required",
+      "noKeyRequired" : "Free access"
+    }
   },
   "dashboard": {
     "addCourse": "Add course",
