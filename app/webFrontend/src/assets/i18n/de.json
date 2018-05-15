@@ -7,8 +7,10 @@
     }
   },
   "auth": {
+    "changePassword": "Passwort ändern",
     "confirmPassword": "Passwort bestätigen",
     "forgotPassword": "Passwort vergessen",
+    "generatePassword": "Neues Passwort generieren",
     "loginFailed": "Login fehlgeschlagen",
     "loginFailedError": {
       "couldNotBeVerified": "Ihre Logindaten konnten nicht verifiziert werden. Bitte versuchen Sie es noch ein mal.",
@@ -56,7 +58,9 @@
     "about": "Über",
     "actions": "Aktionen",
     "administration": "Administration",
+    "amount": "Menge",
     "back": "Zurück",
+    "cancel": "Abbrechen",
     "cheatSheetYouFind": "Einen Spickzettel finden Sie hier.",
     "delete": "Löschen",
     "description": "Beschreibung",
@@ -80,9 +84,12 @@
     "profileDetails": {
       "firstName": "Vorname",
       "lastName": "Nachname",
-      "uid": "Matrikelnummer"
+      "uid": "Matrikelnummer",
+      "uploadPicture": "Bild hochladen"
     },
+    "question": "Frage",
     "register": "Registrieren",
+    "reset": "Zurücksetzen",
     "role": "Rolle",
     "roles": {
       "student": "Student",
@@ -92,6 +99,7 @@
     "send": "Senden",
     "settings": "Einstellungen",
     "submit": "Absenden",
+    "theme": "Thema",
     "tooltip": {
       "quitFullscreenMode": "Vollbildmodus beenden",
       "downloadUnit": "Diese Einheit downloaden",
@@ -113,8 +121,11 @@
   "course": {
     "delete": "Kurs löschen",
     "placeholder": {
+      "accessKey": "Einschreibeschlüssel",
       "Description": "Kursbeschreibung",
-      "Name": "Kursname"
+      "Name": "Kursname",
+      "searchAdd": "Suchen und hinzufügen:",
+      "searchAddBy": "nach Name, ID und E-Mail"
     },
     "ShowCourse": "Kurs anzeigen",
     "text": {
@@ -125,15 +136,23 @@
       "enterAccessKeyForStudents": "Geben Sie einen Einschreibeschlüssel für die Studenten ein.",
       "goToCourse": "Zum Kurs",
       "inCourse": "Im Kurs",
+      "infoWhitelist": "Allen Benutzern dieser Liste, ist es erlaubt, dem Kurs beizutreten.",
       "isFreeForEveryone": "Der Kurs ist offen und für jeden zugänglich.",
       "notInCourse": "Nicht im Kurs",
+      "overview": "Übersicht",
+      "reportFor": "Ergebnis für",
       "selectAccessType": "Bitte wählen Sie Ihren Kurstyp aus.",
       "uploadWhitelist": "Laden Sie Ihre OBS-csv-Datei mit Ihren Kursteilnehmern hoch, um sie auf die Freigabeliste zu setzen.<br />Alte Freigabelisten-Benutzer werden durch Hochladen einer neuen Datei entfernt.",
-      "yourCourseProgress": "Ihr Kursfortschritt"
+      "userResults": "Benutzerergebnisse",
+      "yourCourseProgress": "Ihr Kursfortschritt",
+      "whitelist": "Freigabeliste"
     },
     "tooltip" : {
       "add": "Kurs hinzufügen",
+      "addUserToWhitelist": "Benutzer zu Freigabeliste hinzufügen",
+      "enroll": "Einschreiben",
       "keyRequired" : "Zugangscode benötigt",
+      "leave": "Verlassen",
       "noKeyRequired" : "Frei zugänglich"
     }
   },
@@ -156,7 +175,12 @@
       "actions": "Aktionen",
       "addFile": "Datei hinzufügen",
       "filename": "Dateiname",
-      "filesize": "Dateigröße"
+      "filesize": "Dateigröße",
+      "infoDropAddFiles": "Dateien hier hinziehen oder hier klicken, um Dateien auszuwählen.",
+      "noVideo": "Kein Video verfügbar.",
+      "progress": "Fortschritt",
+      "RemoveFromQueue": "Datei aus der Schlange löschen.",
+      "takePicture": "Bild aufnehmen"
     }
   },
   "home": {
@@ -169,6 +193,12 @@
       "download": "Einheit downloaden",
       "duplicate": "Kapitel kopieren",
       "edit": "Einheit bearbeiten"
+    }
+  },
+  "mail":{
+    "send": "Sende Mail",
+    "tooltip":{
+      "sendToMembers": "Mail an ausgewählte Mitglieder senden."
     }
   },
   "mainMenu": {
@@ -200,7 +230,8 @@
     "addVideos": "Videos hinzufügen",
     "import": "Einheit importieren",
     "placeholder": {
-      "enterAnswer": "Antwort hier eintragen",
+      "enterAnswer": "Antwort hier eintragen*",
+      "enterQuestion": "Frage hier eintragen*",
       "optionalDeadline": "Optionale Frist"
     },
     "text": {
@@ -212,6 +243,8 @@
       "fullscreen": "Vollbild",
       "hintAddQuestionAndAnswers": "Fragen mit beliebiger Anzahl an möglichen Antowrten hinzufügen. Richtige Antwort(en) mit Hilfe der checkbox markieren.",
       "publishedOn": "Veröffentlicht am",
+      "submitAnswers": "Antworten absenden",
+      "taskCompleted": "Aufgabe abgeschlossen",
       "tasks": "Aufgaben"
     },
     "tooltip": {
@@ -220,6 +253,7 @@
       "deleteAnswer": "Antwort löschen",
       "deleteQuestion": "Frage löschen",
       "download": "Diese Einheit downloaden",
+      "downloadUnits": "Einheiten downloaden",
       "duplicate": "Diese Einheit kopieren",
       "edit": "Einheit bearbeiten"
     }
@@ -230,6 +264,9 @@
     "text": {
       "notSignedIn": "Nicht eingetragen",
       "signedIn": "Eingetragen"
+    },
+    "tooltip":{
+      "deleteUSers": "Ausgewählte Mitglieder entfernen."
     }
   }
 }
