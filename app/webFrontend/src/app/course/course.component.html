@@ -32,11 +32,11 @@
            *ngIf="course.enrollType !== 'accesskey'">lock_open</i>
       </div>
       <button mat-icon-button *ngIf="!course.userIsCourseMember"
-              (click)="enroll()" matTooltip="Enroll">
+              (click)="enroll()" [matTooltip]="'course.tooltip.enroll' | translate">
       <mat-icon>add_circle_outline</mat-icon>
     </button>
     <button mat-icon-button *ngIf="course.userIsCourseMember"
-            (click)="leave()" matTooltip="Leave">
+            (click)="leave()" [matTooltip]="'course.tooltip.leave' | translate">
       <mat-icon>remove_circle_outline</mat-icon>
     </button>
     </span>

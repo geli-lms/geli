@@ -4,11 +4,11 @@
   </mat-form-field>
 
   <mat-form-field>
-    <textarea matInput formControlName="description" placeholder="'common.description' | translate" rows="4"></textarea>
+    <textarea matInput formControlName="description" [placeholder]="'common.description' | translate" rows="4"></textarea>
   </mat-form-field>
 
   <mat-form-field *ngIf="model?.progressable">
-    <input matInput formControlName="deadline" [matDatepicker]="deadlineDatepicker" placeholder="'unit.placeholder.optionalDeadline' | translate">
+    <input matInput formControlName="deadline" [matDatepicker]="deadlineDatepicker" [placeholder]="'unit.placeholder.optionalDeadline' | translate">
     <mat-datepicker-toggle matSuffix [for]="deadlineDatepicker"></mat-datepicker-toggle>
     <mat-datepicker #deadlineDatepicker (selectedChanged)="updateDateTime($event)"></mat-datepicker>
   </mat-form-field>

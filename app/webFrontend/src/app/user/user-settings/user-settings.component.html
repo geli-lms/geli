@@ -7,7 +7,7 @@
                     [checked]="notificationSelection.hasValue() && isAllSelected(notificationSelection)"
                     [indeterminate]="notificationSelection.hasValue() && !isAllSelected(notificationSelection)">
       </mat-checkbox>
-      <span>Notification</span>
+      <span>{{ common.notifications | translate }}</span>
     </mat-header-cell>
     <mat-cell class="checkBox" *matCellDef="let course">
       <mat-checkbox (click)="$event.stopPropagation()"

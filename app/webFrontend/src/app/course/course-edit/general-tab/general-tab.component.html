@@ -1,6 +1,6 @@
 <form class="course-form" (ngSubmit)="createCourse()">
   <mat-form-field>
-    <input async matInput id="name" placeholder="Name" [(ngModel)]="course"
+    <input async matInput id="name" [placeholder]="'common.name' | translate" [(ngModel)]="course"
            [ngModelOptions]="{standalone: true}">
   </mat-form-field>
 
@@ -10,7 +10,7 @@
   </mat-form-field>
 
   <mat-form-field class="full-width">
-    <mat-select name="courseTypes" placeholder="'course.text.selectAccessType' | translate" id="courseTypes" [(ngModel)]="enrollType">
+    <mat-select name="courseTypes" [placeholder]="'course.text.selectAccessType' | translate" id="courseTypes" [(ngModel)]="enrollType">
       <mat-option *ngFor="let enrollType of enrollTypes" [value]="enrollType">{{enrollType}}</mat-option>
     </mat-select><br>
   </mat-form-field>
@@ -20,7 +20,7 @@
   </p>
 
   <mat-form-field class="full-width" *ngIf="enrollType === enrollTypeConstants.ENROLL_TYPE_ACCESSKEY">
-    <input async matInput id="accessKey" placeholder="Access Key" [(ngModel)]="accessKey"
+    <input async matInput id="accessKey" [placeholder]="'course.placeholder.accessKey' | translate" [(ngModel)]="accessKey"
            [ngModelOptions]="{standalone: true}">
     <mat-hint>{{ course.text.enterAccessKeyForStudents | translate }}</mat-hint>
   </mat-form-field>

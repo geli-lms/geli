@@ -9,7 +9,7 @@
 
   <div *ngFor="let task of model.tasks" class="question-answer">
     <mat-form-field matLine class="question">
-      <textarea matInput id="name" placeholder="Enter question here *" [(ngModel)]="task.name"></textarea>
+      <textarea matInput id="name" [placeholder]="'unit.placeholder.enterQuestion' | translate" [(ngModel)]="task.name"></textarea>
     </mat-form-field>
 
     <button mat-button class="remove" (click)="removeTask(task)" [matTooltip]="'task.tooltip.deleteQuestion' | translate">

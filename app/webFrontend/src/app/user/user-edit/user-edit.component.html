@@ -43,7 +43,7 @@
     </mat-form-field>
 
     <mat-form-field class="full-width">
-      <mat-select placeholder="Theme" formControlName="theme">
+      <mat-select [placeholder]="'common.theme' | translate" formControlName="theme">
         <mat-option *ngFor="let theme of themes" value="{{theme}}">{{theme}}</mat-option>
       </mat-select>
     </mat-form-field>
@@ -52,20 +52,24 @@
   <mat-form-field class="full-width">
     <input matInput formControlName="email" [placeholder]="'common.email'|translate"/>
   </mat-form-field>
-  <button mat-raised-button color="primary" class="mat-button" type="submit" [disabled]="!userForm?.valid">Save</button>
+  <button mat-raised-button color="primary" class="mat-button" type="submit" [disabled]="!userForm?.valid">
+    {{ common.save | translate }}
+  </button>
   <button mat-raised-button class="mat-button" routerLink="/profile" routerLinkActive="active">
-    Cancel
+    {{ common.cancel | translate }}
   </button>
 </form>
 <p *ngIf="!showPwFields()">
-  <button mat-raised-button class="mat-button" (click)="resetPassword()">Generate new Password</button>
+  <button mat-raised-button class="mat-button" (click)="resetPassword()">
+    {{ auth.generatePassword | translate }}
+  </button>
 </p>
 <div class="button-wrapper">
   <button mat-raised-button class="mat-button" (click)="openAddPictureDialog()">
-    Upload new picture
+    {{ profileDetails.uploadPicture | translate }}
   </button>
   <button mat-raised-button class="mat-button" (click)="openChangePasswordDialog()">
-    Change Password
+    {{ auth.changePassword | translate }}
   </button>
 </div>
 </div>
