@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {AfterViewInit, Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import 'rxjs/add/operator/switchMap';
 import {CourseService, UserDataService} from '../../shared/services/data.service';
@@ -10,14 +10,14 @@ import {TitleService} from '../../shared/services/title.service';
 import {LastVisitedCourseContainerUpdater} from '../../shared/utils/LastVisitedCourseContainerUpdater';
 import {DialogService} from '../../shared/services/dialog.service';
 
-import {DataSharingService} from '../../shared/services/data-sharing.service';
 
 @Component({
   selector: 'app-course-detail',
   templateUrl: './course-detail.component.html',
   styleUrls: ['./course-detail.component.scss']
 })
-export class CourseDetailComponent implements OnInit, OnDestroy {
+export class CourseDetailComponent implements OnInit {
+
   course: ICourse;
   id: string;
   tabs = [
@@ -34,7 +34,6 @@ export class CourseDetailComponent implements OnInit, OnDestroy {
               private dialog: MatDialog,
               private titleService: TitleService,
               private userDataService: UserDataService,
-              private dataSharingService: DataSharingService,
               private dialogService: DialogService) {
   }
 
@@ -45,10 +44,6 @@ export class CourseDetailComponent implements OnInit, OnDestroy {
     this.id = this.course._id;
     LastVisitedCourseContainerUpdater.addCourseToLastVisitedCourses(this.id, this.userService, this.userDataService);
     this.titleService.setTitleCut(['Course: ', this.course.name]);
-  }
-
-  ngOnDestroy() {
-    this.dataSharingService.deleteDataForKey('course');
   }
 
   showUserProfile(teacher: User) {

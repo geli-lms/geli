@@ -1,11 +1,10 @@
 import {Component, Inject, OnInit, QueryList, ViewChildren, ViewEncapsulation} from '@angular/core';
-import {MatSnackBar} from '@angular/material';
+import {SnackBarService} from '../../../shared/services/snack-bar.service';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
 import {LectureCheckboxComponent} from './downloadCheckBoxes/lecture-checkbox.component';
 import {DownloadFileService} from 'app/shared/services/data.service';
 import {IDownload} from '../../../../../../../shared/models/IDownload';
 import {SaveFileService} from '../../../shared/services/save-file.service';
-
 import {saveAs} from 'file-saver/FileSaver';
 import {DataSharingService} from '../../../shared/services/data-sharing.service';
 
@@ -26,7 +25,7 @@ export class DownloadCourseDialogComponent implements OnInit {
   childLectures: QueryList<LectureCheckboxComponent>;
 
   constructor(private downloadReq: DownloadFileService,
-              public snackBar: MatSnackBar,
+              public snackBar: SnackBarService,
               private saveFileService: SaveFileService,
               private dataSharingService: DataSharingService) {
   }
@@ -56,7 +55,7 @@ export class DownloadCourseDialogComponent implements OnInit {
   }
 
   onChildEvent() {
-    const childChecked: boolean[] = new Array();
+    const childChecked: boolean[] = [];
 
     this.childLectures.forEach(lec => {
       if (lec.chkbox === true && !lec.childUnits.find(unit => unit.chkbox === false)) {
@@ -108,7 +107,7 @@ export class DownloadCourseDialogComponent implements OnInit {
     this.disableDownloadButton = true;
     const obj = await this.buildObject();
     if (obj.lectures.length === 0) {
-      this.snackBar.open('No units selected!', 'Dismiss', {duration: 3000});
+      this.snackBar.open('No units selected!');
       this.disableDownloadButton = false;
       return;
     }
@@ -124,15 +123,13 @@ export class DownloadCourseDialogComponent implements OnInit {
         if (!this.keepDialogOpen) {
           // this.dialogRef.close();
         }
-      } catch (error) {
+      } catch (err) {
         this.showSpinner = false;
         this.disableDownloadButton = false;
-        this.snackBar.open('Woops! Something went wrong. Please try again in a few Minutes.',
-          'Dismiss', {duration: 10000});
+        this.snackBar.openLong('Woops! Something went wrong. Please try again in a few Minutes.');
       }
     } else {
-      this.snackBar.open('Requested Download Package is too large! Please Download fewer Units in one Package.',
-        'Dismiss', {duration: 10000});
+      this.snackBar.openLong('Requested Download Package is too large! Please Download fewer Units in one Package.');
       this.showSpinner = false;
       this.disableDownloadButton = false;
     }
@@ -162,8 +159,7 @@ export class DownloadCourseDialogComponent implements OnInit {
       }
     });
 
-    const downloadObj = {courseName: this.course._id, lectures: lectures};
-    return downloadObj;
+    return  {courseName: this.course._id, lectures: lectures};
   }
 
 }
