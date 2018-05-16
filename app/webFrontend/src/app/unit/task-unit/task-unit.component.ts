@@ -1,5 +1,5 @@
 import {Component, OnInit, Input} from '@angular/core';
-import {MatSnackBar} from '@angular/material';
+import {SnackBarService} from '../../shared/services/snack-bar.service';
 import {ActivatedRoute} from '@angular/router';
 import {ProgressService} from '../../shared/services/data/progress.service';
 import {ITaskUnit} from '../../../../../../shared/models/units/ITaskUnit';
@@ -23,7 +23,7 @@ export class TaskUnitComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
               private progressService: ProgressService,
-              private snackBar: MatSnackBar) {
+              private snackBar: SnackBarService) {
   }
 
   ngOnInit() {
@@ -31,6 +31,16 @@ export class TaskUnitComponent implements OnInit {
       this.progress = new TaskUnitProgress(this.taskUnit);
     } else {
       this.progress = this.taskUnit.progressData;
+    }
+
+    this.applyProgressData();
+    this.shuffleAnswers();
+  }
+
+  async applyProgressData() {
+    const progress = await this.progressService.getUnitProgress<ITaskUnitProgress>(this.taskUnit._id);
+    if (progress) {
+      this.progress = progress;
     }
 
     if (!this.progress.answers) {
@@ -49,7 +59,6 @@ export class TaskUnitComponent implements OnInit {
         }
       });
     }
-    this.shuffleAnswers();
   }
 
   resetProgressAnswers() {
@@ -73,10 +82,10 @@ export class TaskUnitComponent implements OnInit {
       promise
         .then((savedProgress) => {
           this.progress = savedProgress;
-          this.snackBar.open('Progress has been saved', '', {duration: 3000});
+          this.snackBar.open('Progress has been saved');
         })
         .catch((err) => {
-          this.snackBar.open(`An error occurred: ${err.error.message}`, '', {duration: 3000});
+          this.snackBar.open(`An error occurred: ${err.error.message}`);
         });
     };
 

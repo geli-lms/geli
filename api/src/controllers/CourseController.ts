@@ -162,7 +162,7 @@ export class CourseController {
    * @apiError NotFoundError Includes implicit authorization check. (In getCourse helper method.)
    * @apiError ForbiddenError (Redundant) Authorization check.
    */
-  @Get('/:id')
+  @Get('/:id([a-fA-F0-9]{24})')
   async getCourseView(@Param('id') id: string, @CurrentUser() currentUser: IUser): Promise<ICourseView> {
     const course = await this.getCourse(id, currentUser);
 
@@ -482,7 +482,7 @@ export class CourseController {
    * @apiParam {Object} data Data (with access key).
    * @apiParam {IUser} currentUser Currently logged in user.
    *
-   * @apiSuccess {{}} result Empty object.
+   * @apiSuccess {Object} result Empty object.
    *
    * @apiSuccessExample {json} Success-Response:
    *      {}
@@ -533,7 +533,7 @@ export class CourseController {
    * @apiParam {Object} data Body.
    * @apiParam {IUser} currentUser Currently logged in user.
    *
-   * @apiSuccess {{}} result Empty object.
+   * @apiSuccess {Object} result Empty object.
    *
    * @apiSuccessExample {json} Success-Response:
    *      {}
@@ -585,9 +585,9 @@ export class CourseController {
   @Authorized(['teacher', 'admin'])
   @Post('/:id/whitelist')
   async whitelistStudents(
-      @Param('id') id: string,
-      @UploadedFile('file', {options: uploadOptions}) file: any,
-      @CurrentUser() currentUser: IUser) {
+    @Param('id') id: string,
+    @UploadedFile('file', {options: uploadOptions}) file: any,
+    @CurrentUser() currentUser: IUser) {
     const name: string = file.originalname;
     if (!name.endsWith('.csv')) {
       throw new TypeError(errorCodes.upload.type.notCSV.code);
@@ -653,7 +653,7 @@ export class CourseController {
    * @apiParam {String} id Course ID.
    * @apiParam {IUser} currentUser Currently logged in user.
    *
-   * @apiSuccess {{}} result Empty object.
+   * @apiSuccess {Object} result Empty object.
    *
    * @apiSuccessExample {json} Success-Response:
    *      {}
