@@ -1,7 +1,7 @@
 import {Component, Input} from '@angular/core';
 import {MatDialogRef} from '@angular/material';
 import {FileItem, FileUploader, ParsedResponseHeaders} from 'ng2-file-upload';
-import {IResponsiveImage} from "../../../../../../../shared/models/mediaManager/IResponsiveImage";
+import {IResponsiveImage} from "../../../../../../../shared/models/IResponsiveImage";
 
 @Component({
   selector: 'app-responsive-image-upload-dialog',

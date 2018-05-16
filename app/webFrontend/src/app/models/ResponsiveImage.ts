@@ -1,7 +1,7 @@
 import {
   BreakpointSize, IBreakpoint, IImageSize,
   IResponsiveImage
-} from "../../../../../shared/models/mediaManager/IResponsiveImage";
+} from "../../../../../shared/models/IResponsiveImage";
 
 class Breakpoint implements IBreakpoint {
   screenSize: BreakpointSize;

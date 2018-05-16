@@ -32,7 +32,8 @@ import {IWhitelistUser} from '../../../shared/models/IWhitelistUser';
 import {DocumentToObjectOptions} from 'mongoose';
 import * as sharp from 'sharp';
 import * as fs from "fs";
-import {IResponsiveImage} from "../../../shared/models/mediaManager/IResponsiveImage";
+import {IResponsiveImage} from "../../../shared/models/IResponsiveImage";
+import ResponsiveImageService from "../services/ResponsiveImageService";
 
 const uploadOptions = {
   storage: multer.diskStorage({
@@ -52,7 +53,13 @@ const uploadOptions = {
 const coursePictureUploadOptions = {
   storage: multer.diskStorage({
     destination: (req: any, file: any, cb: any) => {
-      cb(null, 'uploads/courses/');
+      const directory = 'uploads/courses';
+
+      if (!fs.existsSync(directory)) {
+        fs.mkdirSync(directory);
+      }
+
+      cb(null, directory);
     },
     filename: (req: any, file: any, cb: any) => {
       const id = req.params.id;
@@ -694,12 +701,18 @@ export class CourseController {
 
   @Post('/picture/:id')
   async addCoursePicture(
-      @UploadedFile('file', {options: uploadOptions}) file: any,
+      @UploadedFile('file', {options: coursePictureUploadOptions}) file: any,
       @Param('id') id: string,
       @Body() responsiveImageDataRaw: any,
       @CurrentUser() currentUser: IUser) {
 
-    const responsiveImageData = <IResponsiveImage>responsiveImageDataRaw.imageData;
+    console.log("1");
+
+    console.log(responsiveImageDataRaw);
+    const responsiveImageData = <IResponsiveImage>JSON.parse(responsiveImageDataRaw.imageData);
+
+    console.log(responsiveImageData);
+    console.log("2");
 
     const mimeFamily = file.mimetype.split('/', 1)[0];
     if (mimeFamily !== 'image') {
@@ -707,20 +720,24 @@ export class CourseController {
     }
 
     const course = await Course.findById(id);
-    const destination = 'uploads/courses/' + id;
-    const resizedImageBuffer = await sharp(file.path)
-      .resize(300)
-      .withoutEnlargement(true)
-      .max()
-      .toBuffer({resolveWithObject: true});
+    const destination = 'uploads/courses/';
 
-    fs.writeFileSync('', resizedImageBuffer.data);
+    // Create the directory if not already exists.
+    if (!fs.existsSync(destination)) {
+      fs.mkdirSync(destination);
+    }
+
+    console.log("3");
+
+    await ResponsiveImageService.generateResponsiveImages(file, responsiveImageData);
+
+    console.log("4");
 
     course.image = {
       _id: null,
       name: file.filename,
       link: file.path,
-      size: resizedImageBuffer.info.size,
+      size: 0,
       mimeType: file.mimetype
     };
 
