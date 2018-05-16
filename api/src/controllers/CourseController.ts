@@ -506,7 +506,7 @@ export class CourseController {
    * @apiParam {Object} data Data (with access key).
    * @apiParam {IUser} currentUser Currently logged in user.
    *
-   * @apiSuccess {{}} result Empty object.
+   * @apiSuccess {Object} result Empty object.
    *
    * @apiSuccessExample {json} Success-Response:
    *      {}
@@ -557,7 +557,7 @@ export class CourseController {
    * @apiParam {Object} data Body.
    * @apiParam {IUser} currentUser Currently logged in user.
    *
-   * @apiSuccess {{}} result Empty object.
+   * @apiSuccess {Object} result Empty object.
    *
    * @apiSuccessExample {json} Success-Response:
    *      {}
@@ -677,7 +677,7 @@ export class CourseController {
    * @apiParam {String} id Course ID.
    * @apiParam {IUser} currentUser Currently logged in user.
    *
-   * @apiSuccess {{}} result Empty object.
+   * @apiSuccess {Object} result Empty object.
    *
    * @apiSuccessExample {json} Success-Response:
    *      {}
