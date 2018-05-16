@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewEncapsulation, EventEmitter, Output, Input } from '@angular/core';
+import {IResponsiveImageData} from "../../../../../../../shared/models/IResponsiveImageData";
 
 @Component({
   selector: 'app-responsive-image',
@@ -7,6 +8,9 @@ import { Component, OnInit, ViewEncapsulation, EventEmitter, Output, Input } fro
   encapsulation: ViewEncapsulation.None
 })
 export class ResponsiveImageComponent implements OnInit {
+
+  @Input()
+  responsiveImageData: IResponsiveImageData;
 
   constructor() { }
 

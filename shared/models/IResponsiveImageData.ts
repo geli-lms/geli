@@ -9,6 +9,7 @@ import {IBreakpoint} from "./IBreakpoint";
  * i.E. if we only specified a breakpoint for mobile and no other, the server will return the image
  * with the size of the mobile breakpoint.
  */
-export interface IResponsiveImage {
+export interface IResponsiveImageData {
   breakpoints: IBreakpoint[];
+  pathToImage: string;
 }

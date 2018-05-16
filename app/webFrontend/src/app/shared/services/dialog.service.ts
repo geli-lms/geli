@@ -10,8 +10,8 @@ import {WriteMailDialog} from '../components/write-mail-dialog/write-mail-dialog
 import {ChangePasswordDialogComponent} from '../components/change-password-dialog/change-password-dialog.component';
 import {UserProfileDialog} from '../components/user-profile-dialog/user-profile-dialog.component';
 import {User} from '../../models/User';
-import {IResponsiveImage} from "../../../../../../shared/models/IResponsiveImage";
 import {ResponsiveImageUploadDialog} from "../components/responsive-image-upload-dialog/responsive-image-upload-dialog.component";
+import {IResponsiveImageData} from "../../../../../../shared/models/IResponsiveImageData";
 
 @Injectable()
 export class DialogService {
@@ -80,7 +80,7 @@ export class DialogService {
     return dialogRef.afterClosed();
   }
 
-  public uploadResponsiveImage(message: string, uploadPath: string, responsiveImageData: IResponsiveImage) {
+  public uploadResponsiveImage(message: string, uploadPath: string, responsiveImageData: IResponsiveImageData) {
     const dialogReference = this.dialog.open(ResponsiveImageUploadDialog);
 
     dialogReference.componentInstance.message = message;

@@ -79,7 +79,10 @@ const courseSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'WhitelistUser'
       }
-    ]
+    ],
+    image: {
+      type: mongoose.Schema.Types.Mixed
+    }
   },
   {
     timestamps: true,

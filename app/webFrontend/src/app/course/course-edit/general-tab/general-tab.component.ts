@@ -134,11 +134,6 @@ export class GeneralTabComponent implements OnInit {
 
     const result = await this.dialogService
       .uploadResponsiveImage('Choose a picture for the course.', apiPath, responsiveImage).toPromise();
-
-
-
-
-    console.log(result);
   }
 
   async createCourse() {

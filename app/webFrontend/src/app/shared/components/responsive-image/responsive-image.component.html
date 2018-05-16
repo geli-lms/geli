@@ -1,0 +1,4 @@
+<picture class="responsive-image">
+  <source *ngFor="let breakpoint of this.breakpoints.breakpoints" media="(min-width: {{breakpoint.screenSize}}px" srcset="{{breakpoint.pathToImage}}">
+</picture>
+

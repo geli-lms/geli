@@ -17,7 +17,7 @@ export interface ICourse {
   description: string;
   courseAdmin: IUser;
   media: IDirectory;
-  image: IFile;
+  image: IPicture;
   teachers: IUser[];
   students: IUser[];
   lectures: ILecture[];

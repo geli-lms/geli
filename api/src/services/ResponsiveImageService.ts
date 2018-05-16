@@ -1,7 +1,7 @@
 import sharp = require("sharp");
 import * as fs from "fs";
-import {IResponsiveImage} from "../../../shared/models/IResponsiveImage";
 import {BreakpointSize} from "../models/BreakpointSize";
+import {IResponsiveImageData} from "../../../shared/models/IResponsiveImageData";
 
 export default class ResponsiveImageService {
   /**
@@ -15,10 +15,10 @@ export default class ResponsiveImageService {
    * e.g.
    *
    * @param originalFile
-   * @param {IResponsiveImage} responsiveImage
+   * @param {IResponsiveImageData} responsiveImage
    * @returns {Promise<boolean>}
    */
-  static async generateResponsiveImages(originalFile: any, responsiveImage: IResponsiveImage) {
+  static async generateResponsiveImages(originalFile: any, responsiveImage: IResponsiveImageData) {
     if (!responsiveImage.breakpoints) {
       // Cannot generate any responsive images, because there are no breakpoints provided.
       return false;
@@ -50,6 +50,8 @@ export default class ResponsiveImageService {
         .withoutEnlargement(true)
         .max()
         .toFile(directory + '/' + fileNameToSave);
+
+      breakpoint.pathToImage = directory + '/' + fileNameToSave;
     }
 
     if (!keepOriginalFile) {

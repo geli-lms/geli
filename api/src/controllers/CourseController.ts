@@ -32,8 +32,9 @@ import {IWhitelistUser} from '../../../shared/models/IWhitelistUser';
 import {DocumentToObjectOptions} from 'mongoose';
 import * as sharp from 'sharp';
 import * as fs from "fs";
-import {IResponsiveImage} from "../../../shared/models/IResponsiveImage";
 import ResponsiveImageService from "../services/ResponsiveImageService";
+import {IResponsiveImageData} from "../../../shared/models/IResponsiveImageData";
+import {IPicture} from "../../../shared/models/mediaManager/IPicture";
 
 const uploadOptions = {
   storage: multer.diskStorage({
@@ -706,13 +707,7 @@ export class CourseController {
       @Body() responsiveImageDataRaw: any,
       @CurrentUser() currentUser: IUser) {
 
-    console.log("1");
-
-    console.log(responsiveImageDataRaw);
-    const responsiveImageData = <IResponsiveImage>JSON.parse(responsiveImageDataRaw.imageData);
-
-    console.log(responsiveImageData);
-    console.log("2");
+    const responsiveImageData = <IResponsiveImageData>JSON.parse(responsiveImageDataRaw.imageData);
 
     const mimeFamily = file.mimetype.split('/', 1)[0];
     if (mimeFamily !== 'image') {
@@ -727,25 +722,22 @@ export class CourseController {
       fs.mkdirSync(destination);
     }
 
-    console.log("3");
+    console.log("before", responsiveImageData);
 
     await ResponsiveImageService.generateResponsiveImages(file, responsiveImageData);
 
-    console.log("4");
+    console.log("after", responsiveImageData);
 
-    course.image = {
-      _id: null,
-      name: file.filename,
-      link: file.path,
-      size: 0,
-      mimeType: file.mimetype
+    const image: IPicture = {
+      mimeType: file.mimetype,
+      breakpoints: responsiveImageData.breakpoints
     };
 
-    try {
-      await course.save();
-      return course;
-    } catch (error) {
-      throw new BadRequestError(error);
-    }
+    const result = await Course.update({ _id: id }, {
+      image: image
+    });
+
+    console.log("course not yet saved", course);
+    console.log("course saved", result);
   }
 }

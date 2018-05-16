@@ -1,7 +1,8 @@
+import {IResponsiveImageData} from "../IResponsiveImageData";
+import {IBreakpoint} from "../IBreakpoint";
+
 export interface IPicture {
-  _id: any;
-  name: string;
-  path: string;
-  size: number;
   mimeType: string;
+
+  breakpoints?: IBreakpoint[];
 }

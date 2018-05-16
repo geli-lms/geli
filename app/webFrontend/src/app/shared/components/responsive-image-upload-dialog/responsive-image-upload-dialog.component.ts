@@ -1,7 +1,7 @@
 import {Component, Input} from '@angular/core';
 import {MatDialogRef} from '@angular/material';
 import {FileItem, FileUploader, ParsedResponseHeaders} from 'ng2-file-upload';
-import {IResponsiveImage} from "../../../../../../../shared/models/IResponsiveImage";
+import {IResponsiveImageData} from "../../../../../../../shared/models/IResponsiveImageData";
 
 @Component({
   selector: 'app-responsive-image-upload-dialog',
@@ -16,7 +16,7 @@ export class ResponsiveImageUploadDialog {
   public uploader: FileUploader;
   showProgressBar = false;
 
-  responsiveImageData: IResponsiveImage;
+  responsiveImageData: IResponsiveImageData;
 
   constructor(public dialogRef: MatDialogRef<ResponsiveImageUploadDialog>) {
   }
@@ -38,7 +38,7 @@ export class ResponsiveImageUploadDialog {
     };
   }
 
-  public setResponsiveImageData(responsiveImageData: IResponsiveImage) {
+  public setResponsiveImageData(responsiveImageData: IResponsiveImageData) {
     this.responsiveImageData = responsiveImageData;
   }
 
