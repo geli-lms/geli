@@ -3,6 +3,7 @@
   <mat-toolbar-row>
     <button mat-button routerLink="." routerLinkActive="active">Overview</button>
     <button mat-button routerLink="user/all" routerLinkActive="active">User results</button>
+    <button mat-button (click)="exportReport()">Export to CSV</button>
   </mat-toolbar-row>
 </mat-toolbar>
 <div class="report-container">
