@@ -722,11 +722,7 @@ export class CourseController {
       fs.mkdirSync(destination);
     }
 
-    console.log("before", responsiveImageData);
-
     await ResponsiveImageService.generateResponsiveImages(file, responsiveImageData);
-
-    console.log("after", responsiveImageData);
 
     const image: IPicture = {
       mimeType: file.mimetype,
@@ -736,8 +732,5 @@ export class CourseController {
     const result = await Course.update({ _id: id }, {
       image: image
     });
-
-    console.log("course not yet saved", course);
-    console.log("course saved", result);
   }
 }

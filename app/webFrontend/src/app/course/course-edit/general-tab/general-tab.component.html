@@ -11,9 +11,11 @@
 
   <br />
 
+  <app-responsive-image *ngIf="this.userImageData" [responsiveImageData]="this.userImageData"></app-responsive-image> <br />
+
   <button mat-raised-button color="primary" class="mat-button" (click)="openImageChooserDialog()">Choose Image</button>
 
-  <br />
+  <br />&nbsp;<br/>
 
   <mat-form-field class="full-width">
     <mat-select name="courseTypes" placeholder="Please select your course access type" id="courseTypes" [(ngModel)]="enrollType">

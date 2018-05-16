@@ -19,6 +19,7 @@ import {DataSharingService} from '../../../shared/services/data-sharing.service'
 import {DialogService} from '../../../shared/services/dialog.service';
 import ResponsiveImage from "../../../models/ResponsiveImage";
 import {BreakpointSize} from "../../../../../../../api/src/models/BreakpointSize";
+import {IResponsiveImageData} from "../../../../../../../shared/models/IResponsiveImageData";
 
 @Component({
   selector: 'app-course-edit-general-tab',
@@ -44,6 +45,8 @@ export class GeneralTabComponent implements OnInit {
     ENROLL_TYPE_ACCESSKEY,
   };
 
+  userImageData: IResponsiveImageData;
+
   message = 'Course successfully added.';
 
   constructor(private route: ActivatedRoute,
@@ -67,6 +70,14 @@ export class GeneralTabComponent implements OnInit {
 
       this.courseService.readCourseToEdit(this.id).then(course => {
         this.courseOb = course;
+
+
+
+        this.userImageData = {
+            breakpoints: course.image.breakpoints,
+            pathToImage: ''
+        };
+
 
         this.course = this.courseOb.name;
         this.description = this.courseOb.description;

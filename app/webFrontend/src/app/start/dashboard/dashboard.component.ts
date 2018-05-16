@@ -27,6 +27,7 @@ export class DashboardComponent implements OnInit {
 
   async getCourses() {
     this.allCourses = await this.courseService.readItems<ICourseDashboard>();
+    console.log(this.allCourses);
   }
 
   onUpdateCallback() {

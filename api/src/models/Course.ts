@@ -233,7 +233,7 @@ courseSchema.methods.checkPrivileges = function (user: IUser) {
 
 courseSchema.methods.forDashboard = function (user: IUser): ICourseDashboard {
   const {
-    name, active, description, enrollType
+    name, active, description, enrollType, image
   } = this;
   const {
     userCanEditCourse, userCanViewCourse, userIsCourseAdmin, userIsCourseTeacher, userIsCourseMember
@@ -241,7 +241,7 @@ courseSchema.methods.forDashboard = function (user: IUser): ICourseDashboard {
   return {
     // As in ICourse:
     _id: <string>extractMongoId(this._id),
-    name, active, description, enrollType,
+    name, active, description, enrollType, image,
 
     // Special properties for the dashboard:
     userCanEditCourse, userCanViewCourse, userIsCourseAdmin, userIsCourseTeacher, userIsCourseMember

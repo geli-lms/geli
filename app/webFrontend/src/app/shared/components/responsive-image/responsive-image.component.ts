@@ -7,13 +7,13 @@ import {IResponsiveImageData} from "../../../../../../../shared/models/IResponsi
   styleUrls: ['./responsive-image.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class ResponsiveImageComponent implements OnInit {
+export class ResponsiveImageComponent {
 
   @Input()
   responsiveImageData: IResponsiveImageData;
 
-  constructor() { }
+  @Input()
+  classes: string = '';
 
-  ngOnInit() {
-  }
+  constructor() { }
 }
