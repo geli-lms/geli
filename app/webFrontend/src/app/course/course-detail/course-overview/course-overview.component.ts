@@ -13,8 +13,7 @@ import {DataSharingService} from '../../../shared/services/data-sharing.service'
 export class CourseOverviewComponent implements OnInit {
   course: ICourse;
 
-  constructor(private dataSharingService: DataSharingService,
-              private route: ActivatedRoute,) {
+  constructor(private dataSharingService: DataSharingService) {
   }
 
   ngOnInit() {
