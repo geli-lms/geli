@@ -9,7 +9,7 @@ import {ShowProgressService} from '../../../shared/services/show-progress.servic
 import {PickMediaDialog} from '../../../shared/components/pick-media-dialog/pick-media-dialog.component';
 import {IFile} from '../../../../../../../shared/models/mediaManager/IFile';
 import {UnitFormService} from "../../../shared/services/unit-form.service";
-import {FormControl} from '@angular/forms';
+import {FormArray, FormBuilder, FormControl, FormGroup} from '@angular/forms';
 
 @Component({
   selector: 'app-file-unit-form',
@@ -23,6 +23,9 @@ export class FileUnitFormComponent implements OnInit {
   @Input() model: IFileUnit;
   @Input() fileUnitType: string;
 
+  unitForm: FormGroup;
+
+
   @ViewChild(UnitGeneralInfoFormComponent)
   public generalInfo: UnitGeneralInfoFormComponent;
 
@@ -30,22 +33,34 @@ export class FileUnitFormComponent implements OnInit {
               private unitService: UnitService,
               private showProgress: ShowProgressService,
               private dialog: MatDialog,
-              private unitFormService: UnitFormService) {
+              private unitFormService: UnitFormService,
+              private formBuilder: FormBuilder) {
   }
 
   ngOnInit() {
     this.unitFormService.headline = this.fileUnitType === 'video' ? 'Add Videos' : 'Add Files';
-    this.unitFormService.unitForm.addControl('files',new FormControl(this.model.files));
+    this.unitFormService.unitForm.addControl('files',new FormArray([]));
+
+
+    this.unitForm = this.unitFormService.unitForm;
+
+    this.buildForm();
   }
 
-  removeFile(file: any) {
-    if (this.model) {
-      this.model.files = this.model.files.filter((currFile: any) => currFile !== file);
+  buildForm(){
+    for(const file of this.model.files) {
+      this.addFileToForm(file);
     }
   }
 
+  removeFile(file: any) {
+    let files =  (<FormArray>this.unitForm.controls.files).controls;
+    files = files.filter((currFile: any) => currFile.value !== file.value);
+    (<FormArray>this.unitForm.controls.files).controls = files;
+  }
+
   async openAddFilesDialog() {
-    if (this.course.media === undefined) {
+    if (!this.course.media) {
       this.snackBar.open('Please add files first', '', {duration: 3000});
       return;
     }
@@ -69,19 +84,38 @@ export class FileUnitFormComponent implements OnInit {
         value.forEach((val: IFile) => {
           // Check if file already added
           let alreadyExists = false;
-          this.model.files.forEach(v => {
-            if (val._id === v._id) {
+          (<FormArray>this.unitForm.controls.files).controls.forEach(v => {
+            if (val._id === v.value._id) {
               alreadyExists = true;
             }
           });
 
           // Add file
           if (!alreadyExists) {
-            this.model.files.push(val);
+            this.addFileToForm(val);
+            // this.model.files.push(val);
           }
         });
         this.snackBar.open('Added files to unit', '', {duration: 2000});
       }
     });
+  }
+
+  addFileToForm(file: IFile){
+    const fileControl = this.formBuilder.group({
+      _id: new FormControl(),
+      name: new FormControl(),
+      link: new FormControl(),
+      size: new FormControl(),
+      mimeType: new FormControl()
+    });
+
+    if (file) {
+      fileControl.patchValue({
+        ...file
+      });
+    }
+
+    (<FormArray> this.unitForm.controls['files']).push(fileControl);
   }
 }
