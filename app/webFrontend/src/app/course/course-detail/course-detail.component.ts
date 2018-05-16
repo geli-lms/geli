@@ -13,6 +13,7 @@ import {LastVisitedCourseContainerUpdater} from '../../shared/utils/LastVisitedC
 import {DialogService} from '../../shared/services/dialog.service';
 
 
+
 @Component({
   selector: 'app-course-detail',
   templateUrl: './course-detail.component.html',
@@ -32,7 +33,7 @@ export class CourseDetailComponent implements OnInit {
               private dialog: MatDialog,
               private titleService: TitleService,
               private userDataService: UserDataService,
-              private dialogService: DialogService) {
+              private dialogService: DialogService,) {
   }
 
   ngOnInit() {
@@ -69,8 +70,7 @@ export class CourseDetailComponent implements OnInit {
     this.dialogService.userProfile(teacher);
   }
 
-  displayChat() {
-    this.showChat = true;
+  toggleChat() {
+    this.showChat = !this.showChat;
   }
-
 }

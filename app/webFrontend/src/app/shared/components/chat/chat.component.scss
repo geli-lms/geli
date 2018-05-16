@@ -1,27 +1,10 @@
 .chat-container {
-  width: 100%;
+  position: relative;
   height: 100%;
-  display: flex;
-  flex-direction: column;
 }
 
 .chat-input {
-  padding-top: 20px;
-  width: 80%;
-}
-
-.chat-list {
-  top: 90px;
-  left: 25px;
-  right: 25px;
-  bottom: 120px;
-}
-
-.chat-list-item {
-  margin-top: 2px;
-  margin-bottom: 2px;
-  border-radius: 5px;
-  background-color: #E8EAF6;
+  width: 100%;
 }
 
 .main-card {
@@ -29,11 +12,67 @@
 }
 
 .chat-footer-container {
-  bottom:25px;
-  left:25px;
-  right:25px;
+  padding: 5px;
 }
 
-.chat-notification {
-  text-align: center;
+.messages {
+  height: 80%;
+  overflow-y: scroll
 }
+
+.messages ul {
+  list-style-type: none;
+  display: flex;
+  flex-direction: column;
+  padding-left: 0px;
+  li {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+
+
+.msg {
+  display: flex;
+  flex-direction: column;
+  max-width: 90%;
+  .author {
+    font-size: 0.8em;
+    color: grey;
+  }
+  .content {
+    overflow-wrap: break-word;
+    padding: 7px;
+    border-radius: 7px;
+    max-width: inherit;
+    word-wrap: break-word;
+  }
+}
+
+
+.send{
+  align-self: flex-end;
+  margin-right: 5px;
+
+  .author {
+    text-align: right;
+  }
+  .content{
+    align-self: flex-end;
+    background-color: #e8eaf6;
+    text-align: right;
+  }
+}
+
+.replies {
+  align-self: flex-start;
+  margin-left: 5px;
+  .content{
+    align-self: flex-start;
+    background-color: #e9ebee;
+    text-align: left;
+  }
+
+}
+

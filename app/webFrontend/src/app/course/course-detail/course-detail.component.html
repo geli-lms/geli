@@ -1,44 +1,61 @@
-<div class="course-detail-container">
-  <div class="course-detail-content">
-    <div class="course-header">
-      <button mat-icon-button color="primary" (click)="openDownloadDialog()" class="download-button">
-        <mat-icon aria-label="Download Units" mat-tooltip="Download Units">get_app</mat-icon>
-      </button>
-      <button mat-icon-button color="primary" (click)="displayChat()" class="download-button">
-        <mat-icon aria-label="Enter forum" mat-tooltip="Enter forum">chat</mat-icon>
-      </button>
-      <h1>{{course?.name}}</h1>
+<div class="course-header">
+  <button mat-icon-button color="primary" (click)="openDownloadDialog()" class="download-button">
+    <mat-icon aria-label="Download Units" mat-tooltip="Download Units">get_app</mat-icon>
+  </button>
+  <h1>{{course?.name}}</h1>
 
-      <mat-chip-list>
-        <mat-chip style="cursor:pointer" (click)="showUserProfile(course?.courseAdmin)">
-          <div class="img-wrapper">
-            <div class="admin-image" [user-image]="course?.courseAdmin"></div>
-          </div>
-          <div class="admin-name">
-            {{course?.courseAdmin.profile.firstName + " " + course?.courseAdmin.profile.lastName}} <br>
-            <i>Admin</i>
-          </div>
-        </mat-chip>
-        <div *ngFor="let teacher of course?.teachers">
-          <mat-chip style="cursor:pointer" (click)="showUserProfile(teacher)">
-            <div class="img-wrapper">
-              <div class="teacher-image" [user-image]="teacher"></div>
-            </div>
-            <div class="teacher-name">
-              {{teacher.profile.firstName + " " + teacher.profile.lastName}} <br>
-              <i>Teacher</i>
-            </div>
-          </mat-chip>
+  <mat-chip-list>
+    <mat-chip style="cursor:pointer" (click)="showUserProfile(course?.courseAdmin)">
+      <div class="img-wrapper">
+        <div class="admin-image" [user-image]="course?.courseAdmin"></div>
+      </div>
+      <div class="admin-name">
+        {{course?.courseAdmin.profile.firstName + " " + course?.courseAdmin.profile.lastName}} <br>
+        <i>Admin</i>
+      </div>
+    </mat-chip>
+    <div *ngFor="let teacher of course?.teachers">
+      <mat-chip style="cursor:pointer" (click)="showUserProfile(teacher)">
+        <div class="img-wrapper">
+          <div class="teacher-image" [user-image]="teacher"></div>
         </div>
-      </mat-chip-list>
-      <p>{{course?.description}}</p>
+        <div class="teacher-name">
+          {{teacher.profile.firstName + " " + teacher.profile.lastName}} <br>
+          <i>Teacher</i>
+        </div>
+      </mat-chip>
     </div>
-    <div class="lectures" *ngIf="course">
-      <app-lecture [lecture]="lecture" *ngFor="let lecture of course.lectures">
-      </app-lecture>
+  </mat-chip-list>
+  <p>{{course?.description}}</p>
+</div>
+<div class="lectures" *ngIf="course">
+  <app-lecture [lecture]="lecture" *ngFor="let lecture of course.lectures">
+  </app-lecture>
+</div>
+
+<div [ngClass]="{'chat-toggle': true, 'chat-toggle-show': !showChat, 'chat-toggle-hidden': showChat}">
+  <button mat-fab color="primary" (click)="toggleChat()"><mat-icon>forum</mat-icon></button>
+</div>
+
+
+<div [ngClass]="{'chat-container': true, 'chat-container-show': showChat, 'chat-container-hidden': !showChat}">
+  <div class="forum-container">
+    <div class="chat-top-bar">
+      <div class="chat-heading"><mat-icon>forum</mat-icon>Forum</div>
+      <div>
+        <button [matMenuTriggerFor]="chatMenu" mat-icon-button>
+          <mat-icon>settings</mat-icon>
+        </button>
+        <button (click)="toggleChat()"  mat-icon-button>
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
     </div>
-  </div>
-  <div class="course-chat" *ngIf="showChat">
     <app-chat [room]="course?._id"></app-chat>
   </div>
 </div>
+
+<mat-menu #chatMenu>
+  <button mat-menu-item>Change chat name</button>
+  <button mat-menu-item>...</button>
+</mat-menu>

@@ -1,24 +1,22 @@
 <div class="chat-container">
-  <mat-list class="chat-list">
-    <mat-list-item *ngFor="let message of messages" [ngClass]="[(message.author._id === userService.user._id)? 'chat-list-item': '']">
-      <h4 mat-line>
-        <b>{{message.chatName}}</b>
-      </h4>
-      <p mat-line>
-        <span> {{message.content}} </span>
-      </p>
-    </mat-list-item>
-  </mat-list>
+  <div class="messages">
+    <ul *ngFor="let message of messages">
+      <li class="msg" [ngClass]="[(message.author._id === userService.user._id)? 'send': 'replies']">
+        <div class="author">{{message.chatName}}</div>
+        <div class="content">{{message.content}}</div>
+      </li>
+    </ul>
+  </div>
   <div class="chat-footer-container">
-    <mat-icon>message</mat-icon>
     <mat-form-field class="chat-input">
+      <span matPrefix><mat-icon>message</mat-icon></span>
       <input matInput
              #inputMessage
-             maxlength="140"
+             maxlength="240"
              placeholder="Type your message"
              [(ngModel)]="inputValue"
              (keyup.enter)="onEnter()">
-      <mat-hint align="end">{{inputMessage.value.length}}/140</mat-hint>
+      <mat-hint align="end">{{inputMessage.value.length}}/240</mat-hint>
     </mat-form-field>
   </div>
 </div>

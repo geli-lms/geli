@@ -1,10 +1,9 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit, SimpleChange} from '@angular/core';
 import {UserService} from '../../services/user.service';
 import {MessageService} from '../../services/message.service';
 import {ChatService} from '../../services/chat.service';
 import {IMessage} from '../../../../../../../shared/models/IMessage';
 import {SocketIOEvent} from '../../../../../../../shared/models/SoketIOEvent';
-import {Message} from '../../../models/Message';
 import {MatDialog} from '@angular/material';
 import {ChatNameInputDialogComponent} from '../chat-name-input-dialog/chat-name-input-dialog.component';
 import {Subscription} from 'rxjs/Subscription';
@@ -17,7 +16,6 @@ import {Subscription} from 'rxjs/Subscription';
 })
 export class ChatComponent implements OnInit, OnDestroy {
   @Input() room: string;
-  @Input() anonymous: boolean;
   chatName: string;
   chatNameSubscription: Subscription;
   messages: IMessage[] = [];
@@ -25,21 +23,32 @@ export class ChatComponent implements OnInit, OnDestroy {
   inputValue: string = null;
 
   constructor(private messageService: MessageService, private chatService: ChatService, private userService: UserService, public dialog: MatDialog) {
-    //TODO: remove the next line later
-    this.anonymous = true;
-    if(this.anonymous){
       this.chatNameSubscription = this.chatService.chatName$.subscribe(chatName => {
-        console.log('getting new value')
           this.chatName = chatName;
       })
+  }
+
+  ngOnInit() {
+    this.init();
+  }
+
+  async init (){
+    if(this.room){
+      this.messages = await this.messageService.getMessages({room: this.room});
+      this.initSocketConnection();
     }
   }
 
-  async ngOnInit() {
-    const queryParam = {room: this.room};
-    this.messages = await this.messageService.getMessages(queryParam);
-    this.initSocketConnection();
+  ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
+    for (const propName in changes) {
+      if (changes.hasOwnProperty(propName)) {
+        const changedProp = changes[propName];
+        this[propName] = changedProp.currentValue;
+      }
+    }
+    this.init()
   }
+
 
   ngOnDestroy() {
     this.chatNameSubscription.unsubscribe();
@@ -83,7 +92,7 @@ export class ChatComponent implements OnInit, OnDestroy {
     }
   }
 
-  postMessage() {
+  postMessage = () => {
     const message = {
       chatName: this.chatName,
       content: this.inputValue,
