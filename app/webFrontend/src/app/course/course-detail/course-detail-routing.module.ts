@@ -16,11 +16,9 @@ const routes: Routes = [
     canActivate: [AuthGuardService],
     data: {roles: ['student', 'tutor', 'teacher', 'admin']},
     children: [
-      {
-        path: '',
-        component: CourseOverviewComponent,
-        canActivate: [AuthGuardService],
-        data: {roles: ['student', 'tutor', 'teacher', 'admin']}
+      { path: '',
+        redirectTo: 'overview',
+        pathMatch: 'full'
       },
       {
         path: 'overview',
@@ -40,8 +38,8 @@ const routes: Routes = [
         canActivate: [AuthGuardService],
         data: {roles: ['student', 'tutor', 'teacher', 'admin']}
       }
-      ],
-  },
+    ],
+  }
 ];
 
 @NgModule({
