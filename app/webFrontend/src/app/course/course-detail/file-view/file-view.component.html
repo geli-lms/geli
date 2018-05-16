@@ -7,7 +7,8 @@
     </mat-select>
   </mat-form-field>
   <div class="buttonArea">
-    <button mat-raised-button color="secondary" (click)="listview()" mat-tooltip="List View" class="btn" [class.activeBtn]="displayGrid==false">
+    <button mat-raised-button color="secondary" (click)="listview()" mat-tooltip="List View" class="btn"
+            [class.activeBtn]="displayGrid==false">
       <i class="material-icons iconSize">view_list</i> List
     </button>
     <button mat-raised-button color="secondary" [disabled]="this.disableGridViewButton" (click)="gridview()"
@@ -16,36 +17,38 @@
     </button>
   </div>
 </div>
-
-<div *ngIf="displayGrid == false">
-  <mat-list>
+<div *ngIf="checkForFileUnits()">
+  <div *ngIf="displayGrid == false">
+    <mat-list>
+      <ng-container *ngFor="let lec of course.lectures">
+        <ng-container *ngFor="let unit of lec.units">
+          <ng-container *ngIf="unit.__t === 'file'">
+            <ng-container *ngFor="let fileUnit of unit.files">
+              <ng-container *ngIf="unit.fileUnitType == selectedValue">
+                <mat-list-item>
+                  <app-list-view [file]="fileUnit"></app-list-view>
+                </mat-list-item>
+              </ng-container>
+            </ng-container>
+          </ng-container>
+        </ng-container>
+      </ng-container>
+    </mat-list>
+  </div>
+  <div *ngIf="displayGrid == true" class="grid">
     <ng-container *ngFor="let lec of course.lectures">
       <ng-container *ngFor="let unit of lec.units">
         <ng-container *ngIf="unit.__t === 'file'">
           <ng-container *ngFor="let fileUnit of unit.files">
             <ng-container *ngIf="unit.fileUnitType == selectedValue">
-              <mat-list-item>
-                <app-list-view [file]="fileUnit"></app-list-view>
-              </mat-list-item>
+              <app-grid [file]="fileUnit"></app-grid>
             </ng-container>
           </ng-container>
         </ng-container>
       </ng-container>
     </ng-container>
-  </mat-list>
+  </div>
 </div>
-<div *ngIf="displayGrid == true" class = "grid">
-  <ng-container *ngFor="let lec of course.lectures">
-    <ng-container *ngFor="let unit of lec.units">
-      <ng-container *ngIf="unit.__t === 'file'">
-        <ng-container *ngFor="let fileUnit of unit.files">
-          <ng-container *ngIf="unit.fileUnitType == selectedValue">
-            <app-grid [file]="fileUnit"></app-grid>
-          </ng-container>
-        </ng-container>
-      </ng-container>
-    </ng-container>
-  </ng-container>
+<div *ngIf="!checkForFileUnits()">
+  <h2>There are no Files Attached to this course yet!</h2>
 </div>
-
-

@@ -41,4 +41,17 @@ export class FileViewComponent implements OnInit {
       this.disableGridViewButton = false;
     }
   }
+
+  checkForFileUnits(): boolean {
+    let returnVal = false;
+    this.course.lectures.forEach(lec => {
+      lec.units.forEach(unit => {
+        if (unit.__t === 'file') {
+          returnVal = true;
+        }
+      });
+    });
+    return returnVal;
+  }
+
 }
