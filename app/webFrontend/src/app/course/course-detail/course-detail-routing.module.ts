@@ -7,7 +7,6 @@ import {CourseDetailComponent} from './course-detail.component';
 import {CourseDetailDataResolve} from '../../shared/services/course-detail-data-resolve.service';
 import {DownloadCourseDialogComponent} from './download-course-dialog/download-course-dialog.component';
 
-
 const routes: Routes = [
   {
     path: '',

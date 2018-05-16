@@ -1,16 +1,22 @@
 @import '../../../../variables';
 
+.spacer{
+  display: flex;
+  justify-content: flex-end;
+}
+
 .selectArea {
+  float: right;
   display: inline-flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   margin-top: 0.5em;
+  overflow: hidden;
 
   .buttonArea {
      margin-left: 0.5em;
   }
-
 }
 
 ::ng-deep .iconSize {

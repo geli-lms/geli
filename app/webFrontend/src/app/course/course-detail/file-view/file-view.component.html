@@ -1,20 +1,22 @@
-<div class="selectArea">
-  <mat-form-field>
-    <mat-select [(ngModel)]="selectedValue" (selectionChange)="checkSelection()">
-      <mat-option *ngFor="let type of types" [value]="type.value">
-        {{ type.label }}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
-  <div class="buttonArea">
-    <button mat-raised-button color="secondary" (click)="listview()" mat-tooltip="List View" class="btn"
-            [class.activeBtn]="displayGrid==false">
-      <i class="material-icons iconSize">view_list</i> List
-    </button>
-    <button mat-raised-button color="secondary" [disabled]="this.disableGridViewButton" (click)="gridview()"
-            mat-tooltip="Grid View" class="btn" [class.activeBtn]="displayGrid==true">
-      <i class="material-icons iconSize">view_module</i> Grid
-    </button>
+<div class="spacer">
+  <div class="selectArea">
+    <mat-form-field>
+      <mat-select [(ngModel)]="selectedValue" (selectionChange)="checkSelection()">
+        <mat-option *ngFor="let type of types" [value]="type.value">
+          {{ type.label }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <div class="buttonArea">
+      <button mat-raised-button color="secondary" (click)="listview()" mat-tooltip="List View" class="btn"
+              [class.activeBtn]="displayGrid==false">
+        <i class="material-icons iconSize">view_list</i> List
+      </button>
+      <button mat-raised-button color="secondary" [disabled]="this.disableGridViewButton" (click)="gridview()"
+              mat-tooltip="Grid View" class="btn" [class.activeBtn]="displayGrid==true">
+        <i class="material-icons iconSize">view_module</i> Grid
+      </button>
+    </div>
   </div>
 </div>
 <div *ngIf="checkForFileUnits()">
