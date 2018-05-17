@@ -1,10 +1,10 @@
 <div class="task-unit-edit">
-  <strong>{{ unit.text.tasks | translate }}</strong>
+  <strong>{{ 'unit.text.tasks' | translate }}</strong>
 
   <app-unit-general-info-form [model]="model"></app-unit-general-info-form>
 
   <mat-hint>
-    {{ unit.text.hintAddQuestionAndAnswers | translate}}
+    {{ 'unit.text.hintAddQuestionAndAnswers' | translate}}
   </mat-hint>
 
   <div *ngFor="let task of model.tasks" class="question-answer">
@@ -30,7 +30,7 @@
       </div>
       <div class="add-answer">
         <button mat-button (click)="addAnswerAtEnd(task)">
-          <mat-icon>add</mat-icon> {{ unit.text.addAnswer | translate }}
+          <mat-icon>add</mat-icon> {{ 'unit.text.addAnswer' | translate }}
         </button>
       </div>
     </div>
@@ -38,7 +38,7 @@
 
   <p>
     <button mat-raised-button (click)="addTask()">
-      <mat-icon>add</mat-icon> {{ unit.text.addQuestion | translate }}
+      <mat-icon>add</mat-icon> {{ 'unit.text.addQuestion' | translate }}
     </button>
 
     <app-button-save-cancel (save)="saveUnit()" (cancel)="onCancel()"></app-button-save-cancel>

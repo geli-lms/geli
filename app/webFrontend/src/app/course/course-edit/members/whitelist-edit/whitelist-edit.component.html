@@ -1,13 +1,13 @@
 <mat-expansion-panel *ngIf="course.enrollType === 'whitelist'" class="whitelist" [expanded]="false" #expPanel>
   <mat-expansion-panel-header>
   <mat-panel-title class="title">
-    {{ course.text.whitelist | translate }}
+    {{ 'course.text.whitelist' | translate }}
   </mat-panel-title>
   <mat-panel-description>
-    {{ common.amount | translate }}: {{course.whitelist.length}}
+    {{ 'common.amount' | translate }}: {{course.whitelist.length}}
   </mat-panel-description>
   </mat-expansion-panel-header>
-  <p>{{ course.text.infoWhitelist | translate }}</p>
+  <p>{{ 'course.text.infoWhitelist' | translate }}</p>
   <app-whitelist-show [show]="expPanel.expanded"
                       [course]="course"
     (onDragendRemoveWhitelist) ="removeWhitelistUserFromCourse($event)">

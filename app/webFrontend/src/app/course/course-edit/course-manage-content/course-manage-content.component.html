@@ -18,12 +18,12 @@
 <app-mat-fab-menu class="fab" [open]="fabOpen" [onClick]="onFabClick"
                   [disabled]="isInMode('lecture', 'create') || isInMode('lecture', 'edit') || isInMode('unit', 'create') || isInMode('unit', 'edit')"
                   [fabTooltip]="'unit.addContent' | translate">
-  <div *ngIf="isLectureOpen()" (click)="onImportUnit()">{{ unit.import | translate }}</div>
-  <div *ngIf="isLectureOpen()" (click)="onAddUnit('task')">{{ unit.addTasks | translate }}</div>
-  <div *ngIf="isLectureOpen()" (click)="onAddUnit('file')">{{ unit.addFiles | translate }}</div>
-  <div *ngIf="isLectureOpen()" (click)="onAddUnit('code-kata')">{{ unit.addCodeKata | translate }}</div>
-  <div *ngIf="isLectureOpen()" (click)="onAddUnit('video')">{{ unit.addVideos | translate }}</div>
-  <div *ngIf="isLectureOpen()" (click)="onAddUnit('free-text')">{{ unit.addFreeText | translate }}</div>
+  <div *ngIf="isLectureOpen()" (click)="onImportUnit()">{{ 'unit.import' | translate }}</div>
+  <div *ngIf="isLectureOpen()" (click)="onAddUnit('task')">{{ 'unit.addTasks' | translate }}</div>
+  <div *ngIf="isLectureOpen()" (click)="onAddUnit('file')">{{ 'unit.addFiles' | translate }}</div>
+  <div *ngIf="isLectureOpen()" (click)="onAddUnit('code-kata')">{{ 'unit.addCodeKata' | translate }}</div>
+  <div *ngIf="isLectureOpen()" (click)="onAddUnit('video')">{{ 'unit.addVideos' | translate }}</div>
+  <div *ngIf="isLectureOpen()" (click)="onAddUnit('free-text')">{{ 'unit.addFreeText' | translate }}</div>
   <div (click)="onImportLecture()">Import lecture</div>
   <div (click)="onAddLecture()">Add lecture</div>
 </app-mat-fab-menu>

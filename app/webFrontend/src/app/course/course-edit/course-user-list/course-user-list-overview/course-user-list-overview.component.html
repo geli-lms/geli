@@ -35,9 +35,9 @@
 
       <div class="card-btn-wrapper" *ngIf="isInSelectedMembers(user)">
         <button mat-raised-button (click)="openUserProfileDialog(user)" >DETAILS</button>
-        <button mat-raised-button (click)="openWriteMailDialog()" *ngIf="selectedMembers.length <= 1">{{ mail.send | translate}}</button>
+        <button mat-raised-button (click)="openWriteMailDialog()" *ngIf="selectedMembers.length <= 1">{{ 'mail.send' | translate}}</button>
         <button mat-raised-button color="warn" (click)="removeSelectedUsers()" *ngIf="selectedMembers.length <= 1">
-          {{ common.delete | translate }}
+          {{ 'common.delete' | translate }}
         </button>
       </div>
     </mat-card>

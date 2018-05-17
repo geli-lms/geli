@@ -14,25 +14,32 @@ import {InfoDialog} from '../components/info-dialog/info-dialog.component';
 import {FocusDirective} from '../directives/focus.directive';
 import {ChangePasswordDialogComponent} from '../components/change-password-dialog/change-password-dialog.component';
 import {RenameDialogComponent} from '../components/rename-dialog/rename-dialog.component';
+import {TranslateModule} from '@ngx-translate/core';
+import {HttpClientModule} from '@angular/common/http';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    FileUploadModule,
     MaterialImportModule,
+    HttpClientModule,
+    ReactiveFormsModule,
+    FileUploadModule,
+    TranslateModule,
     AceEditorModule,
   ],
   exports: [
     InfoDialog,
     ConfirmDialog,
+    TranslateModule,
     AccessKeyDialog,
     UploadDialog,
     FilepickerDialog,
     WriteMailDialog,
     RenameDialogComponent,
     FocusDirective,
+    MaterialImportModule
   ],
   declarations: [
     InfoDialog,

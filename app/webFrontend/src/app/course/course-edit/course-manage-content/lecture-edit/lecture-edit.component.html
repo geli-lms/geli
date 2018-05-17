@@ -47,7 +47,7 @@
           <span class="unit-type">{{ unit.__t }}</span>
           <span class="unit-date">{{ unit.updatedAt | date:"y-MM-dd" }}</span>
           <span class="unit-actions">
-              <button mat-icon-button [matTooltip]="'common.edit | translate }}" (click)="onEditUnit(unit)">
+              <button mat-icon-button [matTooltip]="'common.edit' | translate" (click)="onEditUnit(unit)">
                 <mat-icon>edit</mat-icon>
               </button>
               <button class="unit-menu-button" mat-icon-button [matMenuTriggerFor]="unitMenu">

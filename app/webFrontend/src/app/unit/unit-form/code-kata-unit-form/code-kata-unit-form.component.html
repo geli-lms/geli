@@ -5,11 +5,11 @@
 
   <div class="info-text">
     <mat-icon>info</mat-icon>
-    {{ code-kata.information.info1 | translate }} "{{areaSeperator}}".
+    {{ 'code-kata.information.info1' | translate }} "{{areaSeperator}}".
   </div>
   <div class="info-text">
     <mat-icon>info</mat-icon>
-    {{ code-kata.information.info2 | translate }}
+    {{ 'code-kata.information.info2' | translate }}
   </div>
 
   <ace-editor class="user-code-editor"
@@ -23,7 +23,7 @@
   <button mat-raised-button (click)="validate()">Validate</button>
   <app-button-save-cancel (save)="addUnit()" (cancel) ="onCancel()"></app-button-save-cancel>
   <div *ngIf="logs!==undefined" class="logs-title">
-    {{ code-kata.text.logs | translate }}
+    {{ 'code-kata.text.logs' | translate }}
     <pre>{{logs}}</pre>
   </div>
 </div>
