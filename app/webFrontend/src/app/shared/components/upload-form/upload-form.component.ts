@@ -9,29 +9,15 @@ import {SnackBarService} from '../../services/snack-bar.service';
 })
 export class UploadFormComponent implements OnInit, OnChanges {
 
-  @Input()
-  uploadPath: string;
+  @Input() uploadPath: string;
+  @Input() uploadMethod = 'POST';
+  @Input() allowedMimeTypes: string[];
+  @Input() additionalData: any;
+  @Input() maxFileNumber: number;
 
-  @Input()
-  uploadMethod = 'POST';
-
-  @Input()
-  allowedMimeTypes: string[];
-
-  @Input()
-  additionalData: any;
-
-  @Input()
-  maxFileNumber: number;
-
-  @Output()
-  onFileSelectedChange = new EventEmitter();
-
-  @Output()
-  onFileUploaded = new EventEmitter();
-
-  @Output()
-  onAllUploaded = new EventEmitter();
+  @Output() onFileSelectedChange = new EventEmitter();
+  @Output() onFileUploaded = new EventEmitter();
+  @Output() onAllUploaded = new EventEmitter();
 
   hasDropZoneOver = false;
   fileUploader: FileUploader;
