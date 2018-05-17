@@ -1,6 +1,6 @@
 <form [formGroup]="form">
   <mat-form-field>
-    <input matInput required formControlName="name" [placeholder]="'common.name'| translate ">
+    <input matInput required formControlName="name" [placeholder]="'common.name'| translate">
   </mat-form-field>
 
   <mat-form-field>
@@ -15,8 +15,8 @@
 
   <div>
     <mat-slide-toggle formControlName="visible">
-      <span *ngIf="form.value.visible">{{ unit.text.canBeSeenByStudents | translate }}</span>
-      <span *ngIf="!form.value.visible">{{ unit.text.canNotBeSeenByStudents | translate }}s</span>
+      <span *ngIf="form.value.visible">{{ 'unit.text.canBeSeenByStudents' | translate }}</span>
+      <span *ngIf="!form.value.visible">{{ 'unit.text.canNotBeSeenByStudents' | translate }}s</span>
     </mat-slide-toggle>
   </div>
 </form>

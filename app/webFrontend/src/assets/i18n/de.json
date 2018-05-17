@@ -89,6 +89,7 @@
     "media" : "Medien",
     "members" : "Mitglieder",
     "ok": "OK",
+    "open" : "Öffnen",
     "password": "Passwort",
     "profile": "Profil",
     "profileDetails": {
@@ -108,6 +109,7 @@
     "save": "Speichern",
     "send": "Senden",
     "settings": "Einstellungen",
+    "statistics": "Statistik",
     "submit": "Absenden",
     "teachers" : "Lehrer",
     "theme": "Thema",
@@ -152,6 +154,7 @@
       "needAccessKey": "Dieser Kurs benötigt einen Einschreibeschlüssel.",
       "noCourses": "Noch keine Kurse hinzugefügt.",
       "notInCourse": "Nicht im Kurs",
+      "notVisibleToStudents": "Kurs für Studenten nicht sichtbar",
       "overview": "Übersicht",
       "reportFor": "Ergebnis für",
       "selectAccessType": "Bitte wählen Sie Ihren Kurstyp aus.",
