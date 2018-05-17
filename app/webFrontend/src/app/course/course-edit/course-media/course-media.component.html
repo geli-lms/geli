@@ -87,7 +87,7 @@
           </mat-card>
         </ng-container>
         <p *ngIf="currentFolder?.files.length === 0">
-          No Files so far.
+          {{ 'file.text.noFiles' | translate }}
         </p>
       </div>
     </div>

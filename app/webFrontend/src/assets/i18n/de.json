@@ -66,6 +66,7 @@
     "cheatSheetYouFind": "Einen Spickzettel finden Sie hier.",
     "close" : "Schließen",
     "continue": "Weiter",
+    "content": "Inhalt",
     "delete": "Löschen",
     "description": "Beschreibung",
     "discard": "Verwerfen",
@@ -78,12 +79,15 @@
     "export": "Export",
     "fullscreenMode": "Vollbildmodus",
     "geli": "geli",
+    "general" : "Allgemein",
     "here": "hier",
     "imprint": "imprint",
     "infobox": "Infobox",
     "login": "Login",
     "name": "Name",
     "notifications": "Benachrichtigungen",
+    "media" : "Medien",
+    "members" : "Mitglieder",
     "ok": "OK",
     "password": "Passwort",
     "profile": "Profil",
@@ -105,6 +109,7 @@
     "send": "Senden",
     "settings": "Einstellungen",
     "submit": "Absenden",
+    "teachers" : "Lehrer",
     "theme": "Thema",
     "tooltip": {
       "quitFullscreenMode": "Vollbildmodus beenden",
@@ -130,8 +135,7 @@
       "accessKey": "Einschreibeschlüssel",
       "Description": "Kursbeschreibung",
       "Name": "Kursname",
-      "searchAdd": "Suchen und hinzufügen:",
-      "searchAddBy": "nach Name, ID und E-Mail"
+      "searchAndAdd": "Benutzer anhand des Namens, der Id oder der E-Mail-Adresse suchen"
     },
     "ShowCourse": "Kurs anzeigen",
     "text": {
@@ -194,6 +198,7 @@
       "filesSelected" : "Dateien ausgewählt",
       "infoDropAddFiles": "Dateien hier hinziehen oder hier klicken, um Dateien auszuwählen.",
       "noVideo": "Kein Video verfügbar.",
+      "noFiles" : "Keine Dateien vorhanden",
       "progress": "Fortschritt",
       "RemoveFromQueue": "Datei aus der Schlange löschen.",
       "takePicture": "Bild aufnehmen"
@@ -290,7 +295,8 @@
       "signedIn": "Eingetragen"
     },
     "tooltip":{
-      "deleteUSers": "Ausgewählte Mitglieder entfernen."
+      "deleteUSers": "Ausgewählte Mitglieder entfernen.",
+      "toggleMembers" : "Alle Benutzer auswählen"
     }
   }
 }

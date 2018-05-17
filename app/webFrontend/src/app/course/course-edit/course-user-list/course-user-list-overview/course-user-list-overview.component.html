@@ -1,7 +1,7 @@
 <div class="members" *ngIf="show">
 
   <div>
-    <button class="text-fit" mat-raised-button matTooltip="Toggle all members"
+    <button class="text-fit" mat-raised-button [matTooltip]="'user.tooltip.toggleMembers' | translate"
             (click)="toggleAllUsers()">
       <mat-icon>select_all</mat-icon>
     </button>

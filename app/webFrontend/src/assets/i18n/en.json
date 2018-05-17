@@ -65,6 +65,7 @@
     "cancel": "Cancel",
     "cheatSheetYouFind": "A cheat sheet you can find ",
     "continue": "Continue",
+    "content" : "Content",
     "close" : "Close",
     "delete": "Delete",
     "description": "Description",
@@ -78,12 +79,15 @@
     "export": "Export",
     "fullscreenMode": "Fullscreen Mode",
     "geli": "geli",
+    "general": "General",
     "here": "here",
     "imprint": "imprint",
     "infobox": "InfoBox",
     "login": "Login",
     "name": "Name",
     "notifications": "Notifications",
+    "media": "Media",
+    "members": "Members",
     "ok": "OK",
     "password": "Password",
     "profile": "Profile",
@@ -105,6 +109,7 @@
     "send": "Send",
     "settings": "Settings",
     "submit": "Submit",
+    "teachers": "Teachers",
     "theme": "Theme",
     "tooltip": {
       "quitFullscreenMode": "Quit Fullscreen",
@@ -130,8 +135,7 @@
       "accessKey": "Access key",
       "Description": "Course description",
       "Name": "Course name",
-      "searchAdd": "Search and add",
-      "searchAddBy": "by name, id and email"
+      "searchAndAdd": "Search and add user by name, Id or e-mail"
     },
     "ShowCourse": "Show course",
     "text": {
@@ -194,6 +198,7 @@
       "filesSelected" : "File selected",
       "infoDropAddFiles": "Drop files here or click here to select files.",
       "noVideo": "No video available.",
+      "noFiles" : "No files available.",
       "progress": "Progress",
       "RemoveFromQueue": "Remove file from queue.",
       "takePicture": "Take picture"
@@ -290,7 +295,8 @@
       "signedIn": "Signed in"
     },
     "tooltip":{
-      "deleteUSers": "Delete selected Members."
+      "deleteUSers": "Delete selected Members.",
+      "toggleMembers" : "Toggle all members"
     }
   }
 }
