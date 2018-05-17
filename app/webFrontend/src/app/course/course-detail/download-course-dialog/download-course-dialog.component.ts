@@ -138,6 +138,38 @@ export class DownloadCourseDialogComponent implements OnInit {
     }
   }
 
+  async downloadAndClosePDF() {
+    this.disableDownloadButton = true;
+    const obj = await this.buildObject();
+    if (obj.lectures.length === 0) {
+      this.snackBar.open('No units selected!');
+      this.disableDownloadButton = false;
+      return;
+    }
+    const downloadObj = <IDownload> obj;
+    this.showSpinner = true;
+    if (this.calcSumFileSize() / 1024 < 204800) {
+      const result = await this.downloadReq.postDownloadReqForCoursePDF(downloadObj);
+      try {
+        const response = <Response> await this.downloadReq.getFile(result.toString());
+        saveAs(response.body, this.saveFileService.replaceCharInFilename(this.course.name) + '.zip');
+        this.showSpinner = false;
+        this.disableDownloadButton = false;
+        if (!this.keepDialogOpen) {
+          this.dialogRef.close();
+        }
+      } catch (err) {
+        this.showSpinner = false;
+        this.disableDownloadButton = false;
+        this.snackBar.openLong('Woops! Something went wrong. Please try again in a few Minutes.');
+      }
+    } else {
+      this.snackBar.openLong('Requested Download Package is too large! Please Download fewer Units in one Package.');
+      this.showSpinner = false;
+      this.disableDownloadButton = false;
+    }
+  }
+
   buildObject() {
     const lectures = [];
     this.childLectures.forEach(lec => {

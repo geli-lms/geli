@@ -17,6 +17,7 @@
 </div>
 <mat-dialog-actions>
   <button mat-raised-button color="primary" [disabled]="this.disableDownloadButton" (click)="downloadAndClose()">Download</button>
+  <button mat-raised-button color="primary" [disabled]="this.disableDownloadButton" (click)="downloadAndClosePDF()">Download PDF</button>
   <button mat-button [mat-dialog-close]="true">Cancel</button>
   <span class="spacer"></span>
   <ng-container *ngIf="showSpinner">

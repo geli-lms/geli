@@ -23,6 +23,16 @@ import {User} from '../models/User';
 import {File} from '../models/mediaManager/File';
 
 const cache = require('node-file-cache').create({life: config.timeToLiveCacheValue});
+const pdfMakePrinter = require('pdfmake/src/printer');
+
+const fonts = {
+  Roboto: {
+    normal: 'src/assets/fonts/Roboto-Regular.ttf',
+    bold: 'src/assets/fonts/Roboto-Medium.ttf',
+    italics: 'src/assets/fonts/Roboto-Italic.ttf',
+    bolditalics: 'src/assets/fonts/Roboto-MediumItalic.ttf'
+  }
+};
 
 // Set all routes which should use json to json, the standard is blob streaming data
 @Controller('/download')
@@ -211,6 +221,98 @@ export class DownloadController {
             } else {
               archive.append(localUnit.toFile(),
                 {name: lecCounter + '_' + lcName + '/' + unitCounter + '_' + this.replaceCharInFilename(localUnit.name) + '.txt'});
+            }
+            unitCounter++;
+          }
+          lecCounter++;
+        }
+        return new Promise((resolve, reject) => {
+          archive.on('error', () => reject(hash));
+          archive.finalize();
+          cache.set(hash, hash);
+          archive.on('end', () => resolve(hash));
+        });
+      } else {
+        return hash;
+      }
+    } else {
+      throw new NotFoundError();
+    }
+  }
+
+  @Post('/pdf')
+  @ContentType('application/json')
+  async postDownloadRequestPDF(@Body() data: IDownload, @CurrentUser() user: IUser) {
+
+    const printer = new pdfMakePrinter(fonts);
+
+    const course = await Course.findOne({_id: data.courseName});
+
+    if (course === null) {
+      throw new NotFoundError();
+    }
+
+    const courseAdmin = await User.findOne({_id: course.courseAdmin});
+
+    if (course.students.indexOf(user._id) !== -1 || courseAdmin.equals(user._id.toString()) ||
+      course.teachers.indexOf(user._id) !== -1 || user.role === 'admin') {
+
+      if (!data.lectures.length) {
+        throw new NotFoundError();
+      }
+
+      const size = await this.calcPackage(data);
+
+      if (size.totalSize > config.maxZipSize || size.tooLargeFiles.length !== 0) {
+        throw new NotFoundError();
+      }
+
+      const hash = await this.createFileHash(data);
+      const key = cache.get(hash);
+
+      if (key === null) {
+        const filepath = config.tmpFileCacheFolder + hash + '.zip';
+        const output = fs.createWriteStream(filepath);
+        const archive = archiver('zip', {
+          zlib: {level: 9}
+        });
+
+        archive.pipe(output);
+
+        let lecCounter = 1;
+        for (const lec of data.lectures) {
+
+          const localLecture = await Lecture.findOne({_id: lec.lectureId});
+          const lcName = this.replaceCharInFilename(localLecture.name);
+          let unitCounter = 1;
+
+          for (const unit of lec.units) {
+            const localUnit = await Unit.findOne({_id: unit.unitId});
+
+            if (!localUnit) {
+              throw new NotFoundError();
+            }
+
+            if (localUnit.__t === 'file') {
+              for (const fileId of unit.files) {
+                const file = await File.findById(fileId);
+                archive.file( 'uploads/' + file.link, {name: lecCounter + '_' + lcName + '/' + unitCounter + '_' + file.name});
+              }
+            } else {
+
+              const docDefinition = {
+                content: [
+                  'First paragraph',
+                  'Another paragraph, this time a little bit longer to make sure, this line will be divided into at least two lines'
+                ]
+              };
+              const doc = printer.createPdfKitDocument(docDefinition);
+              doc.pipe(fs.createWriteStream(config.tmpFileCacheFolder +'/temp.pdf'));
+              await doc.end();
+
+              archive.file(config.tmpFileCacheFolder +'/temp.pdf',
+                {name: lecCounter + '_' + lcName + '/' + unitCounter + '_' + this.replaceCharInFilename(localUnit.name) + '.pdf'});
+
             }
             unitCounter++;
           }
