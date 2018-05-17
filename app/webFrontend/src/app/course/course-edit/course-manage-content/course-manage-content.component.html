@@ -7,7 +7,7 @@
     </app-lecture-edit>
   </div>
 
-  <p *ngIf="!course.lectures.length">No lectures added yet.</p>
+  <p *ngIf="!course.lectures.length">{{ 'lecture.text.noLecture' | translate }}</p>
 
   <app-lecture-form *ngIf="isInMode('lecture', 'create')" (onSubmit)="createLecture($event)" [onCancel]="closeAddLecture"
                     actionLabel="Add"></app-lecture-form>
@@ -24,6 +24,6 @@
   <div *ngIf="isLectureOpen()" (click)="onAddUnit('code-kata')">{{ 'unit.addCodeKata' | translate }}</div>
   <div *ngIf="isLectureOpen()" (click)="onAddUnit('video')">{{ 'unit.addVideos' | translate }}</div>
   <div *ngIf="isLectureOpen()" (click)="onAddUnit('free-text')">{{ 'unit.addFreeText' | translate }}</div>
-  <div (click)="onImportLecture()">Import lecture</div>
-  <div (click)="onAddLecture()">Add lecture</div>
+  <div (click)="onImportLecture()">{{ 'lecture.text.import' | translate }}</div>
+  <div (click)="onAddLecture()">{{ 'lecture.text.add' | translate }}</div>
 </app-mat-fab-menu>
