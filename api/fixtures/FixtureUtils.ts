@@ -144,6 +144,10 @@ export class FixtureUtils {
     return this.getUser('student');
   }
 
+  public static async getUserCount(): Promise<number> {
+    return User.count({});
+  }
+
   public static async getCourses(): Promise<ICourse[]> {
     return Course.find()
       .populate('students')
