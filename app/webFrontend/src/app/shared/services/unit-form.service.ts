@@ -1,4 +1,4 @@
-import {EventEmitter, Injectable} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {IUnit} from '../../../../../../shared/models/units/IUnit';
 import {ICourse} from '../../../../../../shared/models/ICourse';
@@ -16,8 +16,6 @@ export class UnitFormService {
   public lecture: ILecture;
 
   public headline: string;
-  public unitDescription: string;
-  public infos: [string];
 
   /**
    * if false is returned, submit will be cancelled
@@ -38,9 +36,7 @@ export class UnitFormService {
     this.beforeSubmit = undefined;
 
     this.headline = null;
-    this.unitDescription = null;
-    this.infos = null;
-  }
+    }
 
   async save(onDone: () => void ) {
 
