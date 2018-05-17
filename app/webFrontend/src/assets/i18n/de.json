@@ -64,6 +64,7 @@
     "back": "Zurück",
     "cancel": "Abbrechen",
     "cheatSheetYouFind": "Einen Spickzettel finden Sie hier.",
+    "close" : "Schließen",
     "continue": "Weiter",
     "delete": "Löschen",
     "description": "Beschreibung",
@@ -175,15 +176,22 @@
     "myCourses": "Meine Kurse",
     "teacherCourses": "Meine Lehrveranstaltungen"
   },
+  "errorPage": {
+    "text" : {
+      "pageNotFound" : "Seite nicht gefunden :(",
+      "pageNotFoundHint" : "Vielleicht suchen Sie nach einer Seite, die leider nicht mehr existiert."
+    }
+  },
   "file": {
     "placeholder": {
-      "uploadFiles": "UploadFiles"
+      "uploadFiles": "Dateien hochladen"
     },
     "text": {
       "actions": "Aktionen",
       "addFile": "Datei hinzufügen",
       "filename": "Dateiname",
       "filesize": "Dateigröße",
+      "filesSelected" : "Dateien ausgewählt",
       "infoDropAddFiles": "Dateien hier hinziehen oder hier klicken, um Dateien auszuwählen.",
       "noVideo": "Kein Video verfügbar.",
       "progress": "Fortschritt",

@@ -5,7 +5,7 @@
     <li *ngFor="let type of allowedMimeTypes"><small>{{ type }}</small></li>
   </ul>
 </ng-container>
-<small>Files selected: {{ selectedOptions.length }}</small>
+<small>{{ 'file.text.filesSelected' | translate }}: {{ selectedOptions.length }}</small>
 <br>
 <mat-dialog-content>
   <mat-selection-list #fileList dense [(ngModel)]="selectedOptions">

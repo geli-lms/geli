@@ -5,11 +5,11 @@
       <span>{{user.profile.firstName}} {{user.profile.lastName}}</span>
     </h2>
     <div class="user-data">
-      <div><strong>E-Mail: </strong><a href="mailto:{{user.email}}">{{user.email}}</a></div>
+      <div><strong>{{ 'common.email' | translate }}: </strong><a href="mailto:{{user.email}}">{{user.email}}</a></div>
       <div *ngIf="canSeeUid()">
-          <strong>Matrikelnummer: </strong>{{user.uid}}
+          <strong>{{ 'common.profileDetails.uid' | translate }}: </strong>{{user.uid}}
       </div>
     </div>
   </div>
-  <button mat-raised-button color="primary" (click)="dialogRef.close(true)">CLOSE</button>
+  <button mat-raised-button color="primary" (click)="dialogRef.close(true)">{{ 'common.close' | translate }}</button>
 </div>

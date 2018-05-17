@@ -65,6 +65,7 @@
     "cancel": "Cancel",
     "cheatSheetYouFind": "A cheat sheet you can find ",
     "continue": "Continue",
+    "close" : "Close",
     "delete": "Delete",
     "description": "Description",
     "discard": "Discard",
@@ -175,6 +176,12 @@
     "myCourses": "My courses",
     "teacherCourses": "My teacher courses"
   },
+  "errorPage": {
+    "text" : {
+      "pageNotFound" : "Page not found :(",
+      "pageNotFoundHint" : "Maybe the page you are looking for a page has been removed."
+    }
+  },
   "file": {
     "placeholder": {
       "uploadFiles": "UploadFiles"
@@ -184,6 +191,7 @@
       "addFile": "Add file",
       "filename": "File name",
       "filesize": "File size",
+      "filesSelected" : "File selected",
       "infoDropAddFiles": "Drop files here or click here to select files.",
       "noVideo": "No video available.",
       "progress": "Progress",

@@ -13,7 +13,7 @@
   <button mat-raised-button color="primary"
           (click)="uploadAll()" [disabled]="!checkSave()">
     <mat-icon>file_upload</mat-icon>
-    Upload and save
+    {{ 'file.placeholder.uploadFiles' | translate }}
   </button>
-  <button mat-raised-button (click)="cancel()">Cancel</button>
+  <button mat-raised-button (click)="cancel()">{{ 'common.cancel' | translate }}</button>
 </mat-dialog-actions>
