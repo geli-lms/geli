@@ -62,8 +62,6 @@ export class UnitFormComponent implements OnInit {
     this.unitFormService.lecture = this.lecture;
 
     this.unitForm = this.unitFormService.unitForm;
-
-    this.unitFormService.submitDone.subscribe(() => this.onDone());
   }
 
   reset() {
