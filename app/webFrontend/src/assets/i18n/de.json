@@ -38,6 +38,7 @@
       "reset": "Zurücksetzen"
     },
     "tooltip": {
+      "currentPassword": "Current password",
       "ForgotPassword": "Klicken Sie hier, um ein neues Passwort anzufordern.",
       "ResetPassword": "Klicken Sie hier, um das Passwort zurückzusetzen."
     }
@@ -57,13 +58,16 @@
   "common": {
     "about": "Über",
     "actions": "Aktionen",
+    "addMarkdownText": "Füge Markdown hinzu.\n Eine Referenz finden Sie hier: <a href=\"https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet\" target=\"_blank\"></a>.",
     "administration": "Administration",
     "amount": "Menge",
     "back": "Zurück",
     "cancel": "Abbrechen",
     "cheatSheetYouFind": "Einen Spickzettel finden Sie hier.",
+    "continue": "Weiter",
     "delete": "Löschen",
     "description": "Beschreibung",
+    "discard": "Verwerfen",
     "dismiss": "Schließen",
     "download": "Download",
     "duplicate": "Duplizieren",
@@ -79,6 +83,7 @@
     "login": "Login",
     "name": "Name",
     "notifications": "Benachrichtigungen",
+    "ok": "OK",
     "password": "Passwort",
     "profile": "Profil",
     "profileDetails": {
@@ -133,11 +138,14 @@
       "canNotSeenByStudents": "Kurs ist für Studenten nicht sichtbar.",
       "canSeenByStudents": "Kurs ist für Studenten sichtbar.",
       "editCourse": "Kurs bearbeiten",
+      "enterAccessKey": "Bitte geben Sie den Einschreibeschlüssel dieses Kurses ein.",
       "enterAccessKeyForStudents": "Geben Sie einen Einschreibeschlüssel für die Studenten ein.",
       "goToCourse": "Zum Kurs",
       "inCourse": "Im Kurs",
       "infoWhitelist": "Allen Benutzern dieser Liste, ist es erlaubt, dem Kurs beizutreten.",
       "isFreeForEveryone": "Der Kurs ist offen und für jeden zugänglich.",
+      "needAccessKey": "Dieser Kurs benötigt einen Einschreibeschlüssel.",
+      "noCourses": "Noch keine Kurse hinzugefügt.",
       "notInCourse": "Nicht im Kurs",
       "overview": "Übersicht",
       "reportFor": "Ergebnis für",
@@ -181,12 +189,20 @@
       "progress": "Fortschritt",
       "RemoveFromQueue": "Datei aus der Schlange löschen.",
       "takePicture": "Bild aufnehmen"
+    },
+    "tooltip":{
+      "selectFile": "Datei auswählen"
     }
   },
   "home": {
     "welcomeTo": "Willkommen auf"
   },
   "lecture": {
+    "text":{
+      "add": "Kapitel hinzufügen",
+      "import": "Kapitel importieren",
+      "noLecture": "Noch kein Kapitel hinzugefügt."
+    },
     "tooltip": {
       "add": "Einheit hinzufügen",
       "delete": "Einheit löschen",

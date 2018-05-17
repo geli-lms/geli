@@ -38,6 +38,7 @@
       "reset": "Reset"
     },
     "tooltip": {
+      "currentPassword": "Current password",
       "ForgotPassword": "Click here to request a new password.",
       "ResetPassword": "Click here to reset password."
     }
@@ -57,13 +58,16 @@
   "common": {
     "about": "About",
     "actions": "Actions",
+    "addMarkdownText": "Add Markdown to add text.\n A Cheatsheet you can find here: <a href=\"https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet\" target=\"_blank\"></a>.",
     "administration": "Administration",
     "amount": "Amount",
     "back": "Back",
     "cancel": "Cancel",
     "cheatSheetYouFind": "A cheat sheet you can find ",
+    "continue": "Continue",
     "delete": "Delete",
     "description": "Description",
+    "discard": "Discard",
     "dismiss": "Dismiss",
     "download": "Download",
     "duplicate": "Duplicate",
@@ -79,6 +83,7 @@
     "login": "Login",
     "name": "Name",
     "notifications": "Notifications",
+    "ok": "OK",
     "password": "Password",
     "profile": "Profile",
     "profileDetails": {
@@ -133,11 +138,14 @@
       "canNotSeenByStudents": "Course cannot be seen by students.",
       "canSeenByStudents": "Course can be seen by students.",
       "editCourse": "Edit course",
+      "enterAccessKey": "Please enter the course's access key.",
       "enterAccessKeyForStudents": "Enter an access key for the students.",
       "goToCourse": "Go to course",
       "inCourse": "In Course",
       "infoWhitelist": "All users on this list are allowed to join this course.",
       "isFreeForEveryone": "The course is free and accessible for everyone.",
+      "needAccessKey": "This course requires an access key.",
+      "noCourses": "No courses added yet.",
       "notInCourse": "Not in course",
       "overview": "Overview",
       "reportFor": "Report for",
@@ -181,12 +189,20 @@
       "progress": "Progress",
       "RemoveFromQueue": "Remove file from queue.",
       "takePicture": "Take picture"
+    },
+    "tooltip":{
+      "selectFile": "Select file"
     }
   },
   "home": {
     "welcomeTo": "Welcome to"
   },
   "lecture": {
+    "text":{
+      "add": "Add lecture",
+      "import": "Import lecture",
+      "noLecture": "No lecture added yet."
+    },
     "tooltip": {
       "add": "Add new unit",
       "delete": "Delete unit",
