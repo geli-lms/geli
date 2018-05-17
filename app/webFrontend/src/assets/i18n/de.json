@@ -73,7 +73,7 @@
     "dismiss": "Schließen",
     "download": "Download",
     "duplicate": "Duplizieren",
-    "edit": "bearbeiten",
+    "edit": "Bearbeiten",
     "editProfile": "Profil bearbeiten",
     "email": "E-Mail",
     "export": "Export",
@@ -166,6 +166,7 @@
     "tooltip" : {
       "add": "Kurs hinzufügen",
       "addUserToWhitelist": "Benutzer zu Freigabeliste hinzufügen",
+      "download" : "Kurs herunterladen",
       "enroll": "Einschreiben",
       "keyRequired" : "Zugangscode benötigt",
       "leave": "Verlassen",
@@ -207,7 +208,8 @@
       "takePicture": "Bild aufnehmen"
     },
     "tooltip":{
-      "selectFile": "Datei auswählen"
+      "selectFile": "Datei auswählen",
+      "uploadFile": "Datei hochladen"
     }
   },
   "home": {
@@ -257,6 +259,7 @@
     "addCodeKata": "Code-Kata hinzufügen",
     "addContent": "Inhalt hinzufügen",
     "addFiles": "Dateien hinzufügen",
+    "addFilesToUnit": "Dateien zur Einheit hinzufügen",
     "addFreeText": "Freitext hinzufügen",
     "addTasks": "Aufgaben hinzufügen",
     "addVideos": "Videos hinzufügen",

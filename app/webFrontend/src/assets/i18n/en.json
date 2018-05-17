@@ -166,6 +166,7 @@
     "tooltip" : {
       "add": "Add Course",
       "addUserToWhitelist": "Add user to whitelist",
+      "download" : "Download course",
       "enroll": "Enroll",
       "keyRequired" : "Access key required",
       "leave": "Leave",
@@ -207,7 +208,8 @@
       "takePicture": "Take picture"
     },
     "tooltip":{
-      "selectFile": "Select file"
+      "selectFile": "Select file",
+      "uploadFile": "Upload file"
     }
   },
   "home": {
@@ -257,6 +259,7 @@
     "addCodeKata": "Add code-kata",
     "addContent": "Add content",
     "addFiles": "Add files",
+    "addFilesToUnit": "Add files to unit",
     "addFreeText": "Add free text",
     "addTasks": "Add tasks",
     "addVideos": "Add videos",

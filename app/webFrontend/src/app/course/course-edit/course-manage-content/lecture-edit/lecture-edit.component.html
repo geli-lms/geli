@@ -2,7 +2,7 @@
   <div class="lecture-header">
     <mat-icon class="lecture-drag-handle">drag_handle</mat-icon>
     <h2>{{lecture.name}}</h2>
-    <button class="open-toggle" (click)="toggleLecture()"
+    <button class="open-toggle" [matTooltip]="'common.tooltip.clickToOpen' | translate" (click)="toggleLecture()"
             [class.opened]="isOpened()" mat-icon-button>
       <mat-icon>arrow_drop_down</mat-icon>
     </button>
@@ -16,19 +16,19 @@
     <mat-menu #lectureMenu="matMenu">
       <button mat-menu-item [matTooltip]="'lecture.tooltipEdit' | translate" (click)="onEditLecture(lecture)">
         <mat-icon>edit</mat-icon>
-        Edit
+        {{ 'common.edit' | translate }}
       </button>
       <button mat-menu-item [matTooltip]="'lecture.tooltipDownloadLecture' | translate"  (click)="exportLecture(lecture)">
         <mat-icon>file_download</mat-icon>
-        Export
+        {{ 'common.export' | translate }}
       </button>
       <button mat-menu-item [matTooltip]="'lecture.tooltipDuplicate' | translate" (click)="duplicateLecture(lecture)">
         <mat-icon>content_copy</mat-icon>
-        Duplicate
+        {{ 'common.duplicate' | translate }}
       </button>
       <button mat-menu-item [matTooltip]="'lecture.tooltipDelete' | translate" (click)="deleteLecture(lecture)">
         <mat-icon>delete</mat-icon>
-        Delete
+        {{ 'common.delete' | translate }}
       </button>
     </mat-menu>
   </div>

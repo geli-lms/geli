@@ -1,5 +1,5 @@
 <div class="course-header">
-  <button mat-icon-button color="primary" (click)="openDownloadDialog()" class="download-button">
+  <button mat-icon-button color="primary" [matTooltip]="'course.tooltip.download' | translate" (click)="openDownloadDialog()" class="download-button">
     <mat-icon>get_app</mat-icon>
   </button>
   <h1>{{course?.name}}</h1>

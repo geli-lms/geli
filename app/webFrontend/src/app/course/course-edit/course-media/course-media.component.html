@@ -28,7 +28,7 @@
 
       <!-- Multi-Select button area -->
       <div class="btn__area">
-        <button class="text-fit" mat-raised-button matTooltip="Upload file"
+        <button class="text-fit" mat-raised-button [matTooltip]="'file.tooltip.uploadFile' | translate"
                 (click)="addFile()">
           <mat-icon>add</mat-icon>
         </button>
