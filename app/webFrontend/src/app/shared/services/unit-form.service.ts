@@ -75,8 +75,7 @@ export class UnitFormService {
     if (reqObj.model._id) {
       isUpdate = true;
       promise = this.unitService.updateItem(this.model);
-    }
-    else {
+    } else {
       isUpdate = false;
       promise = this.unitService.createItem(reqObj);
     }

@@ -61,17 +61,15 @@ export class CodeKataUnitFormComponent implements OnInit {
 
   ngOnInit() {
     // set example Values if all values are undefined
-    if(!this.model.definition && !this.model.code && !this.model.test) {
+    if (!this.model.definition && !this.model.code && !this.model.test) {
       this.model.definition = this.example.definition;
       this.model.code = this.example.code;
       this.model.test = this.example.test;
     }
     // set empty string if single value is undefined
-    this.model.definition = this.model.definition? this.model.definition : '';
-    this.model.code = this.model.code? this.model.code: '';
-    this.model.test = this.model.test? this.model.test: '';
-
-
+    this.model.definition = this.model.definition ? this.model.definition : '';
+    this.model.code = this.model.code ? this.model.code : '';
+    this.model.test = this.model.test ? this.model.test : '';
 
     this.unitForm = this.unitFormService.unitForm;
 
@@ -79,9 +77,9 @@ export class CodeKataUnitFormComponent implements OnInit {
 
     this.wholeInputCode =
       this.model.definition
-      + '\n' + this.areaSeperator +'\n'
+      + '\n' + this.areaSeperator + '\n'
       + this.model.code
-      + '\n' + this.areaSeperator +'\n'
+      + '\n' + this.areaSeperator + '\n'
       + this.model.test;
 
     this.unitForm.addControl('wholeInputCode', new FormControl(this.wholeInputCode));
@@ -156,7 +154,11 @@ export class CodeKataUnitFormComponent implements OnInit {
 
   // this code gets unnessessary with the Implementation of Issue #44 (all validation parts should happen on the server)
   private validateStructure(): boolean {
-    const separatorCount = (this.unitForm.controls.wholeInputCode.value.match(new RegExp('\n' + this.areaSeperator + '\n', 'gmi')) || []).length;
+    const separatorCount = (
+      this.unitForm.controls.wholeInputCode.value.match(
+        new RegExp('\n' + this.areaSeperator + '\n', 'gmi')
+      ) || []
+    ).length;
     if (separatorCount > 2) {
       this.snackBar.open('There are too many area separators');
       return false;
@@ -182,5 +184,4 @@ export class CodeKataUnitFormComponent implements OnInit {
 
     return true;
   }
-
 }

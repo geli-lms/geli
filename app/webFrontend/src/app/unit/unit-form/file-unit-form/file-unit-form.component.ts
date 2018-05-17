@@ -8,7 +8,7 @@ import {UnitService} from '../../../shared/services/data.service';
 import {ShowProgressService} from '../../../shared/services/show-progress.service';
 import {PickMediaDialog} from '../../../shared/components/pick-media-dialog/pick-media-dialog.component';
 import {IFile} from '../../../../../../../shared/models/mediaManager/IFile';
-import {UnitFormService} from "../../../shared/services/unit-form.service";
+import {UnitFormService} from '../../../shared/services/unit-form.service';
 import {FormArray, FormBuilder, FormControl, FormGroup} from '@angular/forms';
 
 @Component({
@@ -39,7 +39,7 @@ export class FileUnitFormComponent implements OnInit {
 
   ngOnInit() {
     this.unitFormService.headline = this.fileUnitType === 'video' ? 'Add Videos' : 'Add Files';
-    this.unitFormService.unitForm.addControl('files',new FormArray([]));
+    this.unitFormService.unitForm.addControl('files', new FormArray([]));
 
 
     this.unitForm = this.unitFormService.unitForm;
@@ -47,8 +47,8 @@ export class FileUnitFormComponent implements OnInit {
     this.buildForm();
   }
 
-  buildForm(){
-    for(const file of this.model.files) {
+  buildForm() {
+    for (const file of this.model.files) {
       this.addFileToForm(file);
     }
   }
@@ -101,7 +101,7 @@ export class FileUnitFormComponent implements OnInit {
     });
   }
 
-  addFileToForm(file: IFile){
+  addFileToForm(file: IFile) {
     const fileControl = this.formBuilder.group({
       _id: new FormControl(),
       name: new FormControl(),
