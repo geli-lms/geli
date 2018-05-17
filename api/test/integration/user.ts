@@ -7,6 +7,7 @@ import {User} from '../../src/models/User';
 import {errorCodes} from '../../src/config/errorCodes';
 import {FixtureUtils} from '../../fixtures/FixtureUtils';
 import {IUser} from '../../../shared/models/IUser';
+import {allRoles} from '../../src/config/roles';
 import chaiHttp = require('chai-http');
 import fs = require('fs');
 
@@ -34,7 +35,7 @@ describe('User', () => {
 
       res.status.should.be.equal(200);
       res.body.should.be.a('array');
-      res.body.length.should.be.equal(42);
+      res.body.length.should.be.equal(await FixtureUtils.getUserCount());
     });
 
     it('should fail with wrong authorization', async () => {
@@ -81,8 +82,8 @@ describe('User', () => {
 
       res.status.should.be.equal(200);
       res.body.should.be.a('array');
-      res.body.length.should.be.equal(4);
-      res.body.should.have.same.members(['student', 'tutor', 'teacher', 'admin']);
+      res.body.length.should.be.equal(allRoles.length);
+      res.body.should.have.same.members(allRoles);
     });
   });
 
