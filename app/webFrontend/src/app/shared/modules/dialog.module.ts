@@ -24,7 +24,6 @@ import {HttpClientModule} from '@angular/common/http';
     ReactiveFormsModule,
     MaterialImportModule,
     HttpClientModule,
-    ReactiveFormsModule,
     FileUploadModule,
     TranslateModule,
     AceEditorModule,

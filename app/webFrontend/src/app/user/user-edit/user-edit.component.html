@@ -1,5 +1,5 @@
 <div class="edit-user-wrapper">
-<h1>Edit profile</h1>
+<h1>{{ 'common.editProfile' | translate }}</h1>
 <div class="profile" *ngIf="user">
     <span class="user-icon" user-image [user-image]="user" [size]="'100px'"></span>
 </div>
@@ -7,7 +7,7 @@
 <form name="form" class="user-form" (ngSubmit)="onSubmit()" [formGroup]="userForm">
   <div class="form-group" formGroupName="profile">
     <mat-form-field class="full-width">
-      <input matInput formControlName="firstName" placeholder="First name" maxlength="64"/>
+      <input matInput formControlName="firstName" [placeholder]="'common.profileDetails.firstName' | translate" maxlength="64"/>
       <div *ngIf="userForm.get('profile').get('firstName').touched">
         <small *ngIf="userForm.get('profile').get('firstName').hasError('required')"
                class="text-danger">
@@ -53,23 +53,23 @@
     <input matInput formControlName="email" [placeholder]="'common.email'|translate"/>
   </mat-form-field>
   <button mat-raised-button color="primary" class="mat-button" type="submit" [disabled]="!userForm?.valid">
-    {{ common.save | translate }}
+    {{ 'common.save' | translate }}
   </button>
   <button mat-raised-button class="mat-button" routerLink="/profile" routerLinkActive="active">
-    {{ common.cancel | translate }}
+    {{ 'common.cancel' | translate }}
   </button>
 </form>
 <p *ngIf="!showPwFields()">
   <button mat-raised-button class="mat-button" (click)="resetPassword()">
-    {{ auth.generatePassword | translate }}
+    {{ 'auth.generatePassword' | translate }}
   </button>
 </p>
 <div class="button-wrapper">
   <button mat-raised-button class="mat-button" (click)="openAddPictureDialog()">
-    {{ profileDetails.uploadPicture | translate }}
+    {{ 'common.profileDetails.uploadPicture' | translate }}
   </button>
   <button mat-raised-button class="mat-button" (click)="openChangePasswordDialog()">
-    {{ auth.changePassword | translate }}
+    {{ 'auth.changePassword' | translate }}
   </button>
 </div>
 </div>
