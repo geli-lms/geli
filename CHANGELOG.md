@@ -12,6 +12,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [NEXT] 
 ### Changed
+- rework existing translation
+- add vars to html-files
+- add translations to resource files
+- include translation for components
+
+### Changed
 - Migrate MatSnackBar to SnackBarService. [#724](https://github.com/h-da/geli/pull/724)
 - Reload user list after deleting an account. [#724](https://github.com/h-da/geli/pull/724)
 - Validate form before submit when creating a new course. [#724](https://github.com/h-da/geli/pull/724)
