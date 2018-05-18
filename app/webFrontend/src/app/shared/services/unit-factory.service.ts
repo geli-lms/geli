@@ -14,8 +14,8 @@ export class UnitFactoryService {
   constructor() { }
 
   createNewUnit(type: string, course: ICourse): IUnit {
-    switch (type){
-      case 'free-text' : return new FreeTextUnit(course);
+    switch (type) {
+      case 'free-text' :  return new FreeTextUnit(course);
       case 'file' : return new FileUnit(course);
       case 'video' : return new VideoUnit(course);
       case 'code-kata': return new CodeKataUnit(course);

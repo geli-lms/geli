@@ -1,4 +1,4 @@
-import {EventEmitter, Injectable} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {IUnit} from '../../../../../../shared/models/units/IUnit';
 import {ICourse} from '../../../../../../shared/models/ICourse';
@@ -16,17 +16,11 @@ export class UnitFormService {
   public lecture: ILecture;
 
   public headline: string;
-  public unitDescription: string;
-  public infos: [string];
-
 
   /**
    * if false is returned, submit will be cancelled
    */
   public beforeSubmit: () => Promise<boolean>;
-  public submitDone: EventEmitter<any>;
-
-
 
   constructor (private formBuilder: FormBuilder,
               private freeTextUnitService: FreeTextUnitService,
@@ -35,24 +29,18 @@ export class UnitFormService {
               public dialog: MatDialog,
               private notificationService: NotificationService) {
     this.reset();
-
   }
 
   reset() {
     this.unitForm = new FormGroup({});
-    this.submitDone = new EventEmitter<any>();
     this.beforeSubmit = undefined;
 
     this.headline = null;
-    this.unitDescription = null;
-    this.infos = null;
-  }
-
-
+    }
 
   async save(onDone: () => void ) {
 
-
+    // call beforeSubmit from Unit
     if (this.beforeSubmit) {
       const success = await this.beforeSubmit();
       if (!success) {
@@ -83,7 +71,6 @@ export class UnitFormService {
     if (reqObj.model._id) {
       isUpdate = true;
       promise = this.unitService.updateItem(this.model);
-
     } else {
       isUpdate = false;
       promise = this.unitService.createItem(reqObj);
@@ -113,9 +100,5 @@ export class UnitFormService {
 
       this.snackBar.open(snackErrMessage, '', {duration: 3000});
     }
-
   }
-
-
-
 }

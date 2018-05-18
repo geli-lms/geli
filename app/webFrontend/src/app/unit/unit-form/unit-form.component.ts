@@ -10,7 +10,7 @@ import {FreeTextUnitService, NotificationService, UnitService} from '../../share
 import {TaskUnitEditComponent} from './task-unit-edit/task-unit-edit.component';
 import {UnitFormService} from '../../shared/services/unit-form.service';
 import {CodeKataUnitFormComponent} from './code-kata-unit-form/code-kata-unit-form.component';
-import {FileUnitFormComponent} from "./file-unit-form/file-unit-form.component";
+import {FileUnitFormComponent} from './file-unit-form/file-unit-form.component';
 
 @Component({
   selector: 'app-unit-form',
@@ -62,8 +62,6 @@ export class UnitFormComponent implements OnInit {
     this.unitFormService.lecture = this.lecture;
 
     this.unitForm = this.unitFormService.unitForm;
-
-    this.unitFormService.submitDone.subscribe(() => this.onDone());
   }
 
   reset() {
