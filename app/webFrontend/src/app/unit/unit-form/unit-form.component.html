@@ -1,30 +1,50 @@
+<!--
+    TUTORIAL FOR CREATING & INTEGRATING NEW TYPES
+
+    1. Create your-type component in 'unit-form' folder(for teacher edit). And also your-type component for students-view
+        Inject UnitFormService and FormBuilder in constructor.
+        unitFormService.headline sets Headline, unitFormService.unitDescription sets Description
+    2. Add new Type in /app/webFrontend/src/app/shared/services/unit-factory.service.ts (createNewUnit)
+    3*. _IF_ you want to add extra Buttons (ex: Fullscreen in Textmode) include your-type in unit-form.component.ts as ViewChild  (see other).
+      3.1 Add Button (important: type="button", ng-if to your type) below in app-button-save-cancel your desired position
+      3.2 Connect your button action with ViewChild
+          ex: (click)="freeTextUnitFormComponent.openFullscreen()
+    4. Include your-type in form below (ng-if type) and pass parameters (model)
+    5. Register your-type controls in your-type.ts (ex: this.unitForm.addControl('my_control_name', new FormControl(this.model.MYFIELD)); (this.model is your type model)
+       and pass model.field as default value. (Think about form-validation https://angular.io/guide/form-validation#reactive-form-validation)
+    6. In your-type.component.html write your form within [formGroup]="unitForm" element. eg: <ng-container [formGroup]="unitForm">...</ng-container>
+    7. Write your form-html, form fields: formControlName="my_control_name"
+    8*. If you want actions (e.g validation) before submit, use async function unitFormService.beforeSubmit = async () => {/*my checks here*/}.
+       By returning false, the submit will canceled.
+
+
+    Interesting links:
+    https://angular.io/guide/reactive-forms
+
+* Optional
+
+-->
 <form class="edit-unit" *ngIf="course" [formGroup]="unitForm" (reset)="reset()"  (submit)="save()" novalidate>
   <app-unit-general-info-form [model]="model" [unitForm]="unitForm"></app-unit-general-info-form>
 
   <app-file-unit-form
     *ngIf="(type == 'video' || type == 'file')"
-    [course]="course"
-    [lecture]="lecture"
     [model]="model"
     [fileUnitType]="type">
   </app-file-unit-form>
   <app-code-kata-unit-form
     *ngIf="type == 'code-kata'"
-    [course]="course"
     [model]="model"
-    [lectureId]="lecture._id"></app-code-kata-unit-form>
+   ></app-code-kata-unit-form>
   <app-task-unit-edit
     *ngIf="type == 'task'"
-    [course]="course"
     [model]="model"
-    [lectureId]="lecture._id"
     ></app-task-unit-edit>
 
   <app-free-text-unit-form
     *ngIf="type == 'free-text'"
-    [course]="course"
     [model]="model"
-    [lectureId]="lecture._id"></app-free-text-unit-form>
+    ></app-free-text-unit-form>
 
 
   <div class="btn-wrapper">
@@ -39,7 +59,6 @@
         <!-- Add here Elements right to the save & cancel buttons -->
         <button  type="button" *ngIf="type == 'free-text'" mat-raised-button color="secondary"
                  (click)="freeTextUnitFormComponent.openFullscreen()">Fullscreen</button>
-
         <button type="button" *ngIf="type == 'task'" mat-raised-button (click)="taskUnitEditComponent.addTask()">
           <mat-icon>add</mat-icon> Add question</button>
       </ng-container>

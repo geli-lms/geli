@@ -14,8 +14,6 @@ import {UnitFormService} from '../../../shared/services/unit-form.service';
   styleUrls: ['./free-text-unit-form.component.scss']
 })
 export class FreeTextUnitFormComponent implements OnInit {
-  @Input() course: ICourse;
-  @Input() lectureId: string;
   @Input() model: IFreeTextUnit;
 
 
