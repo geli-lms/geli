@@ -1,5 +1,5 @@
-<h1>{{ common.settings | translate }}</h1>
-<h2>{{ common.notifications | translate }}</h2>
+<h1>{{ 'common.settings' | translate }}</h1>
+<h2>{{ 'common.notifications' | translate }}</h2>
 <mat-table #table [dataSource]="dataSource">
   <ng-container matColumnDef="Notifications">
     <mat-header-cell class="header" *matHeaderCellDef>
@@ -7,7 +7,7 @@
                     [checked]="notificationSelection.hasValue() && isAllSelected(notificationSelection)"
                     [indeterminate]="notificationSelection.hasValue() && !isAllSelected(notificationSelection)">
       </mat-checkbox>
-      <span>{{ common.notifications | translate }}</span>
+      <span>{{ 'common.notifications' | translate }}</span>
     </mat-header-cell>
     <mat-cell class="checkBox" *matCellDef="let course">
       <mat-checkbox (click)="$event.stopPropagation()"
@@ -28,7 +28,7 @@
                     [checked]="emailSelection.hasValue() && isAllSelected(emailSelection)"
                     [indeterminate]="emailSelection.hasValue() && !isAllSelected(emailSelection)">
       </mat-checkbox>
-      <span>{{ common.email | translate}}</span>
+      <span>{{ 'common.email' | translate}}</span>
     </mat-header-cell>
     <mat-cell class="checkBox" *matCellDef="let course">
       <mat-checkbox (click)="$event.stopPropagation()"
