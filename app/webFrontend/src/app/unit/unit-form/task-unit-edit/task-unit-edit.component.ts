@@ -30,7 +30,7 @@ export class TaskUnitEditComponent implements OnInit {
   ngOnInit() {
     this.unitForm = this.unitFormService.unitForm;
 
-    this.unitFormService.unitDescription = 'Add questions with any number of possible answers. Mark the correct answer(s) with the checkbox.';
+    this.unitFormService.unitDescription = 'Add questions with any number of possible answers. Mark the correct answer(s) with the checkbox.\n';
     this.unitFormService.headline = 'Tasks';
     this.buildForm();
 
