@@ -1,7 +1,10 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {ILecture} from '../../../../../../shared/models/ILecture';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {DataSharingService} from '../../shared/services/data-sharing.service';
 import {Lecture} from '../../models/Lecture';
+import {DialogService} from '../../shared/services/dialog.service';
+import {MatSnackBar} from '@angular/material';
 
 @Component({
   selector: 'app-lecture-form',
@@ -20,10 +23,15 @@ export class LectureFormComponent implements OnInit {
 
   @Output()
   onSubmit = new EventEmitter<ILecture>();
+  @Output()
+  onImport = new EventEmitter();
 
   lectureForm: FormGroup;
 
-  constructor(private formBuilder: FormBuilder) {
+  constructor(private formBuilder: FormBuilder,
+              private dataSharingService: DataSharingService,
+              private dialogService: DialogService,
+              private snackBar: MatSnackBar) {
   }
 
   ngOnInit() {
@@ -42,5 +50,24 @@ export class LectureFormComponent implements OnInit {
     this.model.description = this.lectureForm.value.description;
 
     this.onSubmit.emit(this.model);
+  }
+
+
+  onImportLecture(){
+    const course = this.dataSharingService.getDataForKey('course');
+    this.dialogService
+      .chooseFile('Choose a lecture.json to import',
+        '/api/import/lecture/' + course._id)
+      .subscribe(res => {
+        if (res.success) {
+          // This does not work as expected
+          this.dataSharingService.setDataForKey('unit-edit-element', res.result);
+          this.dataSharingService.setDataForKey('unit-edit-mode', true);
+          this.snackBar.open('Lecture successfully imported', '', {duration: 3000});
+          this.onImport.emit();
+        } else if (res.result) {
+          this.snackBar.open(res.error.message, '', {duration: 3000});
+        }
+      });
   }
 }

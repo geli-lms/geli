@@ -283,4 +283,21 @@ export class LectureEditComponent implements OnInit, OnDestroy {
       this.navigateToThisLecture();
     }
   }
+
+  onAddUnit = (type: string) => {
+    this.onCloseAllForms.next();
+
+    this.dataSharingService.setDataForKey('unit-create-mode', true);
+    this.dataSharingService.setDataForKey('unit-create-type', type);
+    this.route.url.subscribe(segments => {
+      let path = segments.map(() => '../').join('') || '';
+      path += `lecture/${this.lecture._id}/unit/add/${type}`;
+      this.router.navigate([path], {relativeTo: this.route});
+    });
+  }
+
+  async importLecture() {
+    await this.reloadCourse();
+    this.closeEditUnit();
+  }
 }

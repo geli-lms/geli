@@ -229,23 +229,6 @@ export class CourseManageContentComponent implements OnInit, OnDestroy {
     return this.showProgress.toggleLoadingGlobal(false);
   }
 
-  onImportLecture = () => {
-    this.dialogService
-      .chooseFile('Choose a lecture.json to import',
-        '/api/import/lecture/' + this.course._id)
-      .subscribe(res => {
-        if (res.success) {
-          this.reloadCourse();
-          // This does not work as expected
-          this.dataSharingService.setDataForKey('unit-edit-element', res.result);
-          this.dataSharingService.setDataForKey('unit-edit-mode', true);
-          this.snackBar.open('Lecture successfully imported', '', {duration: 3000});
-        } else if (res.result) {
-          this.snackBar.open(res.error.message, '', {duration: 3000});
-        }
-      });
-  }
-
   onAddLecture() {
     this.onCloseAllForms.next();
     this.dataSharingService.setDataForKey('openLectureId', null);
@@ -254,19 +237,6 @@ export class CourseManageContentComponent implements OnInit, OnDestroy {
     this.route.url.subscribe(segments => {
       let path = segments.map(() => '../').join('') || '';
       path += 'lecture/add';
-      this.router.navigate([path], {relativeTo: this.route});
-    });
-  }
-
-  onAddUnit = (type: string) => {
-    this.onCloseAllForms.next();
-
-    this.dataSharingService.setDataForKey('unit-create-mode', true);
-    this.dataSharingService.setDataForKey('unit-create-type', type);
-    const lectureId = this.dataSharingService.getDataForKey('openLectureId');
-    this.route.url.subscribe(segments => {
-      let path = segments.map(() => '../').join('') || '';
-      path += `lecture/${lectureId}/unit/add/${type}`;
       this.router.navigate([path], {relativeTo: this.route});
     });
   }
@@ -290,20 +260,11 @@ export class CourseManageContentComponent implements OnInit, OnDestroy {
       });
   }
 
-  closeFab = () => {
-    this.fabOpen = false;
-  }
-
-  onFabClick = () => {
-    this.fabOpen = !this.fabOpen;
-  }
-
   closeAddLecture = () => {
     this.dataSharingService.setDataForKey('lecture-create-mode', false);
   }
 
   private closeAllForms() {
-    this.closeFab();
     this.closeAddLecture();
   }
 }

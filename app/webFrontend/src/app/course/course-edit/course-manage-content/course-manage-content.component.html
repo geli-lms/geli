@@ -1,4 +1,4 @@
-<div class="container" *ngIf="course" (click)="closeFab()">
+<div class="container" *ngIf="course">
   <div class="lectures" [dragula]="'lectures'" [dragulaModel]="course.lectures">
     <app-lecture-edit
       *ngFor="let lecture of course.lectures"
@@ -13,8 +13,6 @@
                     actionLabel="Add"></app-lecture-form>
 </div>
 
-<div class="button-row alignright">
-  <button mat-button (click)="onAddLecture()">Add Lecture</button>
-  <button mat-button>Add Unit</button>
-  <button mat-button>Import Unit</button>
-</div>
+<button mat-fab class="alignright" color="primary" (click)="onAddLecture()" matTooltip="Add Lecture">
+  <mat-icon>add</mat-icon>
+</button>

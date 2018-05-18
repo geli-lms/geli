@@ -8,7 +8,6 @@ import {SharedModule} from '../../../shared/shared.module';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {LectureModule} from '../../../lecture/lecture.module';
 import {UnitFormModule} from '../../../unit/unit-form/unit-form.module';
-import { SelectUnitComponent } from './select-unit/select-unit.component';
 
 @NgModule({
   imports: [
@@ -24,7 +23,6 @@ import { SelectUnitComponent } from './select-unit/select-unit.component';
   declarations: [
     CourseManageContentComponent,
     LectureEditComponent,
-    SelectUnitComponent,
   ],
   exports: [
     CourseManageContentComponent,

@@ -9,6 +9,33 @@
 
     <span class="flex-spacer"></span>
 
+    <button class="lecture-menu-button" mat-icon-button [matMenuTriggerFor]="unitMenu">
+      <mat-icon>add</mat-icon>
+    </button>
+
+    <mat-menu #unitMenu="matMenu">
+      <button mat-menu-item (click)="onAddUnit('free-text')">
+        <mat-icon>comment</mat-icon>
+        Free Text Unit
+      </button>
+      <button mat-menu-item (click)="onAddUnit('task')">
+        <mat-icon>list_alt</mat-icon>
+        Task Unit
+      </button>
+      <button mat-menu-item (click)="onAddUnit('file')">
+        <mat-icon>insert_drive_file</mat-icon>
+        File Unit
+      </button>
+      <button mat-menu-item (click)="onAddUnit('video')">
+        <mat-icon>movie</mat-icon>
+        Video Unit
+      </button>
+      <button mat-menu-item (click)="onAddUnit('code-kata')">
+        <mat-icon>code</mat-icon>
+        Code Kata Unit
+      </button>
+    </mat-menu>
+
     <button class="lecture-menu-button" mat-icon-button [matMenuTriggerFor]="lectureMenu">
       <mat-icon>more_vert</mat-icon>
     </button>
@@ -37,6 +64,7 @@
                     *ngIf="isOpened() && getDataForKey('lecture-edit-mode')"
                     (onSubmit)="updateLecture($event)"
                     [onCancel]="closeEditLecture"
+                    (onImport)="importLecture()"
                     actionLabel="Update"></app-lecture-form>
   <div *ngIf="getDataForKey('openLectureId') === lecture._id">
     <div class="units" [dragula]="'units'" [dragulaModel]="lecture.units">
@@ -60,8 +88,11 @@
                 <button mat-icon-button matTooltip="Duplicate" (click)="duplicateUnit(unit)">
                   <mat-icon>content_copy</mat-icon>
                 </button>
-                <button mat-icon-button matTooltip="Export" (click)="onExportUnit(unit)">
+                <button mat-icon-button matTooltip="Export Lecture" (click)="onExportUnit(unit)">
                   <mat-icon>file_download</mat-icon>
+              </button>
+                <button mat-icon-button matTooltip="Import Unit" (click)="onExportUnit(unit)">
+                  <mat-icon>file_upload</mat-icon>
               </button>
               </mat-menu>
             </span>
@@ -77,7 +108,7 @@
         </app-unit-form>
       </div>
 
-      <p *ngIf="!lecture.units.length">No units added yet.</p>
+      <p *ngIf="!lecture.units.length || !getDataForKey('unit-create-mode')">No units added yet.</p>
     </div>
 
     <app-unit-form *ngIf="getDataForKey('unit-create-mode') && getDataForKey('unit-create-type')"
