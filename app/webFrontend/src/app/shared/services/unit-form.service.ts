@@ -16,6 +16,7 @@ export class UnitFormService {
   public lecture: ILecture;
 
   public headline: string;
+  public unitDescription: string;
 
   /**
    * if false is returned, submit will be cancelled
@@ -36,7 +37,8 @@ export class UnitFormService {
     this.beforeSubmit = undefined;
 
     this.headline = null;
-    }
+    this.unitDescription = null;
+  }
 
   async save(onDone: () => void ) {
 

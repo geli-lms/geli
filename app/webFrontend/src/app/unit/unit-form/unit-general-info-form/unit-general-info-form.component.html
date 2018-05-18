@@ -1,7 +1,9 @@
 <div *ngIf="unitFormService.headline as headline">
   <strong>{{headline}}</strong>
 </div>
-
+<mat-hint *ngIf="unitFormService.unitDescription as unitDescription">
+  <span>{{unitDescription}}</span>
+</mat-hint>
 
 <ng-container  [formGroup]="unitForm">
 <mat-form-field >
