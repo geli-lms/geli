@@ -177,4 +177,14 @@ export class TaskUnitEditComponent implements OnInit {
     (<FormArray>this.unitForm.controls.tasks).controls = tasks;
 
   }
+
+  /**
+   * Helper function to get tasks from Form for template
+   * @returns {FormArray}
+   */
+  get formTasks() {
+    return <FormArray>this.unitForm.get('tasks');
+  }
+
+
 }

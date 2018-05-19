@@ -1,5 +1,5 @@
 <ng-container [formGroup]="unitForm">
-  <div *ngIf="unitForm.controls.files.length" formArrayName="files" class="file-list-container uploaded-files">
+  <div *ngIf="unitForm.controls.files" formArrayName="files" class="file-list-container uploaded-files">
     <div class="file-list">
       <div class="file-list-row file-list-header">
         <span>Filename</span>
