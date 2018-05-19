@@ -1,8 +1,7 @@
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {IFreeTextUnit} from '../../../../../../../shared/models/units/IFreeTextUnit';
-import {MatDialog, MatSnackBar} from '@angular/material';
+import {MatDialog} from '@angular/material';
 import {FreeTextUnitService, NotificationService, UnitService} from '../../../shared/services/data.service';
-import {ICourse} from '../../../../../../../shared/models/ICourse';
 import {FreeTextUnitEditorComponent} from './free-text-unit-editor/free-text-unit-editor.component';
 import {FreeTextUnitEditorDialog} from './free-text-unit-editor/free-text-unit-editor-dialog/free-text-unit-editor.dialog';
 import {FormControl, FormGroup} from '@angular/forms';
@@ -14,8 +13,6 @@ import {UnitFormService} from '../../../shared/services/unit-form.service';
   styleUrls: ['./free-text-unit-form.component.scss']
 })
 export class FreeTextUnitFormComponent implements OnInit {
-  @Input() model: IFreeTextUnit;
-
 
   unitForm: FormGroup;
 
@@ -24,7 +21,6 @@ export class FreeTextUnitFormComponent implements OnInit {
 
   constructor(private freeTextUnitService: FreeTextUnitService,
               private unitService: UnitService,
-              private snackBar: MatSnackBar,
               public dialog: MatDialog,
               private notificationService: NotificationService,
               private unitFormService: UnitFormService) {}
@@ -34,7 +30,7 @@ export class FreeTextUnitFormComponent implements OnInit {
     this.unitForm = this.unitFormService.unitForm;
 
     // add a virtual FormControl which binds to model.markdown
-    this.unitForm.addControl('markdown', new FormControl(this.model.markdown));
+    this.unitForm.addControl('markdown', new FormControl((<IFreeTextUnit>this.unitFormService.model).markdown));
   }
 
 
@@ -52,7 +48,7 @@ export class FreeTextUnitFormComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (typeof result !== 'undefined') {
-        this.model.markdown = result;
+        // this.unitFormService.model.markdown = result;
         this.unitForm.patchValue({ markdown: result });
       }
     });

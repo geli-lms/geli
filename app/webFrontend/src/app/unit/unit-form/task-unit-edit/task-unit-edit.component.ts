@@ -1,12 +1,11 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {NotificationService, UnitService} from '../../../shared/services/data.service';
 import {Task} from '../../../models/Task';
-import {MatSnackBar} from '@angular/material';
 import {ITaskUnit} from '../../../../../../../shared/models/units/ITaskUnit';
 import {Answer} from '../../../models/Answer';
-import {ICourse} from '../../../../../../../shared/models/ICourse';
 import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {UnitFormService} from '../../../shared/services/unit-form.service';
+import {SnackBarService} from '../../../shared/services/snack-bar.service';
 
 @Component({
   selector: 'app-task-unit-edit',
@@ -14,14 +13,12 @@ import {UnitFormService} from '../../../shared/services/unit-form.service';
   styleUrls: ['./task-unit-edit.component.scss']
 })
 export class TaskUnitEditComponent implements OnInit {
-  @Input() course: ICourse;
-  @Input() lectureId: string;
-  @Input() model: ITaskUnit;
+  model: ITaskUnit;
 
   unitForm: FormGroup;
 
   constructor(private unitService: UnitService,
-              private snackBar: MatSnackBar,
+              private snackBar: SnackBarService,
               private notificationService: NotificationService,
               private formBuilder: FormBuilder,
               private unitFormService: UnitFormService) {}
@@ -30,13 +27,18 @@ export class TaskUnitEditComponent implements OnInit {
   ngOnInit() {
     this.unitForm = this.unitFormService.unitForm;
 
-    this.unitFormService.unitDescription = 'Add questions with any number of possible answers. Mark the correct answer(s) with the checkbox.\n';
+    this.unitFormService.unitInfoText =
+      'Add questions with any number of possible answers. Mark the correct answer(s) with the checkbox.\n';
     this.unitFormService.headline = 'Tasks';
+
+    this.model = <ITaskUnit>this.unitFormService.model;
+
     this.buildForm();
 
     this.unitFormService.beforeSubmit = async () => {
       return await this.isTaskUnitValid();
     };
+
   }
 
   buildForm() {
@@ -54,26 +56,25 @@ export class TaskUnitEditComponent implements OnInit {
 
   isTaskUnitValid() {
     const taskUnit = this.unitForm.value;
-    // tslint:disable-next-line:no-console
-    console.log(taskUnit);
+
     if (!taskUnit.name || taskUnit.name === null || taskUnit.name.trim() === '') {
       const message = 'Task not valid: Name is required';
-      this.snackBar.open(message, '', {duration: 3000});
+      this.snackBar.openShort(message);
       return false;
     } else if (taskUnit.tasks.length === 0) {
       const message = 'Task not valid: At least one question is required';
-      this.snackBar.open(message, '', {duration: 3000});
+      this.snackBar.openShort(message);
       return false;
     } else {
       // Check if all tasks i.e. questions are valid
       for (const task of taskUnit.tasks) {
         if (task.name === null || task.name.trim() === '') {
           const message = 'Task not valid: Every question requires some text';
-          this.snackBar.open(message, '', {duration: 3000});
+          this.snackBar.openShort(message);
           return false;
         } else if (task.answers.length < 2) {
           const message = 'Task not valid: Every question requires at least two answers';
-          this.snackBar.open(message, '', {duration: 3000});
+          this.snackBar.openShort(message);
           return false;
         } else {
           // Check if answers are valid
@@ -85,13 +86,13 @@ export class TaskUnitEditComponent implements OnInit {
             }
             if (answer.text === null || answer.text.trim() === '') {
               const message = 'Task not valid: Every answer requires some text';
-              this.snackBar.open(message, '', {duration: 3000});
+              this.snackBar.openShort(message);
               return false;
             }
           }
           if (noAnswersChecked) {
             const message = 'Task not valid: Every question requires at least one checked answer';
-            this.snackBar.open(message, '', {duration: 3000});
+            this.snackBar.openShort(message);
             return false;
           }
         }
@@ -107,6 +108,7 @@ export class TaskUnitEditComponent implements OnInit {
       answers: new FormArray([])
     });
 
+    // if task exist, set values
     if (task) {
       taskControl.patchValue({
         ...task
@@ -151,7 +153,7 @@ export class TaskUnitEditComponent implements OnInit {
       }
     } else {
       const message = 'Not possible: Every question requires at least two answers';
-      this.snackBar.open(message, '', {duration: 3000});
+      this.snackBar.openShort(message);
     }
   }
 
@@ -161,15 +163,28 @@ export class TaskUnitEditComponent implements OnInit {
     if (tasks.length > 1) {
       if (!taskControl.value._id) {
         tasks = tasks.filter(obj => taskControl.value !== obj.value);
+        // search by value
       } else {
         tasks = tasks.filter(obj => taskControl.value._id !== (obj).value._id);
+        // search by filter
       }
     } else {
       const message = 'Not possible: At least one question is required';
-      this.snackBar.open(message, '', {duration: 3000});
+      this.snackBar.openShort(message);
     }
 
+    // sets changed tasks to original position
     (<FormArray>this.unitForm.controls.tasks).controls = tasks;
 
   }
+
+  /**
+   * Helper function to get tasks from Form for template
+   * @returns {FormArray}
+   */
+  get formTasks() {
+    return <FormArray>this.unitForm.get('tasks');
+  }
+
+
 }

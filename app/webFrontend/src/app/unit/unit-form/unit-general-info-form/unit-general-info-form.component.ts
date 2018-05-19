@@ -15,7 +15,7 @@ export class UnitGeneralInfoFormComponent implements OnInit {
   public form: FormGroup;
 
   constructor(private formBuilder: FormBuilder,
-              private unitFormService: UnitFormService
+              public unitFormService: UnitFormService
               ) {
   }
 

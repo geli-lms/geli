@@ -1,5 +1,5 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
-import {MatDialog, MatSnackBar} from '@angular/material';
+import {MatDialog} from '@angular/material';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
 import {ILecture} from '../../../../../../../shared/models/ILecture';
 import {IFileUnit} from '../../../../../../../shared/models/units/IFileUnit';
@@ -10,6 +10,7 @@ import {PickMediaDialog} from '../../../shared/components/pick-media-dialog/pick
 import {IFile} from '../../../../../../../shared/models/mediaManager/IFile';
 import {UnitFormService} from '../../../shared/services/unit-form.service';
 import {FormArray, FormBuilder, FormControl, FormGroup} from '@angular/forms';
+import {SnackBarService} from '../../../shared/services/snack-bar.service';
 
 @Component({
   selector: 'app-file-unit-form',
@@ -18,9 +19,10 @@ import {FormArray, FormBuilder, FormControl, FormGroup} from '@angular/forms';
 })
 export class FileUnitFormComponent implements OnInit {
 
-  @Input() course: ICourse;
-  @Input() lecture: ILecture;
-  @Input() model: IFileUnit;
+  course: ICourse;
+  lecture: ILecture;
+  model: IFileUnit;
+
   @Input() fileUnitType: string;
 
   unitForm: FormGroup;
@@ -29,7 +31,7 @@ export class FileUnitFormComponent implements OnInit {
   @ViewChild(UnitGeneralInfoFormComponent)
   public generalInfo: UnitGeneralInfoFormComponent;
 
-  constructor(public snackBar: MatSnackBar,
+  constructor(public snackBar: SnackBarService,
               private unitService: UnitService,
               private showProgress: ShowProgressService,
               private dialog: MatDialog,
@@ -41,9 +43,11 @@ export class FileUnitFormComponent implements OnInit {
     this.unitFormService.headline = this.fileUnitType === 'video' ? 'Add Videos' : 'Add Files';
     this.unitFormService.unitForm.addControl('files', new FormArray([]));
 
-
     this.unitForm = this.unitFormService.unitForm;
 
+    this.model = <IFileUnit> this.unitFormService.model;
+    this.lecture = <ILecture> this.unitFormService.lecture;
+    this.course = <ICourse> this.unitFormService.course;
     this.buildForm();
   }
 
@@ -60,8 +64,8 @@ export class FileUnitFormComponent implements OnInit {
   }
 
   async openAddFilesDialog() {
-    if (!this.course.media) {
-      this.snackBar.open('Please add files first', '', {duration: 3000});
+    if (!this.unitFormService.course.media) {
+      this.snackBar.openShort('Please add files first');
       return;
     }
 
@@ -96,12 +100,13 @@ export class FileUnitFormComponent implements OnInit {
             // this.model.files.push(val);
           }
         });
-        this.snackBar.open('Added files to unit', '', {duration: 2000});
+        this.snackBar.openShort('Added files to unit');
       }
     });
   }
 
   addFileToForm(file: IFile) {
+    // create new fileControl as formGroup
     const fileControl = this.formBuilder.group({
       _id: new FormControl(),
       name: new FormControl(),
@@ -116,6 +121,7 @@ export class FileUnitFormComponent implements OnInit {
       });
     }
 
+    // add new element at end of files array
     (<FormArray> this.unitForm.controls['files']).push(fileControl);
   }
 }

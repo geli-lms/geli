@@ -3,20 +3,27 @@ import {FormBuilder, FormGroup} from '@angular/forms';
 import {IUnit} from '../../../../../../shared/models/units/IUnit';
 import {ICourse} from '../../../../../../shared/models/ICourse';
 import {ILecture} from '../../../../../../shared/models/ILecture';
-import {MatDialog, MatSnackBar} from '@angular/material';
+import {MatDialog} from '@angular/material';
 import {FreeTextUnitService, NotificationService, UnitService} from './data.service';
+import {SnackBarService} from './snack-bar.service';
 
 @Injectable()
 export class UnitFormService {
 
+
+  //  Holds the unit Form
   public unitForm: FormGroup;
 
+  // Original Model coure lecture. can be read from everyne
   public model: IUnit;
   public course: ICourse;
   public lecture: ILecture;
 
+  // Headline for the type
   public headline: string;
-  public unitDescription: string;
+
+  // Optional unit info
+  public unitInfoText: string;
 
   /**
    * if false is returned, submit will be cancelled
@@ -26,7 +33,7 @@ export class UnitFormService {
   constructor (private formBuilder: FormBuilder,
               private freeTextUnitService: FreeTextUnitService,
               private unitService: UnitService,
-              private snackBar: MatSnackBar,
+              private snackbar: SnackBarService,
               public dialog: MatDialog,
               private notificationService: NotificationService) {
     this.reset();
@@ -37,7 +44,7 @@ export class UnitFormService {
     this.beforeSubmit = undefined;
 
     this.headline = null;
-    this.unitDescription = null;
+    this.unitInfoText = null;
   }
 
   async save(onDone: () => void ) {
@@ -50,13 +57,14 @@ export class UnitFormService {
       }
     }
 
-    // check if form is valid.
+    // check if form is valid. Uses form validators
     if (!this.unitForm.valid) {
       const snackErrMessage = `Given input is not valid. Please fill fields correctly.`;
-      this.snackBar.open(snackErrMessage, '', {duration: 3000});
+      this.snackbar.openShort(snackErrMessage);
       return;
     }
 
+    // patch model with old model fields + new (updated unitForm fields)
     this.model = {
       ...this.model,
       ...this.unitForm.getRawValue()
@@ -70,6 +78,7 @@ export class UnitFormService {
     let isUpdate;
     let promise;
 
+    // finally call update / create item
     if (reqObj.model._id) {
       isUpdate = true;
       promise = this.unitService.updateItem(this.model);
@@ -85,10 +94,12 @@ export class UnitFormService {
 
       const notifyMessage = `Course '${this.course.name}' has ${isUpdate ? 'a new' : 'an updated'} Unit '${this.model.name}'`;
 
-      this.snackBar.open(snackSuccMessage, '', {duration: 3000});
+      this.snackbar.openShort(snackSuccMessage);
 
+      // call callback function
       onDone();
 
+      // create notification
       this.notificationService.createItem(
         {
           changedCourse: this.course,
@@ -100,7 +111,7 @@ export class UnitFormService {
     } catch (err) {
       const snackErrMessage = `Couldn't ${isUpdate ? 'update' : 'create'} Unit '${this.model.name ? `'${this.model.name}'` : ''}'`;
 
-      this.snackBar.open(snackErrMessage, '', {duration: 3000});
-    }
+      this.snackbar.openShort(snackErrMessage);
+      }
   }
 }
