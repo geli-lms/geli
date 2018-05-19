@@ -14,11 +14,8 @@
               [theme]="'github'"
               [readOnly]="false">
   </ace-editor>
-  <div *ngIf="logs!==undefined" class="logs-title">
+  <div *ngIf="logs" class="logs-title">
     Logs:
     <pre>{{logs}}</pre>
   </div>
 </div>
-
-
-<!--  [(text)]="wholeInputCode"-->

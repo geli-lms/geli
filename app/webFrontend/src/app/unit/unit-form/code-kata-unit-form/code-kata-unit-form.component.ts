@@ -1,7 +1,6 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {CodeKataUnitService, NotificationService, UnitService} from '../../../shared/services/data.service';
 import {SnackBarService} from '../../../shared/services/snack-bar.service';
-import {ICourse} from '../../../../../../../shared/models/ICourse';
 import {CodeKataUnit} from '../../../models/units/CodeKataUnit';
 import {AceEditorComponent} from 'ng2-ace-editor';
 import 'brace';
@@ -16,15 +15,15 @@ import {UnitFormService} from '../../../shared/services/unit-form.service';
   styleUrls: ['./code-kata-unit-form.component.scss']
 })
 export class CodeKataUnitFormComponent implements OnInit {
-  @Input() course: ICourse;
-  @Input() lectureId: string;
-  @Input() model: CodeKataUnit;
+  private model: CodeKataUnit;
 
   @ViewChild('codeEditor')
   editor: AceEditorComponent;
 
+  // holds unitform
   unitForm: FormGroup;
 
+  // to seperate definition, code and test
   areaSeperator = '//####################';
 
   // Example code Kata
@@ -60,6 +59,10 @@ export class CodeKataUnitFormComponent implements OnInit {
   }
 
   ngOnInit() {
+
+    // sets model. for easier handling (you also could use model from unitFormService
+    this.model = <CodeKataUnit> this.unitFormService.model;
+
     // set example Values if all values are undefined
     if (!this.model.definition && !this.model.code && !this.model.test) {
       this.model.definition = this.example.definition;
@@ -142,12 +145,10 @@ export class CodeKataUnitFormComponent implements OnInit {
     window.console.log = origLogger;
 
     if (result === true || result === undefined) {
-      this.snackBar.open('Validation succesful');
+      this.snackBar.openShort('Validation succesful');
       return true;
     } else {
-      // tslint:disable-next-line:no-console
-      console.log(result);
-      this.snackBar.open('Validation failed');
+      this.snackBar.openShort('Validation failed');
       return false;
     }
   }
@@ -160,25 +161,25 @@ export class CodeKataUnitFormComponent implements OnInit {
       ) || []
     ).length;
     if (separatorCount > 2) {
-      this.snackBar.open('There are too many area separators');
+      this.snackBar.openShort('There are too many area separators');
       return false;
     }
     if (separatorCount < 2) {
-      this.snackBar.open('There must 3 separated areas');
+      this.snackBar.openShort('There must 3 separated areas');
       return false;
     }
     if (!this.unitForm.controls.wholeInputCode.value.match(new RegExp('function(.|\t)*validate\\(\\)(.|\n|\t)*{(.|\n|\t)*}', 'gmi'))) {
-      this.snackBar.open('The test section must contain a validate function');
+      this.snackBar.openShort('The test section must contain a validate function');
       return false;
     }
     if (!this.unitForm.controls.wholeInputCode.value.match(
       new RegExp('function(.|\t)*validate\\(\\)(.|\n|\t)*{(.|\n|\t)*return(.|\n|\t)*}', 'gmi'))
     ) {
-      this.snackBar.open('The validate function must return something');
+      this.snackBar.openShort('The validate function must return something');
       return false;
     }
     if (!this.unitForm.controls.wholeInputCode.value.match(new RegExp('validate\\(\\);', 'gmi'))) {
-      this.snackBar.open('The test section must call the validate function');
+      this.snackBar.openShort('The test section must call the validate function');
       return false;
     }
 
