@@ -2,7 +2,7 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import {UserService} from '../shared/services/user.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {CourseService} from '../shared/services/data.service';
-import {ReportService} from "../shared/services/data/report.service";
+import {ReportService} from '../shared/services/data/report.service';
 
 @Component({
   selector: 'app-report',
@@ -14,6 +14,15 @@ export class ReportComponent implements OnInit {
 
   public courseId: string;
   public courseName: string;
+
+  private converter = require('json-2-csv');
+  private options = {
+    delimiter: {
+      field: ';',
+      array: ',',
+      eol : '\n'
+    },
+  };
 
   constructor(
     public userService: UserService,
@@ -42,12 +51,13 @@ export class ReportComponent implements OnInit {
     this.reportService.getCourseResults(this.courseId)
       .then((result) => {
         let report = result;
-        this.generateCsvContent(report);
+        const csvContent = this.generateCsvContent(report);
+        this.converter.json2csv(csvContent, this.createDownload, this.options);
     });
   }
 
   private generateCsvContent(report: any[]) {
-    let reportData: any[] = [];
+    let csvContent: any[] = [];
     for (let student of report) {
       for (let unit of student.progress.units) {
         let status: string;
@@ -85,9 +95,16 @@ export class ReportComponent implements OnInit {
           status: status,
           answers: null,
         };
-        reportData.push(entry);
+        csvContent.push(entry);
       }
     }
-    console.log(reportData);
+    return csvContent;
   }
+
+  private createDownload(err, csv) {
+    if(err) {
+      throw err;
+    }
+    console.log(csv);
+
 }
