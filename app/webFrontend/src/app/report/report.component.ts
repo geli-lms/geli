@@ -3,6 +3,7 @@ import {UserService} from '../shared/services/user.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {CourseService} from '../shared/services/data.service';
 import {ReportService} from '../shared/services/data/report.service';
+import {saveAs}from 'file-saver/FileSaver';
 
 @Component({
   selector: 'app-report',
@@ -102,9 +103,10 @@ export class ReportComponent implements OnInit {
   }
 
   private createDownload(err, csv) {
-    if(err) {
+    if (err) {
       throw err;
     }
-    console.log(csv);
-
+    const file = new Blob([csv], {type: 'text/csv'});
+    saveAs(file, "Report.csv");
+  }
 }
