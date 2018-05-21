@@ -3,8 +3,7 @@ import {DashboardBaseComponent} from '../dashboard-base-component';
 import {SnackBarService} from '../../../shared/services/snack-bar.service';
 import {DialogService} from '../../../shared/services/dialog.service';
 import {Router} from '@angular/router';
-import {SortUtil} from "../../../shared/utils/SortUtil";
-import {ICourseDashboard} from "../../../../../../../shared/models/ICourseDashboard";
+import {ICourseDashboard} from '../../../../../../../shared/models/ICourseDashboard';
 
 @Component({
   selector: 'app-dashboard-admin',
@@ -30,7 +29,7 @@ export class DashboardAdminComponent extends DashboardBaseComponent {
 
   async filterCourses(event: any) {
     this.searchValue = event.target.value.toLowerCase();
-    if (this.allCoursesAdmin.length == 0) {
+    if (this.allCoursesAdmin.length === 0) {
       this.allCoursesAdmin = this.allCourses;
     }
     this.allCourses = [];
