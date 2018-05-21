@@ -114,7 +114,6 @@ export class AppComponent implements OnInit {
     }
 
     getGravatar(size: number = 80) {
-        this.userService.updateProfilePicture('');
         return `https://www.gravatar.com/avatar/${md5(this.userService.user._id)}.jpg?s=${size}&d=retro`
     }
 }
