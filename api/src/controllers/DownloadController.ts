@@ -22,7 +22,9 @@ import crypto = require('crypto');
 import {User} from '../models/User';
 import {File} from '../models/mediaManager/File';
 
+
 const cache = require('node-file-cache').create({life: config.timeToLiveCacheValue});
+const PDFMake = require('pdfmake');
 const pdfMakePrinter = require('pdfmake/src/printer');
 
 const fonts = {
@@ -33,6 +35,9 @@ const fonts = {
     bolditalics: 'src/assets/fonts/Roboto-MediumItalic.ttf'
   }
 };
+
+const printer = new pdfMakePrinter(fonts);
+const PDFtempPath = config.tmpFileCacheFolder + '/temp.pdf';
 
 // Set all routes which should use json to json, the standard is blob streaming data
 @Controller('/download')
@@ -244,7 +249,7 @@ export class DownloadController {
   @ContentType('application/json')
   async postDownloadRequestPDF(@Body() data: IDownload, @CurrentUser() user: IUser) {
 
-    const printer = new pdfMakePrinter(fonts);
+
 
     const course = await Course.findOne({_id: data.courseName});
 
@@ -302,22 +307,23 @@ export class DownloadController {
 
               const docDefinition = {
                 content: [
-                  'First paragraph',
-                  'Another paragraph, this time a little bit longer to make sure, this line will be divided into at least two lines'
+                  localUnit.toFile(),
                 ]
               };
-              const doc = printer.createPdfKitDocument(docDefinition);
-              doc.pipe(fs.createWriteStream(config.tmpFileCacheFolder +'/temp.pdf'));
-              await doc.end();
 
-              archive.file(config.tmpFileCacheFolder +'/temp.pdf',
-                {name: lecCounter + '_' + lcName + '/' + unitCounter + '_' + this.replaceCharInFilename(localUnit.name) + '.pdf'});
+
+              await this.savePdfToFile(docDefinition, PDFtempPath);
+              const name = lecCounter + '_' + lcName + '/' + unitCounter + '_' + this.replaceCharInFilename(localUnit.name) + '.pdf';
+              await this.appendToArchive(archive, name, PDFtempPath);
+
+
 
             }
             unitCounter++;
           }
           lecCounter++;
         }
+        fs.unlinkSync(PDFtempPath);
         return new Promise((resolve, reject) => {
           archive.on('error', () => reject(hash));
           archive.finalize();
@@ -330,5 +336,39 @@ export class DownloadController {
     } else {
       throw new NotFoundError();
     }
+  }
+
+  private savePdfToFile(docDefinition, path: String ): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+      const doc = printer.createPdfKitDocument(docDefinition);
+      // To determine when the PDF has finished being written successfully
+      // we need to confirm the following 2 conditions:
+      //
+      //   1. The write stream has been closed
+      //   2. PDFDocument.end() was called syncronously without an error being thrown
+      let pendingStepCount = 2;
+      const stepFinished = () => {
+        if (--pendingStepCount === 0) {
+          resolve();
+        }
+      };
+
+      const writeStream = fs.createWriteStream(path);
+      writeStream.on('close', stepFinished);
+      doc.pipe(writeStream);
+
+      doc.end();
+
+      stepFinished();
+    });
+  }
+
+  private appendToArchive(archive, name: String, path: String) {
+    return new Promise<void>((resolve, reject) => {
+      archive.on('entry', () => {
+        resolve(); });
+      archive.file(path,
+        {name: name});
+    });
   }
 }
