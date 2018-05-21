@@ -135,8 +135,8 @@
     "delete": "Delete course",
     "placeholder": {
       "accessKey": "Access key",
-      "Description": "Course description",
-      "Name": "Course name",
+      "description": "Course description",
+      "name": "Course name",
       "searchAndAdd": "Search and add user by name, Id or e-mail"
     },
     "ShowCourse": "Show course",

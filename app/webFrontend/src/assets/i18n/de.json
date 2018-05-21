@@ -135,8 +135,8 @@
     "delete": "Kurs löschen",
     "placeholder": {
       "accessKey": "Einschreibeschlüssel",
-      "Description": "Kursbeschreibung",
-      "Name": "Kursname",
+      "description": "Kursbeschreibung",
+      "name": "Kursname",
       "searchAndAdd": "Benutzer anhand des Namens, der Id oder der E-Mail-Adresse suchen"
     },
     "ShowCourse": "Kurs anzeigen",

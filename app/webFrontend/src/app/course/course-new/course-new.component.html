@@ -1,5 +1,5 @@
 <div class="center-both">
-  <h1>Create Course</h1>
+  <h1>{{ 'dashboard.addCourse' | translate }}</h1>
   <mat-card>
     <form class="course-form" (ngSubmit)="newCourse.valid && createCourse()" [formGroup]="newCourse">
       <mat-form-field class="full-width">
@@ -13,7 +13,7 @@
         <textarea matInput formControlName="description" [placeholder]="'course.placeholder.description' | translate"></textarea>
       </mat-form-field>
       <br/>
-      <button mat-raised-button color="primary" [matTooltip]="'course.tooltipAdd' | translate" class="mat-button" type="submit">Add</button>
+      <button mat-raised-button color="primary" [matTooltip]="'course.tooltip,Add' | translate" class="mat-button" type="submit">{{ 'dashboard.addCourse' | translate }}</button>
     </form>
   </mat-card>
 </div>
