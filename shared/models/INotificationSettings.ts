@@ -1,5 +1,5 @@
-import {ICourse} from './ICourse';
 import {IUser} from './IUser';
+import {ICourseDashboard} from './ICourseDashboard';
 
 export const NOTIFICATION_TYPE_NONE = 'none';
 export const NOTIFICATION_TYPE_CHANGES_WITH_RELATIONIONSHIP = 'relatedChanges';
@@ -12,9 +12,8 @@ export const NOTIFICATION_TYPES = [
 
 export interface INotificationSettings {
   _id: any;
-  course: ICourse;
+  course: ICourseDashboard;
   user: IUser;
   notificationType: string;
   emailNotification: boolean;
 }
-
