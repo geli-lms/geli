@@ -16,8 +16,12 @@
 
       <span *ngIf="isLoggedIn()">
         <button mat-button routerLink="/profile">
-          <img class="avatar" src="{{this.getImageUrl(30)}}" width="30" height="30">
-          <!--<img class="avatar" src="{{this.actualProfilePicturePath}}" width="30" height="30">-->
+          <!--<span class="user-icon" user-image [user-image]="this.userService.user" [size]="'30px'"></span>-->
+          <!--<img class="avatar" src="{{this.chooseUserPicture(30)}}" width="30" height="30">-->
+          <img *ngIf="this.actualProfilePicturePath; else elseBlock" class="avatar" src="api/{{this.actualProfilePicturePath}}" width="30" height="30">
+          <ng-template #elseBlock>
+            <img class="avatar" src="{{this.getGravatar(30)}}" width="30" height="30">
+          </ng-template>
           <span class="firstname-wrapper">{{ this.userService.user.profile.firstName }}</span>
         </button>
         <app-notification *ngIf="isStudent()" class="app-notification"></app-notification>

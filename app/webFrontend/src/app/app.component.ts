@@ -1,4 +1,4 @@
-import {Component, OnInit, OnChanges} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {UserService} from './shared/services/user.service';
 import {AuthenticationService} from './shared/services/authentication.service';
 import {ShowProgressService} from './shared/services/show-progress.service';
@@ -14,21 +14,20 @@ import {TranslateService} from '@ngx-translate/core';
 const md5 = require('blueimp-md5');
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit, OnChanges {
+export class AppComponent implements OnInit {
 
     title = 'app works!';
     showProgressBar = false;
     apiInfo: APIInfo;
-    actualProfilePicturePath: string;
+    actualProfilePicturePath: any;
 
     constructor(private router: Router,
                 private authenticationService: AuthenticationService,
                 public userService: UserService,
-                public userDataService: UserDataService,
                 private showProgress: ShowProgressService,
                 private apiInfoService: APIInfoService,
                 private ravenErrorHandler: RavenErrorHandler,
@@ -59,7 +58,15 @@ export class AppComponent implements OnInit, OnChanges {
                 this.snackBar.open('Could not connect to backend', null);
             });
 
-        this.getImageUrl(30);
+        this.updateCurrentUser();
+        this.getImageUrl();
+    }
+
+    updateCurrentUser() {
+        const storedUser = JSON.parse(localStorage.getItem('user'));
+        if (storedUser) {
+            this.userService.setUser(storedUser);
+        }
     }
 
     changeLanguage(lang: string) {
@@ -76,6 +83,7 @@ export class AppComponent implements OnInit, OnChanges {
     }
 
     logout() {
+        this.actualProfilePicturePath = '';
         this.authenticationService.logout();
     }
 
@@ -97,20 +105,16 @@ export class AppComponent implements OnInit, OnChanges {
         return (routeTest && !this.isLoggedIn()) ? 'special-style' : '';
     }
 
-    /**
-     * TODO: Update headerbar profilepicutre after first login, or after profile picture update
-     * @param {number} size
-     * @returns {string}
-     */
-    getImageUrl(size: number = 80) {
-        this.userService.cast.subscribe(actualProfilePicturePath => {
-            if (this.userService.user && this.userService.user.profile && this.userService.user.profile.picture) {
-                this.actualProfilePicturePath = 'api/' + actualProfilePicturePath;
-            } else if (this.userService.user) {
-                this.actualProfilePicturePath = `https://www.gravatar.com/avatar/${md5(this.userService.user._id)}.jpg?s=${size}&d=retro`;
+    getImageUrl() {
+        this.userService.data.subscribe(actualProfilePicturePath => {
+            if (this.userService.user.profile && this.userService.user.profile.picture) {
+                this.actualProfilePicturePath = actualProfilePicturePath;
             }
         });
+    }
 
-        return this.actualProfilePicturePath;
+    getGravatar(size: number = 80) {
+        this.userService.updateProfilePicture('');
+        return `https://www.gravatar.com/avatar/${md5(this.userService.user._id)}.jpg?s=${size}&d=retro`
     }
 }

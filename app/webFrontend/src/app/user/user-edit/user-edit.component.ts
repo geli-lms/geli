@@ -25,7 +25,6 @@ export class UserEditComponent implements OnInit, OnDestroy {
   passwordPatternText: string;
   changePassword = false;
   themes: string[];
-  actualProfilePicturePath: string;
 
   constructor(private router: Router,
               private route: ActivatedRoute,
@@ -68,9 +67,6 @@ export class UserEditComponent implements OnInit, OnDestroy {
     try {
       const user = await this.userDataService.readSingleItem(this.id);
       this.user = <any>user;
-      if (user.profile.picture) {
-        this.userService.updateProfilePicture(user.profile.picture.path);
-      }
       this.userForm.patchValue({
         profile: {
           firstName: this.user.profile.firstName,
@@ -84,6 +80,11 @@ export class UserEditComponent implements OnInit, OnDestroy {
       console.error(err);
       this.snackBar.open(err.error.message);
     }
+
+    if(this.user.profile.picture) {
+      this.userService.updateProfilePicture(this.user.profile.picture.path);
+    }
+
     this.cdRef.detectChanges();
   }
 
@@ -118,7 +119,9 @@ export class UserEditComponent implements OnInit, OnDestroy {
 
       if (this.userService.isLoggedInUser(user)) {
         this.userService.setUser(user);
+        this.userService.updateProfilePicture(user.profile.picture.path);
       }
+
       this.navigateBack();
     } catch (err) {
       this.snackBar.open(err.error.message);

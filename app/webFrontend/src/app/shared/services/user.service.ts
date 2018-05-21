@@ -6,11 +6,13 @@ import {ICourse} from '../../../../../../shared/models/ICourse';
 import {ThemeService} from './theme.service';
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
 
+const md5 = require('blueimp-md5');
+
 @Injectable()
 export class UserService {
     public user: User = null;
-    public actualProfilePicturePath: BehaviorSubject<string> = new BehaviorSubject<string>('');
-    cast = this.actualProfilePicturePath.asObservable();
+    private actualProfilePicturePath: BehaviorSubject<string> = new BehaviorSubject<string>('');
+    data = this.actualProfilePicturePath.asObservable();
 
     constructor(private themeService: ThemeService) {
         const storedUser: IUser = JSON.parse(localStorage.getItem('user'));
@@ -25,7 +27,7 @@ export class UserService {
         localStorage.setItem('user', JSON.stringify(this.user));
         this.themeService.setTheme(this.user.profile.theme);
 
-        if(user.profile.picture) {
+        if (user.profile.picture) {
             this.updateProfilePicture(user.profile.picture.path);
         }
     }
@@ -73,5 +75,9 @@ export class UserService {
 
     isMemberOfCourse(course: ICourse) {
         return course.students.filter(obj => obj._id === this.user._id).length > 0;
+    }
+
+    getActualProfilePicturePath() {
+        return this.actualProfilePicturePath.getValue();
     }
 }
