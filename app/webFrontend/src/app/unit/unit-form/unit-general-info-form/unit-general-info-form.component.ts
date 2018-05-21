@@ -9,8 +9,9 @@ import {UnitFormService} from '../../../shared/services/unit-form.service';
 })
 export class UnitGeneralInfoFormComponent implements OnInit {
 
-  @Input() public model: any;
-  @Input() unitForm: FormGroup;
+  model: any;
+
+  unitForm: FormGroup;
 
   public form: FormGroup;
 
@@ -20,6 +21,9 @@ export class UnitGeneralInfoFormComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.model = this.unitFormService.model;
+    this.unitForm = this.unitFormService.unitForm;
+
     if (this.model !== null && this.model !== undefined && this.model.visible === undefined) {
       this.model.visible = true;
     }

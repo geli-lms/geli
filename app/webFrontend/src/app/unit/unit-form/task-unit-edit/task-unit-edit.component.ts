@@ -52,6 +52,12 @@ export class TaskUnitEditComponent implements OnInit {
     for (const task of this.model.tasks) {
       this.addTask(task);
     }
+
+    // add new question if the model is empty (typically in case of creating new Tasks)
+    if((<FormArray>this.unitForm.controls.tasks).controls.length == 0){
+      this.addTask();
+    }
+
   }
 
   isTaskUnitValid() {
@@ -132,7 +138,7 @@ export class TaskUnitEditComponent implements OnInit {
     const answerControl = this.formBuilder.group({
       _id: new FormControl(),
       value: new FormControl(),
-      text: new FormControl()
+      text: new FormControl(null,Validators.required)
     });
 
     if (answer) {
