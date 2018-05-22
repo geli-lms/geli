@@ -27,13 +27,20 @@ export class UserService {
         localStorage.setItem('user', JSON.stringify(this.user));
         this.themeService.setTheme(this.user.profile.theme);
 
-        if (user.profile.picture) {
-            this.updateProfilePicture(user.profile.picture.path);
-        }
+        const newPath = this.checkNewProfilePicturePath(this.user.profile);
+        this.updateProfilePicture(newPath);
     }
 
     updateProfilePicture(newPath: string) {
         this.actualProfilePicturePath.next(newPath);
+    }
+
+    checkNewProfilePicturePath(profile) {
+        if (profile) {
+            return profile.path;
+        }
+
+        return '';
     }
 
     unsetUser() {

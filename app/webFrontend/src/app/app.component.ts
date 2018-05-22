@@ -59,7 +59,10 @@ export class AppComponent implements OnInit {
             });
 
         this.updateCurrentUser();
-        this.getImageUrl();
+
+        this.userService.data.subscribe(actualProfilePicturePath => {
+            this.actualProfilePicturePath = actualProfilePicturePath;
+        });
     }
 
     updateCurrentUser() {
@@ -103,17 +106,5 @@ export class AppComponent implements OnInit {
         const routeTest = /^(\/|\/login|\/register|\/reset|\/activation-resend)$/.test(this.router.url);
 
         return (routeTest && !this.isLoggedIn()) ? 'special-style' : '';
-    }
-
-    getImageUrl() {
-        this.userService.data.subscribe(actualProfilePicturePath => {
-            if (this.userService.user.profile && this.userService.user.profile.picture) {
-                this.actualProfilePicturePath = actualProfilePicturePath;
-            }
-        });
-    }
-
-    getGravatar(size: number = 80) {
-        return `https://www.gravatar.com/avatar/${md5(this.userService.user._id)}.jpg?s=${size}&d=retro`
     }
 }
