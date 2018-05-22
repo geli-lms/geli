@@ -78,6 +78,7 @@ export class DashboardTeacherComponent extends DashboardBaseComponent {
   }
 
   createCourse() {
+    this.onFabClick();
     this.dialog.open(CourseNewComponent);
   }
 }

@@ -49,6 +49,7 @@ export class DashboardAdminComponent extends DashboardBaseComponent {
   }
 
   createCourse() {
+    this.onFabClick();
     this.dialog.open(CourseNewComponent);
   }
 }

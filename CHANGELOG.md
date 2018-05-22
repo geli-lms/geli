@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - `getNotificationSettings` does not create new notification settings. [#731](https://github.com/h-da/geli/issues/731)
 - Remove `isCourseTeacherOrAdmin` and `isMemberOfCourse`from UserService. [#731](https://github.com/h-da/geli/issues/731)
 - Refactored save mechanism of unit edit form. [#532](https://github.com/h-da/geli/issues/532)
+- Moved the 'create course' into a Dialog. [#725](https://github.com/h-da/geli/issues/725)
 
 ### Fixed
 - Fixed broken notification settings. [#731](https://github.com/h-da/geli/issues/731)
