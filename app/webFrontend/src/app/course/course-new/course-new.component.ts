@@ -5,6 +5,7 @@ import {SnackBarService} from '../../shared/services/snack-bar.service';
 import {Router} from '@angular/router';
 import {errorCodes} from '../../../../../../api/src/config/errorCodes';
 import {TitleService} from '../../shared/services/title.service';
+import {MatDialogRef} from '@angular/material';
 
 @Component({
   selector: 'app-course-new',
@@ -20,7 +21,8 @@ export class CourseNewComponent implements OnInit {
               private formBuilder: FormBuilder,
               private courseService: CourseService,
               private snackBar: SnackBarService,
-              private titleService: TitleService) {
+              private titleService: TitleService,
+              public dialogRef: MatDialogRef<CourseNewComponent>) {
   }
 
   ngOnInit() {
@@ -44,6 +46,7 @@ export class CourseNewComponent implements OnInit {
         this.snackBar.open('Error creating course ' + err.error.message);
       }
     });
+    this.dialogRef.close();
   }
 
   generateForm() {

@@ -6,6 +6,8 @@ import {SnackBarService} from '../../../shared/services/snack-bar.service';
 import {Router} from '@angular/router';
 import {DialogService} from '../../../shared/services/dialog.service';
 import {SortUtil} from '../../../shared/utils/SortUtil';
+import {MatDialog, MatDialogConfig} from '@angular/material';
+import {CourseNewComponent} from '../../../course/course-new/course-new.component';
 
 @Component({
   selector: 'app-dashboard-teacher',
@@ -23,7 +25,8 @@ export class DashboardTeacherComponent extends DashboardBaseComponent {
   constructor(public userService: UserService,
               private router: Router,
               private dialogService: DialogService,
-              private snackBar: SnackBarService) {
+              private snackBar: SnackBarService,
+              private dialog: MatDialog) {
     super();
   }
 
@@ -72,5 +75,9 @@ export class DashboardTeacherComponent extends DashboardBaseComponent {
           this.snackBar.open(res.result.message);
         }
       });
+  }
+
+  createCourse() {
+    this.dialog.open(CourseNewComponent);
   }
 }

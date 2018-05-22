@@ -1,6 +1,7 @@
-<div class="center-both">
-  <h1>Create Course</h1>
-  <mat-card>
+<h1 mat-dialog-title> Create Course</h1>
+<mat-dialog-content>
+  <div class="center-both">
+    <!--<mat-card>-->
     <form class="course-form" (ngSubmit)="newCourse.valid && createCourse()" [formGroup]="newCourse">
       <mat-form-field class="full-width">
         <input matInput formControlName="name" placeholder="Course Name">
@@ -15,5 +16,6 @@
       <br/>
       <button mat-raised-button color="primary" class="mat-button" type="submit">Add</button>
     </form>
-  </mat-card>
-</div>
+    <!--</mat-card>-->
+  </div>
+</mat-dialog-content>
