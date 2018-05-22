@@ -1,25 +1,18 @@
-<div class="task-unit-edit">
-  <strong>{{ 'unit.text.tasks' | translate }}</strong>
-
-  <app-unit-general-info-form [model]="model"></app-unit-general-info-form>
-
-  <mat-hint>
-    {{ 'unit.text.hintAddQuestionAndAnswers' | translate}}
-  </mat-hint>
-
-  <div *ngFor="let task of model.tasks" class="question-answer">
+<ng-container [formGroup]="unitForm">
+  <div class="task-unit-edit" formArrayName="tasks">
+  <div *ngFor="let task of formTasks.controls" class="question-answer">
     <mat-form-field matLine class="question">
       <textarea matInput id="name" [placeholder]="'unit.placeholder.enterQuestion' | translate" [(ngModel)]="task.name"></textarea>
     </mat-form-field>
 
-    <button mat-button class="remove" (click)="removeTask(task)" [matTooltip]="'task.tooltip.deleteQuestion' | translate">
+    <button mat-button class="remove" type="button" (click)="removeTask(task)">
       <mat-icon>delete</mat-icon>
     </button>
 
     <div matLine class="answers">
-      <div class="answer" *ngFor="let answer of task.answers; let idx = index;">
+      <div class="answer" *ngFor="let answer of task.controls.answers.controls; let idx = index;">
         <div class="check-answer">
-          <mat-checkbox [(ngModel)]="answer.value" name="value_{{idx}}"></mat-checkbox>
+          <mat-checkbox [formControl]="answer.controls.value" name="value_{{idx}}"></mat-checkbox>
           <mat-form-field>
             <input matInput [placeholder]="'unit.placeholder.enterAnswer' | translate" [(ngModel)]="answer.text">
           </mat-form-field>
@@ -29,18 +22,11 @@
         </div>
       </div>
       <div class="add-answer">
-        <button mat-button (click)="addAnswerAtEnd(task)">
+        <button mat-button type="button" (click)="addAnswerAtEnd(task)">
           <mat-icon>add</mat-icon> {{ 'unit.text.addAnswer' | translate }}
         </button>
       </div>
     </div>
   </div>
-
-  <p>
-    <button mat-raised-button (click)="addTask()">
-      <mat-icon>add</mat-icon> {{ 'unit.text.addQuestion' | translate }}
-    </button>
-
-    <app-button-save-cancel (save)="saveUnit()" (cancel)="onCancel()"></app-button-save-cancel>
-  </p>
 </div>
+</ng-container>
