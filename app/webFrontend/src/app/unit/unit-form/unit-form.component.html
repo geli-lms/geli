@@ -35,7 +35,7 @@
 
 -->
 <form class="edit-unit" *ngIf="course" [formGroup]="unitForm" (reset)="reset()"  (submit)="save()" novalidate>
-  <app-unit-general-info-form [model]="model" [unitForm]="unitForm"></app-unit-general-info-form>
+  <app-unit-general-info-form></app-unit-general-info-form>
 
   <app-file-unit-form
     *ngIf="(type == 'video' || type == 'file')"
@@ -52,7 +52,7 @@
     ></app-free-text-unit-form>
 
   <div class="btn-wrapper">
-    <app-button-save-cancel>
+    <app-button-save-cancel [saveButtonDisabled]="unitForm.invalid">
       <ng-container left>
         <!-- Add Elements left to the save & cancel buttons -->
         <!-- Button MUST BE  type="button" -->
