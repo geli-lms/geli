@@ -27,7 +27,7 @@ export class ChatComponent implements OnInit, OnDestroy {
   inputValue: string = null;
   loadMsgOnScroll = true;
   scrollCallback: any;
-  limit = 10;
+  limit = 20;
 
   constructor(private messageService: MessageService, private chatService: ChatService, private userService: UserService, public dialog: MatDialog) {
     this.chatNameSubscription = this.chatService.chatName$.subscribe(chatName => {

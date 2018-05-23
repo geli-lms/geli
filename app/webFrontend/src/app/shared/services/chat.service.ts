@@ -4,6 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import * as socketIo from 'socket.io-client';
 import {SocketIOEvent} from '../../../../../../shared/models/SoketIOEvent';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
+import {AuthenticationService} from './authentication.service';
 
 
 @Injectable()
@@ -12,7 +13,7 @@ export class ChatService {
   chatName$ = new BehaviorSubject<string>(null);
   private readonly SERVER_URL = 'http://localhost:3030'; // TODO: Change this
 
-  constructor() {
+  constructor(private authenticationService: AuthenticationService) {
     const chatName = localStorage.getItem('chatName');
     if(chatName){
       this.chatName$.next(chatName);
@@ -23,8 +24,8 @@ export class ChatService {
     this.socket = socketIo(this.SERVER_URL, {
       path: '/chat',
       query: {
-        room: room
-        //TODO:  add authentication token to param
+        room: room,
+        authToken: this.authenticationService.token
       }
     });
   }

@@ -14,12 +14,12 @@ export default class ChatServer {
   constructor(server: any) {
     this.io = socketIo(server, {path: '/chat'});
 
-    /*this.io.use((socket: any, next) => {
-      const token = socket.handshake.headers.authToken;
+    this.io.use((socket: any, next) => {
+      const token = socket.handshake.query.authToken.split(' ')[1];
       const room: any = socket.handshake.query.room;
 
       jwt.verify(token, config.secret, (err: any, decoded: any) => {
-        if (err || !decoded) {
+        if (err) {
           next(new Error('not authorized'));
         } else if(this.canConnect(decoded._id, room)) {
           next();
@@ -27,7 +27,7 @@ export default class ChatServer {
           next(new Error('not authorized'));
         }
       });
-    })*/
+    })
   }
 
 
