@@ -8,11 +8,11 @@ import {UnitFormService} from '../../../shared/services/unit-form.service';
 import {SnackBarService} from '../../../shared/services/snack-bar.service';
 
 @Component({
-  selector: 'app-task-unit-edit',
-  templateUrl: './task-unit-edit.component.html',
-  styleUrls: ['./task-unit-edit.component.scss']
+  selector: 'app-task-unit-form',
+  templateUrl: './task-unit-form.component.html',
+  styleUrls: ['./task-unit-form.component.scss']
 })
-export class TaskUnitEditComponent implements OnInit {
+export class TaskUnitFormComponent implements OnInit {
   model: ITaskUnit;
 
   unitForm: FormGroup;
