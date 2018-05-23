@@ -14,7 +14,7 @@ export default class ChatServer {
   constructor(server: any) {
     this.io = socketIo(server, {path: '/chat'});
 
-    this.io.use((socket: any, next) => {
+    /*this.io.use((socket: any, next) => {
       const token = socket.handshake.headers.authToken;
       const room: any = socket.handshake.query.room;
 
@@ -27,7 +27,7 @@ export default class ChatServer {
           next(new Error('not authorized'));
         }
       });
-    })
+    })*/
   }
 
 
@@ -36,9 +36,9 @@ export default class ChatServer {
    * @param {string} userId
    * @param {string} room
    */
-  async canConnect (userId: string, room: string) {
-    const  _user = await User.findById(userId);
-    const  _room = await Course.findById(room);
+  async canConnect(userId: string, room: string) {
+    const _user = await User.findById(userId);
+    const _room = await Course.findById(room);
 
     return _user && _room;
   }

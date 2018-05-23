@@ -1,3 +1,5 @@
+@import '../../../../variables';
+
 .chat-container {
   position: relative;
   height: 100%;
@@ -36,14 +38,13 @@
 .msg {
   display: flex;
   flex-direction: column;
-  max-width: 90%;
   .author {
     font-size: 0.8em;
     color: grey;
   }
   .content {
     overflow-wrap: break-word;
-    padding: 7px;
+    padding: 0 7px;
     border-radius: 7px;
     max-width: inherit;
     word-wrap: break-word;
@@ -54,7 +55,7 @@
 .send{
   align-self: flex-end;
   margin-right: 5px;
-
+  margin-left: 15px;
   .author {
     text-align: right;
   }
@@ -68,6 +69,7 @@
 .replies {
   align-self: flex-start;
   margin-left: 5px;
+  margin-right: 15px;
   .content{
     align-self: flex-start;
     background-color: #e9ebee;
@@ -75,4 +77,7 @@
   }
 
 }
-
+.msg-created-at {
+  font-size: 0.7em;
+  color: gray;
+}

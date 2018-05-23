@@ -29,7 +29,7 @@ export default class MessageController {
 
 
   @Get('/')
-  async get(@QueryParam('room') room: string) {
+  async get(@QueryParam('room') room: string, @QueryParam('skip') skip: number= 0, @QueryParam('limit') limit: number) {
     if (!room) {
       throw new BadRequestError();
     }
@@ -40,7 +40,10 @@ export default class MessageController {
       throw new NotFoundError('Course not Found.');
     }
 
-    const messages: IMessageModel[] = await Message.find({room: room}).populate({path: 'author', select: 'profile'});
+    const messages: IMessageModel[] = await Message.find({room: room}).sort('-createdAt').skip(skip).limit(limit).populate({
+      path: 'author',
+      select: 'profile'
+    });
 
     return messages.map((message: IMessageModel) => {
       message = message.toObject();
@@ -50,4 +53,18 @@ export default class MessageController {
       return message
     });
   }
+
+  /**
+   * return number of messages in a given room
+   */
+  @Get('/count')
+  async getCount (@QueryParam('room') room: string) {
+    if (!room) {
+      throw new BadRequestError();
+    }
+    const count = await Message.count({room: room});
+
+    return {count: count}
+  }
+
 }

@@ -1,9 +1,12 @@
 <div class="chat-container">
-  <div class="messages">
+  <div class="messages" #msgs [scrollTop]="msgs.scrollHeight" appInfiniteScroll [shouldEmit]="loadMsgOnScroll" (loadMore)="getMessages()">
     <ul *ngFor="let message of messages">
       <li class="msg" [ngClass]="[(message.author._id === userService.user._id)? 'send': 'replies']">
         <div class="author">{{message.chatName}}</div>
-        <div class="content">{{message.content}}</div>
+        <div class="content">
+          <p>{{message.content}}</p>
+          <span class="msg-created-at">{{message.createdAt | date:'mediumDate'}}</span>
+        </div>
       </li>
     </ul>
   </div>

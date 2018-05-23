@@ -35,4 +35,8 @@ $bp-width--xl: 75em; // 1200px
 $bp-width--xxl: 121em; // 1936px
 $bp-width--max: 160em; // 2560px => app-root max-width
 
+
+//CHAT
+
+$message-send-background-color: #e8eaf6;
 @import 'styles/mixins';

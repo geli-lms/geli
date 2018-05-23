@@ -26,6 +26,8 @@ import {UserProfileDialog} from 'app/shared/components/user-profile-dialog/user-
 import {NotfoundComponent} from './components/notfound/notfound.component';
 import {ChatComponent} from './components/chat/chat.component';
 import {ChatNameInputDialogComponent} from './components/chat-name-input-dialog/chat-name-input-dialog.component';
+import { InfiniteScrollDirective } from './directives/infinite-scroll.directive';
+
 
 @NgModule({
   imports: [
@@ -61,6 +63,7 @@ import {ChatNameInputDialogComponent} from './components/chat-name-input-dialog/
     UserProfileDialog,
     ChatComponent,
     ChatNameInputDialogComponent,
+    InfiniteScrollDirective,
   ],
   exports: [
     GravatarDirective,
@@ -85,6 +88,7 @@ import {ChatNameInputDialogComponent} from './components/chat-name-input-dialog/
     UserProfileDialog,
     ChatComponent,
     ChatNameInputDialogComponent,
+    InfiniteScrollDirective
   ],
   entryComponents: [
     UploadFormDialog,

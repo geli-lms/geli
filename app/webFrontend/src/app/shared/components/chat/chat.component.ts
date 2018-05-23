@@ -19,22 +19,27 @@ export class ChatComponent implements OnInit, OnDestroy {
   chatName: string;
   chatNameSubscription: Subscription;
   messages: IMessage[] = [];
+  messageCount: number;
   ioConnection: any;
   inputValue: string = null;
+  loadMsgOnScroll = true;
 
   constructor(private messageService: MessageService, private chatService: ChatService, private userService: UserService, public dialog: MatDialog) {
-      this.chatNameSubscription = this.chatService.chatName$.subscribe(chatName => {
-          this.chatName = chatName;
-      })
+    this.chatNameSubscription = this.chatService.chatName$.subscribe(chatName => {
+      this.chatName = chatName;
+    })
   }
 
   ngOnInit() {
+    console.log('init', this.room)
     this.init();
   }
 
-  async init (){
-    if(this.room){
-      this.messages = await this.messageService.getMessages({room: this.room});
+  async init() {
+    if (this.room) {
+      const res = await this.messageService.getMessageCount({room: this.room});
+      this.messageCount = res.count;
+      this.getMessages();
       this.initSocketConnection();
     }
   }
@@ -55,8 +60,7 @@ export class ChatComponent implements OnInit, OnDestroy {
   }
 
 
-
-  initSocketConnection (): void {
+  initSocketConnection(): void {
     this.chatService.initSocket(this.room);
 
     this.ioConnection = this.chatService.onMessage()
@@ -71,7 +75,6 @@ export class ChatComponent implements OnInit, OnDestroy {
       });
 
 
-
     this.chatService.onEvent(SocketIOEvent.DISCONNECT)
       .subscribe(() => {
         console.log('disconnected');
@@ -80,14 +83,14 @@ export class ChatComponent implements OnInit, OnDestroy {
 
 
   onEnter() {
-    if(!this.chatName){
+    if (!this.chatName) {
       const temporaryNameDialog = this.dialog.open(ChatNameInputDialogComponent);
       temporaryNameDialog.afterClosed()
-        .subscribe((chatName : string)=> {
+        .subscribe((chatName: string) => {
           this.chatService.setChatName(chatName);
           this.postMessage();
         });
-    }else {
+    } else {
       this.postMessage();
     }
   }
@@ -97,10 +100,24 @@ export class ChatComponent implements OnInit, OnDestroy {
       chatName: this.chatName,
       content: this.inputValue,
       room: this.room,
-      author: this.chatName ? {_id: this.userService.user._id}:  this.userService.user  // TODO: send only required information
+      author: this.chatName ? {_id: this.userService.user._id} : this.userService.user  // TODO: send only required information
     };
     this.chatService.send(message);
     this.inputValue = null;
+  };
+
+  async getMessages() {
+    const queryParam = {
+      room: this.room,
+      skip: this.messages.length,
+      limit: 10,
+    };
+
+    const furtherMessages = await this.messageService.getMessages(queryParam);
+    this.messages = this.messages.concat(furtherMessages).reverse();
+    if (this.messages.length === this.messageCount) {
+      this.loadMsgOnScroll = false;
+    }
   }
 
 }
