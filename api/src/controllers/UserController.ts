@@ -224,7 +224,6 @@ export class UserController {
    *     [
    *         "student",
    *         "teacher",
-   *         "tutor",
    *         "admin"
    *     ]
    */

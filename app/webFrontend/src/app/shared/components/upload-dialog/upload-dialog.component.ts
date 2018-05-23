@@ -4,10 +4,9 @@ import {IUser} from '../../../../../../../shared/models/IUser';
 import {MatDialogRef, MatSnackBar} from '@angular/material';
 import {UploadFormComponent} from '../upload-form/upload-form.component';
 import {IFileUnit} from "../../../../../../../shared/models/units/IFileUnit";
-import {FileUploaderOptions, FilterFunction} from "ng2-file-upload/file-upload/file-uploader.class";
-import {FileLikeObject} from "ng2-file-upload/file-upload/file-like-object.class";
 import {Router} from "@angular/router";
 import {UserService} from "../../services/user.service";
+import {SnackBarService} from '../../services/snack-bar.service';
 
 @Component({
   selector: 'app-upload-dialog',
@@ -33,7 +32,7 @@ export class UploadDialog implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<UploadDialog>,
-    private snackBar: MatSnackBar,
+    private snackBar: SnackBarService,
     private userService: UserService,
     private router: Router) {
   }
@@ -65,7 +64,7 @@ export class UploadDialog implements OnInit {
       })
       .catch(error => {
         this.isWebcamActive = false;
-        this.snackBar.open('Couldn\'t start webcam', '', {duration: 3000});
+        this.snackBar.open('Couldn\'t start webcam');
       });
     }
       }
@@ -127,7 +126,7 @@ export class UploadDialog implements OnInit {
     try {
       this.uploadForm.fileUploader.uploadAll();
     } catch (error) {
-      this.snackBar.open('An error occured during the Upload', '', { duration: 3000 });
+      this.snackBar.open('An error occured during the Upload');
     }
   }
 
