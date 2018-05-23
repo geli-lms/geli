@@ -1,20 +1,20 @@
 /* tslint:disable:no-unused-variable */
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
-import {ListViewComponent} from './list-view.component';
+import {VideoViewComponent} from './video-view.component';
 
-describe('ListViewComponent', () => {
-  let component: ListViewComponent;
-  let fixture: ComponentFixture<ListViewComponent>;
+describe('VideoViewComponent', () => {
+  let component: VideoViewComponent;
+  let fixture: ComponentFixture<VideoViewComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ListViewComponent]
+      declarations: [VideoViewComponent]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ListViewComponent);
+    fixture = TestBed.createComponent(VideoViewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

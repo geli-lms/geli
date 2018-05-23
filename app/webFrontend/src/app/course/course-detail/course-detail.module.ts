@@ -12,8 +12,8 @@ import {SharedModule} from '../../shared/shared.module';
 import {LectureModule} from '../../lecture/lecture.module';
 import {FormsModule} from '@angular/forms';
 import {CourseDetailDataResolve} from '../../shared/services/course-detail-data-resolve.service';
-import {ListViewComponent} from './file-view/list-view/list-view.component';
-import {GridComponent} from './file-view/grid/grid.component';
+import {VideoViewComponent} from './video-view/video-view.component';
+import {GridComponent} from './video-view/grid/grid.component';
 
 @NgModule({
   imports: [
@@ -31,7 +31,7 @@ import {GridComponent} from './file-view/grid/grid.component';
     LectureCheckboxComponent,
     UnitCheckboxComponent,
     UploadUnitCheckboxComponent,
-    ListViewComponent,
+    VideoViewComponent,
     GridComponent,
   ],
   entryComponents: [

@@ -6,6 +6,7 @@ import {FileViewComponent} from './file-view/file-view.component';
 import {CourseDetailComponent} from './course-detail.component';
 import {CourseDetailDataResolve} from '../../shared/services/course-detail-data-resolve.service';
 import {DownloadCourseDialogComponent} from './download-course-dialog/download-course-dialog.component';
+import {VideoViewComponent} from './video-view/video-view.component';
 
 const routes: Routes = [
   {
@@ -28,6 +29,12 @@ const routes: Routes = [
       {
         path: 'fileview',
         component: FileViewComponent,
+        canActivate: [AuthGuardService],
+        data: {roles: ['student', 'tutor', 'teacher', 'admin']}
+      },
+      {
+        path: 'videoview',
+        component: VideoViewComponent,
         canActivate: [AuthGuardService],
         data: {roles: ['student', 'tutor', 'teacher', 'admin']}
       },
