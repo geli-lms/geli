@@ -25,7 +25,7 @@
     </mat-form-field>
 
     <mat-form-field class="full-width">
-      <input matInput formControlName="lastName" placeholder="Last name" maxlength="64"/>
+      <input matInput formControlName="lastName" [placeholder]="'common.profileDetails.lastName' | translate" maxlength="64"/>
       <div *ngIf="userForm.get('profile').get('lastName').touched">
         <small *ngIf="userForm.get('profile').get('lastName').hasError('required')"
                class="text-danger">

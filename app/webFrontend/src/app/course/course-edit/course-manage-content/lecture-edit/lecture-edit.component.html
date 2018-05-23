@@ -2,7 +2,7 @@
   <div class="lecture-header">
     <mat-icon class="lecture-drag-handle">drag_handle</mat-icon>
     <h2>{{lecture.name}}</h2>
-    <button class="open-toggle" [matTooltip]="'common.tooltip.clickToOpen' | translate" (click)="toggleLecture()"
+    <button class="open-toggle" (click)="toggleLecture()"
             [class.opened]="isOpened()" mat-icon-button>
       <mat-icon>arrow_drop_down</mat-icon>
     </button>
@@ -14,19 +14,19 @@
     </button>
 
     <mat-menu #lectureMenu="matMenu">
-      <button mat-menu-item [matTooltip]="'lecture.tooltipEdit' | translate" (click)="onEditLecture(lecture)">
+      <button mat-menu-item (click)="onEditLecture(lecture)">
         <mat-icon>edit</mat-icon>
         {{ 'common.edit' | translate }}
       </button>
-      <button mat-menu-item [matTooltip]="'lecture.tooltipDownloadLecture' | translate"  (click)="exportLecture(lecture)">
+      <button mat-menu-item (click)="exportLecture(lecture)">
         <mat-icon>file_download</mat-icon>
         {{ 'common.export' | translate }}
       </button>
-      <button mat-menu-item [matTooltip]="'lecture.tooltipDuplicate' | translate" (click)="duplicateLecture(lecture)">
+      <button mat-menu-item (click)="duplicateLecture(lecture)">
         <mat-icon>content_copy</mat-icon>
         {{ 'common.duplicate' | translate }}
       </button>
-      <button mat-menu-item [matTooltip]="'lecture.tooltipDelete' | translate" (click)="deleteLecture(lecture)">
+      <button mat-menu-item (click)="deleteLecture(lecture)">
         <mat-icon>delete</mat-icon>
         {{ 'common.delete' | translate }}
       </button>
@@ -47,7 +47,7 @@
           <span class="unit-type">{{ unit.__t }}</span>
           <span class="unit-date">{{ unit.updatedAt | date:"y-MM-dd" }}</span>
           <span class="unit-actions">
-              <button mat-icon-button [matTooltip]="'common.edit' | translate" (click)="onEditUnit(unit)">
+              <button mat-icon-button (click)="onEditUnit(unit)">
                 <mat-icon>edit</mat-icon>
               </button>
               <button class="unit-menu-button" mat-icon-button [matMenuTriggerFor]="unitMenu">
@@ -77,7 +77,7 @@
         </app-unit-form>
       </div>
 
-      <p *ngIf="!lecture.units.length">No units added yet.</p>
+      <p *ngIf="!lecture.units.length">{{ 'lecture.noUnits' | translate}}</p>
     </div>
 
     <app-unit-form *ngIf="getDataForKey('unit-create-mode') && getDataForKey('unit-create-type')"

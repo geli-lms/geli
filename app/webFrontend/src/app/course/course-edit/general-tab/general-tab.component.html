@@ -11,7 +11,7 @@
 
   <mat-form-field class="full-width">
     <mat-select name="courseTypes" [placeholder]="'course.text.selectAccessType' | translate" id="courseTypes" [(ngModel)]="enrollType">
-      <mat-option *ngFor="let enrollType of enrollTypes" [value]="enrollType">{{enrollType}}</mat-option>
+      <mat-option *ngFor="let enrollType of enrollTypes" [value]="enrollType">{{'course.text.selectAccessTypes.' + enrollType | translate}}</mat-option>
     </mat-select><br>
   </mat-form-field>
 

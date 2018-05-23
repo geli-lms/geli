@@ -1,7 +1,7 @@
 <ng-container>
   <ng-content select="[left]"></ng-content>
 <button mat-raised-button color="primary" class="add-unit" (click)="emitSave()" type="submit">{{ 'common.save' | translate }}</button>
-<button mat-raised-button color="secondary" (click)="emitCancel()">{{ 'common.cancel' | translate }}</button>
+<button mat-raised-button color="secondary" type="reset" (click)="emitCancel()">{{ 'common.cancel' | translate }}</button>
 <ng-content select="[right]"></ng-content>
 </ng-container>
 <!--Example to add content before/after:
