@@ -21,7 +21,7 @@
           <img *ngIf="this.actualProfilePicturePath == '' || this.actualProfilePicturePath == null; else elseBlock"
                class="avatar" src="{{this.userService.user.getGravatarURL(30)}}" width="30" height="30">
           <ng-template #elseBlock>
-            <img class="avatar" src="api/{{this.actualProfilePicturePath}}" width="30" height="30">
+            <div class="user-icon" [ngStyle]="{'background-image': 'url(api/' + this.actualProfilePicturePath + ')'}"></div>
           </ng-template>
           <span class="firstname-wrapper">{{ this.userService.user.profile.firstName }}</span>
         </button>
