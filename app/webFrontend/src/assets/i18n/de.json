@@ -38,7 +38,7 @@
       "reset": "Zurücksetzen"
     },
     "tooltip": {
-      "currentPassword": "Current password",
+      "currentPassword": "Aktuelles Passwort",
       "ForgotPassword": "Klicken Sie hier, um ein neues Passwort anzufordern.",
       "ResetPassword": "Klicken Sie hier, um das Passwort zurückzusetzen."
     }
@@ -158,6 +158,11 @@
       "overview": "Übersicht",
       "reportFor": "Ergebnis für",
       "selectAccessType": "Bitte wählen Sie Ihren Kurstyp aus.",
+      "selectAccessTypes": {
+        "free": "Frei",
+        "accesskey": "Einschreibeschlüssel",
+        "whitelist": "Whitelist"
+      },
       "uploadWhitelist": "Laden Sie Ihre OBS-csv-Datei mit Ihren Kursteilnehmern hoch, um sie auf die Freigabeliste zu setzen.<br />Alte Freigabelisten-Benutzer werden durch Hochladen einer neuen Datei entfernt.",
       "userResults": "Benutzerergebnisse",
       "yourCourseProgress": "Ihr Kursfortschritt",
@@ -200,6 +205,7 @@
       "filename": "Dateiname",
       "filesize": "Dateigröße",
       "filesSelected" : "Dateien ausgewählt",
+      "fileRemove": "Datei löschen",
       "infoDropAddFiles": "Dateien hier hinziehen oder hier klicken, um Dateien auszuwählen.",
       "noVideo": "Kein Video verfügbar.",
       "noFiles" : "Keine Dateien vorhanden",
@@ -216,6 +222,7 @@
     "welcomeTo": "Willkommen auf"
   },
   "lecture": {
+    "noUnits": "Keine Unterkapitel angelegt!",
     "text":{
       "add": "Kapitel hinzufügen",
       "import": "Kapitel importieren",
@@ -227,6 +234,10 @@
       "download": "Einheit downloaden",
       "duplicate": "Kapitel kopieren",
       "edit": "Einheit bearbeiten"
+    },
+    "action": {
+      "Add": "Hinzufügen",
+      "Update": "Aktualisieren"
     }
   },
   "mail":{
@@ -239,7 +250,7 @@
     "about": "Über geli",
     "admin": "Admin",
     "imprint": "Impressum",
-    "logout": "Logout",
+    "logout": "Ausloggen",
     "userSettings": "Einstellungen"
   },
   "notifications": {

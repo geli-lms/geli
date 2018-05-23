@@ -47,7 +47,7 @@
           <span class="unit-type">{{ unit.__t }}</span>
           <span class="unit-date">{{ unit.updatedAt | date:"y-MM-dd" }}</span>
           <span class="unit-actions">
-              <button mat-icon-button [matTooltip]="'common.edit' | translate" (click)="onEditUnit(unit)">
+              <button mat-icon-button (click)="onEditUnit(unit)">
                 <mat-icon>edit</mat-icon>
               </button>
               <button class="unit-menu-button" mat-icon-button [matMenuTriggerFor]="unitMenu">
@@ -77,7 +77,7 @@
         </app-unit-form>
       </div>
 
-      <p *ngIf="!lecture.units.length">No units added yet.</p>
+      <p *ngIf="!lecture.units.length">{{ 'lecture.noUnits' | translate}}</p>
     </div>
 
     <app-unit-form *ngIf="getDataForKey('unit-create-mode') && getDataForKey('unit-create-type')"

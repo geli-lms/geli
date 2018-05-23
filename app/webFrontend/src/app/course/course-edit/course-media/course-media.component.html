@@ -36,7 +36,7 @@
         <!--<mat-icon>select_all</mat-icon>-->
         <!--</button>-->
         <button [disabled]="selectedFiles.length <= 1"
-                class="text-fit" mat-raised-button matTooltip="Remove file"
+                class="text-fit" mat-raised-button [matTooltip]="'file.text.fileRemove' | translate"
                 color="warn"
                 (click)="removeSelectedFile()">
           <mat-icon>delete</mat-icon>

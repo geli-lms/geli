@@ -18,7 +18,7 @@
               [durationBeforeCallback]="333"
               (textChanged)="onUserInput()">
   </ace-editor>
-  <div>{{ code-kata.text.testsNeedToSuccees | translate }}:</div>
+  <div>{{ 'code-kata.text.testsNeedToSuccees' | translate }}:</div>
   <ace-editor
     #testEditor
     [(text)]="codeKataUnit.test"
@@ -29,7 +29,7 @@
 
   <div *ngIf="!isExampleCode">
     <button mat-raised-button (click)="validate()">{{ 'common.validate' | translate }}</button>
-    <button mat-raised-button color="primary" class="submit-progress" (click)="submitProgress()">{{ common.submit | translate }}</button>
+    <button mat-raised-button color="primary" class="submit-progress" (click)="submitProgress()">{{ 'common.submit' | translate }}</button>
   </div>
   <div *ngIf="logs!==undefined" class="logs-title">
     Logs:

@@ -158,6 +158,11 @@
       "overview": "Overview",
       "reportFor": "Report for",
       "selectAccessType": "Please select your course access type.",
+      "selectAccessTypes": {
+        "free": "Free",
+        "accesskey": "Accesskey",
+        "whitelist": "Whitelist"
+      },
       "uploadWhitelist": "Upload your OBS csv file with your course members for whitelisting students.<br />Old whitelist users are removed by uploading a new file.",
       "userResults": "User results",
       "yourCourseProgress": "Your course progress",
@@ -199,6 +204,7 @@
       "addFile": "Add file",
       "filename": "File name",
       "filesize": "File size",
+      "fileRemove": "Remove File",
       "filesSelected" : "File selected",
       "infoDropAddFiles": "Drop files here or click here to select files.",
       "noVideo": "No video available.",
@@ -216,6 +222,7 @@
     "welcomeTo": "Welcome to"
   },
   "lecture": {
+    "noUnits": "No units added yet.",
     "text":{
       "add": "Add lecture",
       "import": "Import lecture",
@@ -227,6 +234,10 @@
       "download": "Download this unit",
       "duplicate": "Copy this lecture",
       "edit": "Edit this unit"
+    },
+    "action": {
+      "Add": "Add",
+      "Update": "Update"
     }
   },
   "mail":{
