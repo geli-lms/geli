@@ -44,4 +44,23 @@ export class UserService {
   isLoggedInUser(user: IUser): boolean {
     return this.user._id === user._id;
   }
+
+  isCourseTeacherOrAdmin(course: ICourse) {
+    if (this.isStudent()) {
+      return false;
+    }
+    if (this.isAdmin()) {
+      return true;
+    }
+
+    if (course.courseAdmin._id === this.user._id) {
+      return true;
+    }
+
+    return ( course.teachers.filter(teacher => teacher._id === this.user._id).length);
+  }
+
+  isMemberOfCourse(course: ICourse) {
+    return course.students.filter(obj => obj._id === this.user._id).length > 0;
+  }
 }

@@ -3,7 +3,6 @@ import {RouterModule, Routes} from '@angular/router';
 import {AuthGuardService} from '../shared/services/auth-guard.service';
 import {UserDetailsComponent} from './user-details/user-details.component';
 import {UserEditComponent} from './user-edit/user-edit.component';
-import {allRoles} from '../../../../../shared/roles';
 
 const routes: Routes = [
   {
@@ -11,19 +10,19 @@ const routes: Routes = [
     pathMatch: 'full',
     component: UserDetailsComponent,
     canActivate: [AuthGuardService],
-    data: {roles: allRoles}
+    data: {roles: ['student', 'tutor', 'teacher', 'admin']}
   },
   {
     path: 'edit',
     component: UserEditComponent,
     canActivate: [AuthGuardService],
-    data: {roles: allRoles}
+    data: {roles: ['student', 'tutor', 'teacher', 'admin']}
   },
   {
     path: ':id',
     component: UserDetailsComponent,
     canActivate: [AuthGuardService],
-    data: {roles: allRoles}
+    data: {roles: ['student', 'tutor', 'teacher', 'admin']}
   },
   {
     path: ':id/edit',

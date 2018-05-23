@@ -4,7 +4,6 @@ import {AceEditorComponent} from 'ng2-ace-editor';
 import 'brace';
 import 'brace/mode/markdown';
 import 'brace/theme/github';
-import {FormGroup} from '@angular/forms';
 
 
 @Component({
@@ -13,11 +12,7 @@ import {FormGroup} from '@angular/forms';
   styleUrls: ['./free-text-unit-editor.component.scss']
 })
 export class FreeTextUnitEditorComponent implements OnInit {
-
   @Input() markdown: string;
-
-  @Input() unitForm: FormGroup;
-
 
   @ViewChild(FreeTextUnitCoreComponent)
   private freeTextCore: FreeTextUnitCoreComponent;
@@ -28,6 +23,7 @@ export class FreeTextUnitEditorComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.markdown = this.markdown || '';
   }
 
   ngAfterViewInit() {

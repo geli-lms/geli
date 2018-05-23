@@ -1,4 +1,4 @@
-<mat-tab-group (selectChange)="onTabChange($event)" [formGroup]="unitForm">
+<mat-tab-group (selectChange)="onTabChange($event)">
   <mat-tab label="Write">
     <p class="info-text">
       <mat-icon>info</mat-icon>
@@ -7,13 +7,14 @@
       <a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet" target="_blank">here</a>.
     </p>
 
-    <ace-editor formControlName="markdown" #editor
+    <ace-editor #editor
+                [(text)]="this.markdown"
                 [mode]="'markdown'"
                 [theme]="'github'"
                 [autoUpdateContent]="true">
     </ace-editor>
   </mat-tab>
   <mat-tab label="Preview">
-    <app-free-text-unit-core [markdown]="unitForm.controls.markdown.value"></app-free-text-unit-core>
+    <app-free-text-unit-core [markdown]="this.markdown"></app-free-text-unit-core>
   </mat-tab>
 </mat-tab-group>

@@ -9,21 +9,16 @@ import {FreeTextUnitEditorComponent} from '../free-text-unit-editor.component';
 })
 export class FreeTextUnitEditorDialog implements OnInit {
   @ViewChild(FreeTextUnitEditorComponent)
-  public freeTextEditor: FreeTextUnitEditorComponent;
+  private freeTextEditor: FreeTextUnitEditorComponent;
 
   constructor(public dialogRef: MatDialogRef<FreeTextUnitEditorDialog>,
               @Inject(MAT_DIALOG_DATA) public data: any) {
   }
 
   ngOnInit() {
-    this.dialogRef.beforeClose().subscribe(data => {
-      // hack to pass data back after ESC-Close
-      this.dialogRef.close(this.freeTextEditor.unitForm.controls.markdown.value);
-    });
   }
 
-
   onCloseClick(): any {
-    return this.dialogRef.close(this.freeTextEditor.unitForm.controls.markdown.value);
+    return this.dialogRef.close(this.freeTextEditor.markdown);
   }
 }

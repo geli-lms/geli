@@ -3,7 +3,7 @@ import {IConfig} from '../../../../../../../shared/models/IConfig';
 import {ConfigService} from '../../services/data.service';
 import {MarkdownService} from '../../services/markdown.service';
 import {errorCodes} from '../../../../../../../api/src/config/errorCodes';
-import {SnackBarService} from '../../services/snack-bar.service';
+import {MatSnackBar} from '@angular/material';
 import {ActivatedRoute} from '@angular/router';
 
 @Component({
@@ -20,9 +20,8 @@ export class AdminMarkdownEditComponent implements OnInit {
 
   constructor(private service: ConfigService,
               private mdService: MarkdownService,
-              private snackBar: SnackBarService,
-              private route: ActivatedRoute) {
-  }
+              private snackBar: MatSnackBar,
+              private route: ActivatedRoute) { }
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
@@ -40,17 +39,15 @@ export class AdminMarkdownEditComponent implements OnInit {
       this.text = '';
     }
   }
-
-  async onSave(markdown: string) {
+  onSave(markdown: string ) {
     try {
-      await this.service.updateItem({_id: this.type, data: markdown});
-      this.snackBar.open(this.headingType + ' saved');
-    } catch (err) {
-      this.snackBar.open(errorCodes.save.couldNotSaveImprint.text);
+      void this.service.updateItem({_id: this.type, data: markdown});
+      this.snackBar.open( this.headingType + ' saved', '', {duration: 3000});
+    } catch (error) {
+      this.snackBar.open(errorCodes.save.couldNotSaveImprint.text, '', {duration: 3000});
     }
     void this.loadConfig();
   }
-
   onCancel() {
     void this.loadConfig();
   }

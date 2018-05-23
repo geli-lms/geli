@@ -9,7 +9,6 @@ import * as crypto from 'crypto';
 import {isNullOrUndefined} from 'util';
 import {isEmail} from 'validator';
 import {errorCodes} from '../config/errorCodes';
-import {allRoles} from '../config/roles';
 import {IProperties} from '../../../shared/models/IProperties';
 import {extractMongoId} from '../utilities/ExtractMongoId';
 import {ensureMongoToObject} from '../utilities/EnsureMongoToObject';
@@ -82,7 +81,7 @@ const userSchema = new mongoose.Schema({
     },
     role: {
       type: String,
-      'enum': allRoles,
+      'enum': ['student', 'teacher', 'tutor', 'admin'],
       'default': 'student'
     },
     lastVisitedCourses: [ {
@@ -237,7 +236,7 @@ userSchema.statics.checkPrivileges = function (user: IUser): IProperties {
   const userIsAdmin: boolean = user.role === 'admin';
   const userIsTeacher: boolean = user.role === 'teacher';
   const userIsStudent: boolean = user.role === 'student';
-  // NOTE: The 'tutor' role is currently unused / disabled.
+  // NOTE: The 'tutor' role exists and has fixtures, but currently appears to be unimplemented.
   // const userIsTutor: boolean = user.role === 'tutor';
 
   const userEditLevel: number = User.getEditLevel(user);

@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {FileUploader, FileUploaderOptions} from 'ng2-file-upload';
-import {SnackBarService} from '../../services/snack-bar.service';
+import {MatSnackBar} from '@angular/material';
 
 @Component({
   selector: 'app-upload-form',
@@ -9,15 +9,29 @@ import {SnackBarService} from '../../services/snack-bar.service';
 })
 export class UploadFormComponent implements OnInit, OnChanges {
 
-  @Input() uploadPath: string;
-  @Input() uploadMethod = 'POST';
-  @Input() allowedMimeTypes: string[];
-  @Input() additionalData: any;
-  @Input() maxFileNumber: number;
+  @Input()
+  uploadPath: string;
 
-  @Output() onFileSelectedChange = new EventEmitter();
-  @Output() onFileUploaded = new EventEmitter();
-  @Output() onAllUploaded = new EventEmitter();
+  @Input()
+  uploadMethod = 'POST';
+
+  @Input()
+  allowedMimeTypes: string[];
+
+  @Input()
+  additionalData: any;
+
+  @Input()
+  maxFileNumber: number;
+
+  @Output()
+  onFileSelectedChange = new EventEmitter();
+
+  @Output()
+  onFileUploaded = new EventEmitter();
+
+  @Output()
+  onAllUploaded = new EventEmitter();
 
   hasDropZoneOver = false;
   fileUploader: FileUploader;
@@ -26,7 +40,7 @@ export class UploadFormComponent implements OnInit, OnChanges {
   private updateUploadParams = false;
   private error = false;
 
-  constructor(private snackBar: SnackBarService) {
+  constructor(private snackBar: MatSnackBar) {
   }
 
   ngOnInit() {
@@ -47,7 +61,7 @@ export class UploadFormComponent implements OnInit, OnChanges {
     this.fileUploader.onCancelItem = (file) => {
       // set error true, so dialog is not closed automatically
       this.error = true;
-      this.snackBar.open(`upload cancelled for ${file._file.name}`);
+      this.snackBar.open(`upload cancelled for ${file._file.name}`, 'Dismiss');
     };
 
     this.fileUploader.onBuildItemForm = (fileItem: any, form: any) => {
@@ -67,6 +81,7 @@ export class UploadFormComponent implements OnInit, OnChanges {
     this.fileUploader.onCompleteAll = () => {
       if (!this.error && this.fileUploader.queue.length === 0) {
         this.onAllUploaded.emit();
+        this.snackBar.open('All items uploaded!', '', {duration: 3000});
       }
     };
 
@@ -98,7 +113,7 @@ export class UploadFormComponent implements OnInit, OnChanges {
       // reset the error state to try again later
       item.isError = false;
       item.isUploaded = false;
-      this.snackBar.open(`${item._file.name} failed to upload`);
+      this.snackBar.open(`${item._file.name} failed to upload`, 'Dismiss');
     };
   }
 
@@ -112,7 +127,7 @@ export class UploadFormComponent implements OnInit, OnChanges {
   clearQueue() {
     this.fileUploader.clearQueue();
     if (this.fileUploader.queue.length > 0) {
-      this.snackBar.open('Queue couldn\'t be cleared.');
+      this.snackBar.open('Queue couldn\'t be cleared.', 'Dismiss');
     } else {
       this.onFileSelectedChange.emit(false);
     }

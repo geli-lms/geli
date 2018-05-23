@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation, EventEmitter, Output, Input } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, EventEmitter, Output } from '@angular/core';
 
 @Component({
   selector: 'app-button-save-cancel',
@@ -8,18 +8,12 @@ import { Component, OnInit, ViewEncapsulation, EventEmitter, Output, Input } fro
 })
 export class ButtonSaveCancelComponent implements OnInit {
 
-  @Input()
-  saveButtonDisabled: boolean;
-
   @Output()
   save: EventEmitter<any> = new EventEmitter();
   @Output()
   cancel: EventEmitter<any> = new EventEmitter();
 
-  constructor() {
-    // sets save button disabled default: false
-    this.saveButtonDisabled = false;
-  }
+  constructor() {}
 
   ngOnInit() {
   }
