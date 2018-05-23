@@ -10,8 +10,8 @@
     </button>
   </div>
 </div>
-<div *ngIf="checkForFileUnits()" class="grid">
-  <div *ngIf="displayGrid===true">
+<div *ngIf="checkForFileUnits()">
+  <div *ngIf="displayGrid===true" class="grid">
   <ng-container *ngFor="let lec of course.lectures">
     <ng-container *ngFor="let unit of lec.units">
       <ng-container *ngIf="unit.__t === 'file'">

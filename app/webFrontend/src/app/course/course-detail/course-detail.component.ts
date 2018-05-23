@@ -22,7 +22,7 @@ export class CourseDetailComponent implements OnInit, OnDestroy {
   course: ICourse;
   id: string;
   tabs = [
-    {path: 'overview', label: 'Overview', img: 'education'},
+    {path: 'overview', label: 'Overview', img: 'school'},
     {path: 'fileview', label: 'Files', img: 'insert_drive_file'},
     {path: 'videoview', label: 'Videos', img: 'video_library'},
     {path: 'download', label: 'Download', img: 'get_app'}
