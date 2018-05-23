@@ -11,7 +11,8 @@ import {DownloadCourseDialogComponent} from './download-course-dialog/download-c
 import {TitleService} from '../../shared/services/title.service';
 import {LastVisitedCourseContainerUpdater} from '../../shared/utils/LastVisitedCourseContainerUpdater';
 import {DialogService} from '../../shared/services/dialog.service';
-
+import {ChatNameInputComponent} from '../../shared/components/chat-name-input/chat-name-input.component';
+import {ChatService} from '../../shared/services/chat.service';
 
 
 @Component({
@@ -24,6 +25,7 @@ export class CourseDetailComponent implements OnInit {
   course: ICourse;
   id: string;
   showChat = false;
+  chatName: string;
 
   constructor(private router: Router,
               private route: ActivatedRoute,
@@ -33,7 +35,8 @@ export class CourseDetailComponent implements OnInit {
               private dialog: MatDialog,
               private titleService: TitleService,
               private userDataService: UserDataService,
-              private dialogService: DialogService,) {
+              private dialogService: DialogService,
+              private chatService: ChatService) {
   }
 
   ngOnInit() {
@@ -42,6 +45,10 @@ export class CourseDetailComponent implements OnInit {
     });
     this.getCourse(this.id);
     this.titleService.setTitle('Course');
+
+    this.chatService.chatName$.subscribe(name => {
+       this.chatName = name;
+    })
   }
 
   async getCourse(courseId: string) {
@@ -70,7 +77,19 @@ export class CourseDetailComponent implements OnInit {
     this.dialogService.userProfile(teacher);
   }
 
+  /**
+   * show or hide the chat
+   */
   toggleChat() {
     this.showChat = !this.showChat;
+  }
+
+  /**
+   * update user chat name
+   */
+  updateChatName() {
+    const dialogRef = this.dialog.open(ChatNameInputComponent, {
+      data: {chatName: this.chatName}
+    });
   }
 }

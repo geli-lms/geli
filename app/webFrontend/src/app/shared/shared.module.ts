@@ -25,8 +25,8 @@ import {AdminMarkdownEditComponent} from './components/admin-markdown-edit/admin
 import {UserProfileDialog} from 'app/shared/components/user-profile-dialog/user-profile-dialog.component';
 import {NotfoundComponent} from './components/notfound/notfound.component';
 import {ChatComponent} from './components/chat/chat.component';
-import {ChatNameInputDialogComponent} from './components/chat-name-input-dialog/chat-name-input-dialog.component';
-import { InfiniteScrollDirective } from './directives/infinite-scroll.directive';
+import {ChatNameInputComponent} from './components/chat-name-input/chat-name-input.component';
+import {InfiniteScrollDirective} from './directives/infinite-scroll.directive';
 
 
 @NgModule({
@@ -62,7 +62,7 @@ import { InfiniteScrollDirective } from './directives/infinite-scroll.directive'
     NotfoundComponent,
     UserProfileDialog,
     ChatComponent,
-    ChatNameInputDialogComponent,
+    ChatNameInputComponent,
     InfiniteScrollDirective,
   ],
   exports: [
@@ -87,14 +87,14 @@ import { InfiniteScrollDirective } from './directives/infinite-scroll.directive'
     AdminMarkdownEditComponent,
     UserProfileDialog,
     ChatComponent,
-    ChatNameInputDialogComponent,
+    ChatNameInputComponent,
     InfiniteScrollDirective
   ],
   entryComponents: [
     UploadFormDialog,
     PickMediaDialog,
     UserProfileDialog,
-    ChatNameInputDialogComponent
+    ChatNameInputComponent
   ],
   providers: [],
 })

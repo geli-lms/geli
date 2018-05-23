@@ -19,16 +19,14 @@ interface ScrollPosition {
 export class InfiniteScrollDirective {
 
   @Input()
-  scrollCallback;
+  scrollCallback; // callback function which should return an observable
 
   @Input()
-  scrollPercent = 90;  //after this scroll percent new data the loadMore event is emitted.
+  scrollPercent = 90;  //until this percentage the user should scroll the container for the event to be emitted
 
   @Input()
   shouldEmit = true; // yes or not the directive should emit an event when scrollPercent is reached.
 
-  @Output()
-  loadMore = new EventEmitter();
 
   private scrollEvent$;
 
@@ -38,17 +36,19 @@ export class InfiniteScrollDirective {
 
   init() {
     this.scrollEvent$ = Observable.fromEvent(this.elm.nativeElement, 'scroll');
-   this.scrollEvent$.map((e: any): ScrollPosition => ({
+    this.scrollEvent$.map((e: any): ScrollPosition => ({
       sH: e.target.scrollHeight,
       sT: e.target.scrollTop,
       cH: e.target.clientHeight
     }))
       .pairwise()
       .filter(positions => this.isScrollingUp(positions) && this.isScrollExpectedPercent(positions[1]))
-      .subscribe(() => {
-        if(this.shouldEmit){
-          this.loadMore.emit();
+      .exhaustMap(() => {
+        if (this.shouldEmit) {
+          return this.scrollCallback();
         }
+      })
+      .subscribe(() => {
       })
   }
 
@@ -57,7 +57,7 @@ export class InfiniteScrollDirective {
    * @param positions
    * @returns {boolean}
    */
-  isScrollingUp (positions) {
+  isScrollingUp(positions) {
     return positions[0].sT > positions[1].sT;
   }
 

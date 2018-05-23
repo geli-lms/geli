@@ -48,9 +48,9 @@ export default class MessageController {
     return messages.map((message: IMessageModel) => {
       message = message.toObject();
       if (message.chatName) {
-        delete  message.author.profile
+        delete  message.author.profile;
       }
-      return message
+      return message;
     });
   }
 
@@ -64,7 +64,7 @@ export default class MessageController {
     }
     const count = await Message.count({room: room});
 
-    return {count: count}
+    return {count: count};
   }
 
 }

@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ChatNameInputDialogComponent } from './chat-name-input-dialog.component';
+import { ChatNameInputDialogComponent } from './chat-name-input.component';
 
 describe('ChatNameInputDialogComponent', () => {
   let component: ChatNameInputDialogComponent;

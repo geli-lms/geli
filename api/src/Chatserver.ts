@@ -51,7 +51,7 @@ export default class ChatServer {
       // TODO: check  if room exist before  joining it
       socket.join(queryParam.room);
 
-      socket.on(SocketIOEvent.MESSAGE, (message: IMessage) => this.onMessage(message, queryParam))
+      socket.on(SocketIOEvent.MESSAGE, (message: IMessage) => this.onMessage(message, queryParam));
     });
   }
 

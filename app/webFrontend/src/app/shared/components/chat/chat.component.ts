@@ -5,8 +5,11 @@ import {ChatService} from '../../services/chat.service';
 import {IMessage} from '../../../../../../../shared/models/IMessage';
 import {SocketIOEvent} from '../../../../../../../shared/models/SoketIOEvent';
 import {MatDialog} from '@angular/material';
-import {ChatNameInputDialogComponent} from '../chat-name-input-dialog/chat-name-input-dialog.component';
 import {Subscription} from 'rxjs/Subscription';
+import {ChatNameInputComponent} from '../chat-name-input/chat-name-input.component';
+import {fromPromise} from 'rxjs/observable/fromPromise';
+import {Observable} from 'rxjs/Observable';
+import 'rxjs/add/operator/do';
 
 
 @Component({
@@ -23,23 +26,27 @@ export class ChatComponent implements OnInit, OnDestroy {
   ioConnection: any;
   inputValue: string = null;
   loadMsgOnScroll = true;
+  scrollCallback: any;
+  limit = 10;
 
   constructor(private messageService: MessageService, private chatService: ChatService, private userService: UserService, public dialog: MatDialog) {
     this.chatNameSubscription = this.chatService.chatName$.subscribe(chatName => {
       this.chatName = chatName;
-    })
+    });
+
+    this.scrollCallback = this.loadMoreMsg.bind(this);
   }
 
   ngOnInit() {
-    console.log('init', this.room)
     this.init();
   }
 
   async init() {
     if (this.room) {
-      const res = await this.messageService.getMessageCount({room: this.room});
+      const queryParam = {room: this.room, limit: this.limit};
+      const res = await this.messageService.getMessageCount(queryParam);
       this.messageCount = res.count;
-      this.getMessages();
+      this.messages = await this.messageService.getMessages(queryParam);
       this.initSocketConnection();
     }
   }
@@ -82,12 +89,18 @@ export class ChatComponent implements OnInit, OnDestroy {
   }
 
 
+  /**
+   * Post the message if the user have an chatName
+   * otherwise request a chatName first
+   */
   onEnter() {
     if (!this.chatName) {
-      const temporaryNameDialog = this.dialog.open(ChatNameInputDialogComponent);
-      temporaryNameDialog.afterClosed()
+      const dialogRef = this.dialog.open(ChatNameInputComponent, {
+        data: {chatName: ''}
+      });
+
+      dialogRef.afterClosed()
         .subscribe((chatName: string) => {
-          this.chatService.setChatName(chatName);
           this.postMessage();
         });
     } else {
@@ -100,22 +113,26 @@ export class ChatComponent implements OnInit, OnDestroy {
       chatName: this.chatName,
       content: this.inputValue,
       room: this.room,
-      author: this.chatName ? {_id: this.userService.user._id} : this.userService.user  // TODO: send only required information
+      author: this.chatName ? {_id: this.userService.user._id} : this.userService.user
     };
+
     this.chatService.send(message);
     this.inputValue = null;
   };
 
-  async getMessages() {
+  loadMoreMsg(): Observable<any> {
     const queryParam = {
       room: this.room,
       skip: this.messages.length,
-      limit: 10,
+      limit: this.limit
     };
 
-    const furtherMessages = await this.messageService.getMessages(queryParam);
-    this.messages = this.messages.concat(furtherMessages).reverse();
-    if (this.messages.length === this.messageCount) {
+    return fromPromise(this.messageService.getMessages(queryParam)).do(this.processFurtherMessages.bind(this));
+  }
+
+  processFurtherMessages(messages: IMessage[]): void {
+    this.messages = this.messages.concat(messages).reverse();
+    if (this.messages.length == this.messageCount) {
       this.loadMsgOnScroll = false;
     }
   }
