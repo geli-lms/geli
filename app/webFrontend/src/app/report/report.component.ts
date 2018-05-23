@@ -3,7 +3,7 @@ import {UserService} from '../shared/services/user.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {CourseService} from '../shared/services/data.service';
 import {ReportService} from '../shared/services/data/report.service';
-import {saveAs}from 'file-saver/FileSaver';
+import {saveAs} from 'file-saver/FileSaver';
 
 @Component({
   selector: 'app-report',
@@ -51,43 +51,38 @@ export class ReportComponent implements OnInit {
   private exportReport() {
     this.reportService.getCourseResults(this.courseId)
       .then((result) => {
-        let report = result;
+        const report = result;
         const csvContent = this.generateCsvContent(report);
         this.converter.json2csv(csvContent, this.createDownload, this.options);
     });
   }
 
   private generateCsvContent(report: any[]) {
-    let csvContent: any[] = [];
-    for (let student of report) {
-      for (let unit of student.progress.units) {
+    const csvContent: any[] = [];
+    for (const student of report) {
+      for (const unit of student.progress.units) {
         let status: string;
         let answers: string;
-        if (unit.__t === "task") {
+        if (unit.__t === 'task') {
           if (unit.done) {
-            status = "done;";
+            status = 'done;';
+          } else {
+            status = 'tried;';
           }
-          else {
-            status = "tried;";
-          }
-
-          for (let answer of unit.tasks[0].answers) {
+          for (const answer of unit.tasks[0].answers) {
             if (answer.value) {
-              answers += answer.text + ";";
+              answers += answer.text + ';';
             }
           }
-
-        }
-        else if (unit.__t === "code-kata") {
+        } else if (unit.__t === 'code-kata') {
           if (unit.progressData.done) {
-            status = "done";
-          }
-          else {
-            status = "tried"
+            status = 'done';
+          } else {
+            status = 'tried';
           }
         }
 
-        let entry = {
+        const entry = {
           id : student.uid,
           lastName: student.profile.lastName,
           firstName: student.profile.firstName,
@@ -107,6 +102,6 @@ export class ReportComponent implements OnInit {
       throw err;
     }
     const file = new Blob([csv], {type: 'text/csv'});
-    saveAs(file, "Report.csv");
+    saveAs(file, this.courseName + 'Report.csv');
   }
 }
