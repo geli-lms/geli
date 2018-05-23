@@ -15,7 +15,7 @@ import {SaveFileService} from '../../../../shared/services/save-file.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {DataSharingService} from '../../../../shared/services/data-sharing.service';
 import {Subject} from 'rxjs/Subject';
-import {Notification} from '../../../../models/Notification';
+import {UnitFactoryService} from '../../../../shared/services/unit-factory.service';
 
 @Component({
   selector: 'app-lecture-edit',
@@ -42,7 +42,8 @@ export class LectureEditComponent implements OnInit, OnDestroy {
               public userService: UserService,
               private dataSharingService: DataSharingService,
               private router: Router,
-              private notificationService: NotificationService) {
+              private notificationService: NotificationService,
+              private unitFactoryService: UnitFactoryService) {
   }
 
   ngOnInit() {
@@ -280,5 +281,9 @@ export class LectureEditComponent implements OnInit, OnDestroy {
       this.dataSharingService.setDataForKey('openLectureId', this.lecture._id);
       this.navigateToThisLecture();
     }
+  }
+
+  getUnitModel(): IUnit {
+    return this.unitFactoryService.createNewUnit(this.dataSharingService.getDataForKey('unit-create-type'), this.course);
   }
 }
