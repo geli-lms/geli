@@ -304,7 +304,8 @@ export class ReportController {
     .select({
       name: 1,
       lectures: 1,
-      students: 1
+      students: 1,
+      teachers: 1
     })
     .populate({
       path: 'lectures',
@@ -317,6 +318,7 @@ export class ReportController {
       }
     })
     .populate('students')
+    .populate('teachers')
     .exec();
   }
 
