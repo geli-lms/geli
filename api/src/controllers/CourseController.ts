@@ -30,11 +30,15 @@ import crypto = require('crypto');
 import {API_NOTIFICATION_TYPE_ALL_CHANGES, NotificationSettings} from '../models/NotificationSettings';
 import {IWhitelistUser} from '../../../shared/models/IWhitelistUser';
 import {DocumentToObjectOptions} from 'mongoose';
+import * as mongoose from 'mongoose';
 import * as sharp from 'sharp';
 import * as fs from "fs";
 import ResponsiveImageService from "../services/ResponsiveImageService";
 import {IResponsiveImageData} from "../../../shared/models/IResponsiveImageData";
 import {IPicture} from "../../../shared/models/mediaManager/IPicture";
+
+import { Picture } from '../models/mediaManager/File';
+import {IPictureModel} from "../models/mediaManager/Picture";
 
 const uploadOptions = {
   storage: multer.diskStorage({
@@ -714,7 +718,6 @@ export class CourseController {
       throw new ForbiddenError('Forbidden format of uploaded picture: ' + mimeFamily);
     }
 
-    const course = await Course.findById(id);
     const destination = 'uploads/courses/';
 
     // Create the directory if not already exists.
@@ -724,13 +727,19 @@ export class CourseController {
 
     await ResponsiveImageService.generateResponsiveImages(file, responsiveImageData);
 
-    const image: IPicture = {
+    const image: any = new Picture({
+      name: file.filename,
+      physicalPath: file.path,
+      link: file.path,
+      size: 0,
       mimeType: file.mimetype,
       breakpoints: responsiveImageData.breakpoints
-    };
+    });
+
+    await image.save();
 
     const result = await Course.update({ _id: id }, {
-      image: image
+      image: image._id
     });
   }
 }

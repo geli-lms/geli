@@ -80,8 +80,10 @@ const courseSchema = new mongoose.Schema({
         ref: 'WhitelistUser'
       }
     ],
+    // TODO: extend file schama -> ObjectId
     image: {
-      type: mongoose.Schema.Types.Mixed
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Picture'
     }
   },
   {

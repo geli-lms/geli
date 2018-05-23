@@ -5,3 +5,6 @@ export enum BreakpointSize {
   DESKTOP_XL = 1920, // screen larger han 1920px
   ORIGINAL = -1
 }
+
+
+// TODO: move to shared

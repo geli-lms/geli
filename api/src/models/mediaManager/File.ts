@@ -3,6 +3,7 @@ import {IFile} from '../../../../shared/models/mediaManager/IFile';
 import * as fs from 'fs';
 import {FileUnit} from '../units/Unit';
 import {IFileUnitModel} from '../units/FileUnit';
+import {IPictureModel, pictureSchema} from "./Picture";
 
 const {promisify} = require('util');
 
@@ -33,7 +34,9 @@ const fileSchema = new mongoose.Schema({
   timestamps: true,
   toObject: {
     transform: function (doc: IFileModel, ret: any) {
-      ret._id = ret._id.toString();
+      if (ret._id) {
+        ret._id = ret._id.toString();
+      }
       delete ret.physicalPath;
       return ret;
     }
@@ -60,5 +63,6 @@ fileSchema.pre('remove', async function() {
 });
 
 const File = mongoose.model<IFileModel>('File', fileSchema);
+const Picture = File.discriminator('Picture', pictureSchema);
 
-export {File, IFileModel};
+export {File, Picture, IFileModel};
