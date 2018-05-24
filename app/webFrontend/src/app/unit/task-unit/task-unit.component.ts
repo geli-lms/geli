@@ -82,10 +82,10 @@ export class TaskUnitComponent implements OnInit {
       promise
         .then((savedProgress) => {
           this.progress = savedProgress;
-          this.snackBar.open('Progress has been saved');
+          this.snackBar.openShort('Progress has been saved');
         })
         .catch((err) => {
-          this.snackBar.open(`An error occurred: ${err.error.message}`);
+          this.snackBar.openShort(`An error occurred: ${err.error.message}`);
         });
     };
 

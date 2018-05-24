@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Another MatSnackBar to SnackBarService migration. [#730](https://github.com/h-da/geli/pull/730)
 - `getNotificationSettings` does not create new notification settings. [#731](https://github.com/h-da/geli/issues/731)
 - Remove `isCourseTeacherOrAdmin` and `isMemberOfCourse`from UserService. [#731](https://github.com/h-da/geli/issues/731)
+- Refactored save mechanism of unit forms. [#532](https://github.com/h-da/geli/issues/532)
 
 ### Fixed
 - Fixed broken notification settings. [#731](https://github.com/h-da/geli/issues/731)
@@ -41,6 +42,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Added Language code to header [#554](https://github.com/h-da/geli/issues/554)
 - Added icon for access key [#547](https://github.com/h-da/geli/issues/574)
 - Unit visibility toggle [#582](https://github.com/h-da/geli/issues/582)
+- Add bootstrap grid system [#613](https://github.com/h-da/geli/issues/613)
 
 ### Changed
 - Refactored or slightly altered various course & user related APIs. [#654](https://github.com/h-da/geli/issues/654) [#691](https://github.com/h-da/geli/issues/691)
