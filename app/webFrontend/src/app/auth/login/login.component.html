@@ -17,7 +17,7 @@
               [disabled]="loading">
         {{'common.login'|translate}}
       </button>
-      <button mat-raised-button type="button" routerLink="/reset" routerLinkActive="active">
+      <button mat-raised-button [matTooltip]="'auth.tooltip.ForgotPassword' | translate" type="button" routerLink="/reset" routerLinkActive="active">
         {{'auth.forgotPassword'|translate}}
       </button>
     </form>

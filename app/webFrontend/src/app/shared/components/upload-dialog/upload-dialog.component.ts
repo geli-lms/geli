@@ -2,6 +2,8 @@ import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {FileItem, FileUploader} from 'ng2-file-upload';
 import {IUser} from '../../../../../../../shared/models/IUser';
 import {MatDialogRef, MatSnackBar} from '@angular/material';
+import {SnackBarService} from '../../services/snack-bar.service';
+import {TranslateService} from '@ngx-translate/core';
 
 
 @Component({
@@ -23,7 +25,8 @@ export class UploadDialog implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<UploadDialog>,
-    private snackBar: MatSnackBar) { }
+    private snackBar: SnackBarService,
+    private translate: TranslateService) {}
 
   ngOnInit() {
     this.uploader = new FileUploader({
@@ -62,7 +65,7 @@ export class UploadDialog implements OnInit {
         nativeVideo.play();
       })
       .catch(error => {
-        this.snackBar.open('Couldn\'t start webcam', '', {duration: 3000});
+        this.snackBar.open('Couldn\'t start webcam');
       });
     }
   }
@@ -123,7 +126,7 @@ export class UploadDialog implements OnInit {
     try {
       this.uploader.uploadAll();
     } catch (error) {
-      this.snackBar.open('An error occured during the Upload', '', { duration: 3000 });
+      this.snackBar.open('An error occured during the Upload');
     }
 
   }

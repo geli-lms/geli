@@ -20,7 +20,7 @@
       <div class="form-group" formGroupName="profile">
         <mat-form-field>
           <input matInput formControlName="lastName"
-                 [placeholder]="'common.profile.lastName'|translate"/>
+                 [placeholder]="'common.profileDetails.lastName'|translate"/>
           <div *ngIf="resendActivationForm.get('profile').get('lastName').touched">
             <small *ngIf="resendActivationForm.get('profile').get('lastName').hasError('required')"
                    class="text-danger">
@@ -36,7 +36,7 @@
 
       <div>
         <mat-form-field>
-          <input matInput formControlName="uid" [placeholder]="'common.profile.uid'|translate"/>
+          <input matInput formControlName="uid" [placeholder]="'common.profileDetails.uid' | translate"/>
           <div *ngIf="resendActivationForm.controls.uid.touched">
             <small *ngIf="resendActivationForm.controls.uid.hasError('required')" class="text-danger">
               {{'common.validation.required'|translate}}
@@ -69,7 +69,7 @@
 
       <div *ngIf="formError" class="text-danger" id="resendActivationFormError">{{formError}}</div>
 
-      <button mat-raised-button color="primary" type="submit"
+      <button [matTooltip]="'auth.resendActivation.tooltipResendAction' | translate" mat-raised-button color="primary" type="submit"
               [disabled]="loading || !resendActivationForm?.valid">{{'common.send'|translate}}
       </button>
     </form>

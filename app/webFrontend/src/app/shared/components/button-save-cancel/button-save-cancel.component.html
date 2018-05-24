@@ -1,2 +1,16 @@
-<button mat-raised-button color="primary" class="add-unit" (click)="emitSave()" type="submit">Save</button>
-<button mat-raised-button color="secondary" (click)="emitCancel()">Cancel</button>
+<ng-container>
+  <ng-content select="[left]"></ng-content>
+<button mat-raised-button color="primary" class="add-unit" (click)="emitSave()" type="submit">{{ 'common.save' | translate }}</button>
+<button mat-raised-button color="secondary" type="reset" (click)="emitCancel()">{{ 'common.cancel' | translate }}</button>
+<ng-content select="[right]"></ng-content>
+</ng-container>
+<!--Example to add content before/after:
+ <app-button-save-cancel (save)="saveUnit()" (cancel)="onDone()">
+    <ng-container left>
+     <span>Before the buttons</span>
+    </ng-container>
+    <ng-container right>
+      <span>After the buttons</span>
+    </ng-container>
+ </app-button-save-cancel>
+-->

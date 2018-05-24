@@ -1,10 +1,10 @@
-<form [formGroup]="form">
-  <mat-form-field>
-    <input matInput required formControlName="name" placeholder="Name">
+<ng-container  [formGroup]="unitForm">
+  <mat-form-field >
+    <input matInput required formControlName="name" [placeholder]="'common.name'| translate">
   </mat-form-field>
 
-  <mat-form-field>
-    <textarea matInput formControlName="description" placeholder="Description" rows="4"></textarea>
+  <mat-form-field >
+    <textarea matInput formControlName="description" [placeholder]="'common.description'| translate" rows="4"></textarea>
   </mat-form-field>
 
   <mat-form-field *ngIf="model?.progressable">
@@ -15,8 +15,8 @@
 
   <div>
     <mat-slide-toggle formControlName="visible">
-      <span *ngIf="form.value.visible">Unit can be seen by students</span>
-      <span *ngIf="!form.value.visible">Unit cannot be seen by students</span>
+      <span *ngIf="unitForm.value.visible">{{ 'unit.text.canBeSeenByStudents' | translate }}</span>
+      <span *ngIf="!unitForm.value.visible">{{ 'unit.text.canNotBeSeenByStudents' | translate }}</span>
     </mat-slide-toggle>
   </div>
-</form>
+</ng-container>
