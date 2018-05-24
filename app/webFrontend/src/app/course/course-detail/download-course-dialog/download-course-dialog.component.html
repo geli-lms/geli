@@ -19,7 +19,7 @@
     <button mat-raised-button color="primary" [disabled]="this.disableDownloadButton" (click)="downloadAndClose()">
       Download
     </button>
-    <button mat-button [mat-dialog-close]="true">Cancel</button>
+    <button mat-button (click)="uncheckAll()">Reset</button>
     <span class="spacer"></span>
     <ng-container *ngIf="showSpinner">
       <mat-spinner [diameter]=20 [strokeWidth]=2 class="spinner"></mat-spinner>

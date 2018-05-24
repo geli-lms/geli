@@ -162,4 +162,8 @@ export class DownloadCourseDialogComponent implements OnInit {
     return  {courseName: this.course._id, lectures: lectures};
   }
 
+  uncheckAll() {
+    this.chkbox = false;
+    this.onChange();
+  }
 }
