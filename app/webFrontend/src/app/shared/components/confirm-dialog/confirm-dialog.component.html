@@ -1,4 +1,4 @@
 <h2>{{title}}</h2>
 <p>{{message}}</p>
 <button mat-raised-button color="warn" (click)="dialogRef.close(true)">{{confirmText}}</button>
-<button mat-raised-button (click)="dialogRef.close(false)">Cancel</button>
+<button mat-raised-button (click)="dialogRef.close(false)">{{ 'common.cancel' | translate }}</button>

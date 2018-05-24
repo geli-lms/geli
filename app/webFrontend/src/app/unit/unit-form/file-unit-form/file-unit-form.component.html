@@ -2,9 +2,9 @@
   <div *ngIf="unitForm.controls.files" formArrayName="files" class="file-list-container uploaded-files">
     <div class="file-list">
       <div class="file-list-row file-list-header">
-        <span>Filename</span>
-        <span>Filesize</span>
-        <span>Actions</span>
+        <span>{{ 'file.text.filename' | translate }}</span>
+        <span>{{ 'file.text.filesize' | translate }}</span>
+        <span>{{ 'file.text.actions' | translate }}</span>
       </div>
       <div class="file-list-row" *ngFor="let file of unitForm.controls.files.controls;">
         <span class="filename">{{file.value.name}}</span>
@@ -12,7 +12,7 @@
         <mat-action-row>
           <button mat-raised-button color="warn" (click)="removeFile(file)">
             <mat-icon>delete</mat-icon>
-            Remove
+            {{ 'common.delete' | translate }}
           </button>
         </mat-action-row>
       </div>
