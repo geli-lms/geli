@@ -1,4 +1,4 @@
-import {Component, Input, OnDestroy, OnInit, SimpleChange} from '@angular/core';
+import {Component, HostListener, Input, OnChanges, OnDestroy, OnInit, SimpleChange} from '@angular/core';
 import {UserService} from '../../services/user.service';
 import {MessageService} from '../../services/message.service';
 import {ChatService} from '../../services/chat.service';
@@ -10,6 +10,9 @@ import {ChatNameInputComponent} from '../chat-name-input/chat-name-input.compone
 import {fromPromise} from 'rxjs/observable/fromPromise';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/do';
+import {MarkdownService} from '../../services/markdown.service';
+import {DomSanitizer} from '@angular/platform-browser';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 
 
 @Component({
@@ -17,20 +20,30 @@ import 'rxjs/add/operator/do';
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.scss']
 })
-export class ChatComponent implements OnInit, OnDestroy {
+export class ChatComponent implements OnInit, OnChanges {
   @Input() room: string;
   chatName: string;
   chatNameSubscription: Subscription;
   messages: IMessage[] = [];
   messageCount: number;
   ioConnection: any;
-  inputValue: string = null;
   loadMsgOnScroll = true;
   scrollCallback: any;
   limit = 20;
+  form = new FormGroup({
+    chatName: new FormControl('', Validators.required)
+  });
 
-  constructor(private messageService: MessageService, private chatService: ChatService, private userService: UserService, public dialog: MatDialog) {
-    this.chatNameSubscription = this.chatService.chatName$.subscribe(chatName => {
+  constructor(
+    private sanitizer: DomSanitizer,
+    private messageService: MessageService,
+    private chatService: ChatService,
+    private userService: UserService,
+    public dialog: MatDialog,
+    private markdownService: MarkdownService) {
+
+
+    this.chatService.chatName$.subscribe(chatName => {
       this.chatName = chatName;
     });
 
@@ -39,6 +52,12 @@ export class ChatComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.init();
+  }
+
+  onEnter(event: KeyboardEvent) {
+    if (event.keyCode === 13 && event.ctrlKey && this.form.valid) {
+      this.sendMessage();
+    }
   }
 
   async init() {
@@ -59,11 +78,6 @@ export class ChatComponent implements OnInit, OnDestroy {
       }
     }
     this.init()
-  }
-
-
-  ngOnDestroy() {
-    this.chatNameSubscription.unsubscribe();
   }
 
 
@@ -93,7 +107,7 @@ export class ChatComponent implements OnInit, OnDestroy {
    * Post the message if the user have an chatName
    * otherwise request a chatName first
    */
-  onEnter() {
+  sendMessage() {
     if (!this.chatName) {
       const dialogRef = this.dialog.open(ChatNameInputComponent, {
         data: {chatName: ''}
@@ -111,13 +125,13 @@ export class ChatComponent implements OnInit, OnDestroy {
   postMessage = () => {
     const message = {
       chatName: this.chatName,
-      content: this.inputValue,
+      content: this.form.getRawValue().chatName,
       room: this.room,
       author: this.chatName ? {_id: this.userService.user._id} : this.userService.user
     };
 
     this.chatService.send(message);
-    this.inputValue = null;
+    this.form.reset();
   };
 
   loadMoreMsg(): Observable<any> {

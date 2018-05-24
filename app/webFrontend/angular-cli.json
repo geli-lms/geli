@@ -20,7 +20,8 @@
       "prefix": "app",
       "styles": [
         "styles.scss",
-        "../node_modules/angular2-lightbox/lightbox.css"
+        "../node_modules/angular2-lightbox/lightbox.css",
+        "styles/bootstrap-grid.css"
       ],
       "scripts": [
         "../node_modules/ace-builds/src-min/ace.js",
