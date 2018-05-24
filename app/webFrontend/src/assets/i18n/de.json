@@ -163,7 +163,7 @@
         "accesskey": "Einschreibeschlüssel",
         "whitelist": "Whitelist"
       },
-      "uploadWhitelist": "Laden Sie Ihre OBS-csv-Datei mit Ihren Kursteilnehmern hoch, um sie auf die Freigabeliste zu setzen.<br />Alte Freigabelisten-Benutzer werden durch Hochladen einer neuen Datei entfernt.",
+      "uploadWhitelist": "Laden Sie Ihre OBS-csv-Datei mit Ihren Kursteilnehmern hoch, um sie auf die Freigabeliste zu setzen. Alte Freigabelisten-Benutzer werden durch Hochladen einer neuen Datei entfernt.",
       "userResults": "Benutzerergebnisse",
       "yourCourseProgress": "Ihr Kursfortschritt",
       "whitelist": "Freigabeliste"
