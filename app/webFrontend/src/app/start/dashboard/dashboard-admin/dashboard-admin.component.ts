@@ -50,6 +50,9 @@ export class DashboardAdminComponent extends DashboardBaseComponent {
 
   createCourse() {
     this.onFabClick();
-    this.dialog.open(CourseNewComponent);
+    this.dialog.open(CourseNewComponent, {
+      width: '400px',
+      maxWidth: '100%'}
+    );
   }
 }

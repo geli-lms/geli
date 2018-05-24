@@ -56,4 +56,7 @@ export class CourseNewComponent implements OnInit {
     });
   }
 
+  close() {
+    this.dialogRef.close();
+  }
 }
