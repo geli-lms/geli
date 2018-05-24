@@ -66,6 +66,7 @@ export class ChatComponent implements OnInit, OnChanges {
       const res = await this.messageService.getMessageCount(queryParam);
       this.messageCount = res.count;
       this.messages = await this.messageService.getMessages(queryParam);
+      this.messages.reverse();
       this.initSocketConnection();
     }
   }
