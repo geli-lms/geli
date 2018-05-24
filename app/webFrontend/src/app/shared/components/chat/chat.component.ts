@@ -1,11 +1,10 @@
-import {Component, HostListener, Input, OnChanges, OnDestroy, OnInit, SimpleChange} from '@angular/core';
+import {Component, Input, OnChanges, OnInit, SimpleChange} from '@angular/core';
 import {UserService} from '../../services/user.service';
 import {MessageService} from '../../services/message.service';
 import {ChatService} from '../../services/chat.service';
 import {IMessage} from '../../../../../../../shared/models/IMessage';
 import {SocketIOEvent} from '../../../../../../../shared/models/SoketIOEvent';
 import {MatDialog} from '@angular/material';
-import {Subscription} from 'rxjs/Subscription';
 import {ChatNameInputComponent} from '../chat-name-input/chat-name-input.component';
 import {fromPromise} from 'rxjs/observable/fromPromise';
 import {Observable} from 'rxjs/Observable';
@@ -23,7 +22,6 @@ import {FormControl, FormGroup, Validators} from '@angular/forms';
 export class ChatComponent implements OnInit, OnChanges {
   @Input() room: string;
   chatName: string;
-  chatNameSubscription: Subscription;
   messages: IMessage[] = [];
   messageCount: number;
   ioConnection: any;
