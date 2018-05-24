@@ -1,5 +1,6 @@
 import sharp = require("sharp");
 import * as fs from "fs";
+
 import {BreakpointSize} from "../models/BreakpointSize";
 import {IResponsiveImageData} from "../../../shared/models/IResponsiveImageData";
 

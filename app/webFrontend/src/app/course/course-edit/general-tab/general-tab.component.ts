@@ -18,8 +18,8 @@ import {UserService} from '../../../shared/services/user.service';
 import {DataSharingService} from '../../../shared/services/data-sharing.service';
 import {DialogService} from '../../../shared/services/dialog.service';
 import ResponsiveImage from "../../../models/ResponsiveImage";
-import {BreakpointSize} from "../../../../../../../api/src/models/BreakpointSize";
 import {IResponsiveImageData} from "../../../../../../../shared/models/IResponsiveImageData";
+import {BreakpointSize} from "../../../shared/enums/BreakpointSize";
 
 @Component({
   selector: 'app-course-edit-general-tab',

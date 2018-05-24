@@ -1,8 +1,8 @@
 /**
  * Note: If you modify this enum, please modify the corresponding enum
- * in the frontend.
+ * in the backend.
  *
- * app/webFrontend/src/app/shared/enums/BreakpointSize.ts
+ * api/src/models/BreakpointSize.ts
  */
 export enum BreakpointSize {
   MOBILE = 0, // screen larger than 0 px

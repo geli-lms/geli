@@ -1,7 +1,7 @@
 import {IBreakpoint} from "../../../../../shared/models/IBreakpoint";
-import {BreakpointSize} from "../../../../../api/src/models/BreakpointSize";
 import {IImageSize} from "../../../../../shared/models/IImageSize";
 import {IResponsiveImageData} from "../../../../../shared/models/IResponsiveImageData";
+import {BreakpointSize} from "../shared/enums/BreakpointSize";
 
 class Breakpoint implements IBreakpoint {
   screenSize: BreakpointSize;
