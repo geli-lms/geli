@@ -15,6 +15,7 @@ import {Lecture} from '../models/Lecture';
 import {IUser} from '../../../shared/models/IUser';
 import {Course} from '../models/Course';
 import config from '../config/main';
+import * as MarkdownIt from 'markdown-it';
 
 const fs = require('fs');
 const archiver = require('archiver');
@@ -310,7 +311,7 @@ export class DownloadController {
                   margin: 10,
                   columns: [
                     {
-                      image: '../app/webFrontend/src/assets/logo/geli-logo.png',
+                      image: 'src/assets/logo/geli-logo.png',
                       width: 20,
                       alignment: 'left'
                     },

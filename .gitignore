@@ -51,6 +51,8 @@ nohup.out
 !/app/webFrontend/*.js
 !/.travis/*.js
 !/api/test/mocha.env.js
+# Do not ignore html2pdfmake js
+!api/src/assets/html2pdfmake/html2pdfmake.js
 
 # Ignore CSV-Files generated from nlf
 /**/nlf-license*.csv
