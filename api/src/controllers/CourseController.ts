@@ -365,6 +365,7 @@ export class CourseController {
       .populate('teachers')
       .populate('students')
       .populate('whitelist')
+      .populate('image')
       .execPopulate();
     await course.processLecturesFor(currentUser);
     return course.toObject(<DocumentToObjectOptions>{currentUser});

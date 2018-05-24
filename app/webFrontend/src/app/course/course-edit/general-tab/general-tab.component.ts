@@ -71,8 +71,6 @@ export class GeneralTabComponent implements OnInit {
       this.courseService.readCourseToEdit(this.id).then(course => {
         this.courseOb = course;
 
-
-
         this.userImageData = {
             breakpoints: course.image.breakpoints,
             pathToImage: ''

@@ -12,6 +12,9 @@ import {ObjectID} from 'bson';
 import {Directory} from './mediaManager/Directory';
 import {IProperties} from '../../../shared/models/IProperties';
 import {extractMongoId} from '../utilities/ExtractMongoId';
+import {Picture} from "./mediaManager/File";
+import {IPictureModel} from "./mediaManager/Picture";
+import {IPicture} from "../../../shared/models/mediaManager/IPicture";
 
 interface ICourseModel extends ICourse, mongoose.Document {
   exportJSON: (sanitize?: boolean) => Promise<ICourse>;
@@ -80,7 +83,6 @@ const courseSchema = new mongoose.Schema({
         ref: 'WhitelistUser'
       }
     ],
-    // TODO: extend file schama -> ObjectId
     image: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Picture'
@@ -127,6 +129,13 @@ courseSchema.pre('remove', async function () {
       const lecDoc = await Lecture.findById(lec);
       await lecDoc.remove();
     }
+
+    // TODO: remove course image.
+
+
+
+
+
   } catch (error) {
     winston.log('warn', 'course (' + localCourse._id + ') cloud not be deleted!');
     throw new Error('Delete Error: ' + error.toString());
@@ -168,6 +177,9 @@ courseSchema.methods.exportJSON = async function (sanitize: boolean = true) {
       winston.log('warn', 'lecture(' + lectureId + ') was referenced by course(' + this._id + ') but does not exist anymore');
     }
   }
+
+  const imageId: mongoose.Types.ObjectId = obj.image;
+  obj.image = await Picture.findById(imageId);
 
   return obj;
 };
@@ -233,10 +245,21 @@ courseSchema.methods.checkPrivileges = function (user: IUser) {
   };
 };
 
-courseSchema.methods.forDashboard = function (user: IUser): ICourseDashboard {
+/**
+ * Modifies the Course data to be used by the courses dashboard.
+ *
+ * @param {IUser} user
+ * @returns {Promise<ICourseDashboard>}
+ */
+courseSchema.methods.forDashboard = async function (user: IUser): Promise<ICourseDashboard> {
   const {
-    name, active, description, enrollType, image
+    name, active, description, enrollType
   } = this;
+
+  let image = (this.image) ? (await Picture.findById(this.image)).toObject() : null;
+
+  console.log("image", image);
+
   const {
     userCanEditCourse, userCanViewCourse, userIsCourseAdmin, userIsCourseTeacher, userIsCourseMember
   } = this.checkPrivileges(user);
