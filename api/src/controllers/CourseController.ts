@@ -730,8 +730,8 @@ export class CourseController {
 
     const image: any = new Picture({
       name: file.filename,
-      physicalPath: file.path,
-      link: file.path,
+      physicalPath: responsiveImageData.pathToImage,
+      link: responsiveImageData.pathToImage,
       size: 0,
       mimeType: file.mimetype,
       breakpoints: responsiveImageData.breakpoints

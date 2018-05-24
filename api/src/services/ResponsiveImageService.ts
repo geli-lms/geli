@@ -44,6 +44,7 @@ export default class ResponsiveImageService {
       if (breakpoint.imageSize.width && breakpoint.imageSize.height) {
         resizeOptions = resizeOptions.resize(breakpoint.imageSize.width, breakpoint.imageSize.height);
       }
+
       resizeOptions = resizeOptions.resize(breakpoint.imageSize.width);
 
       await resizeOptions
@@ -57,6 +58,7 @@ export default class ResponsiveImageService {
 
     if (!keepOriginalFile) {
       fs.unlinkSync(originalFile.path);
+      responsiveImage.pathToImage = "-";
     }
   }
 
