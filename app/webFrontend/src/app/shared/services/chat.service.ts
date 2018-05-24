@@ -5,13 +5,15 @@ import * as socketIo from 'socket.io-client';
 import {SocketIOEvent} from '../../../../../../shared/models/SoketIOEvent';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {AuthenticationService} from './authentication.service';
+import {environment} from '../../../environments/environment';
 
 
 @Injectable()
 export class ChatService {
   socket;
   chatName$ = new BehaviorSubject<string>(null);
-  private readonly SERVER_URL = 'http://localhost:3030'; // TODO: Change this
+  private readonly SERVER_URL =  environment.serverUrl + ':' + environment.serverPort;
+
 
   constructor(private authenticationService: AuthenticationService) {
     const chatName = localStorage.getItem('chatName');
