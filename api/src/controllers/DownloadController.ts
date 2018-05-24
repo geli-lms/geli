@@ -306,17 +306,46 @@ export class DownloadController {
             } else {
 
               const docDefinition = {
+                header: {
+                  margin: 10,
+                  columns: [
+                    {
+                      image: '../app/webFrontend/src/assets/logo/geli-logo.png',
+                      width: 20,
+                      alignment: 'left'
+                    },
+                    {
+
+                      margin: [10, 0, 0,0],
+                      text: 'Geli LMS',
+                      alignment: 'center'
+                    }
+                  ]
+                },
+                pageMargins: [40, 80, 40, 60],
+                footer: function(page: any, pages: any) {
+                  return {
+                    columns: [
+                      {
+                        alignment: 'center',
+                        text: [
+                          { text: page.toString()},
+                          ' of ',
+                          { text: pages.toString()}
+                        ]
+                      }
+                    ],
+                    margin: [10, 0]
+                  };
+                },
                 content: [
                   localUnit.toFile(),
                 ]
               };
 
-
               await this.savePdfToFile(docDefinition, PDFtempPath);
               const name = lecCounter + '_' + lcName + '/' + unitCounter + '_' + this.replaceCharInFilename(localUnit.name) + '.pdf';
               await this.appendToArchive(archive, name, PDFtempPath);
-
-
 
             }
             unitCounter++;
@@ -338,7 +367,7 @@ export class DownloadController {
     }
   }
 
-  private savePdfToFile(docDefinition, path: String ): Promise<void> {
+  private savePdfToFile(docDefinition: any, path: String ): Promise<void> {
     return new Promise<void>((resolve, reject) => {
       const doc = printer.createPdfKitDocument(docDefinition);
       // To determine when the PDF has finished being written successfully
@@ -363,7 +392,7 @@ export class DownloadController {
     });
   }
 
-  private appendToArchive(archive, name: String, path: String) {
+  private appendToArchive(archive: any, name: String, path: String) {
     return new Promise<void>((resolve, reject) => {
       archive.on('entry', () => {
         resolve(); });
