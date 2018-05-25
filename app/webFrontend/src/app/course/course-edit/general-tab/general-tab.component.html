@@ -1,64 +1,67 @@
-<form class="course-form" (ngSubmit)="createCourse()">
-  <mat-form-field>
-    <input async matInput id="name" placeholder="Name" [(ngModel)]="course"
-           [ngModelOptions]="{standalone: true}">
-  </mat-form-field>
+<div class="row">
+  <div class="col-sm-12 col-md-6">
+    <form class="course-form" (ngSubmit)="createCourse()">
+      <mat-form-field>
+        <input async matInput id="name" placeholder="Name" [(ngModel)]="course"
+               [ngModelOptions]="{standalone: true}">
+      </mat-form-field>
 
-  <mat-form-field class="full-width">
+      <mat-form-field class="full-width">
         <textarea matInput id="description" placeholder="Description" [(ngModel)]="description"
                   [ngModelOptions]="{standalone: true}"></textarea>
-  </mat-form-field>
+      </mat-form-field>
 
-  <br />
+      <mat-form-field class="full-width">
+        <mat-select name="courseTypes" placeholder="Please select your course access type" id="courseTypes" [(ngModel)]="enrollType">
+          <mat-option *ngFor="let enrollType of enrollTypes" [value]="enrollType">{{enrollType}}</mat-option>
+        </mat-select><br>
+      </mat-form-field>
 
-  <app-responsive-image *ngIf="this.userImageData" [responsiveImageData]="this.userImageData"></app-responsive-image> <br />
+      <p *ngIf="enrollType === enrollTypeConstants.ENROLL_TYPE_FREE">
+        The course is free and accessible for everyone
+      </p>
 
-  <button mat-raised-button color="primary" class="mat-button" (click)="openImageChooserDialog()">Choose Image</button>
+      <mat-form-field class="full-width" *ngIf="enrollType === enrollTypeConstants.ENROLL_TYPE_ACCESSKEY">
+        <input async matInput id="accessKey" placeholder="Access Key" [(ngModel)]="accessKey"
+               [ngModelOptions]="{standalone: true}">
+        <mat-hint>Enter an access key for the students</mat-hint>
+      </mat-form-field>
 
-  <br />&nbsp;<br/>
+      <div class="csv-upload" *ngIf="enrollType === enrollTypeConstants.ENROLL_TYPE_WHITELIST">
+        <p>Upload your OBS csv file with your course members for whitelisting students.
+          <br />Old whitelist users are removed by uploading a new file.</p>
+        <p>
+          <!-- TODO: Replace with shared upload form -->
+          <input class="upload" type="file" ng2FileSelect [uploader]="uploader"
+                 placeholder="Upload files" accept=".csv"/>
+          <button mat-raised-button color="primary"
+                  (click)="uploader.uploadAll()"
+                  [disabled]="!uploader.getNotUploadedItems().length">
+            <mat-icon>file_upload</mat-icon>
+            Upload
+          </button>
+        </p>
+      </div>
 
-  <mat-form-field class="full-width">
-    <mat-select name="courseTypes" placeholder="Please select your course access type" id="courseTypes" [(ngModel)]="enrollType">
-      <mat-option *ngFor="let enrollType of enrollTypes" [value]="enrollType">{{enrollType}}</mat-option>
-    </mat-select><br>
-  </mat-form-field>
+      <p>
+        <mat-slide-toggle (change)="onChangeActive($event)" [checked]="active">
+          <span *ngIf="active">Course can be seen by students</span>
+          <span *ngIf="!active">Course cannot be seen by students</span>
+        </mat-slide-toggle>
+      </p>
+      <p>
+        <app-button-save-cancel (cancel)="cancel()"></app-button-save-cancel>
+        <button mat-raised-button (click)="onExport()" type="button">Export</button>
+        <button mat-raised-button (click)="onDuplicate()" type="button">Duplicate</button>
+      </p>
+    </form>
+    <button mat-raised-button color="warn" (click)= "deleteCourse()">Delete Course</button>
 
-  <p *ngIf="enrollType === enrollTypeConstants.ENROLL_TYPE_FREE">
-    The course is free and accessible for everyone
-  </p>
-
-  <mat-form-field class="full-width" *ngIf="enrollType === enrollTypeConstants.ENROLL_TYPE_ACCESSKEY">
-    <input async matInput id="accessKey" placeholder="Access Key" [(ngModel)]="accessKey"
-           [ngModelOptions]="{standalone: true}">
-    <mat-hint>Enter an access key for the students</mat-hint>
-  </mat-form-field>
-
-  <div class="csv-upload" *ngIf="enrollType === enrollTypeConstants.ENROLL_TYPE_WHITELIST">
-    <p>Upload your OBS csv file with your course members for whitelisting students.
-    <br />Old whitelist users are removed by uploading a new file.</p>
-    <p>
-      <!-- TODO: Replace with shared upload form -->
-      <input class="upload" type="file" ng2FileSelect [uploader]="uploader"
-             placeholder="Upload files" accept=".csv"/>
-      <button mat-raised-button color="primary"
-              (click)="uploader.uploadAll()"
-              [disabled]="!uploader.getNotUploadedItems().length">
-        <mat-icon>file_upload</mat-icon>
-        Upload
-      </button>
-    </p>
   </div>
+  <div class="col-md-6">
+    <app-responsive-image *ngIf="this.userImageData" [responsiveImageData]="this.userImageData"></app-responsive-image> <br />
 
-  <p>
-    <mat-slide-toggle (change)="onChangeActive($event)" [checked]="active">
-      <span *ngIf="active">Course can be seen by students</span>
-      <span *ngIf="!active">Course cannot be seen by students</span>
-    </mat-slide-toggle>
-  </p>
-  <p>
-    <app-button-save-cancel (cancel)="cancel()"></app-button-save-cancel>
-    <button mat-raised-button (click)="onExport()" type="button">Export</button>
-    <button mat-raised-button (click)="onDuplicate()" type="button">Duplicate</button>
-  </p>
-</form>
-<button mat-raised-button color="warn" (click)= "deleteCourse()">Delete Course</button>
+    <button mat-raised-button color="primary" class="mat-button" (click)="openImageChooserDialog()">Choose Image</button>
+  </div>
+</div>
+
