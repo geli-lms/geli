@@ -3,6 +3,8 @@ import {FileItem, FileUploader} from 'ng2-file-upload';
 import {IUser} from '../../../../../../../shared/models/IUser';
 import {MatDialogRef, MatSnackBar} from '@angular/material';
 import {SnackBarService} from '../../services/snack-bar.service';
+import {TranslateService} from '@ngx-translate/core';
+
 
 @Component({
   selector: 'app-upload-dialog',
@@ -23,7 +25,8 @@ export class UploadDialog implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<UploadDialog>,
-    private snackBar: SnackBarService) {}
+    private snackBar: SnackBarService,
+    private translate: TranslateService) {}
 
   ngOnInit() {
     this.uploader = new FileUploader({

@@ -15,6 +15,8 @@ import {FocusDirective} from '../directives/focus.directive';
 import {ChangePasswordDialogComponent} from '../components/change-password-dialog/change-password-dialog.component';
 import {RenameDialogComponent} from '../components/rename-dialog/rename-dialog.component';
 import {ResponsiveImageUploadDialog} from "../components/responsive-image-upload-dialog/responsive-image-upload-dialog.component";
+import {TranslateModule} from '@ngx-translate/core';
+import {HttpClientModule} from '@angular/common/http';
 
 @NgModule({
   imports: [
@@ -23,11 +25,15 @@ import {ResponsiveImageUploadDialog} from "../components/responsive-image-upload
     ReactiveFormsModule,
     FileUploadModule,
     MaterialImportModule,
+    HttpClientModule,
+    FileUploadModule,
+    TranslateModule,
     AceEditorModule,
   ],
   exports: [
     InfoDialog,
     ConfirmDialog,
+    TranslateModule,
     AccessKeyDialog,
     UploadDialog,
     FilepickerDialog,
@@ -35,6 +41,7 @@ import {ResponsiveImageUploadDialog} from "../components/responsive-image-upload
     WriteMailDialog,
     RenameDialogComponent,
     FocusDirective,
+    MaterialImportModule
   ],
   declarations: [
     InfoDialog,
