@@ -7,7 +7,7 @@ import {FreeTextUnitFormComponent} from './free-text-unit-form/free-text-unit-fo
 import {CodeKataComponent} from '../code-kata-unit/code-kata-unit.component';
 import {MatDialog, MatSnackBar} from '@angular/material';
 import {FreeTextUnitService, NotificationService, UnitService} from '../../shared/services/data.service';
-import {TaskUnitEditComponent} from './task-unit-edit/task-unit-edit.component';
+import {TaskUnitFormComponent} from './task-unit-form/task-unit-form.component';
 import {UnitFormService} from '../../shared/services/unit-form.service';
 import {CodeKataUnitFormComponent} from './code-kata-unit-form/code-kata-unit-form.component';
 import {FileUnitFormComponent} from './file-unit-form/file-unit-form.component';
@@ -33,8 +33,8 @@ export class UnitFormComponent implements OnInit {
   @ViewChild(CodeKataComponent)
   private codeKataComponent: CodeKataComponent;
 
-  @ViewChild(TaskUnitEditComponent)
-  private taskUnitEditComponent: TaskUnitEditComponent;
+  @ViewChild(TaskUnitFormComponent)
+  private taskUnitEditComponent: TaskUnitFormComponent;
 
   @ViewChild(CodeKataUnitFormComponent)
   private codeKataUnitFormComponent: CodeKataUnitFormComponent;
