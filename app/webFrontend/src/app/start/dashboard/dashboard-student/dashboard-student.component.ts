@@ -3,6 +3,7 @@ import {ICourseDashboard} from '../../../../../../../shared/models/ICourseDashbo
 import {UserService} from '../../../shared/services/user.service';
 import {DashboardBaseComponent} from '../dashboard-base-component';
 import {SortUtil} from '../../../shared/utils/SortUtil';
+import {TranslateService} from '@ngx-translate/core';
 
 
 @Component({

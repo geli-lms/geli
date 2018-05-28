@@ -7,9 +7,9 @@
     <span class="name" *ngIf="isCurrentProfile()">{{user.profile.firstName}} {{user.profile.lastName}}</span>
   </h3>
   <div class="user-data">
-    <span><strong>E-Mail: </strong><a href="mailto:{{user.email}}">{{user.email}}</a></span>
+    <span><strong>{{ 'common.email' | translate }}: </strong><a href="mailto:{{user.email}}">{{user.email}}</a></span>
     <span *ngIf="canSeeUid()">
-      <strong>Matrikelnummer: </strong>{{user.uid}}
+      <strong>{{ 'common.profileDetails.uid' | translate}}: </strong>{{user.uid}}
     </span>
   </div>
 </div>

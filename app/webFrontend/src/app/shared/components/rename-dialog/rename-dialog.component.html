@@ -1,7 +1,7 @@
 <mat-dialog-content>
   <form>
     <mat-form-field>
-      <input matInput placeholder="Name to be set" [(ngModel)]="nameField" name="name">
+      <input matInput [placeholder]="'common.name' | translate" [(ngModel)]="nameField" name="name">
     </mat-form-field>
   </form>
 </mat-dialog-content>
@@ -9,9 +9,9 @@
 <mat-dialog-actions>
   <button mat-raised-button color="primary" (click)="save()">
     <mat-icon>save</mat-icon>
-    SAVE
+    {{ 'common.save' | translate }}
   </button>
   <button mat-raised-button (click)="cancel()">
-    CANCEL
+    {{ 'common.cancel' | translate }}
   </button>
 </mat-dialog-actions>

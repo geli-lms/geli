@@ -1,29 +1,22 @@
-<div *ngIf="unitFormService.headline as headline">
-  <strong>{{headline}}</strong>
-</div>
-<mat-hint *ngIf="unitFormService.unitInfoText as unitInfoText">
-  <span>{{unitInfoText}}</span>
-</mat-hint>
-
 <ng-container  [formGroup]="unitForm">
-<mat-form-field >
-  <input matInput required formControlName="name" placeholder="Name">
-</mat-form-field>
+  <mat-form-field >
+    <input matInput required formControlName="name" [placeholder]="'common.name'| translate">
+  </mat-form-field>
 
-<mat-form-field >
-  <textarea matInput formControlName="description" placeholder="Description" rows="4"></textarea>
-</mat-form-field>
+  <mat-form-field >
+    <textarea matInput formControlName="description" [placeholder]="'common.description'| translate" rows="4"></textarea>
+  </mat-form-field>
 
-<mat-form-field *ngIf="model?.progressable">
-  <input matInput formControlName="deadline" [matDatepicker]="deadlineDatepicker" placeholder="Optional deadline">
-  <mat-datepicker-toggle matSuffix [for]="deadlineDatepicker"></mat-datepicker-toggle>
-  <mat-datepicker #deadlineDatepicker (selectedChanged)="updateDateTime($event)"></mat-datepicker>
-</mat-form-field>
+  <mat-form-field *ngIf="model?.progressable">
+    <input matInput formControlName="deadline" [matDatepicker]="deadlineDatepicker" placeholder="Optional deadline">
+    <mat-datepicker-toggle matSuffix [for]="deadlineDatepicker"></mat-datepicker-toggle>
+    <mat-datepicker #deadlineDatepicker (selectedChanged)="updateDateTime($event)"></mat-datepicker>
+  </mat-form-field>
 
-<div>
-  <mat-slide-toggle formControlName="visible">
-    <span *ngIf="unitForm.value.visible">Unit can be seen by students</span>
-    <span *ngIf="!unitForm.value.visible">Unit cannot be seen by students</span>
-  </mat-slide-toggle>
-</div>
+  <div>
+    <mat-slide-toggle formControlName="visible">
+      <span *ngIf="unitForm.value.visible">{{ 'unit.text.canBeSeenByStudents' | translate }}</span>
+      <span *ngIf="!unitForm.value.visible">{{ 'unit.text.canNotBeSeenByStudents' | translate }}</span>
+    </mat-slide-toggle>
+  </div>
 </ng-container>

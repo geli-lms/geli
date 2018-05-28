@@ -1,10 +1,10 @@
 <div class="code-kata-unit-form" [formGroup]="unitForm">
   <mat-hint>
     <mat-icon>info</mat-icon>
-    Separate definition, coding and test areas with {{this.areaSeperator}}
+    {{ 'code-kata.information.info1' | translate }} "{{areaSeperator}}".
     <br>
     <mat-icon>info</mat-icon>
-    Students can only edit the code area.
+    {{ 'code-kata.information.info2' | translate }}
   </mat-hint>
 
   <ace-editor class="user-code-editor"
@@ -15,7 +15,7 @@
               [readOnly]="false">
   </ace-editor>
   <div *ngIf="logs" class="logs-title">
-    Logs:
+    {{ 'code-kata.text.logs' | translate }}
     <pre>{{logs}}</pre>
   </div>
 </div>
