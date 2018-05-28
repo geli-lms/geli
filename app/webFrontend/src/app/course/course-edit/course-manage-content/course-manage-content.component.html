@@ -7,7 +7,7 @@
     </app-lecture-edit>
   </div>
 
-  <p *ngIf="!course.lectures.length">No lectures added yet.</p>
+  <p *ngIf="!course.lectures.length">{{ 'lecture.text.noLecture' | translate }}</p>
 
   <app-lecture-form *ngIf="isInMode('lecture', 'create')" (onSubmit)="createLecture($event)" [onCancel]="closeAddLecture"
                     actionLabel="Add"></app-lecture-form>
@@ -17,13 +17,13 @@
 
 <app-mat-fab-menu class="fab" [open]="fabOpen" [onClick]="onFabClick"
                   [disabled]="isInMode('lecture', 'create') || isInMode('lecture', 'edit') || isInMode('unit', 'create') || isInMode('unit', 'edit')"
-                  fabTooltip="Add content">
-  <div *ngIf="isLectureOpen()" (click)="onImportUnit()">Import unit</div>
-  <div *ngIf="isLectureOpen()" (click)="onAddUnit('task')">Add tasks</div>
-  <div *ngIf="isLectureOpen()" (click)="onAddUnit('file')">Add files</div>
-  <div *ngIf="isLectureOpen()" (click)="onAddUnit('code-kata')">Add code-kata</div>
-  <div *ngIf="isLectureOpen()" (click)="onAddUnit('video')">Add videos</div>
-  <div *ngIf="isLectureOpen()" (click)="onAddUnit('free-text')">Add free text</div>
-  <div (click)="onImportLecture()">Import lecture</div>
-  <div (click)="onAddLecture()">Add lecture</div>
+                  [fabTooltip]="'unit.addContent' | translate">
+  <div *ngIf="isLectureOpen()" (click)="onImportUnit()">{{ 'unit.import' | translate }}</div>
+  <div *ngIf="isLectureOpen()" (click)="onAddUnit('task')">{{ 'unit.addTasks' | translate }}</div>
+  <div *ngIf="isLectureOpen()" (click)="onAddUnit('file')">{{ 'unit.addFiles' | translate }}</div>
+  <div *ngIf="isLectureOpen()" (click)="onAddUnit('code-kata')">{{ 'unit.addCodeKata' | translate }}</div>
+  <div *ngIf="isLectureOpen()" (click)="onAddUnit('video')">{{ 'unit.addVideos' | translate }}</div>
+  <div *ngIf="isLectureOpen()" (click)="onAddUnit('free-text')">{{ 'unit.addFreeText' | translate }}</div>
+  <div (click)="onImportLecture()">{{ 'lecture.text.import' | translate }}</div>
+  <div (click)="onAddLecture()">{{ 'lecture.text.add' | translate }}</div>
 </app-mat-fab-menu>

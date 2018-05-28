@@ -12,6 +12,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [NEXT] 
 ### Changed
+- rework existing translation
+- add vars to html-files
+- add translations to resource files
+- include translation for components
+
+### Changed
 - Migrate MatSnackBar to SnackBarService. [#724](https://github.com/h-da/geli/pull/724)
 - Reload user list after deleting an account. [#724](https://github.com/h-da/geli/pull/724)
 - Validate form before submit when creating a new course. [#724](https://github.com/h-da/geli/pull/724)
@@ -25,6 +31,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Fixed broken notification settings. [#731](https://github.com/h-da/geli/issues/731)
 - Fixed broken Apidoc [#737](https://github.com/h-da/geli/issues/737)
 - Disabled `tutor` role. [#710](https://github.com/h-da/geli/issues/710)
+- Fixed notifications on hidden units. [#733](https://github.com/utetrapp/geli/issues/733)
 
 ## [[0.7.0](https://github.com/h-da/geli/releases/tag/v0.7.0)] - 2018-05-05 - SS 18 intermediate Release
 ### Added

@@ -1,5 +1,5 @@
 <mat-tab-group *ngIf="!showProgressBar" (selectChange)="changedTab($event)">
-  <mat-tab label="Upload image">
+  <mat-tab [label]="'common.profileDetails.uploadPicture' | translate">
     <div class="tab-content">
       <app-upload-form [uploadMethod]="'POST'"
                        [uploadPath]="uploadPath"
@@ -13,18 +13,21 @@
       <div class="upload-button-group">
         <button mat-raised-button color="primary" (click)="startUpload()" [disabled]="!isObjectInQueue()">
           <mat-icon>file_upload</mat-icon>
-          Upload picture
+            {{ 'file.text.infoDropAddFiles' | translate }}
         </button>
         <button mat-raised-button (click)="cancel()">Cancel</button>
       </div>
     </div>
   </mat-tab>
-  <mat-tab id="webcam-tab" label="Take webcam picture">
+  <mat-tab id="webcam-tab" [label]="'file.text.takePicture' | translate">
     <div class="tab-content">
       <div *ngIf="!isWebcamActive" class="camera">
-      <p>
-        <button mat-raised-button (click)="takePicture()">Take picture</button>
-      </p>
+          <div class="camera">
+            <video #webcam>{{ 'file.text.noVideo' | translate }}</video>
+          </div>
+          <p>
+            <button mat-raised-button (click)="takePicture()">{{ 'file.text.takePicture' | translate }}</button>
+          </p>
       </div>
       <div class="preview">
         <h3 *ngIf="pictureTaken">Preview image</h3>
@@ -32,7 +35,7 @@
       </div>
         <button mat-raised-button color="primary" disabled="{{!pictureTaken}}" (click)="addImage()">
           <mat-icon>file_upload</mat-icon>
-          Upload picture
+            {{ 'common.profileDetails.uploadPicture' | translate }}
         </button>
       <button mat-raised-button (click)="cancel()">Cancel</button>
     </div>
@@ -41,5 +44,7 @@
 <div *ngIf="showProgressBar">
   <h2>Uploading...</h2>
   <mat-progress-bar mode="determinate" [value]="uploader.progress"></mat-progress-bar>
-  <button mat-raised-button class="btn-cancel-upload" color="warn" (click)="cancel()">Cancel</button>
+  <button mat-raised-button class="btn-cancel-upload" color="warn" (click)="cancel()">
+    {{ 'common.cancel' | translate }}
+  </button>
 </div>

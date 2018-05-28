@@ -4,7 +4,7 @@
        (fileOver)="onFileOverDropzone($event)"
        [uploader]="fileUploader"
        class="file-dropzone">
-    <span>Drop files here or click here to add files</span>
+    <span>{{ 'file.text.infoDropAddFiles' | translate }}</span>
     <input type="file"
            ng2FileSelect
            [uploader]="fileUploader"
@@ -24,10 +24,10 @@
   </div>
   <div class="file-list">
     <div class="file-list-row file-list-header">
-      <span>Filename</span>
-      <span>Filesize</span>
-      <span class="progress-col">Progress</span>
-      <span>Actions</span>
+      <span>{{ 'file.text.filename' | translate }}</span>
+      <span>{{ 'file.text.filesize' | translate }}</span>
+      <span class="progress-col">{{ 'file.text.progress' | translate }}</span>
+      <span>{{ 'common.actions' | translate }}</span>
     </div>
     <div class="file-list-row" *ngFor="let item of fileUploader.queue">
       <span class="filename">{{item.file.name}}</span>
@@ -38,10 +38,10 @@
         <mat-action-row>
           <div *ngIf="!uploadSingleFile">
           <button *ngIf="item.isUploading" mat-button (click)="item.cancel()">
-            <mat-icon>block</mat-icon>Cancel upload
+            <mat-icon>block</mat-icon>{{ 'common.cancel' | translate }}
           </button>
           <button *ngIf="!item.isUploading && !item.isSuccess" mat-raised-button color="warn" (click)="item.remove()">
-              <mat-icon>delete</mat-icon>Remove from queue
+            <mat-icon>delete</mat-icon>{{ 'file.text.removeFromQueue' | translate }}
           </button>
           </div>
         </mat-action-row>

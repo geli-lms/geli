@@ -7,6 +7,8 @@ import {IFileUnit} from '../../../../../../../shared/models/units/IFileUnit';
 import {Router} from '@angular/router';
 import {UserService} from '../../services/user.service';
 import {SnackBarService} from '../../services/snack-bar.service';
+import {TranslateService} from '@ngx-translate/core';
+
 
 @Component({
     selector: 'app-upload-dialog',
@@ -18,14 +20,11 @@ export class UploadDialog implements OnInit {
     @Input() user: IUser;
     @ViewChild('webcam') webcam: any;
     @ViewChild('preview') previewPicture: any;
-
     @ViewChild(UploadFormComponent)
     public uploadForm: UploadFormComponent;
     uploadPath: string;
     allowedMimeTypes: string[];
-
     mediastream: MediaStreamTrack;
-
     @Input() isWebcamActive: boolean;
     public pictureTaken: boolean;
     showProgressBar = false;
@@ -34,7 +33,8 @@ export class UploadDialog implements OnInit {
         public dialogRef: MatDialogRef<UploadDialog>,
         private snackBar: SnackBarService,
         private userService: UserService,
-        private router: Router) {
+        private router: Router,
+        private translate: TranslateService) {
     }
 
     ngOnInit() {

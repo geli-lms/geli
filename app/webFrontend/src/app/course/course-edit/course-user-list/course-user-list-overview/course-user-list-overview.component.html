@@ -1,17 +1,17 @@
 <div class="members" *ngIf="show">
 
   <div>
-    <button class="text-fit" mat-raised-button matTooltip="Toggle all members"
+    <button class="text-fit" mat-raised-button [matTooltip]="'user.tooltip.toggleMembers' | translate"
             (click)="toggleAllUsers()">
       <mat-icon>select_all</mat-icon>
     </button>
     <button [disabled]="selectedMembers.length <= 1"
-            class="text-fit" mat-raised-button matTooltip="Send Mail to selected members"
+            class="text-fit" mat-raised-button [matTooltip]="'mail.tooltip.sendToMembers' | translate"
             (click)="openWriteMailDialog()">
       <mat-icon>email</mat-icon>
     </button>
     <button [disabled]="selectedMembers.length <= 1"
-            class="text-fit" mat-raised-button color="warn" matTooltip="Remove selected members"
+            class="text-fit" mat-raised-button color="warn" [matTooltip]="'user.tooltip.deleteUsers' | translate"
             (click)="removeSelectedUsers()">
       <mat-icon>delete</mat-icon>
     </button>
@@ -35,9 +35,9 @@
 
       <div class="card-btn-wrapper" *ngIf="isInSelectedMembers(user)">
         <button mat-raised-button (click)="openUserProfileDialog(user)" >DETAILS</button>
-        <button mat-raised-button (click)="openWriteMailDialog()" *ngIf="selectedMembers.length <= 1">SEND MAIL</button>
+        <button mat-raised-button (click)="openWriteMailDialog()" *ngIf="selectedMembers.length <= 1">{{ 'mail.send' | translate}}</button>
         <button mat-raised-button color="warn" (click)="removeSelectedUsers()" *ngIf="selectedMembers.length <= 1">
-          REMOVE
+          {{ 'common.delete' | translate }}
         </button>
       </div>
     </mat-card>

@@ -17,19 +17,24 @@ import {RenameDialogComponent} from '../components/rename-dialog/rename-dialog.c
 import {UploadFormComponent} from '../components/upload-form/upload-form.component';
 import {FilesizePipe} from '../pipes/filesize/filesize.pipe';
 import {UploadFormDialog} from '../components/upload-form-dialog/upload-form-dialog.component';
+import {TranslateModule} from '@ngx-translate/core';
+import {HttpClientModule} from '@angular/common/http';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    FileUploadModule,
     MaterialImportModule,
+    HttpClientModule,
+    FileUploadModule,
+    TranslateModule,
     AceEditorModule,
   ],
   exports: [
     InfoDialog,
     ConfirmDialog,
+    TranslateModule,
     AccessKeyDialog,
     UploadDialog,
     FilepickerDialog,
@@ -39,6 +44,7 @@ import {UploadFormDialog} from '../components/upload-form-dialog/upload-form-dia
     UploadFormComponent,
     FilesizePipe,
     UploadFormDialog,
+    MaterialImportModule
   ],
   declarations: [
     InfoDialog,
