@@ -1,4 +1,4 @@
-import {IPicture} from "./mediaManager/IPicture";
+import {IPicture} from './mediaManager/IPicture';
 
 export {ENROLL_TYPE_WHITELIST} from './ICourse';
 export {ENROLL_TYPE_FREE} from './ICourse';

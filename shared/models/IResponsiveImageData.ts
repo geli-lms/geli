@@ -1,4 +1,4 @@
-import {IBreakpoint} from "./IBreakpoint";
+import {IBreakpoint} from './IBreakpoint';
 
 /**
  * A really simple shared interface for responsive images.

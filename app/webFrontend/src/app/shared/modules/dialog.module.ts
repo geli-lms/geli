@@ -14,7 +14,7 @@ import {InfoDialog} from '../components/info-dialog/info-dialog.component';
 import {FocusDirective} from '../directives/focus.directive';
 import {ChangePasswordDialogComponent} from '../components/change-password-dialog/change-password-dialog.component';
 import {RenameDialogComponent} from '../components/rename-dialog/rename-dialog.component';
-import {ResponsiveImageUploadDialog} from "../components/responsive-image-upload-dialog/responsive-image-upload-dialog.component";
+import {ResponsiveImageUploadDialog} from '../components/responsive-image-upload-dialog/responsive-image-upload-dialog.component';
 import {TranslateModule} from '@ngx-translate/core';
 import {HttpClientModule} from '@angular/common/http';
 

@@ -3,8 +3,8 @@ import {IUser} from '../../../../../shared/models/IUser';
 import {ILecture} from '../../../../../shared/models/ILecture';
 import {IWhitelistUser} from '../../../../../shared/models/IWhitelistUser';
 import {IDirectory} from '../../../../../shared/models/mediaManager/IDirectory';
-import {IFile} from "../../../../../shared/models/mediaManager/IFile";
-import {IPicture} from "../../../../../shared/models/mediaManager/IPicture";
+import {IFile} from '../../../../../shared/models/mediaManager/IFile';
+import {IPicture} from '../../../../../shared/models/mediaManager/IPicture';
 
 /**
  * Created by Alexander on 23.05.2017.

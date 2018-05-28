@@ -1,8 +1,8 @@
-import sharp = require("sharp");
-import * as fs from "fs";
+import sharp = require('sharp');
+import * as fs from 'fs';
 
-import {BreakpointSize} from "../models/BreakpointSize";
-import {IResponsiveImageData} from "../../../shared/models/IResponsiveImageData";
+import {BreakpointSize} from '../models/BreakpointSize';
+import {IResponsiveImageData} from '../../../shared/models/IResponsiveImageData';
 
 export default class ResponsiveImageService {
   /**
@@ -12,8 +12,6 @@ export default class ResponsiveImageService {
    * append the screen-size for which the responsive image is generated.
    *
    * The original file will be removed if we haven't specified an "original" breakpoint.
-   *
-   * e.g.
    *
    * @param originalFile
    * @param {IResponsiveImageData} responsiveImage
@@ -48,7 +46,7 @@ export default class ResponsiveImageService {
       resizeOptions = resizeOptions.resize(breakpoint.imageSize.width);
 
       await resizeOptions
-        .resize(breakpoint.imageSize.width,)
+        .resize(breakpoint.imageSize.width, )
         .withoutEnlargement(true)
         .max()
         .toFile(directory + '/' + fileNameToSave);
@@ -58,7 +56,7 @@ export default class ResponsiveImageService {
 
     if (!keepOriginalFile) {
       fs.unlinkSync(originalFile.path);
-      responsiveImage.pathToImage = "-";
+      responsiveImage.pathToImage = '-';
     }
   }
 

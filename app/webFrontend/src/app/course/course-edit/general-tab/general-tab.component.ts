@@ -17,9 +17,9 @@ import {SaveFileService} from '../../../shared/services/save-file.service';
 import {UserService} from '../../../shared/services/user.service';
 import {DataSharingService} from '../../../shared/services/data-sharing.service';
 import {DialogService} from '../../../shared/services/dialog.service';
-import ResponsiveImage from "../../../models/ResponsiveImage";
-import {IResponsiveImageData} from "../../../../../../../shared/models/IResponsiveImageData";
-import {BreakpointSize} from "../../../shared/enums/BreakpointSize";
+import ResponsiveImage from '../../../models/ResponsiveImage';
+import {IResponsiveImageData} from '../../../../../../../shared/models/IResponsiveImageData';
+import {BreakpointSize} from '../../../shared/enums/BreakpointSize';
 
 @Component({
   selector: 'app-course-edit-general-tab',

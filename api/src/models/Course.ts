@@ -12,9 +12,9 @@ import {ObjectID} from 'bson';
 import {Directory} from './mediaManager/Directory';
 import {IProperties} from '../../../shared/models/IProperties';
 import {extractMongoId} from '../utilities/ExtractMongoId';
-import {Picture} from "./mediaManager/File";
-import {IPictureModel} from "./mediaManager/Picture";
-import {IPicture} from "../../../shared/models/mediaManager/IPicture";
+import {Picture} from './mediaManager/File';
+import {IPictureModel} from './mediaManager/Picture';
+import {IPicture} from '../../../shared/models/mediaManager/IPicture';
 
 interface ICourseModel extends ICourse, mongoose.Document {
   exportJSON: (sanitize?: boolean) => Promise<ICourse>;
@@ -256,9 +256,7 @@ courseSchema.methods.forDashboard = async function (user: IUser): Promise<ICours
     name, active, description, enrollType
   } = this;
 
-  let image = (this.image) ? (await Picture.findById(this.image)).toObject() : null;
-
-  console.log("image", image);
+  const image = (this.image) ? (await Picture.findById(this.image)).toObject() : null;
 
   const {
     userCanEditCourse, userCanViewCourse, userIsCourseAdmin, userIsCourseTeacher, userIsCourseMember

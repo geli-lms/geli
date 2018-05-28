@@ -25,7 +25,7 @@ import {AdminMarkdownEditComponent} from './components/admin-markdown-edit/admin
 import {ImprintAndInfoService} from './services/imprint-and-info.service';
 import {UserProfileDialog} from 'app/shared/components/user-profile-dialog/user-profile-dialog.component';
 import {NotfoundComponent} from './components/notfound/notfound.component';
-import {ResponsiveImageComponent} from "./components/responsive-image/responsive-image.component";
+import {ResponsiveImageComponent} from './components/responsive-image/responsive-image.component';
 
 @NgModule({
   imports: [

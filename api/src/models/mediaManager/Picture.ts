@@ -1,6 +1,6 @@
 import * as mongoose from 'mongoose';
-import {IPicture} from "../../../../shared/models/mediaManager/IPicture";
-import {IFileModel} from "./File";
+import {IPicture} from '../../../../shared/models/mediaManager/IPicture';
+import {IFileModel} from './File';
 
 
 interface IPictureModel extends IPicture, IFileModel {

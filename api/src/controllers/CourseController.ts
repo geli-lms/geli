@@ -32,13 +32,13 @@ import {IWhitelistUser} from '../../../shared/models/IWhitelistUser';
 import {DocumentToObjectOptions} from 'mongoose';
 import * as mongoose from 'mongoose';
 import * as sharp from 'sharp';
-import * as fs from "fs";
-import ResponsiveImageService from "../services/ResponsiveImageService";
-import {IResponsiveImageData} from "../../../shared/models/IResponsiveImageData";
-import {IPicture} from "../../../shared/models/mediaManager/IPicture";
+import * as fs from 'fs';
+import ResponsiveImageService from '../services/ResponsiveImageService';
+import {IResponsiveImageData} from '../../../shared/models/IResponsiveImageData';
+import {IPicture} from '../../../shared/models/mediaManager/IPicture';
 
 import { Picture } from '../models/mediaManager/File';
-import {IPictureModel} from "../models/mediaManager/Picture";
+import {IPictureModel} from '../models/mediaManager/Picture';
 
 const uploadOptions = {
   storage: multer.diskStorage({

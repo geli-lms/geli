@@ -2,8 +2,8 @@ import {IUser} from './IUser';
 import {ILecture} from './ILecture';
 import {IWhitelistUser} from './IWhitelistUser';
 import {IDirectory} from './mediaManager/IDirectory';
-import {IPicture} from "./mediaManager/IPicture";
-import {IFile} from "./mediaManager/IFile";
+import {IPicture} from './mediaManager/IPicture';
+import {IFile} from './mediaManager/IFile';
 
 export const ENROLL_TYPE_WHITELIST = 'whitelist';
 export const ENROLL_TYPE_FREE = 'free';

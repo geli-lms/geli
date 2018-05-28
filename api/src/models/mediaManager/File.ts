@@ -3,7 +3,7 @@ import {IFile} from '../../../../shared/models/mediaManager/IFile';
 import * as fs from 'fs';
 import {FileUnit} from '../units/Unit';
 import {IFileUnitModel} from '../units/FileUnit';
-import {IPictureModel, pictureSchema} from "./Picture";
+import {IPictureModel, pictureSchema} from './Picture';
 
 const {promisify} = require('util');
 

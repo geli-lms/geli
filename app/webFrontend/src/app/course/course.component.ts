@@ -9,7 +9,7 @@ import {AccessKeyDialog} from '../shared/components/access-key-dialog/access-key
 import {CourseService} from '../shared/services/data.service';
 import {DialogService} from '../shared/services/dialog.service';
 import {ShowProgressService} from '../shared/services/show-progress.service';
-import {IResponsiveImageData} from "../../../../../shared/models/IResponsiveImageData";
+import {IResponsiveImageData} from '../../../../../shared/models/IResponsiveImageData';
 
 @Component({
   selector: 'app-course',
@@ -42,7 +42,7 @@ export class CourseComponent {
       this.responsiveImageData = {
         breakpoints: this.course.image.breakpoints,
         pathToImage: ''
-      }
+      };
     }
   }
 
