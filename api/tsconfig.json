@@ -4,6 +4,7 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "noImplicitAny": true,
+    "allowJs": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true
   },

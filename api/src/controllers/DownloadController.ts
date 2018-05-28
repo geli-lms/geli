@@ -15,7 +15,7 @@ import {Lecture} from '../models/Lecture';
 import {IUser} from '../../../shared/models/IUser';
 import {Course} from '../models/Course';
 import config from '../config/main';
-import * as MarkdownIt from 'markdown-it';
+import * as html2pdf from '../assets/html2pdfmake/html2pdfmake.js';
 
 const fs = require('fs');
 const archiver = require('archiver');

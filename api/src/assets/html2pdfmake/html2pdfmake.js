@@ -3,7 +3,7 @@
  http://jsfiddle.net/mychn9bo/4/
  */
 
-var html2pdfmake = function (html) {
+export default function html2pdfmake(html) {
     var content = [];
     ParseHtml(content, html);
     return content;
