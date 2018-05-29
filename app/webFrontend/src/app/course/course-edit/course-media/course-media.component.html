@@ -131,6 +131,7 @@
 
 <mat-dialog-actions *ngIf="isDialog">
   <button mat-raised-button color="primary"
+          [disabled]="!selectedFiles.length"
           [mat-dialog-close]="selectedFiles" >
     <mat-icon>add</mat-icon>
     {{ 'unit.addFilesToUnit' | translate }}
