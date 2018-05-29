@@ -77,6 +77,7 @@
     "editProfile": "Edit profile",
     "email": "Email",
     "export": "Export",
+    "folder": "Folder",
     "fullscreenMode": "Fullscreen Mode",
     "geli": "geli",
     "general": "General",
@@ -90,6 +91,7 @@
     "members": "Members",
     "ok": "OK",
     "open" : "Open",
+    "openInTab" : "Open in new Tab",
     "password": "Password",
     "profile": "Profile",
     "profileDetails": {
@@ -101,6 +103,7 @@
     "question": "Question",
     "register": "Register",
     "reset": "Reset",
+    "rename" : "Rename",
     "role": "Role",
     "roles": {
       "student": "Student",
@@ -211,6 +214,7 @@
       "noFiles" : "No files available.",
       "progress": "Progress",
       "RemoveFromQueue": "Remove file from queue.",
+      "selectAll" : "Select all",
       "takePicture": "Take picture"
     },
     "tooltip":{

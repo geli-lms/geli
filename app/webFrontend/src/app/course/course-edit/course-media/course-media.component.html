@@ -7,7 +7,7 @@
           <mat-icon *ngIf="folderBarVisible">close</mat-icon>
           <mat-icon *ngIf="!folderBarVisible">arrow_right</mat-icon>
         </button>
-        <span *ngIf="folderBarVisible">Folder</span>
+        <span *ngIf="folderBarVisible">{{ 'common.folder' | translate }}</span>
       </mat-toolbar-row>
     </mat-toolbar>
     <div class="folder-wrapper">
@@ -71,15 +71,15 @@
 
             <div class="card-btn-wrapper" *ngIf="isInSelectedFiles(file)">
               <button mat-raised-button *ngIf="selectedFiles.length <= 1" (click)="initFileDownload(file)"
-                      matTooltip="Open in new Tab">
+                      matTooltip="'common.openInTab' | translate">
                 <mat-icon>open_in_new</mat-icon>
               </button>
               <button mat-raised-button *ngIf="selectedFiles.length <= 1" (click)="renameFile(file)"
-                      matTooltip="Rename">
+                      matTooltip="'common.rename' | translate">
                 <mat-icon>mode_edit</mat-icon>
               </button>
               <button mat-raised-button color="warn" (click)="removeSelectedFile()" *ngIf="selectedFiles.length <= 1"
-                      matTooltip="Delete">
+                      matTooltip="'common.delete' | translate">
                 <mat-icon>delete</mat-icon>
               </button>
             </div>

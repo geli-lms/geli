@@ -77,6 +77,7 @@
     "editProfile": "Profil bearbeiten",
     "email": "E-Mail",
     "export": "Export",
+    "folder": "Ordner",
     "fullscreenMode": "Vollbildmodus",
     "geli": "geli",
     "general" : "Allgemein",
@@ -90,6 +91,7 @@
     "members" : "Mitglieder",
     "ok": "OK",
     "open" : "Öffnen",
+    "openInTab" : "Im neuen Tab öffnen",
     "password": "Passwort",
     "profile": "Profil",
     "profileDetails": {
@@ -101,6 +103,7 @@
     "question": "Frage",
     "register": "Registrieren",
     "reset": "Zurücksetzen",
+    "rename" : "Umbenennen",
     "role": "Rolle",
     "roles": {
       "student": "Student",
@@ -131,6 +134,7 @@
       "required": "Eingabe notwendig"
     }
   },
+
   "course": {
     "delete": "Kurs löschen",
     "placeholder": {
@@ -211,6 +215,7 @@
       "noFiles" : "Keine Dateien vorhanden",
       "progress": "Fortschritt",
       "RemoveFromQueue": "Datei aus der Schlange löschen.",
+      "selectAll" : "Alle auswählen",
       "takePicture": "Bild aufnehmen"
     },
     "tooltip":{
