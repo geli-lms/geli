@@ -291,7 +291,6 @@ describe('Course', () => {
 
       res.should.have.status(200);
       res.body.breakpoints.length.should.be.eq(1);
-      res.body.pathToImage.should.be.eq('-');
     });
 
     it('should not update the course image (wrong file type)', async () => {

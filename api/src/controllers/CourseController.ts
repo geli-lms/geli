@@ -21,7 +21,6 @@ import {ICourseView} from '../../../shared/models/ICourseView';
 import {IUser} from '../../../shared/models/IUser';
 import {ObsCsvController} from './ObsCsvController';
 import {Course} from '../models/Course';
-import {User} from '../models/User';
 import {WhitelistUser} from '../models/WhitelistUser';
 import emailService from '../services/EmailService';
 
@@ -30,15 +29,11 @@ import crypto = require('crypto');
 import {API_NOTIFICATION_TYPE_ALL_CHANGES, NotificationSettings} from '../models/NotificationSettings';
 import {IWhitelistUser} from '../../../shared/models/IWhitelistUser';
 import {DocumentToObjectOptions} from 'mongoose';
-import * as mongoose from 'mongoose';
-import * as sharp from 'sharp';
 import * as fs from 'fs';
 import ResponsiveImageService from '../services/ResponsiveImageService';
 import {IResponsiveImageData} from '../../../shared/models/IResponsiveImageData';
-import {IPicture} from '../../../shared/models/mediaManager/IPicture';
 
 import { Picture } from '../models/mediaManager/File';
-import {IPictureModel} from '../models/mediaManager/Picture';
 
 const uploadOptions = {
   storage: multer.diskStorage({
