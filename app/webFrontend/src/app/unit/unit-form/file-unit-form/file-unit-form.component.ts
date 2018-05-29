@@ -11,6 +11,7 @@ import {IFile} from '../../../../../../../shared/models/mediaManager/IFile';
 import {UnitFormService} from '../../../shared/services/unit-form.service';
 import {FormArray, FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {SnackBarService} from '../../../shared/services/snack-bar.service';
+import {CourseMediaComponent} from "../../../course/course-edit/course-media/course-media.component";
 
 @Component({
   selector: 'app-file-unit-form',
@@ -64,6 +65,19 @@ export class FileUnitFormComponent implements OnInit {
   }
 
   async openAddFilesDialog() {
+
+    const res = await this.dialog.open(CourseMediaComponent, {
+      maxWidth: '90vw',
+      maxHeight: '90vh',
+      minWidth: '50vw',
+      disableClose: true,
+      data: {
+        courseId: this.course._id
+      }
+    });
+
+
+    /*
     if (!this.unitFormService.course.media) {
       this.snackBar.openShort('Please add files first');
       return;
@@ -81,7 +95,7 @@ export class FileUnitFormComponent implements OnInit {
         directoryId: this.course.media._id,
         allowedMimeTypes: allowedMimeTypes,
       },
-    });
+    });*/
 
     res.afterClosed().subscribe(async value => {
       if (value) {

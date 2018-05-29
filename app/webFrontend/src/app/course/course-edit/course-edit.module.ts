@@ -16,6 +16,7 @@ import {WhitelistShowComponent} from './members/whitelist-show/whitelist-show.co
 import {GeneralTabComponent} from './general-tab/general-tab.component';
 import {CourseMediaComponent} from './course-media/course-media.component';
 import {MatFabMenuComponent} from '../../shared/components/mat-fab-menu/mat-fab-menu.component';
+import {MAT_DIALOG_DATA} from '@angular/material';
 
 @NgModule({
   imports: [
@@ -47,6 +48,9 @@ import {MatFabMenuComponent} from '../../shared/components/mat-fab-menu/mat-fab-
     TeachersComponent,
     MatFabMenuComponent,
     GeneralTabComponent,
+  ],
+  providers: [
+    { provide: MAT_DIALOG_DATA, useValue: {} },
   ]
 })
 export class CourseEditModule {

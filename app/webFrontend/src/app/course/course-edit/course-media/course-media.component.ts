@@ -1,6 +1,6 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Inject, OnInit, ViewChild} from '@angular/core';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
-import {MatDialog} from '@angular/material';
+import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material';
 import {SnackBarService} from '../../../shared/services/snack-bar.service';
 import {CourseService, MediaService} from '../../../shared/services/data.service';
 import {ActivatedRoute} from '@angular/router';
@@ -9,6 +9,9 @@ import {UploadFormDialog} from '../../../shared/components/upload-form-dialog/up
 import {IFile} from '../../../../../../../shared/models/mediaManager/IFile';
 import {DialogService} from '../../../shared/services/dialog.service';
 import {RenameDialogComponent} from '../../../shared/components/rename-dialog/rename-dialog.component';
+import {UploadFormComponent} from "../../../shared/components/upload-form/upload-form.component";
+import {IFileUnit} from "../../../../../../../shared/models/units/IFileUnit";
+import {PickMediaDialog} from "../../../shared/components/pick-media-dialog/pick-media-dialog.component";
 
 @Component({
   selector: 'app-course-mediamanager',
@@ -22,37 +25,69 @@ export class CourseMediaComponent implements OnInit {
   selectedFiles: IFile[] = [];
   toggleBlocked = false;
 
+  /**
+   * Sets visability of upload Field
+   * @type {boolean}
+   */
+  showUpload = false;
+
+  /**
+   * Upload Path
+   * @type {string}
+   */
+  uploadPathTmp = '/api/media/file/';
+
+
+  isDialog: boolean;
+
+  @ViewChild(UploadFormComponent)
+  public uploadForm: UploadFormComponent;
+
   constructor(public dialog: MatDialog,
               private mediaService: MediaService,
               public dialogService: DialogService,
               private courseService: CourseService,
               private route: ActivatedRoute,
-              private snackBar: SnackBarService) {
+              private snackBar: SnackBarService,
+              @Inject(MAT_DIALOG_DATA || null) public dialogData: any) {
   }
 
   async ngOnInit() {
     this.folderBarVisible = false;
+    this.isDialog = false;
 
-    this.route.parent.params.subscribe(async (params) => {
-      try {
-        // retrieve course
-        this.course = await this.courseService.readCourseToEdit(params['id']);
+    if(this.dialogData && this.dialogData.courseId){
+      // either load courseId from Dialog-Data
+      this.isDialog = true;
+      this.loadData(this.dialogData.courseId);
+    }else if(this.route.parent.params){
+      // or url params
+      this.route.parent.params.subscribe(async (params) => {
+        this.isDialog = false;
+        this.loadData(params['id']);
+      });
+    }
+  }
 
-        // Check if course has root dir
-        if (this.course.media === undefined) {
-          // Root dir does not exist, add one
-          this.course.media = await this.mediaService.createRootDir(this.course.name);
-          // Update course
-          await this.courseService.updateItem<ICourse>(this.course);
-          // Reload course
-          this.course = await this.courseService.readCourseToEdit(this.course._id);
-        }
+  private async loadData(courseId: string){
+    try {
+      // retrieve course
+      this.course = await this.courseService.readCourseToEdit(courseId);
 
-        await this.changeDirectory(this.course.media._id, true);
-      } catch (err) {
-        this.snackBar.open(err.error.message);
+      // Check if course has root dir
+      if (this.course.media === undefined) {
+        // Root dir does not exist, add one
+        this.course.media = await this.mediaService.createRootDir(this.course.name);
+        // Update course
+        await this.courseService.updateItem<ICourse>(this.course);
+        // Reload course
+        this.course = await this.courseService.readCourseToEdit(this.course._id);
       }
-    });
+
+      await this.changeDirectory(this.course.media._id, true);
+    } catch (err) {
+      this.snackBar.open(err.error.message);
+    }
   }
 
   async reloadDirectory() {
@@ -88,8 +123,9 @@ export class CourseMediaComponent implements OnInit {
   }
 
   addFile(): void {
+    this.showUpload = true;
     // TODO: Dialog can grow to high; implement scroll
-    const dialogRef = this.dialog.open(UploadFormDialog, {
+    /*const dialogRef = this.dialog.open(UploadFormDialog, {
       maxHeight: '90vh',
       minWidth: '50vw',
       data: {
@@ -98,11 +134,12 @@ export class CourseMediaComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(value => {
-      if (value) {
+      if (value) {lo
         // Reload current folder
         this.reloadDirectory();
       }
-    });
+    });*/
+
   }
 
   isInSelectedFiles(file: IFile) {
@@ -211,5 +248,43 @@ export class CourseMediaComponent implements OnInit {
     } else {
       return 'unknown';
     }
+  }
+
+
+
+  cancelFileUpload():void{
+    this.uploadForm.fileUploader.clearQueue();
+    this.showUpload = false;
+  }
+
+  getUploadUrl(): string {
+    return this.uploadPathTmp + this.currentFolder._id;
+  }
+
+  uploadAllFiles() {
+    this.uploadForm.fileUploader.uploadAll();
+    this.uploadForm.onAllUploaded.subscribe(
+      result => this.onAllUploaded(),
+      error => this.snackBar.open('Could not upload files')
+    );
+  }
+
+  onAllUploaded() {
+    this.showUpload = false;
+    this.reloadDirectory();
+    this.snackBar.open('All items uploaded!');
+  }
+
+  onFileUploaded(event: IFileUnit) {
+  }
+
+
+
+  uploadHasQueueItems(): boolean {
+    if(this.uploadForm){
+      return this.uploadForm.fileUploader.queue.length !== 0;
+    }
+
+    return false;
   }
 }

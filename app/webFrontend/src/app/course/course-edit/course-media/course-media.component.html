@@ -26,12 +26,16 @@
     <!-- Files cards -->
     <div class="area--files">
 
+
+
       <!-- Multi-Select button area -->
-      <div class="btn__area">
+      <div class="btn__area" *ngIf="!showUpload">
+
         <button class="text-fit" mat-raised-button [matTooltip]="'file.tooltip.uploadFile' | translate"
                 (click)="addFile()">
-          <mat-icon>add</mat-icon>
+          <mat-icon>cloud_upload</mat-icon>
         </button>
+
         <!--<button class="text-fit" mat-raised-button matTooltip="Select all" (click)="selectAll()">-->
         <!--<mat-icon>select_all</mat-icon>-->
         <!--</button>-->
@@ -41,16 +45,47 @@
                 (click)="removeSelectedFile()">
           <mat-icon>delete</mat-icon>
         </button>
+
       </div>
 
+      <div class="container" *ngIf="showUpload">
+        <div class="row">
+          <app-upload-form
+            [ngClass]="{'col-lg-12 col-xl-10': !isDialog}"
+            class="col"
+            [uploadMethod]="'POST'"
+            [uploadPath]="getUploadUrl()"
+            [additionalData]="null"
+            (onFileSelectedChange)="null"
+            (onFileUploaded)="onFileUploaded($event)"
+            (onAllUploaded)="onAllUploaded()"></app-upload-form>
+        </div>
+
+        <div class="row margin-top">
+          <div
+            [ngClass]="{'col-lg-12 col-xl-10': !isDialog}"
+            class="col">
+            <div class="pull-right">
+              <button mat-raised-button color="primary"
+                      (click)="uploadAllFiles()" [disabled]="!uploadHasQueueItems()">
+                <mat-icon>file_upload</mat-icon>
+                {{ 'file.placeholder.uploadFiles' | translate }}
+              </button>
+              <button mat-raised-button (click)="cancelFileUpload()">{{ 'common.cancel' | translate }}</button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+
       <!-- File Cards -->
-      <div class="file-wrapper">
+      <div class="file-wrapper" [ngClass]="{'isDialog': isDialog}" *ngIf="!showUpload">
         <ng-container *ngFor="let file of currentFolder?.files">
           <mat-card
-            [ngClass]="isInSelectedFiles(file) ? 'card_active' : 'card'"
+            [ngClass]="{'small': isDialog, 'card_active':isInSelectedFiles(file), 'card': !isInSelectedFiles(file)}"
             (click)="toggleSelection(file)">
-
-            <div class="icon-wrapper">
+            <div [ngClass]="{'small': isDialog }"  class="icon-wrapper">
               <ng-container [ngSwitch]="getSimpleMimeType(file)">
                 <mat-icon *ngSwitchCase="'video'">movie</mat-icon>
                 <mat-icon *ngSwitchCase="'image'">image</mat-icon>
@@ -93,3 +128,12 @@
     </div>
   </div>
 </div>
+
+<mat-dialog-actions *ngIf="isDialog">
+  <button mat-raised-button color="primary"
+          [mat-dialog-close]="selectedFiles" >
+    <mat-icon>add</mat-icon>
+    {{ 'unit.addFilesToUnit' | translate }}
+  </button>
+  <button mat-raised-button mat-dialog-close>{{ 'common.cancel' | translate }}</button>
+</mat-dialog-actions>
