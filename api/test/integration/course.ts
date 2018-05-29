@@ -279,7 +279,7 @@ describe('Course', () => {
 
   describe(`POST FILE ${BASE_URL}`, () => {
     it('should update the course image', async () => {
-      const course = await FixtureUtils.getRandomCourse();;
+      const course = await FixtureUtils.getRandomCourse();
       const courseAdmin = await User.findOne({_id: course.courseAdmin});
 
       const res = await chai.request(app)
