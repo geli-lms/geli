@@ -1,10 +1,10 @@
 <div class="spacer">
   <div class="selectArea">
-    <button mat-raised-button color="secondary" (click)="listview()" mat-tooltip="List View" class="btn"
+    <button mat-raised-button color="secondary" [disabled]="!checkForFileUnits()" (click)="listview()" mat-tooltip="List View" class="btn"
             [class.activeBtn]="displayGrid==false">
       <i class="material-icons iconSize">view_list</i> List
     </button>
-    <button mat-raised-button color="secondary" (click)="gridview()"
+    <button mat-raised-button color="secondary" [disabled]="!checkForFileUnits()" (click)="gridview()"
             mat-tooltip="Grid View" class="btn" [class.activeBtn]="displayGrid==true">
       <i class="material-icons iconSize">view_module</i> Grid
     </button>
@@ -45,5 +45,5 @@
   </div>
 </div>
 <div *ngIf="!checkForFileUnits()">
-  <h2>There are no Files Attached to this course yet!</h2>
+  <h2>There are no Videos Attached to this course yet!</h2>
 </div>
