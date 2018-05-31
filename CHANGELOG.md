@@ -16,8 +16,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - add vars to html-files
 - add translations to resource files
 - include translation for components
-
-### Changed
 - Migrate MatSnackBar to SnackBarService. [#724](https://github.com/h-da/geli/pull/724)
 - Reload user list after deleting an account. [#724](https://github.com/h-da/geli/pull/724)
 - Validate form before submit when creating a new course. [#724](https://github.com/h-da/geli/pull/724)
@@ -25,7 +23,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Another MatSnackBar to SnackBarService migration. [#730](https://github.com/h-da/geli/pull/730)
 - `getNotificationSettings` does not create new notification settings. [#731](https://github.com/h-da/geli/issues/731)
 - Remove `isCourseTeacherOrAdmin` and `isMemberOfCourse`from UserService. [#731](https://github.com/h-da/geli/issues/731)
-- Refactored save mechanism of unit forms. [#532](https://github.com/h-da/geli/issues/532)
+- Refactored save mechanism of unit edit form. [#532](https://github.com/h-da/geli/issues/532)
+- Moved the 'create course' into a Dialog. [#725](https://github.com/h-da/geli/issues/725)
 
 ### Fixed
 - Fixed broken notification settings. [#731](https://github.com/h-da/geli/issues/731)
