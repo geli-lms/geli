@@ -127,7 +127,7 @@
       "maxLength": "Maximal {{max}} Zeichen erlaubt",
       "minLength": "Mindestens {{min}} Zeichen benötigt",
       "password": "Passwörter müssen aus mindestens 8 Zeichen, inklusive einem Sonderzeichen und einer Ziffer bestehen",
-      "wrong_mimeType": "Falsches Dateiformat. Es sind nur Bilder erlaubt!"
+      "wrong_mimeType": "Falsches Dateiformat. Es sind nur Bilder erlaubt!",
       "passwordsMatch": "Die Passwörter stimmen nicht überein.",
       "required": "Eingabe notwendig"
     }
