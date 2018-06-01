@@ -3,5 +3,10 @@
 }
 
 .mat-form-field {
-  width: 100%;
+  width: 50%;
+
+  textarea {
+    max-height: 25rem;
+    min-height: 5rem;
+  }
 }
