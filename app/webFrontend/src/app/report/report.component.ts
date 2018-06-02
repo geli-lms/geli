@@ -15,14 +15,13 @@ export class ReportComponent implements OnInit {
 
   public courseId: string;
   public courseName: string;
+  public course: any;
 
   private converter = require('json-2-csv');
-  private options = {
-    delimiter: {
+  private delimiter: {
       field: ';',
       array: ',',
-      eol : '\n'
-    },
+      eol: '\n'
   };
 
   constructor(
@@ -43,65 +42,97 @@ export class ReportComponent implements OnInit {
     this.courseService.readSingleItem(this.courseId)
       .then((course: any) => {
         this.courseName = course.name;
+        this.course = course;
       })
       .catch((err) => {
       });
   }
 
   private exportReport() {
+    const tasks = this.filterCourseForTasks();
+    const header = this.generateCsvHeader(tasks);
     this.reportService.getCourseResults(this.courseId)
       .then((result) => {
-        const report = result;
-        const csvContent = this.generateCsvContent(report);
-        this.converter.json2csv(csvContent, this.createDownload, this.options);
+      const csvContent = this.generateCsvContent(result, tasks, header);
+      this.createDownload(csvContent);
     });
   }
+  private filterCourseForTasks() {
+    const tasks: any[] = [];
+    this.course.lectures.forEach(lecture => {
+      lecture.units.forEach(unit => {
+        if (unit.__t === 'task' || unit.__t === 'code-kata') {
+          tasks.push(unit);
+        }
+      });
+    });
+    return tasks;
+  }
+  private generateCsvHeader(tasks: any[]) {
+    let header = 'Matrikelnummer;';
+    header += 'Nachname;';
+    header += 'Vorname;';
+    let counter = 1;
+    tasks.forEach(task => {
+      header += counter + '.name;';
+      header += counter + '.type;';
+      header += counter + '.status;';
+      if (task.__t === 'task') {
+        header += counter + '.answers;';
+      }
+      counter++;
+    });
+    header += 'ENDERGEBNIS;\n';
+    return header;
+  }
+  private generateCsvContent(reports: any[], units: any[], header: string) {
+    const content: string[] = [];
+    content.push(header);
+    reports.forEach(report => { // create an entry for each student
+      let entry = '';
+      entry += report.uid + ';';
+      entry += report.profile.lastName + ';';
+      entry += report.profile.firstName + ';';
+      units.forEach(unit => {
+        entry += unit.name + ';';
+        entry += unit.__t + ';';
+        const unitProgress = report.progress.units.find (rep => rep.id === unit.id);
 
-  private generateCsvContent(report: any[]) {
-    const csvContent: any[] = [];
-    for (const student of report) {
-      for (const unit of student.progress.units) {
-        let status: string;
-        let answers: string;
-        if (unit.__t === 'task') {
-          if (unit.done) {
-            status = 'done;';
+        if (unitProgress) {
+          if (unitProgress.progressData.done) {
+            entry += 'solved;';
           } else {
-            status = 'tried;';
+            entry += 'tried;';
           }
-          for (const answer of unit.tasks[0].answers) {
-            if (answer.value) {
-              answers += answer.text + ';';
+          if (unit.__t === 'task') {
+            let answerAdded = false;
+            for (const answer of unitProgress.tasks[0].answers) {
+              if (answer.value) {
+                entry += answer.text + ',';
+                answerAdded = true;
+              }
             }
+            if (answerAdded) {
+              entry = entry.substr(0, entry.length - 1);
+            }
+            entry += ';';
           }
-        } else if (unit.__t === 'code-kata') {
-          if (unit.progressData.done) {
-            status = 'done';
-          } else {
-            status = 'tried';
+        } else { // no entry in progress data -> task not worked on
+          entry += 'nothing;';
+          if (unit.__t === 'task') {
+            entry += ';';
           }
         }
+      });
+      entry += '\n';
+      content.push(entry);
+    });
 
-        const entry = {
-          id : student.uid,
-          lastName: student.profile.lastName,
-          firstName: student.profile.firstName,
-          unit: unit.name,
-          unitType: unit.__t,
-          status: status,
-          answers: null,
-        };
-        csvContent.push(entry);
-      }
-    }
-    return csvContent;
+    return content;
   }
 
-  private createDownload(err, csv) {
-    if (err) {
-      throw err;
-    }
-    const file = new Blob([csv], {type: 'text/csv'});
-    saveAs(file, this.courseName + 'Report.csv');
+  private createDownload(csvContent: string[]) {
+    const file = new Blob(csvContent, {type: 'text/csv'});
+    saveAs(file, this.course.name.replace(/\s/g, '') + 'Report.csv');
   }
 }
