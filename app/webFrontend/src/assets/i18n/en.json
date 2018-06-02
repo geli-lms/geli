@@ -71,5 +71,11 @@
     "addCourse": "Add course",
     "createCourse": "Create course",
     "importCourse": "Import course"
+  },
+  "report": {
+    "reportTitle": "Report for",
+    "overview": "Overview",
+    "userResults": "User Results",
+    "export2Csv": "Export to CSV"
   }
 }

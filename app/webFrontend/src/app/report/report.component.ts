@@ -5,6 +5,7 @@ import {CourseService} from '../shared/services/data.service';
 import {ReportService} from '../shared/services/data/report.service';
 import {saveAs} from 'file-saver/FileSaver';
 
+
 @Component({
   selector: 'app-report',
   templateUrl: './report.component.html',

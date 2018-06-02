@@ -71,5 +71,11 @@
     "addCourse": "Kurs hinzufügen",
     "createCourse": "Kurs erstellen",
     "importCourse": "Kurs importieren"
+  },
+  "report": {
+    "reportTitle": "Bericht für",
+    "overview": "Übersicht",
+    "userResults": "Benutzer-Ergebnisse",
+    "export2Csv": "Als CSV exportieren"
   }
 }
