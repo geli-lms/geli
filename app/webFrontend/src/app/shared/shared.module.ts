@@ -24,10 +24,13 @@ import {TranslateModule} from '@ngx-translate/core';
 import {AdminMarkdownEditComponent} from './components/admin-markdown-edit/admin-markdown-edit.component';
 import {UserProfileDialog} from 'app/shared/components/user-profile-dialog/user-profile-dialog.component';
 import {NotfoundComponent} from './components/notfound/notfound.component';
-import {ChatComponent} from './components/chat/chat.component';
 import {ChatNameInputComponent} from './components/chat-name-input/chat-name-input.component';
 import {InfiniteScrollDirective} from './directives/infinite-scroll.directive';
-import { CommentComponent } from './components/comment/comment.component';
+import { ShowCommentsDirective } from './directives/show-comments.directive';
+import { CommentsDialogComponent } from './components/comments-dialog/comments-dialog.component';
+import { MessagingComponent } from './components/messaging/messaging.component';
+import { MessagingInputFieldComponent } from './components/messaging-input-field/messaging-input-field.component';
+import { MessageComponent } from './components/message/message.component';
 
 
 @NgModule({
@@ -62,10 +65,14 @@ import { CommentComponent } from './components/comment/comment.component';
     UserProfileDialog,
     NotfoundComponent,
     UserProfileDialog,
-    ChatComponent,
+    MessagingComponent,
     ChatNameInputComponent,
     InfiniteScrollDirective,
-    CommentComponent,
+    ShowCommentsDirective,
+    CommentsDialogComponent,
+    MessagingComponent,
+    MessagingInputFieldComponent,
+    MessageComponent,
   ],
   exports: [
     GravatarDirective,
@@ -88,16 +95,18 @@ import { CommentComponent } from './components/comment/comment.component';
     TranslateModule,
     AdminMarkdownEditComponent,
     UserProfileDialog,
-    ChatComponent,
+    MessagingComponent,
     ChatNameInputComponent,
     InfiniteScrollDirective,
-    CommentComponent
+    ShowCommentsDirective,
   ],
   entryComponents: [
     UploadFormDialog,
     PickMediaDialog,
     UserProfileDialog,
-    ChatNameInputComponent
+    ChatNameInputComponent,
+    CommentsDialogComponent,
+    MessagingComponent
   ],
   providers: [],
 })

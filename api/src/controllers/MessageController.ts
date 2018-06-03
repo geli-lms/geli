@@ -3,14 +3,12 @@ import {
   BadRequestError,
   Body,
   Get,
-  JsonController, NotFoundError,
+  JsonController, NotFoundError, Param,
   Post, QueryParam,
   UseBefore
 } from 'routing-controllers';
-import {IMessage} from '../../../shared/models/IMessage';
 import {IMessageModel, Message} from '../models/Message';
-import {Course} from '../models/Course';
-
+import {IMessage} from '../../../shared/models/Messaging/IMessage';
 
 @JsonController('/message')
 @UseBefore(passportJwtMiddleware)
@@ -29,27 +27,15 @@ export default class MessageController {
 
 
   @Get('/')
-  async get(@QueryParam('room') room: string, @QueryParam('skip') skip: number= 0, @QueryParam('limit') limit: number) {
+  async get(@QueryParam('room') room: string, @QueryParam('skip') skip: number= 0, @QueryParam('limit') limit: number,@QueryParam('order') order: number = -1) {
     if (!room) {
       throw new BadRequestError();
     }
 
-    const course = await Course.findById(room);
-
-    if (!course) {
-      throw new NotFoundError('Course not Found.');
-    }
-
-    const messages: IMessageModel[] = await Message.find({room: room}).sort('-createdAt').skip(skip).limit(limit).populate({
-      path: 'author',
-      select: 'profile'
-    });
+    const messages: IMessageModel[] = await Message.find({room: room}).sort({createdAt: order}).skip(skip).limit(limit);
 
     return messages.map((message: IMessageModel) => {
       message = message.toObject();
-      if (message.chatName) {
-        delete  message.author.profile;
-      }
       return message;
     });
   }
@@ -65,6 +51,17 @@ export default class MessageController {
     const count = await Message.count({room: room});
 
     return {count: count};
+  }
+
+  @Post('/:id([a-fA-F0-9]{24})/comments')
+  async addComment(@Body() comment: IMessage, @Param('id') id: string){
+     let message = await Message.findById(id);
+     if(!message) {
+       throw new NotFoundError('message not found');
+     }
+
+     message.comments.push(comment);
+     return message.save();
   }
 
 }

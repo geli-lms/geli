@@ -1,9 +1,9 @@
-import {IUser} from './IUser';
-
 export interface IMessage {
-  author: IUser;
+  _id: any;
   content: string;
-  visible: boolean;
+  visible?: boolean;
   room: string;
   chatName: string;
+  comments: IMessage[];
+  author: any;
 }

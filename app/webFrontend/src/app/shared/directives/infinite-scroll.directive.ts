@@ -11,7 +11,7 @@ interface ScrollPosition {
   sH: number;
   sT: number;
   cH: number;
-};
+}
 
 @Directive({
   selector: '[appInfiniteScroll]'
@@ -25,7 +25,7 @@ export class InfiniteScrollDirective {
   scrollPercent = 90;  //until this percentage the user should scroll the container for the event to be emitted
 
   @Input()
-  shouldEmit = true; // yes or not the directive should emit an event when scrollPercent is reached.
+  shouldEmit = false; // yes or not the directive should emit an event when scrollPercent is reached.
 
 
   private scrollEvent$;
@@ -49,7 +49,7 @@ export class InfiniteScrollDirective {
         }
       })
       .subscribe(() => {
-      })
+      });
   }
 
   /**

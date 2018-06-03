@@ -23,7 +23,7 @@
       <app-free-text-unit *ngSwitchCase="'free-text'" [freeTextUnit]="unit"></app-free-text-unit>
       <div class="unit-detail">
         <button mat-icon-button>
-          <mat-icon aria-label="comments" (click)="showComments()">forum</mat-icon>
+          <mat-icon aria-label="comments" appShowComments [room]="unit.chatRoom">forum</mat-icon>
         </button>
         <div class="user-detail" *ngIf="unit.unitCreator">{{unit.unitCreator.profile.firstName + ' ' +
           unit.unitCreator.profile.lastName}}

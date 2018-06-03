@@ -1,26 +1,7 @@
-@import '../../../../variables';
-
-.chat-container {
-  position: relative;
-  height: 100%;
+.message-replies-container {
+  margin-left: 10px;
 }
 
-.chat-input {
-  width: 100%;
-}
-
-.main-card {
-  height: 100%;
-}
-
-.chat-footer-container {
-  padding: 5px;
-}
-
-.messages {
-  height: 80%;
-  overflow-y: scroll
-}
 
 .messages ul {
   list-style-type: none;
@@ -38,13 +19,15 @@
 .msg {
   display: flex;
   flex-direction: column;
+  width: 100%;
+  padding: 0 7px;
   .author {
     font-size: 0.8em;
     color: grey;
   }
   .content {
+    background-color: #e9ebee;
     overflow-wrap: break-word;
-    padding: 0 7px;
     border-radius: 7px;
     max-width: inherit;
     word-wrap: break-word;
@@ -62,7 +45,6 @@
   .content{
     align-self: flex-end;
     background-color: #e8eaf6;
-    text-align: right;
   }
 }
 
@@ -86,3 +68,27 @@
   width: 100%;
 }
 
+
+.like-btn {
+  color: grey;
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
+  .material-icons {
+    font-size: 14px;
+    height: 30px;
+    width: 30px;
+    line-height: 30px;
+  }
+}
+
+.reply-btn{
+  font-size: 12px
+}
+
+.toggle-replies {
+  display: flex;
+  font-size: 14px;
+  align-items: center;
+  font-weight: bold;
+}

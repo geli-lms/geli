@@ -1,0 +1,6 @@
+<form [formGroup]="form">
+  <mat-form-field class="message-input-field">
+            <textarea mat-autosize="true"  matInput class="form-control" formControlName="message" (keydown)="onEnter($event)"></textarea>
+    <mat-hint align="start">Ctrl + Enter to send</mat-hint>
+  </mat-form-field>
+</form>

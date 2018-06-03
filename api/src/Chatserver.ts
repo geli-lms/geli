@@ -1,11 +1,12 @@
 import * as socketIo from 'socket.io';
-import {IMessage} from '../../shared/models/IMessage';
 import {SocketIOEvent} from './models/SocketIOEvent';
-import {Message} from './models/Message';
+import {IMessageModel, Message} from './models/Message';
 import * as jwt from 'jsonwebtoken';
 import config from './config/main';
 import {User} from './models/User';
-import {Course} from './models/Course';
+import {ChatRoom} from './models/ChatRoom';
+import {ISocketIOMessage, SocketIOMessageType} from './models/SocketIOMessage';
+
 
 export default class ChatServer {
 
@@ -21,13 +22,13 @@ export default class ChatServer {
       jwt.verify(token, config.secret, (err: any, decoded: any) => {
         if (err) {
           next(new Error('not authorized'));
-        } else if(this.canConnect(decoded._id, room)) {
+        } else if (this.canConnect(decoded._id, room)) {
           next();
-        }else  {
+        } else {
           next(new Error('not authorized'));
         }
       });
-    })
+    });
   }
 
 
@@ -38,25 +39,35 @@ export default class ChatServer {
    */
   async canConnect(userId: string, room: string) {
     const _user = await User.findById(userId);
-    const _room = await Course.findById(room);
+    const _room = await ChatRoom.findById(room);
 
     return _user && _room;
   }
 
   init() {
     this.io.on(SocketIOEvent.CONNECT, (socket: any) => {
-
       const queryParam: any = socket.handshake.query;
-
-      // TODO: check  if room exist before  joining it
       socket.join(queryParam.room);
 
-      socket.on(SocketIOEvent.MESSAGE, (message: IMessage) => this.onMessage(message, queryParam));
+      socket.on(SocketIOEvent.MESSAGE, (message: ISocketIOMessage) => this.onMessage(message, queryParam));
     });
   }
 
-  onMessage(message: IMessage, queryParam: any) {
-    Message.create(message);
-    this.io.in(queryParam.room).emit(SocketIOEvent.MESSAGE, message);
+  async onMessage(socketIOMessage: ISocketIOMessage, queryParam: any) {
+    if (socketIOMessage.meta.type === SocketIOMessageType.COMMENT) {
+      let foundMessage: IMessageModel = await Message.findById(socketIOMessage.meta.parent);
+
+      if (foundMessage) {
+        foundMessage.comments.push(socketIOMessage.message);
+        foundMessage = await foundMessage.save();
+        socketIOMessage.message = foundMessage.comments.pop();
+        this.io.in(queryParam.room).emit(SocketIOEvent.MESSAGE, socketIOMessage);
+      }
+    } else {
+      let newMessage = new Message(socketIOMessage.message);
+      newMessage = await newMessage.save();
+      socketIOMessage.message = newMessage;
+      this.io.in(queryParam.room).emit(SocketIOEvent.MESSAGE, socketIOMessage);
+    }
   }
 }

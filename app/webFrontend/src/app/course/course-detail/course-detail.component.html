@@ -38,7 +38,7 @@
 </div>
 
 
-<div [ngClass]="{'chat-container': true, 'chat-container-show': showChat, 'chat-container-hidden': !showChat}">
+<div *ngIf="showChat" [ngClass]="{'chat-container': true, 'chat-container-show': showChat, 'chat-container-hidden': !showChat}">
   <div class="forum-container">
     <div class="chat-top-bar">
       <div class="chat-heading"><mat-icon>forum</mat-icon>Forum</div>
@@ -51,7 +51,7 @@
         </button>
       </div>
     </div>
-    <app-chat [room]="course?._id"></app-chat>
+  <app-messaging [room]="course?._id" [mode]="'chat'"></app-messaging>
   </div>
 </div>
 

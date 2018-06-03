@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CommentComponent } from './comment.component';
+import { MessagingComponent } from './messaging.component';
 
-describe('CommentComponent', () => {
-  let component: CommentComponent;
-  let fixture: ComponentFixture<CommentComponent>;
+describe('ChatComponent', () => {
+  let component: MessagingComponent;
+  let fixture: ComponentFixture<MessagingComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CommentComponent ]
+      declarations: [ MessagingComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CommentComponent);
+    fixture = TestBed.createComponent(MessagingComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -1,6 +1,8 @@
 import {Injectable} from '@angular/core';
 import {DataService} from './data.service';
 import {BackendService} from './backend.service';
+import {IMessage} from '../../../../../../shared/models/Messaging/IMessage';
+
 
 @Injectable()
 export class MessageService extends DataService {
@@ -10,31 +12,26 @@ export class MessageService extends DataService {
     super('message', backendService);
   }
 
-  async getMessages(queryParam: any): Promise<any> {
-    const originalApiPath = this.apiPath;
-    this.apiPath += '?';
-    this.addQueryParam(queryParam);
-    const res = await this.readItems();
-    this.apiPath = originalApiPath;
-
-    return res;
+  async getMessages(queryParam: any): Promise<IMessage[]> {
+    const api = this.apiPath + '?'+ this.getQueryParamsString(queryParam) ;
+    return this.backendService
+      .get(api)
+      .toPromise();
   }
 
   async getMessageCount(queryParam: any): Promise<any> {
-    const originalApiPath = this.apiPath;
-    this.apiPath += '/count?';
-    this.addQueryParam(queryParam);
-
-    const res = await this.readItems();
-    this.apiPath = originalApiPath;
-
-    return res;
+    const api = this.apiPath + '/count?'+ this.getQueryParamsString(queryParam) ;
+    return this.backendService
+      .get(api)
+      .toPromise();
   }
 
-  private addQueryParam(queryObj: any){
+  private getQueryParamsString(queryObj: any) {
+    let result ='';
     for (const key in queryObj) {
-      this.apiPath += key + '=' + queryObj[key] + '&';
+      result += key + '=' + queryObj[key] + '&';
     }
+    return result;
   }
 
 }

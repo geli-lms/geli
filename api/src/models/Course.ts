@@ -12,6 +12,8 @@ import {ObjectID} from 'bson';
 import {Directory} from './mediaManager/Directory';
 import {IProperties} from '../../../shared/models/IProperties';
 import {extractMongoId} from '../utilities/ExtractMongoId';
+import {ChatRoom} from './ChatRoom';
+
 
 interface ICourseModel extends ICourse, mongoose.Document {
   exportJSON: (sanitize?: boolean) => Promise<ICourse>;
@@ -79,7 +81,15 @@ const courseSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'WhitelistUser'
       }
-    ]
+    ],
+    enableChat: {
+      type: Boolean,
+      default: true
+    },
+    chatRooms: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'ChatRoom'
+    }]
   },
   {
     timestamps: true,
@@ -109,6 +119,18 @@ const courseSchema = new mongoose.Schema({
     }
   }
 );
+
+courseSchema.pre('save', async function() {
+  const course = <ICourseModel>this;
+  if(this.isNew  && course.enableChat){
+    await ChatRoom.create({
+      room: {
+        roomType: 'Course',
+        roomFor: course
+      }
+    });
+  }
+});
 
 // Cascade delete
 courseSchema.pre('remove', async function () {

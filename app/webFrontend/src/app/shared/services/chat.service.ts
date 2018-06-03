@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import {IMessage} from '../../../../../../shared/models/IMessage';
 import { Observable } from 'rxjs/Observable';
 import * as socketIo from 'socket.io-client';
-import {SocketIOEvent} from '../../../../../../shared/models/SoketIOEvent';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {AuthenticationService} from './authentication.service';
 import {environment} from '../../../environments/environment';
+import {ISocketIOMessage} from '../../../../../../shared/models/Messaging/ISocketIOMessage';
+import {SocketIOEvent} from '../../../../../../shared/models/Messaging/SoketIOEvent';
 
 
 @Injectable()
@@ -17,7 +17,7 @@ export class ChatService {
 
   constructor(private authenticationService: AuthenticationService) {
     const chatName = localStorage.getItem('chatName');
-    if(chatName){
+    if (chatName) {
       this.chatName$.next(chatName);
     }
   }
@@ -33,17 +33,17 @@ export class ChatService {
   }
 
   public setChatName(chatName: string): void {
-    localStorage.setItem('chatName', chatName)
+    localStorage.setItem('chatName', chatName);
     this.chatName$.next(chatName);
   }
 
-  public send(message: any): void {
-    this.socket.emit(SocketIOEvent.MESSAGE, message);
+  public send(socketIOMessage: ISocketIOMessage): void {
+    this.socket.emit(SocketIOEvent.MESSAGE, socketIOMessage);
   }
 
-  public onMessage(): Observable<IMessage> {
-    return new Observable<IMessage>(observer => {
-      this.socket.on(SocketIOEvent.MESSAGE, (data: IMessage) => observer.next(data));
+  public onMessage(): Observable<ISocketIOMessage> {
+    return new Observable<ISocketIOMessage>(observer => {
+      this.socket.on(SocketIOEvent.MESSAGE, (data: ISocketIOMessage) => observer.next(data));
     });
   }
 

@@ -48,7 +48,7 @@ export class CourseDetailComponent implements OnInit {
 
     this.chatService.chatName$.subscribe(name => {
        this.chatName = name;
-    })
+    });
   }
 
   async getCourse(courseId: string) {

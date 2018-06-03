@@ -11,6 +11,7 @@ import {taskUnitSchema} from './TaskUnit';
 import {IUser} from '../../../../shared/models/IUser';
 import {IProgress} from '../../../../shared/models/progress/IProgress';
 import {User} from '../User';
+import {ChatRoom} from '../ChatRoom';
 
 interface IUnitModel extends IUnit, mongoose.Document {
   exportJSON: () => Promise<IUnit>;
@@ -47,6 +48,10 @@ const unitSchema = new mongoose.Schema({
     unitCreator: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User'
+    },
+    chatRoom: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'ChatRoom'
     }
   },
   {
@@ -57,10 +62,25 @@ const unitSchema = new mongoose.Schema({
       transform: function (doc: IUnitModel, ret: any) {
         ret._id = ret._id.toString();
         ret._course = ret._course.toString();
+        ret.chatRoom = ret.chatRoom.toString();
       }
     },
   }
 );
+
+
+unitSchema.pre('save', async function () {
+  const unit = <IUnitModel> this;
+  if (this.isNew) {
+   const chatRoom = await ChatRoom.create({
+      room: {
+        roomType: 'Unit',
+        roomFor: unit
+      }
+    });
+    this.set('chatRoom', chatRoom);
+  }
+});
 
 unitSchema.virtual('progressData', {
   ref: 'Progress',

@@ -21,7 +21,6 @@ import {ICourseView} from '../../../shared/models/ICourseView';
 import {IUser} from '../../../shared/models/IUser';
 import {ObsCsvController} from './ObsCsvController';
 import {Course} from '../models/Course';
-import {User} from '../models/User';
 import {WhitelistUser} from '../models/WhitelistUser';
 import emailService from '../services/EmailService';
 
@@ -30,6 +29,7 @@ import crypto = require('crypto');
 import {API_NOTIFICATION_TYPE_ALL_CHANGES, NotificationSettings} from '../models/NotificationSettings';
 import {IWhitelistUser} from '../../../shared/models/IWhitelistUser';
 import {DocumentToObjectOptions} from 'mongoose';
+
 
 const uploadOptions = {
   storage: multer.diskStorage({
@@ -110,7 +110,7 @@ export class CourseController {
       // Everyone is allowed to see free courses in overview
       conditions.$or.push({enrollType: 'free'});
       conditions.$or.push({enrollType: 'accesskey'});
-      conditions.$or.push({enrollType: 'whitelist', whitelist:  {$elemMatch: {$in: whitelistUsers}}});
+      conditions.$or.push({enrollType: 'whitelist', whitelist: {$elemMatch: {$in: whitelistUsers}}});
     }
 
     const courses = await Course.find(conditions);
@@ -433,6 +433,7 @@ export class CourseController {
     course.courseAdmin = currentUser;
     const newCourse = new Course(course);
     await newCourse.save();
+
     return newCourse.toObject();
   }
 
@@ -501,9 +502,9 @@ export class CourseController {
     if (course.enrollType === 'whitelist') {
       const wUsers: IWhitelistUser[] = await  WhitelistUser.find().where({courseId: course._id});
       if (wUsers.filter(e =>
-          e.firstName === currentUser.profile.firstName.toLowerCase()
-          && e.lastName === currentUser.profile.lastName.toLowerCase()
-          && e.uid === currentUser.uid).length <= 0) {
+        e.firstName === currentUser.profile.firstName.toLowerCase()
+        && e.lastName === currentUser.profile.lastName.toLowerCase()
+        && e.uid === currentUser.uid).length <= 0) {
         throw new ForbiddenError(errorCodes.course.notOnWhitelist.code);
       }
     } else if (course.accessKey && course.accessKey !== data.accessKey) {

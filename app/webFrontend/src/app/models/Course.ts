@@ -3,6 +3,7 @@ import {IUser} from '../../../../../shared/models/IUser';
 import {ILecture} from '../../../../../shared/models/ILecture';
 import {IWhitelistUser} from '../../../../../shared/models/IWhitelistUser';
 import {IDirectory} from '../../../../../shared/models/mediaManager/IDirectory';
+import {IChatRoom} from '../../../../../shared/models/IChatRoom';
 
 /**
  * Created by Alexander on 23.05.2017.
@@ -21,6 +22,8 @@ export class Course implements ICourse {
   enrollType: string;
   accessKey: string;
   hasAccessKey: boolean;
+  enableChat: boolean;
+  chatRooms: IChatRoom[]
 
   public Course(course: ICourse) {
     this._id = course._id;
