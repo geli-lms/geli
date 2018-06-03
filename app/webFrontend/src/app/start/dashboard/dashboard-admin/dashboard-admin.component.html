@@ -1,5 +1,5 @@
 <mat-form-field class="pull-right">
-  <input matInput (keyup)="filterCourses($event)" placeholder="search course" maxlength="64"/>
+  <input matInput (keyup)="getInput($event)" placeholder="search course" maxlength="64"/>
 </mat-form-field>
 <app-course-container [title]="'dashboard.courses'|translate" [courses]="allCourses" [expand]="true"
                       (onEnroll)="enrollCallback()"></app-course-container>
