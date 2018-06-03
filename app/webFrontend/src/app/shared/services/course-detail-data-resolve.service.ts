@@ -3,7 +3,7 @@ import {CanActivate, Router, RouterStateSnapshot, ActivatedRouteSnapshot, Resolv
 import {UserService} from './user.service';
 import {ICourse} from '../../../../../../shared/models/ICourse';
 import {CourseService, UserDataService} from './data.service';
-import {MatSnackBar} from '@angular/material';
+import {SnackBarService} from './snack-bar.service';
 import {DataSharingService} from './data-sharing.service';
 import {Observable} from 'rxjs/Rx';
 
@@ -14,7 +14,7 @@ export class CourseDetailDataResolve implements Resolve<ICourse> {
               private router: Router,
               private userDataService: UserDataService,
               public userService: UserService,
-              private snackBar: MatSnackBar,
+              private snackBar: SnackBarService,
               private shareDataService: DataSharingService) {
   }
 
@@ -26,10 +26,10 @@ export class CourseDetailDataResolve implements Resolve<ICourse> {
         return course;
       }, (errorResponse: Response) => {
         if (errorResponse.status === 401) {
-          this.snackBar.open('You are not authorized to view this course.', '', {duration: 3000});
+          this.snackBar.open('You are not authorized to view this course.');
         }
         if (errorResponse.status === 404) {
-          this.snackBar.open('Your selected course is not available.', '', {duration: 3000});
+          this.snackBar.open('Your selected course is not available.');
           this.router.navigate(['/not-found']);
         }
       });
