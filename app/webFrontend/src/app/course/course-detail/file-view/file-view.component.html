@@ -6,6 +6,7 @@
           <ng-container *ngFor="let fileUnit of unit.files">
             <ng-container *ngIf="unit.fileUnitType == 'file'">
               <mat-list-item>
+                <mat-icon mat-list-icon>{{ fileIcon.fileToIcon(fileUnit) }}</mat-icon>
                 <a href="{{'/api/uploads/' + fileUnit.link}}" download="{{fileUnit.name}}">
                   <span>{{fileUnit.name}}</span>
                 </a>
