@@ -1,11 +1,11 @@
-<h2>Add files to unit</h2>
+<h2>{{ 'unit.addFilesToUnit' | translate }}</h2>
 <ng-container *ngIf="allowedMimeTypes !== undefined && allowedMimeTypes.length > 0">
   <small>Allowed MimeTypes:</small>
   <ul>
     <li *ngFor="let type of allowedMimeTypes"><small>{{ type }}</small></li>
   </ul>
 </ng-container>
-<small>Files selected: {{ selectedOptions.length }}</small>
+<small>{{ 'file.text.filesSelected' | translate }}: {{ selectedOptions.length }}</small>
 <br>
 <mat-dialog-content>
   <mat-selection-list #fileList dense [(ngModel)]="selectedOptions">
@@ -19,9 +19,9 @@
 
 <mat-dialog-actions>
   <button mat-raised-button color="primary" (click)="save()">
-    SAVE
+    {{ 'common.save' | translate }}
   </button>
   <button mat-raised-button (click)="cancel()">
-    CANCEL
+    {{ 'common.cancel' | translate }}
   </button>
 </mat-dialog-actions>

@@ -3,7 +3,7 @@ import {ChangeDetectorRef, NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {CodeKataUnitFormComponent} from './code-kata-unit-form/code-kata-unit-form.component';
 import {FreeTextUnitFormComponent} from './free-text-unit-form/free-text-unit-form.component';
-import {TaskUnitEditComponent} from './task-unit-edit/task-unit-edit.component';
+import {TaskUnitFormComponent} from './task-unit-form/task-unit-form.component';
 import {UnitFormComponent} from './unit-form.component';
 import {UnitGeneralInfoFormComponent} from './unit-general-info-form/unit-general-info-form.component';
 import {FileUnitFormComponent} from './file-unit-form/file-unit-form.component';
@@ -29,7 +29,7 @@ import {UnitFormService} from '../../shared/services/unit-form.service';
   declarations: [
     CodeKataUnitFormComponent,
     FreeTextUnitFormComponent,
-    TaskUnitEditComponent,
+    TaskUnitFormComponent,
     UnitFormComponent,
     UnitGeneralInfoFormComponent,
     FileUnitFormComponent,
@@ -39,7 +39,7 @@ import {UnitFormService} from '../../shared/services/unit-form.service';
   exports: [
     CodeKataUnitFormComponent,
     FreeTextUnitFormComponent,
-    TaskUnitEditComponent,
+    TaskUnitFormComponent,
     UnitFormComponent,
     UnitGeneralInfoFormComponent
   ],

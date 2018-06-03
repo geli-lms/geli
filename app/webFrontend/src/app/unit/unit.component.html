@@ -28,8 +28,8 @@
         <div class="user-detail" *ngIf="unit.unitCreator">{{unit.unitCreator.profile.firstName + ' ' +
           unit.unitCreator.profile.lastName}}
         </div>
-        <span *ngIf="unit.createdAt === unit.updatedAt">Published on: {{getFormattedDate(unit.createdAt)}}</span>
-        <span *ngIf="unit.createdAt !== unit.updatedAt">Changed on: {{getFormattedDate(unit.updatedAt)}}</span>
+        <span *ngIf="unit.createdAt === unit.updatedAt">{{ 'unit.text.publishedOn' | translate }}: {{getFormattedDate(unit.createdAt)}}</span>
+        <span *ngIf="unit.createdAt !== unit.updatedAt">{{ 'unit.text.changedOn' | translate }}: {{getFormattedDate(unit.updatedAt)}}</span>
       </div>
     </mat-card-content>
   </mat-card>

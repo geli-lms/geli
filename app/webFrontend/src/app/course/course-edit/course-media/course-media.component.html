@@ -28,7 +28,7 @@
 
       <!-- Multi-Select button area -->
       <div class="btn__area">
-        <button class="text-fit" mat-raised-button matTooltip="Upload file"
+        <button class="text-fit" mat-raised-button [matTooltip]="'file.tooltip.uploadFile' | translate"
                 (click)="addFile()">
           <mat-icon>add</mat-icon>
         </button>
@@ -36,7 +36,7 @@
         <!--<mat-icon>select_all</mat-icon>-->
         <!--</button>-->
         <button [disabled]="selectedFiles.length <= 1"
-                class="text-fit" mat-raised-button matTooltip="Remove file"
+                class="text-fit" mat-raised-button [matTooltip]="'file.text.fileRemove' | translate"
                 color="warn"
                 (click)="removeSelectedFile()">
           <mat-icon>delete</mat-icon>
@@ -87,7 +87,7 @@
           </mat-card>
         </ng-container>
         <p *ngIf="currentFolder?.files.length === 0">
-          No Files so far.
+          {{ 'file.text.noFiles' | translate }}
         </p>
       </div>
     </div>
