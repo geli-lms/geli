@@ -15,6 +15,7 @@ import {FreeTextUnitEditorComponent} from './free-text-unit-form/free-text-unit-
 import {FreeTextUnitEditorDialog} from './free-text-unit-form/free-text-unit-editor/free-text-unit-editor-dialog/free-text-unit-editor.dialog';
 import {SharedModule} from '../../shared/shared.module';
 import {UnitFormService} from '../../shared/services/unit-form.service';
+import { AssignmentUnitFormComponent } from './assignment-unit-form/assignment-unit-form.component';
 
 @NgModule({
   imports: [
@@ -34,7 +35,8 @@ import {UnitFormService} from '../../shared/services/unit-form.service';
     UnitGeneralInfoFormComponent,
     FileUnitFormComponent,
     FreeTextUnitEditorComponent,
-    FreeTextUnitEditorDialog
+    FreeTextUnitEditorDialog,
+    AssignmentUnitFormComponent
   ],
   exports: [
     CodeKataUnitFormComponent,

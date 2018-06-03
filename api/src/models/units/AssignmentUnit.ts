@@ -1,42 +1,57 @@
 import * as mongoose from 'mongoose';
-import {IUnitModel} from './Unit';
 import {IAssignmentUnit} from '../../../../shared/models/units/IAssignmentUnit';
-import {NativeError} from 'mongoose';
-import {BadRequestError} from 'routing-controllers';
-import {IUser} from '../../../../shared/models/IUser';
+import {Unit} from './Unit';
 
-interface IAssignmentUnit extends IAssignmentUnit, IUnitModel {
-  secureData: (user: IUser) => Promise<IAssignmentUnit>;
+interface IAssignmentUnitModel extends IAssignmentUnit, mongoose.Document {
+  // secureData: (user: IUser) => Promise<IAssignmentUnit>;
 }
 
+const assignmentsSchema = new mongoose.Schema(
+    {
+        file: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'File'
+        },
+        user: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User'
+        },
+        submitted: {
+            type: Boolean
+        },
+        checked: {
+            type: Number
+        }
+    }, {
+        timestamps: true,
+        toObject: {
+            transform: function (doc: any, ret: any) {
+                if (ret.hasOwnProperty('_id') && ret._id !== null) {
+                    ret._id =  ret._id.toString();
+                }
+
+                if (ret.hasOwnProperty('id') && ret.id !== null) {
+                    ret.id = ret.id.toString();
+                }
+            }
+        }
+    }
+);
+
 const assignmentSchema = new mongoose.Schema({
-  deadline: {
-    type: string
-  };
-assignments: [
-  file:  {
-  type: mongoose.Schema.Types.ObjectId,
-    ref: 'File'
-},
-user:     {
-  type: mongoose.Schema.Types.ObjectId,
-    ref: 'User'
-},
-submitted: {
-  type: Boolean
-},
-checked: {
-  type: Interger
-}  // 0 = not checked; 1 = Not ok; 2 = ok
-];
-});
+    deadline: {
+      type: String
+    },
+    assignments: [assignmentsSchema]
+  },
+);
 
-codeKataSchema.methods.secureData = async function (user: IUser): Promise<IAssignmentUnit> {
-  if (user.role === 'student') {
-    const assignment = this.assignments.filer(user);
-    this.assignments = assignment;
-  }
-  return this;
-};
+// assignmentSchema.methods.secureData = async function (user: IUser): Promise<IAssignmentUnit> {
+//   if (user.role === 'student') {
+//     const assignment = this.assignments.filter(user);
+//     this.assignments = assignment;
+//   }
+//   return this;
+// };
 
-export {codeKataSchema, ICodeKataModel};
+export {assignmentSchema, IAssignmentUnitModel};
