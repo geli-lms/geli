@@ -13,7 +13,9 @@ import {SortUtil} from '../../../shared/utils/SortUtil';
 export class DashboardStudentComponent extends DashboardBaseComponent {
 
   myCourses: ICourseDashboard[];
+  myCoursesHolder: ICourseDashboard[];
   availableCourses: ICourseDashboard[];
+  availableCoursesHolder: ICourseDashboard[];
   searchValue: string;
 
   constructor(public userService: UserService) {
@@ -21,29 +23,27 @@ export class DashboardStudentComponent extends DashboardBaseComponent {
   }
 
   ngOnInit() {
-    this.searchValue = '';
+    this.searchValue = "";
+    this.myCoursesHolder = [];
+    this.availableCoursesHolder = [];
+  }
+
+  async getInput(event: any) {
+    if (this.myCoursesHolder.length === 0) {
+      this.myCoursesHolder = this.myCourses;
+    }
+    if (this.availableCoursesHolder.length === 0) {
+      this.availableCoursesHolder = this.availableCourses;
+    }
+    const searchValue = event.target.value.toLowerCase();
+    this.myCourses = [];
+    this.availableCourses = [];
+    super.filterCourses(searchValue, this.myCoursesHolder, this.myCourses);
+    super.filterCourses(searchValue, this.availableCoursesHolder, this.availableCourses);
   }
 
   ngOnChanges() {
     this.sortCourses();
-  }
-
-  async filterCourses(event: any) {
-    this.myCourses = [];
-    this.availableCourses = [];
-    this.searchValue = event.target.value.toLowerCase();
-    for (const course of this.allCourses) {
-      const temp = course.name.toLowerCase();
-      if (course.userCanViewCourse) {
-        if (temp.includes(this.searchValue)) {
-          this.myCourses.push(course);
-        }
-      } else {
-        if (temp.includes(this.searchValue)) {
-          this.availableCourses.push(course);
-        }
-      }
-    }
   }
 
   async sortAlphabetically() {
