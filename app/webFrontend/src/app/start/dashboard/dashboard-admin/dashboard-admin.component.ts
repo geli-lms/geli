@@ -3,7 +3,8 @@ import {DashboardBaseComponent} from '../dashboard-base-component';
 import {SnackBarService} from '../../../shared/services/snack-bar.service';
 import {DialogService} from '../../../shared/services/dialog.service';
 import {Router} from '@angular/router';
-import {ICourseDashboard} from '../../../../../../../shared/models/ICourseDashboard';
+import {SortUtil} from "../../../shared/utils/SortUtil";
+import {ICourseDashboard} from "../../../../../../../shared/models/ICourseDashboard";
 
 @Component({
   selector: 'app-dashboard-admin',
@@ -13,8 +14,7 @@ import {ICourseDashboard} from '../../../../../../../shared/models/ICourseDashbo
 export class DashboardAdminComponent extends DashboardBaseComponent {
 
   fabOpen = false;
-  searchValue: string;
-  allCoursesAdmin: ICourseDashboard[];
+  allCoursesHolder: ICourseDashboard[];
 
   constructor(private snackBar: SnackBarService,
               private router: Router,
@@ -23,22 +23,16 @@ export class DashboardAdminComponent extends DashboardBaseComponent {
   }
 
   ngOnInit() {
-    this.searchValue = '';
-    this.allCoursesAdmin = [];
+    this.allCoursesHolder = [];
   }
 
-  async filterCourses(event: any) {
-    this.searchValue = event.target.value.toLowerCase();
-    if (this.allCoursesAdmin.length === 0) {
-      this.allCoursesAdmin = this.allCourses;
+  async getInput(event: any) {
+    if (this.allCoursesHolder.length === 0) {
+      this.allCoursesHolder = this.allCourses;
     }
+    const searchValue = event.target.value.toLowerCase();
     this.allCourses = [];
-    for (const course of this.allCoursesAdmin) {
-      const temp = course.name.toLowerCase();
-      if (temp.includes(this.searchValue)) {
-        this.allCourses.push(course);
-      }
-    }
+    super.filterCourses(searchValue, this.allCoursesHolder, this.allCourses);
   }
 
   closeFab = () => {
