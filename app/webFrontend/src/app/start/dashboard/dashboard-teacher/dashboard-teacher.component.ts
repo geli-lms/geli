@@ -15,9 +15,13 @@ import {SortUtil} from '../../../shared/utils/SortUtil';
 export class DashboardTeacherComponent extends DashboardBaseComponent {
 
   myCourses: ICourseDashboard[];
+  myCoursesHolder: ICourseDashboard[];
   furtherCourses: ICourseDashboard[];
+  furtherCoursesHolder: ICourseDashboard[];
   inactiveCourses: ICourseDashboard[];
+  inactiveCoursesHolder: ICourseDashboard[];
   availableCourses: ICourseDashboard[];
+  availableCoursesHolder: ICourseDashboard[];
   searchValue: string;
   fabOpen = false;
 
@@ -34,30 +38,34 @@ export class DashboardTeacherComponent extends DashboardBaseComponent {
 
   ngOnInit() {
     this.searchValue = '';
+    this.myCoursesHolder = [];
+    this.availableCoursesHolder = [];
+    this.furtherCoursesHolder = [];
+    this.inactiveCoursesHolder = [];
   }
 
-  async filterCourses(event: any) {
+  async getInput(event: any) {
+    if (this.myCoursesHolder.length === 0) {
+      this.myCoursesHolder = this.myCourses;
+    }
+    if (this.availableCoursesHolder.length === 0) {
+      this.availableCoursesHolder = this.availableCourses;
+    }
+    if (this.furtherCoursesHolder.length === 0) {
+      this.furtherCoursesHolder = this.furtherCourses;
+    }
+    if (this.inactiveCoursesHolder.length === 0) {
+      this.inactiveCoursesHolder = this.inactiveCourses;
+    }
+    const searchValue = event.target.value.toLowerCase();
     this.myCourses = [];
     this.availableCourses = [];
     this.furtherCourses = [];
     this.inactiveCourses = [];
-    this.searchValue = event.target.value.toLowerCase();
-    for (const course of this.allCourses) {
-      const temp = course.name.toLowerCase();
-      if (temp.includes(this.searchValue)) {
-        if (course.userIsCourseAdmin || course.userIsCourseTeacher) {
-          if (!course.active) {
-            this.inactiveCourses.push(course);
-          } else if (course.userIsCourseAdmin) {
-            this.myCourses.push(course);
-          } else {
-            this.furtherCourses.push(course);
-          }
-        } else {
-          this.availableCourses.push(course);
-        }
-      }
-    }
+    super.filterCourses(searchValue, this.myCoursesHolder, this.myCourses);
+    super.filterCourses(searchValue, this.availableCoursesHolder, this.availableCourses);
+    super.filterCourses(searchValue, this.furtherCoursesHolder, this.furtherCourses);
+    super.filterCourses(searchValue, this.inactiveCoursesHolder, this.inactiveCourses);
   }
 
   async sortAlphabetically() {
