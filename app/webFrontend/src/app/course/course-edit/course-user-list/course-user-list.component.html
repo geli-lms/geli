@@ -1,5 +1,5 @@
 <mat-form-field class="search">
-  <input matInput placeholder="Search and add {{role}}s by name, Id, e-mail"
+  <input matInput [placeholder]="'course.placeholder.searchAndAdd' | translate"
          [matAutocomplete]="auto" [formControl]="userCtrl" (ngModelOptions)="{debounce : 1000}"
          (ngModelChange)="searchForUsers($event)" [(ngModel)]="search">
 </mat-form-field>
@@ -23,7 +23,7 @@
   <mat-expansion-panel class="panel" [expanded]="true" #expPanel2>
     <mat-expansion-panel-header>
       <mat-panel-title class="title">
-        In course
+        {{ 'course.text.inCourse' | translate }}
       </mat-panel-title>
       <mat-panel-description>
         <p class="line">{{role}}s: {{dragableUsersInCourse.length}} of
@@ -42,7 +42,7 @@
   <mat-expansion-panel class="panel" [expanded]="false" #expPanel1>
     <mat-expansion-panel-header>
       <mat-panel-title class="title">
-        Not in course
+        {{ 'course.text.notInCourse' | translate }}
       </mat-panel-title>
       <mat-panel-description>
         <p class="line">{{role}}s: {{dragableUsers.length}} of {{usersTotal}}</p>

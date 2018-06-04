@@ -2,9 +2,9 @@
   <mat-tab label="Write">
     <p class="info-text">
       <mat-icon>info</mat-icon>
-      Add Markdown to add text to this Course.
-      A Cheatsheet you can find
-      <a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet" target="_blank">here</a>.
+      {{ 'course.text.addMarkdownToCourse' | translate }}
+      {{ 'common.cheatSheetYouFind' | translate }}
+      <a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet" target="_blank">{{ 'common.here' | translate }}</a>.
     </p>
 
     <ace-editor formControlName="markdown" #editor

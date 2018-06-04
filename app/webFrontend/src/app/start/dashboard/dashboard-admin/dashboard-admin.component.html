@@ -7,5 +7,5 @@
 <app-mat-fab-menu class="add-course-fab" [open]="fabOpen" [onClick]="onFabClick"
                   [fabTooltip]="'dashboard.addCourse'|translate">
   <div (click)="onImportCourse()">{{ 'dashboard.importCourse'|translate }}</div>
-  <div routerLink="course/new">{{ 'dashboard.createCourse'|translate }}</div>
+  <div (click)="createCourse()">{{ 'dashboard.createCourse'|translate }}</div>
 </app-mat-fab-menu>
