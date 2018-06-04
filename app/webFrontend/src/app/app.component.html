@@ -16,8 +16,6 @@
 
       <span *ngIf="isLoggedIn()">
         <button mat-button routerLink="/profile">
-          <!--<span class="user-icon" user-image [user-image]="this.userService.user" [size]="'30px'"></span>-->
-          <!--<img class="avatar" src="{{this.chooseUserPicture(30)}}" width="30" height="30">-->
           <img *ngIf="this.actualProfilePicturePath == '' || this.actualProfilePicturePath == null; else elseBlock"
                class="avatar" src="{{this.userService.user.getGravatarURL(30)}}" width="30" height="30">
           <ng-template #elseBlock>
