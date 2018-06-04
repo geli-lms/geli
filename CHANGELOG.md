@@ -10,7 +10,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ################################################################################
 -->
 
-## [NEXT] 
+## [NEXT]
+### Added
+- Added more EN/DE translation [#753](https://github.com/utetrapp/geli/issues/753)
+ 
 ### Changed
 - rework existing translation
 - add vars to html-files

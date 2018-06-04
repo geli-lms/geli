@@ -112,10 +112,10 @@
     "statistics": "Statistik",
     "submit": "Absenden",
     "teachers" : "Lehrer",
-    "theme": "Thema",
+    "theme": "Design",
     "tooltip": {
       "quitFullscreenMode": "Vollbildmodus beenden",
-      "downloadUnit": "Diese Einheit downloaden",
+      "downloadUnit": "Diese Lerneinheit downloaden",
       "clickToOpen": "Auf-/ zuklappen"
     },
     "upload": "hochladen",
@@ -163,7 +163,7 @@
         "accesskey": "Einschreibeschlüssel",
         "whitelist": "Whitelist"
       },
-      "uploadWhitelist": "Laden Sie Ihre OBS-csv-Datei mit Ihren Kursteilnehmern hoch, um sie auf die Freigabeliste zu setzen.<br />Alte Freigabelisten-Benutzer werden durch Hochladen einer neuen Datei entfernt.",
+      "uploadWhitelist": "Laden Sie Ihre OBS-csv-Datei mit Ihren Kursteilnehmern hoch, um sie auf die Freigabeliste zu setzen. Alte Freigabelisten-Benutzer werden durch Hochladen einer neuen Datei entfernt.",
       "userResults": "Benutzerergebnisse",
       "yourCourseProgress": "Ihr Kursfortschritt",
       "whitelist": "Freigabeliste"
@@ -229,11 +229,11 @@
       "noLecture": "Noch kein Kapitel hinzugefügt."
     },
     "tooltip": {
-      "add": "Einheit hinzufügen",
-      "delete": "Einheit löschen",
-      "download": "Einheit downloaden",
+      "add": "Lerneinheit hinzufügen",
+      "delete": "Lerneinheit löschen",
+      "download": "Lerneinheit downloaden",
       "duplicate": "Kapitel kopieren",
-      "edit": "Einheit bearbeiten"
+      "edit": "Lerneinheit bearbeiten"
     },
     "action": {
       "Add": "Hinzufügen",
@@ -270,11 +270,11 @@
     "addCodeKata": "Code-Kata hinzufügen",
     "addContent": "Inhalt hinzufügen",
     "addFiles": "Dateien hinzufügen",
-    "addFilesToUnit": "Dateien zur Einheit hinzufügen",
+    "addFilesToUnit": "Dateien zur Lerneinheit hinzufügen",
     "addFreeText": "Freitext hinzufügen",
     "addTasks": "Aufgaben hinzufügen",
     "addVideos": "Videos hinzufügen",
-    "import": "Einheit importieren",
+    "import": "Lerneinheit importieren",
     "placeholder": {
       "enterAnswer": "Antwort hier eintragen*",
       "enterQuestion": "Frage hier eintragen*",
@@ -284,7 +284,7 @@
       "addAnswer": "Antwort hinzufügen",
       "addQuestion": "Frage hinzufügen",
       "canBeSeenByStudents": "Eihnheit ist für Studenten sichtbar.",
-      "canNotBeSeenByStudents": "Einheit ist für Studenten nicht sichtbar.",
+      "canNotBeSeenByStudents": "Lerneinheit ist für Studenten nicht sichtbar.",
       "changedOn": "Geändert am",
       "fullscreen": "Vollbild",
       "hintAddQuestionAndAnswers": "Fragen mit beliebiger Anzahl an möglichen Antowrten hinzufügen. Richtige Antwort(en) mit Hilfe der checkbox markieren.",
@@ -294,15 +294,15 @@
       "tasks": "Aufgaben"
     },
     "tooltip": {
-      "add": "Einheit hinzufügen",
-      "delete": "Einheit löschen",
+      "add": "Lerneinheit hinzufügen",
+      "delete": "Lerneinheit löschen",
       "deleteAnswer": "Antwort löschen",
       "deleteQuestion": "Frage löschen",
       "deleteTask" : "Aufgabe löschen",
-      "download": "Diese Einheit downloaden",
-      "downloadUnits": "Einheiten downloaden",
-      "duplicate": "Diese Einheit kopieren",
-      "edit": "Einheit bearbeiten"
+      "download": "Diese Lerneinheit downloaden",
+      "downloadUnits": "Lerneinheiten downloaden",
+      "duplicate": "Diese Lerneinheit kopieren",
+      "edit": "Lerneinheit bearbeiten"
     }
   },
   "user": {
