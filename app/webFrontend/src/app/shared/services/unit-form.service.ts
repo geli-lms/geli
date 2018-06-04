@@ -30,7 +30,7 @@ export class UnitFormService {
    */
   public beforeSubmit: () => Promise<boolean>;
 
-  constructor (private formBuilder: FormBuilder,
+  constructor(private formBuilder: FormBuilder,
               private freeTextUnitService: FreeTextUnitService,
               private unitService: UnitService,
               private snackbar: SnackBarService,
@@ -47,7 +47,7 @@ export class UnitFormService {
     this.unitInfoText = null;
   }
 
-  async save(onDone: () => void ) {
+  async save(onDone: () => void) {
 
     // call beforeSubmit from Unit
     if (this.beforeSubmit) {
@@ -98,20 +98,20 @@ export class UnitFormService {
 
       // call callback function
       onDone();
-
       // create notification
-      this.notificationService.createItem(
-        {
-          changedCourse: this.course,
-          changedLecture: this.lecture._id,
-          changedUnit: responseUnit,
-          text: notifyMessage
-        });
-
+      if (this.model.visible) {
+        this.notificationService.createItem(
+          {
+            changedCourse: this.course,
+            changedLecture: this.lecture._id,
+            changedUnit: responseUnit,
+            text: notifyMessage
+          });
+      }
     } catch (err) {
       const snackErrMessage = `Couldn't ${isUpdate ? 'update' : 'create'} Unit '${this.model.name ? `'${this.model.name}'` : ''}'`;
 
       this.snackbar.openShort(snackErrMessage);
-      }
+    }
   }
 }
