@@ -26,7 +26,7 @@ export class DashboardStudentComponent extends DashboardBaseComponent {
   }
 
   ngOnInit() {
-    this.searchValue = "";
+    this.searchValue = '';
     this.myCoursesHolder = [];
     this.availableCoursesHolder = [];
   }
