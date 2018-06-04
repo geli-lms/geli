@@ -7,15 +7,12 @@ import {
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import {Unit, FreeTextUnit, CodeKataUnit, TaskUnit} from '../models/units/Unit';
 import {IDownload} from '../../../shared/models/IDownload';
-import {IFreeTextUnit} from '../../../shared/models/units/IFreeTextUnit';
-import {ITaskUnit} from '../../../shared/models/units/ITaskUnit';
-import {ICodeKataUnit} from '../../../shared/models/units/ICodeKataUnit';
 import {IFileUnit} from '../../../shared/models/units/IFileUnit';
 import {Lecture} from '../models/Lecture';
 import {IUser} from '../../../shared/models/IUser';
 import {Course} from '../models/Course';
 import config from '../config/main';
-import * as html2pdf from '../assets/html2pdfmake/html2pdfmake.js';
+
 
 const fs = require('fs');
 const archiver = require('archiver');
@@ -25,19 +22,8 @@ import {File} from '../models/mediaManager/File';
 
 
 const cache = require('node-file-cache').create({life: config.timeToLiveCacheValue});
-const PDFMake = require('pdfmake');
-const pdfMakePrinter = require('pdfmake/src/printer');
+const pdf =  require('html-pdf');
 
-const fonts = {
-  Roboto: {
-    normal: 'src/assets/fonts/Roboto-Regular.ttf',
-    bold: 'src/assets/fonts/Roboto-Medium.ttf',
-    italics: 'src/assets/fonts/Roboto-Italic.ttf',
-    bolditalics: 'src/assets/fonts/Roboto-MediumItalic.ttf'
-  }
-};
-
-const printer = new pdfMakePrinter(fonts);
 const PDFtempPath = config.tmpFileCacheFolder + '/temp.pdf';
 
 // Set all routes which should use json to json, the standard is blob streaming data
@@ -306,47 +292,25 @@ export class DownloadController {
               }
             } else {
 
-              const docDefinition = {
-                header: {
-                  margin: 10,
-                  columns: [
-                    {
-                      image: 'src/assets/logo/geli-logo.png',
-                      width: 20,
-                      alignment: 'left'
-                    },
-                    {
 
-                      margin: [10, 0, 0,0],
-                      text: 'Geli LMS',
-                      alignment: 'center'
-                    }
-                  ]
-                },
-                pageMargins: [40, 80, 40, 60],
-                footer: function(page: any, pages: any) {
-                  return {
-                    columns: [
-                      {
-                        alignment: 'center',
-                        text: [
-                          { text: page.toString()},
-                          ' of ',
-                          { text: pages.toString()}
-                        ]
-                      }
-                    ],
-                    margin: [10, 0]
-                  };
-                },
-                content: [
-                  localUnit.toFile(),
-                ]
+
+
+
+              const options = {
+                format: 'A4',
+                'footer': {
+                  'height': '28mm',
+                  'contents': {
+                    default: '<div style="text-align: center;">{{page}}/{{pages}}</div>'
+                  }}
               };
 
-              await this.savePdfToFile(docDefinition, PDFtempPath);
+              const html = localUnit.toHtmlForPdf();
               const name = lecCounter + '_' + lcName + '/' + unitCounter + '_' + this.replaceCharInFilename(localUnit.name) + '.pdf';
-              await this.appendToArchive(archive, name, PDFtempPath);
+              await this.savePdfToFile(html,options,PDFtempPath);
+
+              await this.appendToArchive(archive,name,PDFtempPath,hash);
+
 
             }
             unitCounter++;
@@ -368,35 +332,22 @@ export class DownloadController {
     }
   }
 
-  private savePdfToFile(docDefinition: any, path: String ): Promise<void> {
+  private savePdfToFile(html: any, options:any, path: String ): Promise<void> {
     return new Promise<void>((resolve, reject) => {
-      const doc = printer.createPdfKitDocument(docDefinition);
-      // To determine when the PDF has finished being written successfully
-      // we need to confirm the following 2 conditions:
-      //
-      //   1. The write stream has been closed
-      //   2. PDFDocument.end() was called syncronously without an error being thrown
-      let pendingStepCount = 2;
-      const stepFinished = () => {
-        if (--pendingStepCount === 0) {
-          resolve();
-        }
-      };
 
-      const writeStream = fs.createWriteStream(path);
-      writeStream.on('close', stepFinished);
-      doc.pipe(writeStream);
+      pdf.create(html, options).toFile(PDFtempPath, async function(err: any, res: any) {
+        if (err) { reject(err); }
+        resolve();
+      });
 
-      doc.end();
-
-      stepFinished();
     });
   }
 
-  private appendToArchive(archive: any, name: String, path: String) {
+  private appendToArchive(archive: any, name: String, path: String,hash: any) {
     return new Promise<void>((resolve, reject) => {
       archive.on('entry', () => {
         resolve(); });
+      archive.on('error', () => reject(hash));
       archive.file(path,
         {name: name});
     });
