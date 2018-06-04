@@ -32,7 +32,8 @@ export class User implements IUser {
 
     getUserImageURL(size: number = 80) {
         if (this.profile && this.profile.picture) {
-            return 'api/uploads/users/' + this.profile.picture.name;
+            // FIXME probably shouldn't change this re. the 'api/' path prefix?
+            return 'uploads/users/' + this.profile.picture.name;
         } else {
             return this.getGravatarURL(size);
         }
