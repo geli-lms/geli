@@ -1,8 +1,9 @@
 import {Directive, HostBinding, Input, OnInit, SimpleChange} from '@angular/core';
 import {DomSanitizer, SafeStyle} from '@angular/platform-browser';
-import {User} from '../../models/User';
 import {IUser} from '../../../../../../shared/models/IUser';
 import {BackendService} from '../services/backend.service';
+
+const md5 = require('blueimp-md5');
 
 @Directive({selector: '[user-image]'})
 export class UserImageDirective implements OnInit {
@@ -34,30 +35,45 @@ export class UserImageDirective implements OnInit {
         this[propName] = changedProp.currentValue;
       }
     }
-    await this.getImage();
+    await this.updateImage();
   }
 
   async ngOnInit() {
-    await this.getImage();
+    await this.updateImage();
   }
 
   ngOnDestroy() {
     URL.revokeObjectURL(this.objectUrl);
   }
 
-  async getImage() {
-    // FIXME maybe refactor this 'if' to an early exit?
+  getGravatarURL(size: number = 80) {
+      // Gravatar wants us to hash the email (for site to site consistency),
+      // - see https://en.gravatar.com/site/implement/hash/ -
+      // but we don't do that (anymore) for the sake of security & privacy.
+      return `https://www.gravatar.com/avatar/${md5(this.user._id)}.jpg?s=${size}&d=retro`;
+  }
+
+  async getUserImageURL(size: number = 80) {
+    const profile = this.user.profile;
+    if (profile && profile.picture) {
+      const urlPart = 'uploads/users/' + profile.picture.name;
+      const response = await this.backendService.getDownload(urlPart).toPromise();
+      URL.revokeObjectURL(this.objectUrl);
+      this.objectUrl = URL.createObjectURL(response.body);
+      return this.objectUrl;
+    } else {
+      return this.getGravatarURL(size);
+    }
+  }
+
+  async updateImage() {
     if (this.user) {
-      // FIXME is the following line actually required?
-      const user = new User(this.user);
       this.width = this.size;
       this.height = this.size;
       this.borderRadius = '50%';
-      const response = await this.backendService.getDownload(user.getUserImageURL()).toPromise();
-      // FIXME response error handling?
-      URL.revokeObjectURL(this.objectUrl);
-      this.objectUrl = URL.createObjectURL(response.body);
-      this.backgroundImage = this.domSanitizer.bypassSecurityTrustStyle(`url(${this.objectUrl})`);
+      // FIXME: Supply the image pixel size to getUserImage for the gravatar path.
+      const url = await this.getUserImageURL();
+      this.backgroundImage = this.domSanitizer.bypassSecurityTrustStyle(`url(${url})`);
     }
   }
 

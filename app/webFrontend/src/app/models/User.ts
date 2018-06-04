@@ -3,6 +3,9 @@ import {IFile} from '../../../../../shared/models/IFile';
 
 const md5 = require('blueimp-md5');
 
+// FIXME It appears that this class may now be superfluous and occurrences could be replaced with IUser.
+// More precisely getUserImageURL / getGravatarURL are now unused, which amount to 100% of this class's functionality if I am not mistaken.
+// Alternatively only these methods might be removed, since replacing the class with IUser would imply pervasive refactoring.
 export class User implements IUser {
     _id: any;
     uid: any;
