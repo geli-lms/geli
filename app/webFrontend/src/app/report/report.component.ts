@@ -70,9 +70,9 @@ export class ReportComponent implements OnInit {
     return tasks;
   }
   private generateCsvHeader(tasks: any[]) {
-    let header = 'Matrikelnummer;';
-    header += 'Nachname;';
-    header += 'Vorname;';
+    let header = 'User ID;';
+    header += 'lastName;';
+    header += 'firstName;';
     let counter = 1;
     tasks.forEach(task => {
       header += counter + '.name;';
@@ -83,7 +83,7 @@ export class ReportComponent implements OnInit {
       }
       counter++;
     });
-    header += 'ENDERGEBNIS;\n';
+    header += 'Result;\n';
     return header;
   }
   private generateCsvContent(reports: any[], units: any[], header: string) {

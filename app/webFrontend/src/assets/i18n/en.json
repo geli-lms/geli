@@ -76,6 +76,15 @@
     "reportTitle": "Report for",
     "overview": "Overview",
     "userResults": "User Results",
-    "export2Csv": "Export to CSV"
+    "export2Csv": "Export to CSV",
+    "summary": "Summary",
+    "detailsForUnit": "Details for unit",
+    "submissionDetails": "Submission details",
+    "submission": "Submission",
+    "userNoSubmission": "This user has no submissions for this unit",
+    "noStudentsEnrolled": "There are no students enrolled to this course.",
+    "noUnits": "This course contains no progressable units.",
+    "editUnit": "Edit this Unit",
+    "showUnitDetails": "Show unit details"
   }
 }

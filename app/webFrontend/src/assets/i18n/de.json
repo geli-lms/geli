@@ -76,6 +76,15 @@
     "reportTitle": "Bericht für",
     "overview": "Übersicht",
     "userResults": "Benutzer-Ergebnisse",
-    "export2Csv": "Als CSV exportieren"
+    "export2Csv": "Als CSV exportieren",
+    "summary": "Zusammenfassung",
+    "detailsForUnit": "Informationen zu Unit",
+    "submissionDetails": "Informationen zur Abgabe",
+    "submission": "Abgabe",
+    "userNoSubmission": "Für diesen Benutzer liegen keine Abgaben vor.",
+    "noStudentsEnrolled": "In diesen Kurs sind keine Studenten eingeschrieben.",
+    "noUnits": "In diesem Kurs befinden sich keine Units.",
+    "editUnit": "Unit bearbeiten",
+    "showUnitDetails": "Details zur Unit"
   }
 }

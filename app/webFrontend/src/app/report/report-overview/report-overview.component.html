@@ -17,16 +17,16 @@
       <span>
         <button mat-button class="link" [routerLink]="['unit', unit._id]" routerLinkActive="active">
           <mat-icon>arrow_forward</mat-icon>
-          Show unit details
+          {{'report.showUnitDetails' | translate}}
         </button>
         <button mat-button class="link" (click)="editUnit(lecture._id, unit._id)">
           <mat-icon>mode_edit</mat-icon>
-          Edit this unit
+          {{'report.editUnit' | translate}}
         </button>
       </span>
     </mat-card-actions>
   </mat-card>
 </div>
 <div *ngIf="report?.lectures.length === 0">
-  <p>This course contains no progressable units.</p>
+  <p>{{'report.noUnits' | translate}}</p>
 </div>
