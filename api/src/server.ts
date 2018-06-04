@@ -10,6 +10,7 @@ import * as Raven from 'raven';
 import config from './config/main';
 import passportLoginStrategy from './security/passportLoginStrategy';
 import passportJwtStrategy from './security/passportJwtStrategy';
+import passportJwtMiddleware from './security/passportJwtMiddleware';
 import {RoleAuthorization} from './security/RoleAuthorization';
 import {CurrentUserDecorator} from './security/CurrentUserDecorator';
 import './utilities/FilterErrorHandler';
@@ -54,11 +55,12 @@ export class Server {
       this.app.use(Raven.errorHandler());
     }
 
-    // TODO: Needs authentication in the future
-    this.app.use('/api/uploads', express.static('uploads'));
-
     Server.setupPassport();
     this.app.use(passport.initialize());
+
+    // Requires authentication via the passportJwtMiddleware to accesss the static 'uploads' (e.g. images).
+    // I.e. this is not meant for truly public files!
+    this.app.use('/api/uploads', passportJwtMiddleware, express.static('uploads'));
   }
 
   start() {
