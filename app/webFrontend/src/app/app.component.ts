@@ -62,6 +62,10 @@ export class AppComponent implements OnInit {
 
         this.userService.data.subscribe(actualProfilePicturePath => {
             this.actualProfilePicturePath = actualProfilePicturePath;
+
+            if (this.actualProfilePicturePath === undefined && this.userService.user.profile.picture) {
+                this.actualProfilePicturePath = this.userService.user.profile.picture.path;
+            }
         });
     }
 
