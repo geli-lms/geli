@@ -16,7 +16,7 @@
 
       <span *ngIf="isLoggedIn()">
         <button mat-button routerLink="/profile">
-          <img class="avatar" src="{{userService.user.getUserImageURL(30)}}" width="30" height="30"> <!-- FIXME remove/replace -->
+          <!-- <img class="avatar" src="{{userService.user.getUserImageURL(30)}}" width="30" height="30"> --> <!-- FIXME remove/replace -->
           <span class="avatar" [user-image]="userService.user" [size]="'30px'"></span>
           <span class="firstname-wrapper">{{ this.userService.user.profile.firstName }}</span>
         </button>
