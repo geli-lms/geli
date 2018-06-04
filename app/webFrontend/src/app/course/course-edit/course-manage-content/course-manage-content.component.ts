@@ -20,8 +20,6 @@ import {Notification} from '../../../models/Notification';
 export class CourseManageContentComponent implements OnInit, OnDestroy {
   course: ICourse;
 
-  fabOpen = false;
-
   onCloseAllForms = new Subject();
   onReloadCourse = new Subject();
 
@@ -232,8 +230,9 @@ export class CourseManageContentComponent implements OnInit, OnDestroy {
   onAddLecture() {
     this.onCloseAllForms.next();
     this.dataSharingService.setDataForKey('openLectureId', null);
-
     this.dataSharingService.setDataForKey('lecture-create-mode', true);
+
+    this.onCloseAllForms.next();
     this.route.url.subscribe(segments => {
       let path = segments.map(() => '../').join('') || '';
       path += 'lecture/add';
@@ -241,27 +240,14 @@ export class CourseManageContentComponent implements OnInit, OnDestroy {
     });
   }
 
-  onImportUnit = () => {
-    const openLectureId = this.dataSharingService.getDataForKey('openLectureId');
-    this.dialogService
-      .chooseFile('Choose a unit.json to import',
-        '/api/import/unit/' + this.course._id + '/' + openLectureId)
-      .subscribe(async res => {
-        if (res.success) {
-          this.reloadCourse();
-          // This does not work as expected
-          const lecture = res.result;
-          this.dataSharingService.setDataForKey('openLectureId', lecture._id);
-          this.dataSharingService.setDataForKey('lecture-edit-mode', true);
-          this.snackBar.open('Unit successfully imported', '', {duration: 3000});
-        } else if (res.result) {
-          this.snackBar.open(res.error.message, '', {duration: 3000});
-        }
-      });
-  }
-
   closeAddLecture = () => {
+    this.onCloseAllForms.next();
     this.dataSharingService.setDataForKey('lecture-create-mode', false);
+    this.route.url.subscribe(segments => {
+      let path = segments.map(() => '../').join('') || '';
+      path += this.course._id;
+      this.router.navigate([path], {relativeTo: this.route});
+    });
   }
 
   private closeAllForms() {

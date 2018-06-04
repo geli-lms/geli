@@ -28,7 +28,8 @@ export class LectureFormComponent implements OnInit {
 
   lectureForm: FormGroup;
 
-  constructor(private formBuilder: FormBuilder,
+  constructor(
+  private formBuilder: FormBuilder,
               private dataSharingService: DataSharingService,
               private dialogService: DialogService,
               private snackBar: MatSnackBar) {

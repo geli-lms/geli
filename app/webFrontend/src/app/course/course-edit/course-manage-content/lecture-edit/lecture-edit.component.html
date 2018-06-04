@@ -108,7 +108,7 @@
         </app-unit-form>
       </div>
 
-      <p *ngIf="!lecture.units.length || !getDataForKey('unit-create-mode')">No units added yet.</p>
+      <p *ngIf="!lecture.units.length && !getDataForKey('unit-create-mode')">No units added yet.</p>
     </div>
 
     <app-unit-form *ngIf="getDataForKey('unit-create-mode') && getDataForKey('unit-create-type')"

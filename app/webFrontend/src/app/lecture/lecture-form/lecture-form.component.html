@@ -9,7 +9,7 @@
 
   <p>
     <button mat-raised-button [disabled]="!lectureForm.valid" color="primary" type="submit">{{ actionLabel }}</button>
-    <button mat-raised-button (click)="onCancel()">Cancel</button>
+    <button mat-raised-button type="reset" (click)="onCancel">Cancel</button>
   </p>
 </form>
 <button mat-raised-button (click)="onImportLecture()">Import Lecture</button>

@@ -7,7 +7,7 @@
     </app-lecture-edit>
   </div>
 
-  <p *ngIf="!course.lectures.length">No lectures added yet.</p>
+  <p *ngIf="!course.lectures.length && !this.dataSharingService.getDataForKey('lecture-create-mode')">No lectures added yet.</p>
 
   <app-lecture-form *ngIf="isInMode('lecture', 'create')" (onSubmit)="createLecture($event)" [onCancel]="closeAddLecture"
                     actionLabel="Add"></app-lecture-form>
