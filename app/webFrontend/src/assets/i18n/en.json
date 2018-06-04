@@ -259,6 +259,9 @@
       "noNotifications": "You have no notifications"
     }
   },
+  "report": {
+    "exportToCsv": "Export to CSV"
+  },
   "sort": {
     "alphabetically": "alphabetically",
     "lastVisited": "last visited",
