@@ -3,8 +3,8 @@ import {DashboardBaseComponent} from '../dashboard-base-component';
 import {SnackBarService} from '../../../shared/services/snack-bar.service';
 import {DialogService} from '../../../shared/services/dialog.service';
 import {Router} from '@angular/router';
-import {SortUtil} from "../../../shared/utils/SortUtil";
-import {ICourseDashboard} from "../../../../../../../shared/models/ICourseDashboard";
+import {SortUtil} from '../../../shared/utils/SortUtil';
+import {ICourseDashboard} from '../../../../../../../shared/models/ICourseDashboard';
 import {CourseNewComponent} from '../../../course/course-new/course-new.component';
 import {MatDialog} from '@angular/material';
 
