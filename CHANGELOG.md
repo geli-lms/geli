@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [NEXT]
 ### Added
 - Added more EN/DE translation [#753](https://github.com/utetrapp/geli/issues/753)
+- Added service for FileIcon [#607](https://github.com/utetrapp/geli/issues/607)
  
 ### Changed
 - rework existing translation
