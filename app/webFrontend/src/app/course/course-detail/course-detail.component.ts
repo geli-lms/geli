@@ -1,3 +1,4 @@
+import {AfterViewInit, Component, OnDestroy, OnInit} from '@angular/core';
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import 'rxjs/add/operator/switchMap';
@@ -6,11 +7,10 @@ import {ICourse} from '../../../../../../shared/models/ICourse';
 import {UserService} from '../../shared/services/user.service';
 import {User} from '../../models/User';
 import {MatSnackBar, MatDialog} from '@angular/material';
-import {SnackBarService} from '../../shared/services/snack-bar.service';
-import {DownloadCourseDialogComponent} from './download-course-dialog/download-course-dialog.component';
 import {TitleService} from '../../shared/services/title.service';
 import {LastVisitedCourseContainerUpdater} from '../../shared/utils/LastVisitedCourseContainerUpdater';
 import {DialogService} from '../../shared/services/dialog.service';
+import {DataSharingService} from '../../shared/services/data-sharing.service';
 import {ChatNameInputComponent} from '../../shared/components/chat-name-input/chat-name-input.component';
 import {ChatService} from '../../shared/services/chat.service';
 
@@ -20,10 +20,16 @@ import {ChatService} from '../../shared/services/chat.service';
   templateUrl: './course-detail.component.html',
   styleUrls: ['./course-detail.component.scss']
 })
-export class CourseDetailComponent implements OnInit {
+export class CourseDetailComponent implements OnInit, OnDestroy {
 
   course: ICourse;
   id: string;
+  tabs = [
+    {path: 'overview', label: 'Overview', img: 'school'},
+    {path: 'fileview', label: 'Files', img: 'insert_drive_file'},
+    {path: 'videoview', label: 'Videos', img: 'video_library'},
+    {path: 'download', label: 'Download', img: 'get_app'}
+  ];
   showChat = false;
   chatName: string;
 
@@ -31,15 +37,22 @@ export class CourseDetailComponent implements OnInit {
               private route: ActivatedRoute,
               private courseService: CourseService,
               public userService: UserService,
-              private snackBar: SnackBarService,
+              private snackBar: MatSnackBar,
               private dialog: MatDialog,
               private titleService: TitleService,
               private userDataService: UserDataService,
+              private dialogService: DialogService,
+              private dataSharingService: DataSharingService) {
               private dialogService: DialogService,
               private chatService: ChatService) {
   }
 
   ngOnInit() {
+    const data: any = this.route.snapshot.data;
+    this.course = <ICourse> data.course;
+    this.id = this.course._id;
+    LastVisitedCourseContainerUpdater.addCourseToLastVisitedCourses(this.id, this.userService, this.userDataService);
+    this.titleService.setTitleCut(['Course: ', this.course.name]);
     this.route.params.subscribe(params => {
       this.id = decodeURIComponent(params['id']);
     });
@@ -77,6 +90,9 @@ export class CourseDetailComponent implements OnInit {
     this.dialogService.userProfile(teacher);
   }
 
+  ngOnDestroy() {
+    this.dataSharingService.deleteDataForKey('course');
+  }
   /**
    * show or hide the chat
    */
