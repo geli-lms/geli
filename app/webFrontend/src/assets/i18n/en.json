@@ -212,7 +212,7 @@
       "noVideo": "No video available.",
       "noFiles" : "No files available.",
       "progress": "Progress",
-      "RemoveFromQueue": "Remove file from queue.",
+      "removeFromQueue": "Remove file from queue.",
       "takePicture": "Take picture"
     },
     "tooltip":{
