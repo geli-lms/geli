@@ -721,6 +721,13 @@ export class CourseController {
       fs.mkdirSync(destination);
     }
 
+    // Remove the old picture if the course already has one.
+    const course = await Course.findById(id);
+    if (course.image) {
+      const picture = await Picture.findById(course.image);
+      await picture.remove();
+    }
+
     await ResponsiveImageService.generateResponsiveImages(file, responsiveImageData);
 
     const image: any = new Picture({

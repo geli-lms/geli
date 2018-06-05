@@ -49,6 +49,20 @@ fileSchema.pre('remove', async function() {
     if (fs.existsSync(localFile.physicalPath)) {
       await promisify(fs.unlink)(localFile.physicalPath);
     }
+
+    if ((<any>this).__t === 'Picture') {
+      const localPicture = <IPictureModel><any>this;
+      if (localPicture.breakpoints) {
+        for (const breakpoint of localPicture.breakpoints) {
+          if (breakpoint.pathToImage && breakpoint.pathToImage !== '-'
+            && fs.existsSync(breakpoint.pathToImage)) {
+
+            await promisify(fs.unlink)(breakpoint.pathToImage);
+          }
+        }
+      }
+    }
+
     const units2Check: IFileUnitModel[] = <IFileUnitModel[]> await FileUnit.find({files: {$in: [localFile._id]}});
     Promise.all(units2Check.map(async unit => {
       const index = unit.files.indexOf(localFile._id);
