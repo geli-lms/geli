@@ -1,5 +1,4 @@
-import {AfterViewInit, Component, OnDestroy, OnInit} from '@angular/core';
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import 'rxjs/add/operator/switchMap';
 import {CourseService, UserDataService} from '../../shared/services/data.service';
@@ -13,6 +12,7 @@ import {DialogService} from '../../shared/services/dialog.service';
 import {DataSharingService} from '../../shared/services/data-sharing.service';
 import {ChatNameInputComponent} from '../../shared/components/chat-name-input/chat-name-input.component';
 import {ChatService} from '../../shared/services/chat.service';
+import {DownloadCourseDialogComponent} from './download-course-dialog/download-course-dialog.component';
 
 
 @Component({
@@ -42,10 +42,8 @@ export class CourseDetailComponent implements OnInit, OnDestroy {
               private titleService: TitleService,
               private userDataService: UserDataService,
               private dialogService: DialogService,
-              private dataSharingService: DataSharingService) {
-              private dialogService: DialogService,
-              private chatService: ChatService) {
-  }
+              private dataSharingService: DataSharingService,
+              private chatService: ChatService) {}
 
   ngOnInit() {
     const data: any = this.route.snapshot.data;
