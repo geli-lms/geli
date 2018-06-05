@@ -1,7 +1,4 @@
-<li class="msg" [ngClass]="{
-       'send':  ( mode === 'chat'&& message.author._id === userService.user._id),
-       'replies':  (mode === 'chat' && message.author._id !== userService.user._id)
-      }">
+<li class="msg">
   <div class="author">{{message.chatName}}</div>
   <div class="content">
     <div [innerHtml]="sanitizer.bypassSecurityTrustHtml(markdownService.render(message.content))"></div>

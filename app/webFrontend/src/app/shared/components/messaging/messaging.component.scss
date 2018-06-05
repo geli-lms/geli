@@ -3,6 +3,8 @@
 .chat-container {
   position: relative;
   height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .chat-input {
@@ -14,11 +16,13 @@
 }
 
 .chat-footer-container {
-  padding: 5px;
+  flex-grow: 1;
+  max-height: 45%;
+  overflow-y: scroll;
 }
 
 .messages {
-  height: 80%;
+  height: 90%;
   overflow-y: scroll
 }
 
@@ -27,63 +31,9 @@
   display: flex;
   flex-direction: column;
   padding-left: 0px;
+  margin: 10px 10px;
   li {
     display: flex;
     flex-direction: column;
   }
 }
-
-
-
-.msg {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  padding: 0 7px;
-  .author {
-    font-size: 0.8em;
-    color: grey;
-  }
-  .content {
-    background-color: #e9ebee;
-    overflow-wrap: break-word;
-    border-radius: 7px;
-    max-width: inherit;
-    word-wrap: break-word;
-  }
-}
-
-
-.send{
-  align-self: flex-end;
-  margin-right: 5px;
-  margin-left: 15px;
-  .author {
-    text-align: right;
-  }
-  .content{
-    align-self: flex-end;
-    background-color: #e8eaf6;
-  }
-}
-
-.replies {
-  align-self: flex-start;
-  margin-left: 5px;
-  margin-right: 15px;
-  .content{
-    align-self: flex-start;
-    background-color: #e9ebee;
-    text-align: left;
-  }
-
-}
-.msg-created-at {
-  font-size: 0.7em;
-  color: gray;
-}
-
-.message-input-field{
-  width: 100%;
-}
-

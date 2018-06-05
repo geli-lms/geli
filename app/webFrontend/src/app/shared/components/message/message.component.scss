@@ -3,39 +3,29 @@
 }
 
 
-.messages ul {
-  list-style-type: none;
-  display: flex;
-  flex-direction: column;
-  padding-left: 0px;
-  li {
-    display: flex;
-    flex-direction: column;
-  }
-}
-
-
-
 .msg {
   display: flex;
   flex-direction: column;
   width: 100%;
-  padding: 0 7px;
   .author {
     font-size: 0.8em;
     color: grey;
   }
   .content {
-    background-color: #e9ebee;
+    background-color: #e8eaf6;
     overflow-wrap: break-word;
     border-radius: 7px;
     max-width: inherit;
     word-wrap: break-word;
+    align-self: flex-start;
+    text-align: left;
+    padding: 0 10px;
+    width: 100%;
   }
 }
 
 
-.send{
+/*.send{
   align-self: flex-end;
   margin-right: 5px;
   margin-left: 15px;
@@ -58,7 +48,7 @@
     text-align: left;
   }
 
-}
+}*/
 .msg-created-at {
   font-size: 0.7em;
   color: gray;

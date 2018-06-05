@@ -1,3 +1,7 @@
+@import '../../../variables';
+
+$chat-header-height : 40px;
+
 .download-button {
   float: right;
 }
@@ -97,13 +101,13 @@
 
 
 .chat-top-bar {
-  background-color: #3f51b5; //TODO: use color variable
+  background-color: #3f51b5;
   display: flex;
   align-items: center;
   width: 100%;
   border-radius: 8px 8px 0 0;
   border-color: #3f51b5;
-  height: 40px;
+  height: $chat-header-height;
   color: white;
 }
 
@@ -119,8 +123,9 @@
   height: 100%;
 }
 
-
-// TODO: put the keyframes in a file
+.messaging-container {
+  height: calc(100% - #{$chat-header-height});
+}
 
 @-webkit-keyframes fadeInUp {
   from {
