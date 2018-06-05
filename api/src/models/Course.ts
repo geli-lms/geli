@@ -15,6 +15,7 @@ import {extractMongoId} from '../utilities/ExtractMongoId';
 import {Picture} from './mediaManager/File';
 import {IPictureModel} from './mediaManager/Picture';
 import {IPicture} from '../../../shared/models/mediaManager/IPicture';
+import * as fs from "fs";
 
 interface ICourseModel extends ICourse, mongoose.Document {
   exportJSON: (sanitize?: boolean) => Promise<ICourse>;
@@ -130,10 +131,20 @@ courseSchema.pre('remove', async function () {
       await lecDoc.remove();
     }
 
-    // TODO: remove course image.
+    if (localCourse.image) {
+        const picture: any = await Picture.findById(localCourse.image);
+        if (picture.physicalPath !== '-'
+          && fs.existsSync(picture.physicalPath)) {
+            fs.unlinkSync(picture.physicalPath);
+        }
 
-
-
+        for (const breakpoint of picture.breakpoints) {
+          if (breakpoint.physicalPath && breakpoint.physicalPath !== '-'
+            && fs.existsSync(breakpoint.physicalPath)) {
+            fs.unlinkSync(breakpoint.physicalPath);
+          }
+        }
+    }
 
 
   } catch (error) {
@@ -178,8 +189,10 @@ courseSchema.methods.exportJSON = async function (sanitize: boolean = true) {
     }
   }
 
-  const imageId: mongoose.Types.ObjectId = obj.image;
-  obj.image = await Picture.findById(imageId);
+  if (obj.image) {
+    const imageId: mongoose.Types.ObjectId = obj.image;
+    obj.image = await Picture.findById(imageId);
+  }
 
   return obj;
 };

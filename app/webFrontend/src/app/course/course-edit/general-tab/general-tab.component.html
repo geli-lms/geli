@@ -1,5 +1,5 @@
-<div class="row">
-  <div class="col-sm-12 col-md-6">
+<div class="flex-container">
+  <div>
     <form class="course-form" (ngSubmit)="createCourse()">
       <mat-form-field>
         <input async matInput id="name" [placeholder]="'common.name' | translate" [(ngModel)]="course"
@@ -57,9 +57,9 @@
     <button mat-raised-button color="warn" (click)= "deleteCourse()">{{ 'course.delete' | translate }}</button>
 
   </div>
-  <div class="col-md-6">
-    <app-responsive-image *ngIf="this.userImageData" [responsiveImageData]="this.userImageData"></app-responsive-image> <br />
 
+  <div class="course-image-upload">
+    <app-responsive-image *ngIf="this.userImageData" [responsiveImageData]="this.userImageData"></app-responsive-image> <br />
     <button mat-raised-button color="primary" class="mat-button" (click)="openImageChooserDialog()">Choose Image</button>
   </div>
 </div>

@@ -38,6 +38,7 @@ export default class ResponsiveImageService {
 
       const fileNameToSave = filenameWithoutExtension + '_' + breakpoint.screenSize + '.' + extension;
 
+      sharp.cache(false);
       let resizeOptions = sharp(originalFile.path);
       if (breakpoint.imageSize.width && breakpoint.imageSize.height) {
         resizeOptions = resizeOptions.resize(breakpoint.imageSize.width, breakpoint.imageSize.height);

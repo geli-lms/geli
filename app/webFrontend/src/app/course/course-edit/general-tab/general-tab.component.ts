@@ -71,10 +71,10 @@ export class GeneralTabComponent implements OnInit {
       this.courseService.readCourseToEdit(this.id).then(course => {
         this.courseOb = course;
 
-        this.userImageData = {
+        this.userImageData = course.image ? {
             breakpoints: course.image.breakpoints,
             pathToImage: ''
-        };
+        } : null;
 
 
         this.course = this.courseOb.name;
@@ -143,6 +143,11 @@ export class GeneralTabComponent implements OnInit {
 
     const result = await this.dialogService
       .uploadResponsiveImage('Choose a picture for the course.', apiPath, responsiveImage).toPromise();
+
+    if (result && result.success) {
+      this.userImageData = result.result;
+    } else {
+    }
   }
 
   async createCourse() {
