@@ -4,6 +4,8 @@ import {UserService} from '../../../shared/services/user.service';
 import {DashboardBaseComponent} from '../dashboard-base-component';
 import {SortUtil} from '../../../shared/utils/SortUtil';
 import {TranslateService} from '@ngx-translate/core';
+import {CourseNewComponent} from '../../../course/course-new/course-new.component';
+import {MatDialog} from '@angular/material';
 
 
 @Component({

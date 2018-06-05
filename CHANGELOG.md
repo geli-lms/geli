@@ -10,14 +10,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ################################################################################
 -->
 
-## [NEXT] 
+## [NEXT]
+### Added
+- Added more EN/DE translation [#753](https://github.com/utetrapp/geli/issues/753)
+- Use i18n for new course view [#763](https://github.com/utetrapp/geli/pull/763)
+ 
 ### Changed
 - rework existing translation
 - add vars to html-files
 - add translations to resource files
 - include translation for components
-
-### Changed
 - Migrate MatSnackBar to SnackBarService. [#724](https://github.com/h-da/geli/pull/724)
 - Reload user list after deleting an account. [#724](https://github.com/h-da/geli/pull/724)
 - Validate form before submit when creating a new course. [#724](https://github.com/h-da/geli/pull/724)
@@ -25,7 +27,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Another MatSnackBar to SnackBarService migration. [#730](https://github.com/h-da/geli/pull/730)
 - `getNotificationSettings` does not create new notification settings. [#731](https://github.com/h-da/geli/issues/731)
 - Remove `isCourseTeacherOrAdmin` and `isMemberOfCourse`from UserService. [#731](https://github.com/h-da/geli/issues/731)
-- Refactored save mechanism of unit forms. [#532](https://github.com/h-da/geli/issues/532)
+- Refactored save mechanism of unit edit form. [#532](https://github.com/h-da/geli/issues/532)
+- Moved the 'create course' into a Dialog. [#725](https://github.com/h-da/geli/issues/725)
 
 ### Fixed
 - Fixed broken notification settings. [#731](https://github.com/h-da/geli/issues/731)
@@ -35,6 +38,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [[0.7.0](https://github.com/h-da/geli/releases/tag/v0.7.0)] - 2018-05-05 - SS 18 intermediate Release
 ### Added
+- Added a Dedicated Filefiew and restyled the Course section. [#599] (https://github.com/h-da/geli/issues/599)
 - Added the possibility to sort all courses alphabetically. [#567](https://github.com/h-da/geli/issues/567)
 - Added a box for information on the homescreen. [#216](https://github.com/h-da/geli/issues/216)
 - Added an account activation resend feature. [#601](https://github.com/h-da/geli/issues/601)
@@ -59,6 +63,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Changed the text in download course[#718](https://github.com/h-da/geli/pull/718)
 - Removed firstname from resend activation feature and change button positioning. [#711](https://github.com/h-da/geli/issues/711)
 - Refactored register and resend activation to use geli email validator with top level domain check. [#713](https://github.com/h-da/geli/issues/713)
+- Refactored the uploadform [#693] (https://github.com/h-da/geli/issues/693)
 
 ### Fixed
 - Fixed route `/users/roles` [#204](https://github.com/h-da/geli/issues/204)
