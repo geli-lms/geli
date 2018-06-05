@@ -163,7 +163,7 @@
         "accesskey": "Accesskey",
         "whitelist": "Whitelist"
       },
-      "uploadWhitelist": "Upload your OBS csv file with your course members for whitelisting students.<br />Old whitelist users are removed by uploading a new file.",
+      "uploadWhitelist": "Upload your OBS csv file with your course members for whitelisting students. Old whitelist users are removed by uploading a new file.",
       "userResults": "User results",
       "yourCourseProgress": "Your course progress",
       "whitelist": "Whitelist"
