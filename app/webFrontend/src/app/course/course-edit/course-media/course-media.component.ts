@@ -37,6 +37,7 @@ export class CourseMediaComponent implements OnInit {
    */
   uploadPathTmp = '/api/media/file/';
 
+  allowedMimeTypes: string[];
 
   isDialog: boolean;
 
@@ -60,6 +61,11 @@ export class CourseMediaComponent implements OnInit {
       // either load courseId from Dialog-Data
       this.isDialog = true;
       this.loadData(this.dialogData.courseId);
+
+      if(this.dialogData.allowedMimeTypes){
+        this.allowedMimeTypes = this.dialogData.allowedMimeTypes;
+      }
+
     }else if(this.route.parent.params){
       // or url params
       this.route.parent.params.subscribe(async (params) => {

@@ -48,6 +48,16 @@
 
       </div>
 
+      <div class="container" *ngIf="allowedMimeTypes?.length">
+        <div  class="row">
+          <div><small>Allowed MimeTypes:</small></div>
+          <div><small *ngFor="let type of allowedMimeTypes; let first = first ;let last = last"> {{ type }}{{!last?',':''}}</small></div>
+        </div>
+      </div>
+
+
+
+
       <div class="container" *ngIf="showUpload">
         <div class="row">
           <app-upload-form
@@ -83,6 +93,7 @@
       <div class="file-wrapper" [ngClass]="{'isDialog': isDialog}" *ngIf="!showUpload">
         <ng-container *ngFor="let file of currentFolder?.files">
           <mat-card
+            *ngIf="!allowedMimeTypes || allowedMimeTypes.indexOf(file.mimeType) >= 0"
             [ngClass]="{'small': isDialog, 'card_active':isInSelectedFiles(file), 'card': !isInSelectedFiles(file)}"
             (click)="toggleSelection(file)">
             <div [ngClass]="{'small': isDialog }"  class="icon-wrapper">

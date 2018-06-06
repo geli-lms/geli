@@ -66,13 +66,21 @@ export class FileUnitFormComponent implements OnInit {
 
   async openAddFilesDialog() {
 
+    const allowedMimeTypes = (this.fileUnitType !== 'video') ? undefined : [
+      'video/mp4',
+      'video/webm',
+      'video/ogg',
+      'video/avi',
+    ];
+
     const res = await this.dialog.open(CourseMediaComponent, {
       maxWidth: '90vw',
       maxHeight: '90vh',
       minWidth: '50vw',
       disableClose: true,
       data: {
-        courseId: this.course._id
+        courseId: this.course._id,
+        allowedMimeTypes:allowedMimeTypes
       }
     });
 
