@@ -6,8 +6,10 @@
         <span>{{ 'file.text.filesize' | translate }}</span>
         <span>{{ 'file.text.actions' | translate }}</span>
       </div>
-      <div class="file-list-row" *ngFor="let file of unitForm.controls.files.controls;">
-        <span class="filename">{{file.value.name}}</span>
+      <div class="file-list-row" *ngFor="let file of unitForm.controls.files.controls">
+        <span class="filename">
+          <mat-icon>{{ fileIcon.fileToIcon(file.value) }}</mat-icon>{{ file.value.name }}
+        </span>
         <span class="filesize">{{file.value.size | filesize}}</span>
         <mat-action-row>
           <button mat-raised-button color="warn" (click)="removeFile(file)">
