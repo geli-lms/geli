@@ -10,8 +10,8 @@ import {IFile} from '../../../../../../../shared/models/mediaManager/IFile';
 import {DialogService} from '../../../shared/services/dialog.service';
 import {RenameDialogComponent} from '../../../shared/components/rename-dialog/rename-dialog.component';
 import {FileIconService} from '../../../shared/services/file-icon.service';
-import {UploadFormComponent} from "../../../shared/components/upload-form/upload-form.component";
-import {IFileUnit} from "../../../../../../../shared/models/units/IFileUnit";
+import {UploadFormComponent} from '../../../shared/components/upload-form/upload-form.component';
+import {IFileUnit} from '../../../../../../../shared/models/units/IFileUnit';
 
 
 @Component({
@@ -59,16 +59,16 @@ export class CourseMediaComponent implements OnInit {
     this.folderBarVisible = false;
     this.isDialog = false;
 
-    if(this.dialogData && this.dialogData.courseId){
+    if (this.dialogData && this.dialogData.courseId) {
       // either load courseId from Dialog-Data
       this.isDialog = true;
       this.loadData(this.dialogData.courseId);
 
-      if(this.dialogData.allowedMimeTypes){
+      if (this.dialogData.allowedMimeTypes) {
         this.allowedMimeTypes = this.dialogData.allowedMimeTypes;
       }
 
-    }else if(this.route.parent.params){
+    } else if (this.route.parent.params) {
       // or url params
       this.route.parent.params.subscribe(async (params) => {
         this.isDialog = false;
@@ -77,7 +77,7 @@ export class CourseMediaComponent implements OnInit {
     }
   }
 
-  private async loadData(courseId: string){
+  private async loadData(courseId: string) {
     try {
       // retrieve course
       this.course = await this.courseService.readCourseToEdit(courseId);
@@ -260,7 +260,7 @@ export class CourseMediaComponent implements OnInit {
 
 
 
-  cancelFileUpload():void{
+  cancelFileUpload(): void {
     this.uploadForm.fileUploader.clearQueue();
     this.showUpload = false;
   }
@@ -289,7 +289,7 @@ export class CourseMediaComponent implements OnInit {
 
 
   uploadHasQueueItems(): boolean {
-    if(this.uploadForm){
+    if (this.uploadForm) {
       return this.uploadForm.fileUploader.queue.length !== 0;
     }
 
