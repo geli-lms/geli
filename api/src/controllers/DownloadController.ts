@@ -298,18 +298,21 @@ export class DownloadController {
 
               const options = {
                 format: 'A4',
+                'border': {
+                  'left': '2cm',            // default is 0, units: mm, cm, in, px
+                  'right': '2cm'
+                },
                 'footer': {
-                  'height': '28mm',
                   'contents': {
-                    default: '<div style="text-align: center;">{{page}}/{{pages}}</div>'
+                    default: '<div style="text-align: center;border-top: 1px solid;">{{page}}/{{pages}}</div>'
                   }}
               };
 
               const html = localUnit.toHtmlForPdf();
               const name = lecCounter + '_' + lcName + '/' + unitCounter + '_' + this.replaceCharInFilename(localUnit.name) + '.pdf';
-              await this.savePdfToFile(html,options,PDFtempPath);
+              await this.savePdfToFile(html, options, PDFtempPath);
 
-              await this.appendToArchive(archive,name,PDFtempPath,hash);
+              await this.appendToArchive(archive, name, PDFtempPath, hash);
 
 
             }
@@ -332,7 +335,7 @@ export class DownloadController {
     }
   }
 
-  private savePdfToFile(html: any, options:any, path: String ): Promise<void> {
+  private savePdfToFile(html: any, options: any, path: String ): Promise<void> {
     return new Promise<void>((resolve, reject) => {
 
       pdf.create(html, options).toFile(PDFtempPath, async function(err: any, res: any) {
@@ -343,7 +346,7 @@ export class DownloadController {
     });
   }
 
-  private appendToArchive(archive: any, name: String, path: String,hash: any) {
+  private appendToArchive(archive: any, name: String, path: String, hash: any) {
     return new Promise<void>((resolve, reject) => {
       archive.on('entry', () => {
         resolve(); });

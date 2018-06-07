@@ -20,9 +20,10 @@ freeTextUnitSchema.methods.toFile = function (): String {
 
 freeTextUnitSchema.methods.toHtmlForPdf = function (): String {
   const md = new MarkdownIt();
-  const header = '<div id="pageHeader" style="text-align: center;border-bottom: 1px solid">'+md.render(this.name)+md.render(this.description)+'</div>';
+  const header = '<div id="pageHeader" style="text-align: center;border-bottom: 1px solid">'
+    + md.render(this.name) + md.render(this.description) + '</div>';
   const content = md.render(this.markdown);
-  return header+content;
+  return header + content;
 };
 
 export {freeTextUnitSchema, IFreeTextUnitModel};
