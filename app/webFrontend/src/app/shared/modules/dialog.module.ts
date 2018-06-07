@@ -15,6 +15,9 @@ import {FocusDirective} from '../directives/focus.directive';
 import {ChangePasswordDialogComponent} from '../components/change-password-dialog/change-password-dialog.component';
 import {RenameDialogComponent} from '../components/rename-dialog/rename-dialog.component';
 import {ResponsiveImageUploadDialog} from '../components/responsive-image-upload-dialog/responsive-image-upload-dialog.component';
+import {UploadFormComponent} from '../components/upload-form/upload-form.component';
+import {FilesizePipe} from '../pipes/filesize/filesize.pipe';
+import {UploadFormDialog} from '../components/upload-form-dialog/upload-form-dialog.component';
 import {TranslateModule} from '@ngx-translate/core';
 import {HttpClientModule} from '@angular/common/http';
 
@@ -41,6 +44,9 @@ import {HttpClientModule} from '@angular/common/http';
     WriteMailDialog,
     RenameDialogComponent,
     FocusDirective,
+    UploadFormComponent,
+    FilesizePipe,
+    UploadFormDialog,
     MaterialImportModule
   ],
   declarations: [
@@ -53,6 +59,9 @@ import {HttpClientModule} from '@angular/common/http';
     WriteMailDialog,
     RenameDialogComponent,
     FocusDirective,
+    UploadFormComponent,
+    FilesizePipe,
+    UploadFormDialog,
   ],
   providers: [
     DialogService
@@ -67,6 +76,8 @@ import {HttpClientModule} from '@angular/common/http';
     RenameDialogComponent,
     WriteMailDialog,
     ChangePasswordDialogComponent,
+    UploadFormComponent,
+    UploadFormDialog,
   ]
 })
 export class DialogModule {

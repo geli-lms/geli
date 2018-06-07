@@ -46,6 +46,7 @@ import {NotfoundComponent} from './shared/components/notfound/notfound.component
 import {SnackBarService} from './shared/services/snack-bar.service';
 import {UnitFormService} from './shared/services/unit-form.service';
 import {UnitFactoryService} from './shared/services/unit-factory.service';
+import {FileIconService} from './shared/services/file-icon.service';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -111,7 +112,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     ImprintAndInfoService,
     SnackBarService,
     UnitFormService,
-    UnitFactoryService
+    UnitFactoryService,
+    FileIconService,
   ],
   bootstrap: [AppComponent]
 })
