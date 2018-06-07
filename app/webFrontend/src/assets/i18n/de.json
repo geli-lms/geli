@@ -71,6 +71,7 @@
     "description": "Beschreibung",
     "discard": "Verwerfen",
     "dismiss": "Schließen",
+    "documents": "Dokumente",
     "download": "Download",
     "duplicate": "Duplizieren",
     "edit": "Bearbeiten",
@@ -133,9 +134,9 @@
       "wrong_mimeType": "Falsches Dateiformat. Es sind nur Bilder erlaubt!",
       "passwordsMatch": "Die Passwörter stimmen nicht überein.",
       "required": "Eingabe notwendig"
-    }
+    },
+    "videos": "Videos"
   },
-
   "course": {
     "delete": "Kurs löschen",
     "placeholder": {
@@ -149,6 +150,8 @@
       "addMarkdownToCourse": "Markdown hinzufügen, um Text zu diesem Kurs hinzuzufügen.",
       "canNotSeenByStudents": "Kurs ist für Studenten nicht sichtbar.",
       "canSeenByStudents": "Kurs ist für Studenten sichtbar.",
+      "downloadHelpText": "Wähle die Units oder Files aus die als zip heruntergeladen werden sollen.",
+      "downloadNoFiles": "No Coursematerial aviable for download!",
       "editCourse": "Kurs bearbeiten",
       "enterAccessKey": "Bitte geben Sie den Einschreibeschlüssel dieses Kurses ein.",
       "enterAccessKeyForStudents": "Geben Sie einen Einschreibeschlüssel für die Studenten ein.",
@@ -267,6 +270,13 @@
       "noNotifications": "Sie haben keine Benachrichtigungen."
     }
   },
+  "report": {
+    "notProgressable": "Dieser Kurs enthält keine auswertbare Aufgaben"
+  },
+  "snackbarMessages": {
+    "chooseJson": "Wähle eine Kurs.json Datei zum Importieren",
+    "importSuccess": "Kurs erfolgreich Importiert!"
+  },
   "sort": {
     "alphabetically": "alphabetisch",
     "lastVisited": "zuletzt besucht",
@@ -321,7 +331,7 @@
       "signedIn": "Eingetragen"
     },
     "tooltip":{
-      "deleteUSers": "Ausgewählte Mitglieder entfernen.",
+      "deleteUsers": "Ausgewählte Mitglieder entfernen.",
       "toggleMembers" : "Alle Benutzer auswählen"
     }
   }

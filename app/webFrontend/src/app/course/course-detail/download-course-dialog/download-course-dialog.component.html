@@ -1,8 +1,8 @@
 <div *ngIf="this.checkForEmptyLectures()">
 <mat-card class="dl-card">
   <mat-card-content>
-    <ng-container *ngIf="!this.checkForEmptyLectures()">No course material available for download</ng-container>
-       <p>Select units or files which you want to download in a zip</p>
+    <ng-container *ngIf="!this.checkForEmptyLectures()">{{'common.text.downloadNoFiles' | translate}}</ng-container>
+       <p>{{'course.text.downloadHelpText' | translate}}</p>
     <mat-list>
       <mat-list-item class="selectAll">
       <h3>{{ 'file.text.selectAll' | translate }}</h3>
