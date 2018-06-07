@@ -6,7 +6,7 @@
     </mat-select>
   </mat-form-field>
   <span class="search-bar">
-    <input class="input-bar" (keyup)="getInput($event)" placeholder="search course" maxlength="64"/> <mat-icon>search</mat-icon>
+    <input class="input-bar" (keyup)="getInput($event)" placeholder="{{'course.search' | translate}}" maxlength="64"/> <mat-icon>search</mat-icon>
   </span>
 </div>
 <app-course-container [title]="'dashboard.myCourses' | translate" [courses]="myCourses" [expand]="true" (onLeave)="leaveCallback()" (onEnroll)="enrollCallback()"></app-course-container>
