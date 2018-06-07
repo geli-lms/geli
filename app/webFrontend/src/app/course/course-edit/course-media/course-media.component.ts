@@ -10,6 +10,9 @@ import {IFile} from '../../../../../../../shared/models/mediaManager/IFile';
 import {DialogService} from '../../../shared/services/dialog.service';
 import {RenameDialogComponent} from '../../../shared/components/rename-dialog/rename-dialog.component';
 import {FileIconService} from '../../../shared/services/file-icon.service';
+import {UploadFormComponent} from "../../../shared/components/upload-form/upload-form.component";
+import {IFileUnit} from "../../../../../../../shared/models/units/IFileUnit";
+
 
 @Component({
   selector: 'app-course-mediamanager',
@@ -48,6 +51,7 @@ export class CourseMediaComponent implements OnInit {
               private courseService: CourseService,
               private route: ActivatedRoute,
               private snackBar: SnackBarService,
+              @Inject(MAT_DIALOG_DATA || null) public dialogData: any,
               private fileIcon: FileIconService) {
   }
 

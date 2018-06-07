@@ -81,6 +81,7 @@
     }
 
     &.small{
+      left: 40px;
       width: $icon-wrapper-size-small;
       height: $icon-wrapper-size-small;
       .mat-icon {

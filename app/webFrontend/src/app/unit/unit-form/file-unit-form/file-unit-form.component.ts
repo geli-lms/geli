@@ -12,6 +12,7 @@ import {UnitFormService} from '../../../shared/services/unit-form.service';
 import {FormArray, FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {SnackBarService} from '../../../shared/services/snack-bar.service';
 import {CourseMediaComponent} from "../../../course/course-edit/course-media/course-media.component";
+import {FileIconService} from "../../../shared/services/file-icon.service";
 
 @Component({
   selector: 'app-file-unit-form',

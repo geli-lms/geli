@@ -94,7 +94,7 @@
             [ngClass]="{'small': isDialog, 'card_active':isInSelectedFiles(file), 'card': !isInSelectedFiles(file)}"
             (click)="toggleSelection(file)">
 
-            <div class="icon-wrapper">
+            <div class="icon-wrapper"  [ngClass]="{'small': isDialog}" >
               <ng-container>
                 <mat-icon>{{ fileIcon.fileToIcon(file) }}</mat-icon>
               </ng-container>
