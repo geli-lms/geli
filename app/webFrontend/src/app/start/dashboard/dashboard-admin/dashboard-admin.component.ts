@@ -7,6 +7,7 @@ import {SortUtil} from '../../../shared/utils/SortUtil';
 import {ICourseDashboard} from '../../../../../../../shared/models/ICourseDashboard';
 import {CourseNewComponent} from '../../../course/course-new/course-new.component';
 import {MatDialog} from '@angular/material';
+import {UserService} from '../../../shared/services/user.service';
 
 @Component({
   selector: 'app-dashboard-admin',
@@ -19,6 +20,7 @@ export class DashboardAdminComponent extends DashboardBaseComponent {
   allCoursesHolder: ICourseDashboard[];
 
   constructor(private snackBar: SnackBarService,
+              public userService: UserService,
               private router: Router,
               private dialogService: DialogService,
               private dialog: MatDialog) {
@@ -67,5 +69,19 @@ export class DashboardAdminComponent extends DashboardBaseComponent {
       width: '400px',
       maxWidth: '100%'}
     );
+  }
+  ngOnChanges() {
+    this.sortCourses();
+  }
+
+  async sortAlphabetically() {
+    SortUtil.sortCoursesByName(this.allCoursesHolder);
+  }
+
+  async sortCourses() {
+    this.allCoursesHolder = [];
+
+    SortUtil.sortByLastVisitedCourses(this.allCourses, this.userService.user.lastVisitedCourses);
+    this.allCoursesHolder = this.allCourses;
   }
 }
