@@ -39,20 +39,27 @@ export default class ResponsiveImageService {
       const fileNameToSave = filenameWithoutExtension + '_' + breakpoint.screenSize + '.' + extension;
 
       sharp.cache(false);
-      let resizeOptions = sharp(originalFile.path);
-      if (breakpoint.imageSize.width && breakpoint.imageSize.height) {
-        resizeOptions = resizeOptions.resize(breakpoint.imageSize.width, breakpoint.imageSize.height);
-      }
 
-      resizeOptions = resizeOptions.resize(breakpoint.imageSize.width);
-
-      await resizeOptions
-        .resize(breakpoint.imageSize.width, )
+      await sharp(originalFile.path)
+        .resize(breakpoint.imageSize.width)
         .withoutEnlargement(true)
         .max()
         .toFile(directory + '/' + fileNameToSave);
 
+      // Retina
+
+      const retinaWidth = breakpoint.imageSize.width * 2;
+      const retinaFileNameToSave = filenameWithoutExtension + '_' + breakpoint.screenSize + '@2x.' + extension;
+
+      await sharp(originalFile.path)
+        .resize(retinaWidth)
+        .withoutEnlargement(true)
+        .max()
+        .toFile(directory + '/' + retinaFileNameToSave);
+
+
       breakpoint.pathToImage = directory + '/' + fileNameToSave;
+      breakpoint.pathToRetinaImage = directory + '/' + retinaFileNameToSave;
     }
 
     if (!keepOriginalFile) {

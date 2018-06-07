@@ -65,8 +65,8 @@
     </div>
 
     <div>
-      <button mat-raised-button color="red" class="mat-button" (click)="removeCoursePicture()">{{ 'common.delete' | translate }}</button>
-      <button mat-raised-button color="primary" class="mat-button" (click)="openImageChooserDialog()">{{ 'course.uploadImage' || translate }}</button>
+      <button *ngIf="this.courseImageData" mat-raised-button color="red" class="mat-button" (click)="removeCoursePicture()">{{ 'common.delete' | translate }}</button>
+      <button mat-raised-button color="primary" class="mat-button" (click)="openImageChooserDialog()">{{ 'course.uploadImage' | translate }}</button>
     </div>
   </div>
 </div>

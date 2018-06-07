@@ -10,4 +10,5 @@ export interface IBreakpoint {
    * or the relative/absolute path to the image (on the server side)
    */
   pathToImage: string;
+  pathToRetinaImage?: string;
 }

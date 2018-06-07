@@ -59,6 +59,12 @@ fileSchema.pre('remove', async function() {
 
             await promisify(fs.unlink)(breakpoint.pathToImage);
           }
+
+          if (breakpoint.pathToRetinaImage && breakpoint.pathToRetinaImage !== '-'
+            && fs.existsSync(breakpoint.pathToRetinaImage)) {
+
+            await promisify(fs.unlink)(breakpoint.pathToRetinaImage);
+          }
         }
       }
     }

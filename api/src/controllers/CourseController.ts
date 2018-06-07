@@ -65,7 +65,7 @@ const coursePictureUploadOptions = {
       const id = req.params.id;
       const extPos = file.originalname.lastIndexOf('.');
       const ext = (extPos !== -1) ? `.${file.originalname.substr(extPos + 1).toLowerCase()}` : '';
-      cb(null, id + ext);
+      cb(null, id + '_' + new Date().getTime().toString() + ext);
     }
   }),
 };

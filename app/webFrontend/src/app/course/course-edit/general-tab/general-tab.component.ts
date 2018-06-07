@@ -152,7 +152,6 @@ export class GeneralTabComponent implements OnInit {
 
   async removeCoursePicture() {
     const result = await this.courseService.removePicture(this.id);
-    console.log(result);
 
     this.courseImageData = null;
   }
