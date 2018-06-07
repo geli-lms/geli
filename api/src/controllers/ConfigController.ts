@@ -11,7 +11,7 @@ import {Config} from '../models/Config';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 
 const publicConfigs = [
-  new RegExp('imprint|infoBox'),
+  new RegExp('legalnotice|infoBox|privacy'),
   new RegExp('downloadMaxFileSize')
 ];
 
@@ -32,15 +32,15 @@ export class ConfigController {
    * @apiName GetConfigPublic
    * @apiGroup Config
    *
-   * @apiParam {String} id Config name (e.g. imprint).
+   * @apiParam {String} id Config name (e.g. legal notice).
    *
    * @apiSuccess {Config} config Public config.
    *
    * @apiSuccessExample {json} Success-Response:
    *     {
-   *         "name":"imprint",
+   *         "name":"legal notice",
    *         "updatedAt": "2018-03-20T21:04:41.696Z",
-   *         "value":"This will show the imprint.",
+   *         "value":"This will show the legal notice.",
    *         "__v": 0,
    *         "createdAt": "2018-03-20T21:04:41.696Z"
    *     }
@@ -71,7 +71,7 @@ export class ConfigController {
    * @apiGroup Config
    * @apiPermission admin
    *
-   * @apiParam {String} id Config name (e.g. imprint).
+   * @apiParam {String} id Config name (e.g. legal notice).
    * @apiParam {Object} data New data.
    *
    * @apiSuccess {Config} config Updated config.
@@ -93,9 +93,9 @@ export class ConfigController {
    *         "_doc": {
    *             "createdAt": "2018-03-20T21:04:41.696Z",
    *             "__v": 0,
-   *             "value": "This will show the imprint.",
+   *             "value": "This will show the legal notice.",
    *             "updatedAt": "2018-03-20T21:04:41.696Z",
-   *             "name": "imprint",
+   *             "name": "legal notice",
    *             "_id": {...}
    *         },
    *         "$init": true
@@ -106,7 +106,7 @@ export class ConfigController {
   @UseBefore(passportJwtMiddleware)
   @Authorized(['admin'])
   @Put('/:id')
-  async setImprint(@Param('id') name: string, @Body() data: any) {
+  async setLegalnotice(@Param('id') name: string, @Body() data: any) {
     const conditions: any = {name: name};
     try {
       return Config.findOneAndUpdate(
@@ -125,15 +125,15 @@ export class ConfigController {
    * @apiGroup Config
    * @apiPermission admin
    *
-   * @apiParam {String} id Config name (e.g. imprint).
+   * @apiParam {String} id Config name (e.g. legal notice).
    *
    * @apiSuccess {Config} config Config.
    *
    * @apiSuccessExample {json} Success-Response:
    *     {
-   *         "name":"imprint",
+   *         "name":"legal notice",
    *         "updatedAt": "2018-03-20T21:04:41.696Z",
-   *         "value":"This will show the imprint.",
+   *         "value":"This will show the legal notice.",
    *         "__v": 0,
    *         "createdAt": "2018-03-20T21:04:41.696Z"
    *     }

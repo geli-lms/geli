@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Added more EN/DE translation [#753](https://github.com/utetrapp/geli/issues/753)
 - Use i18n for new course view [#763](https://github.com/utetrapp/geli/pull/763)
 - Added service for FileIcon [#607](https://github.com/utetrapp/geli/issues/607)
+- Added legal notice and privacy declaration [#768](https://github.com/utetrapp/geli/issues/768)
  
 ### Changed
 - rework existing translation
@@ -30,6 +31,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Remove `isCourseTeacherOrAdmin` and `isMemberOfCourse`from UserService. [#731](https://github.com/h-da/geli/issues/731)
 - Refactored save mechanism of unit edit form. [#532](https://github.com/h-da/geli/issues/532)
 - Moved the 'create course' into a Dialog. [#725](https://github.com/h-da/geli/issues/725)
+- corrected 'imprint' to 'legal notice' [#768](https://github.com/utetrapp/geli/issues/768)
 
 ### Fixed
 - Fixed broken notification settings. [#731](https://github.com/h-da/geli/issues/731)

@@ -55,9 +55,13 @@
           <mat-icon>info</mat-icon>
           <span>{{ 'mainMenu.about' | translate }}</span>
         </button>
-        <button mat-menu-item routerLink="/imprint" routerLinkActive="active">
+        <button mat-menu-item routerLink="/legalnotice" routerLinkActive="active">
           <mat-icon>info</mat-icon>
-          <span>{{ 'mainMenu.imprint' | translate }}</span>
+          <span>{{ 'mainMenu.legalNotice' | translate }}</span>
+        </button>
+        <button mat-menu-item routerLink="/privacy" routerLinkActive="active">
+          <mat-icon>info</mat-icon>
+          <span>{{ 'mainMenu.privacy' | translate }}</span>
         </button>
         <button mat-menu-item *ngIf="isLoggedIn()" (click)="logout()" routerLink="" routerLinkActive="active">
           <mat-icon>exit_to_app</mat-icon>
