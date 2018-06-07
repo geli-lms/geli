@@ -11,6 +11,7 @@ import {IFile} from '../../../../../../../shared/models/mediaManager/IFile';
 import {UnitFormService} from '../../../shared/services/unit-form.service';
 import {FormArray, FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {SnackBarService} from '../../../shared/services/snack-bar.service';
+import {FileIconService} from '../../../shared/services/file-icon.service';
 
 @Component({
   selector: 'app-file-unit-form',
@@ -36,7 +37,8 @@ export class FileUnitFormComponent implements OnInit {
               private showProgress: ShowProgressService,
               private dialog: MatDialog,
               private unitFormService: UnitFormService,
-              private formBuilder: FormBuilder) {
+              private formBuilder: FormBuilder,
+              private fileIcon: FileIconService) {
   }
 
   ngOnInit() {
