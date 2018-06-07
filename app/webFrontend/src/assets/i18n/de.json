@@ -213,7 +213,7 @@
       "noVideo": "Kein Video verfügbar.",
       "noFiles" : "Keine Dateien vorhanden",
       "progress": "Fortschritt",
-      "RemoveFromQueue": "Datei aus der Schlange löschen.",
+      "removeFromQueue": "Datei aus der Schlange löschen.",
       "takePicture": "Bild aufnehmen"
     },
     "tooltip":{

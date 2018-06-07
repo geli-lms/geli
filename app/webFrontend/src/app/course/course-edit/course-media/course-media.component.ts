@@ -9,9 +9,7 @@ import {UploadFormDialog} from '../../../shared/components/upload-form-dialog/up
 import {IFile} from '../../../../../../../shared/models/mediaManager/IFile';
 import {DialogService} from '../../../shared/services/dialog.service';
 import {RenameDialogComponent} from '../../../shared/components/rename-dialog/rename-dialog.component';
-import {UploadFormComponent} from "../../../shared/components/upload-form/upload-form.component";
-import {IFileUnit} from "../../../../../../../shared/models/units/IFileUnit";
-import {PickMediaDialog} from "../../../shared/components/pick-media-dialog/pick-media-dialog.component";
+import {FileIconService} from '../../../shared/services/file-icon.service';
 
 @Component({
   selector: 'app-course-mediamanager',
@@ -50,7 +48,7 @@ export class CourseMediaComponent implements OnInit {
               private courseService: CourseService,
               private route: ActivatedRoute,
               private snackBar: SnackBarService,
-              @Inject(MAT_DIALOG_DATA || null) public dialogData: any) {
+              private fileIcon: FileIconService) {
   }
 
   async ngOnInit() {
@@ -140,7 +138,7 @@ export class CourseMediaComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(value => {
-      if (value) {lo
+      if (value) {
         // Reload current folder
         this.reloadDirectory();
       }

@@ -37,7 +37,8 @@ export class FileUnitFormComponent implements OnInit {
               private showProgress: ShowProgressService,
               private dialog: MatDialog,
               private unitFormService: UnitFormService,
-              private formBuilder: FormBuilder) {
+              private formBuilder: FormBuilder,
+              private fileIcon: FileIconService) {
   }
 
   ngOnInit() {

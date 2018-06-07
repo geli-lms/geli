@@ -26,8 +26,6 @@
     <!-- Files cards -->
     <div class="area--files">
 
-
-
       <!-- Multi-Select button area -->
       <div class="btn__area" *ngIf="!showUpload">
 
@@ -35,7 +33,6 @@
                 (click)="addFile()">
           <mat-icon>cloud_upload</mat-icon>
         </button>
-
         <!--<button class="text-fit" mat-raised-button matTooltip="Select all" (click)="selectAll()">-->
         <!--<mat-icon>select_all</mat-icon>-->
         <!--</button>-->
@@ -96,14 +93,10 @@
             *ngIf="!allowedMimeTypes || allowedMimeTypes.indexOf(file.mimeType) >= 0"
             [ngClass]="{'small': isDialog, 'card_active':isInSelectedFiles(file), 'card': !isInSelectedFiles(file)}"
             (click)="toggleSelection(file)">
-            <div [ngClass]="{'small': isDialog }"  class="icon-wrapper">
-              <ng-container [ngSwitch]="getSimpleMimeType(file)">
-                <mat-icon *ngSwitchCase="'video'">movie</mat-icon>
-                <mat-icon *ngSwitchCase="'image'">image</mat-icon>
-                <mat-icon *ngSwitchCase="'pdf'">picture_as_pdf</mat-icon>
-                <mat-icon *ngSwitchCase="'archive'">archive</mat-icon>
-                <mat-icon *ngSwitchCase="'text'">subject</mat-icon>
-                <mat-icon *ngSwitchDefault>insert_drive_file</mat-icon>
+
+            <div class="icon-wrapper">
+              <ng-container>
+                <mat-icon>{{ fileIcon.fileToIcon(file) }}</mat-icon>
               </ng-container>
             </div>
 
