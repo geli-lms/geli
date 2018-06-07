@@ -1,0 +1,57 @@
+@import '../../../../../variables';
+
+:host {
+  max-width: 100%;
+  flex: 1;
+  padding: 8px;
+
+  @include bp(sm) {
+    flex: initial;
+    width: 300px;
+  }
+}
+
+.card {
+  max-width: 100%;
+  width: 300px;
+  padding: 0px;
+  border-radius: 2px;
+  margin-right: 20px;
+  margin-bottom: 20px;
+
+  h2 {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+
+  @include bp(sm) {
+    margin-right: 0px;
+  }
+}
+
+video {
+  width: 100%;
+  overflow: hidden;
+}
+
+.mat-card-title h2 {
+  margin-top: 0;
+}
+
+:host .mat-card {
+  display: flex;
+  flex-direction: column;
+
+  .mat-card-content {
+    flex: 1;
+    padding: 0px;
+  }
+
+  .mat-card-header-text {
+    padding-top: 10px;
+    padding-left: 20px;
+    width: 100%;
+    margin: 0;
+  }
+}

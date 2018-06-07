@@ -1,0 +1,46 @@
+@import '../../../../variables';
+
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 100%;
+  flex-direction: row;
+}
+
+.spacer{
+  display: flex;
+  justify-content: flex-end;
+}
+
+.selectArea {
+  float: right;
+  display: inline-flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 0.5em;
+  overflow: hidden;
+  margin-left: 0.5em;
+}
+
+::ng-deep .iconSize {
+  font-size:30px !important;
+}
+
+.iconFlex {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  align-content: center;
+}
+
+.btn {
+  border: none;
+  outline: none;
+  cursor: pointer;
+  vertical-align: middle;
+}
+
+.activeBtn {
+  background-color: map-get($app-primary,'default');
+}

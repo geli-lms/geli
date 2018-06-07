@@ -127,6 +127,7 @@
       "maxLength": "Maximal {{max}} Zeichen erlaubt",
       "minLength": "Mindestens {{min}} Zeichen benötigt",
       "password": "Passwörter müssen aus mindestens 8 Zeichen, inklusive einem Sonderzeichen und einer Ziffer bestehen",
+      "wrong_mimeType": "Falsches Dateiformat. Es sind nur Bilder erlaubt!",
       "passwordsMatch": "Die Passwörter stimmen nicht überein.",
       "required": "Eingabe notwendig"
     }
@@ -166,7 +167,9 @@
       "uploadWhitelist": "Laden Sie Ihre OBS-csv-Datei mit Ihren Kursteilnehmern hoch, um sie auf die Freigabeliste zu setzen. Alte Freigabelisten-Benutzer werden durch Hochladen einer neuen Datei entfernt.",
       "userResults": "Benutzerergebnisse",
       "yourCourseProgress": "Ihr Kursfortschritt",
-      "whitelist": "Freigabeliste"
+      "whitelist": "Freigabeliste",
+      "noVideosAttached": "Es gibt keine Videos zu diesem Kurs ☹",
+      "noFilesAttached": "Es gibt keine Dateien zu diesem Kurs ☹"
     },
     "tooltip" : {
       "add": "Kurs hinzufügen",
@@ -210,7 +213,7 @@
       "noVideo": "Kein Video verfügbar.",
       "noFiles" : "Keine Dateien vorhanden",
       "progress": "Fortschritt",
-      "RemoveFromQueue": "Datei aus der Schlange löschen.",
+      "removeFromQueue": "Datei aus der Schlange löschen.",
       "takePicture": "Bild aufnehmen"
     },
     "tooltip":{

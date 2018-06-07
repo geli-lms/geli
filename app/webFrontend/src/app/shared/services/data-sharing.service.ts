@@ -15,4 +15,8 @@ export class DataSharingService {
   setDataForKey(key: string, data: any) {
     this.data[key] = data;
   }
+
+  deleteDataForKey(key: string) {
+    delete this.data[key];
+  }
 }
