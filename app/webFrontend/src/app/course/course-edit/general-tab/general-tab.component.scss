@@ -12,6 +12,11 @@
 .course-image-upload {
   padding: 10px 0;
 
+  .course-image img {
+    max-width: 284px;
+    height: auto;
+  }
+
   @include bp(md) {
     padding: 0 10px;
   }

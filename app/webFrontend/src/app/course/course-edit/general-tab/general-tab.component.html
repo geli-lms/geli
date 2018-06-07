@@ -28,7 +28,7 @@
       </mat-form-field>
 
   <div class="csv-upload" *ngIf="enrollType === enrollTypeConstants.ENROLL_TYPE_WHITELIST">
-    <p>{{ ' course .text.uploadWhitelist' | translate }}</p>
+    <p>{{ 'course.text.uploadWhitelist' | translate }}</p>
     <p>
       <!-- TODO: Replace with shared upload form -->
       <input class="upload" type="file" ng2FileSelect [uploader]="uploader"
@@ -59,8 +59,15 @@
   </div>
 
   <div class="course-image-upload">
-    <app-responsive-image *ngIf="this.userImageData" [responsiveImageData]="this.userImageData"></app-responsive-image> <br />
-    <button mat-raised-button color="primary" class="mat-button" (click)="openImageChooserDialog()">Choose Image</button>
+    <div class="course-image">
+      <app-responsive-image *ngIf="this.courseImageData" [responsiveImageData]="this.courseImageData"></app-responsive-image>
+      <img *ngIf="!this.courseImageData" mat-card-image src="/assets/course-header-image.jpg">
+    </div>
+
+    <div>
+      <button mat-raised-button color="red" class="mat-button" (click)="removeCoursePicture()">{{ 'common.delete' | translate }}</button>
+      <button mat-raised-button color="primary" class="mat-button" (click)="openImageChooserDialog()">{{ 'course.uploadImage' || translate }}</button>
+    </div>
   </div>
 </div>
 

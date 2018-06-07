@@ -700,6 +700,34 @@ export class CourseController {
   }
 
 
+  @Authorized(['teacher', 'admin'])
+  @Delete('/picture/:id')
+  async deleteCoursePicture(
+    @Param('id') id: string,
+    @CurrentUser() currentUser: IUser) {
+
+    const course = await Course.findById(id);
+
+    if (!course) {
+      throw new NotFoundError();
+    }
+
+    if (!course.checkPrivileges(currentUser).userCanEditCourse) {
+      throw new ForbiddenError();
+    }
+
+    if (!course.image) {
+      throw new NotFoundError();
+    }
+
+    const picture = await Picture.findOne(course.image);
+    await picture.remove();
+
+    await Course.update({ _id: id }, { $unset: { image: 1 } });
+    return { };
+  }
+
+  @Authorized(['teacher', 'admin'])
   @Post('/picture/:id')
   async addCoursePicture(
       @UploadedFile('file', {options: coursePictureUploadOptions}) file: any,

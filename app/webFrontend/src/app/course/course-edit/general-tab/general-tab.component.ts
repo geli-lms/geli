@@ -45,7 +45,7 @@ export class GeneralTabComponent implements OnInit {
     ENROLL_TYPE_ACCESSKEY,
   };
 
-  userImageData: IResponsiveImageData;
+  courseImageData: IResponsiveImageData;
 
   message = 'Course successfully added.';
 
@@ -71,7 +71,7 @@ export class GeneralTabComponent implements OnInit {
       this.courseService.readCourseToEdit(this.id).then(course => {
         this.courseOb = course;
 
-        this.userImageData = course.image ? {
+        this.courseImageData = course.image ? {
             breakpoints: course.image.breakpoints,
             pathToImage: ''
         } : null;
@@ -145,9 +145,16 @@ export class GeneralTabComponent implements OnInit {
       .uploadResponsiveImage('Choose a picture for the course.', apiPath, responsiveImage).toPromise();
 
     if (result && result.success) {
-      this.userImageData = result.result;
+      this.courseImageData = result.result;
     } else {
     }
+  }
+
+  async removeCoursePicture() {
+    const result = await this.courseService.removePicture(this.id);
+    console.log(result);
+
+    this.courseImageData = null;
   }
 
   async createCourse() {

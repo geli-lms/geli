@@ -133,6 +133,7 @@
   },
   "course": {
     "delete": "Delete course",
+    "uploadImage": "Upload course image",
     "placeholder": {
       "accessKey": "Access key",
       "description": "Course description",
