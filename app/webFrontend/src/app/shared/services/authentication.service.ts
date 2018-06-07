@@ -32,6 +32,11 @@ export class AuthenticationService {
       .subscribe(
         (response) => {
           this.userService.setUser(response['user']);
+
+          if (response['user'].profile.picture) {
+            this.userService.updateProfilePicture(response['user'].profile.picture.path);
+          }
+
           this.token = response['token'];
           this.isLoggedIn = true;
           localStorage.setItem('token', this.token);

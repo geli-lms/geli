@@ -12,10 +12,7 @@ import {MatFabMenuComponent} from './components/mat-fab-menu/mat-fab-menu.compon
 import {PasswordInputComponent} from './components/password-input/password-input.component';
 import {ExpandableDivComponent} from './components/expandable-div/expandable-div.component';
 import {ButtonSaveCancelComponent} from './components/button-save-cancel/button-save-cancel.component';
-import {UploadFormComponent} from './components/upload-form/upload-form.component';
 import {FileUploadModule} from 'ng2-file-upload';
-import {FilesizePipe} from './pipes/filesize/filesize.pipe';
-import {UploadFormDialog} from './components/upload-form-dialog/upload-form-dialog.component';
 import {ChangePasswordDialogComponent} from './components/change-password-dialog/change-password-dialog.component';
 import {MarkdownEditorComponent} from './components/markdown-editor/markdown-editor.component';
 import {AceEditorModule} from 'ng2-ace-editor';
@@ -55,9 +52,6 @@ import { MessageComponent } from './components/message/message.component';
     BadgeComponent,
     ExpandableDivComponent,
     ButtonSaveCancelComponent,
-    UploadFormComponent,
-    FilesizePipe,
-    UploadFormDialog,
     ChangePasswordDialogComponent,
     MarkdownEditorComponent,
     PickMediaDialog,
@@ -87,9 +81,6 @@ import { MessageComponent } from './components/message/message.component';
     ExpandableDivComponent,
     ButtonSaveCancelComponent,
     MarkdownEditorComponent,
-    UploadFormComponent,
-    FilesizePipe,
-    UploadFormDialog,
     ChangePasswordDialogComponent,
     PickMediaDialog,
     TranslateModule,
@@ -101,7 +92,6 @@ import { MessageComponent } from './components/message/message.component';
     ShowCommentsDirective,
   ],
   entryComponents: [
-    UploadFormDialog,
     PickMediaDialog,
     UserProfileDialog,
     ChatNameInputComponent,

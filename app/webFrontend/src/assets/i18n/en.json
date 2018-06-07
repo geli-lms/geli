@@ -65,8 +65,8 @@
     "cancel": "Cancel",
     "cheatSheetYouFind": "A cheat sheet you can find ",
     "continue": "Continue",
-    "content" : "Content",
-    "close" : "Close",
+    "content": "Content",
+    "close": "Close",
     "delete": "Delete",
     "description": "Description",
     "discard": "Discard",
@@ -89,7 +89,7 @@
     "media": "Media",
     "members": "Members",
     "ok": "OK",
-    "open" : "Open",
+    "open": "Open",
     "password": "Password",
     "profile": "Profile",
     "profileDetails": {
@@ -124,6 +124,7 @@
     "validation": {
       "instituteMail": "Please register with your institute email.",
       "invalid": "Input is invalid",
+      "wrong_mimeType": "Wrong filetype. Only image types are allowed!",
       "maxLength": "At least {{max}} characters required",
       "minLength": "At least {{min}} characters required",
       "password": "Password must have at least 8 characters which contain one special character and one digit.",
@@ -170,14 +171,14 @@
       "noVideosAttached": "There are no videos attached to this course yet ☹",
       "noFilesAttached": "There are no files attached to this course yet ☹"
     },
-    "tooltip" : {
+    "tooltip": {
       "add": "Add Course",
       "addUserToWhitelist": "Add user to whitelist",
-      "download" : "Download course",
+      "download": "Download course",
       "enroll": "Enroll",
-      "keyRequired" : "Access key required",
+      "keyRequired": "Access key required",
       "leave": "Leave",
-      "noKeyRequired" : "Free access"
+      "noKeyRequired": "Free access"
     }
   },
   "dashboard": {
@@ -192,9 +193,9 @@
     "teacherCourses": "My teacher courses"
   },
   "errorPage": {
-    "text" : {
-      "pageNotFound" : "Page not found :(",
-      "pageNotFoundHint" : "Maybe the page you are looking for a page has been removed."
+    "text": {
+      "pageNotFound": "Page not found :(",
+      "pageNotFoundHint": "Maybe the page you are looking for a page has been removed."
     }
   },
   "file": {
@@ -207,15 +208,15 @@
       "filename": "File name",
       "filesize": "File size",
       "fileRemove": "Remove File",
-      "filesSelected" : "File selected",
+      "filesSelected": "File selected",
       "infoDropAddFiles": "Drop files here or click here to select files.",
       "noVideo": "No video available.",
-      "noFiles" : "No files available.",
+      "noFiles": "No files available.",
       "progress": "Progress",
-      "RemoveFromQueue": "Remove file from queue.",
+      "removeFromQueue": "Remove file from queue.",
       "takePicture": "Take picture"
     },
-    "tooltip":{
+    "tooltip": {
       "selectFile": "Select file",
       "uploadFile": "Upload file"
     }
@@ -225,7 +226,7 @@
   },
   "lecture": {
     "noUnits": "No units added yet.",
-    "text":{
+    "text": {
       "add": "Add lecture",
       "import": "Import lecture",
       "noLecture": "No lecture added yet."
@@ -242,9 +243,9 @@
       "Update": "Update"
     }
   },
-  "mail":{
+  "mail": {
     "send": "Send mail",
-    "tooltip":{
+    "tooltip": {
       "sendToMembers": "Send mail to selected members."
     }
   },
@@ -300,7 +301,7 @@
       "delete": "delete unit",
       "deleteAnswer": "Delete answer",
       "deleteQuestion": "Delete question",
-      "deleteTask" : "Delete Task",
+      "deleteTask": "Delete Task",
       "download": "Download this unit",
       "downloadUnits": "Download units",
       "duplicate": "Copy this unit",
@@ -314,9 +315,9 @@
       "notSignedIn": "Not Signed in",
       "signedIn": "Signed in"
     },
-    "tooltip":{
+    "tooltip": {
       "deleteUSers": "Delete selected Members.",
-      "toggleMembers" : "Toggle all members"
+      "toggleMembers": "Toggle all members"
     }
   }
 }

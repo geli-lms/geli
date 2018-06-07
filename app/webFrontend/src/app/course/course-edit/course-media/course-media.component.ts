@@ -9,6 +9,7 @@ import {UploadFormDialog} from '../../../shared/components/upload-form-dialog/up
 import {IFile} from '../../../../../../../shared/models/mediaManager/IFile';
 import {DialogService} from '../../../shared/services/dialog.service';
 import {RenameDialogComponent} from '../../../shared/components/rename-dialog/rename-dialog.component';
+import {FileIconService} from '../../../shared/services/file-icon.service';
 
 @Component({
   selector: 'app-course-mediamanager',
@@ -27,7 +28,8 @@ export class CourseMediaComponent implements OnInit {
               public dialogService: DialogService,
               private courseService: CourseService,
               private route: ActivatedRoute,
-              private snackBar: SnackBarService) {
+              private snackBar: SnackBarService,
+              private fileIcon: FileIconService) {
   }
 
   async ngOnInit() {
@@ -180,36 +182,5 @@ export class CourseMediaComponent implements OnInit {
         await this.reloadDirectory();
       }
     });
-  }
-
-  getSimpleMimeType(file: IFile): string {
-    if (file.mimeType === undefined) {
-      return 'unknown';
-    }
-
-    const mimeType = file.mimeType.toLowerCase();
-    const archives = [
-      'application/x-bzip',
-      'application/x-bzip2',
-      'application/x-rar-compressed',
-      'application/x-tar',
-      'application/x-zip-compressed',
-      'application/zip',
-      'application/x-7z-compressed',
-    ];
-
-    if (mimeType.startsWith('video')) {
-      return 'video';
-    } else if (mimeType.startsWith('image')) {
-      return 'image';
-    } else if (mimeType === 'application/pdf') {
-      return 'pdf';
-    } else if (archives.indexOf(mimeType) >= 0) {
-      return 'archive';
-    } else if (mimeType.startsWith('text')) {
-      return 'text';
-    } else {
-      return 'unknown';
-    }
   }
 }

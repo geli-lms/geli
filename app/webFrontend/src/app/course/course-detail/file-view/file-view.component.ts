@@ -2,6 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
 import {DataSharingService} from '../../../shared/services/data-sharing.service';
 import {IFileUnit} from '../../../../../../../shared/models/units/IFileUnit';
+import {FileIconService} from '../../../shared/services/file-icon.service';
 
 @Component({
   selector: 'app-file-view',
@@ -11,7 +12,7 @@ import {IFileUnit} from '../../../../../../../shared/models/units/IFileUnit';
 export class FileViewComponent implements OnInit {
   course: ICourse;
 
-  constructor(private dataSharingService: DataSharingService) {
+  constructor(private dataSharingService: DataSharingService, private fileIcon: FileIconService) {
   }
 
   ngOnInit() {
