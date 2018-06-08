@@ -32,7 +32,7 @@ echo "+ sending lcov file to coveralls"
 # this could easily be done with some sed magic
 # search for "api/build/src" and replace it with "api/src"
 sed -i "s/api\/build\/src/api\/src/g" api/coverage/lcov.info
-cat api/coverage/lcov.info | $BIN_PATH_FULL/coveralls
+cat api/coverage/lcov.info | $BIN_PATH_FULL/coveralls -v
 
 echo "+ INFO: Currently only the api-coverdata are generated and send"
 
