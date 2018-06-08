@@ -15,11 +15,10 @@ export class ShowCommentsDirective {
   @HostListener('click') onClick() {
     let dialogRef = this.dialog.open(CommentsDialogComponent
       , {
-      height: '800px',
-      width: '700px',
       data: {
-        room: this.room,
-      }
+        room: this.room
+      },
+      panelClass: 'comments-dialog'
     })
   }
 

@@ -1,1 +1,10 @@
-<app-messaging [room]="this.data.room" [mode]="comment"></app-messaging>
+<div class="comment-dialog-container">
+  <div class="comments-header">
+    <button class="close-comments-dialog" mat-icon-button isRoundButton="true" mat-dialog-close>
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <div class="comment-dialog-messagin-container">
+    <app-messaging [room]="this.data.room" [mode]="comment"></app-messaging>
+  </div>
+</div>

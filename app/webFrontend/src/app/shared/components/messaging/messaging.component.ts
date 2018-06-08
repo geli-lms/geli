@@ -22,6 +22,7 @@ export class MessagingComponent implements OnInit {
   @Input() loadMsgOnScroll = true;
   // number of messages to load
   @Input() limit = 20;
+  chatName: string
 
   messages: IMessage[] = [];
   // number of message in a given room
@@ -38,11 +39,14 @@ export class MessagingComponent implements OnInit {
     this.scrollCallback = this.loadMsgOnScroll ? this.loadMoreMsg.bind(this) : null;
   }
 
-
   ngOnInit() {
     this.init();
   }
 
+  private  generateChatName () {
+
+  }
+  
   async init() {
     if (this.room) {
       const queryParam = {room: this.room, limit: this.limit};

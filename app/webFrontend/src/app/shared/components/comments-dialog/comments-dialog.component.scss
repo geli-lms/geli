@@ -1,0 +1,23 @@
+$header-width: 30px;
+
+.close-comments-dialog {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.comments-header {
+  display: flex;
+  flex-direction: row-reverse;
+  margin: 10px 0px;
+  height: $header-width;
+}
+
+
+.comment-dialog-container {
+  height: 100%;
+}
+
+.comment-dialog-messagin-container {
+  height: calc(100% - #{$header-width})
+}
