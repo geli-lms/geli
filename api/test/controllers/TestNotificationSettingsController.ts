@@ -26,7 +26,7 @@ describe('NotificationSettings', async () => {
   describe(`POST ${BASE_URL}`, async () => {
     it('should create notification settings', async () => {
       const course = await FixtureUtils.getRandomCourse();
-      const student = await User.findById(course.students[0]);
+      const student = course.students[0];
       const newSettings = {user: student, course: course};
 
       const res = await chai.request(app)
@@ -43,6 +43,24 @@ describe('NotificationSettings', async () => {
       const notificationSettings = await NotificationSettings.findById(res.body._id);
       notificationSettings.user.toString().should.be.equal(newSettings.user._id.toString());
       notificationSettings.course.toString().should.be.equal(newSettings.course._id.toString());
+    });
+
+    it('should fail when already exist', async () => {
+      const course = await FixtureUtils.getRandomCourse();
+      const student = course.students[0];
+      const newSettings = {user: student, course: course};
+
+      const res = await chai.request(app)
+        .post(BASE_URL)
+        .set('Authorization', `JWT ${JwtUtils.generateToken(student)}`)
+        .send(newSettings);
+      res.status.should.be.equals(200);
+
+      const resFail = await chai.request(app)
+        .post(BASE_URL)
+        .set('Authorization', `JWT ${JwtUtils.generateToken(student)}`)
+        .send(newSettings);
+      resFail.status.should.be.equals(400);
     });
   });
 
