@@ -4,8 +4,11 @@
     <button mat-button routerLink="/admin/users">
       <span>{{ 'common.users' | translate }}</span>
     </button>
-    <button [routerLink]="['/admin/markdownEdit']" [queryParams]="{type: 'imprint', header: 'Imprint'}" mat-button>
+    <button [routerLink]="['/admin/markdownEdit']" [queryParams]="{type: 'imprint', header: 'Legal notice'}" mat-button>
       <span>{{ 'common.imprint' | translate }}</span>
+    </button>
+    <button [routerLink]="['/admin/markdownEdit']" [queryParams]="{type: 'privacy', header: 'Privacy'}" mat-button>
+      <span>{{ 'common.privacy' | translate }}</span>
     </button>
     <button mat-button [routerLink]="['/admin/markdownEdit']" [queryParams]="{type: 'infoBox', header: 'InfoBox'}">
       <span>{{ 'common.infobox' | translate }}</span>
