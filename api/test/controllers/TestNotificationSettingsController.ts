@@ -62,6 +62,17 @@ describe('NotificationSettings', async () => {
         .send(newSettings);
       resFail.status.should.be.equals(400);
     });
+
+    it('should fail when course or user missing', async () => {
+      const course = await FixtureUtils.getRandomCourse();
+      const student = course.students[0];
+
+      const res = await chai.request(app)
+        .post(BASE_URL)
+        .set('Authorization', `JWT ${JwtUtils.generateToken(student)}`)
+        .send({});
+      res.status.should.be.equals(400);
+    });
   });
 
   describe(`GET ${BASE_URL} user :id`, () => {
