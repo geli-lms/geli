@@ -11,7 +11,7 @@ import {Config} from '../models/Config';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 
 const publicConfigs = [
-  new RegExp('imprint|infoBox'),
+  new RegExp('imprint|infoBox|privacy'),
   new RegExp('downloadMaxFileSize')
 ];
 

@@ -81,7 +81,7 @@
     "geli": "geli",
     "general": "General",
     "here": "here",
-    "imprint": "imprint",
+    "imprint": "Legal notice",
     "infobox": "InfoBox",
     "login": "Login",
     "name": "Name",
@@ -91,6 +91,7 @@
     "ok": "OK",
     "open": "Open",
     "password": "Password",
+    "privacy": "Privacy",
     "profile": "Profile",
     "profileDetails": {
       "firstName": "First name",
@@ -195,7 +196,7 @@
   "errorPage": {
     "text": {
       "pageNotFound": "Page not found :(",
-      "pageNotFoundHint": "Maybe the page you are looking for a page has been removed."
+      "pageNotFoundHint": "Maybe the page you are looking for has been removed."
     }
   },
   "file": {
@@ -252,8 +253,9 @@
   "mainMenu": {
     "about": "About",
     "admin": "Admin",
-    "imprint": "Imprint",
+    "imprint": "Legal notice",
     "logout": "Logout",
+    "privacy": "Privacy",
     "userSettings": "Settings"
   },
   "notifications": {

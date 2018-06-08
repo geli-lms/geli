@@ -81,7 +81,7 @@
     "geli": "geli",
     "general" : "Allgemein",
     "here": "hier",
-    "imprint": "imprint",
+    "imprint": "Impressum",
     "infobox": "Infobox",
     "login": "Login",
     "name": "Name",
@@ -91,6 +91,7 @@
     "ok": "OK",
     "open" : "Öffnen",
     "password": "Passwort",
+    "privacy": "Datenschutz",
     "profile": "Profil",
     "profileDetails": {
       "firstName": "Vorname",
@@ -254,6 +255,7 @@
     "admin": "Admin",
     "imprint": "Impressum",
     "logout": "Ausloggen",
+    "privacy": "Datenschutz",
     "userSettings": "Einstellungen"
   },
   "notifications": {
