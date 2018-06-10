@@ -3,8 +3,11 @@ import {DashboardBaseComponent} from '../dashboard-base-component';
 import {SnackBarService} from '../../../shared/services/snack-bar.service';
 import {DialogService} from '../../../shared/services/dialog.service';
 import {Router} from '@angular/router';
+import {SortUtil} from '../../../shared/utils/SortUtil';
+import {ICourseDashboard} from '../../../../../../../shared/models/ICourseDashboard';
 import {CourseNewComponent} from '../../../course/course-new/course-new.component';
 import {MatDialog} from '@angular/material';
+import {UserService} from '../../../shared/services/user.service';
 
 @Component({
   selector: 'app-dashboard-admin',
@@ -14,8 +17,10 @@ import {MatDialog} from '@angular/material';
 export class DashboardAdminComponent extends DashboardBaseComponent {
 
   fabOpen = false;
+  allCoursesHolder: ICourseDashboard[];
 
   constructor(private snackBar: SnackBarService,
+              public userService: UserService,
               private router: Router,
               private dialogService: DialogService,
               private dialog: MatDialog) {
@@ -23,6 +28,16 @@ export class DashboardAdminComponent extends DashboardBaseComponent {
   }
 
   ngOnInit() {
+    this.allCoursesHolder = [];
+  }
+
+  async getInput(event: any) {
+    if (this.allCoursesHolder.length === 0) {
+      this.allCoursesHolder = this.allCourses;
+    }
+    const searchValue = event.target.value.toLowerCase();
+    this.allCourses = [];
+    super.filterCourses(searchValue, this.allCoursesHolder, this.allCourses);
   }
 
   closeFab = () => {
@@ -54,5 +69,19 @@ export class DashboardAdminComponent extends DashboardBaseComponent {
       width: '400px',
       maxWidth: '100%'}
     );
+  }
+  ngOnChanges() {
+    this.sortCourses();
+  }
+
+  async sortAlphabetically() {
+    SortUtil.sortCoursesByName(this.allCoursesHolder);
+  }
+
+  async sortCourses() {
+    this.allCoursesHolder = [];
+
+    SortUtil.sortByLastVisitedCourses(this.allCourses, this.userService.user.lastVisitedCourses);
+    this.allCoursesHolder = this.allCourses;
   }
 }
