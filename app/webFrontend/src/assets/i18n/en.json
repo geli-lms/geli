@@ -256,6 +256,9 @@
     "logout": "Logout",
     "userSettings": "Settings"
   },
+  "messaging": {
+    "inputHintText": "Ctrl + Enter to send"
+  },
   "notifications": {
     "text": {
       "clearAll": "Clear all",

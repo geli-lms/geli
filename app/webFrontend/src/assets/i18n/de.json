@@ -256,6 +256,9 @@
     "logout": "Ausloggen",
     "userSettings": "Einstellungen"
   },
+  "messaging": {
+    "inputHintText": "Strg + Enter zum Senden "
+  },
   "notifications": {
     "text": {
       "clearAll": "Alle löschen",

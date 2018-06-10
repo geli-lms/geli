@@ -33,7 +33,8 @@ export class MessagingComponent implements OnInit {
 
   constructor(
     private messageService: MessageService,
-    private chatService: ChatService
+    private chatService: ChatService,
+    private userService: UserService
   ) {
 
     this.scrollCallback = this.loadMsgOnScroll ? this.loadMoreMsg.bind(this) : null;
@@ -43,10 +44,37 @@ export class MessagingComponent implements OnInit {
     this.init();
   }
 
-  private  generateChatName () {
+  /**
+   *  generate chat-name for the user in a given chat room
+   * @returns {string}
+   */
+  private getChatName(): string {
+    // look if user have contributed in the chat room
+    // if yes return his previous chatName.
+    let match = this.messages.find((message: IMessage) => {
+      return message.author === this.userService.user._id;
+    });
 
+    if (match) {
+      return match.chatName
+    }
+
+    //if user haven't contributed in the chat  generate new chatName
+    return this.generateChatName(this.userService.user.role);
   }
-  
+
+  private generateChatName(role: string) {
+    let contributors: string[] = [];
+    this.messages.forEach((message: IMessage) => {
+      const reg = new RegExp(role + '\\d+');
+      if (reg.test(message.chatName) && !!contributors.indexOf(message.author)) {
+        contributors.push(message.author);
+      }
+    });
+    const chatName = role + (contributors.length + 1);
+    return chatName;
+  }
+
   async init() {
     if (this.room) {
       const queryParam = {room: this.room, limit: this.limit};
@@ -54,6 +82,7 @@ export class MessagingComponent implements OnInit {
       this.messageCount = res.count;
       this.messages = await this.messageService.getMessages(queryParam);
       this.messages.reverse();
+      this.chatName = this.getChatName();
       this.initSocketConnection();
     }
   }
