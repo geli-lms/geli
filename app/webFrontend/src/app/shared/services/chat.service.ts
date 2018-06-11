@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import * as socketIo from 'socket.io-client';
-import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {AuthenticationService} from './authentication.service';
 import {environment} from '../../../environments/environment';
 import {ISocketIOMessage} from '../../../../../../shared/models/Messaging/ISocketIOMessage';
@@ -11,15 +10,10 @@ import {SocketIOEvent} from '../../../../../../shared/models/Messaging/SoketIOEv
 @Injectable()
 export class ChatService {
   socket;
-  chatName$ = new BehaviorSubject<string>(null);
   private readonly SERVER_URL =  environment.serverUrl + ':' + environment.serverPort;
 
 
   constructor(private authenticationService: AuthenticationService) {
-    const chatName = localStorage.getItem('chatName');
-    if (chatName) {
-      this.chatName$.next(chatName);
-    }
   }
 
   public initSocket(room: string): void {
@@ -32,10 +26,6 @@ export class ChatService {
     });
   }
 
-  public setChatName(chatName: string): void {
-    localStorage.setItem('chatName', chatName);
-    this.chatName$.next(chatName);
-  }
 
   public send(socketIOMessage: ISocketIOMessage): void {
     this.socket.emit(SocketIOEvent.MESSAGE, socketIOMessage);

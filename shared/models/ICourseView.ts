@@ -8,4 +8,5 @@ export interface ICourseView {
   courseAdmin: IUserSubCourseView;
   teachers: IUserSubCourseView[];
   lectures: ILecture[];
+  chatRooms: string[];
 }

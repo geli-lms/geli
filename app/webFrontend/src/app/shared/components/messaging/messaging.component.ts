@@ -10,6 +10,7 @@ import {Observable} from 'rxjs/Observable';
 import {ISocketIOMessage, SocketIOMessageType} from '../../../../../../../shared/models/Messaging/ISocketIOMessage';
 
 
+
 @Component({
   selector: 'app-messaging',
   templateUrl: './messaging.component.html',
@@ -22,7 +23,7 @@ export class MessagingComponent implements OnInit {
   @Input() loadMsgOnScroll = true;
   // number of messages to load
   @Input() limit = 20;
-  chatName: string
+  chatName: string;
 
   messages: IMessage[] = [];
   // number of message in a given room
@@ -44,6 +45,18 @@ export class MessagingComponent implements OnInit {
     this.init();
   }
 
+  async init() {
+    if (this.room) {
+      const queryParam = {room: this.room, limit: this.limit};
+      const res = await this.messageService.getMessageCount(queryParam);
+      this.messageCount = res.count;
+      this.messages = await this.messageService.getMessages(queryParam);
+      this.messages.reverse();
+      this.chatName = this.getChatName();
+      this.initSocketConnection();
+    }
+  }
+
   /**
    *  generate chat-name for the user in a given chat room
    * @returns {string}
@@ -59,32 +72,8 @@ export class MessagingComponent implements OnInit {
       return match.chatName
     }
 
-    //if user haven't contributed in the chat  generate new chatName
-    return this.generateChatName(this.userService.user.role);
-  }
-
-  private generateChatName(role: string) {
-    let contributors: string[] = [];
-    this.messages.forEach((message: IMessage) => {
-      const reg = new RegExp(role + '\\d+');
-      if (reg.test(message.chatName) && !!contributors.indexOf(message.author)) {
-        contributors.push(message.author);
-      }
-    });
-    const chatName = role + (contributors.length + 1);
-    return chatName;
-  }
-
-  async init() {
-    if (this.room) {
-      const queryParam = {room: this.room, limit: this.limit};
-      const res = await this.messageService.getMessageCount(queryParam);
-      this.messageCount = res.count;
-      this.messages = await this.messageService.getMessages(queryParam);
-      this.messages.reverse();
-      this.chatName = this.getChatName();
-      this.initSocketConnection();
-    }
+    //if user haven't contributed in the chat generate new chatName
+    return this.userService.user.role + Date.now();
   }
 
   /**

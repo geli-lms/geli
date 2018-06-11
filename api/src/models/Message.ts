@@ -1,6 +1,6 @@
 import * as mongoose from 'mongoose';
 import {IMessage} from '../../../shared/models/Messaging/IMessage';
-
+import {ChatRoom} from './ChatRoom';
 
 interface IMessageModel extends IMessage, mongoose.Document {
 }
@@ -48,7 +48,6 @@ const messageSchema = new mongoose.Schema({
 );
 
 messageSchema.add({comments: [messageSchema]});
-
 
 const Message = mongoose.model<IMessageModel>('Message', messageSchema);
 export {Message, IMessageModel};
