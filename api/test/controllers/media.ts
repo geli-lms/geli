@@ -192,7 +192,7 @@ describe('Media', async () => {
       }).save();
 
       const testFileName = 'test_file.txt';
-      const testFile = fs.readFileSync('./test/controllers/' + testFileName);
+      const testFile = fs.readFileSync('./test/resources/' + testFileName);
 
       const result = await chai.request(app)
         .post(`${BASE_URL}/file/${rootDirectory._id}`)
@@ -225,7 +225,7 @@ describe('Media', async () => {
       }).save();
 
       const testFileName = 'test_file_without_extension';
-      const testFile = fs.readFileSync('./test/controllers/' + testFileName);
+      const testFile = fs.readFileSync('./test/resources/' + testFileName);
 
       const result = await chai.request(app)
         .post(`${BASE_URL}/file/${rootDirectory._id}`)
