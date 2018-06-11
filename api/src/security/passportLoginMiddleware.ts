@@ -23,11 +23,10 @@ export function ldapAuthenticate(username: string, password: string) {
 
     const OPTS = {
       url: 'ldap://ldap-rr.fbi.h-da.de:389',
-      searchBase: 'ou=people,ou=Students,dc=fbi,dc=h-da,dc=de',
-      searchFilter: '(uid={{username}})'
+      connectTimeout : 10000
     };
-    const dn = 'cn=' + username;
-    const client = ldap.createClien(OPTS);
+    const dn = 'cn=' + username + ',ou=people,ou=Students,dc=fbi,dc=h-da,dc=de';
+    const client = ldap.createClient(OPTS);
 
     client.bind(dn, password, function (err: object) {
       client.unbind();
