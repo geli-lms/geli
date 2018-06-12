@@ -135,6 +135,7 @@
   "course": {
     "delete": "Delete course",
     "uploadImage": "Upload course image",
+    "search": "Search Courses",
     "placeholder": {
       "accessKey": "Access key",
       "description": "Course description",

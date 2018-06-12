@@ -3,7 +3,11 @@ import {Server} from '../../src/server';
 import {FixtureLoader} from '../../fixtures/FixtureLoader';
 import {FixtureUtils} from '../../fixtures/FixtureUtils';
 import {JwtUtils} from '../../src/security/JwtUtils';
-import {API_NOTIFICATION_TYPE_ALL_CHANGES, API_NOTIFICATION_TYPE_NONE, NotificationSettings} from '../../src/models/NotificationSettings';
+import {
+  API_NOTIFICATION_TYPE_ALL_CHANGES,
+  API_NOTIFICATION_TYPE_NONE,
+  NotificationSettings
+} from '../../src/models/NotificationSettings';
 import {User} from '../../src/models/User';
 import {Course} from '../../src/models/Course';
 import chaiHttp = require('chai-http');
@@ -22,7 +26,7 @@ describe('NotificationSettings', async () => {
   describe(`POST ${BASE_URL}`, async () => {
     it('should create notification settings', async () => {
       const course = await FixtureUtils.getRandomCourse();
-      const student = await User.findById(course.students[0]);
+      const student = course.students[0];
       const newSettings = {user: student, course: course};
 
       const res = await chai.request(app)
@@ -39,6 +43,35 @@ describe('NotificationSettings', async () => {
       const notificationSettings = await NotificationSettings.findById(res.body._id);
       notificationSettings.user.toString().should.be.equal(newSettings.user._id.toString());
       notificationSettings.course.toString().should.be.equal(newSettings.course._id.toString());
+    });
+
+    it('should fail when already exist', async () => {
+      const course = await FixtureUtils.getRandomCourse();
+      const student = course.students[0];
+      const newSettings = {user: student, course: course};
+
+      const res = await chai.request(app)
+        .post(BASE_URL)
+        .set('Authorization', `JWT ${JwtUtils.generateToken(student)}`)
+        .send(newSettings);
+      res.status.should.be.equals(200);
+
+      const resFail = await chai.request(app)
+        .post(BASE_URL)
+        .set('Authorization', `JWT ${JwtUtils.generateToken(student)}`)
+        .send(newSettings);
+      resFail.status.should.be.equals(400);
+    });
+
+    it('should fail when course or user missing', async () => {
+      const course = await FixtureUtils.getRandomCourse();
+      const student = course.students[0];
+
+      const res = await chai.request(app)
+        .post(BASE_URL)
+        .set('Authorization', `JWT ${JwtUtils.generateToken(student)}`)
+        .send({});
+      res.status.should.be.equals(400);
     });
   });
 
@@ -101,6 +134,24 @@ describe('NotificationSettings', async () => {
       res.body.should.have.property('user');
       res.body.should.have.property('course');
       res.body._id.should.be.a('string');
+    });
+
+    it('should fail when missing course or user', async () => {
+      const course = await FixtureUtils.getRandomCourse();
+      const student = course.students[Math.floor(Math.random() * course.students.length)];
+
+      const settings = await new NotificationSettings({
+        'user': student,
+        'course': course,
+        'notificationType': API_NOTIFICATION_TYPE_ALL_CHANGES,
+        'emailNotification': false
+      }).save();
+
+      const res = await chai.request(app)
+        .put(`${BASE_URL}/${settings._id}`)
+        .set('Authorization', `JWT ${JwtUtils.generateToken(student)}`)
+        .send([]);
+      res.should.have.status(400);
     });
   });
 });
