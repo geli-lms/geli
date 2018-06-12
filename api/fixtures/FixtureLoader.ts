@@ -17,7 +17,6 @@ import {IChatRoom} from '../../shared/models/IChatRoom';
 import {IUser} from '../../shared/models/IUser';
 
 
-
 export class FixtureLoader {
   private usersDirectory = 'build/fixtures/users/';
   private coursesDirectory = 'build/fixtures/courses/';
@@ -34,14 +33,15 @@ export class FixtureLoader {
 
   async loadMessages() {
     const messageFixtures = fs.readdirSync(this.chatDirectory);
-    for(const messageFile of messageFixtures) {
+    for (const messageFile of messageFixtures) {
       const file = fs.readFileSync(this.chatDirectory + messageFile);
-      var chatRooms: IChatRoom[];
+      let chatRooms: IChatRoom[];
 
-      if(messageFile.toString().includes('messages')) {
+      if (messageFile.toString().includes('messages')) {
         chatRooms = await ChatRoom.find({'room.roomType': 'Course'});
+      } else {
+        chatRooms = await ChatRoom.find({'room.roomType': 'Unit'});
       }
-      // TODO: else get comments chat rooms
 
       const messages = JSON.parse(file.toString());
       chatRooms.map(async (chatRoom: IChatRoom) => {
@@ -50,10 +50,20 @@ export class FixtureLoader {
 
         messages.map((message: any) => {
           message.room = chatRoom._id;
-          const randomIdx = FixtureUtils.getRandomNumber(0, users.length);
-          const randomUser: IUser = users[randomIdx];
+          let randomIdx = FixtureUtils.getRandomNumber(0, users.length);
+          let randomUser: IUser = users[randomIdx];
           message.author = randomUser._id;
           message.chatName = randomUser.role + randomIdx;
+
+          if (message.comments && message.comments.length > 0) {
+            message.comments.map((msg: any) => {
+              msg.room = chatRoom._id;
+              randomIdx = FixtureUtils.getRandomNumber(0, users.length);
+              randomUser = users[randomIdx];
+              msg.author = randomUser._id;
+              msg.chatName = randomUser.role + randomIdx;
+            });
+          }
 
           new Message(message).save();
         });
@@ -105,7 +115,7 @@ export class FixtureLoader {
       return importedCourse._id;
     }));
 
-    //import messages
+    // import messages
     this.loadMessages();
 
     // import files
