@@ -139,7 +139,7 @@ export class GeneralTabComponent implements OnInit {
 
     const responsiveImage =
       ResponsiveImage.create()
-        .breakpoint(BreakpointSize.MOBILE, { width: 284 });
+        .breakpoint(BreakpointSize.MOBILE, { width: 284, height: 190 });
 
     const result = await this.dialogService
       .uploadResponsiveImage('Choose a picture for the course.', apiPath, responsiveImage).toPromise();
