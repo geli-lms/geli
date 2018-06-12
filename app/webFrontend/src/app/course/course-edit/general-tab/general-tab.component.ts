@@ -139,7 +139,7 @@ export class GeneralTabComponent implements OnInit {
 
     const responsiveImage =
       ResponsiveImage.create()
-        .breakpoint(BreakpointSize.MOBILE, { width: 284, height: 190 });
+        .breakpoint(BreakpointSize.MOBILE, { width: 284 });
 
     const result = await this.dialogService
       .uploadResponsiveImage('Choose a picture for the course.', apiPath, responsiveImage).toPromise();
@@ -147,6 +147,7 @@ export class GeneralTabComponent implements OnInit {
     if (result && result.success) {
       this.courseImageData = result.result;
     } else {
+      this.snackBar.openLong('Image upload failed. It seems like the file type is not correct.');
     }
   }
 

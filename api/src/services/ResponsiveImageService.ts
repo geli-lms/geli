@@ -40,22 +40,43 @@ export default class ResponsiveImageService {
 
       sharp.cache(false);
 
-      await sharp(originalFile.path)
-        .resize(breakpoint.imageSize.width)
-        .withoutEnlargement(true)
-        .max()
-        .toFile(directory + '/' + fileNameToSave);
-
-      // Retina
-
-      const retinaWidth = breakpoint.imageSize.width * 2;
       const retinaFileNameToSave = filenameWithoutExtension + '_' + breakpoint.screenSize + '@2x.' + extension;
 
-      await sharp(originalFile.path)
-        .resize(retinaWidth)
-        .withoutEnlargement(true)
-        .max()
+
+      let resizeOptions = sharp(originalFile.path)
+        .withoutEnlargement(true);
+      let retinaResizeOptions = sharp(originalFile.path)
+        .withoutEnlargement(true);
+
+      if (breakpoint.imageSize.width && breakpoint.imageSize.height) {
+        resizeOptions =
+          resizeOptions.resize(breakpoint.imageSize.width, breakpoint.imageSize.height)
+          .crop(sharp.gravity.center);
+
+        retinaResizeOptions =
+          retinaResizeOptions.resize(breakpoint.imageSize.width * 2, breakpoint.imageSize.height * 2)
+          .crop(sharp.gravity.center);
+
+      } else if (!breakpoint.imageSize.width && breakpoint.imageSize.height) {
+        resizeOptions = resizeOptions.resize(null, breakpoint.imageSize.height)
+          .max();
+
+        retinaResizeOptions = retinaResizeOptions.resize(null, breakpoint.imageSize.height * 2)
+          .max();
+      } else {
+        resizeOptions = resizeOptions.resize(breakpoint.imageSize.width)
+          .max();
+
+        retinaResizeOptions = retinaResizeOptions.resize(breakpoint.imageSize.width * 2)
+          .max();
+      }
+
+      await resizeOptions
+        .toFile(directory + '/' + fileNameToSave);
+
+      await retinaResizeOptions
         .toFile(directory + '/' + retinaFileNameToSave);
+
 
 
       breakpoint.pathToImage = directory + '/' + fileNameToSave;
