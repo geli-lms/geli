@@ -28,6 +28,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Reload user list after deleting an account. [#724](https://github.com/h-da/geli/pull/724)
 - Validate form before submit when creating a new course. [#724](https://github.com/h-da/geli/pull/724)
 - Validate :id for CourseController details route. [#724](https://github.com/h-da/geli/pull/724)
+- Added search function for available courses. [#723](https://github.com/h-da/geli/issues/723)
 - Another MatSnackBar to SnackBarService migration. [#730](https://github.com/h-da/geli/pull/730)
 - `getNotificationSettings` does not create new notification settings. [#731](https://github.com/h-da/geli/issues/731)
 - Remove `isCourseTeacherOrAdmin` and `isMemberOfCourse`from UserService. [#731](https://github.com/h-da/geli/issues/731)
@@ -39,6 +40,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Fixed broken Apidoc [#737](https://github.com/h-da/geli/issues/737)
 - Disabled `tutor` role. [#710](https://github.com/h-da/geli/issues/710)
 - Fixed notifications on hidden units. [#733](https://github.com/utetrapp/geli/issues/733)
+- Validate user input for notication settings api. [#771](https://github.com/utetrapp/geli/issues/771)
 
 ## [[0.7.0](https://github.com/h-da/geli/releases/tag/v0.7.0)] - 2018-05-05 - SS 18 intermediate Release
 ### Added

@@ -18,9 +18,14 @@ import {TranslateService} from '@ngx-translate/core';
 export class DashboardTeacherComponent extends DashboardBaseComponent {
 
   myCourses: ICourseDashboard[];
+  myCoursesHolder: ICourseDashboard[];
   furtherCourses: ICourseDashboard[];
+  furtherCoursesHolder: ICourseDashboard[];
   inactiveCourses: ICourseDashboard[];
+  inactiveCoursesHolder: ICourseDashboard[];
   availableCourses: ICourseDashboard[];
+  availableCoursesHolder: ICourseDashboard[];
+  searchValue: string;
   fabOpen = false;
 
   constructor(public userService: UserService,
@@ -36,6 +41,46 @@ export class DashboardTeacherComponent extends DashboardBaseComponent {
     this.sortCourses();
   }
 
+  ngOnInit() {
+    this.searchValue = '';
+    this.myCoursesHolder = [];
+    this.availableCoursesHolder = [];
+    this.furtherCoursesHolder = [];
+    this.inactiveCoursesHolder = [];
+  }
+
+  async getInput(event: any) {
+    if (this.myCoursesHolder.length === 0) {
+      this.myCoursesHolder = this.myCourses;
+    }
+    if (this.availableCoursesHolder.length === 0) {
+      this.availableCoursesHolder = this.availableCourses;
+    }
+    if (this.furtherCoursesHolder.length === 0) {
+      this.furtherCoursesHolder = this.furtherCourses;
+    }
+    if (this.inactiveCoursesHolder.length === 0) {
+      this.inactiveCoursesHolder = this.inactiveCourses;
+    }
+    const searchValue = event.target.value.toLowerCase();
+    this.myCourses = [];
+    this.availableCourses = [];
+    this.furtherCourses = [];
+    this.inactiveCourses = [];
+    super.filterCourses(searchValue, this.myCoursesHolder, this.myCourses);
+    super.filterCourses(searchValue, this.availableCoursesHolder, this.availableCourses);
+    super.filterCourses(searchValue, this.furtherCoursesHolder, this.furtherCourses);
+    super.filterCourses(searchValue, this.inactiveCoursesHolder, this.inactiveCourses);
+  }
+
+  async sortAlphabetically() {
+    SortUtil.sortCoursesByName(this.myCourses);
+    SortUtil.sortCoursesByName(this.availableCourses);
+    SortUtil.sortCoursesByName(this.furtherCourses);
+    SortUtil.sortCoursesByName(this.inactiveCourses);
+
+  }
+
   sortCourses() {
     this.myCourses = [];
     this.availableCourses = [];
@@ -43,16 +88,19 @@ export class DashboardTeacherComponent extends DashboardBaseComponent {
     this.inactiveCourses = [];
     SortUtil.sortByLastVisitedCourses(this.allCourses, this.userService.user.lastVisitedCourses);
     for (const course of this.allCourses) {
-      if (course.userIsCourseAdmin || course.userIsCourseTeacher) {
-        if (!course.active) {
-          this.inactiveCourses.push(course);
-        } else if (course.userIsCourseAdmin) {
-          this.myCourses.push(course);
+      const temp = course.name.toLowerCase();
+      if (temp.includes(this.searchValue)) {
+        if (course.userIsCourseAdmin || course.userIsCourseTeacher) {
+          if (!course.active) {
+            this.inactiveCourses.push(course);
+          } else if (course.userIsCourseAdmin) {
+            this.myCourses.push(course);
+          } else {
+            this.furtherCourses.push(course);
+          }
         } else {
-          this.furtherCourses.push(course);
+          this.availableCourses.push(course);
         }
-      } else {
-        this.availableCourses.push(course);
       }
     }
   }

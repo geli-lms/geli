@@ -140,6 +140,7 @@
   },
   "course": {
     "delete": "Kurs löschen",
+    "search": "Kurse Suchen",
     "placeholder": {
       "accessKey": "Einschreibeschlüssel",
       "description": "Kursbeschreibung",
