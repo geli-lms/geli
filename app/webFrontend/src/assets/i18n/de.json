@@ -67,6 +67,7 @@
     "close" : "Schließen",
     "continue": "Weiter",
     "content": "Inhalt",
+    "course": "Kurs",
     "delete": "Löschen",
     "description": "Beschreibung",
     "discard": "Verwerfen",
@@ -156,6 +157,7 @@
       "enterAccessKey": "Bitte geben Sie den Einschreibeschlüssel dieses Kurses ein.",
       "enterAccessKeyForStudents": "Geben Sie einen Einschreibeschlüssel für die Studenten ein.",
       "goToCourse": "Zum Kurs",
+      "hasBeenDeleted": "wurde gelöscht.",
       "inCourse": "Im Kurs",
       "infoWhitelist": "Allen Benutzern dieser Liste, ist es erlaubt, dem Kurs beizutreten.",
       "isFreeForEveryone": "Der Kurs ist offen und für jeden zugänglich.",
@@ -175,8 +177,8 @@
       "userResults": "Benutzerergebnisse",
       "yourCourseProgress": "Ihr Kursfortschritt",
       "whitelist": "Freigabeliste",
-      "noVideosAttached": "Es gibt keine Videos zu diesem Kurs ☹",
-      "noFilesAttached": "Es gibt keine Dateien zu diesem Kurs ☹"
+      "noVideosAttached": "Es gibt keine Videos zu diesem Kurs",
+      "noFilesAttached": "Es gibt keine Dateien zu diesem Kurs"
     },
     "tooltip" : {
       "add": "Kurs hinzufügen",
@@ -275,7 +277,9 @@
   },
   "snackbarMessages": {
     "chooseJson": "Wähle eine Kurs.json Datei zum Importieren",
-    "importSuccess": "Kurs erfolgreich Importiert!"
+    "importSuccess": "Kurs erfolgreich Importiert!",
+    "AreYouSure": "Sind Sie sich sicher dass Sie",
+    "dismiss": "Verstanden."
   },
   "sort": {
     "alphabetically": "alphabetisch",

@@ -17,6 +17,7 @@ import {SaveFileService} from '../../../shared/services/save-file.service';
 import {UserService} from '../../../shared/services/user.service';
 import {DataSharingService} from '../../../shared/services/data-sharing.service';
 import {DialogService} from '../../../shared/services/dialog.service';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-course-edit-general-tab',
@@ -24,7 +25,6 @@ import {DialogService} from '../../../shared/services/dialog.service';
   styleUrls: ['./general-tab.component.scss']
 })
 export class GeneralTabComponent implements OnInit {
-
   course: string;
   description: string;
   accessKey: string;
@@ -58,7 +58,8 @@ export class GeneralTabComponent implements OnInit {
               private userService: UserService,
               private dataSharingService: DataSharingService,
               private dialogService: DialogService,
-              private notificationService: NotificationService) {
+              private notificationService: NotificationService,
+              private translate: TranslateService) {
 
     this.route.params.subscribe(params => {
       this.id = params['id'];
@@ -182,12 +183,15 @@ export class GeneralTabComponent implements OnInit {
         if (!res) {
           return;
         }
-        await this.notificationService.createItem({
-          changedCourse: this.courseOb,
-          changedLecture: null,
-          changedUnit: null,
-          text: 'Course ' + this.courseOb.name + ' has been deleted.'
-        });
+        await this.translate.get(['common.course', 'course.hasBeenDeleted'])
+          .subscribe((t: string) => {
+              this.notificationService.createItem({
+              changedCourse: this.courseOb,
+              changedLecture: null,
+              changedUnit: null,
+              text: t['common.course'] + ' ' + this.courseOb.name + ' ' + t['hasBeenDeleted']
+            });
+          });
         await this.courseService.deleteItem(this.courseOb);
         this.router.navigate(['/']);
       });

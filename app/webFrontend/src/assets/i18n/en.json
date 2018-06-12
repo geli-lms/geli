@@ -66,6 +66,7 @@
     "cheatSheetYouFind": "A cheat sheet you can find ",
     "continue": "Continue",
     "content": "Content",
+    "course": "Course",
     "close": "Close",
     "delete": "Delete",
     "description": "Description",
@@ -156,6 +157,7 @@
       "enterAccessKey": "Please enter the course's access key.",
       "enterAccessKeyForStudents": "Enter an access key for the students.",
       "goToCourse": "Go to course",
+      "hasBeenDeleted": "has been deleted.",
       "inCourse": "In Course",
       "infoWhitelist": "All users on this list are allowed to join this course.",
       "isFreeForEveryone": "The course is free and accessible for everyone.",
@@ -175,8 +177,8 @@
       "userResults": "User results",
       "yourCourseProgress": "Your course progress",
       "whitelist": "Whitelist",
-      "noVideosAttached": "There are no videos attached to this course yet ☹",
-      "noFilesAttached": "There are no files attached to this course yet ☹"
+      "noVideosAttached": "There are no videos attached to this course yet",
+      "noFilesAttached": "There are no files attached to this course yet"
     },
     "tooltip": {
       "add": "Add Course",
@@ -275,7 +277,9 @@
   },
   "snackbarMessages": {
     "chooseJson": "Select a course.json file for import.",
-    "importSuccess": "Course Successfully imported!"
+    "importSuccess": "Course Successfully imported!",
+    "AreYouSure": "Are you sure you want to",
+    "dismiss": "Dismiss."
   },
   "sort": {
     "alphabetically": "alphabetically",
