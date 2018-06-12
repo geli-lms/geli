@@ -130,6 +130,7 @@ courseSchema.pre('save', async function () {
         roomFor: course
       }
     });
+    course.chatRooms.push(chatRoom._id);
     Object.assign(this, course);
   }
 });

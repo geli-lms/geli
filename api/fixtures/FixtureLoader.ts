@@ -7,16 +7,21 @@ import * as crypto from 'crypto';
 import {FixtureUtils} from './FixtureUtils';
 import {Lecture} from '../src/models/Lecture';
 import {Unit} from '../src/models/units/Unit';
+import {Message} from '../src/models/Message';
 import {WhitelistUser} from '../src/models/WhitelistUser';
 import {Progress} from '../src/models/progress/Progress';
 import {ITaskUnitModel} from '../src/models/units/TaskUnit';
 import {ICodeKataUnit} from '../../shared/models/units/ICodeKataUnit';
+import {ChatRoom} from '../src/models/ChatRoom';
+import {IChatRoom} from '../../shared/models/IChatRoom';
+import {IUser} from '../../shared/models/IUser';
+
 
 
 export class FixtureLoader {
   private usersDirectory = 'build/fixtures/users/';
   private coursesDirectory = 'build/fixtures/courses/';
-
+  private chatDirectory = 'build/fixtures/chat/';
   private binaryDirectory = 'build/fixtures/binaryData/';
 
   constructor() {
@@ -24,6 +29,36 @@ export class FixtureLoader {
 
     if (!mongoose.connection.readyState) {
       mongoose.connect(config.database);
+    }
+  }
+
+  async loadMessages() {
+    const messageFixtures = fs.readdirSync(this.chatDirectory);
+    for(const messageFile of messageFixtures) {
+      const file = fs.readFileSync(this.chatDirectory + messageFile);
+      var chatRooms: IChatRoom[];
+
+      if(messageFile.toString().includes('messages')) {
+        chatRooms = await ChatRoom.find({'room.roomType': 'Course'});
+      }
+      // TODO: else get comments chat rooms
+
+      const messages = JSON.parse(file.toString());
+      chatRooms.map(async (chatRoom: IChatRoom) => {
+        const hash = crypto.createHash('sha1').update(file.toString()).digest('hex');
+        const users: IUser[] = await  FixtureUtils.getRandomUsers(2, 10, hash);
+
+        messages.map((message: any) => {
+          message.room = chatRoom._id;
+          const randomIdx = FixtureUtils.getRandomNumber(0, users.length);
+          const randomUser: IUser = users[randomIdx];
+          message.author = randomUser._id;
+          message.chatName = randomUser.role + randomIdx;
+
+          new Message(message).save();
+        });
+
+      });
     }
   }
 
@@ -46,7 +81,7 @@ export class FixtureLoader {
     }
 
     // import coursefiles
-    await Promise.all(coursefixtures.map( async (courseFile: string) => {
+    await Promise.all(coursefixtures.map(async (courseFile: string) => {
       const file = fs.readFileSync(this.coursesDirectory + courseFile);
       const course = JSON.parse(file.toString());
 
@@ -70,6 +105,9 @@ export class FixtureLoader {
       return importedCourse._id;
     }));
 
+    //import messages
+    this.loadMessages();
+
     // import files
     const fileUnits = await Unit.find({files: {$exists: true}});
 
@@ -87,9 +125,9 @@ export class FixtureLoader {
     const progressableUnits = await Unit.find({progressable: true});
 
     await Promise.all(progressableUnits.map(async unit => {
-      const lecture = await Lecture.findOne({units: { $in: [ unit._id ] }});
-      const course = await Course.findOne({lectures: { $in: [ lecture._id ] }});
-      const students = await User.find({_id: { $in: course.students}});
+      const lecture = await Lecture.findOne({units: {$in: [unit._id]}});
+      const course = await Course.findOne({lectures: {$in: [lecture._id]}});
+      const students = await User.find({_id: {$in: course.students}});
       const unitObj = await unit.toObject();
 
       for (const student of students) {
