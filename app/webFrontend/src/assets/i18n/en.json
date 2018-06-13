@@ -264,7 +264,9 @@
     }
   },
   "report": {
-    "exportToCsv": "Export to CSV"
+    "exportToCsv": "Export to CSV",
+    "noProgressableUnits": "This course contains no progressable units.",
+    "noStudents": "There are no students enrolled to this course."
   },
   "sort": {
     "alphabetically": "alphabetically",

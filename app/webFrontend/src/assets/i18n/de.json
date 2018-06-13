@@ -264,7 +264,9 @@
     }
   },
   "report": {
-    "exportToCsv": "Als CSV exportieren"
+    "exportToCsv": "Als CSV exportieren",
+    "noProgressableUnits": "In diesem Kurs existieren keine erfüllbaren Aufgaben.",
+    "noStudents": "In diesen Kurs sind keine Studenten eingeschrieben."
   },
   "sort": {
     "alphabetically": "alphabetisch",

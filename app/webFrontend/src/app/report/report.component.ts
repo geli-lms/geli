@@ -4,6 +4,8 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {CourseService} from '../shared/services/data.service';
 import { ReportService } from '../shared/services/data/report.service';
 import {saveAs} from 'file-saver/FileSaver';
+import {SnackBarService} from '../shared/services/snack-bar.service';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-report',
@@ -22,7 +24,9 @@ export class ReportComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private courseService: CourseService,
-    private reportService: ReportService) { }
+    private reportService: ReportService,
+    private snackBar: SnackBarService,
+    private translate: TranslateService) { }
 
   ngOnInit() {
     this.route.params.subscribe(params => {
@@ -42,12 +46,26 @@ export class ReportComponent implements OnInit {
   }
   private exportReport() {
     const tasks = this.filterCourseForTasks();
-    const header = this.generateCsvHeader(tasks);
-    this.reportService.getCourseResults(this.courseId)
-      .then((result) => {
-      const csvContent = this.generateCsvContent(result, tasks, header);
-      this.createDownload(csvContent);
-    });
+
+    if (tasks.length === 0) {
+      this.translate.get(['report.noProgressableUnits', 'common.dismiss']).subscribe((t: string) => {
+        this.snackBar.open(t['report.noProgressableUnits'], t['common.dismiss']);
+      });
+    } else {
+      const header = this.generateCsvHeader(tasks);
+      this.reportService.getCourseResults(this.courseId)
+        .then((report) => {
+          if (report.length) {
+            const csvContent = this.generateCsvContent(report, tasks, header);
+            this.createDownload(csvContent);
+          } else {
+            this.translate.get(['report.noStudents', 'common.dismiss']).subscribe((t: string) => {
+              this.snackBar.open(t['report.noStudents'], t['common.dismiss']);
+            });
+          }
+        });
+    }
+
   }
   private filterCourseForTasks() {
     const tasks: any[] = [];
