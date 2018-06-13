@@ -17,13 +17,14 @@ const chatRoomSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         refPath: 'room.roomType',
       }
-    }
+    },
   },
   {
     timestamps: true,
     toObject: {
       transform: function (doc: any, ret: any) {
         ret._id = ret._id.toString();
+        delete ret.room;
       }
     }
   }

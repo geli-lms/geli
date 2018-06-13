@@ -27,7 +27,9 @@ export default class MessageController {
 
 
   @Get('/')
-  async get(@QueryParam('room') room: string, @QueryParam('skip') skip: number= 0, @QueryParam('limit') limit: number,@QueryParam('order') order: number = -1) {
+  async get (
+    @QueryParam('room') room: string, @QueryParam('skip') skip: number= 0,
+    @QueryParam('limit') limit: number, @QueryParam('order') order: number = -1) {
     if (!room) {
       throw new BadRequestError();
     }
@@ -54,9 +56,9 @@ export default class MessageController {
   }
 
   @Post('/:id([a-fA-F0-9]{24})/comments')
-  async addComment(@Body() comment: IMessage, @Param('id') id: string){
-     let message = await Message.findById(id);
-     if(!message) {
+  async addComment (@Body() comment: IMessage, @Param('id') id: string) {
+     const  message = await Message.findById(id);
+     if (!message) {
        throw new NotFoundError('message not found');
      }
 

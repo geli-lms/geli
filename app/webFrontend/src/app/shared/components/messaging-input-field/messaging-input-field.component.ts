@@ -1,6 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {ChatNameInputComponent} from '../chat-name-input/chat-name-input.component';
+import {FormControl, FormGroup} from '@angular/forms';
 import {ChatService} from '../../services/chat.service';
 import {MatDialog} from '@angular/material';
 import {UserService} from '../../services/user.service';
@@ -19,16 +18,13 @@ import {IMessage} from '../../../../../../../shared/models/Messaging/IMessage';
 export class MessagingInputFieldComponent implements OnInit {
   @Input() parentMessageId;
   @Input() room: string;
+  @Input() chatName: string;
 
-  chatName: string;
   form = new FormGroup({
     message: new FormControl('')
   });
 
   constructor(private chatService: ChatService, private dialog: MatDialog, private userService: UserService,) {
-    this.chatService.chatName$.subscribe(chatName => {
-      this.chatName = chatName;
-    });
   }
 
   ngOnInit() {
@@ -42,18 +38,7 @@ export class MessagingInputFieldComponent implements OnInit {
   onEnter(event: KeyboardEvent): void {
     const message = this.form.getRawValue().message;
     if (event.keyCode === 13 && event.ctrlKey && message.trim().length > 0) {
-      if (!this.chatName) {
-        const dialogRef = this.dialog.open(ChatNameInputComponent, {
-          data: {chatName: this.chatName}
-        });
-
-        dialogRef.afterClosed()
-          .subscribe(() => {
-            this.postMessage();
-          });
-      } else {
-        this.postMessage();
-      }
+      this.postMessage();
     }
   }
 

@@ -10,9 +10,9 @@ import {TitleService} from '../../shared/services/title.service';
 import {LastVisitedCourseContainerUpdater} from '../../shared/utils/LastVisitedCourseContainerUpdater';
 import {DialogService} from '../../shared/services/dialog.service';
 import {DataSharingService} from '../../shared/services/data-sharing.service';
-import {ChatNameInputComponent} from '../../shared/components/chat-name-input/chat-name-input.component';
 import {ChatService} from '../../shared/services/chat.service';
 import {DownloadCourseDialogComponent} from './download-course-dialog/download-course-dialog.component';
+import {IChatRoom} from '../../../../../../shared/models/IChatRoom';
 
 
 @Component({
@@ -57,9 +57,6 @@ export class CourseDetailComponent implements OnInit, OnDestroy {
     this.getCourse(this.id);
     this.titleService.setTitle('Course');
 
-    this.chatService.chatName$.subscribe(name => {
-       this.chatName = name;
-    });
   }
 
   async getCourse(courseId: string) {
@@ -98,12 +95,4 @@ export class CourseDetailComponent implements OnInit, OnDestroy {
     this.showChat = !this.showChat;
   }
 
-  /**
-   * update user chat name
-   */
-  updateChatName() {
-    const dialogRef = this.dialog.open(ChatNameInputComponent, {
-      data: {chatName: this.chatName}
-    });
-  }
 }

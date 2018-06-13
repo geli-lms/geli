@@ -36,7 +36,7 @@ $app-night-theme: mat-dark-theme($app-night-primary, $app-night-accent, $app-nig
     color: map-get($app-night-primary, A100) !important;
   }
 
-  .answers{
+  .answers {
     background-color: map-get($mat-grey, 800) !important;;
   }
 }
@@ -122,4 +122,18 @@ app-root > .app-wrapper {
 
 .pull-right {
   float: right;
+}
+
+.comments-dialog {
+  max-width: none !important;
+  width:100%;
+  height: 100%;
+  @include bp(sm) {
+    width: 50%;
+    height: 90%;
+  }
+  .mat-dialog-container {
+    padding: 0;
+    overflow: hidden;
+  }
 }

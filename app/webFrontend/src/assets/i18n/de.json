@@ -127,6 +127,7 @@
       "maxLength": "Maximal {{max}} Zeichen erlaubt",
       "minLength": "Mindestens {{min}} Zeichen benötigt",
       "password": "Passwörter müssen aus mindestens 8 Zeichen, inklusive einem Sonderzeichen und einer Ziffer bestehen",
+      "wrong_mimeType": "Falsches Dateiformat. Es sind nur Bilder erlaubt!",
       "passwordsMatch": "Die Passwörter stimmen nicht überein.",
       "required": "Eingabe notwendig"
     }
@@ -212,7 +213,7 @@
       "noVideo": "Kein Video verfügbar.",
       "noFiles" : "Keine Dateien vorhanden",
       "progress": "Fortschritt",
-      "RemoveFromQueue": "Datei aus der Schlange löschen.",
+      "removeFromQueue": "Datei aus der Schlange löschen.",
       "takePicture": "Bild aufnehmen"
     },
     "tooltip":{
@@ -254,6 +255,9 @@
     "imprint": "Impressum",
     "logout": "Ausloggen",
     "userSettings": "Einstellungen"
+  },
+  "messaging": {
+    "inputHintText": "Strg + Enter zum Senden "
   },
   "notifications": {
     "text": {

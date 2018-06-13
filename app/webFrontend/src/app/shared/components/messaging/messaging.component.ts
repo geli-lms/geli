@@ -10,6 +10,7 @@ import {Observable} from 'rxjs/Observable';
 import {ISocketIOMessage, SocketIOMessageType} from '../../../../../../../shared/models/Messaging/ISocketIOMessage';
 
 
+
 @Component({
   selector: 'app-messaging',
   templateUrl: './messaging.component.html',
@@ -22,6 +23,7 @@ export class MessagingComponent implements OnInit {
   @Input() loadMsgOnScroll = true;
   // number of messages to load
   @Input() limit = 20;
+  chatName: string;
 
   messages: IMessage[] = [];
   // number of message in a given room
@@ -32,12 +34,12 @@ export class MessagingComponent implements OnInit {
 
   constructor(
     private messageService: MessageService,
-    private chatService: ChatService
+    private chatService: ChatService,
+    private userService: UserService
   ) {
 
     this.scrollCallback = this.loadMsgOnScroll ? this.loadMoreMsg.bind(this) : null;
   }
-
 
   ngOnInit() {
     this.init();
@@ -50,8 +52,28 @@ export class MessagingComponent implements OnInit {
       this.messageCount = res.count;
       this.messages = await this.messageService.getMessages(queryParam);
       this.messages.reverse();
+      this.chatName = this.getChatName();
       this.initSocketConnection();
     }
+  }
+
+  /**
+   *  generate chat-name for the user in a given chat room
+   * @returns {string}
+   */
+  private getChatName(): string {
+    // look if user have contributed in the chat room
+    // if yes return his previous chatName.
+    let match = this.messages.find((message: IMessage) => {
+      return message.author === this.userService.user._id;
+    });
+
+    if (match) {
+      return match.chatName
+    }
+
+    //if user haven't contributed in the chat generate new chatName
+    return this.userService.user.role + Date.now();
   }
 
   /**

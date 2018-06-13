@@ -12,10 +12,7 @@ import {MatFabMenuComponent} from './components/mat-fab-menu/mat-fab-menu.compon
 import {PasswordInputComponent} from './components/password-input/password-input.component';
 import {ExpandableDivComponent} from './components/expandable-div/expandable-div.component';
 import {ButtonSaveCancelComponent} from './components/button-save-cancel/button-save-cancel.component';
-import {UploadFormComponent} from './components/upload-form/upload-form.component';
 import {FileUploadModule} from 'ng2-file-upload';
-import {FilesizePipe} from './pipes/filesize/filesize.pipe';
-import {UploadFormDialog} from './components/upload-form-dialog/upload-form-dialog.component';
 import {ChangePasswordDialogComponent} from './components/change-password-dialog/change-password-dialog.component';
 import {MarkdownEditorComponent} from './components/markdown-editor/markdown-editor.component';
 import {AceEditorModule} from 'ng2-ace-editor';
@@ -24,7 +21,6 @@ import {TranslateModule} from '@ngx-translate/core';
 import {AdminMarkdownEditComponent} from './components/admin-markdown-edit/admin-markdown-edit.component';
 import {UserProfileDialog} from 'app/shared/components/user-profile-dialog/user-profile-dialog.component';
 import {NotfoundComponent} from './components/notfound/notfound.component';
-import {ChatNameInputComponent} from './components/chat-name-input/chat-name-input.component';
 import {InfiniteScrollDirective} from './directives/infinite-scroll.directive';
 import { ShowCommentsDirective } from './directives/show-comments.directive';
 import { CommentsDialogComponent } from './components/comments-dialog/comments-dialog.component';
@@ -55,9 +51,6 @@ import { MessageComponent } from './components/message/message.component';
     BadgeComponent,
     ExpandableDivComponent,
     ButtonSaveCancelComponent,
-    UploadFormComponent,
-    FilesizePipe,
-    UploadFormDialog,
     ChangePasswordDialogComponent,
     MarkdownEditorComponent,
     PickMediaDialog,
@@ -66,7 +59,6 @@ import { MessageComponent } from './components/message/message.component';
     NotfoundComponent,
     UserProfileDialog,
     MessagingComponent,
-    ChatNameInputComponent,
     InfiniteScrollDirective,
     ShowCommentsDirective,
     CommentsDialogComponent,
@@ -87,24 +79,18 @@ import { MessageComponent } from './components/message/message.component';
     ExpandableDivComponent,
     ButtonSaveCancelComponent,
     MarkdownEditorComponent,
-    UploadFormComponent,
-    FilesizePipe,
-    UploadFormDialog,
     ChangePasswordDialogComponent,
     PickMediaDialog,
     TranslateModule,
     AdminMarkdownEditComponent,
     UserProfileDialog,
     MessagingComponent,
-    ChatNameInputComponent,
     InfiniteScrollDirective,
     ShowCommentsDirective,
   ],
   entryComponents: [
-    UploadFormDialog,
     PickMediaDialog,
     UserProfileDialog,
-    ChatNameInputComponent,
     CommentsDialogComponent,
     MessagingComponent
   ],

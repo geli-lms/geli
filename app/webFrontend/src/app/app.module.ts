@@ -48,7 +48,7 @@ import {UnitFormService} from './shared/services/unit-form.service';
 import {UnitFactoryService} from './shared/services/unit-factory.service';
 import {ChatService} from './shared/services/chat.service';
 import {MessageService} from './shared/services/message.service';
-
+import {FileIconService} from './shared/services/file-icon.service';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -116,7 +116,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     ImprintAndInfoService,
     SnackBarService,
     UnitFormService,
-    UnitFactoryService
+    UnitFactoryService,
+    FileIconService,
   ],
   bootstrap: [AppComponent]
 })

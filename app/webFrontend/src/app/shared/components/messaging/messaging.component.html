@@ -1,11 +1,11 @@
 <div class="chat-container">
-  <div class="messages" #msgs [scrollTop]="(mode === 'chat')? msgs.scrollHeight : 0" appInfiniteScroll [shouldEmit]="false"
+  <div class="messages" #msgs [scrollTop]="(mode === 'chat')? msgs.scrollHeight : 0" appInfiniteScroll [shouldEmit]="loadMsgOnScroll"
        (loadMore)="getMessages()" [scrollCallback]="scrollCallback">
     <ul *ngFor="let message of messages">
-      <app-message [message]="message" [mode]="mode"></app-message>
+      <app-message [message]="message" [mode]="mode" [chatName]="chatName"></app-message>
     </ul>
   </div>
   <div class="chat-footer-container">
-      <app-messaging-input-field [room]="room"></app-messaging-input-field>
+      <app-messaging-input-field [room]="room" [chatName]="chatName"></app-messaging-input-field>
   </div>
 </div>

@@ -1,6 +1,6 @@
 import * as mongoose from 'mongoose';
 import {IMessage} from '../../../shared/models/Messaging/IMessage';
-
+import {ChatRoom} from './ChatRoom';
 
 interface IMessageModel extends IMessage, mongoose.Document {
 }
@@ -35,6 +35,8 @@ const messageSchema = new mongoose.Schema({
         ret._id = ret._id.toString();
         ret.author = ret.author.toString();
         ret.room = ret.room.toString();
+
+        delete ret.visible;
 /*
         if (ret.hasOwnProperty('comments') && ret.comments) {
            ret.comments.forEach((comment: any) => {
@@ -48,7 +50,6 @@ const messageSchema = new mongoose.Schema({
 );
 
 messageSchema.add({comments: [messageSchema]});
-
 
 const Message = mongoose.model<IMessageModel>('Message', messageSchema);
 export {Message, IMessageModel};

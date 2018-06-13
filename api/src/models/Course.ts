@@ -12,7 +12,7 @@ import {ObjectID} from 'bson';
 import {Directory} from './mediaManager/Directory';
 import {IProperties} from '../../../shared/models/IProperties';
 import {extractMongoId} from '../utilities/ExtractMongoId';
-import {ChatRoom} from './ChatRoom';
+import {ChatRoom, IChatRoomModel} from './ChatRoom';
 
 
 interface ICourseModel extends ICourse, mongoose.Document {
@@ -98,7 +98,6 @@ const courseSchema = new mongoose.Schema({
         if (ret.hasOwnProperty('_id') && ret._id !== null) {
           ret._id = ret._id.toString();
         }
-
         if (ret.hasOwnProperty('courseAdmin') && ret.courseAdmin !== null && (ret.courseAdmin instanceof ObjectID)) {
           ret.courseAdmin = ret.courseAdmin.toString();
         }
@@ -120,15 +119,19 @@ const courseSchema = new mongoose.Schema({
   }
 );
 
-courseSchema.pre('save', async function() {
+courseSchema.pre('save', async function () {
   const course = <ICourseModel>this;
-  if(this.isNew  && course.enableChat){
-    await ChatRoom.create({
+  if (this.isNew && course.enableChat) {
+    const chatRoom: IChatRoomModel = await ChatRoom.create({
+      name: 'General',
+      description: 'This is a general chat for the course ' + course.name,
       room: {
         roomType: 'Course',
         roomFor: course
       }
     });
+    course.chatRooms.push(chatRoom._id);
+    Object.assign(this, course);
   }
 });
 
@@ -137,8 +140,8 @@ courseSchema.pre('remove', async function () {
   const localCourse = <ICourseModel><any>this;
   try {
     const dic = await Directory.findById(localCourse.media);
-      if (dic) {
-    await dic.remove();
+    if (dic) {
+      await dic.remove();
     }
     for (const lec of localCourse.lectures) {
       const lecDoc = await Lecture.findById(lec);
@@ -271,14 +274,15 @@ courseSchema.methods.forView = function (): ICourseView {
   const {
     name, description,
     courseAdmin, teachers,
-    lectures
+    lectures, chatRooms
   } = this;
   return {
     _id: <string>extractMongoId(this._id),
     name, description,
     courseAdmin: User.forCourseView(courseAdmin),
     teachers: teachers.map((teacher: IUser) => User.forCourseView(teacher)),
-    lectures: lectures.map((lecture: any) => lecture.toObject())
+    lectures: lectures.map((lecture: any) => lecture.toObject()),
+    chatRooms: chatRooms.map((chatRoom: any) => chatRoom.toString())
   };
 };
 
@@ -293,7 +297,7 @@ courseSchema.methods.populateLecturesFor = function (user: IUser) {
       populate: {
         path: 'progressData',
         match: {user: {$eq: user._id}}
-      }
+      },
     }
   });
 };

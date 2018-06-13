@@ -44,6 +44,7 @@
     "jasmine": "^3.1.0",
     "knuth-shuffle": "^1.0.8",
     "markdown-it": "^8.4.1",
+    "markdown-it-emoji": "^1.4.0",
     "material-design-icons": "^3.0.1",
     "moment": "^2.22.0",
     "ng2-ace-editor": "^0.3.7",
