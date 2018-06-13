@@ -266,7 +266,8 @@
   "report": {
     "exportToCsv": "Als CSV exportieren",
     "noProgressableUnits": "In diesem Kurs existieren keine erfüllbaren Aufgaben.",
-    "noStudents": "In diesen Kurs sind keine Studenten eingeschrieben."
+    "noStudents": "In diesen Kurs sind keine Studenten eingeschrieben.",
+    "noSubmissions": "Für diesen Benutzer liegen keine Ergebnisse vor."
   },
   "sort": {
     "alphabetically": "alphabetisch",

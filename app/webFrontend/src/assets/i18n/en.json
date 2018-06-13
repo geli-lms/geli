@@ -266,7 +266,8 @@
   "report": {
     "exportToCsv": "Export to CSV",
     "noProgressableUnits": "This course contains no progressable units.",
-    "noStudents": "There are no students enrolled to this course."
+    "noStudents": "There are no students enrolled to this course.",
+    "noSubmissions": "There are no submissions for this user."
   },
   "sort": {
     "alphabetically": "alphabetically",
