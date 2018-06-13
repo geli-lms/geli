@@ -49,6 +49,7 @@ import {UnitFactoryService} from './shared/services/unit-factory.service';
 import {ChatService} from './shared/services/chat.service';
 import {MessageService} from './shared/services/message.service';
 import {FileIconService} from './shared/services/file-icon.service';
+import {MessagingModule} from './messaging/messaging.module'
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -71,6 +72,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     SharedModule,
     AdminModule,
     ImprintModule,
+    MessagingModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,

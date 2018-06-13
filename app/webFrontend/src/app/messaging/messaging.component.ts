@@ -1,14 +1,13 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {UserService} from '../../services/user.service';
-import {MessageService} from '../../services/message.service';
-import {ChatService} from '../../services/chat.service';
-import {IMessage} from '../../../../../../../shared/models/Messaging/IMessage';
-import {SocketIOEvent} from '../../../../../../../shared/models/Messaging/SoketIOEvent';
 import 'rxjs/add/operator/do';
 import {fromPromise} from 'rxjs/observable/fromPromise';
 import {Observable} from 'rxjs/Observable';
-import {ISocketIOMessage, SocketIOMessageType} from '../../../../../../../shared/models/Messaging/ISocketIOMessage';
-
+import {IMessage} from '../../../../../shared/models/Messaging/IMessage';
+import {MessageService} from '../shared/services/message.service';
+import {ChatService} from '../shared/services/chat.service';
+import {UserService} from '../shared/services/user.service';
+import {SocketIOEvent} from '../../../../../shared/models/Messaging/SoketIOEvent';
+import {ISocketIOMessage, SocketIOMessageType} from '../../../../../shared/models/Messaging/ISocketIOMessage';
 
 
 @Component({

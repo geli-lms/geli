@@ -1,14 +1,15 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {FormControl, FormGroup} from '@angular/forms';
-import {ChatService} from '../../services/chat.service';
 import {MatDialog} from '@angular/material';
-import {UserService} from '../../services/user.service';
+import {ChatService} from '../../shared/services/chat.service';
+import {UserService} from '../../shared/services/user.service';
 import {
   ISocketIOMessage,
   ISocketIOMessageMeta,
   SocketIOMessageType
-} from '../../../../../../../shared/models/Messaging/ISocketIOMessage';
-import {IMessage} from '../../../../../../../shared/models/Messaging/IMessage';
+} from '../../../../../../shared/models/Messaging/ISocketIOMessage';
+import {IMessage} from '../../../../../../shared/models/Messaging/IMessage';
+
 
 @Component({
   selector: 'app-messaging-input-field',

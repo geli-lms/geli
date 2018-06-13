@@ -1,8 +1,8 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {MarkdownService} from '../../services/markdown.service';
 import {DomSanitizer} from '@angular/platform-browser';
-import {IMessage} from '../../../../../../../shared/models/Messaging/IMessage';
-import {UserService} from '../../services/user.service';
+import {IMessage} from '../../../../../../shared/models/Messaging/IMessage';
+import {MarkdownService} from '../../shared/services/markdown.service';
+import {UserService} from '../../shared/services/user.service';
 
 @Component({
   selector: 'app-message',

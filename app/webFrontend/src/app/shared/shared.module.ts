@@ -23,10 +23,6 @@ import {UserProfileDialog} from 'app/shared/components/user-profile-dialog/user-
 import {NotfoundComponent} from './components/notfound/notfound.component';
 import {InfiniteScrollDirective} from './directives/infinite-scroll.directive';
 import { ShowCommentsDirective } from './directives/show-comments.directive';
-import { CommentsDialogComponent } from './components/comments-dialog/comments-dialog.component';
-import { MessagingComponent } from './components/messaging/messaging.component';
-import { MessagingInputFieldComponent } from './components/messaging-input-field/messaging-input-field.component';
-import { MessageComponent } from './components/message/message.component';
 
 
 @NgModule({
@@ -58,13 +54,8 @@ import { MessageComponent } from './components/message/message.component';
     UserProfileDialog,
     NotfoundComponent,
     UserProfileDialog,
-    MessagingComponent,
     InfiniteScrollDirective,
     ShowCommentsDirective,
-    CommentsDialogComponent,
-    MessagingComponent,
-    MessagingInputFieldComponent,
-    MessageComponent,
   ],
   exports: [
     GravatarDirective,
@@ -84,15 +75,12 @@ import { MessageComponent } from './components/message/message.component';
     TranslateModule,
     AdminMarkdownEditComponent,
     UserProfileDialog,
-    MessagingComponent,
     InfiniteScrollDirective,
     ShowCommentsDirective,
   ],
   entryComponents: [
     PickMediaDialog,
     UserProfileDialog,
-    CommentsDialogComponent,
-    MessagingComponent
   ],
   providers: [],
 })

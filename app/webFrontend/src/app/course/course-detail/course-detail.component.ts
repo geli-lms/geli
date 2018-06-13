@@ -12,7 +12,6 @@ import {DialogService} from '../../shared/services/dialog.service';
 import {DataSharingService} from '../../shared/services/data-sharing.service';
 import {ChatService} from '../../shared/services/chat.service';
 import {DownloadCourseDialogComponent} from './download-course-dialog/download-course-dialog.component';
-import {IChatRoom} from '../../../../../../shared/models/IChatRoom';
 
 
 @Component({

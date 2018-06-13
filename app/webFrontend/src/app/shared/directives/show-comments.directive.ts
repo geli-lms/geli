@@ -1,6 +1,7 @@
 import {Directive, HostListener, Input} from '@angular/core';
 import {MatDialog} from '@angular/material';
-import {CommentsDialogComponent} from '../components/comments-dialog/comments-dialog.component';
+import {CommentsDialogComponent} from '../../messaging/comments-dialog/comments-dialog.component';
+
 
 @Directive({
   selector: '[appShowComments]'
