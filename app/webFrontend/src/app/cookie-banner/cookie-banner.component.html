@@ -1,0 +1,9 @@
+<div class="cookieNotice" [style.display]="displayState">
+  <p>
+    {{ 'cookie.text.cookieHint' | translate }}
+  </p>
+  <div class="controlArea">
+    <a href="">{{ 'cookie.text.moreInformation' | translate }}</a>
+    <button mat-raised-button (click)="onAccept()" type="button">{{ 'common.ok' | translate }}</button>
+  </div>
+</div>

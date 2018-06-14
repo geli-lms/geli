@@ -182,6 +182,12 @@
       "noKeyRequired" : "Frei zugänglich"
     }
   },
+  "cookie": {
+    "text" : {
+      "moreInformation" : "Weitere Informationen",
+      "cookieHint" : "Cookies erleichtern die Bereitstellung unserer Dienste. Mit der Nutzung unserer Dienste erklären Sie sich damit einverstanden, dass wir Cookies verwenden"
+    }
+  },
   "dashboard": {
     "addCourse": "Kurs hinzufügen",
     "availableCourses": "Verfügbare Kurse",

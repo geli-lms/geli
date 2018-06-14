@@ -141,6 +141,12 @@
       "name": "Course name",
       "searchAndAdd": "Search and add user by name, Id or e-mail"
     },
+    "cookie": {
+      "text" : {
+        "moreInformation" : "more information",
+        "cookieHint" : "This website is using cookies. We use cookies to ensure that we give you the best experience on our website. If you continue without changing your settings, we will assume that you are happy to receive all cookies on this website."
+      }
+    },
     "ShowCourse": "Show course",
     "text": {
       "addMarkdownToCourse": "Add markdown to add text to this course.",
