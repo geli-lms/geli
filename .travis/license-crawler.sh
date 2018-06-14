@@ -56,8 +56,12 @@ else
     {\"name\":\"NO-DEP\",\"version\":\"0.0.1\",\"repository\":\"https://exmaple.com\",\"license\":\"MIT\",\"devDependency\":true}
   ]
 }" > api/nlf-licenses.json
-  DUMMY="new Dependency('NO-DEP', '0.0.1', 'https://example.com', 'MIT', false), new Dependency('NO-DEP', '0.0.1', 'https://example.com', 'MIT', true)"
-  sed -i '' "s|// DEPENDENCY_REPLACE|${DUMMY}|g" app/webFrontend/src/app/about/licenses/dependencies.ts
+  FE_DATA="
+new Dependency('NO-DEP', '0.0.1', 'https://example.com', 'MIT', false),
+new Dependency('NO-DEP', '0.0.1', 'https://example.com', 'MIT', true)
+  "
+  FE_DATA=`echo $FE_DATA | tr '\n' "\\n"`
+  sed -i "s!// DEPENDENCY_REPLACE!$FE_DATA!" app/webFrontend/src/app/about/licenses/dependencies.ts
 fi
 
 echo
