@@ -44,7 +44,7 @@ export class ReportComponent implements OnInit {
       .catch((err) => {
       });
   }
-  private async exportReport() {
+  async exportReport() {
     const tasks = this.filterCourseForTasks();
 
     if (tasks.length === 0) {
