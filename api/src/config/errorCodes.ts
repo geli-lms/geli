@@ -106,9 +106,9 @@ export const errorCodes = {
     }
   },
   save: {
-    couldNotSaveImprint: {
-      code: 'coldNotSaveImprint',
-      text: 'Could not save Imprint'
+    couldNotSaveLegalnotice: {
+      code: 'coldNotSaveLegalnotice',
+      text: 'Could not save legal notice'
     }
   },
   query: {
