@@ -11,15 +11,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 -->
 
 ## [NEXT]
-###Added
-- Added more EN/DE translation [#753](https://github.com/utetrapp/geli/issues/753)
 
 ### Added
 - Course Progress can now be extracted into a csv-file. [#766](https://github.com/utetrapp/geli/pull/766)
 - Added more EN/DE translation [#753](https://github.com/utetrapp/geli/issues/753)
 - Use i18n for new course view [#763](https://github.com/utetrapp/geli/pull/763)
 - Added service for FileIcon [#607](https://github.com/utetrapp/geli/issues/607)
+- Added legal notice and privacy declaration [#768](https://github.com/utetrapp/geli/issues/768)
 - Add more tests notification ctrl [#772](https://github.com/utetrapp/geli/pull/772)
+- Added more EN/DE translation [#753](https://github.com/utetrapp/geli/issues/753)
  
 ### Changed
 - rework existing translation
@@ -47,6 +47,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Fixed notifications on hidden units. [#733](https://github.com/utetrapp/geli/issues/733)
 - Validate user input for notication settings api. [#771](https://github.com/utetrapp/geli/issues/771)
 - Identification only via matriculation number. [#685](https://github.com/utetrapp/geli/issues/685)
+- Fixed Typo in User-Profile-Dialog. [#782](https://github.com/utetrapp/geli/pull/782)
 
 ## [[0.7.0](https://github.com/h-da/geli/releases/tag/v0.7.0)] - 2018-05-05 - SS 18 intermediate Release
 ### Added

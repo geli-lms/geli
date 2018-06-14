@@ -9,7 +9,7 @@ export class ImprintAndInfoService {
               private mdService: MarkdownService) { }
 
   /**
-   * @param {string} type Should be 'infoBox' to load the InfoBox Data |'imprint' to load the Imprint Data.
+   * @param {string} type Should be 'infoBox' to load the InfoBox Data |'legalnotice' to load the Imprint Data.
    * @returns {Promise<string>} Returns the rendered MarkdownData.
    */
   async loadConfig(type: string) {
