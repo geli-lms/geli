@@ -18,6 +18,9 @@ import {UserService} from '../../../shared/services/user.service';
 import {DataSharingService} from '../../../shared/services/data-sharing.service';
 import {DialogService} from '../../../shared/services/dialog.service';
 import {TranslateService} from '@ngx-translate/core';
+import ResponsiveImage from '../../../models/ResponsiveImage';
+import {IResponsiveImageData} from '../../../../../../../shared/models/IResponsiveImageData';
+import {BreakpointSize} from '../../../shared/enums/BreakpointSize';
 
 @Component({
   selector: 'app-course-edit-general-tab',
@@ -41,6 +44,8 @@ export class GeneralTabComponent implements OnInit {
     ENROLL_TYPE_FREE,
     ENROLL_TYPE_ACCESSKEY,
   };
+
+  courseImageData: IResponsiveImageData;
 
   message = 'Course successfully added.';
 
@@ -66,6 +71,12 @@ export class GeneralTabComponent implements OnInit {
 
       this.courseService.readCourseToEdit(this.id).then(course => {
         this.courseOb = course;
+
+        this.courseImageData = course.image ? {
+            breakpoints: course.image.breakpoints,
+            pathToImage: ''
+        } : null;
+
 
         this.course = this.courseOb.name;
         this.description = this.courseOb.description;
@@ -117,6 +128,42 @@ export class GeneralTabComponent implements OnInit {
       description: ['', Validators.required],
       teacher: '',
     });
+  }
+
+  /**
+   * Opens the {@link FilepickerDialog} which will handle the choosing / uploading of the image file.
+   *
+   * @returns {Promise<void>}
+   */
+  async openImageChooserDialog() {
+    const apiPath = 'api/courses/picture/' + this.id;
+
+    const responsiveImage =
+      ResponsiveImage.create()
+        .breakpoint(BreakpointSize.MOBILE, { width: 284, height: 190 });
+
+    const result = await this.dialogService
+      .uploadResponsiveImage('Choose a picture for the course.', apiPath, responsiveImage).toPromise();
+
+    if (result && result.success) {
+      this.courseImageData = result.result;
+    } else if (result && !result.success
+      && result.result) {
+
+      if (result.result.name === 'BadRequestError') {
+        this.snackBar.openLong('Image upload failed. It seems like the file type is not correct.');
+      } else if (result.result.name === 'ForbiddenError') {
+        this.snackBar.openLong('Image upload failed. It seems like you have no rights to edit the picture.');
+      } else {
+        this.snackBar.openLong('Image upload failed.');
+      }
+    }
+  }
+
+  async removeCoursePicture() {
+    const result = await this.courseService.removePicture(this.id);
+
+    this.courseImageData = null;
   }
 
   async createCourse() {

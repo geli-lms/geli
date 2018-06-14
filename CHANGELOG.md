@@ -60,6 +60,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Added icon for access key [#547](https://github.com/h-da/geli/issues/574)
 - Unit visibility toggle [#582](https://github.com/h-da/geli/issues/582)
 - Add bootstrap grid system [#613](https://github.com/h-da/geli/issues/613)
+- Added changeable picture to course [#702](https://github.com/utetrapp/geli/issues/702)
+- Added a responsive image service [#546](https://github.com/utetrapp/geli/issues/546)
 
 ### Changed
 - Refactored or slightly altered various course & user related APIs. [#654](https://github.com/h-da/geli/issues/654) [#691](https://github.com/h-da/geli/issues/691)
