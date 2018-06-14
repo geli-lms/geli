@@ -11,11 +11,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 -->
 
 ## [NEXT]
+###Added
+- Added more EN/DE translation [#753](https://github.com/utetrapp/geli/issues/753)
+
 ### Added
 - Course Progress can now be extracted into a csv-file. [#766](https://github.com/utetrapp/geli/pull/766)
 - Added more EN/DE translation [#753](https://github.com/utetrapp/geli/issues/753)
 - Use i18n for new course view [#763](https://github.com/utetrapp/geli/pull/763)
 - Added service for FileIcon [#607](https://github.com/utetrapp/geli/issues/607)
+- Add more tests notification ctrl [#772](https://github.com/utetrapp/geli/pull/772)
  
 ### Changed
 - rework existing translation
@@ -32,6 +36,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Remove `isCourseTeacherOrAdmin` and `isMemberOfCourse`from UserService. [#731](https://github.com/h-da/geli/issues/731)
 - Refactored save mechanism of unit edit form. [#532](https://github.com/h-da/geli/issues/532)
 - Moved the 'create course' into a Dialog. [#725](https://github.com/h-da/geli/issues/725)
+- Add the possibility to add files directly in the file unit [#728](https://github.com/utetrapp/geli/issues/728)
 
 ### Fixed
 - Fixed broken notification settings. [#731](https://github.com/h-da/geli/issues/731)
@@ -39,6 +44,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Disabled `tutor` role. [#710](https://github.com/h-da/geli/issues/710)
 - Fixed notifications on hidden units. [#733](https://github.com/utetrapp/geli/issues/733)
 - Validate user input for notication settings api. [#771](https://github.com/utetrapp/geli/issues/771)
+- Identification only via matriculation number. [#685](https://github.com/utetrapp/geli/issues/685)
 
 ## [[0.7.0](https://github.com/h-da/geli/releases/tag/v0.7.0)] - 2018-05-05 - SS 18 intermediate Release
 ### Added

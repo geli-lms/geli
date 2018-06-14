@@ -10,6 +10,7 @@ import {TitleService} from '../../shared/services/title.service';
 import {LastVisitedCourseContainerUpdater} from '../../shared/utils/LastVisitedCourseContainerUpdater';
 import {DialogService} from '../../shared/services/dialog.service';
 import {DataSharingService} from '../../shared/services/data-sharing.service';
+import {TranslateService} from '@ngx-translate/core';
 
 
 @Component({
@@ -21,12 +22,7 @@ export class CourseDetailComponent implements OnInit, OnDestroy {
 
   course: ICourse;
   id: string;
-  tabs = [
-    {path: 'overview', label: 'Overview', img: 'school'},
-    {path: 'fileview', label: 'Files', img: 'insert_drive_file'},
-    {path: 'videoview', label: 'Videos', img: 'video_library'},
-    {path: 'download', label: 'Download', img: 'get_app'}
-  ];
+  tabs = [];
 
   constructor(private router: Router,
               private route: ActivatedRoute,
@@ -37,7 +33,8 @@ export class CourseDetailComponent implements OnInit, OnDestroy {
               private titleService: TitleService,
               private userDataService: UserDataService,
               private dialogService: DialogService,
-              private dataSharingService: DataSharingService) {
+              private dataSharingService: DataSharingService,
+              private translate: TranslateService) {
   }
 
   ngOnInit() {
@@ -46,6 +43,21 @@ export class CourseDetailComponent implements OnInit, OnDestroy {
     this.id = this.course._id;
     LastVisitedCourseContainerUpdater.addCourseToLastVisitedCourses(this.id, this.userService, this.userDataService);
     this.titleService.setTitleCut(['Course: ', this.course.name]);
+    this.translate.onLangChange.subscribe(() => {
+      this.reloadTabBar();
+    });
+    this.reloadTabBar();
+  }
+
+  reloadTabBar(): void {
+    this.tabs.length = 0;
+    this.translate.get(['common.content', 'common.documents', 'common.videos', 'common.download'])
+      .subscribe((t: string) => {
+        this.tabs = [{path: 'overview', label: t['common.content'], img: 'school'},
+          {path: 'fileview', label: t['common.documents'], img: 'insert_drive_file'},
+          {path: 'videoview', label: t['common.videos'], img: 'video_library'},
+          {path: 'download', label: t['common.download'], img: 'get_app'}];
+      });
   }
 
   showUserProfile(teacher: User) {

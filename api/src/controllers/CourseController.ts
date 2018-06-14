@@ -516,12 +516,10 @@ export class CourseController {
     if (!course) {
       throw new NotFoundError();
     }
+
     if (course.enrollType === 'whitelist') {
       const wUsers: IWhitelistUser[] = await  WhitelistUser.find().where({courseId: course._id});
-      if (wUsers.filter(e =>
-          e.firstName === currentUser.profile.firstName.toLowerCase()
-          && e.lastName === currentUser.profile.lastName.toLowerCase()
-          && e.uid === currentUser.uid).length <= 0) {
+      if (wUsers.filter(e => e.uid === currentUser.uid).length < 1) {
         throw new ForbiddenError(errorCodes.course.notOnWhitelist.code);
       }
     } else if (course.accessKey && course.accessKey !== data.accessKey) {
@@ -538,6 +536,7 @@ export class CourseController {
       }).save();
       await course.save();
     }
+
     return {};
   }
 
