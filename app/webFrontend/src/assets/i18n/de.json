@@ -84,7 +84,7 @@
     "geli": "geli",
     "general" : "Allgemein",
     "here": "hier",
-    "imprint": "imprint",
+    "legalnotice": "Impressum",
     "infobox": "Infobox",
     "login": "Login",
     "name": "Name",
@@ -95,6 +95,7 @@
     "open" : "Öffnen",
     "openInTab" : "Im neuen Tab öffnen",
     "password": "Passwort",
+    "privacy": "Datenschutz",
     "profile": "Profil",
     "profileDetails": {
       "firstName": "Vorname",
@@ -264,8 +265,9 @@
   "mainMenu": {
     "about": "Über geli",
     "admin": "Admin",
-    "imprint": "Impressum",
+    "legalnotice": "Impressum",
     "logout": "Ausloggen",
+    "privacy": "Datenschutz",
     "userSettings": "Einstellungen"
   },
   "notifications": {
