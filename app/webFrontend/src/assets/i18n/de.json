@@ -134,6 +134,7 @@
   },
   "course": {
     "delete": "Kurs löschen",
+    "uploadImage": "Kursbild hochladen",
     "search": "Kurse Suchen",
     "placeholder": {
       "accessKey": "Einschreibeschlüssel",
