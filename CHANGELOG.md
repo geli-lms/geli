@@ -36,6 +36,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Refactored save mechanism of unit edit form. [#532](https://github.com/h-da/geli/issues/532)
 - Moved the 'create course' into a Dialog. [#725](https://github.com/h-da/geli/issues/725)
 - Update bcrypt dependency. [#774](https://github.com/utetrapp/geli/pull/774)
+- Use Path-Lib to extract extension from filename. [#773](https://github.com/utetrapp/geli/pull/773)
 - Add the possibility to add files directly in the file unit [#728](https://github.com/utetrapp/geli/issues/728)
 
 ### Fixed
