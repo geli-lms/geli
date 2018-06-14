@@ -11,6 +11,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 -->
 
 ## [NEXT]
+###Added
+- Added more EN/DE translation [#753](https://github.com/utetrapp/geli/issues/753)
+
 ### Added
 - Added more EN/DE translation [#753](https://github.com/utetrapp/geli/issues/753)
 - Use i18n for new course view [#763](https://github.com/utetrapp/geli/pull/763)
@@ -32,6 +35,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Refactored save mechanism of unit edit form. [#532](https://github.com/h-da/geli/issues/532)
 - Moved the 'create course' into a Dialog. [#725](https://github.com/h-da/geli/issues/725)
 - Update bcrypt dependency. [#774](https://github.com/utetrapp/geli/pull/774)
+- Add the possibility to add files directly in the file unit [#728](https://github.com/utetrapp/geli/issues/728)
 
 ### Fixed
 - Fixed broken notification settings. [#731](https://github.com/h-da/geli/issues/731)
@@ -39,6 +43,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Disabled `tutor` role. [#710](https://github.com/h-da/geli/issues/710)
 - Fixed notifications on hidden units. [#733](https://github.com/utetrapp/geli/issues/733)
 - Validate user input for notication settings api. [#771](https://github.com/utetrapp/geli/issues/771)
+- Identification only via matriculation number. [#685](https://github.com/utetrapp/geli/issues/685)
 
 ## [[0.7.0](https://github.com/h-da/geli/releases/tag/v0.7.0)] - 2018-05-05 - SS 18 intermediate Release
 ### Added
@@ -58,6 +63,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Added icon for access key [#547](https://github.com/h-da/geli/issues/574)
 - Unit visibility toggle [#582](https://github.com/h-da/geli/issues/582)
 - Add bootstrap grid system [#613](https://github.com/h-da/geli/issues/613)
+- Added changeable picture to course [#702](https://github.com/utetrapp/geli/issues/702)
+- Added a responsive image service [#546](https://github.com/utetrapp/geli/issues/546)
 
 ### Changed
 - Refactored or slightly altered various course & user related APIs. [#654](https://github.com/h-da/geli/issues/654) [#691](https://github.com/h-da/geli/issues/691)

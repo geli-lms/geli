@@ -1,11 +1,11 @@
 <div *ngIf="this.checkForEmptyLectures()">
 <mat-card class="dl-card">
   <mat-card-content>
-    <ng-container *ngIf="!this.checkForEmptyLectures()">No course material available for download</ng-container>
-       <p>Select units or files which you want to download in a zip</p>
+    <ng-container *ngIf="!this.checkForEmptyLectures()">{{'common.text.downloadNoFiles' | translate}}</ng-container>
+       <p>{{'course.text.downloadHelpText' | translate}}</p>
     <mat-list>
       <mat-list-item class="selectAll">
-        <h3>Select All</h3>
+      <h3>{{ 'file.text.selectAll' | translate }}</h3>
         <span class="spacer"></span>
         <span class="lightgray"> Course </span>
         <mat-checkbox [(ngModel)]="chkbox" (change)="onChange()" class="chkbox"></mat-checkbox>
@@ -15,9 +15,9 @@
     </mat-list>
   </mat-card-content>
   <mat-card-actions>
-    <button mat-raised-button color="primary" [disabled]="this.disableDownloadButton" (click)="downloadAndClose()">
-      Download
-    </button>
+  <button mat-raised-button color="primary" [disabled]="this.disableDownloadButton" (click)="downloadAndClose()">
+  	{{ 'common.download' | translate }}</button>
+  <button mat-button [mat-dialog-close]="true">{{ 'common.cancel' | translate }}</button>
     <button mat-button (click)="uncheckAll()">Reset</button>
     <span class="spacer"></span>
     <ng-container *ngIf="showSpinner">

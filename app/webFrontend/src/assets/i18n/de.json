@@ -67,16 +67,19 @@
     "close" : "Schließen",
     "continue": "Weiter",
     "content": "Inhalt",
+    "course": "Kurs",
     "delete": "Löschen",
     "description": "Beschreibung",
     "discard": "Verwerfen",
     "dismiss": "Schließen",
+    "documents": "Dokumente",
     "download": "Download",
     "duplicate": "Duplizieren",
     "edit": "Bearbeiten",
     "editProfile": "Profil bearbeiten",
     "email": "E-Mail",
     "export": "Export",
+    "folder": "Ordner",
     "fullscreenMode": "Vollbildmodus",
     "geli": "geli",
     "general" : "Allgemein",
@@ -90,6 +93,7 @@
     "members" : "Mitglieder",
     "ok": "OK",
     "open" : "Öffnen",
+    "openInTab" : "Im neuen Tab öffnen",
     "password": "Passwort",
     "profile": "Profil",
     "profileDetails": {
@@ -101,6 +105,7 @@
     "question": "Frage",
     "register": "Registrieren",
     "reset": "Zurücksetzen",
+    "rename" : "Umbenennen",
     "role": "Rolle",
     "roles": {
       "student": "Student",
@@ -130,10 +135,12 @@
       "wrong_mimeType": "Falsches Dateiformat. Es sind nur Bilder erlaubt!",
       "passwordsMatch": "Die Passwörter stimmen nicht überein.",
       "required": "Eingabe notwendig"
-    }
+    },
+    "videos": "Videos"
   },
   "course": {
     "delete": "Kurs löschen",
+    "uploadImage": "Kursbild hochladen",
     "search": "Kurse Suchen",
     "placeholder": {
       "accessKey": "Einschreibeschlüssel",
@@ -146,10 +153,13 @@
       "addMarkdownToCourse": "Markdown hinzufügen, um Text zu diesem Kurs hinzuzufügen.",
       "canNotSeenByStudents": "Kurs ist für Studenten nicht sichtbar.",
       "canSeenByStudents": "Kurs ist für Studenten sichtbar.",
+      "downloadHelpText": "Wähle die Units oder Files aus die als zip heruntergeladen werden sollen.",
+      "downloadNoFiles": "No Coursematerial aviable for download!",
       "editCourse": "Kurs bearbeiten",
       "enterAccessKey": "Bitte geben Sie den Einschreibeschlüssel dieses Kurses ein.",
       "enterAccessKeyForStudents": "Geben Sie einen Einschreibeschlüssel für die Studenten ein.",
       "goToCourse": "Zum Kurs",
+      "hasBeenDeleted": "wurde gelöscht.",
       "inCourse": "Im Kurs",
       "infoWhitelist": "Allen Benutzern dieser Liste, ist es erlaubt, dem Kurs beizutreten.",
       "isFreeForEveryone": "Der Kurs ist offen und für jeden zugänglich.",
@@ -169,8 +179,8 @@
       "userResults": "Benutzerergebnisse",
       "yourCourseProgress": "Ihr Kursfortschritt",
       "whitelist": "Freigabeliste",
-      "noVideosAttached": "Es gibt keine Videos zu diesem Kurs ☹",
-      "noFilesAttached": "Es gibt keine Dateien zu diesem Kurs ☹"
+      "noVideosAttached": "Es gibt keine Videos zu diesem Kurs",
+      "noFilesAttached": "Es gibt keine Dateien zu diesem Kurs"
     },
     "tooltip" : {
       "add": "Kurs hinzufügen",
@@ -210,11 +220,12 @@
       "filesize": "Dateigröße",
       "filesSelected" : "Dateien ausgewählt",
       "fileRemove": "Datei löschen",
-      "infoDropAddFiles": "Dateien hier hinziehen oder hier klicken, um Dateien auszuwählen.",
+      "infoDropAddFiles": "Dateien hier hinziehen oder hier klicken, um Dateien hochzuladen.",
       "noVideo": "Kein Video verfügbar.",
       "noFiles" : "Keine Dateien vorhanden",
       "progress": "Fortschritt",
       "removeFromQueue": "Datei aus der Schlange löschen.",
+      "selectAll" : "Alle auswählen",
       "takePicture": "Bild aufnehmen"
     },
     "tooltip":{
@@ -262,6 +273,15 @@
       "clearAll": "Alle löschen",
       "noNotifications": "Sie haben keine Benachrichtigungen."
     }
+  },
+  "report": {
+    "notProgressable": "Dieser Kurs enthält keine auswertbare Aufgaben"
+  },
+  "snackbarMessages": {
+    "chooseJson": "Wähle eine Kurs.json Datei zum Importieren",
+    "importSuccess": "Kurs erfolgreich Importiert!",
+    "AreYouSure": "Sind Sie sich sicher dass Sie",
+    "dismiss": "Verstanden."
   },
   "sort": {
     "alphabetically": "alphabetisch",
@@ -317,7 +337,7 @@
       "signedIn": "Eingetragen"
     },
     "tooltip":{
-      "deleteUSers": "Ausgewählte Mitglieder entfernen.",
+      "deleteUsers": "Ausgewählte Mitglieder entfernen.",
       "toggleMembers" : "Alle Benutzer auswählen"
     }
   }
