@@ -53,13 +53,7 @@ const uploadOptions = {
 const coursePictureUploadOptions = {
   storage: multer.diskStorage({
     destination: (req: any, file: any, cb: any) => {
-      const directory = 'uploads/courses';
-
-      if (!fs.existsSync(directory)) {
-        fs.mkdirSync(directory);
-      }
-
-      cb(null, directory);
+      cb(null, 'uploads/courses');
     },
     filename: (req: any, file: any, cb: any) => {
       const id = req.params.id;
@@ -735,22 +729,23 @@ export class CourseController {
       @Body() responsiveImageDataRaw: any,
       @CurrentUser() currentUser: IUser) {
 
+    // Remove the old picture if the course already has one.
+    const course = await Course.findById(id);
+
+    if (!course.checkPrivileges(currentUser).userCanEditCourse) {
+      throw new ForbiddenError();
+    }
+
     const responsiveImageData = <IResponsiveImageData>JSON.parse(responsiveImageDataRaw.imageData);
 
     const mimeFamily = file.mimetype.split('/', 1)[0];
     if (mimeFamily !== 'image') {
-      throw new ForbiddenError('Forbidden format of uploaded picture: ' + mimeFamily);
+      // Remove the file if the type was not correct.
+      await fs.unlinkSync(file.path);
+
+      throw new BadRequestError('Forbidden format of uploaded picture: ' + mimeFamily);
     }
 
-    const destination = 'uploads/courses/';
-
-    // Create the directory if not already exists.
-    if (!fs.existsSync(destination)) {
-      fs.mkdirSync(destination);
-    }
-
-    // Remove the old picture if the course already has one.
-    const course = await Course.findById(id);
     if (course.image) {
       const picture = await Picture.findById(course.image);
       await picture.remove();

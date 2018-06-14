@@ -146,8 +146,16 @@ export class GeneralTabComponent implements OnInit {
 
     if (result && result.success) {
       this.courseImageData = result.result;
-    } else {
-      this.snackBar.openLong('Image upload failed. It seems like the file type is not correct.');
+    } else if (result && !result.success
+      && result.result) {
+
+      if (result.result.name === 'BadRequestError') {
+        this.snackBar.openLong('Image upload failed. It seems like the file type is not correct.');
+      } else if (result.result.name === 'ForbiddenError') {
+        this.snackBar.openLong('Image upload failed. It seems like you have no rights to edit the picture.');
+      } else {
+        this.snackBar.openLong('Image upload failed.');
+      }
     }
   }
 
