@@ -4,6 +4,7 @@ import {User} from './User';
 import {Lecture} from './Lecture';
 
 interface INotificationModel extends INotification, mongoose.Document {
+  exportJSON: () => Promise<INotificationModel>;
 }
 
 const notificationSchema = new mongoose.Schema({
@@ -41,6 +42,21 @@ const notificationSchema = new mongoose.Schema({
     }
   }
 );
+
+notificationSchema.methods.exportJSON = function () {
+  const obj = this.toObject();
+
+  // remove unwanted informations
+  // mongo properties
+  delete obj._id;
+  delete obj.createdAt;
+  delete obj.__v;
+  delete obj.updatedAt;
+
+  // custom properties
+
+  return obj;
+};
 
 const Notification = mongoose.model<INotificationModel>('Notification', notificationSchema);
 

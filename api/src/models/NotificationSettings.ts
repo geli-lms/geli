@@ -2,6 +2,7 @@ import * as mongoose from 'mongoose';
 import {INotificationSettings} from '../../../shared/models/INotificationSettings';
 
 interface INotificationSettingsModel extends INotificationSettings, mongoose.Document {
+  exportJSON: () => Promise<INotificationSettings>;
 }
 
 const notificationSettingsSchema = new mongoose.Schema({
@@ -29,6 +30,21 @@ const notificationSettingsSchema = new mongoose.Schema({
     }
   }
 );
+
+notificationSettingsSchema.methods.exportJSON = function () {
+  const obj = this.toObject();
+
+  // remove unwanted informations
+  // mongo properties
+  delete obj._id;
+  delete obj.createdAt;
+  delete obj.__v;
+  delete obj.updatedAt;
+
+  // custom properties
+
+  return obj;
+};
 
 const NotificationSettings = mongoose.model<INotificationSettingsModel>('NotificationSettings', notificationSettingsSchema);
 

@@ -1,8 +1,12 @@
-import {Authorized, Get, JsonController, Param, UseBefore} from 'routing-controllers';
+import {Authorized, CurrentUser, Get, JsonController, NotFoundError, Param, UseBefore} from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import {Course} from '../models/Course';
 import {Lecture} from '../models/Lecture';
 import {Unit} from '../models/units/Unit';
+import {IUser} from "../../../shared/models/IUser";
+import {User} from "../models/User";
+import {Notification} from "../models/Notification";
+import {NotificationSettings} from "../models/NotificationSettings";
 
 @JsonController('/export')
 @UseBefore(passportJwtMiddleware)
@@ -89,4 +93,33 @@ export class ExportController {
     const unit = await Unit.findById(id);
     return unit.exportJSON();
   }
+
+  @Get('/user')
+  @Authorized(['student', 'teacher', 'admin'])
+  async exportAllUserData(@CurrentUser() currentUser: IUser) {
+
+    // load user
+    const user = await User.findById(currentUser);
+
+    if (!user) {
+      throw new NotFoundError(`User was not found.`);
+    }
+
+    //load notification
+    const notificationSettings = await NotificationSettings.findOne({'user': user._id})
+      .populate('course', 'name description -_id');
+
+    // load notifications
+    const notifications = await Notification.find({'user': user._id})
+    const notificationTexts:string[] = notifications.map(notification => {
+      return notification.text;
+    });
+
+    return {
+      user: user.exportPersonalDataJSON(),
+      notifications: notificationTexts,
+      notificationSettings: notificationSettings.exportJSON()
+    }
+  }
+
 }
