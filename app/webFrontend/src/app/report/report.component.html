@@ -3,6 +3,7 @@
   <mat-toolbar-row>
     <button mat-button routerLink="." routerLinkActive="active">{{ 'course.text.overview' | translate }}</button>
     <button mat-button routerLink="user/all" routerLinkActive="active">{{ 'course.text.userResults' | translate }}</button>
+    <button mat-button (click)="exportReport()">{{ 'report.exportToCsv' | translate}}</button>
   </mat-toolbar-row>
 </mat-toolbar>
 <div class="report-container">
