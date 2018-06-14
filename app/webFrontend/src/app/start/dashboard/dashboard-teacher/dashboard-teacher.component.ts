@@ -8,6 +8,7 @@ import {DialogService} from '../../../shared/services/dialog.service';
 import {SortUtil} from '../../../shared/utils/SortUtil';
 import {MatDialog, MatDialogConfig} from '@angular/material';
 import {CourseNewComponent} from '../../../course/course-new/course-new.component';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-dashboard-teacher',
@@ -31,7 +32,8 @@ export class DashboardTeacherComponent extends DashboardBaseComponent {
               private router: Router,
               private dialogService: DialogService,
               private snackBar: SnackBarService,
-              private dialog: MatDialog) {
+              private dialog: MatDialog,
+              private translate:  TranslateService) {
     super();
   }
 
@@ -112,17 +114,20 @@ export class DashboardTeacherComponent extends DashboardBaseComponent {
   }
 
   onImportCourse = () => {
-    this.dialogService
-      .chooseFile('Choose a course.json to import', '/api/import/course/')
-      .subscribe(res => {
-        if (res.success) {
-          this.snackBar.open('Course successfully imported');
-          const url = '/course/' + res.result._id + '/edit';
-          this.router.navigate([url]);
-        } else if (res.result) {
-          this.snackBar.open(res.result.message);
-        }
-      });
+    this.translate.get(['snackbarMessages.chooseJson', 'snackbarMessages.importSuccess']).subscribe((t: string) => {
+      this.dialogService
+        .chooseFile(t['snackbarMessages.chooseJson'],
+          '/api/import/course/')
+        .subscribe(res => {
+          if (res.success) {
+            this.snackBar.open(t['snackbarMessages.importSuccess']);
+            const url = '/course/' + res.result._id + '/edit';
+            this.router.navigate([url]);
+          } else if (res.result) {
+            this.snackBar.open(res.result.message);
+          }
+        });
+    });
   }
 
   createCourse() {
