@@ -18,10 +18,11 @@ freeTextUnitSchema.methods.toFile = function (): String {
   return this.name + '\n' + this.description + '\n' + this.markdown;
 };
 
-freeTextUnitSchema.methods.toHtmlForPdf = function (): String {
+freeTextUnitSchema.methods.toHtmlForSinglePdf = function (): String {
   const md = new MarkdownIt();
-  const header = '<div id="pageHeader" style="text-align: center;border-bottom: 1px solid">'
-    + md.render(this.name) + md.render(this.description) + '</div>';
+  const header = '<body>' +
+    '<div id="pageHeader" style="text-align: center;border-bottom: 1px solid">'
+    + md.render(this.name) + md.render(this.description) + '</div> </body>';
   const content = md.render(this.markdown);
   return header + content;
 };

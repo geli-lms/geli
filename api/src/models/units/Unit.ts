@@ -18,7 +18,7 @@ interface IUnitModel extends IUnit, mongoose.Document {
   populateUnit: () => Promise<IUnitModel>;
   secureData: (user: IUser) => Promise<IUnitModel>;
   toFile: () => String;
-  toHtmlForPdf: () => String;
+  toHtmlForSinglePdf: () => String;
 }
 
 const unitSchema = new mongoose.Schema({

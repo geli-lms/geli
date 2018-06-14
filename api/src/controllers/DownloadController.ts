@@ -19,6 +19,7 @@ const archiver = require('archiver');
 import crypto = require('crypto');
 import {User} from '../models/User';
 import {File} from '../models/mediaManager/File';
+const path = require('path');
 
 
 const cache = require('node-file-cache').create({life: config.timeToLiveCacheValue});
@@ -293,22 +294,31 @@ export class DownloadController {
             } else {
 
 
-
-
-
               const options = {
                 format: 'A4',
                 'border': {
-                  'left': '2cm',            // default is 0, units: mm, cm, in, px
-                  'right': '2cm'
+                  'left': '1cm',            // default is 0, units: mm, cm, in, px
+                  'right': '1cm'
                 },
+                base: 'file://' + path.resolve(),
                 'footer': {
                   'contents': {
                     default: '<div style="text-align: center;border-top: 1px solid;">{{page}}/{{pages}}</div>'
                   }}
               };
 
-              const html = localUnit.toHtmlForPdf();
+              let html = '<!DOCTYPE html>\n' +
+                '<html>\n' +
+                '  <head>' +
+                '     <style>' +
+                '       body {font-family: \'Helvetica\', \'Arial\', sans-serif; }' +
+                '     </style>' +
+                '  </head>';
+                html += localUnit.toHtmlForSinglePdf();
+                html += '</html>';
+                console.log('file://' + path.resolve());
+                console.log('file://' + path.resolve() + 'src/assets/fonts/Roboto-Regular.ttf');
+                console.log(html);
               const name = lecCounter + '_' + lcName + '/' + unitCounter + '_' + this.replaceCharInFilename(localUnit.name) + '.pdf';
               await this.savePdfToFile(html, options, PDFtempPath);
 

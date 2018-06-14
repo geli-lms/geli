@@ -5,6 +5,7 @@ import {IUser} from '../../../../shared/models/IUser';
 import {IProgress} from '../../../../shared/models/progress/IProgress';
 import {ITaskUnitProgress} from '../../../../shared/models/progress/ITaskUnitProgress';
 import {ITask} from '../../../../shared/models/task/ITask';
+const MarkdownIt = require('markdown-it');
 
 interface ITaskUnitModel extends ITaskUnit, IUnitModel {
   exportJSON: () => Promise<ITaskUnit>;
@@ -116,6 +117,38 @@ taskUnitSchema.methods.toFile = function(): String {
   }
 
   return fileStream;
+};
+
+taskUnitSchema.methods.toHtmlForSinglePdf = function (): String {
+  const md = new MarkdownIt({html: true});
+  let html = '<body>' +
+    '<div id="pageHeader" style="text-align: center;border-bottom: 1px solid">'
+    + md.render(this.name) + md.render(this.description ? null : '') + '</div>';
+
+  let counter = 1;
+  html += '<div style="page-break-after: always">';
+  for (const task of this.tasks) {
+     html += '<div><h3>' +  md.render(counter + '. ' + task.name) + '</h3></div>';
+     counter++;
+    for (const answer of task.answers) {
+      html += '<div>' + md.render('<input type="checkbox" style="margin-right: 10px">' + answer.text) + '</div>';
+    }
+  }
+  html += '</div ><div><h2>L&ouml;sungen</h2></div>';
+  counter = 1;
+  for (const task of this.tasks) {
+    html += '<div><h3>' +  md.render(counter + '. ' + task.name) + '</h3></div>';
+    counter++;
+    for (const answer of task.answers) {
+      let checked = '';
+      if (answer.value === true) {
+        checked = 'checked';
+      }
+      html += '<div>' + md.render('<input type="checkbox" style="margin-right: 10px;" ' + checked + '>' + answer.text) + '</div>';
+    }
+  }
+  html += ' </body>';
+  return html;
 };
 
 export {taskUnitSchema, ITaskUnitModel};
