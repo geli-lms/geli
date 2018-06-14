@@ -55,9 +55,9 @@ else
     {\"name\":\"NO-DEP\",\"version\":\"0.0.1\",\"repository\":\"https://exmaple.com\",\"license\":\"MIT\",\"devDependency\":false},
     {\"name\":\"NO-DEP\",\"version\":\"0.0.1\",\"repository\":\"https://exmaple.com\",\"license\":\"MIT\",\"devDependency\":true}
   ]
-}" > ${DIR}/../api/nlf-licenses.json
+}" > api/nlf-licenses.json
   DUMMY="new Dependency('NO-DEP', '0.0.1', 'https://example.com', 'MIT', false), new Dependency('NO-DEP', '0.0.1', 'https://example.com', 'MIT', true)"
-  sed -i '' "s|// DEPENDENCY_REPLACE|${DUMMY}|g" ${DIR}/../app/webFrontend/src/app/about/licenses/dependencies.ts
+  sed -i '' "s|// DEPENDENCY_REPLACE|${DUMMY}|g" app/webFrontend/src/app/about/licenses/dependencies.ts
 fi
 
 echo
