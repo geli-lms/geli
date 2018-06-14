@@ -62,6 +62,9 @@ nohup.out
 !/api/uploads/users
 /api/uploads/users/*
 !/api/uploads/users/.gitkeep
+!/api/uploads/courses
+/api/uploads/courses/*
+!/api/uploads/courses/.gitkeep
 /api/temp/*
 /api/build
 /api/coverage
