@@ -43,6 +43,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Disabled `tutor` role. [#710](https://github.com/h-da/geli/issues/710)
 - Fixed notifications on hidden units. [#733](https://github.com/utetrapp/geli/issues/733)
 - Validate user input for notication settings api. [#771](https://github.com/utetrapp/geli/issues/771)
+- Identification only via matriculation number. [#685](https://github.com/utetrapp/geli/issues/685)
 
 ## [[0.7.0](https://github.com/h-da/geli/releases/tag/v0.7.0)] - 2018-05-05 - SS 18 intermediate Release
 ### Added
