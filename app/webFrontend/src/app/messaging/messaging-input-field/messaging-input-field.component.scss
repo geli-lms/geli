@@ -1,6 +1,40 @@
 .message-input-field {
   width: 100%;
   textarea {
-    max-height: 300px;
+    max-height: 200px;
   }
+}
+
+.msg-input-container{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+
+.emoji-mart-scroll {
+  height: 170px !important;
+}
+
+.msg-input{
+ // background-color: #dfdfdf;
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+
+  form {
+    flex: 1;
+  }
+
+  .message-input-field[_ngcontent-c25] textarea[_ngcontent-c25] {
+    max-height: 200px;
+    min-height: 30px;
+    background-color: white;
+    border-radius: 5px;
+    padding: 2px;
+  }
+}
+
+.mat-input-underline, .mat-form-field-underline {
+  display: none !important;
 }

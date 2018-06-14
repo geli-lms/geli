@@ -11,6 +11,7 @@ import {ChatService} from '../shared/services/chat.service';
 import {MaterialImportModule} from '../shared/modules/material-import.module';
 import {CommentsDialogComponent} from './comments-dialog/comments-dialog.component';
 import {EmojiSelectorComponent} from './emoji-selector/emoji-selector.component';
+import { PickerModule } from '@ctrl/ngx-emoji-mart';
 
 @NgModule({
   imports: [
@@ -19,6 +20,7 @@ import {EmojiSelectorComponent} from './emoji-selector/emoji-selector.component'
     ReactiveFormsModule,
     SharedModule,
     MaterialImportModule,
+    PickerModule
   ],
   declarations: [
     MessagingComponent,

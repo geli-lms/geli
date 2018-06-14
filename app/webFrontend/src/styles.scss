@@ -3,6 +3,8 @@
 // Plus imports for other components in your app.
 // Custom global geli stuff
 @import 'styles/typography';
+@import "~@ctrl/ngx-emoji-mart/picker";
+
 
 // Include the common styles for Angular Material. We include this here so that you only
 // have to load a single css file for Angular Material in your app.
@@ -128,7 +130,7 @@ app-root > .app-wrapper {
   max-width: none !important;
   width:100%;
   height: 100%;
-  @include bp(sm) {
+  @include bp(md) {
     width: 50%;
     height: 90%;
   }
@@ -136,4 +138,18 @@ app-root > .app-wrapper {
     padding: 0;
     overflow: hidden;
   }
+}
+
+.emoji-mart {
+   height: 179px !important;
+   width: 100% !important;
+}
+
+.emoji-mart-scroll {
+  width: 100% !important;
+  height: inherit !important;
+}
+
+.emoji-mart-category-label {
+  display: none !important;
 }

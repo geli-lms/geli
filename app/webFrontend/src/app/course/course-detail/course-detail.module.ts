@@ -15,6 +15,7 @@ import {CourseDetailDataResolve} from '../../shared/services/course-detail-data-
 import {VideoViewComponent} from './video-view/video-view.component';
 import {GridComponent} from './video-view/grid/grid.component';
 import {MessagingModule} from '../../messaging/messaging.module';
+import {PickerModule} from '@ctrl/ngx-emoji-mart';
 
 @NgModule({
   imports: [
@@ -23,7 +24,8 @@ import {MessagingModule} from '../../messaging/messaging.module';
     CourseDetailRoutingModule,
     LectureModule,
     FormsModule,
-    MessagingModule
+    MessagingModule,
+    PickerModule
   ],
   declarations: [
     CourseDetailComponent,

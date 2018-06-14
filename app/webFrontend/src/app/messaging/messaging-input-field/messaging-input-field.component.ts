@@ -21,6 +21,8 @@ export class MessagingInputFieldComponent implements OnInit {
   @Input() room: string;
   @Input() chatName: string;
 
+  caretPos: number = 0;
+
   form = new FormGroup({
     message: new FormControl('')
   });
@@ -28,15 +30,25 @@ export class MessagingInputFieldComponent implements OnInit {
   constructor(private chatService: ChatService, private dialog: MatDialog, private userService: UserService,) {
   }
 
-  ngOnInit() {
+  ngOnInit () {
   }
 
+  getCaretPos (msgTextArea) {
+    if (msgTextArea.selectionStart || msgTextArea.selectionStart == '0') {
+      this.caretPos = msgTextArea.selectionStart;
+    }
+  }
+
+  onClick (msgTextArea) {
+   this.getCaretPos(msgTextArea);
+  }
 
   /**
    * Post the message if the user have a chatName
    * otherwise request user to enter a chatName first
    */
-  onEnter(event: KeyboardEvent): void {
+  onEnter(event: KeyboardEvent, msgTextArea): void {
+    this.getCaretPos(msgTextArea);
     const message = this.form.getRawValue().message;
     if (event.keyCode === 13 && event.ctrlKey && message.trim().length > 0) {
       this.postMessage();
@@ -69,6 +81,14 @@ export class MessagingInputFieldComponent implements OnInit {
 
     this.chatService.send(socketIOMessage);
     this.form.reset();
+  }
+
+  onEmojiSelected($event){
+    let message = this.form.getRawValue().message;
+    message = message.substr(0, this.caretPos) + $event.emoji.colons + message.substr(this.caretPos);
+    this.form.setValue({
+      message: message
+    });
   }
 
 }
