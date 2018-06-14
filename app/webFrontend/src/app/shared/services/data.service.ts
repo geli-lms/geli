@@ -233,6 +233,12 @@ export class CourseService extends DataService {
       .toPromise();
   }
 
+  async removePicture(courseId: string): Promise<any> {
+    return this.backendService
+      .delete(this.apiPath + 'picture/' + courseId)
+      .toPromise();
+  }
+
   async leaveStudent(courseId: string): Promise<{}> {
     return await this.backendService
       .post(this.apiPath + courseId + '/leave', {})
