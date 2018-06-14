@@ -278,7 +278,7 @@
     "exportToCsv": "Export to CSV",
     "noProgressableUnits": "This course contains no progressable units.",
     "noStudents": "There are no students enrolled to this course.",
-    "noSubmissions": "There are no submissions for this user."
+    "noSubmissions": "There are no submissions for this user.",
     "notProgressable": "This course does not contain any progressable units."
   },
   "snackbarMessages": {
