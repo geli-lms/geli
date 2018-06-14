@@ -81,7 +81,7 @@
     "geli": "geli",
     "general": "General",
     "here": "here",
-    "imprint": "Legal notice",
+    "legalnotice": "Legal notice",
     "infobox": "InfoBox",
     "login": "Login",
     "name": "Name",
@@ -253,7 +253,7 @@
   "mainMenu": {
     "about": "About",
     "admin": "Admin",
-    "imprint": "Legal notice",
+    "legalnotice": "Legal notice",
     "logout": "Logout",
     "privacy": "Privacy",
     "userSettings": "Settings"

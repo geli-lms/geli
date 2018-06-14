@@ -4,20 +4,20 @@ import {TitleService} from '../shared/services/title.service';
 
 @Component({
   selector: 'app-imprint',
-  templateUrl: './imprint.component.html',
-  styleUrls: ['./imprint.component.scss']
+  templateUrl: './legalnotice.component.html',
+  styleUrls: ['./legalnotice.component.scss']
 })
-export class ImprintComponent implements OnInit {
+export class LegalnoticeComponent implements OnInit {
   renderedContent: string;
   constructor(private imprintService: ImprintAndInfoService,
               private titleService: TitleService) { }
 
   ngOnInit() {
-    this.titleService.setTitle('Imprint');
+    this.titleService.setTitle('Legalnotice');
     this.getData();
   }
 
   async getData() {
-    this.renderedContent = await this.imprintService.loadConfig('imprint');
+    this.renderedContent = await this.imprintService.loadConfig('legalnotice');
   }
 }

@@ -36,7 +36,7 @@ import {AdminModule} from './admin/admin.module';
 import {ReportService} from './shared/services/data/report.service';
 import {TitleService} from './shared/services/title.service';
 import {ThemeService} from './shared/services/theme.service';
-import {ImprintModule} from './imprint/imprint.module';
+import {LegalnoticeModule} from './legalnotice/legalnotice.module';
 import {DataSharingService} from './shared/services/data-sharing.service';
 import {NotificationModule} from './notification/notification.module';
 import {HttpClient} from '@angular/common/http';
@@ -70,7 +70,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     AboutModule,
     SharedModule,
     AdminModule,
-    ImprintModule,
+    LegalnoticeModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,

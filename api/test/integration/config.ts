@@ -26,23 +26,23 @@ describe('Config', () => {
       res.body.name.should.be.equal('UnauthorizedError');
     });
 
-    it('should pass (imprint)', async () => {
+    it('should pass (legalnotice)', async () => {
       const res = await chai.request(app)
-        .get(`${BASE_URL}/public/imprint`)
+        .get(`${BASE_URL}/public/legalnotice`)
         .catch(err => err.response);
       res.status.should.be.equal(200);
-      res.body.name.should.be.equal('imprint');
+      res.body.name.should.be.equal('legalnotice');
     });
   });
 
-  describe(`PUT ${BASE_URL}/imprint`, () => {
+  describe(`PUT ${BASE_URL}/legalnotice`, () => {
     it('should pass', async () => {
       const admin = await FixtureUtils.getRandomAdmin();
 
       const res = await chai.request(app)
-        .put(`${BASE_URL}/imprint`)
+        .put(`${BASE_URL}/legalnotice`)
         .set('Authorization', `JWT ${JwtUtils.generateToken(admin)}`)
-        .send({data: '# Imprint'});
+        .send({data: '# Legalnotice'});
       res.status.should.be.equal(200);
     });
   });
