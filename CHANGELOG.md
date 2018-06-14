@@ -32,6 +32,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Remove `isCourseTeacherOrAdmin` and `isMemberOfCourse`from UserService. [#731](https://github.com/h-da/geli/issues/731)
 - Refactored save mechanism of unit edit form. [#532](https://github.com/h-da/geli/issues/532)
 - Moved the 'create course' into a Dialog. [#725](https://github.com/h-da/geli/issues/725)
+- Add the possibility to add files directly in the file unit [#728](https://github.com/utetrapp/geli/issues/728)
 
 ### Fixed
 - Fixed broken notification settings. [#731](https://github.com/h-da/geli/issues/731)
@@ -58,6 +59,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Added icon for access key [#547](https://github.com/h-da/geli/issues/574)
 - Unit visibility toggle [#582](https://github.com/h-da/geli/issues/582)
 - Add bootstrap grid system [#613](https://github.com/h-da/geli/issues/613)
+- Added changeable picture to course [#702](https://github.com/utetrapp/geli/issues/702)
+- Added a responsive image service [#546](https://github.com/utetrapp/geli/issues/546)
 
 ### Changed
 - Refactored or slightly altered various course & user related APIs. [#654](https://github.com/h-da/geli/issues/654) [#691](https://github.com/h-da/geli/issues/691)

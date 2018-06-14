@@ -134,6 +134,7 @@
   },
   "course": {
     "delete": "Kurs löschen",
+    "uploadImage": "Kursbild hochladen",
     "search": "Kurse Suchen",
     "placeholder": {
       "accessKey": "Einschreibeschlüssel",
@@ -210,7 +211,7 @@
       "filesize": "Dateigröße",
       "filesSelected" : "Dateien ausgewählt",
       "fileRemove": "Datei löschen",
-      "infoDropAddFiles": "Dateien hier hinziehen oder hier klicken, um Dateien auszuwählen.",
+      "infoDropAddFiles": "Dateien hier hinziehen oder hier klicken, um Dateien hochzuladen.",
       "noVideo": "Kein Video verfügbar.",
       "noFiles" : "Keine Dateien vorhanden",
       "progress": "Fortschritt",
