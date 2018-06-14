@@ -17,6 +17,7 @@ import {SaveFileService} from '../../../shared/services/save-file.service';
 import {UserService} from '../../../shared/services/user.service';
 import {DataSharingService} from '../../../shared/services/data-sharing.service';
 import {DialogService} from '../../../shared/services/dialog.service';
+import {WhitelistService} from '../../../shared/services/whitelist.service';
 
 @Component({
   selector: 'app-course-edit-general-tab',
@@ -42,6 +43,9 @@ export class GeneralTabComponent implements OnInit {
     ENROLL_TYPE_ACCESSKEY,
   };
 
+  whitelistFile: File;
+  whitelistUsers: any[];
+
   message = 'Course successfully added.';
 
   constructor(private route: ActivatedRoute,
@@ -58,7 +62,8 @@ export class GeneralTabComponent implements OnInit {
               private userService: UserService,
               private dataSharingService: DataSharingService,
               private dialogService: DialogService,
-              private notificationService: NotificationService) {
+              private notificationService: NotificationService,
+              private whitelistService: WhitelistService) {
 
     this.route.params.subscribe(params => {
       this.id = params['id'];
@@ -84,7 +89,7 @@ export class GeneralTabComponent implements OnInit {
   ngOnInit() {
     this.generateForm();
     this.uploader = new FileUploader({
-      url: '/api/courses/' + this.id + '/whitelist',
+      url: '/api/whitelist/parse',
       headers: [{
         name: 'Authorization',
         value: localStorage.getItem('token'),
@@ -108,6 +113,20 @@ export class GeneralTabComponent implements OnInit {
         }, 6000);
       }
     };
+  }
+  async onWhitelistFileChanged(event) {
+    if (event.target && event.target.files && event.target.files.length > 0) {
+      this.whitelistFile = event.target.files[0];
+
+      const result = <any[]>await this.whitelistService.parseFile(this.whitelistFile);
+      if (!result || result.length === 0) {
+        this.snackBar.openLong('The CSV file does not contain any students to import.');
+        return;
+      }
+
+      this.whitelistUsers = result;
+      this.dialogService.whitelist(this.whitelistUsers, this.courseOb);
+    }
   }
 
   generateForm() {

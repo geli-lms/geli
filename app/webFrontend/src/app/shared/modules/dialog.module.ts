@@ -19,6 +19,7 @@ import {FilesizePipe} from '../pipes/filesize/filesize.pipe';
 import {UploadFormDialog} from '../components/upload-form-dialog/upload-form-dialog.component';
 import {TranslateModule} from '@ngx-translate/core';
 import {HttpClientModule} from '@angular/common/http';
+import {WhitelistDialog} from '../../course/course-edit/general-tab/whitelist-dialog/whitelist-dialog.component';
 
 @NgModule({
   imports: [
@@ -44,7 +45,8 @@ import {HttpClientModule} from '@angular/common/http';
     UploadFormComponent,
     FilesizePipe,
     UploadFormDialog,
-    MaterialImportModule
+    MaterialImportModule,
+    WhitelistDialog
   ],
   declarations: [
     InfoDialog,
@@ -58,6 +60,7 @@ import {HttpClientModule} from '@angular/common/http';
     UploadFormComponent,
     FilesizePipe,
     UploadFormDialog,
+    WhitelistDialog
   ],
   providers: [
     DialogService
@@ -73,6 +76,7 @@ import {HttpClientModule} from '@angular/common/http';
     ChangePasswordDialogComponent,
     UploadFormComponent,
     UploadFormDialog,
+    WhitelistDialog
   ]
 })
 export class DialogModule {

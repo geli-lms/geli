@@ -1,6 +1,6 @@
 import {
   Authorized, Body, Delete, Get, JsonController, Post, Param, Put, QueryParam, UseBefore,
-  HttpError, BadRequestError
+  HttpError, BadRequestError, UploadedFile, CurrentUser
 } from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import {isNullOrUndefined} from 'util';
@@ -11,15 +11,99 @@ import ObjectId = mongoose.Types.ObjectId;
 import {Course} from '../models/Course';
 import {User} from '../models/User';
 import {IWhitelistUser} from '../../../shared/models/IWhitelistUser';
+import {IUser} from '../../../shared/models/IUser';
+
+const multer = require('multer');
+import crypto = require('crypto');
+import {ObsCsvController} from './ObsCsvController';
 
 function escapeRegex(text: string) {
   return text.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
 }
 
+const uploadOptions = {
+  storage: multer.diskStorage({
+    destination: (req: any, file: any, cb: any) => {
+      cb(null, 'tmp/');
+    },
+    filename: (req: any, file: any, cb: any) => {
+      const extPos = file.originalname.lastIndexOf('.');
+      const ext = (extPos !== -1) ? `.${file.originalname.substr(extPos + 1).toLowerCase()}` : '';
+      crypto.pseudoRandomBytes(16, (err, raw) => {
+        cb(err, err ? undefined : `${raw.toString('hex')}${ext}`);
+      });
+    }
+  }),
+};
+
+
 @JsonController('/whitelist')
 @UseBefore(passportJwtMiddleware)
 export class WitelistController {
 
+  parser: ObsCsvController = new ObsCsvController();
+
+  /**
+   * @api {get} /api/whitelist/:id Request whitelist user
+   * @apiName GetWhitelistUser
+   * @apiGroup Whitelist
+   *
+   * @apiParam {String} id Whitelist user ID.
+   *
+   * @apiSuccess {WhitelistUser} whitelistUser Whitelist user.
+   *
+   * @apiSuccessExample {json} Success-Response:
+   *     {
+   *         "__v": 0,
+   *         "updatedAt": "2018-03-21T23:22:23.758Z",
+   *         "createdAt": "2018-03-21T23:22:23.758Z",
+   *         "_id": "5ab2e92fda32ac2ab0f04b78",
+   *         "firstName": "max",
+   *         "lastName": "mustermann",
+   *         "uid": "876543",
+   *         "courseId": {...},
+   *         "id": "5ab2e92fda32ac2ab0f04b78"
+   *     }
+   */
+  @Get('/course/:id')
+  async getCourse(@Param('id') id: string) {
+    const users = await WhitelistUser.find({ courseId: id });
+    return users.map(user => user.toObject());
+  }
+
+  /**
+   * @api {post} /api/courses/:id/whitelist Whitelist students for course
+   * @apiName PostCourseWhitelist
+   * @apiGroup Course
+   * @apiPermission teacher
+   * @apiPermission admin
+   *
+   * @apiParam {String} id Course ID.
+   * @apiParam {Object} file Uploaded file.
+   *
+   * @apiSuccess {Object} result Returns the new whitelist length.
+   *
+   * @apiSuccessExample {json} Success-Response:
+   *    {
+   *      newlength: 10
+   *    }
+   *
+   * @apiError TypeError Only CSV files are allowed.
+   * @apiError HttpError UID is not a number 1.
+   * @apiError ForbiddenError Unauthorized user.
+   */
+  @Authorized(['teacher', 'admin'])
+  @Post('/parse')
+  async whitelistStudents(
+    @UploadedFile('file', {options: uploadOptions}) file: any,
+    @CurrentUser() currentUser: IUser) {
+    const name: string = file.originalname;
+    if (!name.endsWith('.csv')) {
+      throw new TypeError(errorCodes.upload.type.notCSV.code);
+    }
+
+    return <string> await this.parser.parseFile(file);
+  }
   /**
    * @api {get} /api/whitelist/:id Request whitelist user
    * @apiName GetWhitelistUser

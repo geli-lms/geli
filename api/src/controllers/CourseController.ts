@@ -586,24 +586,44 @@ export class CourseController {
   @Post('/:id/whitelist')
   async whitelistStudents(
     @Param('id') id: string,
-    @UploadedFile('file', {options: uploadOptions}) file: any,
+    @Body() whitelist: any[],
     @CurrentUser() currentUser: IUser) {
-    const name: string = file.originalname;
-    if (!name.endsWith('.csv')) {
-      throw new TypeError(errorCodes.upload.type.notCSV.code);
-    }
+
     const course = await Course.findById(id);
+
     if (!course.checkPrivileges(currentUser).userCanEditCourse) {
       throw new ForbiddenError();
     }
-    await course
-      .populate('whitelist')
-      .populate('students')
-      .execPopulate();
-    const buffer = <string> await this.parser.parseFile(file);
-    await this.parser.updateCourseFromBuffer(buffer, course);
+
+    if (!whitelist || whitelist.length === 0) {
+      throw new BadRequestError();
+    }
+
+    if (course.whitelist.length > 0) {
+      for (const wuser of course.whitelist) {
+        const whitelistUser = await WhitelistUser.findById(wuser);
+        if (whitelistUser) {
+          await whitelistUser.remove();
+        }
+      }
+    }
+
+    course.whitelist = [];
+
+    for (const whiteListUser of whitelist) {
+      const wUser = new WhitelistUser();
+      wUser.firstName = whiteListUser.firstName;
+      wUser.lastName = whiteListUser.lastName;
+      wUser.uid = whiteListUser.uid;
+      wUser.courseId = course._id;
+
+      await wUser.save();
+      course.whitelist.push(wUser._id);
+    }
+
     await course.save();
-    return {newlength: course.whitelist.length};
+
+    return whitelist;
   }
 
   /**

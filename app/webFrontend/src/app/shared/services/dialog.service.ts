@@ -10,6 +10,8 @@ import {WriteMailDialog} from '../components/write-mail-dialog/write-mail-dialog
 import {ChangePasswordDialogComponent} from '../components/change-password-dialog/change-password-dialog.component';
 import {UserProfileDialog} from '../components/user-profile-dialog/user-profile-dialog.component';
 import {User} from '../../models/User';
+import {WhitelistDialog} from '../../course/course-edit/general-tab/whitelist-dialog/whitelist-dialog.component';
+import {ICourse} from '../../../../../../shared/models/ICourse';
 
 @Injectable()
 export class DialogService {
@@ -23,6 +25,17 @@ export class DialogService {
     dialogRef = this.dialog.open(InfoDialog);
     dialogRef.componentInstance.title = title;
     dialogRef.componentInstance.message = message;
+
+    return dialogRef.afterClosed();
+  }
+
+
+  public whitelist(whitelist: any[], course: ICourse): Observable<boolean> {
+    let dialogRef: MatDialogRef<WhitelistDialog>;
+
+    dialogRef = this.dialog.open(WhitelistDialog);
+    dialogRef.componentInstance.whitelistUsers = whitelist;
+    dialogRef.componentInstance.course = course;
 
     return dialogRef.afterClosed();
   }

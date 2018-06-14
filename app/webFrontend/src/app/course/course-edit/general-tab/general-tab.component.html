@@ -29,15 +29,10 @@
     <p>{{ 'course.text.uploadWhitelist' | translate }}</p>
     <p>
       <!-- TODO: Replace with shared upload form -->
-      <input class="upload" type="file" ng2FileSelect [uploader]="uploader"
+      <input class="upload" type="file" (change)="onWhitelistFileChanged($event)"
              [placeholder]="'file.placeholder.uploadFiles' | translate" accept=".csv"/>
-      <button mat-raised-button color="primary"
-              (click)="uploader.uploadAll()"
-              [disabled]="!uploader.getNotUploadedItems().length">
-        <mat-icon>file_upload</mat-icon>
-        {{ 'common.upload' | translate }}
-      </button>
     </p>
+
   </div>
 
   <p>

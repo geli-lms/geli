@@ -246,6 +246,14 @@ export class CourseService extends DataService {
   readCourseToEdit(id: string): Promise<ICourse> {
     return this.readSingleItem<ICourse>(id + '/edit');
   }
+
+  setWhitelistUsers(courseId: string, whitelistUsers: any): Promise<any> {
+    const originalApiPath = this.apiPath;
+    this.apiPath += courseId + '/whitelist';
+    const promise = this.createItem(JSON.stringify(whitelistUsers));
+    this.apiPath = originalApiPath;
+    return promise;
+  }
 }
 
 @Injectable()
