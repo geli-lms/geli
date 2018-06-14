@@ -44,7 +44,7 @@ export class ReportComponent implements OnInit {
       .catch((err) => {
       });
   }
-  private exportReport() {
+  private async exportReport() {
     const tasks = this.filterCourseForTasks();
 
     if (tasks.length === 0) {
@@ -53,17 +53,16 @@ export class ReportComponent implements OnInit {
       });
     } else {
       const header = this.generateCsvHeader(tasks);
-      this.reportService.getCourseResults(this.courseId)
-        .then((report) => {
-          if (report.length) {
-            const csvContent = this.generateCsvContent(report, tasks, header);
-            this.createDownload(csvContent);
-          } else {
-            this.translate.get(['report.noStudents', 'common.dismiss']).subscribe((t: string) => {
-              this.snackBar.open(t['report.noStudents'], t['common.dismiss']);
-            });
-          }
+      const report = await this.reportService.getCourseResults(this.courseId);
+
+      if (report.length > 0) {
+        const csvContent = this.generateCsvContent(report, tasks, header);
+        this.createDownload(csvContent);
+      } else {
+        this.translate.get(['report.noStudents', 'common.dismiss']).subscribe((t: string) => {
+          this.snackBar.open(t['report.noStudents'], t['common.dismiss']);
         });
+      }
     }
 
   }
