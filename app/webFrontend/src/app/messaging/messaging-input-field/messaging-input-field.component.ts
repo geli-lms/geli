@@ -49,8 +49,7 @@ export class MessagingInputFieldComponent implements OnInit {
    */
   onEnter(event: KeyboardEvent, msgTextArea): void {
     this.getCaretPos(msgTextArea);
-    const message = this.form.getRawValue().message;
-    if (event.keyCode === 13 && event.ctrlKey && message.trim().length > 0) {
+    if (event.keyCode === 13 && event.ctrlKey) {
       this.postMessage();
     }
   }
@@ -60,6 +59,11 @@ export class MessagingInputFieldComponent implements OnInit {
    * and reset form
    */
   postMessage(): void {
+    const msg = this.form.getRawValue().message;
+    if (msg.trim().length < 0) {
+      return;
+    }
+
     const meta: ISocketIOMessageMeta = {
       type: this.parentMessageId ?  SocketIOMessageType.COMMENT :  SocketIOMessageType.MESSAGE,
       parent: this.parentMessageId
@@ -80,7 +84,9 @@ export class MessagingInputFieldComponent implements OnInit {
     };
 
     this.chatService.send(socketIOMessage);
-    this.form.reset();
+    this.form.setValue({
+      message: ""
+    });
   }
 
   onEmojiSelected($event){
