@@ -80,52 +80,49 @@ export class NotificationController {
   @Authorized(['teacher', 'admin'])
   @Post('/user/:id')
   async createNotificationForStudent(@Param('id') userId: string, @Body() data: any) {
+    if (!data.changedCourse && !data.text) {
+      throw new BadRequestError('Notification needs at least the field changedCourse or text');
+    }
     const user = await User.findById(userId);
+    if (!user) {
+      throw new BadRequestError('Could not create notification because user not found');
+    }
     await this.createNotification(user, data.text, data.changedCourse, data.changedLecture, data.changedUnit);
     return {notified: true};
   }
 
   async createNotification(user: IUser, text: string, changedCourse?: ICourse, changedLecture?: ILecture, changedUnit?: IUnit) {
-    try {
-      const notification = new Notification();
-      notification.user = user;
-      notification.text = text;
-      notification.isOld = false;
-      if (changedCourse) {
-        notification.changedCourse = changedCourse;
-        const settings = await this.getOrCreateSettings(user, changedCourse);
-        if (settings.notificationType === API_NOTIFICATION_TYPE_ALL_CHANGES) {
-          if (changedLecture) {
-            notification.changedLecture = changedLecture;
-          }
-          if (changedUnit) {
-            notification.changedUnit = changedUnit;
-          }
-          if (settings.emailNotification) {
-            await this.sendNotificationMail(user, 'you received new notifications for the course ' + changedCourse.name + '.');
-          }
-          return notification.save();
+    const notification = new Notification();
+    notification.user = user;
+    notification.text = text;
+    notification.isOld = false;
+    if (changedCourse) {
+      notification.changedCourse = changedCourse;
+      const settings = await this.getOrCreateSettings(user, changedCourse);
+      if (settings.notificationType === API_NOTIFICATION_TYPE_ALL_CHANGES) {
+        if (changedLecture) {
+          notification.changedLecture = changedLecture;
         }
-      } else {
-        return notification.save();
+        if (changedUnit) {
+          notification.changedUnit = changedUnit;
+        }
+        if (settings.emailNotification) {
+          await this.sendNotificationMail(user, 'you received new notifications for the course ' + changedCourse.name + '.');
+        }
       }
-    } catch (err) {
-      const newError = new InternalServerError('Failed to create notification');
-      newError.stack += '\nCaused by: ' + err.message + '\n' + err.stack;
-      throw newError;
     }
+    return await notification.save();
   }
 
   async getOrCreateSettings(user: IUser, changedCourse: ICourse) {
     let settings = await NotificationSettings.findOne({'user': user, 'course': changedCourse});
     if (settings === undefined || settings === null) {
-      settings = await new NotificationSettings(
-        {
-          user: user,
-          course: changedCourse,
-          notificationType: API_NOTIFICATION_TYPE_ALL_CHANGES,
-          emailNotification: false
-        }).save();
+      settings = await new NotificationSettings({
+        user: user,
+        course: changedCourse,
+        notificationType: API_NOTIFICATION_TYPE_ALL_CHANGES,
+        emailNotification: false
+      }).save();
     }
     return settings;
   }
