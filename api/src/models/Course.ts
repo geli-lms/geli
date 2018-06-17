@@ -18,7 +18,7 @@ import {IPicture} from '../../../shared/models/mediaManager/IPicture';
 import * as fs from 'fs';
 
 interface ICourseModel extends ICourse, mongoose.Document {
-  exportJSON: (sanitize?: boolean) => Promise<ICourse>;
+  exportJSON: (sanitize?: boolean, onlyBasicData?: boolean) => Promise<ICourse>;
   checkPrivileges: (user: IUser) => IProperties;
   forDashboard: (user: IUser) => ICourseDashboard;
   forView: () => ICourseView;
@@ -143,7 +143,7 @@ courseSchema.pre('remove', async function () {
   }
 });
 
-courseSchema.methods.exportJSON = async function (sanitize: boolean = true) {
+courseSchema.methods.exportJSON = async function (sanitize: boolean = true, onlyBasicData:boolean = false) {
   const obj = this.toObject();
 
   // remove unwanted informations
@@ -162,6 +162,11 @@ courseSchema.methods.exportJSON = async function (sanitize: boolean = true) {
       delete obj.students;
       delete obj.courseAdmin;
       delete obj.teachers;
+    }
+
+    if(onlyBasicData){
+      delete obj.id;
+      delete obj.hasAccessKey;
     }
   }
 

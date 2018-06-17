@@ -1,5 +1,6 @@
 import * as mongoose from 'mongoose';
 import {INotificationSettings} from '../../../shared/models/INotificationSettings';
+import {Course, ICourseModel} from "./Course";
 
 interface INotificationSettingsModel extends INotificationSettings, mongoose.Document {
   exportJSON: () => Promise<INotificationSettings>;
@@ -31,7 +32,7 @@ const notificationSettingsSchema = new mongoose.Schema({
   }
 );
 
-notificationSettingsSchema.methods.exportJSON = function () {
+notificationSettingsSchema.methods.exportJSON = async function () {
   const obj = this.toObject();
 
   // remove unwanted informations
@@ -42,6 +43,7 @@ notificationSettingsSchema.methods.exportJSON = function () {
   delete obj.updatedAt;
 
   // custom properties
+
 
   return obj;
 };
