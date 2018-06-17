@@ -22,7 +22,7 @@
             ],
             "styles": [
               "src/styles.scss",
-              "node_modules/angular2-lightbox/lightbox.css"
+              "./node_modules/ngx-lightbox/lightbox.css"
             ],
             "scripts": [
               "node_modules/ace-builds/src-min/ace.js",
@@ -81,7 +81,7 @@
             ],
             "styles": [
               "src/styles.scss",
-              "node_modules/angular2-lightbox/lightbox.css"
+	      "./node_modules/ngx-lightbox/lightbox.css"
             ],
             "assets": [
               "src/assets",
