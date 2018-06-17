@@ -9,7 +9,6 @@ $header-width: 30px;
 .comments-header {
   display: flex;
   flex-direction: row-reverse;
-  margin: 10px 0px;
   height: $header-width;
 }
 
@@ -18,6 +17,6 @@ $header-width: 30px;
   height: 100%;
 }
 
-.comment-dialog-messagin-container {
+.comment-dialog-messaging-container {
   height: calc(100% - #{$header-width})
 }
