@@ -20,6 +20,7 @@ export class MessagingInputFieldComponent implements OnInit {
   @Input() parentMessageId;
   @Input() room: string;
   @Input() chatName: string;
+  showEmojiPicker = false;
 
   caretPos: number = 0;
 
@@ -95,6 +96,10 @@ export class MessagingInputFieldComponent implements OnInit {
     this.form.setValue({
       message: message
     });
+  }
+
+  toggleEmojiPicker() {
+    this.showEmojiPicker = !this.showEmojiPicker;
   }
 
 }

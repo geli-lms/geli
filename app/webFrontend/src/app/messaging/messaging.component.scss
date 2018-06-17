@@ -24,6 +24,19 @@
   overflow-y: scroll
 }
 
+.messages::-webkit-scrollbar {
+  width: 0.5em;
+}
+
+.messages::-webkit-scrollbar-track {
+}
+
+.messages::-webkit-scrollbar-thumb {
+  background-color: darkgrey;
+  outline: 1px solid slategrey;
+}
+
+
 .messages ul {
   list-style-type: none;
   display: flex;

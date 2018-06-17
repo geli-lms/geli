@@ -9,15 +9,19 @@
   width: 100%;
   display: flex;
   flex-direction: column;
+  border-top: 2px solid #f2f2f2;
 }
 
+
+.emoji-mart{
+  animation: fadeInUp 1s;
+}
 
 .emoji-mart-scroll {
   height: 170px !important;
 }
 
 .msg-input{
- // background-color: #dfdfdf;
   display: flex;
   flex-direction: row;
   align-items: baseline;
@@ -26,15 +30,17 @@
     flex: 1;
   }
 
-  .message-input-field[_ngcontent-c25] textarea[_ngcontent-c25] {
+  .message-input-field textarea{
     max-height: 200px;
-    min-height: 30px;
+    min-height: 100px;
     background-color: white;
     border-radius: 5px;
-    padding: 2px;
+    padding: 0 10px;
   }
 }
 
-.mat-input-underline, .mat-form-field-underline {
-  display: none !important;
+
+.msg-input-footer{
+  display: flex;
+  justify-content: flex-end;
 }

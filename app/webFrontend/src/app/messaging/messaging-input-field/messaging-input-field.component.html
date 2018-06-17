@@ -1,17 +1,19 @@
 <div class="msg-input-container">
-  <div style="width: 100%; height: 170px"><emoji-mart (emojiSelect)="onEmojiSelected($event)" [showPreview]="false" [style]="{ height: '170px', width: '100%', overflow: 'hidden'}"></emoji-mart></div>
+  <div *ngIf="showEmojiPicker" style="width: 100%; height: 170px"><emoji-mart (emojiSelect)="onEmojiSelected($event)" [showPreview]="false" [style]="{ height: '170px', width: '100%', overflow: 'hidden'}"></emoji-mart></div>
   <div class="msg-input">
-    <button mat-icon-button>
-      <mat-icon>sentiment_very_satisfied</mat-icon>
-    </button>
     <form [formGroup]="form">
       <mat-form-field class="message-input-field">
-      <textarea #msgTextArea mat-autosize="true" matInput class="form-control" formControlName="message" (onclick)="onClick(msgTextArea)" (keydown)="onEnter($event, msgTextArea)"></textarea>
+        <mat-label></mat-label>
+      <textarea  placeholder="Enter a  message" #msgTextArea mat-autosize="true" matInput class="form-control" formControlName="message" (onclick)="onClick(msgTextArea)" (keydown)="onEnter($event, msgTextArea)"></textarea>
       </mat-form-field>
     </form>
-    <button mat-icon-button>
+  </div>
+  <div class="msg-input-footer">
+    <button color="primary" mat-icon-button (click)="toggleEmojiPicker()">
+      <mat-icon>sentiment_very_satisfied</mat-icon>
+    </button>
+    <button color="primary" class="msg-send" mat-icon-button>
       <mat-icon (click)="postMessage()">send</mat-icon>
     </button>
   </div>
 </div>
-
