@@ -14,7 +14,7 @@ import {DragulaService} from 'ng2-dragula';
 import {SaveFileService} from '../../../../shared/services/save-file.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {DataSharingService} from '../../../../shared/services/data-sharing.service';
-import {Subject} from 'rxjs/Subject';
+import {Subject} from 'rxjs';
 import {UnitFactoryService} from '../../../../shared/services/unit-factory.service';
 
 @Component({

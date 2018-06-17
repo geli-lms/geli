@@ -1,11 +1,11 @@
+
+import {throwError as observableThrowError, Observable} from 'rxjs';
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 
-import {Observable} from 'rxjs/Observable';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/observable/throw';
-import 'rxjs/add/observable/empty';
+
+
+
 import {AuthenticationService} from './authentication.service';
 import {catchError} from 'rxjs/operators';
 
@@ -23,7 +23,7 @@ export class BackendService {
       return Observable.empty();
     }
 
-    return Observable.throw(err);
+    return observableThrowError(err);
   }
 
   get(serviceUrl: string): Observable<any> {

@@ -9,7 +9,7 @@ import {MatSnackBar} from '@angular/material';
 import {DragulaService} from 'ng2-dragula';
 import {ActivatedRoute, Router} from '@angular/router';
 import {DataSharingService} from '../../../shared/services/data-sharing.service';
-import {Subject} from 'rxjs/Subject';
+import {Subject} from 'rxjs';
 import {Notification} from '../../../models/Notification';
 
 @Component({

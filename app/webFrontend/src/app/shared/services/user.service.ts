@@ -1,10 +1,10 @@
 import {Injectable} from '@angular/core';
-import 'rxjs/add/operator/map';
+
 import {IUser} from '../../../../../../shared/models/IUser';
 import {User} from '../../models/User';
 import {ICourse} from '../../../../../../shared/models/ICourse';
 import {ThemeService} from './theme.service';
-import {BehaviorSubject} from 'rxjs/BehaviorSubject';
+import {BehaviorSubject} from 'rxjs';
 
 const md5 = require('blueimp-md5');
 
