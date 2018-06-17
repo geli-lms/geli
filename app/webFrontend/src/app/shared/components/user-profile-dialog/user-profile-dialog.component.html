@@ -5,7 +5,7 @@
       <span>{{user.profile.firstName}} {{user.profile.lastName}}</span>
     </h2>
     <div class="user-data">
-      <div><strong>{{ 'common.email' | translate }}u: </strong><a href="mailto:{{user.email}}">{{user.email}}</a></div>
+      <div><strong>{{ 'common.email' | translate }}: </strong><a href="mailto:{{user.email}}">{{user.email}}</a></div>
       <div *ngIf="canSeeUid()">
           <strong>{{ 'common.profileDetails.uid' | translate }}: </strong>{{user.uid}}
       </div>
