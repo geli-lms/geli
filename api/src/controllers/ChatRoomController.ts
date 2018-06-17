@@ -1,10 +1,8 @@
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import {
-  BadRequestError,
-  Body,
   Get,
-  JsonController, NotFoundError, Param,
-  Post, QueryParam,
+  JsonController, NotFoundError,
+  QueryParam,
   UseBefore
 } from 'routing-controllers';
 import {ChatRoom} from '../models/ChatRoom';

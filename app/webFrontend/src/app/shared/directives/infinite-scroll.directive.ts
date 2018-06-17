@@ -13,6 +13,11 @@ interface ScrollPosition {
   cH: number;
 }
 
+enum ScrollDirection {
+  UP  ='up',
+  DOWN = 'down'
+}
+
 @Directive({
   selector: '[appInfiniteScroll]'
 })
@@ -22,11 +27,12 @@ export class InfiniteScrollDirective {
   scrollCallback; // callback function which should return an observable
 
   @Input()
-  scrollPercent = 90;  //until this percentage the user should scroll the container for the event to be emitted
+  scrollPercent = 100;  //until this percentage the user should scroll the container for the event to be emitted
 
   @Input()
-  shouldEmit = false; // yes or not the directive should emit an event when scrollPercent is reached.
-
+  shouldEmit = true;
+  @Input()
+  scrollDirection = ScrollDirection.UP;
 
   private scrollEvent$;
 
@@ -42,7 +48,7 @@ export class InfiniteScrollDirective {
       cH: e.target.clientHeight
     }))
       .pairwise()
-      .filter(positions => this.isScrollingUp(positions) && this.isScrollExpectedPercent(positions[1]))
+      .filter(positions => this.onScroll(positions) && this.isScrollPercentReached(positions[1]))
       .exhaustMap(() => {
         if (this.shouldEmit) {
           return this.scrollCallback();
@@ -52,22 +58,29 @@ export class InfiniteScrollDirective {
       });
   }
 
-  /**
-   * return true if the user is scrolling up otherwise false
-   * @param positions
-   * @returns {boolean}
-   */
-  isScrollingUp(positions) {
-    return positions[0].sT > positions[1].sT;
+
+  onScroll(positions) {
+    switch (this.scrollDirection) {
+      case ScrollDirection.UP:
+        return positions[0].sT > positions[1].sT;
+      case ScrollDirection.DOWN:
+        return positions[0].sT < positions[1].sT;
+      default:
+        return  positions[0].sT > positions[1].sT;
+    }
+
   }
 
-  /**
-   * return true if percentage of scroll after which to load more data is reached
-   * @param position
-   * @returns {boolean}
-   */
-  isScrollExpectedPercent = (position) => {
-    return ((position.sT + position.cH) / position.sH) < (this.scrollPercent / 100);
+
+  isScrollPercentReached = (position) => {
+    switch (this.scrollDirection) {
+      case ScrollDirection.UP:
+        return ((position.sT + position.cH) / position.sH) < (this.scrollPercent / 100);
+      case ScrollDirection.DOWN:
+        return ((position.sT + position.cH) / position.sH) > (this.scrollPercent / 100);
+      default:
+          return ((position.sT + position.cH) / position.sH) < (this.scrollPercent / 100);
+    }
   }
 
 }

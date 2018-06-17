@@ -18,8 +18,9 @@ import {ISocketIOMessage, SocketIOMessageType} from '../../../../../shared/model
 export class MessagingComponent implements OnInit {
 
   @Input() room: string;
-  @Input() mode: string;
+  @Input() mode = 'chat';
   @Input() loadMsgOnScroll = true;
+  @Input() infiniteScrollDirection = 'up';
   // number of messages to load
   @Input() limit = 20;
   chatName: string;
@@ -30,6 +31,7 @@ export class MessagingComponent implements OnInit {
   ioConnection: any;
   // callback for the infinite-scroll
   scrollCallback: any;
+  queryParam: any;
 
   constructor(
     private messageService: MessageService,
@@ -41,16 +43,21 @@ export class MessagingComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.queryParam = {
+      room: this.room,
+      limit: this.limit,
+      order: (this.mode === 'chat') ? -1 : 1
+    };
     this.init();
   }
 
   async init() {
     if (this.room) {
-      const queryParam = {room: this.room, limit: this.limit};
-      const res = await this.messageService.getMessageCount(queryParam);
+      this.queryParam = Object.assign(this.queryParam, {room: this.room});
+      const res = await this.messageService.getMessageCount(this.queryParam);
       this.messageCount = res.count;
-      this.messages = await this.messageService.getMessages(queryParam);
-      this.messages.reverse();
+      const _messages = await this.messageService.getMessages(this.queryParam);
+      this.messages = this.mode === 'chat' ? _messages.reverse(): _messages;
       this.chatName = this.getChatName();
       this.initSocketConnection();
     }
@@ -115,17 +122,12 @@ export class MessagingComponent implements OnInit {
   }
 
   loadMoreMsg(): Observable<any> {
-    const queryParam = {
-      room: this.room,
-      skip: this.messages.length,
-      limit: this.limit
-    };
-
-    return fromPromise(this.messageService.getMessages(queryParam)).do(this.processFurtherMessages.bind(this));
+    this.queryParam =  Object.assign(this.queryParam, {skip: this.messages.length,});
+    return fromPromise(this.messageService.getMessages(this.queryParam)).do(this.processFurtherMessages.bind(this));
   }
 
   processFurtherMessages(messages: IMessage[]): void {
-    this.messages = this.messages.concat(messages).reverse();
+    this.messages = (this.mode === 'chat') ? messages.reverse().concat(this.messages): this.messages.concat(messages.reverse());
     if (this.messages.length === this.messageCount) {
       this.loadMsgOnScroll = false;
     }
