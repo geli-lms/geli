@@ -3,9 +3,8 @@ import {CodeKataUnitService, NotificationService, UnitService} from '../../../sh
 import {SnackBarService} from '../../../shared/services/snack-bar.service';
 import {CodeKataUnit} from '../../../models/units/CodeKataUnit';
 import {AceEditorComponent} from 'ng2-ace-editor';
-import 'brace';
-import 'brace/mode/javascript';
 import 'brace/theme/github';
+import 'brace/mode/javascript';
 import {FormControl, FormGroup} from '@angular/forms';
 import {UnitFormService} from '../../../shared/services/unit-form.service';
 

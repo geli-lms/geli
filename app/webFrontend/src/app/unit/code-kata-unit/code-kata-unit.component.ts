@@ -62,7 +62,7 @@ export class CodeKataComponent implements OnInit {
   }
 
   setOptions() {
-/*    this.definitionEditor.setOptions({
+    this.definitionEditor.setOptions({
       maxLines: 9999,
     });
     this.codeEditor.setOptions({
@@ -73,7 +73,7 @@ export class CodeKataComponent implements OnInit {
       maxLines: 9999,
       firstLineNumber: ((this.codeKataUnit.definition.split('\n').length || 0) +
         (this.codeEditor.text.split('\n').length || 0) + 1),
-    });*/
+    });
   }
 
   async submitProgress() {

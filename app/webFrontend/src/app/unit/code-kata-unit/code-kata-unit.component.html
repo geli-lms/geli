@@ -3,7 +3,7 @@
   <ace-editor
     #definitionEditor
     [text]="codeKataUnit.definition"
-    [mode]="'javascript'"
+    [mode]="'markdown'"
     [theme]="'github'"
     [readOnly]="true">
   </ace-editor>
@@ -12,7 +12,7 @@
   <ace-editor class="user-code-editor"
               #codeEditor
               [text]="codeKataUnit.code || progress.code"
-              [mode]="'javascript'"
+              [mode]="'markdown'"
               [theme]="'github'"
               [readOnly]="isExampleCode"
               [durationBeforeCallback]="333"
@@ -22,7 +22,7 @@
   <ace-editor
     #testEditor
     [text]="codeKataUnit.test"
-    [mode]="'javascript'"
+    [mode]="'markdown'"
     [theme]="'github'"
     [readOnly]="true">
   </ace-editor>
