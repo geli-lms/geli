@@ -9,7 +9,7 @@
     "start": "ng serve --proxy-config local-proxy.conf.json",
     "start-docker-dev": "ng serve --host 0.0.0.0 --proxy-config docker-proxy.conf.json --poll 3000",
     "start-vagrant-dev": "ng serve --host 0.0.0.0 --proxy-config local-proxy.conf.json --poll 3000",
-    "build": "ng build --prod --sourcemaps",
+    "build": "ng build --prod --source-map",
     "build-pr": "ng build --prod",
     "test": "ng test",
     "test-ci": "ng test --single-run",

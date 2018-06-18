@@ -5,7 +5,7 @@ import {MatSnackBar} from '@angular/material';
 import {ICourse} from '../../../../../../../../shared/models/ICourse';
 import {DragulaService} from 'ng2-dragula';
 import {FormControl} from '@angular/forms';
-import {Observable} from 'rxjs';
+import {Observable} from 'rxjs/Observable';
 import {WhitelistShowComponent} from '../whitelist-show/whitelist-show.component';
 
 @Component({

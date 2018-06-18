@@ -90,7 +90,7 @@ export class CodeKataUnitFormComponent implements OnInit {
     this.unitForm.addControl('code', new FormControl(this.model.code));
     this.unitForm.addControl('test', new FormControl( this.model.test));
 
-    this.editor.getEditor().setOptions({maxLines: 9999});
+    // this.editor.getEditor().setOptions({maxLines: 9999});
 
 
     this.unitFormService.beforeSubmit = async () => {
