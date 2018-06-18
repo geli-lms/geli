@@ -167,6 +167,8 @@ courseSchema.methods.exportJSON = async function (sanitize: boolean = true, only
     if(onlyBasicData){
       delete obj.id;
       delete obj.hasAccessKey;
+
+      return obj;
     }
   }
 
@@ -191,6 +193,7 @@ courseSchema.methods.exportJSON = async function (sanitize: boolean = true, only
 
   return obj;
 };
+
 
 courseSchema.statics.importJSON = async function (course: ICourse, admin: IUser, active: boolean) {
   // set Admin

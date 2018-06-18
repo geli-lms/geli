@@ -13,7 +13,7 @@ import {IProgress} from '../../../../shared/models/progress/IProgress';
 import {User} from '../User';
 
 interface IUnitModel extends IUnit, mongoose.Document {
-  exportJSON: () => Promise<IUnit>;
+  exportJSON: (onlyBasicData?:boolean) => Promise<IUnit>;
   calculateProgress: (users: IUser[], progress: IProgress[]) => Promise<IUnit>;
   populateUnit: () => Promise<IUnitModel>;
   secureData: (user: IUser) => Promise<IUnitModel>;
@@ -55,8 +55,13 @@ const unitSchema = new mongoose.Schema({
     toObject: {
       virtuals: true,
       transform: function (doc: IUnitModel, ret: any) {
-        ret._id = ret._id.toString();
-        ret._course = ret._course.toString();
+        if(ret._id){
+          ret._id = ret._id.toString();
+        }
+
+        if(ret._course){
+          ret._course = ret._course.toString();
+        }
       }
     },
   }
@@ -69,7 +74,7 @@ unitSchema.virtual('progressData', {
   justOne: true
 });
 
-unitSchema.methods.exportJSON = function () {
+unitSchema.methods.exportJSON = function (onlyBasicData:boolean=false) {
   const obj = this.toObject();
 
   // remove unwanted informations
@@ -79,8 +84,15 @@ unitSchema.methods.exportJSON = function () {
   delete obj.__v;
   delete obj.updatedAt;
 
+
   // custom properties
   delete obj._course;
+
+  if(onlyBasicData){
+    delete obj.id;
+    delete obj.progressData;
+  }
+
 
   return obj;
 };

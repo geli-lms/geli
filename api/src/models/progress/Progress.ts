@@ -4,6 +4,7 @@ import {codeKataProgressSchema} from './CodeKataProgress';
 import {taskUnitProgressSchema} from './TaskUnitProgress';
 
 interface IProgressModel extends IProgress, mongoose.Document {
+  exportJSON: () => Promise<IProgress>;
 }
 
 const progressSchema = new mongoose.Schema({
@@ -31,17 +32,37 @@ const progressSchema = new mongoose.Schema({
     toObject: {
       transform: function (doc: any, ret: any) {
         ret._id = ret._id.toString();
-        ret.course = ret.course.toString();
 
-        if (doc.populated('user') === undefined) {
+        if(!doc.populated('course') && ret.course){
+          ret.course = ret.course.toString();
+        }
+
+        if (!doc.populated('user') && ret.user) {
           ret.user = ret.user.toString();
         }
 
-        ret.unit = ret.unit.toString();
+        if(!doc.populated('unit') && ret.unit){
+          ret.unit = ret.unit.toString();
+        }
       }
     }
   }
 );
+
+progressSchema.methods.exportJSON = async function () {
+  const obj = this.toObject();
+
+  // remove unwanted informations
+  // mongo properties
+  delete obj._id;
+  delete obj.createdAt;
+  delete obj.__v;
+  delete obj.updatedAt;
+
+  // custom properties
+  return obj;
+};
+
 
 
 const Progress = mongoose.model<IProgressModel>('Progress', progressSchema);

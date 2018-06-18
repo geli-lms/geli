@@ -2,12 +2,13 @@ import {Authorized, CurrentUser, Get, JsonController, NotFoundError, Param, UseB
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import {Course, ICourseModel} from '../models/Course';
 import {Lecture} from '../models/Lecture';
-import {Unit} from '../models/units/Unit';
+import {IUnitModel, Unit} from '../models/units/Unit';
 import {IUser} from "../../../shared/models/IUser";
 import {User} from "../models/User";
 import {Notification} from "../models/Notification";
 import {NotificationSettings} from "../models/NotificationSettings";
 import {WhitelistUser} from "../models/WhitelistUser";
+import {IProgressModel, Progress} from "../models/progress/Progress";
 
 @JsonController('/export')
 @UseBefore(passportJwtMiddleware)
@@ -107,7 +108,7 @@ export class ExportController {
     }
 
     //load notification
-    const notificationSettings = await NotificationSettings.findOne({'user': user._id})
+    const notificationSettings = await NotificationSettings.findOne({'user': user._id}, 'course notificationType emailNotification')
       .populate('course', 'name description -_id');
 
     const notificatinSettingsJson = await notificationSettings.exportJSON();
@@ -121,28 +122,42 @@ export class ExportController {
     });
 
     // User in whitelists
-    const whitelistUsers = await WhitelistUser.find({uid: currentUser.uid},"courseId")
+    const whitelistUsers = await WhitelistUser.find({uid: user.uid},"courseId")
       .populate('courseId', 'name description -_id');
 
-    const whitelistUsersForExport = whitelistUsers.map((whitelist) => {
-      let retWhitelist = whitelist.exportJSON();
-      delete (<ICourseModel><any>retWhitelist.courseId).hasAccessKey;
-      return retWhitelist.courseId;
-    });
+    const whitelistUsersForExport = await Promise.all(whitelistUsers.map(async (whitelist) => {
+      const course:ICourseModel = <any>whitelist.courseId;
+      return await course.exportJSON(true, true);
+    }));
 
 
     // Courses
     const conditions: any = {};
     conditions.$or = [];
-    conditions.$or.push({students: currentUser._id});
-    //conditions.$or.push({teachers: currentUser._id});
-    //conditions.$or.push({courseAdmin: currentUser._id});
+    conditions.$or.push({students: user._id});
+    conditions.$or.push({teachers: user._id});
+    conditions.$or.push({courseAdmin: user._id});
 
     const courses = await Course.find(conditions, 'name description -_id');
-    const exportCourses = await courses.map((course:ICourseModel) => {
-      //delete (<ICourseModel><any>course).hasAccessKey;
-      return course.exportJSON(true, true);
-    });
+    const exportCourses = await Promise.all(courses.map(async (course:ICourseModel) => {
+      return await course.exportJSON(true, true);
+    }));
+
+
+
+    // Progress
+    const userProgress = await Progress.find({'user': user._id},"-user")
+      .populate('course', "name description")
+      .populate('unit',"name description -_id");
+
+    const userProgressExport = await Promise.all(userProgress.map( async (prog:IProgressModel) => {
+      let progExport = await prog.exportJSON();
+      progExport.course = await (<ICourseModel>prog.course).exportJSON(true, true);
+      progExport.unit = await (<IUnitModel>prog.unit).exportJSON(true);
+      return progExport;
+    }));
+
+
 
 
 
@@ -151,7 +166,8 @@ export class ExportController {
       notifications: notificationTexts,
       notificationSettings:notificatinSettingsJson,
       whiteLists: whitelistUsersForExport,
-      courses: exportCourses
+      courses: exportCourses,
+      progress: userProgressExport
     }
   }
 
