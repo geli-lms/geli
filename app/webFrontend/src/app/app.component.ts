@@ -24,7 +24,6 @@ export class AppComponent implements OnInit {
   title = 'app works!';
   showProgressBar = false;
   apiInfo: APIInfo;
-  isCookieAccepted: boolean;
   actualProfilePicturePath: any;
 
   constructor(private router: Router,
@@ -57,8 +56,8 @@ export class AppComponent implements OnInit {
         this.ravenErrorHandler.setup(info.sentryDsn);
         this.apiInfo = info;
       })
-      .catch((err) => {
-        this.snackBar.open('Could not connect to backend', null);
+      .catch(() => {
+        this.snackBar.open( 'Could not connect to backend', null);
       });
 
     this.updateCurrentUser();
