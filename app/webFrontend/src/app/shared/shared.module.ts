@@ -18,7 +18,7 @@ import {MarkdownEditorComponent} from './components/markdown-editor/markdown-edi
 import {AceEditorModule} from 'ng2-ace-editor';
 import {PickMediaDialog} from './components/pick-media-dialog/pick-media-dialog.component';
 import {TranslateModule} from '@ngx-translate/core';
-import {AdminMarkdownEditComponent} from './components/admin-markdown-edit/admin-markdown-edit.component';
+import {ConfigurablePagesFormComponent} from '../admin/configurable-pages/configurable-pages-form/configurable-pages-form.component';
 import {ImprintAndInfoService} from './services/imprint-and-info.service';
 import {UserProfileDialog} from 'app/shared/components/user-profile-dialog/user-profile-dialog.component';
 import {NotfoundComponent} from './components/notfound/notfound.component';
@@ -49,7 +49,7 @@ import {ResponsiveImageComponent} from './components/responsive-image/responsive
     ChangePasswordDialogComponent,
     MarkdownEditorComponent,
     PickMediaDialog,
-    AdminMarkdownEditComponent,
+    ConfigurablePagesFormComponent,
     UserProfileDialog,
     NotfoundComponent,
     UserProfileDialog,
@@ -71,7 +71,7 @@ import {ResponsiveImageComponent} from './components/responsive-image/responsive
     ChangePasswordDialogComponent,
     PickMediaDialog,
     TranslateModule,
-    AdminMarkdownEditComponent,
+    ConfigurablePagesFormComponent,
     UserProfileDialog,
     ResponsiveImageComponent
   ],

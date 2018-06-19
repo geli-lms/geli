@@ -1,6 +1,6 @@
 import {
   Authorized,
-  Body,
+  Body, CurrentUser,
   Get, InternalServerError,
   JsonController,
   Param,
@@ -9,6 +9,7 @@ import {
 } from 'routing-controllers';
 import {Config} from '../models/Config';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
+import {IUser} from '../../../shared/models/IUser';
 
 const publicConfigs = [
   new RegExp('legalnotice|infoBox|privacy'),
@@ -143,7 +144,7 @@ export class ConfigController {
   @UseBefore(passportJwtMiddleware)
   @Authorized(['admin'])
   @Get('/:id')
-  async getConfig(@Param('id') name: string) {
+  async getConfig(@Param('id') name: string, @CurrentUser() currentUser?: IUser) {
     try {
       const configV = await Config.findOne({name: name});
       if (!configV) {

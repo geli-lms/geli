@@ -16,4 +16,7 @@ export class VideoUnitComponent implements OnInit {
   ngOnInit() {
   }
 
+  checkVideoWidth(event) {
+    const debug = 0;
+  }
 }

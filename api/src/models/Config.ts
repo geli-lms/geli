@@ -13,16 +13,22 @@ const configSchema = new mongoose.Schema({
     },
     value: {
       type: String
+    },
+    minViewRole: {
+      type: String
+    },
+    minEditRole: {
+      type: String
     }
   },
   {
     timestamps: true,
     toObject: {
       transform: function (doc: any, ret: any) {
-          delete ret._id;
-        }
+        delete ret._id;
       }
     }
+  }
 );
 
 const Config = mongoose.model<IConfigModel>('Config', configSchema);

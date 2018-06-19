@@ -4,6 +4,9 @@
     <button mat-button routerLink="/admin/users">
       <span>{{ 'common.users' | translate }}</span>
     </button>
+    <button mat-button routerLink="/admin/configurable-pages">
+      <span>{{ 'common.configurablePages' | translate }}</span>
+    </button>
     <button [routerLink]="['/admin/markdownEdit']" [queryParams]="{type: 'legalnotice', header: 'Legal notice'}" mat-button>
       <span>{{ 'common.legalnotice' | translate }}</span>
     </button>

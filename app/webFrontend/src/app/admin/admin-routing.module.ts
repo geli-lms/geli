@@ -3,7 +3,8 @@ import {RouterModule, Routes} from '@angular/router';
 import {AuthGuardService} from '../shared/services/auth-guard.service';
 import {UserAdminComponent} from './user-admin/user-admin.component';
 import {AdminComponent} from './admin.component';
-import {AdminMarkdownEditComponent} from '../shared/components/admin-markdown-edit/admin-markdown-edit.component';
+import {ConfigurablePagesFormComponent} from './configurable-pages/configurable-pages-form/configurable-pages-form.component';
+import {ConfigurablePagesComponent} from './configurable-pages/configurable-pages.component';
 
 const routes: Routes = [
   {
@@ -24,8 +25,13 @@ const routes: Routes = [
         data: {roles: ['admin']}
       },
       {
+        path: 'configurable-pages',
+        component: ConfigurablePagesComponent,
+        data: {roles: ['admin']}
+      },
+      {
         path: 'markdownEdit',
-        component: AdminMarkdownEditComponent,
+        component: ConfigurablePagesFormComponent,
         canActivate: [AuthGuardService],
         data: {roles: ['admin']}
       },

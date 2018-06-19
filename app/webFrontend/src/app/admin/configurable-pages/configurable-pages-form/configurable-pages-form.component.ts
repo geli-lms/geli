@@ -1,17 +1,17 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {IConfig} from '../../../../../../../shared/models/IConfig';
-import {ConfigService} from '../../services/data.service';
-import {MarkdownService} from '../../services/markdown.service';
+import {ConfigService} from '../../../shared/services/data.service';
+import {MarkdownService} from '../../../shared/services/markdown.service';
 import {errorCodes} from '../../../../../../../api/src/config/errorCodes';
-import {SnackBarService} from '../../services/snack-bar.service';
+import {SnackBarService} from '../../../shared/services/snack-bar.service';
 import {ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'app-admin-markdown-edit',
-  templateUrl: './admin-markdown-edit.component.html',
-  styleUrls: ['./admin-markdown-edit.component.scss']
+  templateUrl: './configurable-pages-form.component.html',
+  styleUrls: ['./configurable-pages-form.component.scss']
 })
-export class AdminMarkdownEditComponent implements OnInit {
+export class ConfigurablePagesFormComponent implements OnInit {
 
   config: IConfig;
   text: string;

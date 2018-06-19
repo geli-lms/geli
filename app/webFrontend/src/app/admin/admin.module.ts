@@ -7,6 +7,8 @@ import {RouterModule} from '@angular/router';
 import {SharedModule} from '../shared/shared.module';
 import {AceEditorModule} from 'ng2-ace-editor';
 import {AdminRoutingModule} from './admin-routing.module';
+import { ConfigurablePagesComponent } from './configurable-pages/configurable-pages.component';
+import { ConfigurablePageFormComponent } from './configurable-pages/configurable-page-form/configurable-page-form.component';
 
 @NgModule({
   imports: [
@@ -21,6 +23,8 @@ import {AdminRoutingModule} from './admin-routing.module';
   declarations: [
     AdminComponent,
     UserAdminComponent,
+    ConfigurablePagesComponent,
+    ConfigurablePageFormComponent,
   ]
 })
 export class AdminModule {
