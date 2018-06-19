@@ -37,6 +37,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Refactored save mechanism of unit edit form. [#532](https://github.com/h-da/geli/issues/532)
 - Moved the 'create course' into a Dialog. [#725](https://github.com/h-da/geli/issues/725)
 - Update bcrypt dependency. [#774](https://github.com/utetrapp/geli/pull/774)
+- Remove fs-extra dependency. [#780](https://github.com/utetrapp/geli/pull/780)
 - Use Path-Lib to extract extension from filename. [#773](https://github.com/utetrapp/geli/pull/773)
 - Add the possibility to add files directly in the file unit [#728](https://github.com/utetrapp/geli/issues/728)
 
@@ -48,6 +49,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Validate user input for notication settings api. [#771](https://github.com/utetrapp/geli/issues/771)
 - Identification only via matriculation number. [#685](https://github.com/utetrapp/geli/issues/685)
 - Fixed Typo in User-Profile-Dialog. [#782](https://github.com/utetrapp/geli/pull/782)
+- Fixed broken badge links after repository migration. [#783](https://github.com/utetrapp/geli/pull/783)
 
 ## [[0.7.0](https://github.com/h-da/geli/releases/tag/v0.7.0)] - 2018-05-05 - SS 18 intermediate Release
 ### Added
