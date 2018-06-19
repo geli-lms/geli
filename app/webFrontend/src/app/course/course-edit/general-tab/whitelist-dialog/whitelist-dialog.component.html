@@ -1,26 +1,67 @@
 <div  *ngIf="whitelistUsers">
 
-  <ng-container *ngFor="let user of whitelistUsers; let i = index;">
-    <mat-card>
+  <mat-horizontal-stepper>
 
-      <ul class="info">
-        <li><strong>{{user.firstName}}</strong></li>
-        <li><strong>{{user.lastName}}</strong></li>
-        <li class="userId">{{user.uid}}</li>
-        <li class="delete">
-          <button mat-icon-button color="warn" (click)="whitelistUsers.splice(i, 1);">
-            <mat-icon>delete</mat-icon>
-          </button>
-        </li>
-      </ul>
-    </mat-card>
+    <mat-step>
 
-  </ng-container>
+      <ng-template matStepLabel>Upload whitelist</ng-template>
 
-  <div class="buttons-container">
-    <button class="btn-whitelist" mat-raised-button color="primary" (click)="uploadWhitelist()">Whitelist erstellen</button>
-  </div>
+      <p>{{ 'course.text.uploadWhitelist' | translate }}</p>
+      <p>
+        <input class="upload" type="file" (change)="onWhitelistFileChanged($event)"
+               [placeholder]="'file.placeholder.uploadFiles' | translate" accept=".csv"/>
+      </p>
 
+      <div class="buttons-container">
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </mat-step>
+
+    <mat-step *ngIf="fileErrors && fileErrors.length > 0">
+
+      <ng-template matStepLabel>File Errors</ng-template>
+        <ng-container *ngFor="let error of fileErrors; let i = index;">
+          <div>
+            <span><strong>Line {{error.line}}:</strong></span>
+            <span>{{error.error}}</span>
+          </div>
+
+        </ng-container>
+
+      <div class="buttons-container">
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button mat-raised-button color="primary" matStepperNext>Weiter</button>
+      </div>
+    </mat-step>
+
+    <mat-step>
+
+      <ng-template matStepLabel>Remove unwanted users</ng-template>
+
+      <ng-container *ngFor="let user of whitelistUsers; let i = index;">
+        <mat-card>
+
+          <ul class="info">
+            <li><strong>{{user.firstName}}</strong></li>
+            <li><strong>{{user.lastName}}</strong></li>
+            <li class="userId">{{user.uid}}</li>
+            <li class="delete">
+              <button mat-icon-button color="warn" (click)="whitelistUsers.splice(i, 1);">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </li>
+          </ul>
+        </mat-card>
+
+      </ng-container>
+
+      <div class="buttons-container">
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button mat-raised-button color="primary" matStepperNext>Whitelist erstellen</button>
+      </div>
+    </mat-step>
+  </mat-horizontal-stepper>
 
 
 </div>

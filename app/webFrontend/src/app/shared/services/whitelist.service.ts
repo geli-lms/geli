@@ -7,23 +7,38 @@ export class WhitelistService {
 
   parseFileContents(content: string) {
     const rows = [ ];
+    const errors = [ ];
+
     const lines = content.split(/\r?\n|\r/);
     let actualLine = 0;
     const userLines = lines.filter((line) => line.split(';').length >= 3);
 
-    for (const singleLine of userLines) {
+    for (const singleLine of lines) {
+
+      if (singleLine.split(';').length < 3) {
+        actualLine++;
+        continue;
+      }
+
       actualLine++;
+
       const lastName = singleLine.split(';')[0];
       const firstName = singleLine.split(';')[1];
       const uid = singleLine.split(';')[2];
       if (firstName.length > 0 && lastName.length > 0 && uid.length > 0) {
         if (!isNaN(Number(firstName))) {
+          errors.push({ line: actualLine, error: 'The first name cannot be a number.' });
           continue;
         }
+
         if (!isNaN(Number(lastName))) {
+          errors.push({ line: actualLine, error: 'The last name cannot be a number.' });
+
           continue;
         }
         if (isNaN(Number(uid))) {
+          errors.push({ line: actualLine, error: 'The uid is not a number.' });
+
           continue;
         }
 
@@ -32,10 +47,12 @@ export class WhitelistService {
           lastName: lastName,
           uid: uid
         });
+      } else {
+        errors.push({ line: actualLine, error: 'Some fields are missing.' });
       }
     }
 
-    return rows;
+    return { rows: rows, errors: errors };
   }
 
   parseFile(file: File) {

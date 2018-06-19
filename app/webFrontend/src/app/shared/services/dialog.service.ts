@@ -30,11 +30,11 @@ export class DialogService {
   }
 
 
-  public whitelist(whitelist: any[], course: ICourse): Observable<boolean> {
+  public whitelist(course: ICourse): Observable<boolean> {
     let dialogRef: MatDialogRef<WhitelistDialog>;
 
     dialogRef = this.dialog.open(WhitelistDialog);
-    dialogRef.componentInstance.whitelistUsers = whitelist;
+    dialogRef.componentInstance.whitelistUsers = [];
     dialogRef.componentInstance.course = course;
 
     return dialogRef.afterClosed();

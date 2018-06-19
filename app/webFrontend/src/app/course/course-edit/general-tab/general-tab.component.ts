@@ -114,19 +114,9 @@ export class GeneralTabComponent implements OnInit {
       }
     };
   }
-  async onWhitelistFileChanged(event) {
-    if (event.target && event.target.files && event.target.files.length > 0) {
-      this.whitelistFile = event.target.files[0];
 
-      const result = <any[]>await this.whitelistService.parseFile(this.whitelistFile);
-      if (!result || result.length === 0) {
-        this.snackBar.openLong('The CSV file does not contain any students to import.');
-        return;
-      }
-
-      this.whitelistUsers = result;
-      this.dialogService.whitelist(this.whitelistUsers, this.courseOb);
-    }
+  openWhitelistDialog() {
+    this.dialogService.whitelist(this.courseOb);
   }
 
   generateForm() {

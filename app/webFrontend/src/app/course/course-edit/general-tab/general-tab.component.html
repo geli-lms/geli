@@ -28,9 +28,8 @@
   <div class="csv-upload" *ngIf="enrollType === enrollTypeConstants.ENROLL_TYPE_WHITELIST">
     <p>{{ 'course.text.uploadWhitelist' | translate }}</p>
     <p>
-      <!-- TODO: Replace with shared upload form -->
-      <input class="upload" type="file" (change)="onWhitelistFileChanged($event)"
-             [placeholder]="'file.placeholder.uploadFiles' | translate" accept=".csv"/>
+      <button mat-raised-button (click)="openWhitelistDialog()" type="button">Auswahldialog öffnen</button>
+
     </p>
 
   </div>
