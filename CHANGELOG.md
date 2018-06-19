@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 -->
 
 ## [NEXT]
+###Added
+- Add cookie information [#565]
 
 ### Added
 - Course Progress can now be extracted into a csv-file. [#766](https://github.com/utetrapp/geli/pull/766)
