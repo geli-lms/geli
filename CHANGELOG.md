@@ -48,6 +48,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Validate user input for notication settings api. [#771](https://github.com/utetrapp/geli/issues/771)
 - Identification only via matriculation number. [#685](https://github.com/utetrapp/geli/issues/685)
 - Fixed Typo in User-Profile-Dialog. [#782](https://github.com/utetrapp/geli/pull/782)
+- Fixed broken badge links after repository migration. [#783](https://github.com/utetrapp/geli/pull/783)
 
 ## [[0.7.0](https://github.com/h-da/geli/releases/tag/v0.7.0)] - 2018-05-05 - SS 18 intermediate Release
 ### Added
