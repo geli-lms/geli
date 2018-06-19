@@ -38,8 +38,7 @@ export class AboutController {
   @Get('/dependencies')
   async getDependencies() {
     try {
-      const file = await fs.readFileSync('nlf-licenses.json');
-      return file.toString();
+      return await fs.readFileSync('nlf-licenses.json');
     } catch (err) {
       throw new HttpError(500, 'Licensefile not found');
     }
