@@ -1,13 +1,9 @@
+import {Observable} from 'rxjs/Observable';
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-
-import {Observable} from 'rxjs/Observable';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/observable/throw';
-import 'rxjs/add/observable/empty';
 import {AuthenticationService} from './authentication.service';
 import {catchError} from 'rxjs/operators';
+import {throwError} from 'rxjs/index';
 
 @Injectable()
 export class BackendService {
@@ -23,7 +19,7 @@ export class BackendService {
       return Observable.empty();
     }
 
-    return Observable.throw(err);
+    return throwError(err);
   }
 
   get(serviceUrl: string): Observable<any> {
@@ -31,7 +27,7 @@ export class BackendService {
       .pipe(catchError(this.handleUnauthorized));
   }
 
-  getDownload(serviceUrl: string): Observable<Response> {
+  getDownload(serviceUrl: string): Observable<any> {
     return this.http.get(BackendService.API_URL + serviceUrl, {headers: this.authenticationService.authHeader(),
       observe: 'response', responseType: 'blob'})
       .pipe(catchError(this.handleUnauthorized));

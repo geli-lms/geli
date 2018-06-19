@@ -12,6 +12,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [NEXT]
 
+### Updates
+- Updated Frontend to angular6[#716](https://github.com/utetrapp/geli/pull/766)
+
 ### Added
 - Course Progress can now be extracted into a csv-file. [#766](https://github.com/utetrapp/geli/pull/766)
 - Added more EN/DE translation [#753](https://github.com/utetrapp/geli/issues/753)

@@ -8,7 +8,7 @@
   <mat-form-field class="full-width">
     <input matInput name="subject" [(ngModel)]="subject" placeholder="Subject" focus>
   </mat-form-field>
-  <mat-tab-group (selectChange)="onTabChange($event)">
+  <mat-tab-group (selectedTabChange)="onTabChange($event)">
     <mat-tab label="Mail Text (Markdown)">
       <ace-editor #editor
                   [(text)]="markdown"
