@@ -17,13 +17,107 @@ const BASE_URL = '/api/auth';
 const fixtureLoader = new FixtureLoader();
 
 function delay(ms: number) {
-  return new Promise( resolve => setTimeout(resolve, ms) );
+  return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 describe('Auth', () => {
   // Before each test we reset the database
   beforeEach(async () => {
     await fixtureLoader.load();
+  });
+
+  describe(`POST ${BASE_URL}/login`, () => {
+    it('should login as student', async () => {
+      const res = await chai.request(app)
+        .post(`${BASE_URL}/login`)
+        .send({
+          'email': 'student1@test.local',
+          'password': 'test1234'
+        });
+
+      res.status.should.be.equal(200);
+      res.body.user.email.should.be.equal('student1@test.local');
+    });
+
+    it('should login as teacher', async () => {
+      const res = await chai.request(app)
+        .post(`${BASE_URL}/login`)
+        .send({
+          'email': 'teacher1@test.local',
+          'password': 'test1234'
+        });
+
+      res.status.should.be.equal(200);
+      res.body.user.email.should.be.equal('teacher1@test.local');
+    });
+
+    it('should login as admin', async () => {
+      const res = await chai.request(app)
+        .post(`${BASE_URL}/login`)
+        .send({
+          'email': 'admin@test.local',
+          'password': 'test1234'
+        });
+
+      res.status.should.be.equal(200);
+      res.body.user.email.should.be.equal('admin@test.local');
+    });
+
+    it('should fail with empty password', async () => {
+      const res = await chai.request(app)
+        .post(`${BASE_URL}/login`)
+        .send({
+          'email': 'student2@test.local',
+          'password': ''
+        });
+
+      res.status.should.be.equal(400);
+      res.error.text.should.be.equal('Bad Request');
+    });
+
+    it('should fail without password property', async () => {
+      const res = await chai.request(app)
+        .post(`${BASE_URL}/login`)
+        .send({
+          'email': 'student2@test.local',
+        });
+
+      res.status.should.be.equal(400);
+      res.error.text.should.be.equal('Bad Request');
+    });
+
+    it('should fail when email not found', async () => {
+      const res = await chai.request(app)
+        .post(`${BASE_URL}/login`)
+        .send({
+          'email': 'invalid@test.local',
+          'password': 'invalid',
+        });
+
+      res.status.should.be.equal(401);
+    });
+
+    it('should fail when password wrong', async () => {
+      const res = await chai.request(app)
+        .post(`${BASE_URL}/login`)
+        .send({
+          'email': 'student3@test.local',
+          'password': 'invalid',
+        });
+
+      res.status.should.be.equal(401);
+    });
+
+    it('should fail credentials correct but not active', async () => {
+      const res = await chai.request(app)
+        .post(`${BASE_URL}/login`)
+        .send({
+          'email': 'student31@test.local',
+          'password': 'test1234',
+        });
+
+      res.status.should.be.equal(401);
+    });
   });
 
   describe(`POST ${BASE_URL}/register`, () => {
@@ -73,12 +167,14 @@ describe('Auth', () => {
     });
 
     it('should pass', async () => {
-      const registerUser = { uid: '5468907',
+      const registerUser = {
+        uid: '5468907',
         firstName: 'firstName',
         lastName: 'lastName',
         role: 'student',
         password: 'test1234',
-        email: 'local@test.local.de'};
+        email: 'local@test.local.de'
+      };
 
       const res = await chai.request(app)
         .post(`${BASE_URL}/register`)
@@ -90,12 +186,14 @@ describe('Auth', () => {
 
 
     it('should pass and enroll into course', async () => {
-      const registerUser = { uid: '5468907',
-      firstName: 'firstName',
-      lastName: 'lastName',
-      role: 'student',
-      password: 'test1234',
-      email: 'local@test.local.de'};
+      const registerUser = {
+        uid: '5468907',
+        firstName: 'firstName',
+        lastName: 'lastName',
+        role: 'student',
+        password: 'test1234',
+        email: 'local@test.local.de'
+      };
 
       const whitelistUser = await WhitelistUser.create({
         uid: registerUser.uid,
@@ -113,9 +211,9 @@ describe('Auth', () => {
         whitelist: [whitelistUser]
       });
       const res = await chai.request(app)
-          .post(`${BASE_URL}/register`)
-          .send(registerUser)
-          .catch(err => err.response);
+        .post(`${BASE_URL}/register`)
+        .send(registerUser)
+        .catch(err => err.response);
 
       res.status.should.be.equal(204);
       // Get updated Course.
@@ -147,11 +245,9 @@ describe('Auth', () => {
       res.body.name.should.be.equal('BadRequestError');
       res.body.message.should.be.equal('You can only sign up as student or teacher');
     });
-  })
-  ;
+  });
 
   describe(`POST ${BASE_URL}/activationresend`, () => {
-
     it('should fail (user not found)', async () => {
       const user = await FixtureUtils.getRandomUser();
       const resendActivationUser = user;
@@ -159,9 +255,11 @@ describe('Auth', () => {
 
       const res = await chai.request(app)
         .post(`${BASE_URL}/activationresend`)
-        .send({'lastname': resendActivationUser.profile.lastName,
+        .send({
+          'lastname': resendActivationUser.profile.lastName,
           'uid': resendActivationUser.uid,
-          'email': resendActivationUser.email })
+          'email': resendActivationUser.email
+        })
         .catch(err => err.response);
 
       res.status.should.be.equal(400);
@@ -175,9 +273,11 @@ describe('Auth', () => {
 
       const res = await chai.request(app)
         .post(`${BASE_URL}/activationresend`)
-        .send({'lastname': resendActivationUser.profile.lastName,
+        .send({
+          'lastname': resendActivationUser.profile.lastName,
           'uid': resendActivationUser.uid,
-          'email': resendActivationUser.email })
+          'email': resendActivationUser.email
+        })
         .catch(err => err.response);
 
       res.status.should.be.equal(400);
@@ -194,9 +294,11 @@ describe('Auth', () => {
 
       const res = await chai.request(app)
         .post(`${BASE_URL}/activationresend`)
-        .send({'lastname': resendActivationUser.profile.lastName,
+        .send({
+          'lastname': resendActivationUser.profile.lastName,
           'uid': resendActivationUser.uid,
-          'email': resendActivationUser.email })
+          'email': resendActivationUser.email
+        })
         .catch(err => err.response);
 
       res.status.should.be.equal(503);
@@ -215,9 +317,11 @@ describe('Auth', () => {
 
       const res = await chai.request(app)
         .post(`${BASE_URL}/activationresend`)
-        .send({'lastname': resendActivationUser.profile.lastName,
+        .send({
+          'lastname': resendActivationUser.profile.lastName,
           'uid': resendActivationUser.uid,
-          'email': resendActivationUser.email })
+          'email': resendActivationUser.email
+        })
         .catch(err => err.response);
 
       res.status.should.be.equal(400);
@@ -232,17 +336,15 @@ describe('Auth', () => {
 
       const res = await chai.request(app)
         .post(`${BASE_URL}/activationresend`)
-        .send({'lastname': resendActivationUser.profile.lastName,
+        .send({
+          'lastname': resendActivationUser.profile.lastName,
           'uid': resendActivationUser.uid,
-          'email': resendActivationUser.email })
+          'email': resendActivationUser.email
+        })
         .catch(err => err.response);
 
       res.status.should.be.equal(204);
     }).timeout(Number(config.timeTilNextActivationResendMin) * 61000);
-
-
-  })
-  ;
-})
-;
+  });
+});
 

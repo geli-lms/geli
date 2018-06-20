@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import 'rxjs/add/operator/switchMap';
+
 import {UserService} from '../shared/services/user.service';
 import {ICourseDashboard, ENROLL_TYPE_ACCESSKEY} from '../../../../../shared/models/ICourseDashboard';
 import {Router} from '@angular/router';

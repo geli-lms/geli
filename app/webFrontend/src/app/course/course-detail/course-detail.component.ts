@@ -1,6 +1,6 @@
 import {AfterViewInit, Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import 'rxjs/add/operator/switchMap';
+
 import {CourseService, UserDataService} from '../../shared/services/data.service';
 import {ICourse} from '../../../../../../shared/models/ICourse';
 import {UserService} from '../../shared/services/user.service';

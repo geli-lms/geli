@@ -1,4 +1,4 @@
-<mat-tab-group *ngIf="!showProgressBar" (selectChange)="changedTab($event)">
+<mat-tab-group *ngIf="!showProgressBar" (selectedTabChange)="changedTab($event)">
   <mat-tab [label]="'common.profileDetails.uploadPicture' | translate">
     <div class="tab-content">
       <app-upload-form [uploadMethod]="'POST'"
