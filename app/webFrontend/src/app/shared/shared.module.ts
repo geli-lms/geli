@@ -23,6 +23,7 @@ import {UserProfileDialog} from 'app/shared/components/user-profile-dialog/user-
 import {NotfoundComponent} from './components/notfound/notfound.component';
 import { ShowCommentsDirective } from './directives/show-comments.directive';
 
+import {ResponsiveImageComponent} from './components/responsive-image/responsive-image.component';
 
 @NgModule({
   imports: [
@@ -54,6 +55,7 @@ import { ShowCommentsDirective } from './directives/show-comments.directive';
     NotfoundComponent,
     UserProfileDialog,
     ShowCommentsDirective,
+    ResponsiveImageComponent
   ],
   exports: [
     GravatarDirective,
@@ -74,12 +76,12 @@ import { ShowCommentsDirective } from './directives/show-comments.directive';
     AdminMarkdownEditComponent,
     UserProfileDialog,
     ShowCommentsDirective,
+    ResponsiveImageComponent
   ],
   entryComponents: [
     PickMediaDialog,
     UserProfileDialog,
   ],
-  providers: [],
 })
 export class SharedModule {
 }

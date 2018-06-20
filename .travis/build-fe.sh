@@ -16,10 +16,10 @@ cd app/webFrontend
 
 if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
     echo "+++ in PR; do not build sourcemaps"
-    npm run build-pr
+    npm --max_old_space_size=4096 run build-pr
 else
     echo "+++ is no PR; build with sourcemaps"
-    npm run build
+    npm --max_old_space_size=4096 run build
 fi
 
 echo

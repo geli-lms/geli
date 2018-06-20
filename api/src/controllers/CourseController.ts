@@ -29,7 +29,11 @@ import crypto = require('crypto');
 import {API_NOTIFICATION_TYPE_ALL_CHANGES, NotificationSettings} from '../models/NotificationSettings';
 import {IWhitelistUser} from '../../../shared/models/IWhitelistUser';
 import {DocumentToObjectOptions} from 'mongoose';
+import * as fs from 'fs';
+import ResponsiveImageService from '../services/ResponsiveImageService';
+import {IResponsiveImageData} from '../../../shared/models/IResponsiveImageData';
 
+import { Picture } from '../models/mediaManager/File';
 
 const uploadOptions = {
   storage: multer.diskStorage({
@@ -46,6 +50,19 @@ const uploadOptions = {
   }),
 };
 
+const coursePictureUploadOptions = {
+  storage: multer.diskStorage({
+    destination: (req: any, file: any, cb: any) => {
+      cb(null, 'uploads/courses');
+    },
+    filename: (req: any, file: any, cb: any) => {
+      const id = req.params.id;
+      const extPos = file.originalname.lastIndexOf('.');
+      const ext = (extPos !== -1) ? `.${file.originalname.substr(extPos + 1).toLowerCase()}` : '';
+      cb(null, id + '_' + new Date().getTime().toString() + ext);
+    }
+  }),
+};
 
 @JsonController('/courses')
 @UseBefore(passportJwtMiddleware)
@@ -110,7 +127,7 @@ export class CourseController {
       // Everyone is allowed to see free courses in overview
       conditions.$or.push({enrollType: 'free'});
       conditions.$or.push({enrollType: 'accesskey'});
-      conditions.$or.push({enrollType: 'whitelist', whitelist: {$elemMatch: {$in: whitelistUsers}}});
+      conditions.$or.push({enrollType: 'whitelist', whitelist:  {$elemMatch: {$in: whitelistUsers}}});
     }
 
     const courses = await Course.find(conditions);
@@ -337,6 +354,7 @@ export class CourseController {
       .populate('teachers')
       .populate('students')
       .populate('whitelist')
+      .populate('image')
       .execPopulate();
     await course.processLecturesFor(currentUser);
     return course.toObject(<DocumentToObjectOptions>{currentUser});
@@ -433,7 +451,6 @@ export class CourseController {
     course.courseAdmin = currentUser;
     const newCourse = new Course(course);
     await newCourse.save();
-
     return newCourse.toObject();
   }
 
@@ -499,12 +516,10 @@ export class CourseController {
     if (!course) {
       throw new NotFoundError();
     }
+
     if (course.enrollType === 'whitelist') {
       const wUsers: IWhitelistUser[] = await  WhitelistUser.find().where({courseId: course._id});
-      if (wUsers.filter(e =>
-        e.firstName === currentUser.profile.firstName.toLowerCase()
-        && e.lastName === currentUser.profile.lastName.toLowerCase()
-        && e.uid === currentUser.uid).length <= 0) {
+      if (wUsers.filter(e => e.uid === currentUser.uid).length < 1) {
         throw new ForbiddenError(errorCodes.course.notOnWhitelist.code);
       }
     } else if (course.accessKey && course.accessKey !== data.accessKey) {
@@ -521,6 +536,7 @@ export class CourseController {
       }).save();
       await course.save();
     }
+
     return {};
   }
 
@@ -674,5 +690,83 @@ export class CourseController {
     }
     await course.remove();
     return {};
+  }
+
+
+  @Authorized(['teacher', 'admin'])
+  @Delete('/picture/:id')
+  async deleteCoursePicture(
+    @Param('id') id: string,
+    @CurrentUser() currentUser: IUser) {
+
+    const course = await Course.findById(id);
+
+    if (!course) {
+      throw new NotFoundError();
+    }
+
+    if (!course.checkPrivileges(currentUser).userCanEditCourse) {
+      throw new ForbiddenError();
+    }
+
+    if (!course.image) {
+      throw new NotFoundError();
+    }
+
+    const picture = await Picture.findOne(course.image);
+    await picture.remove();
+
+    await Course.update({ _id: id }, { $unset: { image: 1 } });
+    return { };
+  }
+
+  @Authorized(['teacher', 'admin'])
+  @Post('/picture/:id')
+  async addCoursePicture(
+      @UploadedFile('file', {options: coursePictureUploadOptions}) file: any,
+      @Param('id') id: string,
+      @Body() responsiveImageDataRaw: any,
+      @CurrentUser() currentUser: IUser) {
+
+    // Remove the old picture if the course already has one.
+    const course = await Course.findById(id);
+
+    if (!course.checkPrivileges(currentUser).userCanEditCourse) {
+      throw new ForbiddenError();
+    }
+
+    const responsiveImageData = <IResponsiveImageData>JSON.parse(responsiveImageDataRaw.imageData);
+
+    const mimeFamily = file.mimetype.split('/', 1)[0];
+    if (mimeFamily !== 'image') {
+      // Remove the file if the type was not correct.
+      await fs.unlinkSync(file.path);
+
+      throw new BadRequestError('Forbidden format of uploaded picture: ' + mimeFamily);
+    }
+
+    if (course.image) {
+      const picture = await Picture.findById(course.image);
+      await picture.remove();
+    }
+
+    await ResponsiveImageService.generateResponsiveImages(file, responsiveImageData);
+
+    const image: any = new Picture({
+      name: file.filename,
+      physicalPath: responsiveImageData.pathToImage,
+      link: responsiveImageData.pathToImage,
+      size: 0,
+      mimeType: file.mimetype,
+      breakpoints: responsiveImageData.breakpoints
+    });
+
+    await image.save();
+
+    const result = await Course.update({ _id: id }, {
+      image: image._id
+    });
+
+    return image.toObject();
   }
 }

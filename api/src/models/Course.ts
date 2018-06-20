@@ -14,6 +14,10 @@ import {IProperties} from '../../../shared/models/IProperties';
 import {extractMongoId} from '../utilities/ExtractMongoId';
 import {ChatRoom, IChatRoomModel} from './ChatRoom';
 
+import {Picture} from './mediaManager/File';
+import {IPictureModel} from './mediaManager/Picture';
+import {IPicture} from '../../../shared/models/mediaManager/IPicture';
+import * as fs from 'fs';
 
 interface ICourseModel extends ICourse, mongoose.Document {
   exportJSON: (sanitize?: boolean) => Promise<ICourse>;
@@ -82,6 +86,10 @@ const courseSchema = new mongoose.Schema({
         ref: 'WhitelistUser'
       }
     ],
+    image: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Picture'
+    },
     enableChat: {
       type: Boolean,
       default: true
@@ -140,13 +148,20 @@ courseSchema.pre('remove', async function () {
   const localCourse = <ICourseModel><any>this;
   try {
     const dic = await Directory.findById(localCourse.media);
-    if (dic) {
-      await dic.remove();
+      if (dic) {
+    await dic.remove();
     }
     for (const lec of localCourse.lectures) {
       const lecDoc = await Lecture.findById(lec);
       await lecDoc.remove();
     }
+
+    if (localCourse.image) {
+        const picture: any = await Picture.findById(localCourse.image);
+        await picture.remove();
+    }
+
+
   } catch (error) {
     winston.log('warn', 'course (' + localCourse._id + ') cloud not be deleted!');
     throw new Error('Delete Error: ' + error.toString());
@@ -187,6 +202,11 @@ courseSchema.methods.exportJSON = async function (sanitize: boolean = true) {
     } else {
       winston.log('warn', 'lecture(' + lectureId + ') was referenced by course(' + this._id + ') but does not exist anymore');
     }
+  }
+
+  if (obj.image) {
+    const imageId: mongoose.Types.ObjectId = obj.image;
+    obj.image = await Picture.findById(imageId);
   }
 
   return obj;
@@ -253,17 +273,26 @@ courseSchema.methods.checkPrivileges = function (user: IUser) {
   };
 };
 
-courseSchema.methods.forDashboard = function (user: IUser): ICourseDashboard {
+/**
+ * Modifies the Course data to be used by the courses dashboard.
+ *
+ * @param {IUser} user
+ * @returns {Promise<ICourseDashboard>}
+ */
+courseSchema.methods.forDashboard = async function (user: IUser): Promise<ICourseDashboard> {
   const {
     name, active, description, enrollType
   } = this;
+
+  const image = (this.image) ? (await Picture.findById(this.image)).toObject() : null;
+
   const {
     userCanEditCourse, userCanViewCourse, userIsCourseAdmin, userIsCourseTeacher, userIsCourseMember
   } = this.checkPrivileges(user);
   return {
     // As in ICourse:
     _id: <string>extractMongoId(this._id),
-    name, active, description, enrollType,
+    name, active, description, enrollType, image,
 
     // Special properties for the dashboard:
     userCanEditCourse, userCanViewCourse, userIsCourseAdmin, userIsCourseTeacher, userIsCourseMember
@@ -297,7 +326,7 @@ courseSchema.methods.populateLecturesFor = function (user: IUser) {
       populate: {
         path: 'progressData',
         match: {user: {$eq: user._id}}
-      },
+      }
     }
   });
 };

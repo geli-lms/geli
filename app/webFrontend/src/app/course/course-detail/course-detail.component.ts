@@ -1,6 +1,6 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {AfterViewInit, Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import 'rxjs/add/operator/switchMap';
+
 import {CourseService, UserDataService} from '../../shared/services/data.service';
 import {ICourse} from '../../../../../../shared/models/ICourse';
 import {UserService} from '../../shared/services/user.service';
@@ -10,6 +10,7 @@ import {TitleService} from '../../shared/services/title.service';
 import {LastVisitedCourseContainerUpdater} from '../../shared/utils/LastVisitedCourseContainerUpdater';
 import {DialogService} from '../../shared/services/dialog.service';
 import {DataSharingService} from '../../shared/services/data-sharing.service';
+import {TranslateService} from '@ngx-translate/core';
 import {ChatService} from '../../shared/services/chat.service';
 import {DownloadCourseDialogComponent} from './download-course-dialog/download-course-dialog.component';
 
@@ -23,12 +24,7 @@ export class CourseDetailComponent implements OnInit, OnDestroy {
 
   course: ICourse;
   id: string;
-  tabs = [
-    {path: 'overview', label: 'Overview', img: 'school'},
-    {path: 'fileview', label: 'Files', img: 'insert_drive_file'},
-    {path: 'videoview', label: 'Videos', img: 'video_library'},
-    {path: 'download', label: 'Download', img: 'get_app'}
-  ];
+  tabs = [];
   showChat = false;
   chatName: string;
 
@@ -42,6 +38,7 @@ export class CourseDetailComponent implements OnInit, OnDestroy {
               private userDataService: UserDataService,
               private dialogService: DialogService,
               private dataSharingService: DataSharingService,
+              private translate: TranslateService,
               private chatService: ChatService) {}
 
   ngOnInit() {
@@ -50,34 +47,21 @@ export class CourseDetailComponent implements OnInit, OnDestroy {
     this.id = this.course._id;
     LastVisitedCourseContainerUpdater.addCourseToLastVisitedCourses(this.id, this.userService, this.userDataService);
     this.titleService.setTitleCut(['Course: ', this.course.name]);
-    this.route.params.subscribe(params => {
-      this.id = decodeURIComponent(params['id']);
+    this.translate.onLangChange.subscribe(() => {
+      this.reloadTabBar();
     });
-    this.getCourse(this.id);
-    this.titleService.setTitle('Course');
-
+    this.reloadTabBar();
   }
 
-  async getCourse(courseId: string) {
-    try {
-      this.course = await this.courseService.readCourseToView(courseId);
-      this.titleService.setTitleCut(['Course: ', this.course.name]);
-      LastVisitedCourseContainerUpdater.addCourseToLastVisitedCourses(courseId, this.userService, this.userDataService);
-    } catch (err) {
-      if (err.status === 404) {
-        this.snackBar.open('Your selected course is not available.');
-        this.router.navigate(['/not-found']);
-      } else {
-        this.snackBar.open('Something went wrong: ' + err.error.message);
-      }
-    }
-  }
-
-  openDownloadDialog() {
-    const diaRef = this.dialog.open(DownloadCourseDialogComponent, {
-      data: {course: this.course},
-      width: '800px'
-    });
+  reloadTabBar(): void {
+    this.tabs.length = 0;
+    this.translate.get(['common.content', 'common.documents', 'common.videos', 'common.download'])
+      .subscribe((t: string) => {
+        this.tabs = [{path: 'overview', label: t['common.content'], img: 'school'},
+          {path: 'fileview', label: t['common.documents'], img: 'insert_drive_file'},
+          {path: 'videoview', label: t['common.videos'], img: 'video_library'},
+          {path: 'download', label: t['common.download'], img: 'get_app'}];
+      });
   }
 
   showUserProfile(teacher: User) {
