@@ -1,4 +1,4 @@
-import {Directive, HostBinding, Input, OnInit, SimpleChange} from '@angular/core';
+import {Directive, HostBinding, Input, OnInit, OnDestroy, SimpleChange} from '@angular/core';
 import {DomSanitizer, SafeStyle} from '@angular/platform-browser';
 import {IUser} from '../../../../../../shared/models/IUser';
 import {BackendService} from '../services/backend.service';
@@ -6,7 +6,7 @@ import {BackendService} from '../services/backend.service';
 const md5 = require('blueimp-md5');
 
 @Directive({selector: '[user-image]'})
-export class UserImageDirective implements OnInit {
+export class UserImageDirective implements OnInit, OnDestroy {
 
   @Input('user-image') user: IUser;
   @Input('size') size = '100%';
