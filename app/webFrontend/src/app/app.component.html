@@ -66,7 +66,7 @@
 
   <mat-progress-bar *ngIf="showProgressBar" [mode]="indeterminate"></mat-progress-bar>
 
-  <div class="app-content">
+  <div class="{{ contentStyle() }}">
     <router-outlet></router-outlet>
   </div>
 </div>

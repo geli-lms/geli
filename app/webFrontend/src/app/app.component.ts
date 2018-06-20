@@ -90,4 +90,10 @@ export class AppComponent implements OnInit {
 
     return (routeTest && !this.isLoggedIn()) ? 'special-style' : '';
   }
+
+  contentStyle(): string {
+    // Don't add padding when displaying non-plaintext files such as PDFs via a FileComponent.
+    const routeTest = /^\/file/.test(this.router.url);
+    return routeTest ? 'app-content' : 'app-content-padding';
+  }
 }
