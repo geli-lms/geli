@@ -1,39 +1,46 @@
 @import '../../variables';
 
+$grayBackground: #323232;
+$buttonColor: #ff4081;
+$fontColor: white;
+
 .cookieNotice {
   display: inline-block;
   width: 100%;
   padding: 5px;
-  background-color: #323232;
+  background-color: $grayBackground;
   color: white;
   font-family: $font-body;
   font-size: 14px;
   line-height: unset;
   margin-bottom: -10px;
-}
 
-.cookieNotice p {
-  float: left;
-  padding: 0 10px 0 10px;
-  margin-bottom: 0;
+  p {
+    float: left;
+    padding: 0 10px 0 10px;
+    margin-bottom: 0;
+  }
 }
 
 .controlArea {
   float: right;
 }
 
-.cookieNotice .controlArea a {
-  color: white;
-  padding: 14px 10px 0 10px;
-  text-decoration: underline;
+.cookieNotice .controlArea {
+  a {
+    color: $fontColor;
+    padding: 14px 10px 0 10px;
+    text-decoration: underline;
+  }
+
+  button {
+    border: 2px solid $buttonColor;
+    background-color: $grayBackground;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    color: white;
+  }
 }
 
-.cookieNotice .controlArea button {
-  border: 2px solid #ff4081;
-  background-color: #323232;
-  margin-top: 5px;
-  margin-bottom: 5px;
-  color: white;
-}
 
 
