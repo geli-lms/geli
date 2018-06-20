@@ -9,6 +9,13 @@
   display: block;
 }
 
+.infoIcon {
+  position: relative;
+  bottom: -0.2em;
+  margin-left: -1em;
+  margin-right: 0.4em;
+}
+
 .spinner {
   position: relative;
   right: 5em;
@@ -19,4 +26,7 @@
 .dl-card {
   max-width: 800px;
   padding: 0px 24px 24px 24px;
+  .header {
+    margin-top: 0em;
+  }
 }
