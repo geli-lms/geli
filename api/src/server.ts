@@ -57,10 +57,6 @@ export class Server {
 
     Server.setupPassport();
     this.app.use(passport.initialize());
-
-    // Requires authentication via the passportJwtMiddleware to accesss the static 'uploads' (e.g. images).
-    // I.e. this is not meant for truly public files!
-    this.app.use('/api/uploads', passportJwtMiddleware, express.static('uploads'));
   }
 
   start() {
