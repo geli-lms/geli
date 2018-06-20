@@ -27,6 +27,7 @@ interface ICourseModel extends ICourse, mongoose.Document {
 }
 
 interface ICourseMongoose extends mongoose.Model<ICourseModel> {
+  exportPersonalData: (user: IUser) => Promise<ICourse>;
 }
 
 let Course: ICourseMongoose;
@@ -231,6 +232,20 @@ courseSchema.statics.importJSON = async function (course: ICourse, admin: IUser,
     throw newError;
   }
 };
+
+courseSchema.statics.exportPersonalData = async function(user:IUser){
+  const conditions: any = {};
+  conditions.$or = [];
+  conditions.$or.push({students: user._id});
+  conditions.$or.push({teachers: user._id});
+  conditions.$or.push({courseAdmin: user._id});
+
+  const courses = await Course.find(conditions, 'name description -_id');
+
+  return Promise.all(courses.map(async (course: ICourseModel) => {
+    return await course.exportJSON(true, true);
+  }));
+}
 
 
 courseSchema.methods.checkPrivileges = function (user: IUser) {

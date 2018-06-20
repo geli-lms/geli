@@ -6,7 +6,7 @@ import {Unit} from '../units/Unit';
 import {IProgress} from '../../../../shared/models/progress/IProgress';
 
 interface ITaskUnitProgressModel extends ITaskUnitProgress, mongoose.Document {
-  exportJSON: (includeAnswers?: boolean) => Promise<ITaskUnitProgressModel>;
+  exportJSON: () => Promise<ITaskUnitProgressModel>;
 }
 
 const taskUnitProgressSchema = new mongoose.Schema({
@@ -39,16 +39,16 @@ taskUnitProgressSchema.pre('save', async function (next: () => void) {
 });
 
 
-taskUnitProgressSchema.methods.exportJSON = async function (includeAnswers: boolean= false) {
+taskUnitProgressSchema.methods.exportJSON = async function () {
   const localProg = <ITaskUnitProgressModel><any>this;
-  if (includeAnswers && localProg.unit) {
+  if (localProg.unit) {
     const taskUnit = <ITaskUnitModel> await Unit.findById(localProg.unit);
 
     taskUnit.tasks.forEach(question => {
+      delete question._id
       this.answers = question;
     });
   }
-
 
   const obj = this.toObject();
 

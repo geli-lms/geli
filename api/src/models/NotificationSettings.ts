@@ -12,7 +12,7 @@ interface INotificationSettingsMongoose extends mongoose.Model<INotificationSett
   exportPersonalData: (user: IUser) => Promise<INotificationSettings>;
 }
 
-let NotificationSettings:INotificationSettingsMongoose;
+let NotificationSettings: INotificationSettingsMongoose;
 
 const notificationSettingsSchema = new mongoose.Schema({
     course: {
@@ -62,7 +62,7 @@ notificationSettingsSchema.statics.exportPersonalData = async function(user: IUs
     .populate('course', 'name description -_id');
 
   const notificatinSettingsObj = notificationSettings.exportJson();
-  notificatinSettingsObj.course = await <any>(<ICourseModel><any>notificationSettings.course).exportJSON(true,true);
+  notificatinSettingsObj.course = await <any>(<ICourseModel><any>notificationSettings.course).exportJSON(true, true);
 
   return notificatinSettingsObj;
 };

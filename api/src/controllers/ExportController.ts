@@ -107,65 +107,15 @@ export class ExportController {
       throw new NotFoundError(`User was not found.`);
     }
 
-
-    // load notifications
-    const notifications = await Notification.find({'user': user._id});
-    const notificationTexts: string[] = notifications.map(notification => {
-      return notification.text;
-    });
-
-    // User in whitelists
-    const whitelistUsers = await WhitelistUser.find({uid: user.uid}, 'courseId')
-      .populate('courseId', 'name description -_id');
-
-    const whitelistUsersForExport = await Promise.all(whitelistUsers.map(async (whitelist) => {
-      const course: ICourseModel = <any>whitelist.courseId;
-      return await course.exportJSON(true, true);
-    }));
-
-
-    // Courses
-    const conditions: any = {};
-    conditions.$or = [];
-    conditions.$or.push({students: user._id});
-    conditions.$or.push({teachers: user._id});
-    conditions.$or.push({courseAdmin: user._id});
-
-    const courses = await Course.find(conditions, 'name description -_id');
-    const exportCourses = await Promise.all(courses.map(async (course: ICourseModel) => {
-      return await course.exportJSON(true, true);
-    }));
-
-    // Progress
-    const userProgress = await Progress.find({'user': user._id}, '-user')
-      .populate('course', 'name description')
-      .populate('unit', 'name description');
-
-    const userProgressExport = await Promise.all(userProgress.map( async (prog) => {
-      let progExport;
-
-      if (prog.__t === 'task-unit-progress') {
-        progExport = await (<ITaskUnitProgressModel>prog).exportJSON(true);
-      } else {
-        progExport = await (<IProgressModel>prog).exportJSON();
-      }
-
-      progExport.course = await (<ICourseModel>prog.course).exportJSON(true, true);
-      progExport.unit = await (<IUnitModel>prog.unit).exportJSON(true);
-      return progExport;
-    }));
-
-
-
-
+    //what about the profile image?
 
     return {
       user: await user.exportPersonalData(),
-      notifications: notificationTexts,
+      notifications: await Notification.exportPersonalData(user),
       notificationSettings: await NotificationSettings.exportPersonalData(user),
-      whitelists: whitelistUsersForExport,
-      courses: exportCourses,
-      progress: userProgressExport
+      whitelists: await WhitelistUser.exportPersonalData(user),
+      courses: await Course.exportPersonalData(user),
+      progress: await Progress.exportPersonalUserData(user)
     };
   }
 

@@ -2,10 +2,19 @@ import * as mongoose from 'mongoose';
 import {INotification} from '../../../shared/models/INotification';
 import {User} from './User';
 import {Lecture} from './Lecture';
+import {INotificationSettings} from '../../../shared/models/INotificationSettings';
+import {IUser} from '../../../shared/models/IUser';
+import {INotificationSettingsModel} from './NotificationSettings';
 
 interface INotificationModel extends INotification, mongoose.Document {
   exportJSON: () => Promise<INotificationModel>;
 }
+
+interface INotificationMongoose extends mongoose.Model<INotificationModel> {
+  exportPersonalData: (user: IUser) => Promise<INotification>;
+}
+
+let Notification: INotificationMongoose;
 
 const notificationSchema = new mongoose.Schema({
   user: {
@@ -58,6 +67,11 @@ notificationSchema.methods.exportJSON = function () {
   return obj;
 };
 
-const Notification = mongoose.model<INotificationModel>('Notification', notificationSchema);
+notificationSchema.statics.exportPersonalData = async function(user: IUser) {
+  return (await Notification.find({'user': user._id}, 'text'))
+    .map(not => not.exportJSON());
+};
+
+Notification = mongoose.model<INotificationModel, INotificationMongoose>('Notification', notificationSchema);
 
 export {Notification, INotificationModel};

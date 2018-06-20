@@ -3,10 +3,18 @@ import {IProgress} from '../../../../shared/models/progress/IProgress';
 import {codeKataProgressSchema} from './CodeKataProgress';
 import {taskUnitProgressSchema} from './TaskUnitProgress';
 import {IUser} from '../../../../shared/models/IUser';
+import {ICourseModel} from "../Course";
+import {IUnitModel} from "../units/Unit";
 
 interface IProgressModel extends IProgress, mongoose.Document {
   exportJSON: () => Promise<IProgress>;
 }
+
+interface IProgressMongoose extends mongoose.Model<IProgressModel> {
+  exportPersonalUserData: (user: IUser) => Promise<IProgress>;
+}
+
+let Progress: IProgressMongoose;
 
 const progressSchema = new mongoose.Schema({
     course: {
@@ -64,13 +72,23 @@ progressSchema.methods.exportJSON = async function () {
   return obj;
 };
 
-progressSchema.methods.exportPersonalUserData = async function (user: IUser) {
+progressSchema.statics.exportPersonalUserData = async function (user: IUser) {
+  const userProgress = await Progress.find({'user': user._id}, '-user')
+    .populate('course', 'name description')
+    .populate('unit', 'name description');
 
+  return Promise.all(userProgress.map( async (prog) => {
+    const progExport =  await (<IProgressModel>prog).exportJSON();
+
+    progExport.course = await (<ICourseModel>prog.course).exportJSON(true, true);
+    progExport.unit = await (<IUnitModel>prog.unit).exportJSON(true);
+    return progExport;
+  }));
 };
 
 
 
-const Progress = mongoose.model<IProgressModel>('Progress', progressSchema);
+Progress = mongoose.model<IProgressModel, IProgressMongoose>('Progress', progressSchema);
 const CodeKataProgress = Progress.discriminator('codeKata', codeKataProgressSchema);
 const TaskUnitProgress = Progress.discriminator('task-unit-progress', taskUnitProgressSchema);
 
