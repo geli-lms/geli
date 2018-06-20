@@ -54,6 +54,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Fixed Typo in User-Profile-Dialog. [#782](https://github.com/utetrapp/geli/pull/782)
 - Fixed broken badge links after repository migration. [#783](https://github.com/utetrapp/geli/pull/783)
 - Fix invalid response for dependency [#787](https://github.com/utetrapp/geli/pull/787)
+- Fixed travis usages after angular 6 update [#789](https://github.com/utetrapp/geli/pull/789)
 
 ## [[0.7.0](https://github.com/h-da/geli/releases/tag/v0.7.0)] - 2018-05-05 - SS 18 intermediate Release
 ### Added
