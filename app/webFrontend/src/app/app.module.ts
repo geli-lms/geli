@@ -1,6 +1,6 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {ErrorHandler, NgModule} from '@angular/core';
-import {HttpClientModule} from '@angular/common/http';
+import {HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http';
 import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {AppComponent} from './app.component';
 import {RavenErrorHandler} from './shared/services/raven-error-handler.service';
@@ -26,6 +26,7 @@ import {ShowProgressService} from './shared/services/show-progress.service';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ProgressService} from './shared/services/data/progress.service';
 import {MarkdownService} from './shared/services/markdown.service';
+import {TokenInterceptor} from './shared/interceptors/token.interceptor';
 import {AppRoutingModule} from './app-routing.module';
 import {StartModule} from './start/start.module';
 import {SharedModule} from './shared/shared.module';
@@ -113,7 +114,12 @@ export function HttpLoaderFactory(http: HttpClient) {
     ImprintAndInfoService,
     SnackBarService,
     UnitFormService,
-    UnitFactoryService
+    UnitFactoryService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptor,
+      multi: true
+    }
   ],
   bootstrap: [AppComponent]
 })
