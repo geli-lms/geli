@@ -101,6 +101,7 @@ export class DownloadController {
    */
   @Get('/:id')
   async getArchivedFile(@Param('id') id: string, @Res() response: Response) {
+    // FIXME: Is this simple string concatenation with client input for filePath insecure? (Fix or add comment with justification.)
     const filePath = config.tmpFileCacheFolder + id + '.zip';
 
     if (!fs.existsSync(filePath)) {
