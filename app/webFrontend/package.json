@@ -31,6 +31,7 @@
     "@angular/platform-browser": "6.0.5",
     "@angular/platform-browser-dynamic": "6.0.5",
     "@angular/router": "6.0.5",
+    "@ctrl/ngx-emoji-mart": "^0.6.3",
     "@ngx-translate/core": "^10.0.0",
     "@ngx-translate/http-loader": "^3.0.0",
     "@schematics/package-update": "^0.4.9",
