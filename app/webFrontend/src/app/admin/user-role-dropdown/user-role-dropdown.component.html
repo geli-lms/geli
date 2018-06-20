@@ -1,0 +1,7 @@
+<mat-form-field>
+  <mat-select placeholder="{{ 'common.accessLevel' | translate }}" [(ngModel)]="selectedRole" name="selectedRole">
+    <mat-option *ngFor="let role of availableRoles" [value]="role">
+      {{role}}
+    </mat-option>
+  </mat-select>
+</mat-form-field>

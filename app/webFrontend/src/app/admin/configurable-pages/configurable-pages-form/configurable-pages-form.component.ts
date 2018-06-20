@@ -7,7 +7,7 @@ import {SnackBarService} from '../../../shared/services/snack-bar.service';
 import {ActivatedRoute} from '@angular/router';
 
 @Component({
-  selector: 'app-admin-markdown-edit',
+  selector: 'app-configurable-pages-form',
   templateUrl: './configurable-pages-form.component.html',
   styleUrls: ['./configurable-pages-form.component.scss']
 })
@@ -15,8 +15,11 @@ export class ConfigurablePagesFormComponent implements OnInit {
 
   config: IConfig;
   text: string;
+  selectedAccessLevel: string;
   @Input() type: string;
   @Input() headingType: string;
+
+  private additionalOptions: string[] = ['public'];
 
   constructor(private service: ConfigService,
               private mdService: MarkdownService,

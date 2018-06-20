@@ -8,7 +8,8 @@ import {SharedModule} from '../shared/shared.module';
 import {AceEditorModule} from 'ng2-ace-editor';
 import {AdminRoutingModule} from './admin-routing.module';
 import { ConfigurablePagesComponent } from './configurable-pages/configurable-pages.component';
-import { ConfigurablePageFormComponent } from './configurable-pages/configurable-page-form/configurable-page-form.component';
+import { UserRoleDropdownComponent } from './user-role-dropdown/user-role-dropdown.component';
+import {ConfigurablePagesFormComponent} from './configurable-pages/configurable-pages-form/configurable-pages-form.component';
 
 @NgModule({
   imports: [
@@ -24,7 +25,8 @@ import { ConfigurablePageFormComponent } from './configurable-pages/configurable
     AdminComponent,
     UserAdminComponent,
     ConfigurablePagesComponent,
-    ConfigurablePageFormComponent,
+    ConfigurablePagesFormComponent,
+    UserRoleDropdownComponent
   ]
 })
 export class AdminModule {

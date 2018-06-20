@@ -58,7 +58,7 @@
   "common": {
     "about": "About",
     "actions": "Actions",
-    "addMarkdownText": "Add Markdown to add text.\n A Cheatsheet you can find here: <a href=\"https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet\" target=\"_blank\"></a>.",
+    "addMarkdownText": "Add Markdown to add text.\n A Cheatsheet you can find here",
     "administration": "Administration",
     "amount": "Amount",
     "back": "Back",

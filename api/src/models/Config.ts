@@ -1,5 +1,6 @@
 import {IConfig} from '../../../shared/models/IConfig';
 import * as mongoose from 'mongoose';
+import {Schema} from 'mongoose';
 
 interface IConfigModel extends IConfig, mongoose.Document {
   exportJSON: () => Promise<IConfig>;
@@ -12,7 +13,7 @@ const configSchema = new mongoose.Schema({
       required: true
     },
     value: {
-      type: String
+      type: Schema.Types.Mixed
     },
     minViewRole: {
       type: String

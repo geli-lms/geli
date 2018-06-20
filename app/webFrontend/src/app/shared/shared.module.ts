@@ -49,7 +49,6 @@ import {ResponsiveImageComponent} from './components/responsive-image/responsive
     ChangePasswordDialogComponent,
     MarkdownEditorComponent,
     PickMediaDialog,
-    ConfigurablePagesFormComponent,
     UserProfileDialog,
     NotfoundComponent,
     UserProfileDialog,
@@ -71,7 +70,6 @@ import {ResponsiveImageComponent} from './components/responsive-image/responsive
     ChangePasswordDialogComponent,
     PickMediaDialog,
     TranslateModule,
-    ConfigurablePagesFormComponent,
     UserProfileDialog,
     ResponsiveImageComponent
   ],

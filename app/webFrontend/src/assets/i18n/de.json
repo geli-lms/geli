@@ -58,7 +58,7 @@
   "common": {
     "about": "Über",
     "actions": "Aktionen",
-    "addMarkdownText": "Füge Markdown hinzu.\n Eine Referenz finden Sie hier: <a href=\"https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet\" target=\"_blank\"></a>.",
+    "addMarkdownText": "Füge Markdown hinzu.\n Eine Referenz finden Sie hier",
     "administration": "Administration",
     "amount": "Menge",
     "back": "Zurück",
