@@ -36,6 +36,7 @@ export default {
   maxFileSize: 51200,
   maxZipSize: 204800,
 
+  // FIXME: There is still code that should likely be updated to use config.uploadFolder instead of hardcoded 'uploads' strings.
   uploadFolder: process.env.UPLOADFOLDER || (appRoot + '/uploads/'),
   maxProfileImageWidth: 512,
   maxProfileImageHeight: 512,
