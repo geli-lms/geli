@@ -12,6 +12,7 @@ import {MaterialImportModule} from '../shared/modules/material-import.module';
 import {CommentsDialogComponent} from './comments-dialog/comments-dialog.component';
 import {EmojiSelectorComponent} from './emoji-selector/emoji-selector.component';
 import { PickerModule } from '@ctrl/ngx-emoji-mart';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
 @NgModule({
   imports: [
@@ -20,7 +21,8 @@ import { PickerModule } from '@ctrl/ngx-emoji-mart';
     ReactiveFormsModule,
     SharedModule,
     MaterialImportModule,
-    PickerModule
+    PickerModule,
+    InfiniteScrollModule
   ],
   declarations: [
     MessagingComponent,

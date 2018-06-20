@@ -21,7 +21,6 @@ import {TranslateModule} from '@ngx-translate/core';
 import {AdminMarkdownEditComponent} from './components/admin-markdown-edit/admin-markdown-edit.component';
 import {UserProfileDialog} from 'app/shared/components/user-profile-dialog/user-profile-dialog.component';
 import {NotfoundComponent} from './components/notfound/notfound.component';
-import {InfiniteScrollDirective} from './directives/infinite-scroll.directive';
 import { ShowCommentsDirective } from './directives/show-comments.directive';
 
 
@@ -54,7 +53,6 @@ import { ShowCommentsDirective } from './directives/show-comments.directive';
     UserProfileDialog,
     NotfoundComponent,
     UserProfileDialog,
-    InfiniteScrollDirective,
     ShowCommentsDirective,
   ],
   exports: [
@@ -75,7 +73,6 @@ import { ShowCommentsDirective } from './directives/show-comments.directive';
     TranslateModule,
     AdminMarkdownEditComponent,
     UserProfileDialog,
-    InfiniteScrollDirective,
     ShowCommentsDirective,
   ],
   entryComponents: [

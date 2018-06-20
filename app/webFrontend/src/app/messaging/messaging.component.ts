@@ -1,14 +1,18 @@
-import {Component, Input, OnInit} from '@angular/core';
-import 'rxjs/add/operator/do';
-import {fromPromise} from 'rxjs/observable/fromPromise';
-import {Observable} from 'rxjs/Observable';
+import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
 import {IMessage} from '../../../../../shared/models/Messaging/IMessage';
 import {MessageService} from '../shared/services/message.service';
 import {ChatService} from '../shared/services/chat.service';
 import {UserService} from '../shared/services/user.service';
 import {SocketIOEvent} from '../../../../../shared/models/Messaging/SoketIOEvent';
 import {ISocketIOMessage, SocketIOMessageType} from '../../../../../shared/models/Messaging/ISocketIOMessage';
+import {InfiniteScrollEvent} from 'ngx-infinite-scroll';
 
+
+
+enum MessagingMode {
+  CHAT = 'chat',
+  COMMENT = 'comment'
+}
 
 @Component({
   selector: 'app-messaging',
@@ -18,35 +22,30 @@ import {ISocketIOMessage, SocketIOMessageType} from '../../../../../shared/model
 export class MessagingComponent implements OnInit {
 
   @Input() room: string;
-  @Input() mode = 'chat';
-  @Input() loadMsgOnScroll = true;
-  @Input() infiniteScrollDirection = 'up';
+  @Input() mode: MessagingMode = MessagingMode.CHAT;
   // number of messages to load
   @Input() limit = 20;
   chatName: string;
-
+  scrollTop: number;
   messages: IMessage[] = [];
   // number of message in a given room
   messageCount: number;
   ioConnection: any;
-  // callback for the infinite-scroll
-  scrollCallback: any;
   queryParam: any;
+  disableInfiniteScroll = false;
 
   constructor(
     private messageService: MessageService,
     private chatService: ChatService,
     private userService: UserService
   ) {
-
-    this.scrollCallback = this.loadMsgOnScroll ? this.loadMoreMsg.bind(this) : null;
   }
 
   ngOnInit() {
     this.queryParam = {
       room: this.room,
       limit: this.limit,
-      order: (this.mode === 'chat') ? -1 : 1
+      order: (this.mode === MessagingMode.CHAT) ? -1 : 1
     };
     this.init();
   }
@@ -121,15 +120,28 @@ export class MessagingComponent implements OnInit {
     }
   }
 
-  loadMoreMsg(): Observable<any> {
+
+  async loadMoreMsg() {
     this.queryParam =  Object.assign(this.queryParam, {skip: this.messages.length,});
-    return fromPromise(this.messageService.getMessages(this.queryParam)).do(this.processFurtherMessages.bind(this));
+   const _messages: IMessage[] =  await this.messageService.getMessages(this.queryParam);
+    this.messages = (this.mode === 'chat') ? _messages.reverse().concat(this.messages): this.messages.concat(_messages.reverse());
+    if (this.messages.length === this.messageCount) {
+      this.disableInfiniteScroll = true;
+    }
   }
 
-  processFurtherMessages(messages: IMessage[]): void {
-    this.messages = (this.mode === 'chat') ? messages.reverse().concat(this.messages): this.messages.concat(messages.reverse());
-    if (this.messages.length === this.messageCount) {
-      this.loadMsgOnScroll = false;
+
+  async onScrollDown (infiniteScrollEvent: InfiniteScrollEvent) {
+    if(this.mode === 'comment') {
+      await this.loadMoreMsg();
+      this.scrollTop = infiniteScrollEvent.currentScrollPosition
+    }
+  }
+
+  async onScrollUp (infiniteScrollEvent: InfiniteScrollEvent) {
+    if(this.mode === 'chat') {
+      await this.loadMoreMsg();
+      this.scrollTop = infiniteScrollEvent.currentScrollPosition
     }
   }
 }
