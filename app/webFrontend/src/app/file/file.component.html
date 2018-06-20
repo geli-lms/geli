@@ -1,0 +1,6 @@
+<ng-container *ngIf="loaded">
+  <object *ngIf="!isPlainText; else plainTextCase" [data]="data" class="object"></object>
+  <ng-template #plainTextCase>
+    <pre class="plain-text">{{ plainText }}</pre>
+  </ng-template>
+</ng-container>

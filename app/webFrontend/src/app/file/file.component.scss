@@ -1,0 +1,14 @@
+@import '../../variables';
+
+:host {
+  display: flex;
+  flex: 1;
+}
+
+.plain-text {
+  padding: $app-content-padding;
+}
+
+.object {
+  flex: 1;
+}
