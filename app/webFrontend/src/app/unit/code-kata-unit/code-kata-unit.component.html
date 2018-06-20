@@ -2,8 +2,8 @@
   <strong>Code-Kata</strong>
   <ace-editor
     #definitionEditor
-    [(text)]="codeKataUnit.definition"
-    [mode]="'javascript'"
+    [text]="codeKataUnit.definition"
+    [mode]="'markdown'"
     [theme]="'github'"
     [readOnly]="true">
   </ace-editor>
@@ -11,18 +11,18 @@
   <div *ngIf="isExampleCode"></div>
   <ace-editor class="user-code-editor"
               #codeEditor
-              [(text)]="codeKataUnit.code || progress.code"
-              [mode]="'javascript'"
+              [text]="codeKataUnit.code || progress.code"
+              [mode]="'markdown'"
               [theme]="'github'"
               [readOnly]="isExampleCode"
               [durationBeforeCallback]="333"
               (textChanged)="onUserInput()">
   </ace-editor>
-  <div>{{ 'code-kata.text.needToSuccess' | translate }}/div>
+  <div>{{ 'code-kata.text.needToSuccess' | translate }}</div>
   <ace-editor
     #testEditor
-    [(text)]="codeKataUnit.test"
-    [mode]="'javascript'"
+    [text]="codeKataUnit.test"
+    [mode]="'markdown'"
     [theme]="'github'"
     [readOnly]="true">
   </ace-editor>
