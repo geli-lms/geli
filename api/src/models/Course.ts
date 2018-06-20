@@ -283,6 +283,7 @@ courseSchema.methods.forView = function (): ICourseView {
   return {
     _id: <string>extractMongoId(this._id),
     name, description,
+    name, description,
     courseAdmin: User.forCourseView(courseAdmin),
     teachers: teachers.map((teacher: IUser) => User.forCourseView(teacher)),
     lectures: lectures.map((lecture: any) => lecture.toObject())

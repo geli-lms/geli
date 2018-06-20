@@ -81,7 +81,8 @@ unitSchema.methods.exportJSON = function () {
 
   // custom properties
   delete obj._course;
-
+  console.dir('on export');
+  console.dir(obj);
   return obj;
 };
 
@@ -109,7 +110,8 @@ unitSchema.methods.toFile = function (): String {
 
 unitSchema.statics.importJSON = async function (unit: IUnit, courseId: string, lectureId: string) {
   unit._course = courseId;
-
+  console.dir('on import');
+  console.dir(unit);
   try {
     // Need to disabled this rule because we can't export 'Unit' BEFORE this function-declaration
     // tslint:disable:no-use-before-declare
