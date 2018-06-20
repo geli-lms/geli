@@ -143,33 +143,31 @@ courseSchema.pre('remove', async function () {
   }
 });
 
-courseSchema.methods.exportJSON = async function (sanitize: boolean = true, onlyBasicData:boolean = false) {
+courseSchema.methods.exportJSON = async function (sanitize: boolean = true, onlyBasicData: boolean = false) {
   const obj = this.toObject();
 
   // remove unwanted informations
-  {
-    // mongo properties
-    delete obj._id;
-    delete obj.createdAt;
-    delete obj.__v;
-    delete obj.updatedAt;
 
-    // custom properties
-    if (sanitize) {
-      delete obj.accessKey;
-      delete obj.active;
-      delete obj.whitelist;
-      delete obj.students;
-      delete obj.courseAdmin;
-      delete obj.teachers;
-    }
+  // mongo properties
+  delete obj._id;
+  delete obj.createdAt;
+  delete obj.__v;
+  delete obj.updatedAt;
 
-    if(onlyBasicData){
-      delete obj.id;
-      delete obj.hasAccessKey;
+  // custom properties
+  if (sanitize) {
+    delete obj.accessKey;
+    delete obj.active;
+    delete obj.whitelist;
+    delete obj.students;
+    delete obj.courseAdmin;
+    delete obj.teachers;
+  }
 
-      return obj;
-    }
+  if (onlyBasicData) {
+    delete obj.id;
+    delete obj.hasAccessKey;
+    return obj;
   }
 
   // "populate" lectures

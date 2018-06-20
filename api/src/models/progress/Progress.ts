@@ -2,6 +2,7 @@ import * as mongoose from 'mongoose';
 import {IProgress} from '../../../../shared/models/progress/IProgress';
 import {codeKataProgressSchema} from './CodeKataProgress';
 import {taskUnitProgressSchema} from './TaskUnitProgress';
+import {IUser} from '../../../../shared/models/IUser';
 
 interface IProgressModel extends IProgress, mongoose.Document {
   exportJSON: () => Promise<IProgress>;
@@ -33,7 +34,7 @@ const progressSchema = new mongoose.Schema({
       transform: function (doc: any, ret: any) {
         ret._id = ret._id.toString();
 
-        if(!doc.populated('course') && ret.course){
+        if (!doc.populated('course') && ret.course) {
           ret.course = ret.course.toString();
         }
 
@@ -41,7 +42,7 @@ const progressSchema = new mongoose.Schema({
           ret.user = ret.user.toString();
         }
 
-        if(!doc.populated('unit') && ret.unit){
+        if (!doc.populated('unit') && ret.unit) {
           ret.unit = ret.unit.toString();
         }
       }
@@ -61,6 +62,10 @@ progressSchema.methods.exportJSON = async function () {
 
   // custom properties
   return obj;
+};
+
+progressSchema.methods.exportPersonalUserData = async function (user: IUser) {
+
 };
 
 

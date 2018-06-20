@@ -13,10 +13,11 @@ import {allRoles} from '../config/roles';
 import {IProperties} from '../../../shared/models/IProperties';
 import {extractMongoId} from '../utilities/ExtractMongoId';
 import {ensureMongoToObject} from '../utilities/EnsureMongoToObject';
-import {IUnit} from "../../../shared/models/units/IUnit";
+import {IUnit} from '../../../shared/models/units/IUnit';
+import {Course, ICourseModel} from './Course';
 
 interface IUserModel extends IUser, mongoose.Document {
-  exportPersonalDataJSON: () => Promise<IUser>;
+  exportPersonalData: () => Promise<IUser>;
   isValidPassword: (candidatePassword: string) => Promise<boolean>;
   checkPrivileges: () => IProperties;
   checkEditUser: (targetUser: IUser) => IProperties;
@@ -219,8 +220,22 @@ userSchema.methods.forUser = function (otherUser: IUser): IUserSubSafe | IUserSu
   return User.forUser(this, otherUser);
 };
 
-userSchema.methods.exportPersonalDataJSON = function () {
+userSchema.methods.exportPersonalData = async function () {
+  await this.populate(
+    {
+      path: 'lastVisitedCourses',
+      model: Course,
+      select: 'name description -_id teachers'
+    })
+    .execPopulate();
+
+  const lastVisitedCourses = await Promise.all(this.lastVisitedCourses.map( async (course: ICourseModel) => {
+    return await course.exportJSON(true, true);
+  }));
+
   const obj = this.toObject();
+
+  obj.lastVisitedCourses = lastVisitedCourses;
 
   // remove unwanted informations
   // mongo properties
@@ -228,6 +243,7 @@ userSchema.methods.exportPersonalDataJSON = function () {
   delete obj.createdAt;
   delete obj.__v;
   delete obj.updatedAt;
+  delete obj.id;
 
   // custom properties
 

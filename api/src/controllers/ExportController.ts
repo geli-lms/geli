@@ -3,12 +3,13 @@ import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import {Course, ICourseModel} from '../models/Course';
 import {Lecture} from '../models/Lecture';
 import {IUnitModel, Unit} from '../models/units/Unit';
-import {IUser} from "../../../shared/models/IUser";
-import {User} from "../models/User";
-import {Notification} from "../models/Notification";
-import {NotificationSettings} from "../models/NotificationSettings";
-import {WhitelistUser} from "../models/WhitelistUser";
-import {IProgressModel, Progress} from "../models/progress/Progress";
+import {IUser} from '../../../shared/models/IUser';
+import {User} from '../models/User';
+import {Notification} from '../models/Notification';
+import {NotificationSettings} from '../models/NotificationSettings';
+import {WhitelistUser} from '../models/WhitelistUser';
+import {IProgressModel, Progress} from '../models/progress/Progress';
+import {ITaskUnitProgressModel} from '../models/progress/TaskUnitProgress';
 
 @JsonController('/export')
 @UseBefore(passportJwtMiddleware)
@@ -99,7 +100,6 @@ export class ExportController {
   @Get('/user')
   @Authorized(['student', 'teacher', 'admin'])
   async exportAllUserData(@CurrentUser() currentUser: IUser) {
-
     // load user
     const user = await User.findById(currentUser);
 
@@ -107,26 +107,19 @@ export class ExportController {
       throw new NotFoundError(`User was not found.`);
     }
 
-    //load notification
-    const notificationSettings = await NotificationSettings.findOne({'user': user._id}, 'course notificationType emailNotification')
-      .populate('course', 'name description -_id');
-
-    const notificatinSettingsJson = await notificationSettings.exportJSON();
-    delete (<ICourseModel><any>notificatinSettingsJson.course).hasAccessKey;
-
 
     // load notifications
-    const notifications = await Notification.find({'user': user._id})
-    const notificationTexts:string[] = notifications.map(notification => {
+    const notifications = await Notification.find({'user': user._id});
+    const notificationTexts: string[] = notifications.map(notification => {
       return notification.text;
     });
 
     // User in whitelists
-    const whitelistUsers = await WhitelistUser.find({uid: user.uid},"courseId")
+    const whitelistUsers = await WhitelistUser.find({uid: user.uid}, 'courseId')
       .populate('courseId', 'name description -_id');
 
     const whitelistUsersForExport = await Promise.all(whitelistUsers.map(async (whitelist) => {
-      const course:ICourseModel = <any>whitelist.courseId;
+      const course: ICourseModel = <any>whitelist.courseId;
       return await course.exportJSON(true, true);
     }));
 
@@ -139,19 +132,24 @@ export class ExportController {
     conditions.$or.push({courseAdmin: user._id});
 
     const courses = await Course.find(conditions, 'name description -_id');
-    const exportCourses = await Promise.all(courses.map(async (course:ICourseModel) => {
+    const exportCourses = await Promise.all(courses.map(async (course: ICourseModel) => {
       return await course.exportJSON(true, true);
     }));
 
-
-
     // Progress
-    const userProgress = await Progress.find({'user': user._id},"-user")
-      .populate('course', "name description")
-      .populate('unit',"name description -_id");
+    const userProgress = await Progress.find({'user': user._id}, '-user')
+      .populate('course', 'name description')
+      .populate('unit', 'name description');
 
-    const userProgressExport = await Promise.all(userProgress.map( async (prog:IProgressModel) => {
-      let progExport = await prog.exportJSON();
+    const userProgressExport = await Promise.all(userProgress.map( async (prog) => {
+      let progExport;
+
+      if (prog.__t === 'task-unit-progress') {
+        progExport = await (<ITaskUnitProgressModel>prog).exportJSON(true);
+      } else {
+        progExport = await (<IProgressModel>prog).exportJSON();
+      }
+
       progExport.course = await (<ICourseModel>prog.course).exportJSON(true, true);
       progExport.unit = await (<IUnitModel>prog.unit).exportJSON(true);
       return progExport;
@@ -162,13 +160,13 @@ export class ExportController {
 
 
     return {
-      user: user.exportPersonalDataJSON(),
+      user: await user.exportPersonalData(),
       notifications: notificationTexts,
-      notificationSettings:notificatinSettingsJson,
-      whiteLists: whitelistUsersForExport,
+      notificationSettings: await NotificationSettings.exportPersonalData(user),
+      whitelists: whitelistUsersForExport,
       courses: exportCourses,
       progress: userProgressExport
-    }
+    };
   }
 
 }
