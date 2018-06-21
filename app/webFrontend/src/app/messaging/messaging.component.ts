@@ -5,8 +5,6 @@ import {ChatService} from '../shared/services/chat.service';
 import {UserService} from '../shared/services/user.service';
 import {SocketIOEvent} from '../../../../../shared/models/Messaging/SoketIOEvent';
 import {ISocketIOMessage, SocketIOMessageType} from '../../../../../shared/models/Messaging/ISocketIOMessage';
-import {InfiniteScrollEvent} from 'ngx-infinite-scroll';
-
 
 
 enum MessagingMode {
@@ -26,7 +24,6 @@ export class MessagingComponent implements OnInit,  AfterViewChecked  {
   // number of messages to load
   @Input() limit = 20;
   chatName: string;
-  scrollTop: number;
   @ViewChild('messageList') messageList: ElementRef;
   messages: IMessage[] = [];
   // number of message in a given room
@@ -34,6 +31,7 @@ export class MessagingComponent implements OnInit,  AfterViewChecked  {
   ioConnection: any;
   queryParam: any;
   disableInfiniteScroll = false;
+  scrollToBottom = true;
 
   constructor(
     private messageService: MessageService,
@@ -52,8 +50,7 @@ export class MessagingComponent implements OnInit,  AfterViewChecked  {
   }
 
   ngAfterViewChecked() {
-    // after loading the  first 20 messages  scroll to bottom
-    if(this.messages.length === this.limit){
+    if(this.scrollToBottom){
       this.messageList.nativeElement.scrollIntoView(false);
     }
   }
@@ -130,7 +127,7 @@ export class MessagingComponent implements OnInit,  AfterViewChecked  {
 
 
   async loadMoreMsg() {
-    this.queryParam =  Object.assign(this.queryParam, {skip: this.messages.length,});
+    this.queryParam =  Object.assign(this.queryParam, {skip: this.messages.length});
    const _messages: IMessage[] =  await this.messageService.getMessages(this.queryParam);
     this.messages = (this.mode === 'chat') ? _messages.reverse().concat(this.messages): this.messages.concat(_messages.reverse());
     if (this.messages.length === this.messageCount) {
@@ -139,17 +136,16 @@ export class MessagingComponent implements OnInit,  AfterViewChecked  {
   }
 
 
-  async onScrollDown (infiniteScrollEvent: InfiniteScrollEvent) {
+  async onScrollDown () {
     if(this.mode === 'comment') {
       await this.loadMoreMsg();
-      this.scrollTop = infiniteScrollEvent.currentScrollPosition
     }
   }
 
-  async onScrollUp (infiniteScrollEvent: InfiniteScrollEvent) {
+  async onScrollUp () {
     if(this.mode === 'chat') {
+      this.scrollToBottom = false;
       await this.loadMoreMsg();
-      this.scrollTop = infiniteScrollEvent.currentScrollPosition
     }
   }
 }
