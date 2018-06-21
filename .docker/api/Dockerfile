@@ -10,6 +10,7 @@ EXPOSE 80
 CMD node server.js
 
 RUN mkdir -p /usr/src/app/uploads
+RUN mkdir -p /usr/src/app/uploads/courses
 
 RUN mkdir -p /usr/src/app/tmp
 RUN chmod a+rwx /usr/src/app/tmp

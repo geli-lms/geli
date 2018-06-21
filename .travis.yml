@@ -6,7 +6,7 @@ dist: trusty
 sudo: required
 language: node_js
 node_js:
-  - "8.9.0"
+  - "8.11.3"
 
 addons:
   apt:
@@ -58,7 +58,7 @@ install:
   # install travis dependencies
   - cd .travis
   - npm install
-  - npm prune          # remove not (anymore) in package.json required packages (to keep the cache clean)
+  # - npm prune          # remove not (anymore) in package.json required packages (to keep the cache clean)
   - cd ..
 
 script:
@@ -81,7 +81,8 @@ script:
   - npm run e2e         # run end-to-end-tests
   - sed -i 's/$TRAVIS_COMMIT/'$TRAVIS_COMMIT'/' src/app/shared/services/raven-error-handler.service.ts
   - cd ../..
-  - travis_wait 30 .travis/build-fe.sh       # build in prod mode
+#  - travis_wait 30 .travis/build-fe.sh       # build in prod mode
+  - .travis/build-fe.sh       # build in prod mode
 
 after_script:
   # send required files to coveralls.io

@@ -12,10 +12,6 @@ import {Course} from '../models/Course';
 import {User} from '../models/User';
 import {IWhitelistUser} from '../../../shared/models/IWhitelistUser';
 
-function escapeRegex(text: string) {
-  return text.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
-}
-
 @JsonController('/whitelist')
 @UseBefore(passportJwtMiddleware)
 export class WitelistController {

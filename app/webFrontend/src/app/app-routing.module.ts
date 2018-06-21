@@ -6,7 +6,8 @@ import {StartComponent} from './start/start.component';
 import {AboutComponent} from './about/about.component';
 import {ResetComponent} from './auth/reset/reset.component';
 import {RouterModule, Routes} from '@angular/router';
-import {ImprintComponent} from './imprint/imprint.component';
+import {LegalnoticeComponent} from './legalnotice/legalnotice.component';
+import {PrivacyComponent} from './privacy/privacy.component';
 import {UserSettingsComponent} from './user/user-settings/user-settings.component';
 import {AuthGuardService} from './shared/services/auth-guard.service';
 import {ActivationResendComponent} from './auth/activation-resend/activation-resend.component';
@@ -38,8 +39,12 @@ const routes: Routes = [
     component: AboutComponent
   },
   {
-    path: 'imprint',
-    component: ImprintComponent
+    path: 'legalnotice',
+    component: LegalnoticeComponent
+  },
+  {
+    path: 'privacy',
+    component: PrivacyComponent
   },
   {
     path: 'userSettings',

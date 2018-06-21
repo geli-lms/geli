@@ -46,7 +46,7 @@ export class AdminMarkdownEditComponent implements OnInit {
       await this.service.updateItem({_id: this.type, data: markdown});
       this.snackBar.open(this.headingType + ' saved');
     } catch (err) {
-      this.snackBar.open(errorCodes.save.couldNotSaveImprint.text);
+      this.snackBar.open(errorCodes.save.couldNotSaveLegalnotice.text);
     }
     void this.loadConfig();
   }
