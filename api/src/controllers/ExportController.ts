@@ -10,7 +10,7 @@ import {NotificationSettings} from '../models/NotificationSettings';
 import {WhitelistUser} from '../models/WhitelistUser';
 import {IProgressModel, Progress} from '../models/progress/Progress';
 import {ITaskUnitProgressModel} from '../models/progress/TaskUnitProgress';
-import {Response} from "express";
+import {Response} from 'express';
 
 @JsonController('/export')
 @UseBefore(passportJwtMiddleware)

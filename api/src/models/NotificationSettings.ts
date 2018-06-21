@@ -61,7 +61,7 @@ notificationSettingsSchema.statics.exportPersonalData = async function(user: IUs
     .findOne({'user': user._id}, 'course notificationType emailNotification')
     .populate('course', 'name description -_id');
 
-  if(!notificationSettings){
+  if (!notificationSettings) {
     return null;
   }
 

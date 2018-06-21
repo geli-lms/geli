@@ -404,8 +404,8 @@ export class UserDataService extends DataService {
     return promise;
   }
 
-  exportData(): Promise<Response>{
-    const url ="export/user";
+  exportData(): Promise<Response> {
+    const url = 'export/user';
     return this.backendService
       .getDownload(url)
       .toPromise();
