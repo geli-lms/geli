@@ -54,8 +54,7 @@ describe('Media', async () => {
         .and.have.lengthOf(1)
         .and.contains(subDirectory.id);
       result.body.files.should.be.instanceOf(Array)
-        .and.have.lengthOf(1)
-        .and.contains(file.id);
+        .and.have.lengthOf(1);
     });
 
     it('should get a populated directory', async () => {
