@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Added legal notice and privacy declaration [#768](https://github.com/utetrapp/geli/issues/768)
 - Add more tests notification ctrl [#772](https://github.com/utetrapp/geli/pull/772)
 - Added more EN/DE translation [#753](https://github.com/utetrapp/geli/issues/753)
+- Simple e2e test for login [#](https://github.com/utetrapp/geli/pull/)
  
 ### Changed
 - rework existing translation
