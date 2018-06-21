@@ -10,12 +10,20 @@
   @include globalFabBtn;
 }
 
-.search-input-group {
-  align-items: center;
+.headingAndBoxes {
   display: flex;
   justify-content: space-between;
+  flex-direction: column;
+}
+
+.search-input-group {
+  align-items: center;
+  justify-content: flex-end;
+  display: flex;
+
 
   .search-bar {
+    margin-left:1em;
     border: 1px solid gray;
     border-radius: 5px;
     display: flex;
