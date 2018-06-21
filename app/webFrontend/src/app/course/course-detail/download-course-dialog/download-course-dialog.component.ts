@@ -1,14 +1,12 @@
 import {Component, Inject, OnInit, QueryList, ViewChildren, ViewEncapsulation} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material';
 import {SnackBarService} from '../../../shared/services/snack-bar.service';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
 import {LectureCheckboxComponent} from './downloadCheckBoxes/lecture-checkbox.component';
 import {DownloadFileService} from 'app/shared/services/data.service';
 import {IDownload} from '../../../../../../../shared/models/IDownload';
-import {IDownloadSize} from '../../../../../../../shared/models/IDownloadSize';
 import {SaveFileService} from '../../../shared/services/save-file.service';
-
 import {saveAs} from 'file-saver/FileSaver';
+import {DataSharingService} from '../../../shared/services/data-sharing.service';
 
 @Component({
   selector: 'app-download-course-dialog',
@@ -26,17 +24,16 @@ export class DownloadCourseDialogComponent implements OnInit {
   @ViewChildren(LectureCheckboxComponent)
   childLectures: QueryList<LectureCheckboxComponent>;
 
-  constructor(public dialogRef: MatDialogRef<DownloadCourseDialogComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: any,
-              private downloadReq: DownloadFileService,
+  constructor(private downloadReq: DownloadFileService,
               public snackBar: SnackBarService,
-              private saveFileService: SaveFileService) {
+              private saveFileService: SaveFileService,
+              private dataSharingService: DataSharingService) {
   }
 
   ngOnInit() {
+    this.course = this.dataSharingService.getDataForKey('course');
     this.showSpinner = false;
     this.disableDownloadButton = false;
-    this.course = this.data.course;
     this.chkbox = false;
     if (!this.checkForEmptyLectures()) {
       this.disableDownloadButton = true;
@@ -124,7 +121,7 @@ export class DownloadCourseDialogComponent implements OnInit {
         this.showSpinner = false;
         this.disableDownloadButton = false;
         if (!this.keepDialogOpen) {
-          this.dialogRef.close();
+          // this.dialogRef.close();
         }
       } catch (err) {
         this.showSpinner = false;
@@ -197,4 +194,8 @@ export class DownloadCourseDialogComponent implements OnInit {
     return  {courseName: this.course._id, lectures: lectures};
   }
 
+  uncheckAll() {
+    this.chkbox = false;
+    this.onChange();
+  }
 }

@@ -12,10 +12,7 @@ import {MatFabMenuComponent} from './components/mat-fab-menu/mat-fab-menu.compon
 import {PasswordInputComponent} from './components/password-input/password-input.component';
 import {ExpandableDivComponent} from './components/expandable-div/expandable-div.component';
 import {ButtonSaveCancelComponent} from './components/button-save-cancel/button-save-cancel.component';
-import {UploadFormComponent} from './components/upload-form/upload-form.component';
 import {FileUploadModule} from 'ng2-file-upload';
-import {FilesizePipe} from './pipes/filesize/filesize.pipe';
-import {UploadFormDialog} from './components/upload-form-dialog/upload-form-dialog.component';
 import {ChangePasswordDialogComponent} from './components/change-password-dialog/change-password-dialog.component';
 import {MarkdownEditorComponent} from './components/markdown-editor/markdown-editor.component';
 import {AceEditorModule} from 'ng2-ace-editor';
@@ -25,6 +22,7 @@ import {AdminMarkdownEditComponent} from './components/admin-markdown-edit/admin
 import {ImprintAndInfoService} from './services/imprint-and-info.service';
 import {UserProfileDialog} from 'app/shared/components/user-profile-dialog/user-profile-dialog.component';
 import {NotfoundComponent} from './components/notfound/notfound.component';
+import {ResponsiveImageComponent} from './components/responsive-image/responsive-image.component';
 
 @NgModule({
   imports: [
@@ -48,9 +46,6 @@ import {NotfoundComponent} from './components/notfound/notfound.component';
     BadgeComponent,
     ExpandableDivComponent,
     ButtonSaveCancelComponent,
-    UploadFormComponent,
-    FilesizePipe,
-    UploadFormDialog,
     ChangePasswordDialogComponent,
     MarkdownEditorComponent,
     PickMediaDialog,
@@ -58,6 +53,7 @@ import {NotfoundComponent} from './components/notfound/notfound.component';
     UserProfileDialog,
     NotfoundComponent,
     UserProfileDialog,
+    ResponsiveImageComponent
   ],
   exports: [
     GravatarDirective,
@@ -72,17 +68,14 @@ import {NotfoundComponent} from './components/notfound/notfound.component';
     ExpandableDivComponent,
     ButtonSaveCancelComponent,
     MarkdownEditorComponent,
-    UploadFormComponent,
-    FilesizePipe,
-    UploadFormDialog,
     ChangePasswordDialogComponent,
     PickMediaDialog,
     TranslateModule,
     AdminMarkdownEditComponent,
     UserProfileDialog,
+    ResponsiveImageComponent
   ],
   entryComponents: [
-    UploadFormDialog,
     PickMediaDialog,
     UserProfileDialog,
   ],

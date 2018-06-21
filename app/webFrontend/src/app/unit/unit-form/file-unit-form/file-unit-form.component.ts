@@ -6,11 +6,12 @@ import {IFileUnit} from '../../../../../../../shared/models/units/IFileUnit';
 import {UnitGeneralInfoFormComponent} from '../unit-general-info-form/unit-general-info-form.component';
 import {UnitService} from '../../../shared/services/data.service';
 import {ShowProgressService} from '../../../shared/services/show-progress.service';
-import {PickMediaDialog} from '../../../shared/components/pick-media-dialog/pick-media-dialog.component';
 import {IFile} from '../../../../../../../shared/models/mediaManager/IFile';
 import {UnitFormService} from '../../../shared/services/unit-form.service';
 import {FormArray, FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {SnackBarService} from '../../../shared/services/snack-bar.service';
+import {CourseMediaComponent} from '../../../course/course-edit/course-media/course-media.component';
+import {FileIconService} from '../../../shared/services/file-icon.service';
 
 @Component({
   selector: 'app-file-unit-form',
@@ -36,18 +37,25 @@ export class FileUnitFormComponent implements OnInit {
               private showProgress: ShowProgressService,
               private dialog: MatDialog,
               private unitFormService: UnitFormService,
-              private formBuilder: FormBuilder) {
+              private formBuilder: FormBuilder,
+              private fileIcon: FileIconService) {
   }
 
   ngOnInit() {
+    this.model = <IFileUnit> this.unitFormService.model;
+    this.lecture = <ILecture> this.unitFormService.lecture;
+    this.course = <ICourse> this.unitFormService.course;
+
+    this.model.fileUnitType = this.fileUnitType;
+
     this.unitFormService.headline = this.fileUnitType === 'video' ? 'Add Videos' : 'Add Files';
     this.unitFormService.unitForm.addControl('files', new FormArray([]));
 
     this.unitForm = this.unitFormService.unitForm;
 
-    this.model = <IFileUnit> this.unitFormService.model;
-    this.lecture = <ILecture> this.unitFormService.lecture;
-    this.course = <ICourse> this.unitFormService.course;
+
+
+
     this.buildForm();
   }
 
@@ -64,6 +72,27 @@ export class FileUnitFormComponent implements OnInit {
   }
 
   async openAddFilesDialog() {
+
+    const allowedMimeTypes = (this.fileUnitType !== 'video') ? undefined : [
+      'video/mp4',
+      'video/webm',
+      'video/ogg',
+      'video/avi',
+    ];
+
+    const res = await this.dialog.open(CourseMediaComponent, {
+      maxWidth: '90vw',
+      maxHeight: '90vh',
+      minWidth: '50vw',
+      disableClose: true,
+      data: {
+        courseId: this.course._id,
+        allowedMimeTypes: allowedMimeTypes
+      }
+    });
+
+
+    /*
     if (!this.unitFormService.course.media) {
       this.snackBar.openShort('Please add files first');
       return;
@@ -81,7 +110,7 @@ export class FileUnitFormComponent implements OnInit {
         directoryId: this.course.media._id,
         allowedMimeTypes: allowedMimeTypes,
       },
-    });
+    });*/
 
     res.afterClosed().subscribe(async value => {
       if (value) {

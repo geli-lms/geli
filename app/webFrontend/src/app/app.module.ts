@@ -36,7 +36,7 @@ import {AdminModule} from './admin/admin.module';
 import {ReportService} from './shared/services/data/report.service';
 import {TitleService} from './shared/services/title.service';
 import {ThemeService} from './shared/services/theme.service';
-import {ImprintModule} from './imprint/imprint.module';
+import {LegalnoticeModule} from './legalnotice/legalnotice.module';
 import {DataSharingService} from './shared/services/data-sharing.service';
 import {NotificationModule} from './notification/notification.module';
 import {HttpClient} from '@angular/common/http';
@@ -46,6 +46,8 @@ import {NotfoundComponent} from './shared/components/notfound/notfound.component
 import {SnackBarService} from './shared/services/snack-bar.service';
 import {UnitFormService} from './shared/services/unit-form.service';
 import {UnitFactoryService} from './shared/services/unit-factory.service';
+import {FileIconService} from './shared/services/file-icon.service';
+import { PrivacyComponent } from './privacy/privacy.component';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -55,6 +57,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 @NgModule({
   declarations: [
     AppComponent,
+    PrivacyComponent,
   ],
   imports: [
     BrowserModule,
@@ -67,7 +70,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     AboutModule,
     SharedModule,
     AdminModule,
-    ImprintModule,
+    LegalnoticeModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
@@ -111,7 +114,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     ImprintAndInfoService,
     SnackBarService,
     UnitFormService,
-    UnitFactoryService
+    UnitFactoryService,
+    FileIconService,
   ],
   bootstrap: [AppComponent]
 })

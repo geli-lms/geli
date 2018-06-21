@@ -1,3 +1,5 @@
+import {IPicture} from './mediaManager/IPicture';
+
 export {ENROLL_TYPE_WHITELIST} from './ICourse';
 export {ENROLL_TYPE_FREE} from './ICourse';
 export {ENROLL_TYPE_ACCESSKEY} from './ICourse';
@@ -10,6 +12,7 @@ export interface ICourseDashboard {
   active: boolean;
   description: string;
   enrollType: string;
+  image: IPicture;
 
   // Special properties for the dashboard:
   userCanEditCourse: boolean;

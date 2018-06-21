@@ -35,7 +35,7 @@
     "@types/sharp": "^0.17.8",
     "app-root-path": "^2.0.1",
     "archiver": "^2.1.1",
-    "bcrypt": "^1.0.3",
+    "bcrypt": "^2.0.0",
     "body-parser": "^1.18.2",
     "express": "^4.16.3",
     "fast-csv": "^2.4.1",
@@ -64,7 +64,7 @@
     "winston": "^2.4.2"
   },
   "devDependencies": {
-    "@types/bcrypt": "^1.0.0",
+    "@types/bcrypt": "^2.0.0",
     "@types/body-parser": "1.16.8",
     "@types/chai": "4.1.2",
     "@types/chai-http": "3.0.4",
