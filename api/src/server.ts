@@ -3,6 +3,7 @@ import {createExpressServer} from 'routing-controllers';
 import * as express from 'express';
 import * as mongoose from 'mongoose';
 import * as morgan from 'morgan';
+import * as winston from 'winston';
 import * as passport from 'passport';
 import {Express} from 'express';
 import * as Raven from 'raven';
@@ -67,7 +68,7 @@ export class Server {
     this.app.use(morgan('combined'));
 
     this.app.listen(config.port, () => {
-      process.stdout.write('--> Server successfully started at port ' + config.port);
+      winston.log('info', '--> Server successfully started at port %d', config.port);
     });
   }
 }
