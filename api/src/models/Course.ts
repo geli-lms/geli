@@ -122,6 +122,10 @@ const courseSchema = new mongoose.Schema({
             ret.students = doc.students.map((user: IUserModel) => user.forUser(currentUser));
           }
         }
+
+        ret.chatRooms = ret.chatRooms.map((chatRoom: any) => {
+            return chatRoom.toString();
+        })
       }
     }
   }
