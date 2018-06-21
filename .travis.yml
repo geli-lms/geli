@@ -76,7 +76,7 @@ script:
   - .travis/apidoc-check.sh
   # run frontend-tests and return back to root for following steps
   - cd api
-  - npm start
+  - npm start &
   - cd ../app/webFrontend
   - npm run lint        # run linter
   # - npm run test-ci || true     # run test - many tests are broken
