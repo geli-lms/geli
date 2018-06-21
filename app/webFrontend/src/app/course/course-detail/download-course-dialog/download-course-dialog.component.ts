@@ -120,9 +120,6 @@ export class DownloadCourseDialogComponent implements OnInit {
         saveAs(response.body, this.saveFileService.replaceCharInFilename(this.course.name) + '.zip');
         this.showSpinner = false;
         this.disableDownloadButton = false;
-        if (!this.keepDialogOpen) {
-          // this.dialogRef.close();
-        }
       } catch (err) {
         this.showSpinner = false;
         this.disableDownloadButton = false;
@@ -152,9 +149,6 @@ export class DownloadCourseDialogComponent implements OnInit {
         saveAs(response.body, this.saveFileService.replaceCharInFilename(this.course.name) + '.zip');
         this.showSpinner = false;
         this.disableDownloadButton = false;
-        if (!this.keepDialogOpen) {
-          this.dialogRef.close();
-        }
       } catch (err) {
         this.showSpinner = false;
         this.disableDownloadButton = false;

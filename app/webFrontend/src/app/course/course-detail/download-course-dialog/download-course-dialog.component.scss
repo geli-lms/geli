@@ -20,3 +20,7 @@
   max-width: 800px;
   padding: 0px 24px 24px 24px;
 }
+
+mat-dialog-actions button:nth-child(n+2) {
+  margin-left: 10px;
+}
