@@ -125,7 +125,7 @@ const courseSchema = new mongoose.Schema({
 
         ret.chatRooms = ret.chatRooms.map((chatRoom: any) => {
             return chatRoom.toString();
-        })
+        });
       }
     }
   }

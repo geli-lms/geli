@@ -21,27 +21,25 @@ export class MessagingInputFieldComponent implements OnInit {
   @Input() room: string;
   @Input() chatName: string;
   showEmojiPicker = false;
-
-  caretPos: number = 0;
+  caretPos = 0;
 
   form = new FormGroup({
     message: new FormControl('')
   });
 
-  constructor(private chatService: ChatService, private dialog: MatDialog, private userService: UserService,) {
+  constructor(private chatService: ChatService, private dialog: MatDialog, private userService: UserService) { }
+
+  ngOnInit() {
   }
 
-  ngOnInit () {
-  }
-
-  getCaretPos (msgTextArea) {
-    if (msgTextArea.selectionStart || msgTextArea.selectionStart == '0') {
+  getCaretPos(msgTextArea) {
+    if (msgTextArea.selectionStart || msgTextArea.selectionStart === '0') {
       this.caretPos = msgTextArea.selectionStart;
     }
   }
 
-  onClick (msgTextArea) {
-   this.getCaretPos(msgTextArea);
+  onClick(msgTextArea) {
+    this.getCaretPos(msgTextArea);
   }
 
   /**
@@ -66,7 +64,7 @@ export class MessagingInputFieldComponent implements OnInit {
     }
 
     const meta: ISocketIOMessageMeta = {
-      type: this.parentMessageId ?  SocketIOMessageType.COMMENT :  SocketIOMessageType.MESSAGE,
+      type: this.parentMessageId ? SocketIOMessageType.COMMENT : SocketIOMessageType.MESSAGE,
       parent: this.parentMessageId
     };
 
@@ -86,11 +84,11 @@ export class MessagingInputFieldComponent implements OnInit {
 
     this.chatService.send(socketIOMessage);
     this.form.setValue({
-      message: ""
+      message: ''
     });
   }
 
-  onEmojiSelected($event){
+  onEmojiSelected($event) {
     let message = this.form.getRawValue().message;
     message = message.substr(0, this.caretPos) + $event.emoji.colons + message.substr(this.caretPos);
     this.form.setValue({

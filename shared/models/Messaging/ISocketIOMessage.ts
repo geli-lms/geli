@@ -6,13 +6,13 @@ enum SocketIOMessageType {
 }
 
 interface ISocketIOMessageMeta {
-  type: SocketIOMessageType
-  parent: string
+  type: SocketIOMessageType;
+  parent: string;
 }
 
 interface ISocketIOMessage {
-  meta: ISocketIOMessageMeta
-  message: IMessage
+  meta: ISocketIOMessageMeta;
+  message: IMessage;
 }
 
-export {ISocketIOMessage, ISocketIOMessageMeta, SocketIOMessageType}
+export {ISocketIOMessage, ISocketIOMessageMeta, SocketIOMessageType};

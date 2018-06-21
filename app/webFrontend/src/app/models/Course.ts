@@ -26,7 +26,7 @@ export class Course implements ICourse {
   accessKey: string;
   hasAccessKey: boolean;
   enableChat: boolean;
-  chatRooms: IChatRoom[]
+  chatRooms: IChatRoom[];
 
   public Course(course: ICourse) {
     this._id = course._id;

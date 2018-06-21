@@ -49,7 +49,7 @@ import {UnitFactoryService} from './shared/services/unit-factory.service';
 import {ChatService} from './shared/services/chat.service';
 import {MessageService} from './shared/services/message.service';
 import {FileIconService} from './shared/services/file-icon.service';
-import {MessagingModule} from './messaging/messaging.module'
+import {MessagingModule} from './messaging/messaging.module';
 import { PrivacyComponent } from './privacy/privacy.component';
 
 // AoT requires an exported function for factories

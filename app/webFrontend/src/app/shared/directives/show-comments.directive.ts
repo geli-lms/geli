@@ -14,13 +14,13 @@ export class ShowCommentsDirective {
   }
 
   @HostListener('click') onClick() {
-    let dialogRef = this.dialog.open(CommentsDialogComponent
+    const dialogRef = this.dialog.open(CommentsDialogComponent
       , {
       data: {
         room: this.room
       },
       panelClass: 'comments-dialog'
-    })
+    });
   }
 
 }

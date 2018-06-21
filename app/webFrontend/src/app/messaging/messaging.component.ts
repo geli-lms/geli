@@ -17,7 +17,7 @@ enum MessagingMode {
   templateUrl: './messaging.component.html',
   styleUrls: ['./messaging.component.scss']
 })
-export class MessagingComponent implements OnInit,  AfterViewChecked  {
+export class MessagingComponent implements OnInit, AfterViewChecked {
 
   @Input() room: string;
   @Input() mode: MessagingMode = MessagingMode.CHAT;
@@ -50,7 +50,7 @@ export class MessagingComponent implements OnInit,  AfterViewChecked  {
   }
 
   ngAfterViewChecked() {
-    if(this.scrollToBottom){
+    if (this.scrollToBottom) {
       this.messageList.nativeElement.scrollIntoView(false);
     }
   }
@@ -61,7 +61,7 @@ export class MessagingComponent implements OnInit,  AfterViewChecked  {
       const res = await this.messageService.getMessageCount(this.queryParam);
       this.messageCount = res.count;
       const _messages = await this.messageService.getMessages(this.queryParam);
-      this.messages = this.mode === 'chat' ? _messages.reverse(): _messages;
+      this.messages = this.mode === 'chat' ? _messages.reverse() : _messages;
       this.chatName = this.getChatName();
       this.initSocketConnection();
     }
@@ -74,15 +74,15 @@ export class MessagingComponent implements OnInit,  AfterViewChecked  {
   private getChatName(): string {
     // look if user have contributed in the chat room
     // if yes return his previous chatName.
-    let match = this.messages.find((message: IMessage) => {
+    const match = this.messages.find((message: IMessage) => {
       return message.author === this.userService.user._id;
     });
 
     if (match) {
-      return match.chatName
+      return match.chatName;
     }
 
-    //if user haven't contributed in the chat generate new chatName
+    // if user haven't contributed in the chat generate new chatName
     return this.userService.user.role + Date.now();
   }
 
@@ -95,16 +95,6 @@ export class MessagingComponent implements OnInit,  AfterViewChecked  {
 
     this.ioConnection = this.chatService.onMessage()
       .subscribe(this.handleNewMessage.bind(this));
-
-    this.chatService.onEvent(SocketIOEvent.CONNECT)
-      .subscribe(() => {
-        console.log('connected');
-      });
-
-    this.chatService.onEvent(SocketIOEvent.DISCONNECT)
-      .subscribe(() => {
-        console.log('disconnected');
-      });
   }
 
   /**
@@ -113,8 +103,8 @@ export class MessagingComponent implements OnInit,  AfterViewChecked  {
    */
   handleNewMessage(socketIOMessage: ISocketIOMessage): void {
     if (socketIOMessage.meta.type === SocketIOMessageType.COMMENT) {
-      let match = this.messages.find((msg: IMessage) => {
-        return msg._id === socketIOMessage.meta.parent
+      const match = this.messages.find((msg: IMessage) => {
+        return msg._id === socketIOMessage.meta.parent;
       });
 
       if (match) {
@@ -127,23 +117,23 @@ export class MessagingComponent implements OnInit,  AfterViewChecked  {
 
 
   async loadMoreMsg() {
-    this.queryParam =  Object.assign(this.queryParam, {skip: this.messages.length});
-   const _messages: IMessage[] =  await this.messageService.getMessages(this.queryParam);
-    this.messages = (this.mode === 'chat') ? _messages.reverse().concat(this.messages): this.messages.concat(_messages.reverse());
+    this.queryParam = Object.assign(this.queryParam, {skip: this.messages.length});
+    const _messages: IMessage[] = await this.messageService.getMessages(this.queryParam);
+    this.messages = (this.mode === 'chat') ? _messages.reverse().concat(this.messages) : this.messages.concat(_messages.reverse());
     if (this.messages.length === this.messageCount) {
       this.disableInfiniteScroll = true;
     }
   }
 
 
-  async onScrollDown () {
-    if(this.mode === 'comment') {
+  async onScrollDown() {
+    if (this.mode === 'comment') {
       await this.loadMoreMsg();
     }
   }
 
-  async onScrollUp () {
-    if(this.mode === 'chat') {
+  async onScrollUp() {
+    if (this.mode === 'chat') {
       this.scrollToBottom = false;
       await this.loadMoreMsg();
     }
