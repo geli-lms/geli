@@ -1,13 +1,13 @@
 <div class="chat-container">
-  <div class="messages" #msgs  [scrollTop]="(mode === 'chat')? msgs.scrollHeight : 0"
+  <div class="messages"
        infiniteScroll
        [infiniteScrollDistance]="3"
        (scrolled)="onScrollDown($event)"
        (scrolledUp)="onScrollUp($event)"
        [scrollWindow]="false"
        [infiniteScrollDisabled]="disableInfiniteScroll">
-    <ul *ngFor="let message of messages">
-      <app-message [message]="message" [mode]="mode" [chatName]="chatName"></app-message>
+    <ul  #messageList>
+      <app-message *ngFor="let message of messages" [message]="message" [mode]="mode" [chatName]="chatName"></app-message>
     </ul>
   </div>
   <div class="chat-footer-container">

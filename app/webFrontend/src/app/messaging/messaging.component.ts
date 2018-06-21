@@ -1,4 +1,4 @@
-import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
+import {AfterViewChecked, Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
 import {IMessage} from '../../../../../shared/models/Messaging/IMessage';
 import {MessageService} from '../shared/services/message.service';
 import {ChatService} from '../shared/services/chat.service';
@@ -19,7 +19,7 @@ enum MessagingMode {
   templateUrl: './messaging.component.html',
   styleUrls: ['./messaging.component.scss']
 })
-export class MessagingComponent implements OnInit {
+export class MessagingComponent implements OnInit,  AfterViewChecked  {
 
   @Input() room: string;
   @Input() mode: MessagingMode = MessagingMode.CHAT;
@@ -27,6 +27,7 @@ export class MessagingComponent implements OnInit {
   @Input() limit = 20;
   chatName: string;
   scrollTop: number;
+  @ViewChild('messageList') messageList: ElementRef;
   messages: IMessage[] = [];
   // number of message in a given room
   messageCount: number;
@@ -37,7 +38,7 @@ export class MessagingComponent implements OnInit {
   constructor(
     private messageService: MessageService,
     private chatService: ChatService,
-    private userService: UserService
+    private userService: UserService,
   ) {
   }
 
@@ -48,6 +49,13 @@ export class MessagingComponent implements OnInit {
       order: (this.mode === MessagingMode.CHAT) ? -1 : 1
     };
     this.init();
+  }
+
+  ngAfterViewChecked() {
+    // after loading the  first 20 messages  scroll to bottom
+    if(this.messages.length === this.limit){
+      this.messageList.nativeElement.scrollIntoView(false);
+    }
   }
 
   async init() {

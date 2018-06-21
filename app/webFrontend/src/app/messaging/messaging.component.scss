@@ -37,14 +37,17 @@
 }
 
 
-.messages ul {
-  list-style-type: none;
-  display: flex;
-  flex-direction: column;
-  padding-left: 0px;
-  margin: 10px 10px;
-  li {
+.messages {
+  ul {
+    list-style-type: none;
     display: flex;
     flex-direction: column;
+    padding-left: 0px;
+    margin: 10px 10px;
+
+    li {
+      display: flex;
+      flex-direction: column;
+    }
   }
 }
