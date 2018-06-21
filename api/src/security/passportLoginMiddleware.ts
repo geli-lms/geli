@@ -1,5 +1,4 @@
 import {authenticate} from 'passport';
-import {cat} from 'shelljs';
 
 export default function passportLoginMiddleware(req: any, res: any, next: (err: any) => any) {
   const username = req.body.email;
@@ -8,7 +7,10 @@ export default function passportLoginMiddleware(req: any, res: any, next: (err: 
   debugger;
   authFunction(req, res, (err: any) => {
     if (err) {
-      if (!ldapAuthenticate(username, password)) {
+      // second authentication -> ldap
+      const result = ldapLogin(username, password);
+
+      if (result == null) {
         res.status(401).json(err); // set status and json body, does not get set automatically
         return next(err); // pass error to further error handling functions
       }
@@ -17,26 +19,74 @@ export default function passportLoginMiddleware(req: any, res: any, next: (err: 
   });
 }
 
-export function ldapAuthenticate(username: string, password: string) {
+
+export function ldapLogin(username: string, password: string) {
+  let client;
+
   try {
+    // load libs
     const ldap = require('ldapjs');
 
-    const OPTS = {
-      url: 'ldap://ldap-rr.fbi.h-da.de:389',
-      connectTimeout : 10000
-    };
-    const dn = 'cn=' + username + ',ou=people,ou=Students,dc=fbi,dc=h-da,dc=de';
-    const client = ldap.createClient(OPTS);
+    // get server settings and build search string
+    const OPTS = buildOpts();
+    const dn = buildDn(username);
+    client = ldap.createClient(OPTS);
 
-    client.bind(dn, password, function (err: object) {
+    // first authenticate then search
+    if (isLdapAuthenticated(client, dn, password){
+      ldapSearch(client, dn);
+    }
+  } catch (ex) {
+    console.log(ex);
+  } finally {
+    // force unind if exists
+    if (client != null) {
       client.unbind();
-      if (err) {
-        return false;
-      } else {
-        return true;
-      }
-    });
-  } catch (Ex) {
-    console.log(Ex);
+    }
   }
+
+}
+
+export function buildOpts() {
+  const OPTS = {
+    url: 'ldap://ldap-rr.fbi.h-da.de:389',
+    connectTimeout: 10000
+  };
+  return OPTS;
+}
+
+export function buildDn(username: string) {
+  const adSuffix = 'ou=people,ou=Students,dc=fbi,dc=h-da,dc=de';
+  const dn = 'uid=' + username + ',' + adSuffix;
+  return dn;
+}
+
+
+export function ldapSearch(client: any, dn: string) {
+  client.search(dn, (err: any, res: any) => {
+
+    res.on('searchEntry', function (entry: any) {
+      return entry.object;
+    });
+    res.on('searchReference', function (referral: any) {
+      console.log('referral: ' + referral.uris.join());
+    });
+    res.on('error', function (error: any) {
+      console.error('error: ' + error.message);
+    });
+    res.on('end', function (result: any) {
+      console.log(result);
+    });
+  });
+}
+
+export function isLdapAuthenticated(client: any, dn: string, password: string) {
+  client.bind(dn, password, function (err: object) {
+    if (err == null) {
+      return true;
+    } else {
+      return false;
+    }
+  });
+  client.unbind();
 }
