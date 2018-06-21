@@ -34,9 +34,9 @@ export class User implements IUser {
       return this.profile && this.profile.picture;
     }
 
-    getUserImageURL(size: number = 80, apiPrefix:string="api") {
+    getUserImageURL(size: number = 80, apiPrefix: string = 'api') {
         if (this.profile && this.profile.picture) {
-            return apiPrefix+'/uploads/users/' + this.profile.picture.name;
+            return apiPrefix + '/uploads/users/' + this.profile.picture.name;
         } else {
             return this.getGravatarURL(size);
         }

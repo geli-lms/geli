@@ -7,7 +7,7 @@ import {User} from '../../models/User';
 import {TitleService} from '../../shared/services/title.service';
 import {BackendService} from '../../shared/services/backend.service';
 import {saveAs} from 'file-saver/FileSaver';
-import {SnackBarService} from "../../shared/services/snack-bar.service";
+import {SnackBarService} from '../../shared/services/snack-bar.service';
 
 @Component({
   selector: 'app-user-details',
@@ -59,7 +59,7 @@ export class UserDetailsComponent implements OnInit {
 
     if (user.hasUploadedProfilePicture()) {
       const promise = <Response> await this.backendService
-        .getDownload(user.getUserImageURL(null,''))
+        .getDownload(user.getUserImageURL(null, ''))
         .toPromise();
 
       promises.push(promise);
@@ -67,7 +67,7 @@ export class UserDetailsComponent implements OnInit {
 
     const responses = await Promise.all(promises);
 
-    try{
+    try {
         if (responses[0]) {
           saveAs(responses[0].body, 'MyUserData.json');
         }
