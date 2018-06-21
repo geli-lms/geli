@@ -237,8 +237,6 @@ export class DownloadController {
   @ContentType('application/json')
   async postDownloadRequestPDF(@Body() data: IDownload, @CurrentUser() user: IUser) {
 
-
-
     const course = await Course.findOne({_id: data.courseName});
 
     if (course === null) {
@@ -297,14 +295,14 @@ export class DownloadController {
               const options = {
                 format: 'A4',
                 'border': {
-                  'left': '1cm',            // default is 0, units: mm, cm, in, px
+                  'left': '1cm',
                   'right': '1cm'
                 },
-                base: 'file://' + path.resolve(),
                 'footer': {
                   'contents': {
-                    default: '<div style="text-align: center;border-top: 1px solid;">{{page}}/{{pages}}</div>'
-                  }}
+                    default: '<div style="text-align: center;border-top: 1px solid;padding-top: 5px;">{{page}}/{{pages}}</div>'
+                  }
+                }
               };
 
               let html = '<!DOCTYPE html>\n' +
@@ -316,14 +314,10 @@ export class DownloadController {
                 '  </head>';
                 html += localUnit.toHtmlForSinglePdf();
                 html += '</html>';
-                console.log('file://' + path.resolve());
-                console.log('file://' + path.resolve() + 'src/assets/fonts/Roboto-Regular.ttf');
-                console.log(html);
               const name = lecCounter + '_' + lcName + '/' + unitCounter + '_' + this.replaceCharInFilename(localUnit.name) + '.pdf';
               await this.savePdfToFile(html, options, PDFtempPath);
 
               await this.appendToArchive(archive, name, PDFtempPath, hash);
-
 
             }
             unitCounter++;
