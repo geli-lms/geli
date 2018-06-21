@@ -76,6 +76,7 @@ script:
   - .travis/apidoc-check.sh
   # run frontend-tests and return back to root for following steps
   - cd api
+  - npm run load:fixtures
   - npm start &
   - cd ../app/webFrontend
   - npm run lint        # run linter
