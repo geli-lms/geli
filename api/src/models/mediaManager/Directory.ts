@@ -28,17 +28,17 @@ const directorySchema = new mongoose.Schema({
   timestamps: true,
   toObject: {
     transform: function (doc: IDirectoryModel, ret: any) {
-      if (ret._id instanceof ObjectID) {
+      if (!ret._id || ret._id instanceof ObjectID) {
         ret._id = ret._id.toString();
       }
       ret.subDirectories = ret.subDirectories.map((dir: any) => {
-        if (dir._id instanceof ObjectID) {
+        if (!dir._id || dir._id instanceof ObjectID) {
           dir = dir.toString();
         }
         return dir;
       });
       ret.files = ret.files.map((file: any) => {
-        if (file._id instanceof ObjectID) {
+        if (!file._id || file._id instanceof ObjectID) {
           file = file.toString();
         }
         return file;
