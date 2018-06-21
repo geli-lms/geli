@@ -61,13 +61,18 @@ notificationSettingsSchema.statics.exportPersonalData = async function(user: IUs
     .findOne({'user': user._id}, 'course notificationType emailNotification')
     .populate('course', 'name description -_id');
 
+  if(!notificationSettings){
+    return null;
+  }
+
   const notificatinSettingsObj = notificationSettings.exportJson();
   notificatinSettingsObj.course = await <any>(<ICourseModel><any>notificationSettings.course).exportJSON(true, true);
 
   return notificatinSettingsObj;
 };
 
-NotificationSettings = mongoose.model<INotificationSettingsModel, INotificationSettingsMongoose>('NotificationSettings', notificationSettingsSchema);
+NotificationSettings = mongoose.model<INotificationSettingsModel,
+  INotificationSettingsMongoose>('NotificationSettings', notificationSettingsSchema);
 
 // Ugly copy of shared/models/INotificationSettings.ts
 export const API_NOTIFICATION_TYPE_ALL_CHANGES = 'allChanges';

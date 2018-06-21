@@ -233,7 +233,7 @@ courseSchema.statics.importJSON = async function (course: ICourse, admin: IUser,
   }
 };
 
-courseSchema.statics.exportPersonalData = async function(user:IUser){
+courseSchema.statics.exportPersonalData = async function(user: IUser) {
   const conditions: any = {};
   conditions.$or = [];
   conditions.$or.push({students: user._id});
@@ -245,7 +245,7 @@ courseSchema.statics.exportPersonalData = async function(user:IUser){
   return Promise.all(courses.map(async (course: ICourseModel) => {
     return await course.exportJSON(true, true);
   }));
-}
+};
 
 
 courseSchema.methods.checkPrivileges = function (user: IUser) {

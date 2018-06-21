@@ -45,7 +45,7 @@ taskUnitProgressSchema.methods.exportJSON = async function () {
     const taskUnit = <ITaskUnitModel> await Unit.findById(localProg.unit);
 
     taskUnit.tasks.forEach(question => {
-      delete question._id
+      delete question._id;
       this.answers = question;
     });
   }

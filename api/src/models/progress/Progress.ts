@@ -3,8 +3,8 @@ import {IProgress} from '../../../../shared/models/progress/IProgress';
 import {codeKataProgressSchema} from './CodeKataProgress';
 import {taskUnitProgressSchema} from './TaskUnitProgress';
 import {IUser} from '../../../../shared/models/IUser';
-import {ICourseModel} from "../Course";
-import {IUnitModel} from "../units/Unit";
+import {ICourseModel} from '../Course';
+import {IUnitModel} from '../units/Unit';
 
 interface IProgressModel extends IProgress, mongoose.Document {
   exportJSON: () => Promise<IProgress>;

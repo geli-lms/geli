@@ -1,4 +1,4 @@
-import {Authorized, CurrentUser, Get, JsonController, NotFoundError, Param, UseBefore} from 'routing-controllers';
+import {Authorized, CurrentUser, Get, JsonController, NotFoundError, Param, Res, UseBefore} from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import {Course, ICourseModel} from '../models/Course';
 import {Lecture} from '../models/Lecture';
@@ -10,6 +10,7 @@ import {NotificationSettings} from '../models/NotificationSettings';
 import {WhitelistUser} from '../models/WhitelistUser';
 import {IProgressModel, Progress} from '../models/progress/Progress';
 import {ITaskUnitProgressModel} from '../models/progress/TaskUnitProgress';
+import {Response} from "express";
 
 @JsonController('/export')
 @UseBefore(passportJwtMiddleware)
@@ -99,7 +100,7 @@ export class ExportController {
 
   @Get('/user')
   @Authorized(['student', 'teacher', 'admin'])
-  async exportAllUserData(@CurrentUser() currentUser: IUser) {
+  async exportAllUserData(@CurrentUser() currentUser: IUser,  @Res() response: Response) {
     // load user
     const user = await User.findById(currentUser);
 
@@ -107,8 +108,18 @@ export class ExportController {
       throw new NotFoundError(`User was not found.`);
     }
 
-    //what about the profile image?
-
+    //
+    /*response.setHeader('Content-disposition', 'attachment; filename=export.json');
+    response.setHeader('Content-type', 'application/json');
+    response.send({
+      user: await user.exportPersonalData(),
+      notifications: await Notification.exportPersonalData(user),
+      notificationSettings: await NotificationSettings.exportPersonalData(user),
+      whitelists: await WhitelistUser.exportPersonalData(user),
+      courses: await Course.exportPersonalData(user),
+      progress: await Progress.exportPersonalUserData(user)
+    });
+    return response;*/
     return {
       user: await user.exportPersonalData(),
       notifications: await Notification.exportPersonalData(user),
@@ -118,5 +129,4 @@ export class ExportController {
       progress: await Progress.exportPersonalUserData(user)
     };
   }
-
 }

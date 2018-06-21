@@ -5,6 +5,8 @@ import {ActivatedRoute} from '@angular/router';
 import {UserService} from '../../shared/services/user.service';
 import {User} from '../../models/User';
 import {TitleService} from '../../shared/services/title.service';
+import {BackendService} from "../../shared/services/backend.service";
+import {saveAs} from 'file-saver/FileSaver';
 
 @Component({
   selector: 'app-user-details',
@@ -44,6 +46,12 @@ export class UserDetailsComponent implements OnInit {
     link += '/edit';
 
     return link;
+  }
+
+  async getUserDetailsExportLink(){
+    const response = <Response> await this.userDataService.exportData();
+    saveAs(response.body, 'MyUserData.json');
+    // @Todo: ProfileImage
   }
 
   getUserData() {
