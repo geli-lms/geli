@@ -44,7 +44,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Remove fs-extra dependency. [#780](https://github.com/utetrapp/geli/pull/780)
 - Use Path-Lib to extract extension from filename. [#773](https://github.com/utetrapp/geli/pull/773)
 - Add the possibility to add files directly in the file unit [#728](https://github.com/utetrapp/geli/issues/728)
-- Remove winston dependency. [#791](https://github.com/utetrapp/geli/pull/791)
 - Update validator dependency. [#791](https://github.com/utetrapp/geli/pull/791)
 
 ### Fixed
