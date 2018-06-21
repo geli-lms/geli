@@ -20,7 +20,7 @@ export default function passportLoginMiddleware(req: any, res: any, next: (err: 
 }
 
 
-export function ldapLogin(username: string, password: string) {
+function ldapLogin(username: string, password: string) {
   let client;
 
   try {
@@ -47,7 +47,7 @@ export function ldapLogin(username: string, password: string) {
 
 }
 
-export function buildOpts() {
+function buildOpts() {
   const OPTS = {
     url: 'ldap://ldap-rr.fbi.h-da.de:389',
     connectTimeout: 10000
@@ -55,14 +55,14 @@ export function buildOpts() {
   return OPTS;
 }
 
-export function buildDn(username: string) {
+function buildDn(username: string) {
   const adSuffix = 'ou=people,ou=Students,dc=fbi,dc=h-da,dc=de';
   const dn = 'uid=' + username + ',' + adSuffix;
   return dn;
 }
 
 
-export function ldapSearch(client: any, dn: string) {
+function ldapSearch(client: any, dn: string) {
   client.search(dn, (err: any, res: any) => {
 
     res.on('searchEntry', function (entry: any) {
@@ -80,7 +80,7 @@ export function ldapSearch(client: any, dn: string) {
   });
 }
 
-export function isLdapAuthenticated(client: any, dn: string, password: string) {
+function isLdapAuthenticated(client: any, dn: string, password: string) {
   client.bind(dn, password, function (err: object) {
     if (err == null) {
       return true;
