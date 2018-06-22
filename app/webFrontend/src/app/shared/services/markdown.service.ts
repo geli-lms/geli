@@ -16,9 +16,9 @@ export class MarkdownService {
     this.markdown = new MarkdownIt();
     this.markdown.use(markdownItEmoji);
     this.emojis = emojis;
-    this.markdown.renderer.rules.emoji = function (token,idx) {
+    this.markdown.renderer.rules.emoji = function (token, idx) {
       return twemoji.parse(token[idx].content);
-    }
+    };
   }
 
   render(text: string): string {
