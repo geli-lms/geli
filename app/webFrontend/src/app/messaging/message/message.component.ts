@@ -15,12 +15,14 @@ export class MessageComponent implements OnInit {
   @Input() isChildMessage = false;
   @Input() mode: string;
   @Input() chatName: string;
+  htmlMessage: any;
 
   showReplies = false;
 
   constructor(private markdownService: MarkdownService, private sanitizer: DomSanitizer, private userService: UserService) {}
 
   ngOnInit() {
+    this.sanitizer.bypassSecurityTrustHtml(this.markdownService.render(this.message.content));
   }
 
   toggleReplies() {

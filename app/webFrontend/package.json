@@ -49,7 +49,7 @@
     "ng2-ace-editor": "^0.3.8",
     "ng2-dragula": "^1.5.0",
     "ng2-file-upload": "^1.3.0",
-    "ngx-infinite-scroll": "^0.8.4",
+    "ngx-infinite-scroll": "^6.0.0",
     "ngx-lightbox": "^1.0.2",
     "node-sass": "^4.9.0",
     "raven-js": "^3.26.2",

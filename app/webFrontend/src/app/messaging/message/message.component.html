@@ -1,7 +1,7 @@
 <li class="msg">
   <div class="author">{{message.chatName}}</div>
   <div class="content">
-    <div [innerHtml]="sanitizer.bypassSecurityTrustHtml(markdownService.render(message.content))"></div>
+    <div [innerHtml]="htmlMessage"></div>
     <span class="msg-created-at">{{message.createdAt | date:'mediumDate'}}</span>
   </div>
   <div>
