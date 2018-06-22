@@ -90,10 +90,29 @@
 
       <app-password-input [form]="registerForm"></app-password-input>
 
-      <button [matTooltip]="'auth.registration.tooltipRegister' | translate" mat-raised-button color="primary" type="submit"
-              [disabled]="loading || !registerForm?.valid">{{'common.register'|translate}}
-      </button>
+      <!-- checkbox einfügen  Ich akzeptiere die Nutzungsbedingungen und Datenschutzerklärung von geli. -->
+      <mat-checkbox class="terms-checkbox"  formControlName="termsCheckbox">
+        <span class="privacy-label">
+          {{'auth.registration.acceptCheckboxes' | translate}}
+          <a target="_blank" routerLink="/legalnotice" routerLinkActive="active">
+            {{'auth.registration.termsOfUse' | translate}}
+          </a>
+        </span>
+      </mat-checkbox>
+      <mat-checkbox class="privacy-checkbox" formControlName="privacyCheckbox">
+        <span class="privacy-label">
+          {{'auth.registration.acceptCheckboxes' | translate}}
+          <a target="_blank" routerLink="/privacy" routerLinkActive="active">
+            {{'auth.registration.privacyDeclaration' | translate}}
+          </a>
+        </span>
+      </mat-checkbox>
+
     </form>
+    <button class="register-button" [matTooltip]="'auth.registration.tooltipRegister' | translate" mat-raised-button color="primary" type="submit"
+              [disabled]="loading || !registerForm?.valid">{{'common.register'|translate}}
+    </button>
+
     <div class="bottom-buttons">
       <button *ngIf="role == 'student'" mat-button type="button" routerLink="/activation-resend" routerLinkActive="active">
         {{'auth.registration.resendActivationButton'|translate}}
