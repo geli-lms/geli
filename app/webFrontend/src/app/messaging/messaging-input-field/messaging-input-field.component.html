@@ -1,5 +1,8 @@
 <div class="msg-input-container">
-  <div *ngIf="showEmojiPicker" style="width: 100%; height: 170px"><emoji-mart (emojiSelect)="onEmojiSelected($event)" [showPreview]="false" [style]="{ height: '170px', width: '100%', overflow: 'hidden'}"></emoji-mart></div>
+  <div *ngIf="showEmojiPicker" style="width: 100%; height: 170px">
+    <emoji-mart (emojiSelect)="onEmojiSelected($event)" [showPreview]="false" [style]="{ height: '170px', width: '100%', overflow: 'hidden'}" set="twitter">
+    </emoji-mart>
+  </div>
   <div class="msg-input">
     <form [formGroup]="form">
       <mat-form-field class="message-input-field">

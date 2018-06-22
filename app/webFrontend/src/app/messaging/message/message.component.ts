@@ -18,7 +18,7 @@ export class MessageComponent implements OnInit {
 
   showReplies = false;
 
-  constructor(private markdownService: MarkdownService,   private sanitizer: DomSanitizer, private userService: UserService) { }
+  constructor(private markdownService: MarkdownService, private sanitizer: DomSanitizer, private userService: UserService) {}
 
   ngOnInit() {
   }
