@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Updates
 - Updated Frontend to angular6[#716](https://github.com/utetrapp/geli/pull/766)
 - update node version in travis[#790](https://github.com/utetrapp/geli/pull/796)
+- update node image in docker [#799](https://github.com/utetrapp/geli/pull/799)
 
 ### Added
 - Course Progress can now be extracted into a csv-file. [#766](https://github.com/utetrapp/geli/pull/766)
