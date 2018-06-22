@@ -10,14 +10,12 @@ import {SocketIOEvent} from '../../../../../../shared/models/messaging/SoketIOEv
 @Injectable()
 export class ChatService {
   socket;
-  private readonly SERVER_URL =  environment.serverUrl + ':' + environment.serverPort;
-
 
   constructor(private authenticationService: AuthenticationService) {
   }
 
   public initSocket(room: string): void {
-    this.socket = socketIo(this.SERVER_URL, {
+    this.socket = socketIo({
       path: '/chat',
       query: {
         room: room,
