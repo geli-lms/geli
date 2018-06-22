@@ -6,4 +6,6 @@ export interface IMessage {
   chatName: string;
   comments: IMessage[];
   author: any;
+  updatedAt?: string;
+  createdAt?: string;
 }

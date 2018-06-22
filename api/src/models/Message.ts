@@ -1,5 +1,5 @@
 import * as mongoose from 'mongoose';
-import {IMessage} from '../../../shared/models/Messaging/IMessage';
+import {IMessage} from '../../../shared/models/messaging/IMessage';
 import {ChatRoom} from './ChatRoom';
 
 interface IMessageModel extends IMessage, mongoose.Document {

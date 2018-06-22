@@ -2,8 +2,8 @@
   <div class="messages"
        infiniteScroll
        [infiniteScrollDistance]="3"
-       (scrolled)="onScrollDown($event)"
-       (scrolledUp)="onScrollUp($event)"
+       (scrolled)="onScrollDown()"
+       (scrolledUp)="onScrollUp()"
        [scrollWindow]="false"
        [infiniteScrollDisabled]="disableInfiniteScroll">
     <ul  #messageList>

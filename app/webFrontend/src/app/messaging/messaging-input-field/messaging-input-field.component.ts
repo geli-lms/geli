@@ -7,8 +7,8 @@ import {
   ISocketIOMessage,
   ISocketIOMessageMeta,
   SocketIOMessageType
-} from '../../../../../../shared/models/Messaging/ISocketIOMessage';
-import {IMessage} from '../../../../../../shared/models/Messaging/IMessage';
+} from '../../../../../../shared/models/messaging/ISocketIOMessage';
+import {IMessage} from '../../../../../../shared/models/messaging/IMessage';
 
 
 @Component({
@@ -34,7 +34,7 @@ export class MessagingInputFieldComponent implements OnInit {
 
   getCaretPos(msgTextArea) {
     if (msgTextArea.selectionStart || msgTextArea.selectionStart === '0') {
-      this.caretPos = msgTextArea.selectionStart;
+      this.caretPos = msgTextArea.selectionStart + 1;
     }
   }
 

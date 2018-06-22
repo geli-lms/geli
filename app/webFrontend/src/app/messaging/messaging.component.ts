@@ -1,10 +1,10 @@
 import {AfterViewChecked, Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
-import {IMessage} from '../../../../../shared/models/Messaging/IMessage';
+import {IMessage} from '../../../../../shared/models/messaging/IMessage';
 import {MessageService} from '../shared/services/message.service';
 import {ChatService} from '../shared/services/chat.service';
 import {UserService} from '../shared/services/user.service';
-import {SocketIOEvent} from '../../../../../shared/models/Messaging/SoketIOEvent';
-import {ISocketIOMessage, SocketIOMessageType} from '../../../../../shared/models/Messaging/ISocketIOMessage';
+import {SocketIOEvent} from '../../../../../shared/models/messaging/SoketIOEvent';
+import {ISocketIOMessage, SocketIOMessageType} from '../../../../../shared/models/messaging/ISocketIOMessage';
 
 
 enum MessagingMode {

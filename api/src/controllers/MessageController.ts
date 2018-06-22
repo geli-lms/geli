@@ -8,7 +8,7 @@ import {
   UseBefore
 } from 'routing-controllers';
 import {IMessageModel, Message} from '../models/Message';
-import {IMessage} from '../../../shared/models/Messaging/IMessage';
+import {IMessage} from '../../../shared/models/messaging/IMessage';
 
 @JsonController('/message')
 @UseBefore(passportJwtMiddleware)

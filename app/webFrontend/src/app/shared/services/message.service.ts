@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {DataService} from './data.service';
 import {BackendService} from './backend.service';
-import {IMessage} from '../../../../../../shared/models/Messaging/IMessage';
+import {IMessage} from '../../../../../../shared/models/messaging/IMessage';
 
 
 @Injectable()
