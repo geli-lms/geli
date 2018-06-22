@@ -6,7 +6,7 @@ dist: trusty
 sudo: required
 language: node_js
 node_js:
-  - "8.11.3"
+  - "10.4.1"
 
 addons:
   apt:
@@ -58,7 +58,7 @@ install:
   # install travis dependencies
   - cd .travis
   - npm install
-  # - npm prune          # remove not (anymore) in package.json required packages (to keep the cache clean)
+  - npm prune          # remove not (anymore) in package.json required packages (to keep the cache clean)
   - cd ..
 
 script:
