@@ -13,6 +13,7 @@ export class AuthenticationService {
   public static readonly API_URL = '/api/';
 
   public token: string;
+  public mediaToken: string;
   public isLoggedIn = false;
 
   constructor(private http: HttpClient,
@@ -33,8 +34,10 @@ export class AuthenticationService {
         (response) => {
           this.userService.setUser(response['user']);
           this.token = response['token'];
+          this.mediaToken = response['mediaToken'];
           this.isLoggedIn = true;
           localStorage.setItem('token', this.token);
+          localStorage.setItem('mediaToken', this.mediaToken);
 
           resolve();
         }, (err) => {
