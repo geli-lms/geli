@@ -1,4 +1,5 @@
 import {Component, OnInit, Input, ViewChildren, QueryList, Directive, AfterViewInit, ElementRef} from '@angular/core';
+import {JwtPipe} from '../../shared/pipes/jwt/jwt.pipe';
 import {IFileUnit} from '../../../../../../shared/models/units/IFileUnit';
 import {Lightbox, IAlbum} from 'angular2-lightbox';
 
@@ -14,13 +15,13 @@ export class FileUnitComponent implements OnInit {
   videosLoaded = 0;
   smallestVideoSize = 1080;
 
-  constructor(private lightbox: Lightbox) {
+  constructor(private lightbox: Lightbox, private jwtPipe: JwtPipe) {
   }
 
   ngOnInit() {
     this.fileUnit.files.forEach(file => {
       if (this.isPicture(file.name)) {
-        const src = '/api/uploads/' + file.link;
+        const src = this.jwtPipe.transform('/api/uploads/' + file.link);
         const thumb = src;
         const caption = file.name;
         const image = {

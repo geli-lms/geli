@@ -1,6 +1,6 @@
 <div *ngIf="fileUnit.fileUnitType === 'video'">
   <div *ngFor="let file of fileUnit.files;">
-    <video class="video" (loadedmetadata)="loadedVideos($event)" src="{{'/api/uploads/' + file.link}}" controls #vid></video>
+    <video class="video" (loadedmetadata)="loadedVideos($event)" src="{{'/api/uploads/' + file.link | jwt}}" controls #vid></video>
     <!--<app-video ></app-video>-->
   </div>
 </div>
@@ -11,7 +11,7 @@
   <ul>
     <ng-container *ngFor="let file of fileUnit.files;">
       <li *ngIf="!isPicture(file.name)">
-        <a href="{{'/api/uploads/' + file.link}}" download="{{file.name}}">
+        <a href="{{'/api/uploads/' + file.link | jwt}}" download="{{file.name}}">
           <span>{{file.name}}</span>
         </a>
       </li>
