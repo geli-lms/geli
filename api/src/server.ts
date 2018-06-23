@@ -10,7 +10,7 @@ import * as Raven from 'raven';
 import config from './config/main';
 import passportLoginStrategy from './security/passportLoginStrategy';
 import passportJwtStrategy from './security/passportJwtStrategy';
-import passportJwtMiddleware from './security/passportJwtMiddleware';
+import passportJwtStrategyMedia from './security/passportJwtStrategyMedia';
 import {RoleAuthorization} from './security/RoleAuthorization';
 import {CurrentUserDecorator} from './security/CurrentUserDecorator';
 import './utilities/FilterErrorHandler';
@@ -33,6 +33,7 @@ export class Server {
   static setupPassport() {
     passport.use(passportLoginStrategy);
     passport.use(passportJwtStrategy);
+    passport.use(passportJwtStrategyMedia);
   }
 
   constructor() {
