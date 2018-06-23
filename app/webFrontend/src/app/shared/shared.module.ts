@@ -15,6 +15,7 @@ import {ButtonSaveCancelComponent} from './components/button-save-cancel/button-
 import {UploadFormComponent} from './components/upload-form/upload-form.component';
 import {FileUploadModule} from 'ng2-file-upload';
 import {FilesizePipe} from './pipes/filesize/filesize.pipe';
+import {JwtPipe} from './pipes/jwt/jwt.pipe';
 import {UploadFormDialog} from './components/upload-form-dialog/upload-form-dialog.component';
 import {ChangePasswordDialogComponent} from './components/change-password-dialog/change-password-dialog.component';
 import {MarkdownEditorComponent} from './components/markdown-editor/markdown-editor.component';
@@ -38,6 +39,9 @@ import {NotfoundComponent} from './components/notfound/notfound.component';
     FileUploadModule,
     TranslateModule,
   ],
+  providers: [
+    JwtPipe
+  ],
   declarations: [
     GravatarDirective,
     UnitMenuComponent,
@@ -50,6 +54,7 @@ import {NotfoundComponent} from './components/notfound/notfound.component';
     ButtonSaveCancelComponent,
     UploadFormComponent,
     FilesizePipe,
+    JwtPipe,
     UploadFormDialog,
     ChangePasswordDialogComponent,
     MarkdownEditorComponent,
@@ -74,6 +79,7 @@ import {NotfoundComponent} from './components/notfound/notfound.component';
     MarkdownEditorComponent,
     UploadFormComponent,
     FilesizePipe,
+    JwtPipe,
     UploadFormDialog,
     ChangePasswordDialogComponent,
     PickMediaDialog,
