@@ -55,6 +55,7 @@ export class AuthController {
 
     return {
       token: 'JWT ' + JwtUtils.generateToken(user),
+      mediaToken: 'JWT ' + JwtUtils.generateToken(user, true),
       user: user.toObject()
     };
   }
