@@ -477,7 +477,7 @@ export class UserController {
    *
    * @apiError BadRequestError There are no other users with admin privileges.
    */
-  @Authorized('admin')
+  @Authorized(['admin'])
   @Delete('/:id')
   async deleteUser(@Param('id') id: string, @CurrentUser() currentUser: IUser) {
     if (id === currentUser._id) {
