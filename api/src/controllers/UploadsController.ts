@@ -5,7 +5,7 @@ import {
 } from 'routing-controllers';
 import {Response} from 'express';
 import {promisify} from 'util';
-import passportJwtMiddleware from '../security/passportJwtMiddleware';
+import passportJwtMiddlewareMedia from '../security/passportJwtMiddlewareMedia';
 import config from '../config/main';
 import * as fs from 'fs';
 import * as path from 'path';
@@ -14,7 +14,7 @@ import * as path from 'path';
 // That route was previously handled by an unsecured (public) static route in server.ts.
 // TODO: Perhaps this functionality could be merged with another controller?
 @Controller('/uploads')
-@UseBefore(passportJwtMiddleware)
+@UseBefore(passportJwtMiddlewareMedia)
 export class UploadsController {
 
   /**
