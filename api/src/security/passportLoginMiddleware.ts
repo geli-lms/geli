@@ -1,10 +1,11 @@
 import {authenticate} from 'passport';
+import * as winston from 'winston';
 
 export default function passportLoginMiddleware(req: any, res: any, next: (err: any) => any) {
   const username = req.body.email;
   const password = req.body.password;
   const authFunction = authenticate('local', {session: false});
-  debugger;
+  
   authFunction(req, res, (err: any) => {
     if (err) {
       // second authentication -> ldap
@@ -36,10 +37,10 @@ async function ldapLogin(username: string, password: string) {
 
     // first authenticate then search
     if (isLoggedIn) {
-      ldapSearch(client, dn);
+      await this.ldapSearch(client, dn);
     }
   } catch (ex) {
-    console.log(ex);
+    console.error(ex.text);
   } finally {
     // force unbind if exists
     if (client != null) {
@@ -74,7 +75,7 @@ function ldapSearch(client: any, dn: string) {
       console.log('referral: ' + referral.uris.join());
     });
     res.on('error', function (error: any) {
-      console.error('error: ' + error.message);
+      winston.log('warn', 'error: ' + error.message);
     });
     res.on('end', function (result: any) {
       console.log(result);
@@ -83,14 +84,11 @@ function ldapSearch(client: any, dn: string) {
 }
 
 function isLdapAuthenticated(client: any, dn: string, password: string) {
-  return new Promise<boolean>((resolve, reject) => {
     client.bind(dn, password, function (err: object) {
       if (err == null) {
-        resolve(true);
+        return true;
       } else {
-        reject(false);
+        return false;
       }
     });
-  });
-
 }
