@@ -1,6 +1,6 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {ImprintAndInfoService} from '../shared/services/imprint-and-info.service';
-import {TitleService} from '../shared/services/title.service';
+import {ImprintAndInfoService} from '../../shared/services/imprint-and-info.service';
+import {TitleService} from '../../shared/services/title.service';
 
 @Component({
   selector: 'app-imprint',

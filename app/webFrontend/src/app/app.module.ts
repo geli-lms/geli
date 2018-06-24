@@ -36,7 +36,6 @@ import {AdminModule} from './admin/admin.module';
 import {ReportService} from './shared/services/data/report.service';
 import {TitleService} from './shared/services/title.service';
 import {ThemeService} from './shared/services/theme.service';
-import {LegalnoticeModule} from './legalnotice/legalnotice.module';
 import {DataSharingService} from './shared/services/data-sharing.service';
 import {NotificationModule} from './notification/notification.module';
 import {HttpClient} from '@angular/common/http';
@@ -47,8 +46,7 @@ import {SnackBarService} from './shared/services/snack-bar.service';
 import {UnitFormService} from './shared/services/unit-form.service';
 import {UnitFactoryService} from './shared/services/unit-factory.service';
 import {FileIconService} from './shared/services/file-icon.service';
-import { CookieBannerComponent } from './cookie-banner/cookie-banner.component';
-import { PrivacyComponent } from './privacy/privacy.component';
+import {PrivacyModule} from './privacy/privacy.module';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -58,8 +56,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 @NgModule({
   declarations: [
     AppComponent,
-    PrivacyComponent,
-    CookieBannerComponent
   ],
   imports: [
     BrowserModule,
@@ -72,7 +68,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     AboutModule,
     SharedModule,
     AdminModule,
-    LegalnoticeModule,
+    PrivacyModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,

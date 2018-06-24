@@ -14,12 +14,14 @@ echo
 
 cd app/webFrontend
 
+export NODE_OPTIONS=--max_old_space_size=4096 # allow up to 4gb for ng build
+
 if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
     echo "+++ in PR; do not build sourcemaps"
-    npm --max_old_space_size=4096 run build-pr
+    npm run build-pr
 else
     echo "+++ is no PR; build with sourcemaps"
-    npm --max_old_space_size=4096 run build
+    npm run build
 fi
 
 echo
