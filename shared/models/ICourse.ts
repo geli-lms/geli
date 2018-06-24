@@ -26,6 +26,5 @@ export interface ICourse {
   whitelist: IWhitelistUser[];
   enrollType: string;
   hasAccessKey: boolean;
-  enableChat: boolean;
   chatRooms: IChatRoom[];
 }

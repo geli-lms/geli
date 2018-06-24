@@ -46,9 +46,6 @@
     <div class="chat-top-bar">
       <div class="chat-heading"><mat-icon>forum</mat-icon>Forum</div>
       <div>
-        <button [matMenuTriggerFor]="chatMenu" mat-icon-button>
-          <mat-icon>settings</mat-icon>
-        </button>
         <button (click)="toggleChat()"  mat-icon-button>
           <mat-icon>close</mat-icon>
         </button>
@@ -59,7 +56,3 @@
     </div>
   </div>
 </div>
-
-<mat-menu #chatMenu>
-  <button mat-menu-item></button>
-</mat-menu>

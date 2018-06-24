@@ -105,12 +105,12 @@ $chat-header-height : 40px;
 
 
 .chat-top-bar {
-  background-color: #3f51b5;
+  background-color: $primary;
   display: flex;
   align-items: center;
   width: 100%;
   border-radius: 8px 8px 0 0;
-  border-color: #3f51b5;
+  border-color: $primary;
   height: $chat-header-height;
   color: white;
 }

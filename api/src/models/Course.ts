@@ -90,10 +90,6 @@ const courseSchema = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Picture'
     },
-    enableChat: {
-      type: Boolean,
-      default: true
-    },
     chatRooms: [{
       type: mongoose.Schema.Types.ObjectId,
       ref: 'ChatRoom'
@@ -133,7 +129,7 @@ const courseSchema = new mongoose.Schema({
 
 courseSchema.pre('save', async function () {
   const course = <ICourseModel>this;
-  if (this.isNew && course.enableChat) {
+  if (this.isNew) {
     const chatRoom: IChatRoomModel = await ChatRoom.create({
       name: 'General',
       description: 'This is a general chat for the course ' + course.name,

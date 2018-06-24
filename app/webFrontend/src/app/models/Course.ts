@@ -25,7 +25,6 @@ export class Course implements ICourse {
   enrollType: string;
   accessKey: string;
   hasAccessKey: boolean;
-  enableChat: boolean;
   chatRooms: IChatRoom[];
 
   public Course(course: ICourse) {
