@@ -1,7 +1,7 @@
 import {promisify} from 'util';
 import {Response} from 'express';
 import {
-  Body, Post, Get, NotFoundError, ContentType, UseBefore, Param, Res, Controller,
+  Body, Post, Get, NotFoundError, ForbiddenError, ContentType, UseBefore, Param, Res, Controller,
   CurrentUser
 } from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
@@ -15,8 +15,10 @@ import {Lecture} from '../models/Lecture';
 import {IUser} from '../../../shared/models/IUser';
 import {Course} from '../models/Course';
 import config from '../config/main';
+import {errorCodes} from '../config/errorCodes';
 
-const fs = require('fs');
+import * as fs from 'fs';
+import * as path from 'path';
 const archiver = require('archiver');
 import crypto = require('crypto');
 import {User} from '../models/User';
@@ -97,12 +99,19 @@ export class DownloadController {
    * @apiSuccessExample {json} Success-Response:
    *     UEsFBgAAAAAAAAAAAAAAAAAAAAAAAA==
    *
-   * @apiError NotFoundError
+   * @apiError NotFoundError File could not be found.
+   * @apiError ForbiddenError Invalid id i.e. filename (e.g. '../something').
    */
   @Get('/:id')
   async getArchivedFile(@Param('id') id: string, @Res() response: Response) {
-    // FIXME: Is this simple string concatenation with client input for filePath insecure? (Fix or add comment with justification.)
-    const filePath = config.tmpFileCacheFolder + id + '.zip';
+    const tmpFileCacheFolder = path.resolve(config.tmpFileCacheFolder);
+    const filePath = path.join(tmpFileCacheFolder, id + '.zip');
+
+    // Assures that the filePath actually points to a file within the tmpFileCacheFolder.
+    // This is because the id parameter could be something like '../forbiddenFile' ('../' via %2E%2E%2F in the URL).
+    if (path.dirname(filePath) !== tmpFileCacheFolder) {
+      throw new ForbiddenError(errorCodes.file.forbiddenPath.code);
+    }
 
     if (!fs.existsSync(filePath)) {
       throw new NotFoundError();
