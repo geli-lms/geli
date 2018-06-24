@@ -15,7 +15,6 @@ export class ShowCommentsDirective {
   }
 
   @HostListener('click') onClick() {
-    console.log(this.room, this.title)
     const dialogRef = this.dialog.open(CommentsDialogComponent
       , {
       data: {
