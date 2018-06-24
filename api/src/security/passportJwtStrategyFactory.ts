@@ -1,6 +1,7 @@
 import {ExtractJwt, JwtFromRequestFunction, Strategy as JwtStrategy, StrategyOptions, VerifiedCallback} from 'passport-jwt';
 import {UnauthorizedError} from 'routing-controllers';
 import config from '../config/main';
+import {errorCodes} from '../config/errorCodes';
 import {User} from '../models/User';
 
 interface PassportJwtStrategyFactoryOptions {
@@ -42,8 +43,7 @@ function passportJwtStrategyFactory({
   };
   const verify: VerifiedCallback = (payload, done) => {
     if (forbidMediaTokens && payload.isMediaToken) {
-      // FIXME: Error message in config?
-      done(new UnauthorizedError('Can\'t use media token for this route.'), false);
+      done(new UnauthorizedError(errorCodes.misc.mediaTokenInsufficient.code), false);
     }
     // FIXME: async await?
     User.findById(payload._id)
