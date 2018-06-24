@@ -1,10 +1,11 @@
 <div class="comment-dialog-container">
   <div class="comments-header">
-    <button class="close-comments-dialog" mat-icon-button isRoundButton="true" mat-dialog-close>
+    <div class="comments-heading"><mat-icon>forum</mat-icon>{{data.title}}</div>
+    <button (click)="toggleChat()"  isRoundButton="true"  mat-icon-button mat-dialog-close>
       <mat-icon>close</mat-icon>
     </button>
   </div>
   <div class="comment-dialog-messaging-container">
-    <app-messaging [room]="this.data.room" [mode]="'comment'" infiniteScrollDirection="down"></app-messaging>
+    <app-messaging [room]="data.room" [mode]="'comment'"></app-messaging>
   </div>
 </div>

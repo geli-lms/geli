@@ -9,6 +9,7 @@ import {CommentsDialogComponent} from '../../messaging/comments-dialog/comments-
 export class ShowCommentsDirective {
 
   @Input() room: string;
+  @Input() title: string;
 
   constructor(private dialog: MatDialog) {
   }
@@ -17,7 +18,8 @@ export class ShowCommentsDirective {
     const dialogRef = this.dialog.open(CommentsDialogComponent
       , {
       data: {
-        room: this.room
+        room: this.room,
+        title: this.title
       },
       panelClass: 'comments-dialog'
     });

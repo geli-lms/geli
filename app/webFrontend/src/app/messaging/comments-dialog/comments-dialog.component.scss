@@ -1,4 +1,6 @@
-$header-width: 30px;
+@import '../../../variables';
+
+$header-width: 45px;
 
 .close-comments-dialog {
   display: flex;
@@ -8,8 +10,12 @@ $header-width: 30px;
 
 .comments-header {
   display: flex;
-  flex-direction: row-reverse;
   height: $header-width;
+  background-color: #3f51b5;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  color: white;
 }
 
 
@@ -19,4 +25,12 @@ $header-width: 30px;
 
 .comment-dialog-messaging-container {
   height: calc(100% - #{$header-width})
+}
+
+
+.comments-heading{
+  flex: 1 1 auto;
+  font-size: .95em;
+  font-weight: 700;
+  padding: 0 0 0 15px;
 }
