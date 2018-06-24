@@ -7,6 +7,7 @@ import {Response} from 'express';
 import {promisify} from 'util';
 import passportJwtMiddlewareMedia from '../security/passportJwtMiddlewareMedia';
 import config from '../config/main';
+import {errorCodes} from '../config/errorCodes';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -67,12 +68,12 @@ export class UploadsController {
 
     // Assure that the filePath actually points to a file within prePath.
     if (fileSubPath !== path.relative(prePath, filePath)) {
-      throw new ForbiddenError(); // FIXME: Add message?
+      throw new ForbiddenError(errorCodes.file.forbiddenPath.code);
     }
 
     // Assure that the file that filePath points to exists.
     if (!fs.existsSync(filePath)) {
-      throw new NotFoundError(); // FIXME: Add message?
+      throw new NotFoundError(errorCodes.file.fileNotFound.code);
     }
 
     // The filePath seems to be valid by this point, so prepare and return the response.

@@ -97,6 +97,16 @@ export const errorCodes = {
       regex: '^(?=.*[a-zA-Z])(?=.*[$%&§=#!?*()|0-9]).{8,}$'
     }
   },
+  file: {
+    forbiddenPath: {
+      code: 'forbiddenPath',
+      text: 'Access to requested path is forbidden.'
+    },
+    fileNotFound: {
+      code: 'fileNotFound',
+      text: 'Could not find requested file.'
+    }
+  },
   upload: {
     type: {
       notCSV: {
