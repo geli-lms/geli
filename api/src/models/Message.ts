@@ -34,16 +34,12 @@ const messageSchema = new mongoose.Schema({
       transform: function (doc: any, ret: any) {
         ret._id = ret._id.toString();
         ret.author = ret.author.toString();
-        ret.room = ret.room.toString();
+
+        if (ret.hasOwnProperty('room') && ret.room) {
+          ret.room = ret.room.toString();
+        }
 
         delete ret.visible;
-/*
-        if (ret.hasOwnProperty('comments') && ret.comments) {
-           ret.comments.forEach((comment: any) => {
-             comment.toString();
-           });
-          ret.parent = ret.parent.toString();
-        }*/
       }
     }
   }

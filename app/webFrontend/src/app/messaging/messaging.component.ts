@@ -50,7 +50,7 @@ export class MessagingComponent implements OnInit, AfterViewChecked {
   }
 
   ngAfterViewChecked() {
-    if (this.scrollToBottom) {
+    if (this.scrollToBottom && this.mode === MessagingMode.CHAT) {
       this.messageList.nativeElement.scrollIntoView(false);
     }
   }
