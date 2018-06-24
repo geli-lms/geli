@@ -11,6 +11,8 @@ import {errorCodes} from '../config/errorCodes';
 import * as fs from 'fs';
 import * as path from 'path';
 
+const pathIsInside = require('path-is-inside');
+
 // Note that this isn't meant for uploading files, but for downloads from the '/api/uploads' route.
 // That route was previously handled by an unsecured (public) static route in server.ts.
 // TODO: Perhaps this functionality could be merged with another controller?
@@ -63,11 +65,11 @@ export class UploadsController {
    * @param response Response object that is to be modified for the actual file download.
    */
   async download(prePath: string, fileSubPath: string, response: Response) {
-    fileSubPath = path.normalize(fileSubPath);
-    const filePath = path.join(prePath, fileSubPath);
+    prePath = path.resolve(prePath);
+    const filePath = path.resolve(path.join(prePath, fileSubPath));
 
     // Assure that the filePath actually points to a file within prePath.
-    if (fileSubPath !== path.relative(prePath, filePath)) {
+    if (!pathIsInside(filePath, prePath)) {
       throw new ForbiddenError(errorCodes.file.forbiddenPath.code);
     }
 
