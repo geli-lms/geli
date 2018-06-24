@@ -20,7 +20,7 @@ export default function passportLoginMiddleware(req: any, res: any, next: (err: 
 }
 
 
-function ldapLogin(username: string, password: string) {
+async function ldapLogin(username: string, password: string) {
   let client;
 
   try {
@@ -32,14 +32,16 @@ function ldapLogin(username: string, password: string) {
     const dn = buildDn(username);
     client = ldap.createClient(OPTS);
 
+    const isLoggedIn = await this.isLdapAuthenticated(client, dn, password);
+
     // first authenticate then search
-    if (isLdapAuthenticated(client, dn, password){
+    if (isLoggedIn) {
       ldapSearch(client, dn);
     }
   } catch (ex) {
     console.log(ex);
   } finally {
-    // force unind if exists
+    // force unbind if exists
     if (client != null) {
       client.unbind();
     }
@@ -81,12 +83,14 @@ function ldapSearch(client: any, dn: string) {
 }
 
 function isLdapAuthenticated(client: any, dn: string, password: string) {
-  client.bind(dn, password, function (err: object) {
-    if (err == null) {
-      return true;
-    } else {
-      return false;
-    }
+  return new Promise<boolean>((resolve, reject) => {
+    client.bind(dn, password, function (err: object) {
+      if (err == null) {
+        resolve(true);
+      } else {
+        reject(false);
+      }
+    });
   });
-  client.unbind();
+
 }
