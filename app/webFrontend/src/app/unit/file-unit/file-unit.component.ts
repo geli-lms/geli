@@ -1,6 +1,6 @@
 import {Component, OnInit, Input, ViewChildren, QueryList, Directive, AfterViewInit, ElementRef} from '@angular/core';
 import {IFileUnit} from '../../../../../../shared/models/units/IFileUnit';
-import {Lightbox, IAlbum} from 'angular2-lightbox';
+import {Lightbox, IAlbum} from 'ngx-lightbox';
 import {FileIconService} from '../../shared/services/file-icon.service';
 import {IFile} from '../../../../../../shared/models/mediaManager/IFile';
 

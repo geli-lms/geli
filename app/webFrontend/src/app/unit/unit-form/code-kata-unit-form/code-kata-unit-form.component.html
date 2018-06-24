@@ -2,7 +2,7 @@
   <mat-hint>
     <mat-icon>info</mat-icon>
     {{ 'code-kata.information.info1' | translate }} "{{areaSeperator}}".
-    <br>
+    <br/>
     <mat-icon>info</mat-icon>
     {{ 'code-kata.information.info2' | translate }}
   </mat-hint>
@@ -10,7 +10,7 @@
   <ace-editor class="user-code-editor"
               #codeEditor
               formControlName="wholeInputCode"
-              [mode]="'javascript'"
+              [mode]="'markdown'"
               [theme]="'github'"
               [readOnly]="false">
   </ace-editor>
