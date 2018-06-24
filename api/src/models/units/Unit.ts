@@ -78,6 +78,8 @@ unitSchema.methods.exportJSON = function () {
   delete obj.createdAt;
   delete obj.__v;
   delete obj.updatedAt;
+  delete obj.unitCreator;
+  delete obj.files;
 
   // custom properties
   delete obj._course;
