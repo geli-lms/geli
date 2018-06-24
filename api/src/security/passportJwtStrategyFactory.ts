@@ -41,20 +41,19 @@ function passportJwtStrategyFactory({
     jwtFromRequest,
     secretOrKey: config.secret  // Telling Passport where to find the secret
   };
-  const verify: VerifiedCallback = (payload, done) => {
+  const verify: VerifiedCallback = async (payload, done) => {
     if (forbidMediaTokens && payload.isMediaToken) {
       done(new UnauthorizedError(errorCodes.misc.mediaTokenInsufficient.code), false);
     }
-    // FIXME: async await?
-    User.findById(payload._id)
-        .then((user) => {
-          if (user) {
-            done(null, {tokenPayload: payload});
-          } else {
-            done(null, false);
-          }
-        })
-        .catch(done);
+    try {
+      if (await User.findById(payload._id)) {
+        done(null, {tokenPayload: payload});
+      } else {
+        done(null, false);
+      }
+    } catch (error) {
+      done(error);
+    }
   };
 
   const jwtStrategy = new JwtStrategy(opts, verify);
