@@ -26,7 +26,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Add more tests notification ctrl [#772](https://github.com/utetrapp/geli/pull/772)
 - Added more EN/DE translation [#753](https://github.com/utetrapp/geli/issues/753)
 - Added checkboxes for accepting our terms of use and privacy declarations whil registering [#778](https://github.com/utetrapp/geli/issues/778)
-- Qucikfixed the Import/Export. You now need to manually reupload files into a fileUnit as it gets imprted as a dummy Unit (Just name and description but without files). [#42] (https://github.com/utetrapp/geli/issues/42)
+- Quickfixed the Import/Export [#42](https://github.com/utetrapp/geli/issues/42)
  
 ### Changed
 - rework existing translation
