@@ -19,12 +19,15 @@
     },
     "loginSuccess": "Login erfolgreich",
     "registration": {
+      "acceptCheckboxes": "Ich akzeptiere gelis ",
       "back": "Zurück zur Startseite",
       "mailSent": "Wir haben Ihnen einen Aktivierungslink an Ihre E-Mail-Adresse gesendet.",
+      "privacyDeclaration": "Datenschutzerklärung",
       "registerAs": "Registrieren als",
       "resendActivationButton": "Aktivierung erneut senden",
       "successful": "Registrierung erfolgreich",
       "teacherRegistrationButton": "Kein Student?",
+      "termsOfUse": "Nutzungsbedingungen",
       "tooltipRegister": "Klicken Sie hier, um Ihre Registrierung abzuschließen."
     },
     "resendActivation": {
