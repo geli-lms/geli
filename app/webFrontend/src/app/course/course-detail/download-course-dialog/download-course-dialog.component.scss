@@ -21,6 +21,21 @@
   padding: 0px 24px 24px 24px;
 }
 
-mat-dialog-actions button:nth-child(n+2) {
+.mat-dialog-actions > button:nth-child(n+3) {
   margin-left: 10px;
+}
+
+.radio-buttons{
+  margin-bottom: 15px;
+}
+
+.radio-buttons .radio-info{
+  padding: 0;
+  margin: 0;
+  font-size: 0.8em;
+  font-style: italic;
+}
+
+.radio-buttons .radio-button:nth-child(n+2){
+  margin-left: 20px;
 }

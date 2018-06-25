@@ -16,6 +16,18 @@
 </mat-dialog-content>
 </div>
 <mat-dialog-actions>
+  <div class="radio-buttons">
+    <mat-radio-group>
+      <mat-radio-button class="radio-button" value="Individual">
+        Individual PDFs
+        <p class="radio-info">One PDF per Unit</p>
+      </mat-radio-button>
+      <mat-radio-button class="radio-button" value="Single">
+        Single PDF
+        <p class="radio-info">One PDF with everything</p>
+      </mat-radio-button>
+    </mat-radio-group>
+  </div>
   <button mat-raised-button color="primary" [disabled]="this.disableDownloadButton" (click)="downloadAndClose()">Download</button>
   <button mat-raised-button color="primary" [disabled]="this.disableDownloadButton" (click)="downloadAndClosePDF()">Download PDF</button>
   <button mat-button [mat-dialog-close]="true">Cancel</button>

@@ -113,24 +113,25 @@ codeKataSchema.methods.toFile = function (): String  {
 codeKataSchema.methods.toHtmlForSinglePdf = function (): String {
   const md = new MarkdownIt({html: true});
   let html = '<body >' +
-    '<div id="pageHeader" style="text-align: center;border-bottom: 1px solid;">'
+    '<div id="pageHeader">'
     + md.render(this.name) + md.render(this.description) + '</div>';
 
 
-  html += '<div style="page-break-after: always;height:800px; position: relative">';
-  html += '<h3>Task</h3>';html += '<div>' +  md.render('<div style="border: 1px solid grey; font-family: Monaco,Menlo,source-code-pro,monospace; padding: 10px">' + this.definition + '</div>') + '</div>';
+  html += '<div id="firstPage" class="bottomBoxWrapper">';
+  html += '<h3>Task</h3>';
+  html += '<div>' +  md.render('<div class="codeBox">' + this.definition + '</div>') + '</div>';
   html += '<h3>Code</h3>';
-  html += '<div style="position: absolute; bottom: 0;"><h3>Validation</h3>';
-  html += '<div>' +  md.render('<div style="border: 1px solid grey; font-family: Monaco,Menlo,source-code-pro,monospace; padding: 10px;">' + this.test + '</div>') + '</div>';
+  html += '<div class="bottomBox"><h3>Validation</h3>';
+  html += '<div>' +  md.render('<div class="codeBox">' + this.test + '</div>') + '</div>';
   html += '</div>';
 
-  html += '</div ><div><h2>L&ouml;sungen</h2></div>';
+  html += '</div ><div><h2>Solutions</h2></div>';
   html += '<h3>Task</h3>';
-  html += '<div>' +  md.render('<div style="border: 1px solid grey; font-family: Monaco,Menlo,source-code-pro,monospace; padding: 10px">' + this.definition + '</div>') + '</div>';
+  html += '<div>' +  md.render('<div class="codeBox">' + this.definition + '</div>') + '</div>';
   html += '<h3>Code</h3>';
-  html += '<div>' +  md.render('<div style="border: 1px solid grey; font-family: Monaco,Menlo,source-code-pro,monospace; padding: 10px">' + this.code + '</div>') + '</div>';
+  html += '<div>' +  md.render('<div class="codeBox">' + this.code + '</div>') + '</div>';
   html += '<h3>Validation</h3>';
-  html += '<div>' +  md.render('<div style="border: 1px solid grey; font-family: Monaco,Menlo,source-code-pro,monospace; padding: 10px;">' + this.test + '</div>') + '</div>';
+  html += '<div>' +  md.render('<div class="codeBox">' + this.test + '</div>') + '</div>';
   html += ' </body>';
   return html;
 };

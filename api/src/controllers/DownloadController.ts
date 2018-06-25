@@ -291,7 +291,6 @@ export class DownloadController {
               }
             } else {
 
-
               const options = {
                 format: 'A4',
                 'border': {
@@ -300,7 +299,7 @@ export class DownloadController {
                 },
                 'footer': {
                   'contents': {
-                    default: '<div style="text-align: center;border-top: 1px solid;padding-top: 5px;">{{page}}/{{pages}}</div>'
+                    default: '<div id="pageFooter">{{page}}/{{pages}}</div>'
                   }
                 }
               };
@@ -309,7 +308,13 @@ export class DownloadController {
                 '<html>\n' +
                 '  <head>' +
                 '     <style>' +
+                '       #pageHeader {text-align: center;border-bottom: 1px solid;}' +
+                '       #pageFooter {text-align: center;border-top: 1px solid;padding-top: 5px;}' +
                 '       body {font-family: \'Helvetica\', \'Arial\', sans-serif; }' +
+                '       .codeBox {border: 1px solid grey; font-family: Monaco,Menlo,source-code-pro,monospace; padding: 10px}' +
+                '       #firstPage {page-break-after: always;}' +
+                '       .bottomBoxWrapper {height:800px; position: relative}' +
+                '       .bottomBox {position: absolute; bottom: 0;}' +
                 '     </style>' +
                 '  </head>';
                 html += localUnit.toHtmlForSinglePdf();
@@ -339,10 +344,10 @@ export class DownloadController {
     }
   }
 
-  private savePdfToFile(html: any, options: any, path: String ): Promise<void> {
+  private savePdfToFile(html: any, options: any, pathToFile: String ): Promise<void> {
     return new Promise<void>((resolve, reject) => {
 
-      pdf.create(html, options).toFile(PDFtempPath, async function(err: any, res: any) {
+      pdf.create(html, options).toFile(pathToFile, function(err: any, res: any) {
         if (err) { reject(err); }
         resolve();
       });
@@ -350,12 +355,12 @@ export class DownloadController {
     });
   }
 
-  private appendToArchive(archive: any, name: String, path: String, hash: any) {
+  private appendToArchive(archive: any, name: String, pathToFile: String, hash: any) {
     return new Promise<void>((resolve, reject) => {
       archive.on('entry', () => {
         resolve(); });
       archive.on('error', () => reject(hash));
-      archive.file(path,
+      archive.file(pathToFile,
         {name: name});
     });
   }

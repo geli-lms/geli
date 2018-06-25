@@ -134,7 +134,7 @@ taskUnitSchema.methods.toHtmlForSinglePdf = function (): String {
       html += '<div>' + md.render('<input type="checkbox" style="margin-right: 10px">' + answer.text) + '</div>';
     }
   }
-  html += '</div ><div><h2>L&ouml;sungen</h2></div>';
+  html += '</div ><div><h2>Solutions</h2></div>';
   counter = 1;
   for (const task of this.tasks) {
     html += '<div><h3>' +  md.render(counter + '. ' + task.name) + '</h3></div>';
