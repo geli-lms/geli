@@ -5,14 +5,19 @@ import {
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 
 import {Lecture} from '../models/Lecture';
-import {IUnitModel, Unit} from '../models/units/Unit';
+import {IUnitModel, Unit, AssignmentUnit} from '../models/units/Unit';
 import {ValidationError} from 'mongoose';
 import {IUser} from '../../../shared/models/IUser';
-import {IAssignment} from "../../../shared/models/assignment/IAssignment";
-import config from "../config/main";
-import {File} from "../models/mediaManager/File";
-import {IFile} from "../../../shared/models/mediaManager/IFile";
-import {IAssignmentUnit} from "../../../shared/models/units/IAssignmentUnit";
+import {IAssignment} from '../../../shared/models/assignment/IAssignment';
+import config from '../config/main';
+import {File} from '../models/mediaManager/File';
+import {IFile} from '../../../shared/models/mediaManager/IFile';
+import {IAssignmentUnit} from '../../../shared/models/units/IAssignmentUnit';
+
+import crypto = require('crypto');
+import {IAssignmentUnitModel} from '../models/units/AssignmentUnit';
+const multer = require('multer');
+const path = require('path');
 
 const uploadOptions = {
   storage: multer.diskStorage({
@@ -267,15 +272,15 @@ export class UnitController {
    * @apiError ValidationError
    */
   @Authorized(['student'])
-  @Post('/')
-  async addAssignment(@Body() data: IAssignment, @Param('id') id: string, @UploadedFile('file', {options: uploadOptions}) uploadedFile: any, @CurrentUser() currentUser: IUser) {
+  @Post('/:id/assignment')
+  async addAssignment(@Body() data: IAssignment, @Param('id') id: string,
+                      @UploadedFile('file', {options: uploadOptions}) uploadedFile: any,
+                      @CurrentUser() currentUser: IUser) {
 
-    const assignmentUnit
-    <AssignmentUnit> = Unit.findById(id);
-
+    const assignmentUnit = <IAssignmentUnitModel> await Unit.findById(id);
     // Check Params file etc
 
-    if (assignmentUnit || assignmentUnit.__t !== 'assignment') {
+    if (!assignmentUnit) {
       throw new NotFoundError();
     }
 
@@ -289,12 +294,12 @@ export class UnitController {
       });
       const savedFile = await new File(file).save();
 
-      assignment = new IAssignment({
+      const assignment: IAssignment = {
         file: savedFile._id,
         user: currentUser._id,
         submitted: false,
         checked: 0,
-      });
+      };
 
       assignmentUnit.assignments.push(assignment);
       assignmentUnit.save();
@@ -335,35 +340,31 @@ export class UnitController {
    * @apiError ValidationError
    */
   @Authorized(['teacher', 'admin', 'student'])
-  @Put('/:id')
+  @Put('/:id/assignment')
   async updateAssignment(@Param('id') id: string, @Body() data: IAssignment, @CurrentUser() currentUser: IUser) {
-    const unit: IAssignmentUnit = await Unit.findById(id);
+    const assignmentUnit = <IAssignmentUnitModel> await Unit.findById(id);
 
-    if (!unit || unit.__t !== 'assignment') {
+    if (!assignmentUnit) {
       throw new NotFoundError();
     }
 
-    let oldAssignment;
-
-    for (const assignment of unit.assignments) {
+    for (let assignment of assignmentUnit.assignments) {
       if (assignment.user._id === currentUser._id) {
         assignment = data;
+        try {
+          await assignmentUnit.save();
+        } catch (err) {
+          if (err.name === 'ValidationError') {
+            throw err;
+          } else {
+            throw new BadRequestError(err);
+          }
+        }
+        return;
       }
     }
 
-    if (!oldAssignment) {
       throw new NotFoundError();
-    }
-
-    try {
-      await unit.save();
-    } catch (err) {
-      if (err.name === 'ValidationError') {
-        throw err;
-      } else {
-        throw new BadRequestError(err);
-      }
-    }
   }
 
   /**
@@ -384,20 +385,20 @@ export class UnitController {
    * @apiError NotFoundError
    */
   @Authorized(['student'])
-  @Delete('/:id')
-  deleteUnit(@Param('id') id: string) {
-    const unit = await
-    Unit.findById(id);
+  @Delete('/:id/assignment')
+  async deleteAssignment(@Param('id') id: string, @CurrentUser() currentUser: IUser) {
+    const assignmentUnit = <IAssignmentUnitModel> await Unit.findById(id);
 
-    if (!unit || unit.__t !== 'assignment') {
+
+    if (!assignmentUnit) {
       throw new NotFoundError();
     }
 
-    for (const assignment of unit.assignments) {
+    for (const assignment of assignmentUnit.assignments) {
       if (assignment.user._id === currentUser._id) {
-        delete assignment;
-        await
-        unit.save();
+        const index = assignmentUnit.assignments.indexOf(assignment, 0);
+        assignmentUnit.assignments.splice(index, 1);
+        await assignmentUnit.save();
         return;
       }
     }

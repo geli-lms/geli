@@ -8,7 +8,7 @@ import {freeTextUnitSchema} from './FreeTextUnit';
 import {codeKataSchema} from './CodeKataUnit';
 import {fileUnitSchema} from './FileUnit';
 import {taskUnitSchema} from './TaskUnit';
-import {assignmentSchema} from './AssignmentUnit';
+import {assignmentsSchema} from './AssignmentUnit';
 import {IUser} from '../../../../shared/models/IUser';
 import {IProgress} from '../../../../shared/models/progress/IProgress';
 import {User} from '../User';
@@ -142,6 +142,6 @@ const FreeTextUnit = Unit.discriminator('free-text', freeTextUnitSchema);
 const CodeKataUnit = Unit.discriminator('code-kata', codeKataSchema);
 const FileUnit = Unit.discriminator('file', fileUnitSchema);
 const TaskUnit = Unit.discriminator('task', taskUnitSchema);
-const AssignmentUnit = Unit.discriminator('assignment', assignmentSchema);
+const AssignmentUnit = Unit.discriminator('assignment', assignmentsSchema);
 
 export {Unit, FreeTextUnit, CodeKataUnit, FileUnit, TaskUnit, AssignmentUnit, IUnitModel};
