@@ -1,7 +1,7 @@
-  <button mat-icon-button [matMenuTriggerFor]="notificationMenu">
-    <mat-icon  matBadge="{{notifications.length}}" matBadgeColor="accent" matBadgeOverlap="true">{{notificationIcon}}</mat-icon>
-    <!--<span *ngIf="!isNullOrUndefined(notifications)">{{notifications.length}}</span>-->
-  </button>
+<button mat-icon-button [matMenuTriggerFor]="notificationMenu">
+  <mat-icon>notifications</mat-icon>
+  <span *ngIf="!isNullOrUndefined(notifications) && notifications.length" matBadge="{{notifications.length}}" matBadgeColor="accent" matBadgeOverlap="true"></span>
+</button>
 <mat-menu #notificationMenu="matMenu">
   <span class="headline">Notifications</span>
   <span *ngIf="!isNullOrUndefined(notifications) && notifications.length > 0" class="clearButton" (click)="clearAll()">{{ 'notifications.text.clearAll' | translate }}</span>

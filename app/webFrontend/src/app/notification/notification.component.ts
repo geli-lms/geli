@@ -3,14 +3,6 @@ import {NotificationService} from '../shared/services/data.service';
 import {INotification} from '../../../../../shared/models/INotification';
 import {UserService} from '../shared/services/user.service';
 
-enum NotificationIcon {
-  NOTIFICATIONS = 'notifications',
-  ACTIVE = 'notifications_active',
-  NONE = 'notifications_none',
-  OFF = 'notifications_off',
-  PAUSED = 'notifications_paused',
-}
-
 @Component({
   selector: 'app-notification',
   templateUrl: './notification.component.html',
@@ -18,26 +10,19 @@ enum NotificationIcon {
 })
 export class NotificationComponent implements OnInit {
 
-  notificationIcon: NotificationIcon;
   notifications: Array<INotification>;
 
   constructor(private notificationService: NotificationService,
               private userService: UserService) {
-    this.notificationIcon = NotificationIcon.NONE;
     this.getNotifications();
   }
 
   ngOnInit() {
   }
 
-  getNotifications() {
-    this.notificationService.getNotificationsPerUser(this.userService.user).then(notifications => {
-      this.notifications = notifications;
-      this.sortNotifications();
-      if (this.notifications.length > 0) {
-        this.notificationIcon = NotificationIcon.ACTIVE;
-      }
-    });
+  async getNotifications() {
+    this.notifications = await this.notificationService.getNotificationsPerUser(this.userService.user);
+    this.sortNotifications();
   }
 
   async clearAll() {
@@ -96,3 +81,4 @@ function compareIds(a: any, b: any) {
   }
   return 0;
 }
+
