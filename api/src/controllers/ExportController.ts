@@ -2,7 +2,7 @@ import {Authorized, CurrentUser, Get, JsonController, NotFoundError, Param, Res,
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import {Course, ICourseModel} from '../models/Course';
 import {Lecture} from '../models/Lecture';
-import {IUnitModel, Unit} from '../models/units/Unit';
+import {Unit} from '../models/units/Unit';
 import {IUser} from '../../../shared/models/IUser';
 import {User} from '../models/User';
 import {Notification} from '../models/Notification';
@@ -104,22 +104,6 @@ export class ExportController {
     // load user
     const user = await User.findById(currentUser);
 
-    if (!user) {
-      throw new NotFoundError(`User was not found.`);
-    }
-
-    //
-    /*response.setHeader('Content-disposition', 'attachment; filename=export.json');
-    response.setHeader('Content-type', 'application/json');
-    response.send({
-      user: await user.exportPersonalData(),
-      notifications: await Notification.exportPersonalData(user),
-      notificationSettings: await NotificationSettings.exportPersonalData(user),
-      whitelists: await WhitelistUser.exportPersonalData(user),
-      courses: await Course.exportPersonalData(user),
-      progress: await Progress.exportPersonalUserData(user)
-    });
-    return response;*/
     return {
       user: await user.exportPersonalData(),
       notifications: await Notification.exportPersonalData(user),
