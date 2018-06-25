@@ -27,8 +27,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Added more EN/DE translation [#753](https://github.com/utetrapp/geli/issues/753)
 - Simple e2e test for login [#795](https://github.com/utetrapp/geli/pull/795)
 - Added checkboxes for accepting our terms of use and privacy declarations whil registering [#778](https://github.com/utetrapp/geli/issues/778)
+- Quickfixed the Import/Export [#42](https://github.com/utetrapp/geli/issues/42)
  
 ### Changed
+- Minor Fixes and Adaptations and Mergefailure fixes. [#785] (https://github.com/utetrapp/geli/issues/785)
 - rework existing translation
 - add vars to html-files
 - add translations to resource files
