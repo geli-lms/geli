@@ -18,6 +18,7 @@ import {ITaskUnit} from '../../../shared/models/units/ITaskUnit';
 import * as winston from 'winston';
 import {API_NOTIFICATION_TYPE_ALL_CHANGES, NotificationSettings} from '../../src/models/NotificationSettings';
 import {Notification} from '../../src/models/Notification';
+import {WhitelistUser} from '../../src/models/WhitelistUser';
 
 import chai = require('chai');
 import chaiHttp = require('chai-http');
@@ -177,6 +178,13 @@ describe('Export', async () => {
         user: student,
         changedCourse: course2,
         text: 'blubba blubba'
+      }).save();
+
+      await new WhitelistUser({
+        firstName: student.profile.firstName,
+        lastName: student.profile.lastName,
+        uid: student.uid,
+        courseId: course1._id
       }).save();
 
       const result = await chai.request(app)
