@@ -7,6 +7,12 @@ import {IDownload} from '../../../../../../../shared/models/IDownload';
 import {SaveFileService} from '../../../shared/services/save-file.service';
 import {saveAs} from 'file-saver/FileSaver';
 import {DataSharingService} from '../../../shared/services/data-sharing.service';
+import {MatListOption, MatSelectionList} from '@angular/material';
+import {ILecture} from '../../../../../../../shared/models/ILecture';
+import {IUnit} from '../../../../../../../shared/models/units/IUnit';
+import {ITask} from '../../../../../../../shared/models/task/ITask';
+import {ILectureModel} from '../../../../../../../api/src/models/Lecture';
+import {Input} from '@angular/compiler/src/core';
 
 @Component({
   selector: 'app-download-course-dialog',
@@ -18,11 +24,11 @@ import {DataSharingService} from '../../../shared/services/data-sharing.service'
 export class DownloadCourseDialogComponent implements OnInit {
   course: ICourse;
   chkbox: boolean;
-  keepDialogOpen = false;
   showSpinner: boolean;
   disableDownloadButton: boolean;
-  @ViewChildren(LectureCheckboxComponent)
-  childLectures: QueryList<LectureCheckboxComponent>;
+
+  lectureList: MatSelectionList;
+
 
   constructor(private downloadReq: DownloadFileService,
               public snackBar: SnackBarService,
@@ -40,51 +46,19 @@ export class DownloadCourseDialogComponent implements OnInit {
     }
   }
 
-  onChange() {
-    if (this.chkbox) {
-      this.childLectures.forEach(lecture => {
-
-        lecture.chkbox = true;
-        lecture.onChange();
-
-      });
-    } else {
-      this.childLectures.forEach(lecture => lecture.chkbox = false);
-      this.childLectures.forEach(unit => unit.onChange());
-    }
-  }
-
-  onChildEvent() {
-    const childChecked: boolean[] = [];
-
-    this.childLectures.forEach(lec => {
-      if (lec.chkbox === true && !lec.childUnits.find(unit => unit.chkbox === false)) {
-        childChecked.push(true);
-      } else {
-        childChecked.push(false);
-      }
-    });
-
-    if (childChecked.find(bol => bol === false) !== undefined) {
-      this.chkbox = false;
-    } else {
-      this.chkbox = true;
-    }
-  }
-
   calcSumFileSize(): number {
-    let sum = 0;
-    this.childLectures.forEach(lecture => {
-      lecture.childUnits.forEach(unit => {
-        if (unit.files) {
-          unit.childUnits.forEach(fileUnit => {
-            if (fileUnit.chkbox) {
-              sum = sum + fileUnit.file.size;
-            }
-          });
-        }
-      });
-    });
+     let sum = 0;
+    // this.childLectures.forEach(lecture => {
+    //   lecture.childUnits.forEach(unit => {
+    //     if (unit.files) {
+    //       unit.childUnits.forEach(fileUnit => {
+    //         if (fileUnit.chkbox) {
+    //           sum = sum + fileUnit.file.size;
+    //         }
+    //       });
+    //     }
+    //   });
+    // });
     return sum;
   }
 
@@ -104,66 +78,117 @@ export class DownloadCourseDialogComponent implements OnInit {
   }
 
   async downloadAndClose() {
-    this.disableDownloadButton = true;
-    const obj = await this.buildObject();
-    if (obj.lectures.length === 0) {
-      this.snackBar.open('No units selected!');
-      this.disableDownloadButton = false;
-      return;
-    }
-    const downloadObj = <IDownload> obj;
-    this.showSpinner = true;
-    if (this.calcSumFileSize() / 1024 < 204800) {
-      const result = await this.downloadReq.postDownloadReqForCourse(downloadObj);
-      try {
-        const response = <Response> await this.downloadReq.getFile(result.toString());
-        saveAs(response.body, this.saveFileService.replaceCharInFilename(this.course.name) + '.zip');
-        this.showSpinner = false;
-        this.disableDownloadButton = false;
-        if (!this.keepDialogOpen) {
-          // this.dialogRef.close();
-        }
-      } catch (err) {
-        this.showSpinner = false;
-        this.disableDownloadButton = false;
-        this.snackBar.openLong('Woops! Something went wrong. Please try again in a few Minutes.');
-      }
-    } else {
-      this.snackBar.openLong('Requested Download Package is too large! Please Download fewer Units in one Package.');
-      this.showSpinner = false;
-      this.disableDownloadButton = false;
-    }
+    // this.disableDownloadButton = true;
+    // const obj = await this.buildObject();
+    // if (obj.lectures.length === 0) {
+    //   this.snackBar.open('No units selected!');
+    //   this.disableDownloadButton = false;
+    //   return;
+    // }
+    // const downloadObj = <IDownload> obj;
+    // this.showSpinner = true;
+    // if (this.calcSumFileSize() / 1024 < 204800) {
+    //   const result = await this.downloadReq.postDownloadReqForCourse(downloadObj);
+    //   try {
+    //     const response = <Response> await this.downloadReq.getFile(result.toString());
+    //     saveAs(response.body, this.saveFileService.replaceCharInFilename(this.course.name) + '.zip');
+    //     this.showSpinner = false;
+    //     this.disableDownloadButton = false;
+    //     if (!this.keepDialogOpen) {
+    //       // this.dialogRef.close();
+    //     }
+    //   } catch (err) {
+    //     this.showSpinner = false;
+    //     this.disableDownloadButton = false;
+    //     this.snackBar.openLong('Woops! Something went wrong. Please try again in a few Minutes.');
+    //   }
+    // } else {
+    //   this.snackBar.openLong('Requested Download Package is too large! Please Download fewer Units in one Package.');
+    //   this.showSpinner = false;
+    //   this.disableDownloadButton = false;
+    // }
   }
 
   buildObject() {
-    const lectures = [];
-    this.childLectures.forEach(lec => {
-      if (lec.chkbox) {
-        const units = [];
-        lec.childUnits.forEach(unit => {
-          if (unit.chkbox) {
-            if (unit.unit.__t === 'file') {
-              const files = [];
-              unit.childUnits.forEach((file, index) => {
-                if (file.chkbox && !file.showDL) {
-                  files.push(file.file._id);
-                }
-              });
-              units.push({unitId: unit.unit._id, files: files});
-            } else {
-              units.push({unitId: unit.unit._id});
-            }
-          }
-        });
-        lectures.push({lectureId: lec.lecture._id, units: units});
-      }
-    });
-
-    return  {courseName: this.course._id, lectures: lectures};
+    // const lectures = [];
+    // this.childLectures.forEach(lec => {
+    //   if (lec.chkbox) {
+    //     const units = [];
+    //     lec.childUnits.forEach(unit => {
+    //       if (unit.chkbox) {
+    //         if (unit.unit.__t === 'file') {
+    //           const files = [];
+    //           unit.childUnits.forEach((file, index) => {
+    //             if (file.chkbox && !file.showDL) {
+    //               files.push(file.file._id);
+    //             }
+    //           });
+    //           units.push({unitId: unit.unit._id, files: files});
+    //         } else {
+    //           units.push({unitId: unit.unit._id});
+    //         }
+    //       }
+    //     });
+    //     lectures.push({lectureId: lec.lecture._id, units: units});
+    //   }
+    // });
+    //
+    // return  {courseName: this.course._id, lectures: lectures};
   }
 
   uncheckAll() {
-    this.chkbox = false;
-    this.onChange();
+
+    // this.chkbox = false;
+    // this.onChange();
   }
+
+  lectureChangedOrAll($event) {
+    console.dir($event);
+  }
+
+  lectureChanged($event) {
+
+  }
+
+  unitChanged($event) {
+    console.dir($event);
+    let lectureOption: MatListOption = this.getOptionWithLecture(this.getLecture($event.option.value._id));
+    let srcList: MatSelectionList = $event.source._element;
+    // let parentLecture: ILecture =
+    if ($event.source.selectedOptions.length == $event.source.options.length) {
+      //lec full anhaken.
+      lectureOption.selected = true;
+    } else if ($event.source.selectedOptions.length == 0) {
+      lectureOption.selected = false;
+    } else {
+      //partially/indeterminate
+      lectureOption.selected = true;
+    }
+  }
+
+  getLecture(unitID) {
+    this.course.lectures.forEach((lec: ILecture) => {
+      lec.units.forEach((unit: IUnit) => {
+        if (unit._id == unitID) {
+          return lec;
+        }
+      });
+    });
+
+  }
+
+  getOptionWithLecture(lecID): MatListOption {
+    console.dir(this.lectureList);
+    this.lectureList.options.forEach((opt) => {
+      if (opt.value._id == lecID) {
+        return opt;
+      }
+    });
+    return null;
+  }
+
+
+
+
+
 }
