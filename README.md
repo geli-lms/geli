@@ -2,13 +2,13 @@
 
 ![geli-Logo](.var/geli-readme-icon.png)
 
-[![GitHub release](https://img.shields.io/github/release/h-da/geli.svg)](https://github.com/h-da/geli/releases)
-[![Build Status](https://travis-ci.org/h-da/geli.svg?branch=develop)](https://travis-ci.org/h-da/geli)
-[![Coverage Status](https://coveralls.io/repos/github/h-da/geli/badge.svg?branch=develop)](https://coveralls.io/github/h-da/geli?branch=develop)
+[![GitHub release](https://img.shields.io/github/release/utetrapp/geli.svg)](https://github.com/utetrapp/geli/releases)
+[![Build Status](https://travis-ci.org/utetrapp/geli.svg?branch=develop)](https://travis-ci.org/utetrapp/geli)
+[![Coverage Status](https://coveralls.io/repos/github/utetrapp/geli/badge.svg?branch=develop)](https://coveralls.io/github/utetrapp/geli?branch=develop)
 [![Uptime Robot ratio](https://img.shields.io/uptimerobot/ratio/m779032297-cd1143fdc10b510896f2a344.svg)](https://stats.uptimerobot.com/mq8EDc8lx)
-[![Gitter chat](https://badges.gitter.im/h-da/geli.png)](https://gitter.im/mpse-geli/Lobby)
-[![DavidDM-API](https://david-dm.org/h-da/geli.svg?path=api)](https://david-dm.org/h-da/geli?path=api)
-[![DavidDM-WEB](https://david-dm.org/h-da/geli.svg?path=app/webFrontend)](https://david-dm.org/h-da/geli?path=app/webFrontend)
+[![Gitter chat](https://badges.gitter.im/utetrapp/geli.png)](https://gitter.im/mpse-geli/Lobby)
+[![DavidDM-API](https://david-dm.org/utetrapp/geli.svg?path=api)](https://david-dm.org/utetrapp/geli?path=api)
+[![DavidDM-WEB](https://david-dm.org/utetrapp/geli.svg?path=app/webFrontend)](https://david-dm.org/utetrapp/geli?path=app/webFrontend)
 
 geli is an open source e-learning platform. Try the [demo](https://demo.geli.fbi.h-da.de/)!
 

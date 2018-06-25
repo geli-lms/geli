@@ -16,8 +16,11 @@
 
       <span *ngIf="isLoggedIn()">
         <button mat-button routerLink="/profile">
-          <!-- <img class="avatar" src="{{userService.user.getUserImageURL(30)}}" width="30" height="30"> --> <!-- FIXME remove/replace -->
-          <span class="avatar" [user-image]="userService.user" [size]="'30px'"></span>
+          <img *ngIf="this.actualProfilePicturePath == '' || this.actualProfilePicturePath == null; else elseBlock"
+               class="avatar" src="{{this.userService.user.getGravatarURL(30)}}" width="30" height="30">
+          <ng-template #elseBlock>
+            <div class="user-icon" [ngStyle]="{'background-image': 'url(api/' + this.actualProfilePicturePath + ')'}"></div>
+          </ng-template>
           <span class="firstname-wrapper">{{ this.userService.user.profile.firstName }}</span>
         </button>
         <app-notification *ngIf="isStudent()" class="app-notification"></app-notification>
@@ -52,9 +55,13 @@
           <mat-icon>info</mat-icon>
           <span>{{ 'mainMenu.about' | translate }}</span>
         </button>
-        <button mat-menu-item routerLink="/imprint" routerLinkActive="active">
+        <button mat-menu-item routerLink="/legalnotice" routerLinkActive="active">
           <mat-icon>info</mat-icon>
-          <span>{{ 'mainMenu.imprint' | translate }}</span>
+          <span>{{ 'mainMenu.legalnotice' | translate }}</span>
+        </button>
+        <button mat-menu-item routerLink="/privacy" routerLinkActive="active">
+          <mat-icon>info</mat-icon>
+          <span>{{ 'mainMenu.privacy' | translate }}</span>
         </button>
         <button mat-menu-item *ngIf="isLoggedIn()" (click)="logout()" routerLink="" routerLinkActive="active">
           <mat-icon>exit_to_app</mat-icon>

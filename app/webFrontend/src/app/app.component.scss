@@ -1,5 +1,15 @@
 @import '../variables';
 
+.user-icon {
+  background-size: cover;
+  border-radius: 1.25rem;
+  display: inline-block;
+  height: 2rem;
+  margin-right: 0.5rem;
+  vertical-align: middle;
+  width: 2rem;
+}
+
 :host {
   display: flex;
   flex-direction: column;

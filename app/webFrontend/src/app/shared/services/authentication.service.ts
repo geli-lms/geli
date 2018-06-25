@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpHeaders} from '@angular/common/http';
-import 'rxjs/add/operator/map';
+
 import {UserService} from './user.service';
 import {HttpClient} from '@angular/common/http';
 import {IUser} from '../../../../../../shared/models/IUser';
@@ -33,6 +33,11 @@ export class AuthenticationService {
       .subscribe(
         (response) => {
           this.userService.setUser(response['user']);
+
+          if (response['user'].profile.picture) {
+            this.userService.updateProfilePicture(response['user'].profile.picture.path);
+          }
+
           this.token = response['token'];
           this.mediaToken = response['mediaToken'];
           this.isLoggedIn = true;

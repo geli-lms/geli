@@ -11,6 +11,7 @@ import crypto = require('crypto');
 import config from '../config/main';
 
 const multer = require('multer');
+const path = require('path');
 
 const uploadOptions = {
   storage: multer.diskStorage({
@@ -18,10 +19,8 @@ const uploadOptions = {
       cb(null, config.uploadFolder);
     },
     filename: (req: any, file: any, cb: any) => {
-      const extPos = file.originalname.lastIndexOf('.');
-      const ext = (extPos !== -1) ? `.${file.originalname.substr(extPos + 1).toLowerCase()}` : '';
       crypto.pseudoRandomBytes(16, (err, raw) => {
-        cb(err, err ? undefined : `${raw.toString('hex')}${ext}`);
+        cb(err, err ? undefined : raw.toString('hex') + path.extname(file.originalname));
       });
     }
   }),

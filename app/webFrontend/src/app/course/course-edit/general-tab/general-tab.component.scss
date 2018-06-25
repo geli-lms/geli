@@ -1,5 +1,27 @@
 @import '../../../../variables';
 
+.flex-container {
+  display: flex;
+  flex-direction: column-reverse;
+
+  @include bp(md) {
+    flex-direction: row;
+  }
+}
+
+.course-image-upload {
+  padding: 10px 0;
+
+  .course-image img {
+    max-width: 284px;
+    height: auto;
+  }
+
+  @include bp(md) {
+    padding: 0 10px;
+  }
+}
+
 .course-form {
   max-width: 700px;
 }
@@ -25,7 +47,7 @@
   }
 }
 
-.mat-input-container {
+.mat-form-field {
   width: 100%;
 
   @include bp(md) {

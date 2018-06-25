@@ -11,9 +11,9 @@
   </div>
   <div class="content">
     <app-unit-report-details *ngFor="let unit of student.progress?.units" [unit]="unit"></app-unit-report-details>
-    <p *ngIf="student.progress?.units.length === 0">There are no submissions for this user.</p>
+    <p *ngIf="student.progress?.units.length === 0">{{ 'report.noSubmissions' | translate}}</p>
   </div>
 </div>
 <div *ngIf="report?.length === 0">
-  <p>There are no students enrolled to this course.</p>
+  <p>{{ 'report.noStudents' | translate}}</p>
 </div>

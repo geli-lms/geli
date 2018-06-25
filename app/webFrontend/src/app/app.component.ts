@@ -3,7 +3,7 @@ import {UserService} from './shared/services/user.service';
 import {AuthenticationService} from './shared/services/authentication.service';
 import {ShowProgressService} from './shared/services/show-progress.service';
 import {Router} from '@angular/router';
-import {APIInfoService} from './shared/services/data.service';
+import {APIInfoService, UserDataService} from './shared/services/data.service';
 import {APIInfo} from './models/APIInfo';
 import {isNullOrUndefined} from 'util';
 import {RavenErrorHandler} from './shared/services/raven-error-handler.service';
@@ -11,16 +11,19 @@ import {SnackBarService} from './shared/services/snack-bar.service';
 import {ThemeService} from './shared/services/theme.service';
 import {TranslateService} from '@ngx-translate/core';
 
+const md5 = require('blueimp-md5');
+
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
 
   title = 'app works!';
   showProgressBar = false;
   apiInfo: APIInfo;
+  actualProfilePicturePath: any;
 
   constructor(private router: Router,
               private authenticationService: AuthenticationService,
@@ -54,6 +57,23 @@ export class AppComponent implements OnInit {
       .catch((err) => {
         this.snackBar.open('Could not connect to backend', null);
       });
+
+    this.updateCurrentUser();
+
+    this.userService.data.subscribe(actualProfilePicturePath => {
+      this.actualProfilePicturePath = actualProfilePicturePath;
+
+      if (this.actualProfilePicturePath === undefined && this.userService.user.profile.picture) {
+        this.actualProfilePicturePath = this.userService.user.profile.picture.path;
+      }
+    });
+  }
+
+  updateCurrentUser() {
+    const storedUser = JSON.parse(localStorage.getItem('user'));
+    if (storedUser) {
+      this.userService.setUser(storedUser);
+    }
   }
 
   changeLanguage(lang: string) {

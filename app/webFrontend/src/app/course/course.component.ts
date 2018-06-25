@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import 'rxjs/add/operator/switchMap';
+
 import {UserService} from '../shared/services/user.service';
 import {ICourseDashboard, ENROLL_TYPE_ACCESSKEY} from '../../../../../shared/models/ICourseDashboard';
 import {Router} from '@angular/router';
@@ -9,6 +9,7 @@ import {AccessKeyDialog} from '../shared/components/access-key-dialog/access-key
 import {CourseService} from '../shared/services/data.service';
 import {DialogService} from '../shared/services/dialog.service';
 import {ShowProgressService} from '../shared/services/show-progress.service';
+import {IResponsiveImageData} from '../../../../../shared/models/IResponsiveImageData';
 
 @Component({
   selector: 'app-course',
@@ -25,6 +26,8 @@ export class CourseComponent {
   @Output()
   onLeave = new EventEmitter();
 
+  responsiveImageData: IResponsiveImageData;
+
   constructor(public userService: UserService,
               private router: Router,
               private dialog: MatDialog,
@@ -32,6 +35,15 @@ export class CourseComponent {
               private dialogService: DialogService,
               private showProgress: ShowProgressService,
               private courseService: CourseService) {
+  }
+
+  ngOnInit() {
+    if (this.course.image) {
+      this.responsiveImageData = {
+        breakpoints: this.course.image.breakpoints,
+        pathToImage: ''
+      };
+    }
   }
 
   editCourse(id: string) {
