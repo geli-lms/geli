@@ -110,10 +110,9 @@ codeKataSchema.methods.toFile = function (): String  {
     + '\n' + this.test;
 };
 
-codeKataSchema.methods.toHtmlForSinglePdf = function (): String {
+codeKataSchema.methods.toHtmlForIndividualPdf = function (): String {
   const md = new MarkdownIt({html: true});
-  let html = '<body >' +
-    '<div id="pageHeader">'
+  let html = '<div id="pageHeader">'
     + md.render(this.name) + md.render(this.description) + '</div>';
 
 
@@ -132,7 +131,6 @@ codeKataSchema.methods.toHtmlForSinglePdf = function (): String {
   html += '<div>' +  md.render('<div class="codeBox">' + this.code + '</div>') + '</div>';
   html += '<h3>Validation</h3>';
   html += '<div>' +  md.render('<div class="codeBox">' + this.test + '</div>') + '</div>';
-  html += ' </body>';
   return html;
 };
 

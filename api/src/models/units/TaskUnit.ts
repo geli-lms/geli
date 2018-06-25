@@ -119,10 +119,9 @@ taskUnitSchema.methods.toFile = function(): String {
   return fileStream;
 };
 
-taskUnitSchema.methods.toHtmlForSinglePdf = function (): String {
+taskUnitSchema.methods.toHtmlForIndividualPdf = function (): String {
   const md = new MarkdownIt({html: true});
-  let html = '<body>' +
-    '<div id="pageHeader" style="text-align: center;border-bottom: 1px solid">'
+  let html = '<div id="pageHeader" style="text-align: center;border-bottom: 1px solid">'
     + md.render(this.name) + md.render(this.description ? null : '') + '</div>';
 
   let counter = 1;
@@ -147,7 +146,7 @@ taskUnitSchema.methods.toHtmlForSinglePdf = function (): String {
       html += '<div>' + md.render('<input type="checkbox" style="margin-right: 10px;" ' + checked + '>' + answer.text) + '</div>';
     }
   }
-  html += ' </body>';
+
   return html;
 };
 

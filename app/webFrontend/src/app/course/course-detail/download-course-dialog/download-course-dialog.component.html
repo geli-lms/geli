@@ -17,7 +17,7 @@
 </div>
 <mat-dialog-actions>
   <div class="radio-buttons">
-    <mat-radio-group>
+    <mat-radio-group [(ngModel)]="radioSelect">
       <mat-radio-button class="radio-button" value="Individual">
         Individual PDFs
         <p class="radio-info">One PDF per Unit</p>

@@ -23,6 +23,7 @@ export class DownloadCourseDialogComponent implements OnInit {
   disableDownloadButton: boolean;
   @ViewChildren(LectureCheckboxComponent)
   childLectures: QueryList<LectureCheckboxComponent>;
+  radioSelect: string;
 
   constructor(private downloadReq: DownloadFileService,
               public snackBar: SnackBarService,
@@ -35,6 +36,7 @@ export class DownloadCourseDialogComponent implements OnInit {
     this.showSpinner = false;
     this.disableDownloadButton = false;
     this.chkbox = false;
+    this.radioSelect = 'Individual';
     if (!this.checkForEmptyLectures()) {
       this.disableDownloadButton = true;
     }
@@ -143,8 +145,16 @@ export class DownloadCourseDialogComponent implements OnInit {
     const downloadObj = <IDownload> obj;
     this.showSpinner = true;
     if (this.calcSumFileSize() / 1024 < 204800) {
-      const result = await this.downloadReq.postDownloadReqForCoursePDF(downloadObj);
       try {
+        let result;
+        if(this.radioSelect === 'Individual')
+        {
+          result = await this.downloadReq.postDownloadReqForCoursePDFIndividual(downloadObj);
+        }
+        else if(this.radioSelect === 'Single')
+        {
+          result = await this.downloadReq.postDownloadReqForCoursePDFSingle(downloadObj);
+        }
         const response = <Response> await this.downloadReq.getFile(result.toString());
         saveAs(response.body, this.saveFileService.replaceCharInFilename(this.course.name) + '.zip');
         this.showSpinner = false;
