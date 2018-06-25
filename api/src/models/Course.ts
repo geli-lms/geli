@@ -131,13 +131,10 @@ courseSchema.pre('remove', async function () {
       const lecDoc = await Lecture.findById(lec);
       await lecDoc.remove();
     }
-
     if (localCourse.image) {
         const picture: any = await Picture.findById(localCourse.image);
         await picture.remove();
     }
-
-
   } catch (error) {
     winston.log('warn', 'course (' + localCourse._id + ') cloud not be deleted!');
     throw new Error('Delete Error: ' + error.toString());
@@ -148,12 +145,12 @@ courseSchema.methods.exportJSON = async function (sanitize: boolean = true, only
   const obj = this.toObject();
 
   // remove unwanted informations
-
   // mongo properties
   delete obj._id;
   delete obj.createdAt;
   delete obj.__v;
   delete obj.updatedAt;
+  delete obj.media;                            
 
   // custom properties
   if (sanitize) {
