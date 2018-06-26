@@ -1,2 +1,18 @@
 <ng-container [formGroup]="unitForm">
+    <app-upload-form [uploadMethod]="'POST'"
+                     [uploadPath]="uploadPath"
+                     [additionalData]="null"
+                     [allowedMimeTypes]="allowedMimeTypes"
+                     [uploadSingleFile]="true"
+                     [maxFileNumber]="1"
+                     (onFileUploaded)="onFileUploaded($event)"
+                     (onAllUploaded)="onAllUploaded()"
+    ></app-upload-form>
+    <div class="upload-button-group">
+        <button mat-raised-button color="primary" (click)="startUpload()" [disabled]="!isObjectInQueue()">
+            <mat-icon>file_upload</mat-icon>
+            {{ 'file.text.infoDropAddFiles' | translate }}
+        </button>
+        <button mat-raised-button (click)="cancel()">Cancel</button>
+    </div>
 </ng-container>
