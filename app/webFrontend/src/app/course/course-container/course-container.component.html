@@ -1,16 +1,18 @@
-<div class="title-header" (click)="changeExpand()"><h1>{{title}}</h1>
-
-  <app-badge [displayNumber]="courses.length"></app-badge>
-
-  <button class="open-toggle" [class.opened]="expand" mat-icon-button>
-    <mat-icon class="arrow">
-      arrow_drop_down
-    </mat-icon>
-  </button></div>
+<div class="title-header" (click)="changeExpand()">
+  <h1>{{title}}</h1>
+  <div *ngIf="courses.length" matBadge="{{courses.length}}" matBadgeSize="medium">
+    <button [class.opened]="expand" mat-icon-button class="open-toggle">
+      <mat-icon class="arrow">
+        arrow_drop_down
+      </mat-icon>
+    </button>
+  </div>
+</div>
 
 
 <div class="courses" *ngIf="expand">
   <p class="subtitle" *ngIf="!courses.length">{{ 'course.text.noCourses' | translate }}</p>
-  <app-course *ngFor="let course of courses" [course]="course" (onLeave)="leaveCallback($event)" (onEnroll)="enrollCallback($event)"></app-course>
+  <app-course *ngFor="let course of courses" [course]="course" (onLeave)="leaveCallback($event)"
+              (onEnroll)="enrollCallback($event)"></app-course>
 </div>
 
