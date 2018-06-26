@@ -19,7 +19,6 @@ import {ICourse} from '../../../shared/models/ICourse';
 import {ICourseDashboard} from '../../../shared/models/ICourseDashboard';
 import {ICourseView} from '../../../shared/models/ICourseView';
 import {IUser} from '../../../shared/models/IUser';
-import {ObsCsvController} from './ObsCsvController';
 import {Course} from '../models/Course';
 import {WhitelistUser} from '../models/WhitelistUser';
 import emailService from '../services/EmailService';
@@ -67,8 +66,6 @@ const coursePictureUploadOptions = {
 @JsonController('/courses')
 @UseBefore(passportJwtMiddleware)
 export class CourseController {
-
-  parser: ObsCsvController = new ObsCsvController();
 
   /**
    * @api {get} /api/courses/ Request courses of current user

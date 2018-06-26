@@ -15,7 +15,6 @@ import {IUser} from '../../../shared/models/IUser';
 
 const multer = require('multer');
 import crypto = require('crypto');
-import {ObsCsvController} from './ObsCsvController';
 
 
 const uploadOptions = {
@@ -38,9 +37,6 @@ const uploadOptions = {
 @UseBefore(passportJwtMiddleware)
 export class WitelistController {
 
-  parser: ObsCsvController = new ObsCsvController();
-
-
   @Get('/check/:whitelist')
   @Authorized(['teacher', 'admin'])
   async checkWhitelistForExistingStudents(@Body() data: any,
@@ -54,39 +50,6 @@ export class WitelistController {
     return whitelistToCheck;
   }
 
-  /**
-   * @api {post} /api/courses/:id/whitelist Whitelist students for course
-   * @apiName PostCourseWhitelist
-   * @apiGroup Course
-   * @apiPermission teacher
-   * @apiPermission admin
-   *
-   * @apiParam {String} id Course ID.
-   * @apiParam {Object} file Uploaded file.
-   *
-   * @apiSuccess {Object} result Returns the new whitelist length.
-   *
-   * @apiSuccessExample {json} Success-Response:
-   *    {
-   *      newlength: 10
-   *    }
-   *
-   * @apiError TypeError Only CSV files are allowed.
-   * @apiError HttpError UID is not a number 1.
-   * @apiError ForbiddenError Unauthorized user.
-   */
-  @Authorized(['teacher', 'admin'])
-  @Post('/parse')
-  async whitelistStudents(
-    @UploadedFile('file', {options: uploadOptions}) file: any,
-    @CurrentUser() currentUser: IUser) {
-    const name: string = file.originalname;
-    if (!name.endsWith('.csv')) {
-      throw new TypeError(errorCodes.upload.type.notCSV.code);
-    }
-
-    return <string> await this.parser.parseFile(file);
-  }
   /**
    * @api {get} /api/whitelist/:id Request whitelist user
    * @apiName GetWhitelistUser
