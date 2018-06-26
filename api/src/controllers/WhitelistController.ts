@@ -17,9 +17,6 @@ const multer = require('multer');
 import crypto = require('crypto');
 import {ObsCsvController} from './ObsCsvController';
 
-function escapeRegex(text: string) {
-  return text.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
-}
 
 const uploadOptions = {
   storage: multer.diskStorage({

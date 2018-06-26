@@ -19,12 +19,15 @@
     },
     "loginSuccess": "Login successful",
     "registration": {
+      "acceptCheckboxes": "I accept gelis ",
       "back": "Back to frontpage",
       "mailSent": "We have sent you an activation link to your specified email address.",
+      "privacyDeclaration": "privacy declaration",
       "registerAs": "Register as",
       "resendActivationButton": "Resend activation",
       "successful": "Registration was successful",
       "teacherRegistrationButton": "Not a student?",
+      "termsOfUse": "terms of use",
       "tooltipRegister": "Click here to complete your registration."
     },
     "resendActivation": {
@@ -66,22 +69,25 @@
     "cheatSheetYouFind": "A cheat sheet you can find ",
     "continue": "Continue",
     "content": "Content",
+    "course": "Course",
     "close": "Close",
     "delete": "Delete",
     "description": "Description",
     "discard": "Discard",
     "dismiss": "Dismiss",
     "download": "Download",
+    "documents": "Documents",
     "duplicate": "Duplicate",
     "edit": "Edit",
     "editProfile": "Edit profile",
     "email": "Email",
     "export": "Export",
+    "folder": "Folder",
     "fullscreenMode": "Fullscreen Mode",
     "geli": "geli",
     "general": "General",
     "here": "here",
-    "imprint": "imprint",
+    "legalnotice": "Legal notice",
     "infobox": "InfoBox",
     "login": "Login",
     "name": "Name",
@@ -90,7 +96,9 @@
     "members": "Members",
     "ok": "OK",
     "open": "Open",
+    "openInTab" : "Open in new Tab",
     "password": "Password",
+    "privacy": "Privacy",
     "profile": "Profile",
     "profileDetails": {
       "firstName": "First name",
@@ -101,6 +109,7 @@
     "question": "Question",
     "register": "Register",
     "reset": "Reset",
+    "rename" : "Rename",
     "role": "Role",
     "roles": {
       "student": "Student",
@@ -130,10 +139,12 @@
       "password": "Password must have at least 8 characters which contain one special character and one digit.",
       "passwordsMatch": "Passwords do not match.",
       "required": "Input required"
-    }
+    },
+    "videos": "Videos"
   },
   "course": {
     "delete": "Delete course",
+    "uploadImage": "Upload course image",
     "search": "Search Courses",
     "placeholder": {
       "accessKey": "Access key",
@@ -146,10 +157,13 @@
       "addMarkdownToCourse": "Add markdown to add text to this course.",
       "canNotSeenByStudents": "Course cannot be seen by students.",
       "canSeenByStudents": "Course can be seen by students.",
+      "downloadHelpText": "Select units or files which you want to download in a zip",
+      "downloadNoFiles": "Für diesen Kurs steht kein Material zum herunterladen bereit!",
       "editCourse": "Edit course",
       "enterAccessKey": "Please enter the course's access key.",
       "enterAccessKeyForStudents": "Enter an access key for the students.",
       "goToCourse": "Go to course",
+      "hasBeenDeleted": "has been deleted.",
       "inCourse": "In Course",
       "infoWhitelist": "All users on this list are allowed to join this course.",
       "isFreeForEveryone": "The course is free and accessible for everyone.",
@@ -169,8 +183,8 @@
       "userResults": "User results",
       "yourCourseProgress": "Your course progress",
       "whitelist": "Whitelist",
-      "noVideosAttached": "There are no videos attached to this course yet ☹",
-      "noFilesAttached": "There are no files attached to this course yet ☹"
+      "noVideosAttached": "There are no videos attached to this course yet",
+      "noFilesAttached": "There are no files attached to this course yet"
     },
     "tooltip": {
       "add": "Add Course",
@@ -196,7 +210,7 @@
   "errorPage": {
     "text": {
       "pageNotFound": "Page not found :(",
-      "pageNotFoundHint": "Maybe the page you are looking for a page has been removed."
+      "pageNotFoundHint": "Maybe the page you are looking for has been removed."
     }
   },
   "file": {
@@ -209,12 +223,13 @@
       "filename": "File name",
       "filesize": "File size",
       "fileRemove": "Remove File",
-      "filesSelected": "File selected",
-      "infoDropAddFiles": "Drop files here or click here to select files.",
+      "filesSelected" : "File selected",
+      "infoDropAddFiles": "Drop files here or click here to upload files.",
       "noVideo": "No video available.",
       "noFiles": "No files available.",
       "progress": "Progress",
       "removeFromQueue": "Remove file from queue.",
+      "selectAll" : "Select all",
       "takePicture": "Take picture"
     },
     "tooltip": {
@@ -253,8 +268,9 @@
   "mainMenu": {
     "about": "About",
     "admin": "Admin",
-    "imprint": "Imprint",
+    "legalnotice": "Legal notice",
     "logout": "Logout",
+    "privacy": "Privacy",
     "userSettings": "Settings"
   },
   "notifications": {
@@ -262,6 +278,19 @@
       "clearAll": "Clear all",
       "noNotifications": "You have no notifications"
     }
+  },
+  "report": {
+    "exportToCsv": "Export to CSV",
+    "noProgressableUnits": "This course contains no progressable units.",
+    "noStudents": "There are no students enrolled to this course.",
+    "noSubmissions": "There are no submissions for this user.",
+    "notProgressable": "This course does not contain any progressable units."
+  },
+  "snackbarMessages": {
+    "chooseJson": "Select a course.json file for import.",
+    "importSuccess": "Course Successfully imported!",
+    "AreYouSure": "Are you sure you want to",
+    "dismiss": "Dismiss."
   },
   "sort": {
     "alphabetically": "alphabetically",
@@ -274,7 +303,7 @@
     "addCodeKata": "Add code-kata",
     "addContent": "Add content",
     "addFiles": "Add files",
-    "addFilesToUnit": "Add files to unit",
+    "addFilesToUnit": "Add selected files to unit",
     "addFreeText": "Add free text",
     "addTasks": "Add tasks",
     "addVideos": "Add videos",
@@ -317,7 +346,7 @@
       "signedIn": "Signed in"
     },
     "tooltip": {
-      "deleteUSers": "Delete selected Members.",
+      "deleteUsers": "Delete selected Members.",
       "toggleMembers": "Toggle all members"
     }
   }

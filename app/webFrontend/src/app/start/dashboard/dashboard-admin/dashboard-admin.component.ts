@@ -7,7 +7,9 @@ import {SortUtil} from '../../../shared/utils/SortUtil';
 import {ICourseDashboard} from '../../../../../../../shared/models/ICourseDashboard';
 import {CourseNewComponent} from '../../../course/course-new/course-new.component';
 import {MatDialog} from '@angular/material';
+import {TranslateService} from '@ngx-translate/core';
 import {UserService} from '../../../shared/services/user.service';
+
 
 @Component({
   selector: 'app-dashboard-admin',
@@ -23,7 +25,8 @@ export class DashboardAdminComponent extends DashboardBaseComponent {
               public userService: UserService,
               private router: Router,
               private dialogService: DialogService,
-              private dialog: MatDialog) {
+              private dialog: MatDialog,
+              public translate: TranslateService) {
     super();
   }
 
@@ -49,18 +52,22 @@ export class DashboardAdminComponent extends DashboardBaseComponent {
   }
 
   onImportCourse = () => {
-    this.dialogService
-      .chooseFile('Choose a course.json to import',
-        '/api/import/course/')
-      .subscribe(res => {
-        if (res.success) {
-          this.snackBar.open('Course successfully imported');
-          const url = '/course/' + res.result._id + '/edit';
-          this.router.navigate([url]);
-        } else if (res.result) {
-          this.snackBar.open(res.result.message);
-        }
-      });
+    const lang = localStorage.getItem('lang') || this.translate.getBrowserLang() || this.translate.getDefaultLang();
+    this.translate.use(lang);
+    this.translate.get(['snackbarMessages.chooseJson', 'snackbarMessages.importSuccess']).subscribe((t: string) => {
+      this.dialogService
+        .chooseFile(t['snackbarMessages.chooseJson'],
+          '/api/import/course/')
+        .subscribe(res => {
+          if (res.success) {
+            this.snackBar.open(t['snackbarMessages.importSuccess']);
+            const url = '/course/' + res.result._id + '/edit';
+            this.router.navigate([url]);
+          } else if (res.result) {
+            this.snackBar.open(res.result.message);
+          }
+        });
+    });
   }
 
   createCourse() {

@@ -1,4 +1,6 @@
 import {NgModule} from '@angular/core';
+import {MatBadgeModule} from '@angular/material/badge';
+
 import {
   MatAutocompleteModule,
   MatButtonModule,
@@ -54,6 +56,7 @@ import {CustomDateAdapter} from '../classes/CustomDateAdapter';
     MatTooltipModule,
     MatProgressSpinnerModule,
     MatChipsModule,
+    MatBadgeModule
   ],
   exports: [
     MatAutocompleteModule,
@@ -80,6 +83,7 @@ import {CustomDateAdapter} from '../classes/CustomDateAdapter';
     MatTooltipModule,
     MatProgressSpinnerModule,
     MatChipsModule,
+    MatBadgeModule
   ],
   providers: [
     {provide: DateAdapter, useClass: CustomDateAdapter},

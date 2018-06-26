@@ -6,7 +6,7 @@ dist: trusty
 sudo: required
 language: node_js
 node_js:
-  - "8.9.0"
+  - "10.4.1"
 
 addons:
   apt:
@@ -81,7 +81,8 @@ script:
   - npm run e2e         # run end-to-end-tests
   - sed -i 's/$TRAVIS_COMMIT/'$TRAVIS_COMMIT'/' src/app/shared/services/raven-error-handler.service.ts
   - cd ../..
-  - travis_wait 30 .travis/build-fe.sh       # build in prod mode
+#  - travis_wait 30 .travis/build-fe.sh       # build in prod mode
+  - .travis/build-fe.sh       # build in prod mode
 
 after_script:
   # send required files to coveralls.io
