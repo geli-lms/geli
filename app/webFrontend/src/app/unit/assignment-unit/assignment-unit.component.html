@@ -16,3 +16,7 @@
         <button mat-raised-button (click)="cancel()">Cancel</button>
     </div>
 </ng-container>
+<button mat-raised-button color="primary" [disabled]="isSubmited()" (click)="submitAssignment()" >{{ 'unit.submitAss' | translate }}</button>
+<button mat-raised-button color="warn" [disabled]="isSubmited()" (click)="deleteAssignment()" matTooltip="{{'unit.deleteAssignment' | translate}}">
+  <mat-icon>delete</mat-icon>
+</button>

@@ -60,4 +60,32 @@ export class AssignmentUnitComponent implements OnInit {
             return this.uploadForm.fileUploader.queue.length > 0;
         }
     }
+
+    public isSubmited() {
+      if (!this.assignmentUnit.assignments.length) {
+        return true;
+      } else {
+        if(this.assignmentUnit.assignments[0].submitted) {
+          return true;
+        }
+        return false;
+      }
+    }
+
+    public deleteAssignment() {
+      // Call service!
+    }
+
+    public canBeDeleted() {
+      if (this.assignmentUnit.assignments.length) {
+        return true;
+      } else {
+        return false;
+      }
+
+    }
+
+    public submitAssignment() {
+      // call put in service
+    }
 }

@@ -308,6 +308,8 @@
     "addTasks": "Add tasks",
     "addVideos": "Add videos",
     "addAssignment": "Add assignment",
+    "submitAss": "Submit Assignment",
+    "deleteAssignment": "Delete Assignment",
     "import": "Import unit",
     "placeholder": {
       "enterAnswer": "Enter answer here*",

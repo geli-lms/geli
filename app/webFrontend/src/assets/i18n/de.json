@@ -308,6 +308,8 @@
     "addTasks": "Aufgaben hinzufügen",
     "addVideos": "Videos hinzufügen",
     "addAssignment": "Abgabe hinzufügen",
+    "submitAss": "Aufgabe abgeben",
+    "deleteAssignment": "Aufgabe Löschen",
     "import": "Lerneinheit importieren",
     "placeholder": {
       "enterAnswer": "Antwort hier eintragen*",

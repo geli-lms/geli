@@ -51,7 +51,9 @@ assignmentsSchema.methods.secureData = async function (user: IUser): Promise<IAs
      }
 
      this.assignments = [];
-     this.assignments.push(assignmentToUse);
+     if (assignmentToUse) {
+       this.assignments.push(assignmentToUse);
+     }
    }
    return this;
 };
