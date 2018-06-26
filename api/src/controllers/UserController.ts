@@ -3,7 +3,8 @@ import {
   BadRequestError, ForbiddenError, InternalServerError, NotFoundError, UploadedFile, Post
 } from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
-import fs = require('fs');
+import * as fs from 'fs';
+import * as path from 'path';
 import {IUser} from '../../../shared/models/IUser';
 import {IUserModel, User} from '../models/User';
 import {isNullOrUndefined} from 'util';
@@ -16,7 +17,7 @@ const multer = require('multer');
 const uploadOptions = {
   storage: multer.diskStorage({
     destination: (req: any, file: any, cb: any) => {
-      cb(null, 'uploads/users/');
+      cb(null, path.join(config.uploadFolder, 'users'));
     },
     filename: (req: any, file: any, cb: any) => {
       const id = req.params.id;

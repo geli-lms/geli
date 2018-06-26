@@ -60,9 +60,9 @@ export class Server {
     Server.setupPassport();
     this.app.use(passport.initialize());
 
-    // Requires authentication via the passportJwtMiddlewareMedia to accesss the static 'uploads' (e.g. images).
+    // Requires authentication via the passportJwtMiddlewareMedia to accesss the static config.uploadFolder (e.g. for images).
     // That means this is not meant for truly public files accessible without login!
-    this.app.use('/api/uploads', passportJwtMiddlewareMedia, express.static('uploads'));
+    this.app.use('/api/uploads', passportJwtMiddlewareMedia, express.static(config.uploadFolder));
   }
 
   start() {

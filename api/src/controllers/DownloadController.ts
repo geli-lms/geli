@@ -216,7 +216,8 @@ export class DownloadController {
             if (localUnit.__t === 'file') {
               for (const fileId of unit.files) {
                 const file = await File.findById(fileId);
-                archive.file( 'uploads/' + file.link, {name: lecCounter + '_' + lcName + '/' + unitCounter + '_' + file.name});
+                archive.file(path.join(config.uploadFolder, file.link),
+                  {name: lecCounter + '_' + lcName + '/' + unitCounter + '_' + file.name});
               }
             } else {
               archive.append(localUnit.toFile(),
