@@ -27,7 +27,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Added more EN/DE translation [#753](https://github.com/utetrapp/geli/issues/753)
 - Added checkboxes for accepting our terms of use and privacy declarations whil registering [#778](https://github.com/utetrapp/geli/issues/778)
 - Quickfixed the Import/Export [#42](https://github.com/utetrapp/geli/issues/42)
- 
+- Added a `JwtPipe` to easily append `'mediaToken'`s to file URLs. [#729](https://github.com/h-da/geli/issues/729)
+- Added a `FileComponent` to flexibly display a single file e.g. in a new tab. [#729](https://github.com/h-da/geli/issues/729)
+
 ### Changed
 - Minor Fixes and Adaptations and Mergefailure fixes. [#785] (https://github.com/utetrapp/geli/issues/785)
 - rework existing translation
@@ -49,6 +51,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Use Path-Lib to extract extension from filename. [#773](https://github.com/utetrapp/geli/pull/773)
 - Add the possibility to add files directly in the file unit [#728](https://github.com/utetrapp/geli/issues/728)
 - Update validator dependency. [#791](https://github.com/utetrapp/geli/pull/791)
+- Appended `'mediaToken'` to various file URLs via `JwtPipe`. [#729](https://github.com/h-da/geli/issues/729)
 
 ### Fixed
 - Fixed broken notification settings. [#731](https://github.com/h-da/geli/issues/731)
@@ -62,6 +65,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Fix invalid response for dependency [#787](https://github.com/utetrapp/geli/pull/787)
 - Fixed travis usages after angular 6 update [#789](https://github.com/utetrapp/geli/pull/789)
 - Build with source-maps [#797](https://github.com/utetrapp/geli/pull/797)
+- Fixed `picture.path` backslash issue / regression. [#729](https://github.com/h-da/geli/issues/729)
+- Replaced hard-coded `'upload'` strings in the API with `config.uploadFolder`. [#729](https://github.com/h-da/geli/issues/729)
+- Fixed missing `@UseBefore` middleware in `MediaController`. [#729](https://github.com/h-da/geli/issues/729)
+
+### Security
+- Secured the static `'uploads'` route by introducing a special `'mediaToken'` with new JWT strategy & middleware. [#729](https://github.com/h-da/geli/issues/729)
+- Secured `DownloadController` → `getArchivedFile` → `id` input usage. [#729](https://github.com/h-da/geli/issues/729)
+- (Scrapped experiment of a `@Controller`-based replacement for the static `'uploads'` route: `UploadsController`. [#729](https://github.com/h-da/geli/issues/729))
 
 ## [[0.7.0](https://github.com/h-da/geli/releases/tag/v0.7.0)] - 2018-05-05 - SS 18 intermediate Release
 ### Added
