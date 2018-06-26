@@ -49,7 +49,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Use Path-Lib to extract extension from filename. [#773](https://github.com/utetrapp/geli/pull/773)
 - Add the possibility to add files directly in the file unit [#728](https://github.com/utetrapp/geli/issues/728)
 - Update validator dependency. [#791](https://github.com/utetrapp/geli/pull/791)
-- Remove winston dependency. [#](https://github.com/utetrapp/geli/pull/)
+- Remove winston dependency. [#806](https://github.com/utetrapp/geli/pull/806)
 
 ### Fixed
 - Fixed broken notification settings. [#731](https://github.com/h-da/geli/issues/731)
