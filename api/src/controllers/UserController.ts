@@ -331,9 +331,9 @@ export class UserController {
     }
 
     if (user.profile.picture) {
-      const path = user.profile.picture.path;
-      if (path && fs.existsSync(path)) {
-        fs.unlinkSync(path);
+      const oldPicturePath = user.profile.picture.path;
+      if (oldPicturePath && fs.existsSync(oldPicturePath)) {
+        fs.unlinkSync(oldPicturePath);
       }
     }
 
@@ -350,7 +350,7 @@ export class UserController {
       _id: null,
       name: file.filename,
       alias: file.originalname,
-      path: file.path,
+      path: file.path.replace(/\\\\?/g, '/'),
       size: resizedImageBuffer.info.size
     };
 
