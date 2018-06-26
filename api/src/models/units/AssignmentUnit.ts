@@ -41,9 +41,17 @@ assignmentsSchema.pre('save', function() {
 
 assignmentsSchema.methods.secureData = async function (user: IUser): Promise<IAssignmentUnit> {
    if (user.role === 'student' && this.assignments.length) {
-     const assignment = this.assignments.filter(user);
+
+     let assignmentToUse;
+
+     for(const assignment of this.assignments) {
+       if(assignment.user._id.toString() === user._id) {
+         assignmentToUse = assignment;
+       }
+     }
+
      this.assignments = [];
-     this.assignments.push(assignment);
+     this.assignments.push(assignmentToUse);
    }
    return this;
 };

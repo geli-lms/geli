@@ -310,6 +310,8 @@ export class UnitController {
 
       assignmentUnit.assignments.push(assignment);
       await assignmentUnit.save();
+
+      return true;
     } catch (err) {
       throw new BadRequestError(err);
     }
