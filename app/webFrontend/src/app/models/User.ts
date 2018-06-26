@@ -3,9 +3,6 @@ import {IFile} from '../../../../../shared/models/IFile';
 
 const md5 = require('blueimp-md5');
 
-// FIXME It appears that this class may now be superfluous and occurrences could be replaced with IUser.
-// More precisely getUserImageURL / getGravatarURL are now unused, which amount to 100% of this class's functionality if I am not mistaken.
-// Alternatively only these methods might be removed, since replacing the class with IUser would imply pervasive refactoring.
 export class User implements IUser {
     _id: any;
     uid: any;
@@ -26,6 +23,10 @@ export class User implements IUser {
         this.lastVisitedCourses = user.lastVisitedCourses;
     }
 
+    get hasUploadedProfilePicture() {
+      return this.profile && this.profile.picture;
+    }
+
     getGravatarURL(size: number = 80) {
         // Gravatar wants us to hash the email (for site to site consistency),
         // - see https://en.gravatar.com/site/implement/hash/ -
@@ -34,9 +35,8 @@ export class User implements IUser {
     }
 
     getUserImageURL(size: number = 80) {
-        if (this.profile && this.profile.picture) {
-            // FIXME probably shouldn't change this re. the 'api/' path prefix?
-            return 'uploads/users/' + this.profile.picture.name;
+        if (this.hasUploadedProfilePicture) {
+            return '/api/uploads/users/' + this.profile.picture.name;
         } else {
             return this.getGravatarURL(size);
         }

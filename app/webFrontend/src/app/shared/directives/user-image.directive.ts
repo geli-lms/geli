@@ -1,9 +1,8 @@
 import {Directive, HostBinding, Input, OnInit, OnDestroy, SimpleChange} from '@angular/core';
 import {DomSanitizer, SafeStyle} from '@angular/platform-browser';
 import {IUser} from '../../../../../../shared/models/IUser';
-import {BackendService} from '../services/backend.service';
-
-const md5 = require('blueimp-md5');
+import {User} from '../../models/User';
+import {JwtPipe} from '../pipes/jwt/jwt.pipe';
 
 @Directive({selector: '[user-image]'})
 export class UserImageDirective implements OnInit, OnDestroy {
@@ -25,7 +24,7 @@ export class UserImageDirective implements OnInit, OnDestroy {
 
   private objectUrl: string;
 
-  constructor(private backendService: BackendService, private domSanitizer: DomSanitizer) {
+  constructor(private jwtPipe: JwtPipe, private domSanitizer: DomSanitizer) {
   }
 
   async ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
@@ -46,33 +45,18 @@ export class UserImageDirective implements OnInit, OnDestroy {
     URL.revokeObjectURL(this.objectUrl);
   }
 
-  getGravatarURL(size: number = 80) {
-      // Gravatar wants us to hash the email (for site to site consistency),
-      // - see https://en.gravatar.com/site/implement/hash/ -
-      // but we don't do that (anymore) for the sake of security & privacy.
-      return `https://www.gravatar.com/avatar/${md5(this.user._id)}.jpg?s=${size}&d=retro`;
-  }
-
-  async getUserImageURL(size: number = 80) {
-    const profile = this.user.profile;
-    if (profile && profile.picture) {
-      const urlPart = 'uploads/users/' + profile.picture.name;
-      const response = await this.backendService.getDownload(urlPart).toPromise();
-      URL.revokeObjectURL(this.objectUrl);
-      this.objectUrl = URL.createObjectURL(response.body);
-      return this.objectUrl;
-    } else {
-      return this.getGravatarURL(size);
-    }
-  }
-
   async updateImage() {
     if (this.user) {
       this.width = this.size;
       this.height = this.size;
       this.borderRadius = '50%';
-      // TODO: Supply the image pixel size to getUserImage for the gravatar path.
-      const url = await this.getUserImageURL();
+
+      const user = new User(this.user);
+      // TODO: Provide a way to supply the image pixel size to user.getUserImageURL for the gravatar path.
+      let url = user.getUserImageURL();
+      if (user.hasUploadedProfilePicture) {
+        url = this.jwtPipe.transform(url);
+      }
       this.backgroundImage = this.domSanitizer.bypassSecurityTrustStyle(`url(${url})`);
     }
   }
