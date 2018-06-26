@@ -81,10 +81,11 @@ unitSchema.methods.exportJSON = function () {
   delete obj.createdAt;
   delete obj.__v;
   delete obj.updatedAt;
+  delete obj.unitCreator;
+  delete obj.files;
 
   // custom properties
   delete obj._course;
-
   return obj;
 };
 
@@ -112,7 +113,6 @@ unitSchema.methods.toFile = function (): String {
 
 unitSchema.statics.importJSON = async function (unit: IUnit, courseId: string, lectureId: string) {
   unit._course = courseId;
-
   try {
     // Need to disabled this rule because we can't export 'Unit' BEFORE this function-declaration
     // tslint:disable:no-use-before-declare

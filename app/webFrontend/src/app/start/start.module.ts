@@ -12,6 +12,7 @@ import {SharedModule} from '../shared/shared.module';
 import {NotificationModule} from '../notification/notification.module';
 import {InfoBoxComponent} from './homescreen/info-box/info-box.component';
 
+
 @NgModule({
   imports: [
     CommonModule,
