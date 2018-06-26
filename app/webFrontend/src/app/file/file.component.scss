@@ -11,9 +11,11 @@
 
 object, video {
   flex: 1;
+  min-width: 0;
 }
 
 img {
-  align-self: center;
   margin: auto;
+  min-width: 0;
+  object-fit: scale-down;
 }
