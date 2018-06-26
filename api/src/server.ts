@@ -11,6 +11,7 @@ import config from './config/main';
 import passportLoginStrategy from './security/passportLoginStrategy';
 import passportJwtStrategy from './security/passportJwtStrategy';
 import passportJwtStrategyMedia from './security/passportJwtStrategyMedia';
+import passportJwtMiddlewareMedia from './security/passportJwtMiddlewareMedia';
 import {RoleAuthorization} from './security/RoleAuthorization';
 import {CurrentUserDecorator} from './security/CurrentUserDecorator';
 import './utilities/FilterErrorHandler';
@@ -58,6 +59,10 @@ export class Server {
 
     Server.setupPassport();
     this.app.use(passport.initialize());
+
+    // Requires authentication via the passportJwtMiddlewareMedia to accesss the static 'uploads' (e.g. images).
+    // That means this is not meant for truly public files accessible without login!
+    this.app.use('/api/uploads', passportJwtMiddlewareMedia, express.static('uploads'));
   }
 
   start() {
