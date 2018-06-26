@@ -38,6 +38,8 @@ export class AuthenticationService {
             this.userService.updateProfilePicture(response['user'].profile.picture.path);
           }
 
+          // See JwtUtils.ts (generateToken function) in the back-end API for a description of the mediaToken's purpose.
+          // To easily attach the mediaToken to an URL you can use the jwt.pipe.ts (e.g. 'some/url/file.png | jwt').
           this.token = response['token'];
           this.mediaToken = response['mediaToken'];
           this.isLoggedIn = true;

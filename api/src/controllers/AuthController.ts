@@ -53,6 +53,7 @@ export class AuthController {
   postLogin(@Req() request: Request) {
     const user = <IUserModel>(<any>request).user;
 
+    // See JwtUtils.ts (generateToken function) for a description of the mediaToken's purpose.
     return {
       token: 'JWT ' + JwtUtils.generateToken(user),
       mediaToken: 'JWT ' + JwtUtils.generateToken(user, true),
