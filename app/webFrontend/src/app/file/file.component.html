@@ -1,6 +1,6 @@
-<ng-container *ngIf="loaded">
-  <object *ngIf="!isPlainText; else plainTextCase" [data]="data" class="object"></object>
-  <ng-template #plainTextCase>
-    <pre class="plain-text">{{ plainText }}</pre>
-  </ng-template>
+<ng-container *ngIf="loaded" [ngSwitch]="type">
+  <pre *ngSwitchCase="'text'" class="plain-text">{{ plainText }}</pre>
+  <img *ngSwitchCase="'image'" [src]="data"/>
+  <video *ngSwitchCase="'video'" [src]="data" controls></video>
+  <object *ngSwitchDefault [data]="data"></object>
 </ng-container>

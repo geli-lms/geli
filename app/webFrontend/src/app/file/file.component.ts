@@ -16,6 +16,7 @@ export class FileComponent implements OnDestroy {
   objectUrl: string | undefined;
   data: SafeResourceUrl | undefined;
   plainText: string | undefined;
+  type: string | undefined;
   loaded: Boolean = false;
 
   constructor(private route: ActivatedRoute,
@@ -27,6 +28,7 @@ export class FileComponent implements OnDestroy {
         const urlPart = 'uploads/' + this.path;
         const response = await this.backendService.getDownload(urlPart).toPromise();
         this.blob = <any>response.body;
+        this.type = this.blob.type.split('/')[0];
 
         if (this.blob.type === 'text/plain') {
           // Read plain-text for direct embedding.

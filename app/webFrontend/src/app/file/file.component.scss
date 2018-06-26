@@ -9,6 +9,11 @@
   padding: $app-content-padding;
 }
 
-.object {
+object, video {
   flex: 1;
+}
+
+img {
+  align-self: center;
+  margin: auto;
 }
