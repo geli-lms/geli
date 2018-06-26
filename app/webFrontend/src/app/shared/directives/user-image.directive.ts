@@ -71,7 +71,7 @@ export class UserImageDirective implements OnInit, OnDestroy {
       this.width = this.size;
       this.height = this.size;
       this.borderRadius = '50%';
-      // FIXME: Supply the image pixel size to getUserImage for the gravatar path.
+      // TODO: Supply the image pixel size to getUserImage for the gravatar path.
       const url = await this.getUserImageURL();
       this.backgroundImage = this.domSanitizer.bypassSecurityTrustStyle(`url(${url})`);
     }
