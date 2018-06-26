@@ -1,16 +1,11 @@
 @import '../../../variables';
 
-$grayBackground: #323232;
-$buttonColor: #ff4081;
-$linkColor: #ff4081;
-$fontColor: white;
-
 .cookieNotice {
   display: inline-block;
   padding: 5px;
   width: 100%;
-  background-color: $grayBackground;
-  color: $fontColor;
+  background-color: map-get($mat-grey, 800);
+  color: white;
   font-family: $font-body;
   font-size: 14px;
   line-height: unset;
@@ -44,16 +39,14 @@ $fontColor: white;
   margin-right: 32px;
 
   a {
-    color: $linkColor !important;
+    color: #ff4081 !important;
     padding: 14px 10px 0 10px;
     text-decoration: none;
   }
 
   button {
-    background-color: $buttonColor;
     margin-top: 5px;
     margin-bottom: 5px;
-    color: white;
   }
 }
 
