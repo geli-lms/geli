@@ -110,27 +110,57 @@ codeKataSchema.methods.toFile = function (): String  {
     + '\n' + this.test;
 };
 
-codeKataSchema.methods.toHtmlForIndividualPdf = function (): String {
+codeKataSchema.methods.toHtmlForIndividualPDF = function (): String {
   const md = new MarkdownIt({html: true});
   let html = '<div id="pageHeader">'
     + md.render(this.name) + md.render(this.description) + '</div>';
 
 
   html += '<div id="firstPage" class="bottomBoxWrapper">';
-  html += '<h3>Task</h3>';
-  html += '<div>' +  md.render('<div class="codeBox">' + this.definition + '</div>') + '</div>';
-  html += '<h3>Code</h3>';
+  html += '<h5>Task</h5>';
+  html += '<div>' +  md.render('<div class="codeBox">' + md.render(this.definition) + '</div>') + '</div>';
+  html += '<h5>Code</h5>';
   html += '<div class="bottomBox"><h3>Validation</h3>';
-  html += '<div>' +  md.render('<div class="codeBox">' + this.test + '</div>') + '</div>';
+  html += '<div>' +  md.render('<div class="codeBox">' + md.render(this.test) + '</div>') + '</div>';
   html += '</div>';
 
   html += '</div ><div><h2>Solutions</h2></div>';
-  html += '<h3>Task</h3>';
-  html += '<div>' +  md.render('<div class="codeBox">' + this.definition + '</div>') + '</div>';
-  html += '<h3>Code</h3>';
-  html += '<div>' +  md.render('<div class="codeBox">' + this.code + '</div>') + '</div>';
-  html += '<h3>Validation</h3>';
-  html += '<div>' +  md.render('<div class="codeBox">' + this.test + '</div>') + '</div>';
+  html += '<h5>Task</h5>';
+  html += '<div>' +  md.render('<div class="codeBox">' + md.render(this.definition) + '</div>') + '</div>';
+  html += '<h5>Code</h5>';
+  html += '<div>' +  md.render('<div class="codeBox">' + md.render(this.code ) + '</div>') + '</div>';
+  html += '<h5>Validation</h5>';
+  html += '<div>' +  md.render('<div class="codeBox">' + md.render(this.test) + '</div>') + '</div>';
+  return html;
+};
+
+codeKataSchema.methods.toHtmlForSinglePDF = function (): String {
+  const md = new MarkdownIt({html: true});
+
+
+  let html = '<div id="nextPage" class="bottomBoxWrapper">';
+  html += '<div><h4>' + md.render('Unit:' + this.name) + '</h4>'
+    + '<span>' + md.render(this.description ? 'Description: ' + this.description : '') + '</span></div>';
+  html += '<h5>Task</h5>';
+  html += '<div>' +  md.render('<div class="codeBox">' + md.render(this.definition) + '</div>') + '</div>';
+  html += '<h5>Code</h5>';
+  html += '<div class="bottomBox"><h5>Validation</h5>';
+  html += '<div>' +  md.render('<div class="codeBox">' + md.render(this.test) + '</div>') + '</div>';
+  html += '</div></div>';
+  return html;
+};
+
+codeKataSchema.methods.toHtmlForSinglePDFSolutions = function (): String {
+  const md = new MarkdownIt({html: true});
+
+  let html = '';
+  html += '<div><h4>' + md.render('Unit:' + this.name) + '</h4></div>';
+  html += '<h5>Task</h5>';
+  html += '<div>' +  md.render('<div class="codeBox">' + md.render(this.definition) + '</div>') + '</div>';
+  html += '<h5>Code</h5>';
+  html += '<div>' +  md.render('<div class="codeBox">' + md.render(this.code ) + '</div>') + '</div>';
+  html += '<h5>Validation</h5>';
+  html += '<div>' +  md.render('<div class="codeBox">' + md.render(this.test) + '</div>') + '</div>';
   return html;
 };
 

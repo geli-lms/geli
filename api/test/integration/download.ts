@@ -52,6 +52,17 @@ describe('DownloadFile', () => {
         .catch(err => err.response);
       res.status.should.be.equal(401);
     });
+  });
+
+  describe(`POST ${BASE_URL + '/pdf/individual'}`, () => {
+    it('should fail, no auth', async () => {
+
+      const res = await chai.request(app)
+        .post(BASE_URL)
+        .set('Authorization', 'JWT asdf')
+        .catch(err => err.response);
+      res.status.should.be.equal(401);
+    });
 
     it('should fail, course does not exists', async () => {
       const course = await FixtureUtils.getRandomCourse();

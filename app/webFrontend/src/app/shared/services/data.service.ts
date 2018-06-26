@@ -478,12 +478,6 @@ export class DownloadFileService extends DataService {
     super('download/', backendService);
   }
 
-  postDownloadReqForCourse(idl: IDownload): Promise<Response> {
-    return this.backendService
-      .post(this.apiPath, idl)
-      .toPromise();
-  }
-
   postDownloadReqForCoursePDFIndividual(idl: IDownload): Promise<Response> {
     return this.backendService
       .post(this.apiPath + 'pdf/individual', idl)

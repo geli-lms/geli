@@ -1,7 +1,7 @@
 <h2>{{course.name}}</h2>
-<ng-container *ngIf="!this.checkForEmptyLectures()">No course material available for download</ng-container>
+<ng-container *ngIf="!this.checkForEmptyLectures()">{{'course.text.downloadNoFiles' | translate}}</ng-container>
 <div *ngIf="this.checkForEmptyLectures()">
-<p>Select units or files which you want to download in a zip</p>
+<p>{{'course.text.downloadHelpText' | translate}}</p>
 
 <mat-dialog-content class="layout">
   <mat-list>
@@ -19,16 +19,15 @@
   <div class="radio-buttons">
     <mat-radio-group [(ngModel)]="radioSelect">
       <mat-radio-button class="radio-button" value="Individual">
-        Individual PDFs
-        <p class="radio-info">One PDF per Unit</p>
+        {{'course.text.IndividualPDF' | translate}}
+        <p class="radio-info">{{'course.text.IndividualPDFExplanation' | translate}}</p>
       </mat-radio-button>
       <mat-radio-button class="radio-button" value="Single">
-        Single PDF
-        <p class="radio-info">One PDF with everything</p>
+        {{'course.text.SinglePDF' | translate}}
+        <p class="radio-info">{{'course.text.SinglePDFExplanation' | translate}}</p>
       </mat-radio-button>
     </mat-radio-group>
   </div>
-  <button mat-raised-button color="primary" [disabled]="this.disableDownloadButton" (click)="downloadAndClose()">Download</button>
   <button mat-raised-button color="primary" [disabled]="this.disableDownloadButton" (click)="downloadAndClosePDF()">Download PDF</button>
   <button mat-button [mat-dialog-close]="true">Cancel</button>
   <span class="spacer"></span>
