@@ -17,9 +17,16 @@ mat-card {
       vertical-align: middle;
       line-height: 36px;
 
-      &.delete {
+      &.delete,
+      &.existing {
         flex-shrink: 2;
         flex-grow: 0;
+      }
+
+      &.existing {
+        mat-icon {
+          line-height: 40px;
+        }
       }
     }
   }

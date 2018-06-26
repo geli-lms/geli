@@ -421,6 +421,14 @@ export class WhitelistUserService extends DataService {
     this.apiPath = originalApiPath;
     return promise;
   }
+
+  checkWhitelistUsers(whitelistUsers: any[]): Promise<any> {
+    const originalApiPath = this.apiPath;
+    this.apiPath += 'check/' + encodeURIComponent(JSON.stringify(whitelistUsers));
+    const promise = this.readItems();
+    this.apiPath = originalApiPath;
+    return promise;
+  }
 }
 
 @Injectable()

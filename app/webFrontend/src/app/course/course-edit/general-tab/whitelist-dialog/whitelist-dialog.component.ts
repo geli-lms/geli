@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {MatDialogRef} from '@angular/material';
-import {CourseService} from '../../../../shared/services/data.service';
+import {CourseService, WhitelistUserService} from '../../../../shared/services/data.service';
 import {ICourse} from '../../../../../../../../shared/models/ICourse';
 import {SnackBarService} from '../../../../shared/services/snack-bar.service';
 import {WhitelistService} from "../../../../shared/services/whitelist.service";
@@ -20,7 +20,8 @@ export class WhitelistDialog {
   constructor(public dialogRef: MatDialogRef<WhitelistDialog>,
               public courseService: CourseService,
               public snackBar: SnackBarService,
-              public whitelistService: WhitelistService) {
+              public whitelistService: WhitelistService,
+              public whitelistUserService: WhitelistUserService) {
 
   }
 
@@ -35,7 +36,7 @@ export class WhitelistDialog {
         return;
       }
 
-      this.whitelistUsers = result.rows;
+      this.whitelistUsers = await this.whitelistUserService.checkWhitelistUsers(result.rows);
       this.fileErrors = result.errors;
     }
   }

@@ -43,32 +43,18 @@ export class WitelistController {
 
   parser: ObsCsvController = new ObsCsvController();
 
-  /**
-   * @api {get} /api/whitelist/:id Request whitelist user
-   * @apiName GetWhitelistUser
-   * @apiGroup Whitelist
-   *
-   * @apiParam {String} id Whitelist user ID.
-   *
-   * @apiSuccess {WhitelistUser} whitelistUser Whitelist user.
-   *
-   * @apiSuccessExample {json} Success-Response:
-   *     {
-   *         "__v": 0,
-   *         "updatedAt": "2018-03-21T23:22:23.758Z",
-   *         "createdAt": "2018-03-21T23:22:23.758Z",
-   *         "_id": "5ab2e92fda32ac2ab0f04b78",
-   *         "firstName": "max",
-   *         "lastName": "mustermann",
-   *         "uid": "876543",
-   *         "courseId": {...},
-   *         "id": "5ab2e92fda32ac2ab0f04b78"
-   *     }
-   */
-  @Get('/course/:id')
-  async getCourse(@Param('id') id: string) {
-    const users = await WhitelistUser.find({ courseId: id });
-    return users.map(user => user.toObject());
+
+  @Get('/check/:whitelist')
+  @Authorized(['teacher', 'admin'])
+  async checkWhitelistForExistingStudents(@Body() data: any,
+                                          @CurrentUser() currentUser: IUser,
+                                          @Param('whitelist') whitelistToCheck: any[]) {
+    for (const whitelistUser of whitelistToCheck) {
+      const user = await User.findOne({ uid: whitelistUser.uid });
+      whitelistUser.exists = !!user;
+    }
+
+    return whitelistToCheck;
   }
 
   /**

@@ -1,9 +1,13 @@
 import {Injectable} from '@angular/core';
+import {WhitelistUserService} from "./data.service";
 
 
 @Injectable()
 export class WhitelistService {
 
+  constructor(private whitelistUserService: WhitelistUserService) {
+
+  }
 
   parseFileContents(content: string) {
     const rows = [ ];
@@ -58,7 +62,7 @@ export class WhitelistService {
   parseFile(file: File) {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
-      reader.readAsText(file, 'ascii');
+      reader.readAsText(file, 'utf-8');
       reader.onload = (evt: any) => {
         const result = this.parseFileContents(evt.target.result);
         if (!result) {

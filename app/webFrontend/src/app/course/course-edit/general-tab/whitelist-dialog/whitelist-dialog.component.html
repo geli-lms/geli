@@ -41,8 +41,13 @@
 
       <ng-container *ngFor="let user of whitelistUsers; let i = index;">
         <mat-card>
-
           <ul class="info">
+
+            <li class="existing">
+              <mat-icon *ngIf="!user.exists" color="warn" matTooltip="Nutzer existiert nicht">warning</mat-icon>
+              <mat-icon *ngIf="user.exists" color="green">check</mat-icon>
+            </li>
+
             <li><strong>{{user.firstName}}</strong></li>
             <li><strong>{{user.lastName}}</strong></li>
             <li class="userId">{{user.uid}}</li>
