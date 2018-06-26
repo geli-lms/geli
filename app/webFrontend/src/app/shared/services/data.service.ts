@@ -12,6 +12,7 @@ import {IFile} from '../../../../../../shared/models/mediaManager/IFile';
 import {IUserSearchMeta} from '../../../../../../shared/models/IUserSearchMeta';
 import {IConfig} from '../../../../../../shared/models/IConfig';
 import {literalMap} from '@angular/compiler/src/output/output_ast';
+import {IAssignment} from "../../../../../../shared/models/assignment/IAssignment";
 
 export abstract class DataService {
 
@@ -285,6 +286,30 @@ export class TaskService extends DataService {
 export class AssignmentService extends DataService {
   constructor(public backendService: BackendService) {
     super('units/', backendService);
+  }
+
+  updateAssignment(assignment: IAssignment, unitId: string): Promise<any[]> {
+    return new Promise((resolve, reject) => {
+      this.backendService.put(this.apiPath + unitId + '/assignment', assignment)
+        .subscribe(
+          (responseItem: any) => {
+            resolve(responseItem);
+          },
+          error => reject(error)
+        );
+    });
+  }
+
+  deleteAssignment(unitId: string): Promise<any[]> {
+    return new Promise((resolve, reject) => {
+      this.backendService.delete(this.apiPath + unitId + '/assignment')
+        .subscribe(
+          (responseItem: any) => {
+            resolve(responseItem);
+          },
+          error => reject(error)
+        );
+    });
   }
 
 }

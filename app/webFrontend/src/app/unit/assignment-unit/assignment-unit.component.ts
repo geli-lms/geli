@@ -4,6 +4,9 @@ import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {IAssignmentUnit} from "../../../../../../shared/models/units/IAssignmentUnit";
 import {UploadFormComponent} from "../../shared/components/upload-form/upload-form.component";
 import {IFileUnit} from "../../../../../../shared/models/units/IFileUnit";
+import {IFile} from '../../../../../../shared/models/IFile';
+import {AssignmentService} from "../../shared/services/data.service";
+
 
 @Component({
   selector: 'app-assignment-unit',
@@ -18,10 +21,17 @@ export class AssignmentUnitComponent implements OnInit {
     unitForm: FormGroup;
     uploadPath: string;
 
+    file: IFile = null;
+
     constructor(public unitFormService: UnitFormService,
-                public formBuilder: FormBuilder){ }
+                public formBuilder: FormBuilder,
+                private assignmentService: AssignmentService){ }
 
     ngOnInit() {
+      if (this.assignmentUnit.assignments.length) {
+        this.file = this.assignmentUnit.assignments[0].file;
+      }
+
         this.uploadPath = '/api/units/' + this.assignmentUnit._id + '/assignment';
         this.allowedMimeTypes = ['text/plain'];
 
@@ -73,7 +83,7 @@ export class AssignmentUnitComponent implements OnInit {
     }
 
     public deleteAssignment() {
-      // Call service!
+      this.assignmentService.deleteAssignment(this.assignmentUnit._id.toString());
     }
 
     public canBeDeleted() {
@@ -86,6 +96,7 @@ export class AssignmentUnitComponent implements OnInit {
     }
 
     public submitAssignment() {
-      // call put in service
+      this.assignmentUnit.assignments[0].submitted = true;
+      this.assignmentService.updateAssignment(this.assignmentUnit.assignments[0], this.assignmentUnit._id.toString());
     }
 }

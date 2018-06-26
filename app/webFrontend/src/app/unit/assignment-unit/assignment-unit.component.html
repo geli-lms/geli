@@ -1,4 +1,4 @@
-<ng-container [formGroup]="unitForm">
+<ng-container *ngIf="!canBeDeleted()" [formGroup]="unitForm">
     <app-upload-form [uploadMethod]="'POST'"
                      [uploadPath]="uploadPath"
                      [additionalData]="null"
@@ -16,7 +16,8 @@
         <button mat-raised-button (click)="cancel()">Cancel</button>
     </div>
 </ng-container>
+<ng-container *ngIf="this.file !== null"><a href="{{ '/api/uploads/' + this.file.link }}" download="{{this.file.name}}">{{this.file.name}}</a></ng-container>
 <button mat-raised-button color="primary" [disabled]="isSubmited()" (click)="submitAssignment()" >{{ 'unit.submitAss' | translate }}</button>
-<button mat-raised-button color="warn" [disabled]="isSubmited()" (click)="deleteAssignment()" matTooltip="{{'unit.deleteAssignment' | translate}}">
+<button mat-raised-button color="warn" [disabled]="!canBeDeleted()" (click)="deleteAssignment()" matTooltip="{{'unit.deleteAssignment' | translate}}">
   <mat-icon>delete</mat-icon>
 </button>

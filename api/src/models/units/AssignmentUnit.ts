@@ -3,6 +3,7 @@ import {IAssignmentUnit} from '../../../../shared/models/units/IAssignmentUnit';
 import {IUser} from '../../../../shared/models/IUser';
 import {IUnitModel, Unit} from './Unit';
 import {ICourseModel} from "../Course";
+import {File} from '../mediaManager/File';
 
 interface IAssignmentUnitModel extends IAssignmentUnit, IUnitModel {
   // secureData: (user: IUser) => Promise<IAssignmentUnit>;
@@ -47,6 +48,7 @@ assignmentsSchema.methods.secureData = async function (user: IUser): Promise<IAs
      for(const assignment of this.assignments) {
        if(assignment.user._id.toString() === user._id) {
          assignmentToUse = assignment;
+         assignmentToUse.file = await File.findById(assignment.file._id);
        }
      }
 

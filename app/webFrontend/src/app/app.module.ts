@@ -20,6 +20,7 @@ import {
   UserDataService,
   WhitelistUserService,
   ConfigService,
+  AssignmentService
 } from './shared/services/data.service';
 import {BackendService} from './shared/services/backend.service';
 import {ShowProgressService} from './shared/services/show-progress.service';
@@ -104,6 +105,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     ThemeService,
     ConfigService,
     NotfoundComponent,
+    AssignmentService,
     {
       provide: ErrorHandler,
       useExisting: RavenErrorHandler

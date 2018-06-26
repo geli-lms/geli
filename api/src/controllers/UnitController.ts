@@ -369,7 +369,7 @@ export class UnitController {
             throw new BadRequestError(err);
           }
         }
-        return;
+        return true;
       }
     }
 
@@ -408,7 +408,7 @@ export class UnitController {
         const index = assignmentUnit.assignments.indexOf(assignment, 0);
         assignmentUnit.assignments.splice(index, 1);
         await assignmentUnit.save();
-        return;
+        return true;
       }
     }
 
