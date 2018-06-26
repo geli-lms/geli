@@ -1,6 +1,8 @@
 import * as mongoose from 'mongoose';
 import {IAssignmentUnit} from '../../../../shared/models/units/IAssignmentUnit';
+import {IUser} from '../../../../shared/models/IUser';
 import {IUnitModel, Unit} from './Unit';
+import {ICourseModel} from "../Course";
 
 interface IAssignmentUnitModel extends IAssignmentUnit, IUnitModel {
   // secureData: (user: IUser) => Promise<IAssignmentUnit>;
@@ -29,13 +31,21 @@ const assignmentsSchema = new mongoose.Schema({
   }
 );
 
+assignmentsSchema.pre('save', function() {
+  const localUnit = <IAssignmentUnitModel><any>this;
+  if (localUnit.assignments === null) {
+    localUnit.assignments = [];
+  }
+  });
 
-// assignmentSchema.methods.secureData = async function (user: IUser): Promise<IAssignmentUnit> {
-//   if (user.role === 'student') {
-//     const assignment = this.assignments.filter(user);
-//     this.assignments = assignment;
-//   }
-//   return this;
-// };
+
+assignmentsSchema.methods.secureData = async function (user: IUser): Promise<IAssignmentUnit> {
+   if (user.role === 'student' && this.assignments.length) {
+     const assignment = this.assignments.filter(user);
+     this.assignments = [];
+     this.assignments.push(assignment);
+   }
+   return this;
+};
 
 export {assignmentsSchema, IAssignmentUnitModel};

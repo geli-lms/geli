@@ -287,15 +287,6 @@ export class AssignmentService extends DataService {
     super('units/', backendService);
   }
 
-  postAssignment(id: string, file: any): Promise<any> {
-    return new Promise((resolve, reject) => {
-      this.backendService.post(this.apiPath + id + 'assignments',file)
-        .subscribe(
-          (responseItems: any) => {
-          }
-            return true;
-          }
-  }
 }
 
 @Injectable()

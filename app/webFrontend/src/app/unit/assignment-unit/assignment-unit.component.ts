@@ -52,7 +52,7 @@ export class AssignmentUnitComponent implements OnInit {
     }
 
     public onAllUploaded() {
-        this.dialogRef.close(true);
+        // this.dialogRef.close(true);
     }
 
     public isObjectInQueue() {

@@ -273,7 +273,7 @@ export class UnitController {
    */
   @Authorized(['student'])
   @Post('/:id/assignment')
-  async addAssignment(@Body() data: IAssignment, @Param('id') id: string,
+  async addAssignment(@Param('id') id: string,
                       @UploadedFile('file', {options: uploadOptions}) uploadedFile: any,
                       @CurrentUser() currentUser: IUser) {
 
@@ -284,7 +284,14 @@ export class UnitController {
       throw new NotFoundError();
     }
 
-    try {
+    for (const assignment of assignmentUnit.assignments) {
+      if (assignment.user._id.toString() === currentUser._id) {
+        throw new BadRequestError();
+      }
+    }
+
+
+        try {
       const file: IFile = new File({
         name: uploadedFile.originalname,
         physicalPath: uploadedFile.path,
@@ -302,7 +309,7 @@ export class UnitController {
       };
 
       assignmentUnit.assignments.push(assignment);
-      assignmentUnit.save();
+      await assignmentUnit.save();
     } catch (err) {
       throw new BadRequestError(err);
     }
