@@ -11,12 +11,25 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 -->
 
 ## [NEXT]
+
+### Updates
+- Updated Frontend to angular6[#716](https://github.com/utetrapp/geli/pull/766)
+- update node version in travis[#790](https://github.com/utetrapp/geli/pull/796)
+- update node image in docker [#799](https://github.com/utetrapp/geli/pull/799)
+
 ### Added
+- Course Progress can now be extracted into a csv-file. [#766](https://github.com/utetrapp/geli/pull/766)
 - Added more EN/DE translation [#753](https://github.com/utetrapp/geli/issues/753)
 - Use i18n for new course view [#763](https://github.com/utetrapp/geli/pull/763)
 - Added service for FileIcon [#607](https://github.com/utetrapp/geli/issues/607)
+- Added legal notice and privacy declaration [#768](https://github.com/utetrapp/geli/issues/768)
+- Add more tests notification ctrl [#772](https://github.com/utetrapp/geli/pull/772)
+- Added more EN/DE translation [#753](https://github.com/utetrapp/geli/issues/753)
+- Added checkboxes for accepting our terms of use and privacy declarations whil registering [#778](https://github.com/utetrapp/geli/issues/778)
+- Quickfixed the Import/Export [#42](https://github.com/utetrapp/geli/issues/42)
  
 ### Changed
+- Minor Fixes and Adaptations and Mergefailure fixes. [#785] (https://github.com/utetrapp/geli/issues/785)
 - rework existing translation
 - add vars to html-files
 - add translations to resource files
@@ -25,17 +38,30 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Reload user list after deleting an account. [#724](https://github.com/h-da/geli/pull/724)
 - Validate form before submit when creating a new course. [#724](https://github.com/h-da/geli/pull/724)
 - Validate :id for CourseController details route. [#724](https://github.com/h-da/geli/pull/724)
+- Added search function for available courses. [#723](https://github.com/h-da/geli/issues/723)
 - Another MatSnackBar to SnackBarService migration. [#730](https://github.com/h-da/geli/pull/730)
 - `getNotificationSettings` does not create new notification settings. [#731](https://github.com/h-da/geli/issues/731)
 - Remove `isCourseTeacherOrAdmin` and `isMemberOfCourse`from UserService. [#731](https://github.com/h-da/geli/issues/731)
 - Refactored save mechanism of unit edit form. [#532](https://github.com/h-da/geli/issues/532)
 - Moved the 'create course' into a Dialog. [#725](https://github.com/h-da/geli/issues/725)
+- Update bcrypt dependency. [#774](https://github.com/utetrapp/geli/pull/774)
+- Remove fs-extra dependency. [#780](https://github.com/utetrapp/geli/pull/780)
+- Use Path-Lib to extract extension from filename. [#773](https://github.com/utetrapp/geli/pull/773)
+- Add the possibility to add files directly in the file unit [#728](https://github.com/utetrapp/geli/issues/728)
+- Update validator dependency. [#791](https://github.com/utetrapp/geli/pull/791)
 
 ### Fixed
 - Fixed broken notification settings. [#731](https://github.com/h-da/geli/issues/731)
 - Fixed broken Apidoc [#737](https://github.com/h-da/geli/issues/737)
 - Disabled `tutor` role. [#710](https://github.com/h-da/geli/issues/710)
 - Fixed notifications on hidden units. [#733](https://github.com/utetrapp/geli/issues/733)
+- Validate user input for notication settings api. [#771](https://github.com/utetrapp/geli/issues/771)
+- Identification only via matriculation number. [#685](https://github.com/utetrapp/geli/issues/685)
+- Fixed Typo in User-Profile-Dialog. [#782](https://github.com/utetrapp/geli/pull/782)
+- Fixed broken badge links after repository migration. [#783](https://github.com/utetrapp/geli/pull/783)
+- Fix invalid response for dependency [#787](https://github.com/utetrapp/geli/pull/787)
+- Fixed travis usages after angular 6 update [#789](https://github.com/utetrapp/geli/pull/789)
+- Build with source-maps [#797](https://github.com/utetrapp/geli/pull/797)
 
 ## [[0.7.0](https://github.com/h-da/geli/releases/tag/v0.7.0)] - 2018-05-05 - SS 18 intermediate Release
 ### Added
@@ -55,6 +81,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Added icon for access key [#547](https://github.com/h-da/geli/issues/574)
 - Unit visibility toggle [#582](https://github.com/h-da/geli/issues/582)
 - Add bootstrap grid system [#613](https://github.com/h-da/geli/issues/613)
+- Added changeable picture to course [#702](https://github.com/utetrapp/geli/issues/702)
+- Added a responsive image service [#546](https://github.com/utetrapp/geli/issues/546)
 
 ### Changed
 - Refactored or slightly altered various course & user related APIs. [#654](https://github.com/h-da/geli/issues/654) [#691](https://github.com/h-da/geli/issues/691)

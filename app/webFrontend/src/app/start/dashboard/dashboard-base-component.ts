@@ -16,7 +16,15 @@ export abstract class DashboardBaseComponent implements OnInit {
   }
 
   ngOnInit() {
+  }
 
+  async filterCourses(searchValue: string, tempCourses: ICourseDashboard[], courses: ICourseDashboard[]) {
+    for (const course of tempCourses) {
+      const temp = course.name.toLowerCase();
+      if (temp.includes(searchValue)) {
+        courses.push(course);
+      }
+    }
   }
 
   leaveCallback() {

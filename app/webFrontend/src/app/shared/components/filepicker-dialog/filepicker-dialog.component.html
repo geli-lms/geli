@@ -1,7 +1,7 @@
 <h2>{{ 'file.tooltip.selectFile' | translate }}</h2>
 <p>{{message}}</p>
 <div *ngIf="!showProgressBar">
-  <input type="file" name="filepicker" ng2FileSelect [uploader]="uploader" [placeholder]="'file.tooltip.selectFile' | translate"/>
+  <input type="file" name="filepicker" ng2FileSelect [uploader]="uploader" [placeholder]="'file.tooltip.selectFile' | translate" />
 </div>
 <div *ngIf="showProgressBar">
   <h2>Uploading...</h2>
