@@ -13,6 +13,11 @@ import {allRoles} from '../config/roles';
 import {IProperties} from '../../../shared/models/IProperties';
 import {extractMongoId} from '../utilities/ExtractMongoId';
 import {ensureMongoToObject} from '../utilities/EnsureMongoToObject';
+import {Notification} from "./Notification";
+import {Course, ICourseModel} from "./Course";
+import {NotificationSettings} from "./NotificationSettings";
+import {WhitelistUser} from "./WhitelistUser";
+import {Progress} from "./progress/Progress";
 
 interface IUserModel extends IUser, mongoose.Document {
   isValidPassword: (candidatePassword: string) => Promise<boolean>;
@@ -183,11 +188,37 @@ userSchema.pre('findOneAndUpdate', function (next) {
 
 //delete all user data
 userSchema.pre('remove', async function () {
-  //notifications
-  //notificationsettings
-  //whitelists
-  //courses
-  //progress
+  const localUser = <IUserModel><any>this;
+  try {
+    const promises = [];
+    //notifications
+    promises.push(Notification.remove({user:localUser._id}));
+    //notificationsettings
+    promises.push(NotificationSettings.remove({user:localUser._id}));
+    //whitelists
+    promises.push(WhitelistUser.remove({uid:localUser.uid}));
+    //remove user form courses
+    promises.push(Course.update(
+      {$or: [
+          {students:localUser._id},
+          {teachers:localUser._id},
+          {courseAdmin:localUser._id}]},
+      {$pull: {
+            "students":localUser._id,
+            "teachers":localUser._id,
+            "courseAdmin":localUser._id
+          }
+      }));
+    //progress
+    promises.push(Progress.remove({user: localUser._id}));
+
+
+    // image
+    const result = await Promise.all(promises);
+
+  } catch (e) {
+    throw new Error('Delete Error: ' + e.toString());
+  }
 });
 
 // Method to compare password for login

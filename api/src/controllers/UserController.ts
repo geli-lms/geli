@@ -477,14 +477,16 @@ export class UserController {
    *
    * @apiError BadRequestError There are no other users with admin privileges.
    */
-  @Authorized('admin')
+  @Authorized(['student', 'teacher', 'admin'])
   @Delete('/:id')
   async deleteUser(@Param('id') id: string, @CurrentUser() currentUser: IUser) {
-    if (id === currentUser._id) {
+    if (id === currentUser._id && currentUser.role=='admin') {
       const otherAdmin = await User.findOne({$and: [{'role': 'admin'}, {'_id': {$ne: id}}]});
       if (otherAdmin === null) {
         throw new BadRequestError(errorCodes.user.noOtherAdmins.text);
       }
+    }else if(id != currentUser._id){
+      throw new BadRequestError(errorCodes.user.cantDeleteOtherUsers.text);
     }
     await User.findByIdAndRemove(id);
     return {result: true};
