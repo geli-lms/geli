@@ -24,7 +24,7 @@ export default class MessageController {
    *
    */
   @Post('/')
-  async post(@Body({required: true}) message: IMessage) {
+  async postMessage(@Body({required: true}) message: IMessage) {
     const newMessage = new Message(message);
     try {
       const createdMessage = await newMessage.save();
@@ -63,7 +63,7 @@ export default class MessageController {
    *
    */
   @Get('/')
-  async get (
+  async getMessages (
     @QueryParam('room') room: string, @QueryParam('skip') skip: number= 0,
     @QueryParam('limit') limit: number, @QueryParam('order') order: number = -1) {
     if (!room) {
