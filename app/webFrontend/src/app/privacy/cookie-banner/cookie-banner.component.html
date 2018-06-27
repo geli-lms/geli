@@ -1,4 +1,4 @@
-<ng-container class="cookieNotice" [style.display]="displayState">
+<ng-container *ngIf="!isCookieAccepted" class="cookieNotice">
   <div class="cookieContent">
     <p class="cookieText">{{ 'cookie.text.cookieHint' | translate }}</p>
     <div class="controlArea">

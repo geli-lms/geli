@@ -6,22 +6,19 @@ import {Component, OnInit} from '@angular/core';
   styleUrls: ['./cookie-banner.component.scss']
 })
 export class CookieBannerComponent implements OnInit {
-  displayState: string;
+  
+  isCookieAccepted: boolean;
 
   constructor() {
   }
 
   ngOnInit() {
-    const isCookieAccepted = (localStorage.getItem('geli_accept_cookie') === 'true');
-    if (isCookieAccepted) {
-      this.displayState = 'none';
-    } else {
-      this.displayState = 'inline-block';
+    this.isCookieAccepted = (localStorage.getItem('geli_accept_cookie') === 'true');
     }
-  }
+
 
   onAccept() {
     localStorage.setItem('geli_accept_cookie', 'true');
-    this.displayState = 'none';
+    this.isCookieAccepted = true;
   }
 }
