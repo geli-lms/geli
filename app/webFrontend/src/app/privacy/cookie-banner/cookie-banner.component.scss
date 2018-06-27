@@ -9,7 +9,7 @@
   background-color: map-get($mat-grey, 800);
   color: map-get($mat-grey, A100);
 
-  @include bp(md) {
+  @include bp(xl) {
     flex-direction: row;
   }
 
@@ -19,11 +19,19 @@
     line-height: 2rem;
   }
 
-  .more-info {
-    margin-right: 0;
-  }
-
   .controlArea {
     text-align: right;
+
+    @include  bp(xl) {
+      flex-shrink: 0;
+    }
+
+    @include  bp(exl) {
+      flex-shrink: initial;
+    }
+
+    .more-info {
+      margin-right: 1rem;
+    }
   }
 }
