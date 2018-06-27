@@ -13,6 +13,9 @@ import config from '../config/main';
 import {File} from '../models/mediaManager/File';
 import {IFile} from '../../../shared/models/mediaManager/IFile';
 import {IAssignmentUnit} from '../../../shared/models/units/IAssignmentUnit';
+import {IProgress} from '../../build/../../shared/models/progress/IProgress';
+import {Progress} from '../models/progress/Progress';
+import {IAssignmentUnitProgress} from '../../../shared/models/progress/IAssignmentProgress';
 
 import crypto = require('crypto');
 import {IAssignmentUnitModel} from '../models/units/AssignmentUnit';
@@ -292,13 +295,14 @@ export class UnitController {
 
 
         try {
-      const file: IFile = new File({
-        name: uploadedFile.originalname,
-        physicalPath: uploadedFile.path,
-        link: uploadedFile.filename,
-        size: uploadedFile.size,
-        mimeType: uploadedFile.mimetype,
-      });
+          const file: IFile = new File({
+            name: uploadedFile.originalname,
+            physicalPath: uploadedFile.path,
+            link: uploadedFile.filename,
+            size: uploadedFile.size,
+            mimeType: uploadedFile.mimetype,
+          });
+
       const savedFile = await new File(file).save();
 
       const assignment: IAssignment = {
@@ -368,6 +372,15 @@ export class UnitController {
         try {
         console.log(assignmentUnit);
           await assignmentUnit.save();
+
+        const progress: IProgress = new Progress({
+          course: assignmentUnit._course._id,
+          unit: assignmentUnit._id,
+          user: currentUser._id,
+          done: false,
+      });
+
+          await new Progress(progress).save();
         } catch (err) {
           if (err.name === 'ValidationError') {
             throw err;
