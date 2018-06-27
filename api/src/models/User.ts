@@ -181,6 +181,15 @@ userSchema.pre('findOneAndUpdate', function (next) {
   }
 });
 
+//delete all user data
+userSchema.pre('remove', async function () {
+  //notifications
+  //notificationsettings
+  //whitelists
+  //courses
+  //progress
+});
+
 // Method to compare password for login
 userSchema.methods.isValidPassword = function (candidatePassword: string) {
   if (typeof  candidatePassword === 'undefined') {
