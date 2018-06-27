@@ -3,12 +3,10 @@ import {Server} from '../../src/server';
 import {FixtureLoader} from '../../fixtures/FixtureLoader';
 import {JwtUtils} from '../../src/security/JwtUtils';
 import {User} from '../../src/models/User';
-import {Course} from '../../src/models/Course';
 import {FixtureUtils} from '../../fixtures/FixtureUtils';
 import chaiHttp = require('chai-http');
 import {IDownload} from '../../../shared/models/IDownload';
-import {Lecture} from '../../src/models/Lecture';
-import {Unit} from '../../src/models/units/Unit';
+
 
 chai.use(chaiHttp);
 const should = chai.should();
@@ -43,22 +41,11 @@ describe('DownloadFile', () => {
     });
   });
 
-  describe(`POST ${BASE_URL}`, () => {
-    it('should fail, no auth', async () => {
-
-      const res = await chai.request(app)
-        .post(BASE_URL)
-        .set('Authorization', 'JWT asdf')
-        .catch(err => err.response);
-      res.status.should.be.equal(401);
-    });
-  });
-
   describe(`POST ${BASE_URL + '/pdf/individual'}`, () => {
     it('should fail, no auth', async () => {
 
       const res = await chai.request(app)
-        .post(BASE_URL)
+        .post(BASE_URL + '/pdf/individual')
         .set('Authorization', 'JWT asdf')
         .catch(err => err.response);
       res.status.should.be.equal(401);
@@ -77,7 +64,7 @@ describe('DownloadFile', () => {
       };
 
       const res = await chai.request(app)
-        .post(BASE_URL)
+        .post(BASE_URL + '/pdf/individual')
         .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
         .send(testData)
         .catch(err => err.response);
@@ -98,7 +85,7 @@ describe('DownloadFile', () => {
       };
 
       const res = await chai.request(app)
-        .post(BASE_URL)
+        .post(BASE_URL + '/pdf/individual')
         .set('Authorization', `JWT ${JwtUtils.generateToken(user)}`)
         .send(testData)
         .catch(err => err.response);
@@ -115,7 +102,77 @@ describe('DownloadFile', () => {
       };
 
       const res = await chai.request(app)
-        .post(BASE_URL)
+        .post(BASE_URL + '/pdf/individual')
+        .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
+        .send(testData)
+        .catch(err => err.response);
+      res.status.should.be.equal(500);
+    });
+  });
+
+
+  describe(`POST ${BASE_URL + '/pdf/single'}`, () => {
+    it('should fail, no auth', async () => {
+
+      const res = await chai.request(app)
+        .post(BASE_URL + '/pdf/single')
+        .set('Authorization', 'JWT asdf')
+        .catch(err => err.response);
+      res.status.should.be.equal(401);
+    });
+
+    it('should fail, course does not exists', async () => {
+      const course = await FixtureUtils.getRandomCourse();
+      const teacher = await User.findById(course.courseAdmin);
+
+      const testData: IDownload = {
+        courseName: '000000000000000000000000',
+        'lectures': [{
+          'lectureId': '000000000000000000000000',
+          'units': [{'unitId': '000000000000000000000000'}]
+        }]
+      };
+
+      const res = await chai.request(app)
+        .post(BASE_URL + '/pdf/single')
+        .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
+        .send(testData)
+        .catch(err => err.response);
+      res.status.should.be.equal(404);
+    });
+
+    it('should fail, because user is not in course', async () => {
+      const course = await FixtureUtils.getRandomCourse();
+      const teacher = await User.findById(course.courseAdmin);
+      const user = await User.findOne().where('_id').ne(teacher._id);
+
+      const testData: IDownload = {
+        courseName: course._id,
+        'lectures': [{
+          'lectureId': '000000000000000000000000',
+          'units': [{'unitId': '000000000000000000000000'}]
+        }]
+      };
+
+      const res = await chai.request(app)
+        .post(BASE_URL + '/pdf/single')
+        .set('Authorization', `JWT ${JwtUtils.generateToken(user)}`)
+        .send(testData)
+        .catch(err => err.response);
+      res.status.should.be.equal(404);
+    });
+
+    it('should fail, because the lectures is empty and the IDownloadObject cant be created', async () => {
+      const course = await FixtureUtils.getRandomCourse();
+      const teacher = await User.findById(course.courseAdmin);
+
+      const testData = {
+        courseName: course._id,
+        'lectures': Array
+      };
+
+      const res = await chai.request(app)
+        .post(BASE_URL + '/pdf/single')
         .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
         .send(testData)
         .catch(err => err.response);

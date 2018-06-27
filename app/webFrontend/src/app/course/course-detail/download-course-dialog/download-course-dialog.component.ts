@@ -118,12 +118,9 @@ export class DownloadCourseDialogComponent implements OnInit {
     if (this.calcSumFileSize() / 1024 < 204800) {
       try {
         let result;
-        if(this.radioSelect === 'Individual')
-        {
+        if (this.radioSelect === 'Individual') {
           result = await this.downloadReq.postDownloadReqForCoursePDFIndividual(downloadObj);
-        }
-        else if(this.radioSelect === 'Single')
-        {
+        } else if (this.radioSelect === 'Single') {
           result = await this.downloadReq.postDownloadReqForCoursePDFSingle(downloadObj);
         }
         const response = <Response> await this.downloadReq.getFile(result.toString());

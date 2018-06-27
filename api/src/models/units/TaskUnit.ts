@@ -125,7 +125,7 @@ taskUnitSchema.methods.toHtmlForIndividualPDF = function (): String {
     + md.render(this.name) + md.render(this.description ? this.description : '') + '</div>';
 
   let counter = 1;
-  html += '<div style="page-break-after: always">';
+  html += '<div id="firstPage">';
   for (const task of this.tasks) {
      html += '<div><h5>' +  md.render(counter + '. ' + task.name) + '</h5></div>';
      counter++;
@@ -133,7 +133,7 @@ taskUnitSchema.methods.toHtmlForIndividualPDF = function (): String {
       html += '<div>' + md.render('<input type="checkbox" style="margin-right: 10px">' + answer.text) + '</div>';
     }
   }
-  html += '</div ><div><h2>Solutions</h2></div>';
+  html += '</div><div><h2>Solution</h2></div>';
   counter = 1;
   for (const task of this.tasks) {
     html += '<div><h5>' +  md.render(counter + '. ' + task.name) + '</h5></div>';
@@ -153,7 +153,7 @@ taskUnitSchema.methods.toHtmlForIndividualPDF = function (): String {
 taskUnitSchema.methods.toHtmlForSinglePDF = function (): String {
   const md = new MarkdownIt({html: true});
   let html = '';
-  html += '<div><h4>' + md.render('Unit:' + this.name) + '</h4>'
+  html += '<div><h4>' + md.render('Unit: ' + this.name) + '</h4>'
     + '<span>' + md.render(this.description ? 'Description: ' + this.description : '') + '</span></div>';
 
   let counter = 1;
@@ -172,7 +172,7 @@ taskUnitSchema.methods.toHtmlForSinglePDF = function (): String {
 taskUnitSchema.methods.toHtmlForSinglePDFSolutions = function (): String {
   const md = new MarkdownIt({html: true});
   let html = '';
-  html += '<div><h4>' + md.render('Unit:' + this.name) + '</h4></div>';
+  html += '<div><h4>' + md.render('Unit: ' + this.name) + '</h4></div>';
   let counter = 1;
   for (const task of this.tasks) {
     html += '<div><h5>' +  md.render(counter + '. ' + task.name) + '</h5></div>';

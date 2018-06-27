@@ -29,7 +29,7 @@ freeTextUnitSchema.methods.toHtmlForIndividualPDF = function (): String {
 freeTextUnitSchema.methods.toHtmlForSinglePDF = function (): String {
   const md = new MarkdownIt();
   let html = '';
-  html += '<div><h4>' + md.render('Unit:' + this.name) + '</h4>'
+  html += '<div><h4>' + md.render('Unit: ' + this.name) + '</h4>'
     + '<span>' + md.render(this.description ? 'Description: ' + this.description : '') + '</span></div>';
   html += md.render(this.markdown);
   return html;

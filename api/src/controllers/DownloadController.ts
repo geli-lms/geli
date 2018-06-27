@@ -230,7 +230,7 @@ export class DownloadController {
                 '<html>\n' +
                 '  <head>' +
                 '     <style>' +
-                '       #pageHeader {text-align: center;border-bottom: 1px solid;}' +
+                '       #pageHeader {text-align: center;border-bottom: 1px solid;padding-bottom: 5px;}' +
                 '       #pageFooter {text-align: center;border-top: 1px solid;padding-top: 5px;}' +
                 '       body {font-family: \'Helvetica\', \'Arial\', sans-serif; }' +
                 '       .codeBox {border: 1px solid grey; font-family: Monaco,Menlo,source-code-pro,monospace; padding: 10px}' +
@@ -323,7 +323,9 @@ export class DownloadController {
           format: 'A4',
           'border': {
             'left': '1cm',
-            'right': '1cm'
+            'right': '1cm',
+            'top': '0',
+            'bottom': '0'
           },
           'footer': {
             'contents': {
@@ -333,7 +335,8 @@ export class DownloadController {
           'header': {
             'contents': {
               default: '<div id="pageHeader">' + course.name + '</div>'
-            }
+            },
+            height: '20mm'
           }
         };
 
@@ -341,13 +344,12 @@ export class DownloadController {
           '<html>\n' +
           '  <head>' +
           '     <style>' +
-          '       #pageHeader {text-align: center;border-bottom: 1px solid;}' +
+          '       #pageHeader {text-align: center;border-bottom: 1px solid;padding-bottom: 5px;}' +
           '       #pageFooter {text-align: center;border-top: 1px solid;padding-top: 5px;}' +
-          '       body {font-family: \'Helvetica\', \'Arial\', sans-serif; }' +
+          '       body {font-family: \'Helvetica\', \'Arial\', sans-serif;}' +
           '       .codeBox {border: 1px solid grey; font-family: Monaco,Menlo,source-code-pro,monospace; padding: 10px}' +
           '       #firstPage {page-break-after: always;}' +
           '       #nextPage {page-break-before: always;}' +
-          '       #singlePage {page-break-before: always;page-break-after: always;}' +
           '       .bottomBoxWrapper {height:800px; position: relative}' +
           '       .bottomBox {position: absolute; bottom: 0;}' +
           '     </style>' +
@@ -355,14 +357,21 @@ export class DownloadController {
           '  <body>' +
           '  ';
 
-        let solutions = '<div id="nextPage"><div><h2>Solutions</h2></div>';
+        let solutions = '<div id="nextPage"><h2><u>Solutions</u></h2>';
 
         let lecCounter = 1;
+        let firstSol = false;
         for (const lec of data.lectures) {
 
           const localLecture = await Lecture.findOne({_id: lec.lectureId});
           const lcName = this.replaceCharInFilename(localLecture.name);
           let unitCounter = 1;
+          let solCounter = 1;
+          if (lecCounter > 1) {
+            html += '<div id="nextPage" ><h2>Lecture: ' + localLecture.name + '</h2>';
+          } else {
+            html += '<div><h2>Lecture: ' + localLecture.name + '</h2>';
+          }
 
           for (const unit of lec.units) {
             const localUnit = await Unit.findOne({_id: unit.unitId});
@@ -376,12 +385,28 @@ export class DownloadController {
                 const file = await File.findById(fileId);
                 archive.file( 'uploads/' + file.link, {name: lecCounter + '_' + lcName + '/' + unitCounter + '_' + file.name});
               }
+            } else if ( (localUnit.__t === 'code-kata' || localUnit.__t === 'task') && lecCounter > 1 && unitCounter > 1) {
+              html +=  '<div id="nextPage" >' + localUnit.toHtmlForSinglePDF() + '</div>';
             } else {
-              html += '<div id="nextPage" >' + localUnit.toHtmlForSinglePDF()+'</div>';
-              solutions += localUnit.toHtmlForSinglePDFSolutions();
+              html +=  localUnit.toHtmlForSinglePDF();
+            }
+
+            if (localUnit.__t === 'code-kata' || localUnit.__t === 'task') {
+
+              if (!firstSol && solCounter === 1) {
+                solutions += '<div><h2>Lecture: ' + localLecture.name + '</h2>';
+                firstSol = true;
+              } else if (solCounter === 1) {
+                solutions += '<div id="nextPage" ><h2>Lecture: ' + localLecture.name + '</h2>';
+              } else {
+                solutions += '<div id="nextPage" >';
+              }
+              solutions += localUnit.toHtmlForSinglePDFSolutions()  + '</div>';
+              solCounter++;
             }
             unitCounter++;
           }
+          html += '</div>';
           lecCounter++;
         }
         html += solutions;
