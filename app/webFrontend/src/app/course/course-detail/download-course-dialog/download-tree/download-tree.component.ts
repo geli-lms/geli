@@ -103,13 +103,14 @@ export class DownloadTreeComponent {
         if (unit.__t === 'file') {
           const uk = unit.name;
           const fUnit: IFileUnit = unit as IFileUnit;
-          const fUnitObj = {};
-          fUnitObj[uk] = [];
-          fUnit.files.forEach((fu) => {
-            const fk = fu.name;
-            fUnitObj[uk].push(fk);
+         // copyCourse[key][lk].push(uk);
+          const fUnitObj = [];
+          fUnit.files.forEach((f) => {
+            const fk = f.name;
+            fUnitObj.push(fk);
+            // copyCourse[uk][lk][uk].push(fk);
           });
-          copyCourse[key][lk].push(fUnitObj);
+            copyCourse[key][lk][uk] = fUnitObj;
         } else {
           const uk = unit.name;
           copyCourse[key][lk].push(uk);
