@@ -16,7 +16,7 @@
         <button mat-raised-button (click)="cancel()">Cancel</button>
     </div>
 </ng-container>
-<ng-container *ngIf="this.file !== null"><a href="{{ '/api/uploads/' + this.file.link }}" download="{{this.file.name}}">{{this.file.name}}</a></ng-container> <span *ngIf="isSubmited()"><mat-icon>assignment_turned_in</mat-icon></span>
+<ng-container *ngIf="this.file !== null"><a href="{{ '/api/uploads/' + this.file.link }}" download="{{this.file.name}}">{{this.file.name}}</a></ng-container> <span *ngIf="readyForGreating()">Status: <mat-icon>{{assignmentIcon}}</mat-icon></span>
 <button *ngIf="!isSubmited()" mat-raised-button color="primary" (click)="submitAssignment()" >{{ 'unit.submitAss' | translate }}</button>
 <button *ngIf="!isSubmited()" mat-raised-button color="warn" (click)="deleteAssignment()" matTooltip="{{'unit.deleteAssignment' | translate}}">
   <mat-icon>delete</mat-icon>

@@ -7,6 +7,11 @@ import {IFileUnit} from "../../../../../../shared/models/units/IFileUnit";
 import {IFile} from '../../../../../../shared/models/IFile';
 import {AssignmentService} from "../../shared/services/data.service";
 
+enum AssignmentIcon {
+  TURNED_IN = 'assignment_turned_in',
+  ACCEPTED = 'done',
+  FAILED = 'clear',
+}
 
 @Component({
   selector: 'app-assignment-unit',
@@ -20,6 +25,7 @@ export class AssignmentUnitComponent implements OnInit {
     allowedMimeTypes: string[];
     unitForm: FormGroup;
     uploadPath: string;
+    assignmentIcon: AssignmentIcon;
 
     file: IFile = null;
 
@@ -30,6 +36,14 @@ export class AssignmentUnitComponent implements OnInit {
     ngOnInit() {
       if (this.assignmentUnit.assignments.length) {
         this.file = this.assignmentUnit.assignments[0].file;
+
+        if (this.assignmentUnit.assignments[0].checked === 1) {
+          this.assignmentIcon = AssignmentIcon.ACCEPTED;
+        } else if (this.assignmentUnit.assignments[0].checked === 2) {
+          this.assignmentIcon = AssignmentIcon.FAILED;
+        } else {
+          this.assignmentIcon = AssignmentIcon.TURNED_IN;
+        }
       }
 
         this.uploadPath = '/api/units/' + this.assignmentUnit._id + '/assignment';
@@ -92,7 +106,15 @@ export class AssignmentUnitComponent implements OnInit {
       } else {
         return false;
       }
+    }
 
+    public readyForGreating() {
+      if (this.assignmentUnit.assignments.length) {
+        if (this.assignmentUnit.assignments[0].submitted) {
+          return true;
+        }
+    } 
+        return false;
     }
 
     public submitAssignment() {
