@@ -1,13 +1,12 @@
-import {Component, Inject, OnInit, QueryList, ViewChildren, ViewEncapsulation} from '@angular/core';
+import {Component, Inject, Injectable, OnInit, QueryList, ViewChildren, ViewEncapsulation} from '@angular/core';
 import {SnackBarService} from '../../../shared/services/snack-bar.service';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
-import {LectureCheckboxComponent} from './downloadCheckBoxes/lecture-checkbox.component';
 import {DownloadFileService} from 'app/shared/services/data.service';
 import {IDownload} from '../../../../../../../shared/models/IDownload';
 import {SaveFileService} from '../../../shared/services/save-file.service';
 import {saveAs} from 'file-saver/FileSaver';
 import {DataSharingService} from '../../../shared/services/data-sharing.service';
-import {MatListOption, MatSelectionList} from '@angular/material';
+import {MatListOption, MatSelectionList, MatTreeFlatDataSource, MatTreeFlattener} from '@angular/material';
 import {ILecture} from '../../../../../../../shared/models/ILecture';
 import {IUnit} from '../../../../../../../shared/models/units/IUnit';
 import {ITask} from '../../../../../../../shared/models/task/ITask';
@@ -20,15 +19,11 @@ import {Input} from '@angular/compiler/src/core';
   styleUrls: ['./download-course-dialog.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-
 export class DownloadCourseDialogComponent implements OnInit {
   course: ICourse;
   chkbox: boolean;
   showSpinner: boolean;
   disableDownloadButton: boolean;
-
-  lectureList: MatSelectionList;
-
 
   constructor(private downloadReq: DownloadFileService,
               public snackBar: SnackBarService,
@@ -137,43 +132,7 @@ export class DownloadCourseDialogComponent implements OnInit {
   }
 
   uncheckAll() {
-
     // this.chkbox = false;
     // this.onChange();
   }
-
-  async selectionChanged($event) {
-    const changedOption: MatListOption = $event.option;
-    const srcList: MatSelectionList = $event.source;
-    const lectureOption: MatListOption = await this.getOptionWithLecture(changedOption.value.parentID, srcList);
-
-    if ($event.source.selectedOptions.length === $event.source.options.length) {
-      // lec full anhaken.
-      lectureOption.selected = true;
-    } else if ($event.source.selectedOptions.length === 0) {
-      lectureOption.selected = false;
-    } else {
-      // partially/indeterminate
-      lectureOption.selected = true;
-    }
-  }
-
-  getOptionWithLecture(lecID, srcList): MatListOption {
-    srcList.options.forEach((opt) => {
-      if (opt.value.type === 'lecture') {
-        if (opt.value.value._id === lecID) {
-          return opt;
-        }
-      }
-    });
-    console.dir('error: no lecture found');
-    return null;
-  }
-
-
-  buildValueObject(type: string, parent: string, value: any) {
-    return {type: type, parentID: parent, value: value};
-  }
-
-
 }

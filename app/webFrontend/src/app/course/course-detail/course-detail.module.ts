@@ -14,6 +14,7 @@ import {FormsModule} from '@angular/forms';
 import {CourseDetailDataResolve} from '../../shared/services/course-detail-data-resolve.service';
 import {VideoViewComponent} from './video-view/video-view.component';
 import {GridComponent} from './video-view/grid/grid.component';
+import { DownloadTreeComponent } from './download-course-dialog/download-tree/download-tree.component';
 
 @NgModule({
   imports: [
@@ -33,6 +34,7 @@ import {GridComponent} from './video-view/grid/grid.component';
     UploadUnitCheckboxComponent,
     VideoViewComponent,
     GridComponent,
+    DownloadTreeComponent,
   ],
   entryComponents: [
     DownloadCourseDialogComponent,

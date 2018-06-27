@@ -2,30 +2,7 @@
   <mat-card class="dl-card">
     <mat-card-content>
       <ng-container *ngIf="!this.checkForEmptyLectures()">{{'common.text.downloadNoFiles' | translate}}</ng-container>
-
-      <mat-selection-list [(ngModel)]="lectureList" (selectionChange)="selectionChanged($event)">
-        <mat-list-option [value]="buildValueObject('course', 'none', this.course)">
-          <h3> Select All </h3>
-          <span class="lightgray"> Course </span>
-        </mat-list-option>
-        <mat-divider></mat-divider>
-        <ng-container *ngFor="let lec of this.course.lectures">
-          <mat-list-option [value]="buildValueObject('lecture', 'course', lec)">
-            <h4 class="lec">{{lec.name}}</h4>
-            <span class="lightgray lec"> Lecture </span>
-          </mat-list-option>
-          <div *ngFor="let unit of lec.units">
-            <div *ngIf="!(unit.__t==='file')">
-              <mat-list-option [value]="buildValueObject('unit', lec._id, unit)">
-                <h4 class="unit"> {{unit.name}} </h4>
-                <span class="lightgray unit"> Unit </span>
-              </mat-list-option>
-            </div>
-          </div>
-          <mat-divider></mat-divider>
-        </ng-container>
-      </mat-selection-list>
-
+    <app-download-tree [course]="this.course"></app-download-tree>
     </mat-card-content>
     <mat-card-actions>
       <button mat-raised-button color="primary" [disabled]="this.disableDownloadButton" (click)="downloadAndClose()">
