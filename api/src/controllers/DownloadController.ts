@@ -13,14 +13,11 @@ import {IUser} from '../../../shared/models/IUser';
 import {Course} from '../models/Course';
 import config from '../config/main';
 
-
 const fs = require('fs');
 const archiver = require('archiver');
 import crypto = require('crypto');
 import {User} from '../models/User';
 import {File} from '../models/mediaManager/File';
-const path = require('path');
-
 
 const cache = require('node-file-cache').create({life: config.timeToLiveCacheValue});
 const pdf =  require('html-pdf');
