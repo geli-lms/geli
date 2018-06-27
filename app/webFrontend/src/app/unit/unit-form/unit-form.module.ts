@@ -43,7 +43,8 @@ import { AssignmentUnitFormComponent } from './assignment-unit-form/assignment-u
     FreeTextUnitFormComponent,
     TaskUnitFormComponent,
     UnitFormComponent,
-    UnitGeneralInfoFormComponent
+    UnitGeneralInfoFormComponent,
+    AssignmentUnitFormComponent
   ],
   providers: [
     UnitFormService

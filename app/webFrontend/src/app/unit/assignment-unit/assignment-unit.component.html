@@ -1,40 +1,64 @@
+<!--STUDENT VIEW-->
 <ng-container *ngIf="this.userService.isStudent()">
-<ng-container *ngIf="!canBeDeleted()" [formGroup]="unitForm">
-    <app-upload-form [uploadMethod]="'POST'"
-                     [uploadPath]="uploadPath"
-                     [additionalData]="null"
-                     [allowedMimeTypes]="allowedMimeTypes"
-                     [uploadSingleFile]="true"
-                     [maxFileNumber]="1"
-                     (onFileUploaded)="onFileUploaded($event)"
-                     (onAllUploaded)="onAllUploaded()"
-    ></app-upload-form>
-    <div class="upload-button-group">
-        <button mat-raised-button color="primary" (click)="startUpload()" [disabled]="!isObjectInQueue()">
-            <mat-icon>file_upload</mat-icon>
-            {{ 'file.text.infoDropAddFiles' | translate }}
-        </button>
-        <button mat-raised-button (click)="cancel()">Cancel</button>
-    </div>
-</ng-container>
-<ng-container *ngIf="this.file !== null"><a href="{{ '/api/uploads/' + this.file.link }}" download="{{this.file.name}}">{{this.file.name}}</a></ng-container> <span *ngIf="readyForGreating()">Status: <mat-icon>{{assignmentIcon}}</mat-icon></span>
-<button *ngIf="!isSubmited()" mat-raised-button color="primary" (click)="submitAssignment()" >{{ 'unit.submitAss' | translate }}</button>
-<button *ngIf="!isSubmited()" mat-raised-button color="warn" (click)="deleteAssignment()" matTooltip="{{'unit.deleteAssignment' | translate}}">
-  <mat-icon>delete</mat-icon>
-</button>
-</ng-container>
-<ng-container *ngIf="this.userService.isTeacher()">
-    <div *ngFor="let unit of this.assignmentUnit.assignments;">
-        <div *ngIf="unit.submitted">
-            <span>User: {{unit.user.profile.firstName}} {{unit.user.profile.lastName}} </span>
-            <span>File: <a href="{{ '/api/uploads/' + unit.file.link }}" download="{{unit.file.name}}">{{unit.file.name}}</a></span>
-            <span><mat-select>
-          <mat-option [value]="enrollType">Open</mat-option>
-          <mat-option [value]="enrollType">Failed</mat-option>
-          <mat-option [value]="enrollType">Accpected</mat-option>
-        </mat-select>
-    </span>
+    <ng-container *ngIf="!canBeDeleted()" [formGroup]="unitForm">
+        <app-upload-form [uploadMethod]="'POST'"
+                         [uploadPath]="uploadPath"
+                         [additionalData]="null"
+                         [allowedMimeTypes]="allowedMimeTypes"
+                         [uploadSingleFile]="true"
+                         [maxFileNumber]="1"
+                         (onFileUploaded)="onFileUploaded($event)"
+                         (onAllUploaded)="onAllUploaded()"
+        ></app-upload-form>
+        <div class="upload-button-group">
+            <button mat-raised-button color="primary" (click)="startUpload()" [disabled]="!isObjectInQueue()">
+                <mat-icon>file_upload</mat-icon>
+                {{ 'file.text.infoDropAddFiles' | translate }}
+            </button>
+            <button mat-raised-button (click)="cancel()">Cancel</button>
         </div>
+    </ng-container>
+    <div class="assignment-status-group">
+        <ng-container *ngIf="this.file !== null"><a href="{{ '/api/uploads/' + this.file.link }}"
+                                                    download="{{this.file.name}}">{{this.file.name}}</a></ng-container>
+        <span class="status-group" *ngIf="readyForGreating()">Status: <mat-icon id="{{assignmentIcon}}">{{assignmentIcon}}</mat-icon></span>
+    </div>
+    <div class="submit-button-group">
+        <button *ngIf="!isSubmited()" mat-raised-button color="primary" (click)="submitAssignment()">{{ 'unit.submitAss'
+            | translate }}
+        </button>
+        <button class="delete-button" *ngIf="!isSubmited()" mat-raised-button color="warn" (click)="deleteAssignment()"
+                matTooltip="{{'unit.deleteAssignment' | translate}}">
+            <mat-icon>delete</mat-icon>
+        </button>
     </div>
 </ng-container>
+
+<!--TEACHER VIEW-->
+<ng-container *ngIf="this.userService.isTeacher()">
+
+    <table>
+        <tr class="heading-row">
+            <td>Student</td>
+            <td>File</td>
+            <td>Status</td>
+        </tr>
+        <tr class="content-row" *ngFor="let unit of this.assignmentUnit.assignments;">
+            <td *ngIf="unit.submitted">{{unit.user.profile.firstName}} {{unit.user.profile.lastName}}</td>
+            <td *ngIf="unit.submitted"><a href="{{ '/api/uploads/' + unit.file.link }}"
+                                          download="{{unit.file.name}}">{{unit.file.name}}</a></td>
+            <td *ngIf="unit.submitted">
+                <mat-form-field>
+                    <mat-select placeholder="Status">
+                        <mat-option >Open</mat-option>
+                        <mat-option (click)="this.submitStatusChange(unit._id, 0)">Failed</mat-option>
+                        <mat-option (click)="this.submitStatusChange(unit._id, 1)">Accpected</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </td>
+        </tr>
+    </table>
+
+</ng-container>
+
 

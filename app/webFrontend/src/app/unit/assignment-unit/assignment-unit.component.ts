@@ -9,15 +9,15 @@ import {AssignmentService} from "../../shared/services/data.service";
 import {UserService} from '../../shared/services/user.service';
 
 enum AssignmentIcon {
-  TURNED_IN = 'assignment_turned_in',
-  ACCEPTED = 'done',
-  FAILED = 'clear',
+    TURNED_IN = 'assignment_turned_in',
+    ACCEPTED = 'done',
+    FAILED = 'clear',
 }
 
 @Component({
-  selector: 'app-assignment-unit',
-  templateUrl: './assignment-unit.component.html',
-  styleUrls: ['./assignment-unit.component.scss']
+    selector: 'app-assignment-unit',
+    templateUrl: './assignment-unit.component.html',
+    styleUrls: ['./assignment-unit.component.scss']
 })
 export class AssignmentUnitComponent implements OnInit {
     @Input() assignmentUnit: IAssignmentUnit;
@@ -32,21 +32,22 @@ export class AssignmentUnitComponent implements OnInit {
 
     constructor(public unitFormService: UnitFormService,
                 public formBuilder: FormBuilder,
-              public userService: UserService,
-                private assignmentService: AssignmentService){ }
+                public userService: UserService,
+                private assignmentService: AssignmentService) {
+    }
 
     ngOnInit() {
-      if (this.assignmentUnit.assignments.length) {
-        this.file = this.assignmentUnit.assignments[0].file;
+        if (this.assignmentUnit.assignments.length) {
+            this.file = this.assignmentUnit.assignments[0].file;
 
-        if (this.assignmentUnit.assignments[0].checked === 1) {
-          this.assignmentIcon = AssignmentIcon.ACCEPTED;
-        } else if (this.assignmentUnit.assignments[0].checked === 2) {
-          this.assignmentIcon = AssignmentIcon.FAILED;
-        } else {
-          this.assignmentIcon = AssignmentIcon.TURNED_IN;
+            if (this.assignmentUnit.assignments[0].checked === 1) {
+                this.assignmentIcon = AssignmentIcon.ACCEPTED;
+            } else if (this.assignmentUnit.assignments[0].checked === 2) {
+                this.assignmentIcon = AssignmentIcon.FAILED;
+            } else {
+                this.assignmentIcon = AssignmentIcon.TURNED_IN;
+            }
         }
-      }
 
         this.uploadPath = '/api/units/' + this.assignmentUnit._id + '/assignment';
         this.allowedMimeTypes = ['text/plain'];
@@ -88,39 +89,50 @@ export class AssignmentUnitComponent implements OnInit {
     }
 
     public isSubmited() {
-      if (!this.assignmentUnit.assignments.length) {
-        return true;
-      } else {
-        if(this.assignmentUnit.assignments[0].submitted) {
-          return true;
+        if (!this.assignmentUnit.assignments.length) {
+            return true;
+        } else {
+            if (this.assignmentUnit.assignments[0].submitted) {
+                return true;
+            }
+            return false;
         }
-        return false;
-      }
     }
 
     public deleteAssignment() {
-      this.assignmentService.deleteAssignment(this.assignmentUnit._id.toString());
+        this.assignmentService.deleteAssignment(this.assignmentUnit._id.toString());
     }
 
     public canBeDeleted() {
-      if (this.assignmentUnit.assignments.length) {
-        return true;
-      } else {
-        return false;
-      }
+        if (this.assignmentUnit.assignments.length) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public readyForGreating() {
-      if (this.assignmentUnit.assignments.length) {
-        if (this.assignmentUnit.assignments[0].submitted) {
-          return true;
+        if (this.assignmentUnit.assignments.length) {
+            if (this.assignmentUnit.assignments[0].submitted) {
+                return true;
+            }
         }
-    } 
         return false;
     }
 
     public submitAssignment() {
-      this.assignmentUnit.assignments[0].submitted = true;
-      this.assignmentService.updateAssignment(this.assignmentUnit.assignments[0], this.assignmentUnit._id.toString());
+        this.assignmentUnit.assignments[0].submitted = true;
+        this.assignmentService.updateAssignment(this.assignmentUnit.assignments[0], this.assignmentUnit._id.toString());
+    }
+
+    public submitStatusChange(unitId, approved) {
+        const assignmentIndex = this.getElementIndexById(this.assignmentUnit.assignments, unitId);
+        this.assignmentUnit.assignments[assignmentIndex].checked = approved;
+    }
+
+    private getElementIndexById(arr, id) {
+        return arr.findIndex((item) => {
+            return item._id === id
+        })
     }
 }
