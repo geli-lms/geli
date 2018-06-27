@@ -6,7 +6,7 @@ import {Component, OnInit} from '@angular/core';
   styleUrls: ['./cookie-banner.component.scss']
 })
 export class CookieBannerComponent implements OnInit {
-  
+
   isCookieAccepted: boolean;
 
   constructor() {
