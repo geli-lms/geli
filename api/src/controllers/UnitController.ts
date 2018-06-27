@@ -358,9 +358,15 @@ export class UnitController {
     }
 
     for (let assignment of assignmentUnit.assignments) {
-      if (assignment.user._id === currentUser._id) {
-        assignment = data;
+      if (assignment.user._id.toString() === currentUser._id) {
+        if(assignment.submitted) {
+            throw new BadRequestError();
+        }
+
+      const index = assignmentUnit.assignments.indexOf(assignment);
+        assignmentUnit.assignments[index].submitted = data.submitted;
         try {
+        console.log(assignmentUnit);
           await assignmentUnit.save();
         } catch (err) {
           if (err.name === 'ValidationError') {
@@ -404,7 +410,10 @@ export class UnitController {
     }
 
     for (const assignment of assignmentUnit.assignments) {
-      if (assignment.user._id === currentUser._id) {
+      if (assignment.user._id.toString() === currentUser._id) {
+          if(assignment.submitted) {
+            throw new BadRequestError();
+          }
         const index = assignmentUnit.assignments.indexOf(assignment, 0);
         assignmentUnit.assignments.splice(index, 1);
         await assignmentUnit.save();
