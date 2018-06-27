@@ -198,7 +198,7 @@ userSchema.pre('remove', async function () {
     //whitelists
     promises.push(WhitelistUser.remove({uid:localUser.uid}));
     //remove user form courses
-    promises.push(Course.update(
+    promises.push(Course.updateMany(
       {$or: [
           {students:localUser._id},
           {teachers:localUser._id}
