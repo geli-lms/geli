@@ -47,7 +47,7 @@ export class DownloadCourseDialogComponent implements OnInit {
   }
 
   calcSumFileSize(): number {
-     let sum = 0;
+    let sum = 0;
     // this.childLectures.forEach(lecture => {
     //   lecture.childUnits.forEach(unit => {
     //     if (unit.files) {
@@ -142,53 +142,38 @@ export class DownloadCourseDialogComponent implements OnInit {
     // this.onChange();
   }
 
-  lectureChangedOrAll($event) {
-    console.dir($event);
-  }
+  async selectionChanged($event) {
+    const changedOption: MatListOption = $event.option;
+    const srcList: MatSelectionList = $event.source;
+    const lectureOption: MatListOption = await this.getOptionWithLecture(changedOption.value.parentID, srcList);
 
-  lectureChanged($event) {
-
-  }
-
-  unitChanged($event) {
-    console.dir($event);
-    let lectureOption: MatListOption = this.getOptionWithLecture(this.getLecture($event.option.value._id));
-    let srcList: MatSelectionList = $event.source._element;
-    // let parentLecture: ILecture =
-    if ($event.source.selectedOptions.length == $event.source.options.length) {
-      //lec full anhaken.
+    if ($event.source.selectedOptions.length === $event.source.options.length) {
+      // lec full anhaken.
       lectureOption.selected = true;
-    } else if ($event.source.selectedOptions.length == 0) {
+    } else if ($event.source.selectedOptions.length === 0) {
       lectureOption.selected = false;
     } else {
-      //partially/indeterminate
+      // partially/indeterminate
       lectureOption.selected = true;
     }
   }
 
-  getLecture(unitID) {
-    this.course.lectures.forEach((lec: ILecture) => {
-      lec.units.forEach((unit: IUnit) => {
-        if (unit._id == unitID) {
-          return lec;
+  getOptionWithLecture(lecID, srcList): MatListOption {
+    srcList.options.forEach((opt) => {
+      if (opt.value.type === 'lecture') {
+        if (opt.value.value._id === lecID) {
+          return opt;
         }
-      });
-    });
-
-  }
-
-  getOptionWithLecture(lecID): MatListOption {
-    console.dir(this.lectureList);
-    this.lectureList.options.forEach((opt) => {
-      if (opt.value._id == lecID) {
-        return opt;
       }
     });
+    console.dir('error: no lecture found');
     return null;
   }
 
 
-
+  buildValueObject(type: string, parent: string, value: any) {
+    return {type: type, parentID: parent, value: value};
+  }
 
 
 }

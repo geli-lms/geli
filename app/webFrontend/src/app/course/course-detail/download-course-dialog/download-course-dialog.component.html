@@ -2,21 +2,30 @@
   <mat-card class="dl-card">
     <mat-card-content>
       <ng-container *ngIf="!this.checkForEmptyLectures()">{{'common.text.downloadNoFiles' | translate}}</ng-container>
-      <mat-list>
-        <mat-list-item class="selectAll">
-          <h3>
-            <mat-icon matTooltip="{{'course.text.downloadHelpText' | translate}}" class="infoIcon">
-              info
-            </mat-icon>
-            {{ 'file.text.selectAll' | translate }}
-          </h3>
-          <span class="spacer"></span>
+
+      <mat-selection-list [(ngModel)]="lectureList" (selectionChange)="selectionChanged($event)">
+        <mat-list-option [value]="buildValueObject('course', 'none', this.course)">
+          <h3> Select All </h3>
           <span class="lightgray"> Course </span>
-          <mat-checkbox [(ngModel)]="chkbox" (change)="onChange()" class="chkbox"></mat-checkbox>
-        </mat-list-item>
-        <app-lecture-checkbox (valueChanged)="onChildEvent($event)" *ngFor=" let lecture of course.lectures"
-                              [lecture]="lecture"></app-lecture-checkbox>
-      </mat-list>
+        </mat-list-option>
+        <mat-divider></mat-divider>
+        <ng-container *ngFor="let lec of this.course.lectures">
+          <mat-list-option [value]="buildValueObject('lecture', 'course', lec)">
+            <h4 class="lec">{{lec.name}}</h4>
+            <span class="lightgray lec"> Lecture </span>
+          </mat-list-option>
+          <div *ngFor="let unit of lec.units">
+            <div *ngIf="!(unit.__t==='file')">
+              <mat-list-option [value]="buildValueObject('unit', lec._id, unit)">
+                <h4 class="unit"> {{unit.name}} </h4>
+                <span class="lightgray unit"> Unit </span>
+              </mat-list-option>
+            </div>
+          </div>
+          <mat-divider></mat-divider>
+        </ng-container>
+      </mat-selection-list>
+
     </mat-card-content>
     <mat-card-actions>
       <button mat-raised-button color="primary" [disabled]="this.disableDownloadButton" (click)="downloadAndClose()">
