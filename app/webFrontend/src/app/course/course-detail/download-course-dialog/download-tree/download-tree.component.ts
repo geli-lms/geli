@@ -1,12 +1,12 @@
 import {SelectionModel} from '@angular/cdk/collections';
 import {FlatTreeControl} from '@angular/cdk/tree';
-import {Component, Injectable, Input} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {MatTreeFlatDataSource, MatTreeFlattener} from '@angular/material/tree';
-import {BehaviorSubject, Observable, of as observableOf} from 'rxjs';
+import {Observable} from 'rxjs/Observable';
+import {of as observableOf} from 'rxjs/observable/of';
 import {ICourse} from '../../../../../../../../shared/models/ICourse';
 import {DataSharingService} from '../../../../shared/services/data-sharing.service';
 import {IFileUnit} from '../../../../../../../../shared/models/units/IFileUnit';
-import {IUnit} from '../../../../../../../../shared/models/units/IUnit';
 
 export class DLNode {
   children: DLNode[];
@@ -93,7 +93,7 @@ export class DownloadTreeComponent {
   }
 
   preBuildJSON(): object {
-    let copyCourse: any = {};
+    const copyCourse: any = {};
     const key = this.course.name;
     copyCourse[key] = {};
     this.course.lectures.forEach((lec) => {
@@ -119,48 +119,6 @@ export class DownloadTreeComponent {
     console.dir(copyCourse);
     return copyCourse;
   }
-
-// var key = "happyCount";
-//   var obj = {};
-//   obj[key] = someValueArray;
-//   myArray.push(obj);
-//
-//
-// {
-//   Applications: {
-//     Calendar: 'app',
-//     Chrome: 'app',
-//     Webstorm: 'app'
-//   },
-//   Documents: {
-//     angular: {
-//       src: {
-//         compiler: 'ts',
-//         core: 'ts'
-//       }
-//     },
-//     material2: {
-//       src: {
-//         button: 'ts',
-//         checkbox: 'ts',
-//         input: 'ts'
-//       }
-//     }
-//   },
-//   Downloads: {
-//     October: 'pdf',
-//     November: 'pdf',
-//     Tutorial: 'html'
-//   },
-//   Pictures: {
-//     'Photo Booth Library': {
-//       Contents: 'dir',
-//       Pictures: 'dir'
-//     },
-//     Sun: 'png',
-//     Woods: 'jpg'
-//   }
-// }
 
   /**
    * Build the file structure tree. The `value` is the Json object, or a sub-tree of a Json object.
