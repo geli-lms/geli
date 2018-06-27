@@ -11,7 +11,10 @@ export default function passportLoginMiddleware(req: any, res: any, next: (err: 
       // second authentication -> ldap
       const result = ldapLogin(username, password);
 
-      if (result == null) {
+      if (result != null) {
+        // TODO: return correct result-object
+        next(result);
+      } else {
         res.status(401).json(err); // set status and json body, does not get set automatically
         return next(err); // pass error to further error handling functions
       }
@@ -33,11 +36,11 @@ async function ldapLogin(username: string, password: string) {
     const dn = buildDn(username);
     client = ldap.createClient(OPTS);
 
-    const isLoggedIn = await this.isLdapAuthenticated(client, dn, password);
+    const isLoggedIn = await isLdapAuthenticated(client, dn, password);
 
     // first authenticate then search
     if (isLoggedIn) {
-      await this.ldapSearch(client, dn);
+      await ldapSearch(client, dn);
     }
   } catch (ex) {
       // log exceptions
@@ -86,7 +89,7 @@ function ldapSearch(client: any, dn: string) {
   });
 }
 
-function isLdapAuthenticated(client: any, dn: string, password: string) {
+async function isLdapAuthenticated(client: any, dn: string, password: string) {
     // check if login is possible with this username and password
     client.bind(dn, password, function (err: object) {
       if (err == null) {
