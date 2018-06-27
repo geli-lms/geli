@@ -1,11 +1,11 @@
-<div class="cookieNotice" [style.display]="displayState">
+<ng-container class="cookieNotice" [style.display]="displayState">
   <div class="cookieContent">
-    <p>
-      {{ 'cookie.text.cookieHint' | translate }}
-    </p>
+    <p class="cookieText">{{ 'cookie.text.cookieHint' | translate }}</p>
     <div class="controlArea">
-      <a href="/privacy" target="_blank">{{ 'cookie.text.moreInformation' | translate }}</a>
+      <a class="more-info" mat-button color="accent" routerLink="/privacy" routerLinkActive="active" target="_blank">
+        {{ 'cookie.text.moreInformation' | translate }}
+      </a>
       <button mat-raised-button color="accent" (click)="onAccept()" type="button">{{ 'common.ok' | translate }}</button>
     </div>
   </div>
-</div>
+</ng-container>
