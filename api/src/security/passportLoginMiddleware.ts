@@ -5,7 +5,7 @@ export default function passportLoginMiddleware(req: any, res: any, next: (err: 
   const username = req.body.email;
   const password = req.body.password;
   const authFunction = authenticate('local', {session: false});
-  
+
   authFunction(req, res, (err: any) => {
     if (err) {
       // second authentication -> ldap
@@ -40,20 +40,20 @@ async function ldapLogin(username: string, password: string) {
       await this.ldapSearch(client, dn);
     }
   } catch (ex) {
-    console.error(ex.text);
+      // log exceptions
+      winston.log('warn', 'error: ' + ex.message);
   } finally {
     // force unbind if exists
     if (client != null) {
       client.unbind();
     }
   }
-
 }
 
 function buildOpts() {
   const OPTS = {
     url: 'ldap://ldap-rr.fbi.h-da.de:389',
-    connectTimeout: 10000
+    connectTimeout: 3000
   };
   return OPTS;
 }
@@ -69,21 +69,25 @@ function ldapSearch(client: any, dn: string) {
   client.search(dn, (err: any, res: any) => {
 
     res.on('searchEntry', function (entry: any) {
+      // TODO: this is not the right result object -> need to be discussed if a "new user" should be created here
       return entry.object;
     });
     res.on('searchReference', function (referral: any) {
+      // TODO: find out if this case could be possible
       console.log('referral: ' + referral.uris.join());
     });
     res.on('error', function (error: any) {
       winston.log('warn', 'error: ' + error.message);
     });
     res.on('end', function (result: any) {
+      // TODO: can be ignored?
       console.log(result);
     });
   });
 }
 
 function isLdapAuthenticated(client: any, dn: string, password: string) {
+    // check if login is possible with this username and password
     client.bind(dn, password, function (err: object) {
       if (err == null) {
         return true;
