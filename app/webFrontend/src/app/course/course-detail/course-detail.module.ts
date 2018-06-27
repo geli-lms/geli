@@ -4,9 +4,6 @@ import {CourseDetailComponent} from './course-detail.component';
 import {CourseOverviewComponent} from './course-overview/course-overview.component';
 import {FileViewComponent} from './file-view/file-view.component';
 import {DownloadCourseDialogComponent} from './download-course-dialog/download-course-dialog.component';
-import {UploadUnitCheckboxComponent} from './download-course-dialog/downloadCheckBoxes/upload-unit-checkbox.component';
-import {LectureCheckboxComponent} from './download-course-dialog/downloadCheckBoxes/lecture-checkbox.component';
-import {UnitCheckboxComponent} from './download-course-dialog/downloadCheckBoxes/unit-checkbox.component';
 import {CourseDetailRoutingModule} from './course-detail-routing.module';
 import {SharedModule} from '../../shared/shared.module';
 import {LectureModule} from '../../lecture/lecture.module';
@@ -29,9 +26,6 @@ import { DownloadTreeComponent } from './download-course-dialog/download-tree/do
     CourseOverviewComponent,
     FileViewComponent,
     DownloadCourseDialogComponent,
-    LectureCheckboxComponent,
-    UnitCheckboxComponent,
-    UploadUnitCheckboxComponent,
     VideoViewComponent,
     GridComponent,
     DownloadTreeComponent,
@@ -42,8 +36,6 @@ import { DownloadTreeComponent } from './download-course-dialog/download-tree/do
   exports: [
     CourseDetailComponent,
     DownloadCourseDialogComponent,
-    LectureCheckboxComponent,
-    UnitCheckboxComponent,
   ],
   providers: [
     CourseDetailDataResolve,
