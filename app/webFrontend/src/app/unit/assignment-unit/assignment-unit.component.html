@@ -1,3 +1,4 @@
+<ng-container *ngIf="this.userService.isStudent()">
 <ng-container *ngIf="!canBeDeleted()" [formGroup]="unitForm">
     <app-upload-form [uploadMethod]="'POST'"
                      [uploadPath]="uploadPath"
@@ -21,3 +22,19 @@
 <button *ngIf="!isSubmited()" mat-raised-button color="warn" (click)="deleteAssignment()" matTooltip="{{'unit.deleteAssignment' | translate}}">
   <mat-icon>delete</mat-icon>
 </button>
+</ng-container>
+<ng-container *ngIf="this.userService.isTeacher()">
+    <div *ngFor="let unit of this.assignmentUnit.assignments;">
+        <div *ngIf="unit.submitted">
+            <span>User: {{unit.user.profile.firstName}} {{unit.user.profile.lastName}} </span>
+            <span>File: <a href="{{ '/api/uploads/' + unit.file.link }}" download="{{unit.file.name}}">{{unit.file.name}}</a></span>
+            <span><mat-select>
+          <mat-option [value]="enrollType">Open</mat-option>
+          <mat-option [value]="enrollType">Failed</mat-option>
+          <mat-option [value]="enrollType">Accpected</mat-option>
+        </mat-select>
+    </span>
+        </div>
+    </div>
+</ng-container>
+

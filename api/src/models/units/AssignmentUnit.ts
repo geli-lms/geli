@@ -4,6 +4,7 @@ import {IUser} from '../../../../shared/models/IUser';
 import {IUnitModel, Unit} from './Unit';
 import {ICourseModel} from "../Course";
 import {File} from '../mediaManager/File';
+import {User} from '../User';
 
 interface IAssignmentUnitModel extends IAssignmentUnit, IUnitModel {
   // secureData: (user: IUser) => Promise<IAssignmentUnit>;
@@ -41,7 +42,8 @@ assignmentsSchema.pre('save', function() {
 
 
 assignmentsSchema.methods.secureData = async function (user: IUser): Promise<IAssignmentUnit> {
-   if (user.role === 'student' && this.assignments.length) {
+  if(this.assignments.length) {
+   if (user.role === 'student') {
 
      let assignmentToUse;
 
@@ -56,6 +58,14 @@ assignmentsSchema.methods.secureData = async function (user: IUser): Promise<IAs
      if (assignmentToUse) {
        this.assignments.push(assignmentToUse);
      }
+   } else {
+           for(const assignment of this.assignments) {
+       if(assignment.submitted) {
+         assignment.file = await File.findById(assignment.file._id);
+         assignment.user = await User.findById(assignment.user._id);
+       }
+     }
+   }
    }
    return this;
 };

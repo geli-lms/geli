@@ -6,6 +6,7 @@ import {UploadFormComponent} from "../../shared/components/upload-form/upload-fo
 import {IFileUnit} from "../../../../../../shared/models/units/IFileUnit";
 import {IFile} from '../../../../../../shared/models/IFile';
 import {AssignmentService} from "../../shared/services/data.service";
+import {UserService} from '../../shared/services/user.service';
 
 enum AssignmentIcon {
   TURNED_IN = 'assignment_turned_in',
@@ -31,6 +32,7 @@ export class AssignmentUnitComponent implements OnInit {
 
     constructor(public unitFormService: UnitFormService,
                 public formBuilder: FormBuilder,
+              public userService: UserService,
                 private assignmentService: AssignmentService){ }
 
     ngOnInit() {
