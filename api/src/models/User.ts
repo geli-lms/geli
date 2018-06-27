@@ -201,20 +201,19 @@ userSchema.pre('remove', async function () {
     promises.push(Course.update(
       {$or: [
           {students:localUser._id},
-          {teachers:localUser._id},
-          {courseAdmin:localUser._id}]},
+          {teachers:localUser._id}
+          ]},
       {$pull: {
             "students":localUser._id,
-            "teachers":localUser._id,
-            "courseAdmin":localUser._id
+            "teachers":localUser._id
           }
       }));
     //progress
     promises.push(Progress.remove({user: localUser._id}));
-
-
     // image
     const result = await Promise.all(promises);
+
+    console.log(result);
 
   } catch (e) {
     throw new Error('Delete Error: ' + e.toString());

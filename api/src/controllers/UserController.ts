@@ -464,6 +464,8 @@ export class UserController {
    * @api {delete} /api/users/:id Delete user
    * @apiName DeleteUser
    * @apiGroup User
+   * @apiPermission student
+   * @apiPermission teacher
    * @apiPermission admin
    *
    * @apiParam {String} id User ID.
@@ -485,7 +487,7 @@ export class UserController {
       if (otherAdmin === null) {
         throw new BadRequestError(errorCodes.user.noOtherAdmins.text);
       }
-    }else if(id != currentUser._id){
+    }else if(id != currentUser._id && currentUser.role != 'admin'){
       throw new BadRequestError(errorCodes.user.cantDeleteOtherUsers.text);
     }
     await User.findByIdAndRemove(id);
