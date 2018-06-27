@@ -138,7 +138,7 @@ codeKataSchema.methods.toHtmlForSinglePDF = function (): String {
   const md = new MarkdownIt({html: true});
 
 
-  let html = '<div id="nextPage" class="bottomBoxWrapper">';
+  let html = '<div class="bottomBoxWrapper">';
   html += '<div><h4>' + md.render('Unit:' + this.name) + '</h4>'
     + '<span>' + md.render(this.description ? 'Description: ' + this.description : '') + '</span></div>';
   html += '<h5>Task</h5>';

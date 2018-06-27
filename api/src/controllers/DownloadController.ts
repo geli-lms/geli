@@ -377,7 +377,7 @@ export class DownloadController {
                 archive.file( 'uploads/' + file.link, {name: lecCounter + '_' + lcName + '/' + unitCounter + '_' + file.name});
               }
             } else {
-              html += localUnit.toHtmlForSinglePDF();
+              html += '<div id="nextPage" >' + localUnit.toHtmlForSinglePDF()+'</div>';
               solutions += localUnit.toHtmlForSinglePDFSolutions();
             }
             unitCounter++;
