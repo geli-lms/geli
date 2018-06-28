@@ -200,6 +200,12 @@
       "noKeyRequired" : "Frei zugänglich"
     }
   },
+  "cookie": {
+    "text" : {
+      "moreInformation" : "Weitere Informationen",
+      "cookieHint" : "Geli verwendet Cookies, um Ihnen den bestmöglichen Service zu gewährleisten. Wenn Sie auf der Seite weitersurfen, stimmen Sie der Cookie-Nutzung zu, wie im Impressum beschrieben."
+    }
+  },
   "dashboard": {
     "addCourse": "Kurs hinzufügen",
     "availableCourses": "Verfügbare Kurse",

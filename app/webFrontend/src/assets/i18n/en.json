@@ -200,6 +200,12 @@
       "noKeyRequired": "Free access"
     }
   },
+  "cookie": {
+    "text": {
+      "moreInformation": "More Information",
+      "cookieHint": "Geli uses cookies to function properly. By using this site you agree to the use of cookies as described in our policy."
+    }
+  },
   "dashboard": {
     "addCourse": "Add course",
     "availableCourses": "Available courses",
