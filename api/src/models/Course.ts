@@ -103,6 +103,7 @@ const courseSchema = new mongoose.Schema({
         if (ret.hasOwnProperty('_id') && ret._id !== null) {
           ret._id = ret._id.toString();
         }
+
         if (ret.hasOwnProperty('courseAdmin') && ret.courseAdmin !== null && (ret.courseAdmin instanceof ObjectID)) {
           ret.courseAdmin = ret.courseAdmin.toString();
         }
