@@ -64,12 +64,12 @@ $chat-header-height : 40px;
 
 .chat-toggle {
   position: fixed;
-  right: 10px;
+  right: 0.5em;
   z-index: 255;
 }
 
 .chat-toggle-show {
-  bottom: 20px;
+  bottom: 1em;
   animation: fadeInUp 1s;
 }
 
@@ -95,11 +95,11 @@ $chat-header-height : 40px;
 
 @media screen and (min-width: 600px) {
   .chat-container-show{
-    width: 400px;
-    box-shadow: 0 0 15px 0 rgba(0,0,0,0.15);
-    right: 10px;
-    bottom: 5px;
-    height: 600px;
+    width: 25em;
+    box-shadow: 0 0 1em 0 rgba(0,0,0,0.15);
+    right: 1em;
+    bottom: 0.5em;
+    height: 65%;
   }
 }
 
@@ -109,7 +109,6 @@ $chat-header-height : 40px;
   display: flex;
   align-items: center;
   width: 100%;
-  border-radius: 8px 8px 0 0;
   border-color: $primary;
   height: $chat-header-height;
   color: white;
@@ -119,7 +118,7 @@ $chat-header-height : 40px;
   flex: 1 1 auto;
   font-size: .95em;
   font-weight: 700;
-  padding: 0 0 0 15px;
+  padding: 0 0 0 1em;
 }
 
 .forum-container{
