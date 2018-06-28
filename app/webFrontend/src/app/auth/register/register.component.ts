@@ -113,7 +113,9 @@ export class RegisterComponent implements OnInit {
         lastName: ['', Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(64)])],
       }),
       email: ['', Validators.compose([emailValidator, Validators.required, this.validateTeacherEmail.bind(this)])],
-      uid: ['', [this.validateMatriculationNumber.bind(this)]]
+      uid: ['', [this.validateMatriculationNumber.bind(this)]],
+      privacyCheckbox: [false, Validators.requiredTrue],
+      termsCheckbox: [false, Validators.requiredTrue]
     });
   }
 
