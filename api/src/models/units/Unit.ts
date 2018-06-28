@@ -67,7 +67,7 @@ const unitSchema = new mongoose.Schema({
         if (ret._course) {
           ret._course = ret._course.toString();
         }
-        ret._course = ret._course.toString();
+
         if (ret.hasOwnProperty('chatRoom') && ret.chatRoom) {
           ret.chatRoom = ret.chatRoom.toString();
         }
