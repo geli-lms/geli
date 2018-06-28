@@ -403,6 +403,13 @@ export class UserDataService extends DataService {
     this.apiPath = originalApiPath;
     return promise;
   }
+
+  exportData(): Promise<Response> {
+    const url = 'export/user';
+    return this.backendService
+      .getDownload(url)
+      .toPromise();
+  }
 }
 
 @Injectable()
