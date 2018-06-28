@@ -3,13 +3,14 @@ import {Server} from '../../src/server';
 import {FixtureLoader} from '../../fixtures/FixtureLoader';
 import {JwtUtils} from '../../src/security/JwtUtils';
 import {User} from '../../src/models/User';
+import {Lecture} from '../../src/models/Lecture';
 import {FixtureUtils} from '../../fixtures/FixtureUtils';
 import chaiHttp = require('chai-http');
 import {IDownload} from '../../../shared/models/IDownload';
 
-
 chai.use(chaiHttp);
 const should = chai.should();
+const expect = chai.expect;
 const app = new Server().app;
 const BASE_URL = '/api/download';
 const fixtureLoader = new FixtureLoader();
@@ -108,6 +109,29 @@ describe('DownloadFile', () => {
         .catch(err => err.response);
       res.status.should.be.equal(500);
     });
+
+    it('should pass', async () => {
+      const course = await FixtureUtils.getRandomCourse();
+      const teacher = await User.findById(course.courseAdmin);
+      const lecture = await Lecture.findById(course.lectures[0]);
+
+      const testData = {
+        'courseName': course._id,
+        'lectures': [{
+          'lectureId': lecture._id ,
+          'units': [{'unitId': lecture.units[0] }]
+        }]
+      };
+      const res = await chai.request(app)
+        .post(BASE_URL + '/pdf/individual')
+        .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
+        .send(testData)
+        .catch(err => err.response);
+
+      expect(res).to.have.status(200);
+      expect(res).to.be.json;
+    });
+
   });
 
 
@@ -177,6 +201,28 @@ describe('DownloadFile', () => {
         .send(testData)
         .catch(err => err.response);
       res.status.should.be.equal(500);
+    });
+
+    it('should pass', async () => {
+      const course = await FixtureUtils.getRandomCourse();
+      const teacher = await User.findById(course.courseAdmin);
+      const lecture = await Lecture.findById(course.lectures[0]);
+
+      const testData = {
+        'courseName': course._id,
+        'lectures': [{
+          'lectureId': lecture._id ,
+          'units': [{'unitId': lecture.units[0] }]
+        }]
+      };
+      const res = await chai.request(app)
+        .post(BASE_URL + '/pdf/single')
+        .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
+        .send(testData)
+        .catch(err => err.response);
+
+      expect(res).to.have.status(200);
+      expect(res).to.be.json;
     });
   });
 });
