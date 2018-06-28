@@ -1,8 +1,16 @@
-import {Authorized, Get, JsonController, Param, UseBefore} from 'routing-controllers';
+import {Authorized, CurrentUser, Get, JsonController, NotFoundError, Param, Res, UseBefore} from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
-import {Course} from '../models/Course';
+import {Course, ICourseModel} from '../models/Course';
 import {Lecture} from '../models/Lecture';
 import {Unit} from '../models/units/Unit';
+import {IUser} from '../../../shared/models/IUser';
+import {User} from '../models/User';
+import {Notification} from '../models/Notification';
+import {NotificationSettings} from '../models/NotificationSettings';
+import {WhitelistUser} from '../models/WhitelistUser';
+import {IProgressModel, Progress} from '../models/progress/Progress';
+import {ITaskUnitProgressModel} from '../models/progress/TaskUnitProgress';
+import {Response} from 'express';
 
 @JsonController('/export')
 @UseBefore(passportJwtMiddleware)
@@ -88,5 +96,21 @@ export class ExportController {
   async exportUnit(@Param('id') id: string) {
     const unit = await Unit.findById(id);
     return unit.exportJSON();
+  }
+
+  @Get('/user')
+  @Authorized(['student', 'teacher', 'admin'])
+  async exportAllUserData(@CurrentUser() currentUser: IUser,  @Res() response: Response) {
+    // load user
+    const user = await User.findById(currentUser);
+
+    return {
+      user: await user.exportPersonalData(),
+      notifications: await Notification.exportPersonalData(user),
+      notificationSettings: await NotificationSettings.exportPersonalData(user),
+      whitelists: await WhitelistUser.exportPersonalData(user),
+      courses: await Course.exportPersonalData(user),
+      progress: await Progress.exportPersonalUserData(user)
+    };
   }
 }
