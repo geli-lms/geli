@@ -7,23 +7,22 @@ describe('Login-form', () => {
     page = new WebFrontendLogin();
   });
 
-  it('should have email and password input', () => {
-    page.navigateTo();
+  it('should have email and password input', async () => {
+    await page.navigateTo();
 
     expect(page.getInputEmail().isPresent()).toBeTruthy();
     expect(page.getInputPassword().isPresent()).toBeTruthy();
   });
 
-  it('show error when email or password empty', () => {
-    page.navigateTo();
+  it('show error when email or password empty', async () => {
+    await page.navigateTo();
 
-    page.getLoginButton().click().then(function () {
-      expect(page.getSnackBar().getText()).toContain('Login failed: auth.loginFailedError.undefined');
-    });
+    await page.getLoginButton().click();
+    expect(page.getSnackBar().getText()).toContain('Login failed: auth.loginFailedError.undefined');
   });
 
-  it('should login with valid credentials', () => {
-    page.navigateTo();
+  it('should login with valid credentials', async () => {
+    await page.navigateTo();
 
     const email = page.getInputEmail();
     email.sendKeys('student1@test.local');
@@ -31,8 +30,7 @@ describe('Login-form', () => {
     const password = page.getInputPassword();
     password.sendKeys('test1234');
 
-    page.getLoginButton().click().then(function () {
-      expect(page.getSnackBar().getText()).toContain('Login successful');
-    });
+    await page.getLoginButton().click();
+    expect(page.getSnackBar().getText()).toContain('Login successful');
   });
 });
