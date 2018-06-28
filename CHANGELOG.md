@@ -64,6 +64,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Fixed travis usages after angular 6 update [#789](https://github.com/utetrapp/geli/pull/789)
 - Build with source-maps [#797](https://github.com/utetrapp/geli/pull/797)
 - Add missing import for rxjs operators [#808](https://github.com/utetrapp/geli/issues/808)
+- Fixed wrong Image URL in profile export [#811](https://github.com/utetrapp/geli/issues/811)
 
 ## [[0.7.0](https://github.com/h-da/geli/releases/tag/v0.7.0)] - 2018-05-05 - SS 18 intermediate Release
 ### Added
