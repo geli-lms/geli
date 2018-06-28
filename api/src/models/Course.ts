@@ -18,7 +18,7 @@ import {IPicture} from '../../../shared/models/mediaManager/IPicture';
 import * as fs from 'fs';
 
 interface ICourseModel extends ICourse, mongoose.Document {
-  exportJSON: (sanitize?: boolean) => Promise<ICourse>;
+  exportJSON: (sanitize?: boolean, onlyBasicData?: boolean) => Promise<ICourse>;
   checkPrivileges: (user: IUser) => IProperties;
   forDashboard: (user: IUser) => ICourseDashboard;
   forView: () => ICourseView;
@@ -27,6 +27,7 @@ interface ICourseModel extends ICourse, mongoose.Document {
 }
 
 interface ICourseMongoose extends mongoose.Model<ICourseModel> {
+  exportPersonalData: (user: IUser) => Promise<ICourse>;
 }
 
 let Course: ICourseMongoose;
@@ -140,27 +141,31 @@ courseSchema.pre('remove', async function () {
   }
 });
 
-courseSchema.methods.exportJSON = async function (sanitize: boolean = true) {
+courseSchema.methods.exportJSON = async function (sanitize: boolean = true, onlyBasicData: boolean = false) {
   const obj = this.toObject();
 
   // remove unwanted informations
-  {
-    // mongo properties
-    delete obj._id;
-    delete obj.createdAt;
-    delete obj.__v;
-    delete obj.updatedAt;
-    delete obj.media;
+  // mongo properties
+  delete obj._id;
+  delete obj.createdAt;
+  delete obj.__v;
+  delete obj.updatedAt;
+  delete obj.media;
 
-    // custom properties
-    if (sanitize) {
-      delete obj.accessKey;
-      delete obj.active;
-      delete obj.whitelist;
-      delete obj.students;
-      delete obj.courseAdmin;
-      delete obj.teachers;
-    }
+  // custom properties
+  if (sanitize) {
+    delete obj.accessKey;
+    delete obj.active;
+    delete obj.whitelist;
+    delete obj.students;
+    delete obj.courseAdmin;
+    delete obj.teachers;
+  }
+
+  if (onlyBasicData) {
+    delete obj.id;
+    delete obj.hasAccessKey;
+    return obj;
   }
 
   // "populate" lectures
@@ -184,6 +189,7 @@ courseSchema.methods.exportJSON = async function (sanitize: boolean = true) {
 
   return obj;
 };
+
 
 courseSchema.statics.importJSON = async function (course: ICourse, admin: IUser, active: boolean) {
   // set Admin
@@ -222,6 +228,20 @@ courseSchema.statics.importJSON = async function (course: ICourse, admin: IUser,
     newError.stack += '\nCaused by: ' + err.message + '\n' + err.stack;
     throw newError;
   }
+};
+
+courseSchema.statics.exportPersonalData = async function(user: IUser) {
+  const conditions: any = {};
+  conditions.$or = [];
+  conditions.$or.push({students: user._id});
+  conditions.$or.push({teachers: user._id});
+  conditions.$or.push({courseAdmin: user._id});
+
+  const courses = await Course.find(conditions, 'name description -_id');
+
+  return Promise.all(courses.map(async (course: ICourseModel) => {
+    return await course.exportJSON(true, true);
+  }));
 };
 
 

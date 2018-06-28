@@ -28,6 +28,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Added checkboxes for accepting our terms of use and privacy declarations whil registering [#778](https://github.com/utetrapp/geli/issues/778)
 - Quickfixed the Import/Export [#42](https://github.com/utetrapp/geli/issues/42)
 - Added PDF download of Coursecontent [#720](https://github.com/utetrapp/geli/pull/720)
+- Export personal data for gdpr.
+
  
 ### Changed
 - Minor Fixes and Adaptations and Mergefailure fixes. [#785] (https://github.com/utetrapp/geli/issues/785)

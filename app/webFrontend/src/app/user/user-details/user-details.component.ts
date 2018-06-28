@@ -5,6 +5,9 @@ import {ActivatedRoute} from '@angular/router';
 import {UserService} from '../../shared/services/user.service';
 import {User} from '../../models/User';
 import {TitleService} from '../../shared/services/title.service';
+import {BackendService} from '../../shared/services/backend.service';
+import {saveAs} from 'file-saver/FileSaver';
+import {SnackBarService} from '../../shared/services/snack-bar.service';
 
 @Component({
   selector: 'app-user-details',
@@ -19,7 +22,9 @@ export class UserDetailsComponent implements OnInit {
   constructor(private route: ActivatedRoute,
               public userService: UserService,
               public userDataService: UserDataService,
-              private titleService: TitleService) {
+              private titleService: TitleService,
+              private backendService: BackendService,
+              private snackbar: SnackBarService) {
   }
 
   ngOnInit() {
@@ -45,6 +50,34 @@ export class UserDetailsComponent implements OnInit {
 
     return link;
   }
+
+  async exportProfile() {
+    const user = new User(this.user);
+
+    const promises = [];
+    promises.push(<Response> await this.userDataService.exportData());
+
+    if (user.hasUploadedProfilePicture()) {
+      const promise = <Response> await this.backendService
+        .getDownload(user.getUserImageURL(null, ''))
+        .toPromise();
+
+      promises.push(promise);
+    }
+
+    const responses = await Promise.all(promises);
+
+    try {
+        if (responses[0]) {
+          saveAs(responses[0].body, 'MyUserData.json');
+        }
+        if (responses[1]) {
+          saveAs(responses[1].body, user.profile.picture.alias);
+        }
+      } catch (err) {
+        this.snackbar.openLong('Woops! Something went wrong. Please try again in a few Minutes.');
+      }
+    }
 
   getUserData() {
     this.userDataService.readSingleItem(this.userId)
