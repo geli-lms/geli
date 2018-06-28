@@ -11,13 +11,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 -->
 
 ## [NEXT]
-
 ### Updates
 - Updated Frontend to angular6[#716](https://github.com/utetrapp/geli/pull/766)
 - update node version in travis[#790](https://github.com/utetrapp/geli/pull/796)
 - update node image in docker [#799](https://github.com/utetrapp/geli/pull/799)
 
 ### Added
+- Add cookie information [#565]
 - Course Progress can now be extracted into a csv-file. [#766](https://github.com/utetrapp/geli/pull/766)
 - Added more EN/DE translation [#753](https://github.com/utetrapp/geli/issues/753)
 - Use i18n for new course view [#763](https://github.com/utetrapp/geli/pull/763)
@@ -63,6 +63,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Fix invalid response for dependency [#787](https://github.com/utetrapp/geli/pull/787)
 - Fixed travis usages after angular 6 update [#789](https://github.com/utetrapp/geli/pull/789)
 - Build with source-maps [#797](https://github.com/utetrapp/geli/pull/797)
+- Add missing import for rxjs operators [#808](https://github.com/utetrapp/geli/issues/808)
 
 ## [[0.7.0](https://github.com/h-da/geli/releases/tag/v0.7.0)] - 2018-05-05 - SS 18 intermediate Release
 ### Added

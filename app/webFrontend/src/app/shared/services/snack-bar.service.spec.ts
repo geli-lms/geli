@@ -24,7 +24,7 @@ describe('SnackBarService', () => {
     snackBar.open('awesome message');
 
     expect(matSnackBar.open)
-      .toHaveBeenCalledWith('awesome message', SnackBarService.defaultAction, {duration: SnackBarService.defaultDuration});
+      .toHaveBeenCalledWith('awesome message', snackBar.defaultAction, {duration: SnackBarService.defaultDuration});
   });
 
   it('should have been called with dismiss and short duration', () => {
@@ -34,7 +34,7 @@ describe('SnackBarService', () => {
     snackBar.openShort('awesome short message');
 
     expect(matSnackBar.open)
-      .toHaveBeenCalledWith('awesome short message', SnackBarService.defaultAction, {duration: SnackBarService.durationShort});
+      .toHaveBeenCalledWith('awesome short message', snackBar.defaultAction, {duration: SnackBarService.durationShort});
   });
 
   it('should have been called with dismiss and long duration', () => {
@@ -44,7 +44,7 @@ describe('SnackBarService', () => {
     snackBar.openLong('awesome long message');
 
     expect(matSnackBar.open)
-      .toHaveBeenCalledWith('awesome long message', SnackBarService.defaultAction, {duration: SnackBarService.durationLong});
+      .toHaveBeenCalledWith('awesome long message', snackBar.defaultAction, {duration: SnackBarService.durationLong});
   });
 
 });
