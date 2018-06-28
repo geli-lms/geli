@@ -14,9 +14,9 @@ import {TranslateService} from '@ngx-translate/core';
 import {DomSanitizer, SafeStyle} from '@angular/platform-browser';
 
 @Component({
-    selector: 'app-root',
-    templateUrl: './app.component.html',
-    styleUrls: ['./app.component.scss']
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
 
@@ -98,6 +98,7 @@ export class AppComponent implements OnInit {
   }
 
   logout() {
+    delete this.avatarBackgroundImage;
     this.authenticationService.logout();
   }
 

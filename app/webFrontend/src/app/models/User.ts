@@ -34,9 +34,9 @@ export class User implements IUser {
         return `https://www.gravatar.com/avatar/${md5(this._id)}.jpg?s=${size}&d=retro`;
     }
 
-    getUserImageURL(size: number = 80) {
+    getUserImageURL(size: number = 80, apiPrefix: string = '/api/uploads/users/') {
         if (this.hasUploadedProfilePicture) {
-            return '/api/uploads/users/' + this.profile.picture.name;
+            return apiPrefix + this.profile.picture.name;
         } else {
             return this.getGravatarURL(size);
         }

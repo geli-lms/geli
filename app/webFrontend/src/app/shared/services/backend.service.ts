@@ -4,6 +4,7 @@ import {HttpClient} from '@angular/common/http';
 import {AuthenticationService} from './authentication.service';
 import {catchError} from 'rxjs/operators';
 import {throwError} from 'rxjs/index';
+import 'rxjs/add/observable/empty';
 
 @Injectable()
 export class BackendService {

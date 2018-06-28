@@ -11,13 +11,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 -->
 
 ## [NEXT]
-
 ### Updates
 - Updated Frontend to angular6[#716](https://github.com/utetrapp/geli/pull/766)
 - update node version in travis[#790](https://github.com/utetrapp/geli/pull/796)
 - update node image in docker [#799](https://github.com/utetrapp/geli/pull/799)
 
 ### Added
+- Add cookie information [#565]
 - Course Progress can now be extracted into a csv-file. [#766](https://github.com/utetrapp/geli/pull/766)
 - Added more EN/DE translation [#753](https://github.com/utetrapp/geli/issues/753)
 - Use i18n for new course view [#763](https://github.com/utetrapp/geli/pull/763)
@@ -27,6 +27,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Added more EN/DE translation [#753](https://github.com/utetrapp/geli/issues/753)
 - Added checkboxes for accepting our terms of use and privacy declarations whil registering [#778](https://github.com/utetrapp/geli/issues/778)
 - Quickfixed the Import/Export [#42](https://github.com/utetrapp/geli/issues/42)
+- Export personal data for gdpr.
 - Added a `JwtPipe` to easily append `'mediaToken'`s to file URLs. [#729](https://github.com/h-da/geli/issues/729)
 - Added a `FileComponent` to flexibly display a single file e.g. in a new tab. [#729](https://github.com/h-da/geli/issues/729)
 
@@ -65,6 +66,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Fix invalid response for dependency [#787](https://github.com/utetrapp/geli/pull/787)
 - Fixed travis usages after angular 6 update [#789](https://github.com/utetrapp/geli/pull/789)
 - Build with source-maps [#797](https://github.com/utetrapp/geli/pull/797)
+- Add missing import for rxjs operators [#808](https://github.com/utetrapp/geli/issues/808)
 - Fixed `picture.path` backslash issue / regression. [#729](https://github.com/h-da/geli/issues/729)
 - Replaced hard-coded `'upload'` strings in the API with `config.uploadFolder`. [#729](https://github.com/h-da/geli/issues/729)
 - Fixed missing `@UseBefore` middleware in `MediaController`. [#729](https://github.com/h-da/geli/issues/729)
