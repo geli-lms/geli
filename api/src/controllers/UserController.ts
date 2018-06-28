@@ -351,7 +351,7 @@ export class UserController {
       _id: null,
       name: file.filename,
       alias: file.originalname,
-      path: file.path.replace(/\\\\?/g, '/'),
+      path: path.relative(path.dirname(config.uploadFolder), file.path).replace(/\\\\?/g, '/'),
       size: resizedImageBuffer.info.size
     };
 
