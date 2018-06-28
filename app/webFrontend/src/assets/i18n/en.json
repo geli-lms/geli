@@ -80,6 +80,7 @@
     "duplicate": "Duplicate",
     "edit": "Edit",
     "editProfile": "Edit profile",
+    "exportProfile": "Export profile",
     "email": "Email",
     "export": "Export",
     "folder": "Folder",
@@ -194,6 +195,12 @@
       "keyRequired": "Access key required",
       "leave": "Leave",
       "noKeyRequired": "Free access"
+    }
+  },
+  "cookie": {
+    "text": {
+      "moreInformation": "More Information",
+      "cookieHint": "Geli uses cookies to function properly. By using this site you agree to the use of cookies as described in our policy."
     }
   },
   "dashboard": {
