@@ -13,13 +13,11 @@ import {allRoles} from '../config/roles';
 import {IProperties} from '../../../shared/models/IProperties';
 import {extractMongoId} from '../utilities/ExtractMongoId';
 import {ensureMongoToObject} from '../utilities/EnsureMongoToObject';
-import {Notification} from "./Notification";
-import {Course, ICourseModel} from "./Course";
-import {NotificationSettings} from "./NotificationSettings";
-import {WhitelistUser} from "./WhitelistUser";
-import {Progress} from "./progress/Progress";
+import {IUnit} from '../../../shared/models/units/IUnit';
+import {Course, ICourseModel} from './Course';
 
 interface IUserModel extends IUser, mongoose.Document {
+  exportPersonalData: () => Promise<IUser>;
   isValidPassword: (candidatePassword: string) => Promise<boolean>;
   checkPrivileges: () => IProperties;
   checkEditUser: (targetUser: IUser) => IProperties;
@@ -254,6 +252,36 @@ userSchema.methods.forCourseView = function (): IUserSubCourseView {
 
 userSchema.methods.forUser = function (otherUser: IUser): IUserSubSafe | IUserSubTeacher | IUser {
   return User.forUser(this, otherUser);
+};
+
+userSchema.methods.exportPersonalData = async function () {
+  await this.populate(
+    {
+      path: 'lastVisitedCourses',
+      model: Course,
+      select: 'name description -_id teachers'
+    })
+    .execPopulate();
+
+  const lastVisitedCourses = await Promise.all(this.lastVisitedCourses.map( async (course: ICourseModel) => {
+    return await course.exportJSON(true, true);
+  }));
+
+  const obj = this.toObject();
+
+  obj.lastVisitedCourses = lastVisitedCourses;
+
+  // remove unwanted informations
+  // mongo properties
+  delete obj._id;
+  delete obj.createdAt;
+  delete obj.__v;
+  delete obj.updatedAt;
+  delete obj.id;
+
+  // custom properties
+
+  return obj;
 };
 
 // The idea behind the editLevels is to only allow updates if the currentUser "has a higher level" than the target.
