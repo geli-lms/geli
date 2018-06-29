@@ -400,6 +400,8 @@ export class DownloadController {
               }
               solutions += localUnit.toHtmlForSinglePDFSolutions()  + '</div>';
               solCounter++;
+            } else {
+              solutions += localUnit.toHtmlForSinglePDFSolutions();
             }
             unitCounter++;
           }
