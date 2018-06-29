@@ -17,7 +17,6 @@ interface IUnitModel extends IUnit, mongoose.Document {
   calculateProgress: (users: IUser[], progress: IProgress[]) => Promise<IUnit>;
   populateUnit: () => Promise<IUnitModel>;
   secureData: (user: IUser) => Promise<IUnitModel>;
-  toFile: () => String;
   toHtmlForIndividualPDF: () => String;
   toHtmlForSinglePDF: () => String;
   toHtmlForSinglePDFSolutions: () => String;

@@ -111,17 +111,32 @@ describe('DownloadFile', () => {
     });
 
     it('should pass', async () => {
-      const course = await FixtureUtils.getRandomCourse();
+      const course = await FixtureUtils.getRandomCourseWithAllUnitTypes();
+      console.log(course.name); // tslint:disable-line
       const teacher = await User.findById(course.courseAdmin);
-      const lecture = await Lecture.findById(course.lectures[0]);
+
+      const lectures: any[] = [];
+
+      for (const lec of course.lectures) {
+        const lecture = await Lecture.findById(lec);
+
+        const units: any[]  = [];
+        for ( const unitId of lecture.units) {
+          const temp: any = {};
+          temp['unitId'] = unitId;
+          units.push(temp);
+        }
+        const tempLec: any = {};
+        tempLec['lectureId'] = lec;
+        tempLec['units'] = units;
+        lectures.push(tempLec);
+      }
 
       const testData = {
         'courseName': course._id,
-        'lectures': [{
-          'lectureId': lecture._id ,
-          'units': [{'unitId': lecture.units[0] }]
-        }]
+        'lectures': lectures
       };
+
       const res = await chai.request(app)
         .post(BASE_URL + '/pdf/individual')
         .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
@@ -130,7 +145,7 @@ describe('DownloadFile', () => {
 
       expect(res).to.have.status(200);
       expect(res).to.be.json;
-    });
+    }).timeout(30000);
 
   });
 
@@ -204,17 +219,31 @@ describe('DownloadFile', () => {
     });
 
     it('should pass', async () => {
-      const course = await FixtureUtils.getRandomCourse();
+      const course = await FixtureUtils.getRandomCourseWithAllUnitTypes();
+      console.log(course.name); // tslint:disable-line
       const teacher = await User.findById(course.courseAdmin);
-      const lecture = await Lecture.findById(course.lectures[0]);
+
+      const lectures: any[] = [];
+      for (const lec of course.lectures) {
+        const lecture = await Lecture.findById(lec);
+
+          const units: any[]  = [];
+          for ( const unit of lecture.units) {
+            const temp: any = {};
+            temp['unitId'] = unit;
+            units.push(temp);
+            }
+        const tempLec: any = {};
+        tempLec['lectureId'] = lec;
+        tempLec['units'] = units;
+        lectures.push(tempLec);
+      }
 
       const testData = {
         'courseName': course._id,
-        'lectures': [{
-          'lectureId': lecture._id ,
-          'units': [{'unitId': lecture.units[0] }]
-        }]
+        'lectures': lectures
       };
+
       const res = await chai.request(app)
         .post(BASE_URL + '/pdf/single')
         .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
@@ -223,6 +252,6 @@ describe('DownloadFile', () => {
 
       expect(res).to.have.status(200);
       expect(res).to.be.json;
-    });
+    }).timeout(30000);
   });
 });

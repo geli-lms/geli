@@ -10,7 +10,6 @@ const MarkdownIt = require('markdown-it');
 interface ITaskUnitModel extends ITaskUnit, IUnitModel {
   exportJSON: () => Promise<ITaskUnit>;
   calculateProgress: (users: IUser[], progress: IProgress[]) => Promise<ITaskUnit>;
-  toFile: () => String;
 }
 
 const taskSchema = new mongoose.Schema(
@@ -101,22 +100,6 @@ taskUnitSchema.methods.calculateProgress = async function (users: IUser[], progr
 
   unitObj.progressData = progressStats;
   return unitObj;
-};
-
-taskUnitSchema.methods.toFile = function(): String {
-  let fileStream = '';
-
-  for (const task of this.tasks) {
-    fileStream = fileStream + task.name + '\n';
-
-    for (const answer of task.answers) {
-      fileStream = fileStream + answer.text + ': [ ]\n';
-    }
-    fileStream = fileStream + '-------------------------------------\n';
-
-  }
-
-  return fileStream;
 };
 
 taskUnitSchema.methods.toHtmlForIndividualPDF = function (): String {

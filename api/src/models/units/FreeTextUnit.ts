@@ -5,7 +5,6 @@ const MarkdownIt = require('markdown-it');
 
 interface IFreeTextUnitModel extends IFreeTextUnit, IUnitModel {
   exportJSON: () => Promise<IFreeTextUnit>;
-  toFile: () => String;
 }
 
 const freeTextUnitSchema = new mongoose.Schema({
@@ -13,10 +12,6 @@ const freeTextUnitSchema = new mongoose.Schema({
     type: String,
   }
 });
-
-freeTextUnitSchema.methods.toFile = function (): String {
-  return this.name + '\n' + this.description + '\n' + this.markdown;
-};
 
 freeTextUnitSchema.methods.toHtmlForIndividualPDF = function (): String {
   const md = new MarkdownIt();
