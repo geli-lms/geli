@@ -112,7 +112,6 @@ describe('DownloadFile', () => {
 
     it('should pass', async () => {
       const course = await FixtureUtils.getRandomCourseWithAllUnitTypes();
-      console.log(course.name); // tslint:disable-line
       const teacher = await User.findById(course.courseAdmin);
 
       const lectures: any[] = [];
@@ -220,7 +219,6 @@ describe('DownloadFile', () => {
 
     it('should pass', async () => {
       const course = await FixtureUtils.getRandomCourseWithAllUnitTypes();
-      console.log(course.name); // tslint:disable-line
       const teacher = await User.findById(course.courseAdmin);
 
       const lectures: any[] = [];
