@@ -42,6 +42,17 @@ describe('DownloadFile', () => {
   }
 
   describe(`GET ${BASE_URL}`, () => {
+    it('should succeed for some valid input with prior POST', async () => {
+      const { postRes, courseAdmin } = await postValidRequest();
+      postRes.body.should.not.be.empty;
+
+      const res = await chai.request(app)
+        .get(BASE_URL + '/' + postRes.body)
+        .set('Authorization', `JWT ${JwtUtils.generateToken(courseAdmin)}`)
+        .catch(err => err.response);
+      res.status.should.be.equal(200);
+    });
+
     it('should fail, no auth', async () => {
 
       const res = await chai.request(app)
