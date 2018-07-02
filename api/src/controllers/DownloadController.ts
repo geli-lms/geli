@@ -243,7 +243,7 @@ export class DownloadController {
 
   /**
    * @api {delete} /api/download/ Request to clean up the cache.
-   * @apiName DeleteCleanupCache
+   * @apiName DeleteCache
    * @apiGroup Download
    * @apiPermission admin
    *
@@ -252,9 +252,9 @@ export class DownloadController {
    * @apiSuccessExample {json} Success-Response:
    *      {}
    */
-  @Delete('/cleanup/cache') // The extra path separator is here to differentiate the route from the regular /:id requests.
+  @Delete('/cache')
   @Authorized(['admin'])
-  deleteCleanupCache() {
+  deleteCache() {
     this.cleanupCache();
     return {};
   }

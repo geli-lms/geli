@@ -48,7 +48,7 @@ describe('DownloadFile', () => {
   async function requestCleanup() {
     const admin = await FixtureUtils.getRandomAdmin();
     const res = await chai.request(app)
-      .del(BASE_URL + '/cleanup/cache')
+      .del(BASE_URL + '/cache')
       .set('Authorization', `JWT ${JwtUtils.generateToken(admin)}`)
       .catch(err => err.response);
     res.status.should.be.equal(200);
@@ -167,7 +167,7 @@ describe('DownloadFile', () => {
     it('should fail with non-admin as user', async () => {
       const student = await FixtureUtils.getRandomStudent();
       const res = await chai.request(app)
-        .del(BASE_URL + '/cleanup/cache')
+        .del(BASE_URL + '/cache')
         .set('Authorization', `JWT ${JwtUtils.generateToken(student)}`)
         .catch(err => err.response);
       res.status.should.be.equal(403);
