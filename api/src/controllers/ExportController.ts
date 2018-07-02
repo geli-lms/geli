@@ -96,6 +96,51 @@ export class ExportController {
     return unit.exportJSON();
   }
 
+  /**
+   * @api {get} /api/export/user Export the CurrentUser's own data.
+   * @apiName GetExportUser
+   * @apiGroup Export
+   * @apiPermission student
+   * @apiPermission teacher
+   * @apiPermission admin
+   *
+   * @apiSuccess {Object} result Exported personal user data, notifications, whitelists, courses, progress.
+   *
+   * @apiSuccessExample {json} Success-Response:
+   *     {
+   *         "user": {
+   *             "profile": {
+   *                 "picture": {
+   *                     "name": "5b23c0387d7d4e2fd0148741-4602.png",
+   *                     "alias": "ProfilePictureFilename.png",
+   *                     "path": "uploads/users/5b23c0387d7d4e2fd0148741-4602.png"
+   *                 },
+   *                 "firstName": "Daniel",
+   *                 "lastName": "Teachman",
+   *                 "theme": "night"
+   *             },
+   *             "role": "teacher",
+   *             "lastVisitedCourses": [
+   *                 {
+   *                     "name": "Introduction to web development",
+   *                     "description": "Short description here."
+   *                 }
+   *             ],
+   *             "isActive": true,
+   *             "email": "teacher1@test.local"
+   *         },
+   *         "notifications": [],
+   *         "notificationSettings": null,
+   *         "whitelists": [],
+   *         "courses": [
+   *             {
+   *                 "name": "Introduction to web development",
+   *                 "description": "Short description here."
+   *             }
+   *         ],
+   *         "progress": []
+   *     }
+   */
   @Get('/user')
   @Authorized(['student', 'teacher', 'admin'])
   async exportAllUserData(@CurrentUser() currentUser: IUser) {
