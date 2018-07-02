@@ -7,6 +7,8 @@ import {WhitelistUser} from '../../src/models/WhitelistUser';
 import {IUser} from '../../../shared/models/IUser';
 import {Course} from '../../src/models/Course';
 import {FixtureUtils} from '../../fixtures/FixtureUtils';
+import {RoleAuthorization} from '../../src/security/RoleAuthorization';
+import {Action, UnauthorizedError} from 'routing-controllers';
 import chaiHttp = require('chai-http');
 import config from '../../src/config/main';
 
@@ -24,6 +26,13 @@ describe('Auth', () => {
   // Before each test we reset the database
   beforeEach(async () => {
     await fixtureLoader.load();
+  });
+
+  describe.only('RoleAuthorization', () => {
+    it('should handle missing jwtData by throwing UnauthorizedError', async () => {
+      const invalidAction: Action = { request: {}, response: {} };
+      await chai.expect(() => RoleAuthorization.checkAuthorization(invalidAction, [])).to.throw(UnauthorizedError);
+    });
   });
 
   describe(`POST ${BASE_URL}/login`, () => {
