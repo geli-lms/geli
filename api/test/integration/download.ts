@@ -67,6 +67,17 @@ describe('DownloadFile', () => {
       res.status.should.be.equal(200);
     });
 
+    it('should fail, malignant file id', async () => {
+      const { postRes, courseAdmin } = await postValidRequest();
+      postRes.body.should.not.be.empty;
+
+      const res = await chai.request(app)
+        .get(BASE_URL + '/%2E%2E%2F' + postRes.body)
+        .set('Authorization', `JWT ${JwtUtils.generateToken(courseAdmin)}`)
+        .catch(err => err.response);
+      res.status.should.be.equal(403);
+    });
+
     it('should fail, no auth', async () => {
 
       const res = await chai.request(app)
