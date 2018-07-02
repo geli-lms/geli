@@ -171,7 +171,7 @@ describe('DownloadFile', () => {
     });
   });
 
-  describe(`DELETE ${BASE_URL}/cleanup/cache`, () => {
+  describe(`DELETE ${BASE_URL}/cache`, () => {
     it('should succeed with admin as user', async () => {
       await requestValidCleanup();
     });
