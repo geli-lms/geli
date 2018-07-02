@@ -22,6 +22,25 @@ describe('DownloadFile', () => {
     await fixtureLoader.load();
   });
 
+  async function postValidRequest() {
+    const unit = await FixtureUtils.getRandomUnit();
+    const lecture = await FixtureUtils.getLectureFromUnit(unit);
+    const course = await FixtureUtils.getCoursesFromLecture(lecture);
+    const courseAdmin = await User.findById(course.courseAdmin);
+    const downloadRequestData: IDownload = {
+      courseName: course._id,
+      lectures: [{ lectureId: lecture._id, units: [{ unitId: unit._id }] }]
+    };
+
+    const res = await chai.request(app)
+      .post(BASE_URL)
+      .set('Authorization', `JWT ${JwtUtils.generateToken(courseAdmin)}`)
+      .send(downloadRequestData)
+      .catch(err => err.response);
+    res.status.should.be.equal(200);
+    return { postRes: res, courseAdmin };
+  }
+
   describe(`GET ${BASE_URL}`, () => {
     it('should fail, no auth', async () => {
 
@@ -44,6 +63,10 @@ describe('DownloadFile', () => {
   });
 
   describe(`POST ${BASE_URL}`, () => {
+    it('should succeed for some valid input', async () => {
+      await postValidRequest();
+    });
+
     it('should fail, no auth', async () => {
 
       const res = await chai.request(app)
