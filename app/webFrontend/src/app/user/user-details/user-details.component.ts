@@ -59,7 +59,7 @@ export class UserDetailsComponent implements OnInit {
 
     if (user.hasUploadedProfilePicture) {
       const promise = <Response> await this.backendService
-        .getDownload(user.getUserImageURL(null, ''))
+        .getDownload(user.getUserImageURL(null, 'uploads/users/'))
         .toPromise();
 
       promises.push(promise);
