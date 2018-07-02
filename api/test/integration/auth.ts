@@ -28,10 +28,26 @@ describe('Auth', () => {
     await fixtureLoader.load();
   });
 
-  describe.only('RoleAuthorization', () => {
+  describe('RoleAuthorization', () => {
     it('should handle missing jwtData by throwing UnauthorizedError', async () => {
       const invalidAction: Action = { request: {}, response: {} };
       await chai.expect(() => RoleAuthorization.checkAuthorization(invalidAction, [])).to.throw(UnauthorizedError);
+    });
+
+    async function accessTest(user: IUser, roles: string[], expectedResult: boolean) {
+      const request: any = { jwtData: { tokenPayload: { _id: user._id } } };
+      const action: Action = { request, response: {} };
+      chai.expect(await RoleAuthorization.checkAuthorization(action, roles)).to.equal(expectedResult);
+    }
+
+    it('should allow access for a user with valid parameters', async () => {
+      const student = await FixtureUtils.getRandomStudent();
+      await accessTest(student, ['student'], true);
+    });
+
+    it('should deny access for a user with mismatching role', async () => {
+      const student = await FixtureUtils.getRandomStudent();
+      await accessTest(student, ['teacher'], false);
     });
   });
 
