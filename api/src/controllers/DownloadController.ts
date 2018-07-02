@@ -1,8 +1,8 @@
 import {promisify} from 'util';
 import {Response} from 'express';
 import {
-  Body, Post, Get, NotFoundError, ForbiddenError, ContentType, UseBefore, Param, Res, Controller,
-  CurrentUser
+  NotFoundError, ForbiddenError, ContentType, UseBefore, Param, Res, Controller,
+  Body, Post, Get, Delete, CurrentUser, Authorized
 } from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import {Unit, FreeTextUnit, CodeKataUnit, TaskUnit} from '../models/units/Unit';
@@ -239,5 +239,23 @@ export class DownloadController {
     } else {
       throw new NotFoundError();
     }
+  }
+
+  /**
+   * @api {delete} /api/download/ Request to clean up the cache.
+   * @apiName DeleteCleanupCache
+   * @apiGroup Download
+   * @apiPermission admin
+   *
+   * @apiSuccess {Object} result Empty object.
+   *
+   * @apiSuccessExample {json} Success-Response:
+   *      {}
+   */
+  @Delete('/cleanup/cache') // The extra path separator is here to differentiate the route from the regular /:id requests.
+  @Authorized(['admin'])
+  deleteCleanupCache() {
+    this.cleanupCache();
+    return {};
   }
 }
