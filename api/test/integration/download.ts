@@ -22,6 +22,10 @@ describe('DownloadFile', () => {
     await fixtureLoader.load();
   });
 
+  after(async () => {
+    await requestCleanup();
+  });
+
   async function postValidRequest() {
     const unit = await FixtureUtils.getRandomUnit();
     const lecture = await FixtureUtils.getLectureFromUnit(unit);
@@ -39,6 +43,15 @@ describe('DownloadFile', () => {
       .catch(err => err.response);
     res.status.should.be.equal(200);
     return { postRes: res, courseAdmin };
+  }
+
+  async function requestCleanup() {
+    const admin = await FixtureUtils.getRandomAdmin();
+    const res = await chai.request(app)
+      .del(BASE_URL + '/cleanup/cache')
+      .set('Authorization', `JWT ${JwtUtils.generateToken(admin)}`)
+      .catch(err => err.response);
+    res.status.should.be.equal(200);
   }
 
   describe(`GET ${BASE_URL}`, () => {
