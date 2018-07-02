@@ -3,15 +3,12 @@ import {Server} from '../../src/server';
 import {FixtureLoader} from '../../fixtures/FixtureLoader';
 import {JwtUtils} from '../../src/security/JwtUtils';
 import {User} from '../../src/models/User';
-import {Course} from '../../src/models/Course';
 import {FixtureUtils} from '../../fixtures/FixtureUtils';
 import chaiHttp = require('chai-http');
 import {IDownload} from '../../../shared/models/IDownload';
-import {Lecture} from '../../src/models/Lecture';
-import {Unit} from '../../src/models/units/Unit';
+import {IUser} from '../../../shared/models/IUser';
 
 chai.use(chaiHttp);
-const should = chai.should();
 const app = new Server().app;
 const BASE_URL = '/api/download';
 const fixtureLoader = new FixtureLoader();
@@ -23,7 +20,7 @@ describe('DownloadFile', () => {
   });
 
   after(async () => {
-    await requestCleanup();
+    await requestValidCleanup();
   });
 
   async function postValidRequest() {
@@ -45,12 +42,16 @@ describe('DownloadFile', () => {
     return { postRes: res, courseAdmin };
   }
 
-  async function requestCleanup() {
-    const admin = await FixtureUtils.getRandomAdmin();
-    const res = await chai.request(app)
+  function requestCleanup(user: IUser) {
+    return chai.request(app)
       .del(BASE_URL + '/cache')
-      .set('Authorization', `JWT ${JwtUtils.generateToken(admin)}`)
+      .set('Authorization', `JWT ${JwtUtils.generateToken(user)}`)
       .catch(err => err.response);
+  }
+
+  async function requestValidCleanup() {
+    const admin = await FixtureUtils.getRandomAdmin();
+    const res = await requestCleanup(admin);
     res.status.should.be.equal(200);
   }
 
@@ -161,15 +162,12 @@ describe('DownloadFile', () => {
 
   describe(`DELETE ${BASE_URL}/cleanup/cache`, () => {
     it('should succeed with admin as user', async () => {
-      await requestCleanup();
+      await requestValidCleanup();
     });
 
     it('should fail with non-admin as user', async () => {
       const student = await FixtureUtils.getRandomStudent();
-      const res = await chai.request(app)
-        .del(BASE_URL + '/cache')
-        .set('Authorization', `JWT ${JwtUtils.generateToken(student)}`)
-        .catch(err => err.response);
+      const res = await requestCleanup(student);
       res.status.should.be.equal(403);
     });
   });
