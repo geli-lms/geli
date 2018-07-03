@@ -28,6 +28,7 @@ interface ICourseModel extends ICourse, mongoose.Document {
 
 interface ICourseMongoose extends mongoose.Model<ICourseModel> {
   exportPersonalData: (user: IUser) => Promise<ICourse>;
+  changeCourseAdminFromUser: (userFrom: IUser, userTo: IUser) => Promise<ICourseMongoose>;
 }
 
 let Course: ICourseMongoose;
@@ -244,6 +245,9 @@ courseSchema.statics.exportPersonalData = async function(user: IUser) {
   }));
 };
 
+courseSchema.statics.changeCourseAdminFromUser = async function (userFrom: IUser, userTo: IUser) {
+  return Course.updateMany({courseAdmin: userFrom._id}, {courseAdmin: userTo._id});
+};
 
 courseSchema.methods.checkPrivileges = function (user: IUser) {
   const {userIsAdmin, ...userIs} = User.checkPrivileges(user);
@@ -329,6 +333,9 @@ courseSchema.methods.processLecturesFor = async function (user: IUser) {
   }));
   return this;
 };
+
+
+
 
 Course = mongoose.model<ICourseModel, ICourseMongoose>('Course', courseSchema);
 
