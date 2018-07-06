@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {IUser} from '../../../../../../shared/models/IUser';
 import {UserDataService} from '../../shared/services/data.service';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {UserService} from '../../shared/services/user.service';
 import {User} from '../../models/User';
 import {TitleService} from '../../shared/services/title.service';
@@ -24,7 +24,9 @@ export class UserDetailsComponent implements OnInit {
               public userDataService: UserDataService,
               private titleService: TitleService,
               private backendService: BackendService,
-              private snackbar: SnackBarService) {
+              private snackBar: SnackBarService,
+              private snackbar: SnackBarService,
+              private router: Router) {
   }
 
   ngOnInit() {
@@ -87,5 +89,22 @@ export class UserDetailsComponent implements OnInit {
       })
       .catch((error: any) => {
       });
+  }
+
+  async deleteProfile() {
+    if(this.user.role === 'admin') {
+      // navigate to delete site.
+      const link = `/admin/users/delete/${this.user._id}`;
+      this.router.navigate([link]);
+    } else {
+      // send delete request
+      try {
+        await this.userDataService.deleteItem(this.user);
+        this.snackBar.open('A delete request was sent to an admin.');
+      } catch (err) {
+        this.snackBar.open(err.error.message);
+      }
+    }
+
   }
 }

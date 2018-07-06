@@ -20,6 +20,8 @@ import {Notification} from './Notification';
 import {WhitelistUser} from './WhitelistUser';
 import {Progress} from './progress/Progress';
 import fs = require('fs');
+import emailService from '../services/EmailService';
+
 
 interface IUserModel extends IUser, mongoose.Document {
   exportPersonalData: () => Promise<IUser>;

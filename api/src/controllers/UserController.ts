@@ -11,6 +11,7 @@ import {errorCodes} from '../config/errorCodes';
 import * as sharp from 'sharp';
 import config from '../config/main';
 import {Course} from '../models/Course';
+import emailService from "../services/EmailService";
 
 const multer = require('multer');
 
@@ -484,6 +485,16 @@ export class UserController {
   @Delete('/:id')
   async deleteUser(@Param('id') id: string, @CurrentUser() currentUser: IUser) {
     const otherAdmin = await User.findOne({$and: [{'role': 'admin'}, {'_id': {$ne: id}}]});
+
+    if(currentUser.role === 'teacher' || currentUser.role === 'student') {
+      try {
+        emailService.sendDeleteRequest(currentUser, otherAdmin)
+      } catch (err) {
+        throw new InternalServerError(errorCodes.mail.notSend.code);
+      }
+
+      return {result: true};
+    }
 
     if (id === currentUser._id && currentUser.role === 'admin') {
       if (otherAdmin === null) {
