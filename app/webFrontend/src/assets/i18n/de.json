@@ -19,12 +19,15 @@
     },
     "loginSuccess": "Login erfolgreich",
     "registration": {
+      "acceptCheckboxes": "Ich akzeptiere gelis ",
       "back": "Zurück zur Startseite",
       "mailSent": "Wir haben Ihnen einen Aktivierungslink an Ihre E-Mail-Adresse gesendet.",
+      "privacyDeclaration": "Datenschutzerklärung",
       "registerAs": "Registrieren als",
       "resendActivationButton": "Aktivierung erneut senden",
       "successful": "Registrierung erfolgreich",
       "teacherRegistrationButton": "Kein Student?",
+      "termsOfUse": "Nutzungsbedingungen",
       "tooltipRegister": "Klicken Sie hier, um Ihre Registrierung abzuschließen."
     },
     "resendActivation": {
@@ -78,6 +81,7 @@
     "duplicate": "Duplizieren",
     "edit": "Bearbeiten",
     "editProfile": "Profil bearbeiten",
+    "exportProfile": "Profildaten exportieren",
     "email": "E-Mail",
     "export": "Export",
     "folder": "Ordner",
@@ -192,6 +196,12 @@
       "keyRequired" : "Zugangscode benötigt",
       "leave": "Verlassen",
       "noKeyRequired" : "Frei zugänglich"
+    }
+  },
+  "cookie": {
+    "text" : {
+      "moreInformation" : "Weitere Informationen",
+      "cookieHint" : "Geli verwendet Cookies, um Ihnen den bestmöglichen Service zu gewährleisten. Wenn Sie auf der Seite weitersurfen, stimmen Sie der Cookie-Nutzung zu, wie im Impressum beschrieben."
     }
   },
   "dashboard": {
