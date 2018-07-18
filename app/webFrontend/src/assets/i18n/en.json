@@ -6,6 +6,16 @@
       "toUseYourAccount": "to use your account"
     }
   },
+  "admin": {
+    "cache": {
+      "clear": {
+        "failed": "Server cache clearing error",
+        "label": "Clear cache",
+        "tooltip": "This may disrupt coincident download requests!"
+      },
+      "header": "Server cache controls"
+    }
+  },
   "auth": {
     "changePassword": "Change password",
     "confirmPassword": "Confirm password",

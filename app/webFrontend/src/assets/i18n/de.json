@@ -6,6 +6,16 @@
       "toUseYourAccount": ", um den Account zu nutzen."
     }
   },
+  "admin": {
+    "cache": {
+      "clear": {
+        "failed": "Fehler beim Löschen des Server-Caches",
+        "label": "Lösche Cache",
+        "tooltip": "Dies kann laufende Download-Anfragen stören!"
+      },
+      "header": "Server Cache Steuerung"
+    }
+  },
   "auth": {
     "changePassword": "Passwort ändern",
     "confirmPassword": "Passwort bestätigen",
