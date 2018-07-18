@@ -66,7 +66,7 @@ export class AppComponent implements OnInit {
       if (actualProfilePicturePath === undefined && this.userService.user.profile.picture) {
         actualProfilePicturePath = this.userService.user.profile.picture.path;
       }
-      if (actualProfilePicturePath === undefined) {
+      if (actualProfilePicturePath === undefined || actualProfilePicturePath === '') {
         this.avatarBackgroundImage = undefined;
         return;
       }
