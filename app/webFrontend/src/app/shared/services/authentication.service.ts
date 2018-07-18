@@ -20,10 +20,14 @@ export class AuthenticationService {
               private router: Router,
               private userService: UserService) {
     this.token = localStorage.getItem('token');
+    this.mediaToken = localStorage.getItem('mediaToken');
     if (isNullOrUndefined(this.token)) {
       this.token = '';
     }
-    this.isLoggedIn = this.token !== '';
+    if (isNullOrUndefined(this.mediaToken)) {
+      this.mediaToken = '';
+    }
+    this.isLoggedIn = this.token !== ''; // Not checking against the mediaToken, because the app may still be partly functional without it.
   }
 
   async login(email: string, password: string) {
@@ -66,9 +70,11 @@ export class AuthenticationService {
   }
 
   unsetAuthData() {
-    this.token = null;
     this.isLoggedIn = false;
+    this.token = null;
+    this.mediaToken = null;
     localStorage.removeItem('token');
+    localStorage.removeItem('mediaToken');
 
     this.userService.unsetUser();
   }
