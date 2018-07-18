@@ -64,6 +64,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Validate user input for notication settings api. [#771](https://github.com/utetrapp/geli/issues/771)
 - Identification only via matriculation number. [#685](https://github.com/utetrapp/geli/issues/685)
 - Fixed Typo in User-Profile-Dialog. [#782](https://github.com/utetrapp/geli/pull/782)
+- Fixed missing capitalization typo for `common.users` EN-translation. [#729](https://github.com/h-da/geli/issues/729)
 - Fixed broken badge links after repository migration. [#783](https://github.com/utetrapp/geli/pull/783)
 - Fix invalid response for dependency [#787](https://github.com/utetrapp/geli/pull/787)
 - Fixed travis usages after angular 6 update [#789](https://github.com/utetrapp/geli/pull/789)
