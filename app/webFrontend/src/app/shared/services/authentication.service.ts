@@ -36,19 +36,15 @@ export class AuthenticationService {
       return this.http.post(AuthenticationService.API_URL + 'auth/login', {email: email, password: password})
       .subscribe(
         (response) => {
-          this.userService.setUser(response['user']);
-
-          if (response['user'].profile.picture) {
-            this.userService.updateProfilePicture(response['user'].profile.picture.path);
-          }
-
           // See JwtUtils.ts (generateToken function) in the back-end API for a description of the mediaToken's purpose.
           // To easily attach the mediaToken to an URL you can use the jwt.pipe.ts (e.g. 'some/url/file.png | jwt').
           this.token = response['token'];
           this.mediaToken = response['mediaToken'];
-          this.isLoggedIn = true;
           localStorage.setItem('token', this.token);
           localStorage.setItem('mediaToken', this.mediaToken);
+          this.isLoggedIn = true;
+
+          this.userService.setUser(response['user']);
 
           resolve();
         }, (err) => {
