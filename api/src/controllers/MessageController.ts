@@ -93,7 +93,7 @@ export default class MessageController {
    *
    */
   @Get('/count')
-  async getCount (@QueryParam('room') room: string) {
+  async getMessageCount (@QueryParam('room') room: string) {
     if (!room) {
       throw new BadRequestError();
     }

@@ -11,8 +11,7 @@ import {LastVisitedCourseContainerUpdater} from '../../shared/utils/LastVisitedC
 import {DialogService} from '../../shared/services/dialog.service';
 import {DataSharingService} from '../../shared/services/data-sharing.service';
 import {TranslateService} from '@ngx-translate/core';
-import {ChatService} from '../../shared/services/chat.service';
-import {DownloadCourseDialogComponent} from './download-course-dialog/download-course-dialog.component';
+
 
 
 @Component({
@@ -25,8 +24,6 @@ export class CourseDetailComponent implements OnInit, OnDestroy {
   course: ICourse;
   id: string;
   tabs = [];
-  showChat = false;
-  chatName: string;
 
   constructor(private router: Router,
               private route: ActivatedRoute,
@@ -38,8 +35,7 @@ export class CourseDetailComponent implements OnInit, OnDestroy {
               private userDataService: UserDataService,
               private dialogService: DialogService,
               private dataSharingService: DataSharingService,
-              private translate: TranslateService,
-              private chatService: ChatService) {}
+              private translate: TranslateService) {}
 
   ngOnInit() {
     const data: any = this.route.snapshot.data;
@@ -70,12 +66,6 @@ export class CourseDetailComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.dataSharingService.deleteDataForKey('course');
-  }
-  /**
-   * show or hide the chat
-   */
-  toggleChat() {
-    this.showChat = !this.showChat;
   }
 
 }

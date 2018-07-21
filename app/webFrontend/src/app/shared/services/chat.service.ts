@@ -2,14 +2,13 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import * as socketIo from 'socket.io-client';
 import {AuthenticationService} from './authentication.service';
-import {environment} from '../../../environments/environment';
 import {ISocketIOMessage} from '../../../../../../shared/models/messaging/ISocketIOMessage';
 import {SocketIOEvent} from '../../../../../../shared/models/messaging/SoketIOEvent';
 
 
 @Injectable()
 export class ChatService {
-  socket;
+  private socket;
 
   constructor(private authenticationService: AuthenticationService) {
   }

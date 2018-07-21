@@ -1,0 +1,71 @@
+@import '../../../../variables';
+$chat-header-height : 40px;
+
+.chat-toggle {
+  position: fixed;
+  right: 0.5em;
+  z-index: 255;
+}
+
+.chat-toggle-show {
+  bottom: 1em;
+  animation: fadeInUp 1s;
+}
+
+.chat-container {
+  background: #fff;
+  position: fixed;
+  z-index: 255;
+}
+
+.chat-toggle-hidden, .chat-container-hidden {;
+  animation: fadeOutDown 1s;
+  display: none;
+}
+
+
+.chat-container-show {
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  animation: fadeInUp 1s;
+}
+
+@media screen and (min-width: 600px) {
+  .chat-container-show{
+    width: 25em;
+    box-shadow: 0 0 1em 0 rgba(0,0,0,0.15);
+    right: 1em;
+    bottom: 0.5em;
+    height: 65%;
+  }
+}
+
+
+.chat-top-bar {
+  background-color: $primary;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  border-color: $primary;
+  height: $chat-header-height;
+  color: white;
+}
+
+.chat-heading{
+  flex: 1 1 auto;
+  font-size: .95em;
+  font-weight: 700;
+  padding: 0 0 0 1em;
+}
+
+.forum-container{
+  position: relative;
+  height: 100%;
+}
+
+.messaging-container {
+  height: calc(100% - #{$chat-header-height});
+}
+

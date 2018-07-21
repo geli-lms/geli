@@ -21,7 +21,8 @@ export class ShowCommentsDirective {
         room: this.room,
         title: this.title
       },
-      panelClass: 'comments-dialog'
+      panelClass: 'comments-dialog',
+      maxWidth: 'none'
     });
   }
 
