@@ -44,18 +44,23 @@
             <td>Status</td>
         </tr>
         <tr class="content-row" *ngFor="let unit of this.assignmentUnit.assignments;">
-            <td *ngIf="unit.submitted">{{unit.user.profile.firstName}} {{unit.user.profile.lastName}}</td>
-            <td *ngIf="unit.submitted"><a href="{{ '/api/uploads/' + unit.file.link }}"
-                                          download="{{unit.file.name}}">{{unit.file.name}}</a></td>
-            <td *ngIf="unit.submitted">
+            <td class="{{!unit.submitted ? 'not-submitted' : ''}}">{{unit.user.profile.firstName}} {{unit.user.profile.lastName}}</td>
+            <td class="{{!unit.submitted ? 'not-submitted' : ''}}"><a href="{{ '/api/uploads/' + unit.file.link }}"
+                   download="{{unit.file.name}}">{{unit.file.name}}</a></td>
+            <td *ngIf="unit.submitted; else notSubmitted">
                 <mat-form-field>
                     <mat-select placeholder="Status">
-                        <mat-option >Open</mat-option>
+                        <mat-option>Open</mat-option>
                         <mat-option (click)="this.submitStatusChange(unit._id, 0)">Failed</mat-option>
                         <mat-option (click)="this.submitStatusChange(unit._id, 1)">Accpected</mat-option>
                     </mat-select>
                 </mat-form-field>
             </td>
+            <ng-template #notSubmitted>
+                <td class="{{!unit.submitted ? 'not-submitted' : ''}}">
+                    Not submitted yet.
+                </td>
+            </ng-template>
         </tr>
     </table>
 

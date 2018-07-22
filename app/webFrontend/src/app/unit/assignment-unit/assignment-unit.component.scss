@@ -9,6 +9,10 @@ table {
     border-bottom: 1px solid grey;
     padding: 10px;
     width: 15rem;
+
+    &.not-submitted {
+      opacity: 0.5;
+    }
   }
 
   .heading-row {

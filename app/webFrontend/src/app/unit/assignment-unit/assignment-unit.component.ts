@@ -38,6 +38,7 @@ export class AssignmentUnitComponent implements OnInit {
 
     ngOnInit() {
         if (this.assignmentUnit.assignments.length) {
+
             this.file = this.assignmentUnit.assignments[0].file;
 
             if (this.assignmentUnit.assignments[0].checked === 1) {
