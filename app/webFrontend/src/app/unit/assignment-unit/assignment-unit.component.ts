@@ -7,6 +7,7 @@ import {IFileUnit} from "../../../../../../shared/models/units/IFileUnit";
 import {IFile} from '../../../../../../shared/models/IFile';
 import {AssignmentService} from "../../shared/services/data.service";
 import {UserService} from '../../shared/services/user.service';
+import {BehaviorSubject} from "rxjs/BehaviorSubject";
 
 enum AssignmentIcon {
     TURNED_IN = 'assignment_turned_in',
@@ -28,6 +29,9 @@ export class AssignmentUnitComponent implements OnInit {
     uploadPath: string;
     assignmentIcon: AssignmentIcon;
 
+    public showUploadForm: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
+    data = this.showUploadForm.asObservable();
+
     file: IFile = null;
 
     constructor(public unitFormService: UnitFormService,
@@ -37,8 +41,9 @@ export class AssignmentUnitComponent implements OnInit {
     }
 
     ngOnInit() {
-        if (this.assignmentUnit.assignments.length) {
 
+        if (this.assignmentUnit.assignments.length) {
+            this.updateShowUploadForm(false);
             this.file = this.assignmentUnit.assignments[0].file;
 
             if (this.assignmentUnit.assignments[0].checked === 1) {
@@ -69,6 +74,10 @@ export class AssignmentUnitComponent implements OnInit {
         }
     }
 
+    public updateShowUploadForm = (shown: boolean) => {
+        this.showUploadForm.next(shown);
+    }
+
     public startUpload() {
         try {
             this.uploadForm.fileUploader.uploadAll();
@@ -80,7 +89,7 @@ export class AssignmentUnitComponent implements OnInit {
     }
 
     public onAllUploaded() {
-        // this.dialogRef.close(true);
+        this.updateShowUploadForm(false);
     }
 
     public isObjectInQueue() {
@@ -101,7 +110,8 @@ export class AssignmentUnitComponent implements OnInit {
     }
 
     public deleteAssignment() {
-        this.assignmentService.deleteAssignment(this.assignmentUnit._id.toString());
+        this.updateShowUploadForm(true);
+        this.assignmentService.deleteAssignment(this.assignmentUnit._id.toString(), this.updateShowUploadForm);
     }
 
     public canBeDeleted() {

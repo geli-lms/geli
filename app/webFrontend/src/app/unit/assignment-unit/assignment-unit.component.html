@@ -1,6 +1,6 @@
 <!--STUDENT VIEW-->
 <ng-container *ngIf="this.userService.isStudent()">
-    <ng-container *ngIf="!canBeDeleted()" [formGroup]="unitForm">
+    <ng-container *ngIf="this.showUploadForm.getValue()" [formGroup]="unitForm">
         <app-upload-form [uploadMethod]="'POST'"
                          [uploadPath]="uploadPath"
                          [additionalData]="null"
@@ -15,23 +15,27 @@
                 <mat-icon>file_upload</mat-icon>
                 {{ 'file.text.infoDropAddFiles' | translate }}
             </button>
-            <button mat-raised-button (click)="cancel()">Cancel</button>
         </div>
     </ng-container>
-    <div class="assignment-status-group">
-        <ng-container *ngIf="this.file !== null"><a href="{{ '/api/uploads/' + this.file.link }}"
-                                                    download="{{this.file.name}}">{{this.file.name}}</a></ng-container>
-        <span class="status-group" *ngIf="readyForGreating()">Status: <mat-icon id="{{assignmentIcon}}">{{assignmentIcon}}</mat-icon></span>
-    </div>
-    <div class="submit-button-group">
-        <button *ngIf="!isSubmited()" mat-raised-button color="primary" (click)="submitAssignment()">{{ 'unit.submitAss'
-            | translate }}
-        </button>
-        <button class="delete-button" *ngIf="!isSubmited()" mat-raised-button color="warn" (click)="deleteAssignment()"
-                matTooltip="{{'unit.deleteAssignment' | translate}}">
-            <mat-icon>delete</mat-icon>
-        </button>
-    </div>
+    <ng-container *ngIf="!this.showUploadForm.getValue()">
+        <div class="assignment-status-group">
+            <ng-container *ngIf="this.file !== null"><a href="{{ '/api/uploads/' + this.file.link }}"
+                                                        download="{{this.file.name}}">{{this.file.name}}</a>
+            </ng-container>
+            <span class="status-group" *ngIf="readyForGreating()">Status: <mat-icon id="{{assignmentIcon}}">{{assignmentIcon}}</mat-icon></span>
+        </div>
+        <div class="submit-button-group">
+            <button *ngIf="!isSubmited()" mat-raised-button color="primary" (click)="submitAssignment()">{{
+                'unit.submitAss'
+                | translate }}
+            </button>
+            <button class="delete-button" *ngIf="!isSubmited()" mat-raised-button color="warn"
+                    (click)="deleteAssignment()"
+                    matTooltip="{{'unit.deleteAssignment' | translate}}">
+                <mat-icon>delete</mat-icon>
+            </button>
+        </div>
+    </ng-container>
 </ng-container>
 
 <!--TEACHER VIEW-->
@@ -44,9 +48,12 @@
             <td>Status</td>
         </tr>
         <tr class="content-row" *ngFor="let unit of this.assignmentUnit.assignments;">
-            <td class="{{!unit.submitted ? 'not-submitted' : ''}}">{{unit.user.profile.firstName}} {{unit.user.profile.lastName}}</td>
+            <td class="{{!unit.submitted ? 'not-submitted' : ''}}">{{unit.user.profile.firstName}}
+                {{unit.user.profile.lastName}}
+            </td>
             <td class="{{!unit.submitted ? 'not-submitted' : ''}}"><a href="{{ '/api/uploads/' + unit.file.link }}"
-                   download="{{unit.file.name}}">{{unit.file.name}}</a></td>
+                                                                      download="{{unit.file.name}}">{{unit.file.name}}</a>
+            </td>
             <td *ngIf="unit.submitted; else notSubmitted">
                 <mat-form-field>
                     <mat-select placeholder="Status">
