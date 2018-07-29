@@ -1,7 +1,8 @@
 import {
-  Authorized, Body, Delete, Get, JsonController, NotFoundError, Param, Post, Put,
+  Authorized, UseBefore, Body, Delete, Get, JsonController, NotFoundError, Param, Post, Put,
   UploadedFile
 } from 'routing-controllers';
+import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import {Directory} from '../models/mediaManager/Directory';
 import {File} from '../models/mediaManager/File';
 import {IDirectory} from '../../../shared/models/mediaManager/IDirectory';
@@ -26,14 +27,16 @@ const uploadOptions = {
 };
 
 @JsonController('/media')
-@Authorized()
+@UseBefore(passportJwtMiddleware)
 export class MediaController {
+  @Authorized(['student', 'teacher', 'admin'])
   @Get('/directory/:id')
   async getDirectory(@Param('id') directoryId: string) {
     const directory = await Directory.findById(directoryId);
     return directory.toObject();
   }
 
+  @Authorized(['student', 'teacher', 'admin'])
   @Get('/directory/:id/lazy')
   async getDirectoryLazy(@Param('id') directoryId: string) {
     const directory = await Directory.findById(directoryId)
@@ -42,6 +45,7 @@ export class MediaController {
     return directory.toObject();
   }
 
+  @Authorized(['student', 'teacher', 'admin'])
   @Get('/file/:id')
   async getFile(@Param('id') fileId: string) {
     const file = await File.findById(fileId);
