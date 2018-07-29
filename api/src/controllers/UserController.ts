@@ -3,7 +3,8 @@ import {
   BadRequestError, ForbiddenError, InternalServerError, NotFoundError, UploadedFile, Post
 } from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
-import fs = require('fs');
+import * as fs from 'fs';
+import * as path from 'path';
 import {IUser} from '../../../shared/models/IUser';
 import {IUserModel, User} from '../models/User';
 import {isNullOrUndefined} from 'util';
@@ -16,7 +17,7 @@ const multer = require('multer');
 const uploadOptions = {
   storage: multer.diskStorage({
     destination: (req: any, file: any, cb: any) => {
-      cb(null, 'uploads/users/');
+      cb(null, path.join(config.uploadFolder, 'users'));
     },
     filename: (req: any, file: any, cb: any) => {
       const id = req.params.id;
@@ -331,9 +332,9 @@ export class UserController {
     }
 
     if (user.profile.picture) {
-      const path = user.profile.picture.path;
-      if (path && fs.existsSync(path)) {
-        fs.unlinkSync(path);
+      const oldPicturePath = user.profile.picture.path;
+      if (oldPicturePath && fs.existsSync(oldPicturePath)) {
+        fs.unlinkSync(oldPicturePath);
       }
     }
 
@@ -350,7 +351,7 @@ export class UserController {
       _id: null,
       name: file.filename,
       alias: file.originalname,
-      path: file.path,
+      path: path.relative(path.dirname(config.uploadFolder), file.path).replace(/\\\\?/g, '/'),
       size: resizedImageBuffer.info.size
     };
 
@@ -477,7 +478,7 @@ export class UserController {
    *
    * @apiError BadRequestError There are no other users with admin privileges.
    */
-  @Authorized('admin')
+  @Authorized(['admin'])
   @Delete('/:id')
   async deleteUser(@Param('id') id: string, @CurrentUser() currentUser: IUser) {
     if (id === currentUser._id) {

@@ -57,9 +57,9 @@ export class UserDetailsComponent implements OnInit {
     const promises = [];
     promises.push(<Response> await this.userDataService.exportData());
 
-    if (user.hasUploadedProfilePicture()) {
+    if (user.hasUploadedProfilePicture) {
       const promise = <Response> await this.backendService
-        .getDownload(user.getUserImageURL(null, ''))
+        .getDownload(user.getUserImageURL(null, 'uploads/users/'))
         .toPromise();
 
       promises.push(promise);
