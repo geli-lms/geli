@@ -55,6 +55,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Add the possibility to add files directly in the file unit [#728](https://github.com/utetrapp/geli/issues/728)
 - Update validator dependency. [#791](https://github.com/utetrapp/geli/pull/791)
 - Appended `'mediaToken'` to various file URLs via `JwtPipe`. [#729](https://github.com/utetrapp/geli/issues/729)
+- Remove winston dependency. [#806](https://github.com/utetrapp/geli/pull/806)
 
 ### Fixed
 - Fixed broken notification settings. [#731](https://github.com/utetrapp/geli/issues/731)
