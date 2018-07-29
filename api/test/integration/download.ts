@@ -3,15 +3,12 @@ import {Server} from '../../src/server';
 import {FixtureLoader} from '../../fixtures/FixtureLoader';
 import {JwtUtils} from '../../src/security/JwtUtils';
 import {User} from '../../src/models/User';
-import {Course} from '../../src/models/Course';
 import {FixtureUtils} from '../../fixtures/FixtureUtils';
 import chaiHttp = require('chai-http');
 import {IDownload} from '../../../shared/models/IDownload';
-import {Lecture} from '../../src/models/Lecture';
-import {Unit} from '../../src/models/units/Unit';
+import {IUser} from '../../../shared/models/IUser';
 
 chai.use(chaiHttp);
-const should = chai.should();
 const app = new Server().app;
 const BASE_URL = '/api/download';
 const fixtureLoader = new FixtureLoader();
@@ -22,7 +19,65 @@ describe('DownloadFile', () => {
     await fixtureLoader.load();
   });
 
+  after(async () => {
+    await requestValidCleanup();
+  });
+
+  async function postValidRequest() {
+    const unit = await FixtureUtils.getRandomUnit();
+    const lecture = await FixtureUtils.getLectureFromUnit(unit);
+    const course = await FixtureUtils.getCoursesFromLecture(lecture);
+    const courseAdmin = await User.findById(course.courseAdmin);
+    const downloadRequestData: IDownload = {
+      courseName: course._id,
+      lectures: [{ lectureId: lecture._id, units: [{ unitId: unit._id }] }]
+    };
+
+    const res = await chai.request(app)
+      .post(BASE_URL)
+      .set('Authorization', `JWT ${JwtUtils.generateToken(courseAdmin)}`)
+      .send(downloadRequestData)
+      .catch(err => err.response);
+    res.status.should.be.equal(200);
+    return { postRes: res, courseAdmin };
+  }
+
+  function requestCleanup(user: IUser) {
+    return chai.request(app)
+      .del(BASE_URL + '/cache')
+      .set('Authorization', `JWT ${JwtUtils.generateToken(user)}`)
+      .catch(err => err.response);
+  }
+
+  async function requestValidCleanup() {
+    const admin = await FixtureUtils.getRandomAdmin();
+    const res = await requestCleanup(admin);
+    res.status.should.be.equal(200);
+  }
+
   describe(`GET ${BASE_URL}`, () => {
+    it('should succeed for some valid input with prior POST', async () => {
+      const { postRes, courseAdmin } = await postValidRequest();
+      postRes.body.should.not.be.empty;
+
+      const res = await chai.request(app)
+        .get(BASE_URL + '/' + postRes.body)
+        .set('Authorization', `JWT ${JwtUtils.generateToken(courseAdmin)}`)
+        .catch(err => err.response);
+      res.status.should.be.equal(200);
+    });
+
+    it('should fail, malignant file id', async () => {
+      const { postRes, courseAdmin } = await postValidRequest();
+      postRes.body.should.not.be.empty;
+
+      const res = await chai.request(app)
+        .get(BASE_URL + '/%2E%2E%2F' + postRes.body)
+        .set('Authorization', `JWT ${JwtUtils.generateToken(courseAdmin)}`)
+        .catch(err => err.response);
+      res.status.should.be.equal(403);
+    });
+
     it('should fail, no auth', async () => {
 
       const res = await chai.request(app)
@@ -44,6 +99,10 @@ describe('DownloadFile', () => {
   });
 
   describe(`POST ${BASE_URL}`, () => {
+    it('should succeed for some valid input', async () => {
+      await postValidRequest();
+    });
+
     it('should fail, no auth', async () => {
 
       const res = await chai.request(app)
@@ -109,6 +168,18 @@ describe('DownloadFile', () => {
         .send(testData)
         .catch(err => err.response);
       res.status.should.be.equal(500);
+    });
+  });
+
+  describe(`DELETE ${BASE_URL}/cache`, () => {
+    it('should succeed with admin as user', async () => {
+      await requestValidCleanup();
+    });
+
+    it('should fail with non-admin as user', async () => {
+      const student = await FixtureUtils.getRandomStudent();
+      const res = await requestCleanup(student);
+      res.status.should.be.equal(403);
     });
   });
 });

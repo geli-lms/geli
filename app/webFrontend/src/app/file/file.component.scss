@@ -1,0 +1,21 @@
+@import '../../variables';
+
+:host {
+  display: flex;
+  flex: 1;
+}
+
+.plain-text {
+  padding: $app-content-padding;
+}
+
+object, video {
+  flex: 1;
+  min-width: 0;
+}
+
+img {
+  margin: auto;
+  min-width: 0;
+  object-fit: scale-down;
+}
