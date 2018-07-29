@@ -109,7 +109,7 @@
             <div class="opacity" *ngIf="isInSelectedFiles(file)"></div>
 
             <div class="card-btn-wrapper" *ngIf="isInSelectedFiles(file)">
-              <button mat-raised-button *ngIf="selectedFiles.length <= 1" (click)="initFileDownload(file)"
+              <button mat-raised-button *ngIf="selectedFiles.length <= 1" (click)="$event.stopPropagation();initFileDownload(file)"
                       matTooltip="'common.openInTab' | translate">
                 <mat-icon>open_in_new</mat-icon>
               </button>

@@ -208,7 +208,7 @@ describe('Export', async () => {
 
 
     it('should export admin data', async () => {
-      const admin = await FixtureUtils.getRandomStudent();
+      const admin = await FixtureUtils.getRandomAdmin();
 
       const result = await chai.request(app)
         .get(`${BASE_URL}/user`)

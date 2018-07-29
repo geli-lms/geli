@@ -1,5 +1,7 @@
 import sharp = require('sharp');
+import config from '../config/main';
 import * as fs from 'fs';
+import * as path from 'path';
 
 import {BreakpointSize} from '../models/BreakpointSize';
 import {IResponsiveImageData} from '../../../shared/models/IResponsiveImageData';
@@ -72,15 +74,15 @@ export default class ResponsiveImageService {
       }
 
       await resizeOptions
-        .toFile(directory + '/' + fileNameToSave);
+        .toFile(path.join(directory, fileNameToSave));
 
       await retinaResizeOptions
-        .toFile(directory + '/' + retinaFileNameToSave);
+        .toFile(path.join(directory, retinaFileNameToSave));
 
 
-
-      breakpoint.pathToImage = directory + '/' + fileNameToSave;
-      breakpoint.pathToRetinaImage = directory + '/' + retinaFileNameToSave;
+      const directoryRelative = path.relative(path.dirname(config.uploadFolder), directory).replace(/\\\\?/g, '/');
+      breakpoint.pathToImage = path.join(directoryRelative, fileNameToSave);
+      breakpoint.pathToRetinaImage = path.join(directoryRelative, retinaFileNameToSave);
     }
 
     if (!keepOriginalFile) {
