@@ -459,6 +459,7 @@ export class DownloadController {
       archive.file(pathToFile,
         {name: name});
     });
+    }
 
   /**
    * @api {delete} /api/download/ Request to clean up the cache.

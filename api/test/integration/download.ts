@@ -206,7 +206,7 @@ describe('DownloadFile', () => {
     }).timeout(30000);
 
   });
-  
+
   describe(`POST ${BASE_URL}`, () => {
     it('should succeed for some valid input', async () => {
       await postValidRequest();
