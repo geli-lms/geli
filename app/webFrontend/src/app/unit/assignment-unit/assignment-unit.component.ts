@@ -34,6 +34,8 @@ export class AssignmentUnitComponent implements OnInit {
 
     file: IFile = null;
 
+    selected: Number;
+
     constructor(public unitFormService: UnitFormService,
                 public formBuilder: FormBuilder,
                 public userService: UserService,
@@ -48,7 +50,7 @@ export class AssignmentUnitComponent implements OnInit {
 
             if (this.assignmentUnit.assignments[0].checked === 1) {
                 this.assignmentIcon = AssignmentIcon.ACCEPTED;
-            } else if (this.assignmentUnit.assignments[0].checked === 2) {
+            } else if (this.assignmentUnit.assignments[0].checked === 0) {
                 this.assignmentIcon = AssignmentIcon.FAILED;
             } else {
                 this.assignmentIcon = AssignmentIcon.TURNED_IN;
@@ -111,7 +113,7 @@ export class AssignmentUnitComponent implements OnInit {
 
     public deleteAssignment() {
         this.updateShowUploadForm(true);
-        this.assignmentService.deleteAssignment(this.assignmentUnit._id.toString(), this.updateShowUploadForm);
+        this.assignmentService.deleteAssignment(this.assignmentUnit._id.toString());
     }
 
     public canBeDeleted() {
@@ -139,6 +141,8 @@ export class AssignmentUnitComponent implements OnInit {
     public submitStatusChange(unitId, approved) {
         const assignmentIndex = this.getElementIndexById(this.assignmentUnit.assignments, unitId);
         this.assignmentUnit.assignments[assignmentIndex].checked = approved;
+        console.error(this.assignmentUnit.assignments[assignmentIndex]);
+        this.assignmentService.updateAssignment(this.assignmentUnit.assignments[assignmentIndex], this.assignmentUnit._id.toString());
     }
 
     private getElementIndexById(arr, id) {
