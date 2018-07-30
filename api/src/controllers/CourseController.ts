@@ -14,6 +14,7 @@ import {
 } from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import {errorCodes} from '../config/errorCodes';
+import config from '../config/main';
 
 import {ICourse} from '../../../shared/models/ICourse';
 import {ICourseDashboard} from '../../../shared/models/ICourseDashboard';
@@ -30,6 +31,7 @@ import {API_NOTIFICATION_TYPE_ALL_CHANGES, NotificationSettings} from '../models
 import {IWhitelistUser} from '../../../shared/models/IWhitelistUser';
 import {DocumentToObjectOptions} from 'mongoose';
 import * as fs from 'fs';
+import * as path from 'path';
 import ResponsiveImageService from '../services/ResponsiveImageService';
 import {IResponsiveImageData} from '../../../shared/models/IResponsiveImageData';
 
@@ -53,7 +55,7 @@ const uploadOptions = {
 const coursePictureUploadOptions = {
   storage: multer.diskStorage({
     destination: (req: any, file: any, cb: any) => {
-      cb(null, 'uploads/courses');
+      cb(null, path.join(config.uploadFolder, 'courses'));
     },
     filename: (req: any, file: any, cb: any) => {
       const id = req.params.id;
