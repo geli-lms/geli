@@ -15,7 +15,7 @@ import {ICodeKataModel} from '../../src/models/units/CodeKataUnit';
 import {ICodeKataUnit} from '../../../shared/models/units/ICodeKataUnit';
 import {ITaskUnitModel} from '../../src/models/units/TaskUnit';
 import {ITaskUnit} from '../../../shared/models/units/ITaskUnit';
-import * as winston from 'winston';
+
 import {API_NOTIFICATION_TYPE_ALL_CHANGES, NotificationSettings} from '../../src/models/NotificationSettings';
 import {Notification} from '../../src/models/Notification';
 import {WhitelistUser} from '../../src/models/WhitelistUser';
@@ -97,7 +97,7 @@ describe('Export', async () => {
             break;
           default:
             // should this fail the test?
-            winston.log('warn', 'export for \'' + unit.type + '\' is not completly tested');
+            process.stderr.write('export for "' + unit.type + '" is not completly tested');
             break;
         }
       }
@@ -208,7 +208,7 @@ describe('Export', async () => {
 
 
     it('should export admin data', async () => {
-      const admin = await FixtureUtils.getRandomStudent();
+      const admin = await FixtureUtils.getRandomAdmin();
 
       const result = await chai.request(app)
         .get(`${BASE_URL}/user`)

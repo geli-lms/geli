@@ -7,7 +7,6 @@ import {ILectureModel, Lecture} from './Lecture';
 import {ILecture} from '../../../shared/models/ILecture';
 import {InternalServerError} from 'routing-controllers';
 import {IUser} from '../../../shared/models/IUser';
-import * as winston from 'winston';
 import {ObjectID} from 'bson';
 import {Directory} from './mediaManager/Directory';
 import {IProperties} from '../../../shared/models/IProperties';
@@ -136,7 +135,6 @@ courseSchema.pre('remove', async function () {
         await picture.remove();
     }
   } catch (error) {
-    winston.log('warn', 'course (' + localCourse._id + ') cloud not be deleted!');
     throw new Error('Delete Error: ' + error.toString());
   }
 });
@@ -177,8 +175,6 @@ courseSchema.methods.exportJSON = async function (sanitize: boolean = true, only
     if (lecture) {
       const lectureExport = await lecture.exportJSON();
       obj.lectures.push(lectureExport);
-    } else {
-      winston.log('warn', 'lecture(' + lectureId + ') was referenced by course(' + this._id + ') but does not exist anymore');
     }
   }
 

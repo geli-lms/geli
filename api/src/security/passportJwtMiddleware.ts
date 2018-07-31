@@ -1,3 +1,3 @@
-import {authenticate} from 'passport';
+import passportJwtMiddlewareFactory from './passportJwtMiddlewareFactory';
 
-export default authenticate('jwt', { session: false });
+export default passportJwtMiddlewareFactory('jwt');
