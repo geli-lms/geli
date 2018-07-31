@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [NEXT]
 ### Updates
+- Update insecure dependencies[#816](https://github.com/geli/issues/816)
 - Updated Frontend to angular6[#716](https://github.com/utetrapp/geli/pull/766)
 - update node version in travis[#790](https://github.com/utetrapp/geli/pull/796)
 - update node image in docker [#799](https://github.com/utetrapp/geli/pull/799)
