@@ -62,7 +62,7 @@ export class WhitelistService {
   parseFile(file: File) {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
-      reader.readAsText(file, 'utf-8');
+      reader.readAsText(file, 'ISO-8859-1');
       reader.onload = (evt: any) => {
         const result = this.parseFileContents(evt.target.result);
         if (!result) {

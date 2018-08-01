@@ -42,12 +42,12 @@ export class WitelistController {
   async checkWhitelistForExistingStudents(@Body() data: any,
                                           @CurrentUser() currentUser: IUser,
                                           @Param('whitelist') whitelistToCheck: any[]) {
-    for (const whitelistUser of whitelistToCheck) {
-      const user = await User.findOne({ uid: whitelistUser.uid });
-      whitelistUser.exists = !!user;
-    }
 
-    return whitelistToCheck;
+    return await Promise.all(
+      whitelistToCheck.map(async uid => { {
+        return { uid, exists: !!(await User.findOne({ uid: uid }))}
+      }})
+    );
   }
 
   /**

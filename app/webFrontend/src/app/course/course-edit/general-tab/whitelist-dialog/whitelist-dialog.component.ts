@@ -36,7 +36,12 @@ export class WhitelistDialog {
         return;
       }
 
-      this.whitelistUsers = await this.whitelistUserService.checkWhitelistUsers(result.rows);
+      const uids = result.rows.map(row => row.uid);
+      const whitelistCheckResults = await this.whitelistUserService.checkWhitelistUsers(uids);
+
+      this.whitelistUsers =
+        result.rows.map(row => Object.assign(row, whitelistCheckResults.find(single => single.uid === row.uid)));
+
       this.fileErrors = result.errors;
     }
   }
