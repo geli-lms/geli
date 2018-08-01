@@ -73,6 +73,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Fixed travis usages after angular 6 update [#789](https://github.com/utetrapp/geli/pull/789)
 - Build with source-maps [#797](https://github.com/utetrapp/geli/pull/797)
 - Add missing import for rxjs operators [#808](https://github.com/utetrapp/geli/issues/808)
+- Fixed wrong Image URL in profile export [#811](https://github.com/utetrapp/geli/issues/811)
 - Fixed `picture.path` backslash issue / regression. [#729](https://github.com/utetrapp/geli/issues/729)
 - Replaced hard-coded `'upload'` strings in the API with `config.uploadFolder`. [#729](https://github.com/utetrapp/geli/issues/729)
 - Fixed missing `@UseBefore` middleware in `MediaController`. [#729](https://github.com/utetrapp/geli/issues/729)
