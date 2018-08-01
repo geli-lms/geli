@@ -592,7 +592,6 @@ export class CourseController {
    *      newlength: 10
    *    }
    *
-   * @apiError TypeError Only CSV files are allowed.
    * @apiError HttpError UID is not a number 1.
    * @apiError ForbiddenError Unauthorized user.
    */

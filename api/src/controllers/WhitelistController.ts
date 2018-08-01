@@ -37,6 +37,25 @@ const uploadOptions = {
 @UseBefore(passportJwtMiddleware)
 export class WitelistController {
 
+  /**
+   * @api {get} /api/whitelist/check/:whitelist
+   *
+   *
+   * @apiSuccessExample {json} Success-Response:
+   *  [
+   *    {
+   *        "uid": "<uid>",
+   *        "exists": true
+   *    },
+   *    {
+   *        "uid": "<non-existing-uid>",
+   *        "exists": false
+   *    }
+   *  ]
+   * @param data
+   * @param currentUser
+   * @param whitelistToCheck
+   */
   @Get('/check/:whitelist')
   @Authorized(['teacher', 'admin'])
   async checkWhitelistForExistingStudents(@Body() data: any,
