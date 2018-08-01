@@ -1,6 +1,6 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {ErrorHandler, NgModule} from '@angular/core';
-import {HttpClientModule} from '@angular/common/http';
+import {HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http';
 import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {AppComponent} from './app.component';
 import {RavenErrorHandler} from './shared/services/raven-error-handler.service';
@@ -37,6 +37,7 @@ import {AdminModule} from './admin/admin.module';
 import {ReportService} from './shared/services/data/report.service';
 import {TitleService} from './shared/services/title.service';
 import {ThemeService} from './shared/services/theme.service';
+import {FileModule} from './file/file.module';
 import {DataSharingService} from './shared/services/data-sharing.service';
 import {NotificationModule} from './notification/notification.module';
 import {HttpClient} from '@angular/common/http';
@@ -69,6 +70,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     AboutModule,
     SharedModule,
     AdminModule,
+    FileModule,
     PrivacyModule,
     TranslateModule.forRoot({
       loader: {

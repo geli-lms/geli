@@ -23,6 +23,10 @@ export class User implements IUser {
         this.lastVisitedCourses = user.lastVisitedCourses;
     }
 
+    get hasUploadedProfilePicture() {
+      return this.profile && this.profile.picture;
+    }
+
     getGravatarURL(size: number = 80) {
         // Gravatar wants us to hash the email (for site to site consistency),
         // - see https://en.gravatar.com/site/implement/hash/ -
@@ -30,13 +34,9 @@ export class User implements IUser {
         return `https://www.gravatar.com/avatar/${md5(this._id)}.jpg?s=${size}&d=retro`;
     }
 
-    hasUploadedProfilePicture() {
-      return this.profile && this.profile.picture;
-    }
-
-    getUserImageURL(size: number = 80, apiPrefix: string = 'api') {
-        if (this.profile && this.profile.picture) {
-            return apiPrefix + '/uploads/users/' + this.profile.picture.name;
+    getUserImageURL(size: number = 80, apiPrefix: string = '/api/uploads/users/') {
+        if (this.hasUploadedProfilePicture) {
+            return apiPrefix + this.profile.picture.name;
         } else {
             return this.getGravatarURL(size);
         }
