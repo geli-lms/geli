@@ -141,7 +141,9 @@
       "passwordsMatch": "Passwords do not match.",
       "required": "Input required"
     },
-    "videos": "Videos"
+    "videos": "Videos",
+    "line": "Line",
+    "errors": "Errors"
   },
   "course": {
     "delete": "Delete course",
@@ -185,7 +187,13 @@
       "yourCourseProgress": "Your course progress",
       "whitelist": "Whitelist",
       "noVideosAttached": "There are no videos attached to this course yet",
-      "noFilesAttached": "There are no files attached to this course yet"
+      "noFilesAttached": "There are no files attached to this course yet",
+      "removeUnwantedUsers": "Remove unwanted users",
+      "createWhitelist": "Create whitelist",
+      "openWhitelistDialog": "Open whitelist dialog",
+      "whitelistCreated": "The whitelist has been created. Don't forget to save the course.",
+      "whitelistNotReadable": "The whitelist-file could not be read. Did you select the right file?",
+      "whitelistNoStudents": "No students found which can be imported."
     },
     "tooltip": {
       "add": "Add Course",

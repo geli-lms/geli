@@ -4,6 +4,7 @@ import {CourseService, WhitelistUserService} from '../../../../shared/services/d
 import {ICourse} from '../../../../../../../../shared/models/ICourse';
 import {SnackBarService} from '../../../../shared/services/snack-bar.service';
 import {WhitelistService} from "../../../../shared/services/whitelist.service";
+import {TranslateService} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-whitelist-dialog',
@@ -17,22 +18,31 @@ export class WhitelistDialog {
 
   public course: ICourse;
 
+  private translations = { };
+
   constructor(public dialogRef: MatDialogRef<WhitelistDialog>,
               public courseService: CourseService,
               public snackBar: SnackBarService,
               public whitelistService: WhitelistService,
-              public whitelistUserService: WhitelistUserService) {
+              public whitelistUserService: WhitelistUserService,
+              private translate: TranslateService) {
+
 
   }
 
 
   async onWhitelistFileChanged(event) {
+
+
+    const translations = this.translate.instant(['course.whitelistCreated', 'course.whitelistNotReadable']);
+    console.log("translations are", translations);
+
     if (event.target && event.target.files && event.target.files.length > 0) {
       const whitelistFile = event.target.files[0];
 
       const result = <any>await this.whitelistService.parseFile(whitelistFile);
       if (!result || !result.rows || result.rows.length === 0) {
-        this.snackBar.openLong('The CSV file does not contain any students to import.');
+        this.snackBar.openLong(this.translate.instant('course.text.whitelistNoStudents'));
         return;
       }
 
@@ -50,9 +60,9 @@ export class WhitelistDialog {
     const result = await this.courseService.setWhitelistUsers(this.course._id, this.whitelistUsers);
 
     if (!result) {
-      this.snackBar.openLong('The CSV file could not be read. Do you have the right file?');
+      this.snackBar.openLong(this.translate.instant('course.text.whitelistNotReadable'));
     } else {
-      this.snackBar.openLong('The whitelist has been set. Don`t forget to save the course.');
+      this.snackBar.openLong(this.translate.instant('course.text.whitelistCreated'));
     }
 
     this.dialogRef.close(result);

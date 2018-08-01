@@ -4,7 +4,7 @@
 
     <mat-step>
 
-      <ng-template matStepLabel>Upload whitelist</ng-template>
+      <ng-template matStepLabel>{{ 'course.text.whitelist' | translate }}</ng-template>
 
       <p>{{ 'course.text.uploadWhitelist' | translate }}</p>
       <p>
@@ -13,38 +13,38 @@
       </p>
 
       <div class="buttons-container">
-        <button mat-button matStepperPrevious>Back</button>
-        <button mat-button matStepperNext>Next</button>
+        <button mat-button matStepperPrevious>{{ 'common.back' | translate }}</button>
+        <button mat-button matStepperNext>{{ 'common.continue' | translate }}</button>
       </div>
     </mat-step>
 
     <mat-step *ngIf="fileErrors && fileErrors.length > 0">
 
-      <ng-template matStepLabel>File Errors</ng-template>
+      <ng-template matStepLabel>{{ 'common.errors' | translate }}</ng-template>
         <ng-container *ngFor="let error of fileErrors; let i = index;">
           <div>
-            <span><strong>Line {{error.line}}:</strong></span>
+            <span><strong>{{ 'common.line' | translate }} {{error.line}}:</strong></span>
             <span>{{error.error}}</span>
           </div>
 
         </ng-container>
 
       <div class="buttons-container">
-        <button mat-button matStepperPrevious>Back</button>
-        <button mat-button mat-raised-button color="primary" matStepperNext>Weiter</button>
+        <button mat-button matStepperPrevious>{{ 'common.back' | translate }}</button>
+        <button mat-button mat-raised-button color="primary" matStepperNext>{{ 'common.continue' | translate }}</button>
       </div>
     </mat-step>
 
     <mat-step>
 
-      <ng-template matStepLabel>Remove unwanted users</ng-template>
+      <ng-template matStepLabel>{{ 'course.text.removeUnwantedUsers' | translate}}</ng-template>
 
       <ng-container *ngFor="let user of whitelistUsers; let i = index;">
         <mat-card>
           <ul class="info">
 
             <li class="existing">
-              <mat-icon *ngIf="!user.exists" color="warn" matTooltip="Nutzer existiert nicht">warning</mat-icon>
+              <mat-icon *ngIf="!user.exists" color="warn" matTooltip="{{ 'user.doesntexist' | translate }}">warning</mat-icon>
               <mat-icon *ngIf="user.exists" color="green">check</mat-icon>
             </li>
 
@@ -63,7 +63,7 @@
 
       <div class="buttons-container">
         <button mat-button matStepperPrevious>Back</button>
-        <button mat-button mat-raised-button color="primary" (click)="uploadWhitelist()">Whitelist erstellen</button>
+        <button mat-button mat-raised-button color="primary" (click)="uploadWhitelist()">{{ 'course.text.createWhitelist' | translate }}</button>
       </div>
     </mat-step>
   </mat-horizontal-stepper>

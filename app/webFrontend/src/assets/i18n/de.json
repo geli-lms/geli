@@ -141,7 +141,9 @@
       "passwordsMatch": "Die Passwörter stimmen nicht überein.",
       "required": "Eingabe notwendig"
     },
-    "videos": "Videos"
+    "videos": "Videos",
+    "line": "Zeile",
+    "errors": "Fehler"
   },
   "course": {
     "delete": "Kurs löschen",
@@ -185,7 +187,13 @@
       "yourCourseProgress": "Ihr Kursfortschritt",
       "whitelist": "Freigabeliste",
       "noVideosAttached": "Es gibt keine Videos zu diesem Kurs",
-      "noFilesAttached": "Es gibt keine Dateien zu diesem Kurs"
+      "noFilesAttached": "Es gibt keine Dateien zu diesem Kurs",
+      "removeUnwantedUsers": "Ungewollte Nutzer entfernen",
+      "createWhitelist": "Whitelist erstellen",
+      "openWhitelistDialog": "Auswahldialog öffnen",
+      "whitelistCreated": "Die Whitelist wurde erstellt. Vergessen Sie nicht den Kurs zu speichern.",
+      "whitelistNotReadable": "Die Whitelist-Datei konnte nicht gelesen werden. Haben Sie die richtige Datei ausgewählt?",
+      "whitelistNoStudents": "In der Whitelist-Datei sind keine Stundenten, die importiert werden können."
     },
     "tooltip" : {
       "add": "Kurs hinzufügen",
@@ -355,6 +363,7 @@
     "tooltip":{
       "deleteUsers": "Ausgewählte Mitglieder entfernen.",
       "toggleMembers" : "Alle Benutzer auswählen"
-    }
+    },
+    "doesntExists": "Nutzer existiert nicht"
   }
 }
