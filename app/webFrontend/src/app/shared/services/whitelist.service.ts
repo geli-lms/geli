@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {WhitelistUserService} from "./data.service";
+import {WhitelistUserService} from './data.service';
 
 
 @Injectable()

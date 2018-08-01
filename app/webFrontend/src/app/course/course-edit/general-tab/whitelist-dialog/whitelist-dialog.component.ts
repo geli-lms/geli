@@ -3,8 +3,8 @@ import {MatDialogRef} from '@angular/material';
 import {CourseService, WhitelistUserService} from '../../../../shared/services/data.service';
 import {ICourse} from '../../../../../../../../shared/models/ICourse';
 import {SnackBarService} from '../../../../shared/services/snack-bar.service';
-import {WhitelistService} from "../../../../shared/services/whitelist.service";
-import {TranslateService} from "@ngx-translate/core";
+import {WhitelistService} from '../../../../shared/services/whitelist.service';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-whitelist-dialog',
@@ -32,10 +32,7 @@ export class WhitelistDialog {
 
 
   async onWhitelistFileChanged(event) {
-
-
     const translations = this.translate.instant(['course.whitelistCreated', 'course.whitelistNotReadable']);
-    console.log("translations are", translations);
 
     if (event.target && event.target.files && event.target.files.length > 0) {
       const whitelistFile = event.target.files[0];

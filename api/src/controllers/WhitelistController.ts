@@ -64,7 +64,7 @@ export class WitelistController {
 
     return await Promise.all(
       whitelistToCheck.map(async uid => { {
-        return { uid, exists: !!(await User.findOne({ uid: uid }))}
+        return { uid, exists: !!(await User.findOne({ uid: uid }))};
       }})
     );
   }
