@@ -237,12 +237,14 @@ gulp.task(WATCH_POLL, gulp.series(BUILD_DEV, (done) => {
   done();
 }));
 
-gulp.task(LOAD_FIXTURES, gulp.series(BUILD_DEV, function () {
+gulp.task(LOAD_FIXTURES, gulp.series(BUILD_DEV, (done) => {
   require(__dirname + "/build/fixtures/load");
+  done();
 }));
 
-gulp.task(MIGRATE, gulp.series(BUILD, function () {
+gulp.task(MIGRATE, gulp.series(BUILD, (done) => {
   require(__dirname + "/build/src/migrations");
+  done();
 }));
 
 gulp.task(DEBUG, gulp.series(BUILD_DEV, (done) => {
