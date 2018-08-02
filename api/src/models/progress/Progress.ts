@@ -79,7 +79,7 @@ progressSchema.statics.exportPersonalUserData = async function (user: IUser) {
 
   return Promise.all(userProgress.map( async (prog) => {
     let progExport;
-    if(prog.__t === 'task-unit-progress'){
+    if (prog.__t === 'task-unit-progress') {
       progExport =  await (<ITaskUnitProgressModel>prog).exportJSON();
     } else {
       progExport =  await (<IProgressModel>prog).exportJSON();
