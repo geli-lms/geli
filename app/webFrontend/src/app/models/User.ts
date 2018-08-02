@@ -23,6 +23,10 @@ export class User implements IUser {
         this.lastVisitedCourses = user.lastVisitedCourses;
     }
 
+    get hasUploadedProfilePicture() {
+      return this.profile && this.profile.picture;
+    }
+
     getGravatarURL(size: number = 80) {
         // Gravatar wants us to hash the email (for site to site consistency),
         // - see https://en.gravatar.com/site/implement/hash/ -
