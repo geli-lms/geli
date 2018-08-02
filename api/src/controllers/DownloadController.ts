@@ -1,8 +1,8 @@
 import {promisify} from 'util';
 import {Response} from 'express';
 import {
-  Body, Post, Get, NotFoundError, ContentType, UseBefore, Param, Res, Controller,
-  CurrentUser
+  NotFoundError, ForbiddenError, ContentType, UseBefore, Param, Res, Controller,
+  Body, Post, Get, Delete, CurrentUser, Authorized
 } from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import {Unit, FreeTextUnit, CodeKataUnit, TaskUnit} from '../models/units/Unit';
@@ -15,8 +15,10 @@ import {Lecture} from '../models/Lecture';
 import {IUser} from '../../../shared/models/IUser';
 import {Course} from '../models/Course';
 import config from '../config/main';
+import {errorCodes} from '../config/errorCodes';
 
-const fs = require('fs');
+import * as fs from 'fs';
+import * as path from 'path';
 const archiver = require('archiver');
 import crypto = require('crypto');
 import {User} from '../models/User';
@@ -97,11 +99,19 @@ export class DownloadController {
    * @apiSuccessExample {json} Success-Response:
    *     UEsFBgAAAAAAAAAAAAAAAAAAAAAAAA==
    *
-   * @apiError NotFoundError
+   * @apiError NotFoundError File could not be found.
+   * @apiError ForbiddenError Invalid id i.e. filename (e.g. '../something').
    */
   @Get('/:id')
   async getArchivedFile(@Param('id') id: string, @Res() response: Response) {
-    const filePath = config.tmpFileCacheFolder + id + '.zip';
+    const tmpFileCacheFolder = path.resolve(config.tmpFileCacheFolder);
+    const filePath = path.join(tmpFileCacheFolder, id + '.zip');
+
+    // Assures that the filePath actually points to a file within the tmpFileCacheFolder.
+    // This is because the id parameter could be something like '../forbiddenFile' ('../' via %2E%2E%2F in the URL).
+    if (path.dirname(filePath) !== tmpFileCacheFolder) {
+      throw new ForbiddenError(errorCodes.file.forbiddenPath.code);
+    }
 
     if (!fs.existsSync(filePath)) {
       throw new NotFoundError();
@@ -206,7 +216,8 @@ export class DownloadController {
             if (localUnit.__t === 'file') {
               for (const fileId of unit.files) {
                 const file = await File.findById(fileId);
-                archive.file( 'uploads/' + file.link, {name: lecCounter + '_' + lcName + '/' + unitCounter + '_' + file.name});
+                archive.file(path.join(config.uploadFolder, file.link),
+                  {name: lecCounter + '_' + lcName + '/' + unitCounter + '_' + file.name});
               }
             } else {
               archive.append(localUnit.toFile(),
@@ -228,5 +239,23 @@ export class DownloadController {
     } else {
       throw new NotFoundError();
     }
+  }
+
+  /**
+   * @api {delete} /api/download/ Request to clean up the cache.
+   * @apiName DeleteCache
+   * @apiGroup Download
+   * @apiPermission admin
+   *
+   * @apiSuccess {Object} result Empty object.
+   *
+   * @apiSuccessExample {json} Success-Response:
+   *      {}
+   */
+  @Delete('/cache')
+  @Authorized(['admin'])
+  deleteCache() {
+    this.cleanupCache();
+    return {};
   }
 }

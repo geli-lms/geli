@@ -6,6 +6,16 @@
       "toUseYourAccount": "to use your account"
     }
   },
+  "admin": {
+    "cache": {
+      "clear": {
+        "failed": "Server cache clearing error",
+        "label": "Clear cache",
+        "tooltip": "This may disrupt coincident download requests!"
+      },
+      "header": "Server cache controls"
+    }
+  },
   "auth": {
     "changePassword": "Change password",
     "confirmPassword": "Confirm password",
@@ -96,6 +106,7 @@
     "notifications": "Notifications",
     "media": "Media",
     "members": "Members",
+    "misc": "Misc.",
     "ok": "OK",
     "open": "Open",
     "openInTab" : "Open in new Tab",
@@ -130,7 +141,7 @@
       "clickToOpen": "open up/close"
     },
     "upload": "upload",
-    "users": "users",
+    "users": "Users",
     "validate": "Validate",
     "validation": {
       "instituteMail": "Please register with your institute email.",
