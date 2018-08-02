@@ -33,6 +33,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Added a `FileComponent` to flexibly display a single file e.g. in a new tab. [#729](https://github.com/utetrapp/geli/issues/729)
 - Added more `DownloadController` unit tests, including a new `DeleteCache` `admin`-only API. [#729](https://github.com/utetrapp/geli/issues/729)
 - Added `'Misc.'` front-end admin sub-component with cache-clearing control re. the `DeleteCache` API. [#729](https://github.com/utetrapp/geli/issues/729)
+- Added dsgvo delete user data [#775](https://github.com/utetrapp/geli/issues/775)
 
 ### Changed
 - Minor Fixes and Adaptations and Mergefailure fixes. [#785] (https://github.com/utetrapp/geli/issues/785)
