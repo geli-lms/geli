@@ -359,13 +359,21 @@ export class UnitController {
 
         const assignmentUnit = <IAssignmentUnitModel> await Unit.findById(id);
 
+        /**
+         * Simple workaround if user_id is not set. For some reason is the data.user._id not set if a student commits
+         * an assignment...
+         */
+        const dataUserId = !data.user._id ? "" : data.user._id;
+
         if (!assignmentUnit) {
             throw new NotFoundError();
         }
 
         for (let assignment of assignmentUnit.assignments) {
-            if (assignment.user._id.toString() === data.user._id.toString() &&
-                (assignment.user._id.toString() === currentUser._id || currentUser.role === 'teacher' || currentUser.role === 'admin')) {
+
+            if ((assignment.user._id.toString() === currentUser._id && currentUser.role === 'student') ||
+                (assignment.user._id.toString() === dataUserId.toString() &&
+                (assignment.user._id.toString() === currentUser._id || currentUser.role === 'teacher' || currentUser.role === 'admin'))) {
 
                 const index = assignmentUnit.assignments.indexOf(assignment);
 
