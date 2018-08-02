@@ -6,7 +6,7 @@ import {SnackBarService} from '../../shared/services/snack-bar.service';
 import {IUser} from '../../../../../../shared/models/IUser';
 import {DialogService} from '../../shared/services/dialog.service';
 import {UserService} from '../../shared/services/user.service';
-import {isNullOrUndefined} from "util";
+import {isNullOrUndefined} from 'util';
 
 @Component({
   selector: 'app-user-admin',
@@ -50,7 +50,7 @@ export class UserAdminComponent implements OnInit {
 
   async deleteUserById(userId: string) {
     await this.getUsers();
-    const idx = this.allUsers.findIndex((user) =>  user._id == userId);
+    const idx = this.allUsers.findIndex((user) =>  user._id === userId);
     this.deleteUser(idx);
   }
 

@@ -92,7 +92,7 @@ export class UserDetailsComponent implements OnInit {
   }
 
   async deleteProfile() {
-    if(this.user.role === 'admin') {
+    if (this.user.role === 'admin') {
       // navigate to delete site.
       const link = `/admin/users/delete/${this.user._id}`;
       this.router.navigate([link]);
