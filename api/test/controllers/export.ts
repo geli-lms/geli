@@ -156,7 +156,6 @@ describe('Export', async () => {
       const course1 = await FixtureUtils.getRandomCourse();
       const course2 = await FixtureUtils.getRandomCourse();
       const taskUnit = <ITaskUnitModel>await Unit.findOne({progressable: true, __t: 'task'});
-      
       const lecture = await Lecture.findOne({units: { $in: [ taskUnit._id ] }});
       const course = await Course.findOne({lectures: { $in: [ lecture._id ] }});
       const student = await User.findOne({_id: { $in: course.students}});
