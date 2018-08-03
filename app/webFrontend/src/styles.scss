@@ -38,23 +38,14 @@ $app-night-theme: mat-dark-theme($app-night-primary, $app-night-accent, $app-nig
     color: map-get($app-night-primary, A100) !important;
   }
 
-  .answers {
-    background-color: map-get($mat-grey, 800) !important;;
-  }
   .messages {
-    background-color: map-get($mat-grey, 800) !important;;
+    .content {
+      background-color: map-get($mat-grey, 600) !important;
+    }
   }
-  .messages .content {
-    background-color: map-get($mat-grey, 600) !important;
-  }
-  .mat-form-field-wrapper {
-    background-color: map-get($mat-grey, 800) !important;;
-  }
-  .mat-form-field-wrapper .mat-input-element {
-    background-color: map-get($mat-grey, 800) !important;;
-  }
-  .msg-input-footer{
-    background-color: map-get($mat-grey, 800) !important;;
+
+  .answers, .messages, .msg-input, .msg-input-footer, .mat-form-field-wrapper .mat-input-element {
+    background-color: map-get($mat-grey, 800);
   }
 }
 

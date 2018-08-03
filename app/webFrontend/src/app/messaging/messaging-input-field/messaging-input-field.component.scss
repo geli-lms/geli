@@ -2,7 +2,6 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  border-top: 2px solid #f2f2f2;
 }
 
 
@@ -29,7 +28,6 @@
     width: 100%;
     textarea {
       max-height: 200px;
-      background-color: white;
       border-radius: 5px;
     }
   }

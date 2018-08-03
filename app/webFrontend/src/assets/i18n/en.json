@@ -281,7 +281,9 @@
     "userSettings": "Settings"
   },
   "messaging": {
-    "inputHintText": "Ctrl + Enter to send"
+    "inputHintText": "Enter a Message",
+    "sendIconTooltip": "Send",
+    "emojiIconTooltip": "Emoji Picker ein- oder ausblenden"
   },
   "notifications": {
     "text": {

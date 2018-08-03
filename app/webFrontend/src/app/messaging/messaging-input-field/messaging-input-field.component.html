@@ -7,7 +7,7 @@
   <div class="msg-input">
     <form [formGroup]="form">
       <mat-form-field class="message-input-field" floatLabel="never">
-        <textarea placeholder="Enter a  message"  matInput  cdkAutosizeMinRows="3"   cdkTextareaAutosize  #msgTextArea
+        <textarea placeholder="{{'messaging.inputHintText'| translate}}"  matInput  cdkAutosizeMinRows="3"   cdkTextareaAutosize  #msgTextArea
                   formControlName="message" (onclick)="onClick(msgTextArea)"
                   (keydown)="onEnter($event, msgTextArea)"></textarea>
       </mat-form-field>
@@ -15,9 +15,9 @@
   </div>
   <div class="msg-input-footer">
     <button color="primary" mat-icon-button (click)="toggleEmojiPicker()">
-      <mat-icon>sentiment_very_satisfied</mat-icon>
+      <mat-icon [matTooltip]="'messaging.emojiIconTooltip'| translate">sentiment_very_satisfied</mat-icon>
     </button>
-    <button (click)="postMessage()" color="primary" class="msg-send"     matTooltip="send" mat-icon-button>
+    <button (click)="postMessage()" color="primary" class="msg-send"  [matTooltip]=" 'messaging.sendIconTooltip'| translate" mat-icon-button>
       <mat-icon>send</mat-icon>
     </button>
   </div>
