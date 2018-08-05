@@ -411,7 +411,7 @@ export class DownloadController {
               }
               solutions += localUnit.toHtmlForSinglePDFSolutions()  + '</div>';
               solCounter++;
-            } else {
+            } else if (localUnit.__t !== 'file') {
               solutions += localUnit.toHtmlForSinglePDFSolutions();
             }
             unitCounter++;
