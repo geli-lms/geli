@@ -6,6 +6,16 @@
       "toUseYourAccount": "to use your account"
     }
   },
+  "admin": {
+    "cache": {
+      "clear": {
+        "failed": "Server cache clearing error",
+        "label": "Clear cache",
+        "tooltip": "This may disrupt coincident download requests!"
+      },
+      "header": "Server cache controls"
+    }
+  },
   "auth": {
     "changePassword": "Change password",
     "confirmPassword": "Confirm password",
@@ -95,6 +105,7 @@
     "notifications": "Notifications",
     "media": "Media",
     "members": "Members",
+    "misc": "Misc.",
     "ok": "OK",
     "open": "Open",
     "openInTab" : "Open in new Tab",
@@ -129,7 +140,7 @@
       "clickToOpen": "open up/close"
     },
     "upload": "upload",
-    "users": "users",
+    "users": "Users",
     "validate": "Validate",
     "validation": {
       "instituteMail": "Please register with your institute email.",
@@ -160,6 +171,10 @@
       "canSeenByStudents": "Course can be seen by students.",
       "downloadHelpText": "Select units or files which you want to download in a zip",
       "downloadNoFiles": "Für diesen Kurs steht kein Material zum herunterladen bereit!",
+      "IndividualPDF":"Individual PDFs",
+      "IndividualPDFExplanation":"One PDF per Unit",
+      "SinglePDF":"Single PDF",
+      "SinglePDFExplanation":"One PDF with everything you selected",
       "editCourse": "Edit course",
       "enterAccessKey": "Please enter the course's access key.",
       "enterAccessKeyForStudents": "Enter an access key for the students.",

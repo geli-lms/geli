@@ -6,6 +6,16 @@
       "toUseYourAccount": ", um den Account zu nutzen."
     }
   },
+  "admin": {
+    "cache": {
+      "clear": {
+        "failed": "Fehler beim Löschen des Server-Caches",
+        "label": "Lösche Cache",
+        "tooltip": "Dies kann laufende Download-Anfragen stören!"
+      },
+      "header": "Server Cache Steuerung"
+    }
+  },
   "auth": {
     "changePassword": "Passwort ändern",
     "confirmPassword": "Passwort bestätigen",
@@ -95,6 +105,7 @@
     "notifications": "Benachrichtigungen",
     "media" : "Medien",
     "members" : "Mitglieder",
+    "misc": "Sonstiges",
     "ok": "OK",
     "open" : "Öffnen",
     "openInTab" : "Im neuen Tab öffnen",
@@ -160,6 +171,10 @@
       "canSeenByStudents": "Kurs ist für Studenten sichtbar.",
       "downloadHelpText": "Wähle die Units oder Files aus die als zip heruntergeladen werden sollen.",
       "downloadNoFiles": "No Coursematerial aviable for download!",
+      "IndividualPDF":"individuelle PDFs",
+      "IndividualPDFExplanation":"eine PDF pro Unit",
+      "SinglePDF":"eine PDF",
+      "SinglePDFExplanation":"eine PDF mit allem ausgewählten",
       "editCourse": "Kurs bearbeiten",
       "enterAccessKey": "Bitte geben Sie den Einschreibeschlüssel dieses Kurses ein.",
       "enterAccessKeyForStudents": "Geben Sie einen Einschreibeschlüssel für die Studenten ein.",

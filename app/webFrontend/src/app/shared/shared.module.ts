@@ -13,6 +13,7 @@ import {PasswordInputComponent} from './components/password-input/password-input
 import {ExpandableDivComponent} from './components/expandable-div/expandable-div.component';
 import {ButtonSaveCancelComponent} from './components/button-save-cancel/button-save-cancel.component';
 import {FileUploadModule} from 'ng2-file-upload';
+import {JwtPipe} from './pipes/jwt/jwt.pipe';
 import {ChangePasswordDialogComponent} from './components/change-password-dialog/change-password-dialog.component';
 import {MarkdownEditorComponent} from './components/markdown-editor/markdown-editor.component';
 import {AceEditorModule} from 'ng2-ace-editor';
@@ -24,6 +25,7 @@ import {NotfoundComponent} from './components/notfound/notfound.component';
 import { ShowCommentsDirective } from './directives/show-comments.directive';
 
 import {ResponsiveImageComponent} from './components/responsive-image/responsive-image.component';
+import { headersToString } from 'selenium-webdriver/http';
 
 @NgModule({
   imports: [
@@ -37,6 +39,9 @@ import {ResponsiveImageComponent} from './components/responsive-image/responsive
     FileUploadModule,
     TranslateModule,
   ],
+  providers: [
+    JwtPipe
+  ],
   declarations: [
     GravatarDirective,
     UnitMenuComponent,
@@ -47,6 +52,7 @@ import {ResponsiveImageComponent} from './components/responsive-image/responsive
     BadgeComponent,
     ExpandableDivComponent,
     ButtonSaveCancelComponent,
+    JwtPipe,
     ChangePasswordDialogComponent,
     MarkdownEditorComponent,
     PickMediaDialog,
@@ -70,6 +76,7 @@ import {ResponsiveImageComponent} from './components/responsive-image/responsive
     ExpandableDivComponent,
     ButtonSaveCancelComponent,
     MarkdownEditorComponent,
+    JwtPipe,
     ChangePasswordDialogComponent,
     PickMediaDialog,
     TranslateModule,

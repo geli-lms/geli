@@ -35,8 +35,4 @@ fileUnitSchema.methods.populateUnit = async function() {
   return this.populate('files').execPopulate();
 };
 
-fileUnitSchema.methods.toFile = function() {
-  return '';
-};
-
 export {fileUnitSchema, IFileUnitModel};
