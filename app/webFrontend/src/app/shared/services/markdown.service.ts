@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import * as MarkdownIt from 'markdown-it';
 import * as markdownItEmoji from 'markdown-it-emoji';
-import twemoji from 'twemoji'
+import twemoji from 'twemoji';
 
 @Injectable()
 export class MarkdownService {

@@ -70,7 +70,7 @@ export class Server {
 
     // Request logger
     this.app.use(morgan('combined'));
-    this.app.listen(config.port, () => {
+    const server = this.app.listen(config.port, () => {
       process.stdout.write('Server successfully started at port ' + config.port);
     });
 
