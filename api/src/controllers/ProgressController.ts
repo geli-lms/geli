@@ -249,7 +249,7 @@ export class ProgressController {
    * @apiError NotFoundError
    */
   @Put('/:id')
-  async updateProgress(@Param('id') id: string, @Body() data: any) {
+  async updateProgress(@Param('id') id: string, @Body() data: any, @CurrentUser() currentUser: IUser) {
     const progress = await Progress.findById(id);
 
     if (!progress) {
@@ -258,6 +258,9 @@ export class ProgressController {
 
     const unit: IUnitModel = await Unit.findById(progress.unit);
     ProgressController.checkDeadline(unit);
+
+    // set user
+    data.user = currentUser._id;
 
     progress.set(data);
     await progress.save();

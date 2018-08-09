@@ -25,6 +25,12 @@ const routes: Routes = [
         data: {roles: ['admin']}
       },
       {
+        path: 'users/delete/:deleteId',
+        component: UserAdminComponent,
+        canActivate: [AuthGuardService],
+        data: {roles: ['admin']}
+      },
+      {
         path: 'markdownEdit',
         component: AdminMarkdownEditComponent,
         canActivate: [AuthGuardService],
