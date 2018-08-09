@@ -15,6 +15,13 @@ import {extractMongoId} from '../utilities/ExtractMongoId';
 import {ensureMongoToObject} from '../utilities/EnsureMongoToObject';
 import {IUnit} from '../../../shared/models/units/IUnit';
 import {Course, ICourseModel} from './Course';
+import {NotificationSettings} from './NotificationSettings';
+import {Notification} from './Notification';
+import {WhitelistUser} from './WhitelistUser';
+import {Progress} from './progress/Progress';
+import fs = require('fs');
+import emailService from '../services/EmailService';
+
 
 interface IUserModel extends IUser, mongoose.Document {
   exportPersonalData: () => Promise<IUser>;
@@ -184,6 +191,44 @@ userSchema.pre('findOneAndUpdate', function (next) {
   }
 });
 
+// delete all user data
+userSchema.pre('remove', async function () {
+  const localUser = <IUserModel><any>this;
+  try {
+    const promises = [];
+    // notifications
+    promises.push(Notification.remove({user: localUser._id}));
+    // notificationsettings
+    promises.push(NotificationSettings.remove({user: localUser._id}));
+    // whitelists
+    promises.push(WhitelistUser.remove({uid: localUser.uid}));
+    // remove user form courses
+    promises.push(Course.updateMany(
+      {$or: [
+          {students: localUser._id},
+          {teachers: localUser._id}
+          ]},
+      {$pull: {
+            'students': localUser._id,
+            'teachers': localUser._id
+          }
+      }));
+    // progress
+    promises.push(Progress.remove({user: localUser._id}));
+
+    // image
+    const path = localUser.profile.picture.path;
+    if (path && fs.existsSync(path)) {
+      fs.unlinkSync(path);
+    }
+
+    await Promise.all(promises);
+
+  } catch (e) {
+    throw new Error('Delete Error: ' + e.toString());
+  }
+});
+
 // Method to compare password for login
 userSchema.methods.isValidPassword = function (candidatePassword: string) {
   if (typeof  candidatePassword === 'undefined') {
@@ -248,6 +293,11 @@ userSchema.methods.exportPersonalData = async function () {
   // custom properties
 
   return obj;
+};
+
+userSchema.methods.getCourses = async function () {
+  const localUser = <IUserModel><any>this;
+  return Course.find({courseAdmin: localUser._id});
 };
 
 // The idea behind the editLevels is to only allow updates if the currentUser "has a higher level" than the target.

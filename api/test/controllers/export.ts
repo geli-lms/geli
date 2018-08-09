@@ -153,10 +153,12 @@ describe('Export', async () => {
 
   describe(`GET ${BASE_URL}/user`, async () => {
     it('should export student data', async () => {
-      const student = await FixtureUtils.getRandomStudent();
       const course1 = await FixtureUtils.getRandomCourse();
       const course2 = await FixtureUtils.getRandomCourse();
-
+      const taskUnit = <ITaskUnitModel>await Unit.findOne({progressable: true, __t: 'task'});
+      const lecture = await Lecture.findOne({units: { $in: [ taskUnit._id ] }});
+      const course = await Course.findOne({lectures: { $in: [ lecture._id ] }});
+      const student = await User.findOne({_id: { $in: course.students}});
 
       await new NotificationSettings({
         'user': student, 'course': course1,
@@ -179,6 +181,7 @@ describe('Export', async () => {
         changedCourse: course2,
         text: 'blubba blubba'
       }).save();
+
 
       await new WhitelistUser({
         firstName: student.profile.firstName,

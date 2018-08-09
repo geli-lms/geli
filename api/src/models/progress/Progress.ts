@@ -1,7 +1,7 @@
 import * as mongoose from 'mongoose';
 import {IProgress} from '../../../../shared/models/progress/IProgress';
 import {codeKataProgressSchema} from './CodeKataProgress';
-import {taskUnitProgressSchema} from './TaskUnitProgress';
+import {ITaskUnitProgressModel, taskUnitProgressSchema} from './TaskUnitProgress';
 import {IUser} from '../../../../shared/models/IUser';
 import {ICourseModel} from '../Course';
 import {IUnitModel} from '../units/Unit';
@@ -78,7 +78,16 @@ progressSchema.statics.exportPersonalUserData = async function (user: IUser) {
     .populate('unit', 'name description');
 
   return Promise.all(userProgress.map( async (prog) => {
-    const progExport =  await (<IProgressModel>prog).exportJSON();
+    let progExport;
+
+    switch (prog.__t) {
+      case 'task-unit-progress':
+        progExport =  await (<ITaskUnitProgressModel>prog).exportJSON();
+        break;
+      default:
+        progExport =  await (<IProgressModel>prog).exportJSON();
+    }
+
 
     progExport.course = await (<ICourseModel>prog.course).exportJSON(true, true);
     progExport.unit = await (<IUnitModel>prog.unit).exportJSON(true);
