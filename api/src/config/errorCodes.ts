@@ -68,6 +68,10 @@ export const errorCodes = {
       code: 'noOtherAdmins',
       text: 'There are no other users with admin privileges.'
     },
+    cantDeleteOtherUsers: {
+      code: 'cantDeleteOtherUsers',
+      text: 'Users can only delete themself.'
+    },
     userNotFound: {
       code: 'user not found',
       text: 'User was not found.',

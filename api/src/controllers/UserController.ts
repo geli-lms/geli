@@ -11,6 +11,8 @@ import {isNullOrUndefined} from 'util';
 import {errorCodes} from '../config/errorCodes';
 import * as sharp from 'sharp';
 import config from '../config/main';
+import {Course} from '../models/Course';
+import emailService from '../services/EmailService';
 
 const multer = require('multer');
 
@@ -465,6 +467,8 @@ export class UserController {
    * @api {delete} /api/users/:id Delete user
    * @apiName DeleteUser
    * @apiGroup User
+   * @apiPermission student
+   * @apiPermission teacher
    * @apiPermission admin
    *
    * @apiParam {String} id User ID.
@@ -478,16 +482,40 @@ export class UserController {
    *
    * @apiError BadRequestError There are no other users with admin privileges.
    */
-  @Authorized(['admin'])
+  @Authorized(['student', 'teacher', 'admin'])
   @Delete('/:id')
   async deleteUser(@Param('id') id: string, @CurrentUser() currentUser: IUser) {
-    if (id === currentUser._id) {
-      const otherAdmin = await User.findOne({$and: [{'role': 'admin'}, {'_id': {$ne: id}}]});
+    const otherAdmin = await User.findOne({$and: [{'role': 'admin'}, {'_id': {$ne: id}}]});
+
+    if (id === currentUser._id && (currentUser.role === 'teacher' || currentUser.role === 'student')) {
+      try {
+        emailService.sendDeleteRequest(currentUser, otherAdmin);
+      } catch (err) {
+        throw new InternalServerError(errorCodes.mail.notSend.code);
+      }
+      return {result: true};
+    }
+
+    if (id === currentUser._id && currentUser.role === 'admin') {
       if (otherAdmin === null) {
         throw new BadRequestError(errorCodes.user.noOtherAdmins.text);
       }
+    } else if (id !== currentUser._id && currentUser.role !== 'admin') {
+      throw new BadRequestError(errorCodes.user.cantDeleteOtherUsers.text);
     }
-    await User.findByIdAndRemove(id);
+
+    const user = await User.findById(id);
+
+    if (id === currentUser._id) {
+      // if user is current user, move ownership to another admin.
+      await Course.changeCourseAdminFromUser(user, otherAdmin);
+    } else {
+      // move Courseownerships to active user.
+      await Course.changeCourseAdminFromUser(user, currentUser);
+    }
+
+    await user.remove();
+
     return {result: true};
   }
 }
