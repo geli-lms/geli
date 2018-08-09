@@ -19,17 +19,14 @@ export class FixtureLoader {
 
   private binaryDirectory = 'build/fixtures/binaryData/';
 
-  constructor() {
-    (<any>mongoose).Promise = global.Promise;
-
-    if (!mongoose.connection.readyState) {
-      mongoose.connect(config.database);
-    }
-  }
-
   async load() {
+    if (!mongoose.connection.readyState) {
+      await mongoose.connect(config.database, {useNewUrlParser: true});
+    }
+
     await mongoose.connection.dropDatabase();
     await User.ensureIndexes();
+
     const userfixtures = fs.readdirSync(this.usersDirectory);
     const coursefixtures = fs.readdirSync(this.coursesDirectory);
 
