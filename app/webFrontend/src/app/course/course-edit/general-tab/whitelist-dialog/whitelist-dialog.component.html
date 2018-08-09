@@ -44,7 +44,7 @@
           <ul class="info">
 
             <li class="existing">
-              <mat-icon *ngIf="!user.exists" color="warn" matTooltip="{{ 'user.doesntexist' | translate }}">warning</mat-icon>
+              <mat-icon *ngIf="!user.exists" color="warn" matTooltip="{{ 'user.tooltip.doesNotExist' | translate }}">warning</mat-icon>
               <mat-icon *ngIf="user.exists" color="green">check</mat-icon>
             </li>
 

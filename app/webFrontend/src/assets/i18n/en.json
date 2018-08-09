@@ -378,7 +378,8 @@
     },
     "tooltip": {
       "deleteUsers": "Delete selected Members.",
-      "toggleMembers": "Toggle all members"
+      "toggleMembers": "Toggle all members",
+      "doesNotExist": "User does not exist"
     }
   }
 }

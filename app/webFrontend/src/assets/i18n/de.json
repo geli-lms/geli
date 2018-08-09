@@ -378,8 +378,8 @@
     },
     "tooltip":{
       "deleteUsers": "Ausgewählte Mitglieder entfernen.",
-      "toggleMembers" : "Alle Benutzer auswählen"
-    },
-    "doesntExists": "Nutzer existiert nicht"
+      "toggleMembers" : "Alle Benutzer auswählen",
+      "doesNotExist": "Nutzer existiert nicht"
+    }
   }
 }
