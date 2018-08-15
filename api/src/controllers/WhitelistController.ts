@@ -52,9 +52,9 @@ export class WitelistController {
    *        "exists": false
    *    }
    *  ]
-   * @param data
-   * @param currentUser
-   * @param whitelistToCheck
+   * @apiParam data
+   * @apiParam currentUser
+   * @apiParam whitelistToCheck
    */
   @Get('/check/:whitelist')
   @Authorized(['teacher', 'admin'])
