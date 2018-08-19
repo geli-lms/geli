@@ -252,6 +252,14 @@ export class CourseService extends DataService {
   readCourseToEdit(id: string): Promise<ICourse> {
     return this.readSingleItem<ICourse>(id + '/edit');
   }
+
+  setWhitelistUsers(courseId: string, whitelistUsers: any): Promise<any> {
+    const originalApiPath = this.apiPath;
+    this.apiPath += courseId + '/whitelist';
+    const promise = this.createItem(JSON.stringify(whitelistUsers));
+    this.apiPath = originalApiPath;
+    return promise;
+  }
 }
 
 @Injectable()
@@ -418,10 +426,9 @@ export class WhitelistUserService extends DataService {
     super('whitelist/', backendService);
   }
 
-  countWhitelistUsers(courseId: string): Promise<any> {
+  checkWhitelistUsers(whitelistUsers: any[]): Promise<any> {
     const originalApiPath = this.apiPath;
-    this.apiPath += courseId + '/';
-    this.apiPath += 'count/';
+    this.apiPath += 'check/' + encodeURIComponent(JSON.stringify(whitelistUsers));
     const promise = this.readItems();
     this.apiPath = originalApiPath;
     return promise;

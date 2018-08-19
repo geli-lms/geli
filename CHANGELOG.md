@@ -30,6 +30,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Quickfixed the Import/Export [#42](https://github.com/utetrapp/geli/issues/42)
 - Added PDF download of Coursecontent [#720](https://github.com/utetrapp/geli/pull/720)
 - Export personal data for gdpr.
+- Add a guided dialog for adding a whitelist [#727](https://github.com/utetrapp/geli/issues/727) [#509](https://github.com/utetrapp/geli/issues/509)
 - Added a `JwtPipe` to easily append `'mediaToken'`s to file URLs. [#729](https://github.com/utetrapp/geli/issues/729)
 - Added a `FileComponent` to flexibly display a single file e.g. in a new tab. [#729](https://github.com/utetrapp/geli/issues/729)
 - Added more `DownloadController` unit tests, including a new `DeleteCache` `admin`-only API. [#729](https://github.com/utetrapp/geli/issues/729)
