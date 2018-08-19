@@ -7,6 +7,7 @@ import {RavenErrorHandler} from './shared/services/raven-error-handler.service';
 import {UserService} from './shared/services/user.service';
 import {AuthenticationService} from './shared/services/authentication.service';
 import {AuthGuardService} from './shared/services/auth-guard.service';
+import {WhitelistService} from './shared/services/whitelist.service';
 import {
   AboutDataService,
   APIInfoService,
@@ -122,6 +123,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     UnitFormService,
     UnitFactoryService,
     FileIconService,
+    WhitelistService,
   ],
   bootstrap: [AppComponent]
 })

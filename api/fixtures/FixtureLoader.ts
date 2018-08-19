@@ -22,15 +22,7 @@ export class FixtureLoader {
   private coursesDirectory = 'build/fixtures/courses/';
   private chatDirectory = 'build/fixtures/chat/';
   private binaryDirectory = 'build/fixtures/binaryData/';
-
-  constructor() {
-    (<any>mongoose).Promise = global.Promise;
-
-    if (!mongoose.connection.readyState) {
-      mongoose.connect(config.database);
-    }
-  }
-
+    
   async loadMessages() {
     const messageFixtures = fs.readdirSync(this.chatDirectory);
     for (const messageFile of messageFixtures) {
@@ -73,8 +65,13 @@ export class FixtureLoader {
   }
 
   async load() {
+    if (!mongoose.connection.readyState) {
+      await mongoose.connect(config.database, {useNewUrlParser: true});
+    }
+    
     await mongoose.connection.dropDatabase();
     await User.ensureIndexes();
+
     const userfixtures = fs.readdirSync(this.usersDirectory);
     const coursefixtures = fs.readdirSync(this.coursesDirectory);
 

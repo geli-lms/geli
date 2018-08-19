@@ -14,8 +14,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Updates
 - Update insecure dependencies[#816](https://github.com/geli/issues/816)
 - Updated Frontend to angular6[#716](https://github.com/utetrapp/geli/pull/766)
-- update node version in travis[#790](https://github.com/utetrapp/geli/pull/796)
-- update node image in docker [#799](https://github.com/utetrapp/geli/pull/799)
+- update node version to 10.8.0 [#821](https://github.com/utetrapp/geli/pull/821)
 
 ### Added
 - Add cookie information [#565]
@@ -28,14 +27,17 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Added more EN/DE translation [#753](https://github.com/utetrapp/geli/issues/753)
 - Add anonymous forum [#46](https://github.com/utetrapp/geli/issues/46)
 - Add unit-specific comments [#761](https://github.com/utetrapp/geli/issues/761)
+- Simple e2e test for login [#795](https://github.com/utetrapp/geli/pull/795)
 - Added checkboxes for accepting our terms of use and privacy declarations whil registering [#778](https://github.com/utetrapp/geli/issues/778)
 - Quickfixed the Import/Export [#42](https://github.com/utetrapp/geli/issues/42)
 - Added PDF download of Coursecontent [#720](https://github.com/utetrapp/geli/pull/720)
 - Export personal data for gdpr.
+- Add a guided dialog for adding a whitelist [#727](https://github.com/utetrapp/geli/issues/727) [#509](https://github.com/utetrapp/geli/issues/509)
 - Added a `JwtPipe` to easily append `'mediaToken'`s to file URLs. [#729](https://github.com/utetrapp/geli/issues/729)
 - Added a `FileComponent` to flexibly display a single file e.g. in a new tab. [#729](https://github.com/utetrapp/geli/issues/729)
 - Added more `DownloadController` unit tests, including a new `DeleteCache` `admin`-only API. [#729](https://github.com/utetrapp/geli/issues/729)
 - Added `'Misc.'` front-end admin sub-component with cache-clearing control re. the `DeleteCache` API. [#729](https://github.com/utetrapp/geli/issues/729)
+- Added dsgvo delete user data [#775](https://github.com/utetrapp/geli/issues/775)
 
 ### Changed
 - Minor Fixes and Adaptations and Mergefailure fixes. [#785] (https://github.com/utetrapp/geli/issues/785)
