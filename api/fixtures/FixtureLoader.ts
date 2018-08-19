@@ -22,7 +22,7 @@ export class FixtureLoader {
   private coursesDirectory = 'build/fixtures/courses/';
   private chatDirectory = 'build/fixtures/chat/';
   private binaryDirectory = 'build/fixtures/binaryData/';
-    
+
   async loadMessages() {
     const messageFixtures = fs.readdirSync(this.chatDirectory);
     for (const messageFile of messageFixtures) {
@@ -68,7 +68,7 @@ export class FixtureLoader {
     if (!mongoose.connection.readyState) {
       await mongoose.connect(config.database, {useNewUrlParser: true});
     }
-    
+
     await mongoose.connection.dropDatabase();
     await User.ensureIndexes();
 
