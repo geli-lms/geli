@@ -1,6 +1,6 @@
 import {
-    Body, Get, Put, Delete, Param, JsonController, UseBefore, NotFoundError, BadRequestError, Post,
-    Authorized, CurrentUser, UploadedFile
+  Body, Get, Put, Delete, Param, JsonController, UseBefore, NotFoundError, BadRequestError, Post,
+  Authorized, CurrentUser, UploadedFile, Res
 } from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 
@@ -19,9 +19,13 @@ import {IAssignmentUnitProgress} from '../../../shared/models/progress/IAssignme
 
 import crypto = require('crypto');
 import {IAssignmentUnitModel} from '../models/units/AssignmentUnit';
+import {promisify} from "util";
+import {Response} from "express";
 
 const multer = require('multer');
 const path = require('path');
+const fs = require('fs');
+const archiver = require('archiver');
 
 const uploadOptions = {
     storage: multer.diskStorage({
@@ -409,7 +413,7 @@ export class UnitController {
     }
 
     /**
-     * @api {delete} /api/units/:id/assignemtn Delete assignment
+     * @api {delete} /api/units/:id/assignment Delete assignment
      * @apiName DeleteAssginment
      * @apiGroup Unit
      * @apiPermission student
@@ -449,5 +453,58 @@ export class UnitController {
 
     }
 
+  /**
+   * @api {get} /api/units/:id/assignments Request unit
+   * @apiName GetUnit
+   * @apiGroup Unit
+   *
+   * @apiParam {String} id Unit ID.
+   *
+   * @apiSuccess {Unit} unit Unit.
+   *
+   * @apiSuccessExample {json} Success-Response:
+   *     {
+   *         "_id": "5a037e6b60f72236d8e7c858",
+   *         "updatedAt": "2017-11-08T22:00:11.500Z",
+   *         "createdAt": "2017-11-08T22:00:11.500Z",
+   *         "name": "What is Lorem Ipsum?",
+   *         "description": "...",
+   *         "markdown": "# What is Lorem Ipsum?\n**Lorem Ipsum** is simply dummy text of the printing and typesetting industry.",
+   *         "_course": "5a037e6b60f72236d8e7c83b",
+   *         "unitCreator": "5a037e6b60f72236d8e7c834",
+   *         "type": "free-text",
+   *         "__v": 0
+   *     }
+   */
+  @Get('/:id/assignments')
+  @Authorized(['teacher'])
+  async getAllAssignments(@Param('id') id: string, @Res() response: Response) {
+    assignmentUnit = <IAssignmentUnitModel> Unit.findById(id);
 
-}
+    if (!assignmentUnit) {
+      throw new NotFoundError();
+    }
+
+    const filepath = config.tmpFileCacheFolder + assignmentUnit.name + '.zip';
+    const output = fs.createWriteStream(filepath);
+    const archive = archiver('zip', {
+      zlib: {level: 9}
+    });
+
+    archive.pipe(output);
+
+    for (const assignment of assignmentUnit.assignments) {
+      const file = await File.findById(assignment.file);
+      archive.file('uploads/' + file.link, {name: assignment.user.profile.lastName + '_' + assignment.user.profile.firstName + '_' + file.name});
+    }
+
+    archive.on('error', () => {
+    throw new NotFoundError()});
+    archive.finalize();
+
+    response.setHeader('Connection', 'keep-alive');
+    response.setHeader('Access-Control-Expose-Headers', 'Content-Disposition');
+    await promisify<string, void>(response.download.bind(response))(filePath);
+
+    return response;
+  }

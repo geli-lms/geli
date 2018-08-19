@@ -40,7 +40,7 @@
 
 <!--TEACHER VIEW-->
 <ng-container *ngIf="this.userService.isTeacher()">
-
+  <button mat-raised-button color="primary" (click)="submitAssignment()">Download all</button>
     <table>
         <tr class="heading-row">
             <td>Student</td>

@@ -138,6 +138,10 @@ export class AssignmentUnitComponent implements OnInit {
         this.assignmentService.updateAssignment(this.assignmentUnit.assignments[0], this.assignmentUnit._id.toString());
     }
 
+    public downloadAllAssignments() {
+        this.assignmentService.downloadAllAssignments(this.assignmentUnit._id.toString());
+    }
+
     public submitStatusChange(unitId, approved) {
         const assignmentIndex = this.getElementIndexById(this.assignmentUnit.assignments, unitId);
         this.assignmentUnit.assignments[assignmentIndex].checked = approved;
