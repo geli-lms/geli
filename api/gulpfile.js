@@ -208,7 +208,7 @@ gulp.task(TEST_NATIVE, function (callback) {
 });
 */
 
-gulp.task(TEST, gulp.series(BUILD, CLEAN_COVERAGE, PRETEST, RUN_TESTS, REMAP_COVERAGE));
+gulp.task(TEST, gulp.series(BUILD, CLEAN_COVERAGE, PRETEST, RUN_TESTS));
 
 gulp.task(TEST_NATIVE, gulp.series(BUILD, CLEAN_COVERAGE));
 

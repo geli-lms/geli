@@ -45,6 +45,8 @@ before_script:
   - sleep 15
 
 install:
+  # instll codecov as global package for build
+  - npm install -g codecov
   # install api and return back to root for following steps
   - cd api
   - npm install
@@ -89,6 +91,7 @@ script:
 
 after_script:
   # send required files to coveralls.io
+  - codecov
   - .travis/coveralls.sh
 
 after_success:

@@ -23,7 +23,6 @@
     "start:poll": "gulp watch:poll",
     "pretest": "gulp test:native",
     "test": "istanbul cover --report json node_modules/mocha/bin/_mocha",
-    "posttest": "gulp remap:coverage",
     "lint": "gulp tslint",
     "lint:fix": "tslint --fix -c ./tslint.json 'src/**/*.ts'",
     "debug": "gulp debug",
