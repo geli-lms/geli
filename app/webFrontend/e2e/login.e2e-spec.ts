@@ -19,6 +19,8 @@ describe('Login-form', () => {
     await page.navigateTo();
 
     await page.getLoginButton().click();
+    await browser.waitForAngular(); // ensure that there are no running http requests
+    
     expect(page.getSnackBar().getText()).toContain('Login failed: auth.loginFailedError.undefined');
   });
 
@@ -33,6 +35,7 @@ describe('Login-form', () => {
 
     await page.getLoginButton().click();
     await browser.waitForAngular(); // ensure that there are no running http requests
+
     expect(page.getSnackBar().getText()).toContain('Login successful');
   });
 });
