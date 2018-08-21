@@ -1,4 +1,5 @@
 import {WebFrontendLogin} from './app.po';
+import {browser} from 'protractor';
 
 describe('Login-form', () => {
   let page: WebFrontendLogin;
@@ -31,6 +32,7 @@ describe('Login-form', () => {
     password.sendKeys('test1234');
 
     await page.getLoginButton().click();
+    await browser.waitForAngular(); // ensure that there are no running http requests
     expect(page.getSnackBar().getText()).toContain('Login successful');
   });
 });
