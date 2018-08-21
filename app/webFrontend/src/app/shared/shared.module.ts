@@ -20,9 +20,10 @@ import {AceEditorModule} from 'ng2-ace-editor';
 import {PickMediaDialog} from './components/pick-media-dialog/pick-media-dialog.component';
 import {TranslateModule} from '@ngx-translate/core';
 import {AdminMarkdownEditComponent} from './components/admin-markdown-edit/admin-markdown-edit.component';
-import {ImprintAndInfoService} from './services/imprint-and-info.service';
 import {UserProfileDialog} from 'app/shared/components/user-profile-dialog/user-profile-dialog.component';
 import {NotfoundComponent} from './components/notfound/notfound.component';
+import { ShowCommentsDirective } from './directives/show-comments.directive';
+
 import {ResponsiveImageComponent} from './components/responsive-image/responsive-image.component';
 import { headersToString } from 'selenium-webdriver/http';
 
@@ -59,6 +60,7 @@ import { headersToString } from 'selenium-webdriver/http';
     UserProfileDialog,
     NotfoundComponent,
     UserProfileDialog,
+    ShowCommentsDirective,
     ResponsiveImageComponent
   ],
   exports: [
@@ -80,6 +82,7 @@ import { headersToString } from 'selenium-webdriver/http';
     TranslateModule,
     AdminMarkdownEditComponent,
     UserProfileDialog,
+    ShowCommentsDirective,
     ResponsiveImageComponent
   ],
   entryComponents: [

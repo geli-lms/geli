@@ -221,7 +221,7 @@ export class FixtureUtils {
     }
   }
 
-  private static getRandomNumber(start: number, end: number): number {
+  public static getRandomNumber(start: number, end: number): number {
     return Math.floor(Math.random() * end) + start;
   }
 

@@ -1,4 +1,5 @@
 import {IUser} from '../IUser';
+import {IChatRoom} from '../IChatRoom';
 
 export interface IUnit {
     _id: any;
@@ -14,4 +15,5 @@ export interface IUnit {
     unitCreator: IUser;
     visible: boolean;
     __t: string;
+    chatRoom: IChatRoom;
 }

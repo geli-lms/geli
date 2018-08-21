@@ -3,6 +3,8 @@
 // Plus imports for other components in your app.
 // Custom global geli stuff
 @import 'styles/typography';
+@import "~@ctrl/ngx-emoji-mart/picker";
+
 
 // Include the common styles for Angular Material. We include this here so that you only
 // have to load a single css file for Angular Material in your app.
@@ -36,8 +38,14 @@ $app-night-theme: mat-dark-theme($app-night-primary, $app-night-accent, $app-nig
     color: map-get($app-night-primary, A100) !important;
   }
 
-  .answers{
-    background-color: map-get($mat-grey, 800) !important;;
+  .messages {
+    .content {
+      background-color: map-get($mat-grey, 600) !important;
+    }
+  }
+
+  .answers, .messages, .msg-input, .msg-input-footer, .mat-form-field-wrapper .mat-input-element {
+    background-color: map-get($mat-grey, 800);
   }
 }
 
@@ -122,4 +130,89 @@ app-root > .app-wrapper {
 
 .pull-right {
   float: right;
+}
+
+.comments-dialog {
+  width:100%;
+  height: 100%;
+  @include bp(md) {
+    width: 50%;
+    height: 90%;
+  }
+  .mat-dialog-container {
+    padding: 0;
+    overflow: hidden;
+  }
+}
+
+.emoji-mart {
+   height: 179px !important;
+   width: 100% !important;
+}
+
+.emoji-mart-scroll {
+  width: 100% !important;
+  height: inherit !important;
+}
+
+.emoji-mart-category-label {
+  display: none !important;
+}
+
+.emoji {
+  height: 1.2em;
+}
+
+@-webkit-keyframes fadeInUp {
+  from {
+    opacity: 0;
+    -webkit-transform: translate3d(0, 100%, 0);
+    transform: translate3d(0, 100%, 0);
+  }
+
+  to {
+    opacity: 1;
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    -webkit-transform: translate3d(0, 100%, 0);
+    transform: translate3d(0, 100%, 0);
+  }
+
+  to {
+    opacity: 1;
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+
+
+@-webkit-keyframes fadeOutDown {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+    -webkit-transform: translate3d(0, 100%, 0);
+    transform: translate3d(0, 100%, 0);
+  }
+}
+
+@keyframes fadeOutDown {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+    -webkit-transform: translate3d(0, 100%, 0);
+    transform: translate3d(0, 100%, 0);
+  }
 }

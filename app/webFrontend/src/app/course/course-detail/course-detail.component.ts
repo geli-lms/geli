@@ -13,6 +13,7 @@ import {DataSharingService} from '../../shared/services/data-sharing.service';
 import {TranslateService} from '@ngx-translate/core';
 
 
+
 @Component({
   selector: 'app-course-detail',
   templateUrl: './course-detail.component.html',
@@ -34,8 +35,7 @@ export class CourseDetailComponent implements OnInit, OnDestroy {
               private userDataService: UserDataService,
               private dialogService: DialogService,
               private dataSharingService: DataSharingService,
-              private translate: TranslateService) {
-  }
+              private translate: TranslateService) {}
 
   ngOnInit() {
     const data: any = this.route.snapshot.data;
@@ -67,4 +67,5 @@ export class CourseDetailComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.dataSharingService.deleteDataForKey('course');
   }
+
 }

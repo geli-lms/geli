@@ -14,6 +14,7 @@ import passportJwtMiddlewareMedia from './security/passportJwtMiddlewareMedia';
 import {RoleAuthorization} from './security/RoleAuthorization';
 import {CurrentUserDecorator} from './security/CurrentUserDecorator';
 import './utilities/FilterErrorHandler';
+import ChatServer from './Chatserver';
 
 if (config.sentryDsn) {
   Raven.config(config.sentryDsn, {
@@ -69,10 +70,12 @@ export class Server {
 
     // Request logger
     this.app.use(morgan('combined'));
-
-    this.app.listen(config.port, () => {
+    const server = this.app.listen(config.port, () => {
       process.stdout.write('Server successfully started at port ' + config.port);
     });
+
+    const chatServer = new ChatServer(server);
+    chatServer.init();
   }
 }
 

@@ -304,6 +304,11 @@
     "privacy": "Privacy",
     "userSettings": "Settings"
   },
+  "messaging": {
+    "inputHintText": "Enter a Message",
+    "sendIconTooltip": "Send",
+    "emojiIconTooltip": "Emoji Picker ein- oder ausblenden"
+  },
   "notifications": {
     "text": {
       "clearAll": "Clear all",

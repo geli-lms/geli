@@ -4,6 +4,7 @@ import {IWhitelistUser} from './IWhitelistUser';
 import {IDirectory} from './mediaManager/IDirectory';
 import {IPicture} from './mediaManager/IPicture';
 import {IFile} from './mediaManager/IFile';
+import {IChatRoom} from './IChatRoom';
 
 export const ENROLL_TYPE_WHITELIST = 'whitelist';
 export const ENROLL_TYPE_FREE = 'free';
@@ -25,4 +26,5 @@ export interface ICourse {
   whitelist: IWhitelistUser[];
   enrollType: string;
   hasAccessKey: boolean;
+  chatRooms: IChatRoom[];
 }

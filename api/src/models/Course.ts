@@ -11,6 +11,8 @@ import {ObjectID} from 'bson';
 import {Directory} from './mediaManager/Directory';
 import {IProperties} from '../../../shared/models/IProperties';
 import {extractMongoId} from '../utilities/ExtractMongoId';
+import {ChatRoom, IChatRoomModel} from './ChatRoom';
+
 import {Picture} from './mediaManager/File';
 import {IPictureModel} from './mediaManager/Picture';
 import {IPicture} from '../../../shared/models/mediaManager/IPicture';
@@ -88,7 +90,11 @@ const courseSchema = new mongoose.Schema({
     image: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Picture'
-    }
+    },
+    chatRooms: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'ChatRoom'
+    }]
   },
   {
     timestamps: true,
@@ -114,10 +120,32 @@ const courseSchema = new mongoose.Schema({
             ret.students = doc.students.map((user: IUserModel) => user.forUser(currentUser));
           }
         }
+
+        if (doc.populated('chatRooms') !== undefined) {
+          ret.chatRooms = ret.chatRooms.map((chatRoom: any) => {
+            return chatRoom.toString();
+          });
+        }
       }
     }
   }
 );
+
+courseSchema.pre('save', async function () {
+  const course = <ICourseModel>this;
+  if (this.isNew) {
+    const chatRoom: IChatRoomModel = await ChatRoom.create({
+      name: 'General',
+      description: 'This is a general chat for the course ' + course.name,
+      room: {
+        roomType: 'Course',
+        roomFor: course
+      }
+    });
+    course.chatRooms.push(chatRoom._id);
+    Object.assign(this, course);
+  }
+});
 
 // Cascade delete
 courseSchema.pre('remove', async function () {
@@ -296,14 +324,15 @@ courseSchema.methods.forView = function (): ICourseView {
   const {
     name, description,
     courseAdmin, teachers,
-    lectures
+    lectures, chatRooms
   } = this;
   return {
     _id: <string>extractMongoId(this._id),
     name, description,
     courseAdmin: User.forCourseView(courseAdmin),
     teachers: teachers.map((teacher: IUser) => User.forCourseView(teacher)),
-    lectures: lectures.map((lecture: any) => lecture.toObject())
+    lectures: lectures.map((lecture: any) => lecture.toObject()),
+    chatRooms: chatRooms.map((chatRoom: any) => chatRoom.toString())
   };
 };
 

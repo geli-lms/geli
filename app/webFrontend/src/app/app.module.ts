@@ -47,7 +47,10 @@ import {NotfoundComponent} from './shared/components/notfound/notfound.component
 import {SnackBarService} from './shared/services/snack-bar.service';
 import {UnitFormService} from './shared/services/unit-form.service';
 import {UnitFactoryService} from './shared/services/unit-factory.service';
+import {ChatService} from './shared/services/chat.service';
+import {MessageService} from './shared/services/message.service';
 import {FileIconService} from './shared/services/file-icon.service';
+import {MessagingModule} from './messaging/messaging.module';
 import {PrivacyModule} from './privacy/privacy.module';
 
 // AoT requires an exported function for factories
@@ -70,6 +73,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     AboutModule,
     SharedModule,
     AdminModule,
+    MessagingModule,
     FileModule,
     PrivacyModule,
     TranslateModule.forRoot({
@@ -106,6 +110,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     MediaService,
     ThemeService,
     ConfigService,
+    ChatService,
+    MessageService,
     NotfoundComponent,
     {
       provide: ErrorHandler,
