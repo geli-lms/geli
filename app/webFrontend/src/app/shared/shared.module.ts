@@ -13,15 +13,19 @@ import {PasswordInputComponent} from './components/password-input/password-input
 import {ExpandableDivComponent} from './components/expandable-div/expandable-div.component';
 import {ButtonSaveCancelComponent} from './components/button-save-cancel/button-save-cancel.component';
 import {FileUploadModule} from 'ng2-file-upload';
+import {JwtPipe} from './pipes/jwt/jwt.pipe';
 import {ChangePasswordDialogComponent} from './components/change-password-dialog/change-password-dialog.component';
 import {MarkdownEditorComponent} from './components/markdown-editor/markdown-editor.component';
 import {AceEditorModule} from 'ng2-ace-editor';
 import {PickMediaDialog} from './components/pick-media-dialog/pick-media-dialog.component';
 import {TranslateModule} from '@ngx-translate/core';
 import {AdminMarkdownEditComponent} from './components/admin-markdown-edit/admin-markdown-edit.component';
-import {ImprintAndInfoService} from './services/imprint-and-info.service';
 import {UserProfileDialog} from 'app/shared/components/user-profile-dialog/user-profile-dialog.component';
 import {NotfoundComponent} from './components/notfound/notfound.component';
+import { ShowCommentsDirective } from './directives/show-comments.directive';
+
+import {ResponsiveImageComponent} from './components/responsive-image/responsive-image.component';
+import { headersToString } from 'selenium-webdriver/http';
 
 @NgModule({
   imports: [
@@ -35,6 +39,9 @@ import {NotfoundComponent} from './components/notfound/notfound.component';
     FileUploadModule,
     TranslateModule,
   ],
+  providers: [
+    JwtPipe
+  ],
   declarations: [
     GravatarDirective,
     UnitMenuComponent,
@@ -45,6 +52,7 @@ import {NotfoundComponent} from './components/notfound/notfound.component';
     BadgeComponent,
     ExpandableDivComponent,
     ButtonSaveCancelComponent,
+    JwtPipe,
     ChangePasswordDialogComponent,
     MarkdownEditorComponent,
     PickMediaDialog,
@@ -52,6 +60,8 @@ import {NotfoundComponent} from './components/notfound/notfound.component';
     UserProfileDialog,
     NotfoundComponent,
     UserProfileDialog,
+    ShowCommentsDirective,
+    ResponsiveImageComponent
   ],
   exports: [
     GravatarDirective,
@@ -66,11 +76,14 @@ import {NotfoundComponent} from './components/notfound/notfound.component';
     ExpandableDivComponent,
     ButtonSaveCancelComponent,
     MarkdownEditorComponent,
+    JwtPipe,
     ChangePasswordDialogComponent,
     PickMediaDialog,
     TranslateModule,
     AdminMarkdownEditComponent,
     UserProfileDialog,
+    ShowCommentsDirective,
+    ResponsiveImageComponent
   ],
   entryComponents: [
     PickMediaDialog,

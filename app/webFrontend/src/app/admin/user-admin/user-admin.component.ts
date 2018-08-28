@@ -1,11 +1,12 @@
 import {Component, OnInit} from '@angular/core';
 import {UserDataService} from '../../shared/services/data.service';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {ShowProgressService} from '../../shared/services/show-progress.service';
 import {SnackBarService} from '../../shared/services/snack-bar.service';
 import {IUser} from '../../../../../../shared/models/IUser';
 import {DialogService} from '../../shared/services/dialog.service';
 import {UserService} from '../../shared/services/user.service';
+import {isNullOrUndefined} from 'util';
 
 @Component({
   selector: 'app-user-admin',
@@ -22,22 +23,35 @@ export class UserAdminComponent implements OnInit {
               private showProgress: ShowProgressService,
               public  snackBar: SnackBarService,
               public  dialogService: DialogService,
+              private route: ActivatedRoute,
               private userService: UserService) {
+
+
   }
 
   ngOnInit() {
     this.getUsers();
     this.getRoles();
+
+    this.route.params.subscribe(params => {
+      if (!isNullOrUndefined(params['deleteId'])) {
+        this.deleteUserById(params['deleteId']);
+      }
+    });
   }
 
   getAllUsers(): IUser[] {
     return this.allUsers;
   }
 
-  getUsers() {
-    this.userDataService.readItems<IUser>().then(users => {
-      this.allUsers = users;
-    });
+  async getUsers() {
+    this.allUsers = await this.userDataService.readItems<IUser>();
+  }
+
+  async deleteUserById(userId: string) {
+    await this.getUsers();
+    const idx = this.allUsers.findIndex((user) =>  user._id === userId);
+    this.deleteUser(idx);
   }
 
   getRoles() {

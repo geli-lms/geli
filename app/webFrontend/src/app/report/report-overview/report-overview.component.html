@@ -28,5 +28,5 @@
   </mat-card>
 </div>
 <div *ngIf="report?.lectures.length === 0">
-  <p>This course contains no progressable units.</p>
+<p>{{ 'report.notProgressable' | translate}}</p>
 </div>

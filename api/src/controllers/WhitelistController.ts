@@ -1,6 +1,6 @@
 import {
   Authorized, Body, Delete, Get, JsonController, Post, Param, Put, QueryParam, UseBefore,
-  HttpError, BadRequestError
+  HttpError, BadRequestError, UploadedFile, CurrentUser
 } from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import {isNullOrUndefined} from 'util';
@@ -11,14 +11,63 @@ import ObjectId = mongoose.Types.ObjectId;
 import {Course} from '../models/Course';
 import {User} from '../models/User';
 import {IWhitelistUser} from '../../../shared/models/IWhitelistUser';
+import {IUser} from '../../../shared/models/IUser';
 
-function escapeRegex(text: string) {
-  return text.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
-}
+const multer = require('multer');
+import crypto = require('crypto');
+
+
+const uploadOptions = {
+  storage: multer.diskStorage({
+    destination: (req: any, file: any, cb: any) => {
+      cb(null, 'tmp/');
+    },
+    filename: (req: any, file: any, cb: any) => {
+      const extPos = file.originalname.lastIndexOf('.');
+      const ext = (extPos !== -1) ? `.${file.originalname.substr(extPos + 1).toLowerCase()}` : '';
+      crypto.pseudoRandomBytes(16, (err, raw) => {
+        cb(err, err ? undefined : `${raw.toString('hex')}${ext}`);
+      });
+    }
+  }),
+};
+
 
 @JsonController('/whitelist')
 @UseBefore(passportJwtMiddleware)
 export class WitelistController {
+
+  /**
+   * @api {get} /api/whitelist/check/:whitelist
+   *
+   *
+   * @apiSuccessExample {json} Success-Response:
+   *  [
+   *    {
+   *        "uid": "<uid>",
+   *        "exists": true
+   *    },
+   *    {
+   *        "uid": "<non-existing-uid>",
+   *        "exists": false
+   *    }
+   *  ]
+   * @apiParam data
+   * @apiParam currentUser
+   * @apiParam whitelistToCheck
+   */
+  @Get('/check/:whitelist')
+  @Authorized(['teacher', 'admin'])
+  async checkWhitelistForExistingStudents(@Body() data: any,
+                                          @CurrentUser() currentUser: IUser,
+                                          @Param('whitelist') whitelistToCheck: any[]) {
+
+    return await Promise.all(
+      whitelistToCheck.map(async uid => { {
+        return { uid, exists: !!(await User.findOne({ uid: uid }))};
+      }})
+    );
+  }
 
   /**
    * @api {get} /api/whitelist/:id Request whitelist user

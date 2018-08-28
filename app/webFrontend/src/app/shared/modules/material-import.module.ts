@@ -1,4 +1,6 @@
 import {NgModule} from '@angular/core';
+import {MatBadgeModule} from '@angular/material/badge';
+
 import {
   MatAutocompleteModule,
   MatButtonModule,
@@ -17,6 +19,7 @@ import {
   MatSelectModule,
   MatSlideToggleModule,
   MatSnackBarModule,
+  MatStepperModule,
   MatTabsModule,
   MatToolbarModule,
   MatTooltipModule,
@@ -43,6 +46,7 @@ import {CustomDateAdapter} from '../classes/CustomDateAdapter';
     MatMenuModule,
     MatNativeDateModule,
     MatProgressBarModule,
+    MatStepperModule,
     MatRadioModule,
     MatSelectModule,
     MatSlideToggleModule,
@@ -52,6 +56,7 @@ import {CustomDateAdapter} from '../classes/CustomDateAdapter';
     MatTooltipModule,
     MatProgressSpinnerModule,
     MatChipsModule,
+    MatBadgeModule
   ],
   exports: [
     MatAutocompleteModule,
@@ -65,6 +70,7 @@ import {CustomDateAdapter} from '../classes/CustomDateAdapter';
     MatIconModule,
     MatInputModule,
     MatListModule,
+    MatStepperModule,
     MatMenuModule,
     MatNativeDateModule,
     MatProgressBarModule,
@@ -77,6 +83,7 @@ import {CustomDateAdapter} from '../classes/CustomDateAdapter';
     MatTooltipModule,
     MatProgressSpinnerModule,
     MatChipsModule,
+    MatBadgeModule
   ],
   providers: [
     {provide: DateAdapter, useClass: CustomDateAdapter},

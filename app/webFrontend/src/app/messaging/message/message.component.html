@@ -1,0 +1,20 @@
+<li class="msg">
+  <div class="author">{{message.chatName}}</div>
+  <div class="content">
+    <div [innerHtml]="htmlMessage"></div>
+    <span class="msg-created-at">{{message.createdAt | date:'mediumDate'}}</span>
+  </div>
+  <div>
+    <button class="reply-btn" mat-button *ngIf="!isChildMessage && (mode !== 'chat')" (click)="toggleReplies()">REPLY</button>
+  </div>
+  <div class="toggle-replies" *ngIf="message.comments.length > 0" (click)="toggleReplies()">
+    <span>{{showReplies ?  'Hide replies' : message.comments.length +' replies'}}</span>
+    <mat-icon>{{showReplies ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</mat-icon>
+  </div>
+  <div class="comments-container" *ngIf="showReplies">
+    <div *ngFor="let comment of message.comments">
+      <app-message [message]="comment" [isChildMessage]="true"></app-message>
+    </div>
+    <app-messaging-input-field [room]="message.room" [parentMessageId]="message._id" [chatName]="chatName"></app-messaging-input-field>
+  </div>
+</li>

@@ -18,7 +18,7 @@
         <h4>Submission</h4>
         <app-progress [unit]="report?.summary" [progress]="user.progress"></app-progress>
       </div>
-      <p *ngIf="!user.progress">This user has no submission for this unit.</p>
+      <p *ngIf="!user.progress">{{ 'report.noSubmissions' | translate}}</p>
     </div>
   </div>
 </div>

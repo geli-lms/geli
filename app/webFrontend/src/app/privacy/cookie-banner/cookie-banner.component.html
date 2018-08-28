@@ -1,0 +1,11 @@
+<ng-container *ngIf="!isCookieAccepted" class="cookieNotice">
+  <div class="cookieContent">
+    <p class="cookieText">{{ 'cookie.text.cookieHint' | translate }}</p>
+    <div class="controlArea">
+      <a class="more-info" mat-button color="accent" routerLink="/privacy" routerLinkActive="active" target="_blank">
+        {{ 'cookie.text.moreInformation' | translate }}
+      </a>
+      <button mat-raised-button color="accent" (click)="onAccept()" type="button">{{ 'common.ok' | translate }}</button>
+    </div>
+  </div>
+</ng-container>

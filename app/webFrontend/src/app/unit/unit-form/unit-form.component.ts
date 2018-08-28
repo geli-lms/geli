@@ -60,7 +60,6 @@ export class UnitFormComponent implements OnInit {
     this.unitFormService.model = this.model;
     this.unitFormService.course = this.course;
     this.unitFormService.lecture = this.lecture;
-
     this.unitForm = this.unitFormService.unitForm;
   }
 

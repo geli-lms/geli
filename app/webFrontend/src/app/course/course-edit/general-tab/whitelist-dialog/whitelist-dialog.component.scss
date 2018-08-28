@@ -1,0 +1,38 @@
+mat-card {
+  width: 100%;
+
+  ul {
+    width: 100%;
+    list-style: none;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    padding: 0;
+    margin-left: 0;
+
+    li {
+      padding: 0 10px;
+      flex-grow: 1;
+      flex-basis: 0;
+      vertical-align: middle;
+      line-height: 36px;
+
+      &.delete,
+      &.existing {
+        flex-shrink: 2;
+        flex-grow: 0;
+      }
+
+      &.existing {
+        mat-icon {
+          line-height: 40px;
+        }
+      }
+    }
+  }
+}
+
+.buttons-container {
+  text-align: right;
+  padding-top: 10px;
+}

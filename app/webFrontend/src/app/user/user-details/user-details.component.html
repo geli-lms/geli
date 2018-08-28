@@ -3,12 +3,21 @@
 
     <app-user-profile *ngIf="user" [user]="user" [userId]="this.userService.user._id"></app-user-profile>
 
-    <p *ngIf="user && (userService.isLoggedInUser(user) || userService.isAdmin())">
-        <button mat-raised-button color="primary" routerLink="{{ getEditLink() }}">
+    <div class="button-wrapper" *ngIf="user && (userService.isLoggedInUser(user) || userService.isAdmin())">
+      <button mat-raised-button class="mat-button" color="primary" routerLink="{{ getEditLink() }}">
             <mat-icon>edit</mat-icon>
           {{ 'common.editProfile' | translate }}
-        </button>
-    </p>
+      </button>
+      <button mat-raised-button class="mat-button" (click)="exportProfile()">
+        <mat-icon>get_app</mat-icon>
+        {{ 'common.exportProfile' | translate }}
+      </button>
+      <button mat-raised-button class="mat-button" (click)="deleteProfile()">
+        <mat-icon>delete_forever</mat-icon>
+        {{ 'common.deleteProfile' | translate }}
+      </button>
+    </div>
+
 
     <app-user-report *ngIf="user" [user]="user"></app-user-report>
 </div>

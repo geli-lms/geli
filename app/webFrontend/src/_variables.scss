@@ -24,6 +24,7 @@ $font-logo: Pacifico, cursive;
 $base-font-size: 1em;
 $line-height--base: 1.5;
 $line-height--header: 1.25;
+$app-content-padding: 20px;
 
 // BREAKPOINT VARS
 // the px values are calculated on a user-agent font-size of 16px
@@ -32,7 +33,14 @@ $bp-width--sm: 32em; // 512px
 $bp-width--md: 48em; // 768px
 $bp-width--lg: 60em; // 960px
 $bp-width--xl: 75em; // 1200px
+$bp-width--exl: 87em; // 1392px;
 $bp-width--xxl: 121em; // 1936px
 $bp-width--max: 160em; // 2560px => app-root max-width
+
+
+$primary: mat-color($app-primary);
+$accent: mat-color($app-accent);
+$warn: mat-color($app-warn);
+
 
 @import 'styles/mixins';

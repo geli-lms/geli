@@ -1,12 +1,13 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {ErrorHandler, NgModule} from '@angular/core';
-import {HttpClientModule} from '@angular/common/http';
+import {HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http';
 import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {AppComponent} from './app.component';
 import {RavenErrorHandler} from './shared/services/raven-error-handler.service';
 import {UserService} from './shared/services/user.service';
 import {AuthenticationService} from './shared/services/authentication.service';
 import {AuthGuardService} from './shared/services/auth-guard.service';
+import {WhitelistService} from './shared/services/whitelist.service';
 import {
   AboutDataService,
   APIInfoService,
@@ -36,7 +37,7 @@ import {AdminModule} from './admin/admin.module';
 import {ReportService} from './shared/services/data/report.service';
 import {TitleService} from './shared/services/title.service';
 import {ThemeService} from './shared/services/theme.service';
-import {ImprintModule} from './imprint/imprint.module';
+import {FileModule} from './file/file.module';
 import {DataSharingService} from './shared/services/data-sharing.service';
 import {NotificationModule} from './notification/notification.module';
 import {HttpClient} from '@angular/common/http';
@@ -46,7 +47,11 @@ import {NotfoundComponent} from './shared/components/notfound/notfound.component
 import {SnackBarService} from './shared/services/snack-bar.service';
 import {UnitFormService} from './shared/services/unit-form.service';
 import {UnitFactoryService} from './shared/services/unit-factory.service';
+import {ChatService} from './shared/services/chat.service';
+import {MessageService} from './shared/services/message.service';
 import {FileIconService} from './shared/services/file-icon.service';
+import {MessagingModule} from './messaging/messaging.module';
+import {PrivacyModule} from './privacy/privacy.module';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -68,7 +73,9 @@ export function HttpLoaderFactory(http: HttpClient) {
     AboutModule,
     SharedModule,
     AdminModule,
-    ImprintModule,
+    MessagingModule,
+    FileModule,
+    PrivacyModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
@@ -103,6 +110,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     MediaService,
     ThemeService,
     ConfigService,
+    ChatService,
+    MessageService,
     NotfoundComponent,
     {
       provide: ErrorHandler,
@@ -114,6 +123,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     UnitFormService,
     UnitFactoryService,
     FileIconService,
+    WhitelistService,
   ],
   bootstrap: [AppComponent]
 })

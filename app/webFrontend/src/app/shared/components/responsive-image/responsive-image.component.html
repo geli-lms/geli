@@ -1,0 +1,5 @@
+<picture class="responsive-image">
+  <source *ngFor="let breakpoint of this.responsiveImageData.breakpoints" media="(min-width: {{breakpoint.screenSize}}px)"
+          srcset="api/{{breakpoint.pathToImage | jwt}}{{breakpoint.pathToRetinaImage ? ' 1x, api/' + (breakpoint.pathToRetinaImage | jwt) + ' 2x' : ''}}">
+  <img class="{{this.classes}}" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" />
+</picture>

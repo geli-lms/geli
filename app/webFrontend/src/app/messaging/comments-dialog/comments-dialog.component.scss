@@ -1,0 +1,36 @@
+@import '../../../variables';
+
+$header-width: 45px;
+
+.close-comments-dialog {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.comments-header {
+  display: flex;
+  height: $header-width;
+  background-color: $primary;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  color: white;
+}
+
+
+.comment-dialog-container {
+  height: 100%;
+}
+
+.comment-dialog-messaging-container {
+  height: calc(100% - #{$header-width})
+}
+
+
+.comments-heading{
+  flex: 1 1 auto;
+  font-size: .95em;
+  font-weight: 700;
+  padding: 0 0 0 15px;
+}

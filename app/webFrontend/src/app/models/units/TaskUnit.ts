@@ -1,6 +1,7 @@
 import {ITaskUnit} from '../../../../../../shared/models/units/ITaskUnit';
 import {ITask} from '../../../../../../shared/models/task/ITask';
 import {ICourse} from '../../../../../../shared/models/ICourse';
+import {IChatRoom} from '../../../../../../shared/models/IChatRoom';
 
 export class TaskUnit implements ITaskUnit {
   name: string;
@@ -16,6 +17,7 @@ export class TaskUnit implements ITaskUnit {
   weight: number;
   visible: boolean;
   unitCreator: any;
+  chatRoom: IChatRoom;
 
   tasks: ITask[] = [];
   deadline: string;

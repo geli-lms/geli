@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import 'rxjs/add/operator/map';
+
 import {IUser} from '../../../../../../shared/models/IUser';
 import {User} from '../../models/User';
 import {ICourse} from '../../../../../../shared/models/ICourse';
@@ -36,11 +36,7 @@ export class UserService {
     }
 
     checkNewProfilePicturePath(profile) {
-        if (profile) {
-            return profile.path;
-        }
-
-        return '';
+      return profile && profile.picture ? profile.picture.path : '';
     }
 
     unsetUser() {
