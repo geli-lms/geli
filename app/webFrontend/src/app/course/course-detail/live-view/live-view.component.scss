@@ -1,0 +1,223 @@
+
+
+
+.container {
+    display: grid;    
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: 50px 350px 50px;
+}
+
+header {
+    grid-column: span 12;
+    color: red;
+}
+aside {
+    grid-column: span 4;
+    padding: 10px;
+    clear: both;
+ }
+main {
+    grid-column: span 8;
+    padding: 10px;
+    float: left;
+    display: inline-block;
+}
+
+
+header {
+    margin-left: auto;
+    padding: 10px;
+    float: right;
+    display: block;
+
+}
+
+#remotes{
+  width: 100%;
+  display: inline-flex;
+  clear: both;
+}
+
+.local-video{
+   padding-bottom:400px;
+   width: 100%;
+   height: 80px;
+}
+
+
+
+/* 1em = 10px 
+.remote1 video{
+   height: 100%;
+   width: 100%;
+
+}
+*/
+.local-video video{
+   width: 100%;
+}
+
+
+.chat__main {
+  display: flex;
+  flex-direction: column;
+
+  height: 50vh;
+  width: 100%;
+  overflow-y: scroll;
+}
+
+
+.chat__footer {
+  background: #e6eaee;
+  display: flex;
+  padding: 10px;
+  /*height: 60px;*/
+  flex-shrink: 0;
+  width: 100%;
+}
+
+.chat__footer form {
+  flex-grow: 1;
+  display: flex;
+  width: 100%;
+}
+
+.chat__footer form * {
+  margin-right: 10px;
+}
+
+.chat__footer input {
+  border: none;
+  padding: 10px;
+  flex-grow: 1;
+  width: 70%;
+}
+
+.filename{
+  border: none;
+  padding: 10px;
+  flex-grow: 1;
+}
+
+.chat__messages {
+  list-style-type: none;
+  padding: 10px;
+  flex-grow: 1;
+}
+
+
+
+.message {
+  padding: 10px;
+}
+
+.user{
+   color: blue;
+}
+
+
+mat-card-actions{
+
+}
+
+
+#quit { font-size: 36px;color: red }
+
+
+#sound , #cam ,#attache,#modalTrigger{
+  font-size: 36px;color: blue;
+
+}
+
+#quit:hover,#sound:hover , #cam:hover ,#modalTrigger:hover{
+  cursor: pointer;
+}
+
+#quit:hover .tooltiptext {
+    visibility: visible;
+}
+
+
+#file-form{
+  float: left;
+  clear: both;
+}
+
+
+
+
+.sending{
+  list-style-type: none;
+
+}
+
+
+.chat__messages .sending{
+  display: none;
+
+}
+
+.receiving{
+  list-style-type: none;
+}
+
+.filename{
+  color: blue;
+}
+
+
+ul li{
+  padding: 0px;
+
+}
+/*
+#chat__footer input{
+  display: none;
+}
+
+#chat__footer .sendFile:first-child{
+  display: block;
+}
+
+#chat__footer input:first-child{
+  display: block;
+}
+
+input .sendFile:first-child{
+  display: block;
+}
+*/
+
+/*
+.remote-videos .kvc-video-container{
+  clear: both;
+  position:relative; 
+  width: 320px;
+  height: 320px;
+  padding: 5px;
+
+}
+*/
+
+.fileList{
+  list-style-type: none;
+    margin: 0;
+    float: left;
+
+}
+
+.kvc-video-container{
+ height: 200px; 
+ width: 200px;
+ padding: 5px;
+ margin: 5px;
+ border: green 2px solid;
+}
+
+.username{
+  float: right;
+  font-weight: normal;
+  color: #676767;
+  text-align: center;
+}
