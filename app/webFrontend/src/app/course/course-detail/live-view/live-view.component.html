@@ -1,0 +1,34 @@
+<div class="container">
+  <header>
+  </header>
+  <aside class="">
+    <mat-card class="col-md-9 local-video">
+              <mat-card-content>
+              <video #video id="localVideo" autoplay></video>
+              </mat-card-content>
+              <mat-card-actions>
+               <i class="material-icons" id="quit" (click)="hangup()">highlight_off </i>
+              <i class="material-icons" id="cam" (click)="toggleVideoMute()">{{cam}} </i>
+               <i class="material-icons" id="sound" (click)="toggleAudioMute()">{{mic}} </i>
+              </mat-card-actions>
+    </mat-card>
+    <div class="chat__main" id="chat__main">
+    <!-- LIST TO LOAD MESSAGES -->
+    <ol id="messages" class="chat__messages"></ol>
+    <!-- CHAT FOOTER DIV -->
+    <div class="chat__footer" id="chat__footer">
+      <!-- MESSAGE FORM -->
+      <form id="message-form">
+        <input type="text" id="text" name="message" placeholder="Message" autofocus autocomplete="off" [(ngModel)]="message" (keydown.enter)="send()" />
+      </form>
+      <br>
+      <input #file type="file" name="" id="upload_btn" style="display:none;" (keydown.enter)="sendFile()" />
+      <label for="upload_btn"><i class="material-icons" id="cam">attach_file</i></label>
+    </div>
+    <!-- END CHAT FOOTER DIV -->
+  </div>
+  </aside>
+  <main>
+     <div id="remotes" class="remote-videos"></div>
+  </main>
+</div>

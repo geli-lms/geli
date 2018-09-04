@@ -3,6 +3,7 @@ import {CommonModule} from '@angular/common';
 import {CourseDetailComponent} from './course-detail.component';
 import {CourseOverviewComponent} from './course-overview/course-overview.component';
 import {FileViewComponent} from './file-view/file-view.component';
+import {LiveViewComponent} from './live-view/live-view.component';
 import {DownloadCourseDialogComponent} from './download-course-dialog/download-course-dialog.component';
 import {UploadUnitCheckboxComponent} from './download-course-dialog/downloadCheckBoxes/upload-unit-checkbox.component';
 import {LectureCheckboxComponent} from './download-course-dialog/downloadCheckBoxes/lecture-checkbox.component';
@@ -39,6 +40,7 @@ import { CourseForumComponent } from './course-forum/course-forum.component';
     VideoViewComponent,
     GridComponent,
     CourseForumComponent,
+    LiveViewComponent,
   ],
   entryComponents: [
     DownloadCourseDialogComponent,

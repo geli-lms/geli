@@ -7,6 +7,7 @@ import {CourseDetailComponent} from './course-detail.component';
 import {CourseDetailDataResolve} from '../../shared/services/course-detail-data-resolve.service';
 import {DownloadCourseDialogComponent} from './download-course-dialog/download-course-dialog.component';
 import {VideoViewComponent} from './video-view/video-view.component';
+import { LiveViewComponent } from './live-view/live-view.component';
 
 const routes: Routes = [
   {
@@ -41,6 +42,12 @@ const routes: Routes = [
       {
         path: 'download',
         component: DownloadCourseDialogComponent,
+        canActivate: [AuthGuardService],
+        data: {roles: ['student', 'tutor', 'teacher', 'admin']}
+      },
+      {
+        path: 'live',
+        component: LiveViewComponent,
         canActivate: [AuthGuardService],
         data: {roles: ['student', 'tutor', 'teacher', 'admin']}
       }
