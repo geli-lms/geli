@@ -17,15 +17,15 @@ export class LiveViewComponent implements OnInit {
   public nick: string;
   public webrtc: any;
   public user: any;
-  private stream: MediaStream;
+  public stream: MediaStream;
   @ViewChild('video') video;
   @ViewChild('file') file;
   public iconsClass = 'hidden';
   public hangupClass = 'hidden';
   public muteAudioClass = 'off';
   public muteVideoClass = 'off';
-  private messages = [];
-  private message: string;
+  public messages = [];
+  public message: string;
   cam = 'videocam';
   mic = 'mic';
   today = Date.now();
@@ -42,10 +42,14 @@ export class LiveViewComponent implements OnInit {
 
   ngOnInit() {
        this.user = this.userService.user.profile.firstName;
-       const self = this;
        this.nick = this.user;
-    self.room = window.location.pathname.replace('/course/', '');
-    self.webrtc = new SimpleWebRTC ( {
+       this.room = window.location.pathname.replace('/course/', '');
+       this.setup();
+  }
+
+  setup() {
+      const self = this;
+      self.webrtc = new SimpleWebRTC ( {
       localVideoEl: 'localVideo' ,
       remoteVideosEl: '' ,
       debug: false ,
@@ -54,8 +58,7 @@ export class LiveViewComponent implements OnInit {
       detectSpeakingEvents: true ,
       nick: this.user ,
     });
-
-    const fileinput: HTMLInputElement = this.file.nativeElement;
+     const fileinput: HTMLInputElement = this.file.nativeElement;
 
     fileinput.className = 'sendFile';
     self.webrtc.on('readyToCall', function () {
@@ -128,8 +131,8 @@ export class LiveViewComponent implements OnInit {
             sender.on('progress', function (bytesSent) {
                 sendProgress.value = bytesSent;
             });
-
-            sender.on('sentFile', function () {
+            // sendFile
+            sender.on('sendFile', function () {
                 item.appendChild(document.createTextNode('sent'));
 
                 fileinput.removeAttribute('disabled');
@@ -236,6 +239,7 @@ export class LiveViewComponent implements OnInit {
       'color': 'red'
     };
   }
+
   toggleAudioMute () {
       if ( this.muteAudioClass === 'on') {
          this.muteAudioClass = 'off';

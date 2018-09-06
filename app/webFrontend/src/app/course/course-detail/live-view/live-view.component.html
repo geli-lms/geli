@@ -22,7 +22,7 @@
         <input type="text" id="text" name="message" placeholder="Message" autofocus autocomplete="off" [(ngModel)]="message" (keydown.enter)="send()" />
       </form>
       <br>
-      <input #file type="file" name="" id="upload_btn" style="display:none;" (keydown.enter)="sendFile()" />
+      <input #file type="file" name="" id="upload_btn" style="display:none;"/>
       <label for="upload_btn"><i class="material-icons" id="cam">attach_file</i></label>
     </div>
     <!-- END CHAT FOOTER DIV -->
