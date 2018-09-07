@@ -19,7 +19,7 @@ import {ConfigurablePagesFormComponent} from './configurable-pages/configurable-
     ReactiveFormsModule,
     RouterModule,
     AceEditorModule,
-    AdminRoutingModule,
+    AdminRoutingModule
   ],
   declarations: [
     AdminComponent,

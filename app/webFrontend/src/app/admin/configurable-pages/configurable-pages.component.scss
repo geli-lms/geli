@@ -3,3 +3,11 @@
   right: 1rem;
   bottom: 1rem;
 }
+
+table {
+  width: 100%;
+
+  tr.detail-row {
+    height: 0;
+  }
+}

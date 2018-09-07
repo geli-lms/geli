@@ -1,6 +1,38 @@
-<h2>{{this.headingType}}</h2>
-<app-user-role-dropdown
-  [additionalOptions]="additionalOptions"
-  [defaultRoleSelection]="'public'"
-  (selectedRole)="selectedAccessLevel"></app-user-role-dropdown>
-<app-markdown-editor (save)="onSave($event)" (cancel) ="onCancel()" [(markdown)]="this.text"></app-markdown-editor>
+<!--h2>{{this.headingType}}</h2-->
+<form name="page-form" class="configurable-pages-form" [formGroup]="pageForm">
+  <div class="page-form-container">
+    <app-user-role-dropdown
+      [form]="pageForm"
+      [controlName]="'accessLevel'"
+      [additionalOptions]="additionalOptions"
+      [defaultRoleSelection]="'public'"
+      [(selectedRole)]="selectedRole"></app-user-role-dropdown>
+
+    <mat-form-field>
+      <input matInput placeholder="Path" formControlName="path"/>
+      <mat-error *ngIf="pageForm.controls.path.hasError('required')">
+        Path is required
+      </mat-error>
+      <mat-error *ngIf="pageForm.controls.path.hasError('complexPath')">
+        No paths with / are allowed
+      </mat-error>
+      <mat-error *ngIf="pageForm.controls.path.hasError('pathExists')">
+        Path is already in use
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-select formControlName="language" placeholder="Language">
+        <mat-option>--</mat-option>
+        <mat-option [value]="'de'">Deutsch</mat-option>
+        <mat-option [value]="'en'">Englisch</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput placeholder="Title" formControlName="title" />
+    </mat-form-field>
+
+    <app-markdown-editor (save)="onSave($event)" (cancel) ="onCancel()" [(markdown)]="text"></app-markdown-editor>
+  </div>
+</form>

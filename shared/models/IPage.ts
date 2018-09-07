@@ -1,6 +1,8 @@
 export interface IPage {
   _id: any;
-  key: string;
+  path: string;
   title: string;
   content: string;
+  accessLevel: string;
+  language: string;
 }

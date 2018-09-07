@@ -1,5 +1,7 @@
-import {Component, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {UserDataService} from '../../shared/services/data.service';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {MatSelect} from '@angular/material';
 
 @Component({
   selector: 'app-user-role-dropdown',
@@ -8,17 +10,23 @@ import {UserDataService} from '../../shared/services/data.service';
 })
 export class UserRoleDropdownComponent implements OnInit {
 
+  @Input() form: FormGroup;
+  @Input() controlName: string;
   @Input() additionalOptions: string[];
   @Input() defaultRoleSelection: string;
+  @Input() selectedRole: string;
 
   availableRoles: string[];
-  @Output() selectedRole: string;
 
   constructor(private userDataService: UserDataService) {
     this.availableRoles = [];
   }
 
   ngOnInit() {
+    if (!this.controlName) {
+      this.controlName = 'role';
+    }
+    this.form.addControl(this.controlName, new FormControl(this.defaultRoleSelection, Validators.required))
     if (this.additionalOptions) {
       this.availableRoles = this.availableRoles.concat(this.additionalOptions);
     }
@@ -34,5 +42,4 @@ export class UserRoleDropdownComponent implements OnInit {
       this.availableRoles = this.availableRoles.concat(roles);
     });
   }
-
 }

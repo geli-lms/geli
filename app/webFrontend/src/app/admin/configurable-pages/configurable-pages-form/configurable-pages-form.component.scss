@@ -1,0 +1,12 @@
+.page-form-container {
+  display: flex;
+  flex-direction: column;
+
+  app-user-role-dropdown {
+    width: 100%;
+  }
+
+  .mat-form-field {
+    max-width: 20rem;
+  }
+}

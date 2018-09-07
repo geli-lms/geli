@@ -1,0 +1,33 @@
+<button mat-icon-button [matMenuTriggerFor]="menu" class="menu-button">
+  <mat-icon>more_vert</mat-icon>
+</button>
+<mat-menu #menu="matMenu">
+  <button mat-menu-item *ngIf="isLoggedIn() && isAdmin()" routerLink="/admin" routerLinkActive="active">
+    <mat-icon>settings</mat-icon>
+    <span>{{ 'mainMenu.admin' | translate }}</span>
+  </button>
+  <button mat-menu-item *ngIf="isLoggedIn() && isStudent()" routerLink="/userSettings" routerLinkActive="active">
+    <mat-icon>settings</mat-icon>
+    <span>{{ 'mainMenu.userSettings' | translate }}</span>
+  </button>
+  <button mat-menu-item routerLink="/about" routerLinkActive="active">
+    <mat-icon>info</mat-icon>
+    <span>{{ 'mainMenu.about' | translate }}</span>
+  </button>
+  <button mat-menu-item routerLink="/{{page.path}}" routerLinkActive="active" *ngFor="let page of menuPages">
+    <mat-icon>info</mat-icon>
+    <span>{{page.title}}</span>
+  </button>
+  <button mat-menu-item routerLink="/legalnotice" routerLinkActive="active">
+    <mat-icon>info</mat-icon>
+    <span>{{ 'mainMenu.legalnotice' | translate }}</span>
+  </button>
+  <button mat-menu-item routerLink="/privacy" routerLinkActive="active">
+    <mat-icon>info</mat-icon>
+    <span>{{ 'mainMenu.privacy' | translate }}</span>
+  </button>
+  <button mat-menu-item *ngIf="isLoggedIn()" (click)="logout()" routerLink="" routerLinkActive="active">
+    <mat-icon>exit_to_app</mat-icon>
+    <span>{{ 'mainMenu.logout' | translate }}</span>
+  </button>
+</mat-menu>

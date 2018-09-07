@@ -11,6 +11,9 @@ import {SnackBarService} from './shared/services/snack-bar.service';
 import {ThemeService} from './shared/services/theme.service';
 import {TranslateService} from '@ngx-translate/core';
 import {MatSnackBarRef} from '@angular/material/snack-bar/typings/snack-bar-ref';
+import {PageService} from './shared/services/data/page.service';
+import {IPage} from '../../../../shared/models/IPage';
+import {PageComponent} from './page/page.component';
 
 const md5 = require('blueimp-md5');
 
@@ -25,10 +28,12 @@ export class AppComponent implements OnInit {
   showProgressBar = false;
   apiInfo: APIInfo;
   actualProfilePicturePath: any;
+  pages: IPage[];
 
   constructor(private router: Router,
               private authenticationService: AuthenticationService,
               public userService: UserService,
+              private pageService: PageService,
               private showProgress: ShowProgressService,
               private apiInfoService: APIInfoService,
               private ravenErrorHandler: RavenErrorHandler,
@@ -69,14 +74,29 @@ export class AppComponent implements OnInit {
         this.actualProfilePicturePath = this.userService.user.profile.picture.path;
       }
     });
-  }
 
+    this.registerPages();
+  }
 
   updateCurrentUser() {
     const storedUser = JSON.parse(localStorage.getItem('user'));
     if (storedUser) {
       this.userService.setUser(storedUser);
     }
+  }
+
+  async registerPages() {
+    this.pages = <IPage[]>await this.pageService.readItems();
+    const routerConfig = this.router.config;
+    for (const page of this.pages) {
+      routerConfig.unshift({
+        path: page.path,
+        component: PageComponent
+      });
+    }
+
+    this.router.resetConfig(routerConfig);
+    const debug = 0;
   }
 
   changeLanguage(lang: string) {

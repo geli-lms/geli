@@ -1,4 +1,38 @@
-<app-configurable-pages-form *ngIf="edit"></app-configurable-pages-form>
+<app-configurable-pages-form
+  *ngIf="edit"
+  (save)="onSave($event)"
+  (cancel)="onCancel($event)">
+</app-configurable-pages-form>
+<div *ngIf="pages && pages.length > 0" class="table-container">
+  <table mat-table [dataSource]="pages" multiTemplateDataRows class="mat-elevation-z8">
+    <ng-container matColumnDef="{{column}}" *ngFor="let column of columnsToDisplay">
+      <th mat-header-cell *matHeaderCellDef> {{column}} </th>
+      <td mat-cell *matCellDef="let element"> {{element[column]}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="expandedDetail">
+      <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplay.length">
+        <div class="page-detail"
+             [@detailExpand]="element === expandedPage ? 'expanded' : 'collapsed'">
+          <app-configurable-pages-form
+            *ngIf="element === expandedPage"
+            [page]="element"
+            (cancel)="onCancel($event)"
+            (save)="onSave($event)">
+          </app-configurable-pages-form>
+        </div>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+    <tr mat-row *matRowDef="let element; columns: columnsToDisplay;"
+        [class.expanded-page-row]="expandedPage === element"
+        (click)="editExistingPage(element)">
+    </tr>
+    <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="detail-row"></tr>
+  </table>
+</div>
+
 <button class="add-page-fab" mat-fab color="accent" (click)="addPage()">
   <i class="material-icons">add</i>
 </button>

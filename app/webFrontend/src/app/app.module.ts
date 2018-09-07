@@ -1,5 +1,5 @@
 import {BrowserModule} from '@angular/platform-browser';
-import {ErrorHandler, NgModule} from '@angular/core';
+import {APP_INITIALIZER, ErrorHandler, NgModule} from '@angular/core';
 import {HttpClientModule} from '@angular/common/http';
 import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {AppComponent} from './app.component';
@@ -47,15 +47,23 @@ import {UnitFormService} from './shared/services/unit-form.service';
 import {UnitFactoryService} from './shared/services/unit-factory.service';
 import {FileIconService} from './shared/services/file-icon.service';
 import {PrivacyModule} from './privacy/privacy.module';
+import {PageService} from './shared/services/data/page.service';
+import {PageRouteService} from './page/page-route.service';
+import {MainMenuComponent} from './main-menu/main-menu.component';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
 }
 
+export function loadPageRoutes(pageRouteService: PageRouteService) {
+  return () => pageRouteService.loadPageRoutes();
+}
+
 @NgModule({
   declarations: [
     AppComponent,
+    MainMenuComponent,
   ],
   imports: [
     BrowserModule,
@@ -104,16 +112,24 @@ export function HttpLoaderFactory(http: HttpClient) {
     ThemeService,
     ConfigService,
     NotfoundComponent,
-    {
-      provide: ErrorHandler,
-      useExisting: RavenErrorHandler
-    },
     DataSharingService,
     ImprintAndInfoService,
     SnackBarService,
     UnitFormService,
     UnitFactoryService,
     FileIconService,
+    PageRouteService,
+    PageService,
+    {
+      provide: ErrorHandler,
+      useExisting: RavenErrorHandler
+    },
+    {
+      provide: APP_INITIALIZER,
+      useFactory: loadPageRoutes,
+      deps: [PageRouteService],
+      multi: true
+    }
   ],
   bootstrap: [AppComponent]
 })

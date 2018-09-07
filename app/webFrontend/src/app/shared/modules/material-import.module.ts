@@ -25,7 +25,7 @@ import {
   MatExpansionModule,
   DateAdapter,
   MatProgressSpinnerModule,
-  MatChipsModule
+  MatChipsModule, MatTableModule
 } from '@angular/material';
 import {CustomDateAdapter} from '../classes/CustomDateAdapter';
 
@@ -49,6 +49,7 @@ import {CustomDateAdapter} from '../classes/CustomDateAdapter';
     MatSelectModule,
     MatSlideToggleModule,
     MatSnackBarModule,
+    MatTableModule,
     MatTabsModule,
     MatToolbarModule,
     MatTooltipModule,
@@ -75,6 +76,7 @@ import {CustomDateAdapter} from '../classes/CustomDateAdapter';
     MatSelectModule,
     MatSlideToggleModule,
     MatSnackBarModule,
+    MatTableModule,
     MatTabsModule,
     MatToolbarModule,
     MatTooltipModule,
