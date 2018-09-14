@@ -6,15 +6,15 @@
               <mat-card-content>
               <video #video id="localVideo" autoplay></video>
               </mat-card-content>
-              <mat-card-actions>
-               <i class="material-icons" id="quit" (click)="hangup()">highlight_off </i>
-              <i class="material-icons" id="cam" (click)="toggleVideoMute()">{{cam}} </i>
-               <i class="material-icons" id="sound" (click)="toggleAudioMute()">{{mic}} </i>
+              <mat-card-actions class="actionstate">
+               <mat-icon id="quit" (click)="leave()">highlight_off</mat-icon>
+                <mat-icon id="sound" (click)="toggleLocalAudio()">{{mic}}</mat-icon>
+                <mat-icon id="cam" (click)="toggleLocalVideo()">{{cam}}</mat-icon>
               </mat-card-actions>
     </mat-card>
     <div class="chat__main" id="chat__main">
     <!-- LIST TO LOAD MESSAGES -->
-    <ol id="messages" class="chat__messages"></ol>
+      <li id="messages" class="chat__messages"></li>
     <!-- CHAT FOOTER DIV -->
     <div class="chat__footer" id="chat__footer">
       <!-- MESSAGE FORM -->

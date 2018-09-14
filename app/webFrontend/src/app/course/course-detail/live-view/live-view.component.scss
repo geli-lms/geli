@@ -1,7 +1,7 @@
 .container {
     display: grid;
     grid-template-columns: repeat(12, 1fr);
-    grid-template-rows: 50px 350px 50px;
+    grid-template-rows: 10% 80% 10%;
 }
 header {
     grid-column: span 12;
@@ -28,11 +28,12 @@ header {
   width: 100%;
   display: inline-flex;
   clear: both;
+  .kvc-video-container{
+    margin: 10px ;
+    height: 30%;
+    width: 30%;
+    border: 1px solid blue;
 }
-.local-video{
-   padding-bottom:400px;
-   width: 100%;
-   height: 80px;
 }
 .local-video video{
    width: 100%;
@@ -84,15 +85,31 @@ header {
 }
 mat-card-actions{
 }
-#quit { font-size: 36px;color: red }
-#sound , #cam ,#attache,#modalTrigger{
-  font-size: 36px;color: blue;
+#quit { font-size: 36px;color: red ;}
+#sound , #cam , #attache {
+  font-size: 36px;
+  color: blue;
+  padding: 6px;
 }
-#quit:hover,#sound:hover , #cam:hover ,#modalTrigger:hover{
+
+ #cam:hover {
   cursor: pointer;
 }
-#quit:hover .tooltiptext {
-    visibility: visible;
+
+#sound:hover {
+  cursor: pointer;
+}
+
+ #sound:hover {
+  cursor: pointer;
+}
+
+.sending {
+  display: none;
+}
+
+.receiving{
+  display: block;
 }
 #file-form{
   float: left;
@@ -118,16 +135,24 @@ ul li{
     margin: 0;
     float: left;
 }
-.kvc-video-container{
- height: 200px;
- width: 200px;
- padding: 5px;
- margin: 5px;
- border: green 2px solid;
-}
+
 .username{
-  float: right;
-  font-weight: normal;
-  color: #676767;
   text-align: center;
+  width: 100%;
+}
+
+.receiving{
+  display: block;
+}
+
+.sending{
+  display: none;
+}
+
+ #messages{
+  list-style-type: none;
+}
+
+container .username{
+  text-align: center;width: 100%
 }

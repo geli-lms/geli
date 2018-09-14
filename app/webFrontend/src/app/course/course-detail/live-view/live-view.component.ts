@@ -1,11 +1,14 @@
-import { Component, OnInit, ViewEncapsulation, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, ViewChild , Renderer2, ElementRef} from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { FileUploader, FileUploaderOptions } from 'ng2-file-upload';
-import * as $ from 'jquery';
 import * as SimpleWebRTC from 'simplewebrtc';
 import { UserService } from './../../../shared/services/user.service';
 import { Location, DatePipe } from '@angular/common';
 import { MatDialog, MatDialogConfig } from '@angular/material';
+
+
+import { Injector} from '@angular/core';
+import { createCustomElement } from '@angular/elements';
 
 @Component({
   selector: 'app-live-view',
@@ -13,103 +16,150 @@ import { MatDialog, MatDialogConfig } from '@angular/material';
   styleUrls: ['./live-view.component.scss']
 })
 export class LiveViewComponent implements OnInit {
+
   public room: string;
   public nick: string;
+  public message: string;
   public webrtc: any;
   public user: any;
-  public stream: MediaStream;
-  @ViewChild('video') video;
-  @ViewChild('file') file;
   public iconsClass = 'hidden';
   public hangupClass = 'hidden';
   public muteAudioClass = 'off';
   public muteVideoClass = 'off';
+  public cam = 'videocam';
+  public mic = 'mic';
   public messages = [];
-  public message: string;
-  cam = 'videocam';
-  mic = 'mic';
-  today = Date.now();
-  datePipe = new DatePipe('en-US');
-  myFormattedDate = this.datePipe.transform( this.today, 'short');
+  @ViewChild('file') file;
 
   constructor ( private router: Router,
               private activatedRoute: ActivatedRoute,
               public userService: UserService,
               private location: Location,
-              private dialog: MatDialog) {
+              private dialog: MatDialog,
+              private renderer: Renderer2) {
 
   }
 
+
   ngOnInit() {
+
        this.user = this.userService.user.profile.firstName;
        this.nick = this.user;
+      // get the room from the URL
        this.room = window.location.pathname.replace('/course/', '');
-       this.setup();
+    // create our webrtc connection
+      this.webrtc = new SimpleWebRTC({
+      // the id/element dom element that will hold 'our' video
+      localVideoEl: 'localVideo',
+      // the id/element dom element that will hold remote videos
+      remoteVideosEl: '',
+      // immediately ask for camera access
+      debug: false,
+      autoAdjustMic: false,
+      autoRequestMedia: true,
+      detectSpeakingEvents: true,
+      nick: this.user ,
+    });
+      this.setup();
   }
 
   setup() {
-      const self = this;
-      self.webrtc = new SimpleWebRTC ( {
-      localVideoEl: 'localVideo' ,
-      remoteVideosEl: '' ,
-      debug: false ,
-      autoAdjustMic: false ,
-      autoRequestMedia: true ,
-      detectSpeakingEvents: true ,
-      nick: this.user ,
-    });
-     const fileinput: HTMLInputElement = this.file.nativeElement;
 
+    const fileinput: HTMLInputElement = this.file.nativeElement;
     fileinput.className = 'sendFile';
-    self.webrtc.on('readyToCall', function () {
-      if (self.room) {
-        self.webrtc.joinRoom(self.room);
-        self.webrtc.getPeers();
+    this.webrtc.on('readyToCall', () => {
+      if (this.room) {
+        this.webrtc.joinRoom(this.room);
       }
     });
-     self.webrtc.connection.on('message', function(data) {
-     if ( data.type === 'chat') {
-        $('#messages').append ('<li style="width:100%; float:left;">' +
-          ' <i class="material-icons" style = "color : blue;float:left;">person</i>' +
-          ' <b>' + data.payload.nick + '&nbsp &nbsp' + data.payload.date + ' </b> <br> ' +
-          '<span style = "color : black; padding: 3px 10px;float:left;">' +
-          data.payload.message + '</span>');
-     }
-   });
-    self.webrtc.on('localStream', function (stream: any) {
-      const video = stream.getVideoTracks()[0];
-      const audio = stream.getAudioTracks()[0];
-    });
-
-
-    self.webrtc.on('localMediaError', function (err: any) {
+    this.webrtc.connection.on('message', this.sendMessage);
+    this.webrtc.on('localStream', this.localStream);
+    this.webrtc.on('localMediaError', (err: any) => {
       alert ('Can\'t get access to camera');
     });
+    // a peer video has been added
+    this.webrtc.on('videoAdded', this.SendFile);
+    // a peer was removed
+    this.webrtc.on('videoRemoved', this.videoRemoved);
+    // local p2p/ice failure
+    this.webrtc.on('iceFailed', this.iceFailed );
+    // remote p2p/ice failure
+    this.webrtc.on('connectivityError', this.connectivityError);
+    this.webrtc.on('channelMessage', this.postMessage);
+    this.webrtc.on('createdPeer', this.createdPeer);
+  }
 
-    self.webrtc.on('videoAdded', function (video: any, peer: any) {
-      const addedpeer = peer.nick;
-      this.peer = peer;
-      $('#messages').append('<b>' + peer.nick + '</b>' + '&nbsp' + 'online');
-      const remotes = document.getElementById ('remotes');
 
+
+ connectivityError = (peer: any) => {
+      const connstate: any = document.querySelector('#container_' + this.webrtc.getDomId(peer) + ' .connectionstate');
+      if (connstate) {
+        connstate.innerText = 'Connection failed.';
+      }
+    }
+
+
+ iceFailed = (peer: any) => {
+      const connstate: any = document.querySelector('#container_' + this.webrtc.getDomId(peer) + ' .connectionstate');
+      if (connstate) {
+        connstate.innerText = 'Connection failed.';
+      }
+    }
+
+
+  toggleLocalAudio() {
+         if ( this.muteAudioClass === 'on') {
+         this.muteAudioClass = 'off';
+         this.webrtc.unmute ();
+         this.mic = 'mic';
+      } else {
+         this.muteAudioClass = 'on';
+         this.webrtc.mute ();
+         this.mic = 'mic_off';
+      }
+  }
+
+   toggleLocalVideo() {
+         if (this.muteVideoClass === 'on') {
+         this.muteVideoClass = 'off';
+         this.webrtc.resumeVideo ();
+         this.cam = 'videocam';
+      } else {
+         this.muteVideoClass = 'on';
+         this.webrtc.pauseVideo ();
+         this.cam = 'videocam_off';
+      }
+  }
+
+  leave() {
+    this.webrtc.stopLocalVideo();
+    this.webrtc.leaveRoom();
+    this.location.back();
+  }
+
+  SendFile = (video: any, peer: any) => {
+      const from = typeof peer.nick !== 'undefined' ? peer.nick : peer.id;
+      const remotes = document.getElementById('remotes');
       if (remotes) {
-        const container = <any>document.createElement ('div');
-        container.className = 'kvc-video-container';
-        container.setAttribute('style', 'margin:10px ; height: 30%; width: 30%;border: 1px solid blue;');
+
+        const container = document.createElement('div');
+        container.className = 'video-container';
+        container.id = 'container_' + this.webrtc.getDomId(peer);
         const spanuser = document.createElement('div');
         spanuser.className = 'username';
         spanuser.innerHTML = peer.nick;
-        spanuser.setAttribute('style', 'text-align: center;width: 100%;');
+        // spanuser.setAttribute('style', 'text-align: center;width: 100%;');
         container.appendChild(spanuser);
         const uservideo = <any>document.createElement('div');
         uservideo.className = 'uservideo';
-        container.id = 'container_' + self.webrtc.getDomId(peer);
+        container.id = 'container_' + this.webrtc.getDomId(peer);
         video.setAttribute('style', ' height: 100%; width: 100%;');
         uservideo.appendChild(video);
         container.appendChild(uservideo);
 
-        const chat__main = document.getElementById('chat__main');
-        const chat__footer = document.getElementById('chat__footer');
+        const fileinput: HTMLInputElement = this.file.nativeElement;
+
+        fileinput.className = 'sendFile';
         const messages = document.getElementById('messages');
         const filelist = document.createElement('p');
         filelist.className = 'fileList';
@@ -127,12 +177,12 @@ export class LiveViewComponent implements OnInit {
             const sendProgress = document.createElement('progress');
             sendProgress.max = file.size;
             item.appendChild(sendProgress);
-            $('.sending').hide();
+            // $('.sending').hide();
             sender.on('progress', function (bytesSent) {
                 sendProgress.value = bytesSent;
             });
-            // sendFile
-            sender.on('sendFile', function () {
+
+            sender.on('sentFile', function () {
                 item.appendChild(document.createTextNode('sent'));
 
                 fileinput.removeAttribute('disabled');
@@ -143,18 +193,59 @@ export class LiveViewComponent implements OnInit {
         }, false);
 
         fileinput.disabled = false;
+        remotes.appendChild(container);
+            peer.on('fileTransfer', function ( metadata, receiver ) {
+            const item = document.createElement('div');
+            item.className = 'receiving';
+            const span = document.createElement('span');
+            span.className = 'filename';
+            span.appendChild(document.createTextNode(metadata.name));
+            item.appendChild(span);
+            const receiveProgress = document.createElement('progress');
+            receiveProgress.max = metadata.size;
+            item.appendChild(receiveProgress);
+
+             // $('.receiving').show();
+            // item.setAttribute('style', 'display: none;');
+            receiver.on('progress', function (bytesReceived) {
+                receiveProgress.value = bytesReceived;
+            });
+
+            receiver.on('receivedFile', function (file) {
+                const href = document.createElement('a');
+                href.href = URL.createObjectURL(file);
+                href.download = metadata.name;
+                href.appendChild(document.createTextNode('download'));
+                item.appendChild(href);
+                receiver.channel.close();
+            });
+
+             // $('#messages').append('<b class="sender" >' + peer.nick + ' </b> <br> ');
+            // this.renderer.appendChild(messages, '<b class="sender" >' + peer.nick + ' </b> <br> ');
+             messages.appendChild(item);
+        });
+      }
+
+    }
+
+  createdPeer = (peer: any) => {
+      const remotes = document.getElementById('remotes');
+
+      if (!remotes) {
+        return;
+      }
         if (peer && peer.pc) {
           const connstate = document.createElement('div');
           peer.pc.on('iceConnectionStateChange', function (event: any) {
             switch (peer.pc.iceConnectionState) {
               case 'checking':
-                connstate.innerText = self.nick;
+                connstate.innerText = peer.nick;
                 break;
               case 'connected':
               case 'completed':
                 connstate.innerText = peer.nick ;
-                if (self.nick !== this.user) {
-                  self.webrtc.sendDirectlyToAll(self.room, 'nick', self.nick);
+                if (this.nick !== this.user) {
+                  this.webrtc.sendDirectlyToAll(this.room, 'nick', peer.nick);
                 }
                 break;
               case 'disconnected':
@@ -169,120 +260,39 @@ export class LiveViewComponent implements OnInit {
             }
           });
         }
-        remotes.appendChild(container);
+    }
 
-        peer.on('fileTransfer', function ( metadata, receiver ) {
-            const item = document.createElement('div');
-            const htmlcode = '<i class="material-icons" style = "color : blue;float:left;"> person </i>' +
-            ' <b>' + peer.nick + ' </b>' + ' <br> ';
-            item.className = 'receiving';
-            const span = document.createElement('span');
-            span.className = 'filename';
-            span.appendChild(document.createTextNode(metadata.name));
-            item.appendChild(span);
-            const receiveProgress = document.createElement('progress');
-            receiveProgress.max = metadata.size;
-            item.appendChild(receiveProgress);
+   localStream = (stream: any) => {
+     const video = stream.getVideoTracks()[0];
+     const audio = stream.getAudioTracks()[0];
+    }
 
-            $('.receiving').show();
-            receiver.on('progress', function (bytesReceived) {
-                receiveProgress.value = bytesReceived;
-            });
-
-            receiver.on('receivedFile', function (file) {
-                const href = document.createElement('a');
-                href.href = URL.createObjectURL(file);
-                href.download = metadata.name;
-                href.appendChild(document.createTextNode('download'));
-                item.appendChild(href);
-                receiver.channel.close();
-            });
-            $('#messages').append('<li style="width:100%; float:left;">' +
-              '<i class="material-icons" style = "color : blue;float:left;">person</i>' +
-              ' <b style = "color : black;float:left;">' + peer.nick + ' </b> <br> ');
-            messages.appendChild(item);
-        });
-      }
-    });
-
-    self.webrtc.on('videoRemoved', function (video: any, peer: any) {
-      const peerleave = peer.nick + ' &nbsp &nbsp' + 'offline';
-      $('#messages').append('<h4 class="user" style="color:red">' + peerleave + '</h4>');
+   videoRemoved = (video: any, peer: any) => {
+      const from = typeof peer.nick !== 'undefined' ? peer.nick : peer.id;
       const remotes = document.getElementById('remotes');
-      const el = document.getElementById(peer ? 'container_' + self.webrtc.getDomId(peer) : 'localScreenContainer');
+      const el = document.getElementById(peer ? 'container_' + this.webrtc.getDomId(peer) : 'localScreenContainer');
       if (remotes && el) {
-        remotes.removeChild ( el);
+        remotes.removeChild(el);
       }
-    });
+    }
 
-    self.webrtc.on('iceFailed', function (peer: any) {
-      const connstate: any = document.querySelector('#container_' + self.webrtc.getDomId(peer) + ' .connectionstate');
-      if ( connstate) {
-        connstate.innerText = 'Connection failed.';
-      }
-    });
+    sendMessage = ( data ) => {
+     if ( data.type === 'chat') {
+             const chatMessage = {
+              username : data.payload.nick,
+              message : data.payload.message,
+              postedOn : data.payload.date,
+            };
+         // this.messages.push(chatMessage);
+     }
+   }
 
-    self.webrtc.on('connectivityError', function (peer: any) {
-      const connstate: any = document.querySelector('#container_' + self.webrtc.getDomId(peer) + ' .connectionstate');
-      if ( connstate) {
-        connstate.innerText = 'Connection failed.';
-      }
-    });
-  }
-    pushNotification(event: any, peer1: any): void {
-    const videoAdded: any = {
-      'message': peer1 + ' has joined the room',
-      'color': 'green'
+   postMessage = ( mes ) => {
+    const chatMessage = {
+      username: this.nick,
+      message: mes,
+      postedOn: new Date(),
     };
-    const videoRemoved: any = {
-      'message': peer1 + ' has left the room',
-      'color': 'red'
-    };
-  }
-
-  toggleAudioMute () {
-      if ( this.muteAudioClass === 'on') {
-         this.muteAudioClass = 'off';
-         this.webrtc.unmute ();
-         this.mic = 'mic';
-      } else {
-         this.muteAudioClass = 'on';
-         this.webrtc.mute ();
-         this.mic = 'mic_off';
-      }
-   }
-
-    toggleVideoMute () {
-      if (this.muteVideoClass === 'on') {
-         this.muteVideoClass = 'off';
-         this.webrtc.resumeVideo ();
-         this.cam = 'videocam';
-      } else {
-         this.muteVideoClass = 'on';
-         this.webrtc.pauseVideo ();
-         this.cam = 'videocam_off';
-      }
-   }
-
-   hangup () {
-    this.webrtc.stopLocalVideo();
-    this.webrtc.leaveRoom();
-    this.location.back();
-   }
-
-   send () {
-   if ($('#text').val() !== '') {
-   const msg = $('#text').val();
-   this.webrtc.sendToAll('chat', { message : msg, nick : this.nick, date : this.myFormattedDate});
-    $('#messages').append('<li style = "width:100%; float:left;">' +
-      '<i class="material-icons" style = "color : blue ; float:left;"> person </i>' +
-      ' <b style = "color : black;float : left;">' + this.nick + ' &nbsp &nbsp' +
-      this.myFormattedDate + ' </b> <br> ' +
-      '<span style = "color :black; padding: 3px 10px;float:left;">' + msg + '</span>');
-    $('#chat__main').animate( {
-     scrollTop: $('#chat__main').get(0).scrollHeight}, 2000);
-    $('#text').val('');
- }
-}
-
+    this.webrtc.sendToAll('chat', chatMessage);
+    }
 }
