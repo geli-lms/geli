@@ -31,7 +31,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Added checkboxes for accepting our terms of use and privacy declarations whil registering [#778](https://github.com/utetrapp/geli/issues/778)
 - Quickfixed the Import/Export [#42](https://github.com/utetrapp/geli/issues/42)
 - Added PDF download of Coursecontent [#720](https://github.com/utetrapp/geli/pull/720)
-- Export personal data for gdpr.
+- Export personal data for gdpr [#805](https://github.com/utetrapp/geli/issues/805)
 - Add a guided dialog for adding a whitelist [#727](https://github.com/utetrapp/geli/issues/727) [#509](https://github.com/utetrapp/geli/issues/509)
 - Added a `JwtPipe` to easily append `'mediaToken'`s to file URLs. [#729](https://github.com/utetrapp/geli/issues/729)
 - Added a `FileComponent` to flexibly display a single file e.g. in a new tab. [#729](https://github.com/utetrapp/geli/issues/729)
