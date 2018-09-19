@@ -15,15 +15,20 @@ describe('Login-form', () => {
     expect(page.getInputPassword().isPresent()).toBeTruthy();
   });
 
-  // Test randomly fails on travis therefore disabled
-  // it('show error when email or password empty', async () => {
-  //   await page.navigateTo();
-  //
-  //   await page.getLoginButton().click();
-  //   await browser.waitForAngular(); // ensure that there are no running http requests
-  //
-  //   expect(page.getSnackBar().getText()).toContain('Login failed: auth.loginFailedError.undefined');
-  // });
+  it('show error when email or password invalid', async () => {
+    await page.navigateTo();
+
+    const email = page.getInputEmail();
+    email.sendKeys('invalidEmail');
+
+    const password = page.getInputPassword();
+    password.sendKeys('wrongPassword');
+
+    await page.getLoginButton().click();
+    await browser.waitForAngular(); // ensure that there are no running http requests
+
+    expect(page.getSnackBar().getText()).toContain('Login failed: Your login details could not be verified. Please try again');
+  });
 
   it('should login with valid credentials', async () => {
     await page.navigateTo();
