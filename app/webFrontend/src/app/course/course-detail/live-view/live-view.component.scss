@@ -1,12 +1,16 @@
+
+
 .container {
     display: grid;
     grid-template-columns: repeat(12, 1fr);
     grid-template-rows: 10% 80% 10%;
+    padding-top: 5px;
 }
 header {
     grid-column: span 12;
     color: red;
 }
+
 aside {
     grid-column: span 4;
     padding: 10px;
@@ -18,23 +22,20 @@ main {
     float: left;
     display: inline-block;
 }
-header {
-    margin-left: auto;
-    padding: 10px;
-    float: right;
-    display: block;
-}
-#remotes{
+.remotes{
   width: 100%;
   display: inline-flex;
   clear: both;
-  .kvc-video-container{
+}
+
+.video-container{
     margin: 10px ;
     height: 30%;
     width: 30%;
+    padding-right: 5px;
     border: 1px solid blue;
 }
-}
+
 .local-video video{
    width: 100%;
 }
@@ -43,8 +44,17 @@ header {
   flex-direction: column;
   height: 50vh;
   width: 100%;
-  overflow-y: scroll;
+
 }
+
+#messages {
+  height: 15vh;
+}
+
+#chat {
+  height: 25vh;
+}
+
 .chat__footer {
   background: #e6eaee;
   display: flex;
@@ -72,10 +82,12 @@ header {
   padding: 10px;
   flex-grow: 1;
 }
-.chat__messages {
+.chat__messages , .chat{
   list-style-type: none;
   padding: 10px;
   flex-grow: 1;
+  overflow-y: scroll;
+  scroll-behavior: auto;
 }
 .message {
   padding: 10px;
@@ -85,12 +97,17 @@ header {
 }
 mat-card-actions{
 }
-#quit { font-size: 36px;color: red ;}
+#quit { font-size: 30px;color: red ;}
 #sound , #cam , #attache {
-  font-size: 36px;
+  font-size: 30px;
   color: blue;
-  padding: 6px;
+  padding-right: 10px;
 }
+
+
+ #attache {
+   transform: rotate(90deg);
+ }
 
  #cam:hover {
   cursor: pointer;
@@ -100,7 +117,7 @@ mat-card-actions{
   cursor: pointer;
 }
 
- #sound:hover {
+ #attache:hover {
   cursor: pointer;
 }
 
@@ -153,6 +170,3 @@ ul li{
   list-style-type: none;
 }
 
-container .username{
-  text-align: center;width: 100%
-}

@@ -28,7 +28,7 @@ export class LiveViewComponent implements OnInit {
   public muteVideoClass = 'off';
   public cam = 'videocam';
   public mic = 'mic';
-  public messages = [];
+  public messagess = [];
   @ViewChild('file') file;
 
   constructor ( private router: Router,
@@ -71,21 +71,23 @@ export class LiveViewComponent implements OnInit {
       if (this.room) {
         this.webrtc.joinRoom(this.room);
       }
+        // Send a chat message
     });
-    this.webrtc.connection.on('message', this.sendMessage);
+
     this.webrtc.on('localStream', this.localStream);
     this.webrtc.on('localMediaError', (err: any) => {
       alert ('Can\'t get access to camera');
     });
     // a peer video has been added
     this.webrtc.on('videoAdded', this.SendFile);
+    this.webrtc.connection.on('message', this.sendMessage);
     // a peer was removed
     this.webrtc.on('videoRemoved', this.videoRemoved);
     // local p2p/ice failure
     this.webrtc.on('iceFailed', this.iceFailed );
     // remote p2p/ice failure
     this.webrtc.on('connectivityError', this.connectivityError);
-    this.webrtc.on('channelMessage', this.postMessage);
+    // this.webrtc.on('channelMessage', this.postMessage);
     this.webrtc.on('createdPeer', this.createdPeer);
   }
 
@@ -153,7 +155,7 @@ export class LiveViewComponent implements OnInit {
         const uservideo = <any>document.createElement('div');
         uservideo.className = 'uservideo';
         container.id = 'container_' + this.webrtc.getDomId(peer);
-        video.setAttribute('style', ' height: 100%; width: 100%;');
+        // video.setAttribute('style', ' height: 100%; width: 100%;');
         uservideo.appendChild(video);
         container.appendChild(uservideo);
 
@@ -161,9 +163,9 @@ export class LiveViewComponent implements OnInit {
 
         fileinput.className = 'sendFile';
         const messages = document.getElementById('messages');
-        const filelist = document.createElement('p');
-        filelist.className = 'fileList';
-        messages.appendChild(filelist);
+        // const filelist = document.createElement('p');
+        // filelist.className = 'fileList';
+        // messages.appendChild(filelist);
         fileinput.addEventListener('change', function() {
             fileinput.disabled = true;
             const file = fileinput.files[0];
@@ -223,7 +225,8 @@ export class LiveViewComponent implements OnInit {
              // $('#messages').append('<b class="sender" >' + peer.nick + ' </b> <br> ');
             // this.renderer.appendChild(messages, '<b class="sender" >' + peer.nick + ' </b> <br> ');
              messages.appendChild(item);
-        });
+             // chat.appendChild(item);
+                    });
       }
 
     }
@@ -276,23 +279,27 @@ export class LiveViewComponent implements OnInit {
       }
     }
 
-    sendMessage = ( data ) => {
-     if ( data.type === 'chat') {
-             const chatMessage = {
-              username : data.payload.nick,
-              message : data.payload.message,
-              postedOn : data.payload.date,
-            };
-         // this.messages.push(chatMessage);
-     }
-   }
-
-   postMessage = ( mes ) => {
+    postMessage = ( message ) => {
+    // this.message.length > 0;
     const chatMessage = {
       username: this.nick,
-      message: mes,
+      content: this.message,
       postedOn: new Date(),
     };
     this.webrtc.sendToAll('chat', chatMessage);
+      this.messagess.push({
+      username: this.nick,
+      content: this.message,
+      postedOn: new Date().toLocaleString('de-DE'),
+    });
+    this.message = '';
     }
+
+    sendMessage = ( data ) => {
+     if ( data.type === 'chat') {
+             const message = data.payload;
+             this.messagess.push(message);
+               }
+   }
+
 }

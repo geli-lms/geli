@@ -13,22 +13,27 @@
               </mat-card-actions>
     </mat-card>
     <div class="chat__main" id="chat__main">
-    <!-- LIST TO LOAD MESSAGES -->
-      <li id="messages" class="chat__messages"></li>
+    <!-- LIST TO LOAD MESSAGES <li id="messages" class="chat__messages"></li> -->
+    <div id="messages" class="chat__messages"></div>
+    <div class="chat"  id="chat">
+        <div *ngFor=" let message of messagess">
+           <mat-icon>person</mat-icon> <b>{{message.username}}</b>: {{message.postedOn}} <br> {{message.content}}
+        </div>
+    </div>
     <!-- CHAT FOOTER DIV -->
     <div class="chat__footer" id="chat__footer">
       <!-- MESSAGE FORM -->
       <form id="message-form">
-        <input type="text" id="text" name="message" placeholder="Message" autofocus autocomplete="off" [(ngModel)]="message" (keydown.enter)="send()" />
+        <input  type="text" id="message" name="message" placeholder="Message" autofocus autocomplete="off" [(ngModel)]="message" #mes="ngModel" (keydown.enter)="postMessage()" />
       </form>
       <br>
       <input #file type="file" name="" id="upload_btn" style="display:none;"/>
-      <label for="upload_btn"><i class="material-icons" id="cam">attach_file</i></label>
+      <label for="upload_btn"> <mat-icon  id="attache">attachment</mat-icon></label>
     </div>
     <!-- END CHAT FOOTER DIV -->
   </div>
   </aside>
   <main>
-     <div id="remotes" class="remote-videos"></div>
+     <div id="remotes" class="remotes"></div>
   </main>
 </div>
