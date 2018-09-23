@@ -83,6 +83,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Replaced hard-coded `'upload'` strings in the API with `config.uploadFolder`. [#729](https://github.com/utetrapp/geli/issues/729)
 - Fixed missing `@UseBefore` middleware in `MediaController`. [#729](https://github.com/utetrapp/geli/issues/729)
 - Make e2e login test more stable. [#823](https://github.com/utetrapp/geli/pull/823) & [#824](https://github.com/utetrapp/geli/pull/824)
+- Remove warning from build (sentry.sh). [#830](https://github.com/utetrapp/geli/pull/830)
 
 ### Security
 - Secured the static `'uploads'` route by introducing a special `'mediaToken'` with new JWT strategy & middleware. [#729](https://github.com/utetrapp/geli/issues/729)
