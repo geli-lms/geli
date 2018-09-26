@@ -55,6 +55,7 @@
     "ngx-lightbox": "^1.0.2",
     "node-sass": "^4.9.2",
     "raven-js": "^3.26.2",
+    "recordrtc": "^5.4.8",
     "rxjs": "^6.2.2",
     "rxjs-compat": "^6.2.2",
     "simplewebrtc": "^3.0.2",

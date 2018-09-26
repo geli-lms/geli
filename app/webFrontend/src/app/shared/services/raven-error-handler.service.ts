@@ -20,6 +20,6 @@ export class RavenErrorHandler implements ErrorHandler {
       Raven.captureException(error);
     }
 
-    console.error(error);
+    // console.error(error);
   }
 }

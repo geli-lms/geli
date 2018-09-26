@@ -4,42 +4,39 @@
     display: grid;
     grid-template-columns: repeat(12, 1fr);
     grid-template-rows: 10% 80% 10%;
-    padding-top: 5px;
 }
-header {
-    grid-column: span 12;
-    color: red;
-}
+    header {
+        grid-column: span 12;
+        color: red;
+    }
 
-aside {
-    grid-column: span 4;
-    padding: 10px;
-    clear: both;
- }
-main {
-    grid-column: span 8;
-    padding: 10px;
-    float: left;
-    display: inline-block;
-}
-.remotes{
-  width: 100%;
-  display: inline-flex;
-  clear: both;
-}
+      aside {
+          grid-column: span 4;
+          padding: 2%;
+          clear: both;
+       }
+      main {
+          grid-column: span 8;
+          padding: 2%;
+          float: left;
+          display: inline-block;
+          .remotes{
+          width: 100%;
+          display: inline-flex;
+          clear: both;
+          video{
+            max-height: 15%;
+            max-width: 15%;
+            min-width: 10%;
+            padding: 2%;
+        }
+       }
 
-.video-container{
-    margin: 10px ;
-    height: 30%;
-    width: 30%;
-    padding-right: 5px;
-    border: 1px solid blue;
-}
-
+      }
 .local-video video{
    width: 100%;
 }
-.chat__main {
+.chatmain {
   display: flex;
   flex-direction: column;
   height: 50vh;
@@ -53,55 +50,55 @@ main {
 
 #chat {
   height: 25vh;
+  overflow: auto;
 }
 
-.chat__footer {
+.chatfooter {
   background: #e6eaee;
   display: flex;
-  padding: 10px;
+  padding: 2%;
   /*height: 60px;*/
   flex-shrink: 0;
   width: 100%;
 }
-.chat__footer form {
+.chatfooter form {
   flex-grow: 1;
   display: flex;
   width: 100%;
 }
-.chat__footer form * {
-  margin-right: 10px;
+.chatfooter form * {
+  margin-right: 0.75rem;
 }
-.chat__footer input {
+.chatfooter input {
   border: none;
-  padding: 10px;
+  padding: 2%;
   flex-grow: 1;
   width: 70%;
 }
 .filename{
   border: none;
-  padding: 10px;
+  padding: 2%;
   flex-grow: 1;
 }
-.chat__messages , .chat{
+.chatmessages , .chat{
   list-style-type: none;
-  padding: 10px;
+  padding: 2%;
   flex-grow: 1;
   overflow-y: scroll;
   scroll-behavior: auto;
 }
 .message {
-  padding: 10px;
+  padding: 2%;
 }
 .user{
    color: blue;
 }
 mat-card-actions{
 }
-#quit { font-size: 30px;color: red ;}
+#quit { font-size: 2rem;color: red ;}
 #sound , #cam , #attache {
-  font-size: 30px;
+  font-size: 2rem;
   color: blue;
-  padding-right: 10px;
 }
 
 
@@ -121,6 +118,10 @@ mat-card-actions{
   cursor: pointer;
 }
 
+ #quit:hover {
+  cursor: pointer;
+}
+
 .sending {
   display: none;
 }
@@ -128,14 +129,11 @@ mat-card-actions{
 .receiving{
   display: block;
 }
-#file-form{
-  float: left;
-  clear: both;
-}
+
 .sending{
   list-style-type: none;
 }
-.chat__messages .sending{
+.chatmessages .sending{
   display: none;
 }
 .receiving{
@@ -144,18 +142,11 @@ mat-card-actions{
 .filename{
   color: blue;
 }
-ul li{
-  padding: 0px;
-}
+
 .fileList{
   list-style-type: none;
     margin: 0;
     float: left;
-}
-
-.username{
-  text-align: center;
-  width: 100%;
 }
 
 .receiving{
@@ -163,10 +154,6 @@ ul li{
 }
 
 .sending{
-  display: none;
-}
-
- #messages{
-  list-style-type: none;
+  display: block;
 }
 

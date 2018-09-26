@@ -386,5 +386,12 @@
       "toggleMembers" : "Alle Benutzer auswählen",
       "doesNotExist": "Nutzer existiert nicht"
     }
+  },
+    "virtual": {
+    "messagesend": "neue Nachricht",
+    "messagereceived": " neue Nachricht",
+    "NewUserInRoom": "Zimmer betreten",
+    "LeaveRoom": "jemand hat das Zimmer verlassen",
+    "FileAdded": "neue Datei"
   }
 }

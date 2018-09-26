@@ -12,28 +12,34 @@
                 <mat-icon id="cam" (click)="toggleLocalVideo()">{{cam}}</mat-icon>
               </mat-card-actions>
     </mat-card>
-    <div class="chat__main" id="chat__main">
+    <div class="chatmain" id="chatmain">
     <!-- LIST TO LOAD MESSAGES <li id="messages" class="chat__messages"></li> -->
-    <div id="messages" class="chat__messages"></div>
+    <div id="messages" class="chatmessages"></div>
     <div class="chat"  id="chat">
-        <div *ngFor=" let message of messagess">
+        <div *ngFor=" let message of messages">
            <mat-icon>person</mat-icon> <b>{{message.username}}</b>: {{message.postedOn}} <br> {{message.content}}
         </div>
     </div>
-    <!-- CHAT FOOTER DIV -->
-    <div class="chat__footer" id="chat__footer">
-      <!-- MESSAGE FORM -->
+
+    <div class="chatfooter" id="chatfooter">
+
       <form id="message-form">
-        <input  type="text" id="message" name="message" placeholder="Message" autofocus autocomplete="off" [(ngModel)]="message" #mes="ngModel" (keydown.enter)="postMessage()" />
+        <input  type="text" id="message" name="message" placeholder="{{'messaging.inputHintText'| translate}}" autofocus autocomplete="off" [(ngModel)]="message" #mes="ngModel" (keydown.enter)="postMessage()" />
       </form>
       <br>
       <input #file type="file" name="" id="upload_btn" style="display:none;"/>
       <label for="upload_btn"> <mat-icon  id="attache">attachment</mat-icon></label>
     </div>
-    <!-- END CHAT FOOTER DIV -->
+
   </div>
   </aside>
   <main>
-     <div id="remotes" class="remotes"></div>
+     <div id="remotes" class="remotes">
+        <div *ngFor=" let stream of streams">
+              <div>{{stream.MediaStream}}</div>
+        </div>
+     </div>
+
+
   </main>
 </div>

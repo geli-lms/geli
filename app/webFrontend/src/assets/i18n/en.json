@@ -385,6 +385,13 @@
       "deleteUsers": "Delete selected Members.",
       "toggleMembers": "Toggle all members",
       "doesNotExist": "User does not exist"
+    },
+    "virtual": {
+      "messagesend": " new message",
+      "messagereceived": " new message",
+      "NewUserInRoom": "user join room",
+      "LeaveRoom": "a user leaves room",
+      "FileAdded": "new File"
     }
   }
 }
