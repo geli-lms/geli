@@ -115,7 +115,6 @@ export class CodeKataComponent implements OnInit {
   // refactor this to use the same as in code-kata-unit-form
   validate() {
     const codeToTest: string = this.codeKataUnit.definition + '\n' + this.codeKataUnit.code + '\n' + this.codeKataUnit.test;
-    console.log(codeToTest);
 
     this.logs = undefined;
 
