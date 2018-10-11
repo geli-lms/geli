@@ -105,28 +105,28 @@ taskUnitSchema.methods.calculateProgress = async function (users: IUser[], progr
 taskUnitSchema.methods.toHtmlForIndividualPDF = function (): String {
   const md = new MarkdownIt({html: true});
   let html = '<div id="pageHeader" >'
-    + md.render(this.name) + md.render(this.description ? this.description : '') + '</div>';
+    + md.render(this.name ? this.name : '')  + md.render(this.description ? this.description : '') + '</div>';
 
   let counter = 1;
   html += '<div id="firstPage">';
   for (const task of this.tasks) {
-     html += '<div><h5>' +  md.render(counter + '. ' + task.name) + '</h5></div>';
+     html += '<div><h5>' +  task.name ? md.render(counter + '. ' + task.name) : '' + '</h5></div>';
      counter++;
     for (const answer of task.answers) {
-      html += '<div>' + md.render('<input type="checkbox" style="margin-right: 10px">' + answer.text) + '</div>';
+      html += '<div>' +answer.text ?  md.render('<input type="checkbox" style="margin-right: 10px">' + answer.text) : ''+ '</div>';
     }
   }
   html += '</div><div><h2>Solution</h2></div>';
   counter = 1;
   for (const task of this.tasks) {
-    html += '<div><h5>' +  md.render(counter + '. ' + task.name) + '</h5></div>';
+    html += '<div><h5>' +  task.name ? md.render(counter + '. ' + task.name) : '' + '</h5></div>';
     counter++;
     for (const answer of task.answers) {
       let checked = '';
       if (answer.value === true) {
         checked = 'checked';
       }
-      html += '<div>' + md.render('<input type="checkbox" style="margin-right: 10px;" ' + checked + '>' + answer.text) + '</div>';
+      html += '<div>' + answer.text ? md.render('<input type="checkbox" style="margin-right: 10px;" ' + checked + '>' + answer.text) : ''+ '</div>';
     }
   }
 
@@ -136,15 +136,15 @@ taskUnitSchema.methods.toHtmlForIndividualPDF = function (): String {
 taskUnitSchema.methods.toHtmlForSinglePDF = function (): String {
   const md = new MarkdownIt({html: true});
   let html = '';
-  html += '<div><h4>' + md.render('Unit: ' + this.name) + '</h4>'
+  html += '<div><h4>' + md.render(this.name ? 'Unit: ' + this.name : '') + '</h4>'
     + '<span>' + md.render(this.description ? 'Description: ' + this.description : '') + '</span></div>';
 
   let counter = 1;
   for (const task of this.tasks) {
-    html += '<div><h5>' +  md.render(counter + '. ' + task.name) + '</h5></div>';
+    html += '<div><h5>' +  task.name ? md.render(counter + '. ' + task.name) : '' + '</h5></div>';
     counter++;
     for (const answer of task.answers) {
-      html += '<div>' + md.render('<input type="checkbox" style="margin-right: 10px">' + answer.text) + '</div>';
+      html += '<div>' + answer.text ?  md.render('<input type="checkbox" style="margin-right: 10px">' + answer.text) : '' + '</div>';
     }
   }
 
@@ -155,17 +155,17 @@ taskUnitSchema.methods.toHtmlForSinglePDF = function (): String {
 taskUnitSchema.methods.toHtmlForSinglePDFSolutions = function (): String {
   const md = new MarkdownIt({html: true});
   let html = '';
-  html += '<div><h4>' + md.render('Unit: ' + this.name) + '</h4></div>';
+  html += '<div><h4>' + md.render(this.name ? 'Unit: ' + this.name : '') + '</h4></div>';
   let counter = 1;
   for (const task of this.tasks) {
-    html += '<div><h5>' +  md.render(counter + '. ' + task.name) + '</h5></div>';
+    html += '<div><h5>' + task.name ? md.render(counter + '. ' + task.name) : '' + '</h5></div>';
     counter++;
     for (const answer of task.answers) {
       let checked = '';
       if (answer.value === true) {
         checked = 'checked';
       }
-      html += '<div>' + md.render('<input type="checkbox" style="margin-right: 10px;" ' + checked + '>' + answer.text) + '</div>';
+      html += '<div>' + answer.text ? md.render('<input type="checkbox" style="margin-right: 10px;" ' + checked + '>' + answer.text) : '' + '</div>';
     }
   }
 

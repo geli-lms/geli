@@ -23,8 +23,10 @@ import {File} from '../models/mediaManager/File';
 
 const cache = require('node-file-cache').create({life: config.timeToLiveCacheValue});
 const pdf =  require('html-pdf');
+var phantomjs = require('phantomjs-prebuilt')
+var binPath = phantomjs.path
 
-const PDFtempPath = config.tmpFileCacheFolder + '/temp.pdf';
+const PDFtempPath = config.tmpFileCacheFolder + 'temp.pdf';
 
 // Set all routes which should use json to json, the standard is blob streaming data
 @Controller('/download')
@@ -221,6 +223,7 @@ export class DownloadController {
             } else {
 
               const options = {
+                phantomPath: binPath,
                 format: 'A4',
                 'border': {
                   'left': '1cm',
@@ -327,6 +330,7 @@ export class DownloadController {
         archive.pipe(output);
 
         const options = {
+          phantomPath: binPath,
           format: 'A4',
           'border': {
             'left': '1cm',
