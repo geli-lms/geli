@@ -23,8 +23,8 @@ import {File} from '../models/mediaManager/File';
 
 const cache = require('node-file-cache').create({life: config.timeToLiveCacheValue});
 const pdf =  require('html-pdf');
-var phantomjs = require('phantomjs-prebuilt')
-var binPath = phantomjs.path
+const phantomjs = require('phantomjs-prebuilt');
+const binPath = phantomjs.path;
 
 const PDFtempPath = config.tmpFileCacheFolder + 'temp.pdf';
 

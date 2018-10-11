@@ -113,7 +113,7 @@ taskUnitSchema.methods.toHtmlForIndividualPDF = function (): String {
      html += '<div><h5>' +  task.name ? md.render(counter + '. ' + task.name) : '' + '</h5></div>';
      counter++;
     for (const answer of task.answers) {
-      html += '<div>' +answer.text ?  md.render('<input type="checkbox" style="margin-right: 10px">' + answer.text) : ''+ '</div>';
+      html += '<div>' + answer.text ?  md.render('<input type="checkbox" style="margin-right: 10px">' + answer.text) : '' + '</div>';
     }
   }
   html += '</div><div><h2>Solution</h2></div>';
@@ -126,7 +126,8 @@ taskUnitSchema.methods.toHtmlForIndividualPDF = function (): String {
       if (answer.value === true) {
         checked = 'checked';
       }
-      html += '<div>' + answer.text ? md.render('<input type="checkbox" style="margin-right: 10px;" ' + checked + '>' + answer.text) : ''+ '</div>';
+      html += '<div>' + answer.text ? md.render('<input type="checkbox" style="margin-right: 10px;" ' + checked + '>' + answer.text) : ''
+        + '</div>';
     }
   }
 
@@ -165,7 +166,8 @@ taskUnitSchema.methods.toHtmlForSinglePDFSolutions = function (): String {
       if (answer.value === true) {
         checked = 'checked';
       }
-      html += '<div>' + answer.text ? md.render('<input type="checkbox" style="margin-right: 10px;" ' + checked + '>' + answer.text) : '' + '</div>';
+      html += '<div>' + answer.text ? md.render('<input type="checkbox" style="margin-right: 10px;" ' + checked + '>' + answer.text) : ''
+        + '</div>';
     }
   }
 
