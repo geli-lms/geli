@@ -12,10 +12,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [NEXT]
 ### Updates
-- Update insecure dependencies[#816](https://github.com/geli/issues/816)
-- Updated Frontend to angular6[#716](https://github.com/utetrapp/geli/pull/766)
+- Update insecure dependencies [#816](https://github.com/geli/issues/816)
+- Updated Frontend to angular6 [#716](https://github.com/utetrapp/geli/pull/766)
 - Update node version to 10.8.0 [#821](https://github.com/utetrapp/geli/pull/821)
-- Update README.md with latest information
+- Update README.md with latest information [#845](https://github.com/geli-lms/geli/pull/845)
 
 ### Added
 - Add cookie information [#565]
@@ -32,13 +32,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Added checkboxes for accepting our terms of use and privacy declarations whil registering [#778](https://github.com/utetrapp/geli/issues/778)
 - Quickfixed the Import/Export [#42](https://github.com/utetrapp/geli/issues/42)
 - Added PDF download of Coursecontent [#720](https://github.com/utetrapp/geli/pull/720)
-- Export personal data for gdpr.
+- Export personal data for gdpr [#805](https://github.com/utetrapp/geli/issues/805)
 - Add a guided dialog for adding a whitelist [#727](https://github.com/utetrapp/geli/issues/727) [#509](https://github.com/utetrapp/geli/issues/509)
 - Added a `JwtPipe` to easily append `'mediaToken'`s to file URLs. [#729](https://github.com/utetrapp/geli/issues/729)
 - Added a `FileComponent` to flexibly display a single file e.g. in a new tab. [#729](https://github.com/utetrapp/geli/issues/729)
 - Added more `DownloadController` unit tests, including a new `DeleteCache` `admin`-only API. [#729](https://github.com/utetrapp/geli/issues/729)
 - Added `'Misc.'` front-end admin sub-component with cache-clearing control re. the `DeleteCache` API. [#729](https://github.com/utetrapp/geli/issues/729)
 - Added dsgvo delete user data [#775](https://github.com/utetrapp/geli/issues/775)
+- Add Test if error when invalid user/pass [#825](https://github.com/utetrapp/geli/pull/825)
 
 ### Changed
 - Minor Fixes and Adaptations and Mergefailure fixes. [#785] (https://github.com/utetrapp/geli/issues/785)
@@ -83,6 +84,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Replaced hard-coded `'upload'` strings in the API with `config.uploadFolder`. [#729](https://github.com/utetrapp/geli/issues/729)
 - Fixed missing `@UseBefore` middleware in `MediaController`. [#729](https://github.com/utetrapp/geli/issues/729)
 - Make e2e login test more stable. [#823](https://github.com/utetrapp/geli/pull/823) & [#824](https://github.com/utetrapp/geli/pull/824)
+- Remove warning from build (sentry.sh). [#830](https://github.com/utetrapp/geli/pull/830)
+- Fix broken condition (sentry.sh). [#832](https://github.com/utetrapp/geli/pull/832)
 
 ### Security
 - Secured the static `'uploads'` route by introducing a special `'mediaToken'` with new JWT strategy & middleware. [#729](https://github.com/utetrapp/geli/issues/729)
