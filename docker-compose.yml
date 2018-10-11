@@ -24,5 +24,6 @@ services:
     command: "npm run start-docker-dev"
     ports:
       - "4200:4200"
+      - "5000:5000"
     links:
       - "api"
