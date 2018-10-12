@@ -7,7 +7,7 @@
 - Develop your code
 - Commit and push in regular intervalls
 - Run the tests locally
-- Add a line to the [CHANGELOG.md](https://github.com/h-da/geli/blob/develop/CHANGELOG.md) under the "NEXT" section in the form `- a short text to describe [#123](https://github.com/h-da/geli/issues/123)`
+- Add a line to the [CHANGELOG.md](https://github.com/geli-lms/geli/blob/develop/CHANGELOG.md) under the "NEXT" section in the form `- a short text to describe [#123](https://github.com/geli-lms/geli/issues/123)`
 - Open a Pull-Request
 - If CI/Coverage give their OK we can merge
 - The PR gets merged to `develop`, which will push a new Docker-Image-Version with the tag `develop` and `latest`

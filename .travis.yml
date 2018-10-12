@@ -1,4 +1,4 @@
-# +++ TRAVIS-FILE for https://github.com/h-da/geli +++
+# +++ TRAVIS-FILE for https://github.com/geli-lms/geli +++
 
 # required for chrome to install
 dist: trusty
