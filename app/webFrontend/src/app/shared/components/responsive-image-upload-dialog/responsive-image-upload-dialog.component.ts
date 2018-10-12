@@ -23,11 +23,7 @@ export class ResponsiveImageUploadDialog {
 
   ngOnInit() {
     this.uploader = new FileUploader({
-      url: this.uploadPath,
-      headers: [{
-        name: 'Authorization',
-        value: localStorage.getItem('token')
-      }]
+      url: this.uploadPath
     });
 
     this.uploader.onCompleteItem = (item: any, response: any, status: any, headers: any) => {

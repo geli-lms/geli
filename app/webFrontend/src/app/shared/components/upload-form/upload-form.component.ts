@@ -37,7 +37,6 @@ export class UploadFormComponent implements OnInit, OnChanges {
         const uploadOptions: FileUploaderOptions = {
             url: this.uploadPath,
             method: this.uploadMethod,
-            authToken: localStorage.getItem('token'),
             allowedMimeType: this.allowedMimeTypes,
             removeAfterUpload: true
         };
