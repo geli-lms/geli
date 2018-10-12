@@ -64,6 +64,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Update validator dependency. [#791](https://github.com/geli-lms/geli/pull/791)
 - Appended `'mediaToken'` to various file URLs via `JwtPipe`. [#729](https://github.com/geli-lms/geli/issues/729)
 - Remove winston dependency. [#806](https://github.com/geli-lms/geli/pull/806)
+- Moved all URL etc from utetrapp/geli and h-da/geli to current repo geli-lms/geli [#849](https://github.com/geli-lms/geli/pull/849)
 
 ### Fixed
 - Fixed broken notification settings. [#731](https://github.com/geli-lms/geli/issues/731)
