@@ -10,6 +10,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ################################################################################
 -->
 
+## [NEXT] - Release [08.11.2018]
+### Changed
+- Switched to cookie-based JWT authentication. [#840](https://github.com/geli-lms/geli/issues/840)
+
+### Removed
+- Removed the now obsolete `'mediaToken'` and `JwtPipe` systems. [#840](https://github.com/geli-lms/geli/issues/840)
+
+### Security
+- Reduced XSS attack surface by switching from `localStorage` tokens to `HttpOnly`, strict `SameSite` cookie-based JWT authentication. [#840](https://github.com/geli-lms/geli/issues/840)
+
 ## [NEXT]
 ### Updates
 - Update insecure dependencies [#816](https://github.com/geli/issues/816)
