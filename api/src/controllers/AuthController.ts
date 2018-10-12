@@ -1,4 +1,4 @@
-import {Request, Response} from 'express';
+import {Response} from 'express';
 import {
   Body, Delete, Post, JsonController, Req, HttpError, UseBefore, BodyParam, ForbiddenError,
   InternalServerError, BadRequestError, OnUndefined, Res
@@ -17,22 +17,16 @@ import config from '../config/main';
 export class AuthController {
 
   /**
-   * @api {post} /api/auth/login Login user
+   * @api {post} /api/auth/login Login user by responding with a httpOnly JWT cookie and the user's IUserModel data.
    * @apiName PostAuthLogin
    * @apiGroup Auth
    *
    * @apiParam {Request} request Login request (with email and password).
    *
-   * @apiSuccess {String} token Generated access token.
-   * @apiSuccess {String} mediaToken Generated access token for media.
    * @apiSuccess {IUserModel} user Authenticated user.
    *
    * @apiSuccessExample {json} Success-Response:
    *     {
-   *         "token": "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YTAzN2U2YTYwZjcyMjM2ZDhlN2M4MTMiLCJpYXQiOjE1
-   *         MTcyNTI0NDYsImV4cCI6MTUxNzI2MjUyNn0.b53laxHG-b6FbB7JP1GJsIgGWc3EUm0cTuufm1CKCCM",
-   *         "mediaToken": "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YTAzN2U2YTYwZjcyMjM2ZDhlN2M4MTMiLCJpYXQiOjE1
-   *         MTcyNTI0NDYsImV4cCI6MTUxNzI2MjUyNn0.b53laxHG-b6FbB7JP1GJsIgGWc3EUm0cTuufm1CKCCM",
    *         "user": {
    *             "_id": "5a037e6a60f72236d8e7c813",
    *             "updatedAt": "2018-01-08T19:24:26.522Z",
@@ -55,15 +49,12 @@ export class AuthController {
   @UseBefore(bodyParserJson(), passportLoginMiddleware) // We need body-parser for passport to find the credentials
   postLogin(@Req() request: any, @Res() response: Response) {
     const user: IUserModel = request.user;
-    const token = JwtUtils.generateToken(user);
-    response.cookie('token', token, {
+    response.cookie('token', JwtUtils.generateToken(user), {
       httpOnly: true,
       sameSite: true,
       // secure: true, // TODO Maybe make this configurable?
     });
     response.json({
-      token: 'JWT ' + JwtUtils.generateToken(user),
-      mediaToken: 'JWT ' + JwtUtils.generateToken(user, true),
       user: user.toObject()
     });
     return response;
