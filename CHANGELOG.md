@@ -11,12 +11,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 -->
 
 ## [NEXT]
-### Updates
-- Update insecure dependencies [#816](https://github.com/geli-lms/geli/issues/816)
-- Updated Frontend to angular6 [#716](https://github.com/geli-lms/geli/pull/766)
-- Update node version to 10.8.0 [#821](https://github.com/geli-lms/geli/pull/821)
-- Update README.md with latest information [#845](https://github.com/geli-lms/geli/pull/845)
-
 ### Added
 - Add cookie information [#565](https://github.com/geli-lms/geli/pull/565)
 - Course Progress can now be extracted into a csv-file. [#766](https://github.com/geli-lms/geli/pull/766)
@@ -65,6 +59,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Appended `'mediaToken'` to various file URLs via `JwtPipe`. [#729](https://github.com/geli-lms/geli/issues/729)
 - Remove winston dependency. [#806](https://github.com/geli-lms/geli/pull/806)
 - Moved all URL etc from utetrapp/geli and h-da/geli to current repo geli-lms/geli [#849](https://github.com/geli-lms/geli/pull/849)
+- Update insecure dependencies [#816](https://github.com/geli-lms/geli/issues/816)
+- Updated Frontend to angular6 [#716](https://github.com/geli-lms/geli/pull/766)
+- Update node version to 10.8.0 [#821](https://github.com/geli-lms/geli/pull/821)
+- Update README.md with latest information [#845](https://github.com/geli-lms/geli/pull/845)
 
 ### Fixed
 - Fixed broken notification settings. [#731](https://github.com/geli-lms/geli/issues/731)
