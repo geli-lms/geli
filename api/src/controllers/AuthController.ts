@@ -24,11 +24,14 @@ export class AuthController {
    * @apiParam {Request} request Login request (with email and password).
    *
    * @apiSuccess {String} token Generated access token.
+   * @apiSuccess {String} mediaToken Generated access token for media.
    * @apiSuccess {IUserModel} user Authenticated user.
    *
    * @apiSuccessExample {json} Success-Response:
    *     {
    *         "token": "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YTAzN2U2YTYwZjcyMjM2ZDhlN2M4MTMiLCJpYXQiOjE1
+   *         MTcyNTI0NDYsImV4cCI6MTUxNzI2MjUyNn0.b53laxHG-b6FbB7JP1GJsIgGWc3EUm0cTuufm1CKCCM",
+   *         "mediaToken": "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YTAzN2U2YTYwZjcyMjM2ZDhlN2M4MTMiLCJpYXQiOjE1
    *         MTcyNTI0NDYsImV4cCI6MTUxNzI2MjUyNn0.b53laxHG-b6FbB7JP1GJsIgGWc3EUm0cTuufm1CKCCM",
    *         "user": {
    *             "_id": "5a037e6a60f72236d8e7c813",
@@ -50,15 +53,20 @@ export class AuthController {
    */
   @Post('/login')
   @UseBefore(bodyParserJson(), passportLoginMiddleware) // We need body-parser for passport to find the credentials
-  postLogin(@Req() request: Request) {
-    const user = <IUserModel>(<any>request).user;
-
-    // See JwtUtils.ts (generateToken function) for a description of the mediaToken's purpose.
-    return {
+  postLogin(@Req() request: any, @Res() response: Response) {
+    const user: IUserModel = request.user;
+    const token = JwtUtils.generateToken(user);
+    response.cookie('token', token, {
+      httpOnly: true,
+      sameSite: true,
+      // secure: true, // TODO Maybe make this configurable?
+    });
+    response.json({
       token: 'JWT ' + JwtUtils.generateToken(user),
       mediaToken: 'JWT ' + JwtUtils.generateToken(user, true),
       user: user.toObject()
-    };
+    });
+    return response;
   }
 
   /**
