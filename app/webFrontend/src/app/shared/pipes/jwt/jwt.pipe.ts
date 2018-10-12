@@ -25,10 +25,8 @@ export class JwtPipe implements PipeTransform {
   };
 
   transform(url: string, type: string = 'media'): string {
-    const key = this.availableTypes[type];
-    const token = localStorage[key].split(' ')[1];
-    const delimiter = url.indexOf('?') === -1 ? '?' : '&';
-    return url + delimiter + 'jwt=' + token;
+    // FIXME This JwtPipe is now deprecated and will soon be removed entirely.
+    return url; // (That's why it doesn't do anything here.)
   }
 
 }
