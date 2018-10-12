@@ -85,6 +85,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Make e2e login test more stable. [#823](https://github.com/utetrapp/geli/pull/823) & [#824](https://github.com/utetrapp/geli/pull/824)
 - Remove warning from build (sentry.sh). [#830](https://github.com/utetrapp/geli/pull/830)
 - Fix broken condition (sentry.sh). [#832](https://github.com/utetrapp/geli/pull/832)
+- PDF Download Fix if text is empty + added path to local phantomJS. [#833](https://github.com/geli-lms/geli/issues/833)
 
 ### Security
 - Secured the static `'uploads'` route by introducing a special `'mediaToken'` with new JWT strategy & middleware. [#729](https://github.com/utetrapp/geli/issues/729)
