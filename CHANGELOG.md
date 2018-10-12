@@ -14,7 +14,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Updates
 - Update insecure dependencies [#816](https://github.com/geli/issues/816)
 - Updated Frontend to angular6 [#716](https://github.com/utetrapp/geli/pull/766)
-- update node version to 10.8.0 [#821](https://github.com/utetrapp/geli/pull/821)
+- Update node version to 10.8.0 [#821](https://github.com/utetrapp/geli/pull/821)
+- Update README.md with latest information [#845](https://github.com/geli-lms/geli/pull/845)
 
 ### Added
 - Add cookie information [#565]
