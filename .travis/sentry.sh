@@ -16,7 +16,8 @@ if [[ "$TRAVIS_PULL_REQUEST" == "false" && ("$TRAVIS_BRANCH" == "master" || "$TR
     export INSTALL_DIR=$(pwd)
     curl -sL https://sentry.io/get-cli/ | bash
 
-    if [ "$TRAVIS_BRANCH" -eq "master" ]; then SENTRY_PROJECT="production"; else SENTRY_PROJECT="staging"; fi
+    if [[ "${TRAVIS_BRANCH}" == "master" ]]; then SENTRY_PROJECT="production"; else SENTRY_PROJECT="staging"; fi
+    echo "+ Sentry Project: ${SENTRY_PROJECT}"
 
     echo "+ Creating Sentry release and uploading source maps"
     ./sentry-cli releases -o geli -p $SENTRY_PROJECT new $TRAVIS_COMMIT

@@ -7,11 +7,12 @@ import {ILectureModel, Lecture} from './Lecture';
 import {ILecture} from '../../../shared/models/ILecture';
 import {InternalServerError} from 'routing-controllers';
 import {IUser} from '../../../shared/models/IUser';
-import * as winston from 'winston';
 import {ObjectID} from 'bson';
 import {Directory} from './mediaManager/Directory';
 import {IProperties} from '../../../shared/models/IProperties';
 import {extractMongoId} from '../utilities/ExtractMongoId';
+import {ChatRoom, IChatRoomModel} from './ChatRoom';
+
 import {Picture} from './mediaManager/File';
 import {IPictureModel} from './mediaManager/Picture';
 import {IPicture} from '../../../shared/models/mediaManager/IPicture';
@@ -28,6 +29,7 @@ interface ICourseModel extends ICourse, mongoose.Document {
 
 interface ICourseMongoose extends mongoose.Model<ICourseModel> {
   exportPersonalData: (user: IUser) => Promise<ICourse>;
+  changeCourseAdminFromUser: (userFrom: IUser, userTo: IUser) => Promise<ICourseMongoose>;
 }
 
 let Course: ICourseMongoose;
@@ -88,7 +90,11 @@ const courseSchema = new mongoose.Schema({
     image: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Picture'
-    }
+    },
+    chatRooms: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'ChatRoom'
+    }]
   },
   {
     timestamps: true,
@@ -114,10 +120,32 @@ const courseSchema = new mongoose.Schema({
             ret.students = doc.students.map((user: IUserModel) => user.forUser(currentUser));
           }
         }
+
+        if (doc.populated('chatRooms') !== undefined) {
+          ret.chatRooms = ret.chatRooms.map((chatRoom: any) => {
+            return chatRoom.toString();
+          });
+        }
       }
     }
   }
 );
+
+courseSchema.pre('save', async function () {
+  const course = <ICourseModel>this;
+  if (this.isNew) {
+    const chatRoom: IChatRoomModel = await ChatRoom.create({
+      name: 'General',
+      description: 'This is a general chat for the course ' + course.name,
+      room: {
+        roomType: 'Course',
+        roomFor: course
+      }
+    });
+    course.chatRooms.push(chatRoom._id);
+    Object.assign(this, course);
+  }
+});
 
 // Cascade delete
 courseSchema.pre('remove', async function () {
@@ -136,7 +164,6 @@ courseSchema.pre('remove', async function () {
         await picture.remove();
     }
   } catch (error) {
-    winston.log('warn', 'course (' + localCourse._id + ') cloud not be deleted!');
     throw new Error('Delete Error: ' + error.toString());
   }
 });
@@ -177,8 +204,6 @@ courseSchema.methods.exportJSON = async function (sanitize: boolean = true, only
     if (lecture) {
       const lectureExport = await lecture.exportJSON();
       obj.lectures.push(lectureExport);
-    } else {
-      winston.log('warn', 'lecture(' + lectureId + ') was referenced by course(' + this._id + ') but does not exist anymore');
     }
   }
 
@@ -244,6 +269,9 @@ courseSchema.statics.exportPersonalData = async function(user: IUser) {
   }));
 };
 
+courseSchema.statics.changeCourseAdminFromUser = async function (userFrom: IUser, userTo: IUser) {
+  return Course.updateMany({courseAdmin: userFrom._id}, {courseAdmin: userTo._id});
+};
 
 courseSchema.methods.checkPrivileges = function (user: IUser) {
   const {userIsAdmin, ...userIs} = User.checkPrivileges(user);
@@ -296,14 +324,15 @@ courseSchema.methods.forView = function (): ICourseView {
   const {
     name, description,
     courseAdmin, teachers,
-    lectures
+    lectures, chatRooms
   } = this;
   return {
     _id: <string>extractMongoId(this._id),
     name, description,
     courseAdmin: User.forCourseView(courseAdmin),
     teachers: teachers.map((teacher: IUser) => User.forCourseView(teacher)),
-    lectures: lectures.map((lecture: any) => lecture.toObject())
+    lectures: lectures.map((lecture: any) => lecture.toObject()),
+    chatRooms: chatRooms.map((chatRoom: any) => chatRoom.toString())
   };
 };
 
@@ -329,6 +358,9 @@ courseSchema.methods.processLecturesFor = async function (user: IUser) {
   }));
   return this;
 };
+
+
+
 
 Course = mongoose.model<ICourseModel, ICourseMongoose>('Course', courseSchema);
 

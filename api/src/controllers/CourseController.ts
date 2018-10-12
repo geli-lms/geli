@@ -14,12 +14,12 @@ import {
 } from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import {errorCodes} from '../config/errorCodes';
+import config from '../config/main';
 
 import {ICourse} from '../../../shared/models/ICourse';
 import {ICourseDashboard} from '../../../shared/models/ICourseDashboard';
 import {ICourseView} from '../../../shared/models/ICourseView';
 import {IUser} from '../../../shared/models/IUser';
-import {ObsCsvController} from './ObsCsvController';
 import {Course} from '../models/Course';
 import {WhitelistUser} from '../models/WhitelistUser';
 import emailService from '../services/EmailService';
@@ -30,6 +30,7 @@ import {API_NOTIFICATION_TYPE_ALL_CHANGES, NotificationSettings} from '../models
 import {IWhitelistUser} from '../../../shared/models/IWhitelistUser';
 import {DocumentToObjectOptions} from 'mongoose';
 import * as fs from 'fs';
+import * as path from 'path';
 import ResponsiveImageService from '../services/ResponsiveImageService';
 import {IResponsiveImageData} from '../../../shared/models/IResponsiveImageData';
 
@@ -53,7 +54,7 @@ const uploadOptions = {
 const coursePictureUploadOptions = {
   storage: multer.diskStorage({
     destination: (req: any, file: any, cb: any) => {
-      cb(null, 'uploads/courses');
+      cb(null, path.join(config.uploadFolder, 'courses'));
     },
     filename: (req: any, file: any, cb: any) => {
       const id = req.params.id;
@@ -67,8 +68,6 @@ const coursePictureUploadOptions = {
 @JsonController('/courses')
 @UseBefore(passportJwtMiddleware)
 export class CourseController {
-
-  parser: ObsCsvController = new ObsCsvController();
 
   /**
    * @api {get} /api/courses/ Request courses of current user
@@ -595,7 +594,6 @@ export class CourseController {
    *      newlength: 10
    *    }
    *
-   * @apiError TypeError Only CSV files are allowed.
    * @apiError HttpError UID is not a number 1.
    * @apiError ForbiddenError Unauthorized user.
    */
@@ -603,24 +601,44 @@ export class CourseController {
   @Post('/:id/whitelist')
   async whitelistStudents(
     @Param('id') id: string,
-    @UploadedFile('file', {options: uploadOptions}) file: any,
+    @Body() whitelist: any[],
     @CurrentUser() currentUser: IUser) {
-    const name: string = file.originalname;
-    if (!name.endsWith('.csv')) {
-      throw new TypeError(errorCodes.upload.type.notCSV.code);
-    }
+
     const course = await Course.findById(id);
+
     if (!course.checkPrivileges(currentUser).userCanEditCourse) {
       throw new ForbiddenError();
     }
-    await course
-      .populate('whitelist')
-      .populate('students')
-      .execPopulate();
-    const buffer = <string> await this.parser.parseFile(file);
-    await this.parser.updateCourseFromBuffer(buffer, course);
+
+    if (!whitelist || whitelist.length === 0) {
+      throw new BadRequestError();
+    }
+
+    if (course.whitelist.length > 0) {
+      for (const wuser of course.whitelist) {
+        const whitelistUser = await WhitelistUser.findById(wuser);
+        if (whitelistUser) {
+          await whitelistUser.remove();
+        }
+      }
+    }
+
+    course.whitelist = [];
+
+    for (const whiteListUser of whitelist) {
+      const wUser = new WhitelistUser();
+      wUser.firstName = whiteListUser.firstName;
+      wUser.lastName = whiteListUser.lastName;
+      wUser.uid = whiteListUser.uid;
+      wUser.courseId = course._id;
+
+      await wUser.save();
+      course.whitelist.push(wUser._id);
+    }
+
     await course.save();
-    return {newlength: course.whitelist.length};
+
+    return whitelist;
   }
 
   /**

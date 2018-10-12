@@ -1,5 +1,6 @@
 import {ICourse} from '../../../../../../shared/models/ICourse';
 import {IFreeTextUnit} from '../../../../../../shared/models/units/IFreeTextUnit';
+import {IChatRoom} from '../../../../../../shared/models/IChatRoom';
 
 export class FreeTextUnit implements IFreeTextUnit {
   name: string;
@@ -14,6 +15,7 @@ export class FreeTextUnit implements IFreeTextUnit {
   weight: number;
   visible: boolean;
   unitCreator: any;
+  chatRoom: IChatRoom;
 
   markdown: string;
 

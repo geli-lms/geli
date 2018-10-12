@@ -1,5 +1,6 @@
 import {ICodeKataUnit} from '../../../../../../shared/models/units/ICodeKataUnit';
 import {ICourse} from '../../../../../../shared/models/ICourse';
+import {IChatRoom} from '../../../../../../shared/models/IChatRoom';
 
 export class CodeKataUnit implements ICodeKataUnit {
   name: string;
@@ -19,6 +20,7 @@ export class CodeKataUnit implements ICodeKataUnit {
   test: string;
   deadline: string;
   unitCreator: any;
+  chatRoom: IChatRoom;
 
   constructor(_course: ICourse) {
     this._course = _course;

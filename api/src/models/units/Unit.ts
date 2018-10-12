@@ -11,13 +11,16 @@ import {taskUnitSchema} from './TaskUnit';
 import {IUser} from '../../../../shared/models/IUser';
 import {IProgress} from '../../../../shared/models/progress/IProgress';
 import {User} from '../User';
+import {ChatRoom} from '../ChatRoom';
 
 interface IUnitModel extends IUnit, mongoose.Document {
   exportJSON: (onlyBasicData?: boolean) => Promise<IUnit>;
   calculateProgress: (users: IUser[], progress: IProgress[]) => Promise<IUnit>;
   populateUnit: () => Promise<IUnitModel>;
   secureData: (user: IUser) => Promise<IUnitModel>;
-  toFile: () => String;
+  toHtmlForIndividualPDF: () => String;
+  toHtmlForSinglePDF: () => String;
+  toHtmlForSinglePDFSolutions: () => String;
 }
 
 const unitSchema = new mongoose.Schema({
@@ -47,6 +50,10 @@ const unitSchema = new mongoose.Schema({
     unitCreator: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User'
+    },
+    chatRoom: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'ChatRoom'
     }
   },
   {
@@ -62,10 +69,28 @@ const unitSchema = new mongoose.Schema({
         if (ret._course) {
           ret._course = ret._course.toString();
         }
+
+        if (ret.hasOwnProperty('chatRoom') && ret.chatRoom) {
+          ret.chatRoom = ret.chatRoom.toString();
+        }
       }
     },
   }
 );
+
+
+unitSchema.pre('save', async function () {
+  const unit = <IUnitModel> this;
+  if (this.isNew) {
+   const chatRoom = await ChatRoom.create({
+      room: {
+        roomType: 'Unit',
+        roomFor: unit
+      }
+    });
+    this.set('chatRoom', chatRoom);
+  }
+});
 
 unitSchema.virtual('progressData', {
   ref: 'Progress',
@@ -85,7 +110,6 @@ unitSchema.methods.exportJSON = function (onlyBasicData: boolean= false) {
   delete obj.updatedAt;
   delete obj.unitCreator;
   delete obj.files;
-
 
   // custom properties
   delete obj._course;

@@ -15,7 +15,7 @@ import {ICodeKataModel} from '../../src/models/units/CodeKataUnit';
 import {ICodeKataUnit} from '../../../shared/models/units/ICodeKataUnit';
 import {ITaskUnitModel} from '../../src/models/units/TaskUnit';
 import {ITaskUnit} from '../../../shared/models/units/ITaskUnit';
-import * as winston from 'winston';
+
 import {API_NOTIFICATION_TYPE_ALL_CHANGES, NotificationSettings} from '../../src/models/NotificationSettings';
 import {Notification} from '../../src/models/Notification';
 import {WhitelistUser} from '../../src/models/WhitelistUser';
@@ -97,7 +97,7 @@ describe('Export', async () => {
             break;
           default:
             // should this fail the test?
-            winston.log('warn', 'export for \'' + unit.type + '\' is not completly tested');
+            process.stderr.write('export for "' + unit.type + '" is not completly tested');
             break;
         }
       }
@@ -153,10 +153,12 @@ describe('Export', async () => {
 
   describe(`GET ${BASE_URL}/user`, async () => {
     it('should export student data', async () => {
-      const student = await FixtureUtils.getRandomStudent();
       const course1 = await FixtureUtils.getRandomCourse();
       const course2 = await FixtureUtils.getRandomCourse();
-
+      const taskUnit = <ITaskUnitModel>await Unit.findOne({progressable: true, __t: 'task'});
+      const lecture = await Lecture.findOne({units: { $in: [ taskUnit._id ] }});
+      const course = await Course.findOne({lectures: { $in: [ lecture._id ] }});
+      const student = await User.findOne({_id: { $in: course.students}});
 
       await new NotificationSettings({
         'user': student, 'course': course1,
@@ -179,6 +181,7 @@ describe('Export', async () => {
         changedCourse: course2,
         text: 'blubba blubba'
       }).save();
+
 
       await new WhitelistUser({
         firstName: student.profile.firstName,
@@ -208,7 +211,7 @@ describe('Export', async () => {
 
 
     it('should export admin data', async () => {
-      const admin = await FixtureUtils.getRandomStudent();
+      const admin = await FixtureUtils.getRandomAdmin();
 
       const result = await chai.request(app)
         .get(`${BASE_URL}/user`)

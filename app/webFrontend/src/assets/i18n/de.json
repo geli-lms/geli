@@ -6,6 +6,16 @@
       "toUseYourAccount": ", um den Account zu nutzen."
     }
   },
+  "admin": {
+    "cache": {
+      "clear": {
+        "failed": "Fehler beim Löschen des Server-Caches",
+        "label": "Lösche Cache",
+        "tooltip": "Dies kann laufende Download-Anfragen stören!"
+      },
+      "header": "Server Cache Steuerung"
+    }
+  },
   "auth": {
     "changePassword": "Passwort ändern",
     "confirmPassword": "Passwort bestätigen",
@@ -82,6 +92,7 @@
     "edit": "Bearbeiten",
     "editProfile": "Profil bearbeiten",
     "exportProfile": "Profildaten exportieren",
+    "deleteProfile": "Profildaten löschen",
     "email": "E-Mail",
     "export": "Export",
     "folder": "Ordner",
@@ -96,6 +107,7 @@
     "notifications": "Benachrichtigungen",
     "media" : "Medien",
     "members" : "Mitglieder",
+    "misc": "Sonstiges",
     "ok": "OK",
     "open" : "Öffnen",
     "openInTab" : "Im neuen Tab öffnen",
@@ -142,7 +154,9 @@
       "passwordsMatch": "Die Passwörter stimmen nicht überein.",
       "required": "Eingabe notwendig"
     },
-    "videos": "Videos"
+    "videos": "Videos",
+    "line": "Zeile",
+    "errors": "Fehler"
   },
   "course": {
     "delete": "Kurs löschen",
@@ -161,6 +175,10 @@
       "canSeenByStudents": "Kurs ist für Studenten sichtbar.",
       "downloadHelpText": "Wähle die Units oder Files aus die als zip heruntergeladen werden sollen.",
       "downloadNoFiles": "No Coursematerial aviable for download!",
+      "IndividualPDF":"individuelle PDFs",
+      "IndividualPDFExplanation":"eine PDF pro Unit",
+      "SinglePDF":"eine PDF",
+      "SinglePDFExplanation":"eine PDF mit allem ausgewählten",
       "editCourse": "Kurs bearbeiten",
       "enterAccessKey": "Bitte geben Sie den Einschreibeschlüssel dieses Kurses ein.",
       "enterAccessKeyForStudents": "Geben Sie einen Einschreibeschlüssel für die Studenten ein.",
@@ -186,7 +204,13 @@
       "yourCourseProgress": "Ihr Kursfortschritt",
       "whitelist": "Freigabeliste",
       "noVideosAttached": "Es gibt keine Videos zu diesem Kurs",
-      "noFilesAttached": "Es gibt keine Dateien zu diesem Kurs"
+      "noFilesAttached": "Es gibt keine Dateien zu diesem Kurs",
+      "removeUnwantedUsers": "Ungewollte Nutzer entfernen",
+      "createWhitelist": "Whitelist erstellen",
+      "openWhitelistDialog": "Auswahldialog öffnen",
+      "whitelistCreated": "Die Whitelist wurde erstellt. Vergessen Sie nicht den Kurs zu speichern.",
+      "whitelistNotReadable": "Die Whitelist-Datei konnte nicht gelesen werden. Haben Sie die richtige Datei ausgewählt?",
+      "whitelistNoStudents": "In der Whitelist-Datei sind keine Stundenten, die importiert werden können."
     },
     "tooltip" : {
       "add": "Kurs hinzufügen",
@@ -281,6 +305,11 @@
     "privacy": "Datenschutz",
     "userSettings": "Einstellungen"
   },
+  "messaging": {
+    "inputHintText": "Nachricht schreiben",
+    "sendIconTooltip": "Senden",
+    "emojiIconTooltip": "Show/ Hide Emoji Picker"
+  },
   "notifications": {
     "text": {
       "clearAll": "Alle löschen",
@@ -355,7 +384,8 @@
     },
     "tooltip":{
       "deleteUsers": "Ausgewählte Mitglieder entfernen.",
-      "toggleMembers" : "Alle Benutzer auswählen"
+      "toggleMembers" : "Alle Benutzer auswählen",
+      "doesNotExist": "Nutzer existiert nicht"
     }
   }
 }

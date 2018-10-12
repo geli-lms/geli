@@ -19,7 +19,19 @@
       </mat-list>
     </mat-card-content>
     <mat-card-actions>
-      <button mat-raised-button color="primary" [disabled]="this.disableDownloadButton" (click)="downloadAndClose()">
+      <div class="radio-buttons">
+        <mat-radio-group [(ngModel)]="radioSelect">
+          <mat-radio-button class="radio-button" value="Individual">
+            {{'course.text.IndividualPDF' | translate}}
+            <p class="radio-info">{{'course.text.IndividualPDFExplanation' | translate}}</p>
+          </mat-radio-button>
+          <mat-radio-button class="radio-button" value="Single">
+            {{'course.text.SinglePDF' | translate}}
+            <p class="radio-info">{{'course.text.SinglePDFExplanation' | translate}}</p>
+          </mat-radio-button>
+        </mat-radio-group>
+      </div>
+      <button mat-raised-button color="primary" [disabled]="this.disableDownloadButton" (click)="downloadAndClosePDF()">
         {{ 'common.download' | translate }}
       </button>
       <button mat-button (click)="uncheckAll()">Reset</button>
@@ -29,7 +41,4 @@
       </ng-container>
     </mat-card-actions>
   </mat-card>
-</div>
-<div *ngIf="!this.checkForEmptyLectures()">
-  <h2>There are no Units Attached to this course yet!</h2>
 </div>

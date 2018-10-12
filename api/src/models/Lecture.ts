@@ -5,7 +5,6 @@ import {IUnit} from '../../../shared/models/units/IUnit';
 import {IUser} from '../../../shared/models/IUser';
 import {InternalServerError} from 'routing-controllers';
 import {Course} from './Course';
-import * as winston from 'winston';
 
 interface ILectureModel extends ILecture, mongoose.Document {
   exportJSON: () => Promise<ILecture>;
@@ -67,8 +66,6 @@ lectureSchema.methods.exportJSON = async function () {
     if (unit) {
       const unitExport = await unit.exportJSON();
       obj.units.push(unitExport);
-    } else {
-      winston.log('warn', 'unit(' + unitId + ') was referenced by lecture(' + this._id + ') but does not exist anymore');
     }
   }
 

@@ -7,6 +7,7 @@ import {RouterModule} from '@angular/router';
 import {SharedModule} from '../shared/shared.module';
 import {AceEditorModule} from 'ng2-ace-editor';
 import {AdminRoutingModule} from './admin-routing.module';
+import {AdminMiscComponent} from './admin-misc/admin-misc.component';
 import { ConfigurablePagesComponent } from './configurable-pages/configurable-pages.component';
 import { UserRoleDropdownComponent } from './user-role-dropdown/user-role-dropdown.component';
 import {ConfigurablePagesFormComponent} from './configurable-pages/configurable-pages-form/configurable-pages-form.component';
@@ -24,6 +25,7 @@ import {ConfigurablePagesFormComponent} from './configurable-pages/configurable-
   declarations: [
     AdminComponent,
     UserAdminComponent,
+    AdminMiscComponent,
     ConfigurablePagesComponent,
     ConfigurablePagesFormComponent,
     UserRoleDropdownComponent

@@ -68,6 +68,10 @@ export const errorCodes = {
       code: 'noOtherAdmins',
       text: 'There are no other users with admin privileges.'
     },
+    cantDeleteOtherUsers: {
+      code: 'cantDeleteOtherUsers',
+      text: 'Users can only delete themself.'
+    },
     userNotFound: {
       code: 'user not found',
       text: 'User was not found.',
@@ -94,6 +98,16 @@ export const errorCodes = {
       regex: '^(?=.*[a-zA-Z])(?=.*[$%&§=#!?*()|0-9]).{8,}$'
     }
   },
+  file: {
+    forbiddenPath: {
+      code: 'forbiddenPath',
+      text: 'Access to requested path is forbidden.'
+    },
+    fileNotFound: {
+      code: 'fileNotFound',
+      text: 'Could not find requested file.'
+    }
+  },
   upload: {
     type: {
       notCSV: {
@@ -112,6 +126,12 @@ export const errorCodes = {
     empty: {
       code: 'emptyQuery',
       text: 'Query was empty.'
+    }
+  },
+  misc: {
+    mediaTokenInsufficient: {
+      code: 'mediaTokenInsufficient',
+      text: 'Can\'t use media token for this request.'
     }
   }
 };
