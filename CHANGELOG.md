@@ -18,7 +18,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Update README.md with latest information [#845](https://github.com/geli-lms/geli/pull/845)
 
 ### Added
-- Add cookie information [#565]
+- Add cookie information [#565](https://github.com/utetrapp/geli/pull/565)
 - Course Progress can now be extracted into a csv-file. [#766](https://github.com/utetrapp/geli/pull/766)
 - Added more EN/DE translation [#753](https://github.com/utetrapp/geli/issues/753)
 - Use i18n for new course view [#763](https://github.com/utetrapp/geli/pull/763)
@@ -42,7 +42,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Add Test if error when invalid user/pass [#825](https://github.com/utetrapp/geli/pull/825)
 
 ### Changed
-- Minor Fixes and Adaptations and Mergefailure fixes. [#785] (https://github.com/utetrapp/geli/issues/785)
+- Minor Fixes and Adaptations and Mergefailure fixes. [#785](https://github.com/utetrapp/geli/issues/785)
 - rework existing translation
 - add vars to html-files
 - add translations to resource files
@@ -95,7 +95,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [[0.7.0](https://github.com/utetrapp/geli/releases/tag/v0.7.0)] - 2018-05-05 - SS 18 intermediate Release
 ### Added
-- Added a Dedicated Filefiew and restyled the Course section. [#599] (https://github.com/utetrapp/geli/issues/599)
+- Added a Dedicated Filefiew and restyled the Course section. [#599](https://github.com/utetrapp/geli/issues/599)
 - Added the possibility to sort all courses alphabetically. [#567](https://github.com/utetrapp/geli/issues/567)
 - Added a box for information on the homescreen. [#216](https://github.com/utetrapp/geli/issues/216)
 - Added an account activation resend feature. [#601](https://github.com/utetrapp/geli/issues/601)
@@ -122,7 +122,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Changed the text in download course[#718](https://github.com/utetrapp/geli/pull/718)
 - Removed firstname from resend activation feature and change button positioning. [#711](https://github.com/utetrapp/geli/issues/711)
 - Refactored register and resend activation to use geli email validator with top level domain check. [#713](https://github.com/utetrapp/geli/issues/713)
-- Refactored the uploadform [#693] (https://github.com/utetrapp/geli/issues/693)
+- Refactored the uploadform [#693](https://github.com/utetrapp/geli/issues/693)
 
 ### Fixed
 - Fixed route `/users/roles` [#204](https://github.com/utetrapp/geli/issues/204)
