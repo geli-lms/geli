@@ -18,7 +18,7 @@ export class ChatService {
       path: '/chat',
       query: {
         room: room,
-        authToken: this.authenticationService.token
+        cookie: 'token'
       }
     });
   }
