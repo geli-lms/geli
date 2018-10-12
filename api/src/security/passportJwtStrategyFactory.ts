@@ -3,10 +3,12 @@ import {UnauthorizedError} from 'routing-controllers';
 import config from '../config/main';
 import {errorCodes} from '../config/errorCodes';
 import {User} from '../models/User';
+import * as cookie from 'cookie';
 
 interface PassportJwtStrategyFactoryOptions {
   name?: String;
   forbidMediaTokens?: Boolean;
+  extractJwtFromCookie?: Boolean;
   extractJwtFromAuthHeaderWithScheme?: Boolean;
   extractJwtFromUrlQueryParameter?: Boolean;
 }
@@ -14,10 +16,19 @@ interface PassportJwtStrategyFactoryOptions {
 function passportJwtStrategyFactory({
   name = 'jwt',
   forbidMediaTokens = true,
+  extractJwtFromCookie = true,
   extractJwtFromAuthHeaderWithScheme = true,
   extractJwtFromUrlQueryParameter = false,
 }: PassportJwtStrategyFactoryOptions = {}) {
   const jwtFromRequestLayers: JwtFromRequestFunction[] = [];
+  if (extractJwtFromCookie) {
+    // ATM this is the only usage of the 'cookie' package, we could write specialized code alternatively.
+    jwtFromRequestLayers.push((req) =>
+      req &&
+      typeof req.headers.cookie === 'string' &&
+      cookie.parse(req.headers.cookie).token
+    );
+  }
   if (extractJwtFromAuthHeaderWithScheme) {
     // Telling Passport to check authorization headers for JWT
     // TODO: Replace with bearer method to be compliant to RFC 6750
