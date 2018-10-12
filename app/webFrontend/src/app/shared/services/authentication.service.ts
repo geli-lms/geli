@@ -71,6 +71,7 @@ export class AuthenticationService {
     this.mediaToken = null;
     localStorage.removeItem('token');
     localStorage.removeItem('mediaToken');
+    this.http.delete(AuthenticationService.API_URL + 'auth/logout').toPromise();
 
     this.userService.unsetUser();
   }
