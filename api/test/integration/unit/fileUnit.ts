@@ -38,7 +38,7 @@ describe('FileUnit', () => {
   //       .post(BASE_URL)
   //       .field('data', JSON.stringify(data))
   //       .attach('file', fs.readFileSync('fixtures/binaryData/testvideo.mp4'), 'testvideo.mp4')
-  //       .set('Authorization', `JWT ${JwtUtils.generateToken(courseAdmin)}`);
+  //       .set('Cookie', `token=${JwtUtils.generateToken(courseAdmin)}`);
 
   //     res.status.should.be.equal(200);
   //     res.body.name.should.be.equal('Test Upload');

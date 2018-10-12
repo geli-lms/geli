@@ -41,7 +41,7 @@ describe('ProgressController', () => {
 
       const res = await chai.request(app)
         .post(BASE_URL)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(student)}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(student)}`)
         .send(newProgress);
 
       res.status.should.be.equal(200);
@@ -72,7 +72,7 @@ describe('ProgressController', () => {
 
       const res = await chai.request(app)
         .post(BASE_URL)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(student)}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(student)}`)
         .send(newProgress);
 
       res.status.should.be.equal(200);
@@ -103,7 +103,7 @@ describe('ProgressController', () => {
 
       const res = await chai.request(app)
         .post(BASE_URL)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(student)}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(student)}`)
         .send(newProgress)
         .catch(err => err.response);
 
@@ -142,7 +142,7 @@ describe('ProgressController', () => {
 
       const res = await chai.request(app)
         .put(`${BASE_URL}/${progress._id.toString()}`)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(student)}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(student)}`)
         .send(newProgress);
 
       res.status.should.be.equal(200);
@@ -184,7 +184,7 @@ describe('ProgressController', () => {
 
       const res = await chai.request(app)
         .put(`${BASE_URL}/${progress._id.toString()}`)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(student)}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(student)}`)
         .send(newProgress);
 
       res.status.should.be.equal(200);
@@ -226,7 +226,7 @@ describe('ProgressController', () => {
 
       const res = await chai.request(app)
         .put(`${BASE_URL}/${progress._id.toString()}`)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(student)}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(student)}`)
         .send(newProgress)
         .catch(err => err.response);
 

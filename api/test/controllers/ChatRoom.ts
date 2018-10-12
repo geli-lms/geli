@@ -35,7 +35,7 @@ describe('ChatRoom', async () => {
 
       const result = await chai.request(app)
         .get(BASE_URL + '/507f1f77bcf86cd799439011')
-        .set('Authorization', `JWT ${JwtUtils.generateToken(student)}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(student)}`)
         .catch((err) => err.response);
 
       expect(result).to.have.status(404);
@@ -50,7 +50,7 @@ describe('ChatRoom', async () => {
 
       const result = await chai.request(app)
         .get(BASE_URL + '/' + roomId)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(student)}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(student)}`)
         .catch((err) => err.response);
 
       expect(result).to.have.status(200);

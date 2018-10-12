@@ -45,7 +45,7 @@ describe('Export', async () => {
         let unitJson: IUnit;
         const exportResult = await chai.request(app)
           .get(`${BASE_URL}/unit/${unit._id}`)
-          .set('Authorization', `JWT ${JwtUtils.generateToken(admin)}`)
+          .set('Cookie', `token=${JwtUtils.generateToken(admin)}`)
           .catch((err) => err.response);
         exportResult.status.should.be.equal(200, 'failed to export ' + unit.name);
         unitJson = exportResult.body;
@@ -110,7 +110,7 @@ describe('Export', async () => {
         let lectureJson: ILecture;
         const exportResult = await chai.request(app)
           .get(`${BASE_URL}/lecture/${lecture._id}`)
-          .set('Authorization', `JWT ${JwtUtils.generateToken(admin)}`)
+          .set('Cookie', `token=${JwtUtils.generateToken(admin)}`)
           .catch((err) => err.response);
         exportResult.status.should.be.equal(200, 'failed to export ' + lecture.name);
         lectureJson = exportResult.body;
@@ -132,7 +132,7 @@ describe('Export', async () => {
         let courseJson: ICourse;
         const exportResult = await chai.request(app)
           .get(`${BASE_URL}/course/${course._id}`)
-          .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
+          .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
           .catch((err) => err.response);
         exportResult.status.should.be.equal(200, 'failed to export ' + course.name);
         courseJson = exportResult.body;
@@ -192,7 +192,7 @@ describe('Export', async () => {
 
       const result = await chai.request(app)
         .get(`${BASE_URL}/user`)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(student)}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(student)}`)
         .catch((err) => err.response);
 
       expect(result).to.have.status(200);
@@ -203,7 +203,7 @@ describe('Export', async () => {
 
       const result = await chai.request(app)
         .get(`${BASE_URL}/user`)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
         .catch((err) => err.response);
 
       expect(result).to.have.status(200);
@@ -215,7 +215,7 @@ describe('Export', async () => {
 
       const result = await chai.request(app)
         .get(`${BASE_URL}/user`)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(admin)}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(admin)}`)
         .catch((err) => err.response);
 
       expect(result).to.have.status(200);

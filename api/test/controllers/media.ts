@@ -43,7 +43,7 @@ describe('Media', async () => {
 
       const result = await chai.request(app)
         .get(`${BASE_URL}/directory/${rootDirectory.id}`)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
         .catch((err) => err.response);
 
       result.status.should.be.equal(200,
@@ -78,7 +78,7 @@ describe('Media', async () => {
 
       const result = await chai.request(app)
         .get(`${BASE_URL}/directory/${rootDirectory.id}/lazy`)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
         .catch((err) => err.response);
 
       result.status.should.be.equal(200,
@@ -113,7 +113,7 @@ describe('Media', async () => {
 
       const result = await chai.request(app)
         .get(`${BASE_URL}/file/${file.id}`)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
         .catch((err) => err.response);
 
       result.status.should.be.equal(200,
@@ -137,7 +137,7 @@ describe('Media', async () => {
 
       const result = await chai.request(app)
         .post(`${BASE_URL}/directory`)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
         .send(rootDirectory)
         .catch((err) => err.response);
 
@@ -164,7 +164,7 @@ describe('Media', async () => {
 
       const result = await chai.request(app)
         .post(`${BASE_URL}/directory/${rootDirectory._id}`)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
         .send(subDirectory)
         .catch((err) => err.response);
 
@@ -196,7 +196,7 @@ describe('Media', async () => {
 
       const result = await chai.request(app)
         .post(`${BASE_URL}/file/${rootDirectory._id}`)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
         .attach('file', testFile, testFileName)
         .catch((err) => err.response);
 
@@ -229,7 +229,7 @@ describe('Media', async () => {
 
       const result = await chai.request(app)
         .post(`${BASE_URL}/file/${rootDirectory._id}`)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
         .attach('file', testFile, testFileName)
         .catch((err) => err.response);
 
@@ -264,7 +264,7 @@ describe('Media', async () => {
 
       const result = await chai.request(app)
         .put(`${BASE_URL}/directory/${rootDirectory._id}`)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
         .send(renamedDirectory)
         .catch((err) => err.response);
 
@@ -295,7 +295,7 @@ describe('Media', async () => {
 
       const result = await chai.request(app)
         .put(`${BASE_URL}/file/${file._id}`)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
         .send(renamedFile)
         .catch((err) => err.response);
 
@@ -324,7 +324,7 @@ describe('Media', async () => {
 
       const result = await chai.request(app)
         .del(`${BASE_URL}/directory/${rootDirectory._id}`)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
         .catch((err) => err.response);
 
       result.status.should.be.equal(200,
@@ -347,7 +347,7 @@ describe('Media', async () => {
 
       const result = await chai.request(app)
         .del(`${BASE_URL}/directory/${rootDirectory._id}`)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
         .catch((err) => err.response);
 
       result.status.should.be.equal(200,
@@ -379,7 +379,7 @@ describe('Media', async () => {
 
       const result = await chai.request(app)
         .del(`${BASE_URL}/directory/${rootDirectory._id}`)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
         .catch((err) => err.response);
 
       result.status.should.be.equal(200,
@@ -406,7 +406,7 @@ describe('Media', async () => {
 
       const result = await chai.request(app)
         .del(`${BASE_URL}/file/${file._id}`)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
         .catch((err) => err.response);
 
       result.status.should.be.equal(200,
@@ -422,7 +422,7 @@ describe('Media', async () => {
 
       const result = await chai.request(app)
         .del(`${BASE_URL}/directory/507f1f77bcf86cd799439011`)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
         .catch((err) => err.response);
 
       result.status.should.be.equal(404);
@@ -433,7 +433,7 @@ describe('Media', async () => {
 
       const result = await chai.request(app)
         .del(`${BASE_URL}/file/507f1f77bcf86cd799439011`)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
         .catch((err) => err.response);
 
       result.status.should.be.equal(404);
