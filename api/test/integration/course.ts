@@ -384,7 +384,7 @@ describe('Course', () => {
       should.not.exist(deletedCourse, 'Course does still exist');
     });
 
-    it('should fail because the user is not authorize', async () => {
+    it('should fail because the user is not authorized', async () => {
       const course = await FixtureUtils.getRandomCourse();
 
       const res = await chai.request(app)
