@@ -7,7 +7,7 @@
             <ng-container *ngIf="unit.fileUnitType == 'file'">
               <mat-list-item>
                 <mat-icon mat-list-icon>{{ fileIcon.fileToIcon(fileUnit) }}</mat-icon>
-                <a href="{{'/api/uploads/' + fileUnit.link | jwt}}" download="{{fileUnit.name}}">
+                <a href="{{'/api/uploads/' + fileUnit.link}}" download="{{fileUnit.name}}">
                   <span>{{fileUnit.name}}</span>
                 </a>
               </mat-list-item>

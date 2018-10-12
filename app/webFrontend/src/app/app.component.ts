@@ -6,7 +6,6 @@ import {Router} from '@angular/router';
 import {APIInfoService} from './shared/services/data.service';
 import {APIInfo} from './models/APIInfo';
 import {isNullOrUndefined} from 'util';
-import {JwtPipe} from './shared/pipes/jwt/jwt.pipe';
 import {RavenErrorHandler} from './shared/services/raven-error-handler.service';
 import {SnackBarService} from './shared/services/snack-bar.service';
 import {ThemeService} from './shared/services/theme.service';
@@ -34,7 +33,6 @@ export class AppComponent implements OnInit {
               private snackBar: SnackBarService,
               private themeService: ThemeService,
               public translate: TranslateService,
-              private jwtPipe: JwtPipe,
               private domSanitizer: DomSanitizer) {
     translate.setDefaultLang('en');
 
@@ -72,8 +70,7 @@ export class AppComponent implements OnInit {
       }
 
       actualProfilePicturePath = '/api/' + actualProfilePicturePath;
-      const urlJwt = this.jwtPipe.transform(actualProfilePicturePath);
-      this.avatarBackgroundImage = this.domSanitizer.bypassSecurityTrustStyle(`url(${urlJwt})`);
+      this.avatarBackgroundImage = this.domSanitizer.bypassSecurityTrustStyle(`url(${actualProfilePicturePath})`);
     });
   }
 
