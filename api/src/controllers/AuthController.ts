@@ -1,6 +1,6 @@
 import {Request, Response} from 'express';
 import {
-  Body, Post, JsonController, Req, HttpError, UseBefore, BodyParam, ForbiddenError,
+  Body, Delete, Post, JsonController, Req, HttpError, UseBefore, BodyParam, ForbiddenError,
   InternalServerError, BadRequestError, OnUndefined, Res
 } from 'routing-controllers';
 import {json as bodyParserJson} from 'body-parser';
@@ -66,6 +66,21 @@ export class AuthController {
       mediaToken: 'JWT ' + JwtUtils.generateToken(user, true),
       user: user.toObject()
     });
+    return response;
+  }
+
+  /**
+   * @api {delete} /api/auth/logout Logout user by clearing the httpOnly token cookie.
+   * @apiName AuthLogout
+   * @apiGroup Auth
+   *
+   * @apiSuccessExample {json} Success-Response:
+   *      {}
+   */
+  @Delete('/logout')
+  logout(@Res() response: Response) {
+    response.clearCookie('token');
+    response.json({});
     return response;
   }
 
