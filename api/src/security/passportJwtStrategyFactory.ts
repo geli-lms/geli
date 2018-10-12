@@ -1,13 +1,10 @@
 import {ExtractJwt, JwtFromRequestFunction, Strategy as JwtStrategy, StrategyOptions, VerifiedCallback} from 'passport-jwt';
-import {UnauthorizedError} from 'routing-controllers';
 import config from '../config/main';
-import {errorCodes} from '../config/errorCodes';
 import {User} from '../models/User';
 import * as cookie from 'cookie';
 
 interface PassportJwtStrategyFactoryOptions {
   name?: String;
-  forbidMediaTokens?: Boolean;
   extractJwtFromCookie?: Boolean;
   extractJwtFromAuthHeaderWithScheme?: Boolean;
   extractJwtFromUrlQueryParameter?: Boolean;
@@ -15,9 +12,8 @@ interface PassportJwtStrategyFactoryOptions {
 
 function passportJwtStrategyFactory({
   name = 'jwt',
-  forbidMediaTokens = true,
   extractJwtFromCookie = true,
-  extractJwtFromAuthHeaderWithScheme = true,
+  extractJwtFromAuthHeaderWithScheme = false,
   extractJwtFromUrlQueryParameter = false,
 }: PassportJwtStrategyFactoryOptions = {}) {
   const jwtFromRequestLayers: JwtFromRequestFunction[] = [];
@@ -53,9 +49,6 @@ function passportJwtStrategyFactory({
     secretOrKey: config.secret  // Telling Passport where to find the secret
   };
   const verify: VerifiedCallback = async (payload, done) => {
-    if (forbidMediaTokens && payload.isMediaToken) {
-      done(new UnauthorizedError(errorCodes.misc.mediaTokenInsufficient.code), false);
-    }
     try {
       if (await User.findById(payload._id)) {
         done(null, {tokenPayload: payload});
