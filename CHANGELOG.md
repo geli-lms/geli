@@ -40,12 +40,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Add vars to HTML-files.
 - Add translations to resource files.
 - Include translation for components.
-- Migrate MatSnackBar to SnackBarService. [#724](https://github.com/geli-lms/geli/pull/724)
+- Migrate MatSnackBar to SnackBarService. [#724](https://github.com/geli-lms/geli/pull/724) [#730](https://github.com/geli-lms/geli/pull/730)
 - Reload user list after deleting an account. [#724](https://github.com/geli-lms/geli/pull/724)
 - Validate form before submit when creating a new course. [#724](https://github.com/geli-lms/geli/pull/724)
 - Validate :id for CourseController details route. [#724](https://github.com/geli-lms/geli/pull/724)
 - Added search function for available courses. [#723](https://github.com/geli-lms/geli/issues/723)
-- Another MatSnackBar to SnackBarService migration. [#730](https://github.com/geli-lms/geli/pull/730)
 - `getNotificationSettings` does not create new notification settings. [#731](https://github.com/geli-lms/geli/issues/731)
 - Remove `isCourseTeacherOrAdmin` and `isMemberOfCourse`from UserService. [#731](https://github.com/geli-lms/geli/issues/731)
 - Refactored save mechanism of unit edit form. [#532](https://github.com/geli-lms/geli/issues/532)
