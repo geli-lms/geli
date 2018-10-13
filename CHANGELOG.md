@@ -35,10 +35,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
 - Minor fixes and adaptations and merge-failure fixes. [#785](https://github.com/geli-lms/geli/issues/785)
-- Reworked the existing translation.
-- Added vars to HTML-files.
-- Added translations to resource files.
-- Include translation for components.
+- Reworked existing translations. [#753](https://github.com/geli-lms/geli/issues/753)
 - Migrate `MatSnackBar` to `SnackBarService`. [#724](https://github.com/geli-lms/geli/pull/724) [#730](https://github.com/geli-lms/geli/pull/730)
 - Reload user list after deleting an account. [#724](https://github.com/geli-lms/geli/pull/724)
 - Validate form before submit when creating a new course. [#724](https://github.com/geli-lms/geli/pull/724)
