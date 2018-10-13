@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [NEXT]
 ### Updates
+- Adjusted nginx config in web-frontend for ws-chat [#839](https://github.com/geli-lms/geli/issues/839)
 - Update insecure dependencies [#816](https://github.com/geli-lms/geli/issues/816)
 - Updated Frontend to angular6 [#716](https://github.com/geli-lms/geli/pull/766)
 - Update node version to 10.8.0 [#821](https://github.com/geli-lms/geli/pull/821)
