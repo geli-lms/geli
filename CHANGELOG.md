@@ -42,22 +42,24 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Validate ID of the `CourseController` `/api/courses/:id` route. [#724](https://github.com/geli-lms/geli/pull/724)
 - Added search function for available courses. [#723](https://github.com/geli-lms/geli/issues/723)
 - `getNotificationSettings` does not create new notification settings. [#731](https://github.com/geli-lms/geli/issues/731)
-- Remove `isCourseTeacherOrAdmin` and `isMemberOfCourse` from `UserService`. [#731](https://github.com/geli-lms/geli/issues/731)
 - Refactored save mechanism of unit edit form. [#532](https://github.com/geli-lms/geli/issues/532)
 - Moved the 'create course' button into a `MatDialog`. [#725](https://github.com/geli-lms/geli/issues/725)
 - Update `bcrypt` dependency. [#774](https://github.com/geli-lms/geli/pull/774)
-- Remove `fs-extra` dependency. [#780](https://github.com/geli-lms/geli/pull/780)
 - Use `path`-module to extract extensions from filenames. [#773](https://github.com/geli-lms/geli/pull/773)
 - Add the possibility to add files directly in the file unit. [#728](https://github.com/geli-lms/geli/issues/728)
 - Update validator dependency. [#791](https://github.com/geli-lms/geli/pull/791)
 - Appended `'mediaToken'` to various file URLs via `JwtPipe`. [#729](https://github.com/geli-lms/geli/issues/729)
-- Remove `winston` dependency. [#806](https://github.com/geli-lms/geli/pull/806)
 - Moved all URL etc. from `utetrapp/geli` and `h-da/geli` to current repo `geli-lms/geli`. [#849](https://github.com/geli-lms/geli/pull/849)
 - Adjusted `nginx` config in web-frontend for `ws-chat`. [#839](https://github.com/geli-lms/geli/issues/839)
 - Update insecure dependencies. [#816](https://github.com/geli-lms/geli/issues/816)
 - Updated frontend to `Angular 6`. [#716](https://github.com/geli-lms/geli/pull/766)
 - Update `Node.js` version to `10.8.0`. [#821](https://github.com/geli-lms/geli/pull/821)
 - Update `README.md` with latest information. [#845](https://github.com/geli-lms/geli/pull/845)
+
+### Removed
+- `isCourseTeacherOrAdmin` and `isMemberOfCourse` from `UserService`. [#731](https://github.com/geli-lms/geli/issues/731)
+- `fs-extra` dependency. [#780](https://github.com/geli-lms/geli/pull/780)
+- `winston` dependency. [#806](https://github.com/geli-lms/geli/pull/806)
 
 ### Fixed
 - Unit export quickfix. [#42](https://github.com/geli-lms/geli/issues/42)
