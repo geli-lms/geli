@@ -80,7 +80,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - `picture.path` backslash issue / regression. [#729](https://github.com/geli-lms/geli/issues/729)
 - Remaining hard-coded `'upload'` strings in the API, now replaced with `config.uploadFolder`. [#729](https://github.com/geli-lms/geli/issues/729)
 - Missing `@UseBefore` middleware in `MediaController`. [#729](https://github.com/geli-lms/geli/issues/729)
-- Make E2E login test more stable. [#823](https://github.com/geli-lms/geli/pull/823) & [#824](https://github.com/geli-lms/geli/pull/824)
+- Make E2E login test more stable. [#823](https://github.com/geli-lms/geli/pull/823) [#824](https://github.com/geli-lms/geli/pull/824)
 - `sentry.sh` build warning regarding invalid `-eq` usage. [#830](https://github.com/geli-lms/geli/pull/830) [#832](https://github.com/geli-lms/geli/pull/832)
 - PDF download fix if text is empty + added path to local `PhantomJS`. [#833](https://github.com/geli-lms/geli/issues/833)
 
