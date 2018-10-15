@@ -17,7 +17,9 @@ import {CodeKataUnitProgress} from '../../models/progress/CodeKataUnitProgress';
   styleUrls: ['./code-kata-unit.component.scss']
 })
 export class CodeKataComponent implements OnInit {
-  @Input() codeKataUnit: ICodeKataUnit;
+
+  @Input()
+  codeKataUnit: ICodeKataUnit;
 
   @ViewChild('definitionEditor')
   definitionEditor: AceEditorComponent;
@@ -29,6 +31,7 @@ export class CodeKataComponent implements OnInit {
   logs: string;
   progress: ICodeKataUnitProgress;
   isExampleCode = false;
+
 
   constructor(private route: ActivatedRoute,
               private snackBar: SnackBarService,
@@ -93,6 +96,7 @@ export class CodeKataComponent implements OnInit {
           this.snackBar.open(`An error occurred: ${err.error.message}`);
         });
     } else {
+      this.progress.code = this.codeKataUnit.code;
       this.progressService.updateItem(this.progress)
         .then((item) => {
           this.snackBar.open('Progress has been updated');
@@ -110,7 +114,7 @@ export class CodeKataComponent implements OnInit {
 
   // refactor this to use the same as in code-kata-unit-form
   validate() {
-    const codeToTest: string = this.codeKataUnit.definition + '\n' + this.progress.code + '\n' + this.codeKataUnit.test;
+    const codeToTest: string = this.codeKataUnit.definition + '\n' + this.codeKataUnit.code + '\n' + this.codeKataUnit.test;
 
     this.logs = undefined;
 
