@@ -18,12 +18,13 @@ fi
 
 if [[ ${TRAVIS_BRANCH} == "develop" ]]; then
   echo "+ Pull Request from ${TRAVIS_PULL_REQUEST_BRANCH} to ${TRAVIS_BRANCH}"
-  RESULT=$(curl --silent https://raw.githubusercontent.com/geli-lms/geli/"${TRAVIS_BRANCH}"/CHANGELOG.md \
+  curl --silent https://raw.githubusercontent.com/geli-lms/geli/"${TRAVIS_BRANCH}"/CHANGELOG.md \
   | diff CHANGELOG.md - \
-  | grep -P '^< - .{8,}' - -q)
+  | grep -P '^< - .{8,}' - -q
+  RESULT=$?;
 
-  if [[ ${RESULT} == 0 ]]; then
-    ech -e "${GREEN}+ Update in CHANGELOG.md found"
+  if [[ ${RESULT} -eq 0 ]]; then
+    echo -e "${GREEN}+ Update in CHANGELOG.md found"
     exit 0
   else
     echo -e "${RED}+ ERROR: No Update in CHANGELOG.md found!"
@@ -34,11 +35,12 @@ fi
 
 if [[ ${TRAVIS_BRANCH} == "master" ]]; then
   echo "+ Pull Request from ${TRAVIS_PULL_REQUEST_BRANCH} to ${TRAVIS_BRANCH}"
-  RESULT=$(curl --silent https://raw.githubusercontent.com/geli-lms/geli/"${TRAVIS_BRANCH}"/CHANGELOG.md \
+  curl --silent https://raw.githubusercontent.com/geli-lms/geli/"${TRAVIS_BRANCH}"/CHANGELOG.md \
   | diff CHANGELOG.md - \
-  | grep -P '^< ## \[\[\d{1,3}\.\d{1,3}\.\d{1,3}\].*\] - \d{4}-\d{2}-\d{2} - .{10,}' - -q)
+  | grep -P '^< ## \[\[\d{1,3}\.\d{1,3}\.\d{1,3}\].*\] - \d{4}-\d{2}-\d{2} - .{10,}' - -q
+  RESULT=$?;
 
-  if [[ ${RESULT} != 0 ]]; then
+  if [[ ${RESULT} -eq 0 ]]; then
     echo -e "${GREEN}+ Update in CHANGELOG.md found"
     exit 0
   else
