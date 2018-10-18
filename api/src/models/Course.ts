@@ -121,7 +121,9 @@ const courseSchema = new mongoose.Schema({
           }
         }
 
-        ret.chatRooms = ret.chatRooms.map(extractMongoId);
+        if (ret.chatRooms) {
+          ret.chatRooms = ret.chatRooms.map(extractMongoId);
+        }
       }
     }
   }
