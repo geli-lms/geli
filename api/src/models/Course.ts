@@ -172,7 +172,6 @@ courseSchema.methods.exportJSON = async function (sanitize: boolean = true, only
   delete obj.createdAt;
   delete obj.__v;
   delete obj.updatedAt;
-  delete obj.media;
 
   // custom properties
   if (sanitize) {
@@ -182,6 +181,8 @@ courseSchema.methods.exportJSON = async function (sanitize: boolean = true, only
     delete obj.students;
     delete obj.courseAdmin;
     delete obj.teachers;
+    delete obj.media;
+    delete obj.chatRooms;
   }
 
   if (onlyBasicData) {
