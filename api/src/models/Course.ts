@@ -14,9 +14,6 @@ import {extractMongoId} from '../utilities/ExtractMongoId';
 import {ChatRoom, IChatRoomModel} from './ChatRoom';
 
 import {Picture} from './mediaManager/File';
-import {IPictureModel} from './mediaManager/Picture';
-import {IPicture} from '../../../shared/models/mediaManager/IPicture';
-import * as fs from 'fs';
 
 interface ICourseModel extends ICourse, mongoose.Document {
   exportJSON: (sanitize?: boolean, onlyBasicData?: boolean) => Promise<ICourse>;
