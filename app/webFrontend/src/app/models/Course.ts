@@ -40,5 +40,6 @@ export class Course implements ICourse {
     this.enrollType = course.enrollType;
     this.hasAccessKey = course.hasAccessKey;
     this.image = course.image;
+    this.chatRooms = course.chatRooms;
   }
 }
