@@ -552,14 +552,15 @@ export class ReportController {
       throw new ForbiddenError();
     }
 
-    const coursesPromise = Course.find({ students: new ObjectId(id) })
+    const coursesPromise = Course.find({ students: new ObjectId(id), active: true})
       .select({
         name: 1
       })
       .populate({
         path: 'lectures',
         populate: {
-          path: 'units'
+          path: 'units',
+          match: { visible: true }
         },
         select: {
           name: 1,
