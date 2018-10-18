@@ -19,7 +19,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - `FileIconService`. [#607](https://github.com/geli-lms/geli/issues/607)
 - Legal notice and privacy declaration. [#768](https://github.com/geli-lms/geli/issues/768)
 - More `NotificationController` tests. [#772](https://github.com/geli-lms/geli/pull/772)
-- Anonymous forum. [#46](https://github.com/geli-lms/geli/issues/46)
+- Anonymous forum. [#46](https://github.com/geli-lms/geli/issues/46) [#857](https://github.com/geli-lms/geli/issues/857)
 - Unit-specific comments. [#761](https://github.com/geli-lms/geli/issues/761)
 - Simple E2E test for login. [#795](https://github.com/geli-lms/geli/pull/795)
 - Checkboxes for accepting our terms of use and privacy declarations while registering. [#778](https://github.com/geli-lms/geli/issues/778)
