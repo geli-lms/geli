@@ -40,8 +40,6 @@ cache:
 before_install:
   # check for change in changelog
   - .travis/changelog.sh
-  # early exit when no change to changelog
-  - test $? -ne 0 && travis_terminate 1;
 
 before_script:
   # required for chrome to start properly
