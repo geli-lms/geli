@@ -121,11 +121,7 @@ const courseSchema = new mongoose.Schema({
           }
         }
 
-        if (doc.populated('chatRooms') !== undefined) {
-          ret.chatRooms = ret.chatRooms.map((chatRoom: any) => {
-            return chatRoom.toString();
-          });
-        }
+        ret.chatRooms = ret.chatRooms.map(extractMongoId);
       }
     }
   }
@@ -332,7 +328,7 @@ courseSchema.methods.forView = function (): ICourseView {
     courseAdmin: User.forCourseView(courseAdmin),
     teachers: teachers.map((teacher: IUser) => User.forCourseView(teacher)),
     lectures: lectures.map((lecture: any) => lecture.toObject()),
-    chatRooms: chatRooms.map((chatRoom: any) => chatRoom.toString())
+    chatRooms: chatRooms.map(extractMongoId)
   };
 };
 
