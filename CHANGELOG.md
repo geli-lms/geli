@@ -37,6 +37,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - ID validation of the `CourseController` `/api/courses/:id` route. [#724](https://github.com/geli-lms/geli/pull/724)
 - Possibility to add files directly in the file unit. [#728](https://github.com/geli-lms/geli/issues/728)
 - Execute npm rebuild in docker. [#855](https://github.com/geli-lms/geli/pull/855)
+- Added Sentry reporting for missing translations. [#858](https://github.com/geli-lms/geli/issues/858)
 
 ### Changed
 - Minor fixes and adaptations and merge-failure fixes. [#785](https://github.com/geli-lms/geli/issues/785)
