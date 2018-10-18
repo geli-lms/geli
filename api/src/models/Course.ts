@@ -47,11 +47,10 @@ const courseSchema = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User'
     },
-    media:
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Directory'
-      },
+    media: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Directory'
+    },
     teachers: [
       {
         type: mongoose.Schema.Types.ObjectId,
@@ -75,8 +74,8 @@ const courseSchema = new mongoose.Schema({
     },
     enrollType: {
       type: String,
-      'enum': ['free', 'whitelist', 'accesskey'],
-      'default': 'free'
+      enum: ['free', 'whitelist', 'accesskey'],
+      default: 'free'
     },
     whitelist: [
       {
@@ -88,10 +87,12 @@ const courseSchema = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Picture'
     },
-    chatRooms: [{
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'ChatRoom'
-    }]
+    chatRooms: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'ChatRoom'
+      }
+    ]
   },
   {
     timestamps: true,
