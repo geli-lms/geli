@@ -1,6 +1,7 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {GeneralInfoComponent} from './general-info.component';
 import {Contributor} from './contributor.model';
+import {MaterialImportModule} from '../../shared/modules/material-import.module';
 
 describe('GeneralInfoComponent', () => {
   let component: GeneralInfoComponent;
@@ -8,6 +9,9 @@ describe('GeneralInfoComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+      imports: [
+        MaterialImportModule
+      ],
       declarations: [GeneralInfoComponent]
     })
     .compileComponents();

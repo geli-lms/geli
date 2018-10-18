@@ -1,15 +1,16 @@
-import { TestBed, inject } from '@angular/core/testing';
+import {TestBed, inject} from '@angular/core/testing';
 
-import { SocketService } from './socket.service';
+import {SocketService} from './socket.service';
+import {ChatService} from './chat.service';
 
-describe('SocketService', () => {
+describe('ChatService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [SocketService]
+      providers: [ChatService]
     });
   });
 
-  it('should be created', inject([SocketService], (service: SocketService) => {
+  it('should be created', inject([ChatService], (service: ChatService) => {
     expect(service).toBeTruthy();
   }));
 });

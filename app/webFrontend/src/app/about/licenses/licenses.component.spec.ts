@@ -1,6 +1,7 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {LicensesComponent} from './licenses.component';
+import {MaterialImportModule} from '../../shared/modules/material-import.module';
 
 describe('LicensesComponent', () => {
   let component: LicensesComponent;
@@ -8,6 +9,7 @@ describe('LicensesComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+      imports: [MaterialImportModule],
       declarations: [LicensesComponent]
     })
     .compileComponents();

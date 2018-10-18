@@ -2,7 +2,7 @@ import { ShowCommentsDirective } from './show-comments.directive';
 
 describe('ShowCommentsDirective', () => {
   it('should create an instance', () => {
-    const directive = new ShowCommentsDirective();
+    const directive = new ShowCommentsDirective(null);
     expect(directive).toBeTruthy();
   });
 });
