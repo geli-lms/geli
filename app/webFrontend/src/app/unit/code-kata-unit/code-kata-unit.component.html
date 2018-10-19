@@ -8,7 +8,7 @@
     [readOnly]="true">
   </ace-editor>
   <div *ngIf="!isExampleCode">{{ 'code-kata.text.codeHere' | translate }}:</div>
-  <div *ngIf="isExampleCode"></div>
+  <div *ngIf="isExampleCode">{{ 'code-kata.text.codeExample' | translate }}:</div>
   <ace-editor class="user-code-editor"
               #codeEditor
               [text]="codeKataUnit.code || progress.code"
