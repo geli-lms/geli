@@ -11,7 +11,7 @@
   <div *ngIf="isExampleCode">{{ 'code-kata.text.codeExample' | translate }}:</div>
   <ace-editor class="user-code-editor"
               #codeEditor
-              [text]="codeKataUnit.code || progress.code"
+              [(text)]="codeKataUnit.code"
               [mode]="'markdown'"
               [theme]="'github'"
               [readOnly]="isExampleCode"
