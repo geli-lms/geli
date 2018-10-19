@@ -65,7 +65,7 @@
       "codeExample": "Das ist die bereitgestellte Beispiellösung.",
       "codeHere": "Ihr Code kommt hierhin",
       "logs": "Logs",
-      "mustSucceed": "Diese Tests müssen erfolgreich sein."
+      "mustSucceed": "Diese Tests müssen erfolgreich sein"
     }
   },
   "common": {
