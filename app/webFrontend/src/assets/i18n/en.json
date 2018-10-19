@@ -62,10 +62,10 @@
       "info2": "Your students can only edit the code area."
     },
     "text": {
-      "codeExample": "This is the provided example solution.",
-      "codeHere": "Your code goes here.",
+      "codeExample": "This is the provided example solution",
+      "codeHere": "Your code goes here",
       "logs": "Logs",
-      "testsNeedToSuccees": "These tests need to succeed."
+      "mustSucceed": "These tests need to succeed"
     }
   },
   "common": {

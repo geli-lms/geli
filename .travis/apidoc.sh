@@ -17,7 +17,7 @@ if [[ "$TRAVIS_BRANCH" == "master" ]] || [[ -n "$TRAVIS_TAG" ]]; then
         exit 1
     fi
 
-    GITHUB_URL="github.com/h-da/geli-docs.git"
+    GITHUB_URL="github.com/geli-lms/geli-docs.git"
     GITHUB_FOLDER="geli-docs"
     DOCU_SOURCE="apidocs"
 

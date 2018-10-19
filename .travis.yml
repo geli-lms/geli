@@ -1,4 +1,4 @@
-# +++ TRAVIS-FILE for https://github.com/h-da/geli +++
+# +++ TRAVIS-FILE for https://github.com/geli-lms/geli +++
 
 # required for chrome to install
 dist: trusty
@@ -37,6 +37,10 @@ cache:
     - app/webFrontend/node_modules
     - .travis/node_modules
 
+before_install:
+  # check for change in changelog
+  - .travis/changelog.sh
+
 before_script:
   # required for chrome to start properly
   - export DISPLAY=:99.0
@@ -62,8 +66,6 @@ install:
   - cd ..
 
 script:
-  # check for change in changelog
-  - .travis/changelog.sh
   # check for versions
   - .travis/check-version.sh
   # run license checker and write license.json / dependencies.ts

@@ -52,11 +52,15 @@ import {MessageService} from './shared/services/message.service';
 import {FileIconService} from './shared/services/file-icon.service';
 import {MessagingModule} from './messaging/messaging.module';
 import {PrivacyModule} from './privacy/privacy.module';
+import {TranslationErrorService} from './shared/services/translation-error.service';
+import {MissingTranslationHandler} from '@ngx-translate/core';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
 }
+
+
 
 @NgModule({
   declarations: [
@@ -77,6 +81,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     FileModule,
     PrivacyModule,
     TranslateModule.forRoot({
+      missingTranslationHandler: {provide: MissingTranslationHandler, useClass: TranslationErrorService},
       loader: {
         provide: TranslateLoader,
         useFactory: HttpLoaderFactory,
