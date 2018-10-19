@@ -560,7 +560,12 @@ export class ReportController {
         path: 'lectures',
         populate: {
           path: 'units',
-          match: { visible: true }
+          match: {
+            $and: [
+              {$or: [{visible: undefined}, {visible: true}]}, // TODO For some reason we apparently can have undefined visiblity.
+              {progressable: true} // TODO this.filterUnits currently filters "progressable"s below, but we could do it (only) here.
+            ]
+          }
         },
         select: {
           name: 1,
