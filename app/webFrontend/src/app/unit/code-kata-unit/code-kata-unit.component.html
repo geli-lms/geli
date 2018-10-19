@@ -7,7 +7,7 @@
     [theme]="'github'"
     [readOnly]="true">
   </ace-editor>
-  <div *ngIf="!isExampleCode">{{ 'code-kata.text.codeHere' | translate }}</div>
+  <div *ngIf="!isExampleCode">{{ 'code-kata.text.codeHere' | translate }}:</div>
   <div *ngIf="isExampleCode"></div>
   <ace-editor class="user-code-editor"
               #codeEditor
