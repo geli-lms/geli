@@ -96,17 +96,37 @@ export class AppComponent implements OnInit {
 
   async registerPages() {
     this.pages = <IPage[]>await this.pageService.readItems();
-    const routerConfig = this.router.config;
-    for (const page of this.pages) {
-      routerConfig.unshift({
-        path: page.path,
-        component: PageComponent
-      });
-    }
-
-    this.router.resetConfig(routerConfig);
-    const debug = 0;
   }
+
+  /*
+  registerPages() {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        /*
+        this.pageService.getRoutes()
+          .subscribe(
+            response => {
+              this.pages = <IPage[]>response;
+              const routerConfig = this.router.config;
+              for (const page of this.pages) {
+                routerConfig.unshift({
+                  path: page.path,
+                  component: PageComponent
+                });
+              }
+
+              this.router.resetConfig(routerConfig);
+              resolve(true);
+            },
+            err => {
+              reject(false);
+            }
+          );
+        resolve(true);
+      });
+    });
+  }
+  */
 
   changeLanguage(lang: string) {
     localStorage.setItem('lang', lang);

@@ -55,6 +55,8 @@ import {PrivacyModule} from './privacy/privacy.module';
 import {PageService} from './shared/services/data/page.service';
 import {PageRouteService} from './page/page-route.service';
 import {MainMenuComponent} from './main-menu/main-menu.component';
+import {PageComponent} from './page/page.component';
+import {PageModule} from './page/page.module';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -68,7 +70,7 @@ export function loadPageRoutes(pageRouteService: PageRouteService) {
 @NgModule({
   declarations: [
     AppComponent,
-    MainMenuComponent,
+    MainMenuComponent
   ],
   imports: [
     BrowserModule,
@@ -84,6 +86,7 @@ export function loadPageRoutes(pageRouteService: PageRouteService) {
     MessagingModule,
     FileModule,
     PrivacyModule,
+    PageModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
@@ -133,12 +136,6 @@ export function loadPageRoutes(pageRouteService: PageRouteService) {
     {
       provide: ErrorHandler,
       useExisting: RavenErrorHandler
-    },
-    {
-      provide: APP_INITIALIZER,
-      useFactory: loadPageRoutes,
-      deps: [PageRouteService],
-      multi: true
     }
   ],
   bootstrap: [AppComponent]

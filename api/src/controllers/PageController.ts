@@ -7,8 +7,7 @@ import {IPageModel, Page} from '../models/Page';
 export class PageController {
 
   @Get('/')
-  @Authorized(['admin'])
-  async getPages(@CurrentUser() currentUser: IUser) {
+  async getPages() {
     const pages = await Page.find();
     return pages.map((page) => page.toObject());
   }

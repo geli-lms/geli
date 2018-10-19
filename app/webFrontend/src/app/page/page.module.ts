@@ -13,10 +13,10 @@ export function loadPageRoutes(pageRouteService: PageRouteService) {
     CommonModule
   ],
   declarations: [PageComponent],
-  exports: [
+  entryComponents: [
     PageComponent
   ],
-  entryComponents: [
+  exports: [
     PageComponent
   ],
   providers: [

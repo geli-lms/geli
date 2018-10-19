@@ -1,4 +1,4 @@
-import {NgModule} from '@angular/core';
+import {APP_INITIALIZER, Injector, NgModule} from '@angular/core';
 import {LoginComponent} from './auth/login/login.component';
 import {RegisterComponent} from './auth/register/register.component';
 import {ActivationComponent} from './auth/activation/activation.component';
@@ -13,6 +13,7 @@ import {UserSettingsComponent} from './user/user-settings/user-settings.componen
 import {AuthGuardService} from './shared/services/auth-guard.service';
 import {ActivationResendComponent} from './auth/activation-resend/activation-resend.component';
 import {NotfoundComponent} from './shared/components/notfound/notfound.component';
+import {InitService} from './shared/services/init/init.service';
 
 const routes: Routes = [
   {path: 'not-found', component: NotfoundComponent},
@@ -57,12 +58,29 @@ const routes: Routes = [
     canActivate: [AuthGuardService],
     data: {roles: ['student']}
   },
-  {path: '**', redirectTo: 'not-found'}
+  // {path: '**', redirectTo: 'not-found'}
 ];
+
+export function initServiceFactory(injector: Injector, initService: InitService): Function {
+  return () => {
+    return initService.loadInitData().then((response) => {
+      const debug = 0;
+    });
+  };
+}
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
+  providers: [
+    InitService,
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initServiceFactory,
+      deps: [Injector, InitService],
+      multi: true
+    }
+  ]
 })
 export class AppRoutingModule {
 }
