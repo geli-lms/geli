@@ -58,6 +58,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Updated frontend to `Angular 6`. [#716](https://github.com/geli-lms/geli/pull/766)
 - Update `Node.js` version to `10.8.0`. [#821](https://github.com/geli-lms/geli/pull/821)
 - Update `README.md` with latest information. [#845](https://github.com/geli-lms/geli/pull/845)
+- Exit build when no change to `CHANGELOG.md`. [#880](https://github.com/geli-lms/geli/pull/880)
 
 ### Removed
 - `isCourseTeacherOrAdmin` and `isMemberOfCourse` from `UserService`. [#731](https://github.com/geli-lms/geli/issues/731)
