@@ -29,7 +29,7 @@ export class MigrationHandler {
     });
   }
 
-  public up(scripts: string[]) {
+  public async up(scripts: string[]) {
     const upPromises: Promise<any>[] = [];
     scripts.forEach((script) => {
       if (this.scripts.hasOwnProperty(script)) {
@@ -39,7 +39,7 @@ export class MigrationHandler {
       }
     });
 
-    return Promise.all(upPromises);
+    return await Promise.all(upPromises);
   }
 
   public down(scriptName: string) {
