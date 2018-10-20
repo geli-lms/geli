@@ -26,7 +26,7 @@ describe('ChatRoom', async () => {
     // load fixtures
     await fixtureLoader.load();
     // run migrations for chat feature
-    await (new MigrationHandler()).up(['course_v2', 'unit_v2']);
+    await (new MigrationHandler()).up(['20180821-course', '20180821-unit']);
   });
 
   describe(`GET ${BASE_URL} :id`, async () => {
