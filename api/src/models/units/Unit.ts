@@ -88,7 +88,7 @@ unitSchema.pre('save', async function () {
         roomFor: unit
       }
     });
-    this.set('chatRoom', chatRoom);
+    unit.chatRoom = chatRoom._id;
   }
 });
 
