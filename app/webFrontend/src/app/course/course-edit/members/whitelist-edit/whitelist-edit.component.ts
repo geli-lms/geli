@@ -6,8 +6,8 @@ import {ICourse} from '../../../../../../../../shared/models/ICourse';
 import {DragulaService} from 'ng2-dragula';
 import {FormControl} from '@angular/forms';
 import {Observable} from 'rxjs/Observable';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/startWith';
+
+
 import {WhitelistShowComponent} from '../whitelist-show/whitelist-show.component';
 
 @Component({

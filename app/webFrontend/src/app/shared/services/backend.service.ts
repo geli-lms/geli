@@ -1,10 +1,10 @@
-import {Observable} from 'rxjs/Observable';
+import {Observable} from 'rxjs/observable';
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {AuthenticationService} from './authentication.service';
 import {catchError} from 'rxjs/operators';
 import {throwError} from 'rxjs/index';
-import 'rxjs/add/observable/empty';
+
 
 @Injectable()
 export class BackendService {

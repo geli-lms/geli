@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import * as socketIo from 'socket.io-client';
 import {AuthenticationService} from './authentication.service';
 import {ISocketIOMessage} from '../../../../../../shared/models/messaging/ISocketIOMessage';
