@@ -74,7 +74,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Identification only via matriculation number. [#685](https://github.com/geli-lms/geli/issues/685)
 - Typo in `UserProfileDialog` component. [#782](https://github.com/geli-lms/geli/pull/782)
 - Missing capitalization typo for `common.users` EN-translation. [#729](https://github.com/geli-lms/geli/issues/729)
-- Broken badge links after repository migration. [#783](https://github.com/geli-lms/geli/pull/783)
+- Broken badge links after repository migration. [#783](https://github.com/geli-lms/geli/pull/783) [#892](https://github.com/geli-lms/geli/pull/892)
 - Invalid response for dependency. [#787](https://github.com/geli-lms/geli/pull/787)
 - Travis usages after `Angular 6` update. [#789](https://github.com/geli-lms/geli/pull/789)
 - Build with source maps. [#797](https://github.com/geli-lms/geli/pull/797)
