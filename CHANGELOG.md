@@ -88,6 +88,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - PDF download fix if text is empty + added path to local `PhantomJS`. [#833](https://github.com/geli-lms/geli/issues/833)
 - Wrong reset password translation. [#836](https://github.com/geli-lms/geli/issues/836)
 - Various flawed code kata translations. [#886](https://github.com/geli-lms/geli/issues/886)
+- Fix maxium width of main content area [#893](https://github.com/geli-lms/geli/issues/893)
 
 ### Security
 - Secured the static `'uploads'` route by introducing a special `'mediaToken'` with new JWT strategy & middleware. [#729](https://github.com/geli-lms/geli/issues/729)
