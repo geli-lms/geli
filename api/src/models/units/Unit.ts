@@ -45,7 +45,8 @@ const unitSchema = new mongoose.Schema({
       type: String
     },
     visible: {
-      type: Boolean
+      type: Boolean,
+      default: false,
     },
     unitCreator: {
       type: mongoose.Schema.Types.ObjectId,
