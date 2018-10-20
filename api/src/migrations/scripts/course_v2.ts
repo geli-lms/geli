@@ -10,8 +10,8 @@ class CourseV2Migration {
   async up() {
     console.log('Course Chatroom Migration up was called');
     try {
-      const oldCourses: ICourseModel[] = await Course.find({'chatRooms': {$exists: false}});
-      const updatedCourses = await Promise.all(oldCourses.map(async (course: ICourseModel) => {
+      const oldCourses: ICourseModel[] = await Course.find({$or: [{'chatRooms': { $exists: false}}, {'chatRooms': {$size: 0}} ]});
+      await Promise.all(oldCourses.map(async (course: ICourseModel) => {
         const courseObj = course.toObject();
         const newChatRoom: IChatRoomModel = await ChatRoom.create({
           name: 'General',
@@ -26,7 +26,7 @@ class CourseV2Migration {
 
         courseObj._id = new ObjectID(courseObj._id);
 
-        const courseAfterReplace = await mongoose.connection.collection('courses')
+        return await mongoose.connection.collection('courses')
           .findOneAndReplace({'_id': courseObj._id}, courseObj);
       }));
     } catch (error) {

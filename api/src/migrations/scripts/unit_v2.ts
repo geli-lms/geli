@@ -10,7 +10,7 @@ class UnitV2Migration {
     console.log('Unit V2 up was called');
     try {
       const units: IUnitModel[] = await Unit.find({'chatRoom': {$exists: false}});
-      const unitsWithChat = await Promise.all(units.map(async (unit: IUnitModel) => {
+      await Promise.all(units.map(async (unit: IUnitModel) => {
         const unitObj = unit.toObject();
         const chatRoom = await ChatRoom.create({
           room: {
@@ -23,7 +23,7 @@ class UnitV2Migration {
         unitObj.chatRoom = chatRoomObj._id;
         unitObj._id  = new ObjectID(unitObj._id);
 
-        const unitAfterReplace = await mongoose.connection.collection('units')
+        await mongoose.connection.collection('units')
           .findOneAndReplace({'_id': unit._id}, unitObj);
       }));
     } catch (error) {
