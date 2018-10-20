@@ -17,7 +17,7 @@ fi
 
 if [[ -z ${GIT_PRIVATE_KEY} ]]; then
   echo -e "${WARNING}+ No private key (add GIT_PRIVATE_KEY for travis)${NC}"
-  exit 0;
+  exit 1;
 fi
 
 GITHUB_URL="git@github.com:geli-lms/geli-docs.git"
@@ -51,6 +51,7 @@ if [[ ${TRAVIS_BRANCH} == "master" ]] || [[ -n ${TRAVIS_TAG} ]]; then
   fi
 
   git push --follow-tags ${GITHUB_URL}
+  exit 0
 fi
 
 if [[ ${TRAVIS_BRANCH} == "develop" ]]; then
@@ -68,4 +69,8 @@ if [[ ${TRAVIS_BRANCH} == "develop" ]]; then
   git commit -m "Travis build: ${TRAVIS_BUILD_NUMBER}"
 
   git push --follow-tags ${GITHUB_URL}
+  exit 0
 fi
+
+echo -e "${YELLOW}+ Branch not master or develop and no tag. Nothing todo.${NC}"
+exit 0
