@@ -24,7 +24,6 @@ export class MigrationHandler {
       } catch (error) {
         console.log('The file ' + file + ' is missing a class definition.');
         console.log(error);
-        return false;
       }
     });
   }
