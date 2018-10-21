@@ -289,7 +289,7 @@ export class AuthController {
 
     await Promise.all(
       courses.map(async (course) => {
-        if (course.students.findIndex(u => user._id === u._id < 0)
+        if (course.students.findIndex(u => user._id === u._id) < 0
           && course.whitelist.find(w =>
             w.uid === user.uid)
         ) {
