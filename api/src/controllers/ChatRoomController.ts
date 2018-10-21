@@ -37,6 +37,6 @@ export default class ChatRoomController {
     if (!chatRoom) {
       throw new NotFoundError('chat room not found');
     }
-    return chatRoom;
+    return chatRoom.toObject();
   }
 }
