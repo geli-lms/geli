@@ -38,7 +38,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Possibility to add files directly in the file unit. [#728](https://github.com/geli-lms/geli/issues/728)
 - Execute npm rebuild in docker. [#855](https://github.com/geli-lms/geli/pull/855)
 - Sentry reporting for missing translations. [#858](https://github.com/geli-lms/geli/issues/858)
-- Migration for visible field. [#](https://github.com/geli-lms/geli/pull/)
+- Migration for `visible` field. [#890](https://github.com/geli-lms/geli/pull/890)
 
 ### Changed
 - Minor fixes and adaptations and merge-failure fixes. [#785](https://github.com/geli-lms/geli/issues/785)
