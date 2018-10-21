@@ -5,6 +5,7 @@ import {
   Param,
   UseBefore
 } from 'routing-controllers';
+import {errorCodes} from '../config/errorCodes';
 import {ChatRoom} from '../models/ChatRoom';
 
 @JsonController('/chatRoom')
@@ -35,8 +36,8 @@ export default class ChatRoomController {
   async getChatRoom(@Param('id') id: string) {
     const chatRoom = await ChatRoom.findById(id);
     if (!chatRoom) {
-      throw new NotFoundError('chat room not found');
+      throw new NotFoundError(errorCodes.chat.roomNotFound.text);
     }
-    return chatRoom;
+    return chatRoom.toObject();
   }
 }
