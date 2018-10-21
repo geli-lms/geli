@@ -19,7 +19,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - `FileIconService`. [#607](https://github.com/geli-lms/geli/issues/607)
 - Legal notice and privacy declaration. [#768](https://github.com/geli-lms/geli/issues/768)
 - More `NotificationController` tests. [#772](https://github.com/geli-lms/geli/pull/772)
-- Anonymous forum. [#46](https://github.com/geli-lms/geli/issues/46)
+- Anonymous forum. [#46](https://github.com/geli-lms/geli/issues/46) [#857](https://github.com/geli-lms/geli/issues/857)
 - Unit-specific comments. [#761](https://github.com/geli-lms/geli/issues/761)
 - Simple E2E test for login. [#795](https://github.com/geli-lms/geli/pull/795)
 - Checkboxes for accepting our terms of use and privacy declarations while registering. [#778](https://github.com/geli-lms/geli/issues/778)
@@ -37,8 +37,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - ID validation of the `CourseController` `/api/courses/:id` route. [#724](https://github.com/geli-lms/geli/pull/724)
 - Possibility to add files directly in the file unit. [#728](https://github.com/geli-lms/geli/issues/728)
 - Execute npm rebuild in docker. [#855](https://github.com/geli-lms/geli/pull/855)
-- Fixed wrong translation in reset password [#836](https://github.com/geli-lms/geli/issues/836)
-- Added Sentry reporting for missing translations. [#858](https://github.com/geli-lms/geli/issues/858)
+- Sentry reporting for missing translations. [#858](https://github.com/geli-lms/geli/issues/858)
+- Migration for visible field. [#](https://github.com/geli-lms/geli/pull/)
 
 ### Changed
 - Minor fixes and adaptations and merge-failure fixes. [#785](https://github.com/geli-lms/geli/issues/785)
@@ -75,7 +75,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Identification only via matriculation number. [#685](https://github.com/geli-lms/geli/issues/685)
 - Typo in `UserProfileDialog` component. [#782](https://github.com/geli-lms/geli/pull/782)
 - Missing capitalization typo for `common.users` EN-translation. [#729](https://github.com/geli-lms/geli/issues/729)
-- Broken badge links after repository migration. [#783](https://github.com/geli-lms/geli/pull/783)
+- Broken badge links after repository migration. [#783](https://github.com/geli-lms/geli/pull/783) [#892](https://github.com/geli-lms/geli/pull/892)
 - Invalid response for dependency. [#787](https://github.com/geli-lms/geli/pull/787)
 - Travis usages after `Angular 6` update. [#789](https://github.com/geli-lms/geli/pull/789)
 - Build with source maps. [#797](https://github.com/geli-lms/geli/pull/797)
@@ -87,6 +87,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Make E2E login test more stable. [#823](https://github.com/geli-lms/geli/pull/823) [#824](https://github.com/geli-lms/geli/pull/824)
 - `sentry.sh` build warning regarding invalid `-eq` usage. [#830](https://github.com/geli-lms/geli/pull/830) [#832](https://github.com/geli-lms/geli/pull/832)
 - PDF download fix if text is empty + added path to local `PhantomJS`. [#833](https://github.com/geli-lms/geli/issues/833)
+- Wrong reset password translation. [#836](https://github.com/geli-lms/geli/issues/836)
+- Various flawed code kata translations. [#886](https://github.com/geli-lms/geli/issues/886)
+- Fix migrations for adding chatrooms to course and unit. [#886](https://github.com/geli-lms/geli/issues/888)
 
 ### Security
 - Secured the static `'uploads'` route by introducing a special `'mediaToken'` with new JWT strategy & middleware. [#729](https://github.com/geli-lms/geli/issues/729)
@@ -149,7 +152,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Fixed wording of progress display on profile page. [#715](https://github.com/geli-lms/geli/issues/715)
 - Fixed form validator in create task [#579](https://github.com/geli-lms/geli/issues/579)
 - Fixed Mongoose pre hook usage [#680](https://github.com/geli-lms/geli/issues/680) [#677](https://github.com/geli-lms/geli/issues/677)
-- Fixed broken CodeKata validation. [#834](https://github.com/geli-lms/geli/issues/834)
+- Fixed broken code kata validation. [#834](https://github.com/geli-lms/geli/issues/834)
 
 ### Security
 - Fixed numerous severe user related security issues. [#691](https://github.com/geli-lms/geli/issues/691) [#709](https://github.com/geli-lms/geli/pull/709)
