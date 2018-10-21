@@ -289,10 +289,9 @@ export class AuthController {
 
     await Promise.all(
       courses.map(async (course) => {
-        if (course.students.findIndex(u => user._id === u._id) < 0
-          && course.whitelist.find(w =>
-            w.uid === user.uid)
-        ) {
+        const userUidIsRegisteredInWhitelist = course.whitelist.findIndex(w => w.uid === user.uid) >= 0;
+        const userIsntAlreadyStudentOfCourse = course.students.findIndex(u => u._id === user._id) < 0;
+        if (userUidIsRegisteredInWhitelist && userIsntAlreadyStudentOfCourse) {
           course.students.push(user);
           await Course.update({_id: course._id}, course);
         }
