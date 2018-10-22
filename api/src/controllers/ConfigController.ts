@@ -10,24 +10,14 @@ import {
 import {Config} from '../models/Config';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 
-const publicConfigs = [
-  new RegExp('legalnotice|infoBox|privacy'),
-  new RegExp('downloadMaxFileSize')
-];
-
-function publicConfig(id: string) {
-  for (const item of publicConfigs) {
-    if (id.match(item)) {
-      return true;
-    }
-  }
-  return false;
+function isPublicConfig(name: string) {
+  return /^legalnotice$|^infoBox$|^privacy$|^downloadMaxFileSize$/.test(name);
 }
 
 @JsonController('/config')
 export class ConfigController {
 
-  private async findConfig (name: string) {
+  private async findConfig(name: string) {
     const config = await Config.findOne({name});
     return config ? config.toObject() : {name, value: ''};
   }
@@ -55,7 +45,7 @@ export class ConfigController {
    */
   @Get('/public/:id')
   getPublicConfig(@Param('id') name: string) {
-    if (!publicConfig(name)) {
+    if (!isPublicConfig(name)) {
       throw new UnauthorizedError('');
     }
     return this.findConfig(name);
