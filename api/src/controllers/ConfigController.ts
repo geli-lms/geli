@@ -1,11 +1,9 @@
 import {
-  Authorized,
-  BodyParam,
-  Get, InternalServerError,
   JsonController,
-  Param,
-  Put, UnauthorizedError,
-  UseBefore
+  UseBefore, Authorized,
+  Param, BodyParam,
+  Get, Put,
+  UnauthorizedError
 } from 'routing-controllers';
 import {Config} from '../models/Config';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
@@ -33,14 +31,13 @@ export class ConfigController {
    *
    * @apiSuccessExample {json} Success-Response:
    *     {
-   *         "name":"legalnotice",
-   *         "updatedAt": "2018-03-20T21:04:41.696Z",
-   *         "value":"This will show the legalnotice.",
-   *         "__v": 0,
-   *         "createdAt": "2018-03-20T21:04:41.696Z"
+   *         "name": "legalnotice",
+   *         "value": "This will show the legalnotice.",
+   *         "updatedAt": "2017-11-08T22:00:11.693Z",
+   *         "createdAt": "2017-11-08T22:00:11.693Z",
+   *         "__v": 0
    *     }
    *
-   * @apiError InternalServerError
    * @apiError UnauthorizedError
    */
   @Get('/public/:id')
@@ -58,36 +55,13 @@ export class ConfigController {
    * @apiPermission admin
    *
    * @apiParam {String} id Config name (e.g. legalnotice).
-   * @apiParam {Object} data New data.
+   * @apiParam {Object} data New data (with single 'data' string property).
    *
-   * @apiSuccess {Config} config Updated config.
+   * @apiSuccess {Object} result Empty object.
    *
    * @apiSuccessExample {json} Success-Response:
-   *     {
-   *         "$__": {
-   *             "strictMode": true,
-   *             "selected": {},
-   *             "getters": {},
-   *             "_id": {...},
-   *             "wasPopulated": false,
-   *             "activePaths": {...},
-   *             "pathsToScopes": {},
-   *             "emitter": {...},
-   *             "$options": true
-   *         },
-   *         "isNew": false,
-   *         "_doc": {
-   *             "createdAt": "2018-03-20T21:04:41.696Z",
-   *             "__v": 0,
-   *             "value": "This will show the legalnotice.",
-   *             "updatedAt": "2018-03-20T21:04:41.696Z",
-   *             "name": "legalnotice",
-   *             "_id": {...}
-   *         },
-   *         "$init": true
-   *     }
+   *     {}
    *
-   * @apiError InternalServerError something went wrong
    */
   @UseBefore(passportJwtMiddleware)
   @Authorized(['admin'])
@@ -113,14 +87,13 @@ export class ConfigController {
    *
    * @apiSuccessExample {json} Success-Response:
    *     {
-   *         "name":"legalnotice",
-   *         "updatedAt": "2018-03-20T21:04:41.696Z",
-   *         "value":"This will show the legalnotice.",
-   *         "__v": 0,
-   *         "createdAt": "2018-03-20T21:04:41.696Z"
+   *         "name": "legalnotice",
+   *         "value": "This will show the legalnotice.",
+   *         "updatedAt": "2017-11-08T22:00:11.693Z",
+   *         "createdAt": "2017-11-08T22:00:11.693Z",
+   *         "__v": 0
    *     }
    *
-   * @apiError InternalServerError
    */
   @UseBefore(passportJwtMiddleware)
   @Authorized(['admin'])
