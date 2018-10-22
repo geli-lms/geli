@@ -92,7 +92,7 @@ export class ConfigController {
   @UseBefore(passportJwtMiddleware)
   @Authorized(['admin'])
   @Put('/:id')
-  async setImprint(@Param('id') name: string, @Body() data: any) {
+  async putConfig(@Param('id') name: string, @Body() data: any) {
     const conditions: any = {name: name};
     try {
       return Config.findOneAndUpdate(
