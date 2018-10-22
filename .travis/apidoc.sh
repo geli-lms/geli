@@ -15,19 +15,22 @@ if [[ ${TRAVIS_PULL_REQUEST} != false ]]; then
   exit 0;
 fi
 
-if [[ -z ${GIT_PRIVATE_KEY} ]]; then
-  echo -e "${WARNING}+ No private key (add GIT_PRIVATE_KEY for travis)${NC}"
+# shellcheck disable=2154
+if [[ -z ${encrypted_3e4ede4628d7_key} ]] || [[ -z ${encrypted_3e4ede4628d7_iv} ]]; then
+  echo -e "${WARNING}+ No private key (use travis encrypt-file)${NC}"
   exit 1;
 fi
+
+# use travis encrypt-file to generate this
+openssl aes-256-cbc -K "${encrypted_3e4ede4628d7_key}" -iv "${encrypted_3e4ede4628d7_iv}" -in .travis/deploy_docs.enc -out /tmp/deploy_docs -d
+
+eval "$(ssh-agent -s)"
+chmod 600 /tmp/deploy_docs && ssh-add /tmp/deploy_docs
 
 GITHUB_URL="git@github.com:geli-lms/geli-docs.git"
 GITHUB_DIR="/opt/geli-docs/"
 
 rm -rf ${GITHUB_DIR}
-mkdir -p ${GITHUB_DIR}
-
-eval "$(ssh-agent -s)"
-ssh-add <(echo "${GIT_PRIVATE_KEY}")
 
 if [[ ${TRAVIS_BRANCH} == "master" ]] || [[ ${TRAVIS_BRANCH} == "develop" ]] || [[ -n ${TRAVIS_TAG} ]]; then
   echo "+ Generate API-Doc"
