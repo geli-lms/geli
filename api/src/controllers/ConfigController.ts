@@ -1,6 +1,6 @@
 import {
   Authorized,
-  Body,
+  BodyParam,
   Get, InternalServerError,
   JsonController,
   Param,
@@ -92,17 +92,13 @@ export class ConfigController {
   @UseBefore(passportJwtMiddleware)
   @Authorized(['admin'])
   @Put('/:id')
-  async putConfig(@Param('id') name: string, @Body() data: any) {
-    const conditions: any = {name: name};
-    try {
-      return Config.findOneAndUpdate(
-        conditions,
-        {name: name, value: data.data},
-        {'upsert': true, 'new': true}
-      );
-    } catch (error) {
-      throw new InternalServerError('something went wrong');
-    }
+  async putConfig(@Param('id') name: string, @BodyParam('data') value: string) {
+    await Config.findOneAndUpdate(
+      {name},
+      {name, value},
+      {'upsert': true, 'new': true}
+    );
+    return {};
   }
 
   /**
@@ -133,6 +129,3 @@ export class ConfigController {
     return this.findConfig(name);
   }
 }
-
-
-
