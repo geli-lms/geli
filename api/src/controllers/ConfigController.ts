@@ -43,7 +43,7 @@ export class ConfigController {
   @Get('/public/:id')
   getPublicConfig(@Param('id') name: string) {
     if (!isPublicConfig(name)) {
-      throw new UnauthorizedError('');
+      throw new UnauthorizedError();
     }
     return this.findConfig(name);
   }
