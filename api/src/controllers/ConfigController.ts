@@ -28,15 +28,8 @@ function publicConfig(id: string) {
 export class ConfigController {
 
   private async findConfig (name: string) {
-    try {
-      const configV = await Config.findOne({name: name});
-      if (!configV) {
-        return {name: name, value: ''};
-      }
-      return configV.toObject();
-    } catch (error) {
-      throw new InternalServerError('');
-    }
+    const config = await Config.findOne({name});
+    return config ? config.toObject() : {name, value: ''};
   }
 
   /**
