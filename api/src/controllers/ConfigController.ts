@@ -62,11 +62,10 @@ export class ConfigController {
    */
   @Get('/public/:id')
   getPublicConfig(@Param('id') name: string) {
-    if (publicConfig(name)) {
-      return this.findConfig(name);
-    } else {
+    if (!publicConfig(name)) {
       throw new UnauthorizedError('');
     }
+    return this.findConfig(name);
   }
 
   /**
