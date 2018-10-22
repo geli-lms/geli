@@ -27,6 +27,18 @@ function publicConfig(id: string) {
 @JsonController('/config')
 export class ConfigController {
 
+  private async findConfig (name: string) {
+    try {
+      const configV = await Config.findOne({name: name});
+      if (!configV) {
+        return {name: name, value: ''};
+      }
+      return configV.toObject();
+    } catch (error) {
+      throw new InternalServerError('');
+    }
+  }
+
   /**
    * @api {get} /api/config/public/:id Request public config
    * @apiName GetConfigPublic
@@ -51,15 +63,7 @@ export class ConfigController {
   @Get('/public/:id')
   async getPublicConfig(@Param('id') name: string) {
     if (publicConfig(name)) {
-      try {
-        const configV = await Config.findOne({name: name});
-        if (!configV) {
-          return {name: name, value: ''};
-        }
-        return configV.toObject();
-      } catch (error) {
-        throw new InternalServerError('');
-      }
+      return await this.findConfig(name);
     } else {
       throw new UnauthorizedError('');
     }
@@ -144,15 +148,7 @@ export class ConfigController {
   @Authorized(['admin'])
   @Get('/:id')
   async getConfig(@Param('id') name: string) {
-    try {
-      const configV = await Config.findOne({name: name});
-      if (!configV) {
-        return {name: name, value: ''};
-      }
-      return configV.toObject();
-    } catch (error) {
-      throw new InternalServerError('');
-    }
+    return await this.findConfig(name);
   }
 }
 
