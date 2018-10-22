@@ -61,9 +61,9 @@ export class ConfigController {
    * @apiError UnauthorizedError
    */
   @Get('/public/:id')
-  async getPublicConfig(@Param('id') name: string) {
+  getPublicConfig(@Param('id') name: string) {
     if (publicConfig(name)) {
-      return await this.findConfig(name);
+      return this.findConfig(name);
     } else {
       throw new UnauthorizedError('');
     }
@@ -147,8 +147,8 @@ export class ConfigController {
   @UseBefore(passportJwtMiddleware)
   @Authorized(['admin'])
   @Get('/:id')
-  async getConfig(@Param('id') name: string) {
-    return await this.findConfig(name);
+  getConfig(@Param('id') name: string) {
+    return this.findConfig(name);
   }
 }
 
