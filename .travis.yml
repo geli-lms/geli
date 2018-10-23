@@ -19,6 +19,7 @@ addons:
       - lsb-base
       # used for frontend e2e tests
       - google-chrome-stable
+      - rsync
 
 services:
   - mongodb

@@ -37,7 +37,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - ID validation of the `CourseController` `/api/courses/:id` route. [#724](https://github.com/geli-lms/geli/pull/724)
 - Possibility to add files directly in the file unit. [#728](https://github.com/geli-lms/geli/issues/728)
 - Execute npm rebuild in docker. [#855](https://github.com/geli-lms/geli/pull/855)
-- Added Sentry reporting for missing translations. [#858](https://github.com/geli-lms/geli/issues/858)
+- Sentry reporting for missing translations. [#858](https://github.com/geli-lms/geli/issues/858)
+- Migration for `visible` field. [#890](https://github.com/geli-lms/geli/pull/890)
 
 ### Changed
 - Minor fixes and adaptations and merge-failure fixes. [#785](https://github.com/geli-lms/geli/issues/785)
@@ -58,6 +59,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Update `Node.js` version to `10.8.0`. [#821](https://github.com/geli-lms/geli/pull/821)
 - Update `README.md` with latest information. [#845](https://github.com/geli-lms/geli/pull/845)
 - Exit build when no change to `CHANGELOG.md`. [#880](https://github.com/geli-lms/geli/pull/880)
+- Use deploy token to push geli-docs. [#851](https://github.com/geli-lms/geli/issues/851), [#900](https://github.com/geli-lms/geli/pull/900), [#902](https://github.com/geli-lms/geli/pull/902)
 - Exclude pull requests from dependabot from changelog check. [#854](https://github.com/geli-lms/geli/pull/854)
 
 ### Removed
@@ -75,7 +77,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Identification only via matriculation number. [#685](https://github.com/geli-lms/geli/issues/685)
 - Typo in `UserProfileDialog` component. [#782](https://github.com/geli-lms/geli/pull/782)
 - Missing capitalization typo for `common.users` EN-translation. [#729](https://github.com/geli-lms/geli/issues/729)
-- Broken badge links after repository migration. [#783](https://github.com/geli-lms/geli/pull/783)
+- Broken badge links after repository migration. [#783](https://github.com/geli-lms/geli/pull/783) [#892](https://github.com/geli-lms/geli/pull/892)
 - Invalid response for dependency. [#787](https://github.com/geli-lms/geli/pull/787)
 - Travis usages after `Angular 6` update. [#789](https://github.com/geli-lms/geli/pull/789)
 - Build with source maps. [#797](https://github.com/geli-lms/geli/pull/797)
@@ -89,6 +91,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - PDF download fix if text is empty + added path to local `PhantomJS`. [#833](https://github.com/geli-lms/geli/issues/833)
 - Wrong reset password translation. [#836](https://github.com/geli-lms/geli/issues/836)
 - Various flawed code kata translations. [#886](https://github.com/geli-lms/geli/issues/886)
+- Migrations for adding chatrooms to course and unit. [#888](https://github.com/geli-lms/geli/issues/888), [#903](https://github.com/geli-lms/geli/pull/903)
+- `AuthController` `addWhitelistedUserToCourses` broken condition & typos. [#895](https://github.com/geli-lms/geli/issues/895)
+- `ChatRoomController` internal data leak. [#897](https://github.com/geli-lms/geli/issues/897)
 
 ### Security
 - Secured the static `'uploads'` route by introducing a special `'mediaToken'` with new JWT strategy & middleware. [#729](https://github.com/geli-lms/geli/issues/729)

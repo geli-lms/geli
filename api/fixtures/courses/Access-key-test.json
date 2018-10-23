@@ -15,6 +15,7 @@
           "name": "What is the purpose of this course fixture?",
           "description": "",
           "markdown": "To test the 'accesskey' enrollType.",
+          "visible": true,
           "__t": "free-text"
         }
       ]

@@ -45,7 +45,8 @@ const unitSchema = new mongoose.Schema({
       type: String
     },
     visible: {
-      type: Boolean
+      type: Boolean,
+      default: false,
     },
     unitCreator: {
       type: mongoose.Schema.Types.ObjectId,
@@ -88,7 +89,7 @@ unitSchema.pre('save', async function () {
         roomFor: unit
       }
     });
-    this.set('chatRoom', chatRoom);
+    unit.chatRoom = chatRoom._id;
   }
 });
 

@@ -356,9 +356,6 @@ courseSchema.methods.processLecturesFor = async function (user: IUser) {
   return this;
 };
 
-
-
-
 Course = mongoose.model<ICourseModel, ICourseMongoose>('Course', courseSchema);
 
 export {Course, ICourseModel};
