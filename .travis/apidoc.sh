@@ -16,13 +16,13 @@ if [[ ${TRAVIS_PULL_REQUEST} != false ]]; then
 fi
 
 # shellcheck disable=2154
-if [[ -z ${encrypted_3e4ede4628d7_key} ]] || [[ -z ${encrypted_3e4ede4628d7_iv} ]]; then
+if [[ -z ${encrypted_0b4a1a17005e_key} ]] || [[ -z ${encrypted_0b4a1a17005e_iv} ]]; then
   echo -e "${WARNING}+ No private key (use travis encrypt-file)${NC}"
   exit 1;
 fi
 
 # use travis encrypt-file to generate this
-openssl aes-256-cbc -K "${encrypted_3e4ede4628d7_key}" -iv "${encrypted_3e4ede4628d7_iv}" -in .travis/deploy_docs.enc -out /tmp/deploy_docs -d
+openssl aes-256-cbc -K "${encrypted_0b4a1a17005e_key}" -iv "${encrypted_0b4a1a17005e_iv}" -in .travis/deploy_docs.enc -out /tmp/deploy_docs -d
 
 eval "$(ssh-agent -s)"
 chmod 600 /tmp/deploy_docs && ssh-add /tmp/deploy_docs
