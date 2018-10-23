@@ -67,6 +67,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - `winston` dependency. [#806](https://github.com/geli-lms/geli/pull/806)
 
 ### Fixed
+- Fix karma tests.
 - Unit export. [#42](https://github.com/geli-lms/geli/issues/42)
 - Notification settings. [#731](https://github.com/geli-lms/geli/issues/731)
 - API-doc. [#737](https://github.com/geli-lms/geli/issues/737)
