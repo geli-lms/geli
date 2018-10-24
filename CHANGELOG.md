@@ -11,10 +11,18 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 -->
 
 ## [Unreleased]
+### Added
+- My courses: Make title or teaser image clickable [#904](https://github.com/geli-lms/geli/issues/904)
+
 ### Changed
 - Minor `ConfigController` bugs and refactoring-flaws. [#899](https://github.com/geli-lms/geli/issues/899)
+
+### Removed
+
 ### Fixed
 - Deprecated Messages.count replace with Message.countDocuments [#925](https://github.com/geli-lms/geli/issues/925)
+
+### Security
 
 ## [[0.8.0](https://github.com/geli-lms/geli/releases/tag/v0.8.0)] - 2018-10-29 - WS 18/19 Bugfix & Tweak-Release
 ### Added
@@ -46,7 +54,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Sentry reporting for missing translations. [#858](https://github.com/geli-lms/geli/issues/858)
 - Migration for `visible` field. [#890](https://github.com/geli-lms/geli/pull/890)
 - Migration for `fileUnitType` field. [#907](https://github.com/geli-lms/geli/pull/907)
-- Fixed error on clicking on notification. [#916](https://github.com/geli-lms/geli/issues/916)
 
 ### Changed
 - Minor fixes and adaptations and merge-failure fixes. [#785](https://github.com/geli-lms/geli/issues/785)
@@ -105,6 +112,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Migrations for adding chatrooms to course and unit. [#888](https://github.com/geli-lms/geli/issues/888), [#903](https://github.com/geli-lms/geli/pull/903), [#905](https://github.com/geli-lms/geli/pull/905)
 - `AuthController` `addWhitelistedUserToCourses` broken condition & typos. [#895](https://github.com/geli-lms/geli/issues/895)
 - `ChatRoomController` internal data leak. [#897](https://github.com/geli-lms/geli/issues/897)
+- Error on clicking on notification. [#916](https://github.com/geli-lms/geli/issues/916)
 - Depcreated warning on startup. [#920](https://github.com/geli-lms/geli/pull/920)
 
 ### Security
