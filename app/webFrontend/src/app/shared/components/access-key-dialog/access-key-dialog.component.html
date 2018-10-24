@@ -2,7 +2,7 @@
 <div mat-dialog-content>{{ 'course.text.enterAccessKey' | translate }}</div>
 <div>
   <mat-form-field class="full-width">
-    <input async matInput type="password" id="accessKey" placeholder="'course.placeholder.accessKey' | translate" [(ngModel)]="accessKey"
+    <input async matInput type="password" id="accessKey" [placeholder]="'course.placeholder.accessKey' | translate" [(ngModel)]="accessKey"
            [ngModelOptions]="{standalone: true}">
   </mat-form-field>
 </div>

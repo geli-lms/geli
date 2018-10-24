@@ -42,7 +42,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
 - Minor fixes and adaptations and merge-failure fixes. [#785](https://github.com/geli-lms/geli/issues/785)
-- Reworked existing translations. [#753](https://github.com/geli-lms/geli/issues/753)
+- Reworked existing translations. [#753](https://github.com/geli-lms/geli/issues/753), [#906](https://github.com/geli-lms/geli/pull/906)
 - Migrate `MatSnackBar` to `SnackBarService`. [#724](https://github.com/geli-lms/geli/pull/724) [#730](https://github.com/geli-lms/geli/pull/730)
 - Reload user list after deleting an account. [#724](https://github.com/geli-lms/geli/pull/724)
 - `getNotificationSettings` does not create new notification settings. [#731](https://github.com/geli-lms/geli/issues/731)
