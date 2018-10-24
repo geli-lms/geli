@@ -42,7 +42,13 @@ export class LoginComponent implements OnInit {
     this.loginForm.value.email = this.loginForm.value.email.replace(/\s/g, '').toLowerCase();
     this.authenticationService.login(this.loginForm.value.email, this.loginForm.value.password).then(
       () => {
-        this.router.navigate(['/']);
+
+        if(this.authGuard.redirectUrl){
+          this.router.navigate([this.authGuard.redirectUrl]);
+          this.authGuard.redirectUrl = null;
+        } else {
+          this.router.navigate(['/']);
+        }
         this.showProgress.toggleLoadingGlobal(false);
         this.loading = false;
 
