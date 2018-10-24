@@ -43,7 +43,7 @@ export class LoginComponent implements OnInit {
     this.authenticationService.login(this.loginForm.value.email, this.loginForm.value.password).then(
       () => {
 
-        if(this.authGuard.redirectUrl){
+        if (this.authGuard.redirectUrl) {
           this.router.navigate([this.authGuard.redirectUrl]);
           this.authGuard.redirectUrl = null;
         } else {
