@@ -27,6 +27,12 @@ const routes: Routes = [
         data: {roles: ['student', 'tutor', 'teacher', 'admin']}
       },
       {
+        path: 'unit/:unit',
+        component: CourseOverviewComponent,
+        canActivate: [AuthGuardService],
+        data: {roles: ['student', 'tutor', 'teacher', 'admin']}
+      },
+      {
         path: 'fileview',
         component: FileViewComponent,
         canActivate: [AuthGuardService],
