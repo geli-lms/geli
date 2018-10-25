@@ -167,6 +167,10 @@ export class DownloadController {
   @Post('/pdf/individual')
   @ContentType('application/json')
   async postDownloadRequestPDFIndividual(@Body() data: IDownload, @CurrentUser() user: IUser) {
+    // create hashed pdf file
+    const hashPdfFileName = config.tmpFileCacheFolder +
+      crypto.createHash('sha1').update(new Date() + user._id).digest('hex').toString().slice(0,16) +
+      '_temp.pdf';
 
     const course = await Course.findOne({_id: data.courseName});
 
@@ -252,16 +256,16 @@ export class DownloadController {
                 html += localUnit.toHtmlForIndividualPDF();
                 html += '</html>';
               const name = lecCounter + '_' + lcName + '/' + unitCounter + '_' + this.replaceCharInFilename(localUnit.name) + '.pdf';
-              await this.savePdfToFile(html, options, PDFtempPath);
+              await this.savePdfToFile(html, options, hashPdfFileName);
 
-              await this.appendToArchive(archive, name, PDFtempPath, hash);
+              await this.appendToArchive(archive, name, hashPdfFileName, hash);
 
             }
             unitCounter++;
           }
           lecCounter++;
         }
-        fs.unlinkSync(PDFtempPath);
+        fs.unlinkSync(hashPdfFileName);
         return new Promise((resolve, reject) => {
           archive.on('error', () => reject(hash));
           archive.finalize();
@@ -294,6 +298,10 @@ export class DownloadController {
   @Post('/pdf/single')
   @ContentType('application/json')
   async postDownloadRequestPDFSingle(@Body() data: IDownload, @CurrentUser() user: IUser) {
+
+    const hashPdfFileName = config.tmpFileCacheFolder +
+      crypto.createHash('sha1').update(new Date() + user._id).digest('hex').toString().slice(0,16) +
+      '_temp.pdf';
 
     const course = await Course.findOne({_id: data.courseName});
 
@@ -427,9 +435,9 @@ export class DownloadController {
         html += '</div></body>' +
           '</html>';
         const name = this.replaceCharInFilename(course.name) + '.pdf';
-        await this.savePdfToFile(html, options, PDFtempPath);
-        await this.appendToArchive(archive, name, PDFtempPath, hash);
-        fs.unlinkSync(PDFtempPath);
+        await this.savePdfToFile(html, options, hashPdfFileName);
+        await this.appendToArchive(archive, name, hashPdfFileName, hash);
+        fs.unlinkSync(hashPdfFileName);
         return new Promise((resolve, reject) => {
           archive.on('error', () => reject(hash));
           archive.finalize();
