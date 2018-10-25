@@ -66,10 +66,10 @@ export class Server {
   }
 
   start() {
-    mongoose.connect(config.database);
+    mongoose.connect(config.database, {useNewUrlParser: true});
 
-    // Request logger
     this.app.use(morgan('combined'));
+
     const server = this.app.listen(config.port, () => {
       process.stdout.write('Server successfully started at port ' + config.port);
     });
