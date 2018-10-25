@@ -79,7 +79,7 @@ export class ReportController {
     this.checkAccess(course, currentUser);
 
     const courseObjUnfiltered: ICourse = <ICourse>course.toObject();
-    const courseObj = this.filterUnits(courseObjUnfiltered).courseObj;
+    const courseObj = this.countUnitsAndRemoveEmptyLectures(courseObjUnfiltered).courseObj;
     courseObj.lectures.map((lecture: ILecture) => {
       lecture.units.map((unit) => {
         const progressStats = this.calculateProgress(unitProgressData, courseObj.students.length, unit);
