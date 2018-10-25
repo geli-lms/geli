@@ -42,7 +42,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
 - Minor fixes and adaptations and merge-failure fixes. [#785](https://github.com/geli-lms/geli/issues/785)
-- Reworked existing translations. [#753](https://github.com/geli-lms/geli/issues/753)
+- Reworked existing translations. [#753](https://github.com/geli-lms/geli/issues/753), [#906](https://github.com/geli-lms/geli/pull/906)
 - Migrate `MatSnackBar` to `SnackBarService`. [#724](https://github.com/geli-lms/geli/pull/724) [#730](https://github.com/geli-lms/geli/pull/730)
 - Reload user list after deleting an account. [#724](https://github.com/geli-lms/geli/pull/724)
 - `getNotificationSettings` does not create new notification settings. [#731](https://github.com/geli-lms/geli/issues/731)
@@ -59,7 +59,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Update `Node.js` version to `10.8.0`. [#821](https://github.com/geli-lms/geli/pull/821)
 - Update `README.md` with latest information. [#845](https://github.com/geli-lms/geli/pull/845)
 - Exit build when no change to `CHANGELOG.md`. [#880](https://github.com/geli-lms/geli/pull/880)
-- Use deploy token to push geli-docs. [#851](https://github.com/geli-lms/geli/issues/851)
+- Use deploy token to push geli-docs. [#851](https://github.com/geli-lms/geli/issues/851), [#900](https://github.com/geli-lms/geli/pull/900), [#902](https://github.com/geli-lms/geli/pull/902)
 
 ### Removed
 - `isCourseTeacherOrAdmin` and `isMemberOfCourse` from `UserService`. [#731](https://github.com/geli-lms/geli/issues/731)
@@ -92,6 +92,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Various flawed code kata translations. [#886](https://github.com/geli-lms/geli/issues/886)
 - Fix migrations for adding chatrooms to course and unit. [#888](https://github.com/geli-lms/geli/issues/888)
 - Fix maxium width of main content area [#893](https://github.com/geli-lms/geli/issues/893)
+- Migrations for adding chatrooms to course and unit. [#888](https://github.com/geli-lms/geli/issues/888), [#903](https://github.com/geli-lms/geli/pull/903), [#905](https://github.com/geli-lms/geli/pull/905)
 - `AuthController` `addWhitelistedUserToCourses` broken condition & typos. [#895](https://github.com/geli-lms/geli/issues/895)
 - `ChatRoomController` internal data leak. [#897](https://github.com/geli-lms/geli/issues/897)
 
