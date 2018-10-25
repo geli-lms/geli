@@ -19,13 +19,6 @@ const fileUnitSchema = new mongoose.Schema({
     type: String,
     required: true
   }
-}, {
-  toObject: {
-    transform: function (doc: any, ret: any) {
-      ret._id = ret._id.toString();
-      ret._course = ret._course.toString();
-    }
-  },
 });
 
 fileUnitSchema.methods.populateUnit = async function() {
