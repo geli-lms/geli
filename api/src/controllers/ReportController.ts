@@ -593,7 +593,7 @@ export class ReportController {
       {$group: { _id: '$course', progresses: { $push: '$$ROOT' }}}
     ]).exec();
 
-    // add
+    // add progressdata
     const courseObjectsWithProgress = courses
       .map((course:ICourseModel) => <ICourse> course.toObject())
       .map(this.countUnitsAndRemoveEmptyLectures)
