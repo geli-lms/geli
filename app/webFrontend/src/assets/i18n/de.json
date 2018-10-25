@@ -62,10 +62,10 @@
       "info2": "Ihre Studenten können ausschließlich den Codebereich editieren."
     },
     "text": {
-      "codeExample": "Das ist die bereitgestellte Beispiellösung.",
+      "codeExample": "Das ist die bereitgestellte Beispiellösung",
       "codeHere": "Ihr Code kommt hierhin",
       "logs": "Logs",
-      "testsNeedToSuccees": "Diese Tests müssen erfolgreich sein."
+      "mustSucceed": "Diese Tests müssen erfolgreich sein"
     }
   },
   "common": {

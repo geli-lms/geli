@@ -2,11 +2,11 @@
 
 ![geli-Logo](.var/geli-readme-icon.png)
 
-[![GitHub release](https://img.shields.io/github/release/utetrapp/geli.svg)](https://github.com/geli-lms/geli/releases)
-[![Build Status](https://travis-ci.org/utetrapp/geli.svg?branch=develop)](https://travis-ci.org/geli-lms/geli)
-[![Coverage Status](https://coveralls.io/repos/github/utetrapp/geli/badge.svg?branch=develop)](https://coveralls.io/github/geli-lms/geli?branch=develop)
+[![GitHub release](https://img.shields.io/github/release/geli-lms/geli.svg)](https://github.com/geli-lms/geli/releases)
+[![Build Status](https://travis-ci.com/geli-lms/geli.svg?branch=develop)](https://travis-ci.com/geli-lms/geli)
+[![Coverage Status](https://coveralls.io/repos/github/geli-lms/geli/badge.svg?branch=develop)](https://coveralls.io/github/geli-lms/geli?branch=develop)
 [![Uptime Robot ratio](https://img.shields.io/uptimerobot/ratio/m779032297-cd1143fdc10b510896f2a344.svg)](https://stats.uptimerobot.com/mq8EDc8lx)
-[![Gitter chat](https://badges.gitter.im/utetrapp/geli.png)](https://gitter.im/mpse-geli/Lobby)
+[![Gitter chat](https://badges.gitter.im/geli-lms/geli.png)](https://gitter.im/mpse-geli/Lobby)
 [![DavidDM-API](https://david-dm.org/geli-lms/geli.svg?path=api)](https://david-dm.org/geli-lms/geli?path=api)
 [![DavidDM-WEB](https://david-dm.org/geli-lms/geli.svg?path=app/webFrontend)](https://david-dm.org/geli-lms/geli?path=app/webFrontend)
 

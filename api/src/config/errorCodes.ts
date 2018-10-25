@@ -1,4 +1,10 @@
 export const errorCodes = {
+  chat: {
+    roomNotFound: {
+      code: 'chat room not found',
+      text: 'Chat room was not found.',
+    },
+  },
   mail: {
     duplicate: {
       code: 'duplicate mail',

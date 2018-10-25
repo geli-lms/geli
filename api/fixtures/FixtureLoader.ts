@@ -40,7 +40,7 @@ export class FixtureLoader {
         const hash = crypto.createHash('sha1').update(file.toString()).digest('hex');
         const users: IUser[] = await  FixtureUtils.getRandomUsers(2, 10, hash);
 
-        messages.map((message: any) => {
+        messages.map(async (message: any) => {
           message.room = chatRoom._id;
           let randomIdx = FixtureUtils.getRandomNumber(0, users.length);
           let randomUser: IUser = users[randomIdx];
@@ -57,7 +57,7 @@ export class FixtureLoader {
             });
           }
 
-          new Message(message).save();
+          await new Message(message).save();
         });
 
       });
