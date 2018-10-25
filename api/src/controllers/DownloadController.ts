@@ -165,8 +165,6 @@ export class DownloadController {
   @Post('/pdf/individual')
   @ContentType('application/json')
   async postDownloadRequestPDFIndividual(@Body() data: IDownload, @CurrentUser() user: IUser) {
-    // create hashed pdf file
-    const tempPdfFileName = this.tempPdfFileName(user);
 
     const course = await Course.findOne({_id: data.courseName});
 
@@ -203,6 +201,9 @@ export class DownloadController {
 
         let lecCounter = 1;
         for (const lec of data.lectures) {
+
+          // create hashed pdf file
+          const tempPdfFileName = this.tempPdfFileName(user);
 
           const localLecture = await Lecture.findOne({_id: lec.lectureId});
           const lcName = this.replaceCharInFilename(localLecture.name);
@@ -253,15 +254,14 @@ export class DownloadController {
                 html += '</html>';
               const name = lecCounter + '_' + lcName + '/' + unitCounter + '_' + this.replaceCharInFilename(localUnit.name) + '.pdf';
               await this.savePdfToFile(html, options, tempPdfFileName);
-
               await this.appendToArchive(archive, name, tempPdfFileName, hash);
-
+              fs.unlinkSync(tempPdfFileName);
             }
             unitCounter++;
           }
           lecCounter++;
         }
-        fs.unlinkSync(tempPdfFileName);
+
         return new Promise((resolve, reject) => {
           archive.on('error', () => reject(hash));
           archive.finalize();
