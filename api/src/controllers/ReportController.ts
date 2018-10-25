@@ -552,7 +552,7 @@ export class ReportController {
       throw new ForbiddenError();
     }
 
-    //get all courses for a student (including lectures and progressable+visible units)
+    // get all courses for a student (including lectures and progressable+visible units)
     const courses = await Course.find({ students: new ObjectId(id), active: true})
       .select({
         name: 1
@@ -577,25 +577,25 @@ export class ReportController {
 
     // map-reduce to get all unitIds in a flat array
     const unitIds: any = courses
-      .map((course:ICourseModel) => <ICourse> course.toObject())
-      .map((c:ICourse) => c.lectures)
-      .map((ls:ILecture[]) => ls
-        .map((l:ILecture) => l.units)
-        .map((us:IUnit[]) => us
-          .map((u:IUnit) => new ObjectId(u._id))))
+      .map((course: ICourseModel) => <ICourse> course.toObject())
+      .map((c: ICourse) => c.lectures)
+      .map((ls: ILecture[]) => ls
+        .map((l: ILecture) => l.units)
+        .map((us: IUnit[]) => us
+          .map((u: IUnit) => new ObjectId(u._id))))
       // flatten nested array
-      .reduce((prev,curr) => prev.concat(curr))
-      .reduce((prev,curr) => prev.concat(curr));
+      .reduce((prev, curr) => prev.concat(curr))
+      .reduce((prev, curr) => prev.concat(curr));
 
     // flat array of all user Progresses
     const userProgressData = await Progress.aggregate([
-      {$match: { user: new ObjectId(id), unit:{$in: unitIds}}},
+      {$match: { user: new ObjectId(id), unit: {$in: unitIds}}},
       {$group: { _id: '$course', progresses: { $push: '$$ROOT' }}}
     ]).exec();
 
     // add progressdata
     const courseObjectsWithProgress = courses
-      .map((course:ICourseModel) => <ICourse> course.toObject())
+      .map((course: ICourseModel) => <ICourse> course.toObject())
       .map(this.countUnitsAndRemoveEmptyLectures)
       .map(({courseObj, progressableUnitCount}: any) => {
         const progressStats = this.calculateProgress(userProgressData, progressableUnitCount, courseObj);
@@ -610,7 +610,6 @@ export class ReportController {
         return courseObj.lectures.length > 0;
       });
 
-    console.log(JSON.stringify(courseObjectsWithProgress));
     return courseObjectsWithProgress;
   }
 
