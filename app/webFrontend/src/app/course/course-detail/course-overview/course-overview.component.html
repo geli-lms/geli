@@ -1,4 +1,12 @@
 <div class="lectures" *ngIf="course">
-  <app-lecture [lecture]="lecture" *ngFor="let lecture of course.lectures">
+
+  <div class="toggle-lectures-container">
+    <button (click)="toggleAllLectures()" mat-button class="toggle-lectures">
+      <span *ngIf="openAllLectures">{{'common.collapseAll' | translate}}</span>
+      <span *ngIf="!openAllLectures">{{'common.expandAll' | translate}}</span>
+    </button>
+  </div>
+
+  <app-lecture [opened]="openAllLectures" [lecture]="lecture" *ngFor="let lecture of course.lectures">
   </app-lecture>
 </div>

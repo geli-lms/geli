@@ -155,7 +155,9 @@
     },
     "videos": "Videos",
     "line": "Line",
-    "errors": "Errors"
+    "errors": "Errors",
+    "collapseAll": "Collapse all",
+    "expandAll": "Expand all"
   },
   "course": {
     "delete": "Delete course",

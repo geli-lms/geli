@@ -7,10 +7,24 @@
 .lecture {
   margin-left: 1em;
   margin-bottom: -0.5em;
+
+  @media screen and (max-width: 475px) {
+    margin-left: 0;
+
+    &.mat-list-item .mat-list-item-content {
+      padding: 0;
+    }
+  }
 }
 
 .lightgray {
   margin-right: 7em;
   color: #A1A1A1;
   text-align: center;
+
+  @media screen and (max-width: 475px) {
+    margin-right: 5px;
+    text-align: right;
+    font-size: 12px;
+  }
 }

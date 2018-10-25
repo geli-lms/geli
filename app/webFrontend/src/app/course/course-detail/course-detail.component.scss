@@ -18,6 +18,18 @@
   margin-left: 5px;
 }
 
+.mat-tab-nav-bar {
+  overflow-x: scroll;
+
+  .mat-tab-link {
+    min-width: 110px;
+  }
+
+  @include bp(md) {
+    overflow-x: hidden;
+  }
+}
+
 .mat-chip {
   position: relative;
   cursor: pointer;

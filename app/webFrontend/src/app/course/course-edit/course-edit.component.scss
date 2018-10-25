@@ -12,6 +12,14 @@
   }
 }
 
+.mat-tab-nav-bar {
+  overflow-x: scroll;
+
+  @include bp(md) {
+    overflow-x: hidden;
+  }
+}
+
 .slider {
   width: 100%;
 

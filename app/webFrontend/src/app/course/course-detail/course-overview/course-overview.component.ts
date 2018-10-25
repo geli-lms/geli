@@ -12,6 +12,7 @@ import {DataSharingService} from '../../../shared/services/data-sharing.service'
 })
 export class CourseOverviewComponent implements OnInit {
   course: ICourse;
+  openAllLectures: boolean = true;
 
   constructor(private dataSharingService: DataSharingService) {
   }
@@ -19,4 +20,9 @@ export class CourseOverviewComponent implements OnInit {
   ngOnInit() {
     this.course = this.dataSharingService.getDataForKey('course');
   }
+
+  toggleAllLectures() {
+    this.openAllLectures = !this.openAllLectures;
+  }
+
 }
