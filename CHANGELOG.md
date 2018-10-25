@@ -61,6 +61,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Update `README.md` with latest information. [#845](https://github.com/geli-lms/geli/pull/845)
 - Exit build when no change to `CHANGELOG.md`. [#880](https://github.com/geli-lms/geli/pull/880)
 - Use deploy token to push geli-docs. [#851](https://github.com/geli-lms/geli/issues/851), [#900](https://github.com/geli-lms/geli/pull/900), [#902](https://github.com/geli-lms/geli/pull/902)
+- Responsiveness of course overview [#837](https://github.com/geli-lms/geli/issues/837)
 
 ### Removed
 - `isCourseTeacherOrAdmin` and `isMemberOfCourse` from `UserService`. [#731](https://github.com/geli-lms/geli/issues/731)
@@ -96,7 +97,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Migrations for adding chatrooms to course and unit. [#888](https://github.com/geli-lms/geli/issues/888), [#903](https://github.com/geli-lms/geli/pull/903), [#905](https://github.com/geli-lms/geli/pull/905)
 - `AuthController` `addWhitelistedUserToCourses` broken condition & typos. [#895](https://github.com/geli-lms/geli/issues/895)
 - `ChatRoomController` internal data leak. [#897](https://github.com/geli-lms/geli/issues/897)
-- Responsiveness of course overview [#837](https://github.com/geli-lms/geli/issues/837)
+- Depcreated warning on startup. [#920](https://github.com/geli-lms/geli/pull/920)
 
 ### Security
 - Secured the static `'uploads'` route by introducing a special `'mediaToken'` with new JWT strategy & middleware. [#729](https://github.com/geli-lms/geli/issues/729)
