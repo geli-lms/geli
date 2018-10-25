@@ -121,8 +121,12 @@ export class AppComponent implements OnInit {
   }
 
   contentStyle(): string {
+    let style = 'app-content';
     // Don't add padding when displaying non-plaintext files such as PDFs via a FileComponent.
     const routeTest = /^\/file/.test(this.router.url);
-    return routeTest ? 'app-content' : 'app-content-padding';
+    if (!routeTest) {
+      style += ' app-content-padding';
+    }
+    return style;
   }
 }
