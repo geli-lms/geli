@@ -16,7 +16,8 @@ const routes: Routes = [
     canActivate: [AuthGuardService],
     data: {roles: ['student', 'tutor', 'teacher', 'admin']},
     children: [
-      { path: '',
+      {
+        path: '',
         redirectTo: 'overview',
         pathMatch: 'full'
       },
@@ -28,6 +29,12 @@ const routes: Routes = [
       },
       {
         path: 'unit/:unit',
+        component: CourseOverviewComponent,
+        canActivate: [AuthGuardService],
+        data: {roles: ['student', 'tutor', 'teacher', 'admin']}
+      },
+      {
+        path: 'lecture/:lecture',
         component: CourseOverviewComponent,
         canActivate: [AuthGuardService],
         data: {roles: ['student', 'tutor', 'teacher', 'admin']}
