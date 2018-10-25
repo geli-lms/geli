@@ -26,8 +26,6 @@ const pdf =  require('html-pdf');
 const phantomjs = require('phantomjs-prebuilt');
 const binPath = phantomjs.path;
 
-const PDFtempPath = config.tmpFileCacheFolder + 'temp.pdf';
-
 // Set all routes which should use json to json, the standard is blob streaming data
 @Controller('/download')
 @UseBefore(passportJwtMiddleware)
