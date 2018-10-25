@@ -71,7 +71,7 @@ export class UnitComponent implements OnInit, AfterViewInit {
     try {
       const element = document.getElementById(this.unitId);
       if (element) {
-        element.scrollIntoView();
+        element.scrollIntoView({behavior: 'smooth'});
       }
     } catch (err) {}
   }
