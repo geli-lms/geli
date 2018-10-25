@@ -90,6 +90,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - PDF download fix if text is empty + added path to local `PhantomJS`. [#833](https://github.com/geli-lms/geli/issues/833)
 - Wrong reset password translation. [#836](https://github.com/geli-lms/geli/issues/836)
 - Various flawed code kata translations. [#886](https://github.com/geli-lms/geli/issues/886)
+- Fix migrations for adding chatrooms to course and unit. [#888](https://github.com/geli-lms/geli/issues/888)
+- Fix maxium width of main content area [#893](https://github.com/geli-lms/geli/issues/893)
 - Migrations for adding chatrooms to course and unit. [#888](https://github.com/geli-lms/geli/issues/888), [#903](https://github.com/geli-lms/geli/pull/903), [#905](https://github.com/geli-lms/geli/pull/905)
 - `AuthController` `addWhitelistedUserToCourses` broken condition & typos. [#895](https://github.com/geli-lms/geli/issues/895)
 - `ChatRoomController` internal data leak. [#897](https://github.com/geli-lms/geli/issues/897)
