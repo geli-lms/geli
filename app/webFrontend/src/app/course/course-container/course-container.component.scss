@@ -48,3 +48,9 @@
   height: 36px;
   width: 36px;
 }
+
+h1.small {
+  @media only screen and (max-width: 475px) {
+    font-size: 20px;
+  }
+}

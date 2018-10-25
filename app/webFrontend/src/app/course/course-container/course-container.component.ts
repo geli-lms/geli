@@ -22,6 +22,8 @@ export class CourseContainerComponent implements OnInit {
   expand: boolean;
   @Input()
   title: string;
+  @Input()
+  smallHeader: boolean = false;
 
   @Output()
   onEnroll = new EventEmitter();

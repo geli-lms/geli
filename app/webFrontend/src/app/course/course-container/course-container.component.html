@@ -1,5 +1,5 @@
 <div class="title-header" (click)="changeExpand()">
-  <h1>{{title}}</h1>
+  <h1 [class]="smallHeader ? 'small' : ''">{{title}}</h1>
   <div *ngIf="courses.length" matBadge="{{courses.length}}" matBadgeSize="medium">
     <button [class.opened]="expand" mat-icon-button class="open-toggle">
       <mat-icon class="arrow">
