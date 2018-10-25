@@ -40,6 +40,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Sentry reporting for missing translations. [#858](https://github.com/geli-lms/geli/issues/858)
 - Migration for `visible` field. [#890](https://github.com/geli-lms/geli/pull/890)
 - Fixed error on clicking on notification. [#916](https://github.com/geli-lms/geli/issues/916)
+- A collapse/expand button to units [#868](https://github.com/geli-lms/geli/issues/868)
 
 ### Changed
 - Minor fixes and adaptations and merge-failure fixes. [#785](https://github.com/geli-lms/geli/issues/785)
@@ -124,7 +125,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Add bootstrap grid system [#613](https://github.com/geli-lms/geli/issues/613)
 - Added changeable picture to course [#702](https://github.com/geli-lms/geli/issues/702)
 - Added a responsive image service [#546](https://github.com/geli-lms/geli/issues/546)
-- Added a collapse/expand button to units [#868](https://github.com/geli-lms/geli/issues/868)
 
 ### Changed
 - Refactored or slightly altered various course & user related APIs. [#654](https://github.com/geli-lms/geli/issues/654) [#691](https://github.com/geli-lms/geli/issues/691)
