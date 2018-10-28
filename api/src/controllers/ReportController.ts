@@ -79,7 +79,7 @@ export class ReportController {
     this.checkAccess(course, currentUser);
 
     const courseObjUnfiltered: ICourse = <ICourse>course.toObject();
-    const courseObj = this.countUnitsAndRemoveEmptyLectures(courseObjUnfiltered).courseObj;
+    const courseObj = this.countUnitsAndRemoveEmptyLectures(courseObjUnfiltered, currentUser).courseObj;
     courseObj.lectures.map((lecture: ILecture) => {
       lecture.units.map((unit) => {
         const progressStats = this.calculateProgress(unitProgressData, courseObj.students.length, unit);
@@ -606,16 +606,20 @@ export class ReportController {
     }
   }
 
-  private countUnitsAndRemoveEmptyLectures(courseObj: ICourse) {
+  private countUnitsAndRemoveEmptyLectures(courseObj: ICourse, currentUser: IUser) {
     let progressableUnitCount = 0;
     const invisibleUnits: ObjectId[] = [];
     courseObj.lectures = courseObj.lectures.filter((lecture: ILecture) => {
       lecture.units = lecture.units.filter((unit) => {
-        if (unit.visible === false) {
+        if (unit.visible === false && currentUser.role === 'student') {
           invisibleUnits.push(new ObjectId(unit._id));
         }
 
-        return unit.progressable && unit.visible;
+        if (currentUser.role === 'student') {
+          return unit.progressable && unit.visible;
+        } else {
+          return unit.progressable;
+        }
       });
       progressableUnitCount += lecture.units.length;
       return lecture.units.length > 0;
