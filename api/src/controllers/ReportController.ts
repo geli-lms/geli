@@ -571,7 +571,7 @@ export class ReportController {
     const courses = await coursesPromise;
     const courseObjects: any = courses.map((course: ICourseModel) => <ICourse>course.toObject());
     const aggregatedProgressPromise = courseObjects
-      .map(this.countUnitsAndRemoveEmptyLectures)
+      .map((courseObj: ICourse) => { return this.countUnitsAndRemoveEmptyLectures(courseObj, currentUser); })
       .map(async ({courseObj, progressableUnitCount, invisibleUnits}: any) => {
         const userProgressData = await Progress.aggregate([
           {$match: { user: new ObjectId(id), unit: { $nin: invisibleUnits } }},
