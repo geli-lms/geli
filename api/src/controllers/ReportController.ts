@@ -552,21 +552,14 @@ export class ReportController {
       throw new ForbiddenError();
     }
 
-    // get all courses for a student (including lectures and progressable+visible units)
-    const courses = await Course.find({ students: new ObjectId(id), active: true})
+    const coursesPromise = Course.find({ students: new ObjectId(id) })
       .select({
         name: 1
       })
       .populate({
         path: 'lectures',
         populate: {
-          path: 'units',
-          match: {
-            $and: [
-              {$or: [{visible: undefined}, {visible: true}]},
-              {progressable: true}
-            ]
-          }
+          path: 'units'
         },
         select: {
           name: 1,
@@ -575,38 +568,25 @@ export class ReportController {
       })
       .exec();
 
-    // map-reduce to get all unitIds in a flat array
-    const unitIds: any = courses
-      .map((course: ICourseModel) => <ICourse> course.toObject())
-      .map((c: ICourse) => c.lectures)
-      .map((ls: ILecture[]) => ls
-        .map((l: ILecture) => l.units)
-        .map((us: IUnit[]) => us
-          .map((u: IUnit) => new ObjectId(u._id))))
-      // flatten nested array
-      .reduce((prev, curr) => prev.concat(curr))
-      .reduce((prev, curr) => prev.concat(curr));
-
-    // flat array of all user Progresses
-    const userProgressData = await Progress.aggregate([
-      {$match: { user: new ObjectId(id), unit: {$in: unitIds}}},
-      {$group: { _id: '$course', progresses: { $push: '$$ROOT' }}}
-    ]).exec();
-
-    // add progressdata
-    const courseObjectsWithProgress = courses
-      .map((course: ICourseModel) => <ICourse> course.toObject())
+    const courses = await coursesPromise;
+    const courseObjects: any = courses.map((course: ICourseModel) => <ICourse>course.toObject());
+    const aggregatedProgressPromise = courseObjects
       .map(this.countUnitsAndRemoveEmptyLectures)
-      .map(({courseObj, progressableUnitCount}: any) => {
-        const progressStats = this.calculateProgress(userProgressData, progressableUnitCount, courseObj);
+      .map(async ({courseObj, progressableUnitCount, invisibleUnits}: any) => {
+        const userProgressData = await Progress.aggregate([
+          {$match: { user: new ObjectId(id), unit: { $nin: invisibleUnits } }},
+          {$group: { _id: '$course', progresses: { $push: '$$ROOT' }}}
+        ]).exec();
+        const progressStats = await this.calculateProgress(userProgressData, progressableUnitCount, courseObj);
         courseObj.progressData = [
           { name: 'not tried', value: progressStats.nothing },
           { name: 'tried', value: progressStats.tried },
           { name: 'solved', value: progressStats.done }
         ];
-        return courseObj;
-      })
-      .filter((courseObj: any) => {
+        return await courseObj;
+      });
+      const courseObjectsBeforeFilter = await Promise.all(aggregatedProgressPromise);
+      const courseObjectsWithProgress = await courseObjectsBeforeFilter.filter((courseObj: any) => {
         return courseObj.lectures.length > 0;
       });
 
@@ -628,12 +608,20 @@ export class ReportController {
 
   private countUnitsAndRemoveEmptyLectures(courseObj: ICourse) {
     let progressableUnitCount = 0;
-    courseObj.lectures = courseObj.lectures
-      .filter((lecture: ILecture) => {
+    const invisibleUnits: ObjectId[] = [];
+    courseObj.lectures = courseObj.lectures.filter((lecture: ILecture) => {
+      lecture.units = lecture.units.filter((unit) => {
+        if (unit.visible === false) {
+          invisibleUnits.push(new ObjectId(unit._id));
+        }
+
+        return unit.progressable && unit.visible;
+      });
       progressableUnitCount += lecture.units.length;
       return lecture.units.length > 0;
     });
-    return {courseObj, progressableUnitCount};
+
+    return {courseObj, progressableUnitCount, invisibleUnits};
   }
 
   private calculateProgress(progressData: any, totalCount: number, doc: any) {
