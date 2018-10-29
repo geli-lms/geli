@@ -97,7 +97,7 @@ export default class MessageController {
     if (!room) {
       throw new BadRequestError();
     }
-    const count = await Message.count({room: room});
+    const count = await Message.countDocuments({room: room});
 
     return {count: count};
   }
