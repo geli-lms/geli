@@ -7,8 +7,8 @@
     [theme]="'github'"
     [readOnly]="true">
   </ace-editor>
-  <div *ngIf="!isExampleCode">{{ 'code-kata.text.codeHere' | translate }}</div>
-  <div *ngIf="isExampleCode"></div>
+  <div *ngIf="!isExampleCode">{{ 'code-kata.text.codeHere' | translate }}:</div>
+  <div *ngIf="isExampleCode">{{ 'code-kata.text.codeExample' | translate }}:</div>
   <ace-editor class="user-code-editor"
               #codeEditor
               [(text)]="codeKataUnit.code"
@@ -18,7 +18,7 @@
               [durationBeforeCallback]="333"
               (textChanged)="onUserInput()">
   </ace-editor>
-  <div>{{ 'code-kata.text.needToSuccess' | translate }}</div>
+  <div>{{ 'code-kata.text.mustSucceed' | translate }}:</div>
   <ace-editor
     #testEditor
     [text]="codeKataUnit.test"

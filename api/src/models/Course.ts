@@ -14,9 +14,6 @@ import {extractMongoId} from '../utilities/ExtractMongoId';
 import {ChatRoom, IChatRoomModel} from './ChatRoom';
 
 import {Picture} from './mediaManager/File';
-import {IPictureModel} from './mediaManager/Picture';
-import {IPicture} from '../../../shared/models/mediaManager/IPicture';
-import * as fs from 'fs';
 
 interface ICourseModel extends ICourse, mongoose.Document {
   exportJSON: (sanitize?: boolean, onlyBasicData?: boolean) => Promise<ICourse>;
@@ -50,11 +47,10 @@ const courseSchema = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User'
     },
-    media:
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Directory'
-      },
+    media: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Directory'
+    },
     teachers: [
       {
         type: mongoose.Schema.Types.ObjectId,
@@ -78,8 +74,8 @@ const courseSchema = new mongoose.Schema({
     },
     enrollType: {
       type: String,
-      'enum': ['free', 'whitelist', 'accesskey'],
-      'default': 'free'
+      enum: ['free', 'whitelist', 'accesskey'],
+      default: 'free'
     },
     whitelist: [
       {
@@ -91,10 +87,12 @@ const courseSchema = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Picture'
     },
-    chatRooms: [{
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'ChatRoom'
-    }]
+    chatRooms: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'ChatRoom'
+      }
+    ]
   },
   {
     timestamps: true,
@@ -121,10 +119,8 @@ const courseSchema = new mongoose.Schema({
           }
         }
 
-        if (doc.populated('chatRooms') !== undefined) {
-          ret.chatRooms = ret.chatRooms.map((chatRoom: any) => {
-            return chatRoom.toString();
-          });
+        if (ret.chatRooms) {
+          ret.chatRooms = ret.chatRooms.map(extractMongoId);
         }
       }
     }
@@ -177,7 +173,6 @@ courseSchema.methods.exportJSON = async function (sanitize: boolean = true, only
   delete obj.createdAt;
   delete obj.__v;
   delete obj.updatedAt;
-  delete obj.media;
 
   // custom properties
   if (sanitize) {
@@ -187,6 +182,8 @@ courseSchema.methods.exportJSON = async function (sanitize: boolean = true, only
     delete obj.students;
     delete obj.courseAdmin;
     delete obj.teachers;
+    delete obj.media;
+    delete obj.chatRooms;
   }
 
   if (onlyBasicData) {
@@ -332,7 +329,7 @@ courseSchema.methods.forView = function (): ICourseView {
     courseAdmin: User.forCourseView(courseAdmin),
     teachers: teachers.map((teacher: IUser) => User.forCourseView(teacher)),
     lectures: lectures.map((lecture: any) => lecture.toObject()),
-    chatRooms: chatRooms.map((chatRoom: any) => chatRoom.toString())
+    chatRooms: chatRooms.map(extractMongoId)
   };
 };
 
@@ -358,9 +355,6 @@ courseSchema.methods.processLecturesFor = async function (user: IUser) {
   }));
   return this;
 };
-
-
-
 
 Course = mongoose.model<ICourseModel, ICourseMongoose>('Course', courseSchema);
 

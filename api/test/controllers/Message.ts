@@ -25,8 +25,6 @@ describe('Message', async () => {
   beforeEach(async () => {
     // load fixtures
     await fixtureLoader.load();
-    // run migrations for chat feature
-    await (new MigrationHandler()).up(['course_v2', 'unit_v2']);
   });
 
   describe(`GET ${BASE_URL}`, async () => {

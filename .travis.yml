@@ -19,6 +19,7 @@ addons:
       - lsb-base
       # used for frontend e2e tests
       - google-chrome-stable
+      - rsync
 
 services:
   - mongodb
@@ -36,6 +37,10 @@ cache:
     - api/node_modules
     - app/webFrontend/node_modules
     - .travis/node_modules
+
+before_install:
+  # check for change in changelog
+  - .travis/changelog.sh
 
 before_script:
   # required for chrome to start properly
@@ -62,8 +67,6 @@ install:
   - cd ..
 
 script:
-  # check for change in changelog
-  - .travis/changelog.sh
   # check for versions
   - .travis/check-version.sh
   # run license checker and write license.json / dependencies.ts
