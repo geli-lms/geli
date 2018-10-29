@@ -1,6 +1,13 @@
 <div *ngIf="this.checkForEmptyLectures()">
   <mat-card class="dl-card">
     <mat-card-content>
+      <p class="beta-warning">
+        Heads up! The download feature is still in development.
+        We assume that for most lectures the export works quite well but there are some corner cases where the export might not work as you expect.
+        If you find a mistake please report it back to <a href="https://github.com/geli-lms/geli/issues" target="_blank">https://github.com/geli-lms/geli/issues</a>
+      </p>
+    </mat-card-content>
+    <mat-card-content>
       <ng-container *ngIf="!this.checkForEmptyLectures()">{{'common.text.downloadNoFiles' | translate}}</ng-container>
       <mat-list>
         <mat-list-item class="selectAll">
