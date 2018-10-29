@@ -1,15 +1,17 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
-import {MatDialog, MatSnackBar} from '@angular/material';
+import {MatDialog} from '@angular/material';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
 import {ILecture} from '../../../../../../../shared/models/ILecture';
 import {IFileUnit} from '../../../../../../../shared/models/units/IFileUnit';
 import {UnitGeneralInfoFormComponent} from '../unit-general-info-form/unit-general-info-form.component';
-import {NotificationService, UnitService} from '../../../shared/services/data.service';
-import {FileUnit} from '../../../models/units/FileUnit';
+import {UnitService} from '../../../shared/services/data.service';
 import {ShowProgressService} from '../../../shared/services/show-progress.service';
-import {VideoUnit} from '../../../models/units/VideoUnit';
-import {PickMediaDialog} from '../../../shared/components/pick-media-dialog/pick-media-dialog.component';
 import {IFile} from '../../../../../../../shared/models/mediaManager/IFile';
+import {UnitFormService} from '../../../shared/services/unit-form.service';
+import {FormArray, FormBuilder, FormControl, FormGroup} from '@angular/forms';
+import {SnackBarService} from '../../../shared/services/snack-bar.service';
+import {CourseMediaComponent} from '../../../course/course-edit/course-media/course-media.component';
+import {FileIconService} from '../../../shared/services/file-icon.service';
 
 @Component({
   selector: 'app-file-unit-form',
@@ -18,86 +20,81 @@ import {IFile} from '../../../../../../../shared/models/mediaManager/IFile';
 })
 export class FileUnitFormComponent implements OnInit {
 
-  @Input() course: ICourse;
-  @Input() lecture: ILecture;
-  @Input() model: IFileUnit;
+  course: ICourse;
+  lecture: ILecture;
+  model: IFileUnit;
+
   @Input() fileUnitType: string;
-  @Input() onDone: () => void;
-  @Input() onCancel: () => void;
+
+  unitForm: FormGroup;
+
 
   @ViewChild(UnitGeneralInfoFormComponent)
   public generalInfo: UnitGeneralInfoFormComponent;
 
-  constructor(public snackBar: MatSnackBar,
+  constructor(public snackBar: SnackBarService,
               private unitService: UnitService,
               private showProgress: ShowProgressService,
               private dialog: MatDialog,
-              private notificationService: NotificationService) {
+              private unitFormService: UnitFormService,
+              private formBuilder: FormBuilder,
+              private fileIcon: FileIconService) {
   }
 
   ngOnInit() {
-    if (!this.model) {
-      if (this.fileUnitType === 'video') {
-        // 'video'
-        this.model = new VideoUnit(this.course);
-      } else {
-        // default or 'file'
-        this.model = new FileUnit(this.course);
-      }
-    }
+    this.model = <IFileUnit> this.unitFormService.model;
+    this.lecture = <ILecture> this.unitFormService.lecture;
+    this.course = <ICourse> this.unitFormService.course;
+
+    this.model.fileUnitType = this.fileUnitType;
+
+    this.unitFormService.headline = this.fileUnitType === 'video' ? 'Add Videos' : 'Add Files';
+    this.unitFormService.unitForm.addControl('files', new FormArray([]));
+
+    this.unitForm = this.unitFormService.unitForm;
+
+
+
+
+    this.buildForm();
   }
 
-  save() {
-    this.model = {
-      ...this.model,
-      name: this.generalInfo.form.value.name,
-      description: this.generalInfo.form.value.description,
-      visible: this.generalInfo.form.value.visible
-
-    };
-
-    const reqObj = {
-      lectureId: this.lecture._id,
-      model: this.model
-    };
-
-    const promise = (reqObj.model._id)
-      ? this.unitService.updateItem(reqObj)
-      : this.unitService.createItem(reqObj);
-
-    promise
-      .then((updatedUnit) => {
-        this.model = <FileUnit><any>updatedUnit;
-        this.onDone();
-        return this.notificationService.createItem(
-          {
-            changedCourse: this.course, changedLecture: this.lecture,
-            changedUnit: updatedUnit, text: 'Course ' + this.course.name + ' has an updated file unit.'
-          });
-      })
-      .catch((error) => {
-        this.snackBar.open('An error occurred', 'Dismiss');
-
-      });
+  buildForm() {
+    for (const file of this.model.files) {
+      this.addFileToForm(file);
+    }
   }
 
   removeFile(file: any) {
-    if (this.model) {
-      this.model.files = this.model.files.filter((currFile: any) => currFile !== file);
-    }
-  }
-
-  checkSave() {
-    if (this.generalInfo.form.value.name) {
-      return !(this.model.files.length > 0);
-    } else {
-      return true;
-    }
+    let files =  (<FormArray>this.unitForm.controls.files).controls;
+    files = files.filter((currFile: any) => currFile.value !== file.value);
+    (<FormArray>this.unitForm.controls.files).controls = files;
   }
 
   async openAddFilesDialog() {
-    if (this.course.media === undefined) {
-      this.snackBar.open('Please add files first', '', {duration: 3000});
+
+    const allowedMimeTypes = (this.fileUnitType !== 'video') ? undefined : [
+      'video/mp4',
+      'video/webm',
+      'video/ogg',
+      'video/avi',
+    ];
+
+    const res = await this.dialog.open(CourseMediaComponent, {
+      maxWidth: '90vw',
+      maxHeight: '90vh',
+      minWidth: '50vw',
+      disableClose: true,
+      data: {
+        courseId: this.course._id,
+        allowedMimeTypes: allowedMimeTypes
+      }
+    });
+
+
+    /*
+    if (!this.unitFormService.course.media) {
+      this.snackBar.openShort('Please add files first');
       return;
     }
 
@@ -113,26 +110,47 @@ export class FileUnitFormComponent implements OnInit {
         directoryId: this.course.media._id,
         allowedMimeTypes: allowedMimeTypes,
       },
-    });
+    });*/
 
     res.afterClosed().subscribe(async value => {
       if (value) {
         value.forEach((val: IFile) => {
           // Check if file already added
           let alreadyExists = false;
-          this.model.files.forEach(v => {
-            if (val._id === v._id) {
+          (<FormArray>this.unitForm.controls.files).controls.forEach(v => {
+            if (val._id === v.value._id) {
               alreadyExists = true;
             }
           });
 
           // Add file
           if (!alreadyExists) {
-            this.model.files.push(val);
+            this.addFileToForm(val);
+            // this.model.files.push(val);
           }
         });
-        this.snackBar.open('Added files to unit', '', {duration: 2000});
+        this.snackBar.openShort('Added files to unit');
       }
     });
+  }
+
+  addFileToForm(file: IFile) {
+    // create new fileControl as formGroup
+    const fileControl = this.formBuilder.group({
+      _id: new FormControl(),
+      name: new FormControl(),
+      link: new FormControl(),
+      size: new FormControl(),
+      mimeType: new FormControl()
+    });
+
+    if (file) {
+      fileControl.patchValue({
+        ...file
+      });
+    }
+
+    // add new element at end of files array
+    (<FormArray> this.unitForm.controls['files']).push(fileControl);
   }
 }

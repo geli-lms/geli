@@ -1,0 +1,40 @@
+.msg-input-container{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+
+.emoji-mart{
+  animation: fadeInUp 1s;
+}
+
+.emoji-mart-scroll {
+  height: 170px !important;
+}
+
+.msg-input{
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  padding-left: 10px;
+
+  form {
+    flex: 1;
+  }
+
+  .message-input-field {
+
+    width: 100%;
+    textarea {
+      max-height: 200px;
+      border-radius: 5px;
+    }
+  }
+}
+
+
+.msg-input-footer{
+  display: flex;
+  justify-content: flex-end;
+}

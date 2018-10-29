@@ -1,20 +1,19 @@
-<mat-tab-group (selectChange)="onTabChange($event)">
+<mat-tab-group (selectedTabChange)="onTabChange($event)" [formGroup]="unitForm">
   <mat-tab label="Write">
     <p class="info-text">
       <mat-icon>info</mat-icon>
-      Add Markdown to add text to this Course.
-      A Cheatsheet you can find
-      <a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet" target="_blank">here</a>.
+      {{ 'course.text.addMarkdownToCourse' | translate }}
+      {{ 'common.cheatSheetYouFind' | translate }}
+      <a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet" target="_blank">{{ 'common.here' | translate }}</a>.
     </p>
 
-    <ace-editor #editor
-                [(text)]="this.markdown"
+    <ace-editor formControlName="markdown" #editor
                 [mode]="'markdown'"
                 [theme]="'github'"
                 [autoUpdateContent]="true">
     </ace-editor>
   </mat-tab>
   <mat-tab label="Preview">
-    <app-free-text-unit-core [markdown]="this.markdown"></app-free-text-unit-core>
+    <app-free-text-unit-core [markdown]="unitForm.controls.markdown.value"></app-free-text-unit-core>
   </mat-tab>
 </mat-tab-group>

@@ -1,14 +1,20 @@
-<h1>Administration</h1>
+<h1>{{ 'common.administration' | translate }}</h1>
 <mat-toolbar>
   <mat-toolbar-row>
     <button mat-button routerLink="/admin/users">
-      <span>Users</span>
+      <span>{{ 'common.users' | translate }}</span>
     </button>
-    <button [routerLink]="['/admin/markdownEdit']" [queryParams]="{type: 'imprint', header: 'Imprint'}" mat-button>
-      <span>Imprint</span>
+    <button [routerLink]="['/admin/markdownEdit']" [queryParams]="{type: 'legalnotice', header: 'Legal notice'}" mat-button>
+      <span>{{ 'common.legalnotice' | translate }}</span>
+    </button>
+    <button [routerLink]="['/admin/markdownEdit']" [queryParams]="{type: 'privacy', header: 'Privacy'}" mat-button>
+      <span>{{ 'common.privacy' | translate }}</span>
     </button>
     <button mat-button [routerLink]="['/admin/markdownEdit']" [queryParams]="{type: 'infoBox', header: 'InfoBox'}">
-      <span>InfoBox</span>
+      <span>{{ 'common.infobox' | translate }}</span>
+    </button>
+    <button mat-button [routerLink]="['/admin/misc']">
+      <span>{{ 'common.misc' | translate }}</span>
     </button>
   </mat-toolbar-row>
 </mat-toolbar>

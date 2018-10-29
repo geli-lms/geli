@@ -1,6 +1,6 @@
 <div *ngIf="fileUnit.fileUnitType === 'video'">
   <div *ngFor="let file of fileUnit.files;">
-    <video class="video" (loadedmetadata)="loadedVideos($event)" src="{{'/api/uploads/' + file.link}}" controls #vid></video>
+    <video class="video" (loadedmetadata)="loadedVideos($event)" src="{{'/api/uploads/' + file.link | jwt}}" controls #vid></video>
     <!--<app-video ></app-video>-->
   </div>
 </div>
@@ -8,13 +8,10 @@
   <div>
     <img *ngFor="let image of album; let i=index" [src]="image.src" (click)="openLB(i)" class="lightbox-cstm--preview" matTooltip="Right-click and choose 'Save image as' to download this image">
   </div>
-  <ul>
-    <ng-container *ngFor="let file of fileUnit.files;">
-      <li *ngIf="!isPicture(file.name)">
-        <a href="{{'/api/uploads/' + file.link}}" download="{{file.name}}">
-          <span>{{file.name}}</span>
-        </a>
-      </li>
-    </ng-container>
-  </ul>
+  <mat-list>
+    <mat-list-item *ngFor="let file of files">
+      <mat-icon mat-list-icon>{{ fileIcon.fileToIcon(file) }}</mat-icon>
+      <a href="{{ '/api/uploads/' + file.link | jwt }}" download="{{ file.name }}">{{ file.name }}</a>
+    </mat-list-item>
+  </mat-list>
 </div>

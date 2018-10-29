@@ -1,11 +1,11 @@
 <button mat-icon-button [matMenuTriggerFor]="notificationMenu">
-  <mat-icon>{{notificationIcon}}</mat-icon>
-  <span *ngIf="!isNullOrUndefined(notifications)">{{notifications.length}}</span>
+  <mat-icon>notifications</mat-icon>
+  <span *ngIf="!isNullOrUndefined(notifications) && notifications.length" matBadge="{{notifications.length}}" matBadgeColor="accent" matBadgeOverlap="true"></span>
 </button>
 <mat-menu #notificationMenu="matMenu">
   <span class="headline">Notifications</span>
-  <span *ngIf="!isNullOrUndefined(notifications) && notifications.length > 0" class="clearButton" (click)="clearAll()">Clear all</span>
-  <span *ngIf="isNullOrUndefined(notifications) || notifications.length <= 0" class="noNotification">You don't have notifications.</span>
+  <span *ngIf="!isNullOrUndefined(notifications) && notifications.length > 0" class="clearButton" (click)="clearAll()">{{ 'notifications.text.clearAll' | translate }}</span>
+  <span *ngIf="isNullOrUndefined(notifications) || notifications.length <= 0" class="noNotification">{{ 'notifications.text.noNotifications' | translate }}</span>
   <mat-nav-list>
     <div *ngFor="let notification of notifications">
       <mat-divider></mat-divider>
@@ -13,13 +13,19 @@
         <mat-list-item *ngIf="isNullOrUndefined(notification.changedCourse)">
           <span class="notificationItem">{{notification.text}}</span>
         </mat-list-item>
-        <mat-list-item *ngIf="!isNullOrUndefined(notification.changedCourse) && isNullOrUndefined(notification.changedLecture) && isNullOrUndefined(notification.changedUnit)" [routerLink]="['/course', notification.changedCourse._id]">
+        <mat-list-item
+          *ngIf="!isNullOrUndefined(notification.changedCourse) && isNullOrUndefined(notification.changedLecture) && isNullOrUndefined(notification.changedUnit)"
+          [routerLink]="['/course', notification.changedCourse._id]">
           <span class="notificationItem">{{notification.text}}</span>
         </mat-list-item>
-        <mat-list-item *ngIf="!isNullOrUndefined(notification.changedCourse) && !isNullOrUndefined(notification.changedLecture) && isNullOrUndefined(notification.changedUnit)" [routerLink]="['/course', notification.changedCourse._id, 'lecture', notification.changedLecture._id]">
+        <mat-list-item
+          *ngIf="!isNullOrUndefined(notification.changedCourse) && !isNullOrUndefined(notification.changedLecture) && isNullOrUndefined(notification.changedUnit)"
+          [routerLink]="['/course', notification.changedCourse._id, 'lecture', notification.changedLecture._id]">
           <span class="notificationItem">{{notification.text}}</span>
         </mat-list-item>
-        <mat-list-item *ngIf="!isNullOrUndefined(notification.changedCourse) && !isNullOrUndefined(notification.changedUnit)" [routerLink]="['/course', notification.changedCourse._id, 'unit', notification.changedUnit._id]">
+        <mat-list-item
+          *ngIf="!isNullOrUndefined(notification.changedCourse) && !isNullOrUndefined(notification.changedUnit)"
+          [routerLink]="['/course', notification.changedCourse._id, 'unit', notification.changedUnit._id]">
           <span class="notificationItem">{{notification.text}}</span>
         </mat-list-item>
       </div>

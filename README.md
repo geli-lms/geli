@@ -2,13 +2,13 @@
 
 ![geli-Logo](.var/geli-readme-icon.png)
 
-[![GitHub release](https://img.shields.io/github/release/h-da/geli.svg)](https://github.com/h-da/geli/releases)
-[![Build Status](https://travis-ci.org/h-da/geli.svg?branch=develop)](https://travis-ci.org/h-da/geli)
-[![Coverage Status](https://coveralls.io/repos/github/h-da/geli/badge.svg?branch=develop)](https://coveralls.io/github/h-da/geli?branch=develop)
+[![GitHub release](https://img.shields.io/github/release/geli-lms/geli.svg)](https://github.com/geli-lms/geli/releases)
+[![Build Status](https://travis-ci.com/geli-lms/geli.svg?branch=develop)](https://travis-ci.com/geli-lms/geli)
+[![Coverage Status](https://coveralls.io/repos/github/geli-lms/geli/badge.svg?branch=develop)](https://coveralls.io/github/geli-lms/geli?branch=develop)
 [![Uptime Robot ratio](https://img.shields.io/uptimerobot/ratio/m779032297-cd1143fdc10b510896f2a344.svg)](https://stats.uptimerobot.com/mq8EDc8lx)
-[![Gitter chat](https://badges.gitter.im/h-da/geli.png)](https://gitter.im/mpse-geli/Lobby)
-[![DavidDM-API](https://david-dm.org/h-da/geli.svg?path=api)](https://david-dm.org/h-da/geli?path=api)
-[![DavidDM-WEB](https://david-dm.org/h-da/geli.svg?path=app/webFrontend)](https://david-dm.org/h-da/geli?path=app/webFrontend)
+[![Gitter chat](https://badges.gitter.im/geli-lms/geli.png)](https://gitter.im/mpse-geli/Lobby)
+[![DavidDM-API](https://david-dm.org/geli-lms/geli.svg?path=api)](https://david-dm.org/geli-lms/geli?path=api)
+[![DavidDM-WEB](https://david-dm.org/geli-lms/geli.svg?path=app/webFrontend)](https://david-dm.org/geli-lms/geli?path=app/webFrontend)
 
 geli is an open source e-learning platform. Try the [demo](https://demo.geli.fbi.h-da.de/)!
 
@@ -41,7 +41,7 @@ The API is based on [Node.js](https://nodejs.org) together with [Express](http:/
 [MongoDB](https://www.mongodb.com).
 Have a look at our [API documentation](https://h-da.github.io/geli-docs/).
 
-The web frontend is built with [Angular](https://angular.io/) 5 and 
+The web frontend is built with [Angular](https://angular.io/) 6 and 
 [Angular Material](https://material.angular.io/) components.
 
 

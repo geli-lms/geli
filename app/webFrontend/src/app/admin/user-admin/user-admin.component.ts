@@ -1,11 +1,12 @@
 import {Component, OnInit} from '@angular/core';
 import {UserDataService} from '../../shared/services/data.service';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {ShowProgressService} from '../../shared/services/show-progress.service';
-import {MatSnackBar} from '@angular/material';
+import {SnackBarService} from '../../shared/services/snack-bar.service';
 import {IUser} from '../../../../../../shared/models/IUser';
 import {DialogService} from '../../shared/services/dialog.service';
 import {UserService} from '../../shared/services/user.service';
+import {isNullOrUndefined} from 'util';
 
 @Component({
   selector: 'app-user-admin',
@@ -20,24 +21,37 @@ export class UserAdminComponent implements OnInit {
   constructor(private userDataService: UserDataService,
               private router: Router,
               private showProgress: ShowProgressService,
-              public  snackBar: MatSnackBar,
+              public  snackBar: SnackBarService,
               public  dialogService: DialogService,
+              private route: ActivatedRoute,
               private userService: UserService) {
+
+
   }
 
   ngOnInit() {
     this.getUsers();
     this.getRoles();
+
+    this.route.params.subscribe(params => {
+      if (!isNullOrUndefined(params['deleteId'])) {
+        this.deleteUserById(params['deleteId']);
+      }
+    });
   }
 
   getAllUsers(): IUser[] {
     return this.allUsers;
   }
 
-  getUsers() {
-    this.userDataService.readItems<IUser>().then(users => {
-      this.allUsers = users;
-    });
+  async getUsers() {
+    this.allUsers = await this.userDataService.readItems<IUser>();
+  }
+
+  async deleteUserById(userId: string) {
+    await this.getUsers();
+    const idx = this.allUsers.findIndex((user) =>  user._id === userId);
+    this.deleteUser(idx);
   }
 
   getRoles() {
@@ -46,18 +60,15 @@ export class UserAdminComponent implements OnInit {
     });
   }
 
-  updateRole(userIndex: number) {
+  async updateRole(userIndex: number) {
     this.showProgress.toggleLoadingGlobal(true);
-    this.userDataService.updateItem(this.allUsers[userIndex]).then(
-      (val) => {
-        this.showProgress.toggleLoadingGlobal(false);
-        this.snackBar.open('Role of user ' + val.email + ' successfully updated to ' + val.role, '', {duration: 3000});
-      },
-      (error) => {
-        this.snackBar.open(error.error.message, '', {duration: 3000});
-        this.showProgress.toggleLoadingGlobal(false);
-      }
-    );
+    try {
+      const user = await this.userDataService.updateItem(this.allUsers[userIndex]);
+      this.snackBar.open('Role of user ' + user.email + ' successfully updated to ' + user.role);
+    } catch (err) {
+      this.snackBar.open(err.error.message);
+    }
+    this.showProgress.toggleLoadingGlobal(false);
   }
 
   editUser(userIndex: number) {
@@ -66,22 +77,24 @@ export class UserAdminComponent implements OnInit {
   }
 
   deleteUser(userIndex: number) {
-    this.dialogService
-    .confirmDelete('user', this.allUsers[userIndex].email)
-    .subscribe(res => {
-      if (res) {
+    this.dialogService.confirmDelete('user', this.allUsers[userIndex].email)
+      .subscribe(async res => {
+        if (!res) {
+          return;
+        }
+
         this.showProgress.toggleLoadingGlobal(true);
-        this.userDataService.deleteItem(this.allUsers[userIndex]).then(
-          (val) => {
-            this.showProgress.toggleLoadingGlobal(false);
-            this.snackBar.open('User ' + val + ' was successfully deleted.', '', {duration: 3000});
-          },
-          (error) => {
-            this.showProgress.toggleLoadingGlobal(false);
-            this.snackBar.open(error, '', {duration: 3000});
-          }
-        );
-      }
+        const user = this.allUsers[userIndex];
+
+        try {
+          await this.userDataService.deleteItem(user);
+          this.snackBar.open('User ' + user.email + ' was successfully deleted.');
+        } catch (err) {
+          this.snackBar.open(err.error.message);
+        }
+
+        this.getUsers();
+        this.showProgress.toggleLoadingGlobal(false);
     });
   }
 }

@@ -4,6 +4,10 @@
     "name": "Alexander Eimer",
     "email": "alexander.eimer@gmail.com"
   },
+"repository": {
+  "type": "git",
+  "url": "https://github.com/geli-lms/geli"
+},
   "description": "These dependencies are only for the travis after_script stuff",
   "license": "GPL-3.0",
   "devDependencies": {

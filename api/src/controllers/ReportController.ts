@@ -317,6 +317,8 @@ export class ReportController {
       }
     })
     .populate('students')
+    .populate('teachers')
+    .populate('courseAdmin')
     .exec();
   }
 

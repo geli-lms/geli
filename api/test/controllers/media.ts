@@ -191,8 +191,41 @@ describe('Media', async () => {
         name: 'root'
       }).save();
 
-      const testFileName = fs.readdirSync('./')[0];
-      const testFile = fs.readFileSync(testFileName);
+      const testFileName = 'test_file.txt';
+      const testFile = fs.readFileSync('./test/resources/' + testFileName);
+
+      const result = await chai.request(app)
+        .post(`${BASE_URL}/file/${rootDirectory._id}`)
+        .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
+        .attach('file', testFile, testFileName)
+        .catch((err) => err.response);
+
+      result.status.should.be.equal(200,
+        'could not upload file' +
+        ' -> ' + result.body.message);
+      result.body.__v.should.equal(0);
+      should.exist(result.body._id);
+      should.exist(result.body.mimeType);
+      should.exist(result.body.size);
+      should.exist(result.body.link);
+      result.body.name.should.be.equal(testFileName);
+
+      const updatedRoot = (await Directory.findById(rootDirectory));
+      updatedRoot.files.should.be.instanceOf(Array)
+        .and.have.lengthOf(1)
+        .and.contains(result.body._id);
+    });
+
+
+    it('should upload a file without extension', async () => {
+      const teacher = await FixtureUtils.getRandomTeacher();
+
+      const rootDirectory = await new Directory({
+        name: 'root'
+      }).save();
+
+      const testFileName = 'test_file_without_extension';
+      const testFile = fs.readFileSync('./test/resources/' + testFileName);
 
       const result = await chai.request(app)
         .post(`${BASE_URL}/file/${rootDirectory._id}`)
@@ -382,6 +415,28 @@ describe('Media', async () => {
 
       should.not.exist(await File.findById(file));
       fs.existsSync(config.uploadFolder + '/test.file').should.be.equal(false);
+    });
+
+    it('should fail when directory not found', async () => {
+      const teacher = await FixtureUtils.getRandomTeacher();
+
+      const result = await chai.request(app)
+        .del(`${BASE_URL}/directory/507f1f77bcf86cd799439011`)
+        .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
+        .catch((err) => err.response);
+
+      result.status.should.be.equal(404);
+    });
+
+    it('should fail when file not found', async () => {
+      const teacher = await FixtureUtils.getRandomTeacher();
+
+      const result = await chai.request(app)
+        .del(`${BASE_URL}/file/507f1f77bcf86cd799439011`)
+        .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
+        .catch((err) => err.response);
+
+      result.status.should.be.equal(404);
     });
   });
 });

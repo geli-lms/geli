@@ -1,8 +1,13 @@
-<mat-form-field class="pull-right">
-  <mat-select placeholder="Sorted by">
-    <mat-option value="last visited" (click)="sortCourses()">last visited</mat-option>
-    <mat-option value="alphabetically" (click)="sortAlphabetically()">alphabetically</mat-option>    
-  </mat-select>
-</mat-form-field>
+<div class="search-input-group">
+  <mat-form-field class="pull-right">
+    <mat-select [placeholder]="'sort.placeholder.sortedBy' | translate ">
+      <mat-option value="last visited" (click)="sortCourses()">{{ 'sort.lastVisited' | translate }}</mat-option>
+      <mat-option value="alphabetically" (click)="sortAlphabetically()">{{ 'sort.alphabetically' | translate }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <span class="search-bar">
+    <input class="input-bar" (keyup)="getInput($event)" placeholder="{{'course.search' | translate}}" maxlength="64"/> <mat-icon>search</mat-icon>
+  </span>
+</div>
 <app-course-container [title]="'dashboard.myCourses' | translate" [courses]="myCourses" [expand]="true" (onLeave)="leaveCallback()" (onEnroll)="enrollCallback()"></app-course-container>
-<app-course-container [title]="'Available Courses'" [courses]="availableCourses" [expand]="false" (onEnroll)="enrollCallback()"></app-course-container>
+<app-course-container [title]="'dashboard.availableCourses' | translate" [courses]="availableCourses" [expand]="false" (onEnroll)="enrollCallback()"></app-course-container>

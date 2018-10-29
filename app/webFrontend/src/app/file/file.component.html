@@ -1,0 +1,6 @@
+<ng-container *ngIf="loaded" [ngSwitch]="type">
+  <pre *ngSwitchCase="'text'" class="plain-text">{{ plainText }}</pre>
+  <img *ngSwitchCase="'image'" [src]="jwtUrl"/>
+  <video *ngSwitchCase="'video'" [src]="jwtUrl" controls></video>
+  <object *ngSwitchDefault [data]="jwtUrl"></object>
+</ng-container>

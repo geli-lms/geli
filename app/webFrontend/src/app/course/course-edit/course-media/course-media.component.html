@@ -7,7 +7,7 @@
           <mat-icon *ngIf="folderBarVisible">close</mat-icon>
           <mat-icon *ngIf="!folderBarVisible">arrow_right</mat-icon>
         </button>
-        <span *ngIf="folderBarVisible">Folder</span>
+        <span *ngIf="folderBarVisible">{{ 'common.folder' | translate }}</span>
       </mat-toolbar-row>
     </mat-toolbar>
     <div class="folder-wrapper">
@@ -27,37 +27,76 @@
     <div class="area--files">
 
       <!-- Multi-Select button area -->
-      <div class="btn__area">
-        <button class="text-fit" mat-raised-button matTooltip="Upload file"
+      <div class="btn__area" *ngIf="!showUpload">
+
+        <button class="text-fit" mat-raised-button [matTooltip]="'file.tooltip.uploadFile' | translate"
                 (click)="addFile()">
-          <mat-icon>add</mat-icon>
+          <mat-icon>cloud_upload</mat-icon>
         </button>
         <!--<button class="text-fit" mat-raised-button matTooltip="Select all" (click)="selectAll()">-->
         <!--<mat-icon>select_all</mat-icon>-->
         <!--</button>-->
         <button [disabled]="selectedFiles.length <= 1"
-                class="text-fit" mat-raised-button matTooltip="Remove file"
+                class="text-fit" mat-raised-button [matTooltip]="'file.text.fileRemove' | translate"
                 color="warn"
                 (click)="removeSelectedFile()">
           <mat-icon>delete</mat-icon>
         </button>
+
       </div>
 
+      <div class="container" *ngIf="allowedMimeTypes?.length">
+        <div  class="row">
+          <div><small>Allowed MimeTypes:</small></div>
+          <div><small *ngFor="let type of allowedMimeTypes; let first = first ;let last = last"> {{ type }}{{!last?',':''}}</small></div>
+        </div>
+      </div>
+
+
+
+
+      <div class="container" *ngIf="showUpload">
+        <div class="row">
+          <app-upload-form
+            [ngClass]="{'col-lg-12 col-xl-10': !isDialog}"
+            class="col"
+            [uploadMethod]="'POST'"
+            [uploadPath]="getUploadUrl()"
+            [additionalData]="null"
+            (onFileSelectedChange)="null"
+            (onFileUploaded)="onFileUploaded($event)"
+            (onAllUploaded)="onAllUploaded()"></app-upload-form>
+        </div>
+
+        <div class="row margin-top">
+          <div
+            [ngClass]="{'col-lg-12 col-xl-10': !isDialog}"
+            class="col">
+            <div class="pull-right">
+              <button mat-raised-button color="primary"
+                      (click)="uploadAllFiles()" [disabled]="!uploadHasQueueItems()">
+                <mat-icon>file_upload</mat-icon>
+                {{ 'file.placeholder.uploadFiles' | translate }}
+              </button>
+              <button mat-raised-button (click)="cancelFileUpload()">{{ 'common.cancel' | translate }}</button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+
       <!-- File Cards -->
-      <div class="file-wrapper">
+      <div class="file-wrapper" [ngClass]="{'isDialog': isDialog}" *ngIf="!showUpload">
         <ng-container *ngFor="let file of currentFolder?.files">
           <mat-card
-            [ngClass]="isInSelectedFiles(file) ? 'card_active' : 'card'"
+            *ngIf="!allowedMimeTypes || allowedMimeTypes.indexOf(file.mimeType) >= 0"
+            [ngClass]="{'small': isDialog, 'card_active':isInSelectedFiles(file), 'card': !isInSelectedFiles(file)}"
             (click)="toggleSelection(file)">
 
-            <div class="icon-wrapper">
-              <ng-container [ngSwitch]="getSimpleMimeType(file)">
-                <mat-icon *ngSwitchCase="'video'">movie</mat-icon>
-                <mat-icon *ngSwitchCase="'image'">image</mat-icon>
-                <mat-icon *ngSwitchCase="'pdf'">picture_as_pdf</mat-icon>
-                <mat-icon *ngSwitchCase="'archive'">archive</mat-icon>
-                <mat-icon *ngSwitchCase="'text'">subject</mat-icon>
-                <mat-icon *ngSwitchDefault>insert_drive_file</mat-icon>
+            <div class="icon-wrapper"  [ngClass]="{'small': isDialog}" >
+              <ng-container>
+                <mat-icon>{{ fileIcon.fileToIcon(file) }}</mat-icon>
               </ng-container>
             </div>
 
@@ -70,16 +109,16 @@
             <div class="opacity" *ngIf="isInSelectedFiles(file)"></div>
 
             <div class="card-btn-wrapper" *ngIf="isInSelectedFiles(file)">
-              <button mat-raised-button *ngIf="selectedFiles.length <= 1" (click)="initFileDownload(file)"
-                      matTooltip="Open in new Tab">
+              <button mat-raised-button *ngIf="selectedFiles.length <= 1" (click)="$event.stopPropagation();initFileDownload(file)"
+                      [matTooltip]="'common.openInTab' | translate">
                 <mat-icon>open_in_new</mat-icon>
               </button>
               <button mat-raised-button *ngIf="selectedFiles.length <= 1" (click)="renameFile(file)"
-                      matTooltip="Rename">
+                      [matTooltip]="'common.rename' | translate">
                 <mat-icon>mode_edit</mat-icon>
               </button>
               <button mat-raised-button color="warn" (click)="removeSelectedFile()" *ngIf="selectedFiles.length <= 1"
-                      matTooltip="Delete">
+                      [matTooltip]="'common.delete' | translate">
                 <mat-icon>delete</mat-icon>
               </button>
             </div>
@@ -87,9 +126,19 @@
           </mat-card>
         </ng-container>
         <p *ngIf="currentFolder?.files.length === 0">
-          No Files so far.
+          {{ 'file.text.noFiles' | translate }}
         </p>
       </div>
     </div>
   </div>
 </div>
+
+<mat-dialog-actions *ngIf="isDialog">
+  <button mat-raised-button color="primary"
+          [disabled]="!selectedFiles.length"
+          [mat-dialog-close]="selectedFiles" >
+    <mat-icon>add</mat-icon>
+    {{ 'unit.addFilesToUnit' | translate }}
+  </button>
+  <button mat-raised-button mat-dialog-close>{{ 'common.cancel' | translate }}</button>
+</mat-dialog-actions>

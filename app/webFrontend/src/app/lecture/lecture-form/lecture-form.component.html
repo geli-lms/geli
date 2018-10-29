@@ -1,14 +1,13 @@
 <form [formGroup]="lectureForm" (ngSubmit)="formSubmit()">
   <mat-form-field>
-    <input matInput formControlName="name" placeholder="Name">
+    <input matInput formControlName="name" [placeholder]="'common.name' | translate">
   </mat-form-field>
 
   <mat-form-field>
-    <textarea matInput formControlName="description" placeholder="Description"></textarea>
+    <textarea matInput formControlName="description" [placeholder]="'common.description' | translate"></textarea>
   </mat-form-field>
-
   <p>
-    <button mat-raised-button [disabled]="!lectureForm.valid" color="primary" type="submit">{{ actionLabel }}</button>
-    <button mat-raised-button (click)="onCancel()">Cancel</button>
+    <button mat-raised-button [disabled]="!lectureForm.valid" color="primary" type="submit">{{ 'lecture.action.' + actionLabel | translate }}</button>
+    <button mat-raised-button (click)="onCancel()">{{ 'common.cancel' | translate }}</button>
   </p>
 </form>

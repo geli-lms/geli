@@ -1,0 +1,16 @@
+<div class="chat-container">
+  <div class="messages"
+       infiniteScroll
+       [infiniteScrollDistance]="3"
+       (scrolled)="onScrollDown()"
+       (scrolledUp)="onScrollUp()"
+       [scrollWindow]="false"
+       [infiniteScrollDisabled]="disableInfiniteScroll">
+    <ul  #messageList>
+      <app-message *ngFor="let message of messages" [message]="message" [mode]="mode" [chatName]="chatName"></app-message>
+    </ul>
+  </div>
+  <div class="chat-footer-container">
+      <app-messaging-input-field [room]="room" [chatName]="chatName"></app-messaging-input-field>
+  </div>
+</div>

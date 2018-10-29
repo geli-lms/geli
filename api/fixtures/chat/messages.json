@@ -1,0 +1,146 @@
+[
+  {
+    "content": "I think that using a dialog for this is a direct violation of the material style guide, since dialogs should only be used for interruptive messages but never for things like content creation.https://material.io/guidelines/components/dialogs.html"
+  },
+  {
+    "content": "yeah you right, but there is no other good solution for right now.and I had a good session yesterday. We have a better idea!"
+  },
+  {
+    "content": "Maybe you should present your idea here in this issue. ;-) Also you don't need dialogs for this, just open and display the edit forms the current way. I think you just need more router outlets for this in the single components to display the matching content."
+  },
+  {
+    "content": "What is really important is that you still must be able to have a link to edit each lecture / unit to allow direct linking from the report pages to edit especially the units, which was a key requirement."
+  },
+  {
+    "content": "@PatrickSkowronek I'm still not able to see your plan by this two screens. Could you add some additional description on how the workflow will be implemented? For example how which edit or add form will be accessed."
+  },
+  {
+    "content": "This issue is blocked by the refactoring issue of unit form saving and general unit form structure #532"
+  },
+  {
+    "content": "Overall this looks good, but it looks there are missing some features:\n* Why does the import lecture button appear together with the _add lecture form_? An exported lecture would already contain a name and a description, so this is still a bit confusing. For lecture add / import I would still open a drop menu with the two entries _Add lecture_ and _Import lecture_.\n* A import unit option is missing in the dropdown menu where you add your new unit\n\nIs this still a sketch or did you actually commit this into a branch? If a branch exists I would take a deeper look in it locally."
+  },
+  {
+    "content": "I did push this https://github.com/h-da/geli/tree/feature/%23726-refactor-content-tab\n\n> Why does the import lecture button appear together with the add lecture form? An exported lecture would already contain a name and a description, so this is still a bit confusing. For lecture add / import I would still open a drop menu with the two entries Add lecture and Import lecture.\n\nDo you have a other idea. The mat-fab button should do one primary Action https://material.io/design/components/buttons-floating-action-button.html#types-of-transitions . Adding more would be a bad style.\n\n> A import unit option is missing in the dropdown menu where you add your new unit\n\nIn my opinion the right place is the action drop-down on the right. Where I did put it.\nThis is still in progress a few things are still not working or should not be displayed."
+  },
+  {
+    "content": "I think that using a dialog for this is a direct violation of the material style guide, since dialogs should only be used for interruptive messages but never for things like content creation.https://material.io/guidelines/components/dialogs.html"
+  },
+  {
+    "content": "yeah you right, but there is no other good solution for right now.and I had a good session yesterday. We have a better idea!"
+  },
+  {
+    "content": "Maybe you should present your idea here in this issue. ;-) Also you don't need dialogs for this, just open and display the edit forms the current way. I think you just need more router outlets for this in the single components to display the matching content."
+  },
+  {
+    "content": "What is really important is that you still must be able to have a link to edit each lecture / unit to allow direct linking from the report pages to edit especially the units, which was a key requirement."
+  },
+  {
+    "content": "@PatrickSkowronek I'm still not able to see your plan by this two screens. Could you add some additional description on how the workflow will be implemented? For example how which edit or add form will be accessed."
+  },
+  {
+    "content": "This issue is blocked by the refactoring issue of unit form saving and general unit form structure #532"
+  },
+  {
+    "content": "Overall this looks good, but it looks there are missing some features:\n* Why does the import lecture button appear together with the _add lecture form_? An exported lecture would already contain a name and a description, so this is still a bit confusing. For lecture add / import I would still open a drop menu with the two entries _Add lecture_ and _Import lecture_.\n* A import unit option is missing in the dropdown menu where you add your new unit\n\nIs this still a sketch or did you actually commit this into a branch? If a branch exists I would take a deeper look in it locally."
+  },
+  {
+    "content": "I did push this https://github.com/h-da/geli/tree/feature/%23726-refactor-content-tab\n\n> Why does the import lecture button appear together with the add lecture form? An exported lecture would already contain a name and a description, so this is still a bit confusing. For lecture add / import I would still open a drop menu with the two entries Add lecture and Import lecture.\n\nDo you have a other idea. The mat-fab button should do one primary Action https://material.io/design/components/buttons-floating-action-button.html#types-of-transitions . Adding more would be a bad style.\n\n> A import unit option is missing in the dropdown menu where you add your new unit\n\nIn my opinion the right place is the action drop-down on the right. Where I did put it.\nThis is still in progress a few things are still not working or should not be displayed."
+  },
+  {
+    "content": "I think that using a dialog for this is a direct violation of the material style guide, since dialogs should only be used for interruptive messages but never for things like content creation.https://material.io/guidelines/components/dialogs.html"
+  },
+  {
+    "content": "yeah you right, but there is no other good solution for right now.and I had a good session yesterday. We have a better idea!"
+  },
+  {
+    "content": "Maybe you should present your idea here in this issue. ;-) Also you don't need dialogs for this, just open and display the edit forms the current way. I think you just need more router outlets for this in the single components to display the matching content."
+  },
+  {
+    "content": "What is really important is that you still must be able to have a link to edit each lecture / unit to allow direct linking from the report pages to edit especially the units, which was a key requirement."
+  },
+  {
+    "content": "@PatrickSkowronek I'm still not able to see your plan by this two screens. Could you add some additional description on how the workflow will be implemented? For example how which edit or add form will be accessed."
+  },
+  {
+    "content": "This issue is blocked by the refactoring issue of unit form saving and general unit form structure #532"
+  },
+  {
+    "content": "Overall this looks good, but it looks there are missing some features:\n* Why does the import lecture button appear together with the _add lecture form_? An exported lecture would already contain a name and a description, so this is still a bit confusing. For lecture add / import I would still open a drop menu with the two entries _Add lecture_ and _Import lecture_.\n* A import unit option is missing in the dropdown menu where you add your new unit\n\nIs this still a sketch or did you actually commit this into a branch? If a branch exists I would take a deeper look in it locally."
+  },
+  {
+    "content": "I did push this https://github.com/h-da/geli/tree/feature/%23726-refactor-content-tab\n\n> Why does the import lecture button appear together with the add lecture form? An exported lecture would already contain a name and a description, so this is still a bit confusing. For lecture add / import I would still open a drop menu with the two entries Add lecture and Import lecture.\n\nDo you have a other idea. The mat-fab button should do one primary Action https://material.io/design/components/buttons-floating-action-button.html#types-of-transitions . Adding more would be a bad style.\n\n> A import unit option is missing in the dropdown menu where you add your new unit\n\nIn my opinion the right place is the action drop-down on the right. Where I did put it.\nThis is still in progress a few things are still not working or should not be displayed."
+  },
+  {
+    "content": "I think that using a dialog for this is a direct violation of the material style guide, since dialogs should only be used for interruptive messages but never for things like content creation.https://material.io/guidelines/components/dialogs.html"
+  },
+  {
+    "content": "yeah you right, but there is no other good solution for right now.and I had a good session yesterday. We have a better idea!"
+  },
+  {
+    "content": "Maybe you should present your idea here in this issue. ;-) Also you don't need dialogs for this, just open and display the edit forms the current way. I think you just need more router outlets for this in the single components to display the matching content."
+  },
+  {
+    "content": "What is really important is that you still must be able to have a link to edit each lecture / unit to allow direct linking from the report pages to edit especially the units, which was a key requirement."
+  },
+  {
+    "content": "@PatrickSkowronek I'm still not able to see your plan by this two screens. Could you add some additional description on how the workflow will be implemented? For example how which edit or add form will be accessed."
+  },
+  {
+    "content": "This issue is blocked by the refactoring issue of unit form saving and general unit form structure #532"
+  },
+  {
+    "content": "Overall this looks good, but it looks there are missing some features:\n* Why does the import lecture button appear together with the _add lecture form_? An exported lecture would already contain a name and a description, so this is still a bit confusing. For lecture add / import I would still open a drop menu with the two entries _Add lecture_ and _Import lecture_.\n* A import unit option is missing in the dropdown menu where you add your new unit\n\nIs this still a sketch or did you actually commit this into a branch? If a branch exists I would take a deeper look in it locally."
+  },
+  {
+    "content": "I did push this https://github.com/h-da/geli/tree/feature/%23726-refactor-content-tab\n\n> Why does the import lecture button appear together with the add lecture form? An exported lecture would already contain a name and a description, so this is still a bit confusing. For lecture add / import I would still open a drop menu with the two entries Add lecture and Import lecture.\n\nDo you have a other idea. The mat-fab button should do one primary Action https://material.io/design/components/buttons-floating-action-button.html#types-of-transitions . Adding more would be a bad style.\n\n> A import unit option is missing in the dropdown menu where you add your new unit\n\nIn my opinion the right place is the action drop-down on the right. Where I did put it.\nThis is still in progress a few things are still not working or should not be displayed."
+  },
+  {
+    "content": "I think that using a dialog for this is a direct violation of the material style guide, since dialogs should only be used for interruptive messages but never for things like content creation.https://material.io/guidelines/components/dialogs.html"
+  },
+  {
+    "content": "yeah you right, but there is no other good solution for right now.and I had a good session yesterday. We have a better idea!"
+  },
+  {
+    "content": "Maybe you should present your idea here in this issue. ;-) Also you don't need dialogs for this, just open and display the edit forms the current way. I think you just need more router outlets for this in the single components to display the matching content."
+  },
+  {
+    "content": "What is really important is that you still must be able to have a link to edit each lecture / unit to allow direct linking from the report pages to edit especially the units, which was a key requirement."
+  },
+  {
+    "content": "@PatrickSkowronek I'm still not able to see your plan by this two screens. Could you add some additional description on how the workflow will be implemented? For example how which edit or add form will be accessed."
+  },
+  {
+    "content": "This issue is blocked by the refactoring issue of unit form saving and general unit form structure #532"
+  },
+  {
+    "content": "Overall this looks good, but it looks there are missing some features:\n* Why does the import lecture button appear together with the _add lecture form_? An exported lecture would already contain a name and a description, so this is still a bit confusing. For lecture add / import I would still open a drop menu with the two entries _Add lecture_ and _Import lecture_.\n* A import unit option is missing in the dropdown menu where you add your new unit\n\nIs this still a sketch or did you actually commit this into a branch? If a branch exists I would take a deeper look in it locally."
+  },
+  {
+    "content": "I did push this https://github.com/h-da/geli/tree/feature/%23726-refactor-content-tab\n\n> Why does the import lecture button appear together with the add lecture form? An exported lecture would already contain a name and a description, so this is still a bit confusing. For lecture add / import I would still open a drop menu with the two entries Add lecture and Import lecture.\n\nDo you have a other idea. The mat-fab button should do one primary Action https://material.io/design/components/buttons-floating-action-button.html#types-of-transitions . Adding more would be a bad style.\n\n> A import unit option is missing in the dropdown menu where you add your new unit\n\nIn my opinion the right place is the action drop-down on the right. Where I did put it.\nThis is still in progress a few things are still not working or should not be displayed."
+  },
+  {
+    "content": "I think that using a dialog for this is a direct violation of the material style guide, since dialogs should only be used for interruptive messages but never for things like content creation.https://material.io/guidelines/components/dialogs.html"
+  },
+  {
+    "content": "yeah you right, but there is no other good solution for right now.and I had a good session yesterday. We have a better idea!"
+  },
+  {
+    "content": "Maybe you should present your idea here in this issue. ;-) Also you don't need dialogs for this, just open and display the edit forms the current way. I think you just need more router outlets for this in the single components to display the matching content."
+  },
+  {
+    "content": "What is really important is that you still must be able to have a link to edit each lecture / unit to allow direct linking from the report pages to edit especially the units, which was a key requirement."
+  },
+  {
+    "content": "@PatrickSkowronek I'm still not able to see your plan by this two screens. Could you add some additional description on how the workflow will be implemented? For example how which edit or add form will be accessed."
+  },
+  {
+    "content": "This issue is blocked by the refactoring issue of unit form saving and general unit form structure #532"
+  },
+  {
+    "content": "Overall this looks good, but it looks there are missing some features:\n* Why does the import lecture button appear together with the _add lecture form_? An exported lecture would already contain a name and a description, so this is still a bit confusing. For lecture add / import I would still open a drop menu with the two entries _Add lecture_ and _Import lecture_.\n* A import unit option is missing in the dropdown menu where you add your new unit\n\nIs this still a sketch or did you actually commit this into a branch? If a branch exists I would take a deeper look in it locally."
+  },
+  {
+    "content": "I did push this https://github.com/h-da/geli/tree/feature/%23726-refactor-content-tab\n\n> Why does the import lecture button appear together with the add lecture form? An exported lecture would already contain a name and a description, so this is still a bit confusing. For lecture add / import I would still open a drop menu with the two entries Add lecture and Import lecture.\n\nDo you have a other idea. The mat-fab button should do one primary Action https://material.io/design/components/buttons-floating-action-button.html#types-of-transitions . Adding more would be a bad style.\n\n> A import unit option is missing in the dropdown menu where you add your new unit\n\nIn my opinion the right place is the action drop-down on the right. Where I did put it.\nThis is still in progress a few things are still not working or should not be displayed."
+  }
+]

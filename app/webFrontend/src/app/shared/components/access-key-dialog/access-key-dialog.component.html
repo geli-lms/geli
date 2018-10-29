@@ -1,13 +1,13 @@
-<h1 matDialogTitle>This course requires an access key</h1>
-<div mat-dialog-content>Please enter the course's access key:</div>
+<h1 matDialogTitle>{{ 'course.text.needAccessKey' | translate }}</h1>
+<div mat-dialog-content>{{ 'course.text.enterAccessKey' | translate }}</div>
 <div>
   <mat-form-field class="full-width">
-    <input async matInput type="password" id="accessKey" placeholder="access key" [(ngModel)]="accessKey"
+    <input async matInput type="password" id="accessKey" [placeholder]="'course.placeholder.accessKey' | translate" [(ngModel)]="accessKey"
            [ngModelOptions]="{standalone: true}">
   </mat-form-field>
 </div>
 <div mat-dialog-actions>
-  <button mat-raised-button color="primary" (click)="dialogRef.close(accessKey)" style="margin-right: 10px">Continue
+  <button mat-raised-button color="primary" (click)="dialogRef.close(accessKey)" style="margin-right: 10px">{{ 'common.continue' | translate }}
   </button>
-  <button mat-raised-button color="warn" (click)="dialogRef.close(null)">Discard</button>
+  <button mat-raised-button color="warn" (click)="dialogRef.close(null)">{{ 'common.discard' | translate }}</button>
 </div>

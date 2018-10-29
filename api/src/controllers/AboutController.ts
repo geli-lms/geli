@@ -1,5 +1,5 @@
-import {Get, HttpError, JsonController} from 'routing-controllers';
-import * as fs from 'fs-extra';
+import {ContentType, Get, HttpError, JsonController} from 'routing-controllers';
+import * as fs from 'fs';
 
 @JsonController('/about')
 export class AboutController {
@@ -36,16 +36,12 @@ export class AboutController {
    * @apiError HttpError 500 - Licensefile not found
    */
   @Get('/dependencies')
-  getDependencies() {
-    return fs.readJson('nlf-licenses.json')
-      .then((data) => {
-        if (typeof data.name !== 'undefined' && data.name === 'Error') {
-          return new HttpError(500, 'Licensefile not found');
-        }
-        return data;
-      })
-      .catch(() => {
-        return new HttpError(500, 'Licensefile not found');
-      });
+  @ContentType('application/json')
+  async getDependencies() {
+    try {
+      return await fs.readFileSync('nlf-licenses.json');
+    } catch (err) {
+      throw new HttpError(500, 'Licensefile not found');
+    }
   }
 }

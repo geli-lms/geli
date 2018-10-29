@@ -8,12 +8,12 @@
         <!-- <button mat-icon-button disabled>
           <mat-icon>edit</mat-icon>
         </button> -->
-        <button mat-icon-button (click)="remove(user)">
+        <button mat-icon-button [matTooltip]="'user.deleteUser' | translate" (click)="remove(user)">
           <mat-icon>delete</mat-icon>
         </button>
-        <i  *ngIf="isSignedIn(user) && !isInCourse(user)" class="material-icons green" matTooltip="Signed In">done</i>
-        <i  *ngIf="!isSignedIn(user) && !isInCourse(user)" class="material-icons red" matTooltip="not Signed In">clear</i>
-        <i *ngIf="isInCourse(user)" class="material-icons green" matTooltip="In Course">done_all</i>
+        <i  *ngIf="isSignedIn(user) && !isInCourse(user)" class="material-icons green" matTooltip="'user.text.SignedIn' | translate">done</i>
+        <i  *ngIf="!isSignedIn(user) && !isInCourse(user)" class="material-icons red" matTooltip="'user.text.NotSignedIn' | translate">clear</i>
+        <i *ngIf="isInCourse(user)" class="material-icons green" matTooltip="'course.text.InCourse' | translate">done_all</i>
       </mat-list-item>
     </div>
 </mat-list>

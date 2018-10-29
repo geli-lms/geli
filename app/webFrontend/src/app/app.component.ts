@@ -6,10 +6,12 @@ import {Router} from '@angular/router';
 import {APIInfoService} from './shared/services/data.service';
 import {APIInfo} from './models/APIInfo';
 import {isNullOrUndefined} from 'util';
+import {JwtPipe} from './shared/pipes/jwt/jwt.pipe';
 import {RavenErrorHandler} from './shared/services/raven-error-handler.service';
 import {SnackBarService} from './shared/services/snack-bar.service';
 import {ThemeService} from './shared/services/theme.service';
 import {TranslateService} from '@ngx-translate/core';
+import {DomSanitizer, SafeStyle} from '@angular/platform-browser';
 
 @Component({
   selector: 'app-root',
@@ -21,6 +23,7 @@ export class AppComponent implements OnInit {
   title = 'app works!';
   showProgressBar = false;
   apiInfo: APIInfo;
+  avatarBackgroundImage: SafeStyle | undefined;
 
   constructor(private router: Router,
               private authenticationService: AuthenticationService,
@@ -30,7 +33,9 @@ export class AppComponent implements OnInit {
               private ravenErrorHandler: RavenErrorHandler,
               private snackBar: SnackBarService,
               private themeService: ThemeService,
-              public translate: TranslateService) {
+              public translate: TranslateService,
+              private jwtPipe: JwtPipe,
+              private domSanitizer: DomSanitizer) {
     translate.setDefaultLang('en');
 
     showProgress.toggleSidenav$.subscribe(
@@ -54,6 +59,29 @@ export class AppComponent implements OnInit {
       .catch((err) => {
         this.snackBar.open('Could not connect to backend', null);
       });
+
+    this.updateCurrentUser();
+
+    this.userService.data.subscribe(actualProfilePicturePath => {
+      if (actualProfilePicturePath === undefined && this.userService.user.profile.picture) {
+        actualProfilePicturePath = this.userService.user.profile.picture.path;
+      }
+      if (actualProfilePicturePath === undefined || actualProfilePicturePath === '') {
+        this.avatarBackgroundImage = undefined;
+        return;
+      }
+
+      actualProfilePicturePath = '/api/' + actualProfilePicturePath;
+      const urlJwt = this.jwtPipe.transform(actualProfilePicturePath);
+      this.avatarBackgroundImage = this.domSanitizer.bypassSecurityTrustStyle(`url(${urlJwt})`);
+    });
+  }
+
+  updateCurrentUser() {
+    const storedUser = JSON.parse(localStorage.getItem('user'));
+    if (storedUser) {
+      this.userService.setUser(storedUser);
+    }
   }
 
   changeLanguage(lang: string) {
@@ -70,6 +98,7 @@ export class AppComponent implements OnInit {
   }
 
   logout() {
+    delete this.avatarBackgroundImage;
     this.authenticationService.logout();
   }
 
@@ -89,5 +118,15 @@ export class AppComponent implements OnInit {
     const routeTest = /^(\/|\/login|\/register|\/reset|\/activation-resend)$/.test(this.router.url);
 
     return (routeTest && !this.isLoggedIn()) ? 'special-style' : '';
+  }
+
+  contentStyle(): string {
+    let style = 'app-content';
+    // Don't add padding when displaying non-plaintext files such as PDFs via a FileComponent.
+    const routeTest = /^\/file/.test(this.router.url);
+    if (!routeTest) {
+      style += ' app-content-padding';
+    }
+    return style;
   }
 }

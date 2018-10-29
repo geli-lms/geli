@@ -1,12 +1,12 @@
-<h2>Select a File</h2>
+<h2>{{ 'file.tooltip.selectFile' | translate }}</h2>
 <p>{{message}}</p>
 <div *ngIf="!showProgressBar">
-  <input type="file" name="filepicker" ng2FileSelect [uploader]="uploader" placeholder="Select a file"/>
+  <input type="file" name="filepicker" ng2FileSelect [uploader]="uploader" [placeholder]="'file.tooltip.selectFile' | translate" />
 </div>
 <div *ngIf="showProgressBar">
   <h2>Uploading...</h2>
   <mat-progress-bar mode="determinate" [value]="uploader.progress"></mat-progress-bar>
-  <button mat-raised-button class="btn-cancel-upload" color="warn" (click)="cancel()">Cancel</button>
+  <button mat-raised-button class="btn-cancel-upload" color="warn" (click)="cancel()">{{ 'common.cancel' | translate }}</button>
 </div>
-<button mat-raised-button color="primary" (click)="upload()">OK</button>
-<button mat-raised-button (click)="cancel()">Cancel</button>
+<button mat-raised-button color="primary" (click)="upload()">{{ 'common.ok' | translate }}</button>
+<button mat-raised-button (click)="cancel()">{{ 'common.cancel' | translate }}</button>

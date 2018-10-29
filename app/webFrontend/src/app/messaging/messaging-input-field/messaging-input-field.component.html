@@ -1,0 +1,24 @@
+<div class="msg-input-container">
+  <div *ngIf="showEmojiPicker" style="width: 100%; height: 170px">
+    <emoji-mart (emojiSelect)="onEmojiSelected($event)" [showPreview]="false"
+                [style]="{ height: '170px', width: '100%', overflow: 'hidden'}" set="twitter">
+    </emoji-mart>
+  </div>
+  <div class="msg-input">
+    <form [formGroup]="form">
+      <mat-form-field class="message-input-field" floatLabel="never">
+        <textarea placeholder="{{'messaging.inputHintText'| translate}}"  matInput  cdkAutosizeMinRows="3"   cdkTextareaAutosize  #msgTextArea
+                  formControlName="message" (onclick)="onClick(msgTextArea)"
+                  (keydown)="onEnter($event, msgTextArea)"></textarea>
+      </mat-form-field>
+    </form>
+  </div>
+  <div class="msg-input-footer">
+    <button color="primary" mat-icon-button (click)="toggleEmojiPicker()">
+      <mat-icon [matTooltip]="'messaging.emojiIconTooltip'| translate">sentiment_very_satisfied</mat-icon>
+    </button>
+    <button (click)="postMessage()" color="primary" class="msg-send"  [matTooltip]=" 'messaging.sendIconTooltip'| translate" mat-icon-button>
+      <mat-icon>send</mat-icon>
+    </button>
+  </div>
+</div>

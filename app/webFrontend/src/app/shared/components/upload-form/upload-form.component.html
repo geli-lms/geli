@@ -1,17 +1,20 @@
-<label ng2FileDrop
-     [ngClass]="{'nv-file-over': hasDropZoneOver}"
-     (fileOver)="onFileOverDropzone($event)"
-     [uploader]="fileUploader"
-     class="file-dropzone">
-  <span>Drop files here or click here to add files</span>
-  <input type="file"
-         ng2FileSelect
-         [uploader]="fileUploader"
-         placeholder="Upload files"
-         [multiple]="maxFileNumber !== 1"
-         hidden
-  />
-</label>
+<div *ngIf="!uploadSingleFile || fileUploader.queue.length === 0">
+  <label ng2FileDrop
+       [ngClass]="{'nv-file-over': hasDropZoneOver}"
+       (fileOver)="onFileOverDropzone($event)"
+       [uploader]="fileUploader"
+       class="file-dropzone">
+    <span>{{ 'file.text.infoDropAddFiles' | translate }}</span>
+    <input type="file"
+           ng2FileSelect
+           [uploader]="fileUploader"
+           placeholder="Upload files"
+           [multiple]="maxFileNumber !== 1"
+           (change)="onSelectFile($event)"
+           hidden
+    />
+  </label>
+</div>
 <div class="file-list-container" *ngIf="fileUploader.queue.length > 0">
   <div class="overall-progress">
     <span>Overall progress:</span>
@@ -21,10 +24,10 @@
   </div>
   <div class="file-list">
     <div class="file-list-row file-list-header">
-      <span>Filename</span>
-      <span>Filesize</span>
-      <span class="progress-col">Progress</span>
-      <span>Actions</span>
+      <span>{{ 'file.text.filename' | translate }}</span>
+      <span>{{ 'file.text.filesize' | translate }}</span>
+      <span class="progress-col">{{ 'file.text.progress' | translate }}</span>
+      <span>{{ 'common.actions' | translate }}</span>
     </div>
     <div class="file-list-row" *ngFor="let item of fileUploader.queue">
       <span class="filename">{{item.file.name}}</span>
@@ -32,14 +35,20 @@
       <span class="progress-col">
         <mat-progress-bar mode="determinate" [value]="item.progress"></mat-progress-bar>
       </span>
-      <mat-action-row>
-        <button *ngIf="item.isUploading" mat-button (click)="item.cancel()">
-          <mat-icon>block</mat-icon>Cancel upload
-        </button>
-        <button *ngIf="!item.isUploading && !item.isSuccess" mat-raised-button color="warn" (click)="item.remove()">
-          <mat-icon>delete</mat-icon>Remove from queue
-        </button>
-      </mat-action-row>
+        <mat-action-row>
+          <div *ngIf="!uploadSingleFile">
+          <button *ngIf="item.isUploading" mat-button (click)="item.cancel()">
+            <mat-icon>block</mat-icon>{{ 'common.cancel' | translate }}
+          </button>
+          <button *ngIf="!item.isUploading && !item.isSuccess" mat-raised-button color="warn" (click)="item.remove()">
+            <mat-icon>delete</mat-icon>{{ 'file.text.removeFromQueue' | translate }}
+          </button>
+          </div>
+        </mat-action-row>
     </div>
+  </div>
+  <div *ngIf="uploadSingleFile" class="image-preview-group">
+    <h3>Image preview</h3>
+    <img class="preview-image" [src]="profilePictureUrl">
   </div>
 </div>

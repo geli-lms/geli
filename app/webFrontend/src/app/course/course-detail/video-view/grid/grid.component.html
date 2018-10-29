@@ -1,0 +1,10 @@
+<mat-card class="card">
+<mat-card-header>
+  <mat-card-title>
+  <h2 title="{{file.name}}">{{file.name}}</h2>
+  </mat-card-title>
+</mat-card-header>
+  <mat-card-content>
+    <video src="{{'/api/uploads/' + file.link | jwt}}" [width]="250" [height]="150" controls></video>
+  </mat-card-content>
+</mat-card>

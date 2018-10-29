@@ -1,0 +1,33 @@
+<ng-container [formGroup]="unitForm">
+  <div class="task-unit-edit" formArrayName="tasks">
+    <div *ngFor="let task of formTasks.controls" class="question-answer">
+      <mat-form-field matLine class="question">
+        <textarea matInput id="name" [placeholder]="'unit.placeholder.enterQuestion' | translate" [formControl]="task.controls.name"></textarea>
+      </mat-form-field>
+
+      <button mat-button class="remove" type="button" [matTooltip]="'unit.tooltip.deleteQuestion' | translate" (click)="removeTask(task)">
+        <mat-icon>delete</mat-icon>
+      </button>
+
+      <div matLine class="answers">
+        <div class="answer" *ngFor="let answer of task.controls.answers.controls; let idx = index;">
+          <div class="check-answer">
+            <mat-checkbox [formControl]="answer.controls.value" name="value_{{idx}}"></mat-checkbox>
+            <mat-form-field>
+              <input matInput  [placeholder]="'unit.placeholder.enterAnswer' | translate" [formControl]="answer.controls.text">
+            </mat-form-field>
+            <button mat-button type="button" class="remove" (click)="removeAnswer(task, idx)" [matTooltip]="'unit.tooltip.deleteAnswer' | translate">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </div>
+        <div class="add-answer">
+          <button mat-button type="button" (click)="addAnswerAtEnd(task)">
+            <mat-icon>add</mat-icon> {{ 'unit.text.addAnswer' | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>
+

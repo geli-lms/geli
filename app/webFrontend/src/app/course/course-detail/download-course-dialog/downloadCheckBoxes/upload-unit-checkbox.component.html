@@ -4,7 +4,7 @@
   <span class="spacer"></span>
   <span class="lightgray"> {{unitDesc}} </span>
   <mat-checkbox *ngIf="!this.showDL" [(ngModel)]="chkbox" (change)="emitEvent()" class="chkbox"></mat-checkbox>
-  <button mat-icon-button color="primary" *ngIf="this.showDL" class="dlButton" (click)="this.downloadFile()" matTooltip="Download this Unit">
+  <button mat-icon-button color="primary" *ngIf="this.showDL" class="dlButton" (click)="this.downloadFile()" matTooltip="'common.tooltipDownloadUnit' | translate">
      <mat-icon>file_download</mat-icon>
   </button>
 </mat-list-item>

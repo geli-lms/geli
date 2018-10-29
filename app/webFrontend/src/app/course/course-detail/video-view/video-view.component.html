@@ -1,0 +1,49 @@
+<div class="spacer">
+  <div class="selectArea">
+    <button mat-raised-button color="secondary" [disabled]="!checkForFileUnits()" (click)="listview()" mat-tooltip="List View" class="btn"
+            [class.activeBtn]="displayGrid==false">
+      <i class="material-icons iconSize">view_list</i> List
+    </button>
+    <button mat-raised-button color="secondary" [disabled]="!checkForFileUnits()" (click)="gridview()"
+            mat-tooltip="Grid View" class="btn" [class.activeBtn]="displayGrid==true">
+      <i class="material-icons iconSize">view_module</i> Grid
+    </button>
+  </div>
+</div>
+<div *ngIf="checkForFileUnits()">
+  <div *ngIf="displayGrid===true" class="grid">
+  <ng-container *ngFor="let lec of course.lectures">
+    <ng-container *ngFor="let unit of lec.units">
+      <ng-container *ngIf="unit.__t === 'file'">
+        <ng-container *ngFor="let fileUnit of unit.files">
+          <ng-container *ngIf="unit.fileUnitType == 'video'">
+            <app-grid [file]="fileUnit"></app-grid>
+          </ng-container>
+        </ng-container>
+      </ng-container>
+    </ng-container>
+  </ng-container>
+  </div>
+  <div *ngIf="displayGrid===false">
+    <mat-list>
+      <ng-container *ngFor="let lec of course.lectures">
+        <ng-container *ngFor="let unit of lec.units">
+          <ng-container *ngIf="unit.__t === 'file'">
+            <ng-container *ngFor="let fileUnit of unit.files">
+              <ng-container *ngIf="unit.fileUnitType == 'video'">
+                <mat-list-item>
+                  <a href="{{'/api/uploads/' + fileUnit.link | jwt}}" download="{{fileUnit.name}}">
+                    <span>{{fileUnit.name}}</span>
+                  </a>
+                </mat-list-item>
+              </ng-container>
+            </ng-container>
+          </ng-container>
+        </ng-container>
+      </ng-container>
+    </mat-list>
+  </div>
+</div>
+<div *ngIf="!checkForFileUnits()">
+  <h2>{{ 'course.text.noVideosAttached' | translate }}</h2>
+</div>

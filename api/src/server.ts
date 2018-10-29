@@ -3,16 +3,18 @@ import {createExpressServer} from 'routing-controllers';
 import * as express from 'express';
 import * as mongoose from 'mongoose';
 import * as morgan from 'morgan';
-import * as winston from 'winston';
 import * as passport from 'passport';
 import {Express} from 'express';
 import * as Raven from 'raven';
 import config from './config/main';
 import passportLoginStrategy from './security/passportLoginStrategy';
 import passportJwtStrategy from './security/passportJwtStrategy';
+import passportJwtStrategyMedia from './security/passportJwtStrategyMedia';
+import passportJwtMiddlewareMedia from './security/passportJwtMiddlewareMedia';
 import {RoleAuthorization} from './security/RoleAuthorization';
 import {CurrentUserDecorator} from './security/CurrentUserDecorator';
 import './utilities/FilterErrorHandler';
+import ChatServer from './Chatserver';
 
 if (config.sentryDsn) {
   Raven.config(config.sentryDsn, {
@@ -32,6 +34,7 @@ export class Server {
   static setupPassport() {
     passport.use(passportLoginStrategy);
     passport.use(passportJwtStrategy);
+    passport.use(passportJwtStrategyMedia);
   }
 
   constructor() {
@@ -54,22 +57,25 @@ export class Server {
       this.app.use(Raven.errorHandler());
     }
 
-    // TODO: Needs authentication in the future
-    this.app.use('/api/uploads', express.static('uploads'));
-
     Server.setupPassport();
     this.app.use(passport.initialize());
+
+    // Requires authentication via the passportJwtMiddlewareMedia to accesss the static config.uploadFolder (e.g. for images).
+    // That means this is not meant for truly public files accessible without login!
+    this.app.use('/api/uploads', passportJwtMiddlewareMedia, express.static(config.uploadFolder));
   }
 
   start() {
-    mongoose.connect(config.database);
+    mongoose.connect(config.database, {useNewUrlParser: true});
 
-    // Request logger
     this.app.use(morgan('combined'));
 
-    this.app.listen(config.port, () => {
-      winston.log('info', '--> Server successfully started at port %d', config.port);
+    const server = this.app.listen(config.port, () => {
+      process.stdout.write('Server successfully started at port ' + config.port);
     });
+
+    const chatServer = new ChatServer(server);
+    chatServer.init();
   }
 }
 

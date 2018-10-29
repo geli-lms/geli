@@ -7,6 +7,7 @@ import {User} from '../../src/models/User';
 import {errorCodes} from '../../src/config/errorCodes';
 import {FixtureUtils} from '../../fixtures/FixtureUtils';
 import {IUser} from '../../../shared/models/IUser';
+import {allRoles} from '../../src/config/roles';
 import chaiHttp = require('chai-http');
 import fs = require('fs');
 
@@ -34,7 +35,7 @@ describe('User', () => {
 
       res.status.should.be.equal(200);
       res.body.should.be.a('array');
-      res.body.length.should.be.equal(42);
+      res.body.length.should.be.equal(await FixtureUtils.getUserCount());
     });
 
     it('should fail with wrong authorization', async () => {
@@ -81,8 +82,8 @@ describe('User', () => {
 
       res.status.should.be.equal(200);
       res.body.should.be.a('array');
-      res.body.length.should.be.equal(4);
-      res.body.should.have.same.members(['student', 'tutor', 'teacher', 'admin']);
+      res.body.length.should.be.equal(allRoles.length);
+      res.body.should.have.same.members(allRoles);
     });
   });
 
@@ -347,6 +348,19 @@ describe('User', () => {
       res.body.message.should.be.equal(errorCodes.user.noOtherAdmins.text);
     });
 
+    it('should fail to delete another user, if not admin', async () => {
+      const teacher = await FixtureUtils.getRandomTeacher();
+      const studtent = await FixtureUtils.getRandomStudent();
+      const res = await chai.request(app)
+        .del(`${BASE_URL}/${studtent._id}`)
+        .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
+        .catch(err => err.response);
+
+      res.status.should.be.equal(400);
+      res.body.name.should.be.equal('BadRequestError');
+      res.body.message.should.be.equal(errorCodes.user.cantDeleteOtherUsers.text);
+    });
+
     it('should (promote a teacher to admin and) let the old admin delete itself', async () => {
       const admin = await ensureOnlyOneAdmin();
       const promotedUser = await FixtureUtils.getRandomTeacher();
@@ -370,7 +384,7 @@ describe('User', () => {
       }
     });
 
-    it('should fail to delete (wrong role)', async () => {
+    it('should send delete request', async () => {
       const teacher = await FixtureUtils.getRandomTeacher();
 
       const res = await chai.request(app)
@@ -378,7 +392,11 @@ describe('User', () => {
         .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
         .catch(err => err.response);
 
-      res.status.should.be.equal(403);
+      const userDeleteRequest = User.findById(teacher._id);
+
+      should.exist(userDeleteRequest, 'User doesnt exist anymore.');
+
+      res.status.should.be.equal(200);
     });
 
     it('should delete a student', async () => {

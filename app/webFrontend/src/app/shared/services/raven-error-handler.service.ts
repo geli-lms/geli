@@ -1,6 +1,8 @@
 import * as Raven from 'raven-js';
 import {ErrorHandler} from '@angular/core';
+import {Injectable} from '@angular/core';
 
+@Injectable({providedIn: 'root'})
 export class RavenErrorHandler implements ErrorHandler {
 
   // We need to do a delayed setup of Sentry to avoid building different images for each environment

@@ -4,12 +4,12 @@ import {ICodeKataUnit} from '../../../../shared/models/units/ICodeKataUnit';
 import {NativeError} from 'mongoose';
 import {BadRequestError} from 'routing-controllers';
 import {IUser} from '../../../../shared/models/IUser';
+const MarkdownIt = require('markdown-it');
 
 interface ICodeKataModel extends ICodeKataUnit, IUnitModel {
   exportJSON: () => Promise<ICodeKataUnit>;
   calculateProgress: () => Promise<ICodeKataUnit>;
   secureData: (user: IUser) => Promise<ICodeKataModel>;
-  toFile: () => String;
 }
 
 const codeKataSchema = new mongoose.Schema({
@@ -98,15 +98,58 @@ function validateTestArea(testArea: any) {
 codeKataSchema.pre('validate', splitCodeAreas);
 codeKataSchema.path('test').validate(validateTestArea);
 
-codeKataSchema.methods.toFile = function (): String  {
-  return this.description + '\n'
-    + '####################################'
-    + '\n' + this.definition + '\n' +
-    + '####################################'
-    + '\n'
-    + this.code + '\n'
-    + '####################################'
-    + '\n' + this.test;
+codeKataSchema.methods.toHtmlForIndividualPDF = function (): String {
+  const md = new MarkdownIt({html: true});
+  let html = '<div id="pageHeader">'
+    + md.render(this.name ? this.name : '') + md.render(this.description ? this.description : '') + '</div>';
+
+
+  html += '<div id="firstPage" class="bottomBoxWrapper">';
+  html += '<h5>Task</h5>';
+  html += '<div>' +  md.render('<div class="codeBox">' + md.render(this.definition ? this.definition : '') + '</div>') + '</div>';
+  html += '<h5>Code</h5>';
+  html += '<div class="bottomBox"><h3>Validation</h3>';
+  html += '<div>' +  md.render('<div class="codeBox">' + md.render(this.test ? this.test : '') + '</div>') + '</div>';
+  html += '</div>';
+
+  html += '</div ><div><h2>Solution</h2></div>';
+  html += '<h5>Task</h5>';
+  html += '<div>' +  md.render('<div class="codeBox">' +  md.render(this.definition ? this.definition : '') + '</div>') + '</div>';
+  html += '<h5>Code</h5>';
+  html += '<div>' +  md.render('<div class="codeBox">' + md.render(this.code ? this.code : '') + '</div>') + '</div>';
+  html += '<h5>Validation</h5>';
+  html += '<div>' +  md.render('<div class="codeBox">' +  md.render(this.test ? this.test : '') + '</div>') + '</div>';
+  return html;
+};
+
+codeKataSchema.methods.toHtmlForSinglePDF = function (): String {
+  const md = new MarkdownIt({html: true});
+
+
+  let html = '<div class="bottomBoxWrapper">';
+  html += '<div><h4>' + md.render(this.name ? 'Unit: ' + this.name : '') + '</h4>'
+    + '<span>' + md.render(this.description ? 'Description: ' + this.description : '') + '</span></div>';
+  html += '<h5>Task</h5>';
+  html += '<div>' +  md.render('<div class="codeBox">' + md.render(this.definition ? this.definition : '') + '</div>') + '</div>';
+  html += '<h5>Code</h5>';
+  html += '<div class="bottomBox"><h5>Validation</h5>';
+  html += '<div>' +  md.render('<div class="codeBox">' + md.render(this.test ? this.test : '') + '</div>') + '</div>';
+  html += '</div></div>';
+  return html;
+};
+
+codeKataSchema.methods.toHtmlForSinglePDFSolutions = function (): String {
+  const md = new MarkdownIt({html: true});
+
+  let html = '';
+  html += '<div><h4>' + md.render(this.name ? this.name : '') + '</h4></div>';
+  html += '<h5>Task</h5>';
+  html += '<div>' +  md.render('<div class="codeBox">' +  md.render(this.definition ? this.definition : '') + '</div>') + '</div>';
+  html += '<h5>Code</h5>';
+  html += '<div>' +  md.render('<div class="codeBox">' + md.render(this.code ? this.code : '') + '</div>') + '</div>';
+  html += '<h5>Validation</h5>';
+  html += '<div>' +  md.render('<div class="codeBox">' + md.render(this.test ? this.test : '') + '</div>') + '</div>';
+  return html;
 };
 
 export {codeKataSchema, ICodeKataModel};

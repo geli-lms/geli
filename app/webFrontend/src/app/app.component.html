@@ -1,3 +1,4 @@
+<app-cookie-banner></app-cookie-banner>
 <div class="{{ 'app-wrapper ' + specialContainerStyle() }}">
   <mat-toolbar color="primary" [ngClass]="{'warning': hasWarning()}">
     <mat-toolbar-row>
@@ -16,7 +17,11 @@
 
       <span *ngIf="isLoggedIn()">
         <button mat-button routerLink="/profile">
-          <img class="avatar" src="{{userService.user.getUserImageURL(30)}}" width="30" height="30">
+          <img *ngIf="this.avatarBackgroundImage === undefined; else elseBlock"
+               class="avatar" src="{{this.userService.user.getGravatarURL(30)}}" width="30" height="30">
+          <ng-template #elseBlock>
+            <div class="user-icon" [style.backgroundImage]="this.avatarBackgroundImage"></div>
+          </ng-template>
           <span class="firstname-wrapper">{{ this.userService.user.profile.firstName }}</span>
         </button>
         <app-notification *ngIf="isStudent()" class="app-notification"></app-notification>
@@ -51,9 +56,13 @@
           <mat-icon>info</mat-icon>
           <span>{{ 'mainMenu.about' | translate }}</span>
         </button>
-        <button mat-menu-item routerLink="/imprint" routerLinkActive="active">
+        <button mat-menu-item routerLink="/legalnotice" routerLinkActive="active">
           <mat-icon>info</mat-icon>
-          <span>{{ 'mainMenu.imprint' | translate }}</span>
+          <span>{{ 'mainMenu.legalnotice' | translate }}</span>
+        </button>
+        <button mat-menu-item routerLink="/privacy" routerLinkActive="active">
+          <mat-icon>info</mat-icon>
+          <span>{{ 'mainMenu.privacy' | translate }}</span>
         </button>
         <button mat-menu-item *ngIf="isLoggedIn()" (click)="logout()" routerLink="" routerLinkActive="active">
           <mat-icon>exit_to_app</mat-icon>
@@ -65,7 +74,7 @@
 
   <mat-progress-bar *ngIf="showProgressBar" [mode]="indeterminate"></mat-progress-bar>
 
-  <div class="app-content">
+  <div class="{{ contentStyle() }}">
     <router-outlet></router-outlet>
   </div>
 </div>

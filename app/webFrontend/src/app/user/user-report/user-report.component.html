@@ -1,5 +1,5 @@
 <div class="user-progress" *ngIf="report?.length > 0">
-  <h2>Your course progress</h2>
+  <h2>{{ 'course.text.yourCourseProgress' | translate }}</h2>
   <mat-card *ngFor="let course of report">
     <mat-card-header>
       <mat-card-title>{{ course.name }}</mat-card-title>
@@ -16,7 +16,7 @@
     <mat-card-actions align="start">
       <button mat-button [routerLink]="['/', 'course', course._id]" routerLinkActive="active">
         <mat-icon>arrow_forward</mat-icon>
-        Go to course
+        {{ 'course.text.goToCourse' | translate }}
       </button>
 
     </mat-card-actions>

@@ -1,8 +1,8 @@
 <div class="not-found-wrapper">
-    <h1>Page not found :(</h1>
-    <p>Maybe the page you are looking for has been removed, or you typed in the wrong URL</p>
+    <h1>{{ 'errorPage.text.pageNotFound' | translate }}</h1>
+    <p>{{ 'errorPage.text.pageNotFoundHint' | translate }}</p>
     <button mat-raised-button class="mat-button" (click)="goBack()">
         <mat-icon>arrow_backward</mat-icon>
-        Go back
+        {{ 'common.back' | translate }}
     </button>
 </div>

@@ -1,11 +1,11 @@
-<h2>Users</h2>
+<h2>{{ 'common.users' | translate }}</h2>
 <table class="table">
   <thead>
   <tr>
-    <th>Name</th>
-    <th>E-Mail</th>
-    <th>Role</th>
-    <th>Actions</th>
+    <th>{{ 'common.name' | translate }}</th>
+    <th>{{ 'common.email' | translate }}</th>
+    <th>{{ 'common.role' | translate}}</th>
+    <th>{{ 'common.actions' | translate }}</th>
   </tr>
   </thead>
   <tbody>
@@ -13,17 +13,17 @@
     <td><a [routerLink]="['/profile', user._id]">{{user.profile.firstName}} {{user.profile.lastName}}</a></td>
     <td>{{user.email}}</td>
     <td>
-      <mat-select disabled="{{ userService.user._id === user._id }}" [(ngModel)]="user.role" name="role" (change)="updateRole(i)">
+      <mat-select disabled="{{ userService.user._id === user._id }}" [(ngModel)]="user.role" name="role" (selectionChange)="updateRole(i)">
         <mat-option *ngFor="let role of availableRoles" [value]="role">
           {{role}}
         </mat-option>
       </mat-select>
     </td>
     <td>
-      <button mat-icon-button (click)="editUser(i)">
+      <button [matTooltip]="'user.editUser' | translate" mat-icon-button (click)="editUser(i)">
         <mat-icon>edit</mat-icon>
       </button>
-      <button mat-icon-button (click)="deleteUser(i)">
+      <button [matTooltip]="'user.deleteUser' | translate" mat-icon-button (click)="deleteUser(i)">
         <mat-icon>delete</mat-icon>
       </button>
     </td>

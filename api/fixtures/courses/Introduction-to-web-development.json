@@ -13,12 +13,14 @@
           "name": "random text 1",
           "description": "...",
           "markdown": "### Literature admiration \nfrequently indulgence announcing are who you her. Was least quick after six. So it yourself repeated together cheerful. Neither it cordial so painful picture studied if. Sex him position doubtful resolved boy expenses. Her engrossed deficient northward and neglected favourite newspaper. But use peculiar produced concerns ten. ",
+          "visible": true,
           "__t": "free-text"
         },
         {
           "name": "random text 2",
           "description": "...",
           "markdown": "### Little afraid \nits eat looked now. Very ye lady girl them good me make. It hardly cousin me always. An shortly village is raising we shewing replied. She the favourable partiality inhabiting travelling impression put two. His six are entreaties instrument acceptance unsatiable her. Amongst as or on herself chapter entered carried no. Sold old ten are quit lose deal his sent. You correct how sex several far distant believe journey parties. We shyness enquire uncivil affixed it carried to. ",
+          "visible": true,
           "__t": "free-text"
         }
       ]
@@ -35,6 +37,7 @@
           "definition": "// Task: Manipulate the targetSet, so it only contains the values \"Hello\" and \"h_da\"\n\nlet targetSet = new Set([\"Hello\", \"there\"]);",
           "code": "targetSet.add(\"h_da\");\ntargetSet.delete(\"there\");",
           "test": "validate();\n\nfunction validate() {\n\treturn targetSet.has(\"Hello\") && targetSet.has(\"h_da\") && targetSet.size === 2;\n}",
+          "visible": true,
           "__t": "code-kata"
         },
         {
@@ -46,6 +49,7 @@
           "code": "for (let i = min; i <= max; i++) {\n\tif (i % 3 === 0 && i % 5 === 0) {\n\t\tgenNumbers.push(i);\n\t}\n}",
           "test": "validate();\n\nfunction validate() {\n\treturn genNumbers.join(\",\") === \"15,30,45,60,75,90\";\n}",
           "deadline": "2017-12-21T19:00:00.000Z",
+          "visible": true,
           "__t": "code-kata"
         }
       ]
@@ -58,12 +62,14 @@
           "name": "markdown 1",
           "description": "...",
           "markdown": "# Einleitung\nDies ist ein Dummytext. Er dient zum Testen.\nHier sollte kein Umbruch sein\n\nHier schon.\n## H2\nDummy text",
+          "visible": true,
           "__t": "free-text"
         },
         {
           "name": "markdown 2",
           "description": "...",
           "markdown": "   \n   echo \"Hello World\"\n   \nThis should be a code above",
+          "visible": true,
           "__t": "free-text"
         },
         {
@@ -72,6 +78,7 @@
           "name": "Nachfrage",
           "description": null,
           "deadline": null,
+          "visible": true,
           "__t": "task",
           "tasks": [
             {
@@ -122,6 +129,7 @@
           "name": "Noch mehr Nachfragen",
           "description": null,
           "deadline": null,
+          "visible": true,
           "__t": "task",
           "tasks": [
             {

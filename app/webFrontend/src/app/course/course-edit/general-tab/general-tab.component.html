@@ -1,56 +1,67 @@
-<form class="course-form" (ngSubmit)="createCourse()">
-  <mat-form-field>
-    <input async matInput id="name" placeholder="Name" [(ngModel)]="course"
-           [ngModelOptions]="{standalone: true}">
-  </mat-form-field>
+<div class="flex-container">
+  <div>
+    <form class="course-form" (ngSubmit)="createCourse()">
+      <mat-form-field>
+        <input async matInput id="name" [placeholder]="'common.name' | translate" [(ngModel)]="course"
+               [ngModelOptions]="{standalone: true}">
+      </mat-form-field>
 
-  <mat-form-field class="full-width">
-        <textarea matInput id="description" placeholder="Description" [(ngModel)]="description"
+      <mat-form-field class="full-width">
+        <textarea matInput id="description" [placeholder]="'common.description' | translate" [(ngModel)]="description"
                   [ngModelOptions]="{standalone: true}"></textarea>
-  </mat-form-field>
+      </mat-form-field>
 
-  <mat-form-field class="full-width">
-    <mat-select name="courseTypes" placeholder="Please select your course access type" id="courseTypes" [(ngModel)]="enrollType">
-      <mat-option *ngFor="let enrollType of enrollTypes" [value]="enrollType">{{enrollType}}</mat-option>
-    </mat-select><br>
-  </mat-form-field>
+      <mat-form-field class="full-width">
+        <mat-select name="courseTypes" [placeholder]="'course.text.selectAccessType' | translate" id="courseTypes" [(ngModel)]="enrollType">
+          <mat-option *ngFor="let enrollType of enrollTypes" [value]="enrollType">{{'course.text.selectAccessTypes.' + enrollType | translate}}</mat-option>
+        </mat-select><br>
+      </mat-form-field>
 
   <p *ngIf="enrollType === enrollTypeConstants.ENROLL_TYPE_FREE">
-    The course is free and accessible for everyone
+    {{ 'course.text.isFreeForEveryone' | translate }}
   </p>
 
-  <mat-form-field class="full-width" *ngIf="enrollType === enrollTypeConstants.ENROLL_TYPE_ACCESSKEY">
-    <input async matInput id="accessKey" placeholder="Access Key" [(ngModel)]="accessKey"
-           [ngModelOptions]="{standalone: true}">
-    <mat-hint>Enter an access key for the students</mat-hint>
-  </mat-form-field>
+      <mat-form-field class="full-width" *ngIf="enrollType === enrollTypeConstants.ENROLL_TYPE_ACCESSKEY">
+        <input async matInput id="accessKey" [placeholder]="'course.placeholder.accessKey' | translate" [(ngModel)]="accessKey"
+               [ngModelOptions]="{standalone: true}">
+        <mat-hint>{{ 'course.text.enterAccessKeyForStudents' | translate }}</mat-hint>
+      </mat-form-field>
 
   <div class="csv-upload" *ngIf="enrollType === enrollTypeConstants.ENROLL_TYPE_WHITELIST">
-    <p>Upload your OBS csv file with your course members for whitelisting students.
-    <br />Old whitelist users are removed by uploading a new file.</p>
+    <p>{{ 'course.text.uploadWhitelist' | translate }}</p>
     <p>
-      <!-- TODO: Replace with shared upload form -->
-      <input class="upload" type="file" ng2FileSelect [uploader]="uploader"
-             placeholder="Upload files" accept=".csv"/>
-      <button mat-raised-button color="primary"
-              (click)="uploader.uploadAll()"
-              [disabled]="!uploader.getNotUploadedItems().length">
-        <mat-icon>file_upload</mat-icon>
-        Upload
-      </button>
+      <button mat-raised-button (click)="openWhitelistDialog()" type="button">{{ 'course.text.openWhitelistDialog' | translate }}</button>
+
     </p>
+
   </div>
 
-  <p>
-    <mat-slide-toggle (change)="onChangeActive($event)" [checked]="active">
-      <span *ngIf="active">Course can be seen by students</span>
-      <span *ngIf="!active">Course cannot be seen by students</span>
-    </mat-slide-toggle>
-  </p>
-  <p>
-    <app-button-save-cancel (cancel)="cancel()"></app-button-save-cancel>
-    <button mat-raised-button (click)="onExport()" type="button">Export</button>
-    <button mat-raised-button (click)="onDuplicate()" type="button">Duplicate</button>
-  </p>
-</form>
-<button mat-raised-button color="warn" (click)= "deleteCourse()">Delete Course</button>
+      <p>
+        <mat-slide-toggle (change)="onChangeActive($event)" [checked]="active">
+          <span *ngIf="active">{{ 'course.text.canSeenByStudents' | translate }}</span>
+          <span *ngIf="!active">{{ 'course.text.canNotSeenByStudents' | translate }}</span>
+        </mat-slide-toggle>
+      </p>
+      <p>
+        <app-button-save-cancel (cancel)="cancel()"></app-button-save-cancel>
+        <button mat-raised-button (click)="onExport()" type="button">{{ 'common.export' | translate }}</button>
+        <button mat-raised-button (click)="onDuplicate()" type="button">{{ 'common.duplicate' | translate }}</button>
+      </p>
+    </form>
+    <button mat-raised-button color="warn" (click)= "deleteCourse()">{{ 'course.delete' | translate }}</button>
+
+  </div>
+
+  <div class="course-image-upload">
+    <div class="course-image">
+      <app-responsive-image *ngIf="this.courseImageData" [responsiveImageData]="this.courseImageData"></app-responsive-image>
+      <img *ngIf="!this.courseImageData" src="/assets/course-header-image.jpg">
+    </div>
+
+    <div>
+      <button *ngIf="this.courseImageData" mat-raised-button color="red" class="mat-button" (click)="removeCoursePicture()">{{ 'common.delete' | translate }}</button>
+      <button mat-raised-button color="primary" class="mat-button" (click)="openImageChooserDialog()">{{ 'course.uploadImage' | translate }}</button>
+    </div>
+  </div>
+</div>
+

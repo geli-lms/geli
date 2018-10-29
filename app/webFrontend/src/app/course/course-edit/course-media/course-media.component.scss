@@ -1,5 +1,6 @@
 @import '../../../../variables';
 @import '../../../../styles/card';
+@import '../../../../styles/bootstrap-grid.css';
 
 $margin__card: 10px;
 $width__left: 30%;
@@ -7,6 +8,16 @@ $toolbar__height: 50px;
 
 .mm-container {
   display: flex;
+}
+
+
+mat-card.ng-star-inserted {
+  max-width: inherit;
+  min-width: inherit;
+}
+
+.margin-top{
+  margin-top: 15px;
 }
 
 .part {
@@ -17,6 +28,7 @@ $toolbar__height: 50px;
     width: $width__left;
     padding-left: 0;
     min-width: 6em;
+    max-width: 200px;
     transition: width 300ms ease;
 
     &.hide {
@@ -52,6 +64,12 @@ $toolbar__height: 50px;
 .file-wrapper {
   margin-left: -$margin__card;
   margin-right: -$margin__card;
+
+  &.isDialog {
+    overflow-y: scroll;
+    max-height: 80vh;
+  }
+
 }
 
 .inline-mat-icon {

@@ -2,59 +2,64 @@
 
 # Path to this file
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-# Path the script was called from
-IPWD="$(pwd)"
-# Import shared vars
-. ${DIR}/_shared-vars.sh
+
+# shellcheck source=_shared-vars.sh
+. "${DIR}/_shared-vars.sh"
 
 echo
 echo "+++ Create and publish API-Doc +++"
 echo
-if [[ "$TRAVIS_BRANCH" == "master" ]] || [[ -n "$TRAVIS_TAG" ]]; then
-  if [[ "$TRAVIS_PULL_REQUEST" == "false" ]] || [[ -n "$TRAVIS_TAG" ]]; then
-    if [[ -z $GITHUB_DOCU_TOKEN ]]; then
-        echo -e "${RED}+ ERROR: NO GITHUB_DOCU_TOKEN ENVVAR DEFINED. GO TO TRAVIS-SETTINGS AND DEFINE ONE.${NC}"
-        exit 1
-    fi
 
-    GITHUB_URL="github.com/h-da/geli-docs.git"
-    GITHUB_FOLDER="geli-docs"
-    DOCU_SOURCE="apidocs"
-
-    echo "+ Generate API-Doc"
-    cd api
-    npm run apidoc
-    echo "+ Publish API-Doc to $GITHUB_URL"
-
-    echo "+ git set user.name" ; git config --global user.name 'Travis'
-    echo "+ git set user.email" ; git config --global user.email 'travis@travis-ci.org'
-
-    echo "+ Clone $GITHUB_FOLDER"
-    git clone https://$GITHUB_URL -q -b master $GITHUB_FOLDER &>/dev/null
-
-    echo "+ Clear geli-docs"
-    find $GITHUB_FOLDER | grep -v -E "$GITHUB_FOLDER$|$GITHUB_FOLDER/.git$|$GITHUB_FOLDER/.git/" | xargs rm -rf
-
-    echo "+ Copy files"
-    cp -rT ./$DOCU_SOURCE ./$GITHUB_FOLDER
-
-    cd $GITHUB_FOLDER
-    echo "+ git add"
-    git add --all &>/dev/null
-    echo "+ git commit"
-    git commit -m "Travis build: $TRAVIS_BUILD_NUMBER" &>/dev/null
-
-    if [[ -n "$TRAVIS_TAG" ]]; then
-        echo "+ git tag" ; git tag -a $TRAVIS_TAG -m "Release $TRAVIS_TAG"
-    else
-        echo -e "${YELLOW}+ skipping: git tag - not tagged build${NC}"
-    fi
-
-    echo "+ git push"
-    git push --follow-tags -q https://micpah:$GITHUB_DOCU_TOKEN@$GITHUB_URL &>/dev/null
-  else
-    echo -e "${YELLOW}+ WARNING: pull request #$TRAVIS_PULL_REQUEST -> skipping api-doc${NC}";
-  fi
-else
-  echo -e "${YELLOW}+ WARNING: branch $TRAVIS_BRANCH is not whitelisted -> skipping api-doc${NC}";
+if [[ ${TRAVIS_PULL_REQUEST} != false ]]; then
+  echo -e "${GREEN}+ Skip api-doc check (pull request)${NC}"
+  exit 0;
 fi
+
+# shellcheck disable=2154
+if [[ -z ${encrypted_0b4a1a17005e_key} ]] || [[ -z ${encrypted_0b4a1a17005e_iv} ]]; then
+  echo -e "${WARNING}+ No private key (use travis encrypt-file)${NC}"
+  exit 1;
+fi
+
+# use travis encrypt-file to generate this
+openssl aes-256-cbc -K "${encrypted_0b4a1a17005e_key}" -iv "${encrypted_0b4a1a17005e_iv}" -in .travis/deploy_docs.enc -out /tmp/deploy_docs -d
+
+eval "$(ssh-agent -s)"
+chmod 600 /tmp/deploy_docs && ssh-add /tmp/deploy_docs
+
+GITHUB_URL="git@github.com:geli-lms/geli-docs.git"
+GITHUB_DIR="/opt/geli-docs/"
+
+rm -rf ${GITHUB_DIR}
+
+if [[ ${TRAVIS_BRANCH} == "master" ]] || [[ ${TRAVIS_BRANCH} == "develop" ]] || [[ -n ${TRAVIS_TAG} ]]; then
+  echo "+ Generate API-Doc"
+  cd api || exit 1
+  npm run apidoc
+
+  echo "+ Publish API-Doc to ${GITHUB_URL}"
+  if [[ ${TRAVIS_BRANCH} == "develop" ]]; then
+    git clone ${GITHUB_URL} -b develop ${GITHUB_DIR}
+  else
+    git clone ${GITHUB_URL} -b master ${GITHUB_DIR}
+  fi
+
+  rsync -a -delete apidocs/ ${GITHUB_DIR}
+  cd ${GITHUB_DIR} || exit 1
+
+  git config user.name "Travis"
+  git config user.email "travis@travis-ci.org"
+
+  git add --all
+  git commit -m "Travis build: ${TRAVIS_BUILD_NUMBER}"
+
+  if [[ -n ${TRAVIS_TAG} ]]; then
+    git tag -a "${TRAVIS_TAG}" -m "Release ${TRAVIS_TAG}"
+  fi
+
+  git push --follow-tags ${GITHUB_URL}
+  exit 0
+fi
+
+echo -e "${YELLOW}+ Branch not master or develop and no tag. Nothing todo.${NC}"
+exit 0

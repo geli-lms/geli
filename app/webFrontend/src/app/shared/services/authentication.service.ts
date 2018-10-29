@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpHeaders} from '@angular/common/http';
-import 'rxjs/add/operator/map';
+
 import {UserService} from './user.service';
 import {HttpClient} from '@angular/common/http';
 import {IUser} from '../../../../../../shared/models/IUser';
@@ -13,16 +13,21 @@ export class AuthenticationService {
   public static readonly API_URL = '/api/';
 
   public token: string;
+  public mediaToken: string;
   public isLoggedIn = false;
 
   constructor(private http: HttpClient,
               private router: Router,
               private userService: UserService) {
     this.token = localStorage.getItem('token');
+    this.mediaToken = localStorage.getItem('mediaToken');
     if (isNullOrUndefined(this.token)) {
       this.token = '';
     }
-    this.isLoggedIn = this.token !== '';
+    if (isNullOrUndefined(this.mediaToken)) {
+      this.mediaToken = '';
+    }
+    this.isLoggedIn = this.token !== ''; // Not checking against the mediaToken, because the app may still be partly functional without it.
   }
 
   async login(email: string, password: string) {
@@ -31,10 +36,15 @@ export class AuthenticationService {
       return this.http.post(AuthenticationService.API_URL + 'auth/login', {email: email, password: password})
       .subscribe(
         (response) => {
-          this.userService.setUser(response['user']);
+          // See JwtUtils.ts (generateToken function) in the back-end API for a description of the mediaToken's purpose.
+          // To easily attach the mediaToken to an URL you can use the jwt.pipe.ts (e.g. 'some/url/file.png | jwt').
           this.token = response['token'];
-          this.isLoggedIn = true;
+          this.mediaToken = response['mediaToken'];
           localStorage.setItem('token', this.token);
+          localStorage.setItem('mediaToken', this.mediaToken);
+          this.isLoggedIn = true;
+
+          this.userService.setUser(response['user']);
 
           resolve();
         }, (err) => {
@@ -56,9 +66,11 @@ export class AuthenticationService {
   }
 
   unsetAuthData() {
-    this.token = null;
     this.isLoggedIn = false;
+    this.token = null;
+    this.mediaToken = null;
     localStorage.removeItem('token');
+    localStorage.removeItem('mediaToken');
 
     this.userService.unsetUser();
   }

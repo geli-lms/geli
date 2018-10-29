@@ -13,7 +13,7 @@ import {FileUploadModule} from 'ng2-file-upload';
 import {UnitComponent} from './unit.component';
 import {SharedModule} from '../shared/shared.module';
 import {RouterModule} from '@angular/router';
-import {LightboxModule} from 'angular2-lightbox';
+import {LightboxModule} from 'ngx-lightbox';
 
 @NgModule({
   imports: [

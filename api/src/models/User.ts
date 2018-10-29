@@ -9,11 +9,22 @@ import * as crypto from 'crypto';
 import {isNullOrUndefined} from 'util';
 import {isEmail} from 'validator';
 import {errorCodes} from '../config/errorCodes';
+import {allRoles} from '../config/roles';
 import {IProperties} from '../../../shared/models/IProperties';
 import {extractMongoId} from '../utilities/ExtractMongoId';
 import {ensureMongoToObject} from '../utilities/EnsureMongoToObject';
+import {IUnit} from '../../../shared/models/units/IUnit';
+import {Course, ICourseModel} from './Course';
+import {NotificationSettings} from './NotificationSettings';
+import {Notification} from './Notification';
+import {WhitelistUser} from './WhitelistUser';
+import {Progress} from './progress/Progress';
+import fs = require('fs');
+import emailService from '../services/EmailService';
+
 
 interface IUserModel extends IUser, mongoose.Document {
+  exportPersonalData: () => Promise<IUser>;
   isValidPassword: (candidatePassword: string) => Promise<boolean>;
   checkPrivileges: () => IProperties;
   checkEditUser: (targetUser: IUser) => IProperties;
@@ -81,7 +92,7 @@ const userSchema = new mongoose.Schema({
     },
     role: {
       type: String,
-      'enum': ['student', 'teacher', 'tutor', 'admin'],
+      'enum': allRoles,
       'default': 'student'
     },
     lastVisitedCourses: [ {
@@ -180,6 +191,44 @@ userSchema.pre('findOneAndUpdate', function (next) {
   }
 });
 
+// delete all user data
+userSchema.pre('remove', async function () {
+  const localUser = <IUserModel><any>this;
+  try {
+    const promises = [];
+    // notifications
+    promises.push(Notification.remove({user: localUser._id}));
+    // notificationsettings
+    promises.push(NotificationSettings.remove({user: localUser._id}));
+    // whitelists
+    promises.push(WhitelistUser.remove({uid: localUser.uid}));
+    // remove user form courses
+    promises.push(Course.updateMany(
+      {$or: [
+          {students: localUser._id},
+          {teachers: localUser._id}
+          ]},
+      {$pull: {
+            'students': localUser._id,
+            'teachers': localUser._id
+          }
+      }));
+    // progress
+    promises.push(Progress.remove({user: localUser._id}));
+
+    // image
+    const path = localUser.profile.picture.path;
+    if (path && fs.existsSync(path)) {
+      fs.unlinkSync(path);
+    }
+
+    await Promise.all(promises);
+
+  } catch (e) {
+    throw new Error('Delete Error: ' + e.toString());
+  }
+});
+
 // Method to compare password for login
 userSchema.methods.isValidPassword = function (candidatePassword: string) {
   if (typeof  candidatePassword === 'undefined') {
@@ -216,6 +265,41 @@ userSchema.methods.forUser = function (otherUser: IUser): IUserSubSafe | IUserSu
   return User.forUser(this, otherUser);
 };
 
+userSchema.methods.exportPersonalData = async function () {
+  await this.populate(
+    {
+      path: 'lastVisitedCourses',
+      model: Course,
+      select: 'name description -_id teachers'
+    })
+    .execPopulate();
+
+  const lastVisitedCourses = await Promise.all(this.lastVisitedCourses.map( async (course: ICourseModel) => {
+    return await course.exportJSON(true, true);
+  }));
+
+  const obj = this.toObject();
+
+  obj.lastVisitedCourses = lastVisitedCourses;
+
+  // remove unwanted informations
+  // mongo properties
+  delete obj._id;
+  delete obj.createdAt;
+  delete obj.__v;
+  delete obj.updatedAt;
+  delete obj.id;
+
+  // custom properties
+
+  return obj;
+};
+
+userSchema.methods.getCourses = async function () {
+  const localUser = <IUserModel><any>this;
+  return Course.find({courseAdmin: localUser._id});
+};
+
 // The idea behind the editLevels is to only allow updates if the currentUser "has a higher level" than the target.
 // (Or when the currentUser is an admin or targets itself.)
 const editLevels: {[key: string]: number} = {
@@ -236,7 +320,7 @@ userSchema.statics.checkPrivileges = function (user: IUser): IProperties {
   const userIsAdmin: boolean = user.role === 'admin';
   const userIsTeacher: boolean = user.role === 'teacher';
   const userIsStudent: boolean = user.role === 'student';
-  // NOTE: The 'tutor' role exists and has fixtures, but currently appears to be unimplemented.
+  // NOTE: The 'tutor' role is currently unused / disabled.
   // const userIsTutor: boolean = user.role === 'tutor';
 
   const userEditLevel: number = User.getEditLevel(user);

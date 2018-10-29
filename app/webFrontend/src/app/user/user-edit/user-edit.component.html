@@ -1,5 +1,5 @@
 <div class="edit-user-wrapper">
-<h1>Edit profile</h1>
+<h1>{{ 'common.editProfile' | translate }}</h1>
 <div class="profile" *ngIf="user">
     <span class="user-icon" user-image [user-image]="user" [size]="'100px'"></span>
 </div>
@@ -7,7 +7,7 @@
 <form name="form" class="user-form" (ngSubmit)="onSubmit()" [formGroup]="userForm">
   <div class="form-group" formGroupName="profile">
     <mat-form-field class="full-width">
-      <input matInput formControlName="firstName" placeholder="First name" maxlength="64"/>
+      <input matInput formControlName="firstName" [placeholder]="'common.profileDetails.firstName' | translate" maxlength="64"/>
       <div *ngIf="userForm.get('profile').get('firstName').touched">
         <small *ngIf="userForm.get('profile').get('firstName').hasError('required')"
                class="text-danger">
@@ -25,7 +25,7 @@
     </mat-form-field>
 
     <mat-form-field class="full-width">
-      <input matInput formControlName="lastName" placeholder="Last name" maxlength="64"/>
+      <input matInput formControlName="lastName" [placeholder]="'common.profileDetails.lastName' | translate" maxlength="64"/>
       <div *ngIf="userForm.get('profile').get('lastName').touched">
         <small *ngIf="userForm.get('profile').get('lastName').hasError('required')"
                class="text-danger">
@@ -43,7 +43,7 @@
     </mat-form-field>
 
     <mat-form-field class="full-width">
-      <mat-select placeholder="Theme" formControlName="theme">
+      <mat-select [placeholder]="'common.theme' | translate" formControlName="theme">
         <mat-option *ngFor="let theme of themes" value="{{theme}}">{{theme}}</mat-option>
       </mat-select>
     </mat-form-field>
@@ -52,20 +52,24 @@
   <mat-form-field class="full-width">
     <input matInput formControlName="email" [placeholder]="'common.email'|translate"/>
   </mat-form-field>
-  <button mat-raised-button color="primary" class="mat-button" type="submit" [disabled]="!userForm?.valid">Save</button>
+  <button mat-raised-button color="primary" class="mat-button" type="submit" [disabled]="!userForm?.valid">
+    {{ 'common.save' | translate }}
+  </button>
   <button mat-raised-button class="mat-button" routerLink="/profile" routerLinkActive="active">
-    Cancel
+    {{ 'common.cancel' | translate }}
   </button>
 </form>
 <p *ngIf="!showPwFields()">
-  <button mat-raised-button class="mat-button" (click)="resetPassword()">Generate new Password</button>
+  <button mat-raised-button class="mat-button" (click)="resetPassword()">
+    {{ 'auth.generatePassword' | translate }}
+  </button>
 </p>
 <div class="button-wrapper">
   <button mat-raised-button class="mat-button" (click)="openAddPictureDialog()">
-    Upload new picture
+    {{ 'common.profileDetails.uploadPicture' | translate }}
   </button>
   <button mat-raised-button class="mat-button" (click)="openChangePasswordDialog()">
-    Change Password
+    {{ 'auth.changePassword' | translate }}
   </button>
 </div>
 </div>

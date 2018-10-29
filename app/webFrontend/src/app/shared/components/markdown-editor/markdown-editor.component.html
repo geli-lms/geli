@@ -1,11 +1,9 @@
 <div>
-  <mat-tab-group (selectChange)="onTabChange($event)">
+  <mat-tab-group (selectedTabChange)="onTabChange($event)">
     <mat-tab label="Write">
       <p class="info-text">
         <mat-icon>info</mat-icon>
-        Add Markdown to add text.
-        A Cheatsheet you can find
-        <a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet" target="_blank">here</a>.
+        {{ 'common.addMarkdownText' | translate }}
       </p>
 
       <ace-editor #editor

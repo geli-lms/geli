@@ -9,3 +9,36 @@
 .add-course-fab {
   @include globalFabBtn;
 }
+
+.headingAndBoxes {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+}
+
+.search-input-group {
+  align-items: center;
+  justify-content: flex-end;
+  display: flex;
+
+
+  .search-bar {
+    margin-left:1em;
+    border: 1px solid gray;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    padding: 5px;
+
+    .input-bar {
+      border: none;
+      width: 100%;
+    }
+  }
+}
+
+@media screen and (max-width: 475px){
+  .pull-right{
+    float: none;
+  }
+}

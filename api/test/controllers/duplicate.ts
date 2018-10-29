@@ -10,7 +10,6 @@ import {IUnit} from '../../../shared/models/units/IUnit';
 import * as fs from 'fs';
 import * as util from 'util';
 import {Course} from '../../src/models/Course';
-import * as winston from 'winston';
 import {ICodeKataModel} from '../../src/models/units/CodeKataUnit';
 import {IFreeTextUnit} from '../../../shared/models/units/IFreeTextUnit';
 import {ITaskUnitModel} from '../../src/models/units/TaskUnit';
@@ -103,7 +102,7 @@ describe('Duplicate', async () => {
             break;
           default:
             // should this fail the test?
-            winston.log('warn', 'duplicate for \'' + unit.type + '\' is not completly tested');
+            process.stderr.write('duplicate for "' + unit.type + '" is not completly tested');
             break;
         }
       }

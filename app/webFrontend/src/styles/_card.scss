@@ -7,6 +7,18 @@
   background: no-repeat 75px 15px;
   overflow: hidden;
 
+  &.small{
+    height: 180px;
+    width: 180px;
+
+    .card-btn-wrapper {
+      .mat-raised-button {
+        width: 100%;
+        margin-left: 0px;
+      }
+    }
+  }
+
   &:hover {
     background-color: map-get($app-primary, 300);
   }
@@ -50,6 +62,8 @@
 
   .icon-wrapper {
     $icon-wrapper-size: 140px;
+    $icon-wrapper-size-small:100px;
+
     left: 45px;
     width: $icon-wrapper-size;
     height: $icon-wrapper-size;
@@ -65,6 +79,17 @@
       line-height: $icon-wrapper-size - 20px;
       text-align: center;
     }
+
+    &.small{
+      left: 40px;
+      width: $icon-wrapper-size-small;
+      height: $icon-wrapper-size-small;
+      .mat-icon {
+        font-size: $icon-wrapper-size-small - 20px;
+        line-height: $icon-wrapper-size-small - 20px;
+      }
+    }
+
   }
 }
 

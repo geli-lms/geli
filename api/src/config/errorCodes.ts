@@ -1,7 +1,10 @@
-// TODO move to shared folder
-import config from '../config/main';
-
 export const errorCodes = {
+  chat: {
+    roomNotFound: {
+      code: 'chat room not found',
+      text: 'Chat room was not found.',
+    },
+  },
   mail: {
     duplicate: {
       code: 'duplicate mail',
@@ -71,13 +74,17 @@ export const errorCodes = {
       code: 'noOtherAdmins',
       text: 'There are no other users with admin privileges.'
     },
+    cantDeleteOtherUsers: {
+      code: 'cantDeleteOtherUsers',
+      text: 'Users can only delete themself.'
+    },
     userNotFound: {
       code: 'user not found',
       text: 'User was not found.',
     },
     retryAfter: {
       code: 'retry after',
-      text: 'You can only resend the activation every ' + config.timeTilNextActivationResendMin + ' minutes. You can resend again in ',
+      text: 'You can only resend the activation every 10 minutes. You can resend again in ',
     },
     userAlreadyActive: {
       code: 'user already active',
@@ -97,6 +104,16 @@ export const errorCodes = {
       regex: '^(?=.*[a-zA-Z])(?=.*[$%&§=#!?*()|0-9]).{8,}$'
     }
   },
+  file: {
+    forbiddenPath: {
+      code: 'forbiddenPath',
+      text: 'Access to requested path is forbidden.'
+    },
+    fileNotFound: {
+      code: 'fileNotFound',
+      text: 'Could not find requested file.'
+    }
+  },
   upload: {
     type: {
       notCSV: {
@@ -106,15 +123,21 @@ export const errorCodes = {
     }
   },
   save: {
-    couldNotSaveImprint: {
-      code: 'coldNotSaveImprint',
-      text: 'Could not save Imprint'
+    couldNotSaveLegalnotice: {
+      code: 'coldNotSaveLegalnotice',
+      text: 'Could not save legal notice'
     }
   },
   query: {
     empty: {
       code: 'emptyQuery',
       text: 'Query was empty.'
+    }
+  },
+  misc: {
+    mediaTokenInsufficient: {
+      code: 'mediaTokenInsufficient',
+      text: 'Can\'t use media token for this request.'
     }
   }
 };

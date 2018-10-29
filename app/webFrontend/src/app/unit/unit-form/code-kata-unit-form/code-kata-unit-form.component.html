@@ -1,29 +1,21 @@
-<div class="code-kata-unit-form">
-  <strong>Code-Kata</strong>
-
-  <app-unit-general-info-form [model]="model"></app-unit-general-info-form>
-
-  <div class="info-text">
+<div class="code-kata-unit-form" [formGroup]="unitForm">
+  <mat-hint>
     <mat-icon>info</mat-icon>
-    Separate definition, coding and test areas with "{{areaSeperator}}".
-  </div>
-  <div class="info-text">
+    {{ 'code-kata.information.info1' | translate }} "{{areaSeperator}}".
+    <br/>
     <mat-icon>info</mat-icon>
-    Your students can only edit the code area.
-  </div>
+    {{ 'code-kata.information.info2' | translate }}
+  </mat-hint>
 
   <ace-editor class="user-code-editor"
               #codeEditor
-              [(text)]="wholeInputCode"
-              [mode]="'javascript'"
+              formControlName="wholeInputCode"
+              [mode]="'markdown'"
               [theme]="'github'"
               [readOnly]="false">
   </ace-editor>
-
-  <button mat-raised-button (click)="validate()">Validate</button>
-  <app-button-save-cancel (save)="addUnit()" (cancel) ="onCancel()"></app-button-save-cancel>
-  <div *ngIf="logs!==undefined" class="logs-title">
-    Logs:
+  <div *ngIf="logs" class="logs-title">
+    {{ 'code-kata.text.logs' | translate }}
     <pre>{{logs}}</pre>
   </div>
 </div>

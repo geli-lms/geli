@@ -1,35 +1,35 @@
 <mat-expansion-panel *ngIf="course.enrollType === 'whitelist'" class="whitelist" [expanded]="false" #expPanel>
   <mat-expansion-panel-header>
   <mat-panel-title class="title">
-    Whitelist
+    {{ 'course.text.whitelist' | translate }}
   </mat-panel-title>
   <mat-panel-description>
-    amount: {{course.whitelist.length}}
+    {{ 'common.amount' | translate }}: {{course.whitelist.length}}
   </mat-panel-description>
   </mat-expansion-panel-header>
-  <p>All users on this list is allowed to join in course. Students are automatically synchronised with this list.</p>
+  <p>{{ 'course.text.infoWhitelist' | translate }}</p>
   <app-whitelist-show [show]="expPanel.expanded"
                       [course]="course"
     (onDragendRemoveWhitelist) ="removeWhitelistUserFromCourse($event)">
   </app-whitelist-show>
 
   <mat-form-field class="full-width">
-    <input async matInput id="firstName" placeholder="First name" [(ngModel)]="whitelistUser.firstName"
+    <input async matInput id="firstName" [placeholder]="'common.profileDetails.firstname' | translate" [(ngModel)]="whitelistUser.firstName"
            [ngModelOptions]="{standalone: true}" required="">
   </mat-form-field>
 
   <mat-form-field class="full-width">
-    <input async matInput id="lastName" placeholder="Last name" [(ngModel)]="whitelistUser.lastName"
+    <input async matInput id="lastName" [placeholder]="'common.profileDetails.lastname' | translate" [(ngModel)]="whitelistUser.lastName"
            [ngModelOptions]="{standalone: true}" required="">
   </mat-form-field>
 
   <mat-form-field class="full-width">
-    <input async matInput id="uid" placeholder="User identification number" [(ngModel)]="whitelistUser.uid"
+    <input async matInput id="uid" [placeholder]="'common.profileDetails.uid' | translate" [(ngModel)]="whitelistUser.uid"
            [ngModelOptions]="{standalone: true}" required="">
   </mat-form-field>
 
   <button class="mat-mini-fab" mat-fab (click)="createNewWhitelistUser()"
-          matTooltip="Add whitelist user">
+          [matTooltip]="'course.tooltip.addUserToWhitelist' | translate">
     <mat-icon>add</mat-icon>
   </button>
 </mat-expansion-panel>

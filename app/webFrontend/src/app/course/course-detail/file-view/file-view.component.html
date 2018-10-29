@@ -1,0 +1,23 @@
+<div *ngIf="checkForFileUnits()">
+  <mat-list>
+    <ng-container *ngFor="let lec of course.lectures">
+      <ng-container *ngFor="let unit of lec.units">
+        <ng-container *ngIf="unit.__t === 'file'">
+          <ng-container *ngFor="let fileUnit of unit.files">
+            <ng-container *ngIf="unit.fileUnitType == 'file'">
+              <mat-list-item>
+                <mat-icon mat-list-icon>{{ fileIcon.fileToIcon(fileUnit) }}</mat-icon>
+                <a href="{{'/api/uploads/' + fileUnit.link | jwt}}" download="{{fileUnit.name}}">
+                  <span>{{fileUnit.name}}</span>
+                </a>
+              </mat-list-item>
+            </ng-container>
+          </ng-container>
+        </ng-container>
+      </ng-container>
+    </ng-container>
+  </mat-list>
+</div>
+<div *ngIf="!checkForFileUnits()">
+  <h2>{{ 'course.text.noFilesAttached' | translate }}</h2>
+</div>

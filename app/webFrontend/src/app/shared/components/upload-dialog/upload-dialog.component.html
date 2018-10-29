@@ -1,38 +1,42 @@
-<mat-tab-group *ngIf="!showProgressBar" (selectChange)="changedTab($event)">
-  <mat-tab label="Upload image">
+<mat-tab-group *ngIf="!showProgressBar" (selectedTabChange)="changedTab($event)">
+  <mat-tab [label]="'common.profileDetails.uploadPicture' | translate">
     <div class="tab-content">
-      <label ng2FileDrop
-             [ngClass]="{'nv-file-over': true}"
-             [uploader]="uploader"
-             class="file-dropzone"
-              (onFileDrop)="startUpload()">
-        <span>Drop files here or click here to add files</span>
-        <input type="file"
-               ng2FileSelect
-               [uploader]="uploader"
-               (onFileSelected)="startUpload()"
-               placeholder="Upload files"
-               accept="image/*"
-               hidden
-        />
-      </label>
+      <app-upload-form [uploadMethod]="'POST'"
+                       [uploadPath]="uploadPath"
+                       [additionalData]="null"
+                       [allowedMimeTypes]="allowedMimeTypes"
+                       [uploadSingleFile]="true"
+                       [maxFileNumber]="1"
+                       (onFileUploaded)="onFileUploaded($event)"
+                       (onAllUploaded)="onAllUploaded()"
+      ></app-upload-form>
+      <div class="upload-button-group">
+        <button mat-raised-button color="primary" (click)="startUpload()" [disabled]="!isObjectInQueue()">
+          <mat-icon>file_upload</mat-icon>
+            {{ 'file.text.infoDropAddFiles' | translate }}
+        </button>
+        <button mat-raised-button (click)="cancel()">Cancel</button>
+      </div>
     </div>
   </mat-tab>
-  <mat-tab id="webcam-tab" label="Take webcam picture">
+  <mat-tab id="webcam-tab" [label]="'file.text.takePicture' | translate">
     <div class="tab-content">
-      <div class="camera">
-        <video #webcam>No video stream is available.</video>
+      <div *ngIf="!isWebcamActive" class="camera">
+          <div class="camera">
+            <video #webcam>{{ 'file.text.noVideo' | translate }}</video>
+          </div>
+          <p>
+            <button mat-raised-button (click)="takePicture()">{{ 'file.text.takePicture' | translate }}</button>
+          </p>
       </div>
-      <p>
-        <button mat-raised-button (click)="takePicture()">Take picture</button>
-      </p>
       <div class="preview">
         <h3 *ngIf="pictureTaken">Preview image</h3>
         <img #preview>
       </div>
-      <button mat-raised-button color="primary" disabled="{{!pictureTaken}}" (click)="addImage()">
-        Upload picture
-      </button>
+        <button mat-raised-button color="primary" disabled="{{!pictureTaken}}" (click)="addImage()">
+          <mat-icon>file_upload</mat-icon>
+            {{ 'common.profileDetails.uploadPicture' | translate }}
+        </button>
       <button mat-raised-button (click)="cancel()">Cancel</button>
     </div>
   </mat-tab>
@@ -40,5 +44,7 @@
 <div *ngIf="showProgressBar">
   <h2>Uploading...</h2>
   <mat-progress-bar mode="determinate" [value]="uploader.progress"></mat-progress-bar>
-  <button mat-raised-button class="btn-cancel-upload" color="warn" (click)="cancel()">Cancel</button>
+  <button mat-raised-button class="btn-cancel-upload" color="warn" (click)="cancel()">
+    {{ 'common.cancel' | translate }}
+  </button>
 </div>

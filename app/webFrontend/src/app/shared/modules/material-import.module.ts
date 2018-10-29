@@ -1,15 +1,32 @@
 import {NgModule} from '@angular/core';
+import {MatBadgeModule} from '@angular/material/badge';
+
 import {
   MatAutocompleteModule,
-  MatButtonModule, MatCardModule, MatCheckboxModule, MatDialogModule, MatFormFieldModule, MatIconModule, MatInputModule,
+  MatButtonModule,
+  MatCardModule,
+  MatCheckboxModule,
+  MatDialogModule,
+  MatFormFieldModule,
+  MatIconModule,
+  MatInputModule,
   MatListModule,
   MatDatepickerModule,
   MatMenuModule,
   MatNativeDateModule,
-  MatProgressBarModule, MatRadioModule,
-  MatSelectModule, MatSlideToggleModule,
-  MatSnackBarModule, MatTabsModule,
-  MatToolbarModule, MatTooltipModule, MatExpansionModule, DateAdapter, MatProgressSpinnerModule, MatChipsModule
+  MatProgressBarModule,
+  MatRadioModule,
+  MatSelectModule,
+  MatSlideToggleModule,
+  MatSnackBarModule,
+  MatStepperModule,
+  MatTabsModule,
+  MatToolbarModule,
+  MatTooltipModule,
+  MatExpansionModule,
+  DateAdapter,
+  MatProgressSpinnerModule,
+  MatChipsModule
 } from '@angular/material';
 import {CustomDateAdapter} from '../classes/CustomDateAdapter';
 
@@ -29,6 +46,7 @@ import {CustomDateAdapter} from '../classes/CustomDateAdapter';
     MatMenuModule,
     MatNativeDateModule,
     MatProgressBarModule,
+    MatStepperModule,
     MatRadioModule,
     MatSelectModule,
     MatSlideToggleModule,
@@ -38,6 +56,7 @@ import {CustomDateAdapter} from '../classes/CustomDateAdapter';
     MatTooltipModule,
     MatProgressSpinnerModule,
     MatChipsModule,
+    MatBadgeModule
   ],
   exports: [
     MatAutocompleteModule,
@@ -51,6 +70,7 @@ import {CustomDateAdapter} from '../classes/CustomDateAdapter';
     MatIconModule,
     MatInputModule,
     MatListModule,
+    MatStepperModule,
     MatMenuModule,
     MatNativeDateModule,
     MatProgressBarModule,
@@ -63,6 +83,7 @@ import {CustomDateAdapter} from '../classes/CustomDateAdapter';
     MatTooltipModule,
     MatProgressSpinnerModule,
     MatChipsModule,
+    MatBadgeModule
   ],
   providers: [
     {provide: DateAdapter, useClass: CustomDateAdapter},

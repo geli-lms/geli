@@ -5,7 +5,7 @@ services:
     ports:
       - "27017:27017"
   api:
-    image: "node:8.11.1"
+    image: "node:10.8.0"
     volumes:
       - ".:/usr/src"
     working_dir: "/usr/src/api"
@@ -17,7 +17,7 @@ services:
     links:
       - "db"
   web-frontend:
-    image: "node:8.11.1"
+    image: "node:10.8.0"
     volumes:
       - ".:/usr/src"
     working_dir: "/usr/src/app/webFrontend"

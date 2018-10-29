@@ -8,6 +8,8 @@ import chaiHttp = require('chai-http');
 import {User} from '../../src/models/User';
 import {Course} from '../../src/models/Course';
 import {NotFoundError} from 'routing-controllers';
+import {API_NOTIFICATION_TYPE_ALL_CHANGES, API_NOTIFICATION_TYPE_NONE, NotificationSettings} from '../../src/models/NotificationSettings';
+import {InternalServerError} from 'routing-controllers/http-error/InternalServerError';
 
 chai.use(chaiHttp);
 const should = chai.should();
@@ -57,6 +59,162 @@ describe('Notifications', async () => {
 
       const notifications = await Notification.find({changedCourse: course});
       notifications.length.should.be.equal(course.students.length);
+    });
+  });
+
+  describe(`POST ${BASE_URL} user :id`, async () => {
+    it('should fail if course and text are not given', async () => {
+      const course = await FixtureUtils.getRandomCourse();
+      const teacher = await FixtureUtils.getRandomTeacherForCourse(course);
+
+      const res = await chai.request(app)
+        .post(`${BASE_URL}/user/507f191e810c19729de860ea`) // valid id but user not exist
+        .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
+        .send({})
+        .catch(err => err.response);
+      res.status.should.be.equal(400);
+      res.body.name.should.be.equal('BadRequestError');
+      res.body.message.should.be.equal('Notification needs at least the field changedCourse or text');
+    });
+
+    it('should fail if user not given', async () => {
+      const course = await FixtureUtils.getRandomCourse();
+      const teacher = await FixtureUtils.getRandomTeacherForCourse(course);
+
+      const newNotification = {
+        changedCourse: course,
+        text: 'test text'
+      };
+
+      const res = await chai.request(app)
+        .post(`${BASE_URL}/user/507f191e810c19729de860ea`) // valid id but user not exist
+        .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
+        .send(newNotification)
+        .catch(err => err.response);
+      res.status.should.be.equal(400);
+      res.body.name.should.be.equal('BadRequestError');
+      res.body.message.should.be.equal('Could not create notification because user not found');
+    });
+
+    it('should create notifications for student with changedCourse and text', async () => {
+      const course = await FixtureUtils.getRandomCourse();
+      const student = course.students[Math.floor(Math.random() * course.students.length)];
+      const teacher = await FixtureUtils.getRandomTeacherForCourse(course);
+
+      const newNotification = {
+        changedCourse: course,
+        text: 'test text'
+      };
+
+      const res = await chai.request(app)
+        .post(`${BASE_URL}/user/${student._id}`)
+        .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
+        .send(newNotification);
+      res.status.should.be.equal(200);
+      res.body.notified.should.be.equal(true);
+
+      const notifications = await Notification.find({changedCourse: course});
+      notifications.length.should.be.equal(1);
+    });
+
+    it('should create notifications for student with changedCourse and text', async () => {
+      const course = await FixtureUtils.getRandomCourse();
+      const student = course.students[Math.floor(Math.random() * course.students.length)];
+      const teacher = await FixtureUtils.getRandomTeacherForCourse(course);
+
+      await new NotificationSettings({
+        user: student,
+        course: course,
+        notificationType: API_NOTIFICATION_TYPE_ALL_CHANGES,
+        emailNotification: true
+      }).save();
+
+      const newNotification = {
+        changedCourse: course,
+        text: 'test text'
+      };
+
+      const res = await chai.request(app)
+        .post(`${BASE_URL}/user/${student._id}`)
+        .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
+        .send(newNotification);
+      res.status.should.be.equal(200);
+      res.body.notified.should.be.equal(true);
+
+      const notifications = await Notification.find({changedCourse: course});
+      notifications.length.should.be.equal(1);
+    });
+
+    it('should create notifications for student with changedCourse, changedLecture, changedUnit and text', async () => {
+      const course = await FixtureUtils.getRandomCourse();
+      const lecture = await FixtureUtils.getRandomLectureFromCourse(course);
+      const student = course.students[Math.floor(Math.random() * course.students.length)];
+      const teacher = await FixtureUtils.getRandomTeacherForCourse(course);
+
+      const newNotification = {
+        changedCourse: course,
+        changedLecture: lecture,
+        changedUnit: lecture.units[0],
+        text: 'test text'
+      };
+
+      const res = await chai.request(app)
+        .post(`${BASE_URL}/user/${student._id}`)
+        .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
+        .send(newNotification);
+      res.status.should.be.equal(200);
+      res.body.notified.should.be.equal(true);
+
+      const notifications = await Notification.find({changedCourse: course});
+      notifications.length.should.be.equal(1);
+    });
+
+    it('should create notifications for student with changedCourse and text but API_NOTIFICATION_TYPE_NONE', async () => {
+      const course = await FixtureUtils.getRandomCourse();
+      const student = course.students[Math.floor(Math.random() * course.students.length)];
+      const teacher = await FixtureUtils.getRandomTeacherForCourse(course);
+
+      await new NotificationSettings({
+        user: student,
+        course: course,
+        notificationType: API_NOTIFICATION_TYPE_NONE,
+        emailNotification: false
+      }).save();
+
+      const newNotification = {
+        changedCourse: course,
+        text: 'test text'
+      };
+
+      const res = await chai.request(app)
+        .post(`${BASE_URL}/user/${student._id}`)
+        .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
+        .send(newNotification);
+      res.status.should.be.equal(200);
+      res.body.notified.should.be.equal(true);
+
+      const notifications = await Notification.find({changedCourse: course});
+      notifications.length.should.be.equal(1);
+    });
+
+    it('should create notifications for student with text only', async () => {
+      const course = await FixtureUtils.getRandomCourse();
+      const student = course.students[Math.floor(Math.random() * course.students.length)];
+      const teacher = await FixtureUtils.getRandomTeacherForCourse(course);
+
+      const newNotification = {
+        text: 'test text'
+      };
+
+      const res = await chai.request(app)
+        .post(`${BASE_URL}/user/${student._id}`)
+        .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
+        .send(newNotification);
+      res.status.should.be.equal(200);
+      res.body.notified.should.be.equal(true);
+
+      const notifications = await Notification.find({user: student._id});
+      notifications.length.should.be.equal(1);
     });
   });
 

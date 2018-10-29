@@ -8,7 +8,8 @@ const PATH_APP_WEB = '../app/webFrontend/';
 const PATH_APP_WEB_FILE_NAME = 'src/app/about/licenses/dependencies.ts';
 const PACKAGE_BLACKLIST = [
   'geli-api',
-  'geli-web-frontend'
+  'geli-web-frontend',
+  'rxjs-compat'
 ];
 const SEARCH_FOR = '// DEPENDENCY_REPLACE';
 

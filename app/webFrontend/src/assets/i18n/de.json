@@ -1,75 +1,391 @@
 {
+  "activation": {
+    "text": {
+      "pleaseClick": "Bitte klicken",
+      "toActivate": ", um den Account zu aktivieren.",
+      "toUseYourAccount": ", um den Account zu nutzen."
+    }
+  },
+  "admin": {
+    "cache": {
+      "clear": {
+        "failed": "Fehler beim Löschen des Server-Caches",
+        "label": "Lösche Cache",
+        "tooltip": "Dies kann laufende Download-Anfragen stören!"
+      },
+      "header": "Server Cache Steuerung"
+    }
+  },
+  "auth": {
+    "changePassword": "Passwort ändern",
+    "confirmPassword": "Passwort bestätigen",
+    "forgotPassword": "Passwort vergessen",
+    "generatePassword": "Neues Passwort generieren",
+    "loginFailed": "Login fehlgeschlagen",
+    "loginFailedError": {
+      "couldNotBeVerified": "Ihre Logindaten konnten nicht verifiziert werden. Bitte versuchen Sie es noch ein mal.",
+      "notActiveYet": "Ihr Account wurde noch nicht aktiviert.",
+      "unknown": "Es ist ein unbekannter Fehler aufgetreten."
+    },
+    "loginSuccess": "Login erfolgreich",
+    "registration": {
+      "acceptCheckboxes": "Ich akzeptiere gelis ",
+      "back": "Zurück zur Startseite",
+      "mailSent": "Wir haben Ihnen einen Aktivierungslink an Ihre E-Mail-Adresse gesendet.",
+      "privacyDeclaration": "Datenschutzerklärung",
+      "registerAs": "Registrieren als",
+      "resendActivationButton": "Aktivierung erneut senden",
+      "successful": "Registrierung erfolgreich",
+      "teacherRegistrationButton": "Kein Student?",
+      "termsOfUse": "Nutzungsbedingungen",
+      "tooltipRegister": "Klicken Sie hier, um Ihre Registrierung abzuschließen."
+    },
+    "resendActivation": {
+      "back": "Zurück zur Registrierung",
+      "mailSent": "Wir haben Ihnen einen neuen Aktivierungslink an Ihre E-Mail-Adresse gesendet.",
+      "successful": "Aktivierung erneut senden erfolgreich.",
+      "tooltipResendAction": "Klicken Sie hier, um einen neuen Aktivierungslink anzufordern."
+    },
+    "resetPassword": {
+      "requestReset": "Passwort zurücksetzen",
+      "reset": "Zurücksetzen"
+    },
+    "tooltip": {
+      "currentPassword": "Aktuelles Passwort",
+      "ForgotPassword": "Klicken Sie hier, um ein neues Passwort anzufordern.",
+      "ResetPassword": "Klicken Sie hier, um das Passwort zurückzusetzen."
+    }
+  },
+  "code-kata": {
+    "information": {
+      "info1": "Separate definition, coding and test areas with",
+      "info2": "Ihre Studenten können ausschließlich den Codebereich editieren."
+    },
+    "text": {
+      "codeExample": "Das ist die bereitgestellte Beispiellösung",
+      "codeHere": "Ihr Code kommt hierhin",
+      "logs": "Logs",
+      "mustSucceed": "Diese Tests müssen erfolgreich sein"
+    }
+  },
   "common": {
-    "geli": "geli",
-    "login": "Login",
-    "register": "Registrieren",
-    "email": "E-Mail",
-    "password": "Passwort",
-    "send": "Senden",
-    "dismiss": "Schließen",
+    "about": "Über",
+    "actions": "Aktionen",
+    "addMarkdownText": "Füge Markdown hinzu.\n Eine Referenz finden Sie hier: <a href=\"https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet\" target=\"_blank\"></a>.",
+    "administration": "Administration",
+    "amount": "Menge",
     "back": "Zurück",
-    "profile": {
+    "cancel": "Abbrechen",
+    "cheatSheetYouFind": "Einen Spickzettel finden Sie hier.",
+    "close": "Schließen",
+    "continue": "Weiter",
+    "content": "Inhalt",
+    "course": "Kurs",
+    "delete": "Löschen",
+    "description": "Beschreibung",
+    "discard": "Verwerfen",
+    "dismiss": "Schließen",
+    "documents": "Dokumente",
+    "download": "Download (Beta)",
+    "duplicate": "Duplizieren",
+    "edit": "Bearbeiten",
+    "editProfile": "Profil bearbeiten",
+    "exportProfile": "Profildaten exportieren",
+    "deleteProfile": "Profildaten löschen",
+    "email": "E-Mail",
+    "export": "Export",
+    "folder": "Ordner",
+    "fullscreenMode": "Vollbildmodus",
+    "geli": "geli",
+    "general": "Allgemein",
+    "here": "hier",
+    "legalnotice": "Impressum",
+    "infobox": "Infobox",
+    "login": "Login",
+    "name": "Name",
+    "notifications": "Benachrichtigungen",
+    "media": "Medien",
+    "members": "Mitglieder",
+    "misc": "Sonstiges",
+    "ok": "OK",
+    "open": "Öffnen",
+    "openInTab": "Im neuen Tab öffnen",
+    "password": "Passwort",
+    "privacy": "Datenschutz",
+    "profile": "Profil",
+    "profileDetails": {
       "firstName": "Vorname",
       "lastName": "Nachname",
-      "uid": "Matrikelnummer"
+      "uid": "Matrikelnummer",
+      "uploadPicture": "Bild hochladen"
     },
+    "question": "Frage",
+    "register": "Registrieren",
+    "reset": "Zurücksetzen",
+    "rename": "Umbenennen",
+    "role": "Rolle",
     "roles": {
       "student": "Student",
       "teacher": "Lehrer"
     },
+    "save": "Speichern",
+    "send": "Senden",
+    "settings": "Einstellungen",
+    "statistics": "Statistik",
+    "submit": "Absenden",
+    "teachers": "Lehrer",
+    "theme": "Design",
+    "tooltip": {
+      "quitFullscreenMode": "Vollbildmodus beenden",
+      "downloadUnit": "Diese Lerneinheit downloaden",
+      "clickToOpen": "Auf-/ zuklappen"
+    },
+    "upload": "hochladen",
+    "users": "Benutzer",
+    "validate": "Prüfen",
     "validation": {
-      "required": "Eingabe notwendig",
-      "minLength": "Mindestens {{min}} Zeichen benötigt",
+      "instituteMail": "Bitte nutzen Sie Ihre Instituts-E-Mail.",
+      "invalid": "Keine gültige Eingabe.",
       "maxLength": "Maximal {{max}} Zeichen erlaubt",
-      "invalid": "Keine gültige Eingabe",
+      "minLength": "Mindestens {{min}} Zeichen benötigt",
       "password": "Passwörter müssen aus mindestens 8 Zeichen, inklusive einem Sonderzeichen und einer Ziffer bestehen",
-      "passwordsMatch": "Die Passwörter stimmen nicht überein",
-      "instituteMail": "Bitte nutzen Sie Ihre Instituts-Email"
+      "wrong_mimeType": "Falsches Dateiformat. Es sind nur Bilder erlaubt!",
+      "passwordsMatch": "Die Passwörter stimmen nicht überein.",
+      "required": "Eingabe notwendig"
+    },
+    "videos": "Videos",
+    "line": "Zeile",
+    "errors": "Fehler"
+  },
+  "course": {
+    "delete": "Kurs löschen",
+    "uploadImage": "Kursbild hochladen",
+    "search": "Kurse Suchen",
+    "placeholder": {
+      "accessKey": "Einschreibeschlüssel",
+      "description": "Kursbeschreibung",
+      "name": "Kursname",
+      "searchAndAdd": "Benutzer anhand des Namens, der Id oder der E-Mail-Adresse suchen"
+    },
+    "ShowCourse": "Kurs anzeigen",
+    "text": {
+      "addMarkdownToCourse": "Markdown hinzufügen, um Text zu diesem Kurs hinzuzufügen.",
+      "canNotSeenByStudents": "Kurs ist für Studenten nicht sichtbar.",
+      "canSeenByStudents": "Kurs ist für Studenten sichtbar.",
+      "downloadHelpText": "Wähle die Units oder Files aus die als zip heruntergeladen werden sollen.",
+      "downloadNoFiles": "No Coursematerial aviable for download!",
+      "downloadBetaWarning": "Achtung! Der PDF export befindet sich noch in der Entwicklung. Für die meisten Kurse funktioniert der Export bereits. Ein paar Sonderfälle müssen aber noch gelöst werden. Wenn du einen Fehler findest, dann melde diesen bitte unter",
+      "IndividualPDF": "individuelle PDFs",
+      "IndividualPDFExplanation": "eine PDF pro Unit",
+      "SinglePDF": "eine PDF",
+      "SinglePDFExplanation": "eine PDF mit allem ausgewählten",
+      "editCourse": "Kurs bearbeiten",
+      "enterAccessKey": "Bitte geben Sie den Einschreibeschlüssel dieses Kurses ein.",
+      "enterAccessKeyForStudents": "Geben Sie einen Einschreibeschlüssel für die Studenten ein.",
+      "goToCourse": "Zum Kurs",
+      "hasBeenDeleted": "wurde gelöscht.",
+      "inCourse": "Im Kurs",
+      "infoWhitelist": "Allen Benutzern dieser Liste, ist es erlaubt, dem Kurs beizutreten.",
+      "isFreeForEveryone": "Der Kurs ist offen und für jeden zugänglich.",
+      "needAccessKey": "Dieser Kurs benötigt einen Einschreibeschlüssel.",
+      "noCourses": "Noch keine Kurse hinzugefügt.",
+      "notInCourse": "Nicht im Kurs",
+      "notVisibleToStudents": "Kurs für Studenten nicht sichtbar",
+      "overview": "Übersicht",
+      "reportFor": "Ergebnis für",
+      "selectAccessType": "Bitte wählen Sie Ihren Kurstyp aus.",
+      "selectAccessTypes": {
+        "free": "Frei",
+        "accesskey": "Einschreibeschlüssel",
+        "whitelist": "Whitelist"
+      },
+      "uploadWhitelist": "Laden Sie Ihre OBS-csv-Datei mit Ihren Kursteilnehmern hoch, um sie auf die Freigabeliste zu setzen. Alte Freigabelisten-Benutzer werden durch Hochladen einer neuen Datei entfernt.",
+      "userResults": "Benutzerergebnisse",
+      "yourCourseProgress": "Ihr Kursfortschritt",
+      "whitelist": "Freigabeliste",
+      "noVideosAttached": "Es gibt keine Videos zu diesem Kurs",
+      "noFilesAttached": "Es gibt keine Dateien zu diesem Kurs",
+      "removeUnwantedUsers": "Ungewollte Nutzer entfernen",
+      "createWhitelist": "Whitelist erstellen",
+      "openWhitelistDialog": "Auswahldialog öffnen",
+      "whitelistCreated": "Die Whitelist wurde erstellt. Vergessen Sie nicht den Kurs zu speichern.",
+      "whitelistNotReadable": "Die Whitelist-Datei konnte nicht gelesen werden. Haben Sie die richtige Datei ausgewählt?",
+      "whitelistNoStudents": "In der Whitelist-Datei sind keine Stundenten, die importiert werden können."
+    },
+    "tooltip": {
+      "add": "Kurs hinzufügen",
+      "addUserToWhitelist": "Benutzer zu Freigabeliste hinzufügen",
+      "download": "Kurs herunterladen",
+      "enroll": "Einschreiben",
+      "keyRequired": "Zugangscode benötigt",
+      "leave": "Verlassen",
+      "noKeyRequired": "Frei zugänglich"
+    }
+  },
+  "cookie": {
+    "text": {
+      "moreInformation": "Weitere Informationen",
+      "cookieHint": "Geli verwendet Cookies, um Ihnen den bestmöglichen Service zu gewährleisten. Wenn Sie auf der Seite weitersurfen, stimmen Sie der Cookie-Nutzung zu, wie im Impressum beschrieben."
+    }
+  },
+  "dashboard": {
+    "addCourse": "Kurs hinzufügen",
+    "availableCourses": "Verfügbare Kurse",
+    "courses": "Kurse",
+    "createCourse": "Kurs erstellen",
+    "createdCourses": "Meine erstellten Kurse",
+    "importCourse": "Kurs importieren",
+    "inactiveCourses": "Inaktive Kurse",
+    "myCourses": "Meine Kurse",
+    "teacherCourses": "Meine Lehrveranstaltungen"
+  },
+  "errorPage": {
+    "text": {
+      "pageNotFound": "Seite nicht gefunden :(",
+      "pageNotFoundHint": "Vielleicht suchen Sie nach einer Seite, die leider nicht mehr existiert."
+    }
+  },
+  "file": {
+    "placeholder": {
+      "uploadFiles": "Dateien hochladen"
+    },
+    "text": {
+      "actions": "Aktionen",
+      "addFile": "Datei hinzufügen",
+      "filename": "Dateiname",
+      "filesize": "Dateigröße",
+      "filesSelected": "Dateien ausgewählt",
+      "fileRemove": "Datei löschen",
+      "infoDropAddFiles": "Dateien hier hinziehen oder hier klicken, um Dateien hochzuladen.",
+      "noVideo": "Kein Video verfügbar.",
+      "noFiles": "Keine Dateien vorhanden",
+      "progress": "Fortschritt",
+      "removeFromQueue": "Datei aus der Schlange löschen.",
+      "selectAll": "Alle auswählen",
+      "takePicture": "Bild aufnehmen"
+    },
+    "tooltip": {
+      "selectFile": "Datei auswählen",
+      "uploadFile": "Datei hochladen"
     }
   },
   "home": {
     "welcomeTo": "Willkommen auf"
   },
-  "auth": {
-    "forgotPassword": "Passwort vergessen",
-    "loginSuccess": "Login erfolgreich",
-    "loginFailed": "Login fehlgeschlagen",
-    "loginFailedError": {
-      "couldNotBeVerified": "Ihre Login-Daten konnten nicht verifiziert werden. Bitte versuchen sie es noch ein mal.",
-      "notActiveYet": "Ihr Account wurde noch nicht aktiviert.",
-      "unknown": "Es ist ein unbekannter Fehler aufgetreten."
+  "lecture": {
+    "noUnits": "Keine Unterkapitel angelegt!",
+    "text": {
+      "add": "Kapitel hinzufügen",
+      "import": "Kapitel importieren",
+      "noLecture": "Noch kein Kapitel hinzugefügt."
     },
-    "confirmPassword": "Passwort bestätigen",
-    "registration": {
-      "registerAs": "Registrieren als",
-      "successful": "Registrierung erfolgreich",
-      "mailSent": "Wir haben Ihnen einen Aktivierungslink an Ihre E-Mail-Adresse gesendet.",
-      "back": "Zurück zur Startseite",
-      "teacherRegistrationButton": "Kein Student?",
-      "resendActivationButton": "Aktivierung erneut senden"
+    "tooltip": {
+      "add": "Lerneinheit hinzufügen",
+      "delete": "Lerneinheit löschen",
+      "download": "Lerneinheit downloaden",
+      "duplicate": "Kapitel kopieren",
+      "edit": "Lerneinheit bearbeiten"
     },
-    "resendActivation": {
-      "back": "Zurück zur Registrierung",
-      "successful": "Aktivierung erneut senden erfolgreich",
-      "mailSent": "Wir haben Ihnen einen neuen Aktivierungslink an Ihre E-Mail-Adresse gesendet."
+    "action": {
+      "Add": "Hinzufügen",
+      "Update": "Aktualisieren"
+    }
+  },
+  "mail": {
+    "send": "Sende Mail",
+    "tooltip": {
+      "sendToMembers": "Mail an ausgewählte Mitglieder senden."
     }
   },
   "mainMenu": {
-    "admin": "Admin",
     "about": "Über geli",
-    "imprint": "Impressum",
-    "logout": "Logout",
+    "admin": "Admin",
+    "legalnotice": "Impressum",
+    "logout": "Ausloggen",
+    "privacy": "Datenschutz",
     "userSettings": "Einstellungen"
   },
-  "dashboard": {
-    "courses": "Kurse",
-    "myCourses": "Meine Kurse",
-    "availableCourses": "Verfügbare Kurse",
-    "inactiveCourses": "Inaktive Kurse",
-    "teacherCourses": "Meine Lehrveranstaltungen",
-    "createdCourses": "Meine erstellten Kurse",
-    "addCourse": "Kurs hinzufügen",
-    "createCourse": "Kurs erstellen",
-    "importCourse": "Kurs importieren"
+  "messaging": {
+    "inputHintText": "Nachricht schreiben",
+    "sendIconTooltip": "Senden",
+    "emojiIconTooltip": "Show/ Hide Emoji Picker"
+  },
+  "notifications": {
+    "text": {
+      "clearAll": "Alle löschen",
+      "noNotifications": "Sie haben keine Benachrichtigungen."
+    }
+  },
+  "report": {
+    "exportToCsv": "Als CSV exportieren",
+    "noProgressableUnits": "In diesem Kurs existieren keine erfüllbaren Aufgaben.",
+    "noStudents": "In diesen Kurs sind keine Studenten eingeschrieben.",
+    "noSubmissions": "Für diesen Benutzer liegen keine Ergebnisse vor.",
+    "notProgressable": "Dieser Kurs enthält keine auswertbare Aufgaben"
+  },
+  "snackbarMessages": {
+    "chooseJson": "Wähle eine Kurs.json Datei zum Importieren",
+    "importSuccess": "Kurs erfolgreich Importiert!",
+    "AreYouSure": "Sind Sie sich sicher dass Sie",
+    "dismiss": "Verstanden."
+  },
+  "sort": {
+    "alphabetically": "alphabetisch",
+    "lastVisited": "zuletzt besucht",
+    "placeholder": {
+      "sortedBy": "Sortieren nach"
+    }
+  },
+  "unit": {
+    "addCodeKata": "Code-Kata hinzufügen",
+    "addContent": "Inhalt hinzufügen",
+    "addFiles": "Dateien hinzufügen",
+    "addFilesToUnit": "Dateien zur Lerneinheit hinzufügen",
+    "addFreeText": "Freitext hinzufügen",
+    "addTasks": "Aufgaben hinzufügen",
+    "addVideos": "Videos hinzufügen",
+    "import": "Lerneinheit importieren",
+    "placeholder": {
+      "enterAnswer": "Antwort hier eintragen*",
+      "enterQuestion": "Frage hier eintragen*",
+      "optionalDeadline": "Optionale Frist"
+    },
+    "text": {
+      "addAnswer": "Antwort hinzufügen",
+      "addQuestion": "Frage hinzufügen",
+      "canBeSeenByStudents": "Eihnheit ist für Studenten sichtbar.",
+      "canNotBeSeenByStudents": "Lerneinheit ist für Studenten nicht sichtbar.",
+      "changedOn": "Geändert am",
+      "fullscreen": "Vollbild",
+      "hintAddQuestionAndAnswers": "Fragen mit beliebiger Anzahl an möglichen Antowrten hinzufügen. Richtige Antwort(en) mit Hilfe der checkbox markieren.",
+      "publishedOn": "Veröffentlicht am",
+      "submitAnswers": "Antworten absenden",
+      "taskCompleted": "Aufgabe abgeschlossen",
+      "tasks": "Aufgaben"
+    },
+    "tooltip": {
+      "add": "Lerneinheit hinzufügen",
+      "delete": "Lerneinheit löschen",
+      "deleteAnswer": "Antwort löschen",
+      "deleteQuestion": "Frage löschen",
+      "deleteTask": "Aufgabe löschen",
+      "download": "Diese Lerneinheit downloaden",
+      "downloadUnits": "Lerneinheiten downloaden",
+      "duplicate": "Diese Lerneinheit kopieren",
+      "edit": "Lerneinheit bearbeiten"
+    }
+  },
+  "user": {
+    "deleteUser": "Benutzer löschen",
+    "editUser": "Benutzer bearbeiten",
+    "text": {
+      "notSignedIn": "Nicht eingetragen",
+      "signedIn": "Eingetragen"
+    },
+    "tooltip": {
+      "deleteUsers": "Ausgewählte Mitglieder entfernen.",
+      "toggleMembers": "Alle Benutzer auswählen",
+      "doesNotExist": "Nutzer existiert nicht"
+    }
   }
 }

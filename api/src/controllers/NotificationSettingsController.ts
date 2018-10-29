@@ -1,6 +1,10 @@
 import {Authorized, BadRequestError, Body, Get, JsonController, Param, Post, Put, UseBefore} from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
-import {API_NOTIFICATION_TYPE_ALL_CHANGES, INotificationSettingsModel, NotificationSettings} from '../models/NotificationSettings';
+import {
+  API_NOTIFICATION_TYPE_ALL_CHANGES,
+  INotificationSettingsModel,
+  NotificationSettings
+} from '../models/NotificationSettings';
 import {INotificationSettings} from '../../../shared/models/INotificationSettings';
 
 @JsonController('/notificationSettings')
@@ -81,7 +85,7 @@ export class NotificationSettingsController {
   @Authorized(['student', 'teacher', 'admin'])
   @Put('/:id')
   async updateNotificationSettings(@Param('id') id: string, @Body() notificationSettings: INotificationSettings) {
-    if (!notificationSettings) {
+    if (!notificationSettings.course || !notificationSettings.user) {
       throw new BadRequestError('notification needs fields course and user');
     }
     const settings: INotificationSettingsModel =

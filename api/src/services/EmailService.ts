@@ -3,6 +3,7 @@ import * as nodemailer from 'nodemailer';
 import {IUserModel} from '../models/User';
 import config from '../config/main';
 import {SendMailOptions, Transporter} from 'nodemailer';
+import {IUser} from '../../../shared/models/IUser';
 
 const markdown = require('nodemailer-markdown').markdown;
 
@@ -118,6 +119,32 @@ class EmailService {
       `'>` + config.baseurl + '/reset/' + encodeURIComponent(user.resetPasswordToken) + '</a></p>' +
       '<p>If you didn\'t requested this reset just login with your current credentials to automatically dismiss this process<br>' +
       '<p>Your GELI Team.</p>';
+
+    return this.sendMail(message);
+  }
+
+  public sendDeleteRequest(forUser: IUser, toAdmin: IUser) {
+    const message: SendMailOptions = {};
+
+    if (toAdmin.role !== 'admin') {
+      throw new Error('Receiver of delete request is not an admin!');
+    }
+
+    message.to = toAdmin.profile.firstName + ' ' + toAdmin.profile.lastName + '<' + toAdmin.email + '>';
+    message.subject = 'User delete request';
+    message.text = `Hello  ${toAdmin.profile.firstName}, \n\n` +
+      `the user "${forUser.profile.firstName} ${forUser.profile.lastName}" (${forUser.email})` +
+      `requested to delete all of his / her personal data. \n \n` +
+      `Please login in GELI and use ${config.baseurl}/admin/users/delete/${forUser._id} to delete the user. \n \n` +
+      `Your GELI team.`;
+
+    message.html = `<p>Hello ${toAdmin.profile.firstName},</p> <br>` +
+      `<p>the user <b>"${forUser.profile.firstName} ${forUser.profile.lastName}" (${forUser.email})</b> ` +
+      `requested to delete all of his / her personal data.</p><br>` +
+      `<p>Please login in GELI and use <a href="${config.baseurl}/admin/users/delete/${forUser._id}">` +
+      `${config.baseurl}/admin/users/delete/${forUser._id}</a> ` +
+      `to delete the user.</p><br>` +
+      `<p>Your GELI Team.</p>`;
 
     return this.sendMail(message);
   }

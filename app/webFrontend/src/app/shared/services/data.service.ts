@@ -11,6 +11,7 @@ import {IDirectory} from '../../../../../../shared/models/mediaManager/IDirector
 import {IFile} from '../../../../../../shared/models/mediaManager/IFile';
 import {IUserSearchMeta} from '../../../../../../shared/models/IUserSearchMeta';
 import {IConfig} from '../../../../../../shared/models/IConfig';
+import {literalMap} from '@angular/compiler/src/output/output_ast';
 
 export abstract class DataService {
 
@@ -232,6 +233,12 @@ export class CourseService extends DataService {
       .toPromise();
   }
 
+  async removePicture(courseId: string): Promise<any> {
+    return this.backendService
+      .delete(this.apiPath + 'picture/' + courseId)
+      .toPromise();
+  }
+
   async leaveStudent(courseId: string): Promise<{}> {
     return await this.backendService
       .post(this.apiPath + courseId + '/leave', {})
@@ -244,6 +251,14 @@ export class CourseService extends DataService {
 
   readCourseToEdit(id: string): Promise<ICourse> {
     return this.readSingleItem<ICourse>(id + '/edit');
+  }
+
+  setWhitelistUsers(courseId: string, whitelistUsers: any): Promise<any> {
+    const originalApiPath = this.apiPath;
+    this.apiPath += courseId + '/whitelist';
+    const promise = this.createItem(JSON.stringify(whitelistUsers));
+    this.apiPath = originalApiPath;
+    return promise;
   }
 }
 
@@ -396,6 +411,13 @@ export class UserDataService extends DataService {
     this.apiPath = originalApiPath;
     return promise;
   }
+
+  exportData(): Promise<Response> {
+    const url = 'export/user';
+    return this.backendService
+      .getDownload(url)
+      .toPromise();
+  }
 }
 
 @Injectable()
@@ -404,10 +426,9 @@ export class WhitelistUserService extends DataService {
     super('whitelist/', backendService);
   }
 
-  countWhitelistUsers(courseId: string): Promise<any> {
+  checkWhitelistUsers(whitelistUsers: any[]): Promise<any> {
     const originalApiPath = this.apiPath;
-    this.apiPath += courseId + '/';
-    this.apiPath += 'count/';
+    this.apiPath += 'check/' + encodeURIComponent(JSON.stringify(whitelistUsers));
     const promise = this.readItems();
     this.apiPath = originalApiPath;
     return promise;
@@ -471,9 +492,15 @@ export class DownloadFileService extends DataService {
     super('download/', backendService);
   }
 
-  postDownloadReqForCourse(idl: IDownload): Promise<Response> {
+  postDownloadReqForCoursePDFIndividual(idl: IDownload): Promise<Response> {
     return this.backendService
-      .post(this.apiPath, idl)
+      .post(this.apiPath + 'pdf/individual', idl)
+      .toPromise();
+  }
+
+  postDownloadReqForCoursePDFSingle(idl: IDownload): Promise<Response> {
+    return this.backendService
+      .post(this.apiPath + 'pdf/single', idl)
       .toPromise();
   }
 

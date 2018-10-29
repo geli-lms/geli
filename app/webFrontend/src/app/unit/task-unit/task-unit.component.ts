@@ -1,5 +1,5 @@
 import {Component, OnInit, Input} from '@angular/core';
-import {MatSnackBar} from '@angular/material';
+import {SnackBarService} from '../../shared/services/snack-bar.service';
 import {ActivatedRoute} from '@angular/router';
 import {ProgressService} from '../../shared/services/data/progress.service';
 import {ITaskUnit} from '../../../../../../shared/models/units/ITaskUnit';
@@ -23,7 +23,7 @@ export class TaskUnitComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
               private progressService: ProgressService,
-              private snackBar: MatSnackBar) {
+              private snackBar: SnackBarService) {
   }
 
   ngOnInit() {
@@ -82,10 +82,10 @@ export class TaskUnitComponent implements OnInit {
       promise
         .then((savedProgress) => {
           this.progress = savedProgress;
-          this.snackBar.open('Progress has been saved', '', {duration: 3000});
+          this.snackBar.openShort('Progress has been saved');
         })
         .catch((err) => {
-          this.snackBar.open(`An error occurred: ${err.error.message}`, '', {duration: 3000});
+          this.snackBar.openShort(`An error occurred: ${err.error.message}`);
         });
     };
 

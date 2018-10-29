@@ -3,8 +3,10 @@ import {Progress} from './Progress';
 import {ITaskUnitProgress} from '../../../../shared/models/progress/ITaskUnitProgress';
 import {ITaskUnitModel} from '../units/TaskUnit';
 import {Unit} from '../units/Unit';
+import {IProgress} from '../../../../shared/models/progress/IProgress';
 
 interface ITaskUnitProgressModel extends ITaskUnitProgress, mongoose.Document {
+  exportJSON: () => Promise<ITaskUnitProgressModel>;
 }
 
 const taskUnitProgressSchema = new mongoose.Schema({
@@ -35,6 +37,32 @@ taskUnitProgressSchema.pre('save', async function (next: () => void) {
 
   next();
 });
+
+
+taskUnitProgressSchema.methods.exportJSON = async function () {
+  const localProg = <ITaskUnitProgressModel><any>this;
+  if (localProg.unit) {
+    const taskUnit = <ITaskUnitModel> await Unit.findById(localProg.unit);
+
+    taskUnit.tasks.forEach(question => {
+      delete question._id;
+      this.answers = question;
+    });
+  }
+
+  const obj = this.toObject();
+
+  // remove unwanted informations
+  // mongo properties
+  delete obj._id;
+  delete obj.createdAt;
+  delete obj.__v;
+  delete obj.updatedAt;
+
+  // custom properties
+  return obj;
+};
+
 
 // const TaskUnitProgress = Progress.discriminator('task-unit-progress', taskUnitProgressSchema);
 

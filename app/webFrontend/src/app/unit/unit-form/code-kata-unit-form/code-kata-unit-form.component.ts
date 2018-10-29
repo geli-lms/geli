@@ -1,14 +1,12 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {CodeKataUnitService, NotificationService, UnitService} from '../../../shared/services/data.service';
 import {SnackBarService} from '../../../shared/services/snack-bar.service';
-import {ICodeKataUnit} from '../../../../../../../shared/models/units/ICodeKataUnit';
-import {ICourse} from '../../../../../../../shared/models/ICourse';
 import {CodeKataUnit} from '../../../models/units/CodeKataUnit';
-import {UnitGeneralInfoFormComponent} from '../unit-general-info-form/unit-general-info-form.component';
 import {AceEditorComponent} from 'ng2-ace-editor';
-import 'brace';
-import 'brace/mode/javascript';
 import 'brace/theme/github';
+import 'brace/mode/javascript';
+import {FormControl, FormGroup} from '@angular/forms';
+import {UnitFormService} from '../../../shared/services/unit-form.service';
 
 @Component({
   selector: 'app-code-kata-unit-form',
@@ -16,18 +14,15 @@ import 'brace/theme/github';
   styleUrls: ['./code-kata-unit-form.component.scss']
 })
 export class CodeKataUnitFormComponent implements OnInit {
-  @Input() course: ICourse;
-  @Input() lectureId: string;
-  @Input() model: ICodeKataUnit;
-  @Input() onDone: () => void;
-  @Input() onCancel: () => void;
-
-  @ViewChild(UnitGeneralInfoFormComponent)
-  private generalInfo: UnitGeneralInfoFormComponent;
+  private model: CodeKataUnit;
 
   @ViewChild('codeEditor')
   editor: AceEditorComponent;
 
+  // holds unitform
+  unitForm: FormGroup;
+
+  // to seperate definition, code and test
   areaSeperator = '//####################';
 
   // Example code Kata
@@ -58,16 +53,29 @@ export class CodeKataUnitFormComponent implements OnInit {
   constructor(private codeKataUnitService: CodeKataUnitService,
               private unitService: UnitService,
               private snackBar: SnackBarService,
-              private notificationService: NotificationService) {
+              private notificationService: NotificationService,
+              private unitFormService: UnitFormService) {
   }
 
   ngOnInit() {
-    if (!this.model) {
-      this.model = new CodeKataUnit(this.course._id);
+
+    // sets model. for easier handling (you also could use model from unitFormService
+    this.model = <CodeKataUnit> this.unitFormService.model;
+
+    // set example Values if all values are undefined
+    if (!this.model.definition && !this.model.code && !this.model.test) {
       this.model.definition = this.example.definition;
       this.model.code = this.example.code;
       this.model.test = this.example.test;
     }
+    // set empty string if single value is undefined
+    this.model.definition = this.model.definition ? this.model.definition : '';
+    this.model.code = this.model.code ? this.model.code : '';
+    this.model.test = this.model.test ? this.model.test : '';
+
+    this.unitForm = this.unitFormService.unitForm;
+
+    this.unitFormService.headline = 'Code-Kata';
 
     this.wholeInputCode =
       this.model.definition
@@ -75,81 +83,37 @@ export class CodeKataUnitFormComponent implements OnInit {
       + this.model.code
       + '\n' + this.areaSeperator + '\n'
       + this.model.test;
-    this.editor.getEditor().setOptions({
-      maxLines: 9999,
-    });
-  }
 
-  addUnit() {
-    if (!this.validate()) {
-      this.snackBar.open('Your code does not validate. Check logs for information');
-    }
+    this.unitForm.addControl('wholeInputCode', new FormControl(this.wholeInputCode));
+    this.unitForm.addControl('definition', new FormControl(this.model.definition));
+    this.unitForm.addControl('code', new FormControl(this.model.code));
+    this.unitForm.addControl('test', new FormControl( this.model.test));
 
-    const inputCodeArray = this.wholeInputCode.split('\n' + this.areaSeperator + '\n');
-    this.model = {
-      ...this.model,
-      definition: inputCodeArray[0],
-      code: inputCodeArray[1],
-      test: inputCodeArray[2],
-      name: this.generalInfo.form.value.name,
-      description: this.generalInfo.form.value.description,
-      deadline: this.generalInfo.form.value.deadline,
-      visible: this.generalInfo.form.value.visible
+    // this.editor.getEditor().setOptions({maxLines: 9999});
+
+
+    this.unitFormService.beforeSubmit = async () => {
+      const success = this.validate();
+      if (!success) {
+        return false;
+      }
+
+      const inputCodeArray =  this.unitForm.controls.wholeInputCode.value.split('\n' + this.areaSeperator + '\n');
+
+      this.unitForm.patchValue({
+        'definition': inputCodeArray[0],
+        'code': inputCodeArray[1],
+        'test': inputCodeArray[2]
+      });
+      return true;
     };
-
-    if (this.model._id === undefined) {
-      this.createCodeKata();
-    } else {
-      this.updateCodeKata();
-    }
   }
 
-  private async createCodeKata() {
-    try {
-      const unit = await this.unitService.createItem({
-        model: this.model,
-        lectureId: this.lectureId
-      });
-
-      this.notificationService.createItem({
-        changedCourse: this.course,
-        changedLecture: this.lectureId,
-        changedUnit: unit,
-        text: 'Course ' + this.course.name + ' has a new code kata unit.'
-      });
-
-      this.snackBar.open('Code-Kata created');
-      this.onDone();
-    } catch (err) {
-      this.snackBar.open('Failed to create Code-Kata: ' + err.error.message);
-    }
-  }
-
-  private async updateCodeKata() {
-    try {
-      delete this.model._course;
-      const unit = await this.unitService.updateItem(this.model);
-
-      this.notificationService.createItem({
-        changedCourse: this.course,
-        changedLecture: this.lectureId,
-        changedUnit: unit,
-        text: 'Course ' + this.course.name + ' has an updated unit.'
-      });
-
-      this.snackBar.open('Code-Kata updated');
-      this.onDone();
-    } catch (err) {
-      this.snackBar.open('Failed to update Code-Kata: ' + err.error.message);
-    }
-  }
-
-// refactor this to use the same as in code-kata-unit
   validate() {
     if (!this.validateStructure()) {
       return false;
     }
-    const codeToTest: string = this.wholeInputCode;
+    const codeToTest: string = this.unitForm.controls.wholeInputCode.value;
 
     this.logs = undefined;
 
@@ -173,45 +137,51 @@ export class CodeKataUnitFormComponent implements OnInit {
       const msg = 'Error: ' + e.message; //  + ' (line: ' + err.lineNumber + ')';
       // tslint:disable-next-line:no-console
       console.log(msg);
+      // tslint:disable-next-line:no-console
       console.error(err);
     }
 
     window.console.log = origLogger;
 
     if (result === true || result === undefined) {
+      this.snackBar.openShort('Validation succesful');
       return true;
     } else {
-      // tslint:disable-next-line:no-console
-      console.log(result);
+      this.snackBar.openShort('Validation failed');
       return false;
     }
   }
 
   // this code gets unnessessary with the Implementation of Issue #44 (all validation parts should happen on the server)
   private validateStructure(): boolean {
-    const separatorCount = (this.wholeInputCode.match(new RegExp(this.areaSeperator, 'gmi')) || []).length;
+    const separatorCount = (
+      this.unitForm.controls.wholeInputCode.value.match(
+        new RegExp('\n' + this.areaSeperator + '\n', 'gmi')
+      ) || []
+    ).length;
     if (separatorCount > 2) {
-      this.snackBar.open('There are too many area separators');
+      this.snackBar.openShort('There are too many area separators');
       return false;
     }
     if (separatorCount < 2) {
-      this.snackBar.open('There must be 2 area separators');
+      this.snackBar.openShort('There must 3 separated areas');
       return false;
     }
-    if (!this.wholeInputCode.match(new RegExp('function(.|\t)*validate\\(\\)(.|\n|\t)*{(.|\n|\t)*}', 'gmi'))) {
-      this.snackBar.open('The test section must contain a validate function');
+    if (!this.unitForm.controls.wholeInputCode.value.match(new RegExp('function(.|\t)*validate\\(\\)(.|\n|\t)*{(.|\n|\t)*}', 'gmi'))) {
+      this.snackBar.openShort('The test section must contain a validate function');
       return false;
     }
-    if (!this.wholeInputCode.match(new RegExp('function(.|\t)*validate\\(\\)(.|\n|\t)*{(.|\n|\t)*return(.|\n|\t)*}', 'gmi'))) {
-      this.snackBar.open('The validate function must return something');
+    if (!this.unitForm.controls.wholeInputCode.value.match(
+      new RegExp('function(.|\t)*validate\\(\\)(.|\n|\t)*{(.|\n|\t)*return(.|\n|\t)*}', 'gmi'))
+    ) {
+      this.snackBar.openShort('The validate function must return something');
       return false;
     }
-    if (!this.wholeInputCode.match(new RegExp('validate\\(\\);', 'gmi'))) {
-      this.snackBar.open('The test section must call the validate function');
+    if (!this.unitForm.controls.wholeInputCode.value.match(new RegExp('validate\\(\\);', 'gmi'))) {
+      this.snackBar.openShort('The test section must call the validate function');
       return false;
     }
 
     return true;
   }
-
 }

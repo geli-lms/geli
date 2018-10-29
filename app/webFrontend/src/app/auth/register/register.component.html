@@ -21,7 +21,7 @@
       <div class="form-group" formGroupName="profile">
         <mat-form-field>
           <input matInput formControlName="firstName"
-                 [placeholder]="'common.profile.firstName'|translate" maxlength="64"/>
+                 [placeholder]="'common.profileDetails.firstName'|translate" maxlength="64"/>
           <div *ngIf="registerForm.get('profile').get('firstName').touched">
             <small *ngIf="registerForm.get('profile').get('firstName').hasError('required')"
                    class="text-danger">
@@ -39,7 +39,7 @@
         </mat-form-field>
         <mat-form-field>
           <input matInput formControlName="lastName"
-                 [placeholder]="'common.profile.lastName'|translate" maxlength="64"/>
+                 [placeholder]="'common.profileDetails.lastName'|translate" maxlength="64"/>
           <div *ngIf="registerForm.get('profile').get('lastName').touched">
             <small *ngIf="registerForm.get('profile').get('lastName').hasError('required')"
                    class="text-danger">
@@ -78,7 +78,7 @@
 
       <div *ngIf="role == 'student'">
         <mat-form-field>
-          <input matInput formControlName="uid" [placeholder]="'common.profile.uid'|translate"/>
+          <input matInput formControlName="uid" [placeholder]="'common.profileDetails.uid'|translate"/>
           <div *ngIf="registerForm.controls.uid.touched">
             <small *ngIf="uidError" class="text-danger">{{uidError}}</small>
             <small *ngIf="registerForm.controls.uid.hasError('validateMatriculationNumber')" class="text-danger">
@@ -89,10 +89,27 @@
       </div>
 
       <app-password-input [form]="registerForm"></app-password-input>
-
-      <button mat-raised-button color="primary" type="submit"
+      <div>
+      <mat-checkbox class="terms-checkbox"  formControlName="termsCheckbox">
+        <span class="privacy-label">
+          {{'auth.registration.acceptCheckboxes' | translate}}
+          <a target="_blank" routerLink="/legalnotice" routerLinkActive="active">
+            {{'auth.registration.termsOfUse' | translate}}
+          </a>
+        </span>
+      </mat-checkbox>
+      <mat-checkbox class="privacy-checkbox" formControlName="privacyCheckbox">
+        <span class="privacy-label">
+          {{'auth.registration.acceptCheckboxes' | translate}}
+          <a target="_blank" routerLink="/privacy" routerLinkActive="active">
+            {{'auth.registration.privacyDeclaration' | translate}}
+          </a>
+        </span>
+      </mat-checkbox>
+    </div>
+    <button class="register-button" [matTooltip]="'auth.registration.tooltipRegister' | translate" mat-raised-button color="primary" type="submit"
               [disabled]="loading || !registerForm?.valid">{{'common.register'|translate}}
-      </button>
+    </button>
     </form>
     <div class="bottom-buttons">
       <button *ngIf="role == 'student'" mat-button type="button" routerLink="/activation-resend" routerLinkActive="active">

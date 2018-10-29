@@ -16,19 +16,19 @@
     <mat-menu #lectureMenu="matMenu">
       <button mat-menu-item (click)="onEditLecture(lecture)">
         <mat-icon>edit</mat-icon>
-        Edit
+        {{ 'common.edit' | translate }}
       </button>
       <button mat-menu-item (click)="exportLecture(lecture)">
         <mat-icon>file_download</mat-icon>
-        Export
+        {{ 'common.export' | translate }}
       </button>
       <button mat-menu-item (click)="duplicateLecture(lecture)">
         <mat-icon>content_copy</mat-icon>
-        Duplicate
+        {{ 'common.duplicate' | translate }}
       </button>
       <button mat-menu-item (click)="deleteLecture(lecture)">
         <mat-icon>delete</mat-icon>
-        Delete
+        {{ 'common.delete' | translate }}
       </button>
     </mat-menu>
   </div>
@@ -47,20 +47,20 @@
           <span class="unit-type">{{ unit.__t }}</span>
           <span class="unit-date">{{ unit.updatedAt | date:"y-MM-dd" }}</span>
           <span class="unit-actions">
-              <button mat-icon-button matTooltip="Edit" (click)="onEditUnit(unit)">
+              <button mat-icon-button (click)="onEditUnit(unit)">
                 <mat-icon>edit</mat-icon>
               </button>
               <button class="unit-menu-button" mat-icon-button [matMenuTriggerFor]="unitMenu">
                 <mat-icon>more_vert</mat-icon>
               </button>
               <mat-menu #unitMenu="matMenu">
-                <button mat-icon-button matTooltip="Delete" (click)="deleteUnit(unit)">
+                <button mat-icon-button [matTooltip]="'lecture.tooltip.delete' | translate" (click)="deleteUnit(unit)">
                   <mat-icon>delete</mat-icon>
                 </button>
-                <button mat-icon-button matTooltip="Duplicate" (click)="duplicateUnit(unit)">
+                <button mat-icon-button [matTooltip]="'lecture.tooltip.duplicate' | translate" (click)="duplicateUnit(unit)">
                   <mat-icon>content_copy</mat-icon>
                 </button>
-                <button mat-icon-button matTooltip="Export" (click)="onExportUnit(unit)">
+                <button mat-icon-button [matTooltip]="'lecture.tooltip.download' | translate" (click)="onExportUnit(unit)">
                   <mat-icon>file_download</mat-icon>
               </button>
               </mat-menu>
@@ -77,13 +77,14 @@
         </app-unit-form>
       </div>
 
-      <p *ngIf="!lecture.units.length">No units added yet.</p>
+      <p *ngIf="!lecture.units.length">{{ 'lecture.noUnits' | translate}}</p>
     </div>
 
     <app-unit-form *ngIf="getDataForKey('unit-create-mode') && getDataForKey('unit-create-type')"
                    [course]="course"
                    [lecture]="lecture"
                    [type]="getDataForKey('unit-create-type')"
+                   [model]="getUnitModel()"
                    [onDone]="onAddUnitDone"
                    [onCancel]="closeAddUnit">
     </app-unit-form>
@@ -91,9 +92,7 @@
 </div>
 
 <div class="unit-drop-target"
-     *ngIf="getDataForKey('openLectureId') &&
-     (getDataForKey('openLectureId') !== lecture._id || !lecture.units.length) &&
-     isDraggingUnit()"
+     *ngIf="getDataForKey('openLectureId') && (getDataForKey('openLectureId') !== lecture._id || !lecture.units.length) && isDraggingUnit()"
      dragula="units"
      [dragulaModel]="lecture.units"
      [attr.data-lecture-id]="lecture._id">

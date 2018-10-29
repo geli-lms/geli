@@ -1,3 +1,5 @@
+@import '../../../variables';
+
 .download-button {
   float: right;
 }
@@ -51,4 +53,8 @@
 .admin-image {
   background-size: cover;
   vertical-align: middle;
+}
+
+.iconPos {
+  margin-right: 0.2em;
 }

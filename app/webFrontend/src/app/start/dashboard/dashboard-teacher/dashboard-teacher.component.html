@@ -1,18 +1,29 @@
-<app-course-container [title]="'dashboard.createdCourses'|translate" [courses]="myCourses" [expand]="true"
+<div class="search-input-group">
+  <mat-form-field class="pull-right">
+    <mat-select [placeholder]="'sort.placeholder.sortedBy' | translate ">
+      <mat-option value="last visited" (click)="sortCourses()">{{ 'sort.lastVisited' | translate }}</mat-option>
+      <mat-option value="alphabetically" (click)="sortAlphabetically()">{{ 'sort.alphabetically' | translate }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <span class="search-bar">
+    <input class="input-bar" (keyup)="getInput($event)" placeholder="{{'course.search' | translate}}" maxlength="64"/> <mat-icon>search</mat-icon>
+  </span>
+</div>
+<app-course-container [title]="'dashboard.createdCourses' | translate" [courses]="myCourses" [expand]="true"
                       (onEnroll)="enrollCallback()"></app-course-container>
-<app-course-container [title]="'dashboard.teacherCourses'|translate" [courses]="furtherCourses" [expand]="true"
+<app-course-container [title]="'dashboard.teacherCourses' | translate" [courses]="furtherCourses" [expand]="true"
                       (onEnroll)="enrollCallback()"
                       *ngIf="furtherCourses.length"></app-course-container>
-<app-course-container [title]="'dashboard.inactiveCourses'|translate" [courses]="inactiveCourses"
+<app-course-container [title]="'dashboard.inactiveCourses' | translate" [courses]="inactiveCourses"
                       [expand]="true"
                       (onEnroll)="enrollCallback()"
                       *ngIf="inactiveCourses.length"></app-course-container>
-<app-course-container [title]="'dashboard.availableCourses'|translate" [courses]="availableCourses"
+<app-course-container [title]="'dashboard.availableCourses' | translate" [courses]="availableCourses"
                       [expand]="false"
                       (onEnroll)="enrollCallback()"></app-course-container>
 
 <app-mat-fab-menu class="add-course-fab" [open]="fabOpen" [onClick]="onFabClick"
                   [fabTooltip]="'dashboard.addCourse'|translate">
   <div (click)="onImportCourse()">{{ 'dashboard.importCourse'|translate }}</div>
-  <div routerLink="course/new">{{ 'dashboard.createCourse'|translate }}</div>
+  <div (click)="createCourse()">{{ 'dashboard.createCourse'|translate }}</div>
 </app-mat-fab-menu>

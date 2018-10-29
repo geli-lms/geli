@@ -1,5 +1,5 @@
-<h1>Settings</h1>
-<h2>Notifications</h2>
+<h1>{{ 'common.settings' | translate }}</h1>
+<h2>{{ 'common.notifications' | translate }}</h2>
 <mat-table #table [dataSource]="dataSource">
   <ng-container matColumnDef="Notifications">
     <mat-header-cell class="header" *matHeaderCellDef>
@@ -7,7 +7,7 @@
                     [checked]="notificationSelection.hasValue() && isAllSelected(notificationSelection)"
                     [indeterminate]="notificationSelection.hasValue() && !isAllSelected(notificationSelection)">
       </mat-checkbox>
-      <span>Notification</span>
+      <span>{{ 'common.notifications' | translate }}</span>
     </mat-header-cell>
     <mat-cell class="checkBox" *matCellDef="let course">
       <mat-checkbox (click)="$event.stopPropagation()"
@@ -28,7 +28,7 @@
                     [checked]="emailSelection.hasValue() && isAllSelected(emailSelection)"
                     [indeterminate]="emailSelection.hasValue() && !isAllSelected(emailSelection)">
       </mat-checkbox>
-      <span>Email</span>
+      <span>{{ 'common.email' | translate}}</span>
     </mat-header-cell>
     <mat-cell class="checkBox" *matCellDef="let course">
       <mat-checkbox (click)="$event.stopPropagation()"
@@ -42,4 +42,4 @@
   <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
   <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
 </mat-table>
-<button mat-raised-button color="primary" class="mat-button saveButton" (click)="saveNotificationSettings()">Save</button>
+<button mat-raised-button color="primary" class="mat-button saveButton" (click)="saveNotificationSettings()">{{ 'common.save' | translate }}</button>

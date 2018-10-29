@@ -1,6 +1,6 @@
 <div class="tasks">
   <div class="task" *ngFor="let task of taskUnit.tasks">
-    <p><strong>Question:</strong> {{task.name}}</p>
+    <p><strong>{{'common.question' | translate}}:</strong> {{task.name}}</p>
     <ul class="answers">
       <li *ngFor="let answer of task.answers"
           [class.correct]="validationMode && answer.value"
@@ -15,9 +15,9 @@
 </div>
 
 <p>
-  <button mat-raised-button color="primary" [disabled]="validationMode" (click)="validate()">Submit answers</button>
-  <button mat-raised-button (click)="reset()">Reset</button>
+  <button mat-raised-button color="primary" [disabled]="validationMode" (click)="validate()">{{ 'unit.text.submitAnswers' | translate }}</button>
+  <button mat-raised-button (click)="reset()">{{ 'common.reset' | translate }}</button>
   <span *ngIf="progress && progress.done" class="progress-done">
-    <mat-icon>check</mat-icon>You have completed this task.
+    <mat-icon>check</mat-icon>{{ 'unit.text.taskCompleted' | translate }}
   </span>
 </p>

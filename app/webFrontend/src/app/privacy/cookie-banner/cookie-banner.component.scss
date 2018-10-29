@@ -1,0 +1,37 @@
+@import '../../../variables';
+@import '../../../styles/breakpoints';
+
+.cookieContent {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: map-get($mat-grey, 800);
+  color: map-get($mat-grey, A100);
+
+  @include bp(xl) {
+    flex-direction: row;
+  }
+
+  .cookieText {
+    margin: 0;
+    padding: 0;
+    line-height: 2rem;
+  }
+
+  .controlArea {
+    text-align: right;
+
+    @include  bp(xl) {
+      flex-shrink: 0;
+    }
+
+    @include  bp(exl) {
+      flex-shrink: initial;
+    }
+
+    .more-info {
+      margin-right: 1rem;
+    }
+  }
+}

@@ -1,4 +1,4 @@
-# +++ TRAVIS-FILE for https://github.com/h-da/geli +++
+# +++ TRAVIS-FILE for https://github.com/geli-lms/geli +++
 
 # required for chrome to install
 dist: trusty
@@ -6,7 +6,7 @@ dist: trusty
 sudo: required
 language: node_js
 node_js:
-  - "8.9.0"
+  - "10.8.0"
 
 addons:
   apt:
@@ -19,6 +19,7 @@ addons:
       - lsb-base
       # used for frontend e2e tests
       - google-chrome-stable
+      - rsync
 
 services:
   - mongodb
@@ -36,6 +37,10 @@ cache:
     - api/node_modules
     - app/webFrontend/node_modules
     - .travis/node_modules
+
+before_install:
+  # check for change in changelog
+  - .travis/changelog.sh
 
 before_script:
   # required for chrome to start properly
@@ -62,8 +67,6 @@ install:
   - cd ..
 
 script:
-  # check for change in changelog
-  - .travis/changelog.sh
   # check for versions
   - .travis/check-version.sh
   # run license checker and write license.json / dependencies.ts
@@ -73,14 +76,19 @@ script:
   - sed -i 's/$TRAVIS_COMMIT/'$TRAVIS_COMMIT'/' src/server.ts
   - npm run test        # run backend test
   - cd ..
+  - .travis/apidoc-check.sh
   # run frontend-tests and return back to root for following steps
-  - cd app/webFrontend
+  - cd api
+  - npm run load:fixtures
+  - npm start &
+  - cd ../app/webFrontend
   - npm run lint        # run linter
   # - npm run test-ci || true     # run test - many tests are broken
   - npm run e2e         # run end-to-end-tests
   - sed -i 's/$TRAVIS_COMMIT/'$TRAVIS_COMMIT'/' src/app/shared/services/raven-error-handler.service.ts
   - cd ../..
-  - travis_wait 30 .travis/build-fe.sh       # build in prod mode
+#  - travis_wait 30 .travis/build-fe.sh       # build in prod mode
+  - .travis/build-fe.sh       # build in prod mode
 
 after_script:
   # send required files to coveralls.io

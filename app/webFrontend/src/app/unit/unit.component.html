@@ -22,11 +22,14 @@
       <app-code-kata *ngSwitchCase="'code-kata'" [codeKataUnit]="unit"></app-code-kata>
       <app-free-text-unit *ngSwitchCase="'free-text'" [freeTextUnit]="unit"></app-free-text-unit>
       <div class="unit-detail">
+        <button mat-icon-button appShowComments [room]="unit.chatRoom" [title]="unit.name">
+          <mat-icon aria-label="comments">forum</mat-icon>
+        </button>
         <div class="user-detail" *ngIf="unit.unitCreator">{{unit.unitCreator.profile.firstName + ' ' +
           unit.unitCreator.profile.lastName}}
         </div>
-        <span *ngIf="unit.createdAt === unit.updatedAt">Published on: {{getFormattedDate(unit.createdAt)}}</span>
-        <span *ngIf="unit.createdAt !== unit.updatedAt">Changed on: {{getFormattedDate(unit.updatedAt)}}</span>
+        <span *ngIf="unit.createdAt === unit.updatedAt">{{ 'unit.text.publishedOn' | translate }}: {{getFormattedDate(unit.createdAt)}}</span>
+        <span *ngIf="unit.createdAt !== unit.updatedAt">{{ 'unit.text.changedOn' | translate }}: {{getFormattedDate(unit.updatedAt)}}</span>
       </div>
     </mat-card-content>
   </mat-card>

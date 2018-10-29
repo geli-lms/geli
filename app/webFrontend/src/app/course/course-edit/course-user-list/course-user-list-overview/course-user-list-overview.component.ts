@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {IUser} from '../../../../../../../../shared/models/IUser';
 import {DialogService} from '../../../../shared/services/dialog.service';
-import {MatSnackBar} from '@angular/material';
+import {SnackBarService} from '../../../../shared/services/snack-bar.service';
 import {CourseService, NotificationService} from '../../../../shared/services/data.service';
 import {ICourse} from '../../../../../../../../shared/models/ICourse';
 import {User} from '../../../../models/User';
@@ -27,7 +27,8 @@ export class CourseUserListOverviewComponent implements OnInit {
     return users.map((user: IUser) => `${user.profile.firstName} ${user.profile.lastName}<${user.email}>`).join(', ');
   }
 
-  constructor(private dialogService: DialogService, private snackBar: MatSnackBar,
+  constructor(private dialogService: DialogService,
+              private snackBar: SnackBarService,
               private courseService: CourseService,
               private notificationService: NotificationService) {
   }
@@ -84,9 +85,9 @@ export class CourseUserListOverviewComponent implements OnInit {
     this.resetSelectedUsers();
     try {
       await this.courseService.sendMailToSelectedUsers(mailData);
-      this.snackBar.open('Sending mail succeeded.', 'Dismiss', {duration: 2000});
+      this.snackBar.open('Sending mail succeeded.');
     } catch (err) {
-      this.snackBar.open('Sending mail failed.', 'Dismiss', {duration: 3000});
+      this.snackBar.open('Sending mail failed.');
     }
   }
 

@@ -10,6 +10,8 @@ import {IUserSubCourseView} from '../../../shared/models/IUserSubCourseView';
 import {IUser} from '../../../shared/models/IUser';
 import {FixtureUtils} from '../../fixtures/FixtureUtils';
 import chaiHttp = require('chai-http');
+import {readFileSync} from 'fs';
+import {BreakpointSize} from '../../src/models/BreakpointSize';
 
 chai.use(chaiHttp);
 const should = chai.should();
@@ -271,6 +273,100 @@ describe('Course', () => {
         .catch(err => err.response);
 
       res.should.have.status(404);
+    });
+  });
+
+
+  describe(`POST PICTURE ${BASE_URL}`, () => {
+    it('should update the course image', async () => {
+      const course = await FixtureUtils.getRandomCourse();
+      const courseAdmin = await User.findOne({_id: course.courseAdmin});
+
+      const res = await chai.request(app)
+        .post(`${BASE_URL}/picture/${course._id}`)
+        .set('Authorization', `JWT ${JwtUtils.generateToken(courseAdmin)}`)
+    .attach('file', readFileSync('test/resources/test.png'), 'test.png')
+        .field('imageData', JSON.stringify({ breakpoints:
+          [ { screenSize: BreakpointSize.MOBILE, imageSize: { width: 284, height: 190} }] }));
+
+      res.should.have.status(200);
+      res.body.breakpoints.length.should.be.eq(1);
+    });
+
+    it('should update the course image with only the width set', async () => {
+      const course = await FixtureUtils.getRandomCourse();
+      const courseAdmin = await User.findOne({_id: course.courseAdmin});
+
+      const res = await chai.request(app)
+        .post(`${BASE_URL}/picture/${course._id}`)
+        .set('Authorization', `JWT ${JwtUtils.generateToken(courseAdmin)}`)
+        .attach('file', readFileSync('test/resources/test.png'), 'test.png')
+        .field('imageData', JSON.stringify({ breakpoints:
+          [ { screenSize: BreakpointSize.MOBILE, imageSize: { width: 284 } }] }));
+
+      res.should.have.status(200);
+      res.body.breakpoints.length.should.be.eq(1);
+    });
+
+    it('should update the course image with only the height set', async () => {
+      const course = await FixtureUtils.getRandomCourse();
+      const courseAdmin = await User.findOne({_id: course.courseAdmin});
+
+      const res = await chai.request(app)
+        .post(`${BASE_URL}/picture/${course._id}`)
+        .set('Authorization', `JWT ${JwtUtils.generateToken(courseAdmin)}`)
+        .attach('file', readFileSync('test/resources/test.png'), 'test.png')
+        .field('imageData', JSON.stringify({ breakpoints:
+          [ { screenSize: BreakpointSize.MOBILE, imageSize: { height: 190 } }] }));
+
+      res.should.have.status(200);
+      res.body.breakpoints.length.should.be.eq(1);
+    });
+
+    it('should not update the course image (wrong file type)', async () => {
+      const course = await FixtureUtils.getRandomCourse();
+      const courseAdmin = await User.findOne({_id: course.courseAdmin});
+
+      const res = await chai.request(app)
+        .post(`${BASE_URL}/picture/${course._id}`)
+        .set('Authorization', `JWT ${JwtUtils.generateToken(courseAdmin)}`)
+        .attach('file', readFileSync('test/resources/wrong-format.rtf'), 'test.png')
+        .field('imageData', JSON.stringify({ breakpoints:
+          [ { screenSize: BreakpointSize.MOBILE, imageSize: { width: 284, height: 190} }] }));
+
+      res.should.not.have.status(200);
+    });
+  });
+
+  describe(`DELETE PICTURE ${BASE_URL}`, () => {
+    it('should update and remove the course image', async () => {
+
+      const course = await FixtureUtils.getRandomCourse();
+      const courseAdmin = await User.findOne({_id: course.courseAdmin});
+
+      let res = await chai.request(app)
+        .post(`${BASE_URL}/picture/${course._id}`)
+        .set('Authorization', `JWT ${JwtUtils.generateToken(courseAdmin)}`)
+        .attach('file', readFileSync('test/resources/test.png'), 'test.png')
+        .field('imageData', JSON.stringify({
+          breakpoints:
+            [{screenSize: BreakpointSize.MOBILE, imageSize: {width: 284, height: 190}}]
+        }));
+
+      res.should.have.status(200);
+      res.body.breakpoints.length.should.be.eq(1);
+
+
+      res = await chai.request(app)
+        .del(`${BASE_URL}/picture/${course._id}`)
+        .set('Authorization', `JWT ${JwtUtils.generateToken(courseAdmin)}`)
+        .send();
+
+      res.should.have.status(200);
+
+      const updatedCourse = await Course.findById(course._id);
+      should.not.exist(updatedCourse.image);
+
     });
   });
 

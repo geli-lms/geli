@@ -1,19 +1,20 @@
-<div class="center-both">
-  <h1>Create Course</h1>
-  <mat-card>
-    <form class="course-form" (ngSubmit)="createCourse()" [formGroup]="newCourse">
+<h1>{{ 'dashboard.addCourse' | translate }}</h1>
+<mat-dialog-content>
+  <div class="center-both">
+    <form class="course-form" (ngSubmit)="newCourse.valid && createCourse()" [formGroup]="newCourse">
       <mat-form-field class="full-width">
-        <input matInput formControlName="name" placeholder="Course Name">
+        <input matInput formControlName="name" [placeholder]="'course.placeholder.name' | translate">
         <div *ngIf="nameError">
           <small class="text-danger">{{nameError}}</small>
         </div>
       </mat-form-field>
       <br/>
       <mat-form-field class="full-width">
-        <textarea matInput formControlName="description" placeholder="Course Description"></textarea>
+        <textarea matInput formControlName="description" [placeholder]="'course.placeholder.description' | translate"></textarea>
       </mat-form-field>
       <br/>
-      <button mat-raised-button color="primary" class="mat-button" type="submit">Add</button>
+      <button mat-raised-button color="primary" class="mat-button" type="submit">{{ 'dashboard.addCourse' | translate }}</button>
+      <button class="mat-button" color="secondary" (click)="close()" type="reset">{{ 'common.cancel' | translate }}</button>
     </form>
-  </mat-card>
-</div>
+  </div>
+</mat-dialog-content>

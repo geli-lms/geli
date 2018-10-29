@@ -11,13 +11,16 @@ import {taskUnitSchema} from './TaskUnit';
 import {IUser} from '../../../../shared/models/IUser';
 import {IProgress} from '../../../../shared/models/progress/IProgress';
 import {User} from '../User';
+import {ChatRoom} from '../ChatRoom';
 
 interface IUnitModel extends IUnit, mongoose.Document {
-  exportJSON: () => Promise<IUnit>;
+  exportJSON: (onlyBasicData?: boolean) => Promise<IUnit>;
   calculateProgress: (users: IUser[], progress: IProgress[]) => Promise<IUnit>;
   populateUnit: () => Promise<IUnitModel>;
   secureData: (user: IUser) => Promise<IUnitModel>;
-  toFile: () => String;
+  toHtmlForIndividualPDF: () => String;
+  toHtmlForSinglePDF: () => String;
+  toHtmlForSinglePDFSolutions: () => String;
 }
 
 const unitSchema = new mongoose.Schema({
@@ -42,11 +45,16 @@ const unitSchema = new mongoose.Schema({
       type: String
     },
     visible: {
-      type: Boolean
+      type: Boolean,
+      default: false,
     },
     unitCreator: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User'
+    },
+    chatRoom: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'ChatRoom'
     }
   },
   {
@@ -55,12 +63,35 @@ const unitSchema = new mongoose.Schema({
     toObject: {
       virtuals: true,
       transform: function (doc: IUnitModel, ret: any) {
-        ret._id = ret._id.toString();
-        ret._course = ret._course.toString();
+        if (ret._id) {
+          ret._id = ret._id.toString();
+        }
+
+        if (ret._course) {
+          ret._course = ret._course.toString();
+        }
+
+        if (ret.hasOwnProperty('chatRoom') && ret.chatRoom) {
+          ret.chatRoom = ret.chatRoom.toString();
+        }
       }
     },
   }
 );
+
+
+unitSchema.pre('save', async function () {
+  const unit = <IUnitModel> this;
+  if (this.isNew) {
+   const chatRoom = await ChatRoom.create({
+      room: {
+        roomType: 'Unit',
+        roomFor: unit
+      }
+    });
+    unit.chatRoom = chatRoom._id;
+  }
+});
 
 unitSchema.virtual('progressData', {
   ref: 'Progress',
@@ -69,7 +100,7 @@ unitSchema.virtual('progressData', {
   justOne: true
 });
 
-unitSchema.methods.exportJSON = function () {
+unitSchema.methods.exportJSON = function (onlyBasicData: boolean= false) {
   const obj = this.toObject();
 
   // remove unwanted informations
@@ -78,9 +109,16 @@ unitSchema.methods.exportJSON = function () {
   delete obj.createdAt;
   delete obj.__v;
   delete obj.updatedAt;
+  delete obj.unitCreator;
+  delete obj.files;
 
   // custom properties
   delete obj._course;
+
+  if (onlyBasicData) {
+    delete obj.id;
+    delete obj.progressData;
+  }
 
   return obj;
 };
@@ -109,7 +147,6 @@ unitSchema.methods.toFile = function (): String {
 
 unitSchema.statics.importJSON = async function (unit: IUnit, courseId: string, lectureId: string) {
   unit._course = courseId;
-
   try {
     // Need to disabled this rule because we can't export 'Unit' BEFORE this function-declaration
     // tslint:disable:no-use-before-declare

@@ -19,3 +19,13 @@
     text-align: center;
   }
 }
+
+.image-preview-group {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+
+  .preview-image {
+    width: 10rem;
+  }
+}

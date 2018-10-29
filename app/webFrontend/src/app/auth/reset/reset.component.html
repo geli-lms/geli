@@ -1,22 +1,22 @@
 <mat-card *ngIf="hasToken === false" class="reset-card">
   <mat-card-header>
-    <mat-card-title><h1>Request password reset</h1></mat-card-title>
+    <mat-card-title><h1>{{ 'auth.resetPassword.requestReset' | translate }}</h1></mat-card-title>
   </mat-card-header>
 
   <mat-card-content>
     <form name="form" (ngSubmit)="requestReset()" [formGroup]="resetForm">
       <mat-form-field>
-        <input matInput formControlName="email" placeholder="Mail address">
+        <input matInput formControlName="email" [placeholder]="'common.email' | translate">
       </mat-form-field>
 
-      <button mat-raised-button color="primary" class="mat-button" type="submit" [disabled]="loading">Submit</button>
+      <button mat-raised-button color="primary" [matTooltip]="'auth.tooltip.ResetPassword' | translate" class="mat-button" type="submit" [disabled]="loading">{{ 'auth.resetPassword.requestReset' | translate }}</button>
       <br>
     </form>
   </mat-card-content>
 </mat-card>
 <mat-card *ngIf="hasToken === true" class="reset-card">
   <mat-card-header>
-    <mat-card-title><h1>Reset Password</h1></mat-card-title>
+    <mat-card-title><h1>{{ 'auth.resetPassword.requestReset' | translate }}</h1></mat-card-title>
   </mat-card-header>
 
   <mat-card-content>
@@ -24,7 +24,7 @@
 
       <app-password-input [form]="resetForm"></app-password-input>
 
-      <button mat-raised-button color="primary" type="submit" [disabled]="loading">Reset</button>
+      <button mat-raised-button [matTooltip]="'auth.tooltip.ResetPassword' | translate" color="primary" type="submit" [disabled]="loading">{{ 'auth.resetPassword.reset' | translate }}</button>
     </form>
   </mat-card-content>
 </mat-card>

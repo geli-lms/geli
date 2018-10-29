@@ -1,0 +1,53 @@
+@import '../../variables';
+
+.chat-container {
+  position: relative;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-input {
+  width: 100%;
+}
+
+.main-card {
+  height: 100%;
+}
+
+.chat-footer-container {
+  flex-grow: 1;
+}
+
+.messages {
+  height: 90%;
+  overflow-y: scroll
+}
+
+.messages::-webkit-scrollbar {
+  width: 0.5em;
+}
+
+.messages::-webkit-scrollbar-track {
+}
+
+.messages::-webkit-scrollbar-thumb {
+  background-color: darkgrey;
+  outline: 1px solid slategrey;
+}
+
+
+.messages {
+  ul {
+    list-style-type: none;
+    display: flex;
+    flex-direction: column;
+    padding-left: 0em;
+    margin: 1em;
+
+    li {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+}

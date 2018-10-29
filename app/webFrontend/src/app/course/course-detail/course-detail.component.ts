@@ -1,16 +1,17 @@
-import {AfterViewInit, Component, OnInit} from '@angular/core';
+import {AfterViewInit, Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import 'rxjs/add/operator/switchMap';
+
 import {CourseService, UserDataService} from '../../shared/services/data.service';
 import {ICourse} from '../../../../../../shared/models/ICourse';
 import {UserService} from '../../shared/services/user.service';
-import {IUser} from '../../../../../../shared/models/IUser';
 import {User} from '../../models/User';
 import {MatSnackBar, MatDialog} from '@angular/material';
-import {DownloadCourseDialogComponent} from './download-course-dialog/download-course-dialog.component';
 import {TitleService} from '../../shared/services/title.service';
 import {LastVisitedCourseContainerUpdater} from '../../shared/utils/LastVisitedCourseContainerUpdater';
 import {DialogService} from '../../shared/services/dialog.service';
+import {DataSharingService} from '../../shared/services/data-sharing.service';
+import {TranslateService} from '@ngx-translate/core';
+
 
 
 @Component({
@@ -18,10 +19,11 @@ import {DialogService} from '../../shared/services/dialog.service';
   templateUrl: './course-detail.component.html',
   styleUrls: ['./course-detail.component.scss']
 })
-export class CourseDetailComponent implements OnInit {
+export class CourseDetailComponent implements OnInit, OnDestroy {
 
   course: ICourse;
   id: string;
+  tabs = [];
 
   constructor(private router: Router,
               private route: ActivatedRoute,
@@ -31,43 +33,39 @@ export class CourseDetailComponent implements OnInit {
               private dialog: MatDialog,
               private titleService: TitleService,
               private userDataService: UserDataService,
-              private dialogService: DialogService) {
-  }
+              private dialogService: DialogService,
+              private dataSharingService: DataSharingService,
+              private translate: TranslateService) {}
 
   ngOnInit() {
-    this.route.params.subscribe(params => {
-      this.id = decodeURIComponent(params['id']);
+    const data: any = this.route.snapshot.data;
+    this.course = <ICourse> data.course;
+    this.id = this.course._id;
+    LastVisitedCourseContainerUpdater.addCourseToLastVisitedCourses(this.id, this.userService, this.userDataService);
+    this.titleService.setTitleCut(['Course: ', this.course.name]);
+    this.translate.onLangChange.subscribe(() => {
+      this.reloadTabBar();
     });
-    this.getCourse(this.id);
-    this.titleService.setTitle('Course');
+    this.reloadTabBar();
   }
 
-  async getCourse(courseId: string) {
-    try {
-      this.course = await this.courseService.readCourseToView(courseId);
-      this.titleService.setTitleCut(['Course: ', this.course.name]);
-      LastVisitedCourseContainerUpdater.addCourseToLastVisitedCourses(courseId, this.userService, this.userDataService);
-    } catch (errorResponse) {
-      if (errorResponse.status === 401) {
-        this.snackBar.open('You are not authorized to view this course.', '', {duration: 3000});
-      } else if (errorResponse.status === 404) {
-        this.snackBar.open('Your selected course is not available.', '', {duration: 3000});
-        this.router.navigate(['/not-found']);
-      } else {
-        this.snackBar.open('Something went wrong: ' + errorResponse.message, '', {duration: 3000});
-      }
-    }
-  }
-
-  openDownloadDialog() {
-    const diaRef = this.dialog.open(DownloadCourseDialogComponent, {
-      data: {course: this.course},
-      width: '800px'
-    });
+  reloadTabBar(): void {
+    this.tabs.length = 0;
+    this.translate.get(['common.content', 'common.documents', 'common.videos', 'common.download'])
+      .subscribe((t: string) => {
+        this.tabs = [{path: 'overview', label: t['common.content'], img: 'school'},
+          {path: 'fileview', label: t['common.documents'], img: 'insert_drive_file'},
+          {path: 'videoview', label: t['common.videos'], img: 'video_library'},
+          {path: 'download', label: t['common.download'], img: 'get_app'}];
+      });
   }
 
   showUserProfile(teacher: User) {
     this.dialogService.userProfile(teacher);
+  }
+
+  ngOnDestroy() {
+    this.dataSharingService.deleteDataForKey('course');
   }
 
 }

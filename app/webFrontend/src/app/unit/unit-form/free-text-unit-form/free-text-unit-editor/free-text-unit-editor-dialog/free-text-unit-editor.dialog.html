@@ -1,10 +1,10 @@
 <mat-toolbar matDialogTitle role="heading">
   <mat-toolbar-row>
-    <span>Fullscreen Mode</span>
+    <span>{{ 'common.fullscreenMode' | translate }}</span>
     <span class="toolbar-fill"></span>
-    <button mat-mini-fab color="primary" (click)="onCloseClick()" matTooltip="Quit Fullscreen">
+    <button mat-mini-fab color="primary" (click)="onCloseClick()" [matTooltip]="'common.tooltip.quitFullscreenMode' | translate">
       <mat-icon>close</mat-icon>
     </button>
   </mat-toolbar-row>
 </mat-toolbar>
-<app-free-text-unit-editor [(markdown)]="data.markdown"></app-free-text-unit-editor>
+<app-free-text-unit-editor [unitForm]="data.unitForm" ></app-free-text-unit-editor>

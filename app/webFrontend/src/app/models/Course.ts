@@ -3,6 +3,9 @@ import {IUser} from '../../../../../shared/models/IUser';
 import {ILecture} from '../../../../../shared/models/ILecture';
 import {IWhitelistUser} from '../../../../../shared/models/IWhitelistUser';
 import {IDirectory} from '../../../../../shared/models/mediaManager/IDirectory';
+import {IChatRoom} from '../../../../../shared/models/IChatRoom';
+import {IFile} from '../../../../../shared/models/mediaManager/IFile';
+import {IPicture} from '../../../../../shared/models/mediaManager/IPicture';
 
 /**
  * Created by Alexander on 23.05.2017.
@@ -14,6 +17,7 @@ export class Course implements ICourse {
   description: string;
   courseAdmin: IUser;
   media: IDirectory;
+  image: IPicture;
   teachers: IUser[];
   students: IUser[];
   lectures: ILecture[];
@@ -21,6 +25,7 @@ export class Course implements ICourse {
   enrollType: string;
   accessKey: string;
   hasAccessKey: boolean;
+  chatRooms: IChatRoom[];
 
   public Course(course: ICourse) {
     this._id = course._id;
@@ -34,5 +39,7 @@ export class Course implements ICourse {
     this.whitelist = course.whitelist;
     this.enrollType = course.enrollType;
     this.hasAccessKey = course.hasAccessKey;
+    this.image = course.image;
+    this.chatRooms = course.chatRooms;
   }
 }

@@ -1,25 +1,47 @@
-<h2>{{course.name}}</h2>
-<ng-container *ngIf="!this.checkForEmptyLectures()">No course material available for download</ng-container>
 <div *ngIf="this.checkForEmptyLectures()">
-<p>Select units or files which you want to download in a zip</p>
-
-<mat-dialog-content class="layout">
-  <mat-list>
-    <mat-list-item class="selectAll">
-      <h3>Select All</h3>
+  <mat-card class="dl-card">
+    <mat-card-content>
+      <p class="beta-warning">{{ 'course.text.downloadBetaWarning' | translate }} <a href="https://github.com/geli-lms/geli/issues" target="_blank">https://github.com/geli-lms/geli/issues</a></p>
+    </mat-card-content>
+    <mat-card-content>
+      <ng-container *ngIf="!this.checkForEmptyLectures()">{{'common.text.downloadNoFiles' | translate}}</ng-container>
+      <mat-list>
+        <mat-list-item class="selectAll">
+          <h3>
+            <mat-icon matTooltip="{{'course.text.downloadHelpText' | translate}}" class="infoIcon">
+              info
+            </mat-icon>
+            {{ 'file.text.selectAll' | translate }}
+          </h3>
+          <span class="spacer"></span>
+          <span class="lightgray"> Course </span>
+          <mat-checkbox [(ngModel)]="chkbox" (change)="onChange()" class="chkbox"></mat-checkbox>
+        </mat-list-item>
+        <app-lecture-checkbox (valueChanged)="onChildEvent($event)" *ngFor=" let lecture of course.lectures"
+                              [lecture]="lecture"></app-lecture-checkbox>
+      </mat-list>
+    </mat-card-content>
+    <mat-card-actions>
+      <div class="radio-buttons">
+        <mat-radio-group [(ngModel)]="radioSelect">
+          <mat-radio-button class="radio-button" value="Individual">
+            {{'course.text.IndividualPDF' | translate}}
+            <p class="radio-info">{{'course.text.IndividualPDFExplanation' | translate}}</p>
+          </mat-radio-button>
+          <mat-radio-button class="radio-button" value="Single">
+            {{'course.text.SinglePDF' | translate}}
+            <p class="radio-info">{{'course.text.SinglePDFExplanation' | translate}}</p>
+          </mat-radio-button>
+        </mat-radio-group>
+      </div>
+      <button mat-raised-button color="primary" [disabled]="this.disableDownloadButton" (click)="downloadAndClosePDF()">
+        {{ 'common.download' | translate }}
+      </button>
+      <button mat-button (click)="uncheckAll()">Reset</button>
       <span class="spacer"></span>
-      <span class="lightgray"> Course </span>
-      <mat-checkbox [(ngModel)]="chkbox" (change)="onChange()" class="chkbox"></mat-checkbox>
-    </mat-list-item>
-    <app-lecture-checkbox (valueChanged)="onChildEvent($event)" *ngFor=" let lecture of course.lectures" [lecture]= "lecture"></app-lecture-checkbox>
-  </mat-list>
-</mat-dialog-content>
+      <ng-container *ngIf="showSpinner">
+        <mat-spinner [diameter]=20 [strokeWidth]=2 class="spinner"></mat-spinner>
+      </ng-container>
+    </mat-card-actions>
+  </mat-card>
 </div>
-<mat-dialog-actions>
-  <button mat-raised-button color="primary" [disabled]="this.disableDownloadButton" (click)="downloadAndClose()">Download</button>
-  <button mat-button [mat-dialog-close]="true">Cancel</button>
-  <span class="spacer"></span>
-  <ng-container *ngIf="showSpinner">
-    <mat-spinner [diameter]=20 [strokeWidth]=2 class="spinner"></mat-spinner>
-  </ng-container>
-</mat-dialog-actions>

@@ -1,0 +1,4 @@
+<div class="lectures" *ngIf="course">
+  <app-lecture [lecture]="lecture" *ngFor="let lecture of course.lectures">
+  </app-lecture>
+</div>

@@ -3,20 +3,23 @@ import {
   BadRequestError, ForbiddenError, InternalServerError, NotFoundError, UploadedFile, Post
 } from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
-import fs = require('fs');
+import * as fs from 'fs';
+import * as path from 'path';
 import {IUser} from '../../../shared/models/IUser';
 import {IUserModel, User} from '../models/User';
 import {isNullOrUndefined} from 'util';
 import {errorCodes} from '../config/errorCodes';
 import * as sharp from 'sharp';
 import config from '../config/main';
+import {Course} from '../models/Course';
+import emailService from '../services/EmailService';
 
 const multer = require('multer');
 
 const uploadOptions = {
   storage: multer.diskStorage({
     destination: (req: any, file: any, cb: any) => {
-      cb(null, 'uploads/users/');
+      cb(null, path.join(config.uploadFolder, 'users'));
     },
     filename: (req: any, file: any, cb: any) => {
       const id = req.params.id;
@@ -224,7 +227,6 @@ export class UserController {
    *     [
    *         "student",
    *         "teacher",
-   *         "tutor",
    *         "admin"
    *     ]
    */
@@ -332,9 +334,9 @@ export class UserController {
     }
 
     if (user.profile.picture) {
-      const path = user.profile.picture.path;
-      if (path && fs.existsSync(path)) {
-        fs.unlinkSync(path);
+      const oldPicturePath = user.profile.picture.path;
+      if (oldPicturePath && fs.existsSync(oldPicturePath)) {
+        fs.unlinkSync(oldPicturePath);
       }
     }
 
@@ -351,7 +353,7 @@ export class UserController {
       _id: null,
       name: file.filename,
       alias: file.originalname,
-      path: file.path,
+      path: path.relative(path.dirname(config.uploadFolder), file.path).replace(/\\\\?/g, '/'),
       size: resizedImageBuffer.info.size
     };
 
@@ -465,6 +467,8 @@ export class UserController {
    * @api {delete} /api/users/:id Delete user
    * @apiName DeleteUser
    * @apiGroup User
+   * @apiPermission student
+   * @apiPermission teacher
    * @apiPermission admin
    *
    * @apiParam {String} id User ID.
@@ -478,16 +482,40 @@ export class UserController {
    *
    * @apiError BadRequestError There are no other users with admin privileges.
    */
-  @Authorized('admin')
+  @Authorized(['student', 'teacher', 'admin'])
   @Delete('/:id')
   async deleteUser(@Param('id') id: string, @CurrentUser() currentUser: IUser) {
-    if (id === currentUser._id) {
-      const otherAdmin = await User.findOne({$and: [{'role': 'admin'}, {'_id': {$ne: id}}]});
+    const otherAdmin = await User.findOne({$and: [{'role': 'admin'}, {'_id': {$ne: id}}]});
+
+    if (id === currentUser._id && (currentUser.role === 'teacher' || currentUser.role === 'student')) {
+      try {
+        emailService.sendDeleteRequest(currentUser, otherAdmin);
+      } catch (err) {
+        throw new InternalServerError(errorCodes.mail.notSend.code);
+      }
+      return {result: true};
+    }
+
+    if (id === currentUser._id && currentUser.role === 'admin') {
       if (otherAdmin === null) {
         throw new BadRequestError(errorCodes.user.noOtherAdmins.text);
       }
+    } else if (id !== currentUser._id && currentUser.role !== 'admin') {
+      throw new BadRequestError(errorCodes.user.cantDeleteOtherUsers.text);
     }
-    await User.findByIdAndRemove(id);
+
+    const user = await User.findById(id);
+
+    if (id === currentUser._id) {
+      // if user is current user, move ownership to another admin.
+      await Course.changeCourseAdminFromUser(user, otherAdmin);
+    } else {
+      // move Courseownerships to active user.
+      await Course.changeCourseAdminFromUser(user, currentUser);
+    }
+
+    await user.remove();
+
     return {result: true};
   }
 }

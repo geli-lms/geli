@@ -7,14 +7,16 @@ import {ILectureModel, Lecture} from './Lecture';
 import {ILecture} from '../../../shared/models/ILecture';
 import {InternalServerError} from 'routing-controllers';
 import {IUser} from '../../../shared/models/IUser';
-import * as winston from 'winston';
 import {ObjectID} from 'bson';
 import {Directory} from './mediaManager/Directory';
 import {IProperties} from '../../../shared/models/IProperties';
 import {extractMongoId} from '../utilities/ExtractMongoId';
+import {ChatRoom, IChatRoomModel} from './ChatRoom';
+
+import {Picture} from './mediaManager/File';
 
 interface ICourseModel extends ICourse, mongoose.Document {
-  exportJSON: (sanitize?: boolean) => Promise<ICourse>;
+  exportJSON: (sanitize?: boolean, onlyBasicData?: boolean) => Promise<ICourse>;
   checkPrivileges: (user: IUser) => IProperties;
   forDashboard: (user: IUser) => ICourseDashboard;
   forView: () => ICourseView;
@@ -23,6 +25,8 @@ interface ICourseModel extends ICourse, mongoose.Document {
 }
 
 interface ICourseMongoose extends mongoose.Model<ICourseModel> {
+  exportPersonalData: (user: IUser) => Promise<ICourse>;
+  changeCourseAdminFromUser: (userFrom: IUser, userTo: IUser) => Promise<ICourseMongoose>;
 }
 
 let Course: ICourseMongoose;
@@ -43,11 +47,10 @@ const courseSchema = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User'
     },
-    media:
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Directory'
-      },
+    media: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Directory'
+    },
     teachers: [
       {
         type: mongoose.Schema.Types.ObjectId,
@@ -71,13 +74,23 @@ const courseSchema = new mongoose.Schema({
     },
     enrollType: {
       type: String,
-      'enum': ['free', 'whitelist', 'accesskey'],
-      'default': 'free'
+      enum: ['free', 'whitelist', 'accesskey'],
+      default: 'free'
     },
     whitelist: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'WhitelistUser'
+      }
+    ],
+    image: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Picture'
+    },
+    chatRooms: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'ChatRoom'
       }
     ]
   },
@@ -105,10 +118,30 @@ const courseSchema = new mongoose.Schema({
             ret.students = doc.students.map((user: IUserModel) => user.forUser(currentUser));
           }
         }
+
+        if (ret.chatRooms) {
+          ret.chatRooms = ret.chatRooms.map(extractMongoId);
+        }
       }
     }
   }
 );
+
+courseSchema.pre('save', async function () {
+  const course = <ICourseModel>this;
+  if (this.isNew) {
+    const chatRoom: IChatRoomModel = await ChatRoom.create({
+      name: 'General',
+      description: 'This is a general chat for the course ' + course.name,
+      room: {
+        roomType: 'Course',
+        roomFor: course
+      }
+    });
+    course.chatRooms.push(chatRoom._id);
+    Object.assign(this, course);
+  }
+});
 
 // Cascade delete
 courseSchema.pre('remove', async function () {
@@ -122,32 +155,41 @@ courseSchema.pre('remove', async function () {
       const lecDoc = await Lecture.findById(lec);
       await lecDoc.remove();
     }
+    if (localCourse.image) {
+        const picture: any = await Picture.findById(localCourse.image);
+        await picture.remove();
+    }
   } catch (error) {
-    winston.log('warn', 'course (' + localCourse._id + ') cloud not be deleted!');
     throw new Error('Delete Error: ' + error.toString());
   }
 });
 
-courseSchema.methods.exportJSON = async function (sanitize: boolean = true) {
+courseSchema.methods.exportJSON = async function (sanitize: boolean = true, onlyBasicData: boolean = false) {
   const obj = this.toObject();
 
   // remove unwanted informations
-  {
-    // mongo properties
-    delete obj._id;
-    delete obj.createdAt;
-    delete obj.__v;
-    delete obj.updatedAt;
+  // mongo properties
+  delete obj._id;
+  delete obj.createdAt;
+  delete obj.__v;
+  delete obj.updatedAt;
 
-    // custom properties
-    if (sanitize) {
-      delete obj.accessKey;
-      delete obj.active;
-      delete obj.whitelist;
-      delete obj.students;
-      delete obj.courseAdmin;
-      delete obj.teachers;
-    }
+  // custom properties
+  if (sanitize) {
+    delete obj.accessKey;
+    delete obj.active;
+    delete obj.whitelist;
+    delete obj.students;
+    delete obj.courseAdmin;
+    delete obj.teachers;
+    delete obj.media;
+    delete obj.chatRooms;
+  }
+
+  if (onlyBasicData) {
+    delete obj.id;
+    delete obj.hasAccessKey;
+    return obj;
   }
 
   // "populate" lectures
@@ -159,13 +201,17 @@ courseSchema.methods.exportJSON = async function (sanitize: boolean = true) {
     if (lecture) {
       const lectureExport = await lecture.exportJSON();
       obj.lectures.push(lectureExport);
-    } else {
-      winston.log('warn', 'lecture(' + lectureId + ') was referenced by course(' + this._id + ') but does not exist anymore');
     }
+  }
+
+  if (obj.image) {
+    const imageId: mongoose.Types.ObjectId = obj.image;
+    obj.image = await Picture.findById(imageId);
   }
 
   return obj;
 };
+
 
 courseSchema.statics.importJSON = async function (course: ICourse, admin: IUser, active: boolean) {
   // set Admin
@@ -206,6 +252,23 @@ courseSchema.statics.importJSON = async function (course: ICourse, admin: IUser,
   }
 };
 
+courseSchema.statics.exportPersonalData = async function(user: IUser) {
+  const conditions: any = {};
+  conditions.$or = [];
+  conditions.$or.push({students: user._id});
+  conditions.$or.push({teachers: user._id});
+  conditions.$or.push({courseAdmin: user._id});
+
+  const courses = await Course.find(conditions, 'name description -_id');
+
+  return Promise.all(courses.map(async (course: ICourseModel) => {
+    return await course.exportJSON(true, true);
+  }));
+};
+
+courseSchema.statics.changeCourseAdminFromUser = async function (userFrom: IUser, userTo: IUser) {
+  return Course.updateMany({courseAdmin: userFrom._id}, {courseAdmin: userTo._id});
+};
 
 courseSchema.methods.checkPrivileges = function (user: IUser) {
   const {userIsAdmin, ...userIs} = User.checkPrivileges(user);
@@ -228,17 +291,26 @@ courseSchema.methods.checkPrivileges = function (user: IUser) {
   };
 };
 
-courseSchema.methods.forDashboard = function (user: IUser): ICourseDashboard {
+/**
+ * Modifies the Course data to be used by the courses dashboard.
+ *
+ * @param {IUser} user
+ * @returns {Promise<ICourseDashboard>}
+ */
+courseSchema.methods.forDashboard = async function (user: IUser): Promise<ICourseDashboard> {
   const {
     name, active, description, enrollType
   } = this;
+
+  const image = (this.image) ? (await Picture.findById(this.image)).toObject() : null;
+
   const {
     userCanEditCourse, userCanViewCourse, userIsCourseAdmin, userIsCourseTeacher, userIsCourseMember
   } = this.checkPrivileges(user);
   return {
     // As in ICourse:
     _id: <string>extractMongoId(this._id),
-    name, active, description, enrollType,
+    name, active, description, enrollType, image,
 
     // Special properties for the dashboard:
     userCanEditCourse, userCanViewCourse, userIsCourseAdmin, userIsCourseTeacher, userIsCourseMember
@@ -249,14 +321,15 @@ courseSchema.methods.forView = function (): ICourseView {
   const {
     name, description,
     courseAdmin, teachers,
-    lectures
+    lectures, chatRooms
   } = this;
   return {
     _id: <string>extractMongoId(this._id),
     name, description,
     courseAdmin: User.forCourseView(courseAdmin),
     teachers: teachers.map((teacher: IUser) => User.forCourseView(teacher)),
-    lectures: lectures.map((lecture: any) => lecture.toObject())
+    lectures: lectures.map((lecture: any) => lecture.toObject()),
+    chatRooms: chatRooms.map(extractMongoId)
   };
 };
 

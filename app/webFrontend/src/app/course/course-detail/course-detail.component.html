@@ -1,9 +1,5 @@
 <div class="course-header">
-  <button mat-icon-button color="primary" (click)="openDownloadDialog()" class="download-button">
-    <mat-icon aria-label="Download Units" mat-tooltip="Download Units">get_app</mat-icon>
-  </button>
   <h1>{{course?.name}}</h1>
-
   <mat-chip-list>
     <mat-chip style="cursor:pointer" (click)="showUserProfile(course?.courseAdmin)">
       <div class="img-wrapper">
@@ -11,7 +7,7 @@
       </div>
       <div class="admin-name">
         {{course?.courseAdmin.profile.firstName + " " + course?.courseAdmin.profile.lastName}} <br>
-        <i>Admin</i>
+        <i>{{'mainMenu.admin' | translate}}</i>
       </div>
     </mat-chip>
     <div *ngFor="let teacher of course?.teachers">
@@ -21,14 +17,22 @@
         </div>
         <div class="teacher-name">
           {{teacher.profile.firstName + " " + teacher.profile.lastName}} <br>
-          <i>Teacher</i>
+          <i>{{'common.roles.teacher' | translate}}</i>
         </div>
       </mat-chip>
     </div>
   </mat-chip-list>
   <p>{{course?.description}}</p>
+  <nav mat-tab-nav-bar>
+    <a mat-tab-link *ngFor="let tab of tabs"
+       [routerLink]="tab.path"
+       routerLinkActive
+       #rla="routerLinkActive"
+       [routerLinkActiveOptions]="{exact: true}"
+       [active]="rla.isActive">
+      <mat-icon class="iconPos">{{tab.img}}</mat-icon>{{tab.label}}
+    </a>
+  </nav>
 </div>
-<div class="lectures" *ngIf="course">
-  <app-lecture [lecture]="lecture" *ngFor="let lecture of course.lectures">
-  </app-lecture>
-</div>
+<router-outlet></router-outlet>
+<app-course-forum [chatRoom]="course?.chatRooms[0]"></app-course-forum>

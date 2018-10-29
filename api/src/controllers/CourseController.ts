@@ -14,14 +14,13 @@ import {
 } from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import {errorCodes} from '../config/errorCodes';
+import config from '../config/main';
 
 import {ICourse} from '../../../shared/models/ICourse';
 import {ICourseDashboard} from '../../../shared/models/ICourseDashboard';
 import {ICourseView} from '../../../shared/models/ICourseView';
 import {IUser} from '../../../shared/models/IUser';
-import {ObsCsvController} from './ObsCsvController';
 import {Course} from '../models/Course';
-import {User} from '../models/User';
 import {WhitelistUser} from '../models/WhitelistUser';
 import emailService from '../services/EmailService';
 
@@ -30,6 +29,12 @@ import crypto = require('crypto');
 import {API_NOTIFICATION_TYPE_ALL_CHANGES, NotificationSettings} from '../models/NotificationSettings';
 import {IWhitelistUser} from '../../../shared/models/IWhitelistUser';
 import {DocumentToObjectOptions} from 'mongoose';
+import * as fs from 'fs';
+import * as path from 'path';
+import ResponsiveImageService from '../services/ResponsiveImageService';
+import {IResponsiveImageData} from '../../../shared/models/IResponsiveImageData';
+
+import { Picture } from '../models/mediaManager/File';
 
 const uploadOptions = {
   storage: multer.diskStorage({
@@ -46,12 +51,23 @@ const uploadOptions = {
   }),
 };
 
+const coursePictureUploadOptions = {
+  storage: multer.diskStorage({
+    destination: (req: any, file: any, cb: any) => {
+      cb(null, path.join(config.uploadFolder, 'courses'));
+    },
+    filename: (req: any, file: any, cb: any) => {
+      const id = req.params.id;
+      const extPos = file.originalname.lastIndexOf('.');
+      const ext = (extPos !== -1) ? `.${file.originalname.substr(extPos + 1).toLowerCase()}` : '';
+      cb(null, id + '_' + new Date().getTime().toString() + ext);
+    }
+  }),
+};
 
 @JsonController('/courses')
 @UseBefore(passportJwtMiddleware)
 export class CourseController {
-
-  parser: ObsCsvController = new ObsCsvController();
 
   /**
    * @api {get} /api/courses/ Request courses of current user
@@ -162,7 +178,7 @@ export class CourseController {
    * @apiError NotFoundError Includes implicit authorization check. (In getCourse helper method.)
    * @apiError ForbiddenError (Redundant) Authorization check.
    */
-  @Get('/:id')
+  @Get('/:id([a-fA-F0-9]{24})')
   async getCourseView(@Param('id') id: string, @CurrentUser() currentUser: IUser): Promise<ICourseView> {
     const course = await this.getCourse(id, currentUser);
 
@@ -337,6 +353,7 @@ export class CourseController {
       .populate('teachers')
       .populate('students')
       .populate('whitelist')
+      .populate('image')
       .execPopulate();
     await course.processLecturesFor(currentUser);
     return course.toObject(<DocumentToObjectOptions>{currentUser});
@@ -482,7 +499,7 @@ export class CourseController {
    * @apiParam {Object} data Data (with access key).
    * @apiParam {IUser} currentUser Currently logged in user.
    *
-   * @apiSuccess {{}} result Empty object.
+   * @apiSuccess {Object} result Empty object.
    *
    * @apiSuccessExample {json} Success-Response:
    *      {}
@@ -498,12 +515,10 @@ export class CourseController {
     if (!course) {
       throw new NotFoundError();
     }
+
     if (course.enrollType === 'whitelist') {
       const wUsers: IWhitelistUser[] = await  WhitelistUser.find().where({courseId: course._id});
-      if (wUsers.filter(e =>
-          e.firstName === currentUser.profile.firstName.toLowerCase()
-          && e.lastName === currentUser.profile.lastName.toLowerCase()
-          && e.uid === currentUser.uid).length <= 0) {
+      if (wUsers.filter(e => e.uid === currentUser.uid).length < 1) {
         throw new ForbiddenError(errorCodes.course.notOnWhitelist.code);
       }
     } else if (course.accessKey && course.accessKey !== data.accessKey) {
@@ -520,6 +535,7 @@ export class CourseController {
       }).save();
       await course.save();
     }
+
     return {};
   }
 
@@ -533,7 +549,7 @@ export class CourseController {
    * @apiParam {Object} data Body.
    * @apiParam {IUser} currentUser Currently logged in user.
    *
-   * @apiSuccess {{}} result Empty object.
+   * @apiSuccess {Object} result Empty object.
    *
    * @apiSuccessExample {json} Success-Response:
    *      {}
@@ -578,7 +594,6 @@ export class CourseController {
    *      newlength: 10
    *    }
    *
-   * @apiError TypeError Only CSV files are allowed.
    * @apiError HttpError UID is not a number 1.
    * @apiError ForbiddenError Unauthorized user.
    */
@@ -586,24 +601,44 @@ export class CourseController {
   @Post('/:id/whitelist')
   async whitelistStudents(
     @Param('id') id: string,
-    @UploadedFile('file', {options: uploadOptions}) file: any,
+    @Body() whitelist: any[],
     @CurrentUser() currentUser: IUser) {
-    const name: string = file.originalname;
-    if (!name.endsWith('.csv')) {
-      throw new TypeError(errorCodes.upload.type.notCSV.code);
-    }
+
     const course = await Course.findById(id);
+
     if (!course.checkPrivileges(currentUser).userCanEditCourse) {
       throw new ForbiddenError();
     }
-    await course
-      .populate('whitelist')
-      .populate('students')
-      .execPopulate();
-    const buffer = <string> await this.parser.parseFile(file);
-    await this.parser.updateCourseFromBuffer(buffer, course);
+
+    if (!whitelist || whitelist.length === 0) {
+      throw new BadRequestError();
+    }
+
+    if (course.whitelist.length > 0) {
+      for (const wuser of course.whitelist) {
+        const whitelistUser = await WhitelistUser.findById(wuser);
+        if (whitelistUser) {
+          await whitelistUser.remove();
+        }
+      }
+    }
+
+    course.whitelist = [];
+
+    for (const whiteListUser of whitelist) {
+      const wUser = new WhitelistUser();
+      wUser.firstName = whiteListUser.firstName;
+      wUser.lastName = whiteListUser.lastName;
+      wUser.uid = whiteListUser.uid;
+      wUser.courseId = course._id;
+
+      await wUser.save();
+      course.whitelist.push(wUser._id);
+    }
+
     await course.save();
-    return {newlength: course.whitelist.length};
+
+    return whitelist;
   }
 
   /**
@@ -653,7 +688,7 @@ export class CourseController {
    * @apiParam {String} id Course ID.
    * @apiParam {IUser} currentUser Currently logged in user.
    *
-   * @apiSuccess {{}} result Empty object.
+   * @apiSuccess {Object} result Empty object.
    *
    * @apiSuccessExample {json} Success-Response:
    *      {}
@@ -673,5 +708,83 @@ export class CourseController {
     }
     await course.remove();
     return {};
+  }
+
+
+  @Authorized(['teacher', 'admin'])
+  @Delete('/picture/:id')
+  async deleteCoursePicture(
+    @Param('id') id: string,
+    @CurrentUser() currentUser: IUser) {
+
+    const course = await Course.findById(id);
+
+    if (!course) {
+      throw new NotFoundError();
+    }
+
+    if (!course.checkPrivileges(currentUser).userCanEditCourse) {
+      throw new ForbiddenError();
+    }
+
+    if (!course.image) {
+      throw new NotFoundError();
+    }
+
+    const picture = await Picture.findOne(course.image);
+    await picture.remove();
+
+    await Course.update({ _id: id }, { $unset: { image: 1 } });
+    return { };
+  }
+
+  @Authorized(['teacher', 'admin'])
+  @Post('/picture/:id')
+  async addCoursePicture(
+      @UploadedFile('file', {options: coursePictureUploadOptions}) file: any,
+      @Param('id') id: string,
+      @Body() responsiveImageDataRaw: any,
+      @CurrentUser() currentUser: IUser) {
+
+    // Remove the old picture if the course already has one.
+    const course = await Course.findById(id);
+
+    if (!course.checkPrivileges(currentUser).userCanEditCourse) {
+      throw new ForbiddenError();
+    }
+
+    const responsiveImageData = <IResponsiveImageData>JSON.parse(responsiveImageDataRaw.imageData);
+
+    const mimeFamily = file.mimetype.split('/', 1)[0];
+    if (mimeFamily !== 'image') {
+      // Remove the file if the type was not correct.
+      await fs.unlinkSync(file.path);
+
+      throw new BadRequestError('Forbidden format of uploaded picture: ' + mimeFamily);
+    }
+
+    if (course.image) {
+      const picture = await Picture.findById(course.image);
+      await picture.remove();
+    }
+
+    await ResponsiveImageService.generateResponsiveImages(file, responsiveImageData);
+
+    const image: any = new Picture({
+      name: file.filename,
+      physicalPath: responsiveImageData.pathToImage,
+      link: responsiveImageData.pathToImage,
+      size: 0,
+      mimeType: file.mimetype,
+      breakpoints: responsiveImageData.breakpoints
+    });
+
+    await image.save();
+
+    const result = await Course.update({ _id: id }, {
+      image: image._id
+    });
+
+    return image.toObject();
   }
 }
