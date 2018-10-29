@@ -202,15 +202,15 @@ export class DownloadController {
         let lecCounter = 1;
         for (const lec of data.lectures) {
 
-          // create hashed pdf file
-          const tempPdfFileName = this.tempPdfFileName(user);
-
           const localLecture = await Lecture.findOne({_id: lec.lectureId});
           const lcName = this.replaceCharInFilename(localLecture.name);
           let unitCounter = 1;
 
           for (const unit of lec.units) {
             const localUnit = await Unit.findOne({_id: unit.unitId});
+
+            // create hashed pdf file
+            const tempPdfFileName = this.tempPdfFileName(user);
 
             if (!localUnit) {
               throw new NotFoundError();
