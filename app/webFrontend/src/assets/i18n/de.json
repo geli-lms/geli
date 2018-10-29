@@ -77,7 +77,7 @@
     "back": "Zurück",
     "cancel": "Abbrechen",
     "cheatSheetYouFind": "Einen Spickzettel finden Sie hier.",
-    "close" : "Schließen",
+    "close": "Schließen",
     "continue": "Weiter",
     "content": "Inhalt",
     "course": "Kurs",
@@ -86,7 +86,7 @@
     "discard": "Verwerfen",
     "dismiss": "Schließen",
     "documents": "Dokumente",
-    "download": "Download",
+    "download": "Download (Beta)",
     "duplicate": "Duplizieren",
     "edit": "Bearbeiten",
     "editProfile": "Profil bearbeiten",
@@ -97,19 +97,19 @@
     "folder": "Ordner",
     "fullscreenMode": "Vollbildmodus",
     "geli": "geli",
-    "general" : "Allgemein",
+    "general": "Allgemein",
     "here": "hier",
     "legalnotice": "Impressum",
     "infobox": "Infobox",
     "login": "Login",
     "name": "Name",
     "notifications": "Benachrichtigungen",
-    "media" : "Medien",
-    "members" : "Mitglieder",
+    "media": "Medien",
+    "members": "Mitglieder",
     "misc": "Sonstiges",
     "ok": "OK",
-    "open" : "Öffnen",
-    "openInTab" : "Im neuen Tab öffnen",
+    "open": "Öffnen",
+    "openInTab": "Im neuen Tab öffnen",
     "password": "Passwort",
     "privacy": "Datenschutz",
     "profile": "Profil",
@@ -122,7 +122,7 @@
     "question": "Frage",
     "register": "Registrieren",
     "reset": "Zurücksetzen",
-    "rename" : "Umbenennen",
+    "rename": "Umbenennen",
     "role": "Rolle",
     "roles": {
       "student": "Student",
@@ -133,7 +133,7 @@
     "settings": "Einstellungen",
     "statistics": "Statistik",
     "submit": "Absenden",
-    "teachers" : "Lehrer",
+    "teachers": "Lehrer",
     "theme": "Design",
     "tooltip": {
       "quitFullscreenMode": "Vollbildmodus beenden",
@@ -174,10 +174,11 @@
       "canSeenByStudents": "Kurs ist für Studenten sichtbar.",
       "downloadHelpText": "Wähle die Units oder Files aus die als zip heruntergeladen werden sollen.",
       "downloadNoFiles": "No Coursematerial aviable for download!",
-      "IndividualPDF":"individuelle PDFs",
-      "IndividualPDFExplanation":"eine PDF pro Unit",
-      "SinglePDF":"eine PDF",
-      "SinglePDFExplanation":"eine PDF mit allem ausgewählten",
+      "downloadBetaWarning": "Achtung! Der PDF export befindet sich noch in der Entwicklung. Für die meisten Kurse funktioniert der Export bereits. Ein paar Sonderfälle müssen aber noch gelöst werden. Wenn du einen Fehler findest, dann melde diesen bitte unter",
+      "IndividualPDF": "individuelle PDFs",
+      "IndividualPDFExplanation": "eine PDF pro Unit",
+      "SinglePDF": "eine PDF",
+      "SinglePDFExplanation": "eine PDF mit allem ausgewählten",
       "editCourse": "Kurs bearbeiten",
       "enterAccessKey": "Bitte geben Sie den Einschreibeschlüssel dieses Kurses ein.",
       "enterAccessKeyForStudents": "Geben Sie einen Einschreibeschlüssel für die Studenten ein.",
@@ -211,20 +212,20 @@
       "whitelistNotReadable": "Die Whitelist-Datei konnte nicht gelesen werden. Haben Sie die richtige Datei ausgewählt?",
       "whitelistNoStudents": "In der Whitelist-Datei sind keine Stundenten, die importiert werden können."
     },
-    "tooltip" : {
+    "tooltip": {
       "add": "Kurs hinzufügen",
       "addUserToWhitelist": "Benutzer zu Freigabeliste hinzufügen",
-      "download" : "Kurs herunterladen",
+      "download": "Kurs herunterladen",
       "enroll": "Einschreiben",
-      "keyRequired" : "Zugangscode benötigt",
+      "keyRequired": "Zugangscode benötigt",
       "leave": "Verlassen",
-      "noKeyRequired" : "Frei zugänglich"
+      "noKeyRequired": "Frei zugänglich"
     }
   },
   "cookie": {
-    "text" : {
-      "moreInformation" : "Weitere Informationen",
-      "cookieHint" : "Geli verwendet Cookies, um Ihnen den bestmöglichen Service zu gewährleisten. Wenn Sie auf der Seite weitersurfen, stimmen Sie der Cookie-Nutzung zu, wie im Impressum beschrieben."
+    "text": {
+      "moreInformation": "Weitere Informationen",
+      "cookieHint": "Geli verwendet Cookies, um Ihnen den bestmöglichen Service zu gewährleisten. Wenn Sie auf der Seite weitersurfen, stimmen Sie der Cookie-Nutzung zu, wie im Impressum beschrieben."
     }
   },
   "dashboard": {
@@ -239,9 +240,9 @@
     "teacherCourses": "Meine Lehrveranstaltungen"
   },
   "errorPage": {
-    "text" : {
-      "pageNotFound" : "Seite nicht gefunden :(",
-      "pageNotFoundHint" : "Vielleicht suchen Sie nach einer Seite, die leider nicht mehr existiert."
+    "text": {
+      "pageNotFound": "Seite nicht gefunden :(",
+      "pageNotFoundHint": "Vielleicht suchen Sie nach einer Seite, die leider nicht mehr existiert."
     }
   },
   "file": {
@@ -253,17 +254,17 @@
       "addFile": "Datei hinzufügen",
       "filename": "Dateiname",
       "filesize": "Dateigröße",
-      "filesSelected" : "Dateien ausgewählt",
+      "filesSelected": "Dateien ausgewählt",
       "fileRemove": "Datei löschen",
       "infoDropAddFiles": "Dateien hier hinziehen oder hier klicken, um Dateien hochzuladen.",
       "noVideo": "Kein Video verfügbar.",
-      "noFiles" : "Keine Dateien vorhanden",
+      "noFiles": "Keine Dateien vorhanden",
       "progress": "Fortschritt",
       "removeFromQueue": "Datei aus der Schlange löschen.",
-      "selectAll" : "Alle auswählen",
+      "selectAll": "Alle auswählen",
       "takePicture": "Bild aufnehmen"
     },
-    "tooltip":{
+    "tooltip": {
       "selectFile": "Datei auswählen",
       "uploadFile": "Datei hochladen"
     }
@@ -273,7 +274,7 @@
   },
   "lecture": {
     "noUnits": "Keine Unterkapitel angelegt!",
-    "text":{
+    "text": {
       "add": "Kapitel hinzufügen",
       "import": "Kapitel importieren",
       "noLecture": "Noch kein Kapitel hinzugefügt."
@@ -290,9 +291,9 @@
       "Update": "Aktualisieren"
     }
   },
-  "mail":{
+  "mail": {
     "send": "Sende Mail",
-    "tooltip":{
+    "tooltip": {
       "sendToMembers": "Mail an ausgewählte Mitglieder senden."
     }
   },
@@ -367,7 +368,7 @@
       "delete": "Lerneinheit löschen",
       "deleteAnswer": "Antwort löschen",
       "deleteQuestion": "Frage löschen",
-      "deleteTask" : "Aufgabe löschen",
+      "deleteTask": "Aufgabe löschen",
       "download": "Diese Lerneinheit downloaden",
       "downloadUnits": "Lerneinheiten downloaden",
       "duplicate": "Diese Lerneinheit kopieren",
@@ -381,9 +382,9 @@
       "notSignedIn": "Nicht eingetragen",
       "signedIn": "Eingetragen"
     },
-    "tooltip":{
+    "tooltip": {
       "deleteUsers": "Ausgewählte Mitglieder entfernen.",
-      "toggleMembers" : "Alle Benutzer auswählen",
+      "toggleMembers": "Alle Benutzer auswählen",
       "doesNotExist": "Nutzer existiert nicht"
     }
   }
