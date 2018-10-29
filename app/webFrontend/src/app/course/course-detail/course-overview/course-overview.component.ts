@@ -12,7 +12,7 @@ import {DataSharingService} from '../../../shared/services/data-sharing.service'
 })
 export class CourseOverviewComponent implements OnInit {
   course: ICourse;
-  openAllLectures: boolean = true;
+  openAllLectures = true;
 
   constructor(private dataSharingService: DataSharingService) {
   }

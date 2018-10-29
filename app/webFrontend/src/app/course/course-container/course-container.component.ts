@@ -23,7 +23,7 @@ export class CourseContainerComponent implements OnInit {
   @Input()
   title: string;
   @Input()
-  smallHeader: boolean = false;
+  smallHeader = false;
 
   @Output()
   onEnroll = new EventEmitter();
