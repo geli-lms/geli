@@ -1,6 +1,9 @@
 <div *ngIf="this.checkForEmptyLectures()">
   <mat-card class="dl-card">
     <mat-card-content>
+      <p class="beta-warning">{{ 'course.text.downloadBetaWarning' | translate }} <a href="https://github.com/geli-lms/geli/issues" target="_blank">https://github.com/geli-lms/geli/issues</a></p>
+    </mat-card-content>
+    <mat-card-content>
       <ng-container *ngIf="!this.checkForEmptyLectures()">{{'common.text.downloadNoFiles' | translate}}</ng-container>
       <mat-list>
         <mat-list-item class="selectAll">

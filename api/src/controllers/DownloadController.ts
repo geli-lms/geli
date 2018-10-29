@@ -26,8 +26,6 @@ const pdf =  require('html-pdf');
 const phantomjs = require('phantomjs-prebuilt');
 const binPath = phantomjs.path;
 
-const PDFtempPath = config.tmpFileCacheFolder + 'temp.pdf';
-
 // Set all routes which should use json to json, the standard is blob streaming data
 @Controller('/download')
 @UseBefore(passportJwtMiddleware)
@@ -211,6 +209,9 @@ export class DownloadController {
           for (const unit of lec.units) {
             const localUnit = await Unit.findOne({_id: unit.unitId});
 
+            // create hashed pdf file
+            const tempPdfFileName = this.tempPdfFileName(user);
+
             if (!localUnit) {
               throw new NotFoundError();
             }
@@ -252,16 +253,15 @@ export class DownloadController {
                 html += localUnit.toHtmlForIndividualPDF();
                 html += '</html>';
               const name = lecCounter + '_' + lcName + '/' + unitCounter + '_' + this.replaceCharInFilename(localUnit.name) + '.pdf';
-              await this.savePdfToFile(html, options, PDFtempPath);
-
-              await this.appendToArchive(archive, name, PDFtempPath, hash);
-
+              await this.savePdfToFile(html, options, tempPdfFileName);
+              await this.appendToArchive(archive, name, tempPdfFileName, hash);
+              fs.unlinkSync(tempPdfFileName);
             }
             unitCounter++;
           }
           lecCounter++;
         }
-        fs.unlinkSync(PDFtempPath);
+
         return new Promise((resolve, reject) => {
           archive.on('error', () => reject(hash));
           archive.finalize();
@@ -294,6 +294,8 @@ export class DownloadController {
   @Post('/pdf/single')
   @ContentType('application/json')
   async postDownloadRequestPDFSingle(@Body() data: IDownload, @CurrentUser() user: IUser) {
+    // create hashed pdf file
+    const tempPdfFileName = this.tempPdfFileName(user);
 
     const course = await Course.findOne({_id: data.courseName});
 
@@ -427,9 +429,9 @@ export class DownloadController {
         html += '</div></body>' +
           '</html>';
         const name = this.replaceCharInFilename(course.name) + '.pdf';
-        await this.savePdfToFile(html, options, PDFtempPath);
-        await this.appendToArchive(archive, name, PDFtempPath, hash);
-        fs.unlinkSync(PDFtempPath);
+        await this.savePdfToFile(html, options, tempPdfFileName);
+        await this.appendToArchive(archive, name, tempPdfFileName, hash);
+        fs.unlinkSync(tempPdfFileName);
         return new Promise((resolve, reject) => {
           archive.on('error', () => reject(hash));
           archive.finalize();
@@ -442,6 +444,12 @@ export class DownloadController {
     } else {
       throw new NotFoundError();
     }
+  }
+
+  private tempPdfFileName(user: IUser) {
+    return config.tmpFileCacheFolder +
+      crypto.createHash('sha1').update(new Date() + user._id).digest('hex').toString().slice(0, 16) +
+      '_temp.pdf';
   }
 
   private savePdfToFile(html: any, options: any, pathToFile: String ): Promise<void> {

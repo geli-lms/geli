@@ -1,6 +1,6 @@
 {
   "name": "geli-api",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "license": "GPL-3.0",
   "repository": "geli-lms/geli",
   "description": "This is the API-Package.json for geli.",
@@ -72,7 +72,7 @@
     "@types/markdown-it": "0.0.4",
     "@types/jsonwebtoken": "^7.2.8",
     "@types/mocha": "^5.2.4",
-    "@types/mongoose": "^5.2.0",
+    "@types/mongoose": "^5.2.20",
     "@types/morgan": "1.7.35",
     "@types/nodemailer": "^4.6.2",
     "@types/passport": "^0.4.5",
