@@ -23,7 +23,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Unit-specific comments. [#761](https://github.com/geli-lms/geli/issues/761)
 - Simple E2E test for login. [#795](https://github.com/geli-lms/geli/pull/795)
 - Checkboxes for accepting our terms of use and privacy declarations while registering. [#778](https://github.com/geli-lms/geli/issues/778)
-- PDF course content download functionality. [#720](https://github.com/geli-lms/geli/pull/720)
+- PDF course content download functionality. [#720](https://github.com/geli-lms/geli/pull/720), [#913](https://github.com/geli-lms/geli/issues/913)
 - User data deletion functionality for EU-GDPR compliance. [#775](https://github.com/geli-lms/geli/issues/775)
 - Personal data export functionality for EU-GDPR compliance. [#805](https://github.com/geli-lms/geli/issues/805)
 - Guided dialog for adding a whitelist. [#727](https://github.com/geli-lms/geli/issues/727) [#509](https://github.com/geli-lms/geli/issues/509)
@@ -39,6 +39,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Execute npm rebuild in docker. [#855](https://github.com/geli-lms/geli/pull/855)
 - Sentry reporting for missing translations. [#858](https://github.com/geli-lms/geli/issues/858)
 - Migration for `visible` field. [#890](https://github.com/geli-lms/geli/pull/890)
+- Migration for `fileUnitType` field. [#907](https://github.com/geli-lms/geli/pull/907)
 - Fixed error on clicking on notification. [#916](https://github.com/geli-lms/geli/issues/916)
 - A collapse/expand button to units [#868](https://github.com/geli-lms/geli/issues/868)
 
