@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 -->
 
 ## [Unreleased]
+## [[0.8.0](https://github.com/geli-lms/geli/releases/tag/v0.8.0)] - 2018-10-29 - WS 18/19 Bugfix & Tweak-Release
 ### Added
 - Cookie information banner. [#565](https://github.com/geli-lms/geli/pull/565)
 - Course progress can now be exported as a CSV-file. [#766](https://github.com/geli-lms/geli/pull/766)
@@ -23,7 +24,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Unit-specific comments. [#761](https://github.com/geli-lms/geli/issues/761)
 - Simple E2E test for login. [#795](https://github.com/geli-lms/geli/pull/795)
 - Checkboxes for accepting our terms of use and privacy declarations while registering. [#778](https://github.com/geli-lms/geli/issues/778)
-- PDF course content download functionality. [#720](https://github.com/geli-lms/geli/pull/720), [#913](https://github.com/geli-lms/geli/issues/913)
+- PDF course content download functionality. [#720](https://github.com/geli-lms/geli/pull/720), [#913](https://github.com/geli-lms/geli/issues/913), [#923](https://github.com/geli-lms/geli/pull/923)
 - User data deletion functionality for EU-GDPR compliance. [#775](https://github.com/geli-lms/geli/issues/775)
 - Personal data export functionality for EU-GDPR compliance. [#805](https://github.com/geli-lms/geli/issues/805)
 - Guided dialog for adding a whitelist. [#727](https://github.com/geli-lms/geli/issues/727) [#509](https://github.com/geli-lms/geli/issues/509)
@@ -62,6 +63,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Update `README.md` with latest information. [#845](https://github.com/geli-lms/geli/pull/845)
 - Exit build when no change to `CHANGELOG.md`. [#880](https://github.com/geli-lms/geli/pull/880)
 - Use deploy token to push geli-docs. [#851](https://github.com/geli-lms/geli/issues/851), [#900](https://github.com/geli-lms/geli/pull/900), [#902](https://github.com/geli-lms/geli/pull/902)
+- Adjust `CHANGELOG.md` for next release. [#879](https://github.com/geli-lms/geli/pull/879)
 - Exclude pull requests from dependabot from changelog check. [#854](https://github.com/geli-lms/geli/pull/854)
 
 ### Removed
