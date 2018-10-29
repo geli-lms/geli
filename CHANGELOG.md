@@ -39,6 +39,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Execute npm rebuild in docker. [#855](https://github.com/geli-lms/geli/pull/855)
 - Sentry reporting for missing translations. [#858](https://github.com/geli-lms/geli/issues/858)
 - Migration for `visible` field. [#890](https://github.com/geli-lms/geli/pull/890)
+- Fixed error on clicking on notification. [#916](https://github.com/geli-lms/geli/issues/916)
+- A collapse/expand button to units [#868](https://github.com/geli-lms/geli/issues/868)
 
 ### Changed
 - Minor fixes and adaptations and merge-failure fixes. [#785](https://github.com/geli-lms/geli/issues/785)
@@ -60,6 +62,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Update `README.md` with latest information. [#845](https://github.com/geli-lms/geli/pull/845)
 - Exit build when no change to `CHANGELOG.md`. [#880](https://github.com/geli-lms/geli/pull/880)
 - Use deploy token to push geli-docs. [#851](https://github.com/geli-lms/geli/issues/851), [#900](https://github.com/geli-lms/geli/pull/900), [#902](https://github.com/geli-lms/geli/pull/902)
+- Responsiveness of course overview [#837](https://github.com/geli-lms/geli/issues/837)
 
 ### Removed
 - `isCourseTeacherOrAdmin` and `isMemberOfCourse` from `UserService`. [#731](https://github.com/geli-lms/geli/issues/731)
@@ -95,7 +98,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Migrations for adding chatrooms to course and unit. [#888](https://github.com/geli-lms/geli/issues/888), [#903](https://github.com/geli-lms/geli/pull/903), [#905](https://github.com/geli-lms/geli/pull/905)
 - `AuthController` `addWhitelistedUserToCourses` broken condition & typos. [#895](https://github.com/geli-lms/geli/issues/895)
 - `ChatRoomController` internal data leak. [#897](https://github.com/geli-lms/geli/issues/897)
-- Responsiveness of course overview [#837](https://github.com/geli-lms/geli/issues/837)
+- Depcreated warning on startup. [#920](https://github.com/geli-lms/geli/pull/920)
 
 ### Security
 - Secured the static `'uploads'` route by introducing a special `'mediaToken'` with new JWT strategy & middleware. [#729](https://github.com/geli-lms/geli/issues/729)
@@ -122,7 +125,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Add bootstrap grid system [#613](https://github.com/geli-lms/geli/issues/613)
 - Added changeable picture to course [#702](https://github.com/geli-lms/geli/issues/702)
 - Added a responsive image service [#546](https://github.com/geli-lms/geli/issues/546)
-- Added a collapse/expand button to units [#868](https://github.com/geli-lms/geli/issues/868)
 
 ### Changed
 - Refactored or slightly altered various course & user related APIs. [#654](https://github.com/geli-lms/geli/issues/654) [#691](https://github.com/geli-lms/geli/issues/691)
