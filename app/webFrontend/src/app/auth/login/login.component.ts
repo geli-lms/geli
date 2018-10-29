@@ -44,8 +44,9 @@ export class LoginComponent implements OnInit {
       () => {
 
         if (this.authGuard.redirectUrl) {
-          this.router.navigate([this.authGuard.redirectUrl]);
-          this.authGuard.redirectUrl = null;
+          this.router.navigate([this.authGuard.redirectUrl])
+            .then(() => this.authGuard.redirectUrl = null)
+            .catch(e => this.router.navigate(['/']));
         } else {
           this.router.navigate(['/']);
         }
