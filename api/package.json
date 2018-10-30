@@ -75,7 +75,7 @@
     "@types/mongoose": "^5.2.20",
     "@types/morgan": "1.7.35",
     "@types/nodemailer": "^4.6.2",
-    "@types/passport": "^0.4.5",
+    "@types/passport": "^0.4.6",
     "@types/passport-jwt": "^3.0.1",
     "@types/passport-local": "^1.0.33",
     "@types/raven": "^2.5.1",
