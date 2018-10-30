@@ -67,7 +67,7 @@
     "@types/bcrypt": "^2.0.0",
     "@types/body-parser": "1.16.8",
     "@types/chai": "4.1.2",
-    "@types/chai-http": "3.0.4",
+    "@types/chai-http": "3.0.5",
     "@types/express": "4.11.1",
     "@types/markdown-it": "0.0.4",
     "@types/jsonwebtoken": "^7.2.8",
