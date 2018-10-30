@@ -38,7 +38,7 @@
     "archiver": "^2.1.1",
     "bcrypt": "^3.0.0",
     "body-parser": "^1.18.2",
-    "express": "^4.16.3",
+    "express": "^4.16.4",
     "fast-csv": "^2.4.1",
     "html-pdf": "^2.2.0",
     "jsonwebtoken": "^8.2.1",
