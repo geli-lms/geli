@@ -110,7 +110,7 @@ export class AuthController {
     const newUser = new User(user);
     const savedUser = await newUser.save();
     // User can now match a whitelist.
-    await this.addWhitelistetUserToCourses(savedUser);
+    await this.addWhitelistedUserToCourses(savedUser);
     try {
       emailService.sendActivation(savedUser);
     } catch (err) {
@@ -293,20 +293,19 @@ export class AuthController {
   }
 
   /**
-   * Add new user to all whitelistet courses in example after registration.
+   * Add new user to all whitelisted courses in example after registration.
    * @param {IUser} user
    * @returns {Promise<void>}
    */
-  private async addWhitelistetUserToCourses(user: IUser) {
+  private async addWhitelistedUserToCourses(user: IUser) {
     const courses = await Course.find(
       {enrollType: 'whitelist'}).populate('whitelist');
 
     await Promise.all(
       courses.map(async (course) => {
-        if (course.students.findIndex(u => user._id === u._id < 0)
-          && course.whitelist.find(w =>
-            w.uid === user.uid)
-        ) {
+        const userUidIsRegisteredInWhitelist = course.whitelist.findIndex(w => w.uid === user.uid) >= 0;
+        const userIsntAlreadyStudentOfCourse = course.students.findIndex(u => u._id === user._id) < 0;
+        if (userUidIsRegisteredInWhitelist && userIsntAlreadyStudentOfCourse) {
           course.students.push(user);
           await Course.update({_id: course._id}, course);
         }
