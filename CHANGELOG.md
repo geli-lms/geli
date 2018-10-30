@@ -11,6 +11,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 -->
 
 ## [Unreleased]
+### Changed
+- Minor `ConfigController` bugs and refactoring-flaws. [#899](https://github.com/geli-lms/geli/issues/899)
+### Fixed
+- Deprecated Messages.count replace with Message.countDocuments [#925](https://github.com/geli-lms/geli/issues/925)
+
 ## [[0.8.0](https://github.com/geli-lms/geli/releases/tag/v0.8.0)] - 2018-10-29 - WS 18/19 Bugfix & Tweak-Release
 ### Added
 - Cookie information banner. [#565](https://github.com/geli-lms/geli/pull/565)
@@ -101,7 +106,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - `AuthController` `addWhitelistedUserToCourses` broken condition & typos. [#895](https://github.com/geli-lms/geli/issues/895)
 - `ChatRoomController` internal data leak. [#897](https://github.com/geli-lms/geli/issues/897)
 - Depcreated warning on startup. [#920](https://github.com/geli-lms/geli/pull/920)
-- Replaced deprecated Messages.count with Message.countDocuments [#925](https://github.com/geli-lms/geli/issues/925)
 
 ### Security
 - Secured the static `'uploads'` route by introducing a special `'mediaToken'` with new JWT strategy & middleware. [#729](https://github.com/geli-lms/geli/issues/729)
