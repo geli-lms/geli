@@ -71,7 +71,7 @@
     "@types/express": "4.11.1",
     "@types/markdown-it": "0.0.4",
     "@types/jsonwebtoken": "^7.2.8",
-    "@types/mocha": "^5.2.4",
+    "@types/mocha": "^5.2.5",
     "@types/mongoose": "^5.2.20",
     "@types/morgan": "1.7.35",
     "@types/nodemailer": "^4.6.5",
