@@ -82,7 +82,7 @@
     "@types/validator": "^9.4.1",
     "@types/winston": "^2.3.9",
     "chai": "4.1.2",
-    "chai-http": "^4.0.0",
+    "chai-http": "^4.2.0",
     "coveralls": "^3.0.2",
     "gulp": "^4.0.0",
     "gulp-apidoc": "^0.2.7",
