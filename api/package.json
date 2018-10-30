@@ -69,7 +69,7 @@
     "@types/chai": "4.1.2",
     "@types/chai-http": "3.0.5",
     "@types/express": "4.11.1",
-    "@types/markdown-it": "0.0.4",
+    "@types/markdown-it": "0.0.6",
     "@types/jsonwebtoken": "^7.2.8",
     "@types/mocha": "^5.2.4",
     "@types/mongoose": "^5.2.20",
