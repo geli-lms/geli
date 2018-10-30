@@ -33,7 +33,7 @@
   },
   "dependencies": {
     "@types/socket.io": "^1.4.33",
-    "@types/sharp": "^0.17.9",
+    "@types/sharp": "^0.21.0",
     "app-root-path": "^2.1.0",
     "archiver": "^2.1.1",
     "bcrypt": "^3.0.0",
