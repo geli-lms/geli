@@ -46,3 +46,12 @@
 .mat-card-title h2 {
   margin-top: 0;
 }
+
+.mat-card-title a {
+  text-decoration: none;
+  color: inherit;
+}
+
+a .mat-card-image:first-child{
+  margin-top: inherit;
+}

@@ -1,31 +1,24 @@
 import {
-  Authorized,
-  Body,
-  Get, InternalServerError,
   JsonController,
-  Param,
-  Put, UnauthorizedError,
-  UseBefore
+  UseBefore, Authorized,
+  Param, BodyParam,
+  Get, Put,
+  UnauthorizedError
 } from 'routing-controllers';
 import {Config} from '../models/Config';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 
-const publicConfigs = [
-  new RegExp('legalnotice|infoBox|privacy'),
-  new RegExp('downloadMaxFileSize')
-];
-
-function publicConfig(id: string) {
-  for (const item of publicConfigs) {
-    if (id.match(item)) {
-      return true;
-    }
-  }
-  return false;
+function isPublicConfig(name: string) {
+  return /^legalnotice$|^infoBox$|^privacy$|^downloadMaxFileSize$/.test(name);
 }
 
 @JsonController('/config')
 export class ConfigController {
+
+  private async findConfig(name: string) {
+    const config = await Config.findOne({name});
+    return config ? config.toObject() : {name, value: ''};
+  }
 
   /**
    * @api {get} /api/config/public/:id Request public config
@@ -38,31 +31,21 @@ export class ConfigController {
    *
    * @apiSuccessExample {json} Success-Response:
    *     {
-   *         "name":"legalnotice",
-   *         "updatedAt": "2018-03-20T21:04:41.696Z",
-   *         "value":"This will show the legalnotice.",
-   *         "__v": 0,
-   *         "createdAt": "2018-03-20T21:04:41.696Z"
+   *         "name": "legalnotice",
+   *         "value": "This will show the legalnotice.",
+   *         "updatedAt": "2017-11-08T22:00:11.693Z",
+   *         "createdAt": "2017-11-08T22:00:11.693Z",
+   *         "__v": 0
    *     }
    *
-   * @apiError InternalServerError
    * @apiError UnauthorizedError
    */
   @Get('/public/:id')
-  async getPublicConfig(@Param('id') name: string) {
-    if (publicConfig(name)) {
-      try {
-        const configV = await Config.findOne({name: name});
-        if (!configV) {
-          return {name: name, value: ''};
-        }
-        return configV.toObject();
-      } catch (error) {
-        throw new InternalServerError('');
-      }
-    } else {
-      throw new UnauthorizedError('');
+  getPublicConfig(@Param('id') name: string) {
+    if (!isPublicConfig(name)) {
+      throw new UnauthorizedError();
     }
+    return this.findConfig(name);
   }
 
   /**
@@ -72,51 +55,24 @@ export class ConfigController {
    * @apiPermission admin
    *
    * @apiParam {String} id Config name (e.g. legalnotice).
-   * @apiParam {Object} data New data.
+   * @apiParam {Object} data New data (with single 'data' string property).
    *
-   * @apiSuccess {Config} config Updated config.
+   * @apiSuccess {Object} result Empty object.
    *
    * @apiSuccessExample {json} Success-Response:
-   *     {
-   *         "$__": {
-   *             "strictMode": true,
-   *             "selected": {},
-   *             "getters": {},
-   *             "_id": {...},
-   *             "wasPopulated": false,
-   *             "activePaths": {...},
-   *             "pathsToScopes": {},
-   *             "emitter": {...},
-   *             "$options": true
-   *         },
-   *         "isNew": false,
-   *         "_doc": {
-   *             "createdAt": "2018-03-20T21:04:41.696Z",
-   *             "__v": 0,
-   *             "value": "This will show the legalnotice.",
-   *             "updatedAt": "2018-03-20T21:04:41.696Z",
-   *             "name": "legalnotice",
-   *             "_id": {...}
-   *         },
-   *         "$init": true
-   *     }
+   *     {}
    *
-   * @apiError InternalServerError something went wrong
    */
   @UseBefore(passportJwtMiddleware)
   @Authorized(['admin'])
   @Put('/:id')
-  async setImprint(@Param('id') name: string, @Body() data: any) {
-    const conditions: any = {name: name};
-    try {
-      return Config.findOneAndUpdate(
-        conditions,
-        {name: name, value: data.data},
-        {'upsert': true, 'new': true}
-      );
-    } catch (error) {
-      throw new InternalServerError('something went wrong');
-    }
+  async putConfig(@Param('id') name: string, @BodyParam('data') value: string) {
+    await Config.findOneAndUpdate(
+      {name},
+      {name, value},
+      {'upsert': true, 'new': true}
+    );
+    return {};
   }
 
   /**
@@ -131,30 +87,18 @@ export class ConfigController {
    *
    * @apiSuccessExample {json} Success-Response:
    *     {
-   *         "name":"legalnotice",
-   *         "updatedAt": "2018-03-20T21:04:41.696Z",
-   *         "value":"This will show the legalnotice.",
-   *         "__v": 0,
-   *         "createdAt": "2018-03-20T21:04:41.696Z"
+   *         "name": "legalnotice",
+   *         "value": "This will show the legalnotice.",
+   *         "updatedAt": "2017-11-08T22:00:11.693Z",
+   *         "createdAt": "2017-11-08T22:00:11.693Z",
+   *         "__v": 0
    *     }
    *
-   * @apiError InternalServerError
    */
   @UseBefore(passportJwtMiddleware)
   @Authorized(['admin'])
   @Get('/:id')
-  async getConfig(@Param('id') name: string) {
-    try {
-      const configV = await Config.findOne({name: name});
-      if (!configV) {
-        return {name: name, value: ''};
-      }
-      return configV.toObject();
-    } catch (error) {
-      throw new InternalServerError('');
-    }
+  getConfig(@Param('id') name: string) {
+    return this.findConfig(name);
   }
 }
-
-
-
