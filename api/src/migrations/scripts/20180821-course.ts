@@ -2,7 +2,7 @@
 import * as mongoose from 'mongoose';
 import {Course, ICourseModel} from '../../models/Course';
 import {ChatRoom, IChatRoomModel} from '../../models/ChatRoom';
-import {ObjectID} from 'bson';
+import {ObjectId} from 'bson';
 
 
 class CourseV2Migration {
@@ -22,9 +22,9 @@ class CourseV2Migration {
           }
         });
 
-        courseObj.chatRooms = [newChatRoom];
+        courseObj.chatRooms = [newChatRoom._id];
 
-        courseObj._id = new ObjectID(courseObj._id);
+        courseObj._id = new ObjectId(courseObj._id);
 
         return await mongoose.connection.collection('courses')
           .findOneAndReplace({'_id': courseObj._id}, courseObj);
