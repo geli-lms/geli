@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Minor `ConfigController` bugs and refactoring-flaws. [#899](https://github.com/geli-lms/geli/issues/899)
 
 ### Removed
+- Remove `@types/winston`. [#945](https://github.com/geli-lms/geli/pull/945)
 
 ### Fixed
 - Deprecated Messages.count replace with Message.countDocuments [#925](https://github.com/geli-lms/geli/issues/925)
