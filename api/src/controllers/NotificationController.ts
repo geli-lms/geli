@@ -92,9 +92,9 @@ export class NotificationController {
   }
 
   async createNotification(user: IUser, text: string, changedCourse?: ICourse, changedLecture?: ILecture, changedUnit?: IUnit) {
-    /*if (!changedCourse.active || !changedUnit.visible) {
+    if (!changedCourse.active || !changedUnit.visible) {
       return;
-    }*/
+    }
     const notification = new Notification();
     notification.user = user;
     notification.text = text;
