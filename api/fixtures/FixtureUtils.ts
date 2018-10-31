@@ -172,7 +172,7 @@ export class FixtureUtils {
   }
 
   public static async getUserCount(): Promise<number> {
-    return User.count({});
+    return User.countDocuments({});
   }
 
   public static async getCourses(): Promise<ICourse[]> {
