@@ -12,6 +12,26 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 ### Added
+- My courses: Make title or teaser image clickable [#904](https://github.com/geli-lms/geli/issues/904)
+- EU-DSGVO: Export Chat User Data [#862](https://github.com/geli-lms/geli/issues/862)
+
+### Changed
+- Minor `ConfigController` bugs and refactoring-flaws. [#899](https://github.com/geli-lms/geli/issues/899)
+
+### Removed
+
+### Fixed
+- Deprecated Messages.count replace with Message.countDocuments [#925](https://github.com/geli-lms/geli/issues/925)
+- Remove deprecation warnings / updated sharp + Deprecated User.count replace with User.countDocuments [#934](https://github.com/geli-lms/geli/issues/934) 
+
+### Security
+
+## [[0.8.1](https://github.com/geli-lms/geli/releases/tag/v0.8.1)] - 2018-10-31 - WS 18/19 Hotfix-Release
+### Fixed
+- People can enroll in courses again. [#942](https://github.com/geli-lms/geli/pull/942)
+
+## [[0.8.0](https://github.com/geli-lms/geli/releases/tag/v0.8.0)] - 2018-10-29 - WS 18/19 Bugfix & Tweak-Release
+### Added
 - Cookie information banner. [#565](https://github.com/geli-lms/geli/pull/565)
 - Course progress can now be exported as a CSV-file. [#766](https://github.com/geli-lms/geli/pull/766)
 - More EN/DE translations. [#753](https://github.com/geli-lms/geli/issues/753)
@@ -23,7 +43,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Unit-specific comments. [#761](https://github.com/geli-lms/geli/issues/761)
 - Simple E2E test for login. [#795](https://github.com/geli-lms/geli/pull/795)
 - Checkboxes for accepting our terms of use and privacy declarations while registering. [#778](https://github.com/geli-lms/geli/issues/778)
-- PDF course content download functionality. [#720](https://github.com/geli-lms/geli/pull/720)
+- PDF course content download functionality. [#720](https://github.com/geli-lms/geli/pull/720), [#913](https://github.com/geli-lms/geli/issues/913), [#923](https://github.com/geli-lms/geli/pull/923)
 - User data deletion functionality for EU-GDPR compliance. [#775](https://github.com/geli-lms/geli/issues/775)
 - Personal data export functionality for EU-GDPR compliance. [#805](https://github.com/geli-lms/geli/issues/805)
 - Guided dialog for adding a whitelist. [#727](https://github.com/geli-lms/geli/issues/727) [#509](https://github.com/geli-lms/geli/issues/509)
@@ -40,7 +60,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Sentry reporting for missing translations. [#858](https://github.com/geli-lms/geli/issues/858)
 - Migration for `visible` field. [#890](https://github.com/geli-lms/geli/pull/890)
 - Migration for `fileUnitType` field. [#907](https://github.com/geli-lms/geli/pull/907)
-- Fixed error on clicking on notification. [#916](https://github.com/geli-lms/geli/issues/916)
 
 ### Changed
 - Minor fixes and adaptations and merge-failure fixes. [#785](https://github.com/geli-lms/geli/issues/785)
@@ -62,6 +81,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Update `README.md` with latest information. [#845](https://github.com/geli-lms/geli/pull/845)
 - Exit build when no change to `CHANGELOG.md`. [#880](https://github.com/geli-lms/geli/pull/880)
 - Use deploy token to push geli-docs. [#851](https://github.com/geli-lms/geli/issues/851), [#900](https://github.com/geli-lms/geli/pull/900), [#902](https://github.com/geli-lms/geli/pull/902)
+- Adjust `CHANGELOG.md` for next release. [#879](https://github.com/geli-lms/geli/pull/879), [#928](https://github.com/geli-lms/geli/pull/928)
+- Exclude pull requests from dependabot from changelog check. [#854](https://github.com/geli-lms/geli/pull/854)
 
 ### Removed
 - `isCourseTeacherOrAdmin` and `isMemberOfCourse` from `UserService`. [#731](https://github.com/geli-lms/geli/issues/731)
@@ -97,6 +118,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Migrations for adding chatrooms to course and unit. [#888](https://github.com/geli-lms/geli/issues/888), [#903](https://github.com/geli-lms/geli/pull/903), [#905](https://github.com/geli-lms/geli/pull/905)
 - `AuthController` `addWhitelistedUserToCourses` broken condition & typos. [#895](https://github.com/geli-lms/geli/issues/895)
 - `ChatRoomController` internal data leak. [#897](https://github.com/geli-lms/geli/issues/897)
+- Error on clicking on notification. [#916](https://github.com/geli-lms/geli/issues/916)
 - Closed Progress leak of invisible units and courses [#735](https://github.com/geli-lms/geli/issues/735) 
 - Depcreated warning on startup. [#920](https://github.com/geli-lms/geli/pull/920)
 
