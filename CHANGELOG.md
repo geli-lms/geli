@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
 - Minor `ConfigController` bugs and refactoring-flaws. [#899](https://github.com/geli-lms/geli/issues/899)
+- Don't pin `@types/express` to a specific version. [#947](https://github.com/geli-lms/geli/pull/947)
 
 ### Removed
 - Remove `@types/winston`. [#945](https://github.com/geli-lms/geli/pull/945)
