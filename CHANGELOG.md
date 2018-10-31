@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 -->
 
 ## [Unreleased]
+## [[0.8.1](https://github.com/geli-lms/geli/releases/tag/v0.8.1)] - 2018-10-31 - WS 18/19 Hotfix-Release
+### Fixed
+- People can enroll in courses again. [#942](https://github.com/geli-lms/geli/pull/942)
+
 ## [[0.8.0](https://github.com/geli-lms/geli/releases/tag/v0.8.0)] - 2018-10-29 - WS 18/19 Bugfix & Tweak-Release
 ### Added
 - Cookie information banner. [#565](https://github.com/geli-lms/geli/pull/565)
