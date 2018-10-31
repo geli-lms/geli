@@ -42,7 +42,7 @@
     "fast-csv": "^2.4.1",
     "html-pdf": "^2.2.0",
     "jsonwebtoken": "^8.2.1",
-    "markdown-it": "^8.4.1",
+    "markdown-it": "^8.4.2",
     "migrate-mongoose": "^3.2.2",
     "moment": "^2.22.1",
     "mongoose": "^5.2.3",
