@@ -25,6 +25,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Remove deprecation warnings / updated sharp + Deprecated User.count replace with User.countDocuments [#934](https://github.com/geli-lms/geli/issues/934) 
 
 ### Security
+- Progress leak of invisible units and courses [#735](https://github.com/geli-lms/geli/issues/735)
 
 ## [[0.8.1](https://github.com/geli-lms/geli/releases/tag/v0.8.1)] - 2018-10-31 - WS 18/19 Hotfix-Release
 ### Fixed
