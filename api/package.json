@@ -80,7 +80,6 @@
     "@types/passport-local": "^1.0.33",
     "@types/raven": "^2.5.1",
     "@types/validator": "^9.4.1",
-    "@types/winston": "^2.4.4",
     "chai": "4.1.2",
     "chai-http": "^4.2.0",
     "coveralls": "^3.0.2",
