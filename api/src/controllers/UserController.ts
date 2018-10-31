@@ -200,7 +200,7 @@ export class UserController {
       conditions.$or.push({'profile.firstName': {$regex: re}});
       conditions.$or.push({'profile.lastName': {$regex: re}});
     });
-    const amountUsers = await User.count({}).where({role: role});
+    const amountUsers = await User.countDocuments({role: role});
     const users = await User.find(conditions, {
       'score': {$meta: 'textScore'}
     })
@@ -342,9 +342,7 @@ export class UserController {
 
     const resizedImageBuffer =
         await sharp(file.path)
-            .resize(config.maxProfileImageWidth, config.maxProfileImageHeight)
-            .withoutEnlargement(true)
-            .max()
+            .resize(config.maxProfileImageWidth, config.maxProfileImageHeight, {fit: 'inside', withoutEnlargement: true})
             .toBuffer({resolveWithObject: true});
 
     fs.writeFileSync(file.path, resizedImageBuffer.data);

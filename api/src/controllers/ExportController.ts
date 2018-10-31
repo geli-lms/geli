@@ -9,6 +9,7 @@ import {Notification} from '../models/Notification';
 import {NotificationSettings} from '../models/NotificationSettings';
 import {WhitelistUser} from '../models/WhitelistUser';
 import {Progress} from '../models/progress/Progress';
+import {Message} from '../models/Message';
 
 @JsonController('/export')
 @UseBefore(passportJwtMiddleware)
@@ -153,7 +154,8 @@ export class ExportController {
       notificationSettings: await NotificationSettings.exportPersonalData(user),
       whitelists: await WhitelistUser.exportPersonalData(user),
       courses: await Course.exportPersonalData(user),
-      progress: await Progress.exportPersonalUserData(user)
+      progress: await Progress.exportPersonalUserData(user),
+      messages: await Message.exportPersonalData(user)
     };
   }
 }

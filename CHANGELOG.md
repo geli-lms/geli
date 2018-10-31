@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 ### Added
 - My courses: Make title or teaser image clickable [#904](https://github.com/geli-lms/geli/issues/904)
+- EU-DSGVO: Export Chat User Data [#862](https://github.com/geli-lms/geli/issues/862)
 
 ### Changed
 - Minor `ConfigController` bugs and refactoring-flaws. [#899](https://github.com/geli-lms/geli/issues/899)
@@ -23,9 +24,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed
 - Deprecated Messages.count replace with Message.countDocuments [#925](https://github.com/geli-lms/geli/issues/925)
+- Remove deprecation warnings / updated sharp + Deprecated User.count replace with User.countDocuments [#934](https://github.com/geli-lms/geli/issues/934) 
 
 ### Security
+- Progress leak of invisible units and courses [#735](https://github.com/geli-lms/geli/issues/735)
 - Reduced XSS attack surface by switching from `localStorage` tokens to `HttpOnly`, strict `SameSite` cookie-based JWT authentication. [#840](https://github.com/geli-lms/geli/issues/840)
+
+## [[0.8.1](https://github.com/geli-lms/geli/releases/tag/v0.8.1)] - 2018-10-31 - WS 18/19 Hotfix-Release
+### Fixed
+- People can enroll in courses again. [#942](https://github.com/geli-lms/geli/pull/942)
 
 ## [[0.8.0](https://github.com/geli-lms/geli/releases/tag/v0.8.0)] - 2018-10-29 - WS 18/19 Bugfix & Tweak-Release
 ### Added

@@ -79,7 +79,7 @@ export class ReportController {
     this.checkAccess(course, currentUser);
 
     const courseObjUnfiltered: ICourse = <ICourse>course.toObject();
-    const courseObj = this.filterUnits(courseObjUnfiltered).courseObj;
+    const courseObj = this.countUnitsAndRemoveEmptyLectures(courseObjUnfiltered, currentUser).courseObj;
     courseObj.lectures.map((lecture: ILecture) => {
       lecture.units.map((unit) => {
         const progressStats = this.calculateProgress(unitProgressData, courseObj.students.length, unit);
@@ -567,25 +567,26 @@ export class ReportController {
         }
       })
       .exec();
-    const progressPromise = Progress.aggregate([
-      {$match: { user: new ObjectId(id) }},
-      {$group: { _id: '$course', progresses: { $push: '$$ROOT' }}}
-    ]).exec();
 
-    const [courses, userProgressData] = await Promise.all([coursesPromise, progressPromise]);
+    const courses = await coursesPromise;
     const courseObjects: any = courses.map((course: ICourseModel) => <ICourse>course.toObject());
-    const courseObjectsWithProgress = courseObjects
-      .map(this.filterUnits)
-      .map(({courseObj, progressableUnitCount}: any) => {
-        const progressStats = this.calculateProgress(userProgressData, progressableUnitCount, courseObj);
+    const aggregatedProgressPromise = courseObjects
+      .map((courseObj: ICourse) => { return this.countUnitsAndRemoveEmptyLectures(courseObj, currentUser); })
+      .map(async ({courseObj, progressableUnitCount, invisibleUnits}: any) => {
+        const userProgressData = await Progress.aggregate([
+          {$match: { user: new ObjectId(id), unit: { $nin: invisibleUnits } }},
+          {$group: { _id: '$course', progresses: { $push: '$$ROOT' }}}
+        ]).exec();
+        const progressStats = await this.calculateProgress(userProgressData, progressableUnitCount, courseObj);
         courseObj.progressData = [
           { name: 'not tried', value: progressStats.nothing },
           { name: 'tried', value: progressStats.tried },
           { name: 'solved', value: progressStats.done }
         ];
-        return courseObj;
-      })
-      .filter((courseObj: any) => {
+        return await courseObj;
+      });
+      const courseObjectsBeforeFilter = await Promise.all(aggregatedProgressPromise);
+      const courseObjectsWithProgress = await courseObjectsBeforeFilter.filter((courseObj: any) => {
         return courseObj.lectures.length > 0;
       });
 
@@ -605,17 +606,26 @@ export class ReportController {
     }
   }
 
-  private filterUnits(courseObj: ICourse) {
+  private countUnitsAndRemoveEmptyLectures(courseObj: ICourse, currentUser: IUser) {
     let progressableUnitCount = 0;
+    const invisibleUnits: ObjectId[] = [];
     courseObj.lectures = courseObj.lectures.filter((lecture: ILecture) => {
       lecture.units = lecture.units.filter((unit) => {
-        return unit.progressable;
+        if (unit.visible === false && currentUser.role === 'student') {
+          invisibleUnits.push(new ObjectId(unit._id));
+        }
+
+        if (currentUser.role === 'student') {
+          return unit.progressable && unit.visible;
+        } else {
+          return unit.progressable;
+        }
       });
       progressableUnitCount += lecture.units.length;
       return lecture.units.length > 0;
     });
 
-    return {courseObj, progressableUnitCount};
+    return {courseObj, progressableUnitCount, invisibleUnits};
   }
 
   private calculateProgress(progressData: any, totalCount: number, doc: any) {

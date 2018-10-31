@@ -45,32 +45,27 @@ export default class ResponsiveImageService {
       const retinaFileNameToSave = filenameWithoutExtension + '_' + breakpoint.screenSize + '@2x.' + extension;
 
 
-      let resizeOptions = sharp(originalFile.path)
-        .withoutEnlargement(true);
-      let retinaResizeOptions = sharp(originalFile.path)
-        .withoutEnlargement(true);
+      let resizeOptions = sharp(originalFile.path);
+      let retinaResizeOptions = sharp(originalFile.path);
 
       if (breakpoint.imageSize.width && breakpoint.imageSize.height) {
         resizeOptions =
-          resizeOptions.resize(breakpoint.imageSize.width, breakpoint.imageSize.height)
-          .crop(sharp.gravity.center);
+          resizeOptions.resize(breakpoint.imageSize.width, breakpoint.imageSize.height,
+            {fit: 'cover', withoutEnlargement: true, position: sharp.gravity.center});
 
         retinaResizeOptions =
-          retinaResizeOptions.resize(breakpoint.imageSize.width * 2, breakpoint.imageSize.height * 2)
-          .crop(sharp.gravity.center);
+          retinaResizeOptions
+            .resize(breakpoint.imageSize.width * 2, breakpoint.imageSize.height * 2,
+              {fit: 'cover', withoutEnlargement: true, position: sharp.gravity.center});
 
       } else if (!breakpoint.imageSize.width && breakpoint.imageSize.height) {
-        resizeOptions = resizeOptions.resize(null, breakpoint.imageSize.height)
-          .max();
+        resizeOptions = resizeOptions.resize(null, breakpoint.imageSize.height, {fit: 'inside', withoutEnlargement: true});
 
-        retinaResizeOptions = retinaResizeOptions.resize(null, breakpoint.imageSize.height * 2)
-          .max();
+        retinaResizeOptions = retinaResizeOptions.resize(null, breakpoint.imageSize.height * 2, {fit: 'inside', withoutEnlargement: true});
+
       } else {
-        resizeOptions = resizeOptions.resize(breakpoint.imageSize.width)
-          .max();
-
-        retinaResizeOptions = retinaResizeOptions.resize(breakpoint.imageSize.width * 2)
-          .max();
+        resizeOptions = resizeOptions.resize(breakpoint.imageSize.width, null, {fit: 'inside', withoutEnlargement: true});
+        retinaResizeOptions = retinaResizeOptions.resize(breakpoint.imageSize.width * 2, null, {fit: 'inside', withoutEnlargement: true});
       }
 
       await resizeOptions
