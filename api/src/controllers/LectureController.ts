@@ -127,7 +127,7 @@ export class LectureController {
   @Authorized(['teacher', 'admin'])
   @Delete('/:id')
   async deleteLecture(@Param('id') id: string, @CurrentUser() currentUser: IUser) {
-    const course = await Course.findOne({ lectures: id});
+    const course = await Course.findOne({lectures: id});
     if (!course) {
       throw new NotFoundError();
     }
