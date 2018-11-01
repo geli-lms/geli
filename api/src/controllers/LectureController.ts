@@ -112,6 +112,8 @@ export class LectureController {
    * @api {delete} /api/lecture/:id Delete lecture
    * @apiName DeleteLecture
    * @apiGroup Lecture
+   * @apiPermission teacher
+   * @apiPermission admin
    *
    * @apiParam {String} id Lecture ID.
    *
@@ -125,15 +127,17 @@ export class LectureController {
   @Authorized(['teacher', 'admin'])
   @Delete('/:id')
   async deleteLecture(@Param('id') id: string, @CurrentUser() currentUser: IUser) {
-    const course = await Course.findOne({where: {lectures: id}});
+    const course = await Course.findOne({ lectures: id});
     if (!course) {
       throw new NotFoundError();
     }
-    if (!course.checkPrivileges(currentUser).userCanEditCourse()) {
+    if (!course.checkPrivileges(currentUser).userCanEditCourse) {
       throw new ForbiddenError();
     }
-    const success = await course.update({}, {$pull: {lectures: id}});
+    await course.update({}, {$pull: {lectures: id}});
 
-    return Lecture.findByIdAndRemove(id) && success;
+    await Lecture.findByIdAndRemove(id);
+
+    return {result: true};
   }
 }
