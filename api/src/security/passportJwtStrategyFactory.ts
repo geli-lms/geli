@@ -18,7 +18,7 @@ function passportJwtStrategyFactory({
 }: PassportJwtStrategyFactoryOptions = {}) {
   const jwtFromRequestLayers: JwtFromRequestFunction[] = [];
   if (extractJwtFromCookie) {
-    // ATM this is the only usage of the 'cookie' package, we could write specialized code alternatively.
+    // ATM this and the chat server are the only users of the 'cookie' package, we could write specialized code alternatively.
     jwtFromRequestLayers.push((req) =>
       req &&
       typeof req.headers.cookie === 'string' &&
