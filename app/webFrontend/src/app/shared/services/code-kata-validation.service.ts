@@ -5,8 +5,6 @@ import { Injectable } from '@angular/core';
 })
 export class CodeKataValidationService {
 
-  constructor() { }
-
   validate(codeToTest: string) {
     let result = false;
     let logs = '';
