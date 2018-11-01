@@ -1,17 +1,6 @@
 import {Request} from 'express';
-import {
-  Authorized,
-  Body, CurrentUser,
-  Delete, ForbiddenError,
-  Get,
-  JsonController,
-  NotFoundError,
-  Param,
-  Post,
-  Put,
-  Req,
-  UseBefore
-} from 'routing-controllers';
+import { Authorized, Body, CurrentUser, Delete, ForbiddenError, Get,
+  JsonController, NotFoundError, Param, Post, Put, Req, UseBefore } from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 
 import {Lecture} from '../models/Lecture';
