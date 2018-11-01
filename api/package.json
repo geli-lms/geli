@@ -66,7 +66,7 @@
   },
   "devDependencies": {
     "@types/bcrypt": "^3.0.0",
-    "@types/body-parser": "1.16.8",
+    "@types/body-parser": "1.17.0",
     "@types/chai": "4.1.7",
     "@types/chai-http": "3.0.5",
     "@types/cookie": "^0.3.1",
