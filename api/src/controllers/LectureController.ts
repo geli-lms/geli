@@ -120,9 +120,7 @@ export class LectureController {
    * @apiSuccess {Boolean} result Confirmation of deletion.
    *
    * @apiSuccessExample {json} Success-Response:
-   *     {
-   *         "result": true
-   *     }
+   *     {}
    */
   @Authorized(['teacher', 'admin'])
   @Delete('/:id')
@@ -138,6 +136,6 @@ export class LectureController {
 
     await Lecture.findByIdAndRemove(id);
 
-    return {result: true};
+    return {};
   }
 }
