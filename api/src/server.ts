@@ -13,7 +13,7 @@ import passportJwtMiddleware from './security/passportJwtMiddleware';
 import {RoleAuthorization} from './security/RoleAuthorization';
 import {CurrentUserDecorator} from './security/CurrentUserDecorator';
 import './utilities/FilterErrorHandler';
-import ChatServer from './Chatserver';
+import ChatServer from './ChatServer';
 
 if (config.sentryDsn) {
   Raven.config(config.sentryDsn, {
