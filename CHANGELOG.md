@@ -27,6 +27,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Fixed
 - Deprecated Messages.count replace with Message.countDocuments [#925](https://github.com/geli-lms/geli/issues/925)
 - Remove deprecation warnings / updated sharp + Deprecated User.count replace with User.countDocuments [#934](https://github.com/geli-lms/geli/issues/934) 
+- Redirect to initial URL after login [#318](https://github.com/geli-lms/geli/issues/318)
+- Fixed error on clicking on notification. [#916](https://github.com/geli-lms/geli/issues/916)
+
 
 ### Security
 - Progress leak of invisible units and courses [#735](https://github.com/geli-lms/geli/issues/735)
