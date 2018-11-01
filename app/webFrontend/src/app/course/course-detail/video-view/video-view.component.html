@@ -32,7 +32,7 @@
             <ng-container *ngFor="let fileUnit of unit.files">
               <ng-container *ngIf="unit.fileUnitType == 'video'">
                 <mat-list-item>
-                  <a href="{{'/api/uploads/' + fileUnit.link | jwt}}" download="{{fileUnit.name}}">
+                  <a href="{{'/api/uploads/' + fileUnit.link}}" download="{{fileUnit.name}}">
                     <span>{{fileUnit.name}}</span>
                   </a>
                 </mat-list-item>

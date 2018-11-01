@@ -133,11 +133,5 @@ export const errorCodes = {
       code: 'emptyQuery',
       text: 'Query was empty.'
     }
-  },
-  misc: {
-    mediaTokenInsufficient: {
-      code: 'mediaTokenInsufficient',
-      text: 'Can\'t use media token for this request.'
-    }
   }
 };

@@ -61,7 +61,7 @@ describe('Import', async () => {
         let unitJson: IUnit;
         const importResult = await chai.request(app)
           .post(`${BASE_URL}/unit/${course._id}/${lecture._id}`)
-          .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
+          .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
           .attach('file', fs.readFileSync(tmpUnitFile.path), unit.name)
           .catch((err) => err.response);
         importResult.status.should.be.equal(200,
@@ -145,7 +145,7 @@ describe('Import', async () => {
         let lectureJson: ILecture;
         const importResult = await chai.request(app)
           .post(`${BASE_URL}/lecture/${course._id}`)
-          .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
+          .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
           .attach('file', fs.readFileSync(tmpLectureFile.path), lecture.name)
           .catch((err) => err.response);
         importResult.status.should.be.equal(200,
@@ -180,7 +180,7 @@ describe('Import', async () => {
         let courseJson: ICourse;
         const importResult = await chai.request(app)
           .post(`${BASE_URL}/course`)
-          .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
+          .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
           .attach('file', courseFile, courseFilePath)
           .catch((err) => err.response);
         importResult.status.should.be.equal(200,

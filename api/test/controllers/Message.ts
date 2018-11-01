@@ -33,7 +33,7 @@ describe('Message', async () => {
 
       const result = await chai.request(app)
         .get(BASE_URL)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(student)}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(student)}`)
         .catch((err) => err.response);
 
       expect(result).to.have.status(400);
@@ -49,7 +49,7 @@ describe('Message', async () => {
       const result = await chai.request(app)
         .get(BASE_URL)
         .query({room: roomId})
-        .set('Authorization', `JWT ${JwtUtils.generateToken(student)}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(student)}`)
         .catch((err) => err.response);
 
       expect(result).to.have.status(200);
@@ -64,7 +64,7 @@ describe('Message', async () => {
 
       const result = await chai.request(app)
         .get(BASE_URL)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(student)}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(student)}`)
         .catch((err) => err.response);
 
       expect(result).to.have.status(400);
@@ -80,7 +80,7 @@ describe('Message', async () => {
       const result = await chai.request(app)
         .get(BASE_URL + '/count')
         .query({room: roomId})
-        .set('Authorization', `JWT ${JwtUtils.generateToken(student)}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(student)}`)
         .catch((err) => err.response);
 
       expect(result).to.have.status(200);

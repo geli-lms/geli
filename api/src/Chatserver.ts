@@ -16,7 +16,7 @@ export default class ChatServer {
     this.io = socketIo(server, {path: '/chat'});
 
     this.io.use((socket: any, next) => {
-      const token = socket.handshake.query.authToken.split(' ')[1];
+      const token = socket.handshake.headers.cookie.split(' ')[1];
       const room: any = socket.handshake.query.room;
 
       jwt.verify(token, config.secret, (err: any, decoded: any) => {

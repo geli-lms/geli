@@ -1,6 +1,6 @@
 import {Observable} from 'rxjs/Observable';
 import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {AuthenticationService} from './authentication.service';
 import {catchError} from 'rxjs/operators';
 import {throwError} from 'rxjs/index';
@@ -23,8 +23,12 @@ export class BackendService {
     return throwError(err);
   }
 
+  private get defaultHttpClientOptions () {
+    return {headers: new HttpHeaders({'Content-Type': 'application/json'})};
+  }
+
   head(serviceUrl: string): Observable<any> {
-    return this.http.head(BackendService.API_URL + serviceUrl, {headers: this.authenticationService.authHeader(),
+    return this.http.head(BackendService.API_URL + serviceUrl, {...this.defaultHttpClientOptions,
       observe: 'response', responseType: 'blob'})
       .pipe(catchError(this.handleUnauthorized));
   }
@@ -35,34 +39,33 @@ export class BackendService {
   }
 
   get(serviceUrl: string): Observable<any> {
-    return this.http.get(BackendService.API_URL + serviceUrl, {headers: this.authenticationService.authHeader()})
+    return this.http.get(BackendService.API_URL + serviceUrl, this.defaultHttpClientOptions)
       .pipe(catchError(this.handleUnauthorized));
   }
 
   getDownload(serviceUrl: string): Observable<any> {
-    return this.http.get(BackendService.API_URL + serviceUrl, {headers: this.authenticationService.authHeader(),
+    return this.http.get(BackendService.API_URL + serviceUrl, {...this.defaultHttpClientOptions,
       observe: 'response', responseType: 'blob'})
       .pipe(catchError(this.handleUnauthorized));
   }
 
-  post(serviceUrl: string, options: any): Observable<any> {
-    return this.http.post(BackendService.API_URL + serviceUrl, options, {headers: this.authenticationService.authHeader()})
+  post(serviceUrl: string, body: any): Observable<any> {
+    return this.http.post(BackendService.API_URL + serviceUrl, body, this.defaultHttpClientOptions)
       .pipe(catchError(this.handleUnauthorized));
   }
 
-  put(serviceUrl: string, options: any): Observable<any> {
-    return this.http.put(BackendService.API_URL + serviceUrl, options, {headers: this.authenticationService.authHeader()})
+  put(serviceUrl: string, body: any): Observable<any> {
+    return this.http.put(BackendService.API_URL + serviceUrl, body, this.defaultHttpClientOptions)
       .pipe(catchError(this.handleUnauthorized));
   }
 
   delete(serviceUrl: string): Observable<any> {
-    return this.http.delete(BackendService.API_URL + serviceUrl, {headers: this.authenticationService.authHeader()})
+    return this.http.delete(BackendService.API_URL + serviceUrl, this.defaultHttpClientOptions)
       .pipe(catchError(this.handleUnauthorized));
 
   }
 
   onBeforeUpload(event: any, id: string, extension: string) {
-    event.xhr.setRequestHeader('Authorization', this.authenticationService.token);
     event.xhr.setRequestHeader('uploadfilename', id + '.' + extension);
   }
 }
