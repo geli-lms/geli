@@ -2,67 +2,30 @@
 
 # Path to this file
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-# Path the script was called from
-IPWD="$(pwd)"
-# Import shared vars
-. ${DIR}/_shared-vars.sh
 
-# Functions
-function npm_package_is_installed {
-  local return_=1
-  ls node_modules | grep $1 > /dev/null 2>&1 || { local return_=0; }
-  echo "$return_"
-}
+# shellcheck source=_shared-vars.sh
+. "${DIR}/_shared-vars.sh"
 
-# Begin of code
 echo
-echo "+++ Run NLF +++"
+echo "+++ Run node license finder +++"
 echo
 
-[ ! "$TRAVIS_PULL_REQUEST" == "false" ] ; IS_PR=$?
-( [ "$TRAVIS_BRANCH" == "master" ] || [ "$TRAVIS_BRANCH" == "develop" ] ) ; IS_BRANCH=$?
-[ -n "$TRAVIS_TAG" ] ; IS_TAG=$?
+if [[ ${TRAVIS_PULL_REQUEST} != false ]]; then
+  echo -e "${YELLOW}+ Pull Request. Write dummy data.${NC}"
 
-IS_PR=$(if [ "$IS_PR" == "0" ]; then echo -n true; else echo -n false; fi)
-IS_BRANCH=$(if [ "$IS_BRANCH" == "0" ]; then echo -n true; else echo -n false; fi)
-IS_TAG=$(if [ "$IS_TAG" == "0" ]; then echo -n true; else echo -n false; fi)
+  echo '{"data":[{"name":"NO-DEP","version":"0.0.1","repository":"https://exmaple.com","license":"MIT","devDependency":false},{"name":"NO-DEP","version":"0.0.1","repository":"https://exmaple.com","license":"MIT","devDependency":true}]}' > "${DIR}/../api/nlf-licenses.json"
+  sed -i "s#// DEPENDENCY_REPLACE#new Dependency('NO-DEP', '0.0.1', 'https://example.com', 'MIT', false), new Dependency('NO-DEP', '0.0.1', 'https://example.com', 'MIT', true)#" "${DIR}/../app/webFrontend/src/app/about/licenses/dependencies.ts"
 
-echo -e "+ IS_PR     => $IS_PR\t($TRAVIS_PULL_REQUEST)"
-echo -e "+ IS_BRANCH => $IS_BRANCH\t($TRAVIS_BRANCH)"
-echo -e "+ IS_TAG    => $IS_TAG\t($TRAVIS_TAG)"
-echo
-
-if ( [ "$IS_BRANCH" == "true" ] && [ "$IS_PR" == "false" ] ) || [ "$IS_TAG" == "true" ]; then
-  echo "+ checking if nlf is installed"
-  cd ${DIR}
-  if [ $(npm_package_is_installed nlf) == 0 ]; then
-    echo -e "${RED}+ ERROR: nlf is not installed, please add nlf to the .travis/package.json${NC}"
-    exit 1
-  fi
-  cd ${IPWD}
-
-  echo "+ run node"
-  echo
-
-  cd ${DIR}
-  node license-crawler.js
-  cd ${IPWD}
-else
-  echo -e "${YELLOW}+ WARNING: Branch not whitelisted OR PullRequest${NC}";
-  echo "+ will write dummy data"
-  echo "{
-  \"data\": [
-    {\"name\":\"NO-DEP\",\"version\":\"0.0.1\",\"repository\":\"https://exmaple.com\",\"license\":\"MIT\",\"devDependency\":false},
-    {\"name\":\"NO-DEP\",\"version\":\"0.0.1\",\"repository\":\"https://exmaple.com\",\"license\":\"MIT\",\"devDependency\":true}
-  ]
-}" > api/nlf-licenses.json
-  FE_DATA="
-new Dependency('NO-DEP', '0.0.1', 'https://example.com', 'MIT', false),
-new Dependency('NO-DEP', '0.0.1', 'https://example.com', 'MIT', true)
-  "
-  FE_DATA=`echo $FE_DATA | tr '\n' "\\n"`
-  sed -i "s!// DEPENDENCY_REPLACE!$FE_DATA!" app/webFrontend/src/app/about/licenses/dependencies.ts
+  exit 0;
 fi
 
-echo
-echo "+ finished"
+if [[ ${TRAVIS_BRANCH} == "master" ]] || [[ ${TRAVIS_BRANCH} == "develop" ]] || [[ -n ${TRAVIS_TAG} ]]; then
+  cd "${DIR}" || exit 0
+
+  node license-crawler.js
+
+  exit 0
+fi
+
+echo -e "${YELLOW}+ Branch not master or develop and no tag. Nothing todo.${NC}"
+exit 0

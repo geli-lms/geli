@@ -2,15 +2,12 @@
 const fs = require('fs');
 const nlf = require('nlf');
 
-const LICENSE_FILE_NAME = 'nlf-licenses';
-const PATH_API = '../api/';
-const PATH_APP_WEB = '../app/webFrontend/';
-const PATH_APP_WEB_FILE_NAME = 'src/app/about/licenses/dependencies.ts';
-const PACKAGE_BLACKLIST = [
-  'geli-api',
-  'geli-web-frontend',
-  'rxjs-compat'
-];
+const API_PATH = '../api/';
+const API_FILE_NAME = 'nlf-licenses';
+const WEB_PATH = '../app/webFrontend/';
+const WEB_FILE_NAME = 'src/app/about/licenses/dependencies.ts';
+
+const PACKAGE_BLACKLIST = ['geli-api', 'geli-web-frontend', 'rxjs-compat'];
 const SEARCH_FOR = '// DEPENDENCY_REPLACE';
 
 console.log('\n+++ Starting license js +++\n');
@@ -18,18 +15,20 @@ console.log('\n+++ Starting license js +++\n');
 // API
 console.log('+ starting api crawl');
 nlf.find({
-  directory: PATH_API,
+  directory: API_PATH,
   production: true,
   depth: 1
 }, (err, data) => {
-  if (err) throw err;
+  if (err) {
+    throw err;
+  }
   console.log('+ api: polish json');
   let json = JSON.stringify(
     {data: polishJson(data)}
   );
 
   fs.writeFile(
-    PATH_API + LICENSE_FILE_NAME + '.json',
+    API_PATH + API_FILE_NAME + '.json',
     json,
     'utf8',
     () => console.log('+ api: wrote json')
@@ -39,7 +38,7 @@ nlf.find({
 // WEB_APP
 console.log('+ starting appWeb crawl');
 nlf.find({
-  directory: PATH_APP_WEB,
+  directory: WEB_PATH,
   production: true,
   depth: 1
 }, (err, data) => {
@@ -49,7 +48,7 @@ nlf.find({
   let out = '';
   json.forEach((value, i) => {
     if (i > 0) {
-      out += '\n      , ';
+      out += ',\n      ';
     }
 
     let sep = '\', \'';
@@ -62,19 +61,17 @@ nlf.find({
       + ')';
   });
 
-  fs.readFile(PATH_APP_WEB + PATH_APP_WEB_FILE_NAME, (err, data) => {
-    if (err) throw err;
-    data = data.toString();
-    data = data.replace(SEARCH_FOR, out);
-
-    if (process.env.TRAVIS) {
-      fs.writeFile(PATH_APP_WEB + PATH_APP_WEB_FILE_NAME, data, 'utf8',
-        () => console.log(('+ appWeb: wrote file'))
-      );
-    } else {
-      console.warn('+ appWeb: We are not on travis, will only print content:');
-      console.log(data);
+  fs.readFile(WEB_PATH + WEB_FILE_NAME, 'utf8', (err, data) => {
+    if (err) {
+      throw err;
     }
+
+    fs.writeFile(
+      WEB_PATH + WEB_FILE_NAME,
+      data.replace(SEARCH_FOR, out),
+      'utf8',
+      () => console.log(('+ appWeb: wrote file'))
+    );
   })
 });
 
