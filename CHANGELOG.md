@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Minor `ConfigController` bugs and refactoring-flaws. [#899](https://github.com/geli-lms/geli/issues/899)
 - Don't pin `@types/express` to a specific version. [#947](https://github.com/geli-lms/geli/pull/947)
 - Switched to cookie-based JWT authentication. [#840](https://github.com/geli-lms/geli/issues/840) [#968](https://github.com/geli-lms/geli/issues/968)
+- Update typescript dependancy to v3.1.5 (API) [#957](https://github.com/geli-lms/geli/pull/957), [#967](https://github.com/geli-lms/geli/pull/967)
 
 ### Removed
 - Remove `@types/winston`. [#945](https://github.com/geli-lms/geli/pull/945)
