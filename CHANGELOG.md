@@ -20,7 +20,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Don't pin `@types/express` to a specific version. [#947](https://github.com/geli-lms/geli/pull/947)
 - Switched to cookie-based JWT authentication. [#840](https://github.com/geli-lms/geli/issues/840) [#968](https://github.com/geli-lms/geli/issues/968)
 - Prepare typescript 3.1 upgrade. [#967](https://github.com/geli-lms/geli/pull/967)
-- Use npm ci instead npm install and cache $HOME/.npm instead of node_modules. []()
+- Use npm ci instead npm install and cache $HOME/.npm instead of node_modules. [#972](https://github.com/geli-lms/geli/pull/972)
 
 ### Removed
 - Remove `@types/winston`. [#945](https://github.com/geli-lms/geli/pull/945)
