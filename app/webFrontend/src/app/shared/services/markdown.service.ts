@@ -21,11 +21,18 @@ export class MarkdownService {
     this.markdown.use(MarkdownItDeflist);
     this.markdown.use(MarkdownItFootnote);
 
-    this.markdown.use(MarkdownItContainer);
+    // register warning, info, error, success as custom containers
+    this.markdown.use(MarkdownItContainer, 'warning');
+    this.markdown.use(MarkdownItContainer, 'info');
+    this.markdown.use(MarkdownItContainer, 'error');
+    this.markdown.use(MarkdownItContainer, 'success');
+
     this.markdown.use(MarkdownItMark);
+
     this.markdown.use(MarkdownItAbbr);
 
     this.overwriteCustomFootnoteRenderer();
+
     this.markdown.renderer.rules.emoji = function (token, idx) {
       return twemoji.parse(token[idx].content);
     };
@@ -35,28 +42,36 @@ export class MarkdownService {
     return this.markdown.render(text);
   }
 
+  /*
+  * Ugly workaround. Otherwise scroll to id anchors used by markdown-it-footnote will not work.
+  * Feel welcome to rewrite
+  *
+  * Original implementation: https://github.com/markdown-it/markdown-it-footnote/blob/master/index.js
+  * */
   overwriteCustomFootnoteRenderer() {
-    this.markdown.renderer.rules.footnote_ref = function (tokens, idx) {
-      var n = Number(tokens[idx].meta.id + 1).toString();
-      var id = 'fnref' + n;
-      var uri = window.location.pathname;
+    this.markdown.renderer.rules.footnote_ref = (tokens, idx, options, env, slf) => {
+      const id = slf.rules.footnote_anchor_name(tokens, idx, options, env, slf);
+      const caption = slf.rules.footnote_caption(tokens, idx, options, env, slf);
+      let refid = id;
+      const uri = window.location.pathname;
+
       if (tokens[idx].meta.subId > 0) {
-        id += ':' + tokens[idx].meta.subId;
+        refid += ':' + tokens[idx].meta.subId;
       }
-      //return '<sup class="footnote-ref"><a href="' + uri + '#fn' + n + '" id="' + id + '">[' + n + ']</a></sup>';
-      return '<sup class="footnote-ref">[' + n + ']</sup>';
+
+      return '<sup class="footnote-ref"><a href="' + uri + '#fn' + id + '" id="fnref' + refid + '">' + caption + '</a></sup>';
     };
 
-    this.markdown.renderer.rules.footnote_anchor = function (tokens, idx) {
-      var n = Number(tokens[idx].meta.id + 1).toString();
-      var id = 'fnref' + n;
-      var uri = window.location.pathname;
+    this.markdown.renderer.rules.footnote_anchor = (tokens, idx, options, env, slf) => {
+      let id = slf.rules.footnote_anchor_name(tokens, idx, options, env, slf);
+
       if (tokens[idx].meta.subId > 0) {
         id += ':' + tokens[idx].meta.subId;
       }
-      //return ' <a href="' + uri + '#' + id + '" class="footnote-backref">\u21a9</a>';
-      return '<span class="footnote-backref></span>'
-      /* ↩ */
+
+      const uri = window.location.pathname;
+      /* ↩ with escape code to prevent display as Apple Emoji on iOS */
+      return ' <a href="' + uri + '#fnref' + id + '" class="footnote-backref">\u21a9\uFE0E</a>';
     };
   }
 }
