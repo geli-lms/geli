@@ -18,7 +18,7 @@ export class CodeKataValidationService {
     } catch (e) {
       const err = e.constructor('Error in evaled Script: ' + e.message);
       err.lineNumber = e.lineNumber - err.lineNumber;
-      logs = logs + err + "\n";
+      logs = logs + err + '\n'';
     }
     return { result: result, log: logs};
   }
