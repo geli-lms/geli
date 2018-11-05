@@ -1,23 +1,30 @@
 import {ExtractJwt, JwtFromRequestFunction, Strategy as JwtStrategy, StrategyOptions, VerifiedCallback} from 'passport-jwt';
-import {UnauthorizedError} from 'routing-controllers';
 import config from '../config/main';
-import {errorCodes} from '../config/errorCodes';
 import {User} from '../models/User';
+import * as cookie from 'cookie';
 
 interface PassportJwtStrategyFactoryOptions {
   name?: String;
-  forbidMediaTokens?: Boolean;
+  extractJwtFromCookie?: Boolean;
   extractJwtFromAuthHeaderWithScheme?: Boolean;
   extractJwtFromUrlQueryParameter?: Boolean;
 }
 
 function passportJwtStrategyFactory({
   name = 'jwt',
-  forbidMediaTokens = true,
-  extractJwtFromAuthHeaderWithScheme = true,
+  extractJwtFromCookie = true,
+  extractJwtFromAuthHeaderWithScheme = false,
   extractJwtFromUrlQueryParameter = false,
 }: PassportJwtStrategyFactoryOptions = {}) {
   const jwtFromRequestLayers: JwtFromRequestFunction[] = [];
+  if (extractJwtFromCookie) {
+    // ATM this and the chat server are the only users of the 'cookie' package, we could write specialized code alternatively.
+    jwtFromRequestLayers.push((req) =>
+      req &&
+      typeof req.headers.cookie === 'string' &&
+      cookie.parse(req.headers.cookie).token
+    );
+  }
   if (extractJwtFromAuthHeaderWithScheme) {
     // Telling Passport to check authorization headers for JWT
     // TODO: Replace with bearer method to be compliant to RFC 6750
@@ -42,9 +49,6 @@ function passportJwtStrategyFactory({
     secretOrKey: config.secret  // Telling Passport where to find the secret
   };
   const verify: VerifiedCallback = async (payload, done) => {
-    if (forbidMediaTokens && payload.isMediaToken) {
-      done(new UnauthorizedError(errorCodes.misc.mediaTokenInsufficient.code), false);
-    }
     try {
       if (await User.findById(payload._id)) {
         done(null, {tokenPayload: payload});

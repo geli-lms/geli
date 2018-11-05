@@ -18,17 +18,25 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
 - Minor `ConfigController` bugs and refactoring-flaws. [#899](https://github.com/geli-lms/geli/issues/899)
 - Don't pin `@types/express` to a specific version. [#947](https://github.com/geli-lms/geli/pull/947)
+- Switched to cookie-based JWT authentication. [#840](https://github.com/geli-lms/geli/issues/840) [#968](https://github.com/geli-lms/geli/issues/968)
+- Prepare typescript 3.1 upgrade. [#967](https://github.com/geli-lms/geli/pull/967)
+- Use npm ci instead npm install and cache $HOME/.npm instead of node_modules. [#972](https://github.com/geli-lms/geli/pull/972)
 
 ### Removed
 - Remove `@types/chai-http`. [#946](https://github.com/geli-lms/geli/pull/946)
 - Remove `@types/winston`. [#945](https://github.com/geli-lms/geli/pull/945)
+- Removed the now obsolete `'mediaToken'` and `JwtPipe` systems. [#840](https://github.com/geli-lms/geli/issues/840)
 
 ### Fixed
 - Deprecated Messages.count replace with Message.countDocuments [#925](https://github.com/geli-lms/geli/issues/925)
 - Remove deprecation warnings / updated sharp + Deprecated User.count replace with User.countDocuments [#934](https://github.com/geli-lms/geli/issues/934) 
+- Redirect to initial URL after login [#318](https://github.com/geli-lms/geli/issues/318)
+- Fixed error on clicking on notification. [#916](https://github.com/geli-lms/geli/issues/916)
+
 
 ### Security
 - Progress leak of invisible units and courses [#735](https://github.com/geli-lms/geli/issues/735)
+- Reduced XSS attack surface by switching from `localStorage` tokens to `HttpOnly`, strict `SameSite` cookie-based JWT authentication. [#840](https://github.com/geli-lms/geli/issues/840)
 
 ## [[0.8.1](https://github.com/geli-lms/geli/releases/tag/v0.8.1)] - 2018-10-31 - WS 18/19 Hotfix-Release
 ### Fixed
