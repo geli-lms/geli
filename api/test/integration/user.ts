@@ -31,7 +31,7 @@ describe('User', () => {
 
       const res = await chai.request(app)
         .get(BASE_URL)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`);
+        .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`);
 
       res.status.should.be.equal(200);
       res.body.should.be.a('array');
@@ -53,7 +53,7 @@ describe('User', () => {
 
       const res = await chai.request(app)
         .get(`${BASE_URL}/${admin._id}`)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(admin)}`);
+        .set('Cookie', `token=${JwtUtils.generateToken(admin)}`);
 
       res.status.should.be.equal(200);
       res.body._id.should.be.equal(admin._id.toString());
@@ -67,7 +67,7 @@ describe('User', () => {
 
       const res = await chai.request(app)
         .get(ROLE_URL)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(student)}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(student)}`)
         .catch(err => err.response);
 
       res.status.should.be.equal(403);
@@ -78,7 +78,7 @@ describe('User', () => {
 
       const res = await chai.request(app)
         .get(ROLE_URL)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(admin)}`);
+        .set('Cookie', `token=${JwtUtils.generateToken(admin)}`);
 
       res.status.should.be.equal(200);
       res.body.should.be.a('array');
@@ -111,7 +111,7 @@ describe('User', () => {
           ' ' + newUser.profile.lastName,
           limit: 1
         })
-        .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`);
+        .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`);
 
       res.status.should.be.equal(200);
       res.body.meta.count.should.be.greaterThan(0);
@@ -144,7 +144,7 @@ describe('User', () => {
           ' ' + newUser.profile.firstName +
           ' ' + newUser.profile.lastName
         })
-        .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`);
+        .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`);
 
       res.status.should.be.equal(200);
       res.body.meta.count.should.be.greaterThan(0);
@@ -160,7 +160,7 @@ describe('User', () => {
     function requestUserUpdate(currentUser: IUser, updatedUser: IUser) {
       return chai.request(app)
         .put(`${BASE_URL}/${updatedUser._id}`)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(currentUser)}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(currentUser)}`)
         .send(updatedUser);
     }
 
@@ -283,7 +283,7 @@ describe('User', () => {
     async function requestAddUserPicture(currentUser: IUser, targetUser: IUser) {
       return await chai.request(app)
         .post(`${BASE_URL}/picture/${targetUser._id}`)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(currentUser)}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(currentUser)}`)
         .attach('file', fs.readFileSync('test/resources/test.png'), 'test.png');
     }
 
@@ -320,7 +320,7 @@ describe('User', () => {
 
       const res = await chai.request(app)
         .post(`${BASE_URL}/picture/${admin._id}`)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(admin)}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(admin)}`)
         .attach('file', fs.readFileSync('test/resources/wrong-format.rtf'), 'wrong-format.txt');
 
       res.status.should.be.equal(403);
@@ -340,7 +340,7 @@ describe('User', () => {
 
       const res = await chai.request(app)
         .del(`${BASE_URL}/${admin._id}`)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(admin)}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(admin)}`)
         .catch(err => err.response);
 
       res.status.should.be.equal(400);
@@ -353,7 +353,7 @@ describe('User', () => {
       const studtent = await FixtureUtils.getRandomStudent();
       const res = await chai.request(app)
         .del(`${BASE_URL}/${studtent._id}`)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
         .catch(err => err.response);
 
       res.status.should.be.equal(400);
@@ -369,7 +369,7 @@ describe('User', () => {
 
         const res = await chai.request(app)
           .put(`${BASE_URL}/${promotedUser._id}`)
-          .set('Authorization', `JWT ${JwtUtils.generateToken(admin)}`)
+          .set('Cookie', `token=${JwtUtils.generateToken(admin)}`)
           .send(promotedUser);
 
         res.status.should.be.equal(200);
@@ -378,7 +378,7 @@ describe('User', () => {
       { // Delete the old admin
         const res = await chai.request(app)
           .del(`${BASE_URL}/${admin._id}`)
-          .set('Authorization', `JWT ${JwtUtils.generateToken(admin)}`);
+          .set('Cookie', `token=${JwtUtils.generateToken(admin)}`);
 
         res.status.should.be.equal(200);
       }
@@ -389,7 +389,7 @@ describe('User', () => {
 
       const res = await chai.request(app)
         .del(`${BASE_URL}/${teacher._id}`)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
         .catch(err => err.response);
 
       const userDeleteRequest = User.findById(teacher._id);
@@ -405,7 +405,7 @@ describe('User', () => {
 
       const res = await chai.request(app)
         .del(`${BASE_URL}/${student._id}`)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(admin)}`);
+        .set('Cookie', `token=${JwtUtils.generateToken(admin)}`);
 
       res.status.should.be.equal(200);
       res.body.result.should.be.equal(true);

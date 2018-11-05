@@ -2,7 +2,6 @@ import {Component} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {isNullOrUndefined} from 'util';
 import {BackendService} from '../shared/services/backend.service';
-import {JwtPipe} from '../shared/pipes/jwt/jwt.pipe';
 import {DomSanitizer, SafeResourceUrl} from '@angular/platform-browser';
 
 @Component({
@@ -13,14 +12,13 @@ import {DomSanitizer, SafeResourceUrl} from '@angular/platform-browser';
 export class FileComponent {
 
   path = '';
-  jwtUrl: SafeResourceUrl | undefined;
+  url: SafeResourceUrl | undefined;
   plainText: string | undefined;
   type: string | undefined;
   loaded: Boolean = false;
 
   constructor(private route: ActivatedRoute,
               private backendService: BackendService,
-              private jwtPipe: JwtPipe,
               private domSanitizer: DomSanitizer) {
     this.route.params.subscribe(async params => {
       this.path = params['path'];
@@ -35,14 +33,12 @@ export class FileComponent {
           const blob = <any>response.body;
           const reader = new FileReader();
           reader.onload = () => {
-            this.plainText = reader.result;
+            this.plainText = <string>reader.result;
             this.loaded = true;
           };
           reader.readAsText(blob);
         } else {
-          // Handle anything else by setting 'jwtUrl' to the URL with attached mediaToken.
-          const jwtUrl = this.jwtPipe.transform('api/' + urlPart);
-          this.jwtUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(jwtUrl);
+          this.url = this.domSanitizer.bypassSecurityTrustResourceUrl('api/' + urlPart);
           this.loaded = true;
         }
       }
