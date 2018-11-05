@@ -43,6 +43,7 @@ describe('Notifications', async () => {
 
     it('should create notifications for students with the corresponding settings', async () => {
       const course = await FixtureUtils.getRandomCourse();
+      course.active = true;
       const teacher = await FixtureUtils.getRandomTeacherForCourse(course);
 
       const newNotification = {
@@ -98,6 +99,7 @@ describe('Notifications', async () => {
 
     it('should create notifications for student with changedCourse and text', async () => {
       const course = await FixtureUtils.getRandomCourse();
+      course.active = true;
       const student = course.students[Math.floor(Math.random() * course.students.length)];
       const teacher = await FixtureUtils.getRandomTeacherForCourse(course);
 
@@ -119,6 +121,7 @@ describe('Notifications', async () => {
 
     it('should create notifications for student with changedCourse and text', async () => {
       const course = await FixtureUtils.getRandomCourse();
+      course.active = true;
       const student = course.students[Math.floor(Math.random() * course.students.length)];
       const teacher = await FixtureUtils.getRandomTeacherForCourse(course);
 
@@ -147,9 +150,12 @@ describe('Notifications', async () => {
 
     it('should create notifications for student with changedCourse, changedLecture, changedUnit and text', async () => {
       const course = await FixtureUtils.getRandomCourse();
+      course.active = true;
       const lecture = await FixtureUtils.getRandomLectureFromCourse(course);
       const student = course.students[Math.floor(Math.random() * course.students.length)];
       const teacher = await FixtureUtils.getRandomTeacherForCourse(course);
+      const unit = lecture.units.pop();
+      unit.visible = true;
 
       const newNotification = {
         changedCourse: course,
@@ -171,6 +177,7 @@ describe('Notifications', async () => {
 
     it('should create notifications for student with changedCourse and text but API_NOTIFICATION_TYPE_NONE', async () => {
       const course = await FixtureUtils.getRandomCourse();
+      course.active = true;
       const student = course.students[Math.floor(Math.random() * course.students.length)];
       const teacher = await FixtureUtils.getRandomTeacherForCourse(course);
 
