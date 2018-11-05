@@ -4,15 +4,16 @@
     "name": "Alexander Eimer",
     "email": "alexander.eimer@gmail.com"
   },
-"repository": {
-  "type": "git",
-  "url": "https://github.com/geli-lms/geli"
-},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/geli-lms/geli"
+  },
   "description": "These dependencies are only for the travis after_script stuff",
   "license": "GPL-3.0",
   "devDependencies": {
-    "coveralls": "*",
-    "david": "*",
-    "nlf": "*"
+    "coveralls": "^3.0.2",
+    "david": "^11.0.0",
+    "nlf": "^2.0.1"
   }
 }
+
