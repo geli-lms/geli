@@ -1,11 +1,13 @@
 import {Request} from 'express';
-import {Authorized, Body, Delete, Get, JsonController, Param, Post, Put, Req, UseBefore} from 'routing-controllers';
+import { Authorized, Body, CurrentUser, Delete, ForbiddenError, Get,
+  JsonController, NotFoundError, Param, Post, Put, Req, UseBefore } from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 
 import {Lecture} from '../models/Lecture';
 import {ILecture} from '../../../shared/models/ILecture';
 import {Course} from '../models/Course';
 import {Notification} from '../models/Notification';
+import {IUser} from '../../../shared/models/IUser';
 
 @JsonController('/lecture')
 @UseBefore(passportJwtMiddleware)
@@ -110,20 +112,30 @@ export class LectureController {
    * @api {delete} /api/lecture/:id Delete lecture
    * @apiName DeleteLecture
    * @apiGroup Lecture
+   * @apiPermission teacher
+   * @apiPermission admin
    *
    * @apiParam {String} id Lecture ID.
    *
    * @apiSuccess {Boolean} result Confirmation of deletion.
    *
    * @apiSuccessExample {json} Success-Response:
-   *     {
-   *         "result": true
-   *     }
+   *     {}
    */
+  @Authorized(['teacher', 'admin'])
   @Delete('/:id')
-  deleteLecture(@Param('id') id: string) {
-    return Course.update({}, {$pull: {lectures: id}})
-      .then(() => Lecture.findById(id))
-      .then((lecture) => lecture.remove());
+  async deleteLecture(@Param('id') id: string, @CurrentUser() currentUser: IUser) {
+    const course = await Course.findOne({lectures: id});
+    if (!course) {
+      throw new NotFoundError();
+    }
+    if (!course.checkPrivileges(currentUser).userCanEditCourse) {
+      throw new ForbiddenError();
+    }
+    await course.update({}, {$pull: {lectures: id}});
+
+    await Lecture.findByIdAndRemove(id);
+
+    return {};
   }
 }

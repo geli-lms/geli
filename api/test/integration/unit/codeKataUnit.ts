@@ -56,7 +56,7 @@ describe(`CodeKataUnit ${BASE_URL}`, () => {
 
       const res = await chai.request(app)
         .post(BASE_URL)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
         .send({model: model})
         .catch(err => err.response);
 
@@ -70,7 +70,7 @@ describe(`CodeKataUnit ${BASE_URL}`, () => {
 
       const res = await chai.request(app)
         .post(BASE_URL)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(courseAdmin)}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(courseAdmin)}`)
         .send({lectureId: lecture._id})
         .catch(err => err.response);
 
@@ -85,7 +85,7 @@ describe(`CodeKataUnit ${BASE_URL}`, () => {
 
       const res = await chai.request(app)
         .post(BASE_URL)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(courseAdmin)}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(courseAdmin)}`)
         .send({lectureId: lecture._id, model: model});
 
       res.status.should.be.equal(200);
@@ -111,7 +111,7 @@ describe(`CodeKataUnit ${BASE_URL}`, () => {
 
       const res = await chai.request(app)
         .post(BASE_URL)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(courseAdmin)}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(courseAdmin)}`)
         .send({lectureId: lecture._id, model: model});
 
       res.status.should.be.equal(200);
@@ -130,7 +130,7 @@ describe(`CodeKataUnit ${BASE_URL}`, () => {
 
       const res = await chai.request(app)
         .put(BASE_URL + '/' + unit.id)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(courseAdmin)}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(courseAdmin)}`)
         .send(unit.toObject());
 
       res.status.should.be.equal(200);

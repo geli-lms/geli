@@ -2,6 +2,7 @@ import * as socketIo from 'socket.io';
 import {SocketIOEvent} from './models/SocketIOEvent';
 import {IMessageModel, Message} from './models/Message';
 import * as jwt from 'jsonwebtoken';
+import * as cookie from 'cookie';
 import config from './config/main';
 import {User} from './models/User';
 import {ChatRoom} from './models/ChatRoom';
@@ -16,7 +17,8 @@ export default class ChatServer {
     this.io = socketIo(server, {path: '/chat'});
 
     this.io.use((socket: any, next) => {
-      const token = socket.handshake.query.authToken.split(' ')[1];
+      // ATM this and the passportJwtStrategyFactory are the only users of the 'cookie' package.
+      const token = cookie.parse(socket.handshake.headers.cookie).token;
       const room: any = socket.handshake.query.room;
 
       jwt.verify(token, config.secret, (err: any, decoded: any) => {

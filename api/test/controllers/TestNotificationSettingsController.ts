@@ -31,7 +31,7 @@ describe('NotificationSettings', async () => {
 
       const res = await chai.request(app)
         .post(BASE_URL)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(student)}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(student)}`)
         .send(newSettings);
 
       res.status.should.be.equals(200);
@@ -52,13 +52,13 @@ describe('NotificationSettings', async () => {
 
       const res = await chai.request(app)
         .post(BASE_URL)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(student)}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(student)}`)
         .send(newSettings);
       res.status.should.be.equals(200);
 
       const resFail = await chai.request(app)
         .post(BASE_URL)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(student)}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(student)}`)
         .send(newSettings);
       resFail.status.should.be.equals(400);
     });
@@ -69,7 +69,7 @@ describe('NotificationSettings', async () => {
 
       const res = await chai.request(app)
         .post(BASE_URL)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(student)}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(student)}`)
         .send({});
       res.status.should.be.equals(400);
     });
@@ -98,7 +98,7 @@ describe('NotificationSettings', async () => {
 
       const res = await chai.request(app)
         .get(`${BASE_URL}/user/${student._id}`)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(student)}`);
+        .set('Cookie', `token=${JwtUtils.generateToken(student)}`);
       res.should.have.status(200);
       res.body.forEach((notificationSettings: any) => {
         notificationSettings._id.should.be.a('string');
@@ -126,7 +126,7 @@ describe('NotificationSettings', async () => {
 
       const res = await chai.request(app)
         .put(`${BASE_URL}/${settings._id}`)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(student)}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(student)}`)
         .send(settings);
       res.should.have.status(200);
       res.body.notificationType.should.be.equal(API_NOTIFICATION_TYPE_NONE);
@@ -149,7 +149,7 @@ describe('NotificationSettings', async () => {
 
       const res = await chai.request(app)
         .put(`${BASE_URL}/${settings._id}`)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(student)}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(student)}`)
         .send([]);
       res.should.have.status(400);
     });
