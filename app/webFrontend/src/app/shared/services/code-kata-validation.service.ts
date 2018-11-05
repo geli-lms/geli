@@ -18,11 +18,7 @@ export class CodeKataValidationService {
     } catch (e) {
       const err = e.constructor('Error in evaled Script: ' + e.message);
       err.lineNumber = e.lineNumber - err.lineNumber;
-      const msg = 'Error ' + e.message;
-      // tslint:disable-next-line:no-console
-      console.log(msg);
-      // tslint:disable-next-line:no-console
-      console.error(err);
+      logs = logs + err + "\n";
     }
     return { result: result, log: logs};
   }
