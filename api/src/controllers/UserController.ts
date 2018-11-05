@@ -444,7 +444,7 @@ export class UserController {
       delete newUser.password;
     } else {
       const isValidPassword = await oldUser.isValidPassword(newUser.currentPassword);
-      if (!isValidPassword) {
+      if (!isValidPassword && !userIsAdmin) {
         throw new BadRequestError(errorCodes.user.invalidPassword.text);
       }
     }
