@@ -8,6 +8,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {isNullOrUndefined} from 'util';
 import {TitleService} from '../../shared/services/title.service';
 import {emailValidator} from '../../shared/validators/validators';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   templateUrl: './reset.component.html',
@@ -28,7 +29,8 @@ export class ResetComponent implements OnInit {
               private snackBar: SnackBarService,
               private formBuilder: FormBuilder,
               private route: ActivatedRoute,
-              private titleService: TitleService) {
+              private titleService: TitleService,
+              public translate: TranslateService) {
     this.route.params.subscribe(params => {
       if (!isNullOrUndefined(params['token'])) {
         this.token = params['token'];
@@ -39,13 +41,17 @@ export class ResetComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.titleService.setTitle('Reset Password');
+    this.translate.get('reset.resetPw').subscribe((t: string) => {
+      this.titleService.setTitle(t['reset.resetPw']);
+    });
     this.generateForm();
   }
 
   requestReset() {
     if (!this.resetForm.valid) {
-      this.snackBar.open('The email address you entered is not valid.');
+      this.translate.get('reset.emailNotValid').subscribe((t: string) => {
+        this.titleService.setTitle(t['reset.emailNotValid']);
+      });
       return;
     }
 
@@ -54,9 +60,13 @@ export class ResetComponent implements OnInit {
     this.authenticationService.requestReset(this.resetForm.value.email.replace(/\s/g, '').toLowerCase())
     .then(
       (val) => {
-        this.snackBar.open('Check your mails');
+        this.translate.get('reset.checkMails').subscribe((t: string) => {
+          this.titleService.setTitle(t['reset.checkMails']);
+        });
       }, (error) => {
-        this.snackBar.open('Request failed');
+        this.translate.get('reset.requestFailed').subscribe((t: string) => {
+          this.titleService.setTitle(t['reset.requestFailed']);
+        });
       })
     .then(() => {
       this.showProgress.toggleLoadingGlobal(false);
@@ -71,9 +81,13 @@ export class ResetComponent implements OnInit {
     .then(
       (val) => {
         this.router.navigate(['/login']);
-        this.snackBar.open('Your password has been reset');
+        this.translate.get('reset.success').subscribe((t: string) => {
+          this.titleService.setTitle(t['reset.success']);
+        });
       }, (error) => {
-        this.snackBar.open('Your password could not be reset');
+        this.translate.get('reset.failed').subscribe((t: string) => {
+          this.titleService.setTitle(t['reset.failed']);
+        });
       })
     .then(() => {
       this.showProgress.toggleLoadingGlobal(false);

@@ -3,7 +3,11 @@
     "text": {
       "pleaseClick": "Bitte klicken",
       "toActivate": ", um den Account zu aktivieren.",
-      "toUseYourAccount": ", um den Account zu nutzen."
+      "toUseYourAccount": ", um den Account zu nutzen.",
+      "activating": "Aktiviere Account...",
+      "success" : "Aktivierung erfolgreich",
+      "failed": "Aktivierung fehlgeschlagen",
+      "resendFailed": "Erneutes Senden fehlgeschlagen"
     }
   },
   "admin": {
@@ -316,12 +320,24 @@
       "noNotifications": "Sie haben keine Benachrichtigungen."
     }
   },
+  "registration": {
+  "failed": "Registrierung fehlgeschlagen",
+  "register": "Registrieren"
+  },
   "report": {
     "exportToCsv": "Als CSV exportieren",
     "noProgressableUnits": "In diesem Kurs existieren keine erfüllbaren Aufgaben.",
     "noStudents": "In diesen Kurs sind keine Studenten eingeschrieben.",
     "noSubmissions": "Für diesen Benutzer liegen keine Ergebnisse vor.",
     "notProgressable": "Dieser Kurs enthält keine auswertbare Aufgaben"
+  },
+  "reset": {
+    "resetPw" : "Passwort zurücksetzen",
+    "emailNotValid": "Die angegebene Email-Adresse ist ungültig.",
+    "checkMails": "Email gesendet",
+    "requestFailed": "Anfrage fehlgeschlagen",
+    "success" : "Das Passwort wurde zurückgesetzt",
+    "failed": "Das Passwort konnte nicht zurücksetzt werden."
   },
   "snackbarMessages": {
     "chooseJson": "Wähle eine Kurs.json Datei zum Importieren",

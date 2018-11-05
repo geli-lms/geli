@@ -7,6 +7,7 @@ import {SnackBarService} from '../../shared/services/snack-bar.service';
 import {errorCodes} from '../../../../../../api/src/config/errorCodes';
 import {TitleService} from '../../shared/services/title.service';
 import {emailValidator} from '../../shared/validators/validators';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-activation-resend',
@@ -34,7 +35,8 @@ export class ActivationResendComponent implements OnInit {
               private showProgress: ShowProgressService,
               private snackBar: SnackBarService,
               private formBuilder: FormBuilder,
-              private titleService: TitleService, ) {
+              private titleService: TitleService,
+              public translate: TranslateService) {
   }
 
   ngOnInit() {
@@ -95,7 +97,9 @@ export class ActivationResendComponent implements OnInit {
         break;
       }
       default: {
-        this.snackBar.open('Activation Resend failed');
+        this.translate.get('activation.text.activating').subscribe((t: string) => {
+          this.snackBar.open(t['activation.text.resendFailed']);
+        });
       }
     }
   }

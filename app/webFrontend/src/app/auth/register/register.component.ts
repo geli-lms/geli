@@ -8,6 +8,7 @@ import {errorCodes} from '../../../../../../api/src/config/errorCodes';
 import {TitleService} from '../../shared/services/title.service';
 import {APIInfoService} from '../../shared/services/data.service';
 import {emailValidator} from '../../shared/validators/validators';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-register',
@@ -38,7 +39,8 @@ export class RegisterComponent implements OnInit {
               private snackBar: SnackBarService,
               private formBuilder: FormBuilder,
               private titleService: TitleService,
-              private apiInfoService: APIInfoService) {
+              private apiInfoService: APIInfoService,
+              public translate: TranslateService) {
   }
 
   ngOnInit() {
@@ -46,7 +48,9 @@ export class RegisterComponent implements OnInit {
         this.teacherMailRegex = apiInfo.teacherMailRegex;
       }
     );
-    this.titleService.setTitle('Register');
+    this.translate.get('registration.register').subscribe((t: string) => {
+      this.titleService.setTitle('register...');
+    });
     // reset login status
     this.authenticationService.unsetAuthData();
     this.generateForm();
@@ -101,7 +105,9 @@ export class RegisterComponent implements OnInit {
         break;
       }
       default: {
-        this.snackBar.open('Registration failed');
+        this.translate.get('registration.failed').subscribe((t: string) => {
+          this.titleService.setTitle(t['registration.failed']);
+        });
       }
     }
   }

@@ -3,7 +3,11 @@
     "text": {
       "pleaseClick": "Please click ",
       "toActivate": "to activate your account",
-      "toUseYourAccount": "to use your account"
+      "toUseYourAccount": "to use your account",
+      "activating": "Activating account...",
+      "success" : "Activation successful",
+      "failed": "Activation Failed",
+      "resendFailed": "Resending activation failed"
     }
   },
   "admin": {
@@ -316,12 +320,24 @@
       "noNotifications": "You have no notifications"
     }
   },
+  "registration": {
+    "failed": "Registration failed",
+    "register": "Register"
+  },
   "report": {
     "exportToCsv": "Export to CSV",
     "noProgressableUnits": "This course contains no progressable units.",
     "noStudents": "There are no students enrolled to this course.",
     "noSubmissions": "There are no submissions for this user.",
     "notProgressable": "This course does not contain any progressable units."
+  },
+  "reset": {
+    "resetPw" : "Reset Password",
+    "emailNotValid": "The email address you entered is not valid.",
+    "checkMails": "Check your mails",
+    "requestFailed": "Request failed",
+    "success" : "Your password has been reset",
+    "failed": "Your password could not be reset"
   },
   "snackbarMessages": {
     "chooseJson": "Select a course.json file for import.",

@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {AuthenticationService} from '../../shared/services/authentication.service';
 import {TitleService} from '../../shared/services/title.service';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-activation',
@@ -15,17 +16,24 @@ export class ActivationComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
               private auth: AuthenticationService,
-              private titleService: TitleService) {
-    this.status = 'Activating account...';
+              private titleService: TitleService,
+              translate: TranslateService) {
+    translate.get('activation.text.activating').subscribe((t: string) => {
+      this.status = t['activation.text.activating'];
+    });
     this.success = false;
     this.route.params.subscribe(params => {
       auth.activate(params['token'])
       .then(val => {
-        this.status = 'Successfully activated your account.';
+        translate.get('activation.text.success').subscribe((t: string) => {
+          this.status = t['activation.text.success'];
+        });
         this.success = true;
       })
       .catch(val => {
-        this.status = 'Failed to activate your account.';
+        translate.get('activation.text.failed').subscribe((t: string) => {
+          this.status = t['activation.text.failed'];
+        });
       });
     });
   }
