@@ -11,6 +11,14 @@ export const ENROLL_TYPE_FREE = 'free';
 export const ENROLL_TYPE_ACCESSKEY = 'accesskey';
 export const ENROLL_TYPES = [ENROLL_TYPE_WHITELIST, ENROLL_TYPE_FREE, ENROLL_TYPE_ACCESSKEY];
 
+export const FREETEXT_STYLE_NONE = '';
+export const FREETEXT_STYLE_STYLE1 = 'theme1';
+export const FREETEXT_STYLE_STYLE2 = 'theme2';
+export const FREETEXT_STYLE_STYLE3 = 'theme3';
+export const FREETEXT_STYLE_STYLE4 = 'theme4';
+
+export const FREETEXT_STYLES = [FREETEXT_STYLE_NONE,FREETEXT_STYLE_STYLE1, FREETEXT_STYLE_STYLE2, FREETEXT_STYLE_STYLE3, FREETEXT_STYLE_STYLE4];
+
 export interface ICourse {
   _id: any;
   name: string;
@@ -27,4 +35,5 @@ export interface ICourse {
   enrollType: string;
   hasAccessKey: boolean;
   chatRooms: IChatRoom[];
+  freeTextStyle: string;
 }

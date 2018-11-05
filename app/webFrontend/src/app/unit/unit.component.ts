@@ -3,6 +3,7 @@ import {IUnit} from '../../../../../shared/models/units/IUnit';
 import * as moment from 'moment';
 import {ActivatedRoute, Router} from '@angular/router';
 import {IUser} from '../../../../../shared/models/IUser';
+import {ICourse} from '../../../../../shared/models/ICourse';
 
 @Component({
   selector: 'app-unit',
@@ -10,7 +11,7 @@ import {IUser} from '../../../../../shared/models/IUser';
   styleUrls: ['./unit.component.scss']
 })
 export class UnitComponent implements OnInit, AfterViewInit {
-
+  @Input() course: ICourse;
   @Input() units: IUnit[];
   unitId: string;
   users: IUser[] = [];

@@ -20,7 +20,7 @@
       <app-file-unit *ngSwitchCase="'file'" [fileUnit]="unit"></app-file-unit>
       <app-task-unit *ngSwitchCase="'task'" [taskUnit]="unit"></app-task-unit>
       <app-code-kata *ngSwitchCase="'code-kata'" [codeKataUnit]="unit"></app-code-kata>
-      <app-free-text-unit *ngSwitchCase="'free-text'" [freeTextUnit]="unit"></app-free-text-unit>
+      <app-free-tsext-unit *ngSwitchCase="'free-text'" [theme]="course.freeTextStyle"  [freeTextUnit]="unit"></app-free-tsext-unit>
       <div class="unit-detail">
         <button mat-icon-button appShowComments [room]="unit.chatRoom" [title]="unit.name">
           <mat-icon aria-label="comments">forum</mat-icon>

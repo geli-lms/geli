@@ -5,6 +5,7 @@ import 'brace';
 import 'brace/mode/markdown';
 import 'brace/theme/github';
 import {FormGroup} from '@angular/forms';
+import {UnitFormService} from "../../../../shared/services/unit-form.service";
 
 
 @Component({
@@ -24,7 +25,7 @@ export class FreeTextUnitEditorComponent implements OnInit {
   @ViewChild('editor')
   private editor: AceEditorComponent;
 
-  constructor() {
+  constructor(private unitFormService: UnitFormService) {
   }
 
   ngOnInit() {

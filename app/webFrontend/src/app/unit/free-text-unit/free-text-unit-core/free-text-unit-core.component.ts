@@ -10,7 +10,7 @@ import {DomSanitizer} from '@angular/platform-browser';
 })
 export class FreeTextUnitCoreComponent implements OnInit {
   @Input() markdown: string;
-  @Input() theme = 'theme1';
+  @Input() theme;
 
   renderedHtml: string;
 
