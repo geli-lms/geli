@@ -81,7 +81,9 @@ export default class ResponsiveImageService {
     }
 
     if (!keepOriginalFile) {
-      fs.unlinkSync(originalFile.path);
+      if (fs.existsSync(originalFile.path)) {
+        fs.unlinkSync(originalFile.path);
+      }
       responsiveImage.pathToImage = '-';
     }
   }

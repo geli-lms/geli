@@ -757,8 +757,10 @@ export class CourseController {
 
     const mimeFamily = file.mimetype.split('/', 1)[0];
     if (mimeFamily !== 'image') {
-      // Remove the file if the type was not correct.
-      await fs.unlinkSync(file.path);
+      if (fs.existsSync(file.path)) {
+        // Remove the file if the type was not correct.
+        await fs.unlinkSync(file.path);
+      }
 
       throw new BadRequestError('Forbidden format of uploaded picture: ' + mimeFamily);
     }
