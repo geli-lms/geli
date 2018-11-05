@@ -194,6 +194,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Fixed form validator in create task [#579](https://github.com/geli-lms/geli/issues/579)
 - Fixed Mongoose pre hook usage [#680](https://github.com/geli-lms/geli/issues/680) [#677](https://github.com/geli-lms/geli/issues/677)
 - Fixed broken code kata validation. [#834](https://github.com/geli-lms/geli/issues/834)
+- Fixed error that admin couldn't change password of a student [#975](https://github.com/geli-lms/geli/issues/975)
 
 ### Security
 - Fixed numerous severe user related security issues. [#691](https://github.com/geli-lms/geli/issues/691) [#709](https://github.com/geli-lms/geli/pull/709)
