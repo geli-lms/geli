@@ -1,4 +1,3 @@
-import {Request} from 'express';
 import {
   Authorized, BadRequestError,
   Body,
@@ -8,7 +7,6 @@ import {
   Param,
   Post,
   Put,
-  Req,
   UploadedFile,
   UseBefore
 } from 'routing-controllers';
@@ -424,7 +422,7 @@ export class CourseController {
    */
   @Authorized(['teacher', 'admin'])
   @Post('/')
-  async addCourse(@Body() course: ICourse, @Req() request: Request, @CurrentUser() currentUser: IUser) {
+  async addCourse(@Body() course: ICourse, @CurrentUser() currentUser: IUser) {
     // Note that this might technically have a race condition, but it should never matter because the new course ids remain unique.
     // If a strict version is deemed important, see mongoose Model.findOneAndUpdate for a potential approach.
     const existingCourse = await Course.findOne({name: course.name});
@@ -543,7 +541,7 @@ export class CourseController {
    */
   @Authorized(['student'])
   @Post('/:id/leave')
-  async leaveStudent(@Param('id') id: string, @Body() data: any, @CurrentUser() currentUser: IUser) {
+  async leaveStudent(@Param('id') id: string, @CurrentUser() currentUser: IUser) {
     const course = await Course.findById(id);
     if (!course) {
       throw new NotFoundError();
