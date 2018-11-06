@@ -25,7 +25,6 @@ import {WhitelistUser} from '../models/WhitelistUser';
 import emailService from '../services/EmailService';
 
 const multer = require('multer');
-import crypto = require('crypto');
 import {API_NOTIFICATION_TYPE_ALL_CHANGES, NotificationSettings} from '../models/NotificationSettings';
 import {IWhitelistUser} from '../../../shared/models/IWhitelistUser';
 import {DocumentToObjectOptions} from 'mongoose';
@@ -35,21 +34,6 @@ import ResponsiveImageService from '../services/ResponsiveImageService';
 import {IResponsiveImageData} from '../../../shared/models/IResponsiveImageData';
 
 import { Picture } from '../models/mediaManager/File';
-
-const uploadOptions = {
-  storage: multer.diskStorage({
-    destination: (req: any, file: any, cb: any) => {
-      cb(null, 'tmp/');
-    },
-    filename: (req: any, file: any, cb: any) => {
-      const extPos = file.originalname.lastIndexOf('.');
-      const ext = (extPos !== -1) ? `.${file.originalname.substr(extPos + 1).toLowerCase()}` : '';
-      crypto.pseudoRandomBytes(16, (err, raw) => {
-        cb(err, err ? undefined : `${raw.toString('hex')}${ext}`);
-      });
-    }
-  }),
-};
 
 const coursePictureUploadOptions = {
   storage: multer.diskStorage({
