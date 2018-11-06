@@ -38,7 +38,7 @@ export class DownloadController {
   cleanupCache() {
     cache.expire((record: any) => {
       return new Promise((resolve, reject) => {
-        fs.unlink( config.tmpFileCacheFolder + record.key + '.zip', (err: Error) => {
+        fs.unlink(config.tmpFileCacheFolder + record.key + '.zip', (err: Error) => {
           if (err) {
             reject(false);
           } else {
