@@ -382,7 +382,6 @@ export class CourseController {
    * @apiPermission admin
    *
    * @apiParam {ICourse} course New course data.
-   * @apiParam {Request} request Request.
    * @apiParam {IUser} currentUser Currently logged in user.
    *
    * @apiSuccess {Course} course Added course.
@@ -528,7 +527,6 @@ export class CourseController {
    * @apiPermission student
    *
    * @apiParam {String} id Course ID.
-   * @apiParam {Object} data Body.
    * @apiParam {IUser} currentUser Currently logged in user.
    *
    * @apiSuccess {Object} result Empty object.
