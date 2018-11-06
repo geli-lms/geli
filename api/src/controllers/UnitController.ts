@@ -6,7 +6,6 @@ import passportJwtMiddleware from '../security/passportJwtMiddleware';
 
 import {Lecture} from '../models/Lecture';
 import {IUnitModel, Unit} from '../models/units/Unit';
-import {ValidationError} from 'mongoose';
 import {IUser} from '../../../shared/models/IUser';
 
 @JsonController('/units')
