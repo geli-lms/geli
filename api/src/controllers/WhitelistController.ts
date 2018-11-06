@@ -1,9 +1,8 @@
 import {
-  Authorized, Body, Delete, Get, JsonController, Post, Param, Put, QueryParam, UseBefore,
-  HttpError, BadRequestError, UploadedFile, CurrentUser
+  Authorized, Body, Delete, Get, JsonController, Post, Param, Put, UseBefore,
+  BadRequestError, CurrentUser
 } from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
-import {isNullOrUndefined} from 'util';
 import {WhitelistUser} from '../models/WhitelistUser';
 import {errorCodes} from '../config/errorCodes';
 import * as mongoose from 'mongoose';
