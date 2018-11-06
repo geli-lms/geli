@@ -12,26 +12,6 @@ import {User} from '../models/User';
 import {IWhitelistUser} from '../../../shared/models/IWhitelistUser';
 import {IUser} from '../../../shared/models/IUser';
 
-const multer = require('multer');
-import crypto = require('crypto');
-
-
-const uploadOptions = {
-  storage: multer.diskStorage({
-    destination: (req: any, file: any, cb: any) => {
-      cb(null, 'tmp/');
-    },
-    filename: (req: any, file: any, cb: any) => {
-      const extPos = file.originalname.lastIndexOf('.');
-      const ext = (extPos !== -1) ? `.${file.originalname.substr(extPos + 1).toLowerCase()}` : '';
-      crypto.pseudoRandomBytes(16, (err, raw) => {
-        cb(err, err ? undefined : `${raw.toString('hex')}${ext}`);
-      });
-    }
-  }),
-};
-
-
 @JsonController('/whitelist')
 @UseBefore(passportJwtMiddleware)
 export class WitelistController {
