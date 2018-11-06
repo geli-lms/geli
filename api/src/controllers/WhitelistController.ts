@@ -1,6 +1,6 @@
 import {
   Authorized, Body, Delete, Get, JsonController, Post, Param, Put, UseBefore,
-  BadRequestError, CurrentUser
+  BadRequestError
 } from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import {WhitelistUser} from '../models/WhitelistUser';
@@ -10,7 +10,6 @@ import ObjectId = mongoose.Types.ObjectId;
 import {Course} from '../models/Course';
 import {User} from '../models/User';
 import {IWhitelistUser} from '../../../shared/models/IWhitelistUser';
-import {IUser} from '../../../shared/models/IUser';
 
 @JsonController('/whitelist')
 @UseBefore(passportJwtMiddleware)
@@ -31,15 +30,11 @@ export class WitelistController {
    *        "exists": false
    *    }
    *  ]
-   * @apiParam data
-   * @apiParam currentUser
    * @apiParam whitelistToCheck
    */
   @Get('/check/:whitelist')
   @Authorized(['teacher', 'admin'])
-  async checkWhitelistForExistingStudents(@Body() data: any,
-                                          @CurrentUser() currentUser: IUser,
-                                          @Param('whitelist') whitelistToCheck: any[]) {
+  async checkWhitelistForExistingStudents(@Param('whitelist') whitelistToCheck: any[]) {
 
     return await Promise.all(
       whitelistToCheck.map(async uid => { {
