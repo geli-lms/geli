@@ -6,7 +6,6 @@ import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import {Lecture} from '../models/Lecture';
 import {ILecture} from '../../../shared/models/ILecture';
 import {Course} from '../models/Course';
-import {Notification} from '../models/Notification';
 import {IUser} from '../../../shared/models/IUser';
 
 @JsonController('/lecture')
