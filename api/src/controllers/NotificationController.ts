@@ -1,12 +1,12 @@
 import {
-  Authorized, BadRequestError, Body, CurrentUser, Delete, ForbiddenError, Get, InternalServerError, JsonController, NotFoundError, Param,
+  Authorized, BadRequestError, Body, CurrentUser, Delete, Get, JsonController, NotFoundError, Param,
   Post, Req,
   UseBefore
 } from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import {
-  NotificationSettings, API_NOTIFICATION_TYPE_NONE,
-  API_NOTIFICATION_TYPE_CHANGES_WITH_RELATIONIONSHIP, API_NOTIFICATION_TYPE_ALL_CHANGES,
+  NotificationSettings,
+  API_NOTIFICATION_TYPE_ALL_CHANGES,
 } from '../models/NotificationSettings';
 import {Notification} from '../models/Notification';
 import {Course} from '../models/Course';
@@ -15,7 +15,6 @@ import {IUser} from '../../../shared/models/IUser';
 import {ICourse} from '../../../shared/models/ICourse';
 import {ILecture} from '../../../shared/models/ILecture';
 import {IUnit} from '../../../shared/models/units/IUnit';
-import {INotification} from '../../../shared/models/INotification';
 import {Request} from 'express';
 import {SendMailOptions} from 'nodemailer';
 import emailService from '../services/EmailService';
