@@ -8,14 +8,14 @@ export class CodeKataValidationService {
   validate(codeToTest: string) {
     let result = false;
     let log = undefined;
+    const origLogger = window.console.log;
 
     window.console.log = (msg) => {
       if (log === undefined) {
         log = '';
       }
       log += msg + '\n';
-      // tslint:disable-next-line:no-console
-      console.log(msg);
+      origLogger(msg);
     };
 
     try {
@@ -24,10 +24,12 @@ export class CodeKataValidationService {
     } catch (e) {
       const err = e.constructor('Error in evaled Script:' + e.message);
       err.lineNumber = e.lineNumber - err.lineNumber;
-      log = log + err + '\n';
+      const msg = 'Error: ' + e.message;
       // tslint:disable-next-line:no-console
+      console.log(msg);
       console.error(err.message);
     }
+    window.console.log = origLogger;
     return {result, log};
   }
 }
