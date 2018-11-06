@@ -763,7 +763,7 @@ export class CourseController {
 
     await image.save();
 
-    const result = await Course.update({ _id: id }, {
+    await Course.update({ _id: id }, {
       image: image._id
     });
 
