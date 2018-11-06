@@ -1,6 +1,6 @@
 import {
   Authorized, BadRequestError, Body, CurrentUser, Delete, Get, JsonController, NotFoundError, Param,
-  Post, Req,
+  Post,
   UseBefore
 } from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
@@ -15,7 +15,6 @@ import {IUser} from '../../../shared/models/IUser';
 import {ICourse} from '../../../shared/models/ICourse';
 import {ILecture} from '../../../shared/models/ILecture';
 import {IUnit} from '../../../shared/models/units/IUnit';
-import {Request} from 'express';
 import {SendMailOptions} from 'nodemailer';
 import emailService from '../services/EmailService';
 
@@ -32,7 +31,6 @@ export class NotificationController {
    * @apiPermission admin
    *
    * @apiParam {Object} data Notification text and information on changed course, lecture and unit.
-   * @apiParam {Request} request Request.
    *
    * @apiSuccess {Boolean} notified Confirmation of notification.
    *
@@ -46,7 +44,7 @@ export class NotificationController {
    */
   @Authorized(['teacher', 'admin'])
   @Post('/')
-  async createNotifications(@Body() data: any, @Req() request: Request) {
+  async createNotifications(@Body() data: any) {
     if (!data.changedCourse || !data.text) {
       throw new BadRequestError('Notification needs at least the fields course and text');
     }
