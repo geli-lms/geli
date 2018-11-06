@@ -5,7 +5,7 @@ import {
   Body, Post, Get, Delete, CurrentUser, Authorized
 } from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
-import {Unit, FreeTextUnit, CodeKataUnit, TaskUnit} from '../models/units/Unit';
+import {Unit} from '../models/units/Unit';
 import {IDownload} from '../../../shared/models/IDownload';
 import {IFileUnit} from '../../../shared/models/units/IFileUnit';
 import {Lecture} from '../models/Lecture';
