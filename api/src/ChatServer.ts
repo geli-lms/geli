@@ -6,9 +6,9 @@ import * as cookie from 'cookie';
 import config from './config/main';
 import {User} from './models/User';
 import {ChatRoom} from './models/ChatRoom';
-import {ISocketIOMessage, SocketIOMessageType} from './models/SocketIOMessage';
+import {ISocketIOMessagePost, ISocketIOMessage, SocketIOMessageType, IMessage} from './models/SocketIOMessage';
 
-
+// FIXME: This is currently WIP to fix the #989 issues.
 export default class ChatServer {
 
   private io: socketIo.Server;
@@ -48,25 +48,42 @@ export default class ChatServer {
 
   init() {
     this.io.on(SocketIOEvent.CONNECT, (socket: any) => {
+      // ATM this and the passportJwtStrategyFactory are the only users of the 'cookie' package.
+      const token = cookie.parse(socket.handshake.headers.cookie).token;
+      const tokenPayload = jwt.decode(token);
+
       const queryParam: any = socket.handshake.query;
       socket.join(queryParam.room);
 
-      socket.on(SocketIOEvent.MESSAGE, (message: ISocketIOMessage) => this.onMessage(message, queryParam));
+      socket.on(SocketIOEvent.MESSAGE, (message: ISocketIOMessagePost) => this.onMessage(message, queryParam, tokenPayload));
     });
   }
 
-  async onMessage(socketIOMessage: ISocketIOMessage, queryParam: any) {
-    if (socketIOMessage.meta.type === SocketIOMessageType.COMMENT) {
-      let foundMessage: IMessageModel = await Message.findById(socketIOMessage.meta.parent);
+  async onMessage(socketIOMessagePost: ISocketIOMessagePost, queryParam: any, tokenPayload: any) {
+    const message: IMessage = {
+      _id: undefined,
+      author: tokenPayload._id,
+      content: socketIOMessagePost.content,
+      room: socketIOMessagePost.room,
+      chatName: 'TODO', // FIXME
+      comments: []
+    };
+    const socketIOMessage: ISocketIOMessage = {
+      meta: socketIOMessagePost.meta,
+      message
+    };
+
+    if (socketIOMessagePost.meta.type === SocketIOMessageType.COMMENT) {
+      let foundMessage: IMessageModel = await Message.findById(socketIOMessagePost.meta.parent);
 
       if (foundMessage) {
-        foundMessage.comments.push(socketIOMessage.message);
+        foundMessage.comments.push(message);
         foundMessage = await foundMessage.save();
         socketIOMessage.message = foundMessage.comments.pop();
         this.io.in(queryParam.room).emit(SocketIOEvent.MESSAGE, socketIOMessage);
       }
     } else {
-      let newMessage = new Message(socketIOMessage.message);
+      let newMessage = new Message(message);
       newMessage = await newMessage.save();
       socketIOMessage.message = newMessage;
       this.io.in(queryParam.room).emit(SocketIOEvent.MESSAGE, socketIOMessage);

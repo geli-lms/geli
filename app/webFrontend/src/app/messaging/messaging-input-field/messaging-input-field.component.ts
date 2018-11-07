@@ -4,11 +4,10 @@ import {MatDialog} from '@angular/material';
 import {ChatService} from '../../shared/services/chat.service';
 import {UserService} from '../../shared/services/user.service';
 import {
-  ISocketIOMessage,
+  ISocketIOMessagePost,
   ISocketIOMessageMeta,
   SocketIOMessageType
 } from '../../../../../../shared/models/messaging/ISocketIOMessage';
-import {IMessage} from '../../../../../../shared/models/messaging/IMessage';
 
 
 @Component({
@@ -68,21 +67,13 @@ export class MessagingInputFieldComponent implements OnInit {
       parent: this.parentMessageId
     };
 
-    const message: IMessage = {
-      _id: undefined,
-      chatName: this.chatName,
-      content: this.form.getRawValue().message,
-      room: this.room,
-      author: this.userService.user._id,
-      comments: []
-    };
-
-    const socketIOMessage: ISocketIOMessage = {
+    const socketIOMessagePost: ISocketIOMessagePost = {
       meta: meta,
-      message: message
+      content: this.form.getRawValue().message,
+      room: this.room
     };
 
-    this.chatService.send(socketIOMessage);
+    this.chatService.send(socketIOMessagePost);
     this.form.setValue({
       message: ''
     });
