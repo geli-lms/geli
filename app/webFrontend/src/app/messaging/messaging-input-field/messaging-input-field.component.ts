@@ -1,8 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {FormControl, FormGroup} from '@angular/forms';
-import {MatDialog} from '@angular/material';
 import {ChatService} from '../../shared/services/chat.service';
-import {UserService} from '../../shared/services/user.service';
 import {
   ISocketIOMessagePost,
   ISocketIOMessageMeta,
@@ -26,7 +24,7 @@ export class MessagingInputFieldComponent implements OnInit {
     message: new FormControl('')
   });
 
-  constructor(private chatService: ChatService, private dialog: MatDialog, private userService: UserService) { }
+  constructor(private chatService: ChatService) { }
 
   ngOnInit() {
   }

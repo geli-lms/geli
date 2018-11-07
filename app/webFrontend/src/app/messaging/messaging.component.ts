@@ -3,7 +3,6 @@ import {IMessage} from '../../../../../shared/models/messaging/IMessage';
 import {MessageService} from '../shared/services/message.service';
 import {ChatService} from '../shared/services/chat.service';
 import {UserService} from '../shared/services/user.service';
-import {SocketIOEvent} from '../../../../../shared/models/messaging/SoketIOEvent';
 import {ISocketIOMessage, SocketIOMessageType} from '../../../../../shared/models/messaging/ISocketIOMessage';
 
 
