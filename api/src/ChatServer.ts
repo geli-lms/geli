@@ -19,32 +19,27 @@ export default class ChatServer {
     this.io.use((socket: any, next) => {
       // ATM this and the passportJwtStrategyFactory are the only users of the 'cookie' package.
       const token = cookie.parse(socket.handshake.headers.cookie).token;
-      const room: any = socket.handshake.query.room;
+      const roomId = socket.handshake.query.room;
 
       jwt.verify(token, config.secret, async (err: any, decoded: any) => {
-        if (err || !await this.canConnect(decoded._id, room)) {
+        const [user, room] = await Promise.all([
+          User.findById(decoded._id).exec(),
+          ChatRoom.findById(roomId).exec()
+        ]);
+
+        if (err || !user || !room) {
           next(new Error('Not authorized'));
         }
-        socket.tokenPayload = decoded;
+
+        socket.chatName = await this.obtainChatName(user, roomId);
+        socket.userId = decoded._id;
         next();
       });
     });
   }
 
-  /**
-   * verify if the  given userId and room exist.
-   * @param {string} userId
-   * @param {string} room
-   */
-  async canConnect(userId: string, room: string) {
-    const _user = await User.findById(userId);
-    const _room = await ChatRoom.findById(room);
-
-    return _user && _room;
-  }
-
-  async obtainChatName (user: IUserModel, room: string) {
-    const lastMessage = await Message.findOne({room: room, author: user}).sort({createdAt: -1});
+  async obtainChatName (user: IUserModel, roomId: string) {
+    const lastMessage = await Message.findOne({room: roomId, author: user}).sort({createdAt: -1});
     if (lastMessage) {
       return lastMessage.chatName;
     } else {
@@ -55,20 +50,21 @@ export default class ChatServer {
 
   init() {
     this.io.on(SocketIOEvent.CONNECT, (socket: any) => {
-      const userId = socket.tokenPayload._id;
-      const room = socket.handshake.query.room;
-      socket.join(room);
-      socket.on(SocketIOEvent.MESSAGE, (message: ISocketIOMessagePost) => this.onMessage(message, userId, room));
+      const userId = socket.userId;
+      const roomId = socket.handshake.query.room;
+      const chatName = socket.chatName;
+      socket.join(roomId);
+      socket.on(SocketIOEvent.MESSAGE, (message: ISocketIOMessagePost) => this.onMessage(message, userId, roomId, chatName));
     });
   }
 
-  async onMessage(socketIOMessagePost: ISocketIOMessagePost,  userId: string, room: string) {
+  async onMessage(socketIOMessagePost: ISocketIOMessagePost,  userId: string, roomId: string, chatName: string) {
     const message: IMessage = {
       _id: undefined,
       content: socketIOMessagePost.content,
       author: userId,
-      room,
-      chatName: 'TODO', // FIXME
+      room: roomId,
+      chatName,
       comments: []
     };
     const socketIOMessage: ISocketIOMessage = {
@@ -83,13 +79,13 @@ export default class ChatServer {
         foundMessage.comments.push(message);
         foundMessage = await foundMessage.save();
         socketIOMessage.message = foundMessage.comments.pop();
-        this.io.in(room).emit(SocketIOEvent.MESSAGE, socketIOMessage);
+        this.io.in(roomId).emit(SocketIOEvent.MESSAGE, socketIOMessage);
       }
     } else {
       let newMessage = new Message(message);
       newMessage = await newMessage.save();
       socketIOMessage.message = newMessage;
-      this.io.in(room).emit(SocketIOEvent.MESSAGE, socketIOMessage);
+      this.io.in(roomId).emit(SocketIOEvent.MESSAGE, socketIOMessage);
     }
   }
 }

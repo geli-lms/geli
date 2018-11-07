@@ -14,7 +14,6 @@ export class MessageComponent implements OnInit {
   @Input() message: IMessage;
   @Input() isChildMessage = false;
   @Input() mode: string;
-  @Input() chatName: string;
   htmlMessage: any;
 
   showReplies = false;

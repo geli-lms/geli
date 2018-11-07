@@ -16,7 +16,6 @@ import {
 export class MessagingInputFieldComponent implements OnInit {
   @Input() parentMessageId;
   @Input() room: string;
-  @Input() chatName: string;
   showEmojiPicker = false;
   caretPos = 0;
 
@@ -39,10 +38,6 @@ export class MessagingInputFieldComponent implements OnInit {
     this.getCaretPos(msgTextArea);
   }
 
-  /**
-   * Post the message if the user have a chatName
-   * otherwise request user to enter a chatName first
-   */
   onEnter(event: KeyboardEvent, msgTextArea): void {
     this.getCaretPos(msgTextArea);
     if (event.keyCode === 13 && event.ctrlKey) {
