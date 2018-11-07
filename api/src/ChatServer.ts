@@ -4,7 +4,7 @@ import {IMessageModel, Message} from './models/Message';
 import * as jwt from 'jsonwebtoken';
 import * as cookie from 'cookie';
 import config from './config/main';
-import {User} from './models/User';
+import {User, IUserModel} from './models/User';
 import {ChatRoom} from './models/ChatRoom';
 import {ISocketIOMessagePost, ISocketIOMessage, SocketIOMessageType, IMessage} from './models/SocketIOMessage';
 
@@ -22,6 +22,7 @@ export default class ChatServer {
       const room: any = socket.handshake.query.room;
 
       jwt.verify(token, config.secret, (err: any, decoded: any) => {
+        // FIXME: There's no await before the async this.canConnect?!
         if (err || !this.canConnect(decoded._id, room)) {
           next(new Error('Not authorized'));
         }
@@ -42,6 +43,16 @@ export default class ChatServer {
     const _room = await ChatRoom.findById(room);
 
     return _user && _room;
+  }
+
+  async obtainChatName (user: IUserModel, room: string) {
+    const lastMessage = await Message.findOne({room: room, author: user}).sort({createdAt: -1});
+    if (lastMessage) {
+      return lastMessage.chatName;
+    } else {
+      // Note: We probably should improve the random name generation, especially for better readability.
+      return user.role + Date.now();
+    }
   }
 
   init() {
