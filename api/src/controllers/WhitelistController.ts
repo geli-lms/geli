@@ -1,7 +1,5 @@
-import {
-  Authorized, Body, Delete, Get, JsonController, Post, Param, Put, UseBefore,
-  BadRequestError
-} from 'routing-controllers';
+import {Get, Post, Put, Delete, Authorized, Param, 
+        UseBefore, JsonController, BadRequestError} from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import {WhitelistUser} from '../models/WhitelistUser';
 import {errorCodes} from '../config/errorCodes';
