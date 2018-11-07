@@ -22,9 +22,7 @@ export default class ChatServer {
       const room: any = socket.handshake.query.room;
 
       jwt.verify(token, config.secret, (err: any, decoded: any) => {
-        if (err) {
-          next(new Error('not authorized'));
-        } else if (this.canConnect(decoded._id, room)) {
+        if (!err && this.canConnect(decoded._id, room)) {
           next();
         } else {
           next(new Error('not authorized'));
