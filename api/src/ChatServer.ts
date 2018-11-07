@@ -21,9 +21,8 @@ export default class ChatServer {
       const token = cookie.parse(socket.handshake.headers.cookie).token;
       const room: any = socket.handshake.query.room;
 
-      jwt.verify(token, config.secret, (err: any, decoded: any) => {
-        // FIXME: There's no await before the async this.canConnect?!
-        if (err || !this.canConnect(decoded._id, room)) {
+      jwt.verify(token, config.secret, async (err: any, decoded: any) => {
+        if (err || !await this.canConnect(decoded._id, room)) {
           next(new Error('Not authorized'));
         }
         socket.tokenPayload = decoded;
@@ -31,7 +30,6 @@ export default class ChatServer {
       });
     });
   }
-
 
   /**
    * verify if the  given userId and room exist.
