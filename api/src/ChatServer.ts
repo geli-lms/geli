@@ -22,11 +22,11 @@ export default class ChatServer {
       const room: any = socket.handshake.query.room;
 
       jwt.verify(token, config.secret, (err: any, decoded: any) => {
-        if (!err && this.canConnect(decoded._id, room)) {
-          next();
-        } else {
-          next(new Error('not authorized'));
+        if (err || !this.canConnect(decoded._id, room)) {
+          next(new Error('Not authorized'));
         }
+        socket.tokenPayload = decoded;
+        next();
       });
     });
   }
@@ -46,23 +46,20 @@ export default class ChatServer {
 
   init() {
     this.io.on(SocketIOEvent.CONNECT, (socket: any) => {
-      // ATM this and the passportJwtStrategyFactory are the only users of the 'cookie' package.
-      const token = cookie.parse(socket.handshake.headers.cookie).token;
-      const tokenPayload = jwt.decode(token);
+      const userId = socket.tokenPayload._id;
+      const room = socket.handshake.query.room;
+      socket.join(room);
 
-      const queryParam: any = socket.handshake.query;
-      socket.join(queryParam.room);
-
-      socket.on(SocketIOEvent.MESSAGE, (message: ISocketIOMessagePost) => this.onMessage(message, queryParam, tokenPayload));
+      socket.on(SocketIOEvent.MESSAGE, (message: ISocketIOMessagePost) => this.onMessage(message, room, userId));
     });
   }
 
-  async onMessage(socketIOMessagePost: ISocketIOMessagePost, queryParam: any, tokenPayload: any) {
+  async onMessage(socketIOMessagePost: ISocketIOMessagePost, room: string, userId: string) {
     const message: IMessage = {
       _id: undefined,
-      author: tokenPayload._id,
+      author: userId,
       content: socketIOMessagePost.content,
-      room: socketIOMessagePost.room,
+      room: room,
       chatName: 'TODO', // FIXME
       comments: []
     };
