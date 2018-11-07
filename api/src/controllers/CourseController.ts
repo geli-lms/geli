@@ -1,15 +1,6 @@
-import {
-  Authorized, BadRequestError,
-  Body,
-  CurrentUser, Delete, ForbiddenError,
-  Get,
-  JsonController, NotFoundError,
-  Param,
-  Post,
-  Put,
-  UploadedFile,
-  UseBefore
-} from 'routing-controllers';
+import { Get, Post, Put, Delete, Param, Body, CurrentUser, 
+  Authorized, JsonController, UploadedFile, UseBefore,
+  BadRequestError, ForbiddenError, NotFoundError} from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import {errorCodes} from '../config/errorCodes';
 import config from '../config/main';
