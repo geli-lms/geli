@@ -5,7 +5,7 @@ import {
   Body, Post, Get, Delete, CurrentUser, Authorized
 } from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
-import {Unit, FreeTextUnit, CodeKataUnit, TaskUnit} from '../models/units/Unit';
+import {Unit} from '../models/units/Unit';
 import {IDownload} from '../../../shared/models/IDownload';
 import {IFileUnit} from '../../../shared/models/units/IFileUnit';
 import {Lecture} from '../models/Lecture';
@@ -38,7 +38,7 @@ export class DownloadController {
   cleanupCache() {
     cache.expire((record: any) => {
       return new Promise((resolve, reject) => {
-        fs.unlink( config.tmpFileCacheFolder + record.key + '.zip', (err: Error) => {
+        fs.unlink(config.tmpFileCacheFolder + record.key + '.zip', (err: Error) => {
           if (err) {
             reject(false);
           } else {
