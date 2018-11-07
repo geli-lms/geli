@@ -1,13 +1,7 @@
-import {
-  Authorized, BadRequestError, Body, CurrentUser, Delete, ForbiddenError, Get, InternalServerError, JsonController, NotFoundError, Param,
-  Post, Req,
-  UseBefore
-} from 'routing-controllers';
+import {Get, Post, Delete, Param, Body, CurrentUser, Authorized,
+        UseBefore, BadRequestError, JsonController, NotFoundError} from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
-import {
-  NotificationSettings, API_NOTIFICATION_TYPE_NONE,
-  API_NOTIFICATION_TYPE_CHANGES_WITH_RELATIONIONSHIP, API_NOTIFICATION_TYPE_ALL_CHANGES,
-} from '../models/NotificationSettings';
+import {NotificationSettings, API_NOTIFICATION_TYPE_ALL_CHANGES} from '../models/NotificationSettings';
 import {Notification} from '../models/Notification';
 import {Course} from '../models/Course';
 import {User} from '../models/User';
@@ -15,8 +9,6 @@ import {IUser} from '../../../shared/models/IUser';
 import {ICourse} from '../../../shared/models/ICourse';
 import {ILecture} from '../../../shared/models/ILecture';
 import {IUnit} from '../../../shared/models/units/IUnit';
-import {INotification} from '../../../shared/models/INotification';
-import {Request} from 'express';
 import {SendMailOptions} from 'nodemailer';
 import emailService from '../services/EmailService';
 
@@ -33,7 +25,6 @@ export class NotificationController {
    * @apiPermission admin
    *
    * @apiParam {Object} data Notification text and information on changed course, lecture and unit.
-   * @apiParam {Request} request Request.
    *
    * @apiSuccess {Boolean} notified Confirmation of notification.
    *
@@ -47,7 +38,7 @@ export class NotificationController {
    */
   @Authorized(['teacher', 'admin'])
   @Post('/')
-  async createNotifications(@Body() data: any, @Req() request: Request) {
+  async createNotifications(@Body() data: any) {
     if (!data.changedCourse || !data.text) {
       throw new BadRequestError('Notification needs at least the fields course and text');
     }

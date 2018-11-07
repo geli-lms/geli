@@ -1,12 +1,10 @@
-import {Request} from 'express';
 import { Authorized, Body, CurrentUser, Delete, ForbiddenError, Get,
-  JsonController, NotFoundError, Param, Post, Put, Req, UseBefore } from 'routing-controllers';
+  JsonController, NotFoundError, Param, Post, Put, UseBefore } from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 
 import {Lecture} from '../models/Lecture';
 import {ILecture} from '../../../shared/models/ILecture';
 import {Course} from '../models/Course';
-import {Notification} from '../models/Notification';
 import {IUser} from '../../../shared/models/IUser';
 
 @JsonController('/lecture')
@@ -47,7 +45,6 @@ export class LectureController {
    * @apiPermission admin
    *
    * @apiParam {Object} data New lecture data.
-   * @apiParam {Request} request Request.
    *
    * @apiSuccess {Lecture} lecture Added lecture.
    *
@@ -64,7 +61,7 @@ export class LectureController {
    */
   @Authorized(['teacher', 'admin'])
   @Post('/')
-  addLecture(@Body() data: any, @Req() request: Request) {
+  addLecture(@Body() data: any) {
     const lectureI: ILecture = data.lecture;
     const courseId: string = data.courseId;
     return new Lecture(lectureI).save()

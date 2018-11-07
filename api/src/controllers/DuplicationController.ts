@@ -1,6 +1,5 @@
-import {Request} from 'express';
 import {
-  Body, Post, Param, Req, JsonController, UseBefore, Authorized, InternalServerError
+  Body, Post, Param, JsonController, UseBefore, Authorized, InternalServerError
 } from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import {IUnit} from '../../../shared/models/units/IUnit';
@@ -25,7 +24,6 @@ export class DuplicationController {
    *
    * @apiParam {String} id Course ID.
    * @apiParam {Object} data Course data (with courseAdmin).
-   * @apiParam {Request} request Request.
    *
    * @apiSuccess {Course} course Duplicated course.
    *
@@ -50,7 +48,7 @@ export class DuplicationController {
    * @apiError InternalServerError Failed to duplicate course
    */
   @Post('/course/:id')
-  async duplicateCourse(@Param('id') id: string, @Body() data: any, @Req() request: Request) {
+  async duplicateCourse(@Param('id') id: string, @Body() data: any) {
     // we could use @CurrentUser instead of the need to explicitly provide a teacher
     const courseAdmin = data.courseAdmin;
     try {
@@ -74,7 +72,6 @@ export class DuplicationController {
    *
    * @apiParam {String} id Lecture ID.
    * @apiParam {Object} data Lecture data (with courseId).
-   * @apiParam {Request} request Request.
    *
    * @apiSuccess {Lecture} lecture Duplicated lecture.
    *
@@ -92,7 +89,7 @@ export class DuplicationController {
    * @apiError InternalServerError Failed to duplicate lecture
    */
   @Post('/lecture/:id')
-  async duplicateLecture(@Param('id') id: string, @Body() data: any, @Req() request: Request) {
+  async duplicateLecture(@Param('id') id: string, @Body() data: any) {
     const courseId = data.courseId;
     try {
       const lectureModel: ILectureModel = await Lecture.findById(id);
@@ -114,7 +111,6 @@ export class DuplicationController {
    *
    * @apiParam {String} id Unit ID.
    * @apiParam {Object} data Unit data (with courseId and lectureId).
-   * @apiParam {Request} request Request.
    *
    * @apiSuccess {Unit} unit Duplicated unit.
    *
@@ -136,7 +132,7 @@ export class DuplicationController {
    * @apiError InternalServerError Failed to duplicate unit
    */
   @Post('/unit/:id')
-  async duplicateUnit(@Param('id') id: string, @Body() data: any, @Req() request: Request) {
+  async duplicateUnit(@Param('id') id: string, @Body() data: any) {
     const courseId = data.courseId;
     const lectureId = data.lectureId;
     try {

@@ -6,7 +6,7 @@ import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import * as fs from 'fs';
 import * as path from 'path';
 import {IUser} from '../../../shared/models/IUser';
-import {IUserModel, User} from '../models/User';
+import {User} from '../models/User';
 import {isNullOrUndefined} from 'util';
 import {errorCodes} from '../config/errorCodes';
 import * as sharp from 'sharp';
