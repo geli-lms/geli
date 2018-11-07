@@ -442,7 +442,7 @@ export class UserController {
 
     if (typeof newUser.password === 'undefined' || newUser.password.length === 0) {
       delete newUser.password;
-    } else {
+    } else if (!userIsAdmin) {
       const isValidPassword = await oldUser.isValidPassword(newUser.currentPassword);
       if (!isValidPassword) {
         throw new BadRequestError(errorCodes.user.invalidPassword.text);
