@@ -49,17 +49,16 @@ export default class ChatServer {
       const userId = socket.tokenPayload._id;
       const room = socket.handshake.query.room;
       socket.join(room);
-
-      socket.on(SocketIOEvent.MESSAGE, (message: ISocketIOMessagePost) => this.onMessage(message, room, userId));
+      socket.on(SocketIOEvent.MESSAGE, (message: ISocketIOMessagePost) => this.onMessage(message, userId, room));
     });
   }
 
-  async onMessage(socketIOMessagePost: ISocketIOMessagePost, room: string, userId: string) {
+  async onMessage(socketIOMessagePost: ISocketIOMessagePost,  userId: string, room: string) {
     const message: IMessage = {
       _id: undefined,
-      author: userId,
       content: socketIOMessagePost.content,
-      room: room,
+      author: userId,
+      room,
       chatName: 'TODO', // FIXME
       comments: []
     };
@@ -75,13 +74,13 @@ export default class ChatServer {
         foundMessage.comments.push(message);
         foundMessage = await foundMessage.save();
         socketIOMessage.message = foundMessage.comments.pop();
-        this.io.in(queryParam.room).emit(SocketIOEvent.MESSAGE, socketIOMessage);
+        this.io.in(room).emit(SocketIOEvent.MESSAGE, socketIOMessage);
       }
     } else {
       let newMessage = new Message(message);
       newMessage = await newMessage.save();
       socketIOMessage.message = newMessage;
-      this.io.in(queryParam.room).emit(SocketIOEvent.MESSAGE, socketIOMessage);
+      this.io.in(room).emit(SocketIOEvent.MESSAGE, socketIOMessage);
     }
   }
 }

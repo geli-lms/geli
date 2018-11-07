@@ -32,7 +32,6 @@ interface ISocketIOMessage {
 interface ISocketIOMessagePost {
   meta: ISocketIOMessageMeta;
   content: string;
-  room: string;
 }
 
 export {ISocketIOMessagePost, ISocketIOMessage, ISocketIOMessageMeta, SocketIOMessageType};

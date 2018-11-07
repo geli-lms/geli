@@ -69,8 +69,7 @@ export class MessagingInputFieldComponent implements OnInit {
 
     const socketIOMessagePost: ISocketIOMessagePost = {
       meta: meta,
-      content: this.form.getRawValue().message,
-      room: this.room
+      content: this.form.getRawValue().message
     };
 
     this.chatService.send(socketIOMessagePost);
