@@ -1,13 +1,7 @@
-import {
-  Authorized, BadRequestError, Body, CurrentUser, Delete, Get, JsonController, NotFoundError, Param,
-  Post,
-  UseBefore
-} from 'routing-controllers';
+import {Get, Post, Delete, Param, Body, CurrentUser, Authorized,
+        UseBefore, BadRequestError, JsonController, NotFoundError} from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
-import {
-  NotificationSettings,
-  API_NOTIFICATION_TYPE_ALL_CHANGES,
-} from '../models/NotificationSettings';
+import {NotificationSettings, API_NOTIFICATION_TYPE_ALL_CHANGES} from '../models/NotificationSettings';
 import {Notification} from '../models/Notification';
 import {Course} from '../models/Course';
 import {User} from '../models/User';
