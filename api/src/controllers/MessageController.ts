@@ -83,7 +83,6 @@ export default class MessageController {
    * @apiSuccessExample {json} Success-Response:
    *     {
    *        "count": "45"
-   *
    *     }
    *
    */
@@ -92,9 +91,8 @@ export default class MessageController {
     if (!room) {
       throw new BadRequestError();
     }
-    const count = await Message.countDocuments({room: room});
-
-    return {count: count};
+    const count = await Message.countDocuments({room});
+    return {count};
   }
 
 
