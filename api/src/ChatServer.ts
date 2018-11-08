@@ -10,7 +10,7 @@ import {ChatRoom} from './models/ChatRoom';
 import {SocketIOMessageType} from './models/SocketIOMessage';
 import {IMessage} from '../../shared/models/messaging/IMessage';
 import {ISocketIOMessagePost, ISocketIOMessage} from '../../shared/models/messaging/ISocketIOMessage';
-import {BadRequestError, UnauthorizedError} from 'routing-controllers';
+import {BadRequestError, UnauthorizedError, ForbiddenError} from 'routing-controllers';
 import {extractMongoId} from './utilities/ExtractMongoId';
 import * as Raven from 'raven';
 
@@ -35,6 +35,13 @@ export default class ChatServer {
 
         if (err || !user || !room) {
           next(new UnauthorizedError());
+          return;
+        }
+
+        const privileges = await room.checkPrivileges(user);
+        if (!(privileges.userCanViewMessages && privileges.userCanPostMessages)) {
+          next(new ForbiddenError());
+          return;
         }
 
         socket.chatName = await this.obtainChatName(user, roomId);
