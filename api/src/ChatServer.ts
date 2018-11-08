@@ -80,17 +80,20 @@ export default class ChatServer {
 
     if (socketIOMessagePost.meta.type === SocketIOMessageType.COMMENT) {
       let foundMessage: IMessageModel = await Message.findById(socketIOMessagePost.meta.parent);
+      if (!foundMessage) {
+        process.stdout.write(errorCodes.chat.parentNotFound.text);
+        Raven.captureException(new BadRequestError(errorCodes.chat.parentNotFound.code));
+        return;
+      }
       if (extractMongoId(foundMessage.room) !== roomId) {
         process.stdout.write(errorCodes.chat.badParent.text);
         Raven.captureException(new BadRequestError(errorCodes.chat.badParent.code));
+        return;
       }
-
-      if (foundMessage) {
-        foundMessage.comments.push(message);
-        foundMessage = await foundMessage.save();
-        socketIOMessage.message = foundMessage.comments.pop();
-        this.io.in(roomId).emit(SocketIOEvent.MESSAGE, socketIOMessage);
-      }
+      foundMessage.comments.push(message);
+      foundMessage = await foundMessage.save();
+      socketIOMessage.message = foundMessage.comments.pop();
+      this.io.in(roomId).emit(SocketIOEvent.MESSAGE, socketIOMessage);
     } else {
       let newMessage = new Message(message);
       newMessage = await newMessage.save();
