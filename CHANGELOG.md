@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 -->
 
 ## [Unreleased]
+### Security
+- Fixed multiple severe security issues of the chat system. [#989](https://github.com/geli-lms/geli/issues/989)
 
 ## [[0.8.2](https://github.com/geli-lms/geli/releases/tag/v0.8.2)] - 2018-11-08 - WS 18/19 🍪-Release
 ### Added
