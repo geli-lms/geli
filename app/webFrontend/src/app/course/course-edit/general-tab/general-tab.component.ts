@@ -46,7 +46,7 @@ export class GeneralTabComponent implements OnInit {
     ENROLL_TYPE_ACCESSKEY,
   };
   freeTextStyles = FREETEXT_STYLES;
-  freeTextStyle:string;
+  freeTextStyle: string;
 
 
   courseImageData: IResponsiveImageData;

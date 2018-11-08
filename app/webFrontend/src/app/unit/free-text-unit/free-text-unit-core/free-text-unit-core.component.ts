@@ -1,6 +1,5 @@
 import {Component, Input, OnInit, ViewEncapsulation} from '@angular/core';
 import {MarkdownService} from '../../../shared/services/markdown.service';
-import {DomSanitizer} from '@angular/platform-browser';
 
 @Component({
   selector: 'app-free-text-unit-core',
@@ -14,7 +13,7 @@ export class FreeTextUnitCoreComponent implements OnInit {
 
   renderedHtml: string;
 
-  constructor(private mdService: MarkdownService, private sanitizer: DomSanitizer) {
+  constructor(private mdService: MarkdownService) {
   }
 
   ngOnInit() {
@@ -23,8 +22,7 @@ export class FreeTextUnitCoreComponent implements OnInit {
 
   public renderHtml(): string {
     if (this.mdService && this.markdown) {
-      // ugly workaround for id anchors used by markdown-it footnotes :-(
-      return this.renderedHtml = <string>this.sanitizer.bypassSecurityTrustHtml(this.mdService.render(this.markdown));
+      return this.renderedHtml = this.mdService.render(this.markdown);
     }
   }
 

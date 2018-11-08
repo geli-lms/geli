@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - My courses: Make title or teaser image clickable [#904](https://github.com/geli-lms/geli/issues/904)
 - EU-DSGVO: Export Chat User Data [#862](https://github.com/geli-lms/geli/issues/862)
+- Styles for md-units [#867](https://github.com/geli-lms/geli/issues/867)
 
 ### Changed
 - Minor `ConfigController` bugs and refactoring-flaws. [#899](https://github.com/geli-lms/geli/issues/899)
