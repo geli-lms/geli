@@ -189,6 +189,7 @@ courseSchema.methods.exportJSON = async function (sanitize: boolean = true, only
     delete obj.teachers;
     delete obj.media;
     delete obj.chatRooms;
+    delete obj.freeTextStyle;
   }
 
   if (onlyBasicData) {
