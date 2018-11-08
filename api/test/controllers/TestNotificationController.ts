@@ -160,7 +160,7 @@ describe('Notifications', async () => {
       const newNotification = {
         changedCourse: course,
         changedLecture: lecture,
-        changedUnit: lecture.units[0],
+        changedUnit: unit,
         text: 'test text'
       };
 
