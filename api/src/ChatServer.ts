@@ -8,7 +8,7 @@ import {errorCodes} from './config/errorCodes';
 import {User, IUserModel} from './models/User';
 import {ChatRoom} from './models/ChatRoom';
 import {ISocketIOMessagePost, ISocketIOMessage, SocketIOMessageType, IMessage} from './models/SocketIOMessage';
-import {BadRequestError} from 'routing-controllers';
+import {BadRequestError, UnauthorizedError} from 'routing-controllers';
 import {extractMongoId} from './utilities/ExtractMongoId';
 import * as Raven from 'raven';
 
@@ -32,7 +32,7 @@ export default class ChatServer {
         ]);
 
         if (err || !user || !room) {
-          next(new Error('Not authorized')); // FIXME: Use/Add one of the errorCodes?
+          next(new UnauthorizedError());
         }
 
         socket.chatName = await this.obtainChatName(user, roomId);
