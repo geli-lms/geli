@@ -9,7 +9,6 @@ import {User} from '../../src/models/User';
 import {Course} from '../../src/models/Course';
 import {NotFoundError} from 'routing-controllers';
 import {API_NOTIFICATION_TYPE_ALL_CHANGES, API_NOTIFICATION_TYPE_NONE, NotificationSettings} from '../../src/models/NotificationSettings';
-import {InternalServerError} from 'routing-controllers/http-error/InternalServerError';
 
 chai.use(chaiHttp);
 const should = chai.should();
@@ -154,7 +153,7 @@ describe('Notifications', async () => {
       const lecture = await FixtureUtils.getRandomLectureFromCourse(course);
       const student = course.students[Math.floor(Math.random() * course.students.length)];
       const teacher = await FixtureUtils.getRandomTeacherForCourse(course);
-      const unit = lecture.units.pop();
+      const unit = await FixtureUtils.getRandomUnitFromLecture(lecture);
       unit.visible = true;
 
       const newNotification = {
