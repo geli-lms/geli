@@ -1,39 +1,16 @@
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import {
   BadRequestError,
-  Body,
   Get,
-  JsonController, NotFoundError, Param,
-  Post, QueryParam,
+  JsonController,
+  QueryParam,
   UseBefore
 } from 'routing-controllers';
 import {IMessageModel, Message} from '../models/Message';
-import {IMessage} from '../../../shared/models/messaging/IMessage';
 
 @JsonController('/message')
 @UseBefore(passportJwtMiddleware)
 export default class MessageController {
-
-  /**
-   * @api {post} /api/message create new message
-   * @apiName PostMessage
-   * @apiGroup Message
-   *
-   *
-   * @apiSuccessExample {json} Success-Response:
-   *     {}
-   */
-  @Post('/')
-  async postMessage(@Body({required: true}) message: IMessage) {
-    const newMessage = new Message(message);
-    try {
-      await newMessage.save();
-      return {};
-    } catch (err) {
-      throw new BadRequestError(err);
-    }
-  }
-
 
   /**
    * @api {get} /api/message get all messages in a given room
@@ -93,31 +70,6 @@ export default class MessageController {
     }
     const count = await Message.countDocuments({room});
     return {count};
-  }
-
-
-  /**
-   * @api {post} /api/message/id/comments  add a comment to a given message.
-   * @apiName addComment
-   * @apiGroup Message
-   *
-   * @apiParam {string} id: id of the message.
-   *
-   * @apiSuccess {IMessage} updated Message.
-   *
-   * @apiSuccessExample {json} Success-Response:
-   *     {}
-   */
-  @Post('/:id([a-fA-F0-9]{24})/comments')
-  async addComment (@Body() comment: IMessage, @Param('id') id: string) {
-     const  message = await Message.findById(id);
-     if (!message) {
-       throw new NotFoundError('message not found');
-     }
-
-     message.comments.push(comment);
-     await message.save();
-     return {};
   }
 
 }
