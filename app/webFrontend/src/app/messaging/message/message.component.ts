@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {DomSanitizer} from '@angular/platform-browser';
-import {IMessage} from '../../../../../../shared/models/messaging/IMessage';
+import {IMessageDisplay} from '../../../../../../shared/models/messaging/IMessage';
 import {MarkdownService} from '../../shared/services/markdown.service';
 import {UserService} from '../../shared/services/user.service';
 
@@ -11,7 +11,7 @@ import {UserService} from '../../shared/services/user.service';
 })
 export class MessageComponent implements OnInit {
 
-  @Input() message: IMessage;
+  @Input() message: IMessageDisplay;
   @Input() isChildMessage = false;
   @Input() mode: string;
   htmlMessage: any;

@@ -92,12 +92,12 @@ export default class ChatServer {
       }
       foundMessage.comments.push(message);
       foundMessage = await foundMessage.save();
-      socketIOMessage.message = foundMessage.comments.pop();
+      socketIOMessage.message = (<IMessageModel>foundMessage.comments.pop()).forDisplay();
       this.io.in(roomId).emit(SocketIOEvent.MESSAGE, socketIOMessage);
     } else {
       let newMessage = new Message(message);
       newMessage = await newMessage.save();
-      socketIOMessage.message = newMessage;
+      socketIOMessage.message = newMessage.forDisplay();
       this.io.in(roomId).emit(SocketIOEvent.MESSAGE, socketIOMessage);
     }
   }

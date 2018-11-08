@@ -1,4 +1,4 @@
-import {IMessage} from './IMessage';
+import {IMessageDisplay} from './IMessage';
 
 export enum SocketIOMessageType {
   COMMENT = 'comment',
@@ -13,7 +13,7 @@ export interface ISocketIOMessageMeta {
 // This is what clients receive.
 export interface ISocketIOMessage {
   meta: ISocketIOMessageMeta;
-  message: IMessage;
+  message: IMessageDisplay;
 }
 
 // This is what's "posted" by the client to the ChatServer.

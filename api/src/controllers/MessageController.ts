@@ -28,7 +28,7 @@ export default class MessageController {
     const newMessage = new Message(message);
     try {
       const createdMessage = await newMessage.save();
-      return createdMessage;
+      return createdMessage.forDisplay();
     } catch (err) {
       throw new BadRequestError(err);
     }
@@ -72,10 +72,7 @@ export default class MessageController {
 
     const messages: IMessageModel[] = await Message.find({room: room}).sort({createdAt: order}).skip(skip).limit(limit);
 
-    return messages.map((message: IMessageModel) => {
-      message = message.toObject();
-      return message;
-    });
+    return messages.map((message: IMessageModel) => message.forDisplay());
   }
 
   /**
@@ -133,7 +130,8 @@ export default class MessageController {
      }
 
      message.comments.push(comment);
-     return message.save();
+     await message.save();
+     return message.forDisplay();
   }
 
 }

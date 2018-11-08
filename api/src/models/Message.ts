@@ -1,9 +1,11 @@
 import * as mongoose from 'mongoose';
-import {IMessage} from '../../../shared/models/messaging/IMessage';
+import {IMessage, IMessageDisplay} from '../../../shared/models/messaging/IMessage';
 import {IUser} from '../../../shared/models/IUser';
+import {extractMongoId} from '../utilities/ExtractMongoId';
 
 interface IMessageModel extends IMessage, mongoose.Document {
-    exportJSON: () => Promise<IMessageModel>;
+  exportJSON: () => Promise<IMessageModel>;
+  forDisplay: () => IMessageDisplay;
 }
 
 interface IMessageMongoose extends mongoose.Model<IMessageModel> {
@@ -68,6 +70,19 @@ messageSchema.methods.exportJSON = function () {
   // custom properties
 
   return obj;
+};
+
+messageSchema.methods.forDisplay = function (): IMessageDisplay {
+  const {_id, content, room, chatName, comments, updatedAt, createdAt} = this;
+  return {
+    _id: <string>extractMongoId(_id),
+    content,
+    room: <string>extractMongoId(room),
+    chatName,
+    comments: comments.map((comment: IMessageModel) => comment.forDisplay()),
+    updatedAt,
+    createdAt,
+  };
 };
 
 messageSchema.statics.exportPersonalData = async function(user: IUser) {
