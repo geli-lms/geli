@@ -94,7 +94,7 @@ export class MessagingComponent implements OnInit, AfterViewChecked {
 
   async loadMoreMsg() {
     this.queryParam = Object.assign(this.queryParam, {skip: this.messages.length});
-    const _messages: IMessageDisplay[] = await this.messageService.getMessages(this.queryParam);
+    const _messages = await this.messageService.getMessages(this.queryParam);
     this.messages = (this.mode === 'chat') ? _messages.reverse().concat(this.messages) : this.messages.concat(_messages.reverse());
     if (this.messages.length === this.messageCount) {
       this.disableInfiniteScroll = true;
