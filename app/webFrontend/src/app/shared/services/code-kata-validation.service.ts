@@ -19,8 +19,11 @@ export class CodeKataValidationService {
     };
 
     try {
-      // tslint:disable-next-line:no-eval
-      result = eval(codeToTest);
+      (() => {
+        'use strict';
+        // tslint:disable-next-line:no-eval
+        result = eval(codeToTest);
+      })();
     } catch (e) {
       const err = e.constructor('Error in evaled Script:' + e.message);
       err.lineNumber = e.lineNumber - err.lineNumber;
