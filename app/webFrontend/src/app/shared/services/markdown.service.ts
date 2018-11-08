@@ -19,6 +19,8 @@ export class MarkdownService {
   *
   * A workaround exists, but is removed because of multiple reasons.
   * See: https://github.com/geli-lms/geli/blob/34a3ab12bb64246015d10b0b6d5ae4ceb49467c8/app/webFrontend/src/app/shared/services/markdown.service.ts#L51
+  * and
+  * https://github.com/geli-lms/geli/commit/34a3ab12bb64246015d10b0b6d5ae4ceb49467c8#diff-d066343acc1ce14385a25371993e95da
   *
   * Original implementation can be found here: https://github.com/markdown-it/markdown-it-footnote/blob/master/index.js
   *
