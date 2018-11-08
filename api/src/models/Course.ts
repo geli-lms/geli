@@ -9,7 +9,7 @@ import {InternalServerError} from 'routing-controllers';
 import {IUser} from '../../../shared/models/IUser';
 import {ObjectID} from 'bson';
 import {Directory} from './mediaManager/Directory';
-import {IProperties} from '../../../shared/models/IProperties';
+import {IFlags} from '../../../shared/models/IFlags';
 import {extractMongoId} from '../utilities/ExtractMongoId';
 import {ChatRoom, IChatRoomModel} from './ChatRoom';
 
@@ -17,7 +17,7 @@ import {Picture} from './mediaManager/File';
 
 interface ICourseModel extends ICourse, mongoose.Document {
   exportJSON: (sanitize?: boolean, onlyBasicData?: boolean) => Promise<ICourse>;
-  checkPrivileges: (user: IUser) => IProperties;
+  checkPrivileges: (user: IUser) => IFlags;
   forDashboard: (user: IUser) => ICourseDashboard;
   forView: () => ICourseView;
   populateLecturesFor: (user: IUser) => this;

@@ -1,13 +1,13 @@
 import * as mongoose from 'mongoose';
 import {IChatRoom} from '../../../shared/models/IChatRoom';
 import {IUser} from '../../../shared/models/IUser';
-import {IProperties} from '../../../shared/models/IProperties';
+import {IFlags} from '../../../shared/models/IFlags';
 import {User} from './User';
 import {Course, ICourseModel} from './Course';
 import {Unit} from './units/Unit';
 
 interface IChatRoomModel extends IChatRoom, mongoose.Document {
-  checkPrivileges: (user: IUser) => Promise<IProperties>;
+  checkPrivileges: (user: IUser) => Promise<IFlags>;
 }
 
 const chatRoomSchema = new mongoose.Schema({
