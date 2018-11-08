@@ -7,6 +7,8 @@ import config from './config/main';
 import {User, IUserModel} from './models/User';
 import {ChatRoom} from './models/ChatRoom';
 import {ISocketIOMessagePost, ISocketIOMessage, SocketIOMessageType, IMessage} from './models/SocketIOMessage';
+import {BadRequestError} from 'routing-controllers';
+import {extractMongoId} from './utilities/ExtractMongoId';
 
 // FIXME: This is currently WIP to fix the #989 issues.
 export default class ChatServer {
@@ -28,7 +30,7 @@ export default class ChatServer {
         ]);
 
         if (err || !user || !room) {
-          next(new Error('Not authorized'));
+          next(new Error('Not authorized')); // FIXME: Use/Add one of the errorCodes?
         }
 
         socket.chatName = await this.obtainChatName(user, roomId);
@@ -58,7 +60,7 @@ export default class ChatServer {
     });
   }
 
-  async onMessage(socketIOMessagePost: ISocketIOMessagePost,  userId: string, roomId: string, chatName: string) {
+  async onMessage(socketIOMessagePost: ISocketIOMessagePost, userId: string, roomId: string, chatName: string) {
     const message: IMessage = {
       _id: undefined,
       content: socketIOMessagePost.content,
@@ -74,6 +76,10 @@ export default class ChatServer {
 
     if (socketIOMessagePost.meta.type === SocketIOMessageType.COMMENT) {
       let foundMessage: IMessageModel = await Message.findById(socketIOMessagePost.meta.parent);
+      if (extractMongoId(foundMessage.room) !== roomId) {
+        throw new BadRequestError(); // FIXME: Use/Add one of the errorCodes?
+        // FIXME: Don't just throw an unhandled exception, that's deprecated!
+      }
 
       if (foundMessage) {
         foundMessage.comments.push(message);
