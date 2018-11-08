@@ -6,7 +6,7 @@ import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import * as fs from 'fs';
 import * as path from 'path';
 import {IUser} from '../../../shared/models/IUser';
-import {IUserModel, User} from '../models/User';
+import {User} from '../models/User';
 import {isNullOrUndefined} from 'util';
 import {errorCodes} from '../config/errorCodes';
 import * as sharp from 'sharp';
@@ -200,7 +200,7 @@ export class UserController {
       conditions.$or.push({'profile.firstName': {$regex: re}});
       conditions.$or.push({'profile.lastName': {$regex: re}});
     });
-    const amountUsers = await User.count({}).where({role: role});
+    const amountUsers = await User.countDocuments({role: role});
     const users = await User.find(conditions, {
       'score': {$meta: 'textScore'}
     })
@@ -342,9 +342,7 @@ export class UserController {
 
     const resizedImageBuffer =
         await sharp(file.path)
-            .resize(config.maxProfileImageWidth, config.maxProfileImageHeight)
-            .withoutEnlargement(true)
-            .max()
+            .resize(config.maxProfileImageWidth, config.maxProfileImageHeight, {fit: 'inside', withoutEnlargement: true})
             .toBuffer({resolveWithObject: true});
 
     fs.writeFileSync(file.path, resizedImageBuffer.data);
@@ -444,7 +442,7 @@ export class UserController {
 
     if (typeof newUser.password === 'undefined' || newUser.password.length === 0) {
       delete newUser.password;
-    } else {
+    } else if (!userIsAdmin) {
       const isValidPassword = await oldUser.isValidPassword(newUser.currentPassword);
       if (!isValidPassword) {
         throw new BadRequestError(errorCodes.user.invalidPassword.text);

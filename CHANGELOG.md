@@ -11,6 +11,34 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 -->
 
 ## [Unreleased]
+
+## [[0.8.2](https://github.com/geli-lms/geli/releases/tag/v0.8.2)] - 2018-11-08 - WS 18/19 🍪-Release
+### Added
+- My courses: Make title or teaser image clickable. [#904](https://github.com/geli-lms/geli/issues/904)
+- EU-DSGVO: Export Chat User Data. [#862](https://github.com/geli-lms/geli/issues/862)
+
+### Changed
+- Minor `ConfigController` bugs and refactoring-flaws. [#899](https://github.com/geli-lms/geli/issues/899)
+- Don't pin `@types/express` to a specific version. [#947](https://github.com/geli-lms/geli/pull/947)
+- Switched to cookie-based JWT authentication. [#840](https://github.com/geli-lms/geli/issues/840) [#968](https://github.com/geli-lms/geli/issues/968)
+- Prepare `typescript` 3.1 upgrade. [#967](https://github.com/geli-lms/geli/pull/967)
+- Use `npm ci` instead `npm install` and cache `$HOME/.npm` instead of `node_modules`. [#972](https://github.com/geli-lms/geli/pull/972)
+
+### Removed
+- Remove `@types/winston`. [#945](https://github.com/geli-lms/geli/pull/945)
+- Remove the now obsolete `'mediaToken'` and `JwtPipe` systems. [#840](https://github.com/geli-lms/geli/issues/840)
+
+### Fixed
+- Deprecated `Messages.count` replace with `Message.countDocuments`. [#925](https://github.com/geli-lms/geli/issues/925)
+- Deprecated `User.count` replace with `User.countDocuments`. [#934](https://github.com/geli-lms/geli/issues/934) 
+- Redirect to initial URL after login. [#318](https://github.com/geli-lms/geli/issues/318)
+- Error when clicking on notification. [#916](https://github.com/geli-lms/geli/issues/916)
+- Remove unused controller code. [#986](https://github.com/geli-lms/geli/issues/986)
+
+### Security
+- Progress leak of invisible units and courses [#735](https://github.com/geli-lms/geli/issues/735)
+- Reduced XSS attack surface by switching from `localStorage` tokens to `HttpOnly`, strict `SameSite` cookie-based JWT authentication. [#840](https://github.com/geli-lms/geli/issues/840)
+
 ## [[0.8.1](https://github.com/geli-lms/geli/releases/tag/v0.8.1)] - 2018-10-31 - WS 18/19 Hotfix-Release
 ### Fixed
 - People can enroll in courses again. [#942](https://github.com/geli-lms/geli/pull/942)
@@ -45,7 +73,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Sentry reporting for missing translations. [#858](https://github.com/geli-lms/geli/issues/858)
 - Migration for `visible` field. [#890](https://github.com/geli-lms/geli/pull/890)
 - Migration for `fileUnitType` field. [#907](https://github.com/geli-lms/geli/pull/907)
-- Fixed error on clicking on notification. [#916](https://github.com/geli-lms/geli/issues/916)
 
 ### Changed
 - Minor fixes and adaptations and merge-failure fixes. [#785](https://github.com/geli-lms/geli/issues/785)
@@ -104,6 +131,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Migrations for adding chatrooms to course and unit. [#888](https://github.com/geli-lms/geli/issues/888), [#903](https://github.com/geli-lms/geli/pull/903), [#905](https://github.com/geli-lms/geli/pull/905)
 - `AuthController` `addWhitelistedUserToCourses` broken condition & typos. [#895](https://github.com/geli-lms/geli/issues/895)
 - `ChatRoomController` internal data leak. [#897](https://github.com/geli-lms/geli/issues/897)
+- Error on clicking on notification. [#916](https://github.com/geli-lms/geli/issues/916)
 - Depcreated warning on startup. [#920](https://github.com/geli-lms/geli/pull/920)
 
 ### Security
@@ -168,6 +196,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Fixed form validator in create task [#579](https://github.com/geli-lms/geli/issues/579)
 - Fixed Mongoose pre hook usage [#680](https://github.com/geli-lms/geli/issues/680) [#677](https://github.com/geli-lms/geli/issues/677)
 - Fixed broken code kata validation. [#834](https://github.com/geli-lms/geli/issues/834)
+- Fixed error that admin couldn't change password of a student [#975](https://github.com/geli-lms/geli/issues/975)
 
 ### Security
 - Fixed numerous severe user related security issues. [#691](https://github.com/geli-lms/geli/issues/691) [#709](https://github.com/geli-lms/geli/pull/709)

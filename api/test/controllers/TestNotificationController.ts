@@ -33,7 +33,7 @@ describe('Notifications', async () => {
 
       const res = await chai.request(app)
         .post(BASE_URL)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
         .send(newNotification)
         .catch(err => err.response);
       res.status.should.be.equal(400);
@@ -52,7 +52,7 @@ describe('Notifications', async () => {
 
       const res = await chai.request(app)
         .post(BASE_URL)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
         .send(newNotification);
       res.status.should.be.equal(200);
       res.body.notified.should.be.equal(true);
@@ -69,7 +69,7 @@ describe('Notifications', async () => {
 
       const res = await chai.request(app)
         .post(`${BASE_URL}/user/507f191e810c19729de860ea`) // valid id but user not exist
-        .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
         .send({})
         .catch(err => err.response);
       res.status.should.be.equal(400);
@@ -88,7 +88,7 @@ describe('Notifications', async () => {
 
       const res = await chai.request(app)
         .post(`${BASE_URL}/user/507f191e810c19729de860ea`) // valid id but user not exist
-        .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
         .send(newNotification)
         .catch(err => err.response);
       res.status.should.be.equal(400);
@@ -108,7 +108,7 @@ describe('Notifications', async () => {
 
       const res = await chai.request(app)
         .post(`${BASE_URL}/user/${student._id}`)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
         .send(newNotification);
       res.status.should.be.equal(200);
       res.body.notified.should.be.equal(true);
@@ -136,7 +136,7 @@ describe('Notifications', async () => {
 
       const res = await chai.request(app)
         .post(`${BASE_URL}/user/${student._id}`)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
         .send(newNotification);
       res.status.should.be.equal(200);
       res.body.notified.should.be.equal(true);
@@ -160,7 +160,7 @@ describe('Notifications', async () => {
 
       const res = await chai.request(app)
         .post(`${BASE_URL}/user/${student._id}`)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
         .send(newNotification);
       res.status.should.be.equal(200);
       res.body.notified.should.be.equal(true);
@@ -188,7 +188,7 @@ describe('Notifications', async () => {
 
       const res = await chai.request(app)
         .post(`${BASE_URL}/user/${student._id}`)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
         .send(newNotification);
       res.status.should.be.equal(200);
       res.body.notified.should.be.equal(true);
@@ -208,7 +208,7 @@ describe('Notifications', async () => {
 
       const res = await chai.request(app)
         .post(`${BASE_URL}/user/${student._id}`)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
         .send(newNotification);
       res.status.should.be.equal(200);
       res.body.notified.should.be.equal(true);
@@ -230,7 +230,7 @@ describe('Notifications', async () => {
 
       const res = await chai.request(app)
         .get(`${BASE_URL}/user/${student._id}`)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(student)}`);
+        .set('Cookie', `token=${JwtUtils.generateToken(student)}`);
       res.status.should.be.equal(200);
       res.body.forEach((notification: any) => {
         notification._id.should.be.a('string');
@@ -255,7 +255,7 @@ describe('Notifications', async () => {
 
       const res = await chai.request(app)
         .del(`${BASE_URL}/${newNotification._id}`)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(students[0])}`);
+        .set('Cookie', `token=${JwtUtils.generateToken(students[0])}`);
 
       res.status.should.be.equal(200);
       const deletedNotification = await Notification.findById(newNotification._id);
@@ -274,7 +274,7 @@ describe('Notifications', async () => {
 
       const res = await chai.request(app)
         .del(`${BASE_URL}/${newNotification._id}`)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(students[1])}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(students[1])}`)
         .catch(err => err.response);
 
       res.status.should.be.equal(404);
