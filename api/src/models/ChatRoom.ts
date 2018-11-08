@@ -1,7 +1,13 @@
 import * as mongoose from 'mongoose';
 import {IChatRoom} from '../../../shared/models/IChatRoom';
+import {IUser} from '../../../shared/models/IUser';
+import {IProperties} from '../../../shared/models/IProperties';
+import {User} from './User';
+import {Course, ICourseModel} from './Course';
+import {Unit} from './units/Unit';
 
 interface IChatRoomModel extends IChatRoom, mongoose.Document {
+  checkPrivileges: (user: IUser) => Promise<IProperties>;
 }
 
 const chatRoomSchema = new mongoose.Schema({
@@ -11,7 +17,7 @@ const chatRoomSchema = new mongoose.Schema({
     description: {
       type: String
     },
-     room: {
+    room: {
       roomType: String,
       roomFor: {
         type: mongoose.Schema.Types.ObjectId,
@@ -30,6 +36,31 @@ const chatRoomSchema = new mongoose.Schema({
   }
 );
 
+chatRoomSchema.methods.checkPrivileges = async function (user: IUser) {
+  const {userIsAdmin} = User.checkPrivileges(user);
+
+  let userCanAccessRoom = userIsAdmin;
+  if (!userCanAccessRoom) {
+    const {roomType, roomFor} = this.room;
+    let course: ICourseModel;
+    switch (roomType) {
+      case 'Course':
+        course = await Course.findById(roomFor);
+        break;
+      case 'Unit':
+        const unit = await Unit.findById(roomFor).populate('_course');
+        course = unit && unit._course;
+        break;
+    }
+    userCanAccessRoom = course && course.checkPrivileges(user).userCanViewCourse;
+  }
+
+  return {
+    // Currently there is no differentiation between viewing and posting authentication:
+    userCanViewMessages: userCanAccessRoom,
+    userCanPostMessages: userCanAccessRoom
+  };
+};
 
 const ChatRoom = mongoose.model<IChatRoomModel>('ChatRoom', chatRoomSchema);
 export {ChatRoom, IChatRoomModel};
