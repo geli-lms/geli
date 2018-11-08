@@ -46,7 +46,7 @@
 }
 
 h1.small {
-  @media only screen and (max-width: 475px) {
+  @media only screen and (max-width: $bp-width--sm) {
     font-size: 20px;
   }
 }
