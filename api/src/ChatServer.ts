@@ -79,6 +79,7 @@ export default class ChatServer {
     if (socketIOMessagePost.meta.type === SocketIOMessageType.COMMENT) {
       let foundMessage: IMessageModel = await Message.findById(socketIOMessagePost.meta.parent);
       if (extractMongoId(foundMessage.room) !== roomId) {
+        process.stdout.write(errorCodes.chat.badParent.text);
         Raven.captureException(new BadRequestError(errorCodes.chat.badParent.code));
       }
 
