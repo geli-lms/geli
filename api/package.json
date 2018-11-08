@@ -1,6 +1,6 @@
 {
   "name": "geli-api",
-  "version": "0.8.1",
+  "version": "0.8.2",
   "license": "GPL-3.0",
   "repository": "geli-lms/geli",
   "description": "This is the API-Package.json for geli.",
@@ -62,7 +62,7 @@
     "socket.io": "^2.1.0",
     "stream-buffers": "^3.0.1",
     "to-utf-8": "^1.3.0",
-    "validator": "^10.4.0"
+    "validator": "^10.9.0"
   },
   "devDependencies": {
     "@types/bcrypt": "^3.0.0",
@@ -81,7 +81,7 @@
     "@types/passport-local": "^1.0.33",
     "@types/raven": "^2.5.1",
     "@types/validator": "^9.4.2",
-    "chai": "4.1.2",
+    "chai": "4.2.0",
     "chai-http": "^4.2.0",
     "coveralls": "^3.0.2",
     "gulp": "^4.0.0",
