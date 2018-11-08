@@ -4,6 +4,10 @@ export const errorCodes = {
       code: 'chat room not found',
       text: 'Chat room was not found.',
     },
+    badParent: {
+      code: 'bad parent',
+      text: 'Message parent isn\'t in the same room, invalidating the post',
+    }
   },
   mail: {
     duplicate: {

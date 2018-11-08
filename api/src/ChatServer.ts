@@ -4,6 +4,7 @@ import {IMessageModel, Message} from './models/Message';
 import * as jwt from 'jsonwebtoken';
 import * as cookie from 'cookie';
 import config from './config/main';
+import {errorCodes} from './config/errorCodes';
 import {User, IUserModel} from './models/User';
 import {ChatRoom} from './models/ChatRoom';
 import {ISocketIOMessagePost, ISocketIOMessage, SocketIOMessageType, IMessage} from './models/SocketIOMessage';
@@ -78,7 +79,7 @@ export default class ChatServer {
     if (socketIOMessagePost.meta.type === SocketIOMessageType.COMMENT) {
       let foundMessage: IMessageModel = await Message.findById(socketIOMessagePost.meta.parent);
       if (extractMongoId(foundMessage.room) !== roomId) {
-        Raven.captureException(new BadRequestError()); // FIXME: Use/Add one of the errorCodes?
+        Raven.captureException(new BadRequestError(errorCodes.chat.badParent.code));
       }
 
       if (foundMessage) {
