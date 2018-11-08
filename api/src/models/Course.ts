@@ -95,7 +95,7 @@ const courseSchema = new mongoose.Schema({
     ],
     freeTextStyle: {
       type: String,
-      enum: ['', 'theme1', 'theme2','theme3','theme4'],
+      enum: ['', 'theme1', 'theme2', 'theme3', 'theme4'],
       default: ''
     },
   },
