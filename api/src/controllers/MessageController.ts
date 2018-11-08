@@ -37,7 +37,7 @@ export default class MessageController {
 
   /**
    * @api {get} /api/message get all messages in a given room
-   * @apiName getMessage
+   * @apiName getMessages
    * @apiGroup Message
    *
    * @apiParam {string} room: the room to which the messages belong.
@@ -74,8 +74,8 @@ export default class MessageController {
   }
 
   /**
-   * @api {get} /api/count get number of messages in a given room
-   * @apiName getMessage
+   * @api {get} /api/message/count get number of messages in a given room
+   * @apiName getMessageCount
    * @apiGroup Message
    *
    * @apiParam {string} room: the room to which the messages belong.
@@ -98,7 +98,7 @@ export default class MessageController {
 
   /**
    * @api {post} /api/message/id/comments  add a comment to a given message.
-   * @apiName PostMessage
+   * @apiName addComment
    * @apiGroup Message
    *
    * @apiParam {string} id: id of the message.
