@@ -9,6 +9,7 @@ import {ChatRoom} from './models/ChatRoom';
 import {ISocketIOMessagePost, ISocketIOMessage, SocketIOMessageType, IMessage} from './models/SocketIOMessage';
 import {BadRequestError} from 'routing-controllers';
 import {extractMongoId} from './utilities/ExtractMongoId';
+import * as Raven from 'raven';
 
 // FIXME: This is currently WIP to fix the #989 issues.
 export default class ChatServer {
@@ -77,8 +78,7 @@ export default class ChatServer {
     if (socketIOMessagePost.meta.type === SocketIOMessageType.COMMENT) {
       let foundMessage: IMessageModel = await Message.findById(socketIOMessagePost.meta.parent);
       if (extractMongoId(foundMessage.room) !== roomId) {
-        throw new BadRequestError(); // FIXME: Use/Add one of the errorCodes?
-        // FIXME: Don't just throw an unhandled exception, that's deprecated!
+        Raven.captureException(new BadRequestError()); // FIXME: Use/Add one of the errorCodes?
       }
 
       if (foundMessage) {
