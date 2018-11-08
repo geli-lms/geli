@@ -20,15 +20,15 @@ export default class MessageController {
    * @apiGroup Message
    *
    *
-   * @apiSuccess {IMessage} created Message.
-   *
+   * @apiSuccessExample {json} Success-Response:
+   *     {}
    */
   @Post('/')
   async postMessage(@Body({required: true}) message: IMessage) {
     const newMessage = new Message(message);
     try {
-      const createdMessage = await newMessage.save();
-      return createdMessage.forDisplay();
+      await newMessage.save();
+      return {};
     } catch (err) {
       throw new BadRequestError(err);
     }
@@ -45,18 +45,16 @@ export default class MessageController {
    * @apiParam {number} limit: number of messages to return.
    * @apiParam {number} order: the order in which the messages are ordered. possible values: 1(ascending) or -1(descending). default to -1.
    *
-   * @apiSuccess {IMessage[]} messages in the given room.
+   * @apiSuccess {IMessageDisplay[]} messages in the given room.
    * @apiSuccessExample {json} Success-Response:
    *     [
    *      {
-   *        author: "5b2d66c84daf0700d5afe7bf",
    *        chatName: "student2",
    *        comments: [],
    *        content: "any message",
    *        createdAt: "2018-06-22T21:14:50.924Z",
-   *        room : "5b2d66c84daf0700d5afe7d8",
    *        updatedAt: "2018-06-22T21:14:50.924Z",
-   *        __v: 0,
+   *        room : "5b2d66c84daf0700d5afe7d8",
    *        _id: "5b2d66ca4daf0700d5aff89c"
    *      }
    *     ]
@@ -110,17 +108,7 @@ export default class MessageController {
    * @apiSuccess {IMessage} updated Message.
    *
    * @apiSuccessExample {json} Success-Response:
-   *     {
-   *        author: "5b2d66c84daf0700d5afe7bf",
-   *        chatName: "student2",
-   *        comments: [],
-   *        content: "any message",
-   *        createdAt: "2018-06-22T21:14:50.924Z",
-   *        room : "5b2d66c84daf0700d5afe7d8",
-   *        updatedAt: "2018-06-22T21:14:50.924Z",
-   *        __v: 0,
-   *        _id: "5b2d66ca4daf0700d5aff89c"
-   *     }
+   *     {}
    */
   @Post('/:id([a-fA-F0-9]{24})/comments')
   async addComment (@Body() comment: IMessage, @Param('id') id: string) {
@@ -131,7 +119,7 @@ export default class MessageController {
 
      message.comments.push(comment);
      await message.save();
-     return message.forDisplay();
+     return {};
   }
 
 }
