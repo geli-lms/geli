@@ -2,7 +2,6 @@ import * as mongoose from 'mongoose';
 import {IAssignmentUnit} from '../../../../shared/models/units/IAssignmentUnit';
 import {IUser} from '../../../../shared/models/IUser';
 import {IUnitModel, Unit} from './Unit';
-import {ICourseModel} from "../Course";
 import {File} from '../mediaManager/File';
 import {User} from '../User';
 

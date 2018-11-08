@@ -312,16 +312,9 @@ export class AssignmentService extends DataService {
     });
   }
 
-  downloadAllAssignments(unitId: string): Promise<any[]> {
-    return new Promise((resolve, reject) => {
-      this.backendService.get(this.apiPath + unitId + '/assignments')
-        .subscribe(
-          (responseItem: any) => {
-            resolve(responseItem);
-          },
-          error => reject(error)
-        );
-    });
+  downloadAllAssignments(unitId: string): Promise<Response> {
+    return this.backendService.getDownload(this.apiPath + unitId + '/assignments')
+        .toPromise();
   }
 
 }

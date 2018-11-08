@@ -8,6 +8,8 @@ import {IFile} from '../../../../../../shared/models/IFile';
 import {AssignmentService} from "../../shared/services/data.service";
 import {UserService} from '../../shared/services/user.service';
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
+import {SnackBarService} from '../../shared/services/snack-bar.service';
+import {saveAs} from 'file-saver/FileSaver';
 
 enum AssignmentIcon {
     TURNED_IN = 'assignment_turned_in',
@@ -29,6 +31,9 @@ export class AssignmentUnitComponent implements OnInit {
     uploadPath: string;
     assignmentIcon: AssignmentIcon;
 
+
+    disableDownloadButton: boolean;
+
     public showUploadForm: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
     data = this.showUploadForm.asObservable();
 
@@ -37,6 +42,7 @@ export class AssignmentUnitComponent implements OnInit {
     selected: Number;
 
     constructor(public unitFormService: UnitFormService,
+                public snackBar: SnackBarService,
                 public formBuilder: FormBuilder,
                 public userService: UserService,
                 private assignmentService: AssignmentService) {
@@ -58,7 +64,7 @@ export class AssignmentUnitComponent implements OnInit {
         }
 
         this.uploadPath = '/api/units/' + this.assignmentUnit._id + '/assignment';
-        this.allowedMimeTypes = ['text/plain'];
+        // this.allowedMimeTypes = ['text/plain'];
 
         this.unitFormService.unitInfoText = 'Assignments Info';
         this.unitFormService.headline = 'Assignments';
@@ -74,6 +80,8 @@ export class AssignmentUnitComponent implements OnInit {
                 assignments: this.assignmentUnit.assignments
             });
         }
+
+        this.disableDownloadButton = false;
     }
 
     public updateShowUploadForm = (shown: boolean) => {
@@ -138,8 +146,16 @@ export class AssignmentUnitComponent implements OnInit {
         this.assignmentService.updateAssignment(this.assignmentUnit.assignments[0], this.assignmentUnit._id.toString());
     }
 
-    public downloadAllAssignments() {
-        this.assignmentService.downloadAllAssignments(this.assignmentUnit._id.toString());
+  public async downloadAllAssignments() {
+      try {
+        this.disableDownloadButton = true;
+        const response = <Response> await this.assignmentService.downloadAllAssignments(this.assignmentUnit._id.toString());
+        saveAs(response.body, this.assignmentUnit.name + '.zip');
+        this.disableDownloadButton = false;
+      } catch (err) {
+        this.disableDownloadButton = false;
+        this.snackBar.openLong('Woops! Something went wrong. Please try again in a few Minutes.');
+      }
     }
 
     public submitStatusChange(unitId, approved) {

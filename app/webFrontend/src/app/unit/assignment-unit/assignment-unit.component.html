@@ -40,7 +40,10 @@
 
 <!--TEACHER VIEW-->
 <ng-container *ngIf="this.userService.isTeacher()">
-  <button mat-raised-button color="primary" (click)="submitAssignment()">Download all</button>
+  <button mat-raised-button color="primary" [disabled]="this.disableDownloadButton" (click)="downloadAllAssignments()">Download all</button>
+  <ng-container *ngIf="disableDownloadButton">
+    <mat-spinner [diameter]=20 [strokeWidth]=2 class="spinner"></mat-spinner>
+  </ng-container>
     <table>
         <tr class="heading-row">
             <td>Student</td>
