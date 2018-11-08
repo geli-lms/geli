@@ -14,7 +14,6 @@ import {BadRequestError, UnauthorizedError, ForbiddenError} from 'routing-contro
 import {extractMongoId} from './utilities/ExtractMongoId';
 import * as Raven from 'raven';
 
-// FIXME: This is currently WIP to fix the #989 issues.
 export default class ChatServer {
 
   private io: socketIo.Server;
