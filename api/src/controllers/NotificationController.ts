@@ -86,7 +86,7 @@ export class NotificationController {
     if (changedCourse && !changedCourse.active) {
       return;
     }
-    if (changedUnit && !changedUnit.visible && changedCourse.active) {
+    if (changedUnit && !changedUnit.visible) {
       return;
     }
     const notification = new Notification();
