@@ -83,6 +83,14 @@ export class NotificationController {
   }
 
   async createNotification(user: IUser, text: string, changedCourse?: ICourse, changedLecture?: ILecture, changedUnit?: IUnit) {
+    // create no notification if course is not active
+    if (changedCourse && !changedCourse.active) {
+      return;
+    }
+    // create no notification for unit if unit is invisible
+    if (changedUnit && !changedUnit.visible) {
+      return;
+    }
     const notification = new Notification();
     notification.user = user;
     notification.text = text;
