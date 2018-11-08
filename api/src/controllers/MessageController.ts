@@ -4,13 +4,32 @@ import {
   Get,
   JsonController,
   QueryParam,
-  UseBefore
+  UseBefore,
+  CurrentUser,
+  NotFoundError,
+  ForbiddenError
 } from 'routing-controllers';
+import {errorCodes} from '../config/errorCodes';
 import {IMessageModel, Message} from '../models/Message';
+import {IUser} from '../../../shared/models/IUser';
+import {ChatRoom} from '../models/ChatRoom';
 
 @JsonController('/message')
 @UseBefore(passportJwtMiddleware)
 export default class MessageController {
+
+  private async assertUserViewAuthForRoomId(currentUser: IUser, roomId: string) {
+    if (!roomId) {
+      throw new BadRequestError();
+    }
+    const room = await ChatRoom.findById(roomId);
+    if (!room) {
+      throw new NotFoundError(errorCodes.chat.roomNotFound.text);
+    }
+    if (!(await room.checkPrivileges(currentUser)).userCanViewMessages) {
+      throw new ForbiddenError();
+    }
+  }
 
   /**
    * @api {get} /api/message get all messages in a given room
@@ -36,17 +55,17 @@ export default class MessageController {
    *      }
    *     ]
    *
+   * @apiError BadRequestError
+   * @apiError NotFoundError
+   * @apiError ForbiddenError
    */
   @Get('/')
   async getMessages (
-    @QueryParam('room') room: string, @QueryParam('skip') skip: number= 0,
-    @QueryParam('limit') limit: number, @QueryParam('order') order: number = -1) {
-    if (!room) {
-      throw new BadRequestError();
-    }
-
-    const messages: IMessageModel[] = await Message.find({room: room}).sort({createdAt: order}).skip(skip).limit(limit);
-
+    @QueryParam('room') roomId: string, @QueryParam('skip') skip: number= 0,
+    @QueryParam('limit') limit: number, @QueryParam('order') order: number = -1,
+    @CurrentUser() currentUser: IUser) {
+    await this.assertUserViewAuthForRoomId(currentUser, roomId);
+    const messages: IMessageModel[] = await Message.find({room: roomId}).sort({createdAt: order}).skip(skip).limit(limit);
     return messages.map((message: IMessageModel) => message.forDisplay());
   }
 
@@ -62,13 +81,14 @@ export default class MessageController {
    *        "count": "45"
    *     }
    *
+   * @apiError BadRequestError
+   * @apiError NotFoundError
+   * @apiError ForbiddenError
    */
   @Get('/count')
-  async getMessageCount (@QueryParam('room') room: string) {
-    if (!room) {
-      throw new BadRequestError();
-    }
-    const count = await Message.countDocuments({room});
+  async getMessageCount (@QueryParam('room') roomId: string, @CurrentUser() currentUser: IUser) {
+    await this.assertUserViewAuthForRoomId(currentUser, roomId);
+    const count = await Message.countDocuments({room: roomId});
     return {count};
   }
 
