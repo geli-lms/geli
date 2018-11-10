@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 
 ### Changed
+- Update mongoose to 5.2.x. [#1004](https://github.com/geli-lms/geli/pull/1004)
 
 ### Removed
 
