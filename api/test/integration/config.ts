@@ -41,7 +41,7 @@ describe('Config', () => {
 
       const res = await chai.request(app)
         .put(`${BASE_URL}/legalnotice`)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(admin)}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(admin)}`)
         .send({data: '# Legalnotice'});
       res.status.should.be.equal(200);
     });
@@ -53,12 +53,12 @@ describe('Config', () => {
 
       await chai.request(app)
         .put(`${BASE_URL}/foo`)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(admin)}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(admin)}`)
         .send({data: 'bar'});
 
       const res = await chai.request(app)
         .get(`${BASE_URL}/foo`)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(admin)}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(admin)}`)
         .catch(err => err.response);
       res.status.should.be.equal(200);
       res.body.value.should.be.equal('bar');

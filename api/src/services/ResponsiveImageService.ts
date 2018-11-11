@@ -1,5 +1,7 @@
 import sharp = require('sharp');
+import config from '../config/main';
 import * as fs from 'fs';
+import * as path from 'path';
 
 import {BreakpointSize} from '../models/BreakpointSize';
 import {IResponsiveImageData} from '../../../shared/models/IResponsiveImageData';
@@ -43,44 +45,39 @@ export default class ResponsiveImageService {
       const retinaFileNameToSave = filenameWithoutExtension + '_' + breakpoint.screenSize + '@2x.' + extension;
 
 
-      let resizeOptions = sharp(originalFile.path)
-        .withoutEnlargement(true);
-      let retinaResizeOptions = sharp(originalFile.path)
-        .withoutEnlargement(true);
+      let resizeOptions = sharp(originalFile.path);
+      let retinaResizeOptions = sharp(originalFile.path);
 
       if (breakpoint.imageSize.width && breakpoint.imageSize.height) {
         resizeOptions =
-          resizeOptions.resize(breakpoint.imageSize.width, breakpoint.imageSize.height)
-          .crop(sharp.gravity.center);
+          resizeOptions.resize(breakpoint.imageSize.width, breakpoint.imageSize.height,
+            {fit: 'cover', withoutEnlargement: true, position: sharp.gravity.center});
 
         retinaResizeOptions =
-          retinaResizeOptions.resize(breakpoint.imageSize.width * 2, breakpoint.imageSize.height * 2)
-          .crop(sharp.gravity.center);
+          retinaResizeOptions
+            .resize(breakpoint.imageSize.width * 2, breakpoint.imageSize.height * 2,
+              {fit: 'cover', withoutEnlargement: true, position: sharp.gravity.center});
 
       } else if (!breakpoint.imageSize.width && breakpoint.imageSize.height) {
-        resizeOptions = resizeOptions.resize(null, breakpoint.imageSize.height)
-          .max();
+        resizeOptions = resizeOptions.resize(null, breakpoint.imageSize.height, {fit: 'inside', withoutEnlargement: true});
 
-        retinaResizeOptions = retinaResizeOptions.resize(null, breakpoint.imageSize.height * 2)
-          .max();
+        retinaResizeOptions = retinaResizeOptions.resize(null, breakpoint.imageSize.height * 2, {fit: 'inside', withoutEnlargement: true});
+
       } else {
-        resizeOptions = resizeOptions.resize(breakpoint.imageSize.width)
-          .max();
-
-        retinaResizeOptions = retinaResizeOptions.resize(breakpoint.imageSize.width * 2)
-          .max();
+        resizeOptions = resizeOptions.resize(breakpoint.imageSize.width, null, {fit: 'inside', withoutEnlargement: true});
+        retinaResizeOptions = retinaResizeOptions.resize(breakpoint.imageSize.width * 2, null, {fit: 'inside', withoutEnlargement: true});
       }
 
       await resizeOptions
-        .toFile(directory + '/' + fileNameToSave);
+        .toFile(path.join(directory, fileNameToSave));
 
       await retinaResizeOptions
-        .toFile(directory + '/' + retinaFileNameToSave);
+        .toFile(path.join(directory, retinaFileNameToSave));
 
 
-
-      breakpoint.pathToImage = directory + '/' + fileNameToSave;
-      breakpoint.pathToRetinaImage = directory + '/' + retinaFileNameToSave;
+      const directoryRelative = path.relative(path.dirname(config.uploadFolder), directory).replace(/\\\\?/g, '/');
+      breakpoint.pathToImage = path.join(directoryRelative, fileNameToSave);
+      breakpoint.pathToRetinaImage = path.join(directoryRelative, retinaFileNameToSave);
     }
 
     if (!keepOriginalFile) {

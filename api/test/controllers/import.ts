@@ -10,7 +10,6 @@ import {IUnit} from '../../../shared/models/units/IUnit';
 import * as fs from 'fs';
 import * as util from 'util';
 import {Course} from '../../src/models/Course';
-import * as winston from 'winston';
 import {ICodeKataModel} from '../../src/models/units/CodeKataUnit';
 import {IFreeTextUnit} from '../../../shared/models/units/IFreeTextUnit';
 import {ITaskUnitModel} from '../../src/models/units/TaskUnit';
@@ -62,7 +61,7 @@ describe('Import', async () => {
         let unitJson: IUnit;
         const importResult = await chai.request(app)
           .post(`${BASE_URL}/unit/${course._id}/${lecture._id}`)
-          .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
+          .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
           .attach('file', fs.readFileSync(tmpUnitFile.path), unit.name)
           .catch((err) => err.response);
         importResult.status.should.be.equal(200,
@@ -118,7 +117,7 @@ describe('Import', async () => {
             break;
           default:
             // should this fail the test?
-            winston.log('warn', 'import for \'' + unit.type + '\' is not completly tested');
+            process.stderr.write('import for "' + unit.type + '" is not completly tested');
             break;
         }
       }
@@ -146,7 +145,7 @@ describe('Import', async () => {
         let lectureJson: ILecture;
         const importResult = await chai.request(app)
           .post(`${BASE_URL}/lecture/${course._id}`)
-          .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
+          .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
           .attach('file', fs.readFileSync(tmpLectureFile.path), lecture.name)
           .catch((err) => err.response);
         importResult.status.should.be.equal(200,
@@ -181,7 +180,7 @@ describe('Import', async () => {
         let courseJson: ICourse;
         const importResult = await chai.request(app)
           .post(`${BASE_URL}/course`)
-          .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
+          .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
           .attach('file', courseFile, courseFilePath)
           .catch((err) => err.response);
         importResult.status.should.be.equal(200,

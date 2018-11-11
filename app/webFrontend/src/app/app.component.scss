@@ -46,6 +46,8 @@
 
 .avatar {
   margin-right: 0.2em;
+  display: inline-block;
+  background-size: cover;
 }
 
 .app-wrapper {
@@ -57,10 +59,14 @@
 
 .app-content {
   position: relative;
-  padding: 20px;
   flex-grow: 1;
   display: flex;
   flex-direction: column;
+}
+
+.app-content-padding {
+  @extend .app-content;
+  padding: $app-content-padding;
 }
 
 .special-style {

@@ -1,0 +1,9 @@
+<h2>{{ 'admin.cache.header' | translate }}</h2>
+<button
+    mat-raised-button
+    color="warn"
+    [matTooltip]="'admin.cache.clear.tooltip' | translate"
+    (click)="clearCache()"
+    >
+  {{ 'admin.cache.clear.label' | translate }}
+</button>

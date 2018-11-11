@@ -36,11 +36,7 @@ export class UserService {
     }
 
     checkNewProfilePicturePath(profile) {
-        if (profile) {
-            return profile.path;
-        }
-
-        return '';
+      return profile && profile.picture ? profile.picture.path : '';
     }
 
     unsetUser() {

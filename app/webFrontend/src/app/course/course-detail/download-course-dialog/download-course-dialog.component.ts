@@ -18,11 +18,11 @@ import {DataSharingService} from '../../../shared/services/data-sharing.service'
 export class DownloadCourseDialogComponent implements OnInit {
   course: ICourse;
   chkbox: boolean;
-  keepDialogOpen = false;
   showSpinner: boolean;
   disableDownloadButton: boolean;
   @ViewChildren(LectureCheckboxComponent)
   childLectures: QueryList<LectureCheckboxComponent>;
+  radioSelect: string;
 
   constructor(private downloadReq: DownloadFileService,
               public snackBar: SnackBarService,
@@ -35,6 +35,7 @@ export class DownloadCourseDialogComponent implements OnInit {
     this.showSpinner = false;
     this.disableDownloadButton = false;
     this.chkbox = false;
+    this.radioSelect = 'Individual';
     if (!this.checkForEmptyLectures()) {
       this.disableDownloadButton = true;
     }
@@ -103,7 +104,8 @@ export class DownloadCourseDialogComponent implements OnInit {
     return foundUnits;
   }
 
-  async downloadAndClose() {
+
+  async downloadAndClosePDF() {
     this.disableDownloadButton = true;
     const obj = await this.buildObject();
     if (obj.lectures.length === 0) {
@@ -114,15 +116,17 @@ export class DownloadCourseDialogComponent implements OnInit {
     const downloadObj = <IDownload> obj;
     this.showSpinner = true;
     if (this.calcSumFileSize() / 1024 < 204800) {
-      const result = await this.downloadReq.postDownloadReqForCourse(downloadObj);
       try {
+        let result;
+        if (this.radioSelect === 'Individual') {
+          result = await this.downloadReq.postDownloadReqForCoursePDFIndividual(downloadObj);
+        } else if (this.radioSelect === 'Single') {
+          result = await this.downloadReq.postDownloadReqForCoursePDFSingle(downloadObj);
+        }
         const response = <Response> await this.downloadReq.getFile(result.toString());
         saveAs(response.body, this.saveFileService.replaceCharInFilename(this.course.name) + '.zip');
         this.showSpinner = false;
         this.disableDownloadButton = false;
-        if (!this.keepDialogOpen) {
-          // this.dialogRef.close();
-        }
       } catch (err) {
         this.showSpinner = false;
         this.disableDownloadButton = false;

@@ -5,7 +5,6 @@ let typescript = require("gulp-typescript");
 let nodemon = require("gulp-nodemon");
 let gulpTslint = require("gulp-tslint");
 let tslint = require("tslint");
-let runSequence = require("run-sequence");
 let rimraf = require("rimraf");
 let typedoc = require("gulp-typedoc");
 let apidoc = require("gulp-apidoc");
@@ -117,17 +116,25 @@ gulp.task(COPY_FIXTURES, function () {
 });
 
 // Runs all required steps for the build in sequence.
+/*
 gulp.task(BUILD, function (callback) {
   runSequence(CLEAN_BUILD, TSLINT, COMPILE_TYPESCRIPT, COPY_FIXTURES, callback);
 });
+*/
+
+gulp.task(BUILD, gulp.series(CLEAN_BUILD, TSLINT, COMPILE_TYPESCRIPT, COPY_FIXTURES));
 
 // Runs all required steps for the build in sequence FOR DEVELOP
+/*
 gulp.task(BUILD_DEV, function (callback) {
   runSequence(CLEAN_BUILD, TSLINT_DEV, COMPILE_TYPESCRIPT, COPY_FIXTURES, callback);
 });
+*/
+
+gulp.task(BUILD_DEV, gulp.series(CLEAN_BUILD, TSLINT_DEV, COMPILE_TYPESCRIPT, COPY_FIXTURES));
 
 // Generates a documentation based on the code comments in the *.ts files.
-gulp.task(GENERATE_DOC, [CLEAN_DOC], function () {
+gulp.task(GENERATE_DOC, gulp.series(CLEAN_DOC, function () {
   return gulp.src(TS_SRC_GLOB)
     .pipe(typedoc({
       out: "./docs",
@@ -135,16 +142,16 @@ gulp.task(GENERATE_DOC, [CLEAN_DOC], function () {
       version: true,
       module: "commonjs"
     }));
-});
+}));
 
 // Generates an API documentation based on the code comments in the files within ./src/controllers.
-gulp.task(GENERATE_API_DOC, [CLEAN_API_DOC], function(done){
+gulp.task(GENERATE_API_DOC, gulp.series(CLEAN_API_DOC, function(done){
   apidoc({
     src: "./src/controllers",
     dest: "./apidocs",
     config: "."
   },done);
-});
+}));
 
 // Sets up the istanbul coverage
 gulp.task(PRETEST, function () {
@@ -191,6 +198,7 @@ gulp.task(REMAP_COVERAGE, function () {
 });
 
 // Runs all required steps for testing in sequence.
+/*
 gulp.task(TEST, function (callback) {
   runSequence(BUILD, CLEAN_COVERAGE, PRETEST, RUN_TESTS, REMAP_COVERAGE, callback);
 });
@@ -198,62 +206,79 @@ gulp.task(TEST, function (callback) {
 gulp.task(TEST_NATIVE, function (callback) {
   runSequence(BUILD, CLEAN_COVERAGE, callback);
 });
+*/
+
+gulp.task(TEST, gulp.series(BUILD, CLEAN_COVERAGE, PRETEST, RUN_TESTS, REMAP_COVERAGE));
+
+gulp.task(TEST_NATIVE, gulp.series(BUILD, CLEAN_COVERAGE));
 
 // Runs the build task and starts the server every time changes are detected.
-gulp.task(WATCH, [BUILD_DEV], function () {
-  return nodemon({
+gulp.task(WATCH, gulp.series(BUILD_DEV, (done) => {
+  nodemon({
     ext: "ts js json",
     script: "build/src/server.js",
     watch: ["src/*", "test/*"],
     tasks: [BUILD_DEV]
   });
-});
+
+  done();
+}));
 
 // Runs the build task and starts the server every time changes are detected WITH LEGACY-WATCH ENABLED.
-gulp.task(WATCH_POLL, [BUILD_DEV], function () {
-  return nodemon({
+gulp.task(WATCH_POLL, gulp.series(BUILD_DEV, (done) => {
+  nodemon({
     ext: "ts js json",
     script: "build/src/server.js",
     watch: ["src/*", "test/*"],
     legacyWatch: true, // Uses the legacy polling to get changes even on docker/vagrant-mounts
     tasks: [BUILD_DEV]
   });
-});
 
-gulp.task(LOAD_FIXTURES, [BUILD_DEV], function () {
+  done();
+}));
+
+gulp.task(LOAD_FIXTURES, gulp.series(BUILD_DEV, (done) => {
   require(__dirname + "/build/fixtures/load");
-});
+  done();
+}));
 
-gulp.task(MIGRATE, [BUILD], function () {
+gulp.task(MIGRATE, gulp.series(BUILD, (done) => {
   require(__dirname + "/build/src/migrations");
-});
+  done();
+}));
 
-gulp.task(DEBUG, [BUILD_DEV], function () {
-  return nodemon({
+gulp.task(DEBUG, gulp.series(BUILD_DEV, (done) => {
+  nodemon({
     ext: "ts js json",
     script: "build/src/server.js",
     watch: ["src/*", "test/*"],
     tasks: [BUILD_DEV],
     nodeArgs: ["--debug=9000"]
   });
-});
 
-gulp.task(INSPECT, [BUILD_DEV], function () {
-  return nodemon({
+  done();
+}));
+
+gulp.task(INSPECT, gulp.series(BUILD_DEV, (done) => {
+  nodemon({
     ext: "ts js json",
     script: "build/src/server.js",
     watch: ["src/*", "test/*"],
     tasks: [BUILD_DEV],
     nodeArgs: ["--inspect=0.0.0.0:9229"]
   });
-});
 
-gulp.task(INSPECT_MIGRATOR, [BUILD_DEV], function () {
-  return nodemon({
+  done();
+}));
+
+gulp.task(INSPECT_MIGRATOR, gulp.series(BUILD_DEV, (done) => {
+  nodemon({
     ext: "ts js json",
     script: "build/src/migrate.js",
     watch: ["migrations/*"],
     tasks: [BUILD_DEV],
     nodeArgs: ["--inspect=0.0.0.0:9229"]
   });
-});
+
+  done();
+}));

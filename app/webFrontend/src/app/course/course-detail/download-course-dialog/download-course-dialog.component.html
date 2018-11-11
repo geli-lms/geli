@@ -1,31 +1,47 @@
 <div *ngIf="this.checkForEmptyLectures()">
-<mat-card class="dl-card">
-  <mat-card-content>
-    <ng-container *ngIf="!this.checkForEmptyLectures()">{{'common.text.downloadNoFiles' | translate}}</ng-container>
-       <p>{{'course.text.downloadHelpText' | translate}}</p>
-    <mat-list>
-      <mat-list-item class="selectAll">
-      <h3>{{ 'file.text.selectAll' | translate }}</h3>
-        <span class="spacer"></span>
-        <span class="lightgray"> Course </span>
-        <mat-checkbox [(ngModel)]="chkbox" (change)="onChange()" class="chkbox"></mat-checkbox>
-      </mat-list-item>
-      <app-lecture-checkbox (valueChanged)="onChildEvent($event)" *ngFor=" let lecture of course.lectures"
-                            [lecture]="lecture"></app-lecture-checkbox>
-    </mat-list>
-  </mat-card-content>
-  <mat-card-actions>
-  <button mat-raised-button color="primary" [disabled]="this.disableDownloadButton" (click)="downloadAndClose()">
-  	{{ 'common.download' | translate }}</button>
-  <button mat-button [mat-dialog-close]="true">{{ 'common.cancel' | translate }}</button>
-    <button mat-button (click)="uncheckAll()">Reset</button>
-    <span class="spacer"></span>
-    <ng-container *ngIf="showSpinner">
-      <mat-spinner [diameter]=20 [strokeWidth]=2 class="spinner"></mat-spinner>
-    </ng-container>
-  </mat-card-actions>
-</mat-card>
-</div>
-<div *ngIf="!this.checkForEmptyLectures()">
-  <h2>There are no Units Attached to this course yet!</h2>
+  <mat-card class="dl-card">
+    <mat-card-content>
+      <p class="beta-warning">{{ 'course.text.downloadBetaWarning' | translate }} <a href="https://github.com/geli-lms/geli/issues" target="_blank">https://github.com/geli-lms/geli/issues</a></p>
+    </mat-card-content>
+    <mat-card-content>
+      <ng-container *ngIf="!this.checkForEmptyLectures()">{{'common.text.downloadNoFiles' | translate}}</ng-container>
+      <mat-list>
+        <mat-list-item class="selectAll">
+          <h3>
+            <mat-icon matTooltip="{{'course.text.downloadHelpText' | translate}}" class="infoIcon">
+              info
+            </mat-icon>
+            {{ 'file.text.selectAll' | translate }}
+          </h3>
+          <span class="spacer"></span>
+          <span class="lightgray"> Course </span>
+          <mat-checkbox [(ngModel)]="chkbox" (change)="onChange()" class="chkbox"></mat-checkbox>
+        </mat-list-item>
+        <app-lecture-checkbox (valueChanged)="onChildEvent($event)" *ngFor=" let lecture of course.lectures"
+                              [lecture]="lecture"></app-lecture-checkbox>
+      </mat-list>
+    </mat-card-content>
+    <mat-card-actions>
+      <div class="radio-buttons">
+        <mat-radio-group [(ngModel)]="radioSelect">
+          <mat-radio-button class="radio-button" value="Individual">
+            {{'course.text.IndividualPDF' | translate}}
+            <p class="radio-info">{{'course.text.IndividualPDFExplanation' | translate}}</p>
+          </mat-radio-button>
+          <mat-radio-button class="radio-button" value="Single">
+            {{'course.text.SinglePDF' | translate}}
+            <p class="radio-info">{{'course.text.SinglePDFExplanation' | translate}}</p>
+          </mat-radio-button>
+        </mat-radio-group>
+      </div>
+      <button mat-raised-button color="primary" [disabled]="this.disableDownloadButton" (click)="downloadAndClosePDF()">
+        {{ 'common.download' | translate }}
+      </button>
+      <button mat-button (click)="uncheckAll()">Reset</button>
+      <span class="spacer"></span>
+      <ng-container *ngIf="showSpinner">
+        <mat-spinner [diameter]=20 [strokeWidth]=2 class="spinner"></mat-spinner>
+      </ng-container>
+    </mat-card-actions>
+  </mat-card>
 </div>

@@ -8,6 +8,7 @@ import {ICourseDashboard} from '../../../../../../shared/models/ICourseDashboard
 import {errorCodes} from '../../../../../../api/src/config/errorCodes';
 import {LastVisitedCourseContainerUpdater} from '../../shared/utils/LastVisitedCourseContainerUpdater';
 
+
 @Component({
   selector: 'app-course-container',
   templateUrl: './course-container.component.html',

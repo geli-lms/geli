@@ -10,7 +10,6 @@ import {IUnit} from '../../../shared/models/units/IUnit';
 import * as fs from 'fs';
 import * as util from 'util';
 import {Course} from '../../src/models/Course';
-import * as winston from 'winston';
 import {ICodeKataModel} from '../../src/models/units/CodeKataUnit';
 import {IFreeTextUnit} from '../../../shared/models/units/IFreeTextUnit';
 import {ITaskUnitModel} from '../../src/models/units/TaskUnit';
@@ -48,7 +47,7 @@ describe('Duplicate', async () => {
         let unitJson: IUnit;
         const importResult = await chai.request(app)
           .post(`${BASE_URL}/unit/${unit._id}`)
-          .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
+          .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
           .send({courseId: course._id, lectureId: lecture._id})
           .catch((err) => err.response);
         importResult.status.should.be.equal(200,
@@ -103,7 +102,7 @@ describe('Duplicate', async () => {
             break;
           default:
             // should this fail the test?
-            winston.log('warn', 'duplicate for \'' + unit.type + '\' is not completly tested');
+            process.stderr.write('duplicate for "' + unit.type + '" is not completly tested');
             break;
         }
       }
@@ -119,7 +118,7 @@ describe('Duplicate', async () => {
         let lectureJson: ILecture;
         const importResult = await chai.request(app)
           .post(`${BASE_URL}/lecture/${lecture._id}`)
-          .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
+          .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
           .send({courseId: course._id})
           .catch((err) => err.response);
         importResult.status.should.be.equal(200,
@@ -151,7 +150,7 @@ describe('Duplicate', async () => {
         let courseJson: ICourse;
         const importResult = await chai.request(app)
           .post(`${BASE_URL}/course/${course._id}`)
-          .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
+          .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
           .send({courseAdmin: teacher._id})
           .catch((err) => err.response);
         importResult.status.should.be.equal(200,

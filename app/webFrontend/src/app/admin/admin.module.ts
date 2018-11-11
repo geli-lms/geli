@@ -7,6 +7,7 @@ import {RouterModule} from '@angular/router';
 import {SharedModule} from '../shared/shared.module';
 import {AceEditorModule} from 'ng2-ace-editor';
 import {AdminRoutingModule} from './admin-routing.module';
+import {AdminMiscComponent} from './admin-misc/admin-misc.component';
 
 @NgModule({
   imports: [
@@ -21,6 +22,7 @@ import {AdminRoutingModule} from './admin-routing.module';
   declarations: [
     AdminComponent,
     UserAdminComponent,
+    AdminMiscComponent,
   ]
 })
 export class AdminModule {

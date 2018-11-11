@@ -12,6 +12,8 @@ import {UserProfileDialog} from '../components/user-profile-dialog/user-profile-
 import {User} from '../../models/User';
 import {ResponsiveImageUploadDialog} from '../components/responsive-image-upload-dialog/responsive-image-upload-dialog.component';
 import {IResponsiveImageData} from '../../../../../../shared/models/IResponsiveImageData';
+import {WhitelistDialog} from '../../course/course-edit/general-tab/whitelist-dialog/whitelist-dialog.component';
+import {ICourse} from '../../../../../../shared/models/ICourse';
 
 @Injectable()
 export class DialogService {
@@ -24,6 +26,17 @@ export class DialogService {
     dialogRef = this.dialog.open(InfoDialog);
     dialogRef.componentInstance.title = title;
     dialogRef.componentInstance.message = message;
+
+    return dialogRef.afterClosed();
+  }
+
+
+  public whitelist(course: ICourse): Observable<boolean> {
+    let dialogRef: MatDialogRef<WhitelistDialog>;
+
+    dialogRef = this.dialog.open(WhitelistDialog);
+    dialogRef.componentInstance.whitelistUsers = [];
+    dialogRef.componentInstance.course = course;
 
     return dialogRef.afterClosed();
   }

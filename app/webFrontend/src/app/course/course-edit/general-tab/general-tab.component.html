@@ -18,7 +18,7 @@
       </mat-form-field>
 
   <p *ngIf="enrollType === enrollTypeConstants.ENROLL_TYPE_FREE">
-    {{ ' course .text.isFreeForEveryone' | translate }}
+    {{ 'course.text.isFreeForEveryone' | translate }}
   </p>
 
       <mat-form-field class="full-width" *ngIf="enrollType === enrollTypeConstants.ENROLL_TYPE_ACCESSKEY">
@@ -30,16 +30,10 @@
   <div class="csv-upload" *ngIf="enrollType === enrollTypeConstants.ENROLL_TYPE_WHITELIST">
     <p>{{ 'course.text.uploadWhitelist' | translate }}</p>
     <p>
-      <!-- TODO: Replace with shared upload form -->
-      <input class="upload" type="file" ng2FileSelect [uploader]="uploader"
-             [placeholder]="'file.placeholder.uploadFiles' | translate" accept=".csv"/>
-      <button mat-raised-button color="primary"
-              (click)="uploader.uploadAll()"
-              [disabled]="!uploader.getNotUploadedItems().length">
-        <mat-icon>file_upload</mat-icon>
-        {{ 'common.upload' | translate }}
-      </button>
+      <button mat-raised-button (click)="openWhitelistDialog()" type="button">{{ 'course.text.openWhitelistDialog' | translate }}</button>
+
     </p>
+
   </div>
 
       <p>

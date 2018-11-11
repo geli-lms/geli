@@ -1,6 +1,6 @@
-import {Request, Response} from 'express';
+import {Response} from 'express';
 import {
-  Body, Post, JsonController, Req, HttpError, UseBefore, BodyParam, ForbiddenError,
+  Body, Delete, Post, JsonController, Req, HttpError, UseBefore, BodyParam, ForbiddenError,
   InternalServerError, BadRequestError, OnUndefined, Res
 } from 'routing-controllers';
 import {json as bodyParserJson} from 'body-parser';
@@ -17,19 +17,16 @@ import config from '../config/main';
 export class AuthController {
 
   /**
-   * @api {post} /api/auth/login Login user
+   * @api {post} /api/auth/login Login user by responding with a httpOnly JWT cookie and the user's IUserModel data.
    * @apiName PostAuthLogin
    * @apiGroup Auth
    *
    * @apiParam {Request} request Login request (with email and password).
    *
-   * @apiSuccess {String} token Generated access token.
    * @apiSuccess {IUserModel} user Authenticated user.
    *
    * @apiSuccessExample {json} Success-Response:
    *     {
-   *         "token": "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YTAzN2U2YTYwZjcyMjM2ZDhlN2M4MTMiLCJpYXQiOjE1
-   *         MTcyNTI0NDYsImV4cCI6MTUxNzI2MjUyNn0.b53laxHG-b6FbB7JP1GJsIgGWc3EUm0cTuufm1CKCCM",
    *         "user": {
    *             "_id": "5a037e6a60f72236d8e7c813",
    *             "updatedAt": "2018-01-08T19:24:26.522Z",
@@ -50,13 +47,32 @@ export class AuthController {
    */
   @Post('/login')
   @UseBefore(bodyParserJson(), passportLoginMiddleware) // We need body-parser for passport to find the credentials
-  postLogin(@Req() request: Request) {
-    const user = <IUserModel>(<any>request).user;
-
-    return {
-      token: 'JWT ' + JwtUtils.generateToken(user),
+  postLogin(@Req() request: any, @Res() response: Response) {
+    const user: IUserModel = request.user;
+    response.cookie('token', JwtUtils.generateToken(user), {
+      httpOnly: true,
+      sameSite: true,
+      // secure: true, // TODO Maybe make this configurable?
+    });
+    response.json({
       user: user.toObject()
-    };
+    });
+    return response;
+  }
+
+  /**
+   * @api {delete} /api/auth/logout Logout user by clearing the httpOnly token cookie.
+   * @apiName AuthLogout
+   * @apiGroup Auth
+   *
+   * @apiSuccessExample {json} Success-Response:
+   *      {}
+   */
+  @Delete('/logout')
+  logout(@Res() response: Response) {
+    response.clearCookie('token');
+    response.json({});
+    return response;
   }
 
   /**
@@ -94,7 +110,7 @@ export class AuthController {
     const newUser = new User(user);
     const savedUser = await newUser.save();
     // User can now match a whitelist.
-    await this.addWhitelistetUserToCourses(savedUser);
+    await this.addWhitelistedUserToCourses(savedUser);
     try {
       emailService.sendActivation(savedUser);
     } catch (err) {
@@ -277,20 +293,19 @@ export class AuthController {
   }
 
   /**
-   * Add new user to all whitelistet courses in example after registration.
+   * Add new user to all whitelisted courses in example after registration.
    * @param {IUser} user
    * @returns {Promise<void>}
    */
-  private async addWhitelistetUserToCourses(user: IUser) {
+  private async addWhitelistedUserToCourses(user: IUser) {
     const courses = await Course.find(
       {enrollType: 'whitelist'}).populate('whitelist');
 
     await Promise.all(
       courses.map(async (course) => {
-        if (course.students.findIndex(u => user._id === u._id < 0)
-          && course.whitelist.find(w =>
-            w.uid === user.uid)
-        ) {
+        const userUidIsRegisteredInWhitelist = course.whitelist.findIndex(w => w.uid === user.uid) >= 0;
+        const userIsntAlreadyStudentOfCourse = course.students.findIndex(u => u._id === user._id) < 0;
+        if (userUidIsRegisteredInWhitelist && userIsntAlreadyStudentOfCourse) {
           course.students.push(user);
           await Course.update({_id: course._id}, course);
         }

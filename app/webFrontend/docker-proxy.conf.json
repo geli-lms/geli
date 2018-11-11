@@ -2,5 +2,10 @@
   "/api": {
     "target": "http://api:3030",
     "secure": false
+  },
+  "/chat/*": {
+    "target": "http://api:3030/",
+    "ws": true,
+    "secure": false
   }
 }

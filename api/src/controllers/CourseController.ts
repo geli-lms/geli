@@ -1,59 +1,33 @@
-import {Request} from 'express';
-import {
-  Authorized, BadRequestError,
-  Body,
-  CurrentUser, Delete, ForbiddenError,
-  Get,
-  JsonController, NotFoundError,
-  Param,
-  Post,
-  Put,
-  Req,
-  UploadedFile,
-  UseBefore
-} from 'routing-controllers';
+import { Get, Post, Put, Delete, Param, Body, CurrentUser,
+  Authorized, JsonController, UploadedFile, UseBefore,
+  BadRequestError, ForbiddenError, NotFoundError} from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import {errorCodes} from '../config/errorCodes';
+import config from '../config/main';
 
 import {ICourse} from '../../../shared/models/ICourse';
 import {ICourseDashboard} from '../../../shared/models/ICourseDashboard';
 import {ICourseView} from '../../../shared/models/ICourseView';
 import {IUser} from '../../../shared/models/IUser';
-import {ObsCsvController} from './ObsCsvController';
 import {Course} from '../models/Course';
 import {WhitelistUser} from '../models/WhitelistUser';
 import emailService from '../services/EmailService';
 
 const multer = require('multer');
-import crypto = require('crypto');
 import {API_NOTIFICATION_TYPE_ALL_CHANGES, NotificationSettings} from '../models/NotificationSettings';
 import {IWhitelistUser} from '../../../shared/models/IWhitelistUser';
 import {DocumentToObjectOptions} from 'mongoose';
 import * as fs from 'fs';
+import * as path from 'path';
 import ResponsiveImageService from '../services/ResponsiveImageService';
 import {IResponsiveImageData} from '../../../shared/models/IResponsiveImageData';
 
 import { Picture } from '../models/mediaManager/File';
 
-const uploadOptions = {
-  storage: multer.diskStorage({
-    destination: (req: any, file: any, cb: any) => {
-      cb(null, 'tmp/');
-    },
-    filename: (req: any, file: any, cb: any) => {
-      const extPos = file.originalname.lastIndexOf('.');
-      const ext = (extPos !== -1) ? `.${file.originalname.substr(extPos + 1).toLowerCase()}` : '';
-      crypto.pseudoRandomBytes(16, (err, raw) => {
-        cb(err, err ? undefined : `${raw.toString('hex')}${ext}`);
-      });
-    }
-  }),
-};
-
 const coursePictureUploadOptions = {
   storage: multer.diskStorage({
     destination: (req: any, file: any, cb: any) => {
-      cb(null, 'uploads/courses');
+      cb(null, path.join(config.uploadFolder, 'courses'));
     },
     filename: (req: any, file: any, cb: any) => {
       const id = req.params.id;
@@ -67,8 +41,6 @@ const coursePictureUploadOptions = {
 @JsonController('/courses')
 @UseBefore(passportJwtMiddleware)
 export class CourseController {
-
-  parser: ObsCsvController = new ObsCsvController();
 
   /**
    * @api {get} /api/courses/ Request courses of current user
@@ -127,7 +99,7 @@ export class CourseController {
       // Everyone is allowed to see free courses in overview
       conditions.$or.push({enrollType: 'free'});
       conditions.$or.push({enrollType: 'accesskey'});
-      conditions.$or.push({enrollType: 'whitelist', whitelist:  {$elemMatch: {$in: whitelistUsers}}});
+      conditions.$or.push({enrollType: 'whitelist', whitelist: {$elemMatch: {$in: whitelistUsers}}});
     }
 
     const courses = await Course.find(conditions);
@@ -401,7 +373,6 @@ export class CourseController {
    * @apiPermission admin
    *
    * @apiParam {ICourse} course New course data.
-   * @apiParam {Request} request Request.
    * @apiParam {IUser} currentUser Currently logged in user.
    *
    * @apiSuccess {Course} course Added course.
@@ -441,7 +412,7 @@ export class CourseController {
    */
   @Authorized(['teacher', 'admin'])
   @Post('/')
-  async addCourse(@Body() course: ICourse, @Req() request: Request, @CurrentUser() currentUser: IUser) {
+  async addCourse(@Body() course: ICourse, @CurrentUser() currentUser: IUser) {
     // Note that this might technically have a race condition, but it should never matter because the new course ids remain unique.
     // If a strict version is deemed important, see mongoose Model.findOneAndUpdate for a potential approach.
     const existingCourse = await Course.findOne({name: course.name});
@@ -547,7 +518,6 @@ export class CourseController {
    * @apiPermission student
    *
    * @apiParam {String} id Course ID.
-   * @apiParam {Object} data Body.
    * @apiParam {IUser} currentUser Currently logged in user.
    *
    * @apiSuccess {Object} result Empty object.
@@ -560,7 +530,7 @@ export class CourseController {
    */
   @Authorized(['student'])
   @Post('/:id/leave')
-  async leaveStudent(@Param('id') id: string, @Body() data: any, @CurrentUser() currentUser: IUser) {
+  async leaveStudent(@Param('id') id: string, @CurrentUser() currentUser: IUser) {
     const course = await Course.findById(id);
     if (!course) {
       throw new NotFoundError();
@@ -595,7 +565,6 @@ export class CourseController {
    *      newlength: 10
    *    }
    *
-   * @apiError TypeError Only CSV files are allowed.
    * @apiError HttpError UID is not a number 1.
    * @apiError ForbiddenError Unauthorized user.
    */
@@ -603,24 +572,44 @@ export class CourseController {
   @Post('/:id/whitelist')
   async whitelistStudents(
     @Param('id') id: string,
-    @UploadedFile('file', {options: uploadOptions}) file: any,
+    @Body() whitelist: any[],
     @CurrentUser() currentUser: IUser) {
-    const name: string = file.originalname;
-    if (!name.endsWith('.csv')) {
-      throw new TypeError(errorCodes.upload.type.notCSV.code);
-    }
+
     const course = await Course.findById(id);
+
     if (!course.checkPrivileges(currentUser).userCanEditCourse) {
       throw new ForbiddenError();
     }
-    await course
-      .populate('whitelist')
-      .populate('students')
-      .execPopulate();
-    const buffer = <string> await this.parser.parseFile(file);
-    await this.parser.updateCourseFromBuffer(buffer, course);
+
+    if (!whitelist || whitelist.length === 0) {
+      throw new BadRequestError();
+    }
+
+    if (course.whitelist.length > 0) {
+      for (const wuser of course.whitelist) {
+        const whitelistUser = await WhitelistUser.findById(wuser);
+        if (whitelistUser) {
+          await whitelistUser.remove();
+        }
+      }
+    }
+
+    course.whitelist = [];
+
+    for (const whiteListUser of whitelist) {
+      const wUser = new WhitelistUser();
+      wUser.firstName = whiteListUser.firstName;
+      wUser.lastName = whiteListUser.lastName;
+      wUser.uid = whiteListUser.uid;
+      wUser.courseId = course._id;
+
+      await wUser.save();
+      course.whitelist.push(wUser._id);
+    }
+
     await course.save();
-    return {newlength: course.whitelist.length};
+
+    return whitelist;
   }
 
   /**
@@ -763,7 +752,7 @@ export class CourseController {
 
     await image.save();
 
-    const result = await Course.update({ _id: id }, {
+    await Course.update({ _id: id }, {
       image: image._id
     });
 

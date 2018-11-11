@@ -1,10 +1,30 @@
 <mat-card *ngIf="course" class="course-card">
   <mat-card-header>
-    <mat-card-title><h2 title="{{course.name}}">{{course.name}}</h2></mat-card-title>
+    <mat-card-title>
+
+      <ng-container *ngIf="course.userCanViewCourse; else courseName">
+        <a [routerLink]="['course', course._id]">
+          <ng-container *ngTemplateOutlet="courseName"></ng-container>
+        </a>
+      </ng-container>
+
+      <ng-template #courseName><h2 title="{{course.name}}">{{course.name}}</h2></ng-template>
+
+    </mat-card-title>
   </mat-card-header>
 
-  <img *ngIf="!this.responsiveImageData" mat-card-image src="/assets/course-header-image.jpg">
-  <app-responsive-image *ngIf="this.responsiveImageData" [classes]="'mat-card-image'" [responsiveImageData]="this.responsiveImageData"></app-responsive-image>
+  <ng-container *ngIf="course.userCanViewCourse; else courseImage">
+    <a [routerLink]="['course', course._id]">
+      <ng-container *ngTemplateOutlet="courseImage"></ng-container>
+    </a>
+  </ng-container>
+
+  <ng-template #courseImage>
+    <img *ngIf="!this.responsiveImageData" mat-card-image src="/assets/course-header-image.jpg">
+    <app-responsive-image *ngIf="this.responsiveImageData" [classes]="'mat-card-image'"
+                          [responsiveImageData]="this.responsiveImageData"></app-responsive-image>
+  </ng-template>
+
 
   <mat-card-content>
     <p>
@@ -43,8 +63,8 @@
       <mat-icon>remove_circle_outline</mat-icon>
     </button>
     </span>
-    <button mat-mini-fab *ngIf="course.userCanViewCourse"
-            color="primary" class="details-button" [routerLink]="['course', course._id]">
+    <button mat-icon-button *ngIf="course.userCanViewCourse"
+            class="details-button" [routerLink]="['course', course._id]">
       <mat-icon>arrow_forward</mat-icon>
     </button>
 

@@ -1,7 +1,5 @@
-import * as chai from 'chai';
 import {FixtureLoader} from '../../fixtures/FixtureLoader';
 import {Server} from '../../src/server';
-import chaiHttp = require('chai-http');
 import {FixtureUtils} from '../../fixtures/FixtureUtils';
 import {Course} from '../../src/models/Course';
 import {ICourse} from '../../../shared/models/ICourse';
@@ -17,10 +15,18 @@ import {ICodeKataModel} from '../../src/models/units/CodeKataUnit';
 import {ICodeKataUnit} from '../../../shared/models/units/ICodeKataUnit';
 import {ITaskUnitModel} from '../../src/models/units/TaskUnit';
 import {ITaskUnit} from '../../../shared/models/units/ITaskUnit';
-import * as winston from 'winston';
+
+import {API_NOTIFICATION_TYPE_ALL_CHANGES, NotificationSettings} from '../../src/models/NotificationSettings';
+import {Notification} from '../../src/models/Notification';
+import {WhitelistUser} from '../../src/models/WhitelistUser';
+
+import chai = require('chai');
+import chaiHttp = require('chai-http');
 
 chai.use(chaiHttp);
 const should = chai.should();
+const expect = chai.expect;
+
 const app = new Server().app;
 const BASE_URL = '/api/export';
 const fixtureLoader = new FixtureLoader();
@@ -39,7 +45,7 @@ describe('Export', async () => {
         let unitJson: IUnit;
         const exportResult = await chai.request(app)
           .get(`${BASE_URL}/unit/${unit._id}`)
-          .set('Authorization', `JWT ${JwtUtils.generateToken(admin)}`)
+          .set('Cookie', `token=${JwtUtils.generateToken(admin)}`)
           .catch((err) => err.response);
         exportResult.status.should.be.equal(200, 'failed to export ' + unit.name);
         unitJson = exportResult.body;
@@ -91,7 +97,7 @@ describe('Export', async () => {
             break;
           default:
             // should this fail the test?
-            winston.log('warn', 'export for \'' + unit.type + '\' is not completly tested');
+            process.stderr.write('export for "' + unit.type + '" is not completly tested');
             break;
         }
       }
@@ -104,7 +110,7 @@ describe('Export', async () => {
         let lectureJson: ILecture;
         const exportResult = await chai.request(app)
           .get(`${BASE_URL}/lecture/${lecture._id}`)
-          .set('Authorization', `JWT ${JwtUtils.generateToken(admin)}`)
+          .set('Cookie', `token=${JwtUtils.generateToken(admin)}`)
           .catch((err) => err.response);
         exportResult.status.should.be.equal(200, 'failed to export ' + lecture.name);
         lectureJson = exportResult.body;
@@ -126,7 +132,7 @@ describe('Export', async () => {
         let courseJson: ICourse;
         const exportResult = await chai.request(app)
           .get(`${BASE_URL}/course/${course._id}`)
-          .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
+          .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
           .catch((err) => err.response);
         exportResult.status.should.be.equal(200, 'failed to export ' + course.name);
         courseJson = exportResult.body;
@@ -142,6 +148,77 @@ describe('Export', async () => {
         courseJson.description.should.be.equal(course.description);
         courseJson.lectures.should.be.instanceOf(Array).and.have.lengthOf(course.lectures.length);
       }
+    });
+  });
+
+  describe(`GET ${BASE_URL}/user`, async () => {
+    it('should export student data', async () => {
+      const course1 = await FixtureUtils.getRandomCourse();
+      const course2 = await FixtureUtils.getRandomCourse();
+      const taskUnit = <ITaskUnitModel>await Unit.findOne({progressable: true, __t: 'task'});
+      const lecture = await Lecture.findOne({units: { $in: [ taskUnit._id ] }});
+      const course = await Course.findOne({lectures: { $in: [ lecture._id ] }});
+      const student = await User.findOne({_id: { $in: course.students}});
+
+      await new NotificationSettings({
+        'user': student, 'course': course1,
+        'notificationType': API_NOTIFICATION_TYPE_ALL_CHANGES, 'emailNotification': false
+      }).save();
+
+      await new NotificationSettings({
+        'user': student, 'course': course2,
+        'notificationType': API_NOTIFICATION_TYPE_ALL_CHANGES, 'emailNotification': false
+      }).save();
+
+      await new Notification({
+        user: student,
+        changedCourse: course1,
+        text: 'blubba blubba'
+      }).save();
+
+      await new Notification({
+        user: student,
+        changedCourse: course2,
+        text: 'blubba blubba'
+      }).save();
+
+
+      await new WhitelistUser({
+        firstName: student.profile.firstName,
+        lastName: student.profile.lastName,
+        uid: student.uid,
+        courseId: course1._id
+      }).save();
+
+      const result = await chai.request(app)
+        .get(`${BASE_URL}/user`)
+        .set('Cookie', `token=${JwtUtils.generateToken(student)}`)
+        .catch((err) => err.response);
+
+      expect(result).to.have.status(200);
+    });
+
+    it('should export teacher data', async () => {
+      const teacher = await FixtureUtils.getRandomTeacher();
+
+      const result = await chai.request(app)
+        .get(`${BASE_URL}/user`)
+        .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
+        .catch((err) => err.response);
+
+      expect(result).to.have.status(200);
+    });
+
+
+    it('should export admin data', async () => {
+      const admin = await FixtureUtils.getRandomAdmin();
+
+      const result = await chai.request(app)
+        .get(`${BASE_URL}/user`)
+        .set('Cookie', `token=${JwtUtils.generateToken(admin)}`)
+        .catch((err) => err.response);
+
+      expect(result).to.have.status(200);
     });
   });
 });

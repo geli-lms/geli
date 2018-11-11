@@ -23,6 +23,9 @@
       <app-free-text-unit *ngSwitchCase="'free-text'" [freeTextUnit]="unit"></app-free-text-unit>
       <app-assignment-unit *ngSwitchCase="'assignment'" [assignmentUnit]="unit"></app-assignment-unit>
       <div class="unit-detail">
+        <button mat-icon-button appShowComments [room]="unit.chatRoom" [title]="unit.name">
+          <mat-icon aria-label="comments">forum</mat-icon>
+        </button>
         <div class="user-detail" *ngIf="unit.unitCreator">{{unit.unitCreator.profile.firstName + ' ' +
           unit.unitCreator.profile.lastName}}
         </div>

@@ -1,4 +1,10 @@
 export const errorCodes = {
+  chat: {
+    roomNotFound: {
+      code: 'chat room not found',
+      text: 'Chat room was not found.',
+    },
+  },
   mail: {
     duplicate: {
       code: 'duplicate mail',
@@ -68,6 +74,10 @@ export const errorCodes = {
       code: 'noOtherAdmins',
       text: 'There are no other users with admin privileges.'
     },
+    cantDeleteOtherUsers: {
+      code: 'cantDeleteOtherUsers',
+      text: 'Users can only delete themself.'
+    },
     userNotFound: {
       code: 'user not found',
       text: 'User was not found.',
@@ -92,6 +102,16 @@ export const errorCodes = {
       code: '',
       text: 'Password must have at least 8 characters which contain one special character or digit',
       regex: '^(?=.*[a-zA-Z])(?=.*[$%&§=#!?*()|0-9]).{8,}$'
+    }
+  },
+  file: {
+    forbiddenPath: {
+      code: 'forbiddenPath',
+      text: 'Access to requested path is forbidden.'
+    },
+    fileNotFound: {
+      code: 'fileNotFound',
+      text: 'Could not find requested file.'
     }
   },
   upload: {

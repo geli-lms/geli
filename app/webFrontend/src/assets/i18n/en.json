@@ -6,6 +6,16 @@
       "toUseYourAccount": "to use your account"
     }
   },
+  "admin": {
+    "cache": {
+      "clear": {
+        "failed": "Server cache clearing error",
+        "label": "Clear cache",
+        "tooltip": "This may disrupt coincident download requests!"
+      },
+      "header": "Server cache controls"
+    }
+  },
   "auth": {
     "changePassword": "Change password",
     "confirmPassword": "Confirm password",
@@ -52,10 +62,10 @@
       "info2": "Your students can only edit the code area."
     },
     "text": {
-      "codeExample": "This is the provided example solution.",
-      "codeHere": "Your code goes here.",
+      "codeExample": "This is the provided example solution",
+      "codeHere": "Your code goes here",
       "logs": "Logs",
-      "testsNeedToSuccees": "These tests need to succeed."
+      "mustSucceed": "These tests need to succeed"
     }
   },
   "common": {
@@ -75,11 +85,13 @@
     "description": "Description",
     "discard": "Discard",
     "dismiss": "Dismiss",
-    "download": "Download",
+    "download": "Download (Beta)",
     "documents": "Documents",
     "duplicate": "Duplicate",
     "edit": "Edit",
     "editProfile": "Edit profile",
+    "exportProfile": "Export profile",
+    "deleteProfile": "Delete profile",
     "email": "Email",
     "export": "Export",
     "folder": "Folder",
@@ -94,9 +106,10 @@
     "notifications": "Notifications",
     "media": "Media",
     "members": "Members",
+    "misc": "Misc.",
     "ok": "OK",
     "open": "Open",
-    "openInTab" : "Open in new Tab",
+    "openInTab": "Open in new Tab",
     "password": "Password",
     "privacy": "Privacy",
     "profile": "Profile",
@@ -109,7 +122,7 @@
     "question": "Question",
     "register": "Register",
     "reset": "Reset",
-    "rename" : "Rename",
+    "rename": "Rename",
     "role": "Role",
     "roles": {
       "student": "Student",
@@ -128,7 +141,7 @@
       "clickToOpen": "open up/close"
     },
     "upload": "upload",
-    "users": "users",
+    "users": "Users",
     "validate": "Validate",
     "validation": {
       "instituteMail": "Please register with your institute email.",
@@ -140,7 +153,9 @@
       "passwordsMatch": "Passwords do not match.",
       "required": "Input required"
     },
-    "videos": "Videos"
+    "videos": "Videos",
+    "line": "Line",
+    "errors": "Errors"
   },
   "course": {
     "delete": "Delete course",
@@ -159,6 +174,11 @@
       "canSeenByStudents": "Course can be seen by students.",
       "downloadHelpText": "Select units or files which you want to download in a zip",
       "downloadNoFiles": "Für diesen Kurs steht kein Material zum herunterladen bereit!",
+      "downloadBetaWarning": "Heads up! The download feature is still in development. We assume that for most lectures the export works quite well but there are some corner cases where the export might not work as you expect. If you find a mistake please report it back to",
+      "IndividualPDF": "Individual PDFs",
+      "IndividualPDFExplanation": "One PDF per Unit",
+      "SinglePDF": "Single PDF",
+      "SinglePDFExplanation": "One PDF with everything you selected",
       "editCourse": "Edit course",
       "enterAccessKey": "Please enter the course's access key.",
       "enterAccessKeyForStudents": "Enter an access key for the students.",
@@ -184,7 +204,13 @@
       "yourCourseProgress": "Your course progress",
       "whitelist": "Whitelist",
       "noVideosAttached": "There are no videos attached to this course yet",
-      "noFilesAttached": "There are no files attached to this course yet"
+      "noFilesAttached": "There are no files attached to this course yet",
+      "removeUnwantedUsers": "Remove unwanted users",
+      "createWhitelist": "Create whitelist",
+      "openWhitelistDialog": "Open whitelist dialog",
+      "whitelistCreated": "The whitelist has been created. Don't forget to save the course.",
+      "whitelistNotReadable": "The whitelist-file could not be read. Did you select the right file?",
+      "whitelistNoStudents": "No students found which can be imported."
     },
     "tooltip": {
       "add": "Add Course",
@@ -194,6 +220,12 @@
       "keyRequired": "Access key required",
       "leave": "Leave",
       "noKeyRequired": "Free access"
+    }
+  },
+  "cookie": {
+    "text": {
+      "moreInformation": "More Information",
+      "cookieHint": "Geli uses cookies to function properly. By using this site you agree to the use of cookies as described in our policy."
     }
   },
   "dashboard": {
@@ -223,13 +255,13 @@
       "filename": "File name",
       "filesize": "File size",
       "fileRemove": "Remove File",
-      "filesSelected" : "File selected",
+      "filesSelected": "File selected",
       "infoDropAddFiles": "Drop files here or click here to upload files.",
       "noVideo": "No video available.",
       "noFiles": "No files available.",
       "progress": "Progress",
       "removeFromQueue": "Remove file from queue.",
-      "selectAll" : "Select all",
+      "selectAll": "Select all",
       "takePicture": "Take picture"
     },
     "tooltip": {
@@ -272,6 +304,11 @@
     "logout": "Logout",
     "privacy": "Privacy",
     "userSettings": "Settings"
+  },
+  "messaging": {
+    "inputHintText": "Enter a Message",
+    "sendIconTooltip": "Send",
+    "emojiIconTooltip": "Emoji Picker ein- oder ausblenden"
   },
   "notifications": {
     "text": {
@@ -350,7 +387,8 @@
     },
     "tooltip": {
       "deleteUsers": "Delete selected Members.",
-      "toggleMembers": "Toggle all members"
+      "toggleMembers": "Toggle all members",
+      "doesNotExist": "User does not exist"
     }
   }
 }

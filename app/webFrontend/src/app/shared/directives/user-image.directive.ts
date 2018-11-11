@@ -1,15 +1,16 @@
-import {Directive, HostBinding, Input, OnInit, SimpleChange} from '@angular/core';
-import {User} from '../../models/User';
+import {Directive, HostBinding, Input, OnInit, OnDestroy, SimpleChange} from '@angular/core';
+import {DomSanitizer, SafeStyle} from '@angular/platform-browser';
 import {IUser} from '../../../../../../shared/models/IUser';
+import {User} from '../../models/User';
 
 @Directive({selector: '[user-image]'})
-export class UserImageDirective implements OnInit {
+export class UserImageDirective implements OnInit, OnDestroy {
 
   @Input('user-image') user: IUser;
   @Input('size') size = '100%';
 
   @HostBinding('style.backgroundImage')
-  backgroundImage: string;
+  backgroundImage: SafeStyle;
 
   @HostBinding('style.width')
   width: string;
@@ -20,30 +21,39 @@ export class UserImageDirective implements OnInit {
   @HostBinding('style.border-radius')
   borderRadius: string;
 
-  constructor() {
+  private objectUrl: string;
+
+  constructor(private domSanitizer: DomSanitizer) {
   }
 
-  ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
+  async ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
     for (const propName in changes) {
       if (changes.hasOwnProperty(propName)) {
         const changedProp = changes[propName];
         this[propName] = changedProp.currentValue;
       }
     }
-    this.getImage();
+    await this.updateImage();
   }
 
-  ngOnInit(): void {
-    this.getImage();
+  async ngOnInit() {
+    await this.updateImage();
   }
 
-  getImage() {
+  ngOnDestroy() {
+    URL.revokeObjectURL(this.objectUrl);
+  }
+
+  async updateImage() {
     if (this.user) {
-      const user = new User(this.user);
-      this.backgroundImage = `url(${user.getUserImageURL()})`;
       this.width = this.size;
       this.height = this.size;
       this.borderRadius = '50%';
+
+      const user = new User(this.user);
+      // TODO: Provide a way to supply the image pixel size to user.getUserImageURL for the gravatar path.
+      const url = user.getUserImageURL();
+      this.backgroundImage = this.domSanitizer.bypassSecurityTrustStyle(`url(${url})`);
     }
   }
 

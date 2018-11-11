@@ -202,7 +202,7 @@ export class CourseMediaComponent implements OnInit {
   }
 
   initFileDownload(file: IFile) {
-    const url = '/api/uploads/' + file.link;
+    const url = '/file/' + file.link;
     window.open(url, '_blank');
     this.toggleSelection(file);
   }

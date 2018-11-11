@@ -1,0 +1,20 @@
+<div [ngClass]="{'chat-toggle': true, 'chat-toggle-show': !showChat, 'chat-toggle-hidden': showChat}">
+  <button mat-fab color="primary" (click)="toggleChat()"><mat-icon>forum</mat-icon></button>
+</div>
+
+
+<div *ngIf="showChat" [ngClass]="{'chat-container': true, 'chat-container-show': showChat, 'chat-container-hidden': !showChat}">
+  <div class="forum-container">
+    <div class="chat-top-bar">
+      <div class="chat-heading"><mat-icon>forum</mat-icon>Forum</div>
+      <div>
+        <button (click)="toggleChat()"  mat-icon-button>
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+    </div>
+    <div class="messaging-container">
+      <app-messaging [room]="chatRoom" [mode]="'chat'"></app-messaging>
+    </div>
+  </div>
+</div>

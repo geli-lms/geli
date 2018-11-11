@@ -91,6 +91,33 @@ export class FixtureUtils {
     return this.getRandom<ICourse>(array, hash);
   }
 
+  public static async getRandomCourseWithAllUnitTypes(hash?: string): Promise<ICourse> {
+    const array = await this.getCourses();
+    const coursesWithAllUnitTypes: any[] = [];
+    for (const course of array) {
+      let hasFreeText = false;
+      let hasTask = false;
+      let hasCodeKata = false;
+        for (const lecId of course.lectures ) {
+          const lec = await Lecture.findById(lecId);
+          for (const unitId of lec.units ) {
+            const unit = await Unit.findById(unitId);
+            if ( unit.__t === 'free-text' ) {
+              hasFreeText = true;
+            } else if ( unit.__t === 'task' ) {
+              hasTask = true;
+            } else if ( unit.__t === 'code-kata' ) {
+              hasCodeKata = true;
+            }
+          }
+        }
+        if ( hasFreeText && hasTask && hasCodeKata ) {
+          coursesWithAllUnitTypes.push(course);
+        }
+    }
+    return this.getRandom<ICourse>(coursesWithAllUnitTypes, hash);
+  }
+
   public static async getCoursesFromLecture(lecture: ILecture): Promise<ICourse> {
     return Course.findOne({lectures: { $in: [ lecture._id ] }});
   }
@@ -145,7 +172,7 @@ export class FixtureUtils {
   }
 
   public static async getUserCount(): Promise<number> {
-    return User.count({});
+    return User.countDocuments({});
   }
 
   public static async getCourses(): Promise<ICourse[]> {
@@ -194,7 +221,7 @@ export class FixtureUtils {
     }
   }
 
-  private static getRandomNumber(start: number, end: number): number {
+  public static getRandomNumber(start: number, end: number): number {
     return Math.floor(Math.random() * end) + start;
   }
 

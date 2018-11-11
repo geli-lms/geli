@@ -32,7 +32,7 @@ describe('Course', () => {
 
       const res = await chai.request(app)
         .get(BASE_URL)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(student)}`);
+        .set('Cookie', `token=${JwtUtils.generateToken(student)}`);
       res.status.should.be.equal(200);
       res.body.should.be.a('array');
       res.body.length.should.be.eql(courses.length);
@@ -51,7 +51,7 @@ describe('Course', () => {
       const teacher = await FixtureUtils.getRandomTeacher();
       const res = await chai.request(app)
         .get(BASE_URL)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`);
+        .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`);
       res.status.should.be.equal(200);
       res.body.should.be.a('array');
       res.body.length.should.be.eql(courses.length);
@@ -83,7 +83,7 @@ describe('Course', () => {
 
       const res = await chai.request(app)
         .get(BASE_URL)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(student)}`);
+        .set('Cookie', `token=${JwtUtils.generateToken(student)}`);
       res.status.should.be.equal(200);
 
       res.body.forEach((course: any) => {
@@ -102,7 +102,7 @@ describe('Course', () => {
 
       const res = await chai.request(app)
         .post(BASE_URL)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
         .send(testData);
       res.status.should.be.equal(200);
       res.body.name.should.equal(testData.name);
@@ -134,7 +134,7 @@ describe('Course', () => {
     async function testUnauthorizedGetCourseEdit(savedCourse: ICourseModel, user: IUser) {
       const res = await chai.request(app)
         .get(`${BASE_URL}/${savedCourse._id}/edit`)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(user)}`);
+        .set('Cookie', `token=${JwtUtils.generateToken(user)}`);
 
       res.should.not.have.status(200);
       return res;
@@ -152,7 +152,7 @@ describe('Course', () => {
 
       const res = await chai.request(app)
         .get(`${BASE_URL}/${savedCourse._id}`)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(student)}`);
+        .set('Cookie', `token=${JwtUtils.generateToken(student)}`);
 
       res.should.have.status(200);
 
@@ -172,7 +172,7 @@ describe('Course', () => {
 
       const res = await chai.request(app)
         .get(`${BASE_URL}/${savedCourse._id}/edit`)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`);
+        .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`);
 
       res.should.have.status(200);
 
@@ -211,7 +211,7 @@ describe('Course', () => {
 
       const res = await chai.request(app)
         .get(`${BASE_URL}/${savedCourse._id}`)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(teacher[1])}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(teacher[1])}`)
         .catch(err => err.response);
 
       res.should.have.status(404);
@@ -240,7 +240,7 @@ describe('Course', () => {
 
       let res = await chai.request(app)
         .put(`${BASE_URL}/${testDataUpdate._id}`)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
         .send(testDataUpdate);
 
       res.should.have.status(200);
@@ -249,7 +249,7 @@ describe('Course', () => {
 
       res = await chai.request(app)
         .get(`${BASE_URL}/${res.body._id}/edit`)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`);
+        .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`);
 
       res.should.have.status(200);
       res.body.name.should.be.eq(testDataUpdate.name);
@@ -268,7 +268,7 @@ describe('Course', () => {
       const savedCourse = await testData.save();
       const res = await chai.request(app)
         .put(`${BASE_URL}/${savedCourse._id}`)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
         .send(savedCourse)
         .catch(err => err.response);
 
@@ -284,7 +284,7 @@ describe('Course', () => {
 
       const res = await chai.request(app)
         .post(`${BASE_URL}/picture/${course._id}`)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(courseAdmin)}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(courseAdmin)}`)
     .attach('file', readFileSync('test/resources/test.png'), 'test.png')
         .field('imageData', JSON.stringify({ breakpoints:
           [ { screenSize: BreakpointSize.MOBILE, imageSize: { width: 284, height: 190} }] }));
@@ -299,7 +299,7 @@ describe('Course', () => {
 
       const res = await chai.request(app)
         .post(`${BASE_URL}/picture/${course._id}`)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(courseAdmin)}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(courseAdmin)}`)
         .attach('file', readFileSync('test/resources/test.png'), 'test.png')
         .field('imageData', JSON.stringify({ breakpoints:
           [ { screenSize: BreakpointSize.MOBILE, imageSize: { width: 284 } }] }));
@@ -314,7 +314,7 @@ describe('Course', () => {
 
       const res = await chai.request(app)
         .post(`${BASE_URL}/picture/${course._id}`)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(courseAdmin)}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(courseAdmin)}`)
         .attach('file', readFileSync('test/resources/test.png'), 'test.png')
         .field('imageData', JSON.stringify({ breakpoints:
           [ { screenSize: BreakpointSize.MOBILE, imageSize: { height: 190 } }] }));
@@ -329,7 +329,7 @@ describe('Course', () => {
 
       const res = await chai.request(app)
         .post(`${BASE_URL}/picture/${course._id}`)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(courseAdmin)}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(courseAdmin)}`)
         .attach('file', readFileSync('test/resources/wrong-format.rtf'), 'test.png')
         .field('imageData', JSON.stringify({ breakpoints:
           [ { screenSize: BreakpointSize.MOBILE, imageSize: { width: 284, height: 190} }] }));
@@ -346,7 +346,7 @@ describe('Course', () => {
 
       let res = await chai.request(app)
         .post(`${BASE_URL}/picture/${course._id}`)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(courseAdmin)}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(courseAdmin)}`)
         .attach('file', readFileSync('test/resources/test.png'), 'test.png')
         .field('imageData', JSON.stringify({
           breakpoints:
@@ -359,7 +359,7 @@ describe('Course', () => {
 
       res = await chai.request(app)
         .del(`${BASE_URL}/picture/${course._id}`)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(courseAdmin)}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(courseAdmin)}`)
         .send();
 
       res.should.have.status(200);
@@ -377,14 +377,14 @@ describe('Course', () => {
 
       const res = await chai.request(app)
         .del(`${BASE_URL}/${course._id}`)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(courseAdmin)}`);
+        .set('Cookie', `token=${JwtUtils.generateToken(courseAdmin)}`);
 
       res.status.should.be.equal(200);
       const deletedCourse = await Course.findById(course._id);
       should.not.exist(deletedCourse, 'Course does still exist');
     });
 
-    it('should fail because the user is not authorize', async () => {
+    it('should fail because the user is not authorized', async () => {
       const course = await FixtureUtils.getRandomCourse();
 
       const res = await chai.request(app)
@@ -406,7 +406,7 @@ describe('Course', () => {
       });
       const res = await chai.request(app)
         .del(`${BASE_URL}/${course._id}`)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(user)}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(user)}`)
         .catch(err => err.response);
 
       res.status.should.be.equal(403);

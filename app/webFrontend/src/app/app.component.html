@@ -1,3 +1,4 @@
+<app-cookie-banner></app-cookie-banner>
 <div class="{{ 'app-wrapper ' + specialContainerStyle() }}">
   <mat-toolbar color="primary" [ngClass]="{'warning': hasWarning()}">
     <mat-toolbar-row>
@@ -16,10 +17,10 @@
 
       <span *ngIf="isLoggedIn()">
         <button mat-button routerLink="/profile">
-          <img *ngIf="this.actualProfilePicturePath == '' || this.actualProfilePicturePath == null; else elseBlock"
+          <img *ngIf="this.avatarBackgroundImage === undefined; else elseBlock"
                class="avatar" src="{{this.userService.user.getGravatarURL(30)}}" width="30" height="30">
           <ng-template #elseBlock>
-            <div class="user-icon" [ngStyle]="{'background-image': 'url(api/' + this.actualProfilePicturePath + ')'}"></div>
+            <div class="user-icon" [style.backgroundImage]="this.avatarBackgroundImage"></div>
           </ng-template>
           <span class="firstname-wrapper">{{ this.userService.user.profile.firstName }}</span>
         </button>
@@ -73,7 +74,7 @@
 
   <mat-progress-bar *ngIf="showProgressBar" [mode]="indeterminate"></mat-progress-bar>
 
-  <div class="app-content">
+  <div class="{{ contentStyle() }}">
     <router-outlet></router-outlet>
   </div>
 </div>

@@ -11,7 +11,7 @@
   <mat-list>
     <mat-list-item *ngFor="let file of files">
       <mat-icon mat-list-icon>{{ fileIcon.fileToIcon(file) }}</mat-icon>
-      <a href="{{ '/api/uploads/' + file.link }}" download="{{ file.name }}">{{ file.name }}</a>
+      <a href="{{ '/api/uploads/' + file.link}}" download="{{ file.name }}">{{ file.name }}</a>
     </mat-list-item>
   </mat-list>
 </div>

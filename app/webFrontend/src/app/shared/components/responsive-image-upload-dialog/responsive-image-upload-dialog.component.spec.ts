@@ -1,20 +1,19 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
-import {FilepickerDialog} from './filepicker-dialog.component';
+import {ResponsiveImageUploadDialog} from './responsive-image-upload-dialog.component';
 
-
-describe('FilepickerDialog', () => {
-  let component: FilepickerDialog;
-  let fixture: ComponentFixture<FilepickerDialog>;
+describe('ResponsiveImageUploadDialog', () => {
+  let component: ResponsiveImageUploadDialog;
+  let fixture: ComponentFixture<ResponsiveImageUploadDialog>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [FilepickerDialog]
+      declarations: [ResponsiveImageUploadDialog]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(FilepickerDialog);
+    fixture = TestBed.createComponent(ResponsiveImageUploadDialog);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -1,8 +1,15 @@
-import {Authorized, Get, JsonController, Param, UseBefore} from 'routing-controllers';
+import {Authorized, CurrentUser, Get, JsonController, Param, UseBefore} from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import {Course} from '../models/Course';
 import {Lecture} from '../models/Lecture';
 import {Unit} from '../models/units/Unit';
+import {IUser} from '../../../shared/models/IUser';
+import {User} from '../models/User';
+import {Notification} from '../models/Notification';
+import {NotificationSettings} from '../models/NotificationSettings';
+import {WhitelistUser} from '../models/WhitelistUser';
+import {Progress} from '../models/progress/Progress';
+import {Message} from '../models/Message';
 
 @JsonController('/export')
 @UseBefore(passportJwtMiddleware)
@@ -88,5 +95,67 @@ export class ExportController {
   async exportUnit(@Param('id') id: string) {
     const unit = await Unit.findById(id);
     return unit.exportJSON();
+  }
+
+  /**
+   * @api {get} /api/export/user Export the CurrentUser's own data.
+   * @apiName GetExportUser
+   * @apiGroup Export
+   * @apiPermission student
+   * @apiPermission teacher
+   * @apiPermission admin
+   *
+   * @apiSuccess {Object} result Exported personal user data, notifications, whitelists, courses, progress.
+   *
+   * @apiSuccessExample {json} Success-Response:
+   *     {
+   *         "user": {
+   *             "profile": {
+   *                 "picture": {
+   *                     "name": "5b23c0387d7d4e2fd0148741-4602.png",
+   *                     "alias": "ProfilePictureFilename.png",
+   *                     "path": "uploads/users/5b23c0387d7d4e2fd0148741-4602.png"
+   *                 },
+   *                 "firstName": "Daniel",
+   *                 "lastName": "Teachman",
+   *                 "theme": "night"
+   *             },
+   *             "role": "teacher",
+   *             "lastVisitedCourses": [
+   *                 {
+   *                     "name": "Introduction to web development",
+   *                     "description": "Short description here."
+   *                 }
+   *             ],
+   *             "isActive": true,
+   *             "email": "teacher1@test.local"
+   *         },
+   *         "notifications": [],
+   *         "notificationSettings": null,
+   *         "whitelists": [],
+   *         "courses": [
+   *             {
+   *                 "name": "Introduction to web development",
+   *                 "description": "Short description here."
+   *             }
+   *         ],
+   *         "progress": []
+   *     }
+   */
+  @Get('/user')
+  @Authorized(['student', 'teacher', 'admin'])
+  async exportAllUserData(@CurrentUser() currentUser: IUser) {
+    // load user
+    const user = await User.findById(currentUser);
+
+    return {
+      user: await user.exportPersonalData(),
+      notifications: await Notification.exportPersonalData(user),
+      notificationSettings: await NotificationSettings.exportPersonalData(user),
+      whitelists: await WhitelistUser.exportPersonalData(user),
+      courses: await Course.exportPersonalData(user),
+      progress: await Progress.exportPersonalUserData(user),
+      messages: await Message.exportPersonalData(user)
+    };
   }
 }

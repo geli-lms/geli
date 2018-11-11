@@ -1,5 +1,4 @@
 import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
-import {FileUploader} from 'ng2-file-upload';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {
   ENROLL_TYPES,
@@ -17,6 +16,7 @@ import {SaveFileService} from '../../../shared/services/save-file.service';
 import {UserService} from '../../../shared/services/user.service';
 import {DataSharingService} from '../../../shared/services/data-sharing.service';
 import {DialogService} from '../../../shared/services/dialog.service';
+import {WhitelistService} from '../../../shared/services/whitelist.service';
 import {TranslateService} from '@ngx-translate/core';
 import ResponsiveImage from '../../../models/ResponsiveImage';
 import {IResponsiveImageData} from '../../../../../../../shared/models/IResponsiveImageData';
@@ -37,7 +37,6 @@ export class GeneralTabComponent implements OnInit {
   newCourse: FormGroup;
   id: string;
   courseOb: ICourse;
-  uploader: FileUploader = null;
   enrollTypes = ENROLL_TYPES;
   enrollTypeConstants = {
     ENROLL_TYPE_WHITELIST,
@@ -46,6 +45,9 @@ export class GeneralTabComponent implements OnInit {
   };
 
   courseImageData: IResponsiveImageData;
+
+  whitelistFile: File;
+  whitelistUsers: any[];
 
   message = 'Course successfully added.';
 
@@ -63,6 +65,7 @@ export class GeneralTabComponent implements OnInit {
               private userService: UserService,
               private dataSharingService: DataSharingService,
               private dialogService: DialogService,
+              private whitelistService: WhitelistService,
               private notificationService: NotificationService,
               private translate: TranslateService) {
 
@@ -95,31 +98,10 @@ export class GeneralTabComponent implements OnInit {
 
   ngOnInit() {
     this.generateForm();
-    this.uploader = new FileUploader({
-      url: '/api/courses/' + this.id + '/whitelist',
-      headers: [{
-        name: 'Authorization',
-        value: localStorage.getItem('token'),
-      }]
-    });
-    this.uploader.onProgressItem = () => {
-      this.ref.detectChanges();
-    };
-    this.uploader.onCompleteItem = (item: any, response: any, status: any) => {
-      if (status === 200) {
-        const result = JSON.parse(response);
-        this.snackBar.openLong('Upload complete, there now are ' + result.newlength + ' whitelisted users!');
-        setTimeout(() => {
-          this.uploader.clearQueue();
-        }, 3000);
-      } else {
-        const error = JSON.parse(response);
-        this.snackBar.openLong('Upload failed with status ' + status + ' message was: ' + error.message);
-        setTimeout(() => {
-          this.uploader.clearQueue();
-        }, 6000);
-      }
-    };
+  }
+
+  openWhitelistDialog() {
+    this.dialogService.whitelist(this.courseOb);
   }
 
   generateForm() {
