@@ -9,4 +9,6 @@ export interface ICourseView {
   teachers: IUserSubCourseView[];
   lectures: ILecture[];
   chatRooms: string[];
+
+  userCanEditCourse: boolean;
 }

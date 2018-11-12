@@ -47,6 +47,8 @@ export class CourseDetailComponent implements OnInit, OnDestroy {
       this.reloadTabBar();
     });
     this.reloadTabBar();
+
+
   }
 
   reloadTabBar(): void {

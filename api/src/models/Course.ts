@@ -19,7 +19,7 @@ interface ICourseModel extends ICourse, mongoose.Document {
   exportJSON: (sanitize?: boolean, onlyBasicData?: boolean) => Promise<ICourse>;
   checkPrivileges: (user: IUser) => IProperties;
   forDashboard: (user: IUser) => ICourseDashboard;
-  forView: () => ICourseView;
+  forView: (user: IUser) => ICourseView;
   populateLecturesFor: (user: IUser) => this;
   processLecturesFor: (user: IUser) => Promise<this>;
 }
@@ -317,19 +317,23 @@ courseSchema.methods.forDashboard = async function (user: IUser): Promise<ICours
   };
 };
 
-courseSchema.methods.forView = function (): ICourseView {
+courseSchema.methods.forView = function (user: IUser): ICourseView {
   const {
     name, description,
     courseAdmin, teachers,
     lectures, chatRooms
   } = this;
+
+  const userCanEditCourse = this.checkPrivileges(user).userCanEditCourse;
+
   return {
     _id: <string>extractMongoId(this._id),
     name, description,
     courseAdmin: User.forCourseView(courseAdmin),
     teachers: teachers.map((teacher: IUser) => User.forCourseView(teacher)),
     lectures: lectures.map((lecture: any) => lecture.toObject()),
-    chatRooms: chatRooms.map(extractMongoId)
+    chatRooms: chatRooms.map(extractMongoId),
+    userCanEditCourse
   };
 };
 
