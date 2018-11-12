@@ -38,16 +38,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Use `npm ci` instead `npm install` and cache `$HOME/.npm` instead of `node_modules`. [#972](https://github.com/geli-lms/geli/pull/972)
 
 ### Removed
-- Remove `@types/winston`. [#945](https://github.com/geli-lms/geli/pull/945)
-- Remove the now obsolete `'mediaToken'` and `JwtPipe` systems. [#840](https://github.com/geli-lms/geli/issues/840)
+- `@types/winston`. [#945](https://github.com/geli-lms/geli/pull/945)
+- The now obsolete `'mediaToken'` and `JwtPipe` systems. [#840](https://github.com/geli-lms/geli/issues/840)
+- Unused controller code. [#986](https://github.com/geli-lms/geli/issues/986)
 
 ### Fixed
 - Deprecated `Messages.count` replace with `Message.countDocuments`. [#925](https://github.com/geli-lms/geli/issues/925)
 - Deprecated `User.count` replace with `User.countDocuments`. [#934](https://github.com/geli-lms/geli/issues/934) 
 - Redirect to initial URL after login. [#318](https://github.com/geli-lms/geli/issues/318)
 - Error when clicking on notification. [#916](https://github.com/geli-lms/geli/issues/916)
-- Remove unused controller code. [#986](https://github.com/geli-lms/geli/issues/986)
-- Fixed error that admin couldn't change password of a student [#975](https://github.com/geli-lms/geli/issues/975)
+- Admin couldn't change password of a student [#975](https://github.com/geli-lms/geli/issues/975)
 
 ### Security
 - Progress leak of invisible units and courses [#735](https://github.com/geli-lms/geli/issues/735)
