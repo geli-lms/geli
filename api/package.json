@@ -46,7 +46,7 @@
     "markdown-it": "^8.4.2",
     "migrate-mongoose": "^3.2.2",
     "moment": "^2.22.1",
-    "mongoose": "~5.2.3",
+    "mongoose": "~5.3.11",
     "morgan": "^1.9.1",
     "multer": "^1.4.1",
     "node-file-cache": "^1.0.2",
