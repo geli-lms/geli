@@ -12,27 +12,45 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 ### Added
-- My courses: Make title or teaser image clickable [#904](https://github.com/geli-lms/geli/issues/904)
-- EU-DSGVO: Export Chat User Data [#862](https://github.com/geli-lms/geli/issues/862)
 - Styles for md-units [#867](https://github.com/geli-lms/geli/issues/867)
+
+
+### Changed
+- Update mongoose to 5.2.x. [#1004](https://github.com/geli-lms/geli/pull/1004)
+- Update contributors list. [#1007](https://github.com/geli-lms/geli/issues/1007)
+
+### Removed
+
+### Fixed
+- Notifications for invisible courses and lectures will no longer be created. [#877](https://github.com/geli-lms/geli/issues/877) 
+- EU-DSGVO: Export Chat User Data - Exclude Comments. [#998](https://github.com/geli-lms/geli/issues/998)
+
+### Security
+
+
+## [[0.8.2](https://github.com/geli-lms/geli/releases/tag/v0.8.2)] - 2018-11-08 - WS 18/19 🍪-Release
+### Added
+- My courses: Make title or teaser image clickable. [#904](https://github.com/geli-lms/geli/issues/904)
+- EU-DSGVO: Export Chat User Data. [#862](https://github.com/geli-lms/geli/issues/862)
 
 ### Changed
 - Minor `ConfigController` bugs and refactoring-flaws. [#899](https://github.com/geli-lms/geli/issues/899)
 - Don't pin `@types/express` to a specific version. [#947](https://github.com/geli-lms/geli/pull/947)
 - Switched to cookie-based JWT authentication. [#840](https://github.com/geli-lms/geli/issues/840) [#968](https://github.com/geli-lms/geli/issues/968)
-- Prepare typescript 3.1 upgrade. [#967](https://github.com/geli-lms/geli/pull/967)
-- Use npm ci instead npm install and cache $HOME/.npm instead of node_modules. [#972](https://github.com/geli-lms/geli/pull/972)
+- Prepare `typescript` 3.1 upgrade. [#967](https://github.com/geli-lms/geli/pull/967)
+- Use `npm ci` instead `npm install` and cache `$HOME/.npm` instead of `node_modules`. [#972](https://github.com/geli-lms/geli/pull/972)
 
 ### Removed
-- Remove `@types/winston`. [#945](https://github.com/geli-lms/geli/pull/945)
-- Removed the now obsolete `'mediaToken'` and `JwtPipe` systems. [#840](https://github.com/geli-lms/geli/issues/840)
+- `@types/winston`. [#945](https://github.com/geli-lms/geli/pull/945)
+- The now obsolete `'mediaToken'` and `JwtPipe` systems. [#840](https://github.com/geli-lms/geli/issues/840)
+- Unused controller code. [#986](https://github.com/geli-lms/geli/issues/986)
 
 ### Fixed
-- Deprecated Messages.count replace with Message.countDocuments [#925](https://github.com/geli-lms/geli/issues/925)
-- Remove deprecation warnings / updated sharp + Deprecated User.count replace with User.countDocuments [#934](https://github.com/geli-lms/geli/issues/934) 
-- Redirect to initial URL after login [#318](https://github.com/geli-lms/geli/issues/318)
-- Fixed error on clicking on notification. [#916](https://github.com/geli-lms/geli/issues/916)
-- Remove unused controller code. [#986](https://github.com/geli-lms/geli/issues/986)
+- Deprecated `Messages.count` replace with `Message.countDocuments`. [#925](https://github.com/geli-lms/geli/issues/925)
+- Deprecated `User.count` replace with `User.countDocuments`. [#934](https://github.com/geli-lms/geli/issues/934) 
+- Redirect to initial URL after login. [#318](https://github.com/geli-lms/geli/issues/318)
+- Error when clicking on notification. [#916](https://github.com/geli-lms/geli/issues/916)
+- Admin couldn't change password of a student. [#975](https://github.com/geli-lms/geli/issues/975)
 
 ### Security
 - Progress leak of invisible units and courses [#735](https://github.com/geli-lms/geli/issues/735)
@@ -195,7 +213,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Fixed form validator in create task [#579](https://github.com/geli-lms/geli/issues/579)
 - Fixed Mongoose pre hook usage [#680](https://github.com/geli-lms/geli/issues/680) [#677](https://github.com/geli-lms/geli/issues/677)
 - Fixed broken code kata validation. [#834](https://github.com/geli-lms/geli/issues/834)
-- Fixed error that admin couldn't change password of a student [#975](https://github.com/geli-lms/geli/issues/975)
 
 ### Security
 - Fixed numerous severe user related security issues. [#691](https://github.com/geli-lms/geli/issues/691) [#709](https://github.com/geli-lms/geli/pull/709)
