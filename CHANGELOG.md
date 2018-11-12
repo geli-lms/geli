@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 ### Added
+- Added course-view-navigation for edit-users [#1010](https://github.com/geli-lms/geli/issues/924)
 
 ### Changed
 - Update mongoose to 5.2.x. [#1004](https://github.com/geli-lms/geli/pull/1004)
