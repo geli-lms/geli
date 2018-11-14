@@ -151,9 +151,9 @@ export class FixtureUtils {
   }
 
   public static async getSimpleChatRoomSetup(hash?: string) {
-    const course = await FixtureUtils.getRandomCourse() as ICourseModel;
+    const course = await FixtureUtils.getRandomCourse();
     const room = await FixtureUtils.getRandom<IChatRoom>(course.chatRooms, hash);
-    const roomId = room._id.toString();
+    const roomId: string = room._id.toString();
     return {course, roomId};
   }
 
