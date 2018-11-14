@@ -22,7 +22,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Removed
 
 ### Fixed
-- Notifications for invisible courses and lectures will no longer be created. [#877](https://github.com/geli-lms/geli/issues/877) 
+- Notifications for invisible courses and lectures will no longer be created. [#877](https://github.com/geli-lms/geli/issues/877)
 - EU-DSGVO: Export Chat User Data - Exclude Comments. [#998](https://github.com/geli-lms/geli/issues/998)
 - Nondeterministic chat system unit test authorization failures. [#989](https://github.com/geli-lms/geli/issues/989)
 
