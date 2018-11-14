@@ -3,9 +3,6 @@ import {Server} from '../../src/server';
 import {FixtureUtils} from '../../fixtures/FixtureUtils';
 import {User} from '../../src/models/User';
 import {IUser} from '../../../shared/models/IUser';
-import {ICourseModel} from '../../src/models/Course';
-import {ICourse} from '../../../shared/models/ICourse';
-import {IChatRoom} from '../../../shared/models/IChatRoom';
 import {JwtUtils} from '../../src/security/JwtUtils';
 import chai = require('chai');
 import chaiHttp = require('chai-http');
@@ -16,17 +13,6 @@ const expect = chai.expect;
 const app = new Server().app;
 const BASE_URL = '/api/message';
 const fixtureLoader = new FixtureLoader();
-
-function getRandomRoomFromCourse(course: ICourse): IChatRoom {
-  return course.chatRooms[Math.floor(Math.random() * course.chatRooms.length)];
-}
-
-async function simpleRoomSetup() {
-  const course = await FixtureUtils.getRandomCourse() as ICourseModel;
-  const room = getRandomRoomFromCourse(course);
-  const roomId = room._id.toString();
-  return {course, room, roomId};
-}
 
 async function commonRequest(user: IUser, urlPostfix = '', queryOptions?: string | object) {
   return await chai.request(app)
@@ -45,7 +31,7 @@ async function testMissingRoom(urlPostfix = '') {
 }
 
 async function testSuccess(urlPostfix = '') {
-  const {roomId} = await simpleRoomSetup();
+  const {roomId} = await FixtureUtils.getSimpleChatRoomSetup();
   const admin = await FixtureUtils.getRandomAdmin();
 
   const result = await commonRequest(admin, urlPostfix, {room: roomId});
@@ -56,7 +42,7 @@ async function testSuccess(urlPostfix = '') {
 }
 
 async function testAccessDenial(urlPostfix = '') {
-  const {course, roomId} = await simpleRoomSetup();
+  const {course, roomId} = await FixtureUtils.getSimpleChatRoomSetup();
   const student = await User.findOne({role: 'student', _id: {$nin: course.students}});
 
   const result = await commonRequest(student, urlPostfix, {room: roomId});

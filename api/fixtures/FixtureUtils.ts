@@ -8,6 +8,7 @@ import {IUnit} from '../../shared/models/units/IUnit';
 import {IUser} from '../../shared/models/IUser';
 import {ITaskUnit} from '../../shared/models/units/ITaskUnit';
 import {ITaskUnitModel} from '../src/models/units/TaskUnit';
+import {IChatRoom} from '../../shared/models/IChatRoom';
 import * as mongoose from 'mongoose';
 import ObjectId = mongoose.Types.ObjectId;
 
@@ -147,6 +148,13 @@ export class FixtureUtils {
   public static async getRandomUnitFromLecture(lecture: ILecture, hash?: string): Promise<IUnit> {
     const unitId = await this.getRandom<IUnit>(lecture.units, hash);
     return Unit.findById(unitId);
+  }
+
+  public static async getSimpleChatRoomSetup(hash?: string) {
+    const course = await FixtureUtils.getRandomCourse() as ICourseModel;
+    const room = await FixtureUtils.getRandom<IChatRoom>(course.chatRooms, hash);
+    const roomId = room._id.toString();
+    return {course, roomId};
   }
 
   public static async getRandomUnitFromCourse(course: ICourse, hash?: string): Promise<IUnit> {
