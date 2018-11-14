@@ -2,6 +2,7 @@ import {FixtureLoader} from '../../fixtures/FixtureLoader';
 import {Server} from '../../src/server';
 import {FixtureUtils} from '../../fixtures/FixtureUtils';
 import {User} from '../../src/models/User';
+import {IUser} from '../../../shared/models/IUser';
 import {ICourseModel} from '../../src/models/Course';
 import {ICourse} from '../../../shared/models/ICourse';
 import {IChatRoom} from '../../../shared/models/IChatRoom';
@@ -34,13 +35,18 @@ describe('Message', async () => {
     return {course, room, roomId};
   }
 
+  async function commonRequest(user: IUser, urlPostfix = '', queryOptions?: string | object) {
+    return await chai.request(app)
+      .get(BASE_URL + urlPostfix)
+      .query(queryOptions)
+      .set('Cookie', `token=${JwtUtils.generateToken(user)}`)
+      .catch((err) => err.response);
+  }
+
   async function testMissingRoom(urlPostfix = '') {
     const admin = await FixtureUtils.getRandomAdmin();
 
-    const result = await chai.request(app)
-      .get(BASE_URL + urlPostfix)
-      .set('Cookie', `token=${JwtUtils.generateToken(admin)}`)
-      .catch((err) => err.response);
+    const result = await commonRequest(admin, urlPostfix);
 
     expect(result).to.have.status(400);
   }
@@ -49,11 +55,7 @@ describe('Message', async () => {
     const {roomId} = await simpleRoomSetup();
     const admin = await FixtureUtils.getRandomAdmin();
 
-    const result = await chai.request(app)
-      .get(BASE_URL + urlPostfix)
-      .query({room: roomId})
-      .set('Cookie', `token=${JwtUtils.generateToken(admin)}`)
-      .catch((err) => err.response);
+    const result = await commonRequest(admin, urlPostfix, {room: roomId});
 
     expect(result).to.have.status(200);
     expect(result).to.be.json;
@@ -64,11 +66,7 @@ describe('Message', async () => {
     const {course, roomId} = await simpleRoomSetup();
     const student = await User.findOne({role: 'student', _id: {$nin: course.students}});
 
-    const result = await chai.request(app)
-      .get(BASE_URL + urlPostfix)
-      .query({room: roomId})
-      .set('Cookie', `token=${JwtUtils.generateToken(student)}`)
-      .catch((err) => err.response);
+    const result = await commonRequest(student, urlPostfix, {room: roomId});
 
     expect(result).to.have.status(403);
   }
