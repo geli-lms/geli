@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 ### Added
 - Chat system access denial unit tests. [#989](https://github.com/geli-lms/geli/issues/989)
-- A `TestHelper` class for shared API unit test functionality. [#989](https://github.com/geli-lms/geli/issues/989)
+- `TestHelper` class for shared API unit test functionality. [#989](https://github.com/geli-lms/geli/issues/989)
 
 ### Changed
 - Update mongoose to 5.2.x. [#1004](https://github.com/geli-lms/geli/pull/1004)
