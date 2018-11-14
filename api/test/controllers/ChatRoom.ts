@@ -1,10 +1,7 @@
 import {FixtureLoader} from '../../fixtures/FixtureLoader';
 import {Server} from '../../src/server';
 import {FixtureUtils} from '../../fixtures/FixtureUtils';
-import {ICourseModel} from '../../src/models/Course';
-import {ICourse} from '../../../shared/models/ICourse';
 import {JwtUtils} from '../../src/security/JwtUtils';
-import {IChatRoom} from '../../../shared/models/IChatRoom';
 import chai = require('chai');
 import chaiHttp = require('chai-http');
 
@@ -14,10 +11,6 @@ const expect = chai.expect;
 const app = new Server().app;
 const BASE_URL = '/api/chatRoom';
 const fixtureLoader = new FixtureLoader();
-
-function getRandomRoomFromCourse(course: ICourse): IChatRoom {
-  return course.chatRooms[Math.floor(Math.random() * course.chatRooms.length)];
-}
 
 describe('ChatRoom', async () => {
   // Before each test we reset the database
@@ -39,11 +32,8 @@ describe('ChatRoom', async () => {
     });
 
     it('should return chat room', async () => {
+      const {roomId} = await FixtureUtils.getSimpleChatRoomSetup();
       const student = await FixtureUtils.getRandomStudent();
-      const course = await FixtureUtils.getRandomCourse() as ICourseModel;
-
-      const room = getRandomRoomFromCourse(course);
-      const roomId = room._id.toString();
 
       const result = await chai.request(app)
         .get(BASE_URL + '/' + roomId)
