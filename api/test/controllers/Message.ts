@@ -28,18 +28,18 @@ describe('Message', async () => {
 
   describe(`GET ${BASE_URL}`, async () => {
     it('should fail when parameter room missing', async () => {
-      const student = await FixtureUtils.getRandomStudent();
+      const admin = await FixtureUtils.getRandomAdmin();
 
       const result = await chai.request(app)
         .get(BASE_URL)
-        .set('Cookie', `token=${JwtUtils.generateToken(student)}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(admin)}`)
         .catch((err) => err.response);
 
       expect(result).to.have.status(400);
     });
 
     it('should return messages for chat room', async () => {
-      const student = await FixtureUtils.getRandomStudent();
+      const admin = await FixtureUtils.getRandomAdmin();
       const course = await FixtureUtils.getRandomCourse() as ICourseModel;
 
       const room = getRandomRoomFromCourse(course);
@@ -48,7 +48,7 @@ describe('Message', async () => {
       const result = await chai.request(app)
         .get(BASE_URL)
         .query({room: roomId})
-        .set('Cookie', `token=${JwtUtils.generateToken(student)}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(admin)}`)
         .catch((err) => err.response);
 
       expect(result).to.have.status(200);
@@ -59,18 +59,18 @@ describe('Message', async () => {
 
   describe(`GET ${BASE_URL}/count`, async () => {
     it('should fail when parameter room missing', async () => {
-      const student = await FixtureUtils.getRandomStudent();
+      const admin = await FixtureUtils.getRandomAdmin();
 
       const result = await chai.request(app)
         .get(BASE_URL)
-        .set('Cookie', `token=${JwtUtils.generateToken(student)}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(admin)}`)
         .catch((err) => err.response);
 
       expect(result).to.have.status(400);
     });
 
     it('should return message count for chat room', async () => {
-      const student = await FixtureUtils.getRandomStudent();
+      const admin = await FixtureUtils.getRandomAdmin();
       const course = await FixtureUtils.getRandomCourse() as ICourseModel;
 
       const room = getRandomRoomFromCourse(course);
@@ -79,7 +79,7 @@ describe('Message', async () => {
       const result = await chai.request(app)
         .get(BASE_URL + '/count')
         .query({room: roomId})
-        .set('Cookie', `token=${JwtUtils.generateToken(student)}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(admin)}`)
         .catch((err) => err.response);
 
       expect(result).to.have.status(200);
