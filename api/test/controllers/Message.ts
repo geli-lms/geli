@@ -69,7 +69,7 @@ describe('Message', async () => {
       expect(result).to.have.status(400);
     });
 
-    it('should return messages for chat room', async () => {
+    it('should return message count for chat room', async () => {
       const student = await FixtureUtils.getRandomStudent();
       const course = await FixtureUtils.getRandomCourse() as ICourseModel;
 
