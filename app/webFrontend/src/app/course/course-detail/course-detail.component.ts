@@ -11,7 +11,7 @@ import {LastVisitedCourseContainerUpdater} from '../../shared/utils/LastVisitedC
 import {DialogService} from '../../shared/services/dialog.service';
 import {DataSharingService} from '../../shared/services/data-sharing.service';
 import {TranslateService} from '@ngx-translate/core';
-import {ICourseView} from "../../../../../../shared/models/ICourseView";
+import {ICourseView} from '../../../../../../shared/models/ICourseView';
 
 
 
