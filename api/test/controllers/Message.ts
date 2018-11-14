@@ -27,97 +27,78 @@ describe('Message', async () => {
     await fixtureLoader.load();
   });
 
+  async function testMissingRoom(urlPostfix = '') {
+    const admin = await FixtureUtils.getRandomAdmin();
+
+    const result = await chai.request(app)
+      .get(BASE_URL + urlPostfix)
+      .set('Cookie', `token=${JwtUtils.generateToken(admin)}`)
+      .catch((err) => err.response);
+
+    expect(result).to.have.status(400);
+  }
+
+  async function testSuccess(urlPostfix = '') {
+    const admin = await FixtureUtils.getRandomAdmin();
+    const course = await FixtureUtils.getRandomCourse() as ICourseModel;
+
+    const room = getRandomRoomFromCourse(course);
+    const roomId = room._id.toString();
+
+    const result = await chai.request(app)
+      .get(BASE_URL + urlPostfix)
+      .query({room: roomId})
+      .set('Cookie', `token=${JwtUtils.generateToken(admin)}`)
+      .catch((err) => err.response);
+
+    expect(result).to.have.status(200);
+    expect(result).to.be.json;
+    return result;
+  }
+
+  async function testAccessDenial(urlPostfix = '') {
+    const course = await FixtureUtils.getRandomCourse() as ICourseModel;
+    const student = await User.findOne({role: 'student', _id: {$nin: course.students}});
+
+    const room = getRandomRoomFromCourse(course);
+    const roomId = room._id.toString();
+
+    const result = await chai.request(app)
+      .get(BASE_URL + urlPostfix)
+      .query({room: roomId})
+      .set('Cookie', `token=${JwtUtils.generateToken(student)}`)
+      .catch((err) => err.response);
+
+    expect(result).to.have.status(403);
+  }
+
   describe(`GET ${BASE_URL}`, async () => {
     it('should fail when parameter room missing', async () => {
-      const admin = await FixtureUtils.getRandomAdmin();
-
-      const result = await chai.request(app)
-        .get(BASE_URL)
-        .set('Cookie', `token=${JwtUtils.generateToken(admin)}`)
-        .catch((err) => err.response);
-
-      expect(result).to.have.status(400);
+      await testMissingRoom();
     });
 
     it('should return messages for chat room', async () => {
-      const admin = await FixtureUtils.getRandomAdmin();
-      const course = await FixtureUtils.getRandomCourse() as ICourseModel;
-
-      const room = getRandomRoomFromCourse(course);
-      const roomId = room._id.toString();
-
-      const result = await chai.request(app)
-        .get(BASE_URL)
-        .query({room: roomId})
-        .set('Cookie', `token=${JwtUtils.generateToken(admin)}`)
-        .catch((err) => err.response);
-
-      expect(result).to.have.status(200);
-      expect(result).to.be.json;
+      const result = await testSuccess();
       expect(result.body).to.be.an('array');
     });
 
     it('should deny access to chat room messages if unauthorized', async () => {
-      const course = await FixtureUtils.getRandomCourse() as ICourseModel;
-      const student = await User.findOne({role: 'student', _id: {$nin: course.students}});
-
-      const room = getRandomRoomFromCourse(course);
-      const roomId = room._id.toString();
-
-      const result = await chai.request(app)
-        .get(BASE_URL)
-        .query({room: roomId})
-        .set('Cookie', `token=${JwtUtils.generateToken(student)}`)
-        .catch((err) => err.response);
-
-      expect(result).to.have.status(403);
+      await testAccessDenial();
     });
   });
 
   describe(`GET ${BASE_URL}/count`, async () => {
     it('should fail when parameter room missing', async () => {
-      const admin = await FixtureUtils.getRandomAdmin();
-
-      const result = await chai.request(app)
-        .get(BASE_URL)
-        .set('Cookie', `token=${JwtUtils.generateToken(admin)}`)
-        .catch((err) => err.response);
-
-      expect(result).to.have.status(400);
+      await testMissingRoom('/count');
     });
 
     it('should return message count for chat room', async () => {
-      const admin = await FixtureUtils.getRandomAdmin();
-      const course = await FixtureUtils.getRandomCourse() as ICourseModel;
-
-      const room = getRandomRoomFromCourse(course);
-      const roomId = room._id.toString();
-
-      const result = await chai.request(app)
-        .get(BASE_URL + '/count')
-        .query({room: roomId})
-        .set('Cookie', `token=${JwtUtils.generateToken(admin)}`)
-        .catch((err) => err.response);
-
-      expect(result).to.have.status(200);
-      expect(result).to.be.json;
+      const result = await testSuccess('/count');
       expect(result.body).to.have.property('count');
     });
 
     it('should deny access to chat room message count if unauthorized', async () => {
-      const course = await FixtureUtils.getRandomCourse() as ICourseModel;
-      const student = await User.findOne({role: 'student', _id: {$nin: course.students}});
-
-      const room = getRandomRoomFromCourse(course);
-      const roomId = room._id.toString();
-
-      const result = await chai.request(app)
-        .get(BASE_URL + '/count')
-        .query({room: roomId})
-        .set('Cookie', `token=${JwtUtils.generateToken(student)}`)
-        .catch((err) => err.response);
-
-      expect(result).to.have.status(403);
+      await testAccessDenial('/count');
     });
   });
 });
