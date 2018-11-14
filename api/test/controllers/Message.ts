@@ -1,10 +1,11 @@
 import {FixtureLoader} from '../../fixtures/FixtureLoader';
 import {Server} from '../../src/server';
 import {FixtureUtils} from '../../fixtures/FixtureUtils';
+import {User} from '../../src/models/User';
 import {ICourseModel} from '../../src/models/Course';
 import {ICourse} from '../../../shared/models/ICourse';
-import {JwtUtils} from '../../src/security/JwtUtils';
 import {IChatRoom} from '../../../shared/models/IChatRoom';
+import {JwtUtils} from '../../src/security/JwtUtils';
 import chai = require('chai');
 import chaiHttp = require('chai-http');
 
@@ -55,6 +56,22 @@ describe('Message', async () => {
       expect(result).to.be.json;
       expect(result.body).to.be.an('array');
     });
+
+    it('should deny access to chat room messages if unauthorized', async () => {
+      const course = await FixtureUtils.getRandomCourse() as ICourseModel;
+      const student = await User.findOne({role: 'student', _id: {$nin: course.students}});
+
+      const room = getRandomRoomFromCourse(course);
+      const roomId = room._id.toString();
+
+      const result = await chai.request(app)
+        .get(BASE_URL)
+        .query({room: roomId})
+        .set('Cookie', `token=${JwtUtils.generateToken(student)}`)
+        .catch((err) => err.response);
+
+      expect(result).to.have.status(403);
+    });
   });
 
   describe(`GET ${BASE_URL}/count`, async () => {
@@ -85,6 +102,22 @@ describe('Message', async () => {
       expect(result).to.have.status(200);
       expect(result).to.be.json;
       expect(result.body).to.have.property('count');
+    });
+
+    it('should deny access to chat room message count if unauthorized', async () => {
+      const course = await FixtureUtils.getRandomCourse() as ICourseModel;
+      const student = await User.findOne({role: 'student', _id: {$nin: course.students}});
+
+      const room = getRandomRoomFromCourse(course);
+      const roomId = room._id.toString();
+
+      const result = await chai.request(app)
+        .get(BASE_URL + '/count')
+        .query({room: roomId})
+        .set('Cookie', `token=${JwtUtils.generateToken(student)}`)
+        .catch((err) => err.response);
+
+      expect(result).to.have.status(403);
     });
   });
 });
