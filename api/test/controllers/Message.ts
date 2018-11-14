@@ -27,6 +27,13 @@ describe('Message', async () => {
     await fixtureLoader.load();
   });
 
+  async function simpleRoomSetup() {
+    const course = await FixtureUtils.getRandomCourse() as ICourseModel;
+    const room = getRandomRoomFromCourse(course);
+    const roomId = room._id.toString();
+    return {course, room, roomId};
+  }
+
   async function testMissingRoom(urlPostfix = '') {
     const admin = await FixtureUtils.getRandomAdmin();
 
@@ -39,11 +46,8 @@ describe('Message', async () => {
   }
 
   async function testSuccess(urlPostfix = '') {
+    const {roomId} = await simpleRoomSetup();
     const admin = await FixtureUtils.getRandomAdmin();
-    const course = await FixtureUtils.getRandomCourse() as ICourseModel;
-
-    const room = getRandomRoomFromCourse(course);
-    const roomId = room._id.toString();
 
     const result = await chai.request(app)
       .get(BASE_URL + urlPostfix)
@@ -57,11 +61,8 @@ describe('Message', async () => {
   }
 
   async function testAccessDenial(urlPostfix = '') {
-    const course = await FixtureUtils.getRandomCourse() as ICourseModel;
+    const {course, roomId} = await simpleRoomSetup();
     const student = await User.findOne({role: 'student', _id: {$nin: course.students}});
-
-    const room = getRandomRoomFromCourse(course);
-    const roomId = room._id.toString();
 
     const result = await chai.request(app)
       .get(BASE_URL + urlPostfix)
