@@ -11,6 +11,17 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 -->
 
 ## [Unreleased]
+### Added
+
+### Changed
+- Update mongoose to 5.2.x. [#1004](https://github.com/geli-lms/geli/pull/1004)
+
+### Removed
+
+### Fixed
+- Notifications for invisible courses and lectures will no longer be created. [#877](https://github.com/geli-lms/geli/issues/877) 
+- EU-DSGVO: Export Chat User Data - Exclude Comments. [#998](https://github.com/geli-lms/geli/issues/998)
+
 ### Security
 - Fixed multiple severe security issues of the chat system. [#989](https://github.com/geli-lms/geli/issues/989)
 

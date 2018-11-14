@@ -86,7 +86,7 @@ messageSchema.methods.forDisplay = function (): IMessageDisplay {
 };
 
 messageSchema.statics.exportPersonalData = async function(user: IUser) {
-  return (await Message.find({'author': user._id}).sort({room: 1, createdAt: 1}))
+  return (await Message.find({'author': user._id}).sort({room: 1, createdAt: 1}).select('-comments'))
     .map(messages => messages.exportJSON());
 };
 
