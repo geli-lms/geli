@@ -4,7 +4,6 @@ import {FixtureUtils} from '../../fixtures/FixtureUtils';
 import {ICourseModel} from '../../src/models/Course';
 import {ICourse} from '../../../shared/models/ICourse';
 import {JwtUtils} from '../../src/security/JwtUtils';
-import {MigrationHandler} from '../../src/migrations/MigrationHandler';
 import {IChatRoom} from '../../../shared/models/IChatRoom';
 import chai = require('chai');
 import chaiHttp = require('chai-http');
