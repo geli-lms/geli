@@ -9,6 +9,7 @@ import {IUser} from '../../shared/models/IUser';
 import {ITaskUnit} from '../../shared/models/units/ITaskUnit';
 import {ITaskUnitModel} from '../src/models/units/TaskUnit';
 import {IChatRoom} from '../../shared/models/IChatRoom';
+import {extractSingleMongoId} from '../src/utilities/ExtractMongoId';
 import * as mongoose from 'mongoose';
 import ObjectId = mongoose.Types.ObjectId;
 
@@ -153,7 +154,7 @@ export class FixtureUtils {
   public static async getSimpleChatRoomSetup(hash?: string) {
     const course = await FixtureUtils.getRandomCourse();
     const room = await FixtureUtils.getRandom<IChatRoom>(course.chatRooms, hash);
-    const roomId: string = room._id.toString();
+    const roomId = extractSingleMongoId(room);
     return {course, roomId};
   }
 
