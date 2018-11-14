@@ -21,11 +21,11 @@ describe('ChatRoom', async () => {
 
   describe(`GET ${BASE_URL} :id`, async () => {
     it('should fail when parameter room invalid', async () => {
-      const student = await FixtureUtils.getRandomStudent();
+      const admin = await FixtureUtils.getRandomAdmin();
 
       const result = await chai.request(app)
         .get(BASE_URL + '/507f1f77bcf86cd799439011')
-        .set('Cookie', `token=${JwtUtils.generateToken(student)}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(admin)}`)
         .catch((err) => err.response);
 
       expect(result).to.have.status(404);
@@ -33,11 +33,11 @@ describe('ChatRoom', async () => {
 
     it('should return chat room', async () => {
       const {roomId} = await FixtureUtils.getSimpleChatRoomSetup();
-      const student = await FixtureUtils.getRandomStudent();
+      const admin = await FixtureUtils.getRandomAdmin();
 
       const result = await chai.request(app)
         .get(BASE_URL + '/' + roomId)
-        .set('Cookie', `token=${JwtUtils.generateToken(student)}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(admin)}`)
         .catch((err) => err.response);
 
       expect(result).to.have.status(200);
