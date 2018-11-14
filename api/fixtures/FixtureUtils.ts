@@ -6,7 +6,6 @@ import {ICourse} from '../../shared/models/ICourse';
 import {ILecture} from '../../shared/models/ILecture';
 import {IUnit} from '../../shared/models/units/IUnit';
 import {IUser} from '../../shared/models/IUser';
-import {IWhitelistUser} from '../../shared/models/IWhitelistUser';
 import {ITaskUnit} from '../../shared/models/units/ITaskUnit';
 import {ITaskUnitModel} from '../src/models/units/TaskUnit';
 import * as mongoose from 'mongoose';
