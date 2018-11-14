@@ -40,7 +40,7 @@ export class CourseDetailComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     const data: any = this.route.snapshot.data;
-    this.course = <ICourse> data.course;
+    this.course = <ICourseView> data.course;
     this.id = this.course._id;
     LastVisitedCourseContainerUpdater.addCourseToLastVisitedCourses(this.id, this.userService, this.userDataService);
     this.titleService.setTitleCut(['Course: ', this.course.name]);
