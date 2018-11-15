@@ -44,7 +44,7 @@ export class NotificationController {
     }
     const course = await Course.findById(data.changedCourse._id);
     await Promise.all(course.students.map(async student => {
-      if (this.shouldCreateNotification(student, data.changedCourse)) {
+      if (await this.shouldCreateNotification(student, data.changedCourse, data.changedUnit)) {
         await this.createNotification(student, data.text, data.changedCourse, data.changedLecture, data.changedUnit);
       }
     }));
@@ -80,14 +80,17 @@ export class NotificationController {
     if (!user) {
       throw new BadRequestError('Could not create notification because user not found');
     }
-    if (this.shouldCreateNotification(user, data.changedCourse)) {
+    if (await this.shouldCreateNotification(user, data.changedCourse, data.changedUnit)) {
       await this.createNotification(user, data.text, data.changedCourse, data.changedLecture, data.changedUnit);
     }
     return {notified: true};
   }
 
-  async shouldCreateNotification(user: IUser, changedCourse: ICourse) {
-    return (await Notification.count({'user': user._id, 'changedCourse': changedCourse._id})) === 0;
+  async shouldCreateNotification(user: IUser, changedCourse: ICourse, changedUnit: IUnit = null) {
+    if (!changedUnit) {
+      return (await Notification.count({'user': user._id, 'changedCourse': changedCourse._id})) === 0;
+    }
+    return (await Notification.count({'user': user._id, 'changedUnit': changedUnit._id})) === 0;
   }
 
   async createNotification(user: IUser, text: string, changedCourse?: ICourse, changedLecture?: ILecture, changedUnit?: IUnit) {
