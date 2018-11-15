@@ -9,7 +9,7 @@ import {InternalServerError} from 'routing-controllers';
 import {IUser} from '../../../shared/models/IUser';
 import {ObjectID} from 'bson';
 import {Directory} from './mediaManager/Directory';
-import {IProperties} from '../../../shared/models/IProperties';
+import {IFlags} from '../../../shared/models/IFlags';
 import {extractMongoId} from '../utilities/ExtractMongoId';
 import {ChatRoom, IChatRoomModel} from './ChatRoom';
 
@@ -17,7 +17,7 @@ import {Picture} from './mediaManager/File';
 
 interface ICourseModel extends ICourse, mongoose.Document {
   exportJSON: (sanitize?: boolean, onlyBasicData?: boolean) => Promise<ICourse>;
-  checkPrivileges: (user: IUser) => IProperties;
+  checkPrivileges: (user: IUser) => IFlags;
   forDashboard: (user: IUser) => ICourseDashboard;
   forView: () => ICourseView;
   populateLecturesFor: (user: IUser) => this;
@@ -278,12 +278,13 @@ courseSchema.statics.changeCourseAdminFromUser = async function (userFrom: IUser
 
 courseSchema.methods.checkPrivileges = function (user: IUser) {
   const {userIsAdmin, ...userIs} = User.checkPrivileges(user);
+  const userId = extractMongoId(user._id);
 
   const courseAdminId = extractMongoId(this.courseAdmin);
 
-  const userIsCourseAdmin: boolean = user._id === courseAdminId;
-  const userIsCourseTeacher: boolean = this.teachers.some((teacher: IUserModel) => user._id === extractMongoId(teacher));
-  const userIsCourseStudent: boolean = this.students.some((student: IUserModel) => user._id === extractMongoId(student));
+  const userIsCourseAdmin: boolean = userId === courseAdminId;
+  const userIsCourseTeacher: boolean = this.teachers.some((teacher: IUserModel) => userId === extractMongoId(teacher));
+  const userIsCourseStudent: boolean = this.students.some((student: IUserModel) => userId === extractMongoId(student));
   const userIsCourseMember: boolean = userIsCourseAdmin || userIsCourseTeacher || userIsCourseStudent;
 
   const userCanEditCourse: boolean = userIsAdmin || userIsCourseAdmin || userIsCourseTeacher;

@@ -6,9 +6,10 @@ import {ICourse} from '../../shared/models/ICourse';
 import {ILecture} from '../../shared/models/ILecture';
 import {IUnit} from '../../shared/models/units/IUnit';
 import {IUser} from '../../shared/models/IUser';
-import {IWhitelistUser} from '../../shared/models/IWhitelistUser';
 import {ITaskUnit} from '../../shared/models/units/ITaskUnit';
 import {ITaskUnitModel} from '../src/models/units/TaskUnit';
+import {IChatRoom} from '../../shared/models/IChatRoom';
+import {extractSingleMongoId} from '../src/utilities/ExtractMongoId';
 import * as mongoose from 'mongoose';
 import ObjectId = mongoose.Types.ObjectId;
 
@@ -148,6 +149,19 @@ export class FixtureUtils {
   public static async getRandomUnitFromLecture(lecture: ILecture, hash?: string): Promise<IUnit> {
     const unitId = await this.getRandom<IUnit>(lecture.units, hash);
     return Unit.findById(unitId);
+  }
+
+  /**
+   * Provides simple shared setup functionality currently used by multiple chat system unit tests.
+   *
+   * @param hash The optional RNG seed passed to FixtureUtils.getRandom for random course.chatRooms selection.
+   * @returns A random fixture course and one of its chatRooms, also randomly selected, in form of a roomId.
+   */
+  public static async getSimpleChatRoomSetup(hash?: string) {
+    const course = await FixtureUtils.getRandomCourse();
+    const room = await FixtureUtils.getRandom<IChatRoom>(course.chatRooms, hash);
+    const roomId = extractSingleMongoId(room);
+    return {course, roomId};
   }
 
   public static async getRandomUnitFromCourse(course: ICourse, hash?: string): Promise<IUnit> {

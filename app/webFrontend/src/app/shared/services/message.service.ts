@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {DataService} from './data.service';
 import {BackendService} from './backend.service';
-import {IMessage} from '../../../../../../shared/models/messaging/IMessage';
+import {IMessageDisplay} from '../../../../../../shared/models/messaging/IMessage';
 
 
 @Injectable()
@@ -12,7 +12,7 @@ export class MessageService extends DataService {
     super('message', backendService);
   }
 
-  async getMessages(queryParam: any): Promise<IMessage[]> {
+  async getMessages(queryParam: any): Promise<IMessageDisplay[]> {
     const api = this.apiPath + '?' + this.getQueryParamsString(queryParam);
     return this.backendService
       .get(api)
