@@ -25,7 +25,7 @@ export class FreeTextUnitEditorComponent implements OnInit {
   @ViewChild('editor')
   private editor: AceEditorComponent;
 
-  constructor(private unitFormService: UnitFormService) {
+  constructor(public unitFormService: UnitFormService) {
   }
 
   ngOnInit() {
