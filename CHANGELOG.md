@@ -16,6 +16,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - `TestHelper` class for shared API unit test functionality. [#989](https://github.com/geli-lms/geli/issues/989)
 - `extractSingleMongoId` variant of the `ExtractMongoId` utility function(s). [#989](https://github.com/geli-lms/geli/issues/989)
 - Show message count for unit chat. [#933](https://github.com/geli-lms/geli/issues/993)
+- Styles for free text units. [#867](https://github.com/geli-lms/geli/issues/867)
+
 
 ### Changed
 - Update mongoose to 5.2.x. [#1004](https://github.com/geli-lms/geli/pull/1004)

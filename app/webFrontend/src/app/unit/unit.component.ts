@@ -4,6 +4,7 @@ import * as moment from 'moment';
 import {ActivatedRoute, Router} from '@angular/router';
 import {IUser} from '../../../../../shared/models/IUser';
 import {MessageService} from '../shared/services/message.service';
+import {ICourse} from '../../../../../shared/models/ICourse';
 
 @Component({
   selector: 'app-unit',
@@ -11,7 +12,7 @@ import {MessageService} from '../shared/services/message.service';
   styleUrls: ['./unit.component.scss']
 })
 export class UnitComponent implements OnInit, AfterViewInit {
-
+  @Input() course: ICourse;
   @Input() units: IUnit[];
   unitId: string;
   users: IUser[] = [];
