@@ -289,7 +289,7 @@ describe('Course', () => {
       const res = await chai.request(app)
         .post(`${BASE_URL}/picture/${course._id}`)
         .set('Cookie', `token=${JwtUtils.generateToken(courseAdmin)}`)
-    .attach('file', readFileSync('test/resources/test.png'), 'test.png')
+        .attach('file', readFileSync('test/resources/test.png'), 'test.png')
         .field('imageData', JSON.stringify({ breakpoints:
           [ { screenSize: BreakpointSize.MOBILE, imageSize: { width: 284, height: 190} }] }));
 
