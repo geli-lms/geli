@@ -322,8 +322,8 @@ export class DownloadController {
 
       data.courseName += 'Single';
       const hash = await this.createFileHash(data);
-      // const key = cache.get(hash);
-      const key = null;
+      const key = cache.get(hash);
+
       if (key === null) {
         const filepath = config.tmpFileCacheFolder + hash + '.zip';
         const output = fs.createWriteStream(filepath);
