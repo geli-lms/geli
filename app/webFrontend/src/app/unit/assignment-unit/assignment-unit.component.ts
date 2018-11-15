@@ -96,6 +96,7 @@ export class AssignmentUnitComponent implements OnInit {
     }
 
     public onFileUploaded(event: IFileUnit) {
+      alert("file uploaded!!!!!!!!!!!!");
     }
 
     public onAllUploaded() {

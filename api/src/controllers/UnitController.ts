@@ -316,7 +316,7 @@ export class UnitController {
         file: savedFile._id,
         user: currentUser._id,
         submitted: false,
-        checked: 0,
+        checked: -1,
       };
 
       assignmentUnit.assignments.push(assignment);

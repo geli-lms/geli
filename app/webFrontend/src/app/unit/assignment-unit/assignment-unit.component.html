@@ -60,7 +60,7 @@
             <td *ngIf="unit.submitted; else notSubmitted">
                 <mat-form-field>
                     <mat-select placeholder="Status" value="{{unit.checked}}">
-                        <mat-option (click)="submitStatusChange(unit._id, null)" value={{null}}>Open</mat-option>
+                        <mat-option (click)="submitStatusChange(unit._id, -1)" value={{-1}}>Open</mat-option>
                         <mat-option (click)="submitStatusChange(unit._id, 0)" value={{0}}>Failed</mat-option>
                         <mat-option (click)="submitStatusChange(unit._id, 1)" value={{1}}>Accpected</mat-option>
                     </mat-select>

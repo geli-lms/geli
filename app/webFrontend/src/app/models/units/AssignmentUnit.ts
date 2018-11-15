@@ -2,6 +2,7 @@ import {ICourse} from '../../../../../../shared/models/ICourse';
 import {IAssignmentUnit} from '../../../../../../shared/models/units/IAssignmentUnit';
 import {IUser} from "../../../../../../shared/models/IUser";
 import {IAssignment} from "../../../../../../shared/models/assignment/IAssignment";
+import {IChatRoom} from "../../../../../../shared/models/IChatRoom";
 
 export class AssignmentUnit implements IAssignmentUnit {
     _id: any;
@@ -20,6 +21,8 @@ export class AssignmentUnit implements IAssignmentUnit {
 
     deadline: string;
     assignments: IAssignment[] = [];
+
+    chatRoom: IChatRoom;
 
     constructor(_course: ICourse) {
         this._course = _course;
