@@ -151,6 +151,12 @@ export class FixtureUtils {
     return Unit.findById(unitId);
   }
 
+  /**
+   * Provides simple shared setup functionality currently used by multiple chat system unit tests.
+   *
+   * @param hash The optional RNG seed passed to FixtureUtils.getRandom for random course.chatRooms selection.
+   * @returns A random fixture course and one of its chatRooms, also randomly selected, in form of a roomId.
+   */
   public static async getSimpleChatRoomSetup(hash?: string) {
     const course = await FixtureUtils.getRandomCourse();
     const room = await FixtureUtils.getRandom<IChatRoom>(course.chatRooms, hash);
