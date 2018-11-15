@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
 - Update mongoose to 5.2.x. [#1004](https://github.com/geli-lms/geli/pull/1004)
 - Update contributors list. [#1007](https://github.com/geli-lms/geli/issues/1007)
+- Display only one notification per course update. [#914](https://github.com/geli-lms/geli/issues/914)
 
 ### Removed
 
@@ -187,7 +188,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Changed the text in download course[#718](https://github.com/geli-lms/geli/pull/718)
 - Refactored register and resend activation to use geli email validator with top level domain check. [#713](https://github.com/geli-lms/geli/issues/713)
 - Refactored the uploadform [#693](https://github.com/geli-lms/geli/issues/693)
-- Display one notification per course update [#914](https://github.com/geli-lms/geli/issues/914)
 
 ### Fixed
 - Fixed route `/users/roles` [#204](https://github.com/geli-lms/geli/issues/204)
