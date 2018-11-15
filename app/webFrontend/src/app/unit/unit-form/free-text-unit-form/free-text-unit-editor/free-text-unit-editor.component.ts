@@ -7,7 +7,6 @@ import 'brace/theme/github';
 import {FormGroup} from '@angular/forms';
 import {UnitFormService} from '../../../../shared/services/unit-form.service';
 
-
 @Component({
   selector: 'app-free-text-unit-editor',
   templateUrl: './free-text-unit-editor.component.html',
@@ -36,7 +35,6 @@ export class FreeTextUnitEditorComponent implements OnInit, AfterViewInit {
       maxLines: 9999
     });
   }
-
 
   onTabChange($event: any) {
     if ($event.index === 1) {
