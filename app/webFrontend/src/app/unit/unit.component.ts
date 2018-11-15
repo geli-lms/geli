@@ -3,7 +3,7 @@ import {IUnit} from '../../../../../shared/models/units/IUnit';
 import * as moment from 'moment';
 import {ActivatedRoute, Router} from '@angular/router';
 import {IUser} from '../../../../../shared/models/IUser';
-import {MessageService} from "../shared/services/message.service";
+import {MessageService} from '../shared/services/message.service';
 
 @Component({
   selector: 'app-unit',
@@ -15,7 +15,7 @@ export class UnitComponent implements OnInit, AfterViewInit {
   @Input() units: IUnit[];
   unitId: string;
   users: IUser[] = [];
-  chatMessageCount: {[unitId:string]: number} = {};
+  chatMessageCount: {[unitId: string]: number} = {};
 
   private getDeadlineDiffTime (deadline: string) {
     const momentDeadline = moment(deadline);
