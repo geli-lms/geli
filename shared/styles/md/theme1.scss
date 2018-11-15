@@ -1,229 +1,244 @@
-.markdown-wrapper.theme1 {
-  background-color: #fff;
-  color: #000;
-  font: 13px "Myriad Pro", "Lucida Grande", Lucida, Verdana, sans-serif;
+ &.theme1 {
+    background-color: #fff;
+    color: #000;
+    font: 13px "Myriad Pro", "Lucida Grande", Lucida, Verdana, sans-serif;
 
-}
+    h1, h2, h3, h4, h5, h6 {
+      text-decoration: underline;
+    }
 
-.markdown-wrapper.theme1 h1, .markdown-wrapper.theme1 h2, .markdown-wrapper.theme1 h3, .markdown-wrapper.theme1 h4, .markdown-wrapper.theme1 h5, .markdown-wrapper.theme1 h6 {
-  text-decoration: underline;
-}
+    pre {
+      white-space: pre-wrap;
+    }
 
-.markdown-wrapper.theme1 pre {
-  white-space: pre-wrap;
-}
+    /* links */
+    a:link {
+      color: #00f;
+      text-decoration: none;
+    }
 
-.markdown-wrapper.theme1 a:link {
-  color: #00f;
-  text-decoration: none;
-}
+    a:visited {
+      color: #00a;
+      text-decoration: none;
+    }
 
-.markdown-wrapper.theme1 a:visited {
-  color: #00a;
-  text-decoration: none;
-}
+    a:hover {
+      color: #f60;
+      text-decoration: underline;
+    }
 
-.markdown-wrapper.theme1 a:hover {
-  color: #f60;
-  text-decoration: underline;
-}
+    a:active {
+      color: #f60;
+      text-decoration: underline;
+    }
 
-.markdown-wrapper.theme1 a:active {
-  color: #f60;
-  text-decoration: underline;
-}
+    /* html tags */
 
-.markdown-wrapper.theme1 * code {
-  font-size: 101%;
-}
+    /*  Work around IE/Win code size bug - courtesy Jesper, waffle.wootest.net  */
 
-.markdown-wrapper.theme1 * pre {
-  font-size: 101%;
-}
+    * code {
+      font-size: 101%;
+    }
 
-.markdown-wrapper.theme1 pre, .markdown-wrapper.theme1 code {
-  font-size: 11px;
-  font-family: monaco, courier, consolas, monospace;
-}
+    * pre {
+      font-size: 101%;
+    }
 
-.markdown-wrapper.theme1 pre {
-  margin-top: 5px;
-  margin-bottom: 10px;
-  border: 1px solid #c7cfd5;
-  background: #f1f5f9;
-  margin: 20px 0;
-  padding: 8px;
-  text-align: left;
-}
+    /* code */
 
-.markdown-wrapper.theme1 hr {
-  color: #919699;
-  width: 100%;
-  noshade: "noshade";
-}
+    pre, code {
+      font-size: 11px;
+      font-family: monaco, courier, consolas, monospace;
+    }
 
-.markdown-wrapper.theme1 h1, .markdown-wrapper.theme1 h2, .markdown-wrapper.theme1 h3, .markdown-wrapper.theme1 h4, .markdown-wrapper.theme1 h5, .markdown-wrapper.theme1 h6 {
-  font-family: "Myriad Pro", "Lucida Grande", Lucida, Verdana, sans-serif;
-  font-weight: bold;
-}
+    pre {
+      margin-top: 5px;
+      margin-bottom: 10px;
+      border: 1px solid #c7cfd5;
+      background: #f1f5f9;
+      margin: 20px 0;
+      padding: 8px;
+      text-align: left;
+    }
 
-.markdown-wrapper.theme1 h1 {
-  margin-top: 1em;
-  margin-bottom: 25px;
-  color: #000;
-  font-weight: bold;
-  font-size: 30px;
-}
+    hr {
+      color: #919699;
+      width: 100%;
+      noshade: "noshade"
+    }
 
-.markdown-wrapper.theme1 h2 {
-  margin-top: 2.5em;
-  font-size: 24px;
-  color: #000;
-  padding-bottom: 2px;
-  border-bottom: 1px solid #919699;
-}
+    /* headers */
 
-.markdown-wrapper.theme1 h3 {
-  margin-top: 2em;
-  margin-bottom: .5em;
-  font-size: 17px;
-  color: #000;
-}
+    h1, h2, h3, h4, h5, h6 {
+      font-family: "Myriad Pro", "Lucida Grande", Lucida, Verdana, sans-serif;
+      font-weight: bold;
+    }
 
-.markdown-wrapper.theme1 h4 {
-  margin-top: 2em;
-  margin-bottom: .5em;
-  font-size: 15px;
-  color: #000;
-}
+    h1 {
+      margin-top: 1em;
+      margin-bottom: 25px;
+      color: #000;
+      font-weight: bold;
+      font-size: 30px;
+    }
+    h2 {
+      margin-top: 2.5em;
+      font-size: 24px;
+      color: #000;
+      padding-bottom: 2px;
+      border-bottom: 1px solid #919699;
+    }
+    h3 {
+      margin-top: 2em;
+      margin-bottom: .5em;
+      font-size: 17px;
+      color: #000;
+    }
+    h4 {
+      margin-top: 2em;
+      margin-bottom: .5em;
+      font-size: 15px;
+      color: #000;
+    }
+    h5 {
+      margin-top: 20px;
+      margin-bottom: .5em;
+      padding: 0;
+      font-size: 13px;
+      color: #000;
+    }
 
-.markdown-wrapper.theme1 h5 {
-  margin-top: 20px;
-  margin-bottom: .5em;
-  padding: 0;
-  font-size: 13px;
-  color: #000;
-}
+    h6 {
+      margin-top: 20px;
+      margin-bottom: .5em;
+      padding: 0;
+      font-size: 11px;
+      color: #000;
+    }
 
-.markdown-wrapper.theme1 h6 {
-  margin-top: 20px;
-  margin-bottom: .5em;
-  padding: 0;
-  font-size: 11px;
-  color: #000;
-}
+    p {
+      margin-top: 0px;
+      margin-bottom: 10px;
+    }
 
-.markdown-wrapper.theme1 p {
-  margin-top: 0px;
-  margin-bottom: 10px;
-}
+    /* lists */
 
-.markdown-wrapper.theme1 ul {
-  list-style: square outside;
-  margin: 0 0 0 30px;
-  padding: 0 0 12px 6px;
-}
+    ul {
+      list-style: square outside;
+      margin: 0 0 0 30px;
+      padding: 0 0 12px 6px;
+    }
 
-.markdown-wrapper.theme1 li {
-  margin-top: 7px;
-}
+    li {
+      margin-top: 7px;
+    }
 
-.markdown-wrapper.theme1 ol {
-  list-style-type: decimal;
-  list-style-position: outside;
-  margin: 0 0 0 30px;
-  padding: 0 0 12px 6px;
-}
+    ol {
+      list-style-type: decimal;
+      list-style-position: outside;
+      margin: 0 0 0 30px;
+      padding: 0 0 12px 6px;
+    }
 
-.markdown-wrapper.theme1 ol ol {
-  list-style-type: lower-alpha;
-  list-style-position: outside;
-  margin: 7px 0 0 30px;
-  padding: 0 0 0 10px;
-}
+    ol ol {
+      list-style-type: lower-alpha;
+      list-style-position: outside;
+      margin: 7px 0 0 30px;
+      padding: 0 0 0 10px;
+    }
 
-.markdown-wrapper.theme1 ul ul {
-  margin-left: 40px;
-  padding: 0 0 0 6px;
-}
+    ul ul {
+      margin-left: 40px;
+      padding: 0 0 0 6px;
+    }
 
-.markdown-wrapper.theme1 li > p {
-  display: inline;
-}
+    li > p {
+      display: inline
+    }
+    li > p + p {
+      display: block
+    }
+    li > a + p {
+      display: block
+    }
 
-.markdown-wrapper.theme1 li > p + p {
-  display: block;
-}
+    /* table */
 
-.markdown-wrapper.theme1 li > a + p {
-  display: block;
-}
+    table {
+      width: 100%;
+      border-top: 1px solid #919699;
+      border-left: 1px solid #919699;
+      border-spacing: 0;
+    }
 
-.markdown-wrapper.theme1 table {
-  width: 100%;
-  border-top: 1px solid #919699;
-  border-left: 1px solid #919699;
-  border-spacing: 0;
-}
+    table th {
+      padding: 4px 8px 4px 8px;
+      background: #E2E2E2;
+      font-size: 12px;
+      border-bottom: 1px solid #919699;
+      border-right: 1px solid #919699;
+    }
+    table th p {
+      font-weight: bold;
+      margin-bottom: 0px;
+    }
 
-.markdown-wrapper.theme1 table th {
-  padding: 4px 8px 4px 8px;
-  background: #E2E2E2;
-  font-size: 12px;
-  border-bottom: 1px solid #919699;
-  border-right: 1px solid #919699;
-}
+    table td {
+      padding: 8px;
+      font-size: 12px;
+      vertical-align: top;
+      border-bottom: 1px solid #919699;
+      border-right: 1px solid #919699;
+    }
+    table td p {
+      margin-bottom: 0px;
+    }
+    table td p + p {
+      margin-top: 5px;
+    }
+    table td p + p + p {
+      margin-top: 5px;
+    }
 
-.markdown-wrapper.theme1 table th p {
-  font-weight: bold;
-  margin-bottom: 0px;
-}
+    /* forms */
 
-.markdown-wrapper.theme1 table td {
-  padding: 8px;
-  font-size: 12px;
-  vertical-align: top;
-  border-bottom: 1px solid #919699;
-  border-right: 1px solid #919699;
-}
+    form {
+      margin: 0;
+    }
 
-.markdown-wrapper.theme1 table td p {
-  margin-bottom: 0px;
-}
+    button {
+      margin: 3px 0 10px 0;
+    }
+    input {
+      vertical-align: middle;
+      padding: 0;
+      margin: 0 0 5px 0;
+    }
 
-.markdown-wrapper.theme1 table td p + p {
-  margin-top: 5px;
-}
+    select {
+      vertical-align: middle;
+      padding: 0;
+      margin: 0 0 3px 0;
+    }
 
-.markdown-wrapper.theme1 table td p + p + p {
-  margin-top: 5px;
-}
+    textarea {
+      margin: 0 0 10px 0;
+      width: 100%;
+    }
 
-.markdown-wrapper.theme1 form {
-  margin: 0;
-}
 
-.markdown-wrapper.theme1 button {
-  margin: 3px 0 10px 0;
-}
+    .warning {
+      @extend %custombox-shared;
+      background-color: #ff8;
+    }
 
-.markdown-wrapper.theme1 input {
-  vertical-align: middle;
-  padding: 0;
-  margin: 0 0 5px 0;
-}
+    .info {
+    }
 
-.markdown-wrapper.theme1 select {
-  vertical-align: middle;
-  padding: 0;
-  margin: 0 0 3px 0;
-}
+    .error {
+    }
 
-.markdown-wrapper.theme1 textarea {
-  margin: 0 0 10px 0;
-  width: 100%;
-}
+    .success {
 
-.markdown-wrapper.theme1 .warning {
-  background-color: #ff8;
-}
+    }
+  }

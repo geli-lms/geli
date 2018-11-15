@@ -1,26 +1,28 @@
-
-.warning {
+/* custom boxes */
+%custombox-shared {
   color: #424242;
   padding: 10px;
 }
 
+.warning {
+  @extend %custombox-shared;
+  background-color: #ff8;
+}
+
 .info {
-  color: #424242;
-  padding: 10px;
+  @extend %custombox-shared;
   background-color: #03A9F4;
 
 }
 
 .error {
-  color: #424242;
-  padding: 10px;
+  @extend %custombox-shared;
   background-color: #F44336;
 
 }
 
 .success {
- color: #424242;
-  padding: 10px;
+  @extend %custombox-shared;
   background-color: #4CAF50;
 
 }
