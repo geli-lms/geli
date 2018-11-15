@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, Input, OnInit, ViewChild} from '@angular/core';
 import {FreeTextUnitCoreComponent} from '../../../free-text-unit/free-text-unit-core/free-text-unit-core.component';
 import {AceEditorComponent} from 'ng2-ace-editor';
 import 'brace';
@@ -13,7 +13,7 @@ import {UnitFormService} from '../../../../shared/services/unit-form.service';
   templateUrl: './free-text-unit-editor.component.html',
   styleUrls: ['./free-text-unit-editor.component.scss']
 })
-export class FreeTextUnitEditorComponent implements OnInit {
+export class FreeTextUnitEditorComponent implements OnInit, AfterViewInit {
 
   @Input() markdown: string;
 
