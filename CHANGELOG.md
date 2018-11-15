@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 ### Added
+- Show message count for unit Forum/Chat [#933](https://github.com/geli-lms/geli/issues/993)
 
 ### Changed
 - Update mongoose to 5.2.x. [#1004](https://github.com/geli-lms/geli/pull/1004)
