@@ -7,10 +7,10 @@
        [scrollWindow]="false"
        [infiniteScrollDisabled]="disableInfiniteScroll">
     <ul  #messageList>
-      <app-message *ngFor="let message of messages" [message]="message" [mode]="mode" [chatName]="chatName"></app-message>
+      <app-message *ngFor="let message of messages" [message]="message" [mode]="mode"></app-message>
     </ul>
   </div>
   <div class="chat-footer-container">
-      <app-messaging-input-field [room]="room" [chatName]="chatName"></app-messaging-input-field>
+      <app-messaging-input-field [room]="room"></app-messaging-input-field>
   </div>
 </div>

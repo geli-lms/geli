@@ -13,14 +13,12 @@ import {allRoles} from '../config/roles';
 import {IProperties} from '../../../shared/models/IProperties';
 import {extractMongoId} from '../utilities/ExtractMongoId';
 import {ensureMongoToObject} from '../utilities/EnsureMongoToObject';
-import {IUnit} from '../../../shared/models/units/IUnit';
 import {Course, ICourseModel} from './Course';
 import {NotificationSettings} from './NotificationSettings';
 import {Notification} from './Notification';
 import {WhitelistUser} from './WhitelistUser';
 import {Progress} from './progress/Progress';
 import fs = require('fs');
-import emailService from '../services/EmailService';
 
 
 interface IUserModel extends IUser, mongoose.Document {

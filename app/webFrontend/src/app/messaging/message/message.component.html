@@ -15,6 +15,6 @@
     <div *ngFor="let comment of message.comments">
       <app-message [message]="comment" [isChildMessage]="true"></app-message>
     </div>
-    <app-messaging-input-field [room]="message.room" [parentMessageId]="message._id" [chatName]="chatName"></app-messaging-input-field>
+    <app-messaging-input-field [room]="message.room" [parentMessageId]="message._id"></app-messaging-input-field>
   </div>
 </li>
