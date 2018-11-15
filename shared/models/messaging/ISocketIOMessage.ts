@@ -1,18 +1,23 @@
-import {IMessage} from './IMessage';
+import {IMessageDisplay} from './IMessage';
 
-enum SocketIOMessageType {
+export enum SocketIOMessageType {
   COMMENT = 'comment',
   MESSAGE = 'message'
 }
 
-interface ISocketIOMessageMeta {
+export interface ISocketIOMessageMeta {
   type: SocketIOMessageType;
   parent: string;
 }
 
-interface ISocketIOMessage {
+// This is what clients receive.
+export interface ISocketIOMessage {
   meta: ISocketIOMessageMeta;
-  message: IMessage;
+  message: IMessageDisplay;
 }
 
-export {ISocketIOMessage, ISocketIOMessageMeta, SocketIOMessageType};
+// This is what's "posted" by the client to the ChatServer.
+export interface ISocketIOMessagePost {
+  meta: ISocketIOMessageMeta;
+  content: string;
+}
