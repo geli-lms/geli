@@ -1,6 +1,6 @@
 import {
   BodyParam, Post, Param, JsonController, UseBefore, Authorized, CurrentUser,
-  InternalServerError, ForbiddenError, BadRequestError
+  InternalServerError, ForbiddenError
 } from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import {IUser} from '../../../shared/models/IUser';
