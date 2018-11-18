@@ -1,6 +1,6 @@
 import {
   BodyParam, Post, Param, JsonController, UseBefore, Authorized, CurrentUser,
-  InternalServerError, ForbiddenError
+  InternalServerError, ForbiddenError, BadRequestError
 } from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import {IUser} from '../../../shared/models/IUser';
@@ -145,6 +145,10 @@ export class DuplicationController {
   async duplicateUnit(@Param('id') id: string,
                       @BodyParam('courseId', {required: true}) courseId: string,
                       @BodyParam('lectureId', {required: true}) lectureId: string) {
+    const course = await Course.findOne({lectures: lectureId});
+    if (extractSingleMongoId(course) !== courseId) {
+      throw new BadRequestError();
+    }
     try {
       const unitModel: IUnitModel = await Unit.findById(id);
       const exportedUnit: IUnit = await unitModel.exportJSON();
