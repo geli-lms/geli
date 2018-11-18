@@ -1,5 +1,6 @@
 import {User} from '../src/models/User';
 import {Course, ICourseModel} from '../src/models/Course';
+import {IUserModel} from '../src/models/User';
 import {Lecture} from '../src/models/Lecture';
 import {Unit} from '../src/models/units/Unit';
 import {ICourse} from '../../shared/models/ICourse';
@@ -39,12 +40,9 @@ export class FixtureUtils {
     return this.getRandom<IUser>(array, hash);
   }
 
-  public static async getRandomTeacherForCourse(course: ICourse, hash?: string): Promise<IUser> {
-    let array: IUser[] = [];
-    array = array.concat(course.teachers);
-    array.push(course.courseAdmin);
-    const user = await this.getRandom<IUser>(array, hash);
-    return User.findById(user);
+  public static async getRandomTeacherForCourse(course: ICourse, hash?: string): Promise<IUserModel> {
+    const user = await this.getRandom<IUser>([course.courseAdmin, ...course.teachers], hash);
+    return await User.findById(user);
   }
 
   public static async getRandomTeachers(min: number, max: number, hash?: string): Promise<IUser[]> {
