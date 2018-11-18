@@ -174,7 +174,7 @@ describe('Duplicate', async () => {
       }
     });
 
-    it('should fail to duplicate units for an unauthorized teacher', async () => {
+    it('should forbid unit duplication for an unauthorized teacher', async () => {
       const unit = await FixtureUtils.getRandomUnit();
       const lecture = await FixtureUtils.getLectureFromUnit(unit);
       const course = await FixtureUtils.getCourseFromUnit(unit);
@@ -192,7 +192,7 @@ describe('Duplicate', async () => {
       result.status.should.be.equal(403);
     });
 
-    it('should fail to duplicate lectures for an unauthorized teacher', async () => {
+    it('should forbid lecture duplication for an unauthorized teacher', async () => {
       const lecture = await FixtureUtils.getRandomLecture();
       const course = await FixtureUtils.getCourseFromLecture(lecture);
       const unauthorizedTeacher = await User.findOne({
@@ -209,7 +209,7 @@ describe('Duplicate', async () => {
       result.status.should.be.equal(403);
     });
 
-    it('should fail to duplicate courses for an unauthorized teacher', async () => {
+    it('should forbid course duplication for an unauthorized teacher', async () => {
       const course = await FixtureUtils.getRandomCourse();
       const unauthorizedTeacher = await User.findOne({
         role: 'teacher',
