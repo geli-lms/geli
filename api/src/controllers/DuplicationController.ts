@@ -1,5 +1,6 @@
 import {
-  Body, Post, Param, JsonController, UseBefore, Authorized, InternalServerError
+  Body, Post, Param, JsonController, UseBefore, Authorized,
+  InternalServerError, ForbiddenError
 } from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import {IUnit} from '../../../shared/models/units/IUnit';
@@ -51,8 +52,11 @@ export class DuplicationController {
   async duplicateCourse(@Param('id') id: string, @Body() data: any) {
     // we could use @CurrentUser instead of the need to explicitly provide a teacher
     const courseAdmin = data.courseAdmin;
+    const courseModel: ICourseModel = await Course.findById(id);
+    if (!courseModel.checkPrivileges(courseAdmin).userCanEditCourse) {
+      throw new ForbiddenError();
+    }
     try {
-      const courseModel: ICourseModel = await Course.findById(id);
       const exportedCourse: ICourse = await courseModel.exportJSON(false);
       delete exportedCourse.students;
       return Course.schema.statics.importJSON(exportedCourse, courseAdmin);
