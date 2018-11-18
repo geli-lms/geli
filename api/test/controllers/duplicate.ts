@@ -261,5 +261,21 @@ describe('Duplicate', async () => {
 
       result.status.should.be.equal(403);
     });
+
+    it('should fail unit duplication when the given target lecture doesn\'t belong to the target course', async () => {
+      const unit = await FixtureUtils.getRandomUnit();
+      const targetCourse = await FixtureUtils.getCourseFromUnit(unit);
+      const teacher = await FixtureUtils.getRandomTeacherForCourse(targetCourse);
+      const otherCourse = await Course.findOne({_id: {$ne: targetCourse}});
+      const otherTargetLecture = await FixtureUtils.getRandomLectureFromCourse(otherCourse);
+
+      const result = await chai.request(app)
+          .post(`${BASE_URL}/unit/${unit._id}`)
+          .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
+          .send({courseId: targetCourse._id, lectureId: otherTargetLecture._id})
+          .catch((err) => err.response);
+
+      result.status.should.be.equal(400);
+    });
   });
 });
