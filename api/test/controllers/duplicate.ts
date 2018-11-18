@@ -224,5 +224,42 @@ describe('Duplicate', async () => {
 
       result.status.should.be.equal(403);
     });
+
+    it('should forbid unit duplication when given a different target course/lecture without authorization', async () => {
+      const unit = await FixtureUtils.getRandomUnit();
+      const course = await FixtureUtils.getCourseFromUnit(unit);
+      const teacher = await FixtureUtils.getRandomTeacherForCourse(course);
+      const targetCourse = await Course.findOne({
+        courseAdmin: {$ne: teacher},
+        teachers: {$ne: teacher}
+      });
+      const targetLecture = await FixtureUtils.getRandomLectureFromCourse(targetCourse);
+
+      const result = await chai.request(app)
+          .post(`${BASE_URL}/unit/${unit._id}`)
+          .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
+          .send({courseId: targetCourse._id, lectureId: targetLecture._id})
+          .catch((err) => err.response);
+
+      result.status.should.be.equal(403);
+    });
+
+    it('should forbid lecture duplication when given a different target course without authorization', async () => {
+      const lecture = await FixtureUtils.getRandomLecture();
+      const course = await FixtureUtils.getCourseFromLecture(lecture);
+      const teacher = await FixtureUtils.getRandomTeacherForCourse(course);
+      const targetCourse = await Course.findOne({
+        courseAdmin: {$ne: teacher},
+        teachers: {$ne: teacher}
+      });
+
+      const result = await chai.request(app)
+          .post(`${BASE_URL}/lecture/${lecture._id}`)
+          .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
+          .send({courseId: targetCourse._id})
+          .catch((err) => err.response);
+
+      result.status.should.be.equal(403);
+    });
   });
 });
