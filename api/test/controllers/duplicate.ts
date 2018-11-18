@@ -10,6 +10,7 @@ import {IUnit} from '../../../shared/models/units/IUnit';
 import * as fs from 'fs';
 import * as util from 'util';
 import {Course} from '../../src/models/Course';
+import {User} from '../../src/models/User';
 import {ICodeKataModel} from '../../src/models/units/CodeKataUnit';
 import {IFreeTextUnit} from '../../../shared/models/units/IFreeTextUnit';
 import {ITaskUnitModel} from '../../src/models/units/TaskUnit';
@@ -171,6 +172,57 @@ describe('Duplicate', async () => {
           courseJson.accessKey.should.be.equal(course.accessKey);
         }
       }
+    });
+
+    it('should fail to duplicate units for an unauthorized teacher', async () => {
+      const unit = await FixtureUtils.getRandomUnit();
+      const lecture = await FixtureUtils.getLectureFromUnit(unit);
+      const course = await FixtureUtils.getCoursesFromUnit(unit);
+      const unauthorizedTeacher = await User.findOne({
+        role: 'teacher',
+        _id: {$nin: [course.courseAdmin, ...course.teachers]}
+      });
+
+      const result = await chai.request(app)
+          .post(`${BASE_URL}/unit/${unit._id}`)
+          .set('Cookie', `token=${JwtUtils.generateToken(unauthorizedTeacher)}`)
+          .send({courseId: course._id, lectureId: lecture._id})
+          .catch((err) => err.response);
+
+      result.status.should.be.equal(403);
+    });
+
+    it('should fail to duplicate lectures for an unauthorized teacher', async () => {
+      const lecture = await FixtureUtils.getRandomLecture();
+      const course = await FixtureUtils.getCoursesFromLecture(lecture);
+      const unauthorizedTeacher = await User.findOne({
+        role: 'teacher',
+        _id: {$nin: [course.courseAdmin, ...course.teachers]}
+      });
+
+      const result = await chai.request(app)
+          .post(`${BASE_URL}/lecture/${lecture._id}`)
+          .set('Cookie', `token=${JwtUtils.generateToken(unauthorizedTeacher)}`)
+          .send({courseId: course._id})
+          .catch((err) => err.response);
+
+      result.status.should.be.equal(403);
+    });
+
+    it('should fail to duplicate courses for an unauthorized teacher', async () => {
+      const course = await FixtureUtils.getRandomCourse();
+      const unauthorizedTeacher = await User.findOne({
+        role: 'teacher',
+        _id: {$nin: [course.courseAdmin, ...course.teachers]}
+      });
+
+      const result = await chai.request(app)
+          .post(`${BASE_URL}/course/${course._id}`)
+          .set('Cookie', `token=${JwtUtils.generateToken(unauthorizedTeacher)}`)
+          .send({courseAdmin: unauthorizedTeacher._id})
+          .catch((err) => err.response);
+
+      result.status.should.be.equal(403);
     });
   });
 });
