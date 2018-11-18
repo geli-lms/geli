@@ -10,7 +10,7 @@ import {IUser} from '../../../shared/models/IUser';
 import {ObjectID} from 'bson';
 import {Directory} from './mediaManager/Directory';
 import {IFlags} from '../../../shared/models/IFlags';
-import {extractMongoId} from '../utilities/ExtractMongoId';
+import {extractSingleMongoId} from '../utilities/ExtractMongoId';
 import {ChatRoom, IChatRoomModel} from './ChatRoom';
 
 import {Picture} from './mediaManager/File';
@@ -120,7 +120,7 @@ const courseSchema = new mongoose.Schema({
         }
 
         if (ret.chatRooms) {
-          ret.chatRooms = ret.chatRooms.map(extractMongoId);
+          ret.chatRooms = ret.chatRooms.map(extractSingleMongoId);
         }
       }
     }
@@ -272,13 +272,13 @@ courseSchema.statics.changeCourseAdminFromUser = async function (userFrom: IUser
 
 courseSchema.methods.checkPrivileges = function (user: IUser) {
   const {userIsAdmin, ...userIs} = User.checkPrivileges(user);
-  const userId = extractMongoId(user);
+  const userId = extractSingleMongoId(user);
 
-  const courseAdminId = extractMongoId(this.courseAdmin);
+  const courseAdminId = extractSingleMongoId(this.courseAdmin);
 
   const userIsCourseAdmin: boolean = userId === courseAdminId;
-  const userIsCourseTeacher: boolean = this.teachers.some((teacher: IUserModel) => userId === extractMongoId(teacher));
-  const userIsCourseStudent: boolean = this.students.some((student: IUserModel) => userId === extractMongoId(student));
+  const userIsCourseTeacher: boolean = this.teachers.some((teacher: IUserModel) => userId === extractSingleMongoId(teacher));
+  const userIsCourseStudent: boolean = this.students.some((student: IUserModel) => userId === extractSingleMongoId(student));
   const userIsCourseMember: boolean = userIsCourseAdmin || userIsCourseTeacher || userIsCourseStudent;
 
   const userCanEditCourse: boolean = userIsAdmin || userIsCourseAdmin || userIsCourseTeacher;
@@ -310,7 +310,7 @@ courseSchema.methods.forDashboard = async function (user: IUser): Promise<ICours
   } = this.checkPrivileges(user);
   return {
     // As in ICourse:
-    _id: <string>extractMongoId(this._id),
+    _id: extractSingleMongoId(this),
     name, active, description, enrollType, image,
 
     // Special properties for the dashboard:
@@ -325,12 +325,12 @@ courseSchema.methods.forView = function (): ICourseView {
     lectures, chatRooms
   } = this;
   return {
-    _id: <string>extractMongoId(this._id),
+    _id: extractSingleMongoId(this),
     name, description,
     courseAdmin: User.forCourseView(courseAdmin),
     teachers: teachers.map((teacher: IUser) => User.forCourseView(teacher)),
     lectures: lectures.map((lecture: any) => lecture.toObject()),
-    chatRooms: chatRooms.map(extractMongoId)
+    chatRooms: chatRooms.map(extractSingleMongoId)
   };
 };
 
