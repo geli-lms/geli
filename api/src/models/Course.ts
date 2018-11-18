@@ -272,7 +272,7 @@ courseSchema.statics.changeCourseAdminFromUser = async function (userFrom: IUser
 
 courseSchema.methods.checkPrivileges = function (user: IUser) {
   const {userIsAdmin, ...userIs} = User.checkPrivileges(user);
-  const userId = extractMongoId(user._id);
+  const userId = extractMongoId(user);
 
   const courseAdminId = extractMongoId(this.courseAdmin);
 
