@@ -51,16 +51,16 @@ export class DuplicationController {
    */
   @Post('/course/:id')
   async duplicateCourse(@Param('id') id: string, @Body() data: any, @CurrentUser() currentUser: IUser) {
-    // we could use @CurrentUser instead of the need to explicitly provide a teacher
-    const courseAdmin = data.courseAdmin;
     const courseModel: ICourseModel = await Course.findById(id);
     if (!courseModel.checkPrivileges(currentUser).userCanEditCourse) {
       throw new ForbiddenError();
     }
     try {
+      // we could use @CurrentUser instead of the need to explicitly provide a teacher
+      const newCourseAdmin = data.courseAdmin;
       const exportedCourse: ICourse = await courseModel.exportJSON(false);
       delete exportedCourse.students;
-      return Course.schema.statics.importJSON(exportedCourse, courseAdmin);
+      return Course.schema.statics.importJSON(exportedCourse, newCourseAdmin);
     } catch (err) {
         const newError = new InternalServerError('Failed to duplicate course');
         newError.stack += '\nCaused by: ' + err.message + '\n' + err.stack;
