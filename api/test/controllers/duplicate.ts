@@ -38,6 +38,15 @@ async function prepareUnauthorizedTeacherSetFor(course: ICourse) {
   return {targetCourse, unauthorizedTeacher};
 }
 
+async function prepareOtherTargetCourseSetFor(course: ICourse) {
+  const teacher = await FixtureUtils.getRandomTeacherForCourse(course);
+  const targetCourse = await Course.findOne({
+    courseAdmin: {$ne: teacher},
+    teachers: {$ne: teacher}
+  });
+  return {teacher, targetCourse};
+}
+
 async function testForbidden(user: IUser, urlPostfix = '', sendData: object) {
   const result = await testHelper.commonUserPostRequest(user, urlPostfix, sendData);
   result.status.should.be.equal(403);
@@ -198,11 +207,7 @@ describe('Duplicate', async () => {
     it('should forbid unit duplication when given a different target lecture without authorization', async () => {
       const unit = await FixtureUtils.getRandomUnit();
       const course = await FixtureUtils.getCourseFromUnit(unit);
-      const teacher = await FixtureUtils.getRandomTeacherForCourse(course);
-      const targetCourse = await Course.findOne({
-        courseAdmin: {$ne: teacher},
-        teachers: {$ne: teacher}
-      });
+      const {teacher, targetCourse} = await prepareOtherTargetCourseSetFor(course);
       const targetLecture = await FixtureUtils.getRandomLectureFromCourse(targetCourse);
       await testForbidden(teacher, `/unit/${unit._id}`, {lectureId: targetLecture._id});
     });
@@ -210,11 +215,7 @@ describe('Duplicate', async () => {
     it('should forbid lecture duplication when given a different target course without authorization', async () => {
       const lecture = await FixtureUtils.getRandomLecture();
       const course = await FixtureUtils.getCourseFromLecture(lecture);
-      const teacher = await FixtureUtils.getRandomTeacherForCourse(course);
-      const targetCourse = await Course.findOne({
-        courseAdmin: {$ne: teacher},
-        teachers: {$ne: teacher}
-      });
+      const {teacher, targetCourse} = await prepareOtherTargetCourseSetFor(course);
       await testForbidden(teacher, `/lecture/${lecture._id}`, {courseId: targetCourse._id});
     });
   });
