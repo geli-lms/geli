@@ -1,5 +1,5 @@
 import {
-  Body, Post, Param, JsonController, UseBefore, Authorized, CurrentUser,
+  Body, BodyParam, Post, Param, JsonController, UseBefore, Authorized, CurrentUser,
   InternalServerError, ForbiddenError
 } from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
@@ -10,6 +10,7 @@ import {IUnitModel, Unit} from '../models/units/Unit';
 import {Course, ICourseModel} from '../models/Course';
 import {ILecture} from '../../../shared/models/ILecture';
 import {ICourse} from '../../../shared/models/ICourse';
+import {extractSingleMongoId} from '../utilities/ExtractMongoId';
 
 
 @JsonController('/duplicate')
@@ -25,7 +26,8 @@ export class DuplicationController {
    * @apiPermission admin
    *
    * @apiParam {String} id Course ID.
-   * @apiParam {Object} data Course data (with courseAdmin).
+   * @apiParam {Object} data Object optionally containing the courseAdmin id for the duplicated course as "courseAdmin".
+   *                    If unset, the currentUser will be set as courseAdmin.
    *
    * @apiSuccess {Course} course Duplicated course.
    *
@@ -50,17 +52,20 @@ export class DuplicationController {
    * @apiError InternalServerError Failed to duplicate course
    */
   @Post('/course/:id')
-  async duplicateCourse(@Param('id') id: string, @Body() data: any, @CurrentUser() currentUser: IUser) {
+  async duplicateCourse(@Param('id') id: string,
+                        @BodyParam('courseAdmin', {required: false}) newCourseAdminId: string,
+                        @CurrentUser() currentUser: IUser) {
     const courseModel: ICourseModel = await Course.findById(id);
     if (!courseModel.checkPrivileges(currentUser).userCanEditCourse) {
       throw new ForbiddenError();
     }
     try {
-      // we could use @CurrentUser instead of the need to explicitly provide a teacher
-      const newCourseAdmin = data.courseAdmin;
+      // Set the currentUser's id as newCourseAdminId if it wasn't specified by the request.
+      newCourseAdminId = typeof newCourseAdminId === 'string' ? newCourseAdminId : extractSingleMongoId(currentUser);
+
       const exportedCourse: ICourse = await courseModel.exportJSON(false);
       delete exportedCourse.students;
-      return Course.schema.statics.importJSON(exportedCourse, newCourseAdmin);
+      return Course.schema.statics.importJSON(exportedCourse, newCourseAdminId);
     } catch (err) {
         const newError = new InternalServerError('Failed to duplicate course');
         newError.stack += '\nCaused by: ' + err.message + '\n' + err.stack;
