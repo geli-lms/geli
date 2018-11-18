@@ -41,7 +41,7 @@ describe('Duplicate', async () => {
       const units = await FixtureUtils.getUnits();
 
       for (const unit of units) {
-        const course = await FixtureUtils.getCoursesFromUnit(unit);
+        const course = await FixtureUtils.getCourseFromUnit(unit);
         const lecture = await FixtureUtils.getLectureFromUnit(unit);
         const teacher = await FixtureUtils.getRandomTeacherForCourse(course);
 
@@ -113,7 +113,7 @@ describe('Duplicate', async () => {
       const lectures = await FixtureUtils.getLectures();
 
       for (const lecture of lectures) {
-        const course = await FixtureUtils.getCoursesFromLecture(lecture);
+        const course = await FixtureUtils.getCourseFromLecture(lecture);
         const teacher = await FixtureUtils.getRandomTeacherForCourse(course);
 
         let lectureJson: ILecture;
@@ -177,7 +177,7 @@ describe('Duplicate', async () => {
     it('should fail to duplicate units for an unauthorized teacher', async () => {
       const unit = await FixtureUtils.getRandomUnit();
       const lecture = await FixtureUtils.getLectureFromUnit(unit);
-      const course = await FixtureUtils.getCoursesFromUnit(unit);
+      const course = await FixtureUtils.getCourseFromUnit(unit);
       const unauthorizedTeacher = await User.findOne({
         role: 'teacher',
         _id: {$nin: [course.courseAdmin, ...course.teachers]}
@@ -194,7 +194,7 @@ describe('Duplicate', async () => {
 
     it('should fail to duplicate lectures for an unauthorized teacher', async () => {
       const lecture = await FixtureUtils.getRandomLecture();
-      const course = await FixtureUtils.getCoursesFromLecture(lecture);
+      const course = await FixtureUtils.getCourseFromLecture(lecture);
       const unauthorizedTeacher = await User.findOne({
         role: 'teacher',
         _id: {$nin: [course.courseAdmin, ...course.teachers]}

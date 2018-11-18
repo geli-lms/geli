@@ -119,11 +119,11 @@ export class FixtureUtils {
     return this.getRandom<ICourse>(coursesWithAllUnitTypes, hash);
   }
 
-  public static async getCoursesFromLecture(lecture: ILecture): Promise<ICourse> {
+  public static async getCourseFromLecture(lecture: ILecture): Promise<ICourse> {
     return Course.findOne({lectures: { $in: [ lecture._id ] }});
   }
 
-  public static async getCoursesFromUnit(unit: IUnit): Promise<ICourse> {
+  public static async getCourseFromUnit(unit: IUnit): Promise<ICourse> {
     return Course.findById(unit._course);
   }
 
