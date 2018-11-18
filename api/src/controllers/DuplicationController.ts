@@ -145,13 +145,17 @@ export class DuplicationController {
   async duplicateUnit(@Param('id') id: string,
                       @BodyParam('lectureId', {required: true}) targetLectureId: string,
                       @CurrentUser() currentUser: IUser) {
+    const unitModel: IUnitModel = await Unit.findById(id);
+    const course = await Course.findById(unitModel._course);
+    if (!course.checkPrivileges(currentUser).userCanEditCourse) {
+      throw new ForbiddenError();
+    }
     const targetCourse = await Course.findOne({lectures: targetLectureId});
     if (!targetCourse.checkPrivileges(currentUser).userCanEditCourse) {
       throw new ForbiddenError();
     }
     const targetCourseId = extractSingleMongoId(targetCourse);
     try {
-      const unitModel: IUnitModel = await Unit.findById(id);
       const exportedUnit: IUnit = await unitModel.exportJSON();
       return Unit.schema.statics.importJSON(exportedUnit, targetCourseId, targetLectureId);
     } catch (err) {
