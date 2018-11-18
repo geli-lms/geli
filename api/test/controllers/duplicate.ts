@@ -176,17 +176,20 @@ describe('Duplicate', async () => {
 
     it('should forbid unit duplication for an unauthorized teacher', async () => {
       const unit = await FixtureUtils.getRandomUnit();
-      const lecture = await FixtureUtils.getLectureFromUnit(unit);
       const course = await FixtureUtils.getCourseFromUnit(unit);
       const unauthorizedTeacher = await User.findOne({
         role: 'teacher',
         _id: {$nin: [course.courseAdmin, ...course.teachers]}
       });
+      const targetCourse = await Course.findOne({
+        teachers: unauthorizedTeacher
+      });
+      const targetLecture = await FixtureUtils.getRandomLectureFromCourse(targetCourse);
 
       const result = await chai.request(app)
           .post(`${BASE_URL}/unit/${unit._id}`)
           .set('Cookie', `token=${JwtUtils.generateToken(unauthorizedTeacher)}`)
-          .send({lectureId: lecture._id})
+          .send({lectureId: targetLecture._id})
           .catch((err) => err.response);
 
       result.status.should.be.equal(403);
@@ -199,11 +202,14 @@ describe('Duplicate', async () => {
         role: 'teacher',
         _id: {$nin: [course.courseAdmin, ...course.teachers]}
       });
+      const targetCourse = await Course.findOne({
+        teachers: unauthorizedTeacher
+      });
 
       const result = await chai.request(app)
           .post(`${BASE_URL}/lecture/${lecture._id}`)
           .set('Cookie', `token=${JwtUtils.generateToken(unauthorizedTeacher)}`)
-          .send({courseId: course._id})
+          .send({courseId: targetCourse._id})
           .catch((err) => err.response);
 
       result.status.should.be.equal(403);
