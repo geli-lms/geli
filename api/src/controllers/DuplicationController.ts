@@ -18,6 +18,12 @@ import {extractSingleMongoId} from '../utilities/ExtractMongoId';
 @Authorized(['teacher', 'admin'])
 export class DuplicationController {
 
+  private async assertUserDuplicationAuthorization(user: IUser, course: ICourseModel) {
+    if (!course.checkPrivileges(user).userCanEditCourse) {
+      throw new ForbiddenError();
+    }
+  }
+
   /**
    * @api {post} /api/duplicate/course/:id Duplicate course
    * @apiName PostDuplicateCourse
@@ -56,9 +62,7 @@ export class DuplicationController {
                         @BodyParam('courseAdmin', {required: false}) newCourseAdminId: string,
                         @CurrentUser() currentUser: IUser) {
     const courseModel: ICourseModel = await Course.findById(id);
-    if (!courseModel.checkPrivileges(currentUser).userCanEditCourse) {
-      throw new ForbiddenError();
-    }
+    await this.assertUserDuplicationAuthorization(currentUser, courseModel);
     try {
       // Set the currentUser's id as newCourseAdminId if it wasn't specified by the request.
       newCourseAdminId = typeof newCourseAdminId === 'string' ? newCourseAdminId : extractSingleMongoId(currentUser);
@@ -103,13 +107,9 @@ export class DuplicationController {
                          @BodyParam('courseId', {required: true}) targetCourseId: string,
                          @CurrentUser() currentUser: IUser) {
     const course = await Course.findOne({lectures: id});
-    if (!course.checkPrivileges(currentUser).userCanEditCourse) {
-      throw new ForbiddenError();
-    }
+    await this.assertUserDuplicationAuthorization(currentUser, course);
     const targetCourse = await Course.findById(targetCourseId);
-    if (!targetCourse.checkPrivileges(currentUser).userCanEditCourse) {
-      throw new ForbiddenError();
-    }
+    await this.assertUserDuplicationAuthorization(currentUser, targetCourse);
     try {
       const lectureModel: ILectureModel = await Lecture.findById(id);
       const exportedLecture: ILecture = await lectureModel.exportJSON();
@@ -156,13 +156,9 @@ export class DuplicationController {
                       @CurrentUser() currentUser: IUser) {
     const unitModel: IUnitModel = await Unit.findById(id);
     const course = await Course.findById(unitModel._course);
-    if (!course.checkPrivileges(currentUser).userCanEditCourse) {
-      throw new ForbiddenError();
-    }
+    await this.assertUserDuplicationAuthorization(currentUser, course);
     const targetCourse = await Course.findOne({lectures: targetLectureId});
-    if (!targetCourse.checkPrivileges(currentUser).userCanEditCourse) {
-      throw new ForbiddenError();
-    }
+    await this.assertUserDuplicationAuthorization(currentUser, targetCourse);
     const targetCourseId = extractSingleMongoId(targetCourse);
     try {
       const exportedUnit: IUnit = await unitModel.exportJSON();
