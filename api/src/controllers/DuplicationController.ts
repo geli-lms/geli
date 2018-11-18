@@ -1,8 +1,9 @@
 import {
-  Body, Post, Param, JsonController, UseBefore, Authorized,
+  Body, Post, Param, JsonController, UseBefore, Authorized, CurrentUser,
   InternalServerError, ForbiddenError
 } from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
+import {IUser} from '../../../shared/models/IUser';
 import {IUnit} from '../../../shared/models/units/IUnit';
 import {ILectureModel, Lecture} from '../models/Lecture';
 import {IUnitModel, Unit} from '../models/units/Unit';
@@ -49,11 +50,11 @@ export class DuplicationController {
    * @apiError InternalServerError Failed to duplicate course
    */
   @Post('/course/:id')
-  async duplicateCourse(@Param('id') id: string, @Body() data: any) {
+  async duplicateCourse(@Param('id') id: string, @Body() data: any, @CurrentUser() currentUser: IUser) {
     // we could use @CurrentUser instead of the need to explicitly provide a teacher
     const courseAdmin = data.courseAdmin;
     const courseModel: ICourseModel = await Course.findById(id);
-    if (!courseModel.checkPrivileges(courseAdmin).userCanEditCourse) {
+    if (!courseModel.checkPrivileges(currentUser).userCanEditCourse) {
       throw new ForbiddenError();
     }
     try {
