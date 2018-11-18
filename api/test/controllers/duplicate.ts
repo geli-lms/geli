@@ -1,13 +1,11 @@
 import * as chai from 'chai';
-import {FixtureLoader} from '../../fixtures/FixtureLoader';
+import {TestHelper} from '../TestHelper';
 import {Server} from '../../src/server';
 import chaiHttp = require('chai-http');
 import {FixtureUtils} from '../../fixtures/FixtureUtils';
 import {ICourse} from '../../../shared/models/ICourse';
-import {JwtUtils} from '../../src/security/JwtUtils';
 import {ILecture} from '../../../shared/models/ILecture';
 import {IUnit} from '../../../shared/models/units/IUnit';
-import * as fs from 'fs';
 import * as util from 'util';
 import {Course} from '../../src/models/Course';
 import {User} from '../../src/models/User';
@@ -28,12 +26,21 @@ chai.use(chaiHttp);
 const should = chai.should();
 const app = new Server().app;
 const BASE_URL = '/api/duplicate';
-const fixtureLoader = new FixtureLoader();
+const testHelper = new TestHelper(BASE_URL);
+
+async function prepareUnauthorizedTeacherSetFor(course: ICourse) {
+  const authorizedTeachers = [course.courseAdmin, ...course.teachers];
+  const targetCourse = await Course.findOne({
+    courseAdmin: {$nin: authorizedTeachers},
+    teachers: {$nin: authorizedTeachers}
+  });
+  const unauthorizedTeacher = await User.findById(targetCourse.courseAdmin);
+  return {targetCourse, unauthorizedTeacher};
+}
 
 describe('Duplicate', async () => {
-  // Before each test we reset the database
   beforeEach(async () => {
-    await fixtureLoader.load();
+    await testHelper.resetForNextTest();
   });
 
   describe(`POST ${BASE_URL}`, async () => {
@@ -46,11 +53,7 @@ describe('Duplicate', async () => {
         const teacher = await FixtureUtils.getRandomTeacherForCourse(course);
 
         let unitJson: IUnit;
-        const importResult = await chai.request(app)
-          .post(`${BASE_URL}/unit/${unit._id}`)
-          .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
-          .send({lectureId: lecture._id})
-          .catch((err) => err.response);
+        const importResult = await testHelper.commonUserPostRequest(teacher, `/unit/${unit._id}`, {lectureId: lecture._id});
         importResult.status.should.be.equal(200,
           'failed to duplicate ' + unit.name +
           ' into ' + lecture.name +
@@ -117,11 +120,7 @@ describe('Duplicate', async () => {
         const teacher = await FixtureUtils.getRandomTeacherForCourse(course);
 
         let lectureJson: ILecture;
-        const importResult = await chai.request(app)
-          .post(`${BASE_URL}/lecture/${lecture._id}`)
-          .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
-          .send({courseId: course._id})
-          .catch((err) => err.response);
+        const importResult = await testHelper.commonUserPostRequest(teacher, `/lecture/${lecture._id}`, {courseId: course._id});
         importResult.status.should.be.equal(200,
           'failed to import ' + lecture.name +
           ' into ' + course.name +
@@ -149,11 +148,7 @@ describe('Duplicate', async () => {
         const teacher = await FixtureUtils.getRandomTeacherForCourse(course);
 
         let courseJson: ICourse;
-        const importResult = await chai.request(app)
-          .post(`${BASE_URL}/course/${course._id}`)
-          .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
-          .send({courseAdmin: teacher._id})
-          .catch((err) => err.response);
+        const importResult = await testHelper.commonUserPostRequest(teacher, `/course/${course._id}`, {courseAdmin: teacher._id});
         importResult.status.should.be.equal(200,
           'failed to duplicate ' + course.name +
           ' -> ' + importResult.body.message);
@@ -177,19 +172,14 @@ describe('Duplicate', async () => {
     it('should forbid unit duplication for an unauthorized teacher', async () => {
       const unit = await FixtureUtils.getRandomUnit();
       const course = await FixtureUtils.getCourseFromUnit(unit);
-      const authorizedTeachers = [course.courseAdmin, ...course.teachers];
-      const targetCourse = await Course.findOne({
-        courseAdmin: {$nin: authorizedTeachers},
-        teachers: {$nin: authorizedTeachers}
-      });
-      const unauthorizedTeacher = await User.findById(targetCourse.courseAdmin);
+      const {targetCourse, unauthorizedTeacher} = await prepareUnauthorizedTeacherSetFor(course);
       const targetLecture = await FixtureUtils.getRandomLectureFromCourse(targetCourse);
 
-      const result = await chai.request(app)
-          .post(`${BASE_URL}/unit/${unit._id}`)
-          .set('Cookie', `token=${JwtUtils.generateToken(unauthorizedTeacher)}`)
-          .send({lectureId: targetLecture._id})
-          .catch((err) => err.response);
+      const result = await testHelper.commonUserPostRequest(
+        unauthorizedTeacher,
+        `/unit/${unit._id}`,
+        {lectureId: targetLecture._id}
+      );
 
       result.status.should.be.equal(403);
     });
@@ -197,34 +187,26 @@ describe('Duplicate', async () => {
     it('should forbid lecture duplication for an unauthorized teacher', async () => {
       const lecture = await FixtureUtils.getRandomLecture();
       const course = await FixtureUtils.getCourseFromLecture(lecture);
-      const authorizedTeachers = [course.courseAdmin, ...course.teachers];
-      const targetCourse = await Course.findOne({
-        courseAdmin: {$nin: authorizedTeachers},
-        teachers: {$nin: authorizedTeachers}
-      });
-      const unauthorizedTeacher = await User.findById(targetCourse.courseAdmin);
+      const {targetCourse, unauthorizedTeacher} = await prepareUnauthorizedTeacherSetFor(course);
 
-      const result = await chai.request(app)
-          .post(`${BASE_URL}/lecture/${lecture._id}`)
-          .set('Cookie', `token=${JwtUtils.generateToken(unauthorizedTeacher)}`)
-          .send({courseId: targetCourse._id})
-          .catch((err) => err.response);
+      const result = await testHelper.commonUserPostRequest(
+        unauthorizedTeacher,
+        `/lecture/${lecture._id}`,
+        {courseId: targetCourse._id}
+      );
 
       result.status.should.be.equal(403);
     });
 
     it('should forbid course duplication for an unauthorized teacher', async () => {
       const course = await FixtureUtils.getRandomCourse();
-      const unauthorizedTeacher = await User.findOne({
-        role: 'teacher',
-        _id: {$nin: [course.courseAdmin, ...course.teachers]}
-      });
+      const {unauthorizedTeacher} = await prepareUnauthorizedTeacherSetFor(course);
 
-      const result = await chai.request(app)
-          .post(`${BASE_URL}/course/${course._id}`)
-          .set('Cookie', `token=${JwtUtils.generateToken(unauthorizedTeacher)}`)
-          .send({courseAdmin: unauthorizedTeacher._id})
-          .catch((err) => err.response);
+      const result = await testHelper.commonUserPostRequest(
+        unauthorizedTeacher,
+        `/course/${course._id}`,
+        {courseAdmin: unauthorizedTeacher._id}
+      );
 
       result.status.should.be.equal(403);
     });
@@ -239,11 +221,11 @@ describe('Duplicate', async () => {
       });
       const targetLecture = await FixtureUtils.getRandomLectureFromCourse(targetCourse);
 
-      const result = await chai.request(app)
-          .post(`${BASE_URL}/unit/${unit._id}`)
-          .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
-          .send({lectureId: targetLecture._id})
-          .catch((err) => err.response);
+      const result = await testHelper.commonUserPostRequest(
+        teacher,
+        `/unit/${unit._id}`,
+        {lectureId: targetLecture._id}
+      );
 
       result.status.should.be.equal(403);
     });
@@ -257,11 +239,11 @@ describe('Duplicate', async () => {
         teachers: {$ne: teacher}
       });
 
-      const result = await chai.request(app)
-          .post(`${BASE_URL}/lecture/${lecture._id}`)
-          .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
-          .send({courseId: targetCourse._id})
-          .catch((err) => err.response);
+      const result = await testHelper.commonUserPostRequest(
+        teacher,
+        `/lecture/${lecture._id}`,
+        {courseId: targetCourse._id}
+      );
 
       result.status.should.be.equal(403);
     });
