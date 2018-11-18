@@ -143,13 +143,17 @@ export class DuplicationController {
    */
   @Post('/unit/:id')
   async duplicateUnit(@Param('id') id: string,
-                      @BodyParam('lectureId', {required: true}) lectureId: string) {
-    const course = await Course.findOne({lectures: lectureId});
-    const courseId = extractSingleMongoId(course);
+                      @BodyParam('lectureId', {required: true}) targetLectureId: string,
+                      @CurrentUser() currentUser: IUser) {
+    const targetCourse = await Course.findOne({lectures: targetLectureId});
+    if (!targetCourse.checkPrivileges(currentUser).userCanEditCourse) {
+      throw new ForbiddenError();
+    }
+    const targetCourseId = extractSingleMongoId(targetCourse);
     try {
       const unitModel: IUnitModel = await Unit.findById(id);
       const exportedUnit: IUnit = await unitModel.exportJSON();
-      return Unit.schema.statics.importJSON(exportedUnit, courseId, lectureId);
+      return Unit.schema.statics.importJSON(exportedUnit, targetCourseId, targetLectureId);
     } catch (err) {
       const newError = new InternalServerError('Failed to duplicate unit');
       newError.stack += '\nCaused by: ' + err.message + '\n' + err.stack;
