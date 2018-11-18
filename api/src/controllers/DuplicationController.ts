@@ -100,11 +100,16 @@ export class DuplicationController {
    */
   @Post('/lecture/:id')
   async duplicateLecture(@Param('id') id: string,
-                         @BodyParam('courseId', {required: true}) courseId: string) {
+                         @BodyParam('courseId', {required: true}) targetCourseId: string,
+                         @CurrentUser() currentUser: IUser) {
+    const targetCourse = await Course.findById(targetCourseId);
+    if (!targetCourse.checkPrivileges(currentUser).userCanEditCourse) {
+      throw new ForbiddenError();
+    }
     try {
       const lectureModel: ILectureModel = await Lecture.findById(id);
       const exportedLecture: ILecture = await lectureModel.exportJSON();
-      return Lecture.schema.statics.importJSON(exportedLecture, courseId);
+      return Lecture.schema.statics.importJSON(exportedLecture, targetCourseId);
     } catch (err) {
       const newError = new InternalServerError('Failed to duplicate lecture');
       newError.stack += '\nCaused by: ' + err.message + '\n' + err.stack;
