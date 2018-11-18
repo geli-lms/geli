@@ -1,5 +1,5 @@
 import {
-  Body, BodyParam, Post, Param, JsonController, UseBefore, Authorized, CurrentUser,
+  BodyParam, Post, Param, JsonController, UseBefore, Authorized, CurrentUser,
   InternalServerError, ForbiddenError
 } from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
@@ -99,8 +99,8 @@ export class DuplicationController {
    * @apiError InternalServerError Failed to duplicate lecture
    */
   @Post('/lecture/:id')
-  async duplicateLecture(@Param('id') id: string, @Body() data: any) {
-    const courseId = data.courseId;
+  async duplicateLecture(@Param('id') id: string,
+                         @BodyParam('courseId', {required: true}) courseId: string) {
     try {
       const lectureModel: ILectureModel = await Lecture.findById(id);
       const exportedLecture: ILecture = await lectureModel.exportJSON();
@@ -142,9 +142,9 @@ export class DuplicationController {
    * @apiError InternalServerError Failed to duplicate unit
    */
   @Post('/unit/:id')
-  async duplicateUnit(@Param('id') id: string, @Body() data: any) {
-    const courseId = data.courseId;
-    const lectureId = data.lectureId;
+  async duplicateUnit(@Param('id') id: string,
+                      @BodyParam('courseId', {required: true}) courseId: string,
+                      @BodyParam('lectureId', {required: true}) lectureId: string) {
     try {
       const unitModel: IUnitModel = await Unit.findById(id);
       const exportedUnit: IUnit = await unitModel.exportJSON();
