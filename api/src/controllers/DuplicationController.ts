@@ -120,7 +120,7 @@ export class DuplicationController {
    * @apiPermission admin
    *
    * @apiParam {String} id Unit ID.
-   * @apiParam {Object} data Unit data (with courseId and lectureId).
+   * @apiParam {Object} data Object with target lectureId (the unit duplicate will be attached to this lecture).
    *
    * @apiSuccess {Unit} unit Duplicated unit.
    *
@@ -143,12 +143,9 @@ export class DuplicationController {
    */
   @Post('/unit/:id')
   async duplicateUnit(@Param('id') id: string,
-                      @BodyParam('courseId', {required: true}) courseId: string,
                       @BodyParam('lectureId', {required: true}) lectureId: string) {
     const course = await Course.findOne({lectures: lectureId});
-    if (extractSingleMongoId(course) !== courseId) {
-      throw new BadRequestError();
-    }
+    const courseId = extractSingleMongoId(course);
     try {
       const unitModel: IUnitModel = await Unit.findById(id);
       const exportedUnit: IUnit = await unitModel.exportJSON();
