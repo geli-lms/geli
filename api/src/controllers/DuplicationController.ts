@@ -102,6 +102,10 @@ export class DuplicationController {
   async duplicateLecture(@Param('id') id: string,
                          @BodyParam('courseId', {required: true}) targetCourseId: string,
                          @CurrentUser() currentUser: IUser) {
+    const course = await Course.findOne({lectures: id});
+    if (!course.checkPrivileges(currentUser).userCanEditCourse) {
+      throw new ForbiddenError();
+    }
     const targetCourse = await Course.findById(targetCourseId);
     if (!targetCourse.checkPrivileges(currentUser).userCanEditCourse) {
       throw new ForbiddenError();
