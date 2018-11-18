@@ -31,4 +31,12 @@ export class TestHelper {
       .set('Cookie', `token=${JwtUtils.generateToken(user)}`)
       .catch((err) => err.response);
   }
+
+  public async commonUserPostRequest(user: IUser, urlPostfix: string, sendData?: string | object) {
+    return await chai.request(this.app)
+      .post(this.baseUrl + urlPostfix)
+      .set('Cookie', `token=${JwtUtils.generateToken(user)}`)
+      .send(sendData)
+      .catch((err) => err.response);
+  }
 }
