@@ -177,13 +177,12 @@ describe('Duplicate', async () => {
     it('should forbid unit duplication for an unauthorized teacher', async () => {
       const unit = await FixtureUtils.getRandomUnit();
       const course = await FixtureUtils.getCourseFromUnit(unit);
-      const unauthorizedTeacher = await User.findOne({
-        role: 'teacher',
-        _id: {$nin: [course.courseAdmin, ...course.teachers]}
-      });
+      const authorizedTeachers = [course.courseAdmin, ...course.teachers];
       const targetCourse = await Course.findOne({
-        teachers: unauthorizedTeacher
+        courseAdmin: {$nin: authorizedTeachers},
+        teachers: {$nin: authorizedTeachers}
       });
+      const unauthorizedTeacher = await User.findById(targetCourse.courseAdmin);
       const targetLecture = await FixtureUtils.getRandomLectureFromCourse(targetCourse);
 
       const result = await chai.request(app)
@@ -198,13 +197,12 @@ describe('Duplicate', async () => {
     it('should forbid lecture duplication for an unauthorized teacher', async () => {
       const lecture = await FixtureUtils.getRandomLecture();
       const course = await FixtureUtils.getCourseFromLecture(lecture);
-      const unauthorizedTeacher = await User.findOne({
-        role: 'teacher',
-        _id: {$nin: [course.courseAdmin, ...course.teachers]}
-      });
+      const authorizedTeachers = [course.courseAdmin, ...course.teachers];
       const targetCourse = await Course.findOne({
-        teachers: unauthorizedTeacher
+        courseAdmin: {$nin: authorizedTeachers},
+        teachers: {$nin: authorizedTeachers}
       });
+      const unauthorizedTeacher = await User.findById(targetCourse.courseAdmin);
 
       const result = await chai.request(app)
           .post(`${BASE_URL}/lecture/${lecture._id}`)
