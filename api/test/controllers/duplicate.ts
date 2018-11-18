@@ -9,6 +9,7 @@ import {IUnit} from '../../../shared/models/units/IUnit';
 import * as util from 'util';
 import {Course} from '../../src/models/Course';
 import {User} from '../../src/models/User';
+import {IUser} from '../../../shared/models/IUser';
 import {ICodeKataModel} from '../../src/models/units/CodeKataUnit';
 import {IFreeTextUnit} from '../../../shared/models/units/IFreeTextUnit';
 import {ITaskUnitModel} from '../../src/models/units/TaskUnit';
@@ -24,7 +25,6 @@ const createTempFile = util.promisify(temp.open);
 
 chai.use(chaiHttp);
 const should = chai.should();
-const app = new Server().app;
 const BASE_URL = '/api/duplicate';
 const testHelper = new TestHelper(BASE_URL);
 
@@ -36,6 +36,11 @@ async function prepareUnauthorizedTeacherSetFor(course: ICourse) {
   });
   const unauthorizedTeacher = await User.findById(targetCourse.courseAdmin);
   return {targetCourse, unauthorizedTeacher};
+}
+
+async function testForbidden(user: IUser, urlPostfix = '', sendData: object) {
+  const result = await testHelper.commonUserPostRequest(user, urlPostfix, sendData);
+  result.status.should.be.equal(403);
 }
 
 describe('Duplicate', async () => {
@@ -174,41 +179,20 @@ describe('Duplicate', async () => {
       const course = await FixtureUtils.getCourseFromUnit(unit);
       const {targetCourse, unauthorizedTeacher} = await prepareUnauthorizedTeacherSetFor(course);
       const targetLecture = await FixtureUtils.getRandomLectureFromCourse(targetCourse);
-
-      const result = await testHelper.commonUserPostRequest(
-        unauthorizedTeacher,
-        `/unit/${unit._id}`,
-        {lectureId: targetLecture._id}
-      );
-
-      result.status.should.be.equal(403);
+      await testForbidden(unauthorizedTeacher, `/unit/${unit._id}`, {lectureId: targetLecture._id});
     });
 
     it('should forbid lecture duplication for an unauthorized teacher', async () => {
       const lecture = await FixtureUtils.getRandomLecture();
       const course = await FixtureUtils.getCourseFromLecture(lecture);
       const {targetCourse, unauthorizedTeacher} = await prepareUnauthorizedTeacherSetFor(course);
-
-      const result = await testHelper.commonUserPostRequest(
-        unauthorizedTeacher,
-        `/lecture/${lecture._id}`,
-        {courseId: targetCourse._id}
-      );
-
-      result.status.should.be.equal(403);
+      await testForbidden(unauthorizedTeacher, `/lecture/${lecture._id}`, {courseId: targetCourse._id});
     });
 
     it('should forbid course duplication for an unauthorized teacher', async () => {
       const course = await FixtureUtils.getRandomCourse();
       const {unauthorizedTeacher} = await prepareUnauthorizedTeacherSetFor(course);
-
-      const result = await testHelper.commonUserPostRequest(
-        unauthorizedTeacher,
-        `/course/${course._id}`,
-        {courseAdmin: unauthorizedTeacher._id}
-      );
-
-      result.status.should.be.equal(403);
+      await testForbidden(unauthorizedTeacher, `/course/${course._id}`, {courseAdmin: unauthorizedTeacher._id});
     });
 
     it('should forbid unit duplication when given a different target lecture without authorization', async () => {
@@ -220,14 +204,7 @@ describe('Duplicate', async () => {
         teachers: {$ne: teacher}
       });
       const targetLecture = await FixtureUtils.getRandomLectureFromCourse(targetCourse);
-
-      const result = await testHelper.commonUserPostRequest(
-        teacher,
-        `/unit/${unit._id}`,
-        {lectureId: targetLecture._id}
-      );
-
-      result.status.should.be.equal(403);
+      await testForbidden(teacher, `/unit/${unit._id}`, {lectureId: targetLecture._id});
     });
 
     it('should forbid lecture duplication when given a different target course without authorization', async () => {
@@ -238,14 +215,7 @@ describe('Duplicate', async () => {
         courseAdmin: {$ne: teacher},
         teachers: {$ne: teacher}
       });
-
-      const result = await testHelper.commonUserPostRequest(
-        teacher,
-        `/lecture/${lecture._id}`,
-        {courseId: targetCourse._id}
-      );
-
-      result.status.should.be.equal(403);
+      await testForbidden(teacher, `/lecture/${lecture._id}`, {courseId: targetCourse._id});
     });
   });
 });
