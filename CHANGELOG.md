@@ -12,20 +12,28 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 ### Added
-- Added course-view-navigation for edit-users [#1010](https://github.com/geli-lms/geli/issues/924)
+- Chat system access denial unit tests. [#989](https://github.com/geli-lms/geli/issues/989)
+- `TestHelper` class for shared API unit test functionality. [#989](https://github.com/geli-lms/geli/issues/989)
+- `extractSingleMongoId` variant of the `ExtractMongoId` utility function(s). [#989](https://github.com/geli-lms/geli/issues/989)
+- Show message count for unit chat. [#933](https://github.com/geli-lms/geli/issues/993)
+- Styles for free text units. [#867](https://github.com/geli-lms/geli/issues/867)
+- Course-view-navigation for edit-users [#1010](https://github.com/geli-lms/geli/issues/924)
+
 
 ### Changed
 - Update mongoose to 5.2.x. [#1004](https://github.com/geli-lms/geli/pull/1004)
 - Update contributors list. [#1007](https://github.com/geli-lms/geli/issues/1007)
+- Use `terser` instead of `uglify-js`. [#1018](https://github.com/geli-lms/geli/pull/1018) 
 
 ### Removed
 
 ### Fixed
-- Notifications for invisible courses and lectures will no longer be created. [#877](https://github.com/geli-lms/geli/issues/877) 
+- Notifications for invisible courses and lectures will no longer be created. [#877](https://github.com/geli-lms/geli/issues/877)
 - EU-DSGVO: Export Chat User Data - Exclude Comments. [#998](https://github.com/geli-lms/geli/issues/998)
+- Nondeterministic chat system unit test authorization failures. [#989](https://github.com/geli-lms/geli/issues/989)
 
 ### Security
-
+- Fixed multiple severe security issues of the chat system. [#989](https://github.com/geli-lms/geli/issues/989)
 
 ## [[0.8.2](https://github.com/geli-lms/geli/releases/tag/v0.8.2)] - 2018-11-08 - WS 18/19 🍪-Release
 ### Added
@@ -148,7 +156,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - `AuthController` `addWhitelistedUserToCourses` broken condition & typos. [#895](https://github.com/geli-lms/geli/issues/895)
 - `ChatRoomController` internal data leak. [#897](https://github.com/geli-lms/geli/issues/897)
 - Error on clicking on notification. [#916](https://github.com/geli-lms/geli/issues/916)
-- Depcreated warning on startup. [#920](https://github.com/geli-lms/geli/pull/920)
+- Deprecated warning on startup. [#920](https://github.com/geli-lms/geli/pull/920)
 
 ### Security
 - Secured the static `'uploads'` route by introducing a special `'mediaToken'` with new JWT strategy & middleware. [#729](https://github.com/geli-lms/geli/issues/729)

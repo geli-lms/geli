@@ -1,9 +1,7 @@
 import {AfterViewChecked, Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
-import {IMessage} from '../../../../../shared/models/messaging/IMessage';
+import {IMessageDisplay} from '../../../../../shared/models/messaging/IMessage';
 import {MessageService} from '../shared/services/message.service';
 import {ChatService} from '../shared/services/chat.service';
-import {UserService} from '../shared/services/user.service';
-import {SocketIOEvent} from '../../../../../shared/models/messaging/SoketIOEvent';
 import {ISocketIOMessage, SocketIOMessageType} from '../../../../../shared/models/messaging/ISocketIOMessage';
 
 
@@ -23,9 +21,8 @@ export class MessagingComponent implements OnInit, AfterViewChecked {
   @Input() mode: MessagingMode = MessagingMode.CHAT;
   // number of messages to load
   @Input() limit = 20;
-  chatName: string;
   @ViewChild('messageList') messageList: ElementRef;
-  messages: IMessage[] = [];
+  messages: IMessageDisplay[] = [];
   // number of message in a given room
   messageCount: number;
   ioConnection: any;
@@ -36,7 +33,6 @@ export class MessagingComponent implements OnInit, AfterViewChecked {
   constructor(
     private messageService: MessageService,
     private chatService: ChatService,
-    private userService: UserService,
   ) {
   }
 
@@ -62,28 +58,8 @@ export class MessagingComponent implements OnInit, AfterViewChecked {
       this.messageCount = res.count;
       const _messages = await this.messageService.getMessages(this.queryParam);
       this.messages = this.mode === 'chat' ? _messages.reverse() : _messages;
-      this.chatName = this.getChatName();
       this.initSocketConnection();
     }
-  }
-
-  /**
-   *  generate chat-name for the user in a given chat room
-   * @returns {string}
-   */
-  private getChatName(): string {
-    // look if user have contributed in the chat room
-    // if yes return his previous chatName.
-    const match = this.messages.find((message: IMessage) => {
-      return message.author === this.userService.user._id;
-    });
-
-    if (match) {
-      return match.chatName;
-    }
-
-    // if user haven't contributed in the chat generate new chatName
-    return this.userService.user.role + Date.now();
   }
 
   /**
@@ -103,7 +79,7 @@ export class MessagingComponent implements OnInit, AfterViewChecked {
    */
   handleNewMessage(socketIOMessage: ISocketIOMessage): void {
     if (socketIOMessage.meta.type === SocketIOMessageType.COMMENT) {
-      const match = this.messages.find((msg: IMessage) => {
+      const match = this.messages.find((msg: IMessageDisplay) => {
         return msg._id === socketIOMessage.meta.parent;
       });
 
@@ -118,7 +94,7 @@ export class MessagingComponent implements OnInit, AfterViewChecked {
 
   async loadMoreMsg() {
     this.queryParam = Object.assign(this.queryParam, {skip: this.messages.length});
-    const _messages: IMessage[] = await this.messageService.getMessages(this.queryParam);
+    const _messages = await this.messageService.getMessages(this.queryParam);
     this.messages = (this.mode === 'chat') ? _messages.reverse().concat(this.messages) : this.messages.concat(_messages.reverse());
     if (this.messages.length === this.messageCount) {
       this.disableInfiniteScroll = true;
