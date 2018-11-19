@@ -26,6 +26,7 @@ export class Course implements ICourse {
   accessKey: string;
   hasAccessKey: boolean;
   chatRooms: IChatRoom[];
+  freeTextStyle: string;
 
   public Course(course: ICourse) {
     this._id = course._id;
@@ -41,5 +42,6 @@ export class Course implements ICourse {
     this.hasAccessKey = course.hasAccessKey;
     this.image = course.image;
     this.chatRooms = course.chatRooms;
+    this.freeTextStyle = course.freeTextStyle;
   }
 }
