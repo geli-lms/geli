@@ -2,6 +2,7 @@ import * as mongoose from 'mongoose';
 import {IUnitModel} from './Unit';
 import {IFreeTextUnit} from '../../../../shared/models/units/IFreeTextUnit';
 import * as MarkdownIt from 'markdown-it';
+
 const markdownItEmoji = require('markdown-it-emoji');
 const MarkdownItDeflist = require('markdown-it-deflist');
 const MarkdownItContainer = require('markdown-it-container');
@@ -18,6 +19,14 @@ md.use(MarkdownItContainer, 'warning');
 md.use(MarkdownItContainer, 'info');
 md.use(MarkdownItContainer, 'error');
 md.use(MarkdownItContainer, 'success');
+md.use(MarkdownItContainer, 'success');
+md.use(MarkdownItContainer, 'learning-objectives');
+md.use(MarkdownItContainer, 'hints');
+md.use(MarkdownItContainer, 'assignment');
+md.use(MarkdownItContainer, 'question');
+md.use(MarkdownItContainer, 'example');
+md.use(MarkdownItContainer, 'todo');
+
 md.use(MarkdownItMark);
 md.use(MarkdownItAbbr);
 
@@ -31,9 +40,9 @@ const freeTextUnitSchema = new mongoose.Schema({
   }
 });
 
-freeTextUnitSchema.methods.getTheme = async function() {
-    await (<IFreeTextUnitModel>this).populate('_course', 'freeTextStyle').execPopulate();
-    return this._course.freeTextStyle;
+freeTextUnitSchema.methods.getTheme = async function () {
+  await (<IFreeTextUnitModel>this).populate('_course', 'freeTextStyle').execPopulate();
+  return this._course.freeTextStyle;
 };
 
 freeTextUnitSchema.methods.toHtmlForIndividualPDF = async function () {
