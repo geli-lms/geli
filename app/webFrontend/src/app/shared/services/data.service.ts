@@ -5,13 +5,11 @@ import {ILecture} from '../../../../../../shared/models/ILecture';
 import {IUnit} from '../../../../../../shared/models/units/IUnit';
 import {IUser} from '../../../../../../shared/models/IUser';
 import {ICourse} from '../../../../../../shared/models/ICourse';
-import {INotificationSettings} from '../../../../../../shared/models/INotificationSettings';
 import {IDownload} from '../../../../../../shared/models/IDownload';
 import {IDirectory} from '../../../../../../shared/models/mediaManager/IDirectory';
 import {IFile} from '../../../../../../shared/models/mediaManager/IFile';
 import {IUserSearchMeta} from '../../../../../../shared/models/IUserSearchMeta';
 import {IConfig} from '../../../../../../shared/models/IConfig';
-import {literalMap} from '@angular/compiler/src/output/output_ast';
 
 export abstract class DataService {
 
