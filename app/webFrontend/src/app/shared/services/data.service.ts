@@ -8,6 +8,7 @@ import {ICourse} from '../../../../../../shared/models/ICourse';
 import {IDownload} from '../../../../../../shared/models/IDownload';
 import {IDirectory} from '../../../../../../shared/models/mediaManager/IDirectory';
 import {IFile} from '../../../../../../shared/models/mediaManager/IFile';
+import {IDuplicationResponse} from '../../../../../../shared/models/IDuplicationResponse';
 import {IUserSearchMeta} from '../../../../../../shared/models/IUserSearchMeta';
 import {IConfig} from '../../../../../../shared/models/IConfig';
 
@@ -140,19 +141,19 @@ export class DuplicationService extends DataService {
     super('duplicate/', backendService);
   }
 
-  duplicateCourse(course: ICourse, courseAdmin: IUser): Promise<ICourse> {
+  duplicateCourse(course: ICourse, courseAdmin: IUser): Promise<IDuplicationResponse> {
     return this.backendService
       .post(this.apiPath + 'course/' + course._id, JSON.stringify({courseAdmin}))
       .toPromise();
   }
 
-  duplicateLecture(lecture: ILecture, courseId: string): Promise<ILecture> {
+  duplicateLecture(lecture: ILecture, courseId: string): Promise<IDuplicationResponse> {
     return this.backendService
       .post(this.apiPath + 'lecture/' + lecture._id, JSON.stringify({courseId}))
       .toPromise();
   }
 
-  duplicateUnit(unit: IUnit, lectureId: string): Promise<IUnit> {
+  duplicateUnit(unit: IUnit, lectureId: string): Promise<IDuplicationResponse> {
     return this.backendService
       .post(this.apiPath + 'unit/' + unit._id, JSON.stringify({lectureId}))
       .toPromise();

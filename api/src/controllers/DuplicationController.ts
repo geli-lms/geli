@@ -10,6 +10,7 @@ import {IUnitModel, Unit} from '../models/units/Unit';
 import {Course, ICourseModel} from '../models/Course';
 import {ILecture} from '../../../shared/models/ILecture';
 import {ICourse} from '../../../shared/models/ICourse';
+import {IDuplicationResponse} from '../../../shared/models/IDuplicationResponse';
 import {extractSingleMongoId} from '../utilities/ExtractMongoId';
 
 
@@ -24,6 +25,10 @@ export class DuplicationController {
     }
   }
 
+  private extractCommonResponse(duplicate: ICourse | ILecture | IUnit): IDuplicationResponse {
+    return {_id: extractSingleMongoId(duplicate)};
+  }
+
   /**
    * @api {post} /api/duplicate/course/:id Duplicate course
    * @apiName PostDuplicateCourse
@@ -35,24 +40,11 @@ export class DuplicationController {
    * @apiParam {Object} data Object optionally containing the courseAdmin id for the duplicated course as "courseAdmin".
    *                    If unset, the currentUser will be set as courseAdmin.
    *
-   * @apiSuccess {Course} course Duplicated course.
+   * @apiSuccess {Course} course Duplicated course ID.
    *
    * @apiSuccessExample {json} Success-Response:
    *     {
-   *         "_id": "5ab19c382ac32e46dcaa1574",
-   *         "updatedAt": "2018-03-20T23:41:44.792Z",
-   *         "createdAt": "2018-03-20T23:41:44.773Z",
-   *         "name": "Test 101 (copy)",
-   *         "description": "Some course desc",
-   *         "courseAdmin": "5a037e6a60f72236d8e7c813",
-   *         "active": false,
-   *         "__v": 1,
-   *         "whitelist": [],
-   *         "enrollType": "whitelist",
-   *         "lectures": [...],
-   *         "students": [],
-   *         "teachers": [],
-   *         "hasAccessKey": false
+   *         "_id": "5ab19c382ac32e46dcaa1574"
    *     }
    *
    * @apiError InternalServerError Failed to duplicate course
@@ -69,7 +61,8 @@ export class DuplicationController {
 
       const exportedCourse: ICourse = await courseModel.exportJSON(false);
       delete exportedCourse.students;
-      return Course.schema.statics.importJSON(exportedCourse, newCourseAdminId);
+      const duplicate = await Course.schema.statics.importJSON(exportedCourse, newCourseAdminId);
+      return this.extractCommonResponse(duplicate);
     } catch (err) {
         const newError = new InternalServerError('Failed to duplicate course');
         newError.stack += '\nCaused by: ' + err.message + '\n' + err.stack;
@@ -87,17 +80,11 @@ export class DuplicationController {
    * @apiParam {String} id Lecture ID.
    * @apiParam {Object} data Lecture data (with courseId).
    *
-   * @apiSuccess {Lecture} lecture Duplicated lecture.
+   * @apiSuccess {Lecture} lecture Duplicated lecture ID.
    *
    * @apiSuccessExample {json} Success-Response:
    *     {
-   *         "_id": "5ab1a218dab93c34f8541e25",
-   *         "updatedAt": "2018-03-21T00:06:48.043Z",
-   *         "createdAt": "2018-03-21T00:06:48.043Z",
-   *         "name": "Lecture One",
-   *         "description": "Some lecture desc",
-   *         "__v": 0,
-   *         "units": []
+   *         "_id": "5ab1a218dab93c34f8541e25"
    *     }
    *
    * @apiError InternalServerError Failed to duplicate lecture
@@ -113,7 +100,8 @@ export class DuplicationController {
     try {
       const lectureModel: ILectureModel = await Lecture.findById(id);
       const exportedLecture: ILecture = await lectureModel.exportJSON();
-      return Lecture.schema.statics.importJSON(exportedLecture, targetCourseId);
+      const duplicate = await Lecture.schema.statics.importJSON(exportedLecture, targetCourseId);
+      return this.extractCommonResponse(duplicate);
     } catch (err) {
       const newError = new InternalServerError('Failed to duplicate lecture');
       newError.stack += '\nCaused by: ' + err.message + '\n' + err.stack;
@@ -131,20 +119,10 @@ export class DuplicationController {
    * @apiParam {String} id Unit ID.
    * @apiParam {Object} data Object with target lectureId (the unit duplicate will be attached to this lecture).
    *
-   * @apiSuccess {Unit} unit Duplicated unit.
+   * @apiSuccess {Unit} unit Duplicated unit ID.
    *
    * @apiSuccessExample {json} Success-Response:
    *     {
-   *         "__v": 0,
-   *         "updatedAt": "2018-03-21T00:12:48.592Z",
-   *         "createdAt": "2018-03-21T00:12:48.592Z",
-   *         "progressable": false,
-   *         "weight": 0,
-   *         "name": "First unit",
-   *         "description": null,
-   *         "markdown": "Welcome, this is the start",
-   *         "_course": "5ab19c382ac32e46dcaa1574",
-   *         "__t": "free-text",
    *         "_id": "5ab1a380f5bbeb423070d787"
    *     }
    *
@@ -162,7 +140,8 @@ export class DuplicationController {
     const targetCourseId = extractSingleMongoId(targetCourse);
     try {
       const exportedUnit: IUnit = await unitModel.exportJSON();
-      return Unit.schema.statics.importJSON(exportedUnit, targetCourseId, targetLectureId);
+      const duplicate = await Unit.schema.statics.importJSON(exportedUnit, targetCourseId, targetLectureId);
+      return this.extractCommonResponse(duplicate);
     } catch (err) {
       const newError = new InternalServerError('Failed to duplicate unit');
       newError.stack += '\nCaused by: ' + err.message + '\n' + err.stack;

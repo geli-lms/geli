@@ -1,6 +1,5 @@
 import * as chai from 'chai';
 import {TestHelper} from '../TestHelper';
-import {Server} from '../../src/server';
 import chaiHttp = require('chai-http');
 import {FixtureUtils} from '../../fixtures/FixtureUtils';
 import {ICourse} from '../../../shared/models/ICourse';
@@ -16,6 +15,7 @@ import {ITaskUnitModel} from '../../src/models/units/TaskUnit';
 import {IFreeTextUnitModel} from '../../src/models/units/FreeTextUnit';
 import {ICodeKataUnit} from '../../../shared/models/units/ICodeKataUnit';
 import {ITaskUnit} from '../../../shared/models/units/ITaskUnit';
+import {extractSingleMongoId} from '../../src/utilities/ExtractMongoId';
 
 // how can i do this in the usual import scheme as above?
 // 'track()' needs to be chained to the require in order to be able to delete all created temporary files afterwards
@@ -52,6 +52,14 @@ async function testForbidden(user: IUser, urlPostfix = '', sendData: object) {
   result.status.should.be.equal(403);
 }
 
+async function testSuccess(user: IUser, urlPostfix = '', sendData: object, errorMsg = '') {
+  const response = await testHelper.commonUserPostRequest(user, urlPostfix, sendData);
+  response.status.should.be.equal(200, errorMsg + ' -> ' + response.body.message);
+  should.exist(response.body._id, 'Response body doesn\'t have an _id property');
+  should.equal(1, Object.keys(response.body).length, 'The duplication response apparently contains more than just the ID');
+  return response.body._id;
+}
+
 describe('Duplicate', async () => {
   beforeEach(async () => {
     await testHelper.resetForNextTest();
@@ -66,20 +74,16 @@ describe('Duplicate', async () => {
         const lecture = await FixtureUtils.getLectureFromUnit(unit);
         const teacher = await FixtureUtils.getRandomTeacherForCourse(course);
 
-        let unitJson: IUnit;
-        const importResult = await testHelper.commonUserPostRequest(teacher, `/unit/${unit._id}`, {lectureId: lecture._id});
-        importResult.status.should.be.equal(200,
+        const duplicateId = await testSuccess(teacher, `/unit/${unit._id}`, {lectureId: lecture._id},
           'failed to duplicate ' + unit.name +
           ' into ' + lecture.name +
-          ' from ' + course.name +
-          ' -> ' + importResult.body.message);
-        unitJson = importResult.body;
-        should.exist(importResult.body.createdAt);
-        should.exist(importResult.body.__v);
-        should.exist(importResult.body.updatedAt);
-        should.exist(unitJson._id);
+          ' from ' + course.name);
+
+        const getResponse = await testHelper.basicUserGetRequest(teacher, `/api/units/${duplicateId}`);
+        getResponse.status.should.be.equal(200);
+        const unitJson: IUnit = getResponse.body;
         // TODO: share this check since it is the same one as in export.ts
-        unitJson.name.should.be.equal(unit.name);
+        should.equal(unit.name, unitJson.name, 'Duplicate name mismatch');
         // check nullable fields
         if (unit.description != null) {
           unitJson.description.should.be.equal(unit.description);
@@ -133,17 +137,13 @@ describe('Duplicate', async () => {
         const course = await FixtureUtils.getCourseFromLecture(lecture);
         const teacher = await FixtureUtils.getRandomTeacherForCourse(course);
 
-        let lectureJson: ILecture;
-        const importResult = await testHelper.commonUserPostRequest(teacher, `/lecture/${lecture._id}`, {courseId: course._id});
-        importResult.status.should.be.equal(200,
+        const duplicateId = await testSuccess(teacher, `/lecture/${lecture._id}`, {courseId: course._id},
           'failed to import ' + lecture.name +
-          ' into ' + course.name +
-          ' -> ' + importResult.body.message);
-        lectureJson = importResult.body;
-        should.exist(importResult.body.createdAt);
-        should.exist(importResult.body.__v);
-        should.exist(importResult.body.updatedAt);
-        should.exist(lectureJson._id);
+          ' into ' + course.name);
+
+        const getResponse = await testHelper.basicUserGetRequest(teacher, `/api/lecture/${duplicateId}`);
+        getResponse.status.should.be.equal(200);
+        const lectureJson: ILecture = getResponse.body;
         lectureJson.name.should.be.equal(lecture.name);
         lectureJson.description.should.be.equal(lecture.description);
         lectureJson.units.should.be.instanceOf(Array).and.have.lengthOf(lecture.units.length);
@@ -161,18 +161,14 @@ describe('Duplicate', async () => {
       for (const course of courses) {
         const teacher = await FixtureUtils.getRandomTeacherForCourse(course);
 
-        let courseJson: ICourse;
-        const importResult = await testHelper.commonUserPostRequest(teacher, `/course/${course._id}`, {courseAdmin: teacher._id});
-        importResult.status.should.be.equal(200,
-          'failed to duplicate ' + course.name +
-          ' -> ' + importResult.body.message);
-        courseJson = importResult.body;
-        should.exist(importResult.body.createdAt);
-        should.exist(importResult.body.__v);
-        should.exist(importResult.body.updatedAt);
-        should.exist(courseJson._id);
+        const duplicateId = await testSuccess(teacher, `/course/${course._id}`, {courseAdmin: teacher._id},
+          'failed to duplicate ' + course.name);
+
+        const getResponse = await testHelper.basicUserGetRequest(teacher, `/api/courses/${duplicateId}/edit`);
+        getResponse.status.should.be.equal(200);
+        const courseJson: ICourse = getResponse.body;
         courseJson.active.should.be.equal(false);
-        courseJson.courseAdmin.should.be.equal(teacher._id.toString());
+        courseJson.courseAdmin._id.should.be.equal(extractSingleMongoId(teacher));
         courseJson.name.startsWith(course.name).should.be.equal(true);
         courseJson.description.should.be.equal(course.description);
         courseJson.lectures.should.be.instanceOf(Array).and.have.lengthOf(course.lectures.length);
