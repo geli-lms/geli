@@ -7,7 +7,7 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 . "${DIR}/_shared-vars.sh"
 
 echo
-echo "+++ Create and publish API-Doc +++"
+echo "+++ Create and publish Api-Doc +++"
 echo
 
 if [[ ${TRAVIS_PULL_REQUEST} != false ]]; then

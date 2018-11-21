@@ -252,7 +252,7 @@ export class DownloadController {
                 '       .bottomBox {position: absolute; bottom: 0;}' + md_css +
                 '     </style>' +
                 '  </head>';
-                html += localUnit.toHtmlForIndividualPDF();
+                html += await localUnit.toHtmlForIndividualPDF();
                 html += '</html>';
               const name = lecCounter + '_' + lcName + '/' + unitCounter + '_' + this.replaceCharInFilename(localUnit.name) + '.pdf';
               await this.savePdfToFile(html, options, tempPdfFileName);
