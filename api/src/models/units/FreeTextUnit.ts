@@ -2,13 +2,27 @@ import * as mongoose from 'mongoose';
 import {IUnitModel} from './Unit';
 import {IFreeTextUnit} from '../../../../shared/models/units/IFreeTextUnit';
 import * as MarkdownIt from 'markdown-it';
+
 const markdownItEmoji = require('markdown-it-emoji');
 const MarkdownItDeflist = require('markdown-it-deflist');
 const MarkdownItContainer = require('markdown-it-container');
 const MarkdownItMark = require('markdown-it-mark');
 const MarkdownItAbbr = require('markdown-it-abbr');
+const hljs = require('highlight.js');
 
-const md = new MarkdownIt();
+const md = new MarkdownIt({
+  highlight: function (str, lang) {
+    if (lang && hljs.getLanguage(lang)) {
+      try {
+        return hljs.highlight(lang, str).value;
+      } catch (__) {
+      }
+    }
+
+    return ''; // use external default escaping
+  }
+});
+
 // load MD plugins
 md.use(markdownItEmoji);
 md.use(MarkdownItDeflist);
@@ -31,9 +45,9 @@ const freeTextUnitSchema = new mongoose.Schema({
   }
 });
 
-freeTextUnitSchema.methods.getTheme = async function() {
-    await (<IFreeTextUnitModel>this).populate('_course', 'freeTextStyle').execPopulate();
-    return this._course.freeTextStyle;
+freeTextUnitSchema.methods.getTheme = async function () {
+  await (<IFreeTextUnitModel>this).populate('_course', 'freeTextStyle').execPopulate();
+  return this._course.freeTextStyle;
 };
 
 freeTextUnitSchema.methods.toHtmlForIndividualPDF = async function () {
