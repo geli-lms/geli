@@ -41,6 +41,9 @@ export class Server {
 
     // mongoose.set('debug', true);
 
+    // enable CreateIndex internally (ensureIndex is deprecated)
+    mongoose.set('useCreateIndex', true);
+
     this.app = createExpressServer({
       routePrefix: '/api',
       controllers: [__dirname + '/controllers/*.js'], // register all controller's routes

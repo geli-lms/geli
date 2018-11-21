@@ -13,8 +13,8 @@ const fixtureLoader = new FixtureLoader();
 
 describe('About', async () => {
   // Before each test we reset the database
-  beforeEach(async () => {
-    await fixtureLoader.load();
+  beforeEach(() => {
+    Promise.resolve(fixtureLoader.load());
   });
 
   describe(`GET ${BASE_URL}/dependencies`, async () => {
