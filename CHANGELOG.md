@@ -13,7 +13,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 ### Added
 - Chat system access denial unit tests. [#989](https://github.com/geli-lms/geli/issues/989)
-- `TestHelper` class for shared API unit test functionality. [#989](https://github.com/geli-lms/geli/issues/989)
+- `DuplicationController` access denial unit tests. [#1016](https://github.com/geli-lms/geli/issues/1016)
+- `TestHelper` class for shared API unit test functionality. [#989](https://github.com/geli-lms/geli/issues/989) [#1016](https://github.com/geli-lms/geli/issues/1016)
 - `extractSingleMongoId` variant of the `ExtractMongoId` utility function(s). [#989](https://github.com/geli-lms/geli/issues/989)
 - Show message count for unit chat. [#933](https://github.com/geli-lms/geli/issues/993)
 - Styles for free text units. [#867](https://github.com/geli-lms/geli/issues/867)
@@ -22,6 +23,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Update mongoose to 5.2.x. [#1004](https://github.com/geli-lms/geli/pull/1004)
 - Update contributors list. [#1007](https://github.com/geli-lms/geli/issues/1007)
 - Use `terser` instead of `uglify-js`. [#1018](https://github.com/geli-lms/geli/pull/1018)
+- Upgraded & Streamlined the `ExtractMongoId` utility. [#989](https://github.com/geli-lms/geli/issues/989) [#1016](https://github.com/geli-lms/geli/issues/1016)
 
 ### Removed
 
@@ -29,9 +31,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Notifications for invisible courses and lectures will no longer be created. [#877](https://github.com/geli-lms/geli/issues/877)
 - EU-DSGVO: Export Chat User Data - Exclude Comments. [#998](https://github.com/geli-lms/geli/issues/998)
 - Nondeterministic chat system unit test authorization failures. [#989](https://github.com/geli-lms/geli/issues/989)
+- Unnecessarily verbose `DuplicationController` route responses. [#1016](https://github.com/geli-lms/geli/issues/1016)
 
 ### Security
 - Fixed multiple severe security issues of the chat system. [#989](https://github.com/geli-lms/geli/issues/989)
+- Fixed multiple security issues of the three `DuplicationController` routes. [#1016](https://github.com/geli-lms/geli/issues/1016)
 
 ## [[0.8.2](https://github.com/geli-lms/geli/releases/tag/v0.8.2)] - 2018-11-08 - WS 18/19 🍪-Release
 ### Added
