@@ -104,8 +104,8 @@ jobs:
       after_success:
         - cd ${TRAVIS_BUILD_DIR}
         - .travis/package-checker.sh
-        - .travis/docker.sh
         - .travis/apidoc.sh
+        - .travis/docker.sh
         - .travis/deploy.sh
         - .travis/sentry.sh
 
