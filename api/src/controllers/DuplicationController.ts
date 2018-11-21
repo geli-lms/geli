@@ -29,6 +29,13 @@ export class DuplicationController {
     return {_id: extractSingleMongoId(duplicate)};
   }
 
+  private rethrowAsInternalServerError(err: any, message: string) {
+    // TODO This is older code that was factored out here; maybe the route error handling can be reduced or improved further?
+    const newError = new InternalServerError(message);
+    newError.stack += '\nCaused by: ' + err.message + '\n' + err.stack;
+    throw newError;
+  }
+
   /**
    * @api {post} /api/duplicate/course/:id Duplicate course
    * @apiName PostDuplicateCourse
@@ -64,9 +71,7 @@ export class DuplicationController {
       const duplicate = await Course.schema.statics.importJSON(exportedCourse, newCourseAdminId);
       return this.extractCommonResponse(duplicate);
     } catch (err) {
-        const newError = new InternalServerError('Failed to duplicate course');
-        newError.stack += '\nCaused by: ' + err.message + '\n' + err.stack;
-        throw newError;
+      this.rethrowAsInternalServerError(err, 'Failed to duplicate course');
     }
   }
 
@@ -103,9 +108,7 @@ export class DuplicationController {
       const duplicate = await Lecture.schema.statics.importJSON(exportedLecture, targetCourseId);
       return this.extractCommonResponse(duplicate);
     } catch (err) {
-      const newError = new InternalServerError('Failed to duplicate lecture');
-      newError.stack += '\nCaused by: ' + err.message + '\n' + err.stack;
-      throw newError;
+      this.rethrowAsInternalServerError(err, 'Failed to duplicate lecture');
     }
   }
 
@@ -143,9 +146,7 @@ export class DuplicationController {
       const duplicate = await Unit.schema.statics.importJSON(exportedUnit, targetCourseId, targetLectureId);
       return this.extractCommonResponse(duplicate);
     } catch (err) {
-      const newError = new InternalServerError('Failed to duplicate unit');
-      newError.stack += '\nCaused by: ' + err.message + '\n' + err.stack;
-      throw newError;
+      this.rethrowAsInternalServerError(err, 'Failed to duplicate unit');
     }
   }
 
