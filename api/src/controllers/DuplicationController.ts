@@ -12,6 +12,7 @@ import {ILecture} from '../../../shared/models/ILecture';
 import {ICourse} from '../../../shared/models/ICourse';
 import {IDuplicationResponse} from '../../../shared/models/IDuplicationResponse';
 import {extractSingleMongoId} from '../utilities/ExtractMongoId';
+import {errorCodes} from '../config/errorCodes';
 
 
 @JsonController('/duplicate')
@@ -71,7 +72,7 @@ export class DuplicationController {
       const duplicate = await Course.schema.statics.importJSON(exportedCourse, newCourseAdminId);
       return this.extractCommonResponse(duplicate);
     } catch (err) {
-      this.rethrowAsInternalServerError(err, 'Failed to duplicate course');
+      this.rethrowAsInternalServerError(err, errorCodes.duplication.courseDuplicationFailed.text);
     }
   }
 
@@ -108,7 +109,7 @@ export class DuplicationController {
       const duplicate = await Lecture.schema.statics.importJSON(exportedLecture, targetCourseId);
       return this.extractCommonResponse(duplicate);
     } catch (err) {
-      this.rethrowAsInternalServerError(err, 'Failed to duplicate lecture');
+      this.rethrowAsInternalServerError(err, errorCodes.duplication.lectureDuplicationFailed.text);
     }
   }
 
@@ -146,7 +147,7 @@ export class DuplicationController {
       const duplicate = await Unit.schema.statics.importJSON(exportedUnit, targetCourseId, targetLectureId);
       return this.extractCommonResponse(duplicate);
     } catch (err) {
-      this.rethrowAsInternalServerError(err, 'Failed to duplicate unit');
+      this.rethrowAsInternalServerError(err, errorCodes.duplication.unitDuplicationFailed.text);
     }
   }
 
