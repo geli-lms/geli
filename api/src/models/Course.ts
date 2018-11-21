@@ -328,7 +328,7 @@ courseSchema.methods.forView = function (user: IUser): ICourseView {
   const {
     name, description,
     courseAdmin, teachers,
-    lectures, chatRooms, freeTextStyle
+    lectures, chatRooms, freeTextStyle, active
   } = this;
 
   const userCanEditCourse = this.checkPrivileges(user).userCanEditCourse;
@@ -336,6 +336,7 @@ courseSchema.methods.forView = function (user: IUser): ICourseView {
   return {
     _id: <string>extractMongoId(this._id),
     name, description,
+    active,
     courseAdmin: User.forCourseView(courseAdmin),
     teachers: teachers.map((teacher: IUser) => User.forCourseView(teacher)),
     lectures: lectures.map((lecture: any) => lecture.toObject()),

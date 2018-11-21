@@ -11,4 +11,5 @@ export interface ICourseView {
   chatRooms: string[];
   freeTextStyle: string;
   userCanEditCourse: boolean;
+  active: boolean;
 }
