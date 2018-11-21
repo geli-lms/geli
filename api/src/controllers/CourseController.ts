@@ -705,8 +705,8 @@ export class CourseController {
     const picture = await Picture.findOne(course.image);
     await picture.remove();
 
-    await Course.update({ _id: id }, { $unset: { image: 1 } });
-    return { };
+    await Course.updateOne({_id: id}, {$unset: {image: 1}});
+    return {};
   }
 
   @Authorized(['teacher', 'admin'])
@@ -752,10 +752,7 @@ export class CourseController {
 
     await image.save();
 
-    await Course.update({ _id: id }, {
-      image: image._id
-    });
-
+    await Course.updateOne({_id: id}, {image: image._id});
     return image.toObject();
   }
 }

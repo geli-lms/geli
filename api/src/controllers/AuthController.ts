@@ -307,7 +307,7 @@ export class AuthController {
         const userIsntAlreadyStudentOfCourse = course.students.findIndex(u => u._id === user._id) < 0;
         if (userUidIsRegisteredInWhitelist && userIsntAlreadyStudentOfCourse) {
           course.students.push(user);
-          await Course.update({_id: course._id}, course);
+          await Course.updateOne({_id: course._id}, course);
         }
       }));
   }
