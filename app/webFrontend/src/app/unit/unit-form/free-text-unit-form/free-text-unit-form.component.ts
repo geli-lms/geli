@@ -23,7 +23,7 @@ export class FreeTextUnitFormComponent implements OnInit {
               private unitService: UnitService,
               public dialog: MatDialog,
               private notificationService: NotificationService,
-              private unitFormService: UnitFormService) {}
+              public unitFormService: UnitFormService) {}
 
   ngOnInit() {
     this.unitFormService.headline = 'Free-text';
