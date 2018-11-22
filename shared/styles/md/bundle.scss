@@ -1,10 +1,14 @@
 .markdown-wrapper {
 
   // see styles here: https://highlightjs.org/static/demo/
-  @import  "highlight.js/styles/github";
+  // import WITHOUT .css!
+  @import  "../highlightjs/github";
+
+
   @import './custombox-shared';
   @import "theme1";
   @import "theme2";
   @import "theme3";
   @import "theme4";
 }
+

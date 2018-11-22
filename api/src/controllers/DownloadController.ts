@@ -25,10 +25,11 @@ const cache = require('node-file-cache').create({life: config.timeToLiveCacheVal
 const pdf =  require('html-pdf');
 const phantomjs = require('phantomjs-prebuilt');
 const binPath = phantomjs.path;
-const scss = require('../services/SassLoader')();
-const md_css = require('../../../../shared/styles/md/bundle.scss');
+import sassLoader from '../services/SassLoader';
 
-console.log(md_css);
+// ATTENTION: relative path from compiled .js file!
+const md_css = sassLoader.load("../../../../../shared/styles/md/bundle.scss");
+
 // Set all routes which should use json to json, the standard is blob streaming data
 @Controller('/download')
 @UseBefore(passportJwtMiddleware)

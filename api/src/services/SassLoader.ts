@@ -1,42 +1,39 @@
 import {renderSync, Options} from 'node-sass';
+import { resolve } from 'path';
 
 // Defaults
 let options: Options = {
   sourceMap: false,
   sourceMapEmbed: false,
   sourceMapContents: false,
-  outputStyle: "compressed",
-  includePaths: ['node_modules','../../node_modules']
+  outputStyle: "compressed"
 };
 
+export class SassLoader {
 
-// Main export
-module.exports = function(opts: Options, exts: Array<string>) {
-  options = {...options, ...opts};
+  private options: Options = {}
+  private defaultOptions: Options = {
+    sourceMap: false,
+    sourceMapEmbed: false,
+    sourceMapContents: false,
+    outputStyle: "compressed"
+  };
 
-  var extensions = exts || ['.scss', '.sass'];
-  for (var i = 0; i < extensions.length; i++) {
-    require.extensions[extensions[i]] = requireSass;
+  constructor(sassOptions: Options = {}) {
+    //merge with default
+    this.options = {...this.defaultOptions, ...sassOptions};
   }
 
-  return {
-    options: options,
-    exts: extensions
+  public load(filepath: string) {
+    let renderOptions = this.defaultOptions;
+    renderOptions.file = resolve(module.parent.filename,filepath)
+    try{
+      return renderSync(renderOptions).css.toString();
+    } catch (e) {
+      console.error(e);
+      return null;
+    }
   }
 }
 
-// Helper functions
-function requireSass(mod:any, file:string) {
-  var data = sassImport(file);
-  var sassOptions = {...options, ...{data: data}};
-
-  console.log(sassOptions);
-  var result = renderSync(sassOptions);
-
-  mod.exports = result.css.toString();
-};
-
-
-function sassImport(path:string) {
-  return "@import '" + path + "';";
-}
+export default new SassLoader();
