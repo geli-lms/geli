@@ -17,7 +17,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - `extractSingleMongoId` variant of the `ExtractMongoId` utility function(s). [#989](https://github.com/geli-lms/geli/issues/989)
 - Show message count for unit chat. [#933](https://github.com/geli-lms/geli/issues/993)
 - Styles for free text units. [#867](https://github.com/geli-lms/geli/issues/867)
-- Export PDF with styled free text units. [#997](https://github.com/geli-lms/geli/issues/997)
 
 
 ### Changed
