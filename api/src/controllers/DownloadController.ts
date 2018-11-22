@@ -28,7 +28,7 @@ const binPath = phantomjs.path;
 import sassLoader from '../services/SassLoader';
 
 // ATTENTION: relative path from compiled .js file!
-const md_css = sassLoader.load("../../../../../shared/styles/md/bundle.scss");
+const md_css = sassLoader.load('../../../../../shared/styles/md/bundle.scss');
 
 // Set all routes which should use json to json, the standard is blob streaming data
 @Controller('/download')

@@ -2,32 +2,32 @@ import {renderSync, Options} from 'node-sass';
 import { resolve } from 'path';
 
 // Defaults
-let options: Options = {
+const options: Options = {
   sourceMap: false,
   sourceMapEmbed: false,
   sourceMapContents: false,
-  outputStyle: "compressed"
+  outputStyle: 'compressed'
 };
 
 export class SassLoader {
 
-  private options: Options = {}
+  private options: Options = {};
   private defaultOptions: Options = {
     sourceMap: false,
     sourceMapEmbed: false,
     sourceMapContents: false,
-    outputStyle: "compressed"
+    outputStyle: 'compressed'
   };
 
   constructor(sassOptions: Options = {}) {
-    //merge with default
+    // merge with default
     this.options = {...this.defaultOptions, ...sassOptions};
   }
 
   public load(filepath: string) {
-    let renderOptions = this.defaultOptions;
-    renderOptions.file = resolve(module.parent.filename,filepath)
-    try{
+    const renderOptions = this.defaultOptions;
+    renderOptions.file = resolve(module.parent.filename, filepath);
+    try {
       return renderSync(renderOptions).css.toString();
     } catch (e) {
       console.error(e);
