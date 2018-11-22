@@ -1,8 +1,7 @@
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import {Injectable} from '@angular/core';
+import {Observable} from 'rxjs/Observable';
 import * as socketIo from 'socket.io-client';
-import {AuthenticationService} from './authentication.service';
-import {ISocketIOMessage} from '../../../../../../shared/models/messaging/ISocketIOMessage';
+import {ISocketIOMessagePost, ISocketIOMessage} from '../../../../../../shared/models/messaging/ISocketIOMessage';
 import {SocketIOEvent} from '../../../../../../shared/models/messaging/SoketIOEvent';
 
 
@@ -10,7 +9,7 @@ import {SocketIOEvent} from '../../../../../../shared/models/messaging/SoketIOEv
 export class ChatService {
   private socket;
 
-  constructor(private authenticationService: AuthenticationService) {
+  constructor() {
   }
 
   public initSocket(room: string): void {
@@ -24,8 +23,8 @@ export class ChatService {
   }
 
 
-  public send(socketIOMessage: ISocketIOMessage): void {
-    this.socket.emit(SocketIOEvent.MESSAGE, socketIOMessage);
+  public send(socketIOMessagePost: ISocketIOMessagePost): void {
+    this.socket.emit(SocketIOEvent.MESSAGE, socketIOMessagePost);
   }
 
   public onMessage(): Observable<ISocketIOMessage> {

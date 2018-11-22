@@ -9,7 +9,7 @@ import {InternalServerError} from 'routing-controllers';
 import {IUser} from '../../../shared/models/IUser';
 import {ObjectID} from 'bson';
 import {Directory} from './mediaManager/Directory';
-import {IProperties} from '../../../shared/models/IProperties';
+import {IFlags} from '../../../shared/models/IFlags';
 import {extractMongoId} from '../utilities/ExtractMongoId';
 import {ChatRoom, IChatRoomModel} from './ChatRoom';
 
@@ -17,7 +17,7 @@ import {Picture} from './mediaManager/File';
 
 interface ICourseModel extends ICourse, mongoose.Document {
   exportJSON: (sanitize?: boolean, onlyBasicData?: boolean) => Promise<ICourse>;
-  checkPrivileges: (user: IUser) => IProperties;
+  checkPrivileges: (user: IUser) => IFlags;
   forDashboard: (user: IUser) => ICourseDashboard;
   forView: () => ICourseView;
   populateLecturesFor: (user: IUser) => this;
@@ -92,7 +92,12 @@ const courseSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'ChatRoom'
       }
-    ]
+    ],
+    freeTextStyle: {
+      type: String,
+      enum: ['', 'theme1', 'theme2', 'theme3', 'theme4'],
+      default: ''
+    },
   },
   {
     timestamps: true,
@@ -148,16 +153,16 @@ courseSchema.pre('remove', async function () {
   const localCourse = <ICourseModel><any>this;
   try {
     const dic = await Directory.findById(localCourse.media);
-      if (dic) {
-    await dic.remove();
+    if (dic) {
+      await dic.remove();
     }
     for (const lec of localCourse.lectures) {
       const lecDoc = await Lecture.findById(lec);
       await lecDoc.remove();
     }
     if (localCourse.image) {
-        const picture: any = await Picture.findById(localCourse.image);
-        await picture.remove();
+      const picture: any = await Picture.findById(localCourse.image);
+      await picture.remove();
     }
   } catch (error) {
     throw new Error('Delete Error: ' + error.toString());
@@ -184,6 +189,7 @@ courseSchema.methods.exportJSON = async function (sanitize: boolean = true, only
     delete obj.teachers;
     delete obj.media;
     delete obj.chatRooms;
+    delete obj.freeTextStyle;
   }
 
   if (onlyBasicData) {
@@ -252,7 +258,7 @@ courseSchema.statics.importJSON = async function (course: ICourse, admin: IUser,
   }
 };
 
-courseSchema.statics.exportPersonalData = async function(user: IUser) {
+courseSchema.statics.exportPersonalData = async function (user: IUser) {
   const conditions: any = {};
   conditions.$or = [];
   conditions.$or.push({students: user._id});
@@ -272,12 +278,13 @@ courseSchema.statics.changeCourseAdminFromUser = async function (userFrom: IUser
 
 courseSchema.methods.checkPrivileges = function (user: IUser) {
   const {userIsAdmin, ...userIs} = User.checkPrivileges(user);
+  const userId = extractMongoId(user._id);
 
   const courseAdminId = extractMongoId(this.courseAdmin);
 
-  const userIsCourseAdmin: boolean = user._id === courseAdminId;
-  const userIsCourseTeacher: boolean = this.teachers.some((teacher: IUserModel) => user._id === extractMongoId(teacher));
-  const userIsCourseStudent: boolean = this.students.some((student: IUserModel) => user._id === extractMongoId(student));
+  const userIsCourseAdmin: boolean = userId === courseAdminId;
+  const userIsCourseTeacher: boolean = this.teachers.some((teacher: IUserModel) => userId === extractMongoId(teacher));
+  const userIsCourseStudent: boolean = this.students.some((student: IUserModel) => userId === extractMongoId(student));
   const userIsCourseMember: boolean = userIsCourseAdmin || userIsCourseTeacher || userIsCourseStudent;
 
   const userCanEditCourse: boolean = userIsAdmin || userIsCourseAdmin || userIsCourseTeacher;
@@ -321,7 +328,7 @@ courseSchema.methods.forView = function (): ICourseView {
   const {
     name, description,
     courseAdmin, teachers,
-    lectures, chatRooms
+    lectures, chatRooms, freeTextStyle
   } = this;
   return {
     _id: <string>extractMongoId(this._id),
@@ -329,7 +336,8 @@ courseSchema.methods.forView = function (): ICourseView {
     courseAdmin: User.forCourseView(courseAdmin),
     teachers: teachers.map((teacher: IUser) => User.forCourseView(teacher)),
     lectures: lectures.map((lecture: any) => lecture.toObject()),
-    chatRooms: chatRooms.map(extractMongoId)
+    chatRooms: chatRooms.map(extractMongoId),
+    freeTextStyle
   };
 };
 

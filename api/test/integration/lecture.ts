@@ -24,7 +24,7 @@ describe('Lecture', () => {
     it('should delete a lecture by course admin', async () => {
       const course = await FixtureUtils.getRandomCourseWithAllUnitTypes();
       const lectureId = await course.lectures[0];
-      const courseAdmin = await  User.findOne({_id: course.courseAdmin});
+      const courseAdmin = await User.findOne({_id: course.courseAdmin});
 
       const res = await chai.request(app)
         .del(BASE_URL + '/' + lectureId)

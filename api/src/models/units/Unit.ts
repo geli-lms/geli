@@ -145,6 +145,10 @@ unitSchema.methods.toFile = function (): String {
   return '';
 };
 
+unitSchema.methods.toFile = function (): String {
+  return '';
+};
+
 unitSchema.statics.importJSON = async function (unit: IUnit, courseId: string, lectureId: string) {
   unit._course = courseId;
   try {

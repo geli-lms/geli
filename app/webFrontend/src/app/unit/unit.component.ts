@@ -3,6 +3,8 @@ import {IUnit} from '../../../../../shared/models/units/IUnit';
 import * as moment from 'moment';
 import {ActivatedRoute, Router} from '@angular/router';
 import {IUser} from '../../../../../shared/models/IUser';
+import {MessageService} from '../shared/services/message.service';
+import {ICourse} from '../../../../../shared/models/ICourse';
 
 @Component({
   selector: 'app-unit',
@@ -10,10 +12,11 @@ import {IUser} from '../../../../../shared/models/IUser';
   styleUrls: ['./unit.component.scss']
 })
 export class UnitComponent implements OnInit, AfterViewInit {
-
+  @Input() course: ICourse;
   @Input() units: IUnit[];
   unitId: string;
   users: IUser[] = [];
+  chatMessageCount: {[unitId: string]: number} = {};
 
   private getDeadlineDiffTime (deadline: string) {
     const momentDeadline = moment(deadline);
@@ -58,13 +61,18 @@ export class UnitComponent implements OnInit, AfterViewInit {
   }
 
   constructor(private route: ActivatedRoute,
-              private router: Router) {
+              private router: Router,
+              private msgService: MessageService) {
   }
 
   ngOnInit() {
     this.route.params.subscribe(params => {
       this.unitId = decodeURIComponent(params['unit']);
     });
+    Promise.all(this.units.map(async (unit) => {
+      const res = await this.msgService.getMessageCount({room: unit.chatRoom});
+      this.chatMessageCount[unit._id] = res.count;
+    }));
   }
 
   ngAfterViewInit(): void {

@@ -8,6 +8,7 @@ import {FreeTextUnit} from '../../models/units/FreeTextUnit';
 })
 export class FreeTextUnitComponent implements OnInit {
   @Input() freeTextUnit: FreeTextUnit;
+  @Input() theme: string;
 
   constructor() {
   }
