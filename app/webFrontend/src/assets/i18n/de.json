@@ -165,7 +165,8 @@
       "accessKey": "Einschreibeschlüssel",
       "description": "Kursbeschreibung",
       "name": "Kursname",
-      "searchAndAdd": "Benutzer anhand des Namens, der Id oder der E-Mail-Adresse suchen"
+      "searchAndAdd": "Benutzer anhand des Namens, der Id oder der E-Mail-Adresse suchen",
+      "freeTextTheme": "Theme für Freitext"
     },
     "ShowCourse": "Kurs anzeigen",
     "text": {
@@ -198,6 +199,13 @@
         "free": "Frei",
         "accesskey": "Einschreibeschlüssel",
         "whitelist": "Whitelist"
+      },
+      "selectFreeTextTheme": {
+        "": "Default",
+        "theme1": "Theme 1",
+        "theme2": "Theme 2",
+        "theme3": "Theme 3",
+        "theme4": "Theme 4"
       },
       "uploadWhitelist": "Laden Sie Ihre OBS-csv-Datei mit Ihren Kursteilnehmern hoch, um sie auf die Freigabeliste zu setzen. Alte Freigabelisten-Benutzer werden durch Hochladen einer neuen Datei entfernt.",
       "userResults": "Benutzerergebnisse",

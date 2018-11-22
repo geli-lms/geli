@@ -9,4 +9,5 @@ export interface ICourseView {
   teachers: IUserSubCourseView[];
   lectures: ILecture[];
   chatRooms: string[];
+  freeTextStyle: string;
 }

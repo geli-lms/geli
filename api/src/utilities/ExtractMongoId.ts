@@ -48,3 +48,14 @@ export function extractMongoId<T>(from: any | any[], fallback?: T): implReturn<T
     return extractMongoIdImpl(from, fallback);
   }
 }
+
+/**
+ * Tries to extract the id as string from any mongoose object.
+ * This could be a node-mongodb-native ObjectID (i.e. mongoose.Types.ObjectId), via toHexString,
+ * or anything that contains an 'id' property, which is directly returned.
+ *
+ * @param from A mongoose object or id string.
+ */
+export function extractSingleMongoId(from: any): string | undefined {
+  return extractMongoIdImpl(from);
+}
