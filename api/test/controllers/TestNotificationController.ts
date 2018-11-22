@@ -6,7 +6,6 @@ import {JwtUtils} from '../../src/security/JwtUtils';
 import {Notification} from '../../src/models/Notification';
 import chaiHttp = require('chai-http');
 import {User} from '../../src/models/User';
-import {Course, ICourseModel} from '../../src/models/Course';
 import {NotFoundError} from 'routing-controllers';
 import {API_NOTIFICATION_TYPE_ALL_CHANGES, API_NOTIFICATION_TYPE_NONE, NotificationSettings} from '../../src/models/NotificationSettings';
 
@@ -248,7 +247,7 @@ describe('Notifications', async () => {
 
   describe(`DELETE ${BASE_URL} :id`, () => {
     it('should delete a notification', async () => {
-      const course = await <ICourseModel>FixtureUtils.getRandomCourse();
+      const course = await FixtureUtils.getRandomCourse();
       const students = await FixtureUtils.getRandomStudents(2, 5);
 
       course.students = course.students.concat(students);
