@@ -16,6 +16,7 @@
             "main": "src/main.ts",
             "tsConfig": "src/tsconfig.app.json",
             "polyfills": "src/polyfills.ts",
+            "progress": false,
             "assets": [
               "src/assets",
               "src/favicon.ico"
@@ -40,7 +41,6 @@
               "aot": true,
               "extractLicenses": true,
               "buildOptimizer": true,
-              "progress": false,
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
