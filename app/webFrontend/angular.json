@@ -39,8 +39,8 @@
               "namedChunks": false,
               "aot": true,
               "extractLicenses": true,
-              "vendorChunk": false,
               "buildOptimizer": true,
+              "progress": false,
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
@@ -82,7 +82,7 @@
             ],
             "styles": [
               "src/styles.scss",
-	      "./node_modules/ngx-lightbox/lightbox.css"
+              "./node_modules/ngx-lightbox/lightbox.css"
             ],
             "assets": [
               "src/assets",
