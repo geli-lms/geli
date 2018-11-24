@@ -25,8 +25,6 @@ const cache = require('node-file-cache').create({life: config.timeToLiveCacheVal
 const pdf =  require('html-pdf');
 const phantomjs = require('phantomjs-prebuilt');
 const binPath = phantomjs.path;
-const scss = require('require-sass')();
-const md_css = require('../../../../shared/styles/md/bundle.scss');
 
 // Set all routes which should use json to json, the standard is blob streaming data
 @Controller('/download')
@@ -245,14 +243,14 @@ export class DownloadController {
                 '     <style>' +
                 '       #pageHeader {text-align: center;border-bottom: 1px solid;padding-bottom: 5px;}' +
                 '       #pageFooter {text-align: center;border-top: 1px solid;padding-top: 5px;}' +
-                '       html,body {font-family: \'Helvetica\', \'Arial\', sans-serif; font-size: 12px; line-height: 1.5;}' +
+                '       body {font-family: \'Helvetica\', \'Arial\', sans-serif; }' +
                 '       .codeBox {border: 1px solid grey; font-family: Monaco,Menlo,source-code-pro,monospace; padding: 10px}' +
                 '       #firstPage {page-break-after: always;}' +
                 '       .bottomBoxWrapper {height:800px; position: relative}' +
-                '       .bottomBox {position: absolute; bottom: 0;}' + md_css +
+                '       .bottomBox {position: absolute; bottom: 0;}' +
                 '     </style>' +
                 '  </head>';
-                html += await localUnit.toHtmlForIndividualPDF();
+                html += localUnit.toHtmlForIndividualPDF();
                 html += '</html>';
               const name = lecCounter + '_' + lcName + '/' + unitCounter + '_' + this.replaceCharInFilename(localUnit.name) + '.pdf';
               await this.savePdfToFile(html, options, tempPdfFileName);
@@ -361,12 +359,12 @@ export class DownloadController {
           '     <style>' +
           '       #pageHeader {text-align: center;border-bottom: 1px solid;padding-bottom: 5px;}' +
           '       #pageFooter {text-align: center;border-top: 1px solid;padding-top: 5px;}' +
-          '       html, body {font-family: \'Helvetica\', \'Arial\', sans-serif; font-size: 12px; line-height: 1.5;}' +
+          '       body {font-family: \'Helvetica\', \'Arial\', sans-serif;}' +
           '       .codeBox {border: 1px solid grey; font-family: Monaco,Menlo,source-code-pro,monospace; padding: 10px}' +
           '       #firstPage {page-break-after: always;}' +
           '       #nextPage {page-break-before: always;}' +
           '       .bottomBoxWrapper {height:800px; position: relative}' +
-          '       .bottomBox {position: absolute; bottom: 0;}' + md_css +
+          '       .bottomBox {position: absolute; bottom: 0;}' +
           '     </style>' +
           '  </head>' +
           '  <body>' +
@@ -402,9 +400,9 @@ export class DownloadController {
                   {name: lecCounter + '_' + lcName + '/' + unitCounter + '_' + file.name});
               }
             } else if ( (localUnit.__t === 'code-kata' || localUnit.__t === 'task') && lecCounter > 1 && unitCounter > 1) {
-              html +=  '<div id="nextPage" >' + await localUnit.toHtmlForSinglePDF() + '</div>';
+              html +=  '<div id="nextPage" >' + localUnit.toHtmlForSinglePDF() + '</div>';
             } else {
-              html +=  await localUnit.toHtmlForSinglePDF();
+              html +=  localUnit.toHtmlForSinglePDF();
             }
 
             if (localUnit.__t === 'code-kata' || localUnit.__t === 'task') {
@@ -417,10 +415,10 @@ export class DownloadController {
               } else {
                 solutions += '<div id="nextPage" >';
               }
-              solutions += await localUnit.toHtmlForSinglePDFSolutions()  + '</div>';
+              solutions += localUnit.toHtmlForSinglePDFSolutions()  + '</div>';
               solCounter++;
             } else if (localUnit.__t !== 'file') {
-              solutions += await localUnit.toHtmlForSinglePDFSolutions();
+              solutions += localUnit.toHtmlForSinglePDFSolutions();
             }
             unitCounter++;
           }

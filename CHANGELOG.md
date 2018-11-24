@@ -17,8 +17,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - `extractSingleMongoId` variant of the `ExtractMongoId` utility function(s). [#989](https://github.com/geli-lms/geli/issues/989)
 - Show message count for unit chat. [#933](https://github.com/geli-lms/geli/issues/993)
 - Styles for free text units. [#867](https://github.com/geli-lms/geli/issues/867)
-- Export PDF with styled free text units. [#997](https://github.com/geli-lms/geli/issues/997)
-
+- Course-view-navigation for edit-users. [#1010](https://github.com/geli-lms/geli/issues/924)
 
 ### Changed
 - Update mongoose to 5.2.x. [#1004](https://github.com/geli-lms/geli/pull/1004)
@@ -26,6 +25,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Use `terser` instead of `uglify-js`. [#1018](https://github.com/geli-lms/geli/pull/1018)
 
 ### Removed
+- Export PDF with styled free text units. [#997](https://github.com/geli-lms/geli/issues/997)
 
 ### Fixed
 - Notifications for invisible courses and lectures will no longer be created. [#877](https://github.com/geli-lms/geli/issues/877)

@@ -166,7 +166,7 @@ export class CourseController {
       .populate('teachers')
       .execPopulate();
     await course.processLecturesFor(currentUser);
-    return course.forView();
+    return course.forView(currentUser);
   }
 
   /**
