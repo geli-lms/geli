@@ -752,7 +752,9 @@ export class CourseController {
 
     await image.save();
 
-    await Course.updateOne({_id: id}, {image: image._id});
+    course.image = image;
+    await course.save();
+
     return image.toObject();
   }
 }
