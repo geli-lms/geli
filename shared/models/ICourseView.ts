@@ -10,4 +10,6 @@ export interface ICourseView {
   lectures: ILecture[];
   chatRooms: string[];
   freeTextStyle: string;
+  userCanEditCourse: boolean;
+  active: boolean;
 }

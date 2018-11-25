@@ -6,7 +6,7 @@ dist: trusty
 sudo: required
 language: node_js
 node_js:
-  - "10.8.0"
+  - "10.13"
 
 addons:
   apt:
@@ -104,8 +104,8 @@ jobs:
       after_success:
         - cd ${TRAVIS_BUILD_DIR}
         - .travis/package-checker.sh
-        - .travis/docker.sh
         - .travis/apidoc.sh
+        - .travis/docker.sh
         - .travis/deploy.sh
         - .travis/sentry.sh
 

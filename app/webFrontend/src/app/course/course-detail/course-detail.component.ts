@@ -11,6 +11,7 @@ import {LastVisitedCourseContainerUpdater} from '../../shared/utils/LastVisitedC
 import {DialogService} from '../../shared/services/dialog.service';
 import {DataSharingService} from '../../shared/services/data-sharing.service';
 import {TranslateService} from '@ngx-translate/core';
+import {ICourseView} from '../../../../../../shared/models/ICourseView';
 
 
 
@@ -21,7 +22,7 @@ import {TranslateService} from '@ngx-translate/core';
 })
 export class CourseDetailComponent implements OnInit, OnDestroy {
 
-  course: ICourse;
+  course: ICourseView;
   id: string;
   tabs = [];
 
@@ -39,7 +40,7 @@ export class CourseDetailComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     const data: any = this.route.snapshot.data;
-    this.course = <ICourse> data.course;
+    this.course = <ICourseView> data.course;
     this.id = this.course._id;
     LastVisitedCourseContainerUpdater.addCourseToLastVisitedCourses(this.id, this.userService, this.userDataService);
     this.titleService.setTitleCut(['Course: ', this.course.name]);
@@ -47,6 +48,8 @@ export class CourseDetailComponent implements OnInit, OnDestroy {
       this.reloadTabBar();
     });
     this.reloadTabBar();
+
+
   }
 
   reloadTabBar(): void {
