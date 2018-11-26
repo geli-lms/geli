@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Styles for free text units. [#867](https://github.com/geli-lms/geli/issues/867)
 - Export PDF with styled free text units. [#997](https://github.com/geli-lms/geli/issues/997)
 - Course-view-navigation for edit-users. [#924](https://github.com/geli-lms/geli/issues/924)
+- Make MongoDB port configurable `DB_PORT`. [#1034](https://github.com/geli-lms/geli/pull/1034)
 
 ### Changed
 - Update mongoose to 5.2.x. [#1004](https://github.com/geli-lms/geli/pull/1004)
