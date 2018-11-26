@@ -129,8 +129,8 @@ export class LectureController {
     if (!course.checkPrivileges(currentUser).userCanEditCourse) {
       throw new ForbiddenError();
     }
-    await course.update({}, {$pull: {lectures: id}});
 
+    await Course.updateMany({}, {$pull: {lectures: id}});
     await Lecture.findByIdAndRemove(id);
 
     return {};

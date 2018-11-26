@@ -85,9 +85,9 @@ export class FixtureUtils {
     });
   }
 
-  public static async getRandomCourse(hash?: string): Promise<ICourse> {
-    const array = await this.getCourses();
-    return this.getRandom<ICourse>(array, hash);
+  public static async getRandomCourse(hash?: string): Promise<ICourseModel> {
+    const array = <ICourseModel[]>await this.getCourses();
+    return this.getRandom<ICourseModel>(array, hash);
   }
 
   public static async getRandomCourseWithAllUnitTypes(hash?: string): Promise<ICourse> {

@@ -175,7 +175,7 @@ export class UnitController {
         throw new NotFoundError();
       }
 
-      return Lecture.update({}, {$pull: {units: id}})
+      return Lecture.updateMany({}, {$pull: {units: id}})
         .then(() => unit.remove())
         .then(() => {
           return {result: true};
