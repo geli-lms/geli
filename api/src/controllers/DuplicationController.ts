@@ -30,13 +30,6 @@ export class DuplicationController {
     return {_id: extractSingleMongoId(duplicate)};
   }
 
-  private static rethrowAsInternalServerError(err: any, message: string) {
-    // TODO This is older code that was factored out here; maybe the route error handling can be reduced or improved further?
-    const newError = new InternalServerError(message);
-    newError.stack += '\nCaused by: ' + err.message + '\n' + err.stack;
-    throw newError;
-  }
-
   /**
    * @api {post} /api/duplicate/course/:id Duplicate course
    * @apiName PostDuplicateCourse
@@ -63,17 +56,14 @@ export class DuplicationController {
                         @CurrentUser() currentUser: IUser) {
     const courseModel: ICourseModel = await Course.findById(id);
     await DuplicationController.assertUserDuplicationAuthorization(currentUser, courseModel);
-    try {
-      // Set the currentUser's id as newCourseAdminId if it wasn't specified by the request.
-      newCourseAdminId = typeof newCourseAdminId === 'string' ? newCourseAdminId : extractSingleMongoId(currentUser);
 
-      const exportedCourse: ICourse = await courseModel.exportJSON(false);
-      delete exportedCourse.students;
-      const duplicate = await Course.schema.statics.importJSON(exportedCourse, newCourseAdminId);
-      return DuplicationController.extractCommonResponse(duplicate);
-    } catch (err) {
-      DuplicationController.rethrowAsInternalServerError(err, errorCodes.duplication.courseDuplicationFailed.text);
-    }
+    // Set the currentUser's id as newCourseAdminId if it wasn't specified by the request.
+    newCourseAdminId = typeof newCourseAdminId === 'string' ? newCourseAdminId : extractSingleMongoId(currentUser);
+
+    const exportedCourse: ICourse = await courseModel.exportJSON(false);
+    delete exportedCourse.students;
+    const duplicate = await Course.schema.statics.importJSON(exportedCourse, newCourseAdminId);
+    return DuplicationController.extractCommonResponse(duplicate);
   }
 
   /**
@@ -103,14 +93,11 @@ export class DuplicationController {
     await DuplicationController.assertUserDuplicationAuthorization(currentUser, course);
     const targetCourse = await Course.findById(targetCourseId);
     await DuplicationController.assertUserDuplicationAuthorization(currentUser, targetCourse);
-    try {
-      const lectureModel: ILectureModel = await Lecture.findById(id);
-      const exportedLecture: ILecture = await lectureModel.exportJSON();
-      const duplicate = await Lecture.schema.statics.importJSON(exportedLecture, targetCourseId);
-      return DuplicationController.extractCommonResponse(duplicate);
-    } catch (err) {
-      DuplicationController.rethrowAsInternalServerError(err, errorCodes.duplication.lectureDuplicationFailed.text);
-    }
+
+    const lectureModel: ILectureModel = await Lecture.findById(id);
+    const exportedLecture: ILecture = await lectureModel.exportJSON();
+    const duplicate = await Lecture.schema.statics.importJSON(exportedLecture, targetCourseId);
+    return DuplicationController.extractCommonResponse(duplicate);
   }
 
   /**
@@ -142,13 +129,10 @@ export class DuplicationController {
     const targetCourse = await Course.findOne({lectures: targetLectureId});
     await DuplicationController.assertUserDuplicationAuthorization(currentUser, targetCourse);
     const targetCourseId = extractSingleMongoId(targetCourse);
-    try {
-      const exportedUnit: IUnit = await unitModel.exportJSON();
-      const duplicate = await Unit.schema.statics.importJSON(exportedUnit, targetCourseId, targetLectureId);
-      return DuplicationController.extractCommonResponse(duplicate);
-    } catch (err) {
-      DuplicationController.rethrowAsInternalServerError(err, errorCodes.duplication.unitDuplicationFailed.text);
-    }
+
+    const exportedUnit: IUnit = await unitModel.exportJSON();
+    const duplicate = await Unit.schema.statics.importJSON(exportedUnit, targetCourseId, targetLectureId);
+    return DuplicationController.extractCommonResponse(duplicate);
   }
 
 }
