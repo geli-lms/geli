@@ -1,14 +1,16 @@
 import {User} from '../src/models/User';
 import {Course, ICourseModel} from '../src/models/Course';
+import {IUserModel} from '../src/models/User';
 import {Lecture} from '../src/models/Lecture';
 import {Unit} from '../src/models/units/Unit';
 import {ICourse} from '../../shared/models/ICourse';
 import {ILecture} from '../../shared/models/ILecture';
 import {IUnit} from '../../shared/models/units/IUnit';
 import {IUser} from '../../shared/models/IUser';
-import {IWhitelistUser} from '../../shared/models/IWhitelistUser';
 import {ITaskUnit} from '../../shared/models/units/ITaskUnit';
 import {ITaskUnitModel} from '../src/models/units/TaskUnit';
+import {IChatRoom} from '../../shared/models/IChatRoom';
+import {extractSingleMongoId} from '../src/utilities/ExtractMongoId';
 import * as mongoose from 'mongoose';
 import ObjectId = mongoose.Types.ObjectId;
 
@@ -38,12 +40,9 @@ export class FixtureUtils {
     return this.getRandom<IUser>(array, hash);
   }
 
-  public static async getRandomTeacherForCourse(course: ICourse, hash?: string): Promise<IUser> {
-    let array: IUser[] = [];
-    array = array.concat(course.teachers);
-    array.push(course.courseAdmin);
-    const user = await this.getRandom<IUser>(array, hash);
-    return User.findById(user);
+  public static async getRandomTeacherForCourse(course: ICourse, hash?: string): Promise<IUserModel> {
+    const user = await this.getRandom<IUser>([course.courseAdmin, ...course.teachers], hash);
+    return await User.findById(user);
   }
 
   public static async getRandomTeachers(min: number, max: number, hash?: string): Promise<IUser[]> {
@@ -86,9 +85,9 @@ export class FixtureUtils {
     });
   }
 
-  public static async getRandomCourse(hash?: string): Promise<ICourse> {
-    const array = await this.getCourses();
-    return this.getRandom<ICourse>(array, hash);
+  public static async getRandomCourse(hash?: string): Promise<ICourseModel> {
+    const array = <ICourseModel[]>await this.getCourses();
+    return this.getRandom<ICourseModel>(array, hash);
   }
 
   public static async getRandomCourseWithAllUnitTypes(hash?: string): Promise<ICourse> {
@@ -118,11 +117,11 @@ export class FixtureUtils {
     return this.getRandom<ICourse>(coursesWithAllUnitTypes, hash);
   }
 
-  public static async getCoursesFromLecture(lecture: ILecture): Promise<ICourse> {
+  public static async getCourseFromLecture(lecture: ILecture): Promise<ICourse> {
     return Course.findOne({lectures: { $in: [ lecture._id ] }});
   }
 
-  public static async getCoursesFromUnit(unit: IUnit): Promise<ICourse> {
+  public static async getCourseFromUnit(unit: IUnit): Promise<ICourse> {
     return Course.findById(unit._course);
   }
 
@@ -148,6 +147,19 @@ export class FixtureUtils {
   public static async getRandomUnitFromLecture(lecture: ILecture, hash?: string): Promise<IUnit> {
     const unitId = await this.getRandom<IUnit>(lecture.units, hash);
     return Unit.findById(unitId);
+  }
+
+  /**
+   * Provides simple shared setup functionality currently used by multiple chat system unit tests.
+   *
+   * @param hash The optional RNG seed passed to FixtureUtils.getRandom for random course.chatRooms selection.
+   * @returns A random fixture course and one of its chatRooms, also randomly selected, in form of a roomId.
+   */
+  public static async getSimpleChatRoomSetup(hash?: string) {
+    const course = await FixtureUtils.getRandomCourse();
+    const room = await FixtureUtils.getRandom<IChatRoom>(course.chatRooms, hash);
+    const roomId = extractSingleMongoId(room);
+    return {course, roomId};
   }
 
   public static async getRandomUnitFromCourse(course: ICourse, hash?: string): Promise<IUnit> {

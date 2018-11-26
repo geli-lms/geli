@@ -301,14 +301,13 @@ export class AuthController {
     const courses = await Course.find(
       {enrollType: 'whitelist'}).populate('whitelist');
 
-    await Promise.all(
-      courses.map(async (course) => {
-        const userUidIsRegisteredInWhitelist = course.whitelist.findIndex(w => w.uid === user.uid) >= 0;
-        const userIsntAlreadyStudentOfCourse = course.students.findIndex(u => u._id === user._id) < 0;
-        if (userUidIsRegisteredInWhitelist && userIsntAlreadyStudentOfCourse) {
-          course.students.push(user);
-          await Course.update({_id: course._id}, course);
-        }
-      }));
+    await Promise.all(courses.map(async (course) => {
+      const userUidIsRegisteredInWhitelist = course.whitelist.findIndex(w => w.uid === user.uid) >= 0;
+      const userIsntAlreadyStudentOfCourse = course.students.findIndex(u => u._id === user._id) < 0;
+      if (userUidIsRegisteredInWhitelist && userIsntAlreadyStudentOfCourse) {
+        course.students.push(user);
+        await course.save();
+      }
+    }));
   }
 }

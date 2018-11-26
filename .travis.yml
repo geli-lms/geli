@@ -6,7 +6,7 @@ dist: trusty
 sudo: required
 language: node_js
 node_js:
-  - "10.8.0"
+  - "10.13"
 
 addons:
   apt:
@@ -34,67 +34,80 @@ branches:
 
 cache:
   directories:
-  - "$HOME/.npm"
+    - "$HOME/.npm"
 
-before_install:
-  # check for change in changelog
-  - .travis/changelog.sh
+stages:
+  - test
+  - name: deploy
+    if: type = push AND (branch IN (develop, master) OR tag IS present)
 
-before_script:
-  # required for chrome to start properly
-  - export DISPLAY=:99.0
-  - sh -e /etc/init.d/xvfb start
-  # required for MongoDB to have time to start up
-  - sleep 15
-
-install:
-  # install api and return back to root for following steps
-  - cd api
-  - npm ci
-  - cd ..
-  # install frontend and return back to root for following steps
-  - cd app/webFrontend
-  - npm ci
-  - cd ../..
-  # install travis dependencies
-  - cd .travis
-  - npm ci
-  - cd ..
-
-script:
-  # check for versions
-  - .travis/check-version.sh
-  # run license checker and write license.json / dependencies.ts
-  - .travis/license-crawler.sh
-  # run backend-tests and return back to root for following steps
-  - cd api
-  - sed -i 's/$TRAVIS_COMMIT/'$TRAVIS_COMMIT'/' src/server.ts
-  - npm run test        # run backend test
-  - cd ..
-  - .travis/apidoc-check.sh
-  # run frontend-tests and return back to root for following steps
-  - cd api
-  - npm run load:fixtures
-  - npm start &
-  - cd ../app/webFrontend
-  - npm run lint        # run linter
-  # - npm run test-ci || true     # run test - many tests are broken
-  - npm run e2e         # run end-to-end-tests
-  - sed -i 's/$TRAVIS_COMMIT/'$TRAVIS_COMMIT'/' src/app/shared/services/raven-error-handler.service.ts
-  - cd ../..
-#  - travis_wait 30 .travis/build-fe.sh       # build in prod mode
-  - .travis/build-fe.sh       # build in prod mode
-
-after_script:
-  # send required files to coveralls.io
-  - .travis/coveralls.sh
-
-after_success:
-  - .travis/package-checker.sh
-  - .travis/apidoc.sh
-  - .travis/docker.sh
-  - .travis/deploy.sh
-  - .travis/sentry.sh
+jobs:
+  include:
+    - stage: test
+      name: "Tests Api"
+      install:
+        - ${TRAVIS_BUILD_DIR}/.travis/changelog.sh
+        - cd ${TRAVIS_BUILD_DIR}/.travis
+        - npm ci
+        - cd ${TRAVIS_BUILD_DIR}/api
+        - npm ci
+        - ${TRAVIS_BUILD_DIR}/.travis/license-crawler.sh
+      script:
+        - npm run lint
+        - npm run test
+        - npm run apidoc
+      after_script:
+        - cd ${TRAVIS_BUILD_DIR}
+        - .travis/coveralls.sh
+    - stage: test
+      name: "Tests Frontend"
+      before_install:
+        - export NODE_OPTIONS=--max_old_space_size=4096
+      install:
+        - ${TRAVIS_BUILD_DIR}/.travis/changelog.sh
+        - cd ${TRAVIS_BUILD_DIR}/.travis
+        - npm ci
+        - cd ${TRAVIS_BUILD_DIR}/api
+        - npm ci
+        - cd ${TRAVIS_BUILD_DIR}/app/webFrontend
+        - npm ci
+        - ${TRAVIS_BUILD_DIR}/.travis/license-crawler.sh
+      before_script:
+        - export DISPLAY=:99.0
+        - sh -e /etc/init.d/xvfb start
+      script:
+        - cd ${TRAVIS_BUILD_DIR}/api
+        - npm run load:fixtures
+        - npm start &
+        - cd ${TRAVIS_BUILD_DIR}/app/webFrontend
+        - npm run lint
+        - npm run e2e
+        - npm run build
+    - stage: deploy
+      before_install:
+        - export NODE_OPTIONS=--max_old_space_size=4096
+      install:
+        - cd ${TRAVIS_BUILD_DIR}/.travis
+        - npm ci
+        - cd ${TRAVIS_BUILD_DIR}/api
+        - npm ci
+        - sed -i 's/$TRAVIS_COMMIT/'$TRAVIS_COMMIT'/' src/server.ts
+        - cd ${TRAVIS_BUILD_DIR}/app/webFrontend
+        - npm ci
+        - sed -i 's/$TRAVIS_COMMIT/'$TRAVIS_COMMIT'/' src/app/shared/services/raven-error-handler.service.ts
+        - ${TRAVIS_BUILD_DIR}/.travis/license-crawler.sh
+      script:
+        - cd ${TRAVIS_BUILD_DIR}/api
+        - npm run build
+        - cd ${TRAVIS_BUILD_DIR}/app/webFrontend
+        - npm run build
+      after_success:
+        - cd ${TRAVIS_BUILD_DIR}
+        - .travis/package-checker.sh
+        - .travis/apidoc.sh
+        - .travis/docker.sh
+        - .travis/deploy.sh
+        - .travis/sentry.sh
 
 # Configure notification
 notifications:

@@ -125,6 +125,7 @@ describe('Course', () => {
         teachers: [teacher],
         enrollType: 'accesskey',
         accessKey: 'accessKey1234',
+        freeTextStyle: 'theme1',
         students: [student]
       });
       const savedCourse = await testData.save();
@@ -182,6 +183,7 @@ describe('Course', () => {
       body.active.should.be.equal(testData.active);
       body.enrollType.should.be.equal(testData.enrollType);
       body.accessKey.should.be.equal(testData.accessKey);
+      body.freeTextStyle.should.be.equal(testData.freeTextStyle);
     });
 
     it('should not get edit info for course as student', async () => {
@@ -226,7 +228,8 @@ describe('Course', () => {
           name: 'Test Course Update',
           description: 'Test description update',
           active: true,
-          courseAdmin: teacher._id
+          courseAdmin: teacher._id,
+          freeTextStyle: 'theme1'
         });
       const testData = new Course(
         {
@@ -255,6 +258,7 @@ describe('Course', () => {
       res.body.name.should.be.eq(testDataUpdate.name);
       res.body.description.should.be.eq(testDataUpdate.description);
       res.body.active.should.be.eq(testDataUpdate.active);
+      res.body.freeTextStyle.should.be.eq(testDataUpdate.freeTextStyle);
     });
 
     it('should not change course not a teacher of course', async () => {
@@ -285,7 +289,7 @@ describe('Course', () => {
       const res = await chai.request(app)
         .post(`${BASE_URL}/picture/${course._id}`)
         .set('Cookie', `token=${JwtUtils.generateToken(courseAdmin)}`)
-    .attach('file', readFileSync('test/resources/test.png'), 'test.png')
+        .attach('file', readFileSync('test/resources/test.png'), 'test.png')
         .field('imageData', JSON.stringify({ breakpoints:
           [ { screenSize: BreakpointSize.MOBILE, imageSize: { width: 284, height: 190} }] }));
 
