@@ -23,7 +23,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Make MongoDB port configurable `DB_PORT`. [#1034](https://github.com/geli-lms/geli/pull/1034)
 
 ### Changed
-- Update mongoose to 5.2.x. [#1004](https://github.com/geli-lms/geli/pull/1004)
+- Update mongoose to 5.3.x. [#1003](https://github.com/geli-lms/geli/issues/1003)[#1004](https://github.com/geli-lms/geli/pull/1004)
 - Update contributors list. [#1007](https://github.com/geli-lms/geli/issues/1007)
 - Use `terser` instead of `uglify-js`. [#1018](https://github.com/geli-lms/geli/pull/1018)
 - `ExtractMongoId` utility upgrades & streamlining. [#989](https://github.com/geli-lms/geli/issues/989) [#1016](https://github.com/geli-lms/geli/issues/1016)
