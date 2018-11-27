@@ -40,6 +40,7 @@ export class Server {
     (<any>mongoose).Promise = global.Promise;
 
     // mongoose.set('debug', true);
+    mongoose.set('useCreateIndex', true);
 
     this.app = createExpressServer({
       routePrefix: '/api',
