@@ -27,6 +27,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Update contributors list. [#1007](https://github.com/geli-lms/geli/issues/1007)
 - Use `terser` instead of `uglify-js`. [#1018](https://github.com/geli-lms/geli/pull/1018)
 - `ExtractMongoId` utility upgrades & streamlining. [#989](https://github.com/geli-lms/geli/issues/989) [#1016](https://github.com/geli-lms/geli/issues/1016)
+- Bundle vendor libraries into vendor.min.js. [#1031](https://github.com/geli-lms/geli/pull/1031)
 
 ### Removed
 - Export PDF with styled free text units. [#997](https://github.com/geli-lms/geli/issues/997)
