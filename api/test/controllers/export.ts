@@ -29,10 +29,10 @@ const testHelper = new TestHelper(BASE_URL);
 /**
  * Provides simple shared setup functionality used by the export access denial unit tests.
  *
- * @returns A course and an unauthorizedTeacher (i.e. a teacher that isn't part of the course).
+ * @returns A course with at least one unit/lecture and an unauthorizedTeacher (i.e. a teacher that isn't part of the course).
  */
 async function exportAccessDenialSetup() {
-  const course = await FixtureUtils.getRandomCourse();
+  const course = await FixtureUtils.getRandomCourseWithAllUnitTypes();
   const unauthorizedTeacher = await User.findOne({
     _id: {$nin: [course.courseAdmin, ...course.teachers]},
     role: 'teacher'
