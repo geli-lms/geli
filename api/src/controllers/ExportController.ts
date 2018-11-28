@@ -68,7 +68,11 @@ export class ExportController {
    *     }
    */
   @Get('/lecture/:id')
-  async exportLecture(@Param('id') id: string) {
+  async exportLecture(@Param('id') id: string, @CurrentUser() currentUser: IUser) {
+    const course = await Course.findOne({lectures: id});
+    if (!course.checkPrivileges(currentUser).userCanEditCourse) {
+      throw new ForbiddenError();
+    }
     const lecture = await Lecture.findById(id);
     return lecture.exportJSON();
   }
