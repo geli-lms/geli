@@ -10,7 +10,6 @@ import {isNullOrUndefined} from 'util';
 import {isEmail} from 'validator';
 import {errorCodes} from '../config/errorCodes';
 import {allRoles} from '../config/roles';
-import {IProperties} from '../../../shared/models/IProperties';
 import {extractMongoId} from '../utilities/ExtractMongoId';
 import {ensureMongoToObject} from '../utilities/EnsureMongoToObject';
 import {Course, ICourseModel} from './Course';
@@ -21,12 +20,27 @@ import {Progress} from './progress/Progress';
 import fs = require('fs');
 
 
+export interface IUserPrivileges {
+  userIsAdmin: boolean;
+  userIsTeacher: boolean;
+  userIsStudent: boolean;
+  userEditLevel: number;
+}
+
+export interface IUserEditPrivileges extends IUserPrivileges {
+  currentEditLevel: number;
+  targetEditLevel: number;
+  editSelf: boolean;
+  editLevelHigher: boolean;
+  editAllowed: boolean;
+}
+
 interface IUserModel extends IUser, mongoose.Document {
   exportPersonalData: () => Promise<IUser>;
   isValidPassword: (candidatePassword: string) => Promise<boolean>;
-  checkPrivileges: () => IProperties;
-  checkEditUser: (targetUser: IUser) => IProperties;
-  checkEditableBy: (currentUser: IUser) => IProperties;
+  checkPrivileges: () => IUserPrivileges;
+  checkEditUser: (targetUser: IUser) => IUserEditPrivileges;
+  checkEditableBy: (currentUser: IUser) => IUserEditPrivileges;
   forSafe: () => IUserSubSafe;
   forTeacher: () => IUserSubTeacher;
   forCourseView: () => IUserSubCourseView;
@@ -40,8 +54,8 @@ interface IUserModel extends IUser, mongoose.Document {
 interface IUserMongoose extends mongoose.Model<IUserModel> {
   getEditLevel: (user: IUser) => number;
   getEditLevelUnsafe: (user: any) => number | undefined;
-  checkPrivileges: (user: IUser) => IProperties;
-  checkEditUser: (currentUser: IUser, targetUser: IUser) => IProperties;
+  checkPrivileges: (user: IUser) => IUserPrivileges;
+  checkEditUser: (currentUser: IUser, targetUser: IUser) => IUserEditPrivileges;
   forSafe: (user: IUser | IUserModel) => IUserSubSafe;
   forTeacher: (user: IUser | IUserModel) => IUserSubTeacher;
   forCourseView: (user: IUser | IUserModel) => IUserSubCourseView;
@@ -235,15 +249,15 @@ userSchema.methods.isValidPassword = function (candidatePassword: string) {
   return bcrypt.compare(candidatePassword, this.password);
 };
 
-userSchema.methods.checkPrivileges = function (): IProperties {
+userSchema.methods.checkPrivileges = function (): IUserPrivileges {
   return User.checkPrivileges(this);
 };
 
-userSchema.methods.checkEditUser = function (targetUser: IUser): IProperties {
+userSchema.methods.checkEditUser = function (targetUser: IUser): IUserEditPrivileges {
   return User.checkEditUser(this, targetUser);
 };
 
-userSchema.methods.checkEditableBy = function (currentUser: IUser): IProperties {
+userSchema.methods.checkEditableBy = function (currentUser: IUser): IUserEditPrivileges {
   return User.checkEditUser(currentUser, this);
 };
 
@@ -314,7 +328,7 @@ userSchema.statics.getEditLevelUnsafe = function (user: any): number | undefined
   return editLevels[user.role];
 };
 
-userSchema.statics.checkPrivileges = function (user: IUser): IProperties {
+userSchema.statics.checkPrivileges = function (user: IUser): IUserPrivileges {
   const userIsAdmin: boolean = user.role === 'admin';
   const userIsTeacher: boolean = user.role === 'teacher';
   const userIsStudent: boolean = user.role === 'student';
@@ -326,8 +340,8 @@ userSchema.statics.checkPrivileges = function (user: IUser): IProperties {
   return {userIsAdmin, userIsTeacher, userIsStudent, userEditLevel};
 };
 
-userSchema.statics.checkEditUser = function (currentUser: IUser, targetUser: IUser): IProperties {
-  const {userIsAdmin} = User.checkPrivileges(currentUser);
+userSchema.statics.checkEditUser = function (currentUser: IUser, targetUser: IUser): IUserEditPrivileges {
+  const {userIsAdmin, ...userIs} = User.checkPrivileges(currentUser);
 
   const currentEditLevel = User.getEditLevel(currentUser);
   const targetEditLevel = User.getEditLevel(targetUser);
@@ -342,7 +356,7 @@ userSchema.statics.checkEditUser = function (currentUser: IUser, targetUser: IUs
   const editAllowed = userIsAdmin || editSelf || editLevelHigher;
 
   return {
-    userIsAdmin,
+    userIsAdmin, ...userIs,
     currentEditLevel, targetEditLevel,
     editSelf, editLevelHigher,
     editAllowed

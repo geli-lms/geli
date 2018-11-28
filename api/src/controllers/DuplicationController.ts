@@ -1,6 +1,6 @@
 import {
   BodyParam, Post, Param, JsonController, UseBefore, Authorized, CurrentUser,
-  InternalServerError, ForbiddenError
+  ForbiddenError, NotFoundError
 } from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import {IUser} from '../../../shared/models/IUser';
@@ -48,13 +48,15 @@ export class DuplicationController {
    *         "_id": "5ab19c382ac32e46dcaa1574"
    *     }
    *
-   * @apiError InternalServerError Failed to duplicate course
+   * @apiError NotFoundError If the course couldn't be found.
+   * @apiError ForbiddenError assertUserDuplicationAuthorization check failed.
    */
   @Post('/course/:id')
   async duplicateCourse(@Param('id') id: string,
                         @BodyParam('courseAdmin', {required: false}) newCourseAdminId: string,
                         @CurrentUser() currentUser: IUser) {
     const courseModel: ICourseModel = await Course.findById(id);
+    if (!courseModel) { throw new NotFoundError(); }
     await DuplicationController.assertUserDuplicationAuthorization(currentUser, courseModel);
 
     // Set the currentUser's id as newCourseAdminId if it wasn't specified by the request.
@@ -74,7 +76,7 @@ export class DuplicationController {
    * @apiPermission admin
    *
    * @apiParam {String} id Lecture ID.
-   * @apiParam {Object} data Lecture data (with courseId).
+   * @apiParam {Object} data Object with target courseId (the lecture duplicate will be attached to this course).
    *
    * @apiSuccess {Lecture} lecture Duplicated lecture ID.
    *
@@ -83,15 +85,18 @@ export class DuplicationController {
    *         "_id": "5ab1a218dab93c34f8541e25"
    *     }
    *
-   * @apiError InternalServerError Failed to duplicate lecture
+   * @apiError NotFoundError If the lecture or the target courseId couldn't be found.
+   * @apiError ForbiddenError assertUserDuplicationAuthorization check failed.
    */
   @Post('/lecture/:id')
   async duplicateLecture(@Param('id') id: string,
                          @BodyParam('courseId', {required: true}) targetCourseId: string,
                          @CurrentUser() currentUser: IUser) {
     const course = await Course.findOne({lectures: id});
+    if (!course) { throw new NotFoundError(); }
     await DuplicationController.assertUserDuplicationAuthorization(currentUser, course);
     const targetCourse = await Course.findById(targetCourseId);
+    if (!targetCourse) { throw new NotFoundError(errorCodes.duplication.targetNotFound.text); }
     await DuplicationController.assertUserDuplicationAuthorization(currentUser, targetCourse);
 
     const lectureModel: ILectureModel = await Lecture.findById(id);
@@ -117,16 +122,19 @@ export class DuplicationController {
    *         "_id": "5ab1a380f5bbeb423070d787"
    *     }
    *
-   * @apiError InternalServerError Failed to duplicate unit
+   * @apiError NotFoundError If the unit or the target lectureId couldn't be found.
+   * @apiError ForbiddenError assertUserDuplicationAuthorization check failed.
    */
   @Post('/unit/:id')
   async duplicateUnit(@Param('id') id: string,
                       @BodyParam('lectureId', {required: true}) targetLectureId: string,
                       @CurrentUser() currentUser: IUser) {
     const unitModel: IUnitModel = await Unit.findById(id);
+    if (!unitModel) { throw new NotFoundError(); }
     const course = await Course.findById(unitModel._course);
     await DuplicationController.assertUserDuplicationAuthorization(currentUser, course);
     const targetCourse = await Course.findOne({lectures: targetLectureId});
+    if (!targetCourse) { throw new NotFoundError(errorCodes.duplication.targetNotFound.text); }
     await DuplicationController.assertUserDuplicationAuthorization(currentUser, targetCourse);
     const targetCourseId = extractSingleMongoId(targetCourse);
 
