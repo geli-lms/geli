@@ -4,7 +4,7 @@ import {TestHelper} from '../TestHelper';
 import {FixtureUtils} from '../../fixtures/FixtureUtils';
 import {Course} from '../../src/models/Course';
 import {ICourse} from '../../../shared/models/ICourse';
-import {User} from '../../src/models/User';
+import {User, IUserModel} from '../../src/models/User';
 import {Lecture} from '../../src/models/Lecture';
 import {ILecture} from '../../../shared/models/ILecture';
 import {IUnit} from '../../../shared/models/units/IUnit';
@@ -167,6 +167,24 @@ describe('Export', async () => {
       const {course, unauthorizedTeacher} = await exportAccessDenialSetup();
       const result = await testHelper.commonUserGetRequest(unauthorizedTeacher, `/course/${course._id}`);
       result.status.should.be.equal(403);
+    });
+
+    it('should respond with 404 for a unit id that doesn\'t exist', async () => {
+      const admin = await FixtureUtils.getRandomAdmin();
+      const result = await testHelper.commonUserGetRequest(admin, '/unit/000000000000000000000000');
+      result.status.should.be.equal(404);
+    });
+
+    it('should respond with 404 for a lecture id that doesn\'t exist', async () => {
+      const admin = await FixtureUtils.getRandomAdmin();
+      const result = await testHelper.commonUserGetRequest(admin, '/lecture/000000000000000000000000');
+      result.status.should.be.equal(404);
+    });
+
+    it('should respond with 404 for a course id that doesn\'t exist', async () => {
+      const admin = await FixtureUtils.getRandomAdmin();
+      const result = await testHelper.commonUserGetRequest(admin, '/course/000000000000000000000000');
+      result.status.should.be.equal(404);
     });
   });
 
