@@ -1,10 +1,10 @@
-import {FixtureLoader} from '../../fixtures/FixtureLoader';
-import {Server} from '../../src/server';
+import * as chai from 'chai';
+import chaiHttp = require('chai-http');
+import {TestHelper} from '../TestHelper';
 import {FixtureUtils} from '../../fixtures/FixtureUtils';
 import {Course} from '../../src/models/Course';
 import {ICourse} from '../../../shared/models/ICourse';
 import {User} from '../../src/models/User';
-import {JwtUtils} from '../../src/security/JwtUtils';
 import {Lecture} from '../../src/models/Lecture';
 import {ILecture} from '../../../shared/models/ILecture';
 import {IUnit} from '../../../shared/models/units/IUnit';
@@ -20,21 +20,15 @@ import {API_NOTIFICATION_TYPE_ALL_CHANGES, NotificationSettings} from '../../src
 import {Notification} from '../../src/models/Notification';
 import {WhitelistUser} from '../../src/models/WhitelistUser';
 
-import chai = require('chai');
-import chaiHttp = require('chai-http');
-
 chai.use(chaiHttp);
 const should = chai.should();
 const expect = chai.expect;
-
-const app = new Server().app;
 const BASE_URL = '/api/export';
-const fixtureLoader = new FixtureLoader();
+const testHelper = new TestHelper(BASE_URL);
 
 describe('Export', async () => {
-  // Before each test we reset the database
   beforeEach(async () => {
-    await fixtureLoader.load();
+    await testHelper.resetForNextTest();
   });
 
   describe(`GET ${BASE_URL}`, async () => {
@@ -43,10 +37,7 @@ describe('Export', async () => {
       const units = await Unit.find();
       for (const unit of units) {
         let unitJson: IUnit;
-        const exportResult = await chai.request(app)
-          .get(`${BASE_URL}/unit/${unit._id}`)
-          .set('Cookie', `token=${JwtUtils.generateToken(admin)}`)
-          .catch((err) => err.response);
+        const exportResult = await testHelper.commonUserGetRequest(admin, `/unit/${unit._id}`);
         exportResult.status.should.be.equal(200, 'failed to export ' + unit.name);
         unitJson = exportResult.body;
         should.not.exist(exportResult.body.createdAt);
@@ -108,10 +99,7 @@ describe('Export', async () => {
       const lectures = await Lecture.find();
       for (const lecture of lectures) {
         let lectureJson: ILecture;
-        const exportResult = await chai.request(app)
-          .get(`${BASE_URL}/lecture/${lecture._id}`)
-          .set('Cookie', `token=${JwtUtils.generateToken(admin)}`)
-          .catch((err) => err.response);
+        const exportResult = await testHelper.commonUserGetRequest(admin, `/lecture/${lecture._id}`);
         exportResult.status.should.be.equal(200, 'failed to export ' + lecture.name);
         lectureJson = exportResult.body;
         should.not.exist(exportResult.body.createdAt);
@@ -130,10 +118,7 @@ describe('Export', async () => {
         const teacher = await User.findById(course.courseAdmin);
 
         let courseJson: ICourse;
-        const exportResult = await chai.request(app)
-          .get(`${BASE_URL}/course/${course._id}`)
-          .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
-          .catch((err) => err.response);
+        const exportResult = await testHelper.commonUserGetRequest(teacher, `/course/${course._id}`);
         exportResult.status.should.be.equal(200, 'failed to export ' + course.name);
         courseJson = exportResult.body;
         should.not.exist(exportResult.body.createdAt);
@@ -190,34 +175,20 @@ describe('Export', async () => {
         courseId: course1._id
       }).save();
 
-      const result = await chai.request(app)
-        .get(`${BASE_URL}/user`)
-        .set('Cookie', `token=${JwtUtils.generateToken(student)}`)
-        .catch((err) => err.response);
-
+      const result = await testHelper.commonUserGetRequest(student, `/user`);
       expect(result).to.have.status(200);
     });
 
     it('should export teacher data', async () => {
       const teacher = await FixtureUtils.getRandomTeacher();
-
-      const result = await chai.request(app)
-        .get(`${BASE_URL}/user`)
-        .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
-        .catch((err) => err.response);
-
+      const result = await testHelper.commonUserGetRequest(teacher, `/user`);
       expect(result).to.have.status(200);
     });
 
 
     it('should export admin data', async () => {
       const admin = await FixtureUtils.getRandomAdmin();
-
-      const result = await chai.request(app)
-        .get(`${BASE_URL}/user`)
-        .set('Cookie', `token=${JwtUtils.generateToken(admin)}`)
-        .catch((err) => err.response);
-
+      const result = await testHelper.commonUserGetRequest(admin, `/user`);
       expect(result).to.have.status(200);
     });
   });
