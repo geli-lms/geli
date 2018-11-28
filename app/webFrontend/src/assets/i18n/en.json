@@ -167,7 +167,8 @@
       "accessKey": "Access key",
       "description": "Course description",
       "name": "Course name",
-      "searchAndAdd": "Search and add user by name, Id or e-mail"
+      "searchAndAdd": "Search and add user by name, Id or e-mail",
+      "freeTextTheme": "Theme for free text"
     },
     "ShowCourse": "Show course",
     "text": {
@@ -200,6 +201,13 @@
         "free": "Free",
         "accesskey": "Accesskey",
         "whitelist": "Whitelist"
+      },
+      "selectFreeTextTheme": {
+        "": "Default",
+        "theme1": "Theme 1",
+        "theme2": "Theme 2",
+        "theme3": "Theme 3",
+        "theme4": "Theme 4"
       },
       "uploadWhitelist": "Upload your OBS csv file with your course members for whitelisting students. Old whitelist users are removed by uploading a new file.",
       "userResults": "User results",
