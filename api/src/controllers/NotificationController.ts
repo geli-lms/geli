@@ -87,6 +87,10 @@ export class NotificationController {
   }
 
   async shouldCreateNotification(user: IUser, changedCourse: ICourse, changedUnit: IUnit = null) {
+    if (!changedCourse && !changedUnit) {
+      // The notificaiton does not depend on any unit/course. We can create a notification.
+      return true;
+    }
     if (!changedUnit) {
       return (await Notification.count({'user': user._id, 'changedCourse': changedCourse._id})) === 0;
     }
