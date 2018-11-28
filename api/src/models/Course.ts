@@ -16,7 +16,6 @@ import {Picture} from './mediaManager/File';
 
 
 export interface ICourseUserPrivileges extends IUserPrivileges {
-  userIsAdmin: boolean;
   courseAdminId: string;
   userIsCourseAdmin: boolean;
   userIsCourseTeacher: boolean;
