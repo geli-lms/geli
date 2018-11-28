@@ -149,6 +149,15 @@ export class FixtureUtils {
     return Unit.findById(unitId);
   }
 
+  public static async getRandomUnitFromCourse(course: ICourse, hash?: string): Promise<IUnit> {
+    let units: Array<IUnit> = [];
+    for (const lecture of course.lectures) {
+      units = units.concat(lecture.units);
+    }
+    const unitId = await this.getRandom<IUnit>(units, hash);
+    return Unit.findById(unitId);
+  }
+
   /**
    * Provides simple shared setup functionality currently used by multiple chat system unit tests.
    *
@@ -160,15 +169,6 @@ export class FixtureUtils {
     const room = await FixtureUtils.getRandom<IChatRoom>(course.chatRooms, hash);
     const roomId = extractSingleMongoId(room);
     return {course, roomId};
-  }
-
-  public static async getRandomUnitFromCourse(course: ICourse, hash?: string): Promise<IUnit> {
-    let units: Array<IUnit> = [];
-    for (const lecture of course.lectures) {
-      units = units.concat(lecture.units);
-    }
-    const unitId = await this.getRandom<IUnit>(units, hash);
-    return Unit.findById(unitId);
   }
 
   private static async getAdmins(): Promise<IUser[]> {
