@@ -1,6 +1,6 @@
 import {
   Body, Get, Put, Delete, Param, JsonController, UseBefore, NotFoundError, BadRequestError, Post,
-  Authorized, CurrentUser, UploadedFile, Res
+  Authorized, CurrentUser, UploadedFile, Res, UploadedFiles, InternalServerError
 } from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 
@@ -256,8 +256,6 @@ export class UnitController {
    * @apiGroup Unit
    * @apiPermission student
    *
-   * @apiParam {Object} file Uploaded file.
-   *
    * @apiSuccess {boolean} success.
    *
    * @apiSuccessExample {json} Success-Response:
@@ -274,7 +272,6 @@ export class UnitController {
    *         "__v": 0
    *     }
    *
-   * @apiError BadRequestError Invalid combination of file upload and unit data.
    * @apiError BadRequestError No lecture ID was submitted.
    * @apiError BadRequestError No unit was submitted.
    * @apiError BadRequestError Unit has no _course set.
@@ -284,39 +281,32 @@ export class UnitController {
   @Authorized(['student'])
   @Post('/:id/assignment')
   async addAssignment(@Param('id') id: string,
-                      @UploadedFile('file', {options: uploadOptions}) uploadedFile: any,
                       @CurrentUser() currentUser: IUser) {
 
     const assignmentUnit = <IAssignmentUnitModel> await Unit.findById(id);
     // Check Params file etc
 
+    console.log({ assignmentUnit });
     if (!assignmentUnit) {
       throw new NotFoundError();
     }
 
-    for (const assignment of assignmentUnit.assignments) {
-      if (assignment.user._id.toString() === currentUser._id) {
-        throw new BadRequestError();
-      }
+    let assignment: IAssignment = assignmentUnit.assignments.find(submittedAssignment => {
+      return submittedAssignment.user._id.toString() === currentUser._id;
+    });
+
+    if (!!assignment) {
+      // The user has already created an assignment. We cannot create another one.
+      throw new BadRequestError();
     }
 
-
     try {
-      const file: IFile = new File({
-        name: uploadedFile.originalname,
-        physicalPath: uploadedFile.path,
-        link: uploadedFile.filename,
-        size: uploadedFile.size,
-        mimeType: uploadedFile.mimetype,
-      });
-
-      const savedFile = await new File(file).save();
-
       const assignment: IAssignment = {
-        file: savedFile._id,
+        files: [ ],
         user: currentUser._id,
         submitted: false,
         checked: -1,
+        submittedDate: new Date()
       };
 
       assignmentUnit.assignments.push(assignment);
@@ -327,6 +317,66 @@ export class UnitController {
       throw new BadRequestError(err);
     }
   }
+
+
+  /**
+   * Is called when the user wants to add a file to the assignment.
+   * The user can add as much file as she wants as long as the assignment is not finalized/submitted yet.
+   *
+   * @param unitId
+   * @param uploadedFile
+   * @param currentUser
+   *
+   *
+   * @apiError NotFoundError The unit was not found or there isn't an assignment from the current user in the unit.
+   */
+  @Authorized(['student'])
+  @Put('/:id/assignment/files')
+  async addFileToAssignment(@Param('id') unitId: string,
+                            @UploadedFile('file', {options: uploadOptions}) uploadedFile: any,
+                            @CurrentUser() currentUser: IUser ) {
+
+    const assignmentUnit = <IAssignmentUnitModel> await Unit.findById(unitId);
+
+    if (!assignmentUnit) {
+      throw new NotFoundError();
+    }
+
+    let assignment = assignmentUnit.assignments.find(submittedAssignment => {
+      return submittedAssignment.user._id.toString() === currentUser._id;
+    });
+    if (!assignment) {
+      throw new NotFoundError();
+    }
+
+    // The user already submitted/finalized the assignment.
+    if (assignment.submitted) {
+      throw new BadRequestError();
+    }
+
+    const fileMetadata: IFile = new File({
+      name: uploadedFile.originalname,
+      physicalPath: uploadedFile.path,
+      link: uploadedFile.filename,
+      size: uploadedFile.size,
+      mimeType: uploadedFile.mimetype,
+    });
+
+    try {
+      const file = await new File(fileMetadata).save();
+      if (!assignment.files) {
+        assignment.files = [ ];
+      }
+
+      assignment.files.push(file._id);
+      await assignmentUnit.save();
+
+      return true;
+    } catch (error) {
+      throw new InternalServerError(error.message);
+    }
+  }
+
 
   /**
    * @api {put} /api/units/:id/assignment Update assignment
@@ -364,54 +414,50 @@ export class UnitController {
   async updateAssignment(@Param('id') id: string, @Body() data: IAssignment, @CurrentUser() currentUser: IUser) {
 
     const assignmentUnit = <IAssignmentUnitModel> await Unit.findById(id);
-
-    /**
-     * Simple workaround if user_id is not set. For some reason is the data.user._id not set if a student commits
-     * an assignment...
-     */
     const dataUserId = !data.user._id ? '' : data.user._id;
 
     if (!assignmentUnit) {
       throw new NotFoundError();
     }
 
-    for (const assignment of assignmentUnit.assignments) {
+    let assignment: IAssignment = null;
 
-      if ((assignment.user._id.toString() === currentUser._id && currentUser.role === 'student') ||
-        (assignment.user._id.toString() === dataUserId.toString() &&
-          (assignment.user._id.toString() === currentUser._id || currentUser.role === 'teacher' || currentUser.role === 'admin'))) {
-
-        const index = assignmentUnit.assignments.indexOf(assignment);
-
-        assignmentUnit.assignments[index].submitted = data.submitted;
-
-        if (currentUser.role === 'teacher' || currentUser.role === 'admin') {
-          assignmentUnit.assignments[index].checked = data.checked;
-        }
-
-        try {
-          await assignmentUnit.save();
-
-          const progress: IProgress = new Progress({
-            course: assignmentUnit._course._id,
-            unit: assignmentUnit._id,
-            user: currentUser._id,
-            done: false,
-          });
-
-          await new Progress(progress).save();
-        } catch (err) {
-          if (err.name === 'ValidationError') {
-            throw err;
-          } else {
-            throw new BadRequestError(err);
-          }
-        }
-        return true;
+    // The current user updates an assignment of a student.
+    if (currentUser.role === 'teacher' || currentUser.role === 'admin') {
+      if (!data.user._id) {
+        throw new BadRequestError();
       }
+
+      assignment = assignmentUnit.assignments.find(
+        submittedAssignment => submittedAssignment.user._id === data.user._id
+      );
+
+      assignment.checked = data.checked;
+
+    } else {
+      // A student updates her own assignment.
+
+      // We can just retrieve the assignment where the author is the current user, as an user can
+      // only have one assignment.
+      assignment = assignmentUnit.assignments.find(
+        submittedAssignment => submittedAssignment.user._id === currentUser._id
+      );
+
+      // Update the submitted state of the assignment.
+      // TODO: don't allow changing submitted state if the assignment has already been submitted.
+      assignment.submitted = data.submitted;
     }
 
-    throw new NotFoundError();
+    try {
+      await assignmentUnit.save();
+    } catch (err) {
+      if (err.name === 'ValidationError') {
+        throw err;
+      } else {
+        throw new BadRequestError(err);
+      }
+    }
+    return true;
   }
 
   /**
@@ -502,7 +548,9 @@ export class UnitController {
       archive.pipe(output);
 
       for (const assignment of assignmentUnit.assignments) {
-        const file = await File.findById(assignment.file);
+        if (!assignment.files.length) continue;
+
+        const file = await File.findById(assignment.files[0]);
         console.log(assignment);
         const user = await User.findById(assignment.user);
         archive.file('uploads/' + file.link,

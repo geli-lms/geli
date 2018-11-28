@@ -2,9 +2,10 @@ import {IUser} from "../IUser";
 import {IFile} from "../IFile";
 
 export interface IAssignment {
-    file: IFile;
+    files: any[];
     user: IUser;
     submitted: boolean;
+    submittedDate: Date;
     checked: Number;
 }
 

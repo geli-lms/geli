@@ -296,6 +296,11 @@ export class AssignmentService extends DataService {
     super('units/', backendService);
   }
 
+  createAssignment(unitId: string): Promise<any> {
+    return this.backendService.post(this.apiPath + unitId + '/assignment', null)
+      .toPromise();
+  }
+
   updateAssignment(assignment: IAssignment, unitId: string): Promise<any[]> {
     return new Promise((resolve, reject) => {
       this.backendService.put(this.apiPath + unitId + '/assignment', assignment)
