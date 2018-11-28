@@ -167,7 +167,6 @@ describe('Export', async () => {
         text: 'blubba blubba'
       }).save();
 
-
       await new WhitelistUser({
         firstName: student.profile.firstName,
         lastName: student.profile.lastName,
@@ -184,7 +183,6 @@ describe('Export', async () => {
       const result = await testHelper.commonUserGetRequest(teacher, `/user`);
       expect(result).to.have.status(200);
     });
-
 
     it('should export admin data', async () => {
       const admin = await FixtureUtils.getRandomAdmin();
