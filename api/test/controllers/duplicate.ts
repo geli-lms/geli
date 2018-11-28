@@ -7,7 +7,6 @@ import {ILecture} from '../../../shared/models/ILecture';
 import {IUnit} from '../../../shared/models/units/IUnit';
 import * as util from 'util';
 import {Course} from '../../src/models/Course';
-import {User} from '../../src/models/User';
 import {IUser} from '../../../shared/models/IUser';
 import {ICodeKataModel} from '../../src/models/units/CodeKataUnit';
 import {IFreeTextUnit} from '../../../shared/models/units/IFreeTextUnit';
@@ -229,6 +228,40 @@ describe('Duplicate', async () => {
       const course = await FixtureUtils.getCourseFromLecture(lecture);
       const {teacher, targetCourse} = await prepareOtherTargetCourseSetFor(course);
       await testForbidden(teacher, `/lecture/${lecture._id}`, {courseId: targetCourse._id});
+    });
+
+    it('should respond with 404 for a unit id that doesn\'t exist', async () => {
+      const admin = await FixtureUtils.getRandomAdmin();
+      const targetLecture = await FixtureUtils.getRandomLecture();
+      const result = await testHelper.commonUserPostRequest(admin, '/unit/000000000000000000000000', {lectureId: targetLecture._id});
+      result.status.should.be.equal(404);
+    });
+
+    it('should respond with 404 for a lecture id that doesn\'t exist', async () => {
+      const admin = await FixtureUtils.getRandomAdmin();
+      const targetCourse = await FixtureUtils.getRandomCourse();
+      const result = await testHelper.commonUserPostRequest(admin, '/lecture/000000000000000000000000', {courseId: targetCourse._id});
+      result.status.should.be.equal(404);
+    });
+
+    it('should respond with 404 for a course id that doesn\'t exist', async () => {
+      const admin = await FixtureUtils.getRandomAdmin();
+      const result = await testHelper.commonUserPostRequest(admin, '/course/000000000000000000000000');
+      result.status.should.be.equal(404);
+    });
+
+    it('should respond with 404 for a target lecture id that doesn\'t exist (unit duplication)', async () => {
+      const admin = await FixtureUtils.getRandomAdmin();
+      const unit = await FixtureUtils.getRandomUnit();
+      const result = await testHelper.commonUserPostRequest(admin, `/unit/${unit._id}`, {lectureId: '000000000000000000000000'});
+      result.status.should.be.equal(404);
+    });
+
+    it('should respond with 404 for a target course id that doesn\'t exist (lecture duplication)', async () => {
+      const admin = await FixtureUtils.getRandomAdmin();
+      const lecture = await FixtureUtils.getRandomLecture();
+      const result = await testHelper.commonUserPostRequest(admin, `/lecture/${lecture._id}`, {courseId: '000000000000000000000000'});
+      result.status.should.be.equal(404);
     });
   });
 });
