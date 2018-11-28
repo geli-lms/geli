@@ -107,7 +107,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Migration for `visible` field. [#890](https://github.com/geli-lms/geli/pull/890)
 - Migration for `fileUnitType` field. [#907](https://github.com/geli-lms/geli/pull/907)
 - Fixed error on clicking on notification. [#916](https://github.com/geli-lms/geli/issues/916)
-- A collapse/expand button to units [#868](https://github.com/geli-lms/geli/issues/868)
+- A collapse/expand button to units. [#868](https://github.com/geli-lms/geli/issues/868)
 
 
 ### Changed
@@ -130,7 +130,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Update `README.md` with latest information. [#845](https://github.com/geli-lms/geli/pull/845)
 - Exit build when no change to `CHANGELOG.md`. [#880](https://github.com/geli-lms/geli/pull/880)
 - Use deploy token to push geli-docs. [#851](https://github.com/geli-lms/geli/issues/851), [#900](https://github.com/geli-lms/geli/pull/900), [#902](https://github.com/geli-lms/geli/pull/902)
-- Responsiveness of course overview [#837](https://github.com/geli-lms/geli/issues/837)
+- Responsiveness of course overview. [#837](https://github.com/geli-lms/geli/issues/837)
 - Adjust `CHANGELOG.md` for next release. [#879](https://github.com/geli-lms/geli/pull/879), [#928](https://github.com/geli-lms/geli/pull/928)
 - Exclude pull requests from dependabot from changelog check. [#854](https://github.com/geli-lms/geli/pull/854)
 
