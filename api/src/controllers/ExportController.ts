@@ -99,8 +99,12 @@ export class ExportController {
    *     }
    */
   @Get('/unit/:id')
-  async exportUnit(@Param('id') id: string) {
+  async exportUnit(@Param('id') id: string, @CurrentUser() currentUser: IUser) {
     const unit = await Unit.findById(id);
+    const course = await Course.findById(unit._course);
+    if (!course.checkPrivileges(currentUser).userCanEditCourse) {
+      throw new ForbiddenError();
+    }
     return unit.exportJSON();
   }
 
