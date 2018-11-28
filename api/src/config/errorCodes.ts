@@ -14,18 +14,6 @@ export const errorCodes = {
     }
   },
   duplication: {
-    courseDuplicationFailed: {
-      code: 'Course duplication failed',
-      text: 'Failed to duplicate course',
-    },
-    lectureDuplicationFailed: {
-      code: 'Lecture duplication failed',
-      text: 'Failed to duplicate lecture',
-    },
-    unitDuplicationFailed: {
-      code: 'Unit duplication failed',
-      text: 'Failed to duplicate unit',
-    },
     targetNotFound: {
       code: 'Target notfound',
       text: 'The specified duplication target could not be found',
