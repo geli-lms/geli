@@ -134,6 +134,38 @@ describe('Export', async () => {
         courseJson.lectures.should.be.instanceOf(Array).and.have.lengthOf(course.lectures.length);
       }
     });
+
+    it('should forbid unit export for an unauthorized teacher', async () => {
+      const course = await FixtureUtils.getRandomCourse();
+      const unit = await FixtureUtils.getRandomUnitFromCourse(course);
+      const unauthorizedTeacher = await User.findOne({
+        _id: {$nin: [course.courseAdmin, ...course.teachers]},
+        role: 'teacher'
+      });
+      const result = await testHelper.commonUserGetRequest(unauthorizedTeacher, `/unit/${unit._id}`);
+      result.status.should.be.equal(403);
+    });
+
+    it('should forbid lecture export for an unauthorized teacher', async () => {
+      const course = await FixtureUtils.getRandomCourse();
+      const lecture = await FixtureUtils.getRandomLectureFromCourse(course);
+      const unauthorizedTeacher = await User.findOne({
+        _id: {$nin: [course.courseAdmin, ...course.teachers]},
+        role: 'teacher'
+      });
+      const result = await testHelper.commonUserGetRequest(unauthorizedTeacher, `/lecture/${lecture._id}`);
+      result.status.should.be.equal(403);
+    });
+
+    it('should forbid course export for an unauthorized teacher', async () => {
+      const course = await FixtureUtils.getRandomCourse();
+      const unauthorizedTeacher = await User.findOne({
+        _id: {$nin: [course.courseAdmin, ...course.teachers]},
+        role: 'teacher'
+      });
+      const result = await testHelper.commonUserGetRequest(unauthorizedTeacher, `/course/${course._id}`);
+      result.status.should.be.equal(403);
+    });
   });
 
   describe(`GET ${BASE_URL}/user`, async () => {
