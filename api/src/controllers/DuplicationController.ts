@@ -76,7 +76,7 @@ export class DuplicationController {
    * @apiPermission admin
    *
    * @apiParam {String} id Lecture ID.
-   * @apiParam {Object} data Lecture data (with courseId).
+   * @apiParam {Object} data Object with target courseId (the lecture duplicate will be attached to this course).
    *
    * @apiSuccess {Lecture} lecture Duplicated lecture ID.
    *
