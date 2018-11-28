@@ -47,8 +47,6 @@ export class DuplicationController {
    *     {
    *         "_id": "5ab19c382ac32e46dcaa1574"
    *     }
-   *
-   * @apiError InternalServerError Failed to duplicate course
    */
   @Post('/course/:id')
   async duplicateCourse(@Param('id') id: string,
@@ -83,8 +81,6 @@ export class DuplicationController {
    *     {
    *         "_id": "5ab1a218dab93c34f8541e25"
    *     }
-   *
-   * @apiError InternalServerError Failed to duplicate lecture
    */
   @Post('/lecture/:id')
   async duplicateLecture(@Param('id') id: string,
@@ -119,8 +115,6 @@ export class DuplicationController {
    *     {
    *         "_id": "5ab1a380f5bbeb423070d787"
    *     }
-   *
-   * @apiError InternalServerError Failed to duplicate unit
    */
   @Post('/unit/:id')
   async duplicateUnit(@Param('id') id: string,
