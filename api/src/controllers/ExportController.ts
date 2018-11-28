@@ -48,6 +48,9 @@ export class ExportController {
    *         }],
    *         "hasAccessKey": false
    *     }
+   *
+   * @apiError NotFoundError If the course couldn't be found.
+   * @apiError ForbiddenError assertUserExportAuthorization check.
    */
   @Get('/course/:id')
   async exportCourse(@Param('id') id: string, @CurrentUser() currentUser: IUser) {
@@ -76,6 +79,9 @@ export class ExportController {
    *         "description": "Some lecture desc",
    *         "units": []
    *     }
+   *
+   * @apiError NotFoundError If the lecture couldn't be found.
+   * @apiError ForbiddenError assertUserExportAuthorization check.
    */
   @Get('/lecture/:id')
   async exportLecture(@Param('id') id: string, @CurrentUser() currentUser: IUser) {
@@ -108,6 +114,9 @@ export class ExportController {
    *         "markdown": "Welcome, this is the start",
    *         "__t": "free-text"
    *     }
+   *
+   * @apiError NotFoundError If the unit couldn't be found.
+   * @apiError ForbiddenError assertUserExportAuthorization check.
    */
   @Get('/unit/:id')
   async exportUnit(@Param('id') id: string, @CurrentUser() currentUser: IUser) {
