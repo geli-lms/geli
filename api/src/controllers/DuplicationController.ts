@@ -47,6 +47,9 @@ export class DuplicationController {
    *     {
    *         "_id": "5ab19c382ac32e46dcaa1574"
    *     }
+   *
+   * @apiError NotFoundError If the course couldn't be found.
+   * @apiError ForbiddenError assertUserDuplicationAuthorization check failed.
    */
   @Post('/course/:id')
   async duplicateCourse(@Param('id') id: string,
@@ -81,6 +84,9 @@ export class DuplicationController {
    *     {
    *         "_id": "5ab1a218dab93c34f8541e25"
    *     }
+   *
+   * @apiError NotFoundError If the lecture or the target courseId couldn't be found.
+   * @apiError ForbiddenError assertUserDuplicationAuthorization check failed.
    */
   @Post('/lecture/:id')
   async duplicateLecture(@Param('id') id: string,
@@ -115,6 +121,9 @@ export class DuplicationController {
    *     {
    *         "_id": "5ab1a380f5bbeb423070d787"
    *     }
+   *
+   * @apiError NotFoundError If the unit or the target lectureId couldn't be found.
+   * @apiError ForbiddenError assertUserDuplicationAuthorization check failed.
    */
   @Post('/unit/:id')
   async duplicateUnit(@Param('id') id: string,
