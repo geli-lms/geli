@@ -1,6 +1,6 @@
 import {Authorized, CurrentUser, Get, JsonController, Param, UseBefore, ForbiddenError} from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
-import {Course} from '../models/Course';
+import {Course, ICourseModel} from '../models/Course';
 import {Lecture} from '../models/Lecture';
 import {Unit} from '../models/units/Unit';
 import {IUser} from '../../../shared/models/IUser';
@@ -15,6 +15,12 @@ import {Message} from '../models/Message';
 @UseBefore(passportJwtMiddleware)
 @Authorized(['teacher', 'admin'])
 export class ExportController {
+
+  private static assertUserExportAuthorization(user: IUser, course: ICourseModel) {
+    if (!course.checkPrivileges(user).userCanEditCourse) {
+      throw new ForbiddenError();
+    }
+  }
 
   /**
    * @api {get} /api/export/course/:id Export course
@@ -43,9 +49,7 @@ export class ExportController {
   @Get('/course/:id')
   async exportCourse(@Param('id') id: string, @CurrentUser() currentUser: IUser) {
     const course = await Course.findById(id);
-    if (!course.checkPrivileges(currentUser).userCanEditCourse) {
-      throw new ForbiddenError();
-    }
+    ExportController.assertUserExportAuthorization(currentUser, course);
     return course.exportJSON();
   }
 
@@ -70,9 +74,7 @@ export class ExportController {
   @Get('/lecture/:id')
   async exportLecture(@Param('id') id: string, @CurrentUser() currentUser: IUser) {
     const course = await Course.findOne({lectures: id});
-    if (!course.checkPrivileges(currentUser).userCanEditCourse) {
-      throw new ForbiddenError();
-    }
+    ExportController.assertUserExportAuthorization(currentUser, course);
     const lecture = await Lecture.findById(id);
     return lecture.exportJSON();
   }
@@ -102,9 +104,7 @@ export class ExportController {
   async exportUnit(@Param('id') id: string, @CurrentUser() currentUser: IUser) {
     const unit = await Unit.findById(id);
     const course = await Course.findById(unit._course);
-    if (!course.checkPrivileges(currentUser).userCanEditCourse) {
-      throw new ForbiddenError();
-    }
+    ExportController.assertUserExportAuthorization(currentUser, course);
     return unit.exportJSON();
   }
 
