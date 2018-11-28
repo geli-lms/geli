@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - `DuplicationController` access denial unit tests. [#1016](https://github.com/geli-lms/geli/issues/1016)
 - `ExportController` access denial unit tests. [#1039](https://github.com/geli-lms/geli/issues/1039)
 - `ExportController` 404 unit tests. [#1039](https://github.com/geli-lms/geli/issues/1039)
+- `DuplicationController` 404 unit tests. [#1039](https://github.com/geli-lms/geli/issues/1039)
 - `TestHelper` class for shared API unit test functionality. [#989](https://github.com/geli-lms/geli/issues/989) [#1016](https://github.com/geli-lms/geli/issues/1016)
 - `extractSingleMongoId` variant of the `ExtractMongoId` utility function(s). [#989](https://github.com/geli-lms/geli/issues/989)
 - Show message count for unit chat. [#933](https://github.com/geli-lms/geli/issues/993)
@@ -41,6 +42,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Unnecessarily verbose `DuplicationController` route responses. [#1016](https://github.com/geli-lms/geli/issues/1016)
 - Prepare mongoose update. [#1003](https://github.com/geli-lms/geli/issues/1003) [#1027](https://github.com/geli-lms/geli/pull/1027)
 - `ExportController` missing 404 handling. [#1039](https://github.com/geli-lms/geli/issues/1039)
+- `DuplicationController` missing 404 handling. [#1039](https://github.com/geli-lms/geli/issues/1039)
 
 ### Security
 - Fixed multiple severe security issues of the chat system. [#989](https://github.com/geli-lms/geli/issues/989)
