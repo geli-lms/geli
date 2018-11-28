@@ -26,6 +26,20 @@ const expect = chai.expect;
 const BASE_URL = '/api/export';
 const testHelper = new TestHelper(BASE_URL);
 
+/**
+ * Provides simple shared setup functionality used by the export access denial unit tests.
+ *
+ * @returns A course and an unauthorizedTeacher (i.e. a teacher that isn't part of the course).
+ */
+async function exportAccessDenialSetup() {
+  const course = await FixtureUtils.getRandomCourse();
+  const unauthorizedTeacher = await User.findOne({
+    _id: {$nin: [course.courseAdmin, ...course.teachers]},
+    role: 'teacher'
+  });
+  return {course, unauthorizedTeacher};
+}
+
 describe('Export', async () => {
   beforeEach(async () => {
     await testHelper.resetForNextTest();
@@ -136,33 +150,21 @@ describe('Export', async () => {
     });
 
     it('should forbid unit export for an unauthorized teacher', async () => {
-      const course = await FixtureUtils.getRandomCourse();
+      const {course, unauthorizedTeacher} = await exportAccessDenialSetup();
       const unit = await FixtureUtils.getRandomUnitFromCourse(course);
-      const unauthorizedTeacher = await User.findOne({
-        _id: {$nin: [course.courseAdmin, ...course.teachers]},
-        role: 'teacher'
-      });
       const result = await testHelper.commonUserGetRequest(unauthorizedTeacher, `/unit/${unit._id}`);
       result.status.should.be.equal(403);
     });
 
     it('should forbid lecture export for an unauthorized teacher', async () => {
-      const course = await FixtureUtils.getRandomCourse();
+      const {course, unauthorizedTeacher} = await exportAccessDenialSetup();
       const lecture = await FixtureUtils.getRandomLectureFromCourse(course);
-      const unauthorizedTeacher = await User.findOne({
-        _id: {$nin: [course.courseAdmin, ...course.teachers]},
-        role: 'teacher'
-      });
       const result = await testHelper.commonUserGetRequest(unauthorizedTeacher, `/lecture/${lecture._id}`);
       result.status.should.be.equal(403);
     });
 
     it('should forbid course export for an unauthorized teacher', async () => {
-      const course = await FixtureUtils.getRandomCourse();
-      const unauthorizedTeacher = await User.findOne({
-        _id: {$nin: [course.courseAdmin, ...course.teachers]},
-        role: 'teacher'
-      });
+      const {course, unauthorizedTeacher} = await exportAccessDenialSetup();
       const result = await testHelper.commonUserGetRequest(unauthorizedTeacher, `/course/${course._id}`);
       result.status.should.be.equal(403);
     });
