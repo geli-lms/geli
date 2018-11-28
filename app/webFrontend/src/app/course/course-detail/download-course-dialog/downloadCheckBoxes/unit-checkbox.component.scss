@@ -8,8 +8,8 @@
   margin-left: 3em;
   margin-top: -1em;
 
-  @media screen and (max-width: 475px) {
-    margin-left: 5px;
+  @media screen and (max-width: $bp-width--sm) {
+    margin-left: 0.25em;
 
     &.mat-list-item .mat-list-item-content {
       padding: 0;

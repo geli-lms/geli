@@ -50,7 +50,7 @@
   margin-left: 20px;
 }
 
-@media screen and (max-width: 475px) {
+@media screen and (max-width: $bp-width--sm) {
 
   .mat-card-actions .radio-buttons .radio-button {
     width: 100%;
@@ -59,7 +59,7 @@
 }
 
 .selectAll {
-  @media screen and (max-width: 475px) {
+  @media screen and (max-width: $bp-width--sm) {
 
     &.mat-list-item .mat-list-item-content {
       padding: 0 0 0 16px;
