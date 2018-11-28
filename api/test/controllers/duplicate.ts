@@ -75,6 +75,12 @@ async function testSuccess(user: IUser, urlPostfix = '', sendData: object, error
   return response.body._id;
 }
 
+async function testNotFound(what: string, sendData?: string | object) {
+  const admin = await FixtureUtils.getRandomAdmin();
+  const result = await testHelper.commonUserPostRequest(admin, `/${what}/000000000000000000000000`, sendData);
+  result.status.should.be.equal(404);
+}
+
 describe('Duplicate', async () => {
   beforeEach(async () => {
     await testHelper.resetForNextTest();
@@ -231,37 +237,27 @@ describe('Duplicate', async () => {
     });
 
     it('should respond with 404 for a unit id that doesn\'t exist', async () => {
-      const admin = await FixtureUtils.getRandomAdmin();
       const targetLecture = await FixtureUtils.getRandomLecture();
-      const result = await testHelper.commonUserPostRequest(admin, '/unit/000000000000000000000000', {lectureId: targetLecture._id});
-      result.status.should.be.equal(404);
+      testNotFound('/unit/000000000000000000000000', {lectureId: targetLecture._id});
     });
 
     it('should respond with 404 for a lecture id that doesn\'t exist', async () => {
-      const admin = await FixtureUtils.getRandomAdmin();
       const targetCourse = await FixtureUtils.getRandomCourse();
-      const result = await testHelper.commonUserPostRequest(admin, '/lecture/000000000000000000000000', {courseId: targetCourse._id});
-      result.status.should.be.equal(404);
+      testNotFound('/lecture/000000000000000000000000', {courseId: targetCourse._id});
     });
 
     it('should respond with 404 for a course id that doesn\'t exist', async () => {
-      const admin = await FixtureUtils.getRandomAdmin();
-      const result = await testHelper.commonUserPostRequest(admin, '/course/000000000000000000000000');
-      result.status.should.be.equal(404);
+      testNotFound('/course/000000000000000000000000');
     });
 
     it('should respond with 404 for a target lecture id that doesn\'t exist (unit duplication)', async () => {
-      const admin = await FixtureUtils.getRandomAdmin();
       const unit = await FixtureUtils.getRandomUnit();
-      const result = await testHelper.commonUserPostRequest(admin, `/unit/${unit._id}`, {lectureId: '000000000000000000000000'});
-      result.status.should.be.equal(404);
+      testNotFound(`/unit/${unit._id}`, {lectureId: '000000000000000000000000'});
     });
 
     it('should respond with 404 for a target course id that doesn\'t exist (lecture duplication)', async () => {
-      const admin = await FixtureUtils.getRandomAdmin();
       const lecture = await FixtureUtils.getRandomLecture();
-      const result = await testHelper.commonUserPostRequest(admin, `/lecture/${lecture._id}`, {courseId: '000000000000000000000000'});
-      result.status.should.be.equal(404);
+      testNotFound(`/lecture/${lecture._id}`, {courseId: '000000000000000000000000'});
     });
   });
 });
