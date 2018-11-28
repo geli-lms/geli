@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - Chat system access denial unit tests. [#989](https://github.com/geli-lms/geli/issues/989)
 - `DuplicationController` access denial unit tests. [#1016](https://github.com/geli-lms/geli/issues/1016)
+- `ExportController` access denial unit tests. [#1039](https://github.com/geli-lms/geli/issues/1039)
 - `TestHelper` class for shared API unit test functionality. [#989](https://github.com/geli-lms/geli/issues/989) [#1016](https://github.com/geli-lms/geli/issues/1016)
 - `extractSingleMongoId` variant of the `ExtractMongoId` utility function(s). [#989](https://github.com/geli-lms/geli/issues/989)
 - Show message count for unit chat. [#933](https://github.com/geli-lms/geli/issues/993)
@@ -21,12 +22,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Export PDF with styled free text units. [#997](https://github.com/geli-lms/geli/issues/997)
 - Course-view-navigation for edit-users. [#924](https://github.com/geli-lms/geli/issues/924)
 - Make MongoDB port configurable `DB_PORT`. [#1034](https://github.com/geli-lms/geli/pull/1034)
+- `IUserPrivileges`, `IUserEditPrivileges`, `ICourseUserPrivileges`, i.a. for the `checkPrivileges` methods. [#1039](https://github.com/geli-lms/geli/issues/1039)
 
 ### Changed
 - Update mongoose to 5.2.x. [#1004](https://github.com/geli-lms/geli/pull/1004)
 - Update contributors list. [#1007](https://github.com/geli-lms/geli/issues/1007)
 - Use `terser` instead of `uglify-js`. [#1018](https://github.com/geli-lms/geli/pull/1018)
-- `ExtractMongoId` utility upgrades & streamlining. [#989](https://github.com/geli-lms/geli/issues/989) [#1016](https://github.com/geli-lms/geli/issues/1016)
+- `ExtractMongoId` utility upgrades & streamlining. [#989](https://github.com/geli-lms/geli/issues/989) [#1016](https://github.com/geli-lms/geli/issues/1016) [#1039](https://github.com/geli-lms/geli/issues/1039)
 
 ### Removed
 - Export PDF with styled free text units. [#997](https://github.com/geli-lms/geli/issues/997)
@@ -41,6 +43,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Security
 - Fixed multiple severe security issues of the chat system. [#989](https://github.com/geli-lms/geli/issues/989)
 - Fixed multiple security issues of the three `DuplicationController` routes. [#1016](https://github.com/geli-lms/geli/issues/1016)
+- Fixed missing `teacher` authorization checks in the `ExportController` `course`/`lecture`/`unit` routes. [#1039](https://github.com/geli-lms/geli/issues/1039)
 - Update `node` to latest lts. [#1019](https://github.com/geli-lms/geli/issues/1019)
 
 ## [[0.8.2](https://github.com/geli-lms/geli/releases/tag/v0.8.2)] - 2018-11-08 - WS 18/19 🍪-Release
