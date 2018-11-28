@@ -2,22 +2,33 @@ import {ICourse} from '../../../shared/models/ICourse';
 import {ICourseDashboard} from '../../../shared/models/ICourseDashboard';
 import {ICourseView} from '../../../shared/models/ICourseView';
 import * as mongoose from 'mongoose';
-import {User, IUserModel} from './User';
+import {User, IUserModel, IUserPrivileges} from './User';
 import {ILectureModel, Lecture} from './Lecture';
 import {ILecture} from '../../../shared/models/ILecture';
 import {InternalServerError} from 'routing-controllers';
 import {IUser} from '../../../shared/models/IUser';
 import {ObjectID} from 'bson';
 import {Directory} from './mediaManager/Directory';
-import {IFlags} from '../../../shared/models/IFlags';
 import {extractSingleMongoId} from '../utilities/ExtractMongoId';
 import {ChatRoom, IChatRoomModel} from './ChatRoom';
 
 import {Picture} from './mediaManager/File';
 
+
+export interface ICourseUserPrivileges extends IUserPrivileges {
+  userIsAdmin: boolean;
+  courseAdminId: string;
+  userIsCourseAdmin: boolean;
+  userIsCourseTeacher: boolean;
+  userIsCourseStudent: boolean;
+  userIsCourseMember: boolean;
+  userCanEditCourse: boolean;
+  userCanViewCourse: boolean;
+}
+
 interface ICourseModel extends ICourse, mongoose.Document {
   exportJSON: (sanitize?: boolean, onlyBasicData?: boolean) => Promise<ICourse>;
-  checkPrivileges: (user: IUser) => IFlags;
+  checkPrivileges: (user: IUser) => ICourseUserPrivileges;
   forDashboard: (user: IUser) => ICourseDashboard;
   forView: (user: IUser) => ICourseView;
   populateLecturesFor: (user: IUser) => this;
@@ -276,7 +287,7 @@ courseSchema.statics.changeCourseAdminFromUser = async function (userFrom: IUser
   return Course.updateMany({courseAdmin: userFrom._id}, {courseAdmin: userTo._id});
 };
 
-courseSchema.methods.checkPrivileges = function (user: IUser) {
+courseSchema.methods.checkPrivileges = function (user: IUser): ICourseUserPrivileges {
   const {userIsAdmin, ...userIs} = User.checkPrivileges(user);
   const userId = extractSingleMongoId(user);
 
