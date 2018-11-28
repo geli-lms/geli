@@ -150,12 +150,8 @@ export class FixtureUtils {
   }
 
   public static async getRandomUnitFromCourse(course: ICourse, hash?: string): Promise<IUnit> {
-    let units: Array<IUnit> = [];
-    for (const lecture of course.lectures) {
-      units = units.concat(lecture.units);
-    }
-    const unitId = await this.getRandom<IUnit>(units, hash);
-    return Unit.findById(unitId);
+    const units = await Unit.find({_course: course});
+    return await this.getRandom<IUnit>(units, hash);
   }
 
   /**
