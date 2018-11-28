@@ -29,9 +29,9 @@ const BASE_URL = '/api/duplicate';
 const testHelper = new TestHelper(BASE_URL);
 
 /**
- * Provides simple shared setup functionality currently used by the duplicate access denial unit tests.
+ * Provides simple shared setup functionality used by the duplicate access denial unit tests.
  * It finds a targetCourse (ICourseModel) that doesn't share any of the teachers with the given input course.
- * Then it finds the courseAdmin (IUserModel; assumed to be a teacher) of that targetCourse and returns both.
+ * Then it finds the unauthorizedTeacher, which is simply a random teacher of the targetCourse.
  *
  * @param course The course for which the "unauthorized teacher set" is to be generated.
  * @returns An object with the targetCourse and unauthorizedTeacher.
@@ -42,12 +42,12 @@ async function prepareUnauthorizedTeacherSetFor(course: ICourse) {
     courseAdmin: {$nin: authorizedTeachers},
     teachers: {$nin: authorizedTeachers}
   });
-  const unauthorizedTeacher = await User.findById(targetCourse.courseAdmin);
+  const unauthorizedTeacher = await FixtureUtils.getRandomTeacherForCourse(targetCourse);
   return {targetCourse, unauthorizedTeacher};
 }
 
 /**
- * Provides simple shared setup functionality currently used by the duplicate access denial unit tests.
+ * Provides simple shared setup functionality used by the duplicate access denial unit tests.
  * It first gets a random teacher for the input course.
  * Then it finds a targetCourse (ICourseModel) for that teacher.
  *
