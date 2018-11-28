@@ -30,7 +30,7 @@ describe('DownloadFile', () => {
   async function postValidRequest() {
     const unit = await FixtureUtils.getRandomUnit();
     const lecture = await FixtureUtils.getLectureFromUnit(unit);
-    const course = await FixtureUtils.getCoursesFromLecture(lecture);
+    const course = await FixtureUtils.getCourseFromLecture(lecture);
     const courseAdmin = await User.findById(course.courseAdmin);
     const downloadRequestData: IDownload = {
       courseName: course._id,

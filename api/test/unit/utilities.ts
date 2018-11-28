@@ -36,24 +36,39 @@ describe('Testing utilities', () => {
   describe('ExtractMongoId', () => {
     const idAsObjectId = mongooseTypes.ObjectId();
     const idDirect = {id: idAsObjectId.toHexString()};
+    const idDirect2 = {_id: idAsObjectId.toHexString()};
+    const idAsEmbeddedObjectId = {id: idAsObjectId};
+    const idAsEmbeddedObjectId2 = {_id: idAsObjectId};
     const idString = new String(idDirect.id); // tslint:disable-line
     const idExpect = idDirect.id;
-    const idArray = [idAsObjectId, idDirect, {}, idAsObjectId, idString, 1, idExpect, idDirect];
+    const idArray = [
+      idAsObjectId, idDirect, idDirect2,           // Valid
+      {},                                          // Invalid
+      idAsEmbeddedObjectId, idAsEmbeddedObjectId2, // Valid
+      1,                                           // Invalid
+      idString, idExpect                           // Valid
+    ];
     const fallback = 'fallback';
 
-    it('should extract an id from an ObjectID object', () => {
+    it('should extract an ID from an ObjectID object', () => {
       expect(extractMongoId(idAsObjectId)).to.eq(idExpect);
     });
 
-    it('should extract an id from an object with "id" property', () => {
+    it('should extract an ID from an object with "id" or "_id" string property', () => {
       expect(extractMongoId(idDirect)).to.eq(idExpect);
+      expect(extractMongoId(idDirect2)).to.eq(idExpect);
     });
 
-    it('should return an id String object as string', () => {
+    it('should extract an ID from an object with "id" or "_id" ObjectID property', () => {
+      expect(extractMongoId(idAsEmbeddedObjectId)).to.eq(idExpect);
+      expect(extractMongoId(idAsEmbeddedObjectId2)).to.eq(idExpect);
+    });
+
+    it('should return an ID String object as string', () => {
       expect(extractMongoId(idString)).to.eq(idExpect);
     });
 
-    it('should return an id string unmodified', () => {
+    it('should return an ID string without modifications', () => {
       expect(extractMongoId(idExpect)).to.eq(idExpect);
     });
 
@@ -68,11 +83,17 @@ describe('Testing utilities', () => {
     });
 
     it('should only extract ids for valid objects in an array', () => {
-      expect(extractMongoId(idArray)).to.eql([idExpect, idExpect, idExpect, idExpect, idExpect, idExpect]);
+      expect(extractMongoId(idArray)).to.eql(Array(7).fill(idExpect));
     });
 
-    it('should extract ids for valid objects or return fallback values in an array', () => {
-      expect(extractMongoId(idArray, 'fallback')).to.eql([idExpect, idExpect, fallback, idExpect, idExpect, fallback, idExpect, idExpect]);
+    it('should extract IDs for valid objects or return fallback values in an array', () => {
+      expect(extractMongoId(idArray, fallback)).to.eql([
+        idExpect, idExpect, idExpect, // Valid
+        fallback,                     // Invalid
+        idExpect, idExpect,           // Valid
+        fallback,                     // Invalid
+        idExpect, idExpect            // Valid
+      ]);
     });
   });
 

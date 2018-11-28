@@ -13,6 +13,20 @@ export const errorCodes = {
       text: 'Message parent isn\'t in the same room, invalidating the post',
     }
   },
+  duplication: {
+    courseDuplicationFailed: {
+      code: 'Course duplication failed',
+      text: 'Failed to duplicate course',
+    },
+    lectureDuplicationFailed: {
+      code: 'Lecture duplication failed',
+      text: 'Failed to duplicate lecture',
+    },
+    unitDuplicationFailed: {
+      code: 'Unit duplication failed',
+      text: 'Failed to duplicate unit',
+    }
+  },
   mail: {
     duplicate: {
       code: 'duplicate mail',
