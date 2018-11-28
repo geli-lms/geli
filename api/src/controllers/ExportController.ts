@@ -1,4 +1,7 @@
-import {Authorized, CurrentUser, Get, JsonController, Param, UseBefore, ForbiddenError} from 'routing-controllers';
+import {
+  Authorized, CurrentUser, Get, JsonController, Param, UseBefore,
+  ForbiddenError, NotFoundError
+} from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import {Course, ICourseModel} from '../models/Course';
 import {Lecture} from '../models/Lecture';
@@ -49,6 +52,9 @@ export class ExportController {
   @Get('/course/:id')
   async exportCourse(@Param('id') id: string, @CurrentUser() currentUser: IUser) {
     const course = await Course.findById(id);
+    if (!course) {
+      throw new NotFoundError();
+    }
     ExportController.assertUserExportAuthorization(currentUser, course);
     return course.exportJSON();
   }
@@ -73,9 +79,12 @@ export class ExportController {
    */
   @Get('/lecture/:id')
   async exportLecture(@Param('id') id: string, @CurrentUser() currentUser: IUser) {
+    const lecture = await Lecture.findById(id);
+    if (!lecture) {
+      throw new NotFoundError();
+    }
     const course = await Course.findOne({lectures: id});
     ExportController.assertUserExportAuthorization(currentUser, course);
-    const lecture = await Lecture.findById(id);
     return lecture.exportJSON();
   }
 
@@ -103,6 +112,9 @@ export class ExportController {
   @Get('/unit/:id')
   async exportUnit(@Param('id') id: string, @CurrentUser() currentUser: IUser) {
     const unit = await Unit.findById(id);
+    if (!unit) {
+      throw new NotFoundError();
+    }
     const course = await Course.findById(unit._course);
     ExportController.assertUserExportAuthorization(currentUser, course);
     return unit.exportJSON();
