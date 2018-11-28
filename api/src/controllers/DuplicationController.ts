@@ -1,7 +1,4 @@
-import {
-  BodyParam, Post, Param, JsonController, UseBefore, Authorized, CurrentUser,
-  InternalServerError, ForbiddenError
-} from 'routing-controllers';
+import {BodyParam, Post, Param, JsonController, UseBefore, Authorized, CurrentUser, ForbiddenError} from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import {IUser} from '../../../shared/models/IUser';
 import {IUnit} from '../../../shared/models/units/IUnit';
@@ -12,7 +9,6 @@ import {ILecture} from '../../../shared/models/ILecture';
 import {ICourse} from '../../../shared/models/ICourse';
 import {IDuplicationResponse} from '../../../shared/models/IDuplicationResponse';
 import {extractSingleMongoId} from '../utilities/ExtractMongoId';
-import {errorCodes} from '../config/errorCodes';
 
 
 @JsonController('/duplicate')
