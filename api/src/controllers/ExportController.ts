@@ -1,4 +1,4 @@
-import {Authorized, CurrentUser, Get, JsonController, Param, UseBefore} from 'routing-controllers';
+import {Authorized, CurrentUser, Get, JsonController, Param, UseBefore, ForbiddenError} from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import {Course} from '../models/Course';
 import {Lecture} from '../models/Lecture';
@@ -41,8 +41,11 @@ export class ExportController {
    *     }
    */
   @Get('/course/:id')
-  async exportCourse(@Param('id') id: string) {
+  async exportCourse(@Param('id') id: string, @CurrentUser() currentUser: IUser) {
     const course = await Course.findById(id);
+    if (!course.checkPrivileges(currentUser).userCanEditCourse) {
+      throw new ForbiddenError();
+    }
     return course.exportJSON();
   }
 
