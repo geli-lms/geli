@@ -40,6 +40,12 @@ async function exportAccessDenialSetup() {
   return {course, unauthorizedTeacher};
 }
 
+async function testNotFound(what: string) {
+  const admin = await FixtureUtils.getRandomAdmin();
+  const result = await testHelper.commonUserGetRequest(admin, `/${what}/000000000000000000000000`);
+  result.status.should.be.equal(404);
+}
+
 describe('Export', async () => {
   beforeEach(async () => {
     await testHelper.resetForNextTest();
@@ -169,23 +175,9 @@ describe('Export', async () => {
       result.status.should.be.equal(403);
     });
 
-    it('should respond with 404 for a unit id that doesn\'t exist', async () => {
-      const admin = await FixtureUtils.getRandomAdmin();
-      const result = await testHelper.commonUserGetRequest(admin, '/unit/000000000000000000000000');
-      result.status.should.be.equal(404);
-    });
-
-    it('should respond with 404 for a lecture id that doesn\'t exist', async () => {
-      const admin = await FixtureUtils.getRandomAdmin();
-      const result = await testHelper.commonUserGetRequest(admin, '/lecture/000000000000000000000000');
-      result.status.should.be.equal(404);
-    });
-
-    it('should respond with 404 for a course id that doesn\'t exist', async () => {
-      const admin = await FixtureUtils.getRandomAdmin();
-      const result = await testHelper.commonUserGetRequest(admin, '/course/000000000000000000000000');
-      result.status.should.be.equal(404);
-    });
+    it('should respond with 404 for a unit id that doesn\'t exist', async () => await testNotFound('unit'));
+    it('should respond with 404 for a lecture id that doesn\'t exist', async () => await testNotFound('lecture'));
+    it('should respond with 404 for a course id that doesn\'t exist', async () => await testNotFound('course'));
   });
 
   describe(`GET ${BASE_URL}/user`, async () => {
