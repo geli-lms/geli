@@ -8,7 +8,7 @@ export default {
   baseurl: process.env.BASEURL || 'http://localhost:4200',
 
   // Database connection information
-  database: `mongodb://${process.env.DB_HOST || 'localhost'}:27017/${process.env.DB_NAME || 'geli'}`,
+  database: `mongodb://${process.env.DB_HOST || 'localhost'}:${process.env.DB_PORT || '27017'}/${process.env.DB_NAME || 'geli'}`,
 
   // Setting port for server
   port: process.env.PORT || 3030,
