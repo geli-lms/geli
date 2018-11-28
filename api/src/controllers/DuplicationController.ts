@@ -1,4 +1,7 @@
-import {BodyParam, Post, Param, JsonController, UseBefore, Authorized, CurrentUser, ForbiddenError} from 'routing-controllers';
+import {
+  BodyParam, Post, Param, JsonController, UseBefore, Authorized, CurrentUser,
+  ForbiddenError, NotFoundError
+} from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import {IUser} from '../../../shared/models/IUser';
 import {IUnit} from '../../../shared/models/units/IUnit';
@@ -9,6 +12,7 @@ import {ILecture} from '../../../shared/models/ILecture';
 import {ICourse} from '../../../shared/models/ICourse';
 import {IDuplicationResponse} from '../../../shared/models/IDuplicationResponse';
 import {extractSingleMongoId} from '../utilities/ExtractMongoId';
+import {errorCodes} from '../config/errorCodes';
 
 
 @JsonController('/duplicate')
@@ -51,6 +55,9 @@ export class DuplicationController {
                         @BodyParam('courseAdmin', {required: false}) newCourseAdminId: string,
                         @CurrentUser() currentUser: IUser) {
     const courseModel: ICourseModel = await Course.findById(id);
+    if (!courseModel) {
+      throw new NotFoundError();
+    }
     await DuplicationController.assertUserDuplicationAuthorization(currentUser, courseModel);
 
     // Set the currentUser's id as newCourseAdminId if it wasn't specified by the request.
@@ -86,8 +93,14 @@ export class DuplicationController {
                          @BodyParam('courseId', {required: true}) targetCourseId: string,
                          @CurrentUser() currentUser: IUser) {
     const course = await Course.findOne({lectures: id});
+    if (!course) {
+      throw new NotFoundError();
+    }
     await DuplicationController.assertUserDuplicationAuthorization(currentUser, course);
     const targetCourse = await Course.findById(targetCourseId);
+    if (!targetCourse) {
+      throw new NotFoundError(errorCodes.duplication.targetNotFound.text);
+    }
     await DuplicationController.assertUserDuplicationAuthorization(currentUser, targetCourse);
 
     const lectureModel: ILectureModel = await Lecture.findById(id);
@@ -120,9 +133,15 @@ export class DuplicationController {
                       @BodyParam('lectureId', {required: true}) targetLectureId: string,
                       @CurrentUser() currentUser: IUser) {
     const unitModel: IUnitModel = await Unit.findById(id);
+    if (!unitModel) {
+      throw new NotFoundError();
+    }
     const course = await Course.findById(unitModel._course);
     await DuplicationController.assertUserDuplicationAuthorization(currentUser, course);
     const targetCourse = await Course.findOne({lectures: targetLectureId});
+    if (!targetCourse) {
+      throw new NotFoundError(errorCodes.duplication.targetNotFound.text);
+    }
     await DuplicationController.assertUserDuplicationAuthorization(currentUser, targetCourse);
     const targetCourseId = extractSingleMongoId(targetCourse);
 

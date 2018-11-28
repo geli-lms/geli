@@ -25,6 +25,10 @@ export const errorCodes = {
     unitDuplicationFailed: {
       code: 'Unit duplication failed',
       text: 'Failed to duplicate unit',
+    },
+    targetNotFound: {
+      code: 'Target notfound',
+      text: 'The specified duplication target could not be found',
     }
   },
   mail: {
