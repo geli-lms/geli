@@ -28,6 +28,14 @@ const should = chai.should();
 const BASE_URL = '/api/duplicate';
 const testHelper = new TestHelper(BASE_URL);
 
+/**
+ * Provides simple shared setup functionality currently used by the duplicate access denial unit tests.
+ * It finds a targetCourse (ICourseModel) that doesn't share any of the teachers with the given input course.
+ * Then it finds the courseAdmin (IUserModel; assumed to be a teacher) of that targetCourse and returns both.
+ *
+ * @param course The course for which the "unauthorized teacher set" is to be generated.
+ * @returns An object with the targetCourse and unauthorizedTeacher.
+ */
 async function prepareUnauthorizedTeacherSetFor(course: ICourse) {
   const authorizedTeachers = [course.courseAdmin, ...course.teachers];
   const targetCourse = await Course.findOne({
@@ -38,13 +46,21 @@ async function prepareUnauthorizedTeacherSetFor(course: ICourse) {
   return {targetCourse, unauthorizedTeacher};
 }
 
+/**
+ * Provides simple shared setup functionality currently used by the duplicate access denial unit tests.
+ * It first gets a random teacher for the input course.
+ * Then it finds a targetCourse (ICourseModel) for that teacher.
+ *
+ * @param course The course for which the "other course set" is to be generated.
+ * @returns An object with the targetCourse and teacher.
+ */
 async function prepareOtherTargetCourseSetFor(course: ICourse) {
   const teacher = await FixtureUtils.getRandomTeacherForCourse(course);
   const targetCourse = await Course.findOne({
     courseAdmin: {$ne: teacher},
     teachers: {$ne: teacher}
   });
-  return {teacher, targetCourse};
+  return {targetCourse, teacher};
 }
 
 async function testForbidden(user: IUser, urlPostfix = '', sendData: object) {
