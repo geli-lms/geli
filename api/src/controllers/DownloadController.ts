@@ -25,6 +25,10 @@ const cache = require('node-file-cache').create({life: config.timeToLiveCacheVal
 const pdf =  require('html-pdf');
 const phantomjs = require('phantomjs-prebuilt');
 const binPath = phantomjs.path;
+import sassLoader from '../services/SassLoader';
+
+// ATTENTION: relative path from compiled .js file!
+const markdownCss = sassLoader.load('../../../../../shared/styles/md/bundle.scss');
 
 // Set all routes which should use json to json, the standard is blob streaming data
 @Controller('/download')
@@ -243,14 +247,14 @@ export class DownloadController {
                 '     <style>' +
                 '       #pageHeader {text-align: center;border-bottom: 1px solid;padding-bottom: 5px;}' +
                 '       #pageFooter {text-align: center;border-top: 1px solid;padding-top: 5px;}' +
-                '       body {font-family: \'Helvetica\', \'Arial\', sans-serif; }' +
+                '       html,body {font-family: \'Helvetica\', \'Arial\', sans-serif; font-size: 12px; line-height: 1.5;}' +
                 '       .codeBox {border: 1px solid grey; font-family: Monaco,Menlo,source-code-pro,monospace; padding: 10px}' +
                 '       #firstPage {page-break-after: always;}' +
                 '       .bottomBoxWrapper {height:800px; position: relative}' +
-                '       .bottomBox {position: absolute; bottom: 0;}' +
+                '       .bottomBox {position: absolute; bottom: 0;}' + markdownCss +
                 '     </style>' +
                 '  </head>';
-                html += localUnit.toHtmlForIndividualPDF();
+                html += await localUnit.toHtmlForIndividualPDF();
                 html += '</html>';
               const name = lecCounter + '_' + lcName + '/' + unitCounter + '_' + this.replaceCharInFilename(localUnit.name) + '.pdf';
               await this.savePdfToFile(html, options, tempPdfFileName);
@@ -359,12 +363,12 @@ export class DownloadController {
           '     <style>' +
           '       #pageHeader {text-align: center;border-bottom: 1px solid;padding-bottom: 5px;}' +
           '       #pageFooter {text-align: center;border-top: 1px solid;padding-top: 5px;}' +
-          '       body {font-family: \'Helvetica\', \'Arial\', sans-serif;}' +
+          '       html, body {font-family: \'Helvetica\', \'Arial\', sans-serif; font-size: 12px; line-height: 1.5;}' +
           '       .codeBox {border: 1px solid grey; font-family: Monaco,Menlo,source-code-pro,monospace; padding: 10px}' +
           '       #firstPage {page-break-after: always;}' +
           '       #nextPage {page-break-before: always;}' +
           '       .bottomBoxWrapper {height:800px; position: relative}' +
-          '       .bottomBox {position: absolute; bottom: 0;}' +
+          '       .bottomBox {position: absolute; bottom: 0;}' + markdownCss +
           '     </style>' +
           '  </head>' +
           '  <body>' +
@@ -400,9 +404,9 @@ export class DownloadController {
                   {name: lecCounter + '_' + lcName + '/' + unitCounter + '_' + file.name});
               }
             } else if ( (localUnit.__t === 'code-kata' || localUnit.__t === 'task') && lecCounter > 1 && unitCounter > 1) {
-              html +=  '<div id="nextPage" >' + localUnit.toHtmlForSinglePDF() + '</div>';
+              html +=  '<div id="nextPage" >' + await localUnit.toHtmlForSinglePDF() + '</div>';
             } else {
-              html +=  localUnit.toHtmlForSinglePDF();
+              html +=  await localUnit.toHtmlForSinglePDF();
             }
 
             if (localUnit.__t === 'code-kata' || localUnit.__t === 'task') {
@@ -415,10 +419,10 @@ export class DownloadController {
               } else {
                 solutions += '<div id="nextPage" >';
               }
-              solutions += localUnit.toHtmlForSinglePDFSolutions()  + '</div>';
+              solutions += await localUnit.toHtmlForSinglePDFSolutions()  + '</div>';
               solCounter++;
             } else if (localUnit.__t !== 'file') {
-              solutions += localUnit.toHtmlForSinglePDFSolutions();
+              solutions += await localUnit.toHtmlForSinglePDFSolutions();
             }
             unitCounter++;
           }
