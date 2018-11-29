@@ -14,6 +14,7 @@ export class ExpandableDivComponent implements OnInit {
   title: string;
   @Input()
   headerTag: string;
+  @Input()
   opened: boolean;
 
   constructor() { }

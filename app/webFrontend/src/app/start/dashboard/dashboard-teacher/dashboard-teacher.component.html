@@ -12,6 +12,7 @@
 <app-course-container [title]="'dashboard.createdCourses' | translate" [courses]="myCourses" [expand]="true"
                       (onEnroll)="enrollCallback()"></app-course-container>
 <app-course-container [title]="'dashboard.teacherCourses' | translate" [courses]="furtherCourses" [expand]="true"
+                      [smallHeader]="true"
                       (onEnroll)="enrollCallback()"
                       *ngIf="furtherCourses.length"></app-course-container>
 <app-course-container [title]="'dashboard.inactiveCourses' | translate" [courses]="inactiveCourses"

@@ -155,7 +155,9 @@
     },
     "videos": "Videos",
     "line": "Zeile",
-    "errors": "Fehler"
+    "errors": "Fehler",
+    "collapseAll": "Alle einklappen",
+    "expandAll": "Alle expandieren"
   },
   "course": {
     "delete": "Kurs löschen",
