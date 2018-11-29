@@ -78,7 +78,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Admin couldn't change password of a student. [#975](https://github.com/geli-lms/geli/issues/975)
 
 ### Security
-- Progress leak of invisible units and courses [#735](https://github.com/geli-lms/geli/issues/735)
+- Progress leak of invisible units and courses. [#735](https://github.com/geli-lms/geli/issues/735)
 - Reduce XSS attack surface by switching from `localStorage` tokens to `HttpOnly`, strict `SameSite` cookie-based JWT authentication. [#840](https://github.com/geli-lms/geli/issues/840)
 
 ## [[0.8.1](https://github.com/geli-lms/geli/releases/tag/v0.8.1)] - 2018-10-31 - WS 18/19 Hotfix-Release
@@ -98,7 +98,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Unit-specific comments. [#761](https://github.com/geli-lms/geli/issues/761)
 - Simple E2E test for login. [#795](https://github.com/geli-lms/geli/pull/795)
 - Checkboxes for accepting our terms of use and privacy declarations while registering. [#778](https://github.com/geli-lms/geli/issues/778)
-- PDF course content download functionality. [#720](https://github.com/geli-lms/geli/pull/720), [#913](https://github.com/geli-lms/geli/issues/913), [#923](https://github.com/geli-lms/geli/pull/923)
+- PDF course content download functionality. [#720](https://github.com/geli-lms/geli/pull/720) [#913](https://github.com/geli-lms/geli/issues/913) [#923](https://github.com/geli-lms/geli/pull/923)
 - User data deletion functionality for EU-GDPR compliance. [#775](https://github.com/geli-lms/geli/issues/775)
 - Personal data export functionality for EU-GDPR compliance. [#805](https://github.com/geli-lms/geli/issues/805)
 - Guided dialog for adding a whitelist. [#727](https://github.com/geli-lms/geli/issues/727) [#509](https://github.com/geli-lms/geli/issues/509)
@@ -121,7 +121,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
 - Minor fixes and adaptations and merge-failure fixes. [#785](https://github.com/geli-lms/geli/issues/785)
-- Reworked existing translations. [#753](https://github.com/geli-lms/geli/issues/753), [#906](https://github.com/geli-lms/geli/pull/906)
+- Reworked existing translations. [#753](https://github.com/geli-lms/geli/issues/753) [#906](https://github.com/geli-lms/geli/pull/906)
 - Migrate `MatSnackBar` to `SnackBarService`. [#724](https://github.com/geli-lms/geli/pull/724) [#730](https://github.com/geli-lms/geli/pull/730)
 - Reload user list after deleting an account. [#724](https://github.com/geli-lms/geli/pull/724)
 - `getNotificationSettings` does not create new notification settings. [#731](https://github.com/geli-lms/geli/issues/731)
@@ -138,9 +138,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Update `Node.js` version to `10.8.0`. [#821](https://github.com/geli-lms/geli/pull/821)
 - Update `README.md` with latest information. [#845](https://github.com/geli-lms/geli/pull/845)
 - Exit build when no change to `CHANGELOG.md`. [#880](https://github.com/geli-lms/geli/pull/880)
-- Use deploy token to push geli-docs. [#851](https://github.com/geli-lms/geli/issues/851), [#900](https://github.com/geli-lms/geli/pull/900), [#902](https://github.com/geli-lms/geli/pull/902)
+- Use deploy token to push geli-docs. [#851](https://github.com/geli-lms/geli/issues/851) [#900](https://github.com/geli-lms/geli/pull/900) [#902](https://github.com/geli-lms/geli/pull/902)
 - Responsiveness of course overview. [#837](https://github.com/geli-lms/geli/issues/837)
-- Adjust `CHANGELOG.md` for next release. [#879](https://github.com/geli-lms/geli/pull/879), [#928](https://github.com/geli-lms/geli/pull/928)
+- Adjust `CHANGELOG.md` for next release. [#879](https://github.com/geli-lms/geli/pull/879) [#928](https://github.com/geli-lms/geli/pull/928)
 - Exclude pull requests from dependabot from changelog check. [#854](https://github.com/geli-lms/geli/pull/854)
 
 ### Removed
@@ -173,8 +173,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Wrong reset password translation. [#836](https://github.com/geli-lms/geli/issues/836)
 - Various flawed code kata translations. [#886](https://github.com/geli-lms/geli/issues/886)
 - Fix migrations for adding chatrooms to course and unit. [#888](https://github.com/geli-lms/geli/issues/888)
-- Fix maximum width of main content area [#893](https://github.com/geli-lms/geli/issues/893)
-- Migrations for adding chatrooms to course and unit. [#888](https://github.com/geli-lms/geli/issues/888), [#903](https://github.com/geli-lms/geli/pull/903), [#905](https://github.com/geli-lms/geli/pull/905)
+- Fix maximum width of main content area. [#893](https://github.com/geli-lms/geli/issues/893)
+- Migrations for adding chatrooms to course and unit. [#888](https://github.com/geli-lms/geli/issues/888) [#903](https://github.com/geli-lms/geli/pull/903) [#905](https://github.com/geli-lms/geli/pull/905)
 - `AuthController` `addWhitelistedUserToCourses` broken condition & typos. [#895](https://github.com/geli-lms/geli/issues/895)
 - `ChatRoomController` internal data leak. [#897](https://github.com/geli-lms/geli/issues/897)
 - Error on clicking on notification. [#916](https://github.com/geli-lms/geli/issues/916)
@@ -194,17 +194,17 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - `SnackBarService` as wrapper for `MatSnackBar`. [#574](https://github.com/geli-lms/geli/issues/574)
 - New course & user API unit tests. [#654](https://github.com/geli-lms/geli/issues/654) [#691](https://github.com/geli-lms/geli/issues/691)
 - Details of courseAdmin and teacher to course detail view. on click profiles are shown.[#598](https://github.com/geli-lms/geli/issues/598)
-- Small auto linting scripts to package.json [#688](https://github.com/geli-lms/geli/issues/688)
+- Small auto linting scripts to `package.json`. [#688](https://github.com/geli-lms/geli/issues/688)
 - Changed size of drop down arrows for better usability. [#686](https://github.com/geli-lms/geli/issues/686)
-- New contributors [#624](https://github.com/geli-lms/geli/issues/624)
-- The date and the teacher under each unit [#582](https://github.com/geli-lms/geli/issues/582)
-- E-Mail validation to reset password [#597](https://github.com/geli-lms/geli/issues/597)
-- Language code to header [#554](https://github.com/geli-lms/geli/issues/554)
-- Icon for access key [#547](https://github.com/geli-lms/geli/issues/574)
-- Unit visibility toggle [#582](https://github.com/geli-lms/geli/issues/582)
-- Bootstrap grid system [#613](https://github.com/geli-lms/geli/issues/613)
-- Changeable picture to course [#702](https://github.com/geli-lms/geli/issues/702)
-- A responsive image service [#546](https://github.com/geli-lms/geli/issues/546)
+- New contributors. [#624](https://github.com/geli-lms/geli/issues/624)
+- The date and the teacher under each unit. [#582](https://github.com/geli-lms/geli/issues/582)
+- E-Mail validation to reset password. [#597](https://github.com/geli-lms/geli/issues/597)
+- Language code to header. [#554](https://github.com/geli-lms/geli/issues/554)
+- Icon for access key. [#547](https://github.com/geli-lms/geli/issues/574)
+- Unit visibility toggle. [#582](https://github.com/geli-lms/geli/issues/582)
+- Bootstrap grid system. [#613](https://github.com/geli-lms/geli/issues/613)
+- Changeable picture to course. [#702](https://github.com/geli-lms/geli/issues/702)
+- A responsive image service. [#546](https://github.com/geli-lms/geli/issues/546)
 
 ### Changed
 - Refactor or slightly altered various course & user related APIs. [#654](https://github.com/geli-lms/geli/issues/654) [#691](https://github.com/geli-lms/geli/issues/691)
@@ -213,7 +213,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Refactor the `unitCreator` with a `forSafe` user object. [#717](https://github.com/geli-lms/geli/pull/717)
 - Change the text in download course[#718](https://github.com/geli-lms/geli/pull/718)
 - Refactor register and resend activation to use geli email validator with top level domain check. [#713](https://github.com/geli-lms/geli/issues/713)
-- Refactor the uploadform [#693](https://github.com/geli-lms/geli/issues/693)
+- Refactor the uploadform. [#693](https://github.com/geli-lms/geli/issues/693)
 
 ### Fixed
 - Route `/users/roles`. [#204](https://github.com/geli-lms/geli/issues/204)
@@ -239,8 +239,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - `tsconfig.spec.ts` for `ng test`. [#656](https://github.com/geli-lms/geli/pull/656)
 - `.travis.yml`. [#706](https://github.com/geli-lms/geli/pull/706)
 - Wording of progress display on profile page. [#715](https://github.com/geli-lms/geli/issues/715)
-- Form validator in create task [#579](https://github.com/geli-lms/geli/issues/579)
-- `mongoose` pre hook usage [#680](https://github.com/geli-lms/geli/issues/680) [#677](https://github.com/geli-lms/geli/issues/677)
+- Form validator in create task. [#579](https://github.com/geli-lms/geli/issues/579)
+- `mongoose` pre hook usage. [#680](https://github.com/geli-lms/geli/issues/680) [#677](https://github.com/geli-lms/geli/issues/677)
 - Broken code kata validation. [#834](https://github.com/geli-lms/geli/issues/834)
 
 ### Security
