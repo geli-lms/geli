@@ -6,6 +6,7 @@ import * as MarkdownItDeflist from 'markdown-it-deflist';
 import * as MarkdownItContainer from 'markdown-it-container';
 import * as MarkdownItMark from 'markdown-it-mark';
 import * as MarkdownItAbbr from 'markdown-it-abbr';
+import * as hljs from 'highlight.js';
 
 @Injectable()
 export class MarkdownService {
@@ -27,10 +28,22 @@ export class MarkdownService {
   * Original implementation can be found here: https://github.com/markdown-it/markdown-it-footnote/blob/master/index.js
   *
   * */
+
   // tslint:enable:max-line-length
 
   constructor() {
-    this.markdown = new MarkdownIt();
+    this.markdown = new MarkdownIt({
+      highlight: function (str, lang) {
+        if (lang && hljs.getLanguage(lang)) {
+          try {
+            return hljs.highlight(lang, str).value;
+          } catch (__) {
+          }
+        }
+
+        return ''; // use external default escaping
+      }
+    });
 
     // load plugins
     this.markdown.use(markdownItEmoji);
@@ -41,6 +54,12 @@ export class MarkdownService {
     this.markdown.use(MarkdownItContainer, 'info');
     this.markdown.use(MarkdownItContainer, 'error');
     this.markdown.use(MarkdownItContainer, 'success');
+    this.markdown.use(MarkdownItContainer, 'learning-objectives');
+    this.markdown.use(MarkdownItContainer, 'hints');
+    this.markdown.use(MarkdownItContainer, 'assignment');
+    this.markdown.use(MarkdownItContainer, 'question');
+    this.markdown.use(MarkdownItContainer, 'example');
+    this.markdown.use(MarkdownItContainer, 'todo');
 
     this.markdown.use(MarkdownItMark);
 
