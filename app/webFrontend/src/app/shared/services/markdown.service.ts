@@ -54,6 +54,12 @@ export class MarkdownService {
     this.markdown.use(MarkdownItContainer, 'info');
     this.markdown.use(MarkdownItContainer, 'error');
     this.markdown.use(MarkdownItContainer, 'success');
+    this.markdown.use(MarkdownItContainer, 'learning-objectives');
+    this.markdown.use(MarkdownItContainer, 'hints');
+    this.markdown.use(MarkdownItContainer, 'assignment');
+    this.markdown.use(MarkdownItContainer, 'question');
+    this.markdown.use(MarkdownItContainer, 'example');
+    this.markdown.use(MarkdownItContainer, 'todo');
 
     this.markdown.use(MarkdownItMark);
 

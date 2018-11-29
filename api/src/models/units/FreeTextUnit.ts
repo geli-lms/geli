@@ -32,6 +32,13 @@ md.use(MarkdownItContainer, 'warning');
 md.use(MarkdownItContainer, 'info');
 md.use(MarkdownItContainer, 'error');
 md.use(MarkdownItContainer, 'success');
+md.use(MarkdownItContainer, 'learning-objectives');
+md.use(MarkdownItContainer, 'hints');
+md.use(MarkdownItContainer, 'assignment');
+md.use(MarkdownItContainer, 'question');
+md.use(MarkdownItContainer, 'example');
+md.use(MarkdownItContainer, 'todo');
+
 md.use(MarkdownItMark);
 md.use(MarkdownItAbbr);
 

@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Styles for free text units. [#867](https://github.com/geli-lms/geli/issues/867)
 - Course-view-navigation for edit-users. [#1010](https://github.com/geli-lms/geli/issues/924)
 - Export PDF with styled free text units. [#997](https://github.com/geli-lms/geli/issues/997)
+- More predefined custom containers. [#996](https://github.com/geli-lms/geli/issues/996)
 - Styled code snippets. [#1017](https://github.com/geli-lms/geli/issues/1017)
 
 ### Changed
