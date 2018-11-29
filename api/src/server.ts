@@ -40,7 +40,6 @@ export class Server {
     (<any>mongoose).Promise = global.Promise;
 
     // mongoose.set('debug', true);
-    mongoose.set('useCreateIndex', true);
 
     this.app = createExpressServer({
       routePrefix: '/api',
@@ -65,7 +64,7 @@ export class Server {
   }
 
   start() {
-    mongoose.connect(config.database, {useNewUrlParser: true});
+    mongoose.connect(config.database, config.databaseOptions);
 
     this.app.use(morgan('combined'));
 

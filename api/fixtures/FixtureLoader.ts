@@ -66,7 +66,7 @@ export class FixtureLoader {
 
   async load() {
     if (!mongoose.connection.readyState) {
-      await mongoose.connect(config.database, {useNewUrlParser: true});
+      await mongoose.connect(config.database, config.databaseOptions);
     }
 
     await mongoose.connection.dropDatabase();
