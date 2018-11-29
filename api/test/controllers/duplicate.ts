@@ -189,7 +189,7 @@ describe('Duplicate', async () => {
         getResponse.status.should.be.equal(200);
         const courseJson: ICourse = getResponse.body;
         courseJson.active.should.be.equal(false);
-        courseJson.courseAdmin._id.should.be.equal(extractSingleMongoId(teacher));
+        courseJson.courseAdmin.should.be.equal(extractSingleMongoId(teacher));
         courseJson.name.startsWith(course.name).should.be.equal(true);
         courseJson.description.should.be.equal(course.description);
         courseJson.lectures.should.be.instanceOf(Array).and.have.lengthOf(course.lectures.length);
