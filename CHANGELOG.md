@@ -15,8 +15,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Export PDF with styled free text units. [#997](https://github.com/geli-lms/geli/issues/997)
 - More predefined custom containers. [#996](https://github.com/geli-lms/geli/issues/996)
 - Styled code snippets. [#1017](https://github.com/geli-lms/geli/issues/1017)
+
 ### Changed
-- Prepare Mongoose 5.3.x fix some deprecation warnings [#1044](https://github.com/geli-lms/geli/pull/1044)
+- Prepare `mongoose 5.3.x` update. [#1044](https://github.com/geli-lms/geli/pull/1044)
 
 ## [[0.8.3](https://github.com/geli-lms/geli/releases/tag/v0.8.3)] - 2018-11-29 - WS 18/19 🚀-Release
 ### Added
@@ -50,7 +51,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - EU-DSGVO: Exclusion of comments in the user chat data export. [#998](https://github.com/geli-lms/geli/issues/998)
 - Nondeterministic chat system unit test authorization failures. [#989](https://github.com/geli-lms/geli/issues/989)
 - Unnecessarily verbose `DuplicationController` route responses. [#1016](https://github.com/geli-lms/geli/issues/1016)
-- Prepare `mongoose` update. [#1003](https://github.com/geli-lms/geli/issues/1003) [#1027](https://github.com/geli-lms/geli/pull/1027)
+- Prepare `mongoose 5.3.x` update. [#1003](https://github.com/geli-lms/geli/issues/1003) [#1027](https://github.com/geli-lms/geli/pull/1027)
 - `ExportController` missing 404 handling. [#1039](https://github.com/geli-lms/geli/issues/1039)
 - `DuplicationController` missing 404 handling. [#1039](https://github.com/geli-lms/geli/issues/1039)
 - Fix invalid translation key `hasBeenDeleted`. [#1032](https://github.com/geli-lms/geli/pull/1032)
