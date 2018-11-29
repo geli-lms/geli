@@ -82,8 +82,8 @@ describe('NotificationSettings', async () => {
       const course2 = await FixtureUtils.getRandomCourse();
       course1.students.push(student);
       course2.students.push(student);
-      await Course.update(course1, {new: true});
-      await Course.update(course2, {new: true});
+      await course1.save();
+      await course2.save();
 
       await new NotificationSettings({
         'user': student, 'course': course1,
@@ -114,8 +114,10 @@ describe('NotificationSettings', async () => {
     it('should update the notification settings', async () => {
       const student = await FixtureUtils.getRandomStudent();
       const course = await FixtureUtils.getRandomCourse();
+
       course.students.push(student);
-      await Course.update(course, {new: true});
+      await course.save();
+
       const settings = await new NotificationSettings({
         'user': student, 'course': course,
         'notificationType': API_NOTIFICATION_TYPE_ALL_CHANGES, 'emailNotification': false

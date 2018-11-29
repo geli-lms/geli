@@ -1,5 +1,21 @@
 <div class="course-header">
-  <h1>{{course?.name}}</h1>
+  <div class="header-line">
+    <h1>{{course?.name}}</h1>
+
+    <span class="course-admin-actions" *ngIf="course.userCanEditCourse">
+      <button mat-icon-button [routerLink]="['/course', course._id, 'edit']" [matTooltip]="'course.text.editCourse' | translate">
+        <mat-icon>mode_edit</mat-icon>
+      </button>
+
+      <button mat-icon-button [routerLink]="['/course', course._id, 'report'] "[matTooltip]="'common.statistics' | translate">
+        <mat-icon>show_chart</mat-icon>
+      </button>
+
+      <button mat-icon-button *ngIf="!course.active" disabled>
+        <mat-icon color="warn" [matTooltip]="'course.text.notVisibleToStudents' | translate">visibility_off</mat-icon>
+      </button>
+    </span>
+  </div>
   <mat-chip-list>
     <mat-chip style="cursor:pointer" (click)="showUserProfile(course?.courseAdmin)">
       <div class="img-wrapper">
@@ -33,6 +49,7 @@
       <mat-icon class="iconPos">{{tab.img}}</mat-icon>{{tab.label}}
     </a>
   </nav>
+
 </div>
 <router-outlet></router-outlet>
 <app-course-forum [chatRoom]="course?.chatRooms[0]"></app-course-forum>
