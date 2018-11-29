@@ -14,6 +14,6 @@
     </ace-editor>
   </mat-tab>
   <mat-tab label="Preview">
-    <app-free-text-unit-core [markdown]="unitForm.controls.markdown.value"></app-free-text-unit-core>
+    <app-free-text-unit-core [theme]="unitFormService.course.freeTextStyle"  [markdown]="unitForm.controls.markdown.value"></app-free-text-unit-core>
   </mat-tab>
 </mat-tab-group>

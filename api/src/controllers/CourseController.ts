@@ -166,7 +166,7 @@ export class CourseController {
       .populate('teachers')
       .execPopulate();
     await course.processLecturesFor(currentUser);
-    return course.forView();
+    return course.forView(currentUser);
   }
 
   /**
@@ -705,8 +705,8 @@ export class CourseController {
     const picture = await Picture.findOne(course.image);
     await picture.remove();
 
-    await Course.update({ _id: id }, { $unset: { image: 1 } });
-    return { };
+    await Course.updateOne({_id: id}, {$unset: {image: 1}});
+    return {};
   }
 
   @Authorized(['teacher', 'admin'])
@@ -752,9 +752,8 @@ export class CourseController {
 
     await image.save();
 
-    await Course.update({ _id: id }, {
-      image: image._id
-    });
+    course.image = image;
+    await course.save();
 
     return image.toObject();
   }

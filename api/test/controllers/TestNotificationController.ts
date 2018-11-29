@@ -6,10 +6,8 @@ import {JwtUtils} from '../../src/security/JwtUtils';
 import {Notification} from '../../src/models/Notification';
 import chaiHttp = require('chai-http');
 import {User} from '../../src/models/User';
-import {Course} from '../../src/models/Course';
 import {NotFoundError} from 'routing-controllers';
 import {API_NOTIFICATION_TYPE_ALL_CHANGES, API_NOTIFICATION_TYPE_NONE, NotificationSettings} from '../../src/models/NotificationSettings';
-import {InternalServerError} from 'routing-controllers/http-error/InternalServerError';
 
 chai.use(chaiHttp);
 const should = chai.should();
@@ -43,6 +41,7 @@ describe('Notifications', async () => {
 
     it('should create notifications for students with the corresponding settings', async () => {
       const course = await FixtureUtils.getRandomCourse();
+      course.active = true;
       const teacher = await FixtureUtils.getRandomTeacherForCourse(course);
 
       const newNotification = {
@@ -98,6 +97,7 @@ describe('Notifications', async () => {
 
     it('should create notifications for student with changedCourse and text', async () => {
       const course = await FixtureUtils.getRandomCourse();
+      course.active = true;
       const student = course.students[Math.floor(Math.random() * course.students.length)];
       const teacher = await FixtureUtils.getRandomTeacherForCourse(course);
 
@@ -119,6 +119,7 @@ describe('Notifications', async () => {
 
     it('should create notifications for student with changedCourse and text', async () => {
       const course = await FixtureUtils.getRandomCourse();
+      course.active = true;
       const student = course.students[Math.floor(Math.random() * course.students.length)];
       const teacher = await FixtureUtils.getRandomTeacherForCourse(course);
 
@@ -147,14 +148,17 @@ describe('Notifications', async () => {
 
     it('should create notifications for student with changedCourse, changedLecture, changedUnit and text', async () => {
       const course = await FixtureUtils.getRandomCourse();
+      course.active = true;
       const lecture = await FixtureUtils.getRandomLectureFromCourse(course);
       const student = course.students[Math.floor(Math.random() * course.students.length)];
       const teacher = await FixtureUtils.getRandomTeacherForCourse(course);
+      const unit = await FixtureUtils.getRandomUnitFromLecture(lecture);
+      unit.visible = true;
 
       const newNotification = {
         changedCourse: course,
         changedLecture: lecture,
-        changedUnit: lecture.units[0],
+        changedUnit: unit,
         text: 'test text'
       };
 
@@ -171,6 +175,7 @@ describe('Notifications', async () => {
 
     it('should create notifications for student with changedCourse and text but API_NOTIFICATION_TYPE_NONE', async () => {
       const course = await FixtureUtils.getRandomCourse();
+      course.active = true;
       const student = course.students[Math.floor(Math.random() * course.students.length)];
       const teacher = await FixtureUtils.getRandomTeacherForCourse(course);
 
@@ -244,8 +249,9 @@ describe('Notifications', async () => {
     it('should delete a notification', async () => {
       const course = await FixtureUtils.getRandomCourse();
       const students = await FixtureUtils.getRandomStudents(2, 5);
+
       course.students = course.students.concat(students);
-      await Course.update(course, {new: true});
+      await course.save();
 
       const newNotification = await new Notification({
         user: students[0],
