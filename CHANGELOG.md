@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 -->
 
 ## [Unreleased]
+
+## [[0.8.3](https://github.com/geli-lms/geli/releases/tag/v0.8.3)] - 2018-11-29 - WS 18/19 🚀-Release
 ### Added
 - Chat system access denial unit tests. [#989](https://github.com/geli-lms/geli/issues/989)
 - `DuplicationController` access denial unit tests. [#1016](https://github.com/geli-lms/geli/issues/1016)
