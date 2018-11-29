@@ -1,7 +1,7 @@
 {
   "name": "geli-api",
   "version": "0.8.2",
-  "license": "GPL-3.0",
+  "license": "Apache-2.0",
   "repository": "geli-lms/geli",
   "description": "This is the API-Package.json for geli.",
   "main": "build/index.js",
