@@ -19,38 +19,38 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - `DuplicationController` 404 unit tests. [#1039](https://github.com/geli-lms/geli/issues/1039)
 - `TestHelper` class for shared API unit test functionality. [#989](https://github.com/geli-lms/geli/issues/989) [#1016](https://github.com/geli-lms/geli/issues/1016)
 - `extractSingleMongoId` variant of the `ExtractMongoId` utility function(s). [#989](https://github.com/geli-lms/geli/issues/989)
-- Show message count for unit chat. [#933](https://github.com/geli-lms/geli/issues/993)
+- Show message count for `UnitComponent` chat. [#933](https://github.com/geli-lms/geli/issues/993)
 - Styles for free text units. [#867](https://github.com/geli-lms/geli/issues/867)
 - Export PDF with styled free text units. [#997](https://github.com/geli-lms/geli/issues/997)
-- Course-view-navigation for edit-users. [#924](https://github.com/geli-lms/geli/issues/924)
-- Make MongoDB port configurable `DB_PORT`. [#1034](https://github.com/geli-lms/geli/pull/1034)
+- Extend `ICourseView` with `userCanEditCourse` & `active` properties. [#924](https://github.com/geli-lms/geli/issues/924)
+- Make `MongoDB` port configurable as `DB_PORT`. [#1034](https://github.com/geli-lms/geli/pull/1034)
 - `IUserPrivileges`, `IUserEditPrivileges`, `ICourseUserPrivileges`, i.a. for the `checkPrivileges` methods. [#1039](https://github.com/geli-lms/geli/issues/1039)
 
 ### Changed
-- Update mongoose to 5.2.x. [#1004](https://github.com/geli-lms/geli/pull/1004)
+- Update `mongoose` to `5.2.x`. [#1004](https://github.com/geli-lms/geli/pull/1004)
 - Update contributors list. [#1007](https://github.com/geli-lms/geli/issues/1007)
 - Display only one notification per course update. [#914](https://github.com/geli-lms/geli/issues/914)
 - Use `terser` instead of `uglify-js`. [#1018](https://github.com/geli-lms/geli/pull/1018)
 - `ExtractMongoId` utility upgrades & streamlining. [#989](https://github.com/geli-lms/geli/issues/989) [#1016](https://github.com/geli-lms/geli/issues/1016) [#1039](https://github.com/geli-lms/geli/issues/1039)
 
 ### Removed
-- Export PDF with styled free text units. [#997](https://github.com/geli-lms/geli/issues/997)
+- PDF export with styled free text units. [#997](https://github.com/geli-lms/geli/issues/997)
 
 ### Fixed
 - Notifications for invisible courses and lectures will no longer be created. [#877](https://github.com/geli-lms/geli/issues/877)
-- EU-DSGVO: Export Chat User Data - Exclude Comments. [#998](https://github.com/geli-lms/geli/issues/998)
+- EU-DSGVO: Exclusion of comments in the user chat data export. [#998](https://github.com/geli-lms/geli/issues/998)
 - Nondeterministic chat system unit test authorization failures. [#989](https://github.com/geli-lms/geli/issues/989)
 - Unnecessarily verbose `DuplicationController` route responses. [#1016](https://github.com/geli-lms/geli/issues/1016)
-- Prepare mongoose update. [#1003](https://github.com/geli-lms/geli/issues/1003) [#1027](https://github.com/geli-lms/geli/pull/1027)
+- Prepare `mongoose` update. [#1003](https://github.com/geli-lms/geli/issues/1003) [#1027](https://github.com/geli-lms/geli/pull/1027)
 - `ExportController` missing 404 handling. [#1039](https://github.com/geli-lms/geli/issues/1039)
 - `DuplicationController` missing 404 handling. [#1039](https://github.com/geli-lms/geli/issues/1039)
 - Fix invalid translation key `hasBeenDeleted`. [#1032](https://github.com/geli-lms/geli/pull/1032)
 
 ### Security
-- Fixed multiple severe security issues of the chat system. [#989](https://github.com/geli-lms/geli/issues/989)
-- Fixed multiple security issues of the three `DuplicationController` routes. [#1016](https://github.com/geli-lms/geli/issues/1016)
-- Fixed missing `teacher` authorization checks in the `ExportController` `course`/`lecture`/`unit` routes. [#1039](https://github.com/geli-lms/geli/issues/1039)
-- Update `node` to latest lts. [#1019](https://github.com/geli-lms/geli/issues/1019)
+- Fix multiple severe security issues of the chat system. [#989](https://github.com/geli-lms/geli/issues/989)
+- Fix multiple security issues of the three `DuplicationController` routes. [#1016](https://github.com/geli-lms/geli/issues/1016)
+- Fix missing `teacher` authorization checks in the `ExportController` `course`/`lecture`/`unit` routes. [#1039](https://github.com/geli-lms/geli/issues/1039)
+- Update `node` to latest LTS (Long Term Support) version. [#1019](https://github.com/geli-lms/geli/issues/1019)
 
 ## [[0.8.2](https://github.com/geli-lms/geli/releases/tag/v0.8.2)] - 2018-11-08 - WS 18/19 🍪-Release
 ### Added
@@ -60,7 +60,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
 - Minor `ConfigController` bugs and refactoring-flaws. [#899](https://github.com/geli-lms/geli/issues/899)
 - Don't pin `@types/express` to a specific version. [#947](https://github.com/geli-lms/geli/pull/947)
-- Switched to cookie-based JWT authentication. [#840](https://github.com/geli-lms/geli/issues/840) [#968](https://github.com/geli-lms/geli/issues/968)
+- Switch to cookie-based JWT authentication. [#840](https://github.com/geli-lms/geli/issues/840) [#968](https://github.com/geli-lms/geli/issues/968)
 - Prepare `typescript` 3.1 upgrade. [#967](https://github.com/geli-lms/geli/pull/967)
 - Use `npm ci` instead `npm install` and cache `$HOME/.npm` instead of `node_modules`. [#972](https://github.com/geli-lms/geli/pull/972)
 - Use travis build stages. [#962](https://github.com/geli-lms/geli/issues/962) [#1024](https://github.com/geli-lms/geli/pull/1024)
@@ -79,7 +79,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Security
 - Progress leak of invisible units and courses [#735](https://github.com/geli-lms/geli/issues/735)
-- Reduced XSS attack surface by switching from `localStorage` tokens to `HttpOnly`, strict `SameSite` cookie-based JWT authentication. [#840](https://github.com/geli-lms/geli/issues/840)
+- Reduce XSS attack surface by switching from `localStorage` tokens to `HttpOnly`, strict `SameSite` cookie-based JWT authentication. [#840](https://github.com/geli-lms/geli/issues/840)
 
 ## [[0.8.1](https://github.com/geli-lms/geli/releases/tag/v0.8.1)] - 2018-10-31 - WS 18/19 Hotfix-Release
 ### Fixed
@@ -173,7 +173,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Wrong reset password translation. [#836](https://github.com/geli-lms/geli/issues/836)
 - Various flawed code kata translations. [#886](https://github.com/geli-lms/geli/issues/886)
 - Fix migrations for adding chatrooms to course and unit. [#888](https://github.com/geli-lms/geli/issues/888)
-- Fix maxium width of main content area [#893](https://github.com/geli-lms/geli/issues/893)
+- Fix maximum width of main content area [#893](https://github.com/geli-lms/geli/issues/893)
 - Migrations for adding chatrooms to course and unit. [#888](https://github.com/geli-lms/geli/issues/888), [#903](https://github.com/geli-lms/geli/pull/903), [#905](https://github.com/geli-lms/geli/pull/905)
 - `AuthController` `addWhitelistedUserToCourses` broken condition & typos. [#895](https://github.com/geli-lms/geli/issues/895)
 - `ChatRoomController` internal data leak. [#897](https://github.com/geli-lms/geli/issues/897)
@@ -181,8 +181,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Deprecated warning on startup. [#920](https://github.com/geli-lms/geli/pull/920)
 
 ### Security
-- Secured the static `'uploads'` route by introducing a special `'mediaToken'` with new JWT strategy & middleware. [#729](https://github.com/geli-lms/geli/issues/729)
-- Secured `DownloadController` → `getArchivedFile` → `id` input usage. [#729](https://github.com/geli-lms/geli/issues/729)
+- Secure the static `'uploads'` route by introducing a special `'mediaToken'` with new JWT strategy & middleware. [#729](https://github.com/geli-lms/geli/issues/729)
+- Secure `DownloadController` → `getArchivedFile` → `id` input usage. [#729](https://github.com/geli-lms/geli/issues/729)
 - _(Scrapped experiment of a `@Controller`-based replacement for the static `'uploads'` route: `UploadsController`. [#729](https://github.com/geli-lms/geli/issues/729))_
 
 ## [[0.7.0](https://github.com/geli-lms/geli/releases/tag/v0.7.0)] - 2018-05-05 - SS 18 intermediate Release
