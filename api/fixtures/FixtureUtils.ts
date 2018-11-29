@@ -2,7 +2,7 @@ import {User} from '../src/models/User';
 import {Course, ICourseModel} from '../src/models/Course';
 import {IUserModel} from '../src/models/User';
 import {Lecture} from '../src/models/Lecture';
-import {Unit} from '../src/models/units/Unit';
+import {Unit, IUnitModel} from '../src/models/units/Unit';
 import {ICourse} from '../../shared/models/ICourse';
 import {ILecture} from '../../shared/models/ILecture';
 import {IUnit} from '../../shared/models/units/IUnit';
@@ -139,14 +139,19 @@ export class FixtureUtils {
     return Lecture.findOne({units: { $in: [ unit._id ] }});
   }
 
-  public static async getRandomUnit(hash?: string): Promise<IUnit> {
+  public static async getRandomUnit(hash?: string): Promise<IUnitModel> {
     const array = await this.getUnits();
-    return this.getRandom<IUnit>(array, hash);
+    return this.getRandom<IUnitModel>(array, hash);
   }
 
   public static async getRandomUnitFromLecture(lecture: ILecture, hash?: string): Promise<IUnit> {
     const unitId = await this.getRandom<IUnit>(lecture.units, hash);
     return Unit.findById(unitId);
+  }
+
+  public static async getRandomUnitFromCourse(course: ICourse, hash?: string): Promise<IUnitModel> {
+    const units = await Unit.find({_course: course});
+    return await this.getRandom<IUnitModel>(units, hash);
   }
 
   /**
@@ -160,15 +165,6 @@ export class FixtureUtils {
     const room = await FixtureUtils.getRandom<IChatRoom>(course.chatRooms, hash);
     const roomId = extractSingleMongoId(room);
     return {course, roomId};
-  }
-
-  public static async getRandomUnitFromCourse(course: ICourse, hash?: string): Promise<IUnit> {
-    let units: Array<IUnit> = [];
-    for (const lecture of course.lectures) {
-      units = units.concat(lecture.units);
-    }
-    const unitId = await this.getRandom<IUnit>(units, hash);
-    return Unit.findById(unitId);
   }
 
   private static async getAdmins(): Promise<IUser[]> {
@@ -197,7 +193,7 @@ export class FixtureUtils {
     return Lecture.find();
   }
 
-  public static async getUnits(): Promise<IUnit[]> {
+  public static async getUnits(): Promise<IUnitModel[]> {
     return Unit.find();
   }
 

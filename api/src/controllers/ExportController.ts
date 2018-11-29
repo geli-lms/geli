@@ -1,6 +1,9 @@
-import {Authorized, CurrentUser, Get, JsonController, Param, UseBefore} from 'routing-controllers';
+import {
+  Authorized, CurrentUser, Get, JsonController, Param, UseBefore,
+  ForbiddenError, NotFoundError
+} from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
-import {Course} from '../models/Course';
+import {Course, ICourseModel} from '../models/Course';
 import {Lecture} from '../models/Lecture';
 import {Unit} from '../models/units/Unit';
 import {IUser} from '../../../shared/models/IUser';
@@ -15,6 +18,12 @@ import {Message} from '../models/Message';
 @UseBefore(passportJwtMiddleware)
 @Authorized(['teacher', 'admin'])
 export class ExportController {
+
+  private static assertUserExportAuthorization(user: IUser, course: ICourseModel) {
+    if (!course.checkPrivileges(user).userCanEditCourse) {
+      throw new ForbiddenError();
+    }
+  }
 
   /**
    * @api {get} /api/export/course/:id Export course
@@ -39,10 +48,17 @@ export class ExportController {
    *         }],
    *         "hasAccessKey": false
    *     }
+   *
+   * @apiError NotFoundError If the course couldn't be found.
+   * @apiError ForbiddenError assertUserExportAuthorization check failed.
    */
   @Get('/course/:id')
-  async exportCourse(@Param('id') id: string) {
+  async exportCourse(@Param('id') id: string, @CurrentUser() currentUser: IUser) {
     const course = await Course.findById(id);
+    if (!course) {
+      throw new NotFoundError();
+    }
+    ExportController.assertUserExportAuthorization(currentUser, course);
     return course.exportJSON();
   }
 
@@ -63,10 +79,18 @@ export class ExportController {
    *         "description": "Some lecture desc",
    *         "units": []
    *     }
+   *
+   * @apiError NotFoundError If the lecture couldn't be found.
+   * @apiError ForbiddenError assertUserExportAuthorization check failed.
    */
   @Get('/lecture/:id')
-  async exportLecture(@Param('id') id: string) {
+  async exportLecture(@Param('id') id: string, @CurrentUser() currentUser: IUser) {
     const lecture = await Lecture.findById(id);
+    if (!lecture) {
+      throw new NotFoundError();
+    }
+    const course = await Course.findOne({lectures: id});
+    ExportController.assertUserExportAuthorization(currentUser, course);
     return lecture.exportJSON();
   }
 
@@ -90,10 +114,18 @@ export class ExportController {
    *         "markdown": "Welcome, this is the start",
    *         "__t": "free-text"
    *     }
+   *
+   * @apiError NotFoundError If the unit couldn't be found.
+   * @apiError ForbiddenError assertUserExportAuthorization check failed.
    */
   @Get('/unit/:id')
-  async exportUnit(@Param('id') id: string) {
+  async exportUnit(@Param('id') id: string, @CurrentUser() currentUser: IUser) {
     const unit = await Unit.findById(id);
+    if (!unit) {
+      throw new NotFoundError();
+    }
+    const course = await Course.findById(unit._course);
+    ExportController.assertUserExportAuthorization(currentUser, course);
     return unit.exportJSON();
   }
 

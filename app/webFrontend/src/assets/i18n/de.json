@@ -155,7 +155,9 @@
     },
     "videos": "Videos",
     "line": "Zeile",
-    "errors": "Fehler"
+    "errors": "Fehler",
+    "collapseAll": "Alle einklappen",
+    "expandAll": "Alle expandieren"
   },
   "course": {
     "delete": "Kurs löschen",
@@ -168,6 +170,7 @@
       "searchAndAdd": "Benutzer anhand des Namens, der Id oder der E-Mail-Adresse suchen",
       "freeTextTheme": "Theme für Freitext"
     },
+    "hasBeenDeleted": "wurde gelöscht.",
     "ShowCourse": "Kurs anzeigen",
     "text": {
       "addMarkdownToCourse": "Markdown hinzufügen, um Text zu diesem Kurs hinzuzufügen.",
@@ -184,7 +187,6 @@
       "enterAccessKey": "Bitte geben Sie den Einschreibeschlüssel dieses Kurses ein.",
       "enterAccessKeyForStudents": "Geben Sie einen Einschreibeschlüssel für die Studenten ein.",
       "goToCourse": "Zum Kurs",
-      "hasBeenDeleted": "wurde gelöscht.",
       "inCourse": "Im Kurs",
       "infoWhitelist": "Allen Benutzern dieser Liste, ist es erlaubt, dem Kurs beizutreten.",
       "isFreeForEveryone": "Der Kurs ist offen und für jeden zugänglich.",
