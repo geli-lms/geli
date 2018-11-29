@@ -32,6 +32,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Display only one notification per course update. [#914](https://github.com/geli-lms/geli/issues/914)
 - Use `terser` instead of `uglify-js`. [#1018](https://github.com/geli-lms/geli/pull/1018)
 - `ExtractMongoId` utility upgrades & streamlining. [#989](https://github.com/geli-lms/geli/issues/989) [#1016](https://github.com/geli-lms/geli/issues/1016) [#1039](https://github.com/geli-lms/geli/issues/1039)
+- Prepare Mongoose 5.3.x fix some deprecation warnings [#1044](https://github.com/geli-lms/geli/pull/1044)
 
 ### Removed
 - Export PDF with styled free text units. [#997](https://github.com/geli-lms/geli/issues/997)
