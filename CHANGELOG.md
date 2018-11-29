@@ -144,7 +144,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Responsiveness of course overview. [#837](https://github.com/geli-lms/geli/issues/837)
 - Adjust `CHANGELOG.md` for next release. [#879](https://github.com/geli-lms/geli/pull/879) [#928](https://github.com/geli-lms/geli/pull/928)
 - Exclude pull requests from dependabot from changelog check. [#854](https://github.com/geli-lms/geli/pull/854)
-- Now using Apache License, Version 2.0 instead of GPL. [#1033](https://github.com/geli-lms/geli/issues/1033)
+- Switch project license to `Apache License, Version 2.0` instead of `GPL-3.0`. [#1033](https://github.com/geli-lms/geli/issues/1033)
 
 ### Removed
 - `isCourseTeacherOrAdmin` and `isMemberOfCourse` from `UserService`. [#731](https://github.com/geli-lms/geli/issues/731)
