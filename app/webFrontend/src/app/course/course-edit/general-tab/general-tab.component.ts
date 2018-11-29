@@ -224,22 +224,23 @@ export class GeneralTabComponent implements OnInit {
   }
 
   deleteCourse() {
-    this.dialogService.confirmDelete('course', this.courseOb.name)
-      .subscribe(async res => {
-        if (!res) {
-          return;
-        }
-        await this.translate.get(['common.course', 'course.hasBeenDeleted'])
-          .subscribe((t: string) => {
-              this.notificationService.createItem({
-              changedCourse: this.courseOb,
-              changedLecture: null,
-              changedUnit: null,
-              text: t['common.course'] + ' ' + this.courseOb.name + ' ' + t['hasBeenDeleted']
-            });
-          });
-        await this.courseService.deleteItem(this.courseOb);
-        this.router.navigate(['/']);
+    this.dialogService.confirmDelete('course', this.courseOb.name).subscribe(async res => {
+      if (res === false) {
+        return;
+      }
+
+      this.translate.get(['common.course', 'course.hasBeenDeleted']).subscribe(async (t: string) => {
+        await this.notificationService.createItem({
+          changedCourse: this.courseOb,
+          changedLecture: null,
+          changedUnit: null,
+          text: t['common.course'] + ' ' + this.courseOb.name + ' ' + t['course.hasBeenDeleted']
+        });
+        this.snackBar.open(t['common.course'] + ' ' + this.courseOb.name + ' ' + t['course.hasBeenDeleted']);
       });
+
+      await this.courseService.deleteItem(this.courseOb);
+      await this.router.navigate(['/']);
+    });
   }
 }

@@ -13,6 +13,12 @@ export const errorCodes = {
       text: 'Message parent isn\'t in the same room, invalidating the post',
     }
   },
+  duplication: {
+    targetNotFound: {
+      code: 'Target notfound',
+      text: 'The specified duplication target could not be found',
+    }
+  },
   mail: {
     duplicate: {
       code: 'duplicate mail',

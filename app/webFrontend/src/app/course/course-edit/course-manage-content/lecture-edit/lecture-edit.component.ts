@@ -71,7 +71,7 @@ export class LectureEditComponent implements OnInit, OnDestroy {
 
   async duplicateUnit(unit: IUnit) {
     try {
-      const duplicateUnit = await this.duplicationService.duplicateUnit(unit, this.lecture._id, this.course._id);
+      const duplicateUnit = await this.duplicationService.duplicateUnit(unit, this.lecture._id);
       this.snackBar.open('Unit duplicated.');
       await this.reloadCourse();
       this.navigateToUnitEdit(duplicateUnit._id);

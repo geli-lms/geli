@@ -155,7 +155,9 @@
     },
     "videos": "Videos",
     "line": "Line",
-    "errors": "Errors"
+    "errors": "Errors",
+    "collapseAll": "Collapse all",
+    "expandAll": "Expand all"
   },
   "course": {
     "delete": "Delete course",
@@ -168,6 +170,7 @@
       "searchAndAdd": "Search and add user by name, Id or e-mail",
       "freeTextTheme": "Theme for free text"
     },
+    "hasBeenDeleted": "has been deleted.",
     "ShowCourse": "Show course",
     "text": {
       "addMarkdownToCourse": "Add markdown to add text to this course.",
@@ -184,7 +187,6 @@
       "enterAccessKey": "Please enter the course's access key.",
       "enterAccessKeyForStudents": "Enter an access key for the students.",
       "goToCourse": "Go to course",
-      "hasBeenDeleted": "has been deleted.",
       "inCourse": "In Course",
       "infoWhitelist": "All users on this list are allowed to join this course.",
       "isFreeForEveryone": "The course is free and accessible for everyone.",

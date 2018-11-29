@@ -1,19 +1,34 @@
 import {
-  Body, Post, Param, JsonController, UseBefore, Authorized, InternalServerError
+  BodyParam, Post, Param, JsonController, UseBefore, Authorized, CurrentUser,
+  ForbiddenError, NotFoundError
 } from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
+import {IUser} from '../../../shared/models/IUser';
 import {IUnit} from '../../../shared/models/units/IUnit';
 import {ILectureModel, Lecture} from '../models/Lecture';
 import {IUnitModel, Unit} from '../models/units/Unit';
 import {Course, ICourseModel} from '../models/Course';
 import {ILecture} from '../../../shared/models/ILecture';
 import {ICourse} from '../../../shared/models/ICourse';
+import {IDuplicationResponse} from '../../../shared/models/IDuplicationResponse';
+import {extractSingleMongoId} from '../utilities/ExtractMongoId';
+import {errorCodes} from '../config/errorCodes';
 
 
 @JsonController('/duplicate')
 @UseBefore(passportJwtMiddleware)
 @Authorized(['teacher', 'admin'])
 export class DuplicationController {
+
+  private static async assertUserDuplicationAuthorization(user: IUser, course: ICourseModel) {
+    if (!course.checkPrivileges(user).userCanEditCourse) {
+      throw new ForbiddenError();
+    }
+  }
+
+  private static extractCommonResponse(duplicate: ICourse | ILecture | IUnit): IDuplicationResponse {
+    return {_id: extractSingleMongoId(duplicate)};
+  }
 
   /**
    * @api {post} /api/duplicate/course/:id Duplicate course
@@ -23,44 +38,34 @@ export class DuplicationController {
    * @apiPermission admin
    *
    * @apiParam {String} id Course ID.
-   * @apiParam {Object} data Course data (with courseAdmin).
+   * @apiParam {Object} data Object optionally containing the courseAdmin id for the duplicated course as "courseAdmin".
+   *                    If unset, the currentUser will be set as courseAdmin.
    *
-   * @apiSuccess {Course} course Duplicated course.
+   * @apiSuccess {Course} course Duplicated course ID.
    *
    * @apiSuccessExample {json} Success-Response:
    *     {
-   *         "_id": "5ab19c382ac32e46dcaa1574",
-   *         "updatedAt": "2018-03-20T23:41:44.792Z",
-   *         "createdAt": "2018-03-20T23:41:44.773Z",
-   *         "name": "Test 101 (copy)",
-   *         "description": "Some course desc",
-   *         "courseAdmin": "5a037e6a60f72236d8e7c813",
-   *         "active": false,
-   *         "__v": 1,
-   *         "whitelist": [],
-   *         "enrollType": "whitelist",
-   *         "lectures": [...],
-   *         "students": [],
-   *         "teachers": [],
-   *         "hasAccessKey": false
+   *         "_id": "5ab19c382ac32e46dcaa1574"
    *     }
    *
-   * @apiError InternalServerError Failed to duplicate course
+   * @apiError NotFoundError If the course couldn't be found.
+   * @apiError ForbiddenError assertUserDuplicationAuthorization check failed.
    */
   @Post('/course/:id')
-  async duplicateCourse(@Param('id') id: string, @Body() data: any) {
-    // we could use @CurrentUser instead of the need to explicitly provide a teacher
-    const courseAdmin = data.courseAdmin;
-    try {
-      const courseModel: ICourseModel = await Course.findById(id);
-      const exportedCourse: ICourse = await courseModel.exportJSON(false);
-      delete exportedCourse.students;
-      return Course.schema.statics.importJSON(exportedCourse, courseAdmin);
-    } catch (err) {
-        const newError = new InternalServerError('Failed to duplicate course');
-        newError.stack += '\nCaused by: ' + err.message + '\n' + err.stack;
-        throw newError;
-    }
+  async duplicateCourse(@Param('id') id: string,
+                        @BodyParam('courseAdmin', {required: false}) newCourseAdminId: string,
+                        @CurrentUser() currentUser: IUser) {
+    const courseModel: ICourseModel = await Course.findById(id);
+    if (!courseModel) { throw new NotFoundError(); }
+    await DuplicationController.assertUserDuplicationAuthorization(currentUser, courseModel);
+
+    // Set the currentUser's id as newCourseAdminId if it wasn't specified by the request.
+    newCourseAdminId = typeof newCourseAdminId === 'string' ? newCourseAdminId : extractSingleMongoId(currentUser);
+
+    const exportedCourse: ICourse = await courseModel.exportJSON(false);
+    delete exportedCourse.students;
+    const duplicate = await Course.schema.statics.importJSON(exportedCourse, newCourseAdminId);
+    return DuplicationController.extractCommonResponse(duplicate);
   }
 
   /**
@@ -71,35 +76,33 @@ export class DuplicationController {
    * @apiPermission admin
    *
    * @apiParam {String} id Lecture ID.
-   * @apiParam {Object} data Lecture data (with courseId).
+   * @apiParam {Object} data Object with target courseId (the lecture duplicate will be attached to this course).
    *
-   * @apiSuccess {Lecture} lecture Duplicated lecture.
+   * @apiSuccess {Lecture} lecture Duplicated lecture ID.
    *
    * @apiSuccessExample {json} Success-Response:
    *     {
-   *         "_id": "5ab1a218dab93c34f8541e25",
-   *         "updatedAt": "2018-03-21T00:06:48.043Z",
-   *         "createdAt": "2018-03-21T00:06:48.043Z",
-   *         "name": "Lecture One",
-   *         "description": "Some lecture desc",
-   *         "__v": 0,
-   *         "units": []
+   *         "_id": "5ab1a218dab93c34f8541e25"
    *     }
    *
-   * @apiError InternalServerError Failed to duplicate lecture
+   * @apiError NotFoundError If the lecture or the target courseId couldn't be found.
+   * @apiError ForbiddenError assertUserDuplicationAuthorization check failed.
    */
   @Post('/lecture/:id')
-  async duplicateLecture(@Param('id') id: string, @Body() data: any) {
-    const courseId = data.courseId;
-    try {
-      const lectureModel: ILectureModel = await Lecture.findById(id);
-      const exportedLecture: ILecture = await lectureModel.exportJSON();
-      return Lecture.schema.statics.importJSON(exportedLecture, courseId);
-    } catch (err) {
-      const newError = new InternalServerError('Failed to duplicate lecture');
-      newError.stack += '\nCaused by: ' + err.message + '\n' + err.stack;
-      throw newError;
-    }
+  async duplicateLecture(@Param('id') id: string,
+                         @BodyParam('courseId', {required: true}) targetCourseId: string,
+                         @CurrentUser() currentUser: IUser) {
+    const course = await Course.findOne({lectures: id});
+    if (!course) { throw new NotFoundError(); }
+    await DuplicationController.assertUserDuplicationAuthorization(currentUser, course);
+    const targetCourse = await Course.findById(targetCourseId);
+    if (!targetCourse) { throw new NotFoundError(errorCodes.duplication.targetNotFound.text); }
+    await DuplicationController.assertUserDuplicationAuthorization(currentUser, targetCourse);
+
+    const lectureModel: ILectureModel = await Lecture.findById(id);
+    const exportedLecture: ILecture = await lectureModel.exportJSON();
+    const duplicate = await Lecture.schema.statics.importJSON(exportedLecture, targetCourseId);
+    return DuplicationController.extractCommonResponse(duplicate);
   }
 
   /**
@@ -110,40 +113,34 @@ export class DuplicationController {
    * @apiPermission admin
    *
    * @apiParam {String} id Unit ID.
-   * @apiParam {Object} data Unit data (with courseId and lectureId).
+   * @apiParam {Object} data Object with target lectureId (the unit duplicate will be attached to this lecture).
    *
-   * @apiSuccess {Unit} unit Duplicated unit.
+   * @apiSuccess {Unit} unit Duplicated unit ID.
    *
    * @apiSuccessExample {json} Success-Response:
    *     {
-   *         "__v": 0,
-   *         "updatedAt": "2018-03-21T00:12:48.592Z",
-   *         "createdAt": "2018-03-21T00:12:48.592Z",
-   *         "progressable": false,
-   *         "weight": 0,
-   *         "name": "First unit",
-   *         "description": null,
-   *         "markdown": "Welcome, this is the start",
-   *         "_course": "5ab19c382ac32e46dcaa1574",
-   *         "__t": "free-text",
    *         "_id": "5ab1a380f5bbeb423070d787"
    *     }
    *
-   * @apiError InternalServerError Failed to duplicate unit
+   * @apiError NotFoundError If the unit or the target lectureId couldn't be found.
+   * @apiError ForbiddenError assertUserDuplicationAuthorization check failed.
    */
   @Post('/unit/:id')
-  async duplicateUnit(@Param('id') id: string, @Body() data: any) {
-    const courseId = data.courseId;
-    const lectureId = data.lectureId;
-    try {
-      const unitModel: IUnitModel = await Unit.findById(id);
-      const exportedUnit: IUnit = await unitModel.exportJSON();
-      return Unit.schema.statics.importJSON(exportedUnit, courseId, lectureId);
-    } catch (err) {
-      const newError = new InternalServerError('Failed to duplicate unit');
-      newError.stack += '\nCaused by: ' + err.message + '\n' + err.stack;
-      throw newError;
-    }
+  async duplicateUnit(@Param('id') id: string,
+                      @BodyParam('lectureId', {required: true}) targetLectureId: string,
+                      @CurrentUser() currentUser: IUser) {
+    const unitModel: IUnitModel = await Unit.findById(id);
+    if (!unitModel) { throw new NotFoundError(); }
+    const course = await Course.findById(unitModel._course);
+    await DuplicationController.assertUserDuplicationAuthorization(currentUser, course);
+    const targetCourse = await Course.findOne({lectures: targetLectureId});
+    if (!targetCourse) { throw new NotFoundError(errorCodes.duplication.targetNotFound.text); }
+    await DuplicationController.assertUserDuplicationAuthorization(currentUser, targetCourse);
+    const targetCourseId = extractSingleMongoId(targetCourse);
+
+    const exportedUnit: IUnit = await unitModel.exportJSON();
+    const duplicate = await Unit.schema.statics.importJSON(exportedUnit, targetCourseId, targetLectureId);
+    return DuplicationController.extractCommonResponse(duplicate);
   }
 
 }
