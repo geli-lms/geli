@@ -17,15 +17,18 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - `extractSingleMongoId` variant of the `ExtractMongoId` utility function(s). [#989](https://github.com/geli-lms/geli/issues/989)
 - Show message count for unit chat. [#933](https://github.com/geli-lms/geli/issues/993)
 - Styles for free text units. [#867](https://github.com/geli-lms/geli/issues/867)
+- Course-view-navigation for edit-users. [#1010](https://github.com/geli-lms/geli/issues/924)
 - Export PDF with styled free text units. [#997](https://github.com/geli-lms/geli/issues/997)
 - More predefined custom containers. [#996](https://github.com/geli-lms/geli/issues/996)
+- Styled code snippets. [#1017](https://github.com/geli-lms/geli/issues/1017)
 
 ### Changed
 - Update mongoose to 5.2.x. [#1004](https://github.com/geli-lms/geli/pull/1004)
 - Update contributors list. [#1007](https://github.com/geli-lms/geli/issues/1007)
-- Use `terser` instead of `uglify-js`. [#1018](https://github.com/geli-lms/geli/pull/1018) 
+- Use `terser` instead of `uglify-js`. [#1018](https://github.com/geli-lms/geli/pull/1018)
 
 ### Removed
+- Export PDF with styled free text units. [#997](https://github.com/geli-lms/geli/issues/997)
 
 ### Fixed
 - Notifications for invisible courses and lectures will no longer be created. [#877](https://github.com/geli-lms/geli/issues/877)
@@ -34,6 +37,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Security
 - Fixed multiple severe security issues of the chat system. [#989](https://github.com/geli-lms/geli/issues/989)
+- Update `node` to latest lts. [#1019](https://github.com/geli-lms/geli/issues/1019)
 
 ## [[0.8.2](https://github.com/geli-lms/geli/releases/tag/v0.8.2)] - 2018-11-08 - WS 18/19 🍪-Release
 ### Added
@@ -46,7 +50,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Switched to cookie-based JWT authentication. [#840](https://github.com/geli-lms/geli/issues/840) [#968](https://github.com/geli-lms/geli/issues/968)
 - Prepare `typescript` 3.1 upgrade. [#967](https://github.com/geli-lms/geli/pull/967)
 - Use `npm ci` instead `npm install` and cache `$HOME/.npm` instead of `node_modules`. [#972](https://github.com/geli-lms/geli/pull/972)
-- Use travis build stages. [#962](https://github.com/geli-lms/geli/issues/962)
+- Use travis build stages. [#962](https://github.com/geli-lms/geli/issues/962) [#1024](https://github.com/geli-lms/geli/pull/1024)
 
 ### Removed
 - `@types/winston`. [#945](https://github.com/geli-lms/geli/pull/945)

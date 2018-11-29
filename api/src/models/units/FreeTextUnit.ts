@@ -8,8 +8,21 @@ const MarkdownItDeflist = require('markdown-it-deflist');
 const MarkdownItContainer = require('markdown-it-container');
 const MarkdownItMark = require('markdown-it-mark');
 const MarkdownItAbbr = require('markdown-it-abbr');
+const hljs = require('highlight.js');
 
-const md = new MarkdownIt();
+const md = new MarkdownIt({
+  highlight: function (str, lang) {
+    if (lang && hljs.getLanguage(lang)) {
+      try {
+        return hljs.highlight(lang, str).value;
+      } catch (__) {
+      }
+    }
+
+    return ''; // use external default escaping
+  }
+});
+
 // load MD plugins
 md.use(markdownItEmoji);
 md.use(MarkdownItDeflist);
