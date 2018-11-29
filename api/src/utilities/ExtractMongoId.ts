@@ -8,7 +8,7 @@
  * @param from A mongoose object or ID string.
  * @param fallback Return this if no apparent ID is found.
  */
-export function extractSingleMongoId<T>(from: any, fallback?: T): string | T {
+export function extractSingleMongoId<T = undefined>(from: any, fallback?: T): string | T {
   if (typeof from === 'string' || from instanceof String) {
     return from.toString();
   } else if (from instanceof Object) {
@@ -35,7 +35,7 @@ export function extractSingleMongoId<T>(from: any, fallback?: T): string | T {
  * @param from A mongoose object, ID string, or (possibly mixed) array of such.
  * @param fallback Return this if no apparent ID is found.
  */
-export function extractMongoId<T>(from: any | any[], fallback?: T): string | T | (string | T)[] {
+export function extractMongoId<T = undefined>(from: any | any[], fallback?: T): string | T | (string | T)[] {
   if (Array.isArray(from)) {
     const results: any[] = [];
     for (const value of from) {
