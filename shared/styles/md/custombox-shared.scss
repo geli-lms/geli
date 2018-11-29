@@ -12,13 +12,11 @@
 .info {
   @extend %custombox-shared;
   background-color: #03A9F4;
-
 }
 
 .error {
   @extend %custombox-shared;
   background-color: #F44336;
-
 }
 
 .success {
@@ -29,31 +27,26 @@
 .learning-objectives {
   @extend %custombox-shared;
   background-color: #03A9F4;
-
 }
 
 .hints {
   @extend %custombox-shared;
   background-color: #ff8;
-
 }
 
 .assignment {
   @extend %custombox-shared;
   background-color: #f48643;
-
 }
 
 .question {
   @extend %custombox-shared;
   background-color: #44c3f4;
-
 }
 
 .example {
   @extend %custombox-shared;
   background-color: #b648f4;
-
 }
 
 .todo {

@@ -28,7 +28,7 @@ const binPath = phantomjs.path;
 import sassLoader from '../services/SassLoader';
 
 // ATTENTION: relative path from compiled .js file!
-const md_css = sassLoader.load('../../../../../shared/styles/md/bundle.scss');
+const markdownCss = sassLoader.load('../../../../../shared/styles/md/bundle.scss');
 
 // Set all routes which should use json to json, the standard is blob streaming data
 @Controller('/download')
@@ -251,7 +251,7 @@ export class DownloadController {
                 '       .codeBox {border: 1px solid grey; font-family: Monaco,Menlo,source-code-pro,monospace; padding: 10px}' +
                 '       #firstPage {page-break-after: always;}' +
                 '       .bottomBoxWrapper {height:800px; position: relative}' +
-                '       .bottomBox {position: absolute; bottom: 0;}' + md_css +
+                '       .bottomBox {position: absolute; bottom: 0;}' + markdownCss +
                 '     </style>' +
                 '  </head>';
                 html += await localUnit.toHtmlForIndividualPDF();
@@ -368,7 +368,7 @@ export class DownloadController {
           '       #firstPage {page-break-after: always;}' +
           '       #nextPage {page-break-before: always;}' +
           '       .bottomBoxWrapper {height:800px; position: relative}' +
-          '       .bottomBox {position: absolute; bottom: 0;}' + md_css +
+          '       .bottomBox {position: absolute; bottom: 0;}' + markdownCss +
           '     </style>' +
           '  </head>' +
           '  <body>' +
