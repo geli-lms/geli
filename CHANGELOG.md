@@ -29,6 +29,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
 - Update mongoose to 5.2.x. [#1004](https://github.com/geli-lms/geli/pull/1004)
 - Update contributors list. [#1007](https://github.com/geli-lms/geli/issues/1007)
+- Display only one notification per course update. [#914](https://github.com/geli-lms/geli/issues/914)
 - Use `terser` instead of `uglify-js`. [#1018](https://github.com/geli-lms/geli/pull/1018)
 - `ExtractMongoId` utility upgrades & streamlining. [#989](https://github.com/geli-lms/geli/issues/989) [#1016](https://github.com/geli-lms/geli/issues/1016) [#1039](https://github.com/geli-lms/geli/issues/1039)
 
