@@ -9,6 +9,7 @@ export default {
 
   // Database connection information
   database: `mongodb://${process.env.DB_HOST || 'localhost'}:${process.env.DB_PORT || '27017'}/${process.env.DB_NAME || 'geli'}`,
+  databaseOptions: {useNewUrlParser: true, useCreateIndex: true, useFindAndModify: false},
 
   // Setting port for server
   port: process.env.PORT || 3030,
