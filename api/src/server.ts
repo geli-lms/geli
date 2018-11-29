@@ -40,6 +40,8 @@ export class Server {
     (<any>mongoose).Promise = global.Promise;
 
     // mongoose.set('debug', true);
+    mongoose.set('useCreateIndex', true);
+    mongoose.set('useFindAndModify', false);
 
     this.app = createExpressServer({
       routePrefix: '/api',
@@ -61,6 +63,7 @@ export class Server {
     // Requires authentication via the passportJwtMiddleware to accesss the static config.uploadFolder (e.g. for images).
     // That means this is not meant for truly public files accessible without login!
     this.app.use('/api/uploads', passportJwtMiddleware, express.static(config.uploadFolder));
+
   }
 
   start() {

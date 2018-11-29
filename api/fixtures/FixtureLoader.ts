@@ -70,7 +70,7 @@ export class FixtureLoader {
     }
 
     await mongoose.connection.dropDatabase();
-    await User.ensureIndexes();
+    await User.createIndexes();
 
     const userfixtures = fs.readdirSync(this.usersDirectory);
     const coursefixtures = fs.readdirSync(this.coursesDirectory);
