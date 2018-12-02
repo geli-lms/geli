@@ -7,7 +7,6 @@ import {ILectureModel, Lecture} from './Lecture';
 import {ILecture} from '../../../shared/models/ILecture';
 import {InternalServerError} from 'routing-controllers';
 import {IUser} from '../../../shared/models/IUser';
-import {ObjectID} from 'bson';
 import {Directory} from './mediaManager/Directory';
 import {extractSingleMongoId} from '../utilities/ExtractMongoId';
 import {ChatRoom, IChatRoomModel} from './ChatRoom';
