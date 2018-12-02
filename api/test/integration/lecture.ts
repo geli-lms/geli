@@ -1,7 +1,5 @@
 import * as chai from 'chai';
-import {Server} from '../../src/server';
-import {FixtureLoader} from '../../fixtures/FixtureLoader';
-import {JwtUtils} from '../../src/security/JwtUtils';
+import {TestHelper} from '../TestHelper';
 import {User} from '../../src/models/User';
 import {Course} from '../../src/models/Course';
 import {FixtureUtils} from '../../fixtures/FixtureUtils';
@@ -10,14 +8,12 @@ import {Lecture} from '../../src/models/Lecture';
 
 chai.use(chaiHttp);
 const should = chai.should();
-const app = new Server().app;
 const BASE_URL = '/api/lecture';
-const fixtureLoader = new FixtureLoader();
+const testHelper = new TestHelper(BASE_URL);
 
 describe('Lecture', () => {
-  // Before each test we reset the database
   beforeEach(async () => {
-    await fixtureLoader.load();
+    await testHelper.resetForNextTest();
   });
 
   describe(`DELETE ${BASE_URL}` , () => {
@@ -26,9 +22,7 @@ describe('Lecture', () => {
       const lectureId = await course.lectures[0];
       const courseAdmin = await User.findOne({_id: course.courseAdmin});
 
-      const res = await chai.request(app)
-        .del(BASE_URL + '/' + lectureId)
-        .set('Cookie', `token=${JwtUtils.generateToken(courseAdmin)}`);
+      const res = await testHelper.commonUserDeleteRequest(courseAdmin, `/${lectureId}`);
 
       res.status.should.be.equal(200);
       const courseWithDeletedLecture = await Course.findById(course._id);
