@@ -16,19 +16,22 @@ import {errorCodes} from '../config/errorCodes';
 
 import * as fs from 'fs';
 import * as path from 'path';
+
 const archiver = require('archiver');
 import crypto = require('crypto');
 import {User} from '../models/User';
 import {File} from '../models/mediaManager/File';
 
 const cache = require('node-file-cache').create({life: config.timeToLiveCacheValue});
-const pdf =  require('html-pdf');
+const pdf = require('html-pdf');
 const phantomjs = require('phantomjs-prebuilt');
 const binPath = phantomjs.path;
 import sassLoader from '../services/SassLoader';
+const loader = new sassLoader();
 
-// ATTENTION: relative path from compiled .js file!
-const markdownCss = sassLoader.load('../../../../../shared/styles/md/bundle.scss');
+
+// ATTENTION: relative path from transpiled .js file!
+const markdownCss = require('../../../../shared/styles/md/bundle.scss');
 
 // Set all routes which should use json to json, the standard is blob streaming data
 @Controller('/download')
@@ -77,10 +80,10 @@ export class DownloadController {
           const fileUnit = <IFileUnit><any>localUnit;
           fileUnit.files.forEach((file, index) => {
             if (unit.files.indexOf(index) > -1) {
-              if ((file.size / 1024 ) > config.maxFileSize) {
+              if ((file.size / 1024) > config.maxFileSize) {
                 localTooLargeFiles.push(file.link);
               }
-              localTotalSize += (file.size / 1024 );
+              localTotalSize += (file.size / 1024);
             }
           });
         }
@@ -223,7 +226,7 @@ export class DownloadController {
             if (localUnit.__t === 'file') {
               for (const fileId of unit.files) {
                 const file = await File.findById(fileId);
-                archive.file( 'uploads/' + file.link, {name: lecCounter + '_' + lcName + '/' + unitCounter + '_' + file.name});
+                archive.file('uploads/' + file.link, {name: lecCounter + '_' + lcName + '/' + unitCounter + '_' + file.name});
               }
             } else {
 
@@ -254,8 +257,8 @@ export class DownloadController {
                 '       .bottomBox {position: absolute; bottom: 0;}' + markdownCss +
                 '     </style>' +
                 '  </head>';
-                html += await localUnit.toHtmlForIndividualPDF();
-                html += '</html>';
+              html += await localUnit.toHtmlForIndividualPDF();
+              html += '</html>';
               const name = lecCounter + '_' + lcName + '/' + unitCounter + '_' + this.replaceCharInFilename(localUnit.name) + '.pdf';
               await this.savePdfToFile(html, options, tempPdfFileName);
               await this.appendToArchive(archive, name, tempPdfFileName, hash);
@@ -403,10 +406,10 @@ export class DownloadController {
                 archive.file(path.join(config.uploadFolder, file.link),
                   {name: lecCounter + '_' + lcName + '/' + unitCounter + '_' + file.name});
               }
-            } else if ( (localUnit.__t === 'code-kata' || localUnit.__t === 'task') && lecCounter > 1 && unitCounter > 1) {
-              html +=  '<div id="nextPage" >' + await localUnit.toHtmlForSinglePDF() + '</div>';
+            } else if ((localUnit.__t === 'code-kata' || localUnit.__t === 'task') && lecCounter > 1 && unitCounter > 1) {
+              html += '<div id="nextPage" >' + await localUnit.toHtmlForSinglePDF() + '</div>';
             } else {
-              html +=  await localUnit.toHtmlForSinglePDF();
+              html += await localUnit.toHtmlForSinglePDF();
             }
 
             if (localUnit.__t === 'code-kata' || localUnit.__t === 'task') {
@@ -419,7 +422,7 @@ export class DownloadController {
               } else {
                 solutions += '<div id="nextPage" >';
               }
-              solutions += await localUnit.toHtmlForSinglePDFSolutions()  + '</div>';
+              solutions += await localUnit.toHtmlForSinglePDFSolutions() + '</div>';
               solCounter++;
             } else if (localUnit.__t !== 'file') {
               solutions += await localUnit.toHtmlForSinglePDFSolutions();
@@ -456,11 +459,13 @@ export class DownloadController {
       '_temp.pdf';
   }
 
-  private savePdfToFile(html: any, options: any, pathToFile: String ): Promise<void> {
+  private savePdfToFile(html: any, options: any, pathToFile: String): Promise<void> {
     return new Promise<void>((resolve, reject) => {
 
-      pdf.create(html, options).toFile(pathToFile, function(err: any, res: any) {
-        if (err) { reject(err); }
+      pdf.create(html, options).toFile(pathToFile, function (err: any, res: any) {
+        if (err) {
+          reject(err);
+        }
         resolve();
       });
 
@@ -470,12 +475,13 @@ export class DownloadController {
   private appendToArchive(archive: any, name: String, pathToFile: String, hash: any) {
     return new Promise<void>((resolve, reject) => {
       archive.on('entry', () => {
-        resolve(); });
+        resolve();
+      });
       archive.on('error', () => reject(hash));
       archive.file(pathToFile,
         {name: name});
     });
-    }
+  }
 
   /**
    * @api {delete} /api/download/ Request to clean up the cache.
