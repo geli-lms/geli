@@ -238,26 +238,26 @@ describe('Duplicate', async () => {
 
     it('should respond with 404 for a unit id that doesn\'t exist', async () => {
       const targetLecture = await FixtureUtils.getRandomLecture();
-      testNotFound('/unit/000000000000000000000000', {lectureId: targetLecture._id});
+      await testNotFound('/unit/000000000000000000000000', {lectureId: targetLecture._id});
     });
 
     it('should respond with 404 for a lecture id that doesn\'t exist', async () => {
       const targetCourse = await FixtureUtils.getRandomCourse();
-      testNotFound('/lecture/000000000000000000000000', {courseId: targetCourse._id});
+      await testNotFound('/lecture/000000000000000000000000', {courseId: targetCourse._id});
     });
 
     it('should respond with 404 for a course id that doesn\'t exist', async () => {
-      testNotFound('/course/000000000000000000000000');
+      await testNotFound('/course/000000000000000000000000');
     });
 
     it('should respond with 404 for a target lecture id that doesn\'t exist (unit duplication)', async () => {
       const unit = await FixtureUtils.getRandomUnit();
-      testNotFound(`/unit/${unit._id}`, {lectureId: '000000000000000000000000'});
+      await testNotFound(`/unit/${unit._id}`, {lectureId: '000000000000000000000000'});
     });
 
     it('should respond with 404 for a target course id that doesn\'t exist (lecture duplication)', async () => {
       const lecture = await FixtureUtils.getRandomLecture();
-      testNotFound(`/lecture/${lecture._id}`, {courseId: '000000000000000000000000'});
+      await testNotFound(`/lecture/${lecture._id}`, {courseId: '000000000000000000000000'});
     });
   });
 });
