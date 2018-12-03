@@ -19,6 +19,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Fixed
 - File not found error (Bundle.scss) in backend-Docker. [#1052](https://github.com/geli-lms/geli/issues/1052)
 
+### Changed
+- Update mongoose to 5.3.x. [#1003](https://github.com/geli-lms/geli/issues/1003)[#1004](https://github.com/geli-lms/geli/pull/1004)[#1044](https://github.com/geli-lms/geli/pull/1044)
+
 ## [[0.8.3](https://github.com/geli-lms/geli/releases/tag/v0.8.3)] - 2018-11-29 - WS 18/19 🚀-Release
 ### Added
 - Chat system access denial unit tests. [#989](https://github.com/geli-lms/geli/issues/989)
@@ -51,7 +54,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - EU-DSGVO: Exclusion of comments in the user chat data export. [#998](https://github.com/geli-lms/geli/issues/998)
 - Nondeterministic chat system unit test authorization failures. [#989](https://github.com/geli-lms/geli/issues/989)
 - Unnecessarily verbose `DuplicationController` route responses. [#1016](https://github.com/geli-lms/geli/issues/1016)
-- Prepare `mongoose` update. [#1003](https://github.com/geli-lms/geli/issues/1003) [#1027](https://github.com/geli-lms/geli/pull/1027)
+- Prepare `mongoose 5.3.x` update. [#1003](https://github.com/geli-lms/geli/issues/1003) [#1027](https://github.com/geli-lms/geli/pull/1027)
 - `ExportController` missing 404 handling. [#1039](https://github.com/geli-lms/geli/issues/1039)
 - `DuplicationController` missing 404 handling. [#1039](https://github.com/geli-lms/geli/issues/1039)
 - Fix invalid translation key `hasBeenDeleted`. [#1032](https://github.com/geli-lms/geli/pull/1032)

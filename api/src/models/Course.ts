@@ -7,7 +7,6 @@ import {ILectureModel, Lecture} from './Lecture';
 import {ILecture} from '../../../shared/models/ILecture';
 import {InternalServerError} from 'routing-controllers';
 import {IUser} from '../../../shared/models/IUser';
-import {ObjectID} from 'bson';
 import {Directory} from './mediaManager/Directory';
 import {extractSingleMongoId} from '../utilities/ExtractMongoId';
 import {ChatRoom, IChatRoomModel} from './ChatRoom';
@@ -117,9 +116,7 @@ const courseSchema = new mongoose.Schema({
           ret._id = ret._id.toString();
         }
 
-        if (ret.hasOwnProperty('courseAdmin') && ret.courseAdmin !== null && (ret.courseAdmin instanceof ObjectID)) {
-          ret.courseAdmin = ret.courseAdmin.toString();
-        }
+        ret.courseAdmin = extractSingleMongoId(ret.courseAdmin);
         ret.hasAccessKey = false;
         if (ret.accessKey) {
           ret.hasAccessKey = true;
