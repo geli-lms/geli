@@ -30,14 +30,12 @@ export class SassLoader {
   }
 
   public requireSass(mod: any, file: string) {
-    const renderOptions = this.defaultOptions;
-    renderOptions.file = file;
     mod.exports = this.load(file);
   }
 
   public load(filepath: string) {
     const renderOptions = this.defaultOptions;
-    renderOptions.file = filepath; // resolve(module.parent.filename, filepath);
+    renderOptions.file = filepath;
     try {
       return renderSync(renderOptions).css.toString();
     } catch (e) {
