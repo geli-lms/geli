@@ -106,16 +106,11 @@ describe('Lecture', () => {
       return await testHelper.commonUserDeleteRequest(user, `/${lecture.id}`);
     }
 
-    it('should delete a lecture by course admin', async () => {
+    it('should delete a lecture', async () => {
       const setup = await lectureSuccessTestSetup();
       const res = await lectureDeleteTest(setup);
       res.status.should.be.equal(200);
-
-      const {course, lecture} = setup;
-      const courseWithDeletedLecture = await Course.findById(course.id);
-      courseWithDeletedLecture.lectures[0].should.not.be.equal(lecture.id);
-      const deletedLecture = await Lecture.findById(lecture.id);
-      should.not.exist(deletedLecture, 'Lecture still exists');
+      should.not.exist(await Lecture.findById(setup.lecture.id), 'Lecture still exists');
     });
 
     it('should forbid lecture deletions for an unauthorized teacher', async () => {
