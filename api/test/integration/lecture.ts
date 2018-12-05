@@ -1,9 +1,10 @@
 import * as chai from 'chai';
-import {TestHelper} from '../TestHelper';
-import {Course} from '../../src/models/Course';
-import {FixtureUtils} from '../../fixtures/FixtureUtils';
 import chaiHttp = require('chai-http');
+import {TestHelper} from '../TestHelper';
+import {Course, ICourseModel} from '../../src/models/Course';
+import {FixtureUtils} from '../../fixtures/FixtureUtils';
 import {Lecture, ILectureModel} from '../../src/models/Lecture';
+import {IUser} from '../../../shared/models/IUser';
 
 chai.use(chaiHttp);
 const should = chai.should();
@@ -19,7 +20,7 @@ async function lectureSuccessTestSetup() {
   const lecture = await FixtureUtils.getRandomLecture();
   const course = await FixtureUtils.getCourseFromLecture(lecture);
   const admin = await FixtureUtils.getRandomAdmin();
-  return {lecture, course, admin};
+  return {lecture, course, admin, user: admin};
 }
 
 /**
@@ -31,7 +32,7 @@ async function lectureAccessDenialTestSetup() {
   const lecture = await FixtureUtils.getRandomLecture();
   const course = await FixtureUtils.getCourseFromLecture(lecture);
   const unauthorizedTeacher = await FixtureUtils.getUnauthorizedTeacherForCourse(course);
-  return {lecture, course, unauthorizedTeacher};
+  return {lecture, course, unauthorizedTeacher, user: unauthorizedTeacher};
 }
 
 function lectureShouldEqualRes(lecture: ILectureModel, res: any) {
@@ -47,60 +48,70 @@ describe('Lecture', () => {
   });
 
   describe(`GET ${BASE_URL}` , () => {
+    async function lectureGetTest({lecture, user}: {lecture: ILectureModel, user: IUser}) {
+      return await testHelper.commonUserGetRequest(user, `/${lecture.id}`);
+    }
+
     it('should get lecture data', async () => {
-      const {lecture, admin} = await lectureSuccessTestSetup();
-      const res = await testHelper.commonUserGetRequest(admin, `/${lecture.id}`);
-      lectureShouldEqualRes(lecture, res);
+      const setup = await lectureSuccessTestSetup();
+      const res = await lectureGetTest(setup);
+      lectureShouldEqualRes(setup.lecture, res);
     });
 
     it('should forbid lecture access for an unauthorized user', async () => {
-      const {lecture, unauthorizedTeacher} = await lectureAccessDenialTestSetup();
-      const res = await testHelper.commonUserGetRequest(unauthorizedTeacher, `/${lecture.id}`);
+      const res = await lectureGetTest(await lectureAccessDenialTestSetup());
       res.status.should.be.equal(403);
     });
   });
 
   describe(`POST ${BASE_URL}` , () => {
-    it('should add a lecture', async () => {
-      const {lecture, course, admin} = await lectureSuccessTestSetup();
-      const res = await testHelper.commonUserPostRequest(admin, `/`, {
+    async function lecturePostTest({lecture, course, user}: {lecture: ILectureModel, course: ICourseModel, user: IUser}) {
+      return await testHelper.commonUserPostRequest(user, `/`, {
         lecture: {name: lecture.name, description: lecture.description},
         courseId: course.id
       });
+    }
+
+    it('should add a lecture', async () => {
+      const res = await lecturePostTest(await lectureSuccessTestSetup());
       res.status.should.be.equal(200);
     });
 
     it('should forbid lecture addition for an unauthorized teacher', async () => {
-      const {lecture, course, unauthorizedTeacher} = await lectureAccessDenialTestSetup();
-      const res = await testHelper.commonUserPostRequest(unauthorizedTeacher, `/`, {
-        lecture: {name: lecture.name, description: lecture.description},
-        courseId: course.id
-      });
+      const res = await lecturePostTest(await lectureAccessDenialTestSetup());
       res.status.should.be.equal(403);
     });
   });
 
   describe(`PUT ${BASE_URL}` , () => {
-    it('should modify a lecture', async () => {
-      const {lecture, admin} = await lectureSuccessTestSetup();
+    async function lecturePutTest({lecture, user}: {lecture: ILectureModel, user: IUser}) {
       lecture.description = 'Lecture modification unit test.';
-      const res = await testHelper.commonUserPutRequest(admin, `/${lecture.id}`, lecture);
-      lectureShouldEqualRes(lecture, res);
+      return await testHelper.commonUserPutRequest(user, `/${lecture.id}`, lecture);
+    }
+
+    it('should modify a lecture', async () => {
+      const setup = await lectureSuccessTestSetup();
+      const res = await lecturePutTest(setup);
+      lectureShouldEqualRes(setup.lecture, res);
     });
 
     it('should forbid lecture modification for an unauthorized teacher', async () => {
-      const {lecture, unauthorizedTeacher} = await lectureAccessDenialTestSetup();
-      const res = await testHelper.commonUserPutRequest(unauthorizedTeacher, `/${lecture.id}`, lecture);
+      const res = await lecturePutTest(await lectureAccessDenialTestSetup());
       res.status.should.be.equal(403);
     });
   });
 
   describe(`DELETE ${BASE_URL}` , () => {
-    it.only('should delete a lecture by course admin', async () => {
-      const {lecture, course, admin} = await lectureSuccessTestSetup();
-      const res = await testHelper.commonUserDeleteRequest(admin, `/${lecture.id}`);
+    async function lectureDeleteTest({lecture, user}: {lecture: ILectureModel, user: IUser}) {
+      return await testHelper.commonUserDeleteRequest(user, `/${lecture.id}`);
+    }
+
+    it('should delete a lecture by course admin', async () => {
+      const setup = await lectureSuccessTestSetup();
+      const res = await lectureDeleteTest(setup);
       res.status.should.be.equal(200);
 
+      const {course, lecture} = setup;
       const courseWithDeletedLecture = await Course.findById(course.id);
       courseWithDeletedLecture.lectures[0].should.not.be.equal(lecture.id);
       const deletedLecture = await Lecture.findById(lecture.id);
@@ -108,8 +119,7 @@ describe('Lecture', () => {
     });
 
     it('should forbid lecture deletions for an unauthorized teacher', async () => {
-      const {lecture, unauthorizedTeacher} = await lectureAccessDenialTestSetup();
-      const res = await testHelper.commonUserDeleteRequest(unauthorizedTeacher, `/${lecture.id}`);
+      const res = await lectureDeleteTest(await lectureAccessDenialTestSetup());
       res.status.should.be.equal(403);
     });
   });
