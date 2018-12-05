@@ -17,17 +17,38 @@ describe('Lecture', () => {
   });
 
   describe(`GET ${BASE_URL}` , () => {
+    it('should get lecture data', async () => {
+      const admin = await FixtureUtils.getRandomAdmin();
+      const lecture = await FixtureUtils.getRandomLecture();
+      const res = await testHelper.commonUserGetRequest(admin, `/${lecture.id}`);
+      res.status.should.be.equal(200);
+      should.equal(lecture.id, res.body._id, 'Incorrect id.');
+      should.equal(lecture.name, res.body.name, 'Incorrect name.');
+      should.equal(lecture.description, res.body.description, 'Incorrect description.');
+    });
+
     it('should forbid lecture access for an unauthorized user', async () => {
       const lecture = await FixtureUtils.getRandomLecture();
       const course = await FixtureUtils.getCourseFromLecture(lecture);
       const unauthorizedUser = await User.findOne({_id: {$nin: [course.courseAdmin, ...course.teachers]}});
-      const res = await testHelper.commonUserGetRequest(unauthorizedUser, `/${lecture._id}`);
+      const res = await testHelper.commonUserGetRequest(unauthorizedUser, `/${lecture.id}`);
       res.status.should.be.equal(403);
     });
   });
 
   describe(`POST ${BASE_URL}` , () => {
-    it('should forbid lecture additions for an unauthorized teacher', async () => {
+    it('should add a lecture', async () => {
+      const admin = await FixtureUtils.getRandomAdmin();
+      const lecture = await FixtureUtils.getRandomLecture();
+      const course = await FixtureUtils.getCourseFromLecture(lecture);
+      const res = await testHelper.commonUserPostRequest(admin, `/`, {
+        lecture: {name: lecture.name, description: lecture.description},
+        courseId: course.id
+      });
+      res.status.should.be.equal(200);
+    });
+
+    it('should forbid lecture addition for an unauthorized teacher', async () => {
       const lecture = await FixtureUtils.getRandomLecture();
       const course = await FixtureUtils.getCourseFromLecture(lecture);
       const unauthorizedTeacher = await User.findOne({
@@ -35,15 +56,29 @@ describe('Lecture', () => {
         role: 'teacher'
       });
       const res = await testHelper.commonUserPostRequest(unauthorizedTeacher, `/`, {
-        lecture,
-        courseId: course._id
+        lecture: {name: lecture.name, description: lecture.description},
+        courseId: course.id
       });
       res.status.should.be.equal(403);
     });
   });
 
   describe(`PUT ${BASE_URL}` , () => {
-    it('should forbid lecture modifications for an unauthorized teacher', async () => {
+    it('should modify a lecture', async () => {
+      const admin = await FixtureUtils.getRandomAdmin();
+      const lecture = await FixtureUtils.getRandomLecture();
+      lecture.description = 'Lecture modification unit test.';
+      const res = await testHelper.commonUserPutRequest(admin, `/${lecture.id}`, lecture);
+      res.status.should.be.equal(200);
+
+      const resCheck = await testHelper.commonUserGetRequest(admin, `/${lecture.id}`);
+      resCheck.status.should.be.equal(200);
+      should.equal(lecture.id, resCheck.body._id, 'Incorrect id.');
+      should.equal(lecture.name, res.body.name, 'Incorrect name.');
+      should.equal(lecture.description, resCheck.body.description, 'Incorrect description.');
+    });
+
+    it('should forbid lecture modification for an unauthorized teacher', async () => {
       const lecture = await FixtureUtils.getRandomLecture();
       const course = await FixtureUtils.getCourseFromLecture(lecture);
       const unauthorizedTeacher = await User.findOne({
