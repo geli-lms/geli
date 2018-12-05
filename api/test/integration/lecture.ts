@@ -74,10 +74,7 @@ describe('Lecture', () => {
       lecture.description = 'Lecture modification unit test.';
       const res = await testHelper.commonUserPutRequest(admin, `/${lecture.id}`, lecture);
       res.status.should.be.equal(200);
-
-      const resCheck = await testHelper.commonUserGetRequest(admin, `/${lecture.id}`);
-      resCheck.status.should.be.equal(200);
-      lectureShouldEqualRes(lecture, resCheck);
+      lectureShouldEqualRes(lecture, res);
     });
 
     it('should forbid lecture modification for an unauthorized teacher', async () => {
