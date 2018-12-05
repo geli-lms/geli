@@ -92,9 +92,9 @@ export class NotificationController {
       return true;
     }
     if (!changedUnit) {
-      return (await Notification.count({'user': user._id, 'changedCourse': changedCourse._id})) === 0;
+      return (await Notification.countDocuments({'user': user._id, 'changedCourse': changedCourse._id})) === 0;
     }
-    return (await Notification.count({'user': user._id, 'changedUnit': changedUnit._id})) === 0;
+    return (await Notification.countDocuments({'user': user._id, 'changedUnit': changedUnit._id})) === 0;
   }
 
   async createNotification(user: IUser, text: string, changedCourse?: ICourse, changedLecture?: ILecture, changedUnit?: IUnit) {
