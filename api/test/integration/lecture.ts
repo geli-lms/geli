@@ -39,11 +39,12 @@ async function lectureAccessDenialTestSetup() {
 /**
  * Provides simple shared setup functionality used by the lecture not found (404) unit tests.
  *
- * @returns Same as lectureSuccessTestSetup, but the lecture id is set to 000000000000000000000000.
+ * @returns Same as lectureSuccessTestSetup, but the lecture & course ids are set to 000000000000000000000000.
  */
 async function lectureNotFoundTestSetup() {
   const setup = await lectureSuccessTestSetup();
   setup.lecture._id = '000000000000000000000000';
+  setup.course._id = '000000000000000000000000';
   return setup;
 }
 

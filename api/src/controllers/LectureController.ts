@@ -33,11 +33,11 @@ export class LectureController {
    */
   @Get('/:id')
   async getLecture(@Param('id') id: string, @CurrentUser() currentUser: IUser) {
+    const lecture = await Lecture.findById(id).orFail(new NotFoundError());
     const course = await Course.findOne({lectures: id});
     if (!course.checkPrivileges(currentUser).userCanViewCourse) {
       throw new ForbiddenError();
     }
-    const lecture = await Lecture.findById(id);
     return lecture.toObject();
   }
 
@@ -69,7 +69,7 @@ export class LectureController {
     const lectureI: ILecture = data.lecture;
     const courseId: string = data.courseId;
 
-    const course = await Course.findById(courseId);
+    const course = await Course.findById(courseId).orFail(new NotFoundError());
     if (!course.checkPrivileges(currentUser).userCanEditCourse) {
       throw new ForbiddenError();
     }
@@ -107,7 +107,7 @@ export class LectureController {
   @Authorized(['teacher', 'admin'])
   @Put('/:id')
   async updateLecture(@Param('id') id: string, @Body() lectureUpdate: ILecture, @CurrentUser() currentUser: IUser) {
-    const course = await Course.findOne({lectures: id});
+    const course = await Course.findOne({lectures: id}).orFail(new NotFoundError());
     if (!course.checkPrivileges(currentUser).userCanEditCourse) {
       throw new ForbiddenError();
     }
@@ -132,10 +132,7 @@ export class LectureController {
   @Authorized(['teacher', 'admin'])
   @Delete('/:id')
   async deleteLecture(@Param('id') id: string, @CurrentUser() currentUser: IUser) {
-    const course = await Course.findOne({lectures: id});
-    if (!course) {
-      throw new NotFoundError();
-    }
+    const course = await Course.findOne({lectures: id}).orFail(new NotFoundError());
     if (!course.checkPrivileges(currentUser).userCanEditCourse) {
       throw new ForbiddenError();
     }
