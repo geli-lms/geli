@@ -30,10 +30,7 @@ async function lectureSuccessTestSetup() {
 async function lectureAccessDenialTestSetup() {
   const lecture = await FixtureUtils.getRandomLecture();
   const course = await FixtureUtils.getCourseFromLecture(lecture);
-  const unauthorizedTeacher = await User.findOne({
-    _id: {$nin: [course.courseAdmin, ...course.teachers]},
-    role: 'teacher'
-  });
+  const unauthorizedTeacher = await FixtureUtils.getUnauthorizedTeacherForCourse(course);
   return {lecture, course, unauthorizedTeacher};
 }
 

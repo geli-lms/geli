@@ -167,6 +167,20 @@ export class FixtureUtils {
     return {course, roomId};
   }
 
+  /**
+   * Obtain an unauthorized teacher for a course.
+   * This teacher can be used for access denial unit tests.
+   *
+   * @param course The teacher can't belong to this given course; i.e. the teacher won't be 'courseAdmin' or one of the 'teachers'.
+   * @returns A user with 'teacher' role that is not authorized to access the given course.
+   */
+  public static async getUnauthorizedTeacherForCourse(course: ICourse): Promise<IUserModel> {
+    return await User.findOne({
+      _id: {$nin: [course.courseAdmin, ...course.teachers]},
+      role: 'teacher'
+    });
+  }
+
   private static async getAdmins(): Promise<IUser[]> {
     return this.getUser('admin');
   }

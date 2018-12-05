@@ -33,10 +33,7 @@ const testHelper = new TestHelper(BASE_URL);
  */
 async function exportAccessDenialSetup() {
   const course = await FixtureUtils.getRandomCourseWithAllUnitTypes();
-  const unauthorizedTeacher = await User.findOne({
-    _id: {$nin: [course.courseAdmin, ...course.teachers]},
-    role: 'teacher'
-  });
+  const unauthorizedTeacher = await FixtureUtils.getUnauthorizedTeacherForCourse(course);
   return {course, unauthorizedTeacher};
 }
 
