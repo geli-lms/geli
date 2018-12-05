@@ -23,6 +23,7 @@ async function lectureSuccessTestSetup() {
 }
 
 function lectureShouldEqualRes(lecture: ILectureModel, res: any) {
+  res.status.should.be.equal(200);
   should.equal(lecture.id, res.body._id, 'Incorrect id.');
   should.equal(lecture.name, res.body.name, 'Incorrect name.');
   should.equal(lecture.description, res.body.description, 'Incorrect description.');
@@ -37,7 +38,6 @@ describe('Lecture', () => {
     it('should get lecture data', async () => {
       const {admin, lecture} = await lectureSuccessTestSetup();
       const res = await testHelper.commonUserGetRequest(admin, `/${lecture.id}`);
-      res.status.should.be.equal(200);
       lectureShouldEqualRes(lecture, res);
     });
 
@@ -81,7 +81,6 @@ describe('Lecture', () => {
       const {admin, lecture} = await lectureSuccessTestSetup();
       lecture.description = 'Lecture modification unit test.';
       const res = await testHelper.commonUserPutRequest(admin, `/${lecture.id}`, lecture);
-      res.status.should.be.equal(200);
       lectureShouldEqualRes(lecture, res);
     });
 
