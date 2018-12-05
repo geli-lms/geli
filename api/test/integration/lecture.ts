@@ -22,6 +22,21 @@ async function lectureSuccessTestSetup() {
   return {admin, lecture};
 }
 
+/**
+ * Provides simple shared setup functionality used by the lecture access denial (403) unit tests.
+ *
+ * @returns A 'lecture', its 'course' and an 'unauthorizedTeacher' (i.e. a teacher that isn't part of the course).
+ */
+async function lectureAccessDenialTestSetup() {
+  const lecture = await FixtureUtils.getRandomLecture();
+  const course = await FixtureUtils.getCourseFromLecture(lecture);
+  const unauthorizedTeacher = await User.findOne({
+    _id: {$nin: [course.courseAdmin, ...course.teachers]},
+    role: 'teacher'
+  });
+  return {lecture, course, unauthorizedTeacher};
+}
+
 function lectureShouldEqualRes(lecture: ILectureModel, res: any) {
   res.status.should.be.equal(200);
   should.equal(lecture.id, res.body._id, 'Incorrect id.');
@@ -42,10 +57,8 @@ describe('Lecture', () => {
     });
 
     it('should forbid lecture access for an unauthorized user', async () => {
-      const lecture = await FixtureUtils.getRandomLecture();
-      const course = await FixtureUtils.getCourseFromLecture(lecture);
-      const unauthorizedUser = await User.findOne({_id: {$nin: [course.courseAdmin, ...course.teachers]}});
-      const res = await testHelper.commonUserGetRequest(unauthorizedUser, `/${lecture.id}`);
+      const {lecture, unauthorizedTeacher} = await lectureAccessDenialTestSetup();
+      const res = await testHelper.commonUserGetRequest(unauthorizedTeacher, `/${lecture.id}`);
       res.status.should.be.equal(403);
     });
   });
@@ -62,12 +75,7 @@ describe('Lecture', () => {
     });
 
     it('should forbid lecture addition for an unauthorized teacher', async () => {
-      const lecture = await FixtureUtils.getRandomLecture();
-      const course = await FixtureUtils.getCourseFromLecture(lecture);
-      const unauthorizedTeacher = await User.findOne({
-        _id: {$nin: [course.courseAdmin, ...course.teachers]},
-        role: 'teacher'
-      });
+      const {lecture, course, unauthorizedTeacher} = await lectureAccessDenialTestSetup();
       const res = await testHelper.commonUserPostRequest(unauthorizedTeacher, `/`, {
         lecture: {name: lecture.name, description: lecture.description},
         courseId: course.id
@@ -85,12 +93,7 @@ describe('Lecture', () => {
     });
 
     it('should forbid lecture modification for an unauthorized teacher', async () => {
-      const lecture = await FixtureUtils.getRandomLecture();
-      const course = await FixtureUtils.getCourseFromLecture(lecture);
-      const unauthorizedTeacher = await User.findOne({
-        _id: {$nin: [course.courseAdmin, ...course.teachers]},
-        role: 'teacher'
-      });
+      const {lecture, unauthorizedTeacher} = await lectureAccessDenialTestSetup();
       const res = await testHelper.commonUserPutRequest(unauthorizedTeacher, `/${lecture._id}`, lecture);
       res.status.should.be.equal(403);
     });
@@ -112,12 +115,7 @@ describe('Lecture', () => {
     });
 
     it('should forbid lecture deletions for an unauthorized teacher', async () => {
-      const lecture = await FixtureUtils.getRandomLecture();
-      const course = await FixtureUtils.getCourseFromLecture(lecture);
-      const unauthorizedTeacher = await User.findOne({
-        _id: {$nin: [course.courseAdmin, ...course.teachers]},
-        role: 'teacher'
-      });
+      const {lecture, unauthorizedTeacher} = await lectureAccessDenialTestSetup();
       const res = await testHelper.commonUserDeleteRequest(unauthorizedTeacher, `/${lecture._id}`);
       res.status.should.be.equal(403);
     });
