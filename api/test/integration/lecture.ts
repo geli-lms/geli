@@ -11,6 +11,17 @@ const should = chai.should();
 const BASE_URL = '/api/lecture';
 const testHelper = new TestHelper(BASE_URL);
 
+/**
+ * Provides simple shared setup functionality used by the lecture success (200) unit tests.
+ *
+ * @returns A random 'admin' and 'lecture'.
+ */
+async function lectureSuccessTestSetup() {
+  const admin = await FixtureUtils.getRandomAdmin();
+  const lecture = await FixtureUtils.getRandomLecture();
+  return {admin, lecture};
+}
+
 function lectureShouldEqualRes(lecture: ILectureModel, res: any) {
   should.equal(lecture.id, res.body._id, 'Incorrect id.');
   should.equal(lecture.name, res.body.name, 'Incorrect name.');
@@ -24,8 +35,7 @@ describe('Lecture', () => {
 
   describe(`GET ${BASE_URL}` , () => {
     it('should get lecture data', async () => {
-      const admin = await FixtureUtils.getRandomAdmin();
-      const lecture = await FixtureUtils.getRandomLecture();
+      const {admin, lecture} = await lectureSuccessTestSetup();
       const res = await testHelper.commonUserGetRequest(admin, `/${lecture.id}`);
       res.status.should.be.equal(200);
       lectureShouldEqualRes(lecture, res);
@@ -42,8 +52,7 @@ describe('Lecture', () => {
 
   describe(`POST ${BASE_URL}` , () => {
     it('should add a lecture', async () => {
-      const admin = await FixtureUtils.getRandomAdmin();
-      const lecture = await FixtureUtils.getRandomLecture();
+      const {admin, lecture} = await lectureSuccessTestSetup();
       const course = await FixtureUtils.getCourseFromLecture(lecture);
       const res = await testHelper.commonUserPostRequest(admin, `/`, {
         lecture: {name: lecture.name, description: lecture.description},
@@ -69,8 +78,7 @@ describe('Lecture', () => {
 
   describe(`PUT ${BASE_URL}` , () => {
     it('should modify a lecture', async () => {
-      const admin = await FixtureUtils.getRandomAdmin();
-      const lecture = await FixtureUtils.getRandomLecture();
+      const {admin, lecture} = await lectureSuccessTestSetup();
       lecture.description = 'Lecture modification unit test.';
       const res = await testHelper.commonUserPutRequest(admin, `/${lecture.id}`, lecture);
       res.status.should.be.equal(200);
