@@ -65,18 +65,20 @@ export class LectureController {
    */
   @Authorized(['teacher', 'admin'])
   @Post('/')
-  addLecture(@Body() data: any) {
+  async addLecture(@Body() data: any, @CurrentUser() currentUser: IUser) {
     const lectureI: ILecture = data.lecture;
     const courseId: string = data.courseId;
-    return new Lecture(lectureI).save()
-      .then((lecture) => {
-        return Course.findById(courseId).then(course => ({course, lecture}));
-      })
-      .then(({course, lecture}) => {
-        course.lectures.push(lecture);
-        return course.save().then(updatedCourse => ({course, lecture}));
-      })
-      .then(({course, lecture}) => lecture.toObject());
+
+    const course = await Course.findById(courseId);
+    if (!course.checkPrivileges(currentUser).userCanEditCourse) {
+      throw new ForbiddenError();
+    }
+
+    // TODO: Don't allow arbitrary 'lectureI' input; maybe only name & description can be extracted?
+    const lecture = await new Lecture(lectureI).save();
+    course.lectures.push(lecture);
+    await course.save();
+    return lecture.toObject();
   }
 
   /**
