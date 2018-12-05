@@ -106,9 +106,13 @@ export class LectureController {
    */
   @Authorized(['teacher', 'admin'])
   @Put('/:id')
-  updateLecture(@Param('id') id: string, @Body() lecture: ILecture) {
-    return Lecture.findByIdAndUpdate(id, lecture, {'new': true})
-      .then((l) => l.toObject());
+  async updateLecture(@Param('id') id: string, @Body() lectureUpdate: ILecture, @CurrentUser() currentUser: IUser) {
+    const course = await Course.findOne({lectures: id});
+    if (!course.checkPrivileges(currentUser).userCanEditCourse) {
+      throw new ForbiddenError();
+    }
+    const lecture = await Lecture.findByIdAndUpdate(id, lectureUpdate, {'new': true});
+    return lecture.toObject();
   }
 
   /**
