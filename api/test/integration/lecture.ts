@@ -14,7 +14,7 @@ const testHelper = new TestHelper(BASE_URL);
 /**
  * Provides simple shared setup functionality used by the lecture success (200) unit tests.
  *
- * @returns A random 'admin' and 'lecture'.
+ * @returns A random 'lecture', its 'course' and a random 'admin'. The 'admin' is also aliased as 'user'.
  */
 async function lectureSuccessTestSetup() {
   const lecture = await FixtureUtils.getRandomLecture();
@@ -27,12 +27,24 @@ async function lectureSuccessTestSetup() {
  * Provides simple shared setup functionality used by the lecture access denial (403) unit tests.
  *
  * @returns A 'lecture', its 'course' and an 'unauthorizedTeacher' (i.e. a teacher that isn't part of the course).
+ *          The 'unauthorizedTeacher' is also aliased as 'user'.
  */
 async function lectureAccessDenialTestSetup() {
   const lecture = await FixtureUtils.getRandomLecture();
   const course = await FixtureUtils.getCourseFromLecture(lecture);
   const unauthorizedTeacher = await FixtureUtils.getUnauthorizedTeacherForCourse(course);
   return {lecture, course, unauthorizedTeacher, user: unauthorizedTeacher};
+}
+
+/**
+ * Provides simple shared setup functionality used by the lecture not found (404) unit tests.
+ *
+ * @returns Same as lectureSuccessTestSetup, but the lecture id is set to 000000000000000000000000.
+ */
+async function lectureNotFoundTestSetup() {
+  const setup = await lectureSuccessTestSetup();
+  setup.lecture._id = '000000000000000000000000';
+  return setup;
 }
 
 function lectureShouldEqualRes(lecture: ILectureModel, res: any) {
@@ -62,6 +74,11 @@ describe('Lecture', () => {
       const res = await lectureGetTest(await lectureAccessDenialTestSetup());
       res.status.should.be.equal(403);
     });
+
+    it('should respond with 404 for an invalid lecture id', async () => {
+      const res = await lectureGetTest(await lectureNotFoundTestSetup());
+      res.status.should.be.equal(404);
+    });
   });
 
   describe(`POST ${BASE_URL}` , () => {
@@ -81,6 +98,11 @@ describe('Lecture', () => {
       const res = await lecturePostTest(await lectureAccessDenialTestSetup());
       res.status.should.be.equal(403);
     });
+
+    it('should respond with 404 for an invalid lecture id', async () => {
+      const res = await lecturePostTest(await lectureNotFoundTestSetup());
+      res.status.should.be.equal(404);
+    });
   });
 
   describe(`PUT ${BASE_URL}` , () => {
@@ -99,6 +121,11 @@ describe('Lecture', () => {
       const res = await lecturePutTest(await lectureAccessDenialTestSetup());
       res.status.should.be.equal(403);
     });
+
+    it('should respond with 404 for an invalid lecture id', async () => {
+      const res = await lecturePutTest(await lectureNotFoundTestSetup());
+      res.status.should.be.equal(404);
+    });
   });
 
   describe(`DELETE ${BASE_URL}` , () => {
@@ -116,6 +143,11 @@ describe('Lecture', () => {
     it('should forbid lecture deletions for an unauthorized teacher', async () => {
       const res = await lectureDeleteTest(await lectureAccessDenialTestSetup());
       res.status.should.be.equal(403);
+    });
+
+    it('should respond with 404 for an invalid lecture id', async () => {
+      const res = await lectureDeleteTest(await lectureNotFoundTestSetup());
+      res.status.should.be.equal(404);
     });
   });
 
