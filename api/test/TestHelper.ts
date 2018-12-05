@@ -40,6 +40,14 @@ export class TestHelper {
       .catch((err) => err.response);
   }
 
+  public async basicUserPutRequest(user: IUser, url: string, sendData?: string | object) {
+    return await chai.request(this.app)
+      .put(url)
+      .set('Cookie', `token=${JwtUtils.generateToken(user)}`)
+      .send(sendData)
+      .catch((err) => err.response);
+  }
+
   public async basicUserDeleteRequest(user: IUser, url: string) {
     return await chai.request(this.app)
       .del(url)
@@ -53,6 +61,10 @@ export class TestHelper {
 
   public async commonUserPostRequest(user: IUser, urlPostfix: string, sendData?: string | object) {
     return await this.basicUserPostRequest(user, this.baseUrl + urlPostfix, sendData);
+  }
+
+  public async commonUserPutRequest(user: IUser, urlPostfix: string, sendData?: string | object) {
+    return await this.basicUserPutRequest(user, this.baseUrl + urlPostfix, sendData);
   }
 
   public async commonUserDeleteRequest(user: IUser, urlPostfix: string) {
