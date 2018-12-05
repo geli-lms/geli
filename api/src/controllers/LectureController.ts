@@ -30,6 +30,9 @@ export class LectureController {
    *         "__v": 0,
    *         "units": []
    *     }
+   *
+   * @apiError NotFoundError If the lecture couldn't be found.
+   * @apiError ForbiddenError userCanViewCourse check failed.
    */
   @Get('/:id')
   async getLecture(@Param('id') id: string, @CurrentUser() currentUser: IUser) {
@@ -65,6 +68,9 @@ export class LectureController {
    *         "__v": 0,
    *         "units": []
    *     }
+   *
+   * @apiError NotFoundError If the courseId couldn't be found.
+   * @apiError ForbiddenError userCanEditCourse check failed.
    */
   @Authorized(['teacher', 'admin'])
   @Post('/')
@@ -109,6 +115,9 @@ export class LectureController {
    *         "__v": 0,
    *         "units": []
    *     }
+   *
+   * @apiError NotFoundError If the lecture's course couldn't be found.
+   * @apiError ForbiddenError userCanEditCourse check failed.
    */
   @Authorized(['teacher', 'admin'])
   @Put('/:id')
@@ -137,6 +146,9 @@ export class LectureController {
    *
    * @apiSuccessExample {json} Success-Response:
    *     {}
+   *
+   * @apiError NotFoundError If the lecture's course couldn't be found.
+   * @apiError ForbiddenError userCanEditCourse check failed.
    */
   @Authorized(['teacher', 'admin'])
   @Delete('/:id')
