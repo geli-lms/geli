@@ -85,7 +85,8 @@ describe('Lecture', () => {
   describe(`POST ${BASE_URL}` , () => {
     async function lecturePostTest({lecture, course, user}: {lecture: ILectureModel, course: ICourseModel, user: IUser}) {
       return await testHelper.commonUserPostRequest(user, `/`, {
-        lecture: {name: lecture.name, description: lecture.description},
+        name: lecture.name,
+        description: lecture.description,
         courseId: course.id
       });
     }

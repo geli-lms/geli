@@ -1,4 +1,4 @@
-import { Authorized, Body, CurrentUser, Delete, ForbiddenError, Get,
+import { Authorized, Body, BodyParam, CurrentUser, Delete, ForbiddenError, Get,
   JsonController, NotFoundError, Param, Post, Put, UseBefore } from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 
@@ -74,10 +74,10 @@ export class LectureController {
    */
   @Authorized(['teacher', 'admin'])
   @Post('/')
-  async addLecture(@Body() data: any, @CurrentUser() currentUser: IUser) {
-    const lectureI: ILecture = data.lecture;
-    const courseId: string = data.courseId;
-
+  async addLecture(@BodyParam('name', {required: true}) name: string,
+                  @BodyParam('description', {required: true}) description: string,
+                  @BodyParam('courseId', {required: true}) courseId: string,
+                  @CurrentUser() currentUser: IUser) {
     const course = await Course.findById(courseId);
     if (!course) {
       throw new NotFoundError();
@@ -86,8 +86,7 @@ export class LectureController {
       throw new ForbiddenError();
     }
 
-    // TODO: Don't allow arbitrary 'lectureI' input; maybe only name & description can be extracted?
-    const lecture = await new Lecture(lectureI).save();
+    const lecture = await new Lecture({name, description}).save();
     course.lectures.push(lecture);
     await course.save();
     return lecture.toObject();
