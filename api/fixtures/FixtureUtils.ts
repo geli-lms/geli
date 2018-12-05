@@ -1,7 +1,7 @@
 import {User} from '../src/models/User';
 import {Course, ICourseModel} from '../src/models/Course';
 import {IUserModel} from '../src/models/User';
-import {Lecture} from '../src/models/Lecture';
+import {Lecture, ILectureModel} from '../src/models/Lecture';
 import {Unit, IUnitModel} from '../src/models/units/Unit';
 import {ICourse} from '../../shared/models/ICourse';
 import {ILecture} from '../../shared/models/ILecture';
@@ -117,17 +117,17 @@ export class FixtureUtils {
     return this.getRandom<ICourse>(coursesWithAllUnitTypes, hash);
   }
 
-  public static async getCourseFromLecture(lecture: ILecture): Promise<ICourse> {
+  public static async getCourseFromLecture(lecture: ILecture): Promise<ICourseModel> {
     return Course.findOne({lectures: { $in: [ lecture._id ] }});
   }
 
-  public static async getCourseFromUnit(unit: IUnit): Promise<ICourse> {
+  public static async getCourseFromUnit(unit: IUnit): Promise<ICourseModel> {
     return Course.findById(unit._course);
   }
 
-  public static async getRandomLecture(hash?: string): Promise<ILecture> {
+  public static async getRandomLecture(hash?: string): Promise<ILectureModel> {
     const array = await this.getLectures();
-    return this.getRandom<ILecture>(array, hash);
+    return this.getRandom<ILectureModel>(array, hash);
   }
 
   public static async getRandomLectureFromCourse(course: ICourse, hash?: string): Promise<ILecture> {
@@ -189,7 +189,7 @@ export class FixtureUtils {
       .populate('whitelist');
   }
 
-  public static async getLectures(): Promise<ILecture[]> {
+  public static async getLectures(): Promise<ILectureModel[]> {
     return Lecture.find();
   }
 
