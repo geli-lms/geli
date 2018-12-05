@@ -4,7 +4,7 @@ import {TestHelper} from '../TestHelper';
 import {FixtureUtils} from '../../fixtures/FixtureUtils';
 import {Course} from '../../src/models/Course';
 import {ICourse} from '../../../shared/models/ICourse';
-import {User, IUserModel} from '../../src/models/User';
+import {User} from '../../src/models/User';
 import {Lecture} from '../../src/models/Lecture';
 import {ILecture} from '../../../shared/models/ILecture';
 import {IUnit} from '../../../shared/models/units/IUnit';

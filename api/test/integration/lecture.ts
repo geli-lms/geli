@@ -1,7 +1,7 @@
 import * as chai from 'chai';
 import chaiHttp = require('chai-http');
 import {TestHelper} from '../TestHelper';
-import {Course, ICourseModel} from '../../src/models/Course';
+import {ICourseModel} from '../../src/models/Course';
 import {FixtureUtils} from '../../fixtures/FixtureUtils';
 import {Lecture, ILectureModel} from '../../src/models/Lecture';
 import {IUser} from '../../../shared/models/IUser';
