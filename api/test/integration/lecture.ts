@@ -1,6 +1,5 @@
 import * as chai from 'chai';
 import {TestHelper} from '../TestHelper';
-import {User} from '../../src/models/User';
 import {Course} from '../../src/models/Course';
 import {FixtureUtils} from '../../fixtures/FixtureUtils';
 import chaiHttp = require('chai-http');
@@ -17,9 +16,10 @@ const testHelper = new TestHelper(BASE_URL);
  * @returns A random 'admin' and 'lecture'.
  */
 async function lectureSuccessTestSetup() {
-  const admin = await FixtureUtils.getRandomAdmin();
   const lecture = await FixtureUtils.getRandomLecture();
-  return {admin, lecture};
+  const course = await FixtureUtils.getCourseFromLecture(lecture);
+  const admin = await FixtureUtils.getRandomAdmin();
+  return {lecture, course, admin};
 }
 
 /**
@@ -48,7 +48,7 @@ describe('Lecture', () => {
 
   describe(`GET ${BASE_URL}` , () => {
     it('should get lecture data', async () => {
-      const {admin, lecture} = await lectureSuccessTestSetup();
+      const {lecture, admin} = await lectureSuccessTestSetup();
       const res = await testHelper.commonUserGetRequest(admin, `/${lecture.id}`);
       lectureShouldEqualRes(lecture, res);
     });
@@ -62,8 +62,7 @@ describe('Lecture', () => {
 
   describe(`POST ${BASE_URL}` , () => {
     it('should add a lecture', async () => {
-      const {admin, lecture} = await lectureSuccessTestSetup();
-      const course = await FixtureUtils.getCourseFromLecture(lecture);
+      const {lecture, course, admin} = await lectureSuccessTestSetup();
       const res = await testHelper.commonUserPostRequest(admin, `/`, {
         lecture: {name: lecture.name, description: lecture.description},
         courseId: course.id
@@ -83,7 +82,7 @@ describe('Lecture', () => {
 
   describe(`PUT ${BASE_URL}` , () => {
     it('should modify a lecture', async () => {
-      const {admin, lecture} = await lectureSuccessTestSetup();
+      const {lecture, admin} = await lectureSuccessTestSetup();
       lecture.description = 'Lecture modification unit test.';
       const res = await testHelper.commonUserPutRequest(admin, `/${lecture.id}`, lecture);
       lectureShouldEqualRes(lecture, res);
@@ -91,29 +90,26 @@ describe('Lecture', () => {
 
     it('should forbid lecture modification for an unauthorized teacher', async () => {
       const {lecture, unauthorizedTeacher} = await lectureAccessDenialTestSetup();
-      const res = await testHelper.commonUserPutRequest(unauthorizedTeacher, `/${lecture._id}`, lecture);
+      const res = await testHelper.commonUserPutRequest(unauthorizedTeacher, `/${lecture.id}`, lecture);
       res.status.should.be.equal(403);
     });
   });
 
   describe(`DELETE ${BASE_URL}` , () => {
-    it('should delete a lecture by course admin', async () => {
-      const course = await FixtureUtils.getRandomCourseWithAllUnitTypes();
-      const lectureId = await course.lectures[0];
-      const courseAdmin = await User.findOne({_id: course.courseAdmin});
-
-      const res = await testHelper.commonUserDeleteRequest(courseAdmin, `/${lectureId}`);
-
+    it.only('should delete a lecture by course admin', async () => {
+      const {lecture, course, admin} = await lectureSuccessTestSetup();
+      const res = await testHelper.commonUserDeleteRequest(admin, `/${lecture.id}`);
       res.status.should.be.equal(200);
-      const courseWithDeletedLecture = await Course.findById(course._id);
-      courseWithDeletedLecture.lectures[0].should.not.be.equal(lectureId);
-      const deletedLecture = await Lecture.findById(lectureId);
+
+      const courseWithDeletedLecture = await Course.findById(course.id);
+      courseWithDeletedLecture.lectures[0].should.not.be.equal(lecture.id);
+      const deletedLecture = await Lecture.findById(lecture.id);
       should.not.exist(deletedLecture, 'Lecture still exists');
     });
 
     it('should forbid lecture deletions for an unauthorized teacher', async () => {
       const {lecture, unauthorizedTeacher} = await lectureAccessDenialTestSetup();
-      const res = await testHelper.commonUserDeleteRequest(unauthorizedTeacher, `/${lecture._id}`);
+      const res = await testHelper.commonUserDeleteRequest(unauthorizedTeacher, `/${lecture.id}`);
       res.status.should.be.equal(403);
     });
   });
