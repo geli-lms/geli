@@ -4,12 +4,18 @@ import {User} from '../../src/models/User';
 import {Course} from '../../src/models/Course';
 import {FixtureUtils} from '../../fixtures/FixtureUtils';
 import chaiHttp = require('chai-http');
-import {Lecture} from '../../src/models/Lecture';
+import {Lecture, ILectureModel} from '../../src/models/Lecture';
 
 chai.use(chaiHttp);
 const should = chai.should();
 const BASE_URL = '/api/lecture';
 const testHelper = new TestHelper(BASE_URL);
+
+function lectureShouldEqualRes(lecture: ILectureModel, res: any) {
+  should.equal(lecture.id, res.body._id, 'Incorrect id.');
+  should.equal(lecture.name, res.body.name, 'Incorrect name.');
+  should.equal(lecture.description, res.body.description, 'Incorrect description.');
+}
 
 describe('Lecture', () => {
   beforeEach(async () => {
@@ -22,9 +28,7 @@ describe('Lecture', () => {
       const lecture = await FixtureUtils.getRandomLecture();
       const res = await testHelper.commonUserGetRequest(admin, `/${lecture.id}`);
       res.status.should.be.equal(200);
-      should.equal(lecture.id, res.body._id, 'Incorrect id.');
-      should.equal(lecture.name, res.body.name, 'Incorrect name.');
-      should.equal(lecture.description, res.body.description, 'Incorrect description.');
+      lectureShouldEqualRes(lecture, res);
     });
 
     it('should forbid lecture access for an unauthorized user', async () => {
@@ -73,9 +77,7 @@ describe('Lecture', () => {
 
       const resCheck = await testHelper.commonUserGetRequest(admin, `/${lecture.id}`);
       resCheck.status.should.be.equal(200);
-      should.equal(lecture.id, resCheck.body._id, 'Incorrect id.');
-      should.equal(lecture.name, res.body.name, 'Incorrect name.');
-      should.equal(lecture.description, resCheck.body.description, 'Incorrect description.');
+      lectureShouldEqualRes(lecture, resCheck);
     });
 
     it('should forbid lecture modification for an unauthorized teacher', async () => {
