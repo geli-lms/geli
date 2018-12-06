@@ -15,20 +15,31 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Export PDF with styled free text units. [#997](https://github.com/geli-lms/geli/issues/997) [#1047](https://github.com/geli-lms/geli/pull/1047)
 - More predefined custom containers. [#996](https://github.com/geli-lms/geli/issues/996)
 - Styled code snippets. [#1017](https://github.com/geli-lms/geli/issues/1017)
+- `LectureController` success (`200`), access denial (`403`) and not found (`404`) unit tests for all routes. [#1041](https://github.com/geli-lms/geli/issues/1041)
+- `TestHelper` request methods for `PUT` & `DELETE`. [#1041](https://github.com/geli-lms/geli/issues/1041)
+- CodeKata validation service. [#844](https://github.com/geli-lms/geli/issues/844)
 
 ### Fixed
 - File not found error (Bundle.scss) in backend-Docker. [#1052](https://github.com/geli-lms/geli/issues/1052)
 
 ### Changed
-- Update mongoose to 5.3.x. [#1003](https://github.com/geli-lms/geli/issues/1003)[#1004](https://github.com/geli-lms/geli/pull/1004)[#1044](https://github.com/geli-lms/geli/pull/1044)
+- Update `mongoose` to `5.3.x`. [#1003](https://github.com/geli-lms/geli/issues/1003) [#1004](https://github.com/geli-lms/geli/pull/1004) [#1044](https://github.com/geli-lms/geli/pull/1044)
+- Refactor `LectureController` `GET`/`POST`/`PUT` routes to use `async`/`await`. [#1041](https://github.com/geli-lms/geli/issues/1041)
+- Sanitize `{post} /api/lecture/` route parameters by reducing the arbitrary `ILecture` input to `name` & `description`. [#1041](https://github.com/geli-lms/geli/issues/1041)
+
+### Fixed
+- Some incorrect `FixtureUtils` return types. [#1041](https://github.com/geli-lms/geli/issues/1041)
+
+### Security
+- Fix multiple security issues of the `LectureController`. [#1041](https://github.com/geli-lms/geli/issues/1041)
 
 ## [[0.8.3](https://github.com/geli-lms/geli/releases/tag/v0.8.3)] - 2018-11-29 - WS 18/19 🚀-Release
 ### Added
 - Chat system access denial unit tests. [#989](https://github.com/geli-lms/geli/issues/989)
-- `DuplicationController` access denial unit tests. [#1016](https://github.com/geli-lms/geli/issues/1016)
-- `ExportController` access denial unit tests. [#1039](https://github.com/geli-lms/geli/issues/1039)
-- `ExportController` 404 unit tests. [#1039](https://github.com/geli-lms/geli/issues/1039)
-- `DuplicationController` 404 unit tests. [#1039](https://github.com/geli-lms/geli/issues/1039)
+- `DuplicationController` access denial (`403`) unit tests. [#1016](https://github.com/geli-lms/geli/issues/1016)
+- `ExportController` access denial (`403`) unit tests. [#1039](https://github.com/geli-lms/geli/issues/1039)
+- `ExportController` not found (`404`) unit tests. [#1039](https://github.com/geli-lms/geli/issues/1039)
+- `DuplicationController` not found (`404`) unit tests. [#1039](https://github.com/geli-lms/geli/issues/1039)
 - `TestHelper` class for shared API unit test functionality. [#989](https://github.com/geli-lms/geli/issues/989) [#1016](https://github.com/geli-lms/geli/issues/1016)
 - `extractSingleMongoId` variant of the `ExtractMongoId` utility function(s). [#989](https://github.com/geli-lms/geli/issues/989)
 - Show message count for `UnitComponent` chat. [#933](https://github.com/geli-lms/geli/issues/993)

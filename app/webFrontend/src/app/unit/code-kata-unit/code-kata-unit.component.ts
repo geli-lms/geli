@@ -10,6 +10,7 @@ import 'brace/mode/javascript';
 import 'brace/theme/github';
 import {ICodeKataUnit} from '../../../../../../shared/models/units/ICodeKataUnit';
 import {CodeKataUnitProgress} from '../../models/progress/CodeKataUnitProgress';
+import {CodeKataValidationService} from '../../shared/services/code-kata-validation.service';
 
 @Component({
   selector: 'app-code-kata',
@@ -36,7 +37,8 @@ export class CodeKataComponent implements OnInit {
   constructor(private route: ActivatedRoute,
               private snackBar: SnackBarService,
               private progressService: ProgressService,
-              private userService: UserService) {
+              private userService: UserService,
+              private codeKataValidationService: CodeKataValidationService) {
     this.logs = undefined;
   }
 
@@ -118,38 +120,14 @@ export class CodeKataComponent implements OnInit {
 
     this.logs = undefined;
 
-    const origLogger = window.console.log;
-    window.console.log = (msg) => {
-      if (this.logs === undefined) {
-        this.logs = '';
-      }
-      this.logs += msg + '\n';
-      origLogger(msg);
-    };
+    const validation = this.codeKataValidationService.validate(codeToTest);
+    this.logs = validation.log;
 
-    let result = false;
-    try {
-      // tslint:disable-next-line:no-eval
-      result = eval(codeToTest);
-    } catch (e) {
-      const err = e.constructor('Error in Evaled Script: ' + e.message);
-      err.lineNumber = e.lineNumber - err.lineNumber;
-
-      const msg = 'Error: ' + e.message; //  + ' (line: ' + err.lineNumber + ')';
-      // tslint:disable-next-line:no-console
-      console.log(msg);
-      console.error(err);
-    }
-
-    window.console.log = origLogger;
-
-    if (result === true || result === undefined) {
+    if (validation.result === true || validation.result === undefined) {
       this.snackBar.open('Success');
       return true;
     } else {
       this.snackBar.open('Your code failed.');
-      // tslint:disable-next-line:no-console
-      console.log(result);
       return false;
     }
   }
