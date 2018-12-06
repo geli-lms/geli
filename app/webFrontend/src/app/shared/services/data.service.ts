@@ -26,7 +26,7 @@ export abstract class DataService {
               public dependentID?: string) {
   }
 
-  createItem<T>(createItem: T): Promise<T> {
+  createItem<T, RT = T>(createItem: T): Promise<RT> {
     return this.backendService
       .post(this.apiPath, createItem)
       .toPromise();
