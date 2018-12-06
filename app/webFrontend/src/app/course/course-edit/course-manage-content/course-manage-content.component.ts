@@ -1,6 +1,7 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
 import {ICourse} from '../../../../../../../shared/models/ICourse';
 import {ILecture} from '../../../../../../../shared/models/ILecture';
+import {ILectureCreate} from '../../../../../../../shared/models/ILectureCreate';
 import {CourseService, LectureService, NotificationService} from '../../../shared/services/data.service';
 import {ShowProgressService} from 'app/shared/services/show-progress.service';
 import {DialogService} from '../../../shared/services/dialog.service';
@@ -206,7 +207,7 @@ export class CourseManageContentComponent implements OnInit, OnDestroy {
   }
 
   async createLecture({name, description}: {name: string, description: string}) {
-    const newLecture = await this.lectureService.createItem<any, ILecture>({
+    const newLecture = await this.lectureService.createItem<ILectureCreate, ILecture>({
       courseId: this.course._id, name, description
     });
     this.dataSharingService.setDataForKey('lecture-create-mode', false);

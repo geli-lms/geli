@@ -54,7 +54,7 @@ export class LectureController {
    * @apiPermission teacher
    * @apiPermission admin
    *
-   * @apiParam {Object} data New lecture data.
+   * @apiParam {ILectureCreate} data New lecture data with 'name', 'description' and target 'courseId'.
    *
    * @apiSuccess {Lecture} lecture Added lecture.
    *
