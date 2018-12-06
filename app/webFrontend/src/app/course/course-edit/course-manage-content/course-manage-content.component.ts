@@ -10,7 +10,6 @@ import {DragulaService} from 'ng2-dragula';
 import {ActivatedRoute, Router} from '@angular/router';
 import {DataSharingService} from '../../../shared/services/data-sharing.service';
 import {Subject} from 'rxjs/Subject';
-import {Notification} from '../../../models/Notification';
 
 @Component({
   selector: 'app-course-manage-content',
@@ -206,17 +205,18 @@ export class CourseManageContentComponent implements OnInit, OnDestroy {
     });
   }
 
-  createLecture(lecture: ILecture) {
-    this.lectureService.createItem({courseId: this.course._id, name: lecture.name, description: lecture.description})
-    .then((newLecture: any) => {
-      this.dataSharingService.setDataForKey('lecture-create-mode', false);
-      this.notificationService.createItem(
-        {changedCourse: this.course, changedLecture: newLecture._id,
-          changedUnit: null, text: 'Course ' + this.course.name + ' has a new lecture.'})
-        .catch(console.error);
-      return this.reloadCourse();
-    })
-    .catch(console.error);
+  async createLecture({name, description}: {name: string, description: string}) {
+    const newLecture = await this.lectureService.createItem<any, ILecture>({
+      courseId: this.course._id, name, description
+    });
+    this.dataSharingService.setDataForKey('lecture-create-mode', false);
+    await this.notificationService.createItem({
+      changedCourse: this.course,
+      changedLecture: newLecture._id,
+      changedUnit: null,
+      text: 'Course ' + this.course.name + ' has a new lecture.'
+    });
+    await this.reloadCourse();
   }
 
   async reloadCourse() {
