@@ -7,6 +7,7 @@ import 'brace/theme/github';
 import 'brace/mode/javascript';
 import {FormControl, FormGroup} from '@angular/forms';
 import {UnitFormService} from '../../../shared/services/unit-form.service';
+import {CodeKataValidationService} from '../../../shared/services/code-kata-validation.service';
 
 @Component({
   selector: 'app-code-kata-unit-form',
@@ -54,7 +55,8 @@ export class CodeKataUnitFormComponent implements OnInit {
               private unitService: UnitService,
               private snackBar: SnackBarService,
               private notificationService: NotificationService,
-              private unitFormService: UnitFormService) {
+              private unitFormService: UnitFormService,
+              private codeKataValidationService: CodeKataValidationService) {
   }
 
   ngOnInit() {
@@ -117,33 +119,11 @@ export class CodeKataUnitFormComponent implements OnInit {
 
     this.logs = undefined;
 
-    const origLogger = window.console.log;
-    window.console.log = (msg) => {
-      if (this.logs === undefined) {
-        this.logs = '';
-      }
-      this.logs += msg + '\n';
-      origLogger(msg);
-    };
+    const validation = this.codeKataValidationService.validate(codeToTest);
+    this.logs = validation.log;
 
-    let result = false;
-    try {
-      // tslint:disable-next-line:no-eval
-      result = eval(codeToTest);
-    } catch (e) {
-      const err = e.constructor('Error in Evaled Script: ' + e.message);
-      err.lineNumber = e.lineNumber - err.lineNumber;
 
-      const msg = 'Error: ' + e.message; //  + ' (line: ' + err.lineNumber + ')';
-      // tslint:disable-next-line:no-console
-      console.log(msg);
-      // tslint:disable-next-line:no-console
-      console.error(err);
-    }
-
-    window.console.log = origLogger;
-
-    if (result === true || result === undefined) {
+    if (validation.result === true || validation.result === undefined) {
       this.snackBar.openShort('Validation succesful');
       return true;
     } else {

@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Export PDF with styled free text units. [#997](https://github.com/geli-lms/geli/issues/997) [#1047](https://github.com/geli-lms/geli/pull/1047)
 - More predefined custom containers. [#996](https://github.com/geli-lms/geli/issues/996)
 - Styled code snippets. [#1017](https://github.com/geli-lms/geli/issues/1017)
+- CodeKata validation service. [#844](https://github.com/geli-lms/geli/issues/844)
 
 ### Changed
 - Update mongoose to 5.3.x. [#1003](https://github.com/geli-lms/geli/issues/1003)[#1004](https://github.com/geli-lms/geli/pull/1004)[#1044](https://github.com/geli-lms/geli/pull/1044)
