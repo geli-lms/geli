@@ -28,8 +28,8 @@ export class MarkdownService {
   * Original implementation can be found here: https://github.com/markdown-it/markdown-it-footnote/blob/master/index.js
   *
   * */
-
   // tslint:enable:max-line-length
+
 
   constructor() {
     this.markdown = new MarkdownIt({

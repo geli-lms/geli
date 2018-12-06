@@ -26,20 +26,20 @@ const cache = require('node-file-cache').create({life: config.timeToLiveCacheVal
 const pdf = require('html-pdf');
 const phantomjs = require('phantomjs-prebuilt');
 const binPath = phantomjs.path;
-import sassLoader from '../services/SassLoader';
-const loader = new sassLoader();
 
-
-// ATTENTION: relative path from transpiled .js file!
-const markdownCss = require('../../../../shared/styles/md/bundle.scss');
 
 // Set all routes which should use json to json, the standard is blob streaming data
 @Controller('/download')
 @UseBefore(passportJwtMiddleware)
 export class DownloadController {
 
+  private markdownCss: string;
+
+
   constructor() {
     setInterval(this.cleanupCache, config.timeToLiveCacheValue * 60);
+
+    this.markdownCss = this.readMDCss();
   }
 
   cleanupCache() {
@@ -254,7 +254,7 @@ export class DownloadController {
                 '       .codeBox {border: 1px solid grey; font-family: Monaco,Menlo,source-code-pro,monospace; padding: 10px}' +
                 '       #firstPage {page-break-after: always;}' +
                 '       .bottomBoxWrapper {height:800px; position: relative}' +
-                '       .bottomBox {position: absolute; bottom: 0;}' + markdownCss +
+                '       .bottomBox {position: absolute; bottom: 0;}' + this.markdownCss +
                 '     </style>' +
                 '  </head>';
               html += await localUnit.toHtmlForIndividualPDF();
@@ -371,7 +371,7 @@ export class DownloadController {
           '       #firstPage {page-break-after: always;}' +
           '       #nextPage {page-break-before: always;}' +
           '       .bottomBoxWrapper {height:800px; position: relative}' +
-          '       .bottomBox {position: absolute; bottom: 0;}' + markdownCss +
+          '       .bottomBox {position: absolute; bottom: 0;}' + this.markdownCss +
           '     </style>' +
           '  </head>' +
           '  <body>' +
@@ -450,6 +450,15 @@ export class DownloadController {
       }
     } else {
       throw new NotFoundError();
+    }
+  }
+
+  private readMDCss() {
+    try {
+      return fs.readFileSync(path.resolve(__dirname, '../../styles/md/bundle.css'), 'utf8');
+    } catch (e) {
+      console.error(e);
+      return null;
     }
   }
 
