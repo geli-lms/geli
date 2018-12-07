@@ -1,7 +1,7 @@
 import {User} from '../src/models/User';
 import {Course, ICourseModel} from '../src/models/Course';
 import {IUserModel} from '../src/models/User';
-import {Lecture} from '../src/models/Lecture';
+import {Lecture, ILectureModel} from '../src/models/Lecture';
 import {Unit, IUnitModel} from '../src/models/units/Unit';
 import {ICourse} from '../../shared/models/ICourse';
 import {ILecture} from '../../shared/models/ILecture';
@@ -117,17 +117,17 @@ export class FixtureUtils {
     return this.getRandom<ICourse>(coursesWithAllUnitTypes, hash);
   }
 
-  public static async getCourseFromLecture(lecture: ILecture): Promise<ICourse> {
+  public static async getCourseFromLecture(lecture: ILecture): Promise<ICourseModel> {
     return Course.findOne({lectures: { $in: [ lecture._id ] }});
   }
 
-  public static async getCourseFromUnit(unit: IUnit): Promise<ICourse> {
+  public static async getCourseFromUnit(unit: IUnit): Promise<ICourseModel> {
     return Course.findById(unit._course);
   }
 
-  public static async getRandomLecture(hash?: string): Promise<ILecture> {
+  public static async getRandomLecture(hash?: string): Promise<ILectureModel> {
     const array = await this.getLectures();
-    return this.getRandom<ILecture>(array, hash);
+    return this.getRandom<ILectureModel>(array, hash);
   }
 
   public static async getRandomLectureFromCourse(course: ICourse, hash?: string): Promise<ILecture> {
@@ -167,6 +167,20 @@ export class FixtureUtils {
     return {course, roomId};
   }
 
+  /**
+   * Obtain an unauthorized teacher for a course.
+   * This teacher can be used for access denial unit tests.
+   *
+   * @param course The teacher can't belong to this given course; i.e. the teacher won't be 'courseAdmin' or one of the 'teachers'.
+   * @returns A user with 'teacher' role that is not authorized to access the given course.
+   */
+  public static async getUnauthorizedTeacherForCourse(course: ICourse): Promise<IUserModel> {
+    return await User.findOne({
+      _id: {$nin: [course.courseAdmin, ...course.teachers]},
+      role: 'teacher'
+    });
+  }
+
   private static async getAdmins(): Promise<IUser[]> {
     return this.getUser('admin');
   }
@@ -189,7 +203,7 @@ export class FixtureUtils {
       .populate('whitelist');
   }
 
-  public static async getLectures(): Promise<ILecture[]> {
+  public static async getLectures(): Promise<ILectureModel[]> {
     return Lecture.find();
   }
 
