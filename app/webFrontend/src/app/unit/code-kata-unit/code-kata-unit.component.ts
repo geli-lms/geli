@@ -10,6 +10,7 @@ import 'brace/mode/javascript';
 import 'brace/theme/github';
 import {ICodeKataUnit} from '../../../../../../shared/models/units/ICodeKataUnit';
 import {CodeKataUnitProgress} from '../../models/progress/CodeKataUnitProgress';
+import * as moment from "moment";
 
 @Component({
   selector: 'app-code-kata',
@@ -31,7 +32,7 @@ export class CodeKataComponent implements OnInit {
   logs: string;
   progress: ICodeKataUnitProgress;
   isExampleCode = false;
-
+  now = Date.now();
 
   constructor(private route: ActivatedRoute,
               private snackBar: SnackBarService,
@@ -152,5 +153,12 @@ export class CodeKataComponent implements OnInit {
       console.log(result);
       return false;
     }
+  }
+
+  private deadlineIsOver(): boolean {
+    if(!this.codeKataUnit) {
+      return false;
+    }
+    return moment(this.codeKataUnit.deadline).isBefore(this.now);
   }
 }
