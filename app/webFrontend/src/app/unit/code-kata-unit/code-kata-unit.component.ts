@@ -1,5 +1,5 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
-import * as moment from "moment";
+import * as moment from 'moment';
 import {SnackBarService} from '../../shared/services/snack-bar.service';
 import {ProgressService} from 'app/shared/services/data/progress.service';
 import {ICodeKataUnitProgress} from '../../../../../../shared/models/progress/ICodeKataProgress';
@@ -134,7 +134,7 @@ export class CodeKataComponent implements OnInit {
   }
 
   private deadlineIsOver(): boolean {
-    if(!this.codeKataUnit) {
+    if (!this.codeKataUnit) {
       return false;
     }
     return moment(this.codeKataUnit.deadline).isBefore(this.now);
