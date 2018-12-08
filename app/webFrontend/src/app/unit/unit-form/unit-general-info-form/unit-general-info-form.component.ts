@@ -43,11 +43,4 @@ export class UnitGeneralInfoFormComponent implements OnInit {
     }
 
   }
-
-  updateDateTime(date: Date) {
-    // TODO: selectedChanged event is deprecated
-    // set time to 23:59
-    date.setHours(23);
-    date.setMinutes(59);
-  }
 }

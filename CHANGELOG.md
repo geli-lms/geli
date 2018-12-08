@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
 - Update mongoose to 5.3.x. [#1003](https://github.com/geli-lms/geli/issues/1003)[#1004](https://github.com/geli-lms/geli/pull/1004)[#1044](https://github.com/geli-lms/geli/pull/1044)
+- Deadline effects Code Kata Submit Button [#964](https://github.com/geli-lms/geli/issues/964)
 
 ## [[0.8.3](https://github.com/geli-lms/geli/releases/tag/v0.8.3)] - 2018-11-29 - WS 18/19 🚀-Release
 ### Added

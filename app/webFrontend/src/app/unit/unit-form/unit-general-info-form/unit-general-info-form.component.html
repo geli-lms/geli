@@ -10,7 +10,7 @@
   <mat-form-field *ngIf="model?.progressable">
     <input matInput formControlName="deadline" [matDatepicker]="deadlineDatepicker" placeholder="Optional deadline">
     <mat-datepicker-toggle matSuffix [for]="deadlineDatepicker"></mat-datepicker-toggle>
-    <mat-datepicker #deadlineDatepicker (selectedChanged)="updateDateTime($event)"></mat-datepicker>
+    <mat-datepicker #deadlineDatepicker></mat-datepicker>
   </mat-form-field>
 
   <div>
