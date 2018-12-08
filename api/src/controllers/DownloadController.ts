@@ -35,10 +35,8 @@ export class DownloadController {
 
   private markdownCss: string;
 
-
   constructor() {
     setInterval(this.cleanupCache, config.timeToLiveCacheValue * 60);
-
     this.markdownCss = this.readMDCss();
   }
 
@@ -453,7 +451,7 @@ export class DownloadController {
     }
   }
 
-  private readMDCss() {
+  private readMarkdownCss() {
     try {
       return fs.readFileSync(path.resolve(__dirname, '../../styles/md/bundle.css'), 'utf8');
     } catch (e) {
