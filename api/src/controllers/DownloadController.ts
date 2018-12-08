@@ -37,7 +37,7 @@ export class DownloadController {
 
   constructor() {
     setInterval(this.cleanupCache, config.timeToLiveCacheValue * 60);
-    this.markdownCss = this.readMDCss();
+    this.markdownCss = this.readMarkDownCss();
   }
 
   cleanupCache() {
