@@ -21,7 +21,7 @@ export class UnitComponent implements OnInit, AfterViewInit {
 
   private getFormattedDeadline(deadline: string) {
     moment.locale(this.translate.currentLang);
-    return moment(deadline).format('llll');
+    return moment(deadline).format('L LT');
   }
 
   private getFormattedDate(date: string) {
