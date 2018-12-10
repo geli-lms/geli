@@ -192,14 +192,12 @@ export class NotificationController {
   }
 
   /**
-   * @api {get} /api/notification/user/:id Get notifications
-   * @apiName GetNotification
+   * @api {get} /api/notification/ Get own notifications
+   * @apiName GetNotifications
    * @apiGroup Notification
    * @apiPermission student
    * @apiPermission teacher
    * @apiPermission admin
-   *
-   * @apiParam {String} id User ID.
    *
    * @apiSuccess {Notification[]} notifications List of notifications.
    *
@@ -229,9 +227,9 @@ export class NotificationController {
    *     }]
    */
   @Authorized(['student', 'teacher', 'admin'])
-  @Get('/user/:id')
-  async getNotifications(@Param('id') id: string) {
-    const notifications = await Notification.find({'user': id})
+  @Get('/')
+  async getNotifications(@CurrentUser() currentUser: IUser) {
+    const notifications = await Notification.find({user: currentUser})
       .populate('user')
       .populate('changedCourse')
       .populate('changedLecture')

@@ -230,13 +230,13 @@ describe('Notifications', async () => {
     it('should return all notifications for one user', async () => {
       const course = await FixtureUtils.getRandomCourse();
       const student = await User.findById(course.students[0]);
-      const newNotification = await new Notification({
+      await new Notification({
         user: student,
         changedCourse: course,
         text: 'Tritratrulala'
       }).save();
 
-      const res = await testHelper.commonUserGetRequest(student, `/user/${student._id}`);
+      const res = await testHelper.commonUserGetRequest(student, '');
       res.status.should.be.equal(200);
       res.body.forEach((notification: any) => {
         notification._id.should.be.a('string');

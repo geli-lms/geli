@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {NotificationService} from '../shared/services/data.service';
 import {INotification} from '../../../../../shared/models/INotification';
-import {UserService} from '../shared/services/user.service';
 
 @Component({
   selector: 'app-notification',
@@ -12,8 +11,7 @@ export class NotificationComponent implements OnInit {
 
   notifications: Array<INotification>;
 
-  constructor(private notificationService: NotificationService,
-              private userService: UserService) {
+  constructor(private notificationService: NotificationService) {
     this.getNotifications();
   }
 
@@ -21,7 +19,7 @@ export class NotificationComponent implements OnInit {
   }
 
   async getNotifications() {
-    this.notifications = await this.notificationService.getNotificationsPerUser(this.userService.user);
+    this.notifications = await this.notificationService.getNotifications();
     this.sortNotifications();
   }
 

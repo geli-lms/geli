@@ -363,9 +363,9 @@ export class NotificationService extends DataService {
       .toPromise();
   }
 
-  getNotificationsPerUser(user: IUser): Promise<any[]> {
+  getNotifications(): Promise<any[]> {
     return new Promise((resolve, reject) => {
-      this.backendService.get(this.apiPath + 'user/' + user._id)
+      this.backendService.get(this.apiPath)
         .subscribe(
           (responseItem: any) => {
             resolve(responseItem);
