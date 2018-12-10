@@ -27,7 +27,7 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 const archiver = require('archiver');
-const cache = require('node-file-cache').create({life: config.timeToLiveCacheValue});
+import cacheService from '../services/CacheService';
 
 const uploadOptions = {
   storage: multer.diskStorage({
@@ -488,7 +488,7 @@ export class UnitController {
     }
 
     const hash = await crypto.createHash('sha1').update(id + assignmentUnit.assignments.length).digest('hex');
-    const key = cache.get(hash);
+    const key = cacheService.getCacheEntry(hash);
 
     const filepath = config.tmpFileCacheFolder + assignmentUnit.name + '.zip';
 
@@ -503,7 +503,6 @@ export class UnitController {
 
       for (const assignment of assignmentUnit.assignments) {
         const file = await File.findById(assignment.file);
-        console.log(assignment);
         const user = await User.findById(assignment.user);
         archive.file('uploads/' + file.link,
           {
@@ -517,7 +516,7 @@ export class UnitController {
       });
       archive.finalize();
 
-      cache.set(hash, assignmentUnit.name);
+      cacheService.setCacheEntry(hash, assignmentUnit.name);
     }
 
     response.setHeader('Connection', 'keep-alive');

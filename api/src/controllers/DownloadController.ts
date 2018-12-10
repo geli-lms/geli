@@ -14,6 +14,7 @@ import {IFileUnit} from '../../../shared/models/units/IFileUnit';
 import {Lecture} from '../models/Lecture';
 import {IUser} from '../../../shared/models/IUser';
 import {Course} from '../models/Course';
+import cacheService from '../services/CacheService';
 import config from '../config/main';
 
 const fs = require('fs');
@@ -22,30 +23,10 @@ import crypto = require('crypto');
 import {User} from '../models/User';
 import {File} from '../models/mediaManager/File';
 
-const cache = require('node-file-cache').create({life: config.timeToLiveCacheValue});
-
 // Set all routes which should use json to json, the standard is blob streaming data
 @Controller('/download')
 @UseBefore(passportJwtMiddleware)
 export class DownloadController {
-
-  constructor() {
-    setInterval(this.cleanupCache, config.timeToLiveCacheValue * 60);
-  }
-
-  cleanupCache() {
-    cache.expire((record: any) => {
-      return new Promise((resolve, reject) => {
-        fs.unlink( config.tmpFileCacheFolder + record.key + '.zip', (err: Error) => {
-          if (err) {
-            reject(false);
-          } else {
-            resolve(true);
-          }
-        });
-      });
-    });
-  }
 
   replaceCharInFilename(filename: string) {
     return filename.replace(/[^a-zA-Z0-9 -]/g, '')    // remove special characters
@@ -178,7 +159,7 @@ export class DownloadController {
       }
 
       const hash = await this.createFileHash(data);
-      const key = cache.get(hash);
+      const key = cacheService.getCacheEntry(hash);
 
       if (key === null) {
         const filepath = config.tmpFileCacheFolder + hash + '.zip';
@@ -219,7 +200,7 @@ export class DownloadController {
         return new Promise((resolve, reject) => {
           archive.on('error', () => reject(hash));
           archive.finalize();
-          cache.set(hash, hash);
+          cacheService.setCacheEntry(hash, hash);
           archive.on('end', () => resolve(hash));
         });
       } else {
