@@ -54,12 +54,10 @@ export class NotificationController {
    * @apiParam {String} targetType Which type the targetId represents: Either 'course', 'lecture' or 'unit'.
    * @apiParam {String} text Message that the new notification(s) will contain.
    *
-   * @apiSuccess {Boolean} notified Confirmation of notification.
+   * @apiSuccess {Object} result Empty object.
    *
    * @apiSuccessExample {json} Success-Response:
-   *     {
-   *         notified: true
-   *     }
+   *     {}
    *
    * @apiError BadRequestError Notification needs at least the fields course and text
    * @apiError InternalServerError Failed to create notification
@@ -76,7 +74,7 @@ export class NotificationController {
         await this.createNotification(student, text, course, lecture, unit);
       }
     }));
-    return {notified: true};
+    return {};
   }
 
   /**
@@ -92,12 +90,10 @@ export class NotificationController {
    *                               The 'text' type only uses the 'text' parameter while ignoring the 'targetId'.
    * @apiParam {String} text Message that the new notification(s) will contain.
    *
-   * @apiSuccess {Boolean} notified Confirmation of notification.
+   * @apiSuccess {Object} result Empty object.
    *
    * @apiSuccessExample {json} Success-Response:
-   *     {
-   *         notified: true
-   *     }
+   *     {}
    *
    * @apiError InternalServerError Failed to create notification
    */
@@ -123,7 +119,7 @@ export class NotificationController {
     if (await this.shouldCreateNotification(user, course, unit)) {
       await this.createNotification(user, text, course, lecture, unit);
     }
-    return {notified: true};
+    return {};
   }
 
   async shouldCreateNotification(user: IUser, changedCourse: ICourseModel, changedUnit?: IUnitModel) {

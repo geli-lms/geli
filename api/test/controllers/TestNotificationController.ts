@@ -45,7 +45,6 @@ describe('Notifications', async () => {
 
       const res = await testHelper.commonUserPostRequest(teacher, '', newNotification);
       res.status.should.be.equal(200);
-      res.body.notified.should.be.equal(true);
 
       const notifications = await Notification.find({changedCourse: course});
       notifications.length.should.be.equal(course.students.length);
@@ -109,7 +108,6 @@ describe('Notifications', async () => {
 
       const res = await testHelper.commonUserPostRequest(teacher, `/user/${student._id}`, newNotification);
       res.status.should.be.equal(200);
-      res.body.notified.should.be.equal(true);
 
       const notifications = await Notification.find({changedCourse: course});
       notifications.length.should.be.equal(1);
@@ -137,7 +135,6 @@ describe('Notifications', async () => {
 
       const res = await testHelper.commonUserPostRequest(teacher, `/user/${student._id}`, newNotification);
       res.status.should.be.equal(200);
-      res.body.notified.should.be.equal(true);
 
       const notifications = await Notification.find({changedCourse: course});
       notifications.length.should.be.equal(1);
@@ -162,7 +159,6 @@ describe('Notifications', async () => {
 
       const res = await testHelper.commonUserPostRequest(teacher, `/user/${student._id}`, newNotification);
       res.status.should.be.equal(200);
-      res.body.notified.should.be.equal(true);
 
       const notifications = await Notification.find({changedCourse: course});
       notifications.length.should.be.equal(1);
@@ -190,7 +186,6 @@ describe('Notifications', async () => {
 
       const res = await testHelper.commonUserPostRequest(teacher, `/user/${student._id}`, newNotification);
       res.status.should.be.equal(200);
-      res.body.notified.should.be.equal(true);
 
       const notifications = await Notification.find({changedCourse: course});
       notifications.length.should.be.equal(1);
@@ -208,7 +203,6 @@ describe('Notifications', async () => {
 
       const res = await testHelper.commonUserPostRequest(teacher, `/user/${student._id}`, newNotification);
       res.status.should.be.equal(200);
-      res.body.notified.should.be.equal(true);
 
       const notifications = await Notification.find({user: student._id});
       notifications.length.should.be.equal(1);
