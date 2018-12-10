@@ -6,9 +6,8 @@
     <mat-card-subtitle
       *ngIf="unit.progressable && unit.deadline"
       class="deadline"
-      matTooltip="{{getFormattedDeadline(unit.deadline)}}"
     >
-      {{'unit.text.deadline' | translate }}:  {{getDeadlineDiffText(unit.deadline)}}
+      {{'unit.text.deadline' | translate }}:  {{getFormattedDeadline(unit.deadline)}}
     </mat-card-subtitle>
     <mat-card-title class="unit-card-title">
       {{unit.name}}

@@ -19,11 +19,6 @@ export class UnitComponent implements OnInit, AfterViewInit {
   users: IUser[] = [];
   chatMessageCount: {[unitId: string]: number} = {};
 
-  private getDeadlineDiffText (deadline: string) {
-    moment.locale(this.translate.currentLang);
-    return moment(deadline).calendar();
-  }
-
   private getFormattedDeadline(deadline: string) {
     moment.locale(this.translate.currentLang);
     return moment(deadline).format('llll');
