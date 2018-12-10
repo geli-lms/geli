@@ -40,7 +40,6 @@ const DEBUG = "debug";
 const INSPECT = "inspect";
 const INSPECT_MIGRATOR = "migrate:inspect";
 const COMPILE_MD_SASS = 'compile:sass:md';
-const WATCH_MD_SASS = 'watch:sass:md';
 
 const SRC_GLOB = "./src/**/*";
 const TS_SRC_GLOB = SRC_GLOB + ".ts";
@@ -59,7 +58,7 @@ const JS_TEST_GLOB = BUILD_TEST_GLOB + ".js";
 const BUILD_SRC_GLOB = BUILD_GLOB + "src/**/*";
 const JS_SRC_GLOB = BUILD_SRC_GLOB + ".js";
 const TS_GLOB = [TS_SRC_GLOB, TS_TEST_GLOB, TS_FIXTURES_GLOB, TS_MIGRATION_GLOB];
-const MD_SASS_FILE_DST = BUILD_GLOB+"styles/md";
+const MD_SASS_FILE_DST = BUILD_GLOB + "styles/md";
 
 const tsProject = typescript.createProject("tsconfig.json");
 
@@ -137,7 +136,7 @@ gulp.task(BUILD, function (callback) {
 });
 */
 
-gulp.task(BUILD, gulp.series(CLEAN_BUILD, TSLINT, COMPILE_TYPESCRIPT, COMPILE_MD_SASS,COPY_FIXTURES));
+gulp.task(BUILD, gulp.series(CLEAN_BUILD, TSLINT, COMPILE_TYPESCRIPT, COMPILE_MD_SASS, COPY_FIXTURES));
 
 // Runs all required steps for the build in sequence FOR DEVELOP
 /*
