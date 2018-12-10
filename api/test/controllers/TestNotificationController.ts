@@ -1,23 +1,19 @@
 import * as chai from 'chai';
-import {Server} from '../../src/server';
-import {FixtureLoader} from '../../fixtures/FixtureLoader';
-import {FixtureUtils} from '../../fixtures/FixtureUtils';
-import {JwtUtils} from '../../src/security/JwtUtils';
-import {Notification} from '../../src/models/Notification';
 import chaiHttp = require('chai-http');
+import {TestHelper} from '../TestHelper';
+import {FixtureUtils} from '../../fixtures/FixtureUtils';
+import {Notification} from '../../src/models/Notification';
 import {User} from '../../src/models/User';
-import {NotFoundError} from 'routing-controllers';
 import {API_NOTIFICATION_TYPE_ALL_CHANGES, API_NOTIFICATION_TYPE_NONE, NotificationSettings} from '../../src/models/NotificationSettings';
 
 chai.use(chaiHttp);
 const should = chai.should();
-const app = new Server().app;
 const BASE_URL = '/api/notification';
-const fixtureLoader = new FixtureLoader();
+const testHelper = new TestHelper(BASE_URL);
 
 describe('Notifications', async () => {
   beforeEach(async () => {
-    await fixtureLoader.load();
+    await testHelper.resetForNextTest();
   });
 
   describe(`POST ${BASE_URL}`, async () => {
@@ -29,11 +25,7 @@ describe('Notifications', async () => {
         changedCourse: course,
       };
 
-      const res = await chai.request(app)
-        .post(BASE_URL)
-        .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
-        .send(newNotification)
-        .catch(err => err.response);
+      const res = await testHelper.commonUserPostRequest(teacher, '', newNotification);
       res.status.should.be.equal(400);
       res.body.name.should.be.equal('BadRequestError');
       res.body.message.should.be.equal('Notification needs at least the fields course and text');
@@ -49,10 +41,7 @@ describe('Notifications', async () => {
         text: 'test text'
       };
 
-      const res = await chai.request(app)
-        .post(BASE_URL)
-        .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
-        .send(newNotification);
+      const res = await testHelper.commonUserPostRequest(teacher, '', newNotification);
       res.status.should.be.equal(200);
       res.body.notified.should.be.equal(true);
 
@@ -66,11 +55,7 @@ describe('Notifications', async () => {
       const course = await FixtureUtils.getRandomCourse();
       const teacher = await FixtureUtils.getRandomTeacherForCourse(course);
 
-      const res = await chai.request(app)
-        .post(`${BASE_URL}/user/507f191e810c19729de860ea`) // valid id but user not exist
-        .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
-        .send({})
-        .catch(err => err.response);
+      const res = await testHelper.commonUserPostRequest(teacher, '/user/507f191e810c19729de860ea', {});
       res.status.should.be.equal(400);
       res.body.name.should.be.equal('BadRequestError');
       res.body.message.should.be.equal('Notification needs at least the field changedCourse or text');
@@ -85,11 +70,7 @@ describe('Notifications', async () => {
         text: 'test text'
       };
 
-      const res = await chai.request(app)
-        .post(`${BASE_URL}/user/507f191e810c19729de860ea`) // valid id but user not exist
-        .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
-        .send(newNotification)
-        .catch(err => err.response);
+      const res = await testHelper.commonUserPostRequest(teacher, '/user/507f191e810c19729de860ea', newNotification);
       res.status.should.be.equal(400);
       res.body.name.should.be.equal('BadRequestError');
       res.body.message.should.be.equal('Could not create notification because user not found');
@@ -106,10 +87,7 @@ describe('Notifications', async () => {
         text: 'test text'
       };
 
-      const res = await chai.request(app)
-        .post(`${BASE_URL}/user/${student._id}`)
-        .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
-        .send(newNotification);
+      const res = await testHelper.commonUserPostRequest(teacher, `/user/${student._id}`, newNotification);
       res.status.should.be.equal(200);
       res.body.notified.should.be.equal(true);
 
@@ -135,10 +113,7 @@ describe('Notifications', async () => {
         text: 'test text'
       };
 
-      const res = await chai.request(app)
-        .post(`${BASE_URL}/user/${student._id}`)
-        .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
-        .send(newNotification);
+      const res = await testHelper.commonUserPostRequest(teacher, `/user/${student._id}`, newNotification);
       res.status.should.be.equal(200);
       res.body.notified.should.be.equal(true);
 
@@ -162,10 +137,7 @@ describe('Notifications', async () => {
         text: 'test text'
       };
 
-      const res = await chai.request(app)
-        .post(`${BASE_URL}/user/${student._id}`)
-        .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
-        .send(newNotification);
+      const res = await testHelper.commonUserPostRequest(teacher, `/user/${student._id}`, newNotification);
       res.status.should.be.equal(200);
       res.body.notified.should.be.equal(true);
 
@@ -191,10 +163,7 @@ describe('Notifications', async () => {
         text: 'test text'
       };
 
-      const res = await chai.request(app)
-        .post(`${BASE_URL}/user/${student._id}`)
-        .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
-        .send(newNotification);
+      const res = await testHelper.commonUserPostRequest(teacher, `/user/${student._id}`, newNotification);
       res.status.should.be.equal(200);
       res.body.notified.should.be.equal(true);
 
@@ -211,10 +180,7 @@ describe('Notifications', async () => {
         text: 'test text'
       };
 
-      const res = await chai.request(app)
-        .post(`${BASE_URL}/user/${student._id}`)
-        .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
-        .send(newNotification);
+      const res = await testHelper.commonUserPostRequest(teacher, `/user/${student._id}`, newNotification);
       res.status.should.be.equal(200);
       res.body.notified.should.be.equal(true);
 
@@ -233,9 +199,7 @@ describe('Notifications', async () => {
         text: 'Tritratrulala'
       }).save();
 
-      const res = await chai.request(app)
-        .get(`${BASE_URL}/user/${student._id}`)
-        .set('Cookie', `token=${JwtUtils.generateToken(student)}`);
+      const res = await testHelper.commonUserGetRequest(student, `/user/${student._id}`);
       res.status.should.be.equal(200);
       res.body.forEach((notification: any) => {
         notification._id.should.be.a('string');
@@ -259,10 +223,7 @@ describe('Notifications', async () => {
         text: 'Tritratrulala'
       }).save();
 
-      const res = await chai.request(app)
-        .del(`${BASE_URL}/${newNotification._id}`)
-        .set('Cookie', `token=${JwtUtils.generateToken(students[0])}`);
-
+      const res = await testHelper.commonUserDeleteRequest(students[0], `/${newNotification._id}`);
       res.status.should.be.equal(200);
       const deletedNotification = await Notification.findById(newNotification._id);
       should.not.exist(deletedNotification, 'Notification does still exist');
@@ -278,15 +239,10 @@ describe('Notifications', async () => {
         text: 'Tritratrulala'
       }).save();
 
-      const res = await chai.request(app)
-        .del(`${BASE_URL}/${newNotification._id}`)
-        .set('Cookie', `token=${JwtUtils.generateToken(students[1])}`)
-        .catch(err => err.response);
-
+      const res = await testHelper.commonUserDeleteRequest(students[1], `/${newNotification._id}`);
       res.status.should.be.equal(404);
       res.body.name.should.be.equal('NotFoundError');
       res.body.message.should.be.equal('Notification could not be found.');
-
     });
   });
 });
