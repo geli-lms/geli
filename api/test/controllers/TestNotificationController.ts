@@ -48,6 +48,20 @@ describe('Notifications', async () => {
       const notifications = await Notification.find({changedCourse: course});
       notifications.length.should.be.equal(course.students.length);
     });
+
+    it('should forbid notification creation for an unauthorized teacher', async () => {
+      const course = await FixtureUtils.getRandomCourse();
+      course.active = true;
+      const unauthorizedTeacher = await FixtureUtils.getUnauthorizedTeacherForCourse(course);
+
+      const newNotification = {
+        changedCourse: course,
+        text: 'test text'
+      };
+
+      const res = await testHelper.commonUserPostRequest(unauthorizedTeacher, '', newNotification);
+      res.status.should.be.equal(403);
+    });
   });
 
   describe(`POST ${BASE_URL} user :id`, async () => {
@@ -186,6 +200,21 @@ describe('Notifications', async () => {
 
       const notifications = await Notification.find({user: student._id});
       notifications.length.should.be.equal(1);
+    });
+
+    it('should forbid notification creation for an unauthorized teacher', async () => {
+      const course = await FixtureUtils.getRandomCourse();
+      course.active = true;
+      const student = course.students[Math.floor(Math.random() * course.students.length)];
+      const unauthorizedTeacher = await FixtureUtils.getUnauthorizedTeacherForCourse(course);
+
+      const newNotification = {
+        changedCourse: course,
+        text: 'test text'
+      };
+
+      const res = await testHelper.commonUserPostRequest(unauthorizedTeacher, `/user/${student._id}`, newNotification);
+      res.status.should.be.equal(403);
     });
   });
 
