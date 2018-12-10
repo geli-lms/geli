@@ -22,22 +22,24 @@ describe('Notifications', async () => {
       const teacher = await FixtureUtils.getRandomTeacherForCourse(course);
 
       const newNotification = {
-        changedCourse: course,
+        targetId: course.id,
+        targetType: 'course'
       };
 
       const res = await testHelper.commonUserPostRequest(teacher, '', newNotification);
       res.status.should.be.equal(400);
-      res.body.name.should.be.equal('BadRequestError');
-      res.body.message.should.be.equal('Notification needs at least the fields course and text');
+      res.body.name.should.be.equal('ParamRequiredError');
     });
 
     it('should create notifications for students with the corresponding settings', async () => {
       const course = await FixtureUtils.getRandomCourse();
       course.active = true;
+      await course.save();
       const teacher = await FixtureUtils.getRandomTeacherForCourse(course);
 
       const newNotification = {
-        changedCourse: course,
+        targetId: course.id,
+        targetType: 'course',
         text: 'test text'
       };
 
@@ -52,10 +54,12 @@ describe('Notifications', async () => {
     it('should forbid notification creation for an unauthorized teacher', async () => {
       const course = await FixtureUtils.getRandomCourse();
       course.active = true;
+      await course.save();
       const unauthorizedTeacher = await FixtureUtils.getUnauthorizedTeacherForCourse(course);
 
       const newNotification = {
-        changedCourse: course,
+        targetId: course.id,
+        targetType: 'course',
         text: 'test text'
       };
 
@@ -71,8 +75,7 @@ describe('Notifications', async () => {
 
       const res = await testHelper.commonUserPostRequest(teacher, '/user/507f191e810c19729de860ea', {});
       res.status.should.be.equal(400);
-      res.body.name.should.be.equal('BadRequestError');
-      res.body.message.should.be.equal('Notification needs at least the field changedCourse or text');
+      res.body.name.should.be.equal('ParamRequiredError');
     });
 
     it('should fail if user not given', async () => {
@@ -80,7 +83,8 @@ describe('Notifications', async () => {
       const teacher = await FixtureUtils.getRandomTeacherForCourse(course);
 
       const newNotification = {
-        changedCourse: course,
+        targetId: course.id,
+        targetType: 'course',
         text: 'test text'
       };
 
@@ -93,11 +97,13 @@ describe('Notifications', async () => {
     it('should create notifications for student with changedCourse and text', async () => {
       const course = await FixtureUtils.getRandomCourse();
       course.active = true;
+      await course.save();
       const student = course.students[Math.floor(Math.random() * course.students.length)];
       const teacher = await FixtureUtils.getRandomTeacherForCourse(course);
 
       const newNotification = {
-        changedCourse: course,
+        targetId: course.id,
+        targetType: 'course',
         text: 'test text'
       };
 
@@ -112,6 +118,7 @@ describe('Notifications', async () => {
     it('should create notifications for student with changedCourse and text', async () => {
       const course = await FixtureUtils.getRandomCourse();
       course.active = true;
+      await course.save();
       const student = course.students[Math.floor(Math.random() * course.students.length)];
       const teacher = await FixtureUtils.getRandomTeacherForCourse(course);
 
@@ -123,7 +130,8 @@ describe('Notifications', async () => {
       }).save();
 
       const newNotification = {
-        changedCourse: course,
+        targetId: course.id,
+        targetType: 'course',
         text: 'test text'
       };
 
@@ -138,16 +146,17 @@ describe('Notifications', async () => {
     it('should create notifications for student with changedCourse, changedLecture, changedUnit and text', async () => {
       const course = await FixtureUtils.getRandomCourse();
       course.active = true;
+      await course.save();
       const lecture = await FixtureUtils.getRandomLectureFromCourse(course);
       const student = course.students[Math.floor(Math.random() * course.students.length)];
       const teacher = await FixtureUtils.getRandomTeacherForCourse(course);
       const unit = await FixtureUtils.getRandomUnitFromLecture(lecture);
       unit.visible = true;
+      await unit.save();
 
       const newNotification = {
-        changedCourse: course,
-        changedLecture: lecture,
-        changedUnit: unit,
+        targetId: unit.id,
+        targetType: 'unit',
         text: 'test text'
       };
 
@@ -162,6 +171,7 @@ describe('Notifications', async () => {
     it('should create notifications for student with changedCourse and text but API_NOTIFICATION_TYPE_NONE', async () => {
       const course = await FixtureUtils.getRandomCourse();
       course.active = true;
+      await course.save();
       const student = course.students[Math.floor(Math.random() * course.students.length)];
       const teacher = await FixtureUtils.getRandomTeacherForCourse(course);
 
@@ -173,7 +183,8 @@ describe('Notifications', async () => {
       }).save();
 
       const newNotification = {
-        changedCourse: course,
+        targetId: course.id,
+        targetType: 'course',
         text: 'test text'
       };
 
@@ -191,6 +202,7 @@ describe('Notifications', async () => {
       const teacher = await FixtureUtils.getRandomTeacherForCourse(course);
 
       const newNotification = {
+        targetType: 'text',
         text: 'test text'
       };
 
@@ -205,11 +217,13 @@ describe('Notifications', async () => {
     it('should forbid notification creation for an unauthorized teacher', async () => {
       const course = await FixtureUtils.getRandomCourse();
       course.active = true;
+      await course.save();
       const student = course.students[Math.floor(Math.random() * course.students.length)];
       const unauthorizedTeacher = await FixtureUtils.getUnauthorizedTeacherForCourse(course);
 
       const newNotification = {
-        changedCourse: course,
+        targetId: course.id,
+        targetType: 'course',
         text: 'test text'
       };
 

@@ -1,16 +1,16 @@
-import {Get, Post, Delete, Param, Body, CurrentUser, Authorized,
+import {Get, Post, Delete, Param, BodyParam, CurrentUser, Authorized,
         UseBefore, JsonController, BadRequestError, ForbiddenError, NotFoundError} from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import {NotificationSettings, API_NOTIFICATION_TYPE_ALL_CHANGES} from '../models/NotificationSettings';
 import {Notification} from '../models/Notification';
-import {Course} from '../models/Course';
-import {Unit} from '../models/units/Unit';
+import {Course, ICourseModel} from '../models/Course';
+import {Lecture, ILectureModel} from '../models/Lecture';
+import {Unit, IUnitModel} from '../models/units/Unit';
 import {User} from '../models/User';
-import {IUser} from '../../../shared/models/IUser';
 import {ICourse} from '../../../shared/models/ICourse';
 import {ILecture} from '../../../shared/models/ILecture';
 import {IUnit} from '../../../shared/models/units/IUnit';
-import {extractSingleMongoId} from '../utilities/ExtractMongoId';
+import {IUser} from '../../../shared/models/IUser';
 import {SendMailOptions} from 'nodemailer';
 import emailService from '../services/EmailService';
 
@@ -18,6 +18,30 @@ import emailService from '../services/EmailService';
 @UseBefore(passportJwtMiddleware)
 export class NotificationController {
 
+  static async resolveTarget(targetId: string, targetType: string, currentUser: IUser) {
+    let course: ICourseModel;
+    let lecture: ILectureModel;
+    let unit: IUnitModel;
+    switch (targetType) {
+      case 'course':
+        course = await Course.findById(targetId);
+        break;
+      case 'lecture':
+        lecture = await Lecture.findById(targetId);
+        course = await Course.findOne({lectures: targetId});
+        break;
+      case 'unit':
+        unit = await Unit.findById(targetId);
+        course = await Course.findById(unit._course);
+        break;
+      default:
+        throw new BadRequestError('Invalid targetType');
+    }
+    if (!course.checkPrivileges(currentUser).userCanEditCourse) {
+      throw new ForbiddenError();
+    }
+    return {course, lecture, unit};
+  }
 
   /**
    * @api {post} /api/notification/ Create notifications
@@ -26,7 +50,9 @@ export class NotificationController {
    * @apiPermission teacher
    * @apiPermission admin
    *
-   * @apiParam {Object} data Notification text and information on changed course, lecture and unit.
+   * @apiParam {String} targetId Target id of the changed course, lecture or unit.
+   * @apiParam {String} targetType Which type the targetId represents: Either 'course', 'lecture' or 'unit'.
+   * @apiParam {String} text Message that the new notification(s) will contain.
    *
    * @apiSuccess {Boolean} notified Confirmation of notification.
    *
@@ -40,30 +66,14 @@ export class NotificationController {
    */
   @Authorized(['teacher', 'admin'])
   @Post('/')
-  async createNotifications(@Body() data: any, @CurrentUser() currentUser: IUser) {
-    if (!data.changedCourse || !data.text) {
-      throw new BadRequestError('Notification needs at least the fields course and text');
-    }
-
-    const course = await Course.findById(data.changedCourse._id);
-    if (!course.checkPrivileges(currentUser).userCanEditCourse) {
-      throw new ForbiddenError();
-    }
-    if (data.changedUnit) {
-      const unit = await Unit.findById(data.changedUnit._id);
-      if (extractSingleMongoId(course) !== extractSingleMongoId(unit._course)) {
-        throw new BadRequestError('Given unit is not part of given course');
-      }
-    }
-    if (data.changedLecture) {
-      if (!course.lectures.some((lecture) => extractSingleMongoId(lecture) === data.changedLecture._id)) {
-        throw new BadRequestError('Given lecture is not part of given course');
-      }
-    }
-
+  async createNotifications(@BodyParam('targetId', {required: true}) targetId: string,
+                            @BodyParam('targetType', {required: true}) targetType: string,
+                            @BodyParam('text', {required: true}) text: string,
+                            @CurrentUser() currentUser: IUser) {
+    const {course, lecture, unit} = await NotificationController.resolveTarget(targetId, targetType, currentUser);
     await Promise.all(course.students.map(async student => {
-      if (await this.shouldCreateNotification(student, data.changedCourse, data.changedUnit)) {
-        await this.createNotification(student, data.text, data.changedCourse, data.changedLecture, data.changedUnit);
+      if (await this.shouldCreateNotification(student, course, unit)) {
+        await this.createNotification(student, text, course, lecture, unit);
       }
     }));
     return {notified: true};
@@ -76,8 +86,11 @@ export class NotificationController {
    * @apiPermission teacher
    * @apiPermission admin
    *
-   * @apiParam {String} id User ID.
-   * @apiParam {Object} data Notification text and information on changed course, lecture and unit.
+   * @apiParam {String} id ID of the user that the new notification is assigned/sent to.
+   * @apiParam {String} targetId Target id of the changed course, lecture or unit.
+   * @apiParam {String} targetType Which type the targetId represents: Either 'course', 'lecture', 'unit' or 'text'.
+   *                               The 'text' type only uses the 'text' parameter while ignoring the 'targetId'.
+   * @apiParam {String} text Message that the new notification(s) will contain.
    *
    * @apiSuccess {Boolean} notified Confirmation of notification.
    *
@@ -90,48 +103,38 @@ export class NotificationController {
    */
   @Authorized(['teacher', 'admin'])
   @Post('/user/:id')
-  async createNotificationForStudent(@Param('id') userId: string, @Body() data: any, @CurrentUser() currentUser: IUser) {
-    if (!data.changedCourse && !data.text) {
-      throw new BadRequestError('Notification needs at least the field changedCourse or text');
+  async createNotificationForStudent(@Param('id') userId: string,
+                                    @BodyParam('targetId', {required: false}) targetId: string,
+                                    @BodyParam('targetType', {required: true}) targetType: string,
+                                    @BodyParam('text', {required: false}) text: string,
+                                    @CurrentUser() currentUser: IUser) {
+    if (targetType === 'text' && !text) {
+      throw new BadRequestError('Requested text-only notification creation without supplying any text');
     }
+    const {course, lecture, unit} = targetType === 'text'
+      ? {course: undefined, lecture: undefined, unit: undefined}
+      : await NotificationController.resolveTarget(targetId, targetType, currentUser);
+
     const user = await User.findById(userId);
     if (!user) {
       throw new BadRequestError('Could not create notification because user not found');
     }
 
-    if (data.changedCourse || data.changedUnit || data.changedLecture) {
-      const course = await Course.findById(data.changedCourse._id);
-      if (!course.checkPrivileges(currentUser).userCanEditCourse) {
-        throw new ForbiddenError();
-      }
-      if (data.changedUnit) {
-        const unit = await Unit.findById(data.changedUnit._id);
-        if (extractSingleMongoId(course) !== extractSingleMongoId(unit._course)) {
-          throw new BadRequestError('Given unit is not part of given course');
-        }
-      }
-      if (data.changedLecture) {
-        if (!course.lectures.some((lecture) => extractSingleMongoId(lecture) === data.changedLecture._id)) {
-          throw new BadRequestError('Given lecture is not part of given course');
-        }
-      }
-    }
-
-    if (await this.shouldCreateNotification(user, data.changedCourse, data.changedUnit)) {
-      await this.createNotification(user, data.text, data.changedCourse, data.changedLecture, data.changedUnit);
+    if (await this.shouldCreateNotification(user, course, unit)) {
+      await this.createNotification(user, text, course, lecture, unit);
     }
     return {notified: true};
   }
 
-  async shouldCreateNotification(user: IUser, changedCourse: ICourse, changedUnit: IUnit = null) {
+  async shouldCreateNotification(user: IUser, changedCourse: ICourseModel, changedUnit?: IUnitModel) {
     if (!changedCourse && !changedUnit) {
       // The notificaiton does not depend on any unit/course. We can create a notification.
       return true;
     }
     if (!changedUnit) {
-      return (await Notification.countDocuments({'user': user._id, 'changedCourse': changedCourse._id})) === 0;
+      return !(await Notification.findOne({user, changedCourse}));
     }
-    return (await Notification.countDocuments({'user': user._id, 'changedUnit': changedUnit._id})) === 0;
+    return !(await Notification.findOne({user, changedUnit}));
   }
 
   async createNotification(user: IUser, text: string, changedCourse?: ICourse, changedLecture?: ILecture, changedUnit?: IUnit) {
