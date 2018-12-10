@@ -23,7 +23,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Update `mongoose` to `5.3.x`. [#1003](https://github.com/geli-lms/geli/issues/1003) [#1004](https://github.com/geli-lms/geli/pull/1004) [#1044](https://github.com/geli-lms/geli/pull/1044)
 - Refactor `LectureController` `GET`/`POST`/`PUT` routes to use `async`/`await`. [#1041](https://github.com/geli-lms/geli/issues/1041)
 - Sanitize `{post} /api/lecture/` route parameters by reducing the arbitrary `ILecture` input to `name` & `description`. [#1041](https://github.com/geli-lms/geli/issues/1041)
-- Deadline effects Code Kata Submit Button [#964](https://github.com/geli-lms/geli/issues/964)
+- Submit button for code kata will be disabled when deadline is over. [#964](https://github.com/geli-lms/geli/issues/964)
 
 ### Fixed
 - Some incorrect `FixtureUtils` return types. [#1041](https://github.com/geli-lms/geli/issues/1041)
