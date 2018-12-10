@@ -371,7 +371,8 @@
       "publishedOn": "Veröffentlicht am",
       "submitAnswers": "Antworten absenden",
       "taskCompleted": "Aufgabe abgeschlossen",
-      "tasks": "Aufgaben"
+      "tasks": "Aufgaben",
+      "deadline": "Einsendeschluss"
     },
     "tooltip": {
       "add": "Lerneinheit hinzufügen",

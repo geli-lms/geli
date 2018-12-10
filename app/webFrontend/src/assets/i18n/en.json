@@ -371,7 +371,8 @@
       "publishedOn": "Published on",
       "submitAnswers": "Submit answers",
       "taskCompleted": "Task completed",
-      "tasks": "Tasks"
+      "tasks": "Tasks",
+      "deadline": "Deadline"
     },
     "tooltip": {
       "add": "add unit",

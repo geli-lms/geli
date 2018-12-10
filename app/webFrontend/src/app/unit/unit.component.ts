@@ -37,7 +37,7 @@ export class UnitComponent implements OnInit, AfterViewInit {
   constructor(private route: ActivatedRoute,
               private router: Router,
               private msgService: MessageService,
-              private translate: TranslateService) {
+              public translate: TranslateService) {
   }
 
   ngOnInit() {
