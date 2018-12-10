@@ -249,28 +249,11 @@ export class NotificationController {
    * @apiPermission admin
    *
    * @apiParam {String} id Notification ID.
-   * @apiParam {IUser} currentUser Currently logged in user.
    *
-   * @apiSuccess {Object} deletion Object with deleted notification.
+   * @apiSuccess {Object} result Empty object.
    *
    * @apiSuccessExample {json} Success-Response:
-   *     {
-   *         "$__": {...},
-   *         "isNew": false,
-   *         "_doc": {
-   *             "__v": 0,
-   *             "user": {...},
-   *             "text": "Course ProblemSolver has an updated text unit.",
-   *             "isOld": false,
-   *             "changedCourse": {...},
-   *             "changedLecture": {...},
-   *             "changedUnit": {...},
-   *             "createdAt": "2018-03-22T00:42:12.577Z",
-   *             "updatedAt": "2018-03-22T00:42:12.577Z",
-   *             "_id": {...}
-   *         },
-   *         "$init": true
-   *     }
+   *     {}
    *
    * @apiError NotFoundError Notification could not be found.
    */
@@ -281,6 +264,7 @@ export class NotificationController {
     if (!notification) {
       throw new NotFoundError('Notification could not be found.');
     }
-    return notification.remove();
+    await notification.remove();
+    return {};
   }
 }
