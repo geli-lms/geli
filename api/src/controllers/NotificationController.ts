@@ -1,14 +1,16 @@
 import {Get, Post, Delete, Param, Body, CurrentUser, Authorized,
-        UseBefore, BadRequestError, JsonController, NotFoundError} from 'routing-controllers';
+        UseBefore, JsonController, BadRequestError, ForbiddenError, NotFoundError} from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import {NotificationSettings, API_NOTIFICATION_TYPE_ALL_CHANGES} from '../models/NotificationSettings';
 import {Notification} from '../models/Notification';
 import {Course} from '../models/Course';
+import {Unit} from '../models/units/Unit';
 import {User} from '../models/User';
 import {IUser} from '../../../shared/models/IUser';
 import {ICourse} from '../../../shared/models/ICourse';
 import {ILecture} from '../../../shared/models/ILecture';
 import {IUnit} from '../../../shared/models/units/IUnit';
+import {extractSingleMongoId} from '../utilities/ExtractMongoId';
 import {SendMailOptions} from 'nodemailer';
 import emailService from '../services/EmailService';
 
@@ -38,11 +40,27 @@ export class NotificationController {
    */
   @Authorized(['teacher', 'admin'])
   @Post('/')
-  async createNotifications(@Body() data: any) {
+  async createNotifications(@Body() data: any, @CurrentUser() currentUser: IUser) {
     if (!data.changedCourse || !data.text) {
       throw new BadRequestError('Notification needs at least the fields course and text');
     }
+
     const course = await Course.findById(data.changedCourse._id);
+    if (!course.checkPrivileges(currentUser).userCanEditCourse) {
+      throw new ForbiddenError();
+    }
+    if (data.changedUnit) {
+      const unit = await Unit.findById(data.changedUnit._id);
+      if (extractSingleMongoId(course) !== extractSingleMongoId(unit._course)) {
+        throw new BadRequestError('Given unit is not part of given course');
+      }
+    }
+    if (data.changedLecture) {
+      if (!course.lectures.some((lecture) => extractSingleMongoId(lecture) === data.changedLecture._id)) {
+        throw new BadRequestError('Given lecture is not part of given course');
+      }
+    }
+
     await Promise.all(course.students.map(async student => {
       if (await this.shouldCreateNotification(student, data.changedCourse, data.changedUnit)) {
         await this.createNotification(student, data.text, data.changedCourse, data.changedLecture, data.changedUnit);
@@ -72,7 +90,7 @@ export class NotificationController {
    */
   @Authorized(['teacher', 'admin'])
   @Post('/user/:id')
-  async createNotificationForStudent(@Param('id') userId: string, @Body() data: any) {
+  async createNotificationForStudent(@Param('id') userId: string, @Body() data: any, @CurrentUser() currentUser: IUser) {
     if (!data.changedCourse && !data.text) {
       throw new BadRequestError('Notification needs at least the field changedCourse or text');
     }
@@ -80,6 +98,25 @@ export class NotificationController {
     if (!user) {
       throw new BadRequestError('Could not create notification because user not found');
     }
+
+    if (data.changedCourse || data.changedUnit || data.changedLecture) {
+      const course = await Course.findById(data.changedCourse._id);
+      if (!course.checkPrivileges(currentUser).userCanEditCourse) {
+        throw new ForbiddenError();
+      }
+      if (data.changedUnit) {
+        const unit = await Unit.findById(data.changedUnit._id);
+        if (extractSingleMongoId(course) !== extractSingleMongoId(unit._course)) {
+          throw new BadRequestError('Given unit is not part of given course');
+        }
+      }
+      if (data.changedLecture) {
+        if (!course.lectures.some((lecture) => extractSingleMongoId(lecture) === data.changedLecture._id)) {
+          throw new BadRequestError('Given lecture is not part of given course');
+        }
+      }
+    }
+
     if (await this.shouldCreateNotification(user, data.changedCourse, data.changedUnit)) {
       await this.createNotification(user, data.text, data.changedCourse, data.changedLecture, data.changedUnit);
     }
