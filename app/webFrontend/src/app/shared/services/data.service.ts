@@ -11,6 +11,7 @@ import {IFile} from '../../../../../../shared/models/mediaManager/IFile';
 import {IDuplicationResponse} from '../../../../../../shared/models/IDuplicationResponse';
 import {IUserSearchMeta} from '../../../../../../shared/models/IUserSearchMeta';
 import {IConfig} from '../../../../../../shared/models/IConfig';
+import {INotification} from '../../../../../../shared/models/INotification';
 
 export abstract class DataService {
 
@@ -363,16 +364,8 @@ export class NotificationService extends DataService {
       .toPromise();
   }
 
-  getNotifications(): Promise<any[]> {
-    return new Promise((resolve, reject) => {
-      this.backendService.get(this.apiPath)
-        .subscribe(
-          (responseItem: any) => {
-            resolve(responseItem);
-          },
-          error => reject(error)
-        );
-    });
+  getNotifications(): Promise<INotification[]> {
+    return this.backendService.get(this.apiPath).toPromise();
   }
 }
 
