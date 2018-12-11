@@ -11,15 +11,40 @@ const should = chai.should();
 const BASE_URL = '/api/notification';
 const testHelper = new TestHelper(BASE_URL);
 
+/**
+ * Common setup function for the notification creation (POST) routes.
+ */
+async function preparePostSetup() {
+  const course = await FixtureUtils.getRandomCourse();
+  const student = course.students[Math.floor(Math.random() * course.students.length)];
+  const teacher = await FixtureUtils.getRandomTeacherForCourse(course);
+  return {course, student, teacher};
+}
+
+/**
+ * Common setup function for the notification creation (POST) routes with a changed course.
+ */
+async function preparePostChangedCourseSetup() {
+  const setup = await preparePostSetup();
+  const {course} = setup;
+  course.active = true;
+  await course.save();
+  const newNotification = {
+    targetId: course.id,
+    targetType: 'course',
+    text: 'test text'
+  };
+  return {...setup, newNotification};
+}
+
 describe('Notifications', async () => {
   beforeEach(async () => {
     await testHelper.resetForNextTest();
   });
 
   describe(`POST ${BASE_URL}`, async () => {
-    it('should fail if course or text are not given', async () => {
-      const course = await FixtureUtils.getRandomCourse();
-      const teacher = await FixtureUtils.getRandomTeacherForCourse(course);
+    it('should fail if text parameter is not given', async () => {
+      const {course, teacher} = await preparePostSetup();
 
       const newNotification = {
         targetId: course.id,
@@ -32,16 +57,7 @@ describe('Notifications', async () => {
     });
 
     it('should create notifications for students with the corresponding settings', async () => {
-      const course = await FixtureUtils.getRandomCourse();
-      course.active = true;
-      await course.save();
-      const teacher = await FixtureUtils.getRandomTeacherForCourse(course);
-
-      const newNotification = {
-        targetId: course.id,
-        targetType: 'course',
-        text: 'test text'
-      };
+      const {course, teacher, newNotification} = await preparePostChangedCourseSetup();
 
       const res = await testHelper.commonUserPostRequest(teacher, '', newNotification);
       res.status.should.be.equal(200);
@@ -51,16 +67,8 @@ describe('Notifications', async () => {
     });
 
     it('should forbid notification creation for an unauthorized teacher', async () => {
-      const course = await FixtureUtils.getRandomCourse();
-      course.active = true;
-      await course.save();
+      const {course, newNotification} = await preparePostChangedCourseSetup();
       const unauthorizedTeacher = await FixtureUtils.getUnauthorizedTeacherForCourse(course);
-
-      const newNotification = {
-        targetId: course.id,
-        targetType: 'course',
-        text: 'test text'
-      };
 
       const res = await testHelper.commonUserPostRequest(unauthorizedTeacher, '', newNotification);
       res.status.should.be.equal(403);
@@ -68,9 +76,8 @@ describe('Notifications', async () => {
   });
 
   describe(`POST ${BASE_URL} user :id`, async () => {
-    it('should fail if course and text are not given', async () => {
-      const course = await FixtureUtils.getRandomCourse();
-      const teacher = await FixtureUtils.getRandomTeacherForCourse(course);
+    it('should fail if required parameters are omitted', async () => {
+      const {teacher} = await preparePostSetup();
 
       const res = await testHelper.commonUserPostRequest(teacher, '/user/507f191e810c19729de860ea', {});
       res.status.should.be.equal(400);
@@ -78,8 +85,7 @@ describe('Notifications', async () => {
     });
 
     it('should fail if user not given', async () => {
-      const course = await FixtureUtils.getRandomCourse();
-      const teacher = await FixtureUtils.getRandomTeacherForCourse(course);
+      const {course, teacher} = await preparePostSetup();
 
       const newNotification = {
         targetId: course.id,
@@ -94,17 +100,7 @@ describe('Notifications', async () => {
     });
 
     it('should create notifications for student with changedCourse and text', async () => {
-      const course = await FixtureUtils.getRandomCourse();
-      course.active = true;
-      await course.save();
-      const student = course.students[Math.floor(Math.random() * course.students.length)];
-      const teacher = await FixtureUtils.getRandomTeacherForCourse(course);
-
-      const newNotification = {
-        targetId: course.id,
-        targetType: 'course',
-        text: 'test text'
-      };
+      const {course, student, teacher, newNotification} = await preparePostChangedCourseSetup();
 
       const res = await testHelper.commonUserPostRequest(teacher, `/user/${student._id}`, newNotification);
       res.status.should.be.equal(200);
@@ -114,11 +110,7 @@ describe('Notifications', async () => {
     });
 
     it('should create notifications for student with changedCourse and text', async () => {
-      const course = await FixtureUtils.getRandomCourse();
-      course.active = true;
-      await course.save();
-      const student = course.students[Math.floor(Math.random() * course.students.length)];
-      const teacher = await FixtureUtils.getRandomTeacherForCourse(course);
+      const {course, student, teacher, newNotification} = await preparePostChangedCourseSetup();
 
       await new NotificationSettings({
         user: student,
@@ -126,12 +118,6 @@ describe('Notifications', async () => {
         notificationType: API_NOTIFICATION_TYPE_ALL_CHANGES,
         emailNotification: true
       }).save();
-
-      const newNotification = {
-        targetId: course.id,
-        targetType: 'course',
-        text: 'test text'
-      };
 
       const res = await testHelper.commonUserPostRequest(teacher, `/user/${student._id}`, newNotification);
       res.status.should.be.equal(200);
@@ -141,12 +127,8 @@ describe('Notifications', async () => {
     });
 
     it('should create notifications for student with changedCourse, changedLecture, changedUnit and text', async () => {
-      const course = await FixtureUtils.getRandomCourse();
-      course.active = true;
-      await course.save();
+      const {course, student, teacher} = await preparePostChangedCourseSetup();
       const lecture = await FixtureUtils.getRandomLectureFromCourse(course);
-      const student = course.students[Math.floor(Math.random() * course.students.length)];
-      const teacher = await FixtureUtils.getRandomTeacherForCourse(course);
       const unit = await FixtureUtils.getRandomUnitFromLecture(lecture);
       unit.visible = true;
       await unit.save();
@@ -165,11 +147,7 @@ describe('Notifications', async () => {
     });
 
     it('should create notifications for student with changedCourse and text but API_NOTIFICATION_TYPE_NONE', async () => {
-      const course = await FixtureUtils.getRandomCourse();
-      course.active = true;
-      await course.save();
-      const student = course.students[Math.floor(Math.random() * course.students.length)];
-      const teacher = await FixtureUtils.getRandomTeacherForCourse(course);
+      const {course, student, teacher, newNotification} = await preparePostChangedCourseSetup();
 
       await new NotificationSettings({
         user: student,
@@ -177,12 +155,6 @@ describe('Notifications', async () => {
         notificationType: API_NOTIFICATION_TYPE_NONE,
         emailNotification: false
       }).save();
-
-      const newNotification = {
-        targetId: course.id,
-        targetType: 'course',
-        text: 'test text'
-      };
 
       const res = await testHelper.commonUserPostRequest(teacher, `/user/${student._id}`, newNotification);
       res.status.should.be.equal(200);
@@ -192,9 +164,7 @@ describe('Notifications', async () => {
     });
 
     it('should create notifications for student with text only', async () => {
-      const course = await FixtureUtils.getRandomCourse();
-      const student = course.students[Math.floor(Math.random() * course.students.length)];
-      const teacher = await FixtureUtils.getRandomTeacherForCourse(course);
+      const {student, teacher} = await preparePostSetup();
 
       const newNotification = {
         targetType: 'text',
@@ -209,17 +179,8 @@ describe('Notifications', async () => {
     });
 
     it('should forbid notification creation for an unauthorized teacher', async () => {
-      const course = await FixtureUtils.getRandomCourse();
-      course.active = true;
-      await course.save();
-      const student = course.students[Math.floor(Math.random() * course.students.length)];
+      const {course, student, newNotification} = await preparePostChangedCourseSetup();
       const unauthorizedTeacher = await FixtureUtils.getUnauthorizedTeacherForCourse(course);
-
-      const newNotification = {
-        targetId: course.id,
-        targetType: 'course',
-        text: 'test text'
-      };
 
       const res = await testHelper.commonUserPostRequest(unauthorizedTeacher, `/user/${student._id}`, newNotification);
       res.status.should.be.equal(403);
