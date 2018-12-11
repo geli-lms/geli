@@ -242,10 +242,7 @@ export class NotificationController {
   @Authorized(['student', 'teacher', 'admin'])
   @Delete('/:id')
   async deleteNotification(@Param('id') id: string, @CurrentUser() currentUser: IUser) {
-    const notification = await Notification.findOne({_id: id, user: currentUser});
-    if (!notification) {
-      throw new NotFoundError('Notification could not be found.');
-    }
+    const notification = await Notification.findOne({_id: id, user: currentUser}).orFail(new NotFoundError());
     await notification.remove();
     return {};
   }

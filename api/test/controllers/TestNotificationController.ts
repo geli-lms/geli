@@ -272,7 +272,7 @@ describe('Notifications', async () => {
       should.not.exist(deletedNotification, 'Notification does still exist');
     });
 
-    it('should fail because the user is not authorized to delete the notification', async () => {
+    it('should respond with 404 for a notification id that doesn\'t belong to the user', async () => {
       const course = await FixtureUtils.getRandomCourse();
       const students = await FixtureUtils.getRandomStudents(2, 5);
 
@@ -284,8 +284,6 @@ describe('Notifications', async () => {
 
       const res = await testHelper.commonUserDeleteRequest(students[1], `/${newNotification._id}`);
       res.status.should.be.equal(404);
-      res.body.name.should.be.equal('NotFoundError');
-      res.body.message.should.be.equal('Notification could not be found.');
     });
   });
 });
