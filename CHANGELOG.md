@@ -25,6 +25,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Refactor `LectureController` `GET`/`POST`/`PUT` routes to use `async`/`await`. [#1041](https://github.com/geli-lms/geli/issues/1041)
 - Refactor `NotificationController` unit tests in general. [#1065](https://github.com/geli-lms/geli/issues/1065)
 - Refactor `NotificationController` to utilize `.orFail` and the `errorCodes` file. [#1065](https://github.com/geli-lms/geli/issues/1065)
+- Refactor `ExportController` & `LectureController` to utilize `.orFail`. [#1065](https://github.com/geli-lms/geli/issues/1065)
 - Sanitize `{post} /api/lecture/` route parameters by reducing the arbitrary `ILecture` input to `name` & `description`. [#1041](https://github.com/geli-lms/geli/issues/1041)
 - Sanitize `NotificationController` `POST` route parameters by taking a `targetType` and `targetId` instead of the separate `changedCourse`/`changedLecture`/`changedUnit` which needed a _(missing)_ consistency check. [#1065](https://github.com/geli-lms/geli/issues/1065)
 - Empty success response object in the two `NotificationController` `POST` routes. [#1065](https://github.com/geli-lms/geli/issues/1065)
