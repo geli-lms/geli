@@ -3,7 +3,9 @@ import chaiHttp = require('chai-http');
 import {TestHelper} from '../TestHelper';
 import {FixtureUtils} from '../../fixtures/FixtureUtils';
 import {Notification} from '../../src/models/Notification';
-import {User} from '../../src/models/User';
+import {IUser} from '../../../shared/models/IUser';
+import {User, IUserModel} from '../../src/models/User';
+import {ICourseModel} from '../../src/models/Course';
 import {API_NOTIFICATION_TYPE_ALL_CHANGES, API_NOTIFICATION_TYPE_NONE, NotificationSettings} from '../../src/models/NotificationSettings';
 
 chai.use(chaiHttp);
@@ -76,6 +78,20 @@ describe('Notifications', async () => {
   });
 
   describe(`POST ${BASE_URL} user :id`, async () => {
+    interface IChangedCourseSuccessTest {
+      course: ICourseModel;
+      teacher: IUserModel;
+      student: IUser;
+      newNotification: any;
+    }
+    async function changedCourseSuccessTest ({course, teacher, student, newNotification}: IChangedCourseSuccessTest) {
+      const res = await testHelper.commonUserPostRequest(teacher, `/user/${student._id}`, newNotification);
+      res.status.should.be.equal(200);
+
+      const notifications = await Notification.find({changedCourse: course});
+      notifications.length.should.be.equal(1);
+    }
+
     it('should fail if required parameters are omitted', async () => {
       const {teacher} = await preparePostSetup();
 
@@ -100,30 +116,20 @@ describe('Notifications', async () => {
     });
 
     it('should create notifications for student with changedCourse and text', async () => {
-      const {course, student, teacher, newNotification} = await preparePostChangedCourseSetup();
-
-      const res = await testHelper.commonUserPostRequest(teacher, `/user/${student._id}`, newNotification);
-      res.status.should.be.equal(200);
-
-      const notifications = await Notification.find({changedCourse: course});
-      notifications.length.should.be.equal(1);
+      await changedCourseSuccessTest(await preparePostChangedCourseSetup());
     });
 
     it('should create notifications for student with changedCourse and text', async () => {
-      const {course, student, teacher, newNotification} = await preparePostChangedCourseSetup();
+      const setup = await preparePostChangedCourseSetup();
 
       await new NotificationSettings({
-        user: student,
-        course: course,
+        user: setup.student,
+        course: setup.course,
         notificationType: API_NOTIFICATION_TYPE_ALL_CHANGES,
         emailNotification: true
       }).save();
 
-      const res = await testHelper.commonUserPostRequest(teacher, `/user/${student._id}`, newNotification);
-      res.status.should.be.equal(200);
-
-      const notifications = await Notification.find({changedCourse: course});
-      notifications.length.should.be.equal(1);
+      await changedCourseSuccessTest(setup);
     });
 
     it('should create notifications for student with changedCourse, changedLecture, changedUnit and text', async () => {
@@ -139,28 +145,20 @@ describe('Notifications', async () => {
         text: 'test text'
       };
 
-      const res = await testHelper.commonUserPostRequest(teacher, `/user/${student._id}`, newNotification);
-      res.status.should.be.equal(200);
-
-      const notifications = await Notification.find({changedCourse: course});
-      notifications.length.should.be.equal(1);
+      await changedCourseSuccessTest({course, student, teacher, newNotification});
     });
 
     it('should create notifications for student with changedCourse and text but API_NOTIFICATION_TYPE_NONE', async () => {
-      const {course, student, teacher, newNotification} = await preparePostChangedCourseSetup();
+      const setup = await preparePostChangedCourseSetup();
 
       await new NotificationSettings({
-        user: student,
-        course: course,
+        user: setup.student,
+        course: setup.course,
         notificationType: API_NOTIFICATION_TYPE_NONE,
         emailNotification: false
       }).save();
 
-      const res = await testHelper.commonUserPostRequest(teacher, `/user/${student._id}`, newNotification);
-      res.status.should.be.equal(200);
-
-      const notifications = await Notification.find({changedCourse: course});
-      notifications.length.should.be.equal(1);
+      await changedCourseSuccessTest(setup);
     });
 
     it('should create notifications for student with text only', async () => {
