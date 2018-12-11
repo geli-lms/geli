@@ -7,6 +7,7 @@ import {IUser} from '../../../shared/models/IUser';
 import {User, IUserModel} from '../../src/models/User';
 import {ICourseModel} from '../../src/models/Course';
 import {API_NOTIFICATION_TYPE_ALL_CHANGES, API_NOTIFICATION_TYPE_NONE, NotificationSettings} from '../../src/models/NotificationSettings';
+import {errorCodes} from '../../src/config/errorCodes';
 
 chai.use(chaiHttp);
 const should = chai.should();
@@ -148,7 +149,7 @@ describe('Notifications', async () => {
 
       const res = await testHelper.commonUserPostRequest(teacher, '/user/507f191e810c19729de860ea', newNotification);
       res.status.should.be.equal(404);
-      res.body.message.should.be.equal('Target user not found');
+      res.body.message.should.be.equal(errorCodes.notification.targetUserNotFound.text);
     });
 
     it('should create notifications for student with changedCourse and text', async () => {

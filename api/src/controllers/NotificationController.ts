@@ -13,6 +13,7 @@ import {IUnit} from '../../../shared/models/units/IUnit';
 import {IUser} from '../../../shared/models/IUser';
 import {SendMailOptions} from 'nodemailer';
 import emailService from '../services/EmailService';
+import {errorCodes} from '../config/errorCodes';
 
 @JsonController('/notification')
 @UseBefore(passportJwtMiddleware)
@@ -28,14 +29,16 @@ export class NotificationController {
         break;
       case 'lecture':
         lecture = await Lecture.findById(targetId).orFail(new NotFoundError());
-        course = await Course.findOne({lectures: targetId}).orFail(new InternalServerError('Course of lecture missing'));
+        course = await Course.findOne({lectures: targetId})
+          .orFail(new InternalServerError(errorCodes.notification.missingCourseOfLecture.text));
         break;
       case 'unit':
         unit = await Unit.findById(targetId).orFail(new NotFoundError());
-        course = await Course.findById(unit._course).orFail(new InternalServerError('Course of unit missing'));
+        course = await Course.findById(unit._course)
+          .orFail(new InternalServerError(errorCodes.notification.missingCourseOfUnit.text));
         break;
       default:
-        throw new BadRequestError('Invalid targetType');
+        throw new BadRequestError(errorCodes.notification.invalidTargetType.text);
     }
     if (!course.checkPrivileges(currentUser).userCanEditCourse) {
       throw new ForbiddenError();
@@ -105,13 +108,13 @@ export class NotificationController {
                                     @BodyParam('text', {required: false}) text: string,
                                     @CurrentUser() currentUser: IUser) {
     if (targetType === 'text' && !text) {
-      throw new BadRequestError('Requested text-only notification creation without supplying any text');
+      throw new BadRequestError(errorCodes.notification.textOnlyWithoutText.text);
     }
     const {course, lecture, unit} = targetType === 'text'
       ? {course: undefined, lecture: undefined, unit: undefined}
       : await NotificationController.resolveTarget(targetId, targetType, currentUser);
 
-    const user = await User.findById(userId).orFail(new NotFoundError('Target user not found'));
+    const user = await User.findById(userId).orFail(new NotFoundError(errorCodes.notification.targetUserNotFound.text));
 
     if (await this.shouldCreateNotification(user, course, unit)) {
       await this.createNotification(user, text, course, lecture, unit);
