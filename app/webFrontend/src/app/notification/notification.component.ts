@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {NotificationService} from '../shared/services/data.service';
-import {INotification} from '../../../../../shared/models/INotification';
+import {INotificationView} from '../../../../../shared/models/INotificationView';
 
 @Component({
   selector: 'app-notification',
@@ -9,7 +9,7 @@ import {INotification} from '../../../../../shared/models/INotification';
 })
 export class NotificationComponent implements OnInit {
 
-  notifications: Array<INotification>;
+  notifications: INotificationView[];
 
   constructor(private notificationService: NotificationService) {
     this.getNotifications();
@@ -30,7 +30,7 @@ export class NotificationComponent implements OnInit {
     this.notifications = [];
   }
 
-  async removeNotification(notification: INotification) {
+  async removeNotification(notification: INotificationView) {
     const index = this.notifications.indexOf(notification);
     this.notifications.splice(index, 1);
     await this.notificationService.deleteItem(notification);
@@ -70,11 +70,11 @@ export class NotificationComponent implements OnInit {
   }
 }
 
-function compareIds(a: any, b: any) {
-  if (a._id > b._id) {
+function compareIds(a: string, b: string) {
+  if (a > b) {
     return 1;
   }
-  if (a._id < b._id) {
+  if (a < b) {
     return -1;
   }
   return 0;

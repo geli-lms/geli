@@ -240,7 +240,6 @@ describe('Notifications', async () => {
       res.status.should.be.equal(200);
       res.body.forEach((notification: any) => {
         notification._id.should.be.a('string');
-        notification.user._id.toString().should.be.equal(student._id.toString());
         notification.text.should.be.a('string');
       });
     });

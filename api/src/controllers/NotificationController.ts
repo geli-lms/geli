@@ -199,45 +199,30 @@ export class NotificationController {
    * @apiPermission teacher
    * @apiPermission admin
    *
-   * @apiSuccess {Notification[]} notifications List of notifications.
+   * @apiSuccess {INotificationView[]} notifications List of notifications.
    *
    * @apiSuccessExample {json} Success-Response:
    *     [{
    *         "_id": "5ab2fbe464efe60006cef0b1",
-   *         "updatedAt": "2018-03-22T00:42:12.577Z",
-   *         "createdAt": "2018-03-22T00:42:12.577Z",
-   *         "changedUnit": {...},
-   *         "changedLecture": {...},
-   *         "changedCourse": {...},
-   *         "isOld": false,
+   *         "changedCourse": "5c0fb47d8d583532143c68a7",
+   *         "changedLecture": "5bdb49f11a09bb3ca8ce0a10",
+   *         "changedUnit": "5be0691ee3859d38308dab18",
    *         "text": "Course ProblemSolver has an updated text unit.",
-   *         "user": {...},
-   *         "__v": 0
+   *         "isOld": false
    *     }, {
    *         "_id": "5ab2fc7b64efe60006cef0bb",
-   *         "updatedAt": "2018-03-22T00:44:43.966Z",
-   *         "createdAt": "2018-03-22T00:44:43.966Z",
-   *         "changedUnit": {...},
-   *         "changedLecture": {...},
-   *         "changedCourse": {...},
-   *         "isOld": false,
+   *         "changedCourse": "5be0691ee3859d38308dab19",
+   *         "changedLecture": "5bdb49ef1a09bb3ca8ce0a01",
+   *         "changedUnit": "5bdb49f11a09bb3ca8ce0a12",
    *         "text": "Course katacourse has an updated unit.",
-   *         "user": {...},
-   *         "__v": 0
+   *         "isOld": false
    *     }]
    */
   @Authorized(['student', 'teacher', 'admin'])
   @Get('/')
   async getNotifications(@CurrentUser() currentUser: IUser) {
-    const notifications = await Notification.find({user: currentUser})
-      .populate('user')
-      .populate('changedCourse')
-      .populate('changedLecture')
-      .populate('changedUnit');
-    return notifications.map(notification => {
-      return notification.toObject();
-    });
-
+    const notifications = await Notification.find({user: currentUser});
+    return notifications.map(notification => notification.forView());
   }
 
   /**
