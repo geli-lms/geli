@@ -111,10 +111,7 @@ export class NotificationController {
       ? {course: undefined, lecture: undefined, unit: undefined}
       : await NotificationController.resolveTarget(targetId, targetType, currentUser);
 
-    const user = await User.findById(userId);
-    if (!user) {
-      throw new BadRequestError('Could not create notification because user not found');
-    }
+    const user = await User.findById(userId).orFail(new NotFoundError('Target user not found'));
 
     if (await this.shouldCreateNotification(user, course, unit)) {
       await this.createNotification(user, text, course, lecture, unit);

@@ -147,9 +147,8 @@ describe('Notifications', async () => {
       };
 
       const res = await testHelper.commonUserPostRequest(teacher, '/user/507f191e810c19729de860ea', newNotification);
-      res.status.should.be.equal(400);
-      res.body.name.should.be.equal('BadRequestError');
-      res.body.message.should.be.equal('Could not create notification because user not found');
+      res.status.should.be.equal(404);
+      res.body.message.should.be.equal('Target user not found');
     });
 
     it('should create notifications for student with changedCourse and text', async () => {
