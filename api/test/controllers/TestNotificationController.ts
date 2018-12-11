@@ -39,12 +39,31 @@ async function preparePostChangedCourseSetup() {
   return {...setup, newNotification};
 }
 
+/**
+ * Common setup function for the notification creation (POST) routes with invalid targetId.
+ */
+async function preparePostNotFoundSetup(targetType: string) {
+  const setup = await preparePostSetup();
+  const newNotification = {
+    targetType,
+    targetId: '000000000000000000000000',
+    text: 'test text'
+  };
+  return {...setup, newNotification};
+}
+
 describe('Notifications', async () => {
   beforeEach(async () => {
     await testHelper.resetForNextTest();
   });
 
   describe(`POST ${BASE_URL}`, async () => {
+    async function notFoundTest (targetType: string) {
+      const {teacher, newNotification} = await preparePostNotFoundSetup(targetType);
+      const res = await testHelper.commonUserPostRequest(teacher, '', newNotification);
+      res.status.should.be.equal(404);
+    }
+
     it('should fail if text parameter is not given', async () => {
       const {course, teacher} = await preparePostSetup();
 
@@ -75,6 +94,18 @@ describe('Notifications', async () => {
       const res = await testHelper.commonUserPostRequest(unauthorizedTeacher, '', newNotification);
       res.status.should.be.equal(403);
     });
+
+    it('should respond with 404 for an invalid course id target', async () => {
+      await notFoundTest('course');
+    });
+
+    it('should respond with 404 for an invalid lecture id target', async () => {
+      await notFoundTest('lecture');
+    });
+
+    it('should respond with 404 for an invalid unit id target', async () => {
+      await notFoundTest('unit');
+    });
   });
 
   describe(`POST ${BASE_URL} user :id`, async () => {
@@ -90,6 +121,12 @@ describe('Notifications', async () => {
 
       const notifications = await Notification.find({changedCourse: course});
       notifications.length.should.be.equal(1);
+    }
+
+    async function notFoundTest (targetType: string) {
+      const {teacher, student, newNotification} = await preparePostNotFoundSetup(targetType);
+      const res = await testHelper.commonUserPostRequest(teacher, `/user/${student._id}`, newNotification);
+      res.status.should.be.equal(404);
     }
 
     it('should fail if required parameters are omitted', async () => {
@@ -182,6 +219,18 @@ describe('Notifications', async () => {
 
       const res = await testHelper.commonUserPostRequest(unauthorizedTeacher, `/user/${student._id}`, newNotification);
       res.status.should.be.equal(403);
+    });
+
+    it('should respond with 404 for an invalid course id target', async () => {
+      await notFoundTest('course');
+    });
+
+    it('should respond with 404 for an invalid lecture id target', async () => {
+      await notFoundTest('lecture');
+    });
+
+    it('should respond with 404 for an invalid unit id target', async () => {
+      await notFoundTest('unit');
     });
   });
 
