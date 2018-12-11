@@ -1,5 +1,5 @@
 import {Get, Post, Delete, Param, BodyParam, CurrentUser, Authorized,
-        UseBefore, JsonController, BadRequestError, ForbiddenError, NotFoundError} from 'routing-controllers';
+        UseBefore, JsonController, BadRequestError, ForbiddenError, NotFoundError, InternalServerError} from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import {NotificationSettings, API_NOTIFICATION_TYPE_ALL_CHANGES} from '../models/NotificationSettings';
 import {Notification} from '../models/Notification';
@@ -24,15 +24,15 @@ export class NotificationController {
     let unit: IUnitModel;
     switch (targetType) {
       case 'course':
-        course = await Course.findById(targetId);
+        course = await Course.findById(targetId).orFail(new NotFoundError());
         break;
       case 'lecture':
-        lecture = await Lecture.findById(targetId);
-        course = await Course.findOne({lectures: targetId});
+        lecture = await Lecture.findById(targetId).orFail(new NotFoundError());
+        course = await Course.findOne({lectures: targetId}).orFail(new InternalServerError('Course of lecture missing'));
         break;
       case 'unit':
-        unit = await Unit.findById(targetId);
-        course = await Course.findById(unit._course);
+        unit = await Unit.findById(targetId).orFail(new NotFoundError());
+        course = await Course.findById(unit._course).orFail(new InternalServerError('Course of unit missing'));
         break;
       default:
         throw new BadRequestError('Invalid targetType');
