@@ -316,7 +316,13 @@ courseSchema.methods.forDashboard = async function (user: IUser): Promise<ICours
     name, active, description, enrollType
   } = this;
 
-  const image = (this.image) ? (await Picture.findById(this.image)).toObject() : null;
+  let image;
+
+  try {
+    image = (await Picture.findById(this.image)).toObject();
+  } catch (err) {
+    image = null;
+  }
 
   const {
     userCanEditCourse, userCanViewCourse, userIsCourseAdmin, userIsCourseTeacher, userIsCourseMember
