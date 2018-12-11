@@ -62,8 +62,11 @@ export class NotificationController {
    * @apiSuccessExample {json} Success-Response:
    *     {}
    *
-   * @apiError BadRequestError Notification needs at least the fields course and text
-   * @apiError InternalServerError Failed to create notification
+   * @apiError NotFoundError Did not find the targetId of targetType.
+   * @apiError BadRequestError Invalid targetType.
+   * @apiError ForbiddenError The teacher doen't have access to the corresponding course.
+   * @apiError InternalServerError No course was found for a given existing lecture.
+   * @apiError InternalServerError No course was found for a given existing unit.
    */
   @Authorized(['teacher', 'admin'])
   @Post('/')
@@ -98,7 +101,11 @@ export class NotificationController {
    * @apiSuccessExample {json} Success-Response:
    *     {}
    *
-   * @apiError InternalServerError Failed to create notification
+   * @apiError NotFoundError Did not find the targetId of targetType.
+   * @apiError BadRequestError Invalid targetType.
+   * @apiError ForbiddenError The teacher doen't have access to the corresponding course (if targetType isn't 'text'-only).
+   * @apiError InternalServerError No course was found for a given existing lecture.
+   * @apiError InternalServerError No course was found for a given existing unit.
    */
   @Authorized(['teacher', 'admin'])
   @Post('/user/:id')
