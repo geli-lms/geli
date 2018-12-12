@@ -354,6 +354,9 @@
     "addFreeText": "Freitext hinzufügen",
     "addTasks": "Aufgaben hinzufügen",
     "addVideos": "Videos hinzufügen",
+    "viewAs": "Anzeigen als",
+    "video": "Video",
+    "file": "Datei",
     "import": "Lerneinheit importieren",
     "placeholder": {
       "enterAnswer": "Antwort hier eintragen*",

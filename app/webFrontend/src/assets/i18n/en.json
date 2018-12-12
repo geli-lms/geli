@@ -354,6 +354,9 @@
     "addFreeText": "Add free text",
     "addTasks": "Add tasks",
     "addVideos": "Add videos",
+    "viewAs": "Display as",
+    "video": "Video",
+    "file": "File",
     "import": "Import unit",
     "placeholder": {
       "enterAnswer": "Enter answer here*",
