@@ -23,6 +23,7 @@ import ResponsiveImageService from '../services/ResponsiveImageService';
 import {IResponsiveImageData} from '../../../shared/models/IResponsiveImageData';
 
 import { Picture } from '../models/mediaManager/File';
+import {extractSingleMongoId} from '../utilities/ExtractMongoId';
 
 const coursePictureUploadOptions = {
   storage: multer.diskStorage({
@@ -713,10 +714,9 @@ export class CourseController {
       throw new NotFoundError();
     }
 
-    try {
-      (await Picture.findOne(course.image)).remove();
-    } catch (err) {
-      // go ahead if we cannot delete the course picture
+    const picture = await Picture.findById(extractSingleMongoId(course.image));
+    if (picture) {
+      picture.remove();
     }
 
     await Course.updateOne({_id: id}, {$unset: {image: 1}});
@@ -783,10 +783,9 @@ export class CourseController {
       throw new BadRequestError('Forbidden format of uploaded picture: ' + mimeFamily);
     }
 
-    try {
-      (await Picture.findById(course.image)).remove();
-    } catch (err) {
-      // go ahead if we cannot delete the course picture
+    const picture = await Picture.findById(extractSingleMongoId(course.image));
+    if (picture) {
+      picture.remove();
     }
 
     const responsiveImageData = <IResponsiveImageData>JSON.parse(responsiveImageDataRaw.imageData);
