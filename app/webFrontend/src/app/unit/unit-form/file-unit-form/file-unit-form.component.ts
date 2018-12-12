@@ -46,9 +46,8 @@ export class FileUnitFormComponent implements OnInit {
     this.lecture = <ILecture> this.unitFormService.lecture;
     this.course = <ICourse> this.unitFormService.course;
 
-    this.model.fileUnitType = this.fileUnitType;
-
-    this.unitFormService.headline = this.fileUnitType === 'video' ? 'Add Videos' : 'Add Files';
+   
+    this.unitFormService.headline = this.model.fileUnitType === 'video' ? 'Add Videos' : 'Add Files';
     this.unitFormService.unitForm.addControl('files', new FormArray([]));
 
     this.unitForm = this.unitFormService.unitForm;
@@ -73,7 +72,7 @@ export class FileUnitFormComponent implements OnInit {
 
   async openAddFilesDialog() {
 
-    const allowedMimeTypes = (this.fileUnitType !== 'video') ? undefined : [
+    const allowedMimeTypes = (this.model.fileUnitType !== 'video') ? undefined : [
       'video/mp4',
       'video/webm',
       'video/ogg',
