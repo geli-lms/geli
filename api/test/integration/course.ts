@@ -360,7 +360,7 @@ describe('Course', () => {
       resAddCourseImage.body.breakpoints.length.should.be.eq(1);
 
       // delete picture object without api
-      await Picture.findByIdAndRemove(resAddCourseImage.body._id);
+      await Picture.findByIdAndDelete(resAddCourseImage.body._id);
 
       const resAddAnotherCourseImage = await chai.request(app)
         .post(`${BASE_URL}/picture/${course._id}`)
@@ -439,7 +439,7 @@ describe('Course', () => {
       resAddCourseImage.body.breakpoints.length.should.be.eq(1);
 
       // delete picture object without api
-      await Picture.findByIdAndRemove(resAddCourseImage.body._id);
+      await Picture.findByIdAndDelete(resAddCourseImage.body._id);
 
       const resDeleteCourseImage = await chai.request(app)
         .del(`${BASE_URL}/picture/${course._id}`)
