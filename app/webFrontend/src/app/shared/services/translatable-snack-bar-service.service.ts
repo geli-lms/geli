@@ -21,32 +21,32 @@ export class TranslatableSnackBarServiceService {
 
   /**
    * Emit snackbar with given duration
-   * @param {string} message
+   * @param {String[]} keys
    * @param {number} duration
    */
-  open(message: string, duration: number = SnackBarService.defaultDuration): void {
-    this.translateService.get(message).subscribe((res: string) => {
-      this.snackBarService.open(res, duration);
+  open(keys: Array<string>, duration: number = SnackBarService.defaultDuration): void {
+    this.translateService.get(keys).subscribe((translations: {}) => {
+      let message = '';
+      for (let key of keys) {
+        message += translations[key];
+      }
+      this.snackBarService.open(message, duration);
     });
   }
 
   /**
    * Emit snackbar with duration short
-   * @param {string} message
+   * @param {String[]} keys
    */
-  openShort(message: string): void {
-    this.translateService.get(message).subscribe((res: string) => {
-      this.snackBarService.openShort(res);
-    });
+  openShort(keys: Array<string>): void {
+    this.open(keys, SnackBarService.durationShort);
   }
 
   /**
    * Emit snackbar with duration long
-   * @param {string} message
+   * @param {String[]} keys
    */
-  openLong(message: string): void {
-    this.translateService.get(message).subscribe((res: string) => {
-      this.snackBarService.openLong(res);
-    });
+  openLong(keys: Array<string>): void {
+    this.open(keys, SnackBarService.durationLong);
   }
 }

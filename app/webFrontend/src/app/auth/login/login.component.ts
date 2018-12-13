@@ -5,9 +5,9 @@ import {AuthenticationService} from '../../shared/services/authentication.servic
 import {AuthGuardService} from '../../shared/services/auth-guard.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ShowProgressService} from '../../shared/services/show-progress.service';
-import {SnackBarService} from '../../shared/services/snack-bar.service';
 import {TitleService} from '../../shared/services/title.service';
 import {TranslateService} from '@ngx-translate/core';
+import {TranslatableSnackBarServiceService} from "../../shared/services/translatable-snack-bar-service.service";
 
 @Component({
   templateUrl: './login.component.html',
@@ -23,7 +23,7 @@ export class LoginComponent implements OnInit {
               private authGuard: AuthGuardService,
               private authenticationService: AuthenticationService,
               private showProgress: ShowProgressService,
-              private snackBar: SnackBarService,
+              private snackBar: TranslatableSnackBarServiceService,
               private formBuilder: FormBuilder,
               private titleService: TitleService,
               private translate: TranslateService) {
@@ -53,20 +53,13 @@ export class LoginComponent implements OnInit {
         this.showProgress.toggleLoadingGlobal(false);
         this.loading = false;
 
-        this.translate.get(['auth.loginSuccess', 'common.dismiss']).subscribe((t: string) => {
-          this.snackBar.open(t['auth.loginSuccess']);
-        });
+        this.snackBar.open(['auth.loginSuccess']);
       })
       .catch(error => {
         this.showProgress.toggleLoadingGlobal(false);
         this.loading = false;
 
-        this.translate.get([
-          'auth.loginFailed',
-          `auth.loginFailedError.${error.error.message}`
-        ]).subscribe((t: string) => {
-          this.snackBar.open(t['auth.loginFailed'] + ': ' + t[`auth.loginFailedError.${error.error.message}`]);
-        });
+        this.snackBar.open(['auth.loginFailed', ': ', 'auth.loginFailedError.' + error.error.message]);
       });
   }
 
