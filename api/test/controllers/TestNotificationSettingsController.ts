@@ -1,8 +1,6 @@
 import * as chai from 'chai';
-import {Server} from '../../src/server';
-import {FixtureLoader} from '../../fixtures/FixtureLoader';
+import {TestHelper} from '../TestHelper';
 import {FixtureUtils} from '../../fixtures/FixtureUtils';
-import {JwtUtils} from '../../src/security/JwtUtils';
 import {
   API_NOTIFICATION_TYPE_ALL_CHANGES,
   API_NOTIFICATION_TYPE_NONE,
@@ -11,14 +9,12 @@ import {
 import chaiHttp = require('chai-http');
 
 chai.use(chaiHttp);
-const should = chai.should();
-const app = new Server().app;
 const BASE_URL = '/api/notificationSettings';
-const fixtureLoader = new FixtureLoader();
+const testHelper = new TestHelper(BASE_URL);
 
 describe('NotificationSettings', async () => {
   beforeEach(async () => {
-    await fixtureLoader.load();
+    await testHelper.resetForNextTest();
   });
 
   describe(`POST ${BASE_URL}`, async () => {
@@ -27,10 +23,7 @@ describe('NotificationSettings', async () => {
       const student = course.students[0];
       const newSettings = {user: student, course: course};
 
-      const res = await chai.request(app)
-        .post(BASE_URL)
-        .set('Cookie', `token=${JwtUtils.generateToken(student)}`)
-        .send(newSettings);
+      const res = await testHelper.commonUserPostRequest(student, '', newSettings);
 
       res.status.should.be.equals(200);
       res.body.notificationType.should.be.equal(API_NOTIFICATION_TYPE_ALL_CHANGES);
@@ -48,16 +41,10 @@ describe('NotificationSettings', async () => {
       const student = course.students[0];
       const newSettings = {user: student, course: course};
 
-      const res = await chai.request(app)
-        .post(BASE_URL)
-        .set('Cookie', `token=${JwtUtils.generateToken(student)}`)
-        .send(newSettings);
+      const res = await testHelper.commonUserPostRequest(student, '', newSettings);
       res.status.should.be.equals(200);
 
-      const resFail = await chai.request(app)
-        .post(BASE_URL)
-        .set('Cookie', `token=${JwtUtils.generateToken(student)}`)
-        .send(newSettings);
+      const resFail = await testHelper.commonUserPostRequest(student, '', newSettings);
       resFail.status.should.be.equals(400);
     });
 
@@ -65,10 +52,7 @@ describe('NotificationSettings', async () => {
       const course = await FixtureUtils.getRandomCourse();
       const student = course.students[0];
 
-      const res = await chai.request(app)
-        .post(BASE_URL)
-        .set('Cookie', `token=${JwtUtils.generateToken(student)}`)
-        .send({});
+      const res = await testHelper.commonUserPostRequest(student, '', {});
       res.status.should.be.equals(400);
     });
   });
@@ -94,9 +78,7 @@ describe('NotificationSettings', async () => {
       }).save();
 
 
-      const res = await chai.request(app)
-        .get(`${BASE_URL}/user/${student._id}`)
-        .set('Cookie', `token=${JwtUtils.generateToken(student)}`);
+      const res = await testHelper.commonUserGetRequest(student, `/user/${student._id}`);
       res.should.have.status(200);
       res.body.forEach((notificationSettings: any) => {
         notificationSettings._id.should.be.a('string');
@@ -124,10 +106,7 @@ describe('NotificationSettings', async () => {
       settings.notificationType = API_NOTIFICATION_TYPE_NONE;
       settings.emailNotification = true;
 
-      const res = await chai.request(app)
-        .put(`${BASE_URL}/${settings._id}`)
-        .set('Cookie', `token=${JwtUtils.generateToken(student)}`)
-        .send(settings);
+      const res = await testHelper.commonUserPutRequest(student, `/${settings._id}`, settings);
       res.should.have.status(200);
       res.body.notificationType.should.be.equal(API_NOTIFICATION_TYPE_NONE);
       res.body.emailNotification.should.be.equal(true);
@@ -147,10 +126,7 @@ describe('NotificationSettings', async () => {
         'emailNotification': false
       }).save();
 
-      const res = await chai.request(app)
-        .put(`${BASE_URL}/${settings._id}`)
-        .set('Cookie', `token=${JwtUtils.generateToken(student)}`)
-        .send([]);
+      const res = await testHelper.commonUserPutRequest(student, `/${settings._id}`, []);
       res.should.have.status(400);
     });
   });
