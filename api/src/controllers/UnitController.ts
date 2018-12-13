@@ -6,7 +6,6 @@ import passportJwtMiddleware from '../security/passportJwtMiddleware';
 
 import {Lecture} from '../models/Lecture';
 import {IUnitModel, Unit, AssignmentUnit} from '../models/units/Unit';
-import {ValidationError} from 'mongoose';
 import {IUser} from '../../../shared/models/IUser';
 import {IAssignment} from '../../../shared/models/assignment/IAssignment';
 import config from '../config/main';

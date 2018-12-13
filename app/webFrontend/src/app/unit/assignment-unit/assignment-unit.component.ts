@@ -96,7 +96,7 @@ export class AssignmentUnitComponent implements OnInit {
   }
 
   getHumanReadableDate(date) {
-    return new Date(date).toLocaleDateString();
+    return new Date(date).toLocaleString();
   }
 
 

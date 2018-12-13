@@ -133,6 +133,7 @@
     "settings": "Einstellungen",
     "statistics": "Statistik",
     "submit": "Absenden",
+    "submitted": "Abgesendet",
     "teachers": "Lehrer",
     "theme": "Design",
     "tooltip": {
@@ -157,7 +158,8 @@
     "line": "Zeile",
     "errors": "Fehler",
     "collapseAll": "Alle einklappen",
-    "expandAll": "Alle expandieren"
+    "expandAll": "Alle expandieren",
+    "status": "Status"
   },
   "course": {
     "delete": "Kurs löschen",
@@ -272,7 +274,8 @@
       "progress": "Fortschritt",
       "removeFromQueue": "Datei aus der Schlange löschen.",
       "selectAll": "Alle auswählen",
-      "takePicture": "Bild aufnehmen"
+      "takePicture": "Bild aufnehmen",
+      "files": "Dateien"
     },
     "tooltip": {
       "selectFile": "Datei auswählen",
@@ -354,9 +357,6 @@
     "addFreeText": "Freitext hinzufügen",
     "addTasks": "Aufgaben hinzufügen",
     "addVideos": "Videos hinzufügen",
-    "addAssignment": "Abgabe hinzufügen",
-    "submitAss": "Aufgabe abgeben",
-    "deleteAssignment": "Aufgabe Löschen",
     "import": "Lerneinheit importieren",
     "placeholder": {
       "enterAnswer": "Antwort hier eintragen*",
@@ -386,6 +386,17 @@
       "downloadUnits": "Lerneinheiten downloaden",
       "duplicate": "Diese Lerneinheit kopieren",
       "edit": "Lerneinheit bearbeiten"
+    },
+    "assignment": {
+      "performanceReasons": "Aus Performance-Gründen sollten pro Abgabe nur 4-5 Dateien angefordert werden.",
+      "add": "Abgabe hinzufügen",
+      "submit": "Aufgabe abgeben",
+      "delete": "Aufgabe löschen",
+      "notSubmitted": "Nocht nicht abgeschickt.",
+      "downloadAll": "Alle Dateien herunterladen",
+      "notRated": "Nicht gewertet",
+      "failed": "Durchgefallen",
+      "accepted": "Bestanden"
     }
   },
   "user": {

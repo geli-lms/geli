@@ -133,6 +133,7 @@
     "settings": "Settings",
     "statistics": "Statistics",
     "submit": "Submit",
+    "submitted": "Submitted",
     "teachers": "Teachers",
     "theme": "Theme",
     "tooltip": {
@@ -157,7 +158,8 @@
     "line": "Line",
     "errors": "Errors",
     "collapseAll": "Collapse all",
-    "expandAll": "Expand all"
+    "expandAll": "Expand all",
+    "status": "Status"
   },
   "course": {
     "delete": "Delete course",
@@ -272,7 +274,8 @@
       "progress": "Progress",
       "removeFromQueue": "Remove file from queue.",
       "selectAll": "Select all",
-      "takePicture": "Take picture"
+      "takePicture": "Take picture",
+      "files": "Files"
     },
     "tooltip": {
       "selectFile": "Select file",
@@ -354,9 +357,6 @@
     "addFreeText": "Add free text",
     "addTasks": "Add tasks",
     "addVideos": "Add videos",
-    "addAssignment": "Add assignment",
-    "submitAss": "Submit Assignment",
-    "deleteAssignment": "Delete Assignment",
     "import": "Import unit",
     "placeholder": {
       "enterAnswer": "Enter answer here*",
@@ -386,6 +386,17 @@
       "downloadUnits": "Download units",
       "duplicate": "Copy this unit",
       "edit": "Edit unit"
+    },
+    "assignment": {
+      "performanceReasons": "For a better performance, you should only request 4-5 files per student.",
+      "add": "Add assignment",
+      "submit": "Submit assignemnt",
+      "delete": "Delete assignment",
+      "notSubmitted": "Hasn't been submitted.",
+      "downloadAll": "Download all files",
+      "notRated": "Not yet rated.",
+      "failed": "Failed.",
+      "accepted": "Passed."
     }
   },
   "user": {

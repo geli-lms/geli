@@ -1,94 +1,117 @@
 <!--STUDENT VIEW-->
 <ng-container *ngIf="this.userService.isStudent()">
-    <ng-container *ngIf="!this.isSubmitted()" [formGroup]="unitForm">
-        <app-upload-form [uploadMethod]="'PUT'"
-                         [uploadPath]="uploadPath"
-                         [additionalData]="null"
-                         [maxFileNumber]="10"
-                         [allowedMimeTypes]="allowedMimeTypes"
-                         (onFileUploaded)="onFileUploaded($event)"
-                         (onAllUploaded)="onAllUploaded()"
-        ></app-upload-form>
+  <ng-container *ngIf="!this.isSubmitted()" [formGroup]="unitForm">
+    <app-upload-form [uploadMethod]="'PUT'"
+                     [uploadPath]="uploadPath"
+                     [additionalData]="null"
+                     [maxFileNumber]="10"
+                     [allowedMimeTypes]="allowedMimeTypes"
+                     (onFileUploaded)="onFileUploaded($event)"
+                     (onAllUploaded)="onAllUploaded()"
+    ></app-upload-form>
 
 
-        <div class="upload-button-group">
-            <button mat-raised-button color="primary" (click)="startUpload()" [disabled]="!isObjectInQueue()">
-                <mat-icon>file_upload</mat-icon>
-                <!-- TODO: translate -->
-                Dateien hochladen
-            </button>
-        </div>
-    </ng-container>
-    <ng-container>
-        <div class="assignment-status-group">
-            <ng-container *ngFor="let file of this.files"><a href="{{ '/api/uploads/' + file.link }}"
-                                                        download="{{file.name}}">{{file.name}}</a>
-            </ng-container>
-            <span class="status-group" *ngIf="readyToBeGraded()">Status: <mat-icon id="{{assignmentIcon}}">{{assignmentIcon}}</mat-icon></span>
-        </div>
+    <div class="upload-button-group">
+      <button mat-raised-button color="primary" (click)="startUpload()" [disabled]="!isObjectInQueue()">
+        <mat-icon>file_upload</mat-icon>
+        <!-- TODO: translate -->
+        {{ 'file.placeholder.uploadFiles' | translate }}
+      </button>
+    </div>
+  </ng-container>
+  <ng-container>
+    <div class="assignment-status-group">
+      <ng-container *ngFor="let file of this.files"><a href="{{ '/api/uploads/' + file.link }}"
+                                                       download="{{file.name}}">{{file.name}}</a>
+      </ng-container>
+      <span class="status-group" *ngIf="readyToBeGraded()">
+        {{ 'common.status' | translate }}:
+        <mat-icon id="{{assignmentIcon}}">{{assignmentIcon}}</mat-icon>
+      </span>
+    </div>
 
-        <div class="submit-button-group" *ngIf="showSubmitButton()">
-            <button mat-raised-button color="primary" (click)="submitAssignment()">{{
-                'unit.submitAss'
-                | translate }}
-            </button>
-            <button class="delete-button" mat-raised-button color="warn"
-                    (click)="deleteAssignment()"
-                    matTooltip="{{'unit.deleteAssignment' | translate}}">
-                <mat-icon>delete</mat-icon>
-            </button>
-        </div>
-    </ng-container>
+    <div class="submit-button-group" *ngIf="showSubmitButton()">
+      <button mat-raised-button color="primary" (click)="submitAssignment()">{{
+        'unit.assignment.submit'
+        | translate }}
+      </button>
+      <button class="delete-button" mat-raised-button color="warn"
+              (click)="deleteAssignment()"
+              matTooltip="{{'unit.assignment.delete' | translate}}">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+  </ng-container>
 </ng-container>
 
 <!--TEACHER VIEW-->
 <ng-container *ngIf="this.userService.isTeacher()">
-  <button mat-raised-button color="primary" [disabled]="this.disableDownloadButton" (click)="downloadAllAssignments()">Download all</button>
+  <button mat-raised-button color="primary" [disabled]="this.disableDownloadButton" (click)="downloadAllAssignments()">
+    {{ 'unit.assignment.downloadAll' | translate }}
+  </button>
   <ng-container *ngIf="disableDownloadButton">
     <mat-spinner [diameter]=20 [strokeWidth]=2 class="spinner"></mat-spinner>
   </ng-container>
-    <p>
-      <!-- TODO: text / tranlsate -->
-      Aus Performance-Gründen sollten nur 2-3 Dateien angefordert werden pro Abgabe.
-    </p>
+  <p>
+    {{ 'unit.assignment.performanceReasons' | translate }}
+  </p>
 
-    <table>
-      <!-- TODO: text / tranlsate -->
-        <tr class="heading-row">
-            <td>Student</td>
-            <td>Submitted</td>
-            <td>Files</td>
-            <td>Status</td>
-        </tr>
-        <tr class="content-row" *ngFor="let assignment of this.assignmentUnit.assignments;">
-            <td class="{{!assignment.submitted ? 'not-submitted' : ''}}">
-              {{assignment.user.profile.firstName}} {{assignment.user.profile.lastName}}
-            </td>
-          <td class="{{!assignment.submitted ? 'not-submitted' : ''}}">
-              {{getHumanReadableDate(assignment.submittedDate)}}
-          </td>
-            <td class="{{!assignment.submitted ? 'not-submitted' : ''}}">
+  <table>
+    <tr class="heading-row">
+      <td>
+        {{ 'common.roles.student' | translate }}
+      </td>
+      <td>
+        {{ 'common.submitted' | translate}}
+      </td>
+      <td>
+        {{ 'file.text.files' | translate }}
+      </td>
+      <td>
+        {{ 'common.status' | translate }}
+      </td>
+    </tr>
+    <tr class="content-row" *ngFor="let assignment of this.assignmentUnit.assignments;">
+      <td class="{{!assignment.submitted ? 'not-submitted' : ''}}">
+        {{assignment.user.profile.firstName}} {{assignment.user.profile.lastName}}
+      </td>
+      <td class="{{!assignment.submitted ? 'not-submitted' : ''}}">
+        <span *ngIf="assignment.checked !== -1">
+          {{getHumanReadableDate(assignment.submittedDate)}}
+        </span>
 
-              <ng-container *ngFor="let file of this.files"><a href="{{ '/api/uploads/' + file.link }}"
-                                                               download="{{file.name}}">{{file.name}}</a><br />
-              </ng-container>
-            </td>
-            <td *ngIf="assignment.submitted; else notSubmitted">
-                <mat-form-field>
-                    <mat-select placeholder="Status" value="{{assignment.checked}}">
-                        <mat-option (click)="submitStatusChange(assignment._id, -1)" value={{-1}}>Open</mat-option>
-                        <mat-option (click)="submitStatusChange(assignment._id, 0)" value={{0}}>Failed</mat-option>
-                        <mat-option (click)="submitStatusChange(assignment._id, 1)" value={{1}}>Accpected</mat-option>
-                    </mat-select>
-                </mat-form-field>
-            </td>
-            <ng-template #notSubmitted>
-                <td class="{{!assignment.submitted ? 'not-submitted' : ''}}">
-                    Not submitted yet.
-                </td>
-            </ng-template>
-        </tr>
-    </table>
+        <span *ngIf="assignment.checked === -1">
+          -
+        </span>
+      </td>
+      <td class="{{!assignment.submitted ? 'not-submitted' : ''}}">
+
+        <ng-container *ngFor="let file of this.files"><a href="{{ '/api/uploads/' + file.link }}"
+                                                         download="{{file.name}}">{{file.name}}</a><br/>
+        </ng-container>
+      </td>
+      <td *ngIf="assignment.submitted; else notSubmitted">
+        <mat-form-field>
+          <mat-select placeholder="{{ 'common.status' | translate }}" value="{{assignment.checked}}">
+            <mat-option (click)="submitStatusChange(assignment._id, -1)" value={{-1}}>
+              {{ 'unit.assignment.notRated' | translate }}
+            </mat-option>
+            <mat-option (click)="submitStatusChange(assignment._id, 0)" value={{0}}>
+              {{ 'unit.assignment.failed' | translate }}
+            </mat-option>
+            <mat-option (click)="submitStatusChange(assignment._id, 1)" value={{1}}>
+              {{ 'unit.assignment.accepted' | translate }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </td>
+      <ng-template #notSubmitted>
+        <td class="{{!assignment.submitted ? 'not-submitted' : ''}}">
+          {{ 'unit.assignment.notSubmitted' | translate }}
+        </td>
+      </ng-template>
+    </tr>
+  </table>
 
 </ng-container>
 
