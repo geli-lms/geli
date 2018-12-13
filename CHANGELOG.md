@@ -18,7 +18,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - `LectureController` success (`200`), access denial (`403`) and not found (`404`) unit tests for all routes. [#1041](https://github.com/geli-lms/geli/issues/1041)
 - `TestHelper` request methods for `PUT` & `DELETE`. [#1041](https://github.com/geli-lms/geli/issues/1041)
 - CodeKata validation service. [#844](https://github.com/geli-lms/geli/issues/844)
-- Course: Video-File switch. [#912](https://github.com/geli-lms/geli/issues/912)
+- Course: Added switch for file <-> video unit. [#912](https://github.com/geli-lms/geli/issues/912)
 
 ### Fixed
 - `bundle.scss` not available in api container. [#1052](https://github.com/geli-lms/geli/issues/1052)
