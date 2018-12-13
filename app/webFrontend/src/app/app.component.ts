@@ -53,7 +53,6 @@ export class AppComponent implements OnInit {
         this.apiInfo = info;
       })
       .catch((err) => {
-        console.dir(err.error);
         this.snackBar.open(['home.backendError'], {err: err.error}, null);
       });
 
