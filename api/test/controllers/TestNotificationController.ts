@@ -6,7 +6,6 @@ import {JwtUtils} from '../../src/security/JwtUtils';
 import {Notification} from '../../src/models/Notification';
 import chaiHttp = require('chai-http');
 import {User} from '../../src/models/User';
-import {NotFoundError} from 'routing-controllers';
 import {API_NOTIFICATION_TYPE_ALL_CHANGES, API_NOTIFICATION_TYPE_NONE, NotificationSettings} from '../../src/models/NotificationSettings';
 
 chai.use(chaiHttp);

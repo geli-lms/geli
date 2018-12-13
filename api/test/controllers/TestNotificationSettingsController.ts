@@ -8,8 +8,6 @@ import {
   API_NOTIFICATION_TYPE_NONE,
   NotificationSettings
 } from '../../src/models/NotificationSettings';
-import {User} from '../../src/models/User';
-import {Course} from '../../src/models/Course';
 import chaiHttp = require('chai-http');
 
 chai.use(chaiHttp);
