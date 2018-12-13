@@ -56,11 +56,9 @@ import {TranslationErrorService} from './shared/services/translation-error.servi
 import {MissingTranslationHandler} from '@ngx-translate/core';
 
 // AoT requires an exported function for factories
-export function HttpLoaderFactory(http: HttpClient) {
+export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
 }
-
-
 
 @NgModule({
   declarations: [
@@ -84,7 +82,7 @@ export function HttpLoaderFactory(http: HttpClient) {
       missingTranslationHandler: {provide: MissingTranslationHandler, useClass: TranslationErrorService},
       loader: {
         provide: TranslateLoader,
-        useFactory: HttpLoaderFactory,
+        useFactory: TranslateHttpLoaderFactory,
         deps: [HttpClient]
       }
     }),

@@ -45,4 +45,8 @@ export class UnitGeneralInfoFormComponent implements OnInit {
     }
 
   }
+
+  onDateChange($event) {
+    this.model.date = $event;
+  }
 }
