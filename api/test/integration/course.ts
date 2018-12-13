@@ -12,6 +12,7 @@ import {FixtureUtils} from '../../fixtures/FixtureUtils';
 import chaiHttp = require('chai-http');
 import {readFileSync} from 'fs';
 import {BreakpointSize} from '../../src/models/BreakpointSize';
+import {Picture} from '../../src/models/mediaManager/File';
 
 chai.use(chaiHttp);
 const should = chai.should();
@@ -280,7 +281,6 @@ describe('Course', () => {
     });
   });
 
-
   describe(`POST PICTURE ${BASE_URL}`, () => {
     it('should update the course image', async () => {
       const course = await FixtureUtils.getRandomCourse();
@@ -334,9 +334,57 @@ describe('Course', () => {
       const res = await chai.request(app)
         .post(`${BASE_URL}/picture/${course._id}`)
         .set('Cookie', `token=${JwtUtils.generateToken(courseAdmin)}`)
-        .attach('file', readFileSync('test/resources/wrong-format.rtf'), 'test.png')
+        .attach('file', readFileSync('test/resources/wrong-format.rtf'), 'test.rtf')
         .field('imageData', JSON.stringify({ breakpoints:
           [ { screenSize: BreakpointSize.MOBILE, imageSize: { width: 284, height: 190} }] }));
+
+      res.should.not.have.status(200);
+    });
+
+    it('should update course image when old picture object missing', async () => {
+      // https://github.com/geli-lms/geli/issues/1053
+
+      const course = await FixtureUtils.getRandomCourse();
+      const courseAdmin = await User.findOne({_id: course.courseAdmin});
+
+      const resAddCourseImage = await chai.request(app)
+        .post(`${BASE_URL}/picture/${course._id}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(courseAdmin)}`)
+        .attach('file', readFileSync('test/resources/test.png'), 'test.png')
+        .field('imageData', JSON.stringify({
+          breakpoints:
+            [{screenSize: BreakpointSize.MOBILE, imageSize: {width: 284, height: 190}}]
+        }));
+
+      resAddCourseImage.should.have.status(200);
+      resAddCourseImage.body.breakpoints.length.should.be.eq(1);
+
+      // delete picture object without api
+      await Picture.findByIdAndDelete(resAddCourseImage.body._id);
+
+      const resAddAnotherCourseImage = await chai.request(app)
+        .post(`${BASE_URL}/picture/${course._id}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(courseAdmin)}`)
+        .attach('file', readFileSync('test/resources/test.png'), 'test.png')
+        .field('imageData', JSON.stringify({ breakpoints:
+            [ { screenSize: BreakpointSize.MOBILE, imageSize: { width: 284, height: 190} }] }));
+
+      resAddAnotherCourseImage.should.have.status(200);
+      resAddAnotherCourseImage.body.breakpoints.length.should.be.eq(1);
+    });
+
+    it('should not update course image when user not authorized', async () => {
+      const course = await FixtureUtils.getRandomCourse();
+      const unauthorizedTeacher = await FixtureUtils.getUnauthorizedTeacherForCourse(course);
+
+      const res = await chai.request(app)
+        .post(`${BASE_URL}/picture/${course._id}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(unauthorizedTeacher)}`)
+        .attach('file', readFileSync('test/resources/test.png'), 'test.png')
+        .field('imageData', JSON.stringify({
+          breakpoints:
+            [{screenSize: BreakpointSize.MOBILE, imageSize: {width: 284, height: 190}}]
+        }));
 
       res.should.not.have.status(200);
     });
@@ -360,7 +408,6 @@ describe('Course', () => {
       res.should.have.status(200);
       res.body.breakpoints.length.should.be.eq(1);
 
-
       res = await chai.request(app)
         .del(`${BASE_URL}/picture/${course._id}`)
         .set('Cookie', `token=${JwtUtils.generateToken(courseAdmin)}`)
@@ -371,6 +418,50 @@ describe('Course', () => {
       const updatedCourse = await Course.findById(course._id);
       should.not.exist(updatedCourse.image);
 
+    });
+
+    it('should remove course image when picture object missing', async () => {
+      // https://github.com/geli-lms/geli/issues/1053
+
+      const course = await FixtureUtils.getRandomCourse();
+      const courseAdmin = await User.findOne({_id: course.courseAdmin});
+
+      const resAddCourseImage = await chai.request(app)
+        .post(`${BASE_URL}/picture/${course._id}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(courseAdmin)}`)
+        .attach('file', readFileSync('test/resources/test.png'), 'test.png')
+        .field('imageData', JSON.stringify({
+          breakpoints:
+            [{screenSize: BreakpointSize.MOBILE, imageSize: {width: 284, height: 190}}]
+        }));
+
+      resAddCourseImage.should.have.status(200);
+      resAddCourseImage.body.breakpoints.length.should.be.eq(1);
+
+      // delete picture object without api
+      await Picture.findByIdAndDelete(resAddCourseImage.body._id);
+
+      const resDeleteCourseImage = await chai.request(app)
+        .del(`${BASE_URL}/picture/${course._id}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(courseAdmin)}`)
+        .send();
+
+      resDeleteCourseImage.should.have.status(200);
+
+      const updatedCourse = await Course.findById(course._id);
+      should.not.exist(updatedCourse.image);
+    });
+
+    it('should not delete course image when user not authorized', async () => {
+      const course = await FixtureUtils.getRandomCourse();
+      const unauthorizedTeacher = await FixtureUtils.getUnauthorizedTeacherForCourse(course);
+
+      const res = await chai.request(app)
+        .del(`${BASE_URL}/picture/${course._id}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(unauthorizedTeacher)}`)
+        .send();
+
+      res.should.not.have.status(200);
     });
   });
 
