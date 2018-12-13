@@ -704,7 +704,7 @@ export class CourseController {
     @Param('id') id: string,
     @CurrentUser() currentUser: IUser) {
 
-    const course = await Course.findById(id).orFail(new NotFoundError()) as ICourseModel;
+    const course = await Course.findById(id).orFail(new NotFoundError());
 
     if (!course.checkPrivileges(currentUser).userCanEditCourse) {
       throw new ForbiddenError();
@@ -770,7 +770,7 @@ export class CourseController {
       @CurrentUser() currentUser: IUser) {
 
     // Remove the old picture if the course already has one.
-    const course = await Course.findById(id).orFail(new NotFoundError()) as ICourseModel;
+    const course = await Course.findById(id).orFail(new NotFoundError());
 
     if (!course.checkPrivileges(currentUser).userCanEditCourse) {
       throw new ForbiddenError();
