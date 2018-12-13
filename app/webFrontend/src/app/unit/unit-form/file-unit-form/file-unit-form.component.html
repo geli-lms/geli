@@ -31,7 +31,7 @@
 
   <div>
     <label>{{"unit.viewAs" | translate}}:</label>
-    <mat-radio-group [disabled]="testOnlyVideoFileTypes()" formControlName="fileUnitType">
+    <mat-radio-group matTooltip="{{'unit.cantSwitchToVideo' | translate}}" matTooltipPosition="above" [matTooltipDisabled]="!testOnlyVideoFileTypes()" [disabled]="testOnlyVideoFileTypes()" formControlName="fileUnitType">
       <mat-radio-button value="video">{{'unit.video' | translate}}</mat-radio-button>
       <mat-radio-button value="file">{{'unit.file' | translate}}</mat-radio-button>
     </mat-radio-group>
