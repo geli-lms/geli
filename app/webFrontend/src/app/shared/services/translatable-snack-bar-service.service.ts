@@ -26,8 +26,6 @@ export class TranslatableSnackBarServiceService {
    */
   open(message: string, duration: number = SnackBarService.defaultDuration): void {
     this.translateService.get(message).subscribe((res: string) => {
-      console.log(message);
-      console.log(res);
       this.snackBarService.open(res, duration);
     });
   }
