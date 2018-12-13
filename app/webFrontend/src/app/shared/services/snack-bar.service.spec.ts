@@ -15,33 +15,33 @@ describe('SnackBarService', () => {
     });
   });
 
-  it('should have been called with dismiss and default duration', () => {
+  it('should have been called with dismiss and default duration', async () => {
     const matSnackBar: MatSnackBar = TestBed.get(MatSnackBar);
 
     const snackBar: SnackBarService = TestBed.get(SnackBarService);
     snackBar.open('awesome message');
 
-    expect(matSnackBar.open)
+    await expect(matSnackBar.open)
       .toHaveBeenCalledWith('awesome message', 'Dismiss', {duration: SnackBarService.defaultDuration});
   });
 
-  it('should have been called with dismiss and short duration', () => {
+  it('should have been called with dismiss and short duration', async () => {
     const matSnackBar: MatSnackBar = TestBed.get(MatSnackBar);
 
     const snackBar: SnackBarService = TestBed.get(SnackBarService);
     snackBar.openShort('awesome short message');
 
-    expect(matSnackBar.open)
+    await expect(matSnackBar.open)
       .toHaveBeenCalledWith('awesome short message', 'Dismiss', {duration: SnackBarService.durationShort});
   });
 
-  it('should have been called with dismiss and long duration', () => {
+  it('should have been called with dismiss and long duration', async () => {
     const matSnackBar: MatSnackBar = TestBed.get(MatSnackBar);
 
     const snackBar: SnackBarService = TestBed.get(SnackBarService);
     snackBar.openLong('awesome long message');
 
-    expect(matSnackBar.open)
+    await expect(matSnackBar.open)
       .toHaveBeenCalledWith('awesome long message', 'Dismiss', {duration: SnackBarService.durationLong});
   });
 

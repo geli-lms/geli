@@ -7,7 +7,7 @@ import {SnackBarService} from './snack-bar.service';
 describe('TranslatableSnackBarServiceService', () => {
 
   beforeEach(() => {
-    const snackBarServiceSpy = jasmine.createSpyObj('SnackBarService', ['open', 'openShort', 'openLong']);
+    const snackBarServiceSpy = jasmine.createSpyObj('SnackBarService', ['open']);
 
     TestBed.configureTestingModule({
       imports: [
@@ -21,23 +21,28 @@ describe('TranslatableSnackBarServiceService', () => {
     });
   });
 
-  it('should have been called with dismiss and default duration', () => {
+  it('should have been called with dismiss and default duration', async () => {
     const snackBar: SnackBarService = TestBed.get(SnackBarService);
     const translate: TranslateService = TestBed.get(TranslateService);
 
     translate.use('en');
     translate.setTranslation('en', {
       'awesome message': 'translated awesome message',
+      'awesome message from {{user}}': 'translated awesome message from {{user}}',
     });
 
     const translatableSnackBar: TranslatableSnackBarServiceService = TestBed.get(TranslatableSnackBarServiceService);
-    translatableSnackBar.open('awesome message');
 
-    expect(snackBar.open)
+    translatableSnackBar.open(['awesome message']);
+    await expect(snackBar.open)
       .toHaveBeenCalledWith('translated awesome message', SnackBarService.defaultDuration);
+
+    translatableSnackBar.open(['awesome message from {{user}}'], {user: 'max'});
+    await expect(snackBar.open)
+      .toHaveBeenCalledWith('translated awesome message from max', SnackBarService.defaultDuration);
   });
 
-  it('should have been called with dismiss and short duration', () => {
+  it('should have been called with dismiss and short duration', async () => {
     const snackBar: SnackBarService = TestBed.get(SnackBarService);
     const translate: TranslateService = TestBed.get(TranslateService);
 
@@ -47,13 +52,13 @@ describe('TranslatableSnackBarServiceService', () => {
     });
 
     const translatableSnackBar: TranslatableSnackBarServiceService = TestBed.get(TranslatableSnackBarServiceService);
-    translatableSnackBar.openShort('awesome short message');
+    translatableSnackBar.openShort(['awesome short message']);
 
-    expect(snackBar.openShort)
-      .toHaveBeenCalledWith('translated awesome short message');
+    await expect(snackBar.open)
+      .toHaveBeenCalledWith('translated awesome short message', SnackBarService.durationShort);
   });
 
-  it('should have been called with dismiss and long duration', () => {
+  it('should have been called with dismiss and long duration', async () => {
     const snackBar: SnackBarService = TestBed.get(SnackBarService);
     const translate: TranslateService = TestBed.get(TranslateService);
 
@@ -64,10 +69,11 @@ describe('TranslatableSnackBarServiceService', () => {
 
 
     const translatableSnackBar: TranslatableSnackBarServiceService = TestBed.get(TranslatableSnackBarServiceService);
-    translatableSnackBar.openLong('awesome long message');
+    translatableSnackBar.openLong(['awesome long message']);
 
-    expect(snackBar.openLong)
-      .toHaveBeenCalledWith('translated awesome long message');
+    await expect(snackBar.open)
+      .toHaveBeenCalledWith('translated awesome long message', SnackBarService.durationLong);
+
   });
 
 });
