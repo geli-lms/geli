@@ -280,7 +280,8 @@
     }
   },
   "home": {
-    "welcomeTo": "Willkommen auf"
+    "welcomeTo": "Willkommen auf",
+    "backendError": "Verbindung zum Backend nicht möglich: {{err}}"
   },
   "lecture": {
     "noUnits": "Keine Unterkapitel angelegt!",

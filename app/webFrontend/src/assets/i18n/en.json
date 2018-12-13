@@ -280,7 +280,8 @@
     }
   },
   "home": {
-    "welcomeTo": "Welcome to"
+    "welcomeTo": "Welcome to",
+    "backendError": "Could not connect to backend: {{err}}"
   },
   "lecture": {
     "noUnits": "No units added yet.",
