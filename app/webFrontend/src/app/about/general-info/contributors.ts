@@ -5,7 +5,6 @@ export class ContributorsList {
   public static getAllContributors(): Contributor[] {
     return [
       // Leader
-      new Contributor('Thomas', 'Sauer', '16WiSe', 'Initiator', 'thomassss'),
       new Contributor('Ute', 'Trapp', '17SuSe', 'Lecturer', 'utetrapp'),
       new Contributor('David', 'Müller', '17SuSe', 'Lecturer', 'd89'),
 
@@ -40,6 +39,7 @@ export class ContributorsList {
       new Contributor('Oliver', 'Neff', '17SuSe', 'Student', 'OliverNeff', '17WiSe'),
       new Contributor('Alexander', 'Weinfurter', '17SuSe', 'Student', 'alexweinfurter', '17WiSe'),
       new Contributor('Bernd', 'Noetscher', '17SuSe', 'Student', 'bernd-hda', '17SuSe'),
+      new Contributor('Thomas', 'Sauer', '16WiSe', 'Initiator', 'thomassss', '16WiSe'),
     ];
   }
 }

@@ -3,7 +3,7 @@
   "description": "This is the WebFronted-Package.json for geli.",
   "repository": "geli-lms/geli",
   "version": "0.8.2",
-  "license": "GPL-3.0",
+  "license": "Apache-2.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -40,10 +40,15 @@
     "core-js": "^2.5.7",
     "d3": "^5.5.0",
     "file-saver": "1.3.3",
+    "highlight.js": "^9.13.1",
     "jasmine": "^3.1.0",
     "knuth-shuffle": "^1.0.8",
     "markdown-it": "^8.4.1",
+    "markdown-it-abbr": "^1.0.4",
+    "markdown-it-container": "^2.0.0",
+    "markdown-it-deflist": "^2.0.3",
     "markdown-it-emoji": "^1.4.0",
+    "markdown-it-mark": "^2.0.0",
     "material-design-icons": "^3.0.1",
     "moment": "^2.22.2",
     "ng2-ace-editor": "^0.3.8",
@@ -53,10 +58,10 @@
     "ngx-lightbox": "^1.0.2",
     "node-sass": "^4.9.2",
     "raven-js": "^3.26.2",
-    "socket.io": "^2.1.0",
-    "twemoji": "^11.0.0",
     "rxjs": "^6.2.2",
     "rxjs-compat": "^6.2.2",
+    "socket.io": "^2.1.0",
+    "twemoji": "^11.0.0",
     "zone.js": "^0.8.26"
   },
   "devDependencies": {
@@ -65,6 +70,7 @@
     "@angular/cli": "^6.0.8",
     "@angular/compiler-cli": "6.0.5",
     "@types/file-saver": "^1.3.0",
+    "@types/highlight.js": "^9.12.3",
     "@types/jasmine": "2.8.6",
     "@types/jasminewd2": "^2.0.3",
     "@types/node": "^8.10.21",
@@ -78,8 +84,12 @@
     "karma-jasmine": "^1.1.2",
     "karma-jasmine-html-reporter": "^1.2.0",
     "protractor": "^5.3.2",
+    "terser": "^3.10.11",
     "ts-node": "~5.0.1",
     "tslint": "~5.9.1",
     "typescript": "2.7.2"
+  },
+  "resolutions": {
+    "uglify-es": "npm:terser"
   }
 }

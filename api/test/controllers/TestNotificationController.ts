@@ -6,7 +6,6 @@ import {JwtUtils} from '../../src/security/JwtUtils';
 import {Notification} from '../../src/models/Notification';
 import chaiHttp = require('chai-http');
 import {User} from '../../src/models/User';
-import {Course} from '../../src/models/Course';
 import {NotFoundError} from 'routing-controllers';
 import {API_NOTIFICATION_TYPE_ALL_CHANGES, API_NOTIFICATION_TYPE_NONE, NotificationSettings} from '../../src/models/NotificationSettings';
 
@@ -250,8 +249,9 @@ describe('Notifications', async () => {
     it('should delete a notification', async () => {
       const course = await FixtureUtils.getRandomCourse();
       const students = await FixtureUtils.getRandomStudents(2, 5);
+
       course.students = course.students.concat(students);
-      await Course.update(course, {new: true});
+      await course.save();
 
       const newNotification = await new Notification({
         user: students[0],

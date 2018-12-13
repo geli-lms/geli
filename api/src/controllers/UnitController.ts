@@ -73,11 +73,10 @@ export class UnitController {
   @Get('/:id')
   async getUnit(@Param('id') id: string) {
     const unit = await Unit.findById(id);
-
-    if (unit) {
+    if (!unit) {
       throw new NotFoundError();
     }
-    return unit;
+    return unit.toObject();
   }
 
   /**
@@ -211,7 +210,7 @@ export class UnitController {
         throw new NotFoundError();
       }
 
-      return Lecture.update({}, {$pull: {units: id}})
+      return Lecture.updateMany({}, {$pull: {units: id}})
         .then(() => unit.remove())
         .then(() => {
           return {result: true};

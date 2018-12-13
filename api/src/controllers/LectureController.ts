@@ -1,4 +1,4 @@
-import { Authorized, Body, CurrentUser, Delete, ForbiddenError, Get,
+import { Authorized, Body, BodyParam, CurrentUser, Delete, ForbiddenError, Get,
   JsonController, NotFoundError, Param, Post, Put, UseBefore } from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 
@@ -30,11 +30,21 @@ export class LectureController {
    *         "__v": 0,
    *         "units": []
    *     }
+   *
+   * @apiError NotFoundError If the lecture couldn't be found.
+   * @apiError ForbiddenError userCanViewCourse check failed.
    */
   @Get('/:id')
-  getLecture(@Param('id') id: string) {
-    return Lecture.findById(id)
-      .then((l) => l.toObject());
+  async getLecture(@Param('id') id: string, @CurrentUser() currentUser: IUser) {
+    const lecture = await Lecture.findById(id);
+    if (!lecture) {
+      throw new NotFoundError();
+    }
+    const course = await Course.findOne({lectures: id});
+    if (!course.checkPrivileges(currentUser).userCanViewCourse) {
+      throw new ForbiddenError();
+    }
+    return lecture.toObject();
   }
 
   /**
@@ -44,7 +54,7 @@ export class LectureController {
    * @apiPermission teacher
    * @apiPermission admin
    *
-   * @apiParam {Object} data New lecture data.
+   * @apiParam {ILectureCreate} data New lecture data with 'name', 'description' and target 'courseId'.
    *
    * @apiSuccess {Lecture} lecture Added lecture.
    *
@@ -58,21 +68,28 @@ export class LectureController {
    *         "__v": 0,
    *         "units": []
    *     }
+   *
+   * @apiError NotFoundError If the courseId couldn't be found.
+   * @apiError ForbiddenError userCanEditCourse check failed.
    */
   @Authorized(['teacher', 'admin'])
   @Post('/')
-  addLecture(@Body() data: any) {
-    const lectureI: ILecture = data.lecture;
-    const courseId: string = data.courseId;
-    return new Lecture(lectureI).save()
-      .then((lecture) => {
-        return Course.findById(courseId).then(course => ({course, lecture}));
-      })
-      .then(({course, lecture}) => {
-        course.lectures.push(lecture);
-        return course.save().then(updatedCourse => ({course, lecture}));
-      })
-      .then(({course, lecture}) => lecture.toObject());
+  async addLecture(@BodyParam('name', {required: true}) name: string,
+                  @BodyParam('description', {required: true}) description: string,
+                  @BodyParam('courseId', {required: true}) courseId: string,
+                  @CurrentUser() currentUser: IUser) {
+    const course = await Course.findById(courseId);
+    if (!course) {
+      throw new NotFoundError();
+    }
+    if (!course.checkPrivileges(currentUser).userCanEditCourse) {
+      throw new ForbiddenError();
+    }
+
+    const lecture = await new Lecture({name, description}).save();
+    course.lectures.push(lecture);
+    await course.save();
+    return lecture.toObject();
   }
 
   /**
@@ -97,12 +114,22 @@ export class LectureController {
    *         "__v": 0,
    *         "units": []
    *     }
+   *
+   * @apiError NotFoundError If the lecture's course couldn't be found.
+   * @apiError ForbiddenError userCanEditCourse check failed.
    */
   @Authorized(['teacher', 'admin'])
   @Put('/:id')
-  updateLecture(@Param('id') id: string, @Body() lecture: ILecture) {
-    return Lecture.findByIdAndUpdate(id, lecture, {'new': true})
-      .then((l) => l.toObject());
+  async updateLecture(@Param('id') id: string, @Body() lectureUpdate: ILecture, @CurrentUser() currentUser: IUser) {
+    const course = await Course.findOne({lectures: id});
+    if (!course) {
+      throw new NotFoundError();
+    }
+    if (!course.checkPrivileges(currentUser).userCanEditCourse) {
+      throw new ForbiddenError();
+    }
+    const lecture = await Lecture.findByIdAndUpdate(id, lectureUpdate, {'new': true});
+    return lecture.toObject();
   }
 
   /**
@@ -118,6 +145,9 @@ export class LectureController {
    *
    * @apiSuccessExample {json} Success-Response:
    *     {}
+   *
+   * @apiError NotFoundError If the lecture's course couldn't be found.
+   * @apiError ForbiddenError userCanEditCourse check failed.
    */
   @Authorized(['teacher', 'admin'])
   @Delete('/:id')
@@ -129,8 +159,8 @@ export class LectureController {
     if (!course.checkPrivileges(currentUser).userCanEditCourse) {
       throw new ForbiddenError();
     }
-    await course.update({}, {$pull: {lectures: id}});
 
+    await Course.updateMany({}, {$pull: {lectures: id}});
     await Lecture.findByIdAndRemove(id);
 
     return {};
