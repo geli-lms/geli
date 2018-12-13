@@ -19,6 +19,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - `TestHelper` request methods for `PUT` & `DELETE`. [#1041](https://github.com/geli-lms/geli/issues/1041)
 - CodeKata validation service. [#844](https://github.com/geli-lms/geli/issues/844)
 
+### Fixed
+- `bundle.scss` not available in api container. [#1052](https://github.com/geli-lms/geli/issues/1052)
+
 ### Changed
 - Update `mongoose` to `5.3.x`. [#1003](https://github.com/geli-lms/geli/issues/1003) [#1004](https://github.com/geli-lms/geli/pull/1004) [#1044](https://github.com/geli-lms/geli/pull/1044)
 - Refactor `LectureController` `GET`/`POST`/`PUT` routes to use `async`/`await`. [#1041](https://github.com/geli-lms/geli/issues/1041)
