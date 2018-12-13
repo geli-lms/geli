@@ -29,6 +29,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed
 - Some incorrect `FixtureUtils` return types. [#1041](https://github.com/geli-lms/geli/issues/1041)
+- Course list broken when course image in invalid state. [#1053](https://github.com/geli-lms/geli/issues/1053)
 
 ### Security
 - Fix multiple security issues of the `LectureController`. [#1041](https://github.com/geli-lms/geli/issues/1041)
