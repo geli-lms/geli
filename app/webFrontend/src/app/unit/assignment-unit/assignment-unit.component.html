@@ -4,6 +4,7 @@
         <app-upload-form [uploadMethod]="'PUT'"
                          [uploadPath]="uploadPath"
                          [additionalData]="null"
+                         [maxFileNumber]="10"
                          [allowedMimeTypes]="allowedMimeTypes"
                          (onFileUploaded)="onFileUploaded($event)"
                          (onAllUploaded)="onAllUploaded()"
@@ -26,7 +27,7 @@
             <span class="status-group" *ngIf="readyToBeGraded()">Status: <mat-icon id="{{assignmentIcon}}">{{assignmentIcon}}</mat-icon></span>
         </div>
 
-        <div class="submit-button-group" *ngIf="!isSubmitted()">
+        <div class="submit-button-group" *ngIf="showSubmitButton()">
             <button mat-raised-button color="primary" (click)="submitAssignment()">{{
                 'unit.submitAss'
                 | translate }}
@@ -52,29 +53,37 @@
     </p>
 
     <table>
+      <!-- TODO: text / tranlsate -->
         <tr class="heading-row">
             <td>Student</td>
-            <td>File</td>
+            <td>Submitted</td>
+            <td>Files</td>
             <td>Status</td>
         </tr>
-        <tr class="content-row" *ngFor="let unit of this.assignmentUnit.assignments;">
-            <td class="{{!unit.submitted ? 'not-submitted' : ''}}">{{unit.user.profile.firstName}}
-                {{unit.user.profile.lastName}}
+        <tr class="content-row" *ngFor="let assignment of this.assignmentUnit.assignments;">
+            <td class="{{!assignment.submitted ? 'not-submitted' : ''}}">
+              {{assignment.user.profile.firstName}} {{assignment.user.profile.lastName}}
             </td>
-            <td class="{{!unit.submitted ? 'not-submitted' : ''}}"><a href="{{ '/api/uploads/' + unit.file.link }}"
-                                                                      download="{{unit.file.name}}">{{unit.file.name}}</a>
+          <td class="{{!assignment.submitted ? 'not-submitted' : ''}}">
+              {{getHumanReadableDate(assignment.submittedDate)}}
+          </td>
+            <td class="{{!assignment.submitted ? 'not-submitted' : ''}}">
+
+              <ng-container *ngFor="let file of this.files"><a href="{{ '/api/uploads/' + file.link }}"
+                                                               download="{{file.name}}">{{file.name}}</a><br />
+              </ng-container>
             </td>
-            <td *ngIf="unit.submitted; else notSubmitted">
+            <td *ngIf="assignment.submitted; else notSubmitted">
                 <mat-form-field>
-                    <mat-select placeholder="Status" value="{{unit.checked}}">
-                        <mat-option (click)="submitStatusChange(unit._id, -1)" value={{-1}}>Open</mat-option>
-                        <mat-option (click)="submitStatusChange(unit._id, 0)" value={{0}}>Failed</mat-option>
-                        <mat-option (click)="submitStatusChange(unit._id, 1)" value={{1}}>Accpected</mat-option>
+                    <mat-select placeholder="Status" value="{{assignment.checked}}">
+                        <mat-option (click)="submitStatusChange(assignment._id, -1)" value={{-1}}>Open</mat-option>
+                        <mat-option (click)="submitStatusChange(assignment._id, 0)" value={{0}}>Failed</mat-option>
+                        <mat-option (click)="submitStatusChange(assignment._id, 1)" value={{1}}>Accpected</mat-option>
                     </mat-select>
                 </mat-form-field>
             </td>
             <ng-template #notSubmitted>
-                <td class="{{!unit.submitted ? 'not-submitted' : ''}}">
+                <td class="{{!assignment.submitted ? 'not-submitted' : ''}}">
                     Not submitted yet.
                 </td>
             </ng-template>

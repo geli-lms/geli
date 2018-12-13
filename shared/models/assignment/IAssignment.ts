@@ -1,5 +1,5 @@
-import {IUser} from "../IUser";
-import {IFile} from "../IFile";
+import {IUser} from '../IUser';
+import {IFile} from '../IFile';
 
 export interface IAssignment {
     files: any[];

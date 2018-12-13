@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
+import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {UnitFormService} from '../../../shared/services/unit-form.service';
-import {IAssignmentUnit} from "../../../../../../../shared/models/units/IAssignmentUnit";
-import {IAssignment} from "../../../../../../../shared/models/assignment/IAssignment";
+import {IAssignmentUnit} from '../../../../../../../shared/models/units/IAssignmentUnit';
+import {IAssignment} from '../../../../../../../shared/models/assignment/IAssignment';
 
 @Component({
   selector: 'app-assignment-unit-form',
@@ -14,7 +14,7 @@ export class AssignmentUnitFormComponent implements OnInit {
     model: IAssignmentUnit;
 
     constructor(public unitFormService: UnitFormService,
-                public formBuilder: FormBuilder){ }
+                public formBuilder: FormBuilder) { }
 
     ngOnInit() {
         this.unitFormService.unitInfoText = 'Assignments Info';

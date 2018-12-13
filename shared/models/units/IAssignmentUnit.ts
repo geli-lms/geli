@@ -1,6 +1,6 @@
 import {IUnit} from './IUnit';
-import {IAssignment} from "../assignment/IAssignment";
-import {IChatRoom} from "../IChatRoom";
+import {IAssignment} from '../assignment/IAssignment';
+import {IChatRoom} from '../IChatRoom';
 
 
 export interface IAssignmentUnit extends IUnit {

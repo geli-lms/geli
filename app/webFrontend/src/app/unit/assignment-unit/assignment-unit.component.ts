@@ -1,15 +1,16 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
-import {UnitFormService} from "../../shared/services/unit-form.service";
-import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {IAssignmentUnit} from "../../../../../../shared/models/units/IAssignmentUnit";
-import {UploadFormComponent} from "../../shared/components/upload-form/upload-form.component";
-import {IFileUnit} from "../../../../../../shared/models/units/IFileUnit";
-import {IFile} from '../../../../../../shared/models/IFile';
-import {AssignmentService} from "../../shared/services/data.service";
+import {UnitFormService} from '../../shared/services/unit-form.service';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {IAssignmentUnit} from '../../../../../../shared/models/units/IAssignmentUnit';
+import {UploadFormComponent} from '../../shared/components/upload-form/upload-form.component';
+import {IFileUnit} from '../../../../../../shared/models/units/IFileUnit';
+import {AssignmentService} from '../../shared/services/data.service';
 import {UserService} from '../../shared/services/user.service';
-import {BehaviorSubject} from "rxjs/BehaviorSubject";
+import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {SnackBarService} from '../../shared/services/snack-bar.service';
 import {saveAs} from 'file-saver/FileSaver';
+import {IFile} from '../../../../../../shared/models/mediaManager/IFile';
+import {IAssignment} from '../../../../../../shared/models/assignment/IAssignment';
 
 enum AssignmentIcon {
   TURNED_IN = 'assignment_turned_in',
@@ -37,9 +38,11 @@ export class AssignmentUnitComponent implements OnInit {
   public showUploadForm: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
   data = this.showUploadForm.asObservable();
 
-  files: IFile[] = [ ];
+  files: IFile[] = [];
 
   selected: Number;
+
+  assignment: IAssignment;
 
   constructor(public unitFormService: UnitFormService,
               public snackBar: SnackBarService,
@@ -51,12 +54,15 @@ export class AssignmentUnitComponent implements OnInit {
   ngOnInit() {
 
     if (this.assignmentUnit.assignments.length) {
+      // The backend controller only sends a single assignment back to the client
+      // if the client has a assignment.
+      this.assignment = this.assignmentUnit.assignments[0];
 
       this.files = this.assignmentUnit.assignments[0].files;
 
-      if (this.assignmentUnit.assignments[0].checked === 1) {
+      if (this.assignment.checked === 1) {
         this.assignmentIcon = AssignmentIcon.ACCEPTED;
-      } else if (this.assignmentUnit.assignments[0].checked === 0) {
+      } else if (this.assignment.checked === 0) {
         this.assignmentIcon = AssignmentIcon.FAILED;
       } else {
         this.assignmentIcon = AssignmentIcon.TURNED_IN;
@@ -74,8 +80,6 @@ export class AssignmentUnitComponent implements OnInit {
     this.unitForm.addControl('deadline', new FormControl(this.assignmentUnit.deadline));
     this.unitForm.addControl('assignments', new FormControl(this.assignmentUnit.assignments));
 
-    console.log({assignmentUnit: this.assignmentUnit});
-
     if (this.assignmentUnit) {
       this.unitForm.patchValue({
         deadline: this.assignmentUnit.deadline,
@@ -91,22 +95,28 @@ export class AssignmentUnitComponent implements OnInit {
     this.showUploadForm.next(shown);
   }
 
+  getHumanReadableDate(date) {
+    return new Date(date).toLocaleDateString();
+  }
+
+
   /**
    *
    */
   public async startUpload() {
-    if (!this.assignmentUnit.assignments.length) {
-      // The user did not send any assignment. Create a new assignment
-      await this.assignmentService.createAssignment(this.assignmentUnit._id);
-    }
-
     try {
+      if (!this.assignment) {
+        // The user did not send any assignment. Create a new assignment
+        this.assignment = await this.assignmentService.createAssignment(this.assignmentUnit._id);
+      }
+
       this.uploadForm.fileUploader.uploadAll();
     } catch (error) {
     }
   }
 
-  public onFileUploaded(event: IFileUnit) {
+  public onFileUploaded(file: IFile) {
+    this.files.push(file);
   }
 
   public onAllUploaded() {
@@ -120,15 +130,22 @@ export class AssignmentUnitComponent implements OnInit {
   }
 
   public isSubmitted() {
-    if (!this.assignmentUnit.assignments.length) {
+    if (!this.assignment) {
       return false;
     }
-    return this.assignmentUnit.assignments[0].submitted;
+    return this.assignment.submitted;
   }
 
-  public deleteAssignment() {
+  showSubmitButton() {
+    return this.assignment && !this.assignment.submitted;
+  }
+
+  public async deleteAssignment() {
     this.updateShowUploadForm(true);
-    this.assignmentService.deleteAssignment(this.assignmentUnit._id.toString());
+    await this.assignmentService.deleteAssignment(this.assignmentUnit._id.toString());
+
+    this.assignment = null;
+    this.files = [];
   }
 
   public canBeDeleted() {
@@ -168,13 +185,12 @@ export class AssignmentUnitComponent implements OnInit {
   public submitStatusChange(unitId, approved) {
     const assignmentIndex = this.getElementIndexById(this.assignmentUnit.assignments, unitId);
     this.assignmentUnit.assignments[assignmentIndex].checked = approved;
-    console.error(this.assignmentUnit.assignments[assignmentIndex]);
     this.assignmentService.updateAssignment(this.assignmentUnit.assignments[assignmentIndex], this.assignmentUnit._id.toString());
   }
 
   private getElementIndexById(arr, id) {
     return arr.findIndex((item) => {
-      return item._id === id
-    })
+      return item._id === id;
+    });
   }
 }

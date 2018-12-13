@@ -6,7 +6,7 @@ import {VideoUnit} from '../../models/units/VideoUnit';
 import {CodeKataUnit} from '../../models/units/CodeKataUnit';
 import {TaskUnit} from '../../models/units/TaskUnit';
 import {FreeTextUnit} from '../../models/units/FreeTextUnit';
-import {AssignmentUnit} from '../../models/units/AssignmentUnit'
+import {AssignmentUnit} from '../../models/units/AssignmentUnit';
 
 @Injectable()
 export class UnitFactoryService {

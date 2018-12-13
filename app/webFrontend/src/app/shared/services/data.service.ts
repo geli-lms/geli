@@ -12,7 +12,7 @@ import {IFile} from '../../../../../../shared/models/mediaManager/IFile';
 import {IUserSearchMeta} from '../../../../../../shared/models/IUserSearchMeta';
 import {IConfig} from '../../../../../../shared/models/IConfig';
 import {literalMap} from '@angular/compiler/src/output/output_ast';
-import {IAssignment} from "../../../../../../shared/models/assignment/IAssignment";
+import {IAssignment} from '../../../../../../shared/models/assignment/IAssignment';
 
 export abstract class DataService {
 

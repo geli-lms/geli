@@ -286,7 +286,6 @@ export class UnitController {
     const assignmentUnit = <IAssignmentUnitModel> await Unit.findById(id);
     // Check Params file etc
 
-    console.log({ assignmentUnit });
     if (!assignmentUnit) {
       throw new NotFoundError();
     }
@@ -301,8 +300,8 @@ export class UnitController {
     }
 
     try {
-      const assignment: IAssignment = {
-        files: [ ],
+      assignment = {
+        files: [],
         user: currentUser._id,
         submitted: false,
         checked: -1,
@@ -312,7 +311,7 @@ export class UnitController {
       assignmentUnit.assignments.push(assignment);
       await assignmentUnit.save();
 
-      return true;
+      return assignment;
     } catch (err) {
       throw new BadRequestError(err);
     }
@@ -334,7 +333,7 @@ export class UnitController {
   @Put('/:id/assignment/files')
   async addFileToAssignment(@Param('id') unitId: string,
                             @UploadedFile('file', {options: uploadOptions}) uploadedFile: any,
-                            @CurrentUser() currentUser: IUser ) {
+                            @CurrentUser() currentUser: IUser) {
 
     const assignmentUnit = <IAssignmentUnitModel> await Unit.findById(unitId);
 
@@ -342,7 +341,7 @@ export class UnitController {
       throw new NotFoundError();
     }
 
-    let assignment = assignmentUnit.assignments.find(submittedAssignment => {
+    const assignment = assignmentUnit.assignments.find(submittedAssignment => {
       return submittedAssignment.user._id.toString() === currentUser._id;
     });
     if (!assignment) {
@@ -365,13 +364,13 @@ export class UnitController {
     try {
       const file = await new File(fileMetadata).save();
       if (!assignment.files) {
-        assignment.files = [ ];
+        assignment.files = [];
       }
 
       assignment.files.push(file._id);
       await assignmentUnit.save();
 
-      return true;
+      return file.toObject();
     } catch (error) {
       throw new InternalServerError(error.message);
     }
@@ -429,7 +428,7 @@ export class UnitController {
       }
 
       assignment = assignmentUnit.assignments.find(
-        submittedAssignment => submittedAssignment.user._id === data.user._id
+        submittedAssignment => `${submittedAssignment.user}` === data.user._id
       );
 
       assignment.checked = data.checked;
@@ -440,12 +439,14 @@ export class UnitController {
       // We can just retrieve the assignment where the author is the current user, as an user can
       // only have one assignment.
       assignment = assignmentUnit.assignments.find(
-        submittedAssignment => submittedAssignment.user._id === currentUser._id
+        submittedAssignment => `${submittedAssignment.user}` === currentUser._id
       );
 
-      // Update the submitted state of the assignment.
-      // TODO: don't allow changing submitted state if the assignment has already been submitted.
-      assignment.submitted = data.submitted;
+      if (!assignment.submitted) {
+        // Update the submitted state of the assignment.
+        assignment.submitted = data.submitted;
+        assignment.submittedDate = new Date();
+      }
     }
 
     try {
@@ -548,15 +549,14 @@ export class UnitController {
       archive.pipe(output);
 
       for (const assignment of assignmentUnit.assignments) {
-        if (!assignment.files.length) continue;
+        if (!assignment.files.length) { continue; }
 
         const file = await File.findById(assignment.files[0]);
-        console.log(assignment);
         const user = await User.findById(assignment.user);
         archive.file('uploads/' + file.link,
           {
             name: user.profile.lastName + '_' +
-            user.profile.firstName + '_' + file.name
+              user.profile.firstName + '_' + file.name
           });
       }
 
