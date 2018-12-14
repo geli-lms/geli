@@ -1,13 +1,13 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { MatDialog } from '@angular/material';
-import { ICourse } from '../../../../../../../shared/models/ICourse';
-import { ILecture } from '../../../../../../../shared/models/ILecture';
-import { IFileUnit } from '../../../../../../../shared/models/units/IFileUnit';
-import { UnitGeneralInfoFormComponent } from '../unit-general-info-form/unit-general-info-form.component';
-import { UnitService } from '../../../shared/services/data.service';
-import { ShowProgressService } from '../../../shared/services/show-progress.service';
-import { IFile } from '../../../../../../../shared/models/mediaManager/IFile';
-import { UnitFormService } from '../../../shared/services/unit-form.service';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {MatDialog} from '@angular/material';
+import {ICourse} from '../../../../../../../shared/models/ICourse';
+import {ILecture} from '../../../../../../../shared/models/ILecture';
+import {IFileUnit} from '../../../../../../../shared/models/units/IFileUnit';
+import {UnitGeneralInfoFormComponent} from '../unit-general-info-form/unit-general-info-form.component';
+import {UnitService} from '../../../shared/services/data.service';
+import {ShowProgressService} from '../../../shared/services/show-progress.service';
+import {IFile} from '../../../../../../../shared/models/mediaManager/IFile';
+import {UnitFormService} from '../../../shared/services/unit-form.service';
 import {
   FormArray,
   FormBuilder,
@@ -15,9 +15,9 @@ import {
   FormGroup,
   Validators
 } from '@angular/forms';
-import { SnackBarService } from '../../../shared/services/snack-bar.service';
-import { CourseMediaComponent } from '../../../course/course-edit/course-media/course-media.component';
-import { FileIconService } from '../../../shared/services/file-icon.service';
+import {SnackBarService} from '../../../shared/services/snack-bar.service';
+import {CourseMediaComponent} from '../../../course/course-edit/course-media/course-media.component';
+import {FileIconService} from '../../../shared/services/file-icon.service';
 
 @Component({
   selector: 'app-file-unit-form',

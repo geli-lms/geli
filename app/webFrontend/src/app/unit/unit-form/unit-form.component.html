@@ -57,7 +57,7 @@
         <!-- Add Elements left to the save & cancel buttons -->
         <!-- Button MUST BE  type="button" -->
         <button type="button" *ngIf="type == 'code-kata'" mat-raised-button (click)="codeKataUnitFormComponent.validate()">Validate</button>
-        <button type="button" *ngIf="(type == 'video' || type == 'file')" mat-raised-button (click)="fileUnitFormComponent.openAddFilesDialog()">Add {{model.fileUnitType=='file'?'Files':'Videos'}}</button>
+        <button type="button" *ngIf="(type == 'video' || type == 'file')" mat-raised-button (click)="fileUnitFormComponent.openAddFilesDialog()">Add {{model.fileUnitType == 'file' ? 'Files' : 'Videos'}}</button>
       </ng-container>
       <ng-container right>
         <!-- Add here Elements right to the save & cancel buttons -->
