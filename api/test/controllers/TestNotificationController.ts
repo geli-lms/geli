@@ -67,16 +67,28 @@ async function invalidTargetTypePostTest(urlPostfixAssembler: (student: IUser) =
   res.body.message.should.be.equal(errorCodes.notification.invalidTargetType.text);
 }
 
+/**
+ * 'should respond with 404 for an invalid course/lecture/unit id target'
+ *
+ * @param urlPostfixAssembler Function that is given a student and returns a urlPostfix string for the commonUserPostRequest.
+ */
+async function notFoundPostTest (targetType: string, urlPostfixAssembler: (student: IUser) => string) {
+  const {teacher, student, newNotification} = await preparePostNotFoundSetup(targetType);
+  const res = await testHelper.commonUserPostRequest(teacher, urlPostfixAssembler(student), newNotification);
+  res.status.should.be.equal(404);
+}
+
 describe('Notifications', async () => {
   beforeEach(async () => {
     await testHelper.resetForNextTest();
   });
 
   describe(`POST ${BASE_URL}`, async () => {
-    async function notFoundTest (targetType: string) {
-      const {teacher, newNotification} = await preparePostNotFoundSetup(targetType);
-      const res = await testHelper.commonUserPostRequest(teacher, '', newNotification);
-      res.status.should.be.equal(404);
+    /**
+     * For the PostNotifications route this can simply return '' without doing anything.
+     */
+    function urlPostfixAssembler() {
+      return '';
     }
 
     it('should fail if text parameter is not given', async () => {
@@ -111,23 +123,30 @@ describe('Notifications', async () => {
     });
 
     it('should respond with 404 for an invalid course id target', async () => {
-      await notFoundTest('course');
+      await notFoundPostTest('course', urlPostfixAssembler);
     });
 
     it('should respond with 404 for an invalid lecture id target', async () => {
-      await notFoundTest('lecture');
+      await notFoundPostTest('lecture', urlPostfixAssembler);
     });
 
     it('should respond with 404 for an invalid unit id target', async () => {
-      await notFoundTest('unit');
+      await notFoundPostTest('unit', urlPostfixAssembler);
     });
 
     it('should respond with 400 for an invalid targetType', async () => {
-      await invalidTargetTypePostTest(() => '');
+      await invalidTargetTypePostTest(urlPostfixAssembler);
     });
   });
 
   describe(`POST ${BASE_URL} user :id`, async () => {
+    /**
+     * For the PostNotification route this will use the given student to return /user/${student._id}.
+     */
+    function urlPostfixAssembler(student: IUser) {
+      return `/user/${student._id}`;
+    }
+
     interface IChangedCourseSuccessTest {
       course: ICourseModel;
       teacher: IUserModel;
@@ -140,12 +159,6 @@ describe('Notifications', async () => {
 
       const notifications = await Notification.find({changedCourse: course});
       notifications.length.should.be.equal(1);
-    }
-
-    async function notFoundTest (targetType: string) {
-      const {teacher, student, newNotification} = await preparePostNotFoundSetup(targetType);
-      const res = await testHelper.commonUserPostRequest(teacher, `/user/${student._id}`, newNotification);
-      res.status.should.be.equal(404);
     }
 
     it('should fail if required parameters are omitted', async () => {
@@ -240,19 +253,19 @@ describe('Notifications', async () => {
     });
 
     it('should respond with 404 for an invalid course id target', async () => {
-      await notFoundTest('course');
+      await notFoundPostTest('course', urlPostfixAssembler);
     });
 
     it('should respond with 404 for an invalid lecture id target', async () => {
-      await notFoundTest('lecture');
+      await notFoundPostTest('lecture', urlPostfixAssembler);
     });
 
     it('should respond with 404 for an invalid unit id target', async () => {
-      await notFoundTest('unit');
+      await notFoundPostTest('unit', urlPostfixAssembler);
     });
 
     it('should respond with 400 for an invalid targetType', async () => {
-      await invalidTargetTypePostTest((student: IUser) => `/user/${student._id}`);
+      await invalidTargetTypePostTest(urlPostfixAssembler);
     });
   });
 
