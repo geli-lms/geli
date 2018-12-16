@@ -6,6 +6,7 @@ import {Notification} from '../../src/models/Notification';
 import {IUser} from '../../../shared/models/IUser';
 import {User, IUserModel} from '../../src/models/User';
 import {ICourseModel} from '../../src/models/Course';
+import {Lecture} from '../../src/models/Lecture';
 import {API_NOTIFICATION_TYPE_ALL_CHANGES, API_NOTIFICATION_TYPE_NONE, NotificationSettings} from '../../src/models/NotificationSettings';
 import {errorCodes} from '../../src/config/errorCodes';
 
@@ -189,11 +190,11 @@ describe('Notifications', async () => {
       res.body.message.should.be.equal(errorCodes.notification.targetUserNotFound.text);
     });
 
-    it('should create notifications for a student, with course-targetType and text', async () => {
+    it('should create notifications for a student, with course-targetType & text', async () => {
       await changedCourseSuccessTest(await preparePostChangedCourseSetup());
     });
 
-    it('should create notifications for a student, with course-targetType and text', async () => {
+    it('should create notifications for a student, with course-targetType & text, setting API_NOTIFICATION_TYPE_ALL_CHANGES', async () => {
       const setup = await preparePostChangedCourseSetup();
 
       await new NotificationSettings({
@@ -206,7 +207,23 @@ describe('Notifications', async () => {
       await changedCourseSuccessTest(setup);
     });
 
-    it('should create notifications for a student, with unit-targetType and text', async () => {
+    it('should create notifications for a student, with lecture-targetType & text', async () => {
+      const {course, student, teacher} = await preparePostChangedCourseSetup();
+      const lectureId = (await FixtureUtils.getRandomLectureFromCourse(course))._id;
+      const lecture = await Lecture.findById(lectureId);
+      lecture.name = 'New test name';
+      await lecture.save();
+
+      const newNotification = {
+        targetId: lecture.id,
+        targetType: 'lecture',
+        text: 'test text'
+      };
+
+      await changedCourseSuccessTest({course, student, teacher, newNotification});
+    });
+
+    it('should create notifications for a student, with unit-targetType & text', async () => {
       const {course, student, teacher} = await preparePostChangedCourseSetup();
       const lecture = await FixtureUtils.getRandomLectureFromCourse(course);
       const unit = await FixtureUtils.getRandomUnitFromLecture(lecture);
@@ -222,7 +239,7 @@ describe('Notifications', async () => {
       await changedCourseSuccessTest({course, student, teacher, newNotification});
     });
 
-    it('should create notifications for a student, with course-targetType and text but API_NOTIFICATION_TYPE_NONE', async () => {
+    it('should create notifications for a student, with course-targetType & text, setting API_NOTIFICATION_TYPE_NONE', async () => {
       const setup = await preparePostChangedCourseSetup();
 
       await new NotificationSettings({
