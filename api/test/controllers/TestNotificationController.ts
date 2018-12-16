@@ -267,6 +267,18 @@ describe('Notifications', async () => {
       notifications.length.should.be.equal(1);
     });
 
+    it('should respond with 400 for requesting text only targetType without text', async () => {
+      const {student, teacher} = await preparePostSetup();
+
+      const newNotification = {
+        targetType: 'text'
+      };
+
+      const res = await testHelper.commonUserPostRequest(teacher, `/user/${student._id}`, newNotification);
+      res.status.should.be.equal(400);
+      res.body.message.should.be.equal(errorCodes.notification.textOnlyWithoutText.text);
+    });
+
     it('should forbid notification creation for an unauthorized teacher', async () => {
       const {course, student, newNotification} = await preparePostChangedCourseSetup();
       const unauthorizedTeacher = await FixtureUtils.getUnauthorizedTeacherForCourse(course);
