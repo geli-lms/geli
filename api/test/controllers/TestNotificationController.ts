@@ -72,10 +72,28 @@ async function invalidTargetTypePostTest(urlPostfixAssembler: (student: IUser) =
  *
  * @param urlPostfixAssembler Function that is given a student and returns a urlPostfix string for the commonUserPostRequest.
  */
-async function notFoundPostTest (targetType: string, urlPostfixAssembler: (student: IUser) => string) {
+async function notFoundPostTest(targetType: string, urlPostfixAssembler: (student: IUser) => string) {
   const {teacher, student, newNotification} = await preparePostNotFoundSetup(targetType);
   const res = await testHelper.commonUserPostRequest(teacher, urlPostfixAssembler(student), newNotification);
   res.status.should.be.equal(404);
+}
+
+function addCommonPostTests(urlPostfixAssembler: (student: IUser) => string) {
+  it('should respond with 404 for an invalid course id target', async () => {
+    await notFoundPostTest('course', urlPostfixAssembler);
+  });
+
+  it('should respond with 404 for an invalid lecture id target', async () => {
+    await notFoundPostTest('lecture', urlPostfixAssembler);
+  });
+
+  it('should respond with 404 for an invalid unit id target', async () => {
+    await notFoundPostTest('unit', urlPostfixAssembler);
+  });
+
+  it('should respond with 400 for an invalid targetType', async () => {
+    await invalidTargetTypePostTest(urlPostfixAssembler);
+  });
 }
 
 describe('Notifications', async () => {
@@ -122,21 +140,7 @@ describe('Notifications', async () => {
       res.status.should.be.equal(403);
     });
 
-    it('should respond with 404 for an invalid course id target', async () => {
-      await notFoundPostTest('course', urlPostfixAssembler);
-    });
-
-    it('should respond with 404 for an invalid lecture id target', async () => {
-      await notFoundPostTest('lecture', urlPostfixAssembler);
-    });
-
-    it('should respond with 404 for an invalid unit id target', async () => {
-      await notFoundPostTest('unit', urlPostfixAssembler);
-    });
-
-    it('should respond with 400 for an invalid targetType', async () => {
-      await invalidTargetTypePostTest(urlPostfixAssembler);
-    });
+    addCommonPostTests(urlPostfixAssembler);
   });
 
   describe(`POST ${BASE_URL} user :id`, async () => {
@@ -252,21 +256,7 @@ describe('Notifications', async () => {
       res.status.should.be.equal(403);
     });
 
-    it('should respond with 404 for an invalid course id target', async () => {
-      await notFoundPostTest('course', urlPostfixAssembler);
-    });
-
-    it('should respond with 404 for an invalid lecture id target', async () => {
-      await notFoundPostTest('lecture', urlPostfixAssembler);
-    });
-
-    it('should respond with 404 for an invalid unit id target', async () => {
-      await notFoundPostTest('unit', urlPostfixAssembler);
-    });
-
-    it('should respond with 400 for an invalid targetType', async () => {
-      await invalidTargetTypePostTest(urlPostfixAssembler);
-    });
+    addCommonPostTests(urlPostfixAssembler);
   });
 
   describe(`GET ${BASE_URL} user :id`, () => {
