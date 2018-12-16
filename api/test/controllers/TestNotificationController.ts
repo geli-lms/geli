@@ -107,6 +107,15 @@ describe('Notifications', async () => {
     it('should respond with 404 for an invalid unit id target', async () => {
       await notFoundTest('unit');
     });
+
+    it('should respond with 400 for an invalid targetType', async () => {
+      const {teacher, newNotification} = await preparePostChangedCourseSetup();
+      newNotification.targetType = 'some-invalid-targetType';
+
+      const res = await testHelper.commonUserPostRequest(teacher, '', newNotification);
+      res.status.should.be.equal(400);
+      res.body.message.should.be.equal(errorCodes.notification.invalidTargetType.text);
+    });
   });
 
   describe(`POST ${BASE_URL} user :id`, async () => {
@@ -231,6 +240,15 @@ describe('Notifications', async () => {
 
     it('should respond with 404 for an invalid unit id target', async () => {
       await notFoundTest('unit');
+    });
+
+    it('should respond with 400 for an invalid targetType', async () => {
+      const {student, teacher, newNotification} = await preparePostChangedCourseSetup();
+      newNotification.targetType = 'some-invalid-targetType';
+
+      const res = await testHelper.commonUserPostRequest(teacher, `/user/${student._id}`, newNotification);
+      res.status.should.be.equal(400);
+      res.body.message.should.be.equal(errorCodes.notification.invalidTargetType.text);
     });
   });
 
