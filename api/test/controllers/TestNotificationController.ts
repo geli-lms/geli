@@ -53,6 +53,20 @@ async function preparePostNotFoundSetup(targetType: string) {
   return {...setup, newNotification};
 }
 
+/**
+ * 'should respond with 400 for an invalid targetType'
+ *
+ * @param urlPostfixAssembler Function that is given a student and returns a urlPostfix string for the commonUserPostRequest.
+ */
+async function invalidTargetTypePostTest(urlPostfixAssembler: (student: IUser) => string) {
+  const {student, teacher, newNotification} = await preparePostChangedCourseSetup();
+  newNotification.targetType = 'some-invalid-targetType';
+
+  const res = await testHelper.commonUserPostRequest(teacher, urlPostfixAssembler(student), newNotification);
+  res.status.should.be.equal(400);
+  res.body.message.should.be.equal(errorCodes.notification.invalidTargetType.text);
+}
+
 describe('Notifications', async () => {
   beforeEach(async () => {
     await testHelper.resetForNextTest();
@@ -109,12 +123,7 @@ describe('Notifications', async () => {
     });
 
     it('should respond with 400 for an invalid targetType', async () => {
-      const {teacher, newNotification} = await preparePostChangedCourseSetup();
-      newNotification.targetType = 'some-invalid-targetType';
-
-      const res = await testHelper.commonUserPostRequest(teacher, '', newNotification);
-      res.status.should.be.equal(400);
-      res.body.message.should.be.equal(errorCodes.notification.invalidTargetType.text);
+      await invalidTargetTypePostTest(() => '');
     });
   });
 
@@ -243,12 +252,7 @@ describe('Notifications', async () => {
     });
 
     it('should respond with 400 for an invalid targetType', async () => {
-      const {student, teacher, newNotification} = await preparePostChangedCourseSetup();
-      newNotification.targetType = 'some-invalid-targetType';
-
-      const res = await testHelper.commonUserPostRequest(teacher, `/user/${student._id}`, newNotification);
-      res.status.should.be.equal(400);
-      res.body.message.should.be.equal(errorCodes.notification.invalidTargetType.text);
+      await invalidTargetTypePostTest((student: IUser) => `/user/${student._id}`);
     });
   });
 
