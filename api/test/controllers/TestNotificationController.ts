@@ -131,8 +131,7 @@ describe('Notifications', async () => {
       const res = await testHelper.commonUserPostRequest(teacher, '', newNotification);
       res.status.should.be.equal(200);
 
-      const notifications = await Notification.find({changedCourse: course});
-      notifications.length.should.be.equal(course.students.length);
+      should.equal(await Notification.count({changedCourse: course}), course.students.length, 'Notification count mismatch');
     });
 
     it('should not create notifications when the course is inactive', async () => {
@@ -141,8 +140,7 @@ describe('Notifications', async () => {
       const res = await testHelper.commonUserPostRequest(teacher, '', newNotification);
       res.status.should.be.equal(200);
 
-      const notifications = await Notification.find({changedCourse: course});
-      notifications.length.should.be.equal(0);
+      should.equal(await Notification.count({changedCourse: course}), 0, 'Notification count mismatch');
     });
 
     it('should forbid notification creation for an unauthorized teacher', async () => {
@@ -174,8 +172,7 @@ describe('Notifications', async () => {
       const res = await testHelper.commonUserPostRequest(teacher, `/user/${student._id}`, newNotification);
       res.status.should.be.equal(200);
 
-      const notifications = await Notification.find({changedCourse: course});
-      notifications.length.should.be.equal(expectedCount);
+      should.equal(await Notification.count({changedCourse: course}), expectedCount, 'Notification count mismatch');
     }
 
     it('should fail if required parameters are omitted', async () => {
@@ -289,8 +286,7 @@ describe('Notifications', async () => {
       const res = await testHelper.commonUserPostRequest(teacher, `/user/${student._id}`, newNotification);
       res.status.should.be.equal(200);
 
-      const notifications = await Notification.find({user: student._id});
-      notifications.length.should.be.equal(1);
+      should.equal(await Notification.count({user: student._id}), 1, 'Notification count mismatch');
     });
 
     it('should respond with 400 for requesting text only targetType without text', async () => {
