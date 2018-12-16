@@ -53,12 +53,16 @@ async function preparePostNotFoundSetup(targetType: string) {
   return {...setup, newNotification};
 }
 
+
+/**
+ * Function that is given a student and returns a urlPostfix string for the commonUserPostRequest.
+ */
+type PostUrlPostfixAssembler = (student: IUser) => string;
+
 /**
  * 'should respond with 400 for an invalid targetType'
- *
- * @param urlPostfixAssembler Function that is given a student and returns a urlPostfix string for the commonUserPostRequest.
  */
-async function invalidTargetTypePostTest(urlPostfixAssembler: (student: IUser) => string) {
+async function invalidTargetTypePostTest(urlPostfixAssembler: PostUrlPostfixAssembler) {
   const {student, teacher, newNotification} = await preparePostChangedCourseSetup();
   newNotification.targetType = 'some-invalid-targetType';
 
@@ -69,16 +73,14 @@ async function invalidTargetTypePostTest(urlPostfixAssembler: (student: IUser) =
 
 /**
  * 'should respond with 404 for an invalid course/lecture/unit id target'
- *
- * @param urlPostfixAssembler Function that is given a student and returns a urlPostfix string for the commonUserPostRequest.
  */
-async function notFoundPostTest(targetType: string, urlPostfixAssembler: (student: IUser) => string) {
+async function notFoundPostTest(targetType: string, urlPostfixAssembler: PostUrlPostfixAssembler) {
   const {teacher, student, newNotification} = await preparePostNotFoundSetup(targetType);
   const res = await testHelper.commonUserPostRequest(teacher, urlPostfixAssembler(student), newNotification);
   res.status.should.be.equal(404);
 }
 
-function addCommonPostTests(urlPostfixAssembler: (student: IUser) => string) {
+function addCommonPostTests(urlPostfixAssembler: PostUrlPostfixAssembler) {
   it('should respond with 404 for an invalid course id target', async () => {
     await notFoundPostTest('course', urlPostfixAssembler);
   });
