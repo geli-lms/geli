@@ -28,10 +28,10 @@ async function preparePostSetup() {
 /**
  * Common setup function for the notification creation (POST) routes with a changed course.
  */
-async function preparePostChangedCourseSetup() {
+async function preparePostChangedCourseSetup(active: boolean = true) {
   const setup = await preparePostSetup();
   const {course} = setup;
-  course.active = true;
+  course.active = active;
   await course.save();
   const newNotification = {
     targetId: course.id,
@@ -133,6 +133,16 @@ describe('Notifications', async () => {
 
       const notifications = await Notification.find({changedCourse: course});
       notifications.length.should.be.equal(course.students.length);
+    });
+
+    it('should not create notifications when the course is inactive', async () => {
+      const {course, teacher, newNotification} = await preparePostChangedCourseSetup(false);
+
+      const res = await testHelper.commonUserPostRequest(teacher, '', newNotification);
+      res.status.should.be.equal(200);
+
+      const notifications = await Notification.find({changedCourse: course});
+      notifications.length.should.be.equal(0);
     });
 
     it('should forbid notification creation for an unauthorized teacher', async () => {
