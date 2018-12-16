@@ -189,11 +189,11 @@ describe('Notifications', async () => {
       res.body.message.should.be.equal(errorCodes.notification.targetUserNotFound.text);
     });
 
-    it('should create notifications for student with changedCourse and text', async () => {
+    it('should create notifications for a student, with course-targetType and text', async () => {
       await changedCourseSuccessTest(await preparePostChangedCourseSetup());
     });
 
-    it('should create notifications for student with changedCourse and text', async () => {
+    it('should create notifications for a student, with course-targetType and text', async () => {
       const setup = await preparePostChangedCourseSetup();
 
       await new NotificationSettings({
@@ -206,7 +206,7 @@ describe('Notifications', async () => {
       await changedCourseSuccessTest(setup);
     });
 
-    it('should create notifications for student with changedCourse, changedLecture, changedUnit and text', async () => {
+    it('should create notifications for a student, with unit-targetType and text', async () => {
       const {course, student, teacher} = await preparePostChangedCourseSetup();
       const lecture = await FixtureUtils.getRandomLectureFromCourse(course);
       const unit = await FixtureUtils.getRandomUnitFromLecture(lecture);
@@ -222,7 +222,7 @@ describe('Notifications', async () => {
       await changedCourseSuccessTest({course, student, teacher, newNotification});
     });
 
-    it('should create notifications for student with changedCourse and text but API_NOTIFICATION_TYPE_NONE', async () => {
+    it('should create notifications for a student, with course-targetType and text but API_NOTIFICATION_TYPE_NONE', async () => {
       const setup = await preparePostChangedCourseSetup();
 
       await new NotificationSettings({
@@ -235,7 +235,7 @@ describe('Notifications', async () => {
       await changedCourseSuccessTest(setup);
     });
 
-    it('should create notifications for student with text only', async () => {
+    it('should create notifications for a student, with text only', async () => {
       const {student, teacher} = await preparePostSetup();
 
       const newNotification = {
