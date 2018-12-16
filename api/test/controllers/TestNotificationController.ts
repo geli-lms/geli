@@ -170,12 +170,12 @@ describe('Notifications', async () => {
       student: IUser;
       newNotification: any;
     }
-    async function changedCourseSuccessTest ({course, teacher, student, newNotification}: IChangedCourseSuccessTest) {
+    async function changedCourseSuccessTest ({course, teacher, student, newNotification}: IChangedCourseSuccessTest, expectedCount = 1) {
       const res = await testHelper.commonUserPostRequest(teacher, `/user/${student._id}`, newNotification);
       res.status.should.be.equal(200);
 
       const notifications = await Notification.find({changedCourse: course});
-      notifications.length.should.be.equal(1);
+      notifications.length.should.be.equal(expectedCount);
     }
 
     it('should fail if required parameters are omitted', async () => {
@@ -247,6 +247,22 @@ describe('Notifications', async () => {
       };
 
       await changedCourseSuccessTest({course, student, teacher, newNotification});
+    });
+
+    it('should create no notifications for a student, with unit-targetType & text, if the unit is invisible', async () => {
+      const {course, student, teacher} = await preparePostChangedCourseSetup();
+      const lecture = await FixtureUtils.getRandomLectureFromCourse(course);
+      const unit = await FixtureUtils.getRandomUnitFromLecture(lecture);
+      unit.visible = false;
+      await unit.save();
+
+      const newNotification = {
+        targetId: unit.id,
+        targetType: 'unit',
+        text: 'test text'
+      };
+
+      await changedCourseSuccessTest({course, student, teacher, newNotification}, 0);
     });
 
     it('should create notifications for a student, with course-targetType & text, setting API_NOTIFICATION_TYPE_NONE', async () => {
