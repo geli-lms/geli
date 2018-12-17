@@ -33,7 +33,7 @@ export class CodeKataComponent implements OnInit {
   logs: string;
   progress: ICodeKataUnitProgress;
   isExampleCode = false;
-  now = Date.now();
+  deadlineIsOver = false;
 
   constructor(private route: ActivatedRoute,
               private snackBar: SnackBarService,
@@ -54,6 +54,8 @@ export class CodeKataComponent implements OnInit {
     }
 
     this.applyProgressData();
+
+    this.deadlineIsOver = moment(new Date()).isAfter(this.codeKataUnit.deadline);
   }
 
   async applyProgressData() {
@@ -131,12 +133,5 @@ export class CodeKataComponent implements OnInit {
       this.snackBar.open('Your code failed.');
       return false;
     }
-  }
-
-  private deadlineIsOver(): boolean {
-    if (!this.codeKataUnit) {
-      return false;
-    }
-    return moment(this.codeKataUnit.deadline).isBefore(this.now);
   }
 }
