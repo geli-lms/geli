@@ -15,17 +15,17 @@
         </mat-list-item>
         <mat-list-item
           *ngIf="!isNullOrUndefined(notification.changedCourse) && isNullOrUndefined(notification.changedLecture) && isNullOrUndefined(notification.changedUnit)"
-          [routerLink]="['/course', notification.changedCourse._id]">
+          [routerLink]="['/course', notification.changedCourse]">
           <span class="notificationItem">{{notification.text}}</span>
         </mat-list-item>
         <mat-list-item
           *ngIf="!isNullOrUndefined(notification.changedCourse) && !isNullOrUndefined(notification.changedLecture) && isNullOrUndefined(notification.changedUnit)"
-          [routerLink]="['/course', notification.changedCourse._id, 'lecture', notification.changedLecture._id]">
+          [routerLink]="['/course', notification.changedCourse, 'lecture', notification.changedLecture]">
           <span class="notificationItem">{{notification.text}}</span>
         </mat-list-item>
         <mat-list-item
           *ngIf="!isNullOrUndefined(notification.changedCourse) && !isNullOrUndefined(notification.changedUnit)"
-          [routerLink]="['/course', notification.changedCourse._id, 'unit', notification.changedUnit._id]">
+          [routerLink]="['/course', notification.changedCourse, 'unit', notification.changedUnit]">
           <span class="notificationItem">{{notification.text}}</span>
         </mat-list-item>
       </div>
