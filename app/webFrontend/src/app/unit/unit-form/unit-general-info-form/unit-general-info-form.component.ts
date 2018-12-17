@@ -43,7 +43,6 @@ export class UnitGeneralInfoFormComponent implements OnInit {
         visible: this.model.visible
       });
     }
-
   }
 
   onDateChange($event) {
