@@ -47,6 +47,9 @@ export class UnitGeneralInfoFormComponent implements OnInit {
   }
 
   onDateChange($event) {
-    this.model.date = $event;
+    const date = $event.value;
+    date.setHours(23);
+    date.setMinutes(59);
+    this.unitForm.patchValue({'deadline': date});
   }
 }
