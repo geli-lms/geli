@@ -46,6 +46,47 @@ const uploadOptions = {
 @UseBefore(passportJwtMiddleware)
 export class UnitController {
 
+  protected waitForArchiveToFinish(output: any, archive: any) {
+    return new Promise((resolve, reject) => {
+      output.on('close', () => {
+        resolve();
+      });
+
+      archive.finalize();
+    });
+  }
+
+  protected pushToLecture(lectureId: string, unit: any) {
+    return Lecture.findById(lectureId)
+      .then((lecture) => {
+        lecture.units.push(unit);
+        return lecture.save();
+      })
+      .then(() => {
+        return unit.populateUnit();
+      })
+      .then((populatedUnit) => {
+        return populatedUnit.toObject();
+      })
+      .catch((err) => {
+        throw new BadRequestError(err);
+      });
+  }
+
+  protected checkPostParam(data: any) {
+    if (!data.lectureId) {
+      throw new BadRequestError('No lecture ID was submitted.');
+    }
+
+    if (!data.model) {
+      throw new BadRequestError('No unit was submitted.');
+    }
+
+    if (!data.model._course) {
+      throw new BadRequestError('Unit has no _course set');
+    }
+  }
+
   /**
    * @api {get} /api/units/:id Request unit
    * @apiName GetUnit
@@ -217,37 +258,6 @@ export class UnitController {
     });
   }
 
-  protected pushToLecture(lectureId: string, unit: any) {
-    return Lecture.findById(lectureId)
-      .then((lecture) => {
-        lecture.units.push(unit);
-        return lecture.save();
-      })
-      .then(() => {
-        return unit.populateUnit();
-      })
-      .then((populatedUnit) => {
-        return populatedUnit.toObject();
-      })
-      .catch((err) => {
-        throw new BadRequestError(err);
-      });
-  }
-
-  protected checkPostParam(data: any) {
-    if (!data.lectureId) {
-      throw new BadRequestError('No lecture ID was submitted.');
-    }
-
-    if (!data.model) {
-      throw new BadRequestError('No unit was submitted.');
-    }
-
-    if (!data.model._course) {
-      throw new BadRequestError('Unit has no _course set');
-    }
-  }
-
   /**
    * @api {post} /api/units/:id/assignment Add assignment
    * @apiName PostAssignment
@@ -299,6 +309,7 @@ export class UnitController {
 
     try {
       assignment = {
+        _id: null,
         files: [],
         user: currentUser._id,
         submitted: false,
@@ -501,6 +512,79 @@ export class UnitController {
   }
 
   /**
+   * @api {get} /api/units/:id/assignments/:assignment Request unit
+   * @apiName GetUnit
+   * @apiGroup Unit
+   *
+   * @apiParam {String} id Unit ID.
+   * @apiPara {String} assignment Assignment id.
+   *
+   * @apiSuccess {Unit} unit Unit.
+   *
+   * @apiSuccessExample {json} Success-Response:
+   *     {
+   *         "_id": "5a037e6b60f72236d8e7c858",
+   *         "updatedAt": "2017-11-08T22:00:11.500Z",
+   *         "createdAt": "2017-11-08T22:00:11.500Z",
+   *         "name": "What is Lorem Ipsum?",
+   *         "description": "...",
+   *         "markdown": "# What is Lorem Ipsum?\n**Lorem Ipsum** is simply dummy text of the printing and typesetting industry.",
+   *         "_course": "5a037e6b60f72236d8e7c83b",
+   *         "unitCreator": "5a037e6b60f72236d8e7c834",
+   *         "type": "free-text",
+   *         "__v": 0
+   *     }
+   */
+  @Get('/:id/assignments/:assignment/files')
+  @Authorized(['teacher'])
+  async downloadFilesOfSingleAssignment(@Param('id') id: string, @Param('assignment') assignmentId: string, @Res() response: Response) {
+    const assignmentUnit = <IAssignmentUnitModel> await Unit.findById(id);
+
+    if (!assignmentUnit) {
+      throw new NotFoundError();
+    }
+
+    const assignment = assignmentUnit.assignments.find(row => `${row._id}` === assignmentId);
+    if (!assignment.files.length) {
+      return;
+    }
+
+    const user = await User.findById(assignment.user);
+    const filepath = `${config.tmpFileCacheFolder}${user.profile.lastName}_${assignmentUnit.name}.zip`;
+
+    const output = fs.createWriteStream(filepath);
+    const archive = archiver('zip', {
+      zlib: {level: 9}
+    });
+
+    archive.pipe(output);
+
+    for (const fileMetadata of assignment.files) {
+      const file = await File.findById(fileMetadata);
+
+      archive
+        .file(`uploads/${file.link}`, {
+          name: user.profile.lastName + '_' +
+            user.profile.firstName + '_' + file.name
+        });
+    }
+
+    archive.on('error', () => {
+      throw new NotFoundError();
+    });
+
+
+    await this.waitForArchiveToFinish(output, archive);
+
+    response.status(200);
+    response.setHeader('Connection', 'keep-alive');
+    response.setHeader('Access-Control-Expose-Headers', 'Content-Disposition');
+    await promisify<string, void>(response.download.bind(response))(filepath);
+
+    return response;
+  }
+
+  /**
    * @api {get} /api/units/:id/assignments Request unit
    * @apiName GetUnit
    * @apiGroup Unit
@@ -532,39 +616,34 @@ export class UnitController {
       throw new NotFoundError();
     }
 
-    const hash = await crypto.createHash('sha1').update(id + assignmentUnit.assignments.length).digest('hex');
-    const key = cache.get(hash);
-
     const filepath = config.tmpFileCacheFolder + assignmentUnit.name + '.zip';
 
-    if (key === null) {
+    const output = fs.createWriteStream(filepath);
+    const archive = archiver('zip', {
+      zlib: {level: 9}
+    });
 
-      const output = fs.createWriteStream(filepath);
-      const archive = archiver('zip', {
-        zlib: {level: 9}
-      });
+    archive.pipe(output);
 
-      archive.pipe(output);
 
-      for (const assignment of assignmentUnit.assignments) {
-        if (!assignment.files.length) { continue; }
+    for (const assignment of assignmentUnit.assignments) {
+      const user = await User.findById(assignment.user);
 
-        const file = await File.findById(assignment.files[0]);
-        const user = await User.findById(assignment.user);
-        archive.file('uploads/' + file.link,
-          {
+      for (const fileMetadata of assignment.files) {
+        const file = await File.findById(fileMetadata);
+        archive
+          .file(`uploads/${file.link}`, {
             name: user.profile.lastName + '_' +
               user.profile.firstName + '_' + file.name
           });
       }
-
-      archive.on('error', () => {
-        throw new NotFoundError();
-      });
-      archive.finalize();
-
-      cache.set(hash, assignmentUnit.name);
     }
+
+    archive.on('error', () => {
+      throw new NotFoundError();
+    });
+
+    await this.waitForArchiveToFinish(output, archive);
 
     response.setHeader('Connection', 'keep-alive');
     response.setHeader('Access-Control-Expose-Headers', 'Content-Disposition');

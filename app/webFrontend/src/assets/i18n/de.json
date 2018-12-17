@@ -86,7 +86,8 @@
     "discard": "Verwerfen",
     "dismiss": "Schließen",
     "documents": "Dokumente",
-    "download": "Download (Beta)",
+    "download": "Herunterladen",
+    "downloadBeta": "Download (Beta)",
     "duplicate": "Duplizieren",
     "edit": "Bearbeiten",
     "editProfile": "Profil bearbeiten",
@@ -396,7 +397,8 @@
       "downloadAll": "Alle Dateien herunterladen",
       "notRated": "Nicht gewertet",
       "failed": "Durchgefallen",
-      "accepted": "Bestanden"
+      "accepted": "Bestanden",
+      "numberOfFiles": "{{filesCount}} Datei(en)"
     }
   },
   "user": {

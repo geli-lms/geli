@@ -72,6 +72,13 @@ const unitSchema = new mongoose.Schema({
           ret._course = ret._course.toString();
         }
 
+        if (ret.assignments) {
+          ret.assigments = ret.assignments.map((assignment: any) => {
+            assignment._id = assignment._id.toString();
+            return assignment;
+          });
+        }
+
         if (ret.hasOwnProperty('chatRoom') && ret.chatRoom) {
           ret.chatRoom = ret.chatRoom.toString();
         }

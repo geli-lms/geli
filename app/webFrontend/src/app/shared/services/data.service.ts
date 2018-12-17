@@ -329,6 +329,11 @@ export class AssignmentService extends DataService {
         .toPromise();
   }
 
+  downloadSingleAssignment(unitId: string, assignmentId: string): Promise<Response> {
+    return this.backendService.getDownload(this.apiPath + unitId + '/assignments/' + assignmentId + '/files')
+      .toPromise();
+  }
+
 }
 
 @Injectable()

@@ -85,7 +85,8 @@
     "description": "Description",
     "discard": "Discard",
     "dismiss": "Dismiss",
-    "download": "Download (Beta)",
+    "download": "Download",
+    "downloadBeta": "Download (Beta)",
     "documents": "Documents",
     "duplicate": "Duplicate",
     "edit": "Edit",
@@ -396,7 +397,8 @@
       "downloadAll": "Download all files",
       "notRated": "Not yet rated.",
       "failed": "Failed.",
-      "accepted": "Passed."
+      "accepted": "Passed.",
+      "numberOfFiles": "{{filesCount}} file(s)"
     }
   },
   "user": {

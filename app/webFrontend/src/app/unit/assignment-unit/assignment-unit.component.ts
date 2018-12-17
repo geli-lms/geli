@@ -38,11 +38,17 @@ export class AssignmentUnitComponent implements OnInit {
   public showUploadForm: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
   data = this.showUploadForm.asObservable();
 
+  /**
+   * Used only for the student view.
+   */
   files: IFile[] = [];
+  /**
+   * Used only for the student view.
+   */
+  assignment: IAssignment;
 
   selected: Number;
 
-  assignment: IAssignment;
 
   constructor(public unitFormService: UnitFormService,
               public snackBar: SnackBarService,
@@ -99,10 +105,6 @@ export class AssignmentUnitComponent implements OnInit {
     return new Date(date).toLocaleString();
   }
 
-
-  /**
-   *
-   */
   public async startUpload() {
     try {
       if (!this.assignment) {
@@ -180,6 +182,13 @@ export class AssignmentUnitComponent implements OnInit {
       this.disableDownloadButton = false;
       this.snackBar.openLong('Woops! Something went wrong. Please try again in a few Minutes.');
     }
+  }
+
+  async downloadSingleAssignment(assignment) {
+    const {firstName, lastName} = assignment.user.profile;
+    const response = <Response> await this.assignmentService
+      .downloadSingleAssignment(this.assignmentUnit._id.toString(), assignment._id.toString());
+    saveAs(response.body, `${lastName}, ${firstName} - ${this.assignmentUnit.name}.zip`);
   }
 
   public submitStatusChange(unitId, approved) {

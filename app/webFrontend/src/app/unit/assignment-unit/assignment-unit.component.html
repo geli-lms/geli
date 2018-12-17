@@ -56,7 +56,7 @@
     {{ 'unit.assignment.performanceReasons' | translate }}
   </p>
 
-  <table>
+  <table class="w-100">
     <tr class="heading-row">
       <td>
         {{ 'common.roles.student' | translate }}
@@ -67,6 +67,7 @@
       <td>
         {{ 'file.text.files' | translate }}
       </td>
+      <td>&nbsp;</td>
       <td>
         {{ 'common.status' | translate }}
       </td>
@@ -85,11 +86,27 @@
         </span>
       </td>
       <td class="{{!assignment.submitted ? 'not-submitted' : ''}}">
-
-        <ng-container *ngFor="let file of this.files"><a href="{{ '/api/uploads/' + file.link }}"
-                                                         download="{{file.name}}">{{file.name}}</a><br/>
-        </ng-container>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Dateien anzeigen
+            </mat-panel-title>
+            <mat-panel-description>
+              {{ 'unit.assignment.numberOfFiles' | translate:{filesCount: assignment.files.length} }}
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <ng-container *ngFor="let file of assignment.files">
+            <a href="{{ '/api/uploads/' + file.link }}"
+               download="{{file.name}}">{{file.name}}</a><br/>
+          </ng-container>
+        </mat-expansion-panel>
       </td>
+      <td>
+        <button mat-raised-button color="primary" [disabled]="this.disableDownloadButton" (click)="downloadSingleAssignment(assignment)">
+          {{ 'common.download' | translate }}
+        </button>
+      </td>
+
       <td *ngIf="assignment.submitted; else notSubmitted">
         <mat-form-field>
           <mat-select placeholder="{{ 'common.status' | translate }}" value="{{assignment.checked}}">
