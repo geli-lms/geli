@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - More predefined custom containers. [#996](https://github.com/geli-lms/geli/issues/996)
 - Styled code snippets. [#1017](https://github.com/geli-lms/geli/issues/1017)
 - `LectureController` success (`200`), access denial (`403`) and not found (`404`) unit tests for all routes. [#1041](https://github.com/geli-lms/geli/issues/1041)
+- Various `NotificationController` unit tests (`200`s, `400`s, `403`s, `404`s). [#1065](https://github.com/geli-lms/geli/issues/1065)
 - `TestHelper` request methods for `PUT` & `DELETE`. [#1041](https://github.com/geli-lms/geli/issues/1041)
 - CodeKata validation service. [#844](https://github.com/geli-lms/geli/issues/844)
 - Course: Added switch for file <-> video unit. [#912](https://github.com/geli-lms/geli/issues/912)
@@ -26,14 +27,28 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
 - Update `mongoose` to `5.3.x`. [#1003](https://github.com/geli-lms/geli/issues/1003) [#1004](https://github.com/geli-lms/geli/pull/1004) [#1044](https://github.com/geli-lms/geli/pull/1044)
 - Refactor `LectureController` `GET`/`POST`/`PUT` routes to use `async`/`await`. [#1041](https://github.com/geli-lms/geli/issues/1041)
+- Refactor `NotificationController` unit tests in general. [#1065](https://github.com/geli-lms/geli/issues/1065)
+- Refactor `NotificationController` to utilize `.orFail` and the `errorCodes` file. [#1065](https://github.com/geli-lms/geli/issues/1065)
+- Refactor `ExportController` & `LectureController` to utilize `.orFail`. [#1065](https://github.com/geli-lms/geli/issues/1065)
 - Sanitize `{post} /api/lecture/` route parameters by reducing the arbitrary `ILecture` input to `name` & `description`. [#1041](https://github.com/geli-lms/geli/issues/1041)
+- Sanitize `NotificationController` `POST` route parameters by taking a `targetType` and `targetId` instead of the separate `changedCourse`/`changedLecture`/`changedUnit` which needed a _(missing)_ consistency check. [#1065](https://github.com/geli-lms/geli/issues/1065)
+- Empty success response object in the two `NotificationController` `POST` routes. [#1065](https://github.com/geli-lms/geli/issues/1065)
+
+### Removed
+- Unused `Notification` class in the front-end. [#1065](https://github.com/geli-lms/geli/issues/1065)
 
 ### Fixed
-- Some incorrect `FixtureUtils` return types. [#1041](https://github.com/geli-lms/geli/issues/1041)
+- Some incorrect `FixtureUtils` return types. [#1041](https://github.com/geli-lms/geli/issues/1041) [#1065](https://github.com/geli-lms/geli/issues/1065)
+- `LectureController` `404` error handling. [#1041](https://github.com/geli-lms/geli/issues/1041)
+- `NotificationController` `404` error handling. [#1065](https://github.com/geli-lms/geli/issues/1065)
 - Course list broken when course image in invalid state. [#1053](https://github.com/geli-lms/geli/issues/1053)
 
 ### Security
 - Fix multiple security issues of the `LectureController`. [#1041](https://github.com/geli-lms/geli/issues/1041)
+- Fix missing `teacher` authorization check for the two `NotificationController` `POST` routes. [#1065](https://github.com/geli-lms/geli/issues/1065)
+- Fix missing `NotificationController` `POST` `teacher` authorization check. [#1065](https://github.com/geli-lms/geli/issues/1065)
+- Fix `{get} /api/notification/` response leaks by introducing `INotificationView`, a reduced and safe variant of the `INotification` interface. [#1065](https://github.com/geli-lms/geli/issues/1065)
+- Secure `{get} /api/notification/` by using the `@CurrentUser` instead of allowing arbitrary id requests. [#1065](https://github.com/geli-lms/geli/issues/1065)
 
 ## [[0.8.3](https://github.com/geli-lms/geli/releases/tag/v0.8.3)] - 2018-11-29 - WS 18/19 🚀-Release
 ### Added

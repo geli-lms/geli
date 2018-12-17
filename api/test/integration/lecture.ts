@@ -101,7 +101,7 @@ describe('Lecture', () => {
       res.status.should.be.equal(403);
     });
 
-    it('should respond with 404 for an invalid lecture id', async () => {
+    it('should respond with 404 for an invalid course id', async () => {
       const res = await lecturePostTest(await lectureNotFoundTestSetup());
       res.status.should.be.equal(404);
     });
