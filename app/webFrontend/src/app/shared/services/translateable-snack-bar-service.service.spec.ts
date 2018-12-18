@@ -33,11 +33,11 @@ describe('TranslatableSnackBarServiceService', () => {
 
     const translatableSnackBar: TranslatableSnackBarServiceService = TestBed.get(TranslatableSnackBarServiceService);
 
-    translatableSnackBar.open(['awesome message']);
+    translatableSnackBar.open('awesome message');
     await expect(snackBar.open)
       .toHaveBeenCalledWith('translated awesome message', SnackBarService.defaultDuration);
 
-    translatableSnackBar.open(['awesome message from {{user}}'], {user: 'max'});
+    translatableSnackBar.open('awesome message from {{user}}', {user: 'max'});
     await expect(snackBar.open)
       .toHaveBeenCalledWith('translated awesome message from max', SnackBarService.defaultDuration);
   });
@@ -52,7 +52,7 @@ describe('TranslatableSnackBarServiceService', () => {
     });
 
     const translatableSnackBar: TranslatableSnackBarServiceService = TestBed.get(TranslatableSnackBarServiceService);
-    translatableSnackBar.openShort(['awesome short message']);
+    translatableSnackBar.openShort('awesome short message');
 
     await expect(snackBar.open)
       .toHaveBeenCalledWith('translated awesome short message', SnackBarService.durationShort);
@@ -69,7 +69,7 @@ describe('TranslatableSnackBarServiceService', () => {
 
 
     const translatableSnackBar: TranslatableSnackBarServiceService = TestBed.get(TranslatableSnackBarServiceService);
-    translatableSnackBar.openLong(['awesome long message']);
+    translatableSnackBar.openLong('awesome long message');
 
     await expect(snackBar.open)
       .toHaveBeenCalledWith('translated awesome long message', SnackBarService.durationLong);
