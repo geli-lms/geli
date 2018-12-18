@@ -53,13 +53,13 @@ export class LoginComponent implements OnInit {
         this.showProgress.toggleLoadingGlobal(false);
         this.loading = false;
 
-        this.snackBar.open('auth.loginSuccess');
+        this.snackBar.open('auth.login.success');
       })
       .catch(response => {
         this.showProgress.toggleLoadingGlobal(false);
         this.loading = false;
 
-        this.snackBar.open('auth.loginFailed.' + response.error.message);
+        this.snackBar.open('auth.login.failed.' + response.error.message);
       });
   }
 

@@ -17,16 +17,18 @@
     }
   },
   "auth": {
+    "login": {
+      "failed": {
+        "couldNotBeVerified": "Login fehlgeschlagen: Ihre Logindaten konnten nicht verifiziert werden.",
+        "notActiveYet": "Login fehlgeschlagen: Ihr Account wurde noch nicht aktiviert.",
+        "unknown": "Login fehlgeschlagen: Es ist ein unbekannter Fehler aufgetreten."
+      },
+      "success": "Login erfolgreich"
+    },
     "changePassword": "Passwort ändern",
     "confirmPassword": "Passwort bestätigen",
     "forgotPassword": "Passwort vergessen",
     "generatePassword": "Neues Passwort generieren",
-    "loginFailed": {
-      "couldNotBeVerified": "Login fehlgeschlagen: Ihre Logindaten konnten nicht verifiziert werden.",
-      "notActiveYet": "Login fehlgeschlagen: Ihr Account wurde noch nicht aktiviert.",
-      "unknown": "Login fehlgeschlagen: Es ist ein unbekannter Fehler aufgetreten."
-    },
-    "loginSuccess": "Login erfolgreich",
     "registration": {
       "acceptCheckboxes": "Ich akzeptiere gelis ",
       "back": "Zurück zur Startseite",

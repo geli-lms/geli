@@ -17,16 +17,18 @@
     }
   },
   "auth": {
+    "login": {
+      "failed": {
+        "couldNotBeVerified": "Login failed: Your login details could not be verified.",
+        "notActiveYet": "Login failed: Your account has not been activated yet.",
+        "unknown": "Login failed: An unknown error occurred."
+      },
+      "success": "Login successful"
+    },
     "changePassword": "Change password",
     "confirmPassword": "Confirm password",
     "forgotPassword": "Forgot password",
     "generatePassword": "Generate new password",
-    "loginFailed": {
-      "couldNotBeVerified": "Login failed: Your login details could not be verified.",
-      "notActiveYet": "Login failed: Your account has not been activated yet.",
-      "unknown": "Login failed: An unknown error occurred."
-    },
-    "loginSuccess": "Login successful",
     "registration": {
       "acceptCheckboxes": "I accept gelis ",
       "back": "Back to frontpage",
