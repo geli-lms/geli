@@ -25,6 +25,16 @@
       },
       "success": "Login successful"
     },
+    "reset": {
+      "emailNotValid": "The email address you entered is not valid.",
+      "clickHereToReset": "Click here to reset password.",
+      "requestReset": "Request password reset",
+      "requestSuccess": "Check your mails",
+      "requestFailed": "Request failed",
+      "success": "Your password has been reset",
+      "failed": "Your password could not be reset",
+      "reset": "Reset"
+    },
     "changePassword": "Change password",
     "confirmPassword": "Confirm password",
     "forgotPassword": "Forgot password",
@@ -47,14 +57,9 @@
       "successful": "Resend activation was successful.",
       "tooltipResendAction": "Click here to request new activation link."
     },
-    "resetPassword": {
-      "requestReset": "Request password reset",
-      "reset": "Reset"
-    },
     "tooltip": {
       "currentPassword": "Current password",
-      "ForgotPassword": "Click here to request a new password.",
-      "ResetPassword": "Click here to reset password."
+      "ForgotPassword": "Click here to request a new password."
     }
   },
   "code-kata": {

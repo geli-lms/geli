@@ -25,6 +25,16 @@
       },
       "success": "Login erfolgreich"
     },
+    "reset": {
+      "emailNotValid": "Die eingegebene E-Mail-Adresse ist ungültig.",
+      "clickHereToReset": "Klicken Sie hier, um das Passwort zurückzusetzen.",
+      "requestReset": "Passwort zurücksetzen",
+      "requestSuccess": "Bitte überprüfe deine E-Mails",
+      "requestFailed": "Anfrage fehlgeschlagen",
+      "success": "Dein Passwort wurde erfolgreich geändert",
+      "failed": "Dein Password konnte nicht geändert werden",
+      "reset": "Zurücksetzen"
+    },
     "changePassword": "Passwort ändern",
     "confirmPassword": "Passwort bestätigen",
     "forgotPassword": "Passwort vergessen",
@@ -47,14 +57,9 @@
       "successful": "Aktivierung erneut senden erfolgreich.",
       "tooltipResendAction": "Klicken Sie hier, um einen neuen Aktivierungslink anzufordern."
     },
-    "resetPassword": {
-      "requestReset": "Passwort zurücksetzen",
-      "reset": "Zurücksetzen"
-    },
     "tooltip": {
       "currentPassword": "Aktuelles Passwort",
-      "ForgotPassword": "Klicken Sie hier, um ein neues Passwort anzufordern.",
-      "ResetPassword": "Klicken Sie hier, um das Passwort zurückzusetzen."
+      "ForgotPassword": "Klicken Sie hier, um ein neues Passwort anzufordern."
     }
   },
   "code-kata": {

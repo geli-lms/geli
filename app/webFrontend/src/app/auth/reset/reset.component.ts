@@ -3,11 +3,11 @@ import {Component, OnInit} from '@angular/core';
 import {AuthenticationService} from '../../shared/services/authentication.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ShowProgressService} from '../../shared/services/show-progress.service';
-import {SnackBarService} from '../../shared/services/snack-bar.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {isNullOrUndefined} from 'util';
 import {TitleService} from '../../shared/services/title.service';
 import {emailValidator} from '../../shared/validators/validators';
+import {TranslatableSnackBarServiceService} from '../../shared/services/translatable-snack-bar-service.service';
 
 @Component({
   templateUrl: './reset.component.html',
@@ -25,7 +25,7 @@ export class ResetComponent implements OnInit {
   constructor(private router: Router,
               private authenticationService: AuthenticationService,
               private showProgress: ShowProgressService,
-              private snackBar: SnackBarService,
+              private snackBar: TranslatableSnackBarServiceService,
               private formBuilder: FormBuilder,
               private route: ActivatedRoute,
               private titleService: TitleService) {
@@ -45,7 +45,7 @@ export class ResetComponent implements OnInit {
 
   requestReset() {
     if (!this.resetForm.valid) {
-      this.snackBar.open('The email address you entered is not valid.');
+      this.snackBar.open('auth.reset.emailNotValid');
       return;
     }
 
@@ -54,9 +54,9 @@ export class ResetComponent implements OnInit {
     this.authenticationService.requestReset(this.resetForm.value.email.replace(/\s/g, '').toLowerCase())
     .then(
       (val) => {
-        this.snackBar.open('Check your mails');
+        this.snackBar.open('auth.reset.requestSuccess');
       }, (error) => {
-        this.snackBar.open('Request failed');
+        this.snackBar.open('auth.reset.requestFailed');
       })
     .then(() => {
       this.showProgress.toggleLoadingGlobal(false);
@@ -71,9 +71,9 @@ export class ResetComponent implements OnInit {
     .then(
       (val) => {
         this.router.navigate(['/login']);
-        this.snackBar.open('Your password has been reset');
+        this.snackBar.open('auth.reset.success');
       }, (error) => {
-        this.snackBar.open('Your password could not be reset');
+        this.snackBar.open('auth.reset.failed');
       })
     .then(() => {
       this.showProgress.toggleLoadingGlobal(false);
