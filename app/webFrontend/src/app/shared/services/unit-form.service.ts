@@ -100,13 +100,11 @@ export class UnitFormService {
       onDone();
       // create notification
       if (this.model.visible) {
-        this.notificationService.createItem(
-          {
-            changedCourse: this.course,
-            changedLecture: this.lecture._id,
-            changedUnit: responseUnit,
-            text: notifyMessage
-          });
+        this.notificationService.createItem({
+          targetId: responseUnit._id,
+          targetType: 'unit',
+          text: notifyMessage
+        });
       }
     } catch (err) {
       const snackErrMessage = `Couldn't ${isUpdate ? 'update' : 'create'} Unit '${this.model.name ? `'${this.model.name}'` : ''}'`;

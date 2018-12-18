@@ -212,9 +212,8 @@ export class CourseManageContentComponent implements OnInit, OnDestroy {
     });
     this.dataSharingService.setDataForKey('lecture-create-mode', false);
     await this.notificationService.createItem({
-      changedCourse: this.course,
-      changedLecture: newLecture._id,
-      changedUnit: null,
+      targetId: newLecture._id,
+      targetType: 'lecture',
       text: 'Course ' + this.course.name + ' has a new lecture.'
     });
     await this.reloadCourse();

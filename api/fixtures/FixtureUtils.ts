@@ -144,7 +144,7 @@ export class FixtureUtils {
     return this.getRandom<IUnitModel>(array, hash);
   }
 
-  public static async getRandomUnitFromLecture(lecture: ILecture, hash?: string): Promise<IUnit> {
+  public static async getRandomUnitFromLecture(lecture: ILecture, hash?: string): Promise<IUnitModel> {
     const unitId = await this.getRandom<IUnit>(lecture.units, hash);
     return Unit.findById(unitId);
   }
