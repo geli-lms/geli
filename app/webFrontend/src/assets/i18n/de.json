@@ -21,11 +21,10 @@
     "confirmPassword": "Passwort bestätigen",
     "forgotPassword": "Passwort vergessen",
     "generatePassword": "Neues Passwort generieren",
-    "loginFailed": "Login fehlgeschlagen",
-    "loginFailedError": {
-      "couldNotBeVerified": "Ihre Logindaten konnten nicht verifiziert werden. Bitte versuchen Sie es noch ein mal.",
-      "notActiveYet": "Ihr Account wurde noch nicht aktiviert.",
-      "unknown": "Es ist ein unbekannter Fehler aufgetreten."
+    "loginFailed": {
+      "couldNotBeVerified": "Login fehlgeschlagen: Ihre Logindaten konnten nicht verifiziert werden.",
+      "notActiveYet": "Login fehlgeschlagen: Ihr Account wurde noch nicht aktiviert.",
+      "unknown": "Login fehlgeschlagen: Es ist ein unbekannter Fehler aufgetreten."
     },
     "loginSuccess": "Login erfolgreich",
     "registration": {

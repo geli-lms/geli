@@ -21,11 +21,10 @@
     "confirmPassword": "Confirm password",
     "forgotPassword": "Forgot password",
     "generatePassword": "Generate new password",
-    "loginFailed": "Login failed",
-    "loginFailedError": {
-      "couldNotBeVerified": "Your login details could not be verified. Please try again.",
-      "notActiveYet": "Your account has not been activated yet.",
-      "unknown": "An unknown error occured."
+    "loginFailed": {
+      "couldNotBeVerified": "Login failed: Your login details could not be verified.",
+      "notActiveYet": "Login failed: Your account has not been activated yet.",
+      "unknown": "Login failed: An unknown error occurred."
     },
     "loginSuccess": "Login successful",
     "registration": {

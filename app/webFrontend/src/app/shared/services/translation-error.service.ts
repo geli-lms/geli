@@ -9,8 +9,6 @@ export class TranslationErrorService implements MissingTranslationHandler {
   }
 
   handle(params: MissingTranslationHandlerParams) {
-    if (params.key.length > 3) {
-      this.errorHandler.handleError(`Missing Translation: ${params.key}`);
-    }
+    this.errorHandler.handleError(`Missing Translation: ${params.key}`);
   }
 }
