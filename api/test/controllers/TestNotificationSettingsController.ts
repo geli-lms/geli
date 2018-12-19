@@ -100,18 +100,20 @@ describe('NotificationSettings', async () => {
         'notificationType': API_NOTIFICATION_TYPE_ALL_CHANGES, 'emailNotification': false
       }).save();
 
-      settings.notificationType = API_NOTIFICATION_TYPE_NONE;
-      settings.emailNotification = true;
-
-      const res = await testHelper.commonUserPutRequest(student, `/${settings._id}`, settings);
+      const res = await testHelper.commonUserPutRequest(student, '/', {
+        course: settings.course,
+        notificationType: API_NOTIFICATION_TYPE_NONE,
+        emailNotification: true
+      });
       res.should.have.status(200);
       res.body.notificationType.should.be.equal(API_NOTIFICATION_TYPE_NONE);
       res.body.emailNotification.should.be.equal(true);
       res.body.should.have.property('course');
       res.body._id.should.be.a('string');
+      res.body._id.should.be.equal(settings.id);
     });
 
-    it('should fail when missing course or user', async () => {
+    it('should fail when missing course', async () => {
       const course = await FixtureUtils.getRandomCourse();
       const student = course.students[Math.floor(Math.random() * course.students.length)];
 
@@ -121,7 +123,7 @@ describe('NotificationSettings', async () => {
         'emailNotification': false
       }).save();
 
-      const res = await testHelper.commonUserPutRequest(student, `/${settings._id}`, []);
+      const res = await testHelper.commonUserPutRequest(student, '/', {});
       res.should.have.status(400);
     });
   });

@@ -104,7 +104,11 @@ export class UserSettingsComponent implements OnInit {
           settings.emailNotification = false;
         }
 
-        await this.notificationSettingsService.updateItem(settings);
+        await this.notificationSettingsService.updateItem({
+          course: settings.course,
+          notificationType: settings.notificationType,
+          emailNotification: settings.emailNotification
+        });
       } catch (err) {
         if (errors.indexOf(err.error.message) === -1) {
           errors.push(err.error.message);

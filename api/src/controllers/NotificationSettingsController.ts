@@ -1,4 +1,5 @@
-import {Authorized, BadRequestError, Body, Get, JsonController, Param, Post, Put, UseBefore, CurrentUser} from 'routing-controllers';
+import {Authorized, BadRequestError, Body, BodyParam, Get,
+        JsonController, Param, Post, Put, UseBefore, CurrentUser} from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import {
   API_NOTIFICATION_TYPE_ALL_CHANGES,
@@ -13,7 +14,7 @@ import {IUser} from '../../../shared/models/IUser';
 export class NotificationSettingsController {
 
   /**
-   * @api {get} /api/notificationSettings/ Get own notification settings
+   * @api {get} /api/notificationSettings/ Get own notification settings for all courses
    * @apiName GetNotificationSettings
    * @apiGroup NotificationSettings
    * @apiPermission student
@@ -45,15 +46,16 @@ export class NotificationSettingsController {
   }
 
   /**
-   * @api {put} /api/notificationSettings/user/:id Update notification settings
+   * @api {put} /api/notificationSettings/ Set notification settings for a course (i.e. create or update them)
    * @apiName PutNotificationSettings
    * @apiGroup NotificationSettings
    * @apiPermission student
    * @apiPermission teacher
    * @apiPermission admin
    *
-   * @apiParam {String} id ID of notification settings.
-   * @apiParam {INotificationSettingsView} notificationSettings New notification settings.
+   * @apiParam {String} course ID of the course for which notification settings are to be set.
+   * @apiParam {String} notificationType New value for the primary notification setting (none/relatedChanges/allChanges).
+   * @apiParam {String} emailNotification New value for the email notification setting.
    *
    * @apiSuccess {INotificationSettingsView} settings Updated notification settings.
    *
@@ -64,19 +66,17 @@ export class NotificationSettingsController {
    *         "notificationType": "allChanges",
    *         "emailNotification": false
    *     }
-   *
-   * @apiError BadRequestError notification needs fields course and user
    */
   @Authorized(['student', 'teacher', 'admin'])
-  @Put('/:id')
-  async updateNotificationSettings(@Param('id') id: string,
-                                  @Body() notificationSettings: INotificationSettingsView,
-                                  @CurrentUser() currentUser: IUser) {
-    if (!notificationSettings.course) {
-      throw new BadRequestError('Notification settings request needs course field');
-    }
-    const settings: INotificationSettingsModel =
-      await NotificationSettings.findOneAndUpdate({'_id': id}, {...notificationSettings, user: currentUser._id}, {new: true});
+  @Put('/')
+  async putNotificationSettings(@BodyParam('course', {required: true}) course: string,
+                                @BodyParam('notificationType', {required: true}) notificationType: string,
+                                @BodyParam('emailNotification', {required: true}) emailNotification: string,
+                                @CurrentUser() currentUser: IUser) {
+    const settings = await NotificationSettings.findOneAndUpdate(
+        {user: currentUser, course},
+        {user: currentUser, course, notificationType, emailNotification},
+        {new: true, upsert: true});
     return settings.forView();
   }
 
