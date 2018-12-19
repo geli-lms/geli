@@ -1,4 +1,5 @@
 import * as chai from 'chai';
+import chaiHttp = require('chai-http');
 import {TestHelper} from '../TestHelper';
 import {FixtureUtils} from '../../fixtures/FixtureUtils';
 import {
@@ -6,7 +7,7 @@ import {
   API_NOTIFICATION_TYPE_NONE,
   NotificationSettings
 } from '../../src/models/NotificationSettings';
-import chaiHttp = require('chai-http');
+import {IUser} from '../../../shared/models/IUser';
 
 chai.use(chaiHttp);
 const BASE_URL = '/api/notificationSettings';
@@ -49,50 +50,37 @@ describe('NotificationSettings', async () => {
   });
 
   describe(`PUT ${BASE_URL}`, () => {
-    it('should create notification settings', async () => {
+    async function putTestRequest (user: IUser,
+        courseId: string,
+        notificationType = API_NOTIFICATION_TYPE_ALL_CHANGES,
+        emailNotification = false) {
+      return await testHelper.commonUserPutRequest(user, '', {
+        course: courseId,
+        notificationType,
+        emailNotification
+      });
+    }
+
+    it('should create & update notification settings', async () => {
       const student = await FixtureUtils.getRandomStudent();
       const course = await FixtureUtils.getRandomCourse();
       course.active = true;
       course.students.push(student);
       await course.save();
 
-      const res = await testHelper.commonUserPutRequest(student, '', {
-        course: course.id,
-        notificationType: API_NOTIFICATION_TYPE_ALL_CHANGES,
-        emailNotification: false
-      });
-      res.status.should.be.equals(200);
-    });
-
-    it('should update notification settings', async () => {
-      const student = await FixtureUtils.getRandomStudent();
-      const course = await FixtureUtils.getRandomCourse();
-      course.active = true;
-      course.students.push(student);
-      await course.save();
-
-      await new NotificationSettings({
-        'user': student, 'course': course,
-        'notificationType': API_NOTIFICATION_TYPE_ALL_CHANGES, 'emailNotification': false
-      }).save();
-
-      const res = await testHelper.commonUserPutRequest(student, '', {
-        course: course.id,
-        notificationType: API_NOTIFICATION_TYPE_NONE,
-        emailNotification: true
-      });
-      res.should.have.status(200);
+      for (const emailNotification of [false, true]) {
+        for (const notificationType of [API_NOTIFICATION_TYPE_NONE, API_NOTIFICATION_TYPE_ALL_CHANGES]) {
+          const res = await putTestRequest(student, course.id, notificationType, emailNotification);
+          res.should.have.status(200);
+          const settings = await NotificationSettings.findOne({user: student._id, course});
+          settings.notificationType.should.be.equal(notificationType);
+          settings.emailNotification.should.be.equal(emailNotification);
+        }
+      }
     });
 
     it('should fail with missing parameters', async () => {
-      const course = await FixtureUtils.getRandomCourse();
-      const student = course.students[Math.floor(Math.random() * course.students.length)];
-
-      await new NotificationSettings({
-        'course': course,
-        'notificationType': API_NOTIFICATION_TYPE_ALL_CHANGES,
-        'emailNotification': false
-      }).save();
+      const student = await FixtureUtils.getRandomStudent();
 
       const res = await testHelper.commonUserPutRequest(student, '', {});
       res.should.have.status(400);
@@ -102,22 +90,14 @@ describe('NotificationSettings', async () => {
       const course = await FixtureUtils.getRandomCourse();
       const teacher = await FixtureUtils.getUnauthorizedTeacherForCourse(course);
 
-      const res = await testHelper.commonUserPutRequest(teacher, '', {
-        course: course.id,
-        notificationType: API_NOTIFICATION_TYPE_NONE,
-        emailNotification: true
-      });
+      const res = await putTestRequest(teacher, course.id);
       res.should.have.status(403);
     });
 
     it('should fail for a non-existent course id', async () => {
       const student = await FixtureUtils.getRandomStudent();
 
-      const res = await testHelper.commonUserPutRequest(student, '', {
-        course: '000000000000000000000000',
-        notificationType: API_NOTIFICATION_TYPE_NONE,
-        emailNotification: true
-      });
+      const res =  await putTestRequest(student, '000000000000000000000000');
       res.should.have.status(404);
     });
   });
