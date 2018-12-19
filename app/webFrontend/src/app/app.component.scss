@@ -70,15 +70,29 @@
 }
 
 .special-style {
-  background: url('/assets/people-woman-coffee-meeting.jpg') no-repeat;
+  background-image: url('/assets/background-home--medium.jpeg');
   background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  @media screen and (min-width: $bp-width--sm) {
+    background-image: url('/assets/background-home--large.jpeg') no-repeat;
+  }
+
+  @media screen and (min-width: $bp-width--xl) {
+    background-image: url('/assets/background-home--xlarge.jpeg') no-repeat;
+  }
+
+  @media screen and (min-width: $bp-width--xxl) {
+    background-image: url('/assets/background-home--xxlarge.jpeg') no-repeat;
+  }
 }
 
-.app-notification{
+.app-notification {
   padding-right: 16px;
 }
 
-.menu-button{
+.menu-button {
   margin-left: 8px;
 }
 
