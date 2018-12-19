@@ -51,15 +51,10 @@ export class NotificationSettingsController {
    * @apiParam {String} notificationType New value for the primary notification setting (none/relatedChanges/allChanges).
    * @apiParam {String} emailNotification New value for the email notification setting.
    *
-   * @apiSuccess {INotificationSettingsView} settings Updated notification settings.
+   * @apiSuccess {Object} result Empty object.
    *
    * @apiSuccessExample {json} Success-Response:
-   *     {
-   *         "_id": "5ab2829142949f000857b8f8",
-   *         "course": "5be0691ee3859d38308dab19",
-   *         "notificationType": "allChanges",
-   *         "emailNotification": false
-   *     }
+   *     {}
    */
   @Authorized(['student', 'teacher', 'admin'])
   @Put('/')
@@ -67,10 +62,10 @@ export class NotificationSettingsController {
                                 @BodyParam('notificationType', {required: true}) notificationType: string,
                                 @BodyParam('emailNotification', {required: true}) emailNotification: string,
                                 @CurrentUser() currentUser: IUser) {
-    const settings = await NotificationSettings.findOneAndUpdate(
+    await NotificationSettings.findOneAndUpdate(
         {user: currentUser, course},
         {user: currentUser, course, notificationType, emailNotification},
         {new: true, upsert: true});
-    return settings.forView();
+    return {};
   }
 }

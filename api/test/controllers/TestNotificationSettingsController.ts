@@ -58,11 +58,7 @@ describe('NotificationSettings', async () => {
         notificationType: API_NOTIFICATION_TYPE_ALL_CHANGES,
         emailNotification: false
       });
-
       res.status.should.be.equals(200);
-      res.body.notificationType.should.be.equal(API_NOTIFICATION_TYPE_ALL_CHANGES);
-      res.body.emailNotification.should.be.equal(false);
-      res.body.should.have.property('course');
     });
 
     it('should update notification settings', async () => {
@@ -83,9 +79,6 @@ describe('NotificationSettings', async () => {
         emailNotification: true
       });
       res.should.have.status(200);
-      res.body.notificationType.should.be.equal(API_NOTIFICATION_TYPE_NONE);
-      res.body.emailNotification.should.be.equal(true);
-      res.body.should.have.property('course');
     });
 
     it('should fail with missing parameters', async () => {
