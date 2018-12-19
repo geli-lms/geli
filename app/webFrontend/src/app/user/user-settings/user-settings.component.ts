@@ -5,11 +5,10 @@ import {MatTableDataSource} from '@angular/material';
 import {SnackBarService} from '../../shared/services/snack-bar.service';
 import {SelectionModel} from '@angular/cdk/collections';
 import {
-  INotificationSettings,
+  INotificationSettingsView,
   NOTIFICATION_TYPE_ALL_CHANGES,
   NOTIFICATION_TYPE_NONE
-} from '../../../../../../shared/models/INotificationSettings';
-import {NotificationSettings} from '../../models/NotificationSettings';
+} from '../../../../../../shared/models/INotificationSettingsView';
 import {ICourseDashboard} from '../../../../../../shared/models/ICourseDashboard';
 
 @Component({
@@ -24,7 +23,7 @@ export class UserSettingsComponent implements OnInit {
   dataSource: MatTableDataSource<ICourseDashboard>;
   notificationSelection = new SelectionModel<ICourseDashboard>(true, []);
   emailSelection = new SelectionModel<ICourseDashboard>(true, []);
-  notificationSettings: INotificationSettings[];
+  notificationSettings: INotificationSettingsView[];
 
   constructor(private userService: UserService,
               private courseService: CourseService,
@@ -58,8 +57,8 @@ export class UserSettingsComponent implements OnInit {
       return;
     }
 
-    this.notificationSettings.forEach((setting: INotificationSettings) => {
-      const course = this.myCourses.find(tmp => tmp._id === setting.course._id);
+    this.notificationSettings.forEach((setting: INotificationSettingsView) => {
+      const course = this.myCourses.find(tmp => tmp._id === setting.course);
 
       if (course === undefined) {
         return;
@@ -80,10 +79,16 @@ export class UserSettingsComponent implements OnInit {
 
     for (const course of this.myCourses) {
       try {
-        let settings = this.notificationSettings.find(tmp => tmp.course._id === course._id);
+        let settings = this.notificationSettings.find(tmp => tmp.course === course._id);
 
         if (settings === undefined) {
-          settings = await this.notificationSettingsService.createItem(new NotificationSettings(this.userService.user, course));
+          settings = {
+            _id: undefined,
+            course: course._id,
+            notificationType: NOTIFICATION_TYPE_ALL_CHANGES,
+            emailNotification: false
+          };
+          settings = await this.notificationSettingsService.createItem(settings);
           this.notificationSettings.push(settings);
         }
 

@@ -28,12 +28,10 @@ describe('NotificationSettings', async () => {
       res.status.should.be.equals(200);
       res.body.notificationType.should.be.equal(API_NOTIFICATION_TYPE_ALL_CHANGES);
       res.body.emailNotification.should.be.equal(false);
-      res.body.should.have.property('user');
       res.body.should.have.property('course');
       res.body._id.should.be.a('string');
-      const notificationSettings = await NotificationSettings.findById(res.body._id);
-      notificationSettings.user.toString().should.be.equal(newSettings.user._id.toString());
-      notificationSettings.course.toString().should.be.equal(newSettings.course._id.toString());
+      const notificationSettings = (await NotificationSettings.findById(res.body._id)).forView();
+      notificationSettings.course.should.be.equal(res.body.course);
     });
 
     it('should fail when already exist', async () => {
@@ -82,8 +80,7 @@ describe('NotificationSettings', async () => {
       res.should.have.status(200);
       res.body.forEach((notificationSettings: any) => {
         notificationSettings._id.should.be.a('string');
-        notificationSettings.user.toString().should.be.a('string');
-        notificationSettings.course.toString().should.be.a('string');
+        notificationSettings.course.should.be.a('string');
         notificationSettings.notificationType.should.be.a('string');
         notificationSettings.emailNotification.should.be.a('boolean');
       });
@@ -110,7 +107,6 @@ describe('NotificationSettings', async () => {
       res.should.have.status(200);
       res.body.notificationType.should.be.equal(API_NOTIFICATION_TYPE_NONE);
       res.body.emailNotification.should.be.equal(true);
-      res.body.should.have.property('user');
       res.body.should.have.property('course');
       res.body._id.should.be.a('string');
     });
@@ -120,7 +116,6 @@ describe('NotificationSettings', async () => {
       const student = course.students[Math.floor(Math.random() * course.students.length)];
 
       const settings = await new NotificationSettings({
-        'user': student,
         'course': course,
         'notificationType': API_NOTIFICATION_TYPE_ALL_CHANGES,
         'emailNotification': false
