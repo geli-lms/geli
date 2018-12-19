@@ -88,23 +88,12 @@ export class UserSettingsComponent implements OnInit {
           this.notificationSettings.push(settings);
         }
 
-        if (this.notificationSelection.isSelected(course)) {
-          settings.notificationType = NOTIFICATION_TYPE_ALL_CHANGES;
-        } else {
-          settings.notificationType = NOTIFICATION_TYPE_NONE;
-        }
+        settings.notificationType = this.notificationSelection.isSelected(course)
+          ? NOTIFICATION_TYPE_ALL_CHANGES
+          : NOTIFICATION_TYPE_NONE;
+        settings.emailNotification = this.emailSelection.isSelected(course);
 
-        if (this.emailSelection.isSelected(course)) {
-          settings.emailNotification = true;
-        } else {
-          settings.emailNotification = false;
-        }
-
-        await this.notificationSettingsService.updateItem({
-          course: settings.course,
-          notificationType: settings.notificationType,
-          emailNotification: settings.emailNotification
-        });
+        await this.notificationSettingsService.updateItem(settings);
       } catch (err) {
         if (errors.indexOf(err.error.message) === -1) {
           errors.push(err.error.message);
