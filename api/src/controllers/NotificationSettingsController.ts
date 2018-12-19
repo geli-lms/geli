@@ -62,6 +62,8 @@ export class NotificationSettingsController {
                                 @BodyParam('notificationType', {required: true}) notificationType: string,
                                 @BodyParam('emailNotification', {required: true}) emailNotification: string,
                                 @CurrentUser() currentUser: IUser) {
+    // NOTE: This COULD also check that the currentUser is actually allowed to access the given course,
+    //       but since storing notification settings shouldn't be a security issue, this can be omitted.
     await NotificationSettings.findOneAndUpdate(
         {user: currentUser, course},
         {user: currentUser, course, notificationType, emailNotification},
