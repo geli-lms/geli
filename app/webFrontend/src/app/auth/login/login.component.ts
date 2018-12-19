@@ -7,7 +7,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ShowProgressService} from '../../shared/services/show-progress.service';
 import {TitleService} from '../../shared/services/title.service';
 import {TranslateService} from '@ngx-translate/core';
-import {TranslatableSnackBarServiceService} from "../../shared/services/translatable-snack-bar-service.service";
+import {TranslatableSnackBarServiceService} from '../../shared/services/translatable-snack-bar-service.service';
 
 @Component({
   templateUrl: './login.component.html',
