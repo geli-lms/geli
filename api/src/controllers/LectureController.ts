@@ -36,10 +36,7 @@ export class LectureController {
    */
   @Get('/:id')
   async getLecture(@Param('id') id: string, @CurrentUser() currentUser: IUser) {
-    const lecture = await Lecture.findById(id);
-    if (!lecture) {
-      throw new NotFoundError();
-    }
+    const lecture = await Lecture.findById(id).orFail(new NotFoundError());
     const course = await Course.findOne({lectures: id});
     if (!course.checkPrivileges(currentUser).userCanViewCourse) {
       throw new ForbiddenError();
@@ -78,10 +75,7 @@ export class LectureController {
                   @BodyParam('description', {required: true}) description: string,
                   @BodyParam('courseId', {required: true}) courseId: string,
                   @CurrentUser() currentUser: IUser) {
-    const course = await Course.findById(courseId);
-    if (!course) {
-      throw new NotFoundError();
-    }
+    const course = await Course.findById(courseId).orFail(new NotFoundError());
     if (!course.checkPrivileges(currentUser).userCanEditCourse) {
       throw new ForbiddenError();
     }
@@ -121,10 +115,7 @@ export class LectureController {
   @Authorized(['teacher', 'admin'])
   @Put('/:id')
   async updateLecture(@Param('id') id: string, @Body() lectureUpdate: ILecture, @CurrentUser() currentUser: IUser) {
-    const course = await Course.findOne({lectures: id});
-    if (!course) {
-      throw new NotFoundError();
-    }
+    const course = await Course.findOne({lectures: id}).orFail(new NotFoundError());
     if (!course.checkPrivileges(currentUser).userCanEditCourse) {
       throw new ForbiddenError();
     }
@@ -152,10 +143,7 @@ export class LectureController {
   @Authorized(['teacher', 'admin'])
   @Delete('/:id')
   async deleteLecture(@Param('id') id: string, @CurrentUser() currentUser: IUser) {
-    const course = await Course.findOne({lectures: id});
-    if (!course) {
-      throw new NotFoundError();
-    }
+    const course = await Course.findOne({lectures: id}).orFail(new NotFoundError());
     if (!course.checkPrivileges(currentUser).userCanEditCourse) {
       throw new ForbiddenError();
     }

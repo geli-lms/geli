@@ -96,9 +96,11 @@ export class LectureEditComponent implements OnInit, OnDestroy {
     this.lectureService.updateItem(lecture)
       .then(() => {
         this.dataSharingService.setDataForKey('lecture-edit-mode', false);
-        this.notificationService.createItem(
-          {changedCourse: this.course, changedLecture: lecture,
-            changedUnit: null, text: 'Course ' + this.course.name + ' has an updated lecture.'})
+        this.notificationService.createItem({
+            targetId: lecture._id,
+            targetType: 'lecture',
+            text: 'Course ' + this.course.name + ' has an updated lecture.'
+          })
           .catch(console.error);
       })
       .catch(console.error)

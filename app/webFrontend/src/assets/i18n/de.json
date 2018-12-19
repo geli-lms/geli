@@ -354,6 +354,10 @@
     "addFreeText": "Freitext hinzufügen",
     "addTasks": "Aufgaben hinzufügen",
     "addVideos": "Videos hinzufügen",
+    "viewAs": "Anzeigen als",
+    "video": "Video",
+    "file": "Datei",
+    "cantSwitchToVideo": "Video-Ansicht darf ausschließlich Videos enthalten.",
     "import": "Lerneinheit importieren",
     "placeholder": {
       "enterAnswer": "Antwort hier eintragen*",
@@ -363,7 +367,7 @@
     "text": {
       "addAnswer": "Antwort hinzufügen",
       "addQuestion": "Frage hinzufügen",
-      "canBeSeenByStudents": "Eihnheit ist für Studenten sichtbar.",
+      "canBeSeenByStudents": "Einheit ist für Studenten sichtbar.",
       "canNotBeSeenByStudents": "Lerneinheit ist für Studenten nicht sichtbar.",
       "changedOn": "Geändert am",
       "fullscreen": "Vollbild",

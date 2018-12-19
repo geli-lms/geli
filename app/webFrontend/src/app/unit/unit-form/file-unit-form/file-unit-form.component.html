@@ -1,16 +1,24 @@
 <ng-container [formGroup]="unitForm">
-  <div *ngIf="unitForm.controls.files" formArrayName="files" class="file-list-container uploaded-files">
+  <div
+    *ngIf="unitForm.controls.files"
+    formArrayName="files"
+    class="file-list-container uploaded-files"
+  >
     <div class="file-list">
       <div class="file-list-row file-list-header">
         <span>{{ 'file.text.filename' | translate }}</span>
         <span>{{ 'file.text.filesize' | translate }}</span>
         <span>{{ 'file.text.actions' | translate }}</span>
       </div>
-      <div class="file-list-row" *ngFor="let file of unitForm.controls.files.controls">
+      <div
+        class="file-list-row"
+        *ngFor="let file of unitForm.controls.files.controls"
+      >
         <span class="filename">
-          <mat-icon>{{ fileIcon.fileToIcon(file.value) }}</mat-icon>{{ file.value.name }}
+          <mat-icon>{{ fileIcon.fileToIcon(file.value) }}</mat-icon
+          >{{ file.value.name }}
         </span>
-        <span class="filesize">{{file.value.size | filesize}}</span>
+        <span class="filesize">{{ file.value.size | filesize }}</span>
         <mat-action-row>
           <button mat-raised-button color="warn" (click)="removeFile(file)">
             <mat-icon>delete</mat-icon>
@@ -19,5 +27,13 @@
         </mat-action-row>
       </div>
     </div>
+  </div>
+
+  <div>
+    <label>{{"unit.viewAs" | translate}}:</label>
+    <mat-radio-group matTooltip="{{'unit.cantSwitchToVideo' | translate}}" matTooltipPosition="above" [matTooltipDisabled]="!testOnlyVideoFileTypes()" [disabled]="testOnlyVideoFileTypes()" formControlName="fileUnitType">
+      <mat-radio-button value="video">{{'unit.video' | translate}}</mat-radio-button>
+      <mat-radio-button value="file">{{'unit.file' | translate}}</mat-radio-button>
+    </mat-radio-group>
   </div>
 </ng-container>
