@@ -1,12 +1,6 @@
-import {Authorized, BadRequestError, Body, BodyParam, Get,
-        JsonController, Param, Post, Put, UseBefore, CurrentUser} from 'routing-controllers';
+import {Authorized, BodyParam, Get, JsonController, Put, UseBefore, CurrentUser} from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
-import {
-  API_NOTIFICATION_TYPE_ALL_CHANGES,
-  INotificationSettingsModel,
-  NotificationSettings
-} from '../models/NotificationSettings';
-import {INotificationSettingsView} from '../../../shared/models/INotificationSettingsView';
+import {NotificationSettings} from '../models/NotificationSettings';
 import {IUser} from '../../../shared/models/IUser';
 
 @JsonController('/notificationSettings')
@@ -79,49 +73,4 @@ export class NotificationSettingsController {
         {new: true, upsert: true});
     return settings.forView();
   }
-
-  /**
-   * @api {post} /api/notificationSettings/ Create notification settings
-   * @apiName PostNotificationSettings
-   * @apiGroup NotificationSettings
-   * @apiPermission student
-   * @apiPermission teacher
-   * @apiPermission admin
-   *
-   * @apiParam {Object} data Data for new notification settings.
-   *
-   * @apiSuccess {INotificationSettingsView} settings Created notification settings.
-   *
-   * @apiSuccessExample {json} Success-Response:
-   *     {
-   *         "_id": "5ab2829142949f000857b8f8",
-   *         "course": "5be0691ee3859d38308dab19",
-   *         "notificationType": "allChanges",
-   *         "emailNotification": false
-   *     }
-   *
-   * @apiError BadRequestError NotificationSettings need course and user
-   * @apiError BadRequestError NotificationSettings for user: x with course: y already exist
-   */
-  @Authorized(['student', 'teacher', 'admin'])
-  @Post('/')
-  async createNotificationSettings(@Body() data: any) {
-    if (!data.user || !data.course) {
-      throw new BadRequestError('NotificationSettings need course and user');
-    }
-    const notificationSettings: INotificationSettingsModel =
-      await NotificationSettings.findOne({'user': data.user, 'course': data.course});
-    if (notificationSettings) {
-      throw new BadRequestError('NotificationSettings for user:' + data.user + ' with course: ' + data.course + ' already exist');
-    }
-    const settings: INotificationSettingsModel = await new NotificationSettings({
-      'user': data.user,
-      'course': data.course,
-      'notificationType': API_NOTIFICATION_TYPE_ALL_CHANGES,
-      'emailNotification': false
-    }).save();
-    return settings.forView();
-  }
-
-
 }

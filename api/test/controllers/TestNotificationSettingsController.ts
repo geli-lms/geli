@@ -17,44 +17,6 @@ describe('NotificationSettings', async () => {
     await testHelper.resetForNextTest();
   });
 
-  describe(`POST ${BASE_URL}`, async () => {
-    it('should create notification settings', async () => {
-      const course = await FixtureUtils.getRandomCourse();
-      const student = course.students[0];
-      const newSettings = {user: student, course: course};
-
-      const res = await testHelper.commonUserPostRequest(student, '', newSettings);
-
-      res.status.should.be.equals(200);
-      res.body.notificationType.should.be.equal(API_NOTIFICATION_TYPE_ALL_CHANGES);
-      res.body.emailNotification.should.be.equal(false);
-      res.body.should.have.property('course');
-      res.body._id.should.be.a('string');
-      const notificationSettings = (await NotificationSettings.findById(res.body._id)).forView();
-      notificationSettings.course.should.be.equal(res.body.course);
-    });
-
-    it('should fail when already exist', async () => {
-      const course = await FixtureUtils.getRandomCourse();
-      const student = course.students[0];
-      const newSettings = {user: student, course: course};
-
-      const res = await testHelper.commonUserPostRequest(student, '', newSettings);
-      res.status.should.be.equals(200);
-
-      const resFail = await testHelper.commonUserPostRequest(student, '', newSettings);
-      resFail.status.should.be.equals(400);
-    });
-
-    it('should fail when course or user missing', async () => {
-      const course = await FixtureUtils.getRandomCourse();
-      const student = course.students[0];
-
-      const res = await testHelper.commonUserPostRequest(student, '', {});
-      res.status.should.be.equals(400);
-    });
-  });
-
   describe(`GET ${BASE_URL} user :id`, () => {
     it('should return all notification settings for a student', async () => {
       const student = await FixtureUtils.getRandomStudent();
@@ -76,7 +38,7 @@ describe('NotificationSettings', async () => {
       }).save();
 
 
-      const res = await testHelper.commonUserGetRequest(student, '/');
+      const res = await testHelper.commonUserGetRequest(student, '');
       res.should.have.status(200);
       res.body.forEach((notificationSettings: any) => {
         notificationSettings._id.should.be.a('string');
@@ -88,7 +50,26 @@ describe('NotificationSettings', async () => {
   });
 
   describe(`PUT ${BASE_URL} :id`, () => {
-    it('should update the notification settings', async () => {
+    it('should create notification settings', async () => {
+      const course = await FixtureUtils.getRandomCourse();
+      const student = course.students[0];
+
+      const res = await testHelper.commonUserPutRequest(student, '', {
+        course: course.id,
+        notificationType: API_NOTIFICATION_TYPE_ALL_CHANGES,
+        emailNotification: false
+      });
+
+      res.status.should.be.equals(200);
+      res.body.notificationType.should.be.equal(API_NOTIFICATION_TYPE_ALL_CHANGES);
+      res.body.emailNotification.should.be.equal(false);
+      res.body.should.have.property('course');
+      res.body._id.should.be.a('string');
+      const notificationSettings = (await NotificationSettings.findById(res.body._id)).forView();
+      notificationSettings.course.should.be.equal(res.body.course);
+    });
+
+    it('should update notification settings', async () => {
       const student = await FixtureUtils.getRandomStudent();
       const course = await FixtureUtils.getRandomCourse();
 
@@ -100,8 +81,8 @@ describe('NotificationSettings', async () => {
         'notificationType': API_NOTIFICATION_TYPE_ALL_CHANGES, 'emailNotification': false
       }).save();
 
-      const res = await testHelper.commonUserPutRequest(student, '/', {
-        course: settings.course,
+      const res = await testHelper.commonUserPutRequest(student, '', {
+        course: course.id,
         notificationType: API_NOTIFICATION_TYPE_NONE,
         emailNotification: true
       });
@@ -113,17 +94,17 @@ describe('NotificationSettings', async () => {
       res.body._id.should.be.equal(settings.id);
     });
 
-    it('should fail when missing course', async () => {
+    it('should fail with missing parameters', async () => {
       const course = await FixtureUtils.getRandomCourse();
       const student = course.students[Math.floor(Math.random() * course.students.length)];
 
-      const settings = await new NotificationSettings({
+      await new NotificationSettings({
         'course': course,
         'notificationType': API_NOTIFICATION_TYPE_ALL_CHANGES,
         'emailNotification': false
       }).save();
 
-      const res = await testHelper.commonUserPutRequest(student, '/', {});
+      const res = await testHelper.commonUserPutRequest(student, '', {});
       res.should.have.status(400);
     });
   });

@@ -1,5 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import {UserService} from '../../shared/services/user.service';
 import {CourseService, NotificationSettingsService} from '../../shared/services/data.service';
 import {MatTableDataSource} from '@angular/material';
 import {SnackBarService} from '../../shared/services/snack-bar.service';
@@ -25,8 +24,7 @@ export class UserSettingsComponent implements OnInit {
   emailSelection = new SelectionModel<ICourseDashboard>(true, []);
   notificationSettings: INotificationSettingsView[];
 
-  constructor(private userService: UserService,
-              private courseService: CourseService,
+  constructor(private courseService: CourseService,
               private notificationSettingsService: NotificationSettingsService,
               private snackBar: SnackBarService) {
   }
@@ -88,7 +86,6 @@ export class UserSettingsComponent implements OnInit {
             notificationType: NOTIFICATION_TYPE_ALL_CHANGES,
             emailNotification: false
           };
-          settings = await this.notificationSettingsService.createItem(settings);
           this.notificationSettings.push(settings);
         }
 
