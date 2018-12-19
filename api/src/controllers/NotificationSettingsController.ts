@@ -1,6 +1,7 @@
-import {Authorized, BodyParam, Get, JsonController, Put, UseBefore, CurrentUser} from 'routing-controllers';
+import {Authorized, BodyParam, Get, JsonController, Put, UseBefore, CurrentUser, NotFoundError, ForbiddenError} from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import {NotificationSettings} from '../models/NotificationSettings';
+import {Course} from '../models/Course';
 import {IUser} from '../../../shared/models/IUser';
 
 @JsonController('/notificationSettings')
@@ -55,6 +56,9 @@ export class NotificationSettingsController {
    *
    * @apiSuccessExample {json} Success-Response:
    *     {}
+   *
+   * @apiError NotFoundError Did not find the given course.
+   * @apiError ForbiddenError User doesn't have access to the given course.
    */
   @Authorized(['student', 'teacher', 'admin'])
   @Put('/')
@@ -62,8 +66,11 @@ export class NotificationSettingsController {
                                 @BodyParam('notificationType', {required: true}) notificationType: string,
                                 @BodyParam('emailNotification', {required: true}) emailNotification: string,
                                 @CurrentUser() currentUser: IUser) {
-    // NOTE: This COULD also check that the currentUser is actually allowed to access the given course,
-    //       but since storing notification settings shouldn't be a security issue, this can be omitted.
+    const courseDoc = await Course.findById(course).orFail(new NotFoundError());
+    if (!courseDoc.checkPrivileges(currentUser).userCanViewCourse) {
+      // This check isn't absolutely necessary since storing notification settings shouldn't be a security issue.
+      throw new ForbiddenError();
+    }
     await NotificationSettings.findOneAndUpdate(
         {user: currentUser, course},
         {user: currentUser, course, notificationType, emailNotification},

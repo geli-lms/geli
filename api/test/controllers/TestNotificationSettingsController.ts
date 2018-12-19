@@ -50,8 +50,11 @@ describe('NotificationSettings', async () => {
 
   describe(`PUT ${BASE_URL}`, () => {
     it('should create notification settings', async () => {
+      const student = await FixtureUtils.getRandomStudent();
       const course = await FixtureUtils.getRandomCourse();
-      const student = course.students[0];
+      course.active = true;
+      course.students.push(student);
+      await course.save();
 
       const res = await testHelper.commonUserPutRequest(student, '', {
         course: course.id,
@@ -64,7 +67,7 @@ describe('NotificationSettings', async () => {
     it('should update notification settings', async () => {
       const student = await FixtureUtils.getRandomStudent();
       const course = await FixtureUtils.getRandomCourse();
-
+      course.active = true;
       course.students.push(student);
       await course.save();
 
@@ -93,6 +96,29 @@ describe('NotificationSettings', async () => {
 
       const res = await testHelper.commonUserPutRequest(student, '', {});
       res.should.have.status(400);
+    });
+
+    it('should be forbidden for an unauthorized user/course pair', async () => {
+      const course = await FixtureUtils.getRandomCourse();
+      const teacher = await FixtureUtils.getUnauthorizedTeacherForCourse(course);
+
+      const res = await testHelper.commonUserPutRequest(teacher, '', {
+        course: course.id,
+        notificationType: API_NOTIFICATION_TYPE_NONE,
+        emailNotification: true
+      });
+      res.should.have.status(403);
+    });
+
+    it('should fail for a non-existent course id', async () => {
+      const student = await FixtureUtils.getRandomStudent();
+
+      const res = await testHelper.commonUserPutRequest(student, '', {
+        course: '000000000000000000000000',
+        notificationType: API_NOTIFICATION_TYPE_NONE,
+        emailNotification: true
+      });
+      res.should.have.status(404);
     });
   });
 });
