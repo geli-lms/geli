@@ -64,7 +64,7 @@ export class NotificationController {
    *
    * @apiError NotFoundError Did not find the targetId of targetType.
    * @apiError BadRequestError Invalid targetType.
-   * @apiError ForbiddenError The teacher doen't have access to the corresponding course.
+   * @apiError ForbiddenError The teacher doesn't have access to the corresponding course.
    * @apiError InternalServerError No course was found for a given existing lecture.
    * @apiError InternalServerError No course was found for a given existing unit.
    */
@@ -103,7 +103,7 @@ export class NotificationController {
    *
    * @apiError NotFoundError Did not find the targetId of targetType.
    * @apiError BadRequestError Invalid targetType.
-   * @apiError ForbiddenError The teacher doen't have access to the corresponding course (if targetType isn't 'text'-only).
+   * @apiError ForbiddenError The teacher doesn't have access to the corresponding course (if targetType isn't 'text'-only).
    * @apiError InternalServerError No course was found for a given existing lecture.
    * @apiError InternalServerError No course was found for a given existing unit.
    */
