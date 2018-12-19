@@ -93,7 +93,7 @@ export class UserSettingsComponent implements OnInit {
           : NOTIFICATION_TYPE_NONE;
         settings.emailNotification = this.emailSelection.isSelected(course);
 
-        await this.notificationSettingsService.updateItem(settings);
+        await this.notificationSettingsService.setNotificationSettings(settings);
       } catch (err) {
         if (errors.indexOf(err.error.message) === -1) {
           errors.push(err.error.message);

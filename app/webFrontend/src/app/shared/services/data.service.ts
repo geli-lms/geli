@@ -343,6 +343,10 @@ export class NotificationSettingsService extends DataService {
   getNotificationSettings(): Promise<INotificationSettingsView[]> {
     return this.backendService.get(this.apiPath).toPromise();
   }
+
+  async setNotificationSettings(settings: INotificationSettingsView) {
+    await this.backendService.put(this.apiPath, settings).toPromise();
+  }
 }
 
 @Injectable()
