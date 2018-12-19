@@ -76,15 +76,15 @@
   background-repeat: no-repeat;
 
   @media screen and (min-width: $bp-width--sm) {
-    background-image: url('/assets/background-home--large.jpeg') no-repeat;
+    background-image: url('/assets/background-home--large.jpeg');
   }
 
   @media screen and (min-width: $bp-width--xl) {
-    background-image: url('/assets/background-home--xlarge.jpeg') no-repeat;
+    background-image: url('/assets/background-home--xlarge.jpeg');
   }
 
   @media screen and (min-width: $bp-width--xxl) {
-    background-image: url('/assets/background-home--xxlarge.jpeg') no-repeat;
+    background-image: url('/assets/background-home--xxlarge.jpeg');
   }
 }
 
