@@ -12,6 +12,7 @@ import {IDuplicationResponse} from '../../../../../../shared/models/IDuplication
 import {IUserSearchMeta} from '../../../../../../shared/models/IUserSearchMeta';
 import {IConfig} from '../../../../../../shared/models/IConfig';
 import {INotificationView} from '../../../../../../shared/models/INotificationView';
+import {INotificationSettings} from '../../../../../../shared/models/INotificationSettings';
 
 export abstract class DataService {
 
@@ -339,16 +340,8 @@ export class NotificationSettingsService extends DataService {
     super('notificationSettings/', backendService);
   }
 
-  getNotificationSettingsPerUser(user: IUser): Promise<any[]> {
-    return new Promise((resolve, reject) => {
-      this.backendService.get(this.apiPath + 'user/' + user._id)
-        .subscribe(
-          (responseItem: any) => {
-            resolve(responseItem);
-          },
-          error => reject(error)
-        );
-    });
+  getNotificationSettings(): Promise<INotificationSettings[]> {
+    return this.backendService.get(this.apiPath).toPromise();
   }
 }
 

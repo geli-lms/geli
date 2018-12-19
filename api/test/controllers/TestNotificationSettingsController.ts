@@ -78,7 +78,7 @@ describe('NotificationSettings', async () => {
       }).save();
 
 
-      const res = await testHelper.commonUserGetRequest(student, `/user/${student._id}`);
+      const res = await testHelper.commonUserGetRequest(student, '/');
       res.should.have.status(200);
       res.body.forEach((notificationSettings: any) => {
         notificationSettings._id.should.be.a('string');

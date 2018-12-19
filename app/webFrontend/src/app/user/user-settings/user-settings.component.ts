@@ -50,7 +50,7 @@ export class UserSettingsComponent implements OnInit {
   }
 
   async getNotificationSettings() {
-    this.notificationSettings = await this.notificationSettingsService.getNotificationSettingsPerUser(this.userService.user);
+    this.notificationSettings = await this.notificationSettingsService.getNotificationSettings();
   }
 
   setSelection() {

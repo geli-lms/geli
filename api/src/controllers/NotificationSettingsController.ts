@@ -1,4 +1,4 @@
-import {Authorized, BadRequestError, Body, Get, JsonController, Param, Post, Put, UseBefore} from 'routing-controllers';
+import {Authorized, BadRequestError, Body, Get, JsonController, Param, Post, Put, UseBefore, CurrentUser} from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import {
   API_NOTIFICATION_TYPE_ALL_CHANGES,
@@ -6,20 +6,19 @@ import {
   NotificationSettings
 } from '../models/NotificationSettings';
 import {INotificationSettings} from '../../../shared/models/INotificationSettings';
+import {IUser} from '../../../shared/models/IUser';
 
 @JsonController('/notificationSettings')
 @UseBefore(passportJwtMiddleware)
 export class NotificationSettingsController {
 
   /**
-   * @api {get} /api/notificationSettings/user/:id Get notification settings per user
+   * @api {get} /api/notificationSettings/ Get own notification settings
    * @apiName GetNotificationSettings
    * @apiGroup NotificationSettings
    * @apiPermission student
    * @apiPermission teacher
    * @apiPermission admin
-   *
-   * @apiParam {String} id User ID.
    *
    * @apiSuccess {INotificationSettingsModel[]} settings List of notification settings.
    *
@@ -42,12 +41,12 @@ export class NotificationSettingsController {
    *         "notificationType": "allChanges",
    *         "emailNotification": false,
    *         "__v": 0
-   *     ]}
+   *     }]
    */
   @Authorized(['student', 'teacher', 'admin'])
-  @Get('/user/:id')
-  async getNotificationSettingsPerUser(@Param('id') id: string) {
-    const notificationSettings: INotificationSettingsModel[] = await NotificationSettings.find({'user': id})
+  @Get('/')
+  async getNotificationSettings(@CurrentUser() currentUser: IUser) {
+    const notificationSettings = await NotificationSettings.find({user: currentUser})
       .populate('user')
       .populate('course');
     return notificationSettings.map(settings => {
