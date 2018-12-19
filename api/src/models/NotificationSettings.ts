@@ -60,7 +60,6 @@ notificationSettingsSchema.methods.exportJson = function () {
 
 notificationSettingsSchema.methods.forView = function (this: INotificationSettingsModel): INotificationSettingsView {
   return {
-    _id: extractSingleMongoId(this),
     course: extractSingleMongoId(this.course),
     notificationType: this.notificationType,
     emailNotification: this.emailNotification

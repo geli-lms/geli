@@ -81,7 +81,6 @@ export class UserSettingsComponent implements OnInit {
 
         if (settings === undefined) {
           settings = {
-            _id: undefined,
             course: course._id,
             notificationType: NOTIFICATION_TYPE_ALL_CHANGES,
             emailNotification: false

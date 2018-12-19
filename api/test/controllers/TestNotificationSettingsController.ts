@@ -17,7 +17,7 @@ describe('NotificationSettings', async () => {
     await testHelper.resetForNextTest();
   });
 
-  describe(`GET ${BASE_URL} user :id`, () => {
+  describe(`GET ${BASE_URL}`, () => {
     it('should return all notification settings for a student', async () => {
       const student = await FixtureUtils.getRandomStudent();
       const course1 = await FixtureUtils.getRandomCourse();
@@ -41,7 +41,6 @@ describe('NotificationSettings', async () => {
       const res = await testHelper.commonUserGetRequest(student, '');
       res.should.have.status(200);
       res.body.forEach((notificationSettings: any) => {
-        notificationSettings._id.should.be.a('string');
         notificationSettings.course.should.be.a('string');
         notificationSettings.notificationType.should.be.a('string');
         notificationSettings.emailNotification.should.be.a('boolean');
@@ -49,7 +48,7 @@ describe('NotificationSettings', async () => {
     });
   });
 
-  describe(`PUT ${BASE_URL} :id`, () => {
+  describe(`PUT ${BASE_URL}`, () => {
     it('should create notification settings', async () => {
       const course = await FixtureUtils.getRandomCourse();
       const student = course.students[0];
@@ -64,9 +63,6 @@ describe('NotificationSettings', async () => {
       res.body.notificationType.should.be.equal(API_NOTIFICATION_TYPE_ALL_CHANGES);
       res.body.emailNotification.should.be.equal(false);
       res.body.should.have.property('course');
-      res.body._id.should.be.a('string');
-      const notificationSettings = (await NotificationSettings.findById(res.body._id)).forView();
-      notificationSettings.course.should.be.equal(res.body.course);
     });
 
     it('should update notification settings', async () => {
@@ -76,7 +72,7 @@ describe('NotificationSettings', async () => {
       course.students.push(student);
       await course.save();
 
-      const settings = await new NotificationSettings({
+      await new NotificationSettings({
         'user': student, 'course': course,
         'notificationType': API_NOTIFICATION_TYPE_ALL_CHANGES, 'emailNotification': false
       }).save();
@@ -90,8 +86,6 @@ describe('NotificationSettings', async () => {
       res.body.notificationType.should.be.equal(API_NOTIFICATION_TYPE_NONE);
       res.body.emailNotification.should.be.equal(true);
       res.body.should.have.property('course');
-      res.body._id.should.be.a('string');
-      res.body._id.should.be.equal(settings.id);
     });
 
     it('should fail with missing parameters', async () => {
