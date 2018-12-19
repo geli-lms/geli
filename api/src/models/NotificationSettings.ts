@@ -1,7 +1,6 @@
 import * as mongoose from 'mongoose';
 import {INotificationSettings} from '../../../shared/models/INotificationSettings';
-import {Course, ICourseModel} from './Course';
-import {IUserModel} from './User';
+import {ICourseModel} from './Course';
 import {IUser} from '../../../shared/models/IUser';
 
 interface INotificationSettingsModel extends INotificationSettings, mongoose.Document {
