@@ -12,6 +12,8 @@ let mocha = require("gulp-mocha");
 let istanbul = require("gulp-istanbul");
 let plumber = require("gulp-plumber");
 let remapIstanbul = require("remap-istanbul/lib/gulpRemapIstanbul");
+let sass = require('gulp-sass');
+sass.compiler = require('node-sass');
 
 const CLEAN_BUILD = "clean:build";
 const CLEAN_COVERAGE = "clean:coverage";
@@ -37,6 +39,7 @@ const WATCH_POLL = "watch:poll";
 const DEBUG = "debug";
 const INSPECT = "inspect";
 const INSPECT_MIGRATOR = "migrate:inspect";
+const COMPILE_MD_SASS = 'compile:sass:md';
 
 const SRC_GLOB = "./src/**/*";
 const TS_SRC_GLOB = SRC_GLOB + ".ts";
@@ -45,6 +48,9 @@ const TS_TEST_GLOB = TEST_GLOB + ".ts";
 const FIXTURES_GLOB = "./fixtures/**/*";
 const TS_FIXTURES_GLOB = FIXTURES_GLOB + ".ts";
 const TS_MIGRATION_GLOB = "./migrations/**/*.ts";
+const MD_SASS_GLOB = "../shared/styles/md/**/*";
+const MD_SASS_FILE_SRC = "../shared/styles/md/bundle.scss";
+
 
 const BUILD_GLOB = "./build/";
 const BUILD_TEST_GLOB = BUILD_GLOB + "test/**/*";
@@ -52,6 +58,7 @@ const JS_TEST_GLOB = BUILD_TEST_GLOB + ".js";
 const BUILD_SRC_GLOB = BUILD_GLOB + "src/**/*";
 const JS_SRC_GLOB = BUILD_SRC_GLOB + ".js";
 const TS_GLOB = [TS_SRC_GLOB, TS_TEST_GLOB, TS_FIXTURES_GLOB, TS_MIGRATION_GLOB];
+const MD_SASS_FILE_DST = BUILD_GLOB + "styles/md";
 
 const tsProject = typescript.createProject("tsconfig.json");
 
@@ -110,6 +117,13 @@ gulp.task(COMPILE_TYPESCRIPT, function () {
     .pipe(gulp.dest("./build"));
 });
 
+// Compiles sass files
+gulp.task(COMPILE_MD_SASS, function () {
+  return gulp.src(MD_SASS_FILE_SRC)
+    .pipe(sass().on('error', sass.logError))
+    .pipe(gulp.dest(MD_SASS_FILE_DST));
+});
+
 gulp.task(COPY_FIXTURES, function () {
   return gulp.src([FIXTURES_GLOB, "!" + TS_FIXTURES_GLOB], {base: "."})
     .pipe(gulp.dest(BUILD_GLOB));
@@ -122,7 +136,7 @@ gulp.task(BUILD, function (callback) {
 });
 */
 
-gulp.task(BUILD, gulp.series(CLEAN_BUILD, TSLINT, COMPILE_TYPESCRIPT, COPY_FIXTURES));
+gulp.task(BUILD, gulp.series(CLEAN_BUILD, TSLINT, COMPILE_TYPESCRIPT, COMPILE_MD_SASS, COPY_FIXTURES));
 
 // Runs all required steps for the build in sequence FOR DEVELOP
 /*
@@ -131,7 +145,7 @@ gulp.task(BUILD_DEV, function (callback) {
 });
 */
 
-gulp.task(BUILD_DEV, gulp.series(CLEAN_BUILD, TSLINT_DEV, COMPILE_TYPESCRIPT, COPY_FIXTURES));
+gulp.task(BUILD_DEV, gulp.series(CLEAN_BUILD, TSLINT_DEV, COMPILE_TYPESCRIPT, COMPILE_MD_SASS, COPY_FIXTURES));
 
 // Generates a documentation based on the code comments in the *.ts files.
 gulp.task(GENERATE_DOC, gulp.series(CLEAN_DOC, function () {
@@ -145,12 +159,12 @@ gulp.task(GENERATE_DOC, gulp.series(CLEAN_DOC, function () {
 }));
 
 // Generates an API documentation based on the code comments in the files within ./src/controllers.
-gulp.task(GENERATE_API_DOC, gulp.series(CLEAN_API_DOC, function(done){
+gulp.task(GENERATE_API_DOC, gulp.series(CLEAN_API_DOC, function (done) {
   apidoc({
     src: "./src/controllers",
     dest: "./apidocs",
     config: "."
-  },done);
+  }, done);
 }));
 
 // Sets up the istanbul coverage
@@ -215,9 +229,9 @@ gulp.task(TEST_NATIVE, gulp.series(BUILD, CLEAN_COVERAGE));
 // Runs the build task and starts the server every time changes are detected.
 gulp.task(WATCH, gulp.series(BUILD_DEV, (done) => {
   nodemon({
-    ext: "ts js json",
+    ext: "ts js json scss",
     script: "build/src/server.js",
-    watch: ["src/*", "test/*"],
+    watch: ["src/*", "test/*", MD_SASS_GLOB],
     tasks: [BUILD_DEV]
   });
 
@@ -227,9 +241,9 @@ gulp.task(WATCH, gulp.series(BUILD_DEV, (done) => {
 // Runs the build task and starts the server every time changes are detected WITH LEGACY-WATCH ENABLED.
 gulp.task(WATCH_POLL, gulp.series(BUILD_DEV, (done) => {
   nodemon({
-    ext: "ts js json",
+    ext: "ts js json scss",
     script: "build/src/server.js",
-    watch: ["src/*", "test/*"],
+    watch: ["src/*", "test/*", MD_SASS_GLOB],
     legacyWatch: true, // Uses the legacy polling to get changes even on docker/vagrant-mounts
     tasks: [BUILD_DEV]
   });

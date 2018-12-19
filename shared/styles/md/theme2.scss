@@ -1,150 +1,274 @@
-  &.theme2 {
-    font-family: Georgia, Palatino, serif;
-    color: #333333; /* dark gray not black */
+&.theme2 {
+  /* theme is based on mkdocs and styles of Stefan Zander, Icons: http://cms.devoffice.com/repack/packs/material-icons/, colors: https://www.color-hex.com/ http://paletton.com */
+  $primary-color: #128bcd;
+  $secondary-color: green;
 
-    line-height: 1;
-    padding: 30px;
-    font-size: 18px;
+  $info_border_color: #2c8fcd; /* blue */
+  $info_background_color: #d6efff;
 
-    p {
-      line-height: 150%;
-      font-weight: 400;
-      color: #333333
-    }
+  $learning-objectives_border_color: #bbbaba;
+  $learning-objectives_background_color: #f5f4f4; /* light gray */
 
-    h1, h2, h3, h4 {
-      color: #111111;
-      font-weight: 400;
-    }
+  $warning_border_color: #dc9090;
+  $warning_background_color: #ffd6d6; /* pink */
 
-    h2, h3, h4, h5, p {
-      margin-bottom: 25px;
-      padding: 0;
-    }
+  $question_border_color: #2e4372;
+  $question_background_color: #3d89c8; /* blue */
+  $question_color: black;
 
-    h1 {
-      margin-bottom: 10px;
-      font-size: 300%;
-      padding: 0px;
-      font-variant: small-caps;
-    }
+  $todo_border_color: #554b00;
+  $todo_background_color: #aa9d39;
+  $todo_color: black;
 
-    h2 {
-      font-size: 150%;
-      margin: 24px 0 6px;
-    }
+  $example_border_color: #1a4a00;
+  $example_background_color: #aede94;
+  $example_color: black;
 
-    h3 {
-      font-size: 120%
-    }
-    h4 {
-      font-size: 100%;
-      font-variant: small-caps;
+  $hints_border_color: #6c5656;
+  $hints_background_color: #bd9898;
+  $hints_color: black;
 
-    }
-    h5 {
-      font-size: 80%;
-      font-weight: 100;
-    }
+  $assignment_border_color: #5e6550;
+  $assignment_background_color: #8b8f84;
+  $assignment_color: black;
 
-    h6 {
-      font-size: 80%;
-      font-weight: 100;
-      color: red;
-      font-variant: small-caps;
-    }
+  $success_border_color: #3c4397;
+  $success_background_color: #f1f1f1;
+  $success_color: black;
 
-    a {
-      color: grey;
-      margin: 0;
-      padding: 0;
-      vertical-align: baseline;
-    }
-    a:hover {
-      text-decoration: blink;
-      color: green;
-    }
-    a:visited {
-      color: black;
-    }
-    ul, ol {
-      padding: 0;
-      margin: 0px 0px 0px 50px;
-    }
-    ul {
-      list-style-type: square;
-      list-style-position: inside;
-    }
+  $text_shadow_color: white;
 
-    li {
-      line-height: 150%
-    }
-    li ul, li ul {
-      margin-left: 24px;
-    }
+  box-shadow: none;
+  border-radius: 0rem;
+  font-size: 1.6rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
 
-    pre {
-      padding: 0px 24px;
-      max-width: 800px;
-      white-space: pre-wrap;
-    }
-    code {
-      font-family: Consolas, Monaco, Andale Mono, monospace;
-      line-height: 1.5;
-      font-size: 13px;
-    }
-    aside {
-      display: block;
-      float: right;
-      width: 390px;
-    }
-    blockquote {
-      border-left: .5em solid #eee;
-      padding: 0 1em;
-      margin-left: 0;
-    }
-    blockquote cite {
-      font-size: 14px;
-      line-height: 20px;
-      color: #bfbfbf;
-    }
-    blockquote cite:before {
-      content: '\2014 \00A0';
-    }
-
-    blockquote p {
-      color: #666;
-      max-width: 460px;
-    }
-    hr {
-      text-align: left;
-      margin: 0 auto 0 0;
-      color: #999;
-    }
-
-    /* custom boxes */
-    %custombox-shared {
-      padding: 10px;
-    }
-
-    .warning {
-      @extend %custombox-shared;
-      background-color: #ff8;
-    }
-
-    .info {
-      @extend %custombox-shared;
-
-    }
-
-    .error {
-      @extend %custombox-shared;
-
-    }
-
-    .success {
-      @extend %custombox-shared;
-
-    }
-
+  p:nth-of-type(2) {
+    margin-top: 1.2rem;
   }
+
+  .warning {
+    border-left: solid 0.5rem $warning_border_color;
+    background-color: $warning_background_color;
+  }
+
+  .warning > * {
+    margin-left: 3rem;
+  }
+
+  .warning::before {
+    font-family: "Material Icons";
+    content: "\e001";
+    font-size: 2.4rem;
+    padding-right: 0.6rem;
+    text-shadow: 0.02rem 0.02rem $text_shadow_color;
+    padding-top: 0.6rem;
+    float: left;
+  }
+
+  .learning-objectives {
+    border-left: solid 0.5rem $learning-objectives_border_color;
+    background-color: $learning-objectives_background_color;
+  }
+  .learning-objectives > * {
+    margin-left: 3rem;
+  }
+
+  .learning-objectives::before {
+    font-family: "Material Icons";
+    content: "\e8d0";
+    font-size: 2.4rem;
+    text-shadow: 0.02rem 0.02rem white;
+    vertical-align: bottom;
+    padding-right: 0.6rem;
+    padding-top: 0.6rem;
+    float: left;
+  }
+  .info {
+    border-left: solid 0.5rem $info_border_color;
+    background-color: $info_background_color;
+  }
+
+  .info > * {
+    margin-left: 3rem;
+  }
+
+  .info::before {
+    font-family: "Material Icons";
+    content: "\e88e";
+    font-size: 2.4rem;
+    padding-right: 0.6rem;
+    text-shadow: 0.02rem 0.02rem $text_shadow_color;
+    padding-top: 0.6rem;
+    float: left;
+  }
+
+  .question {
+    border-left: solid 0.5rem $question_border_color;
+    background-color: $question_background_color;
+    color: $question_color;
+  }
+
+  .question > * {
+    margin-left: 3rem;
+  }
+
+  .question::before {
+    font-family: "Material Icons";
+    content: "\e8af";
+    font-size: 2.4rem;
+    padding-right: 0.6rem;
+    text-shadow: 0.02rem 0.02rem $text_shadow_color;
+    padding-top: 1rem;
+    float: left;
+  }
+
+  .success {
+    border-left: solid 0.5rem $success_border_color;
+    background-color: $success_background_color;
+    color: $success_color;
+  }
+
+  .success > * {
+    margin-left: 3rem;
+  }
+
+  .success::before {
+    font-family: "Material Icons";
+    content: "\e862";
+    font-size: 2.4rem;
+    padding-right: 0.6rem;
+    text-shadow: 0.02rem 0.02rem $text_shadow_color;
+    padding-top: 1rem;
+    float: left;
+  }
+  .assignment {
+    border-left: solid 0.5rem $assignment_border_color;
+    background-color: $assignment_background_color;
+    color: $assignment_color;
+  }
+
+  .assignment > * {
+    margin-left: 3rem;
+  }
+
+  .assignment::before {
+    font-family: "Material Icons";
+    content: "\e85d";
+    font-size: 2.4rem;
+    padding-right: 0.6rem;
+    text-shadow: 0.02rem 0.02rem $text_shadow_color;
+    padding-top: 1rem;
+    float: left;
+  }
+
+  .todo {
+    border-left: solid 0.5rem $todo_border_color;
+    background-color: $todo_background_color;
+    color: $todo_color;
+  }
+
+  .question > * {
+    margin-left: 3rem;
+  }
+
+  .todo::before {
+    font-family: "Material Icons";
+    content: "\e22b";
+    font-size: 2.4rem;
+    padding-right: 0.6rem;
+    text-shadow: 0.02rem 0.02rem $text_shadow_color;
+    padding-top: 1rem;
+    float: left;
+  }
+
+  .example {
+    border-left: solid 0.5rem $example_border_color;
+    background-color: $example_background_color;
+    color: $example_color;
+  }
+
+  .example > * {
+    margin-left: 3rem;
+  }
+
+  .example::before {
+    font-family: "Material Icons";
+    content: "\e39f";
+    font-size: 2.4rem;
+    padding-right: 0.6rem;
+    text-shadow: 0.02rem 0.02rem $text_shadow_color;
+    padding-top: 1rem;
+    float: left;
+  }
+
+  .hints {
+    border-left: solid 0.5rem $hints_border_color;
+    background-color: $hints_background_color;
+    color: $hints_color;
+  }
+
+  .hints > * {
+    margin-left: 3rem;
+  }
+
+  .hints::before {
+    font-family: "Material Icons";
+    content: "\e3a0";
+    font-size: 2.4rem;
+    padding-right: 0.6rem;
+    text-shadow: 0.02rem 0.02rem $text_shadow_color;
+    padding-top: 1rem;
+    float: left;
+  }
+
+  body {
+    counter-reset: figure;
+  }
+
+  a:hover {
+    background-color: lightyellow;
+    font-weight: bold;
+  }
+
+  img + em {
+    display: block;
+    text-align: center;
+    color: gray;
+  }
+
+  img + em:before {
+    counter-increment: figure;
+    content: "Figure " counter(figure) ": ";
+  }
+
+  h3 {
+    color: black;
+    font-family: "Zilla Slab", Roboto, serif;
+    font-size: 2.8rem;
+    font-weight: 900;
+    margin-top: 4rem;
+    padding-bottom: 0.3em;
+  }
+
+  h2 {
+    color: $primary-color;
+    font-weight: 300;
+    padding-bottom: 3rem;
+    padding-top: 3rem;
+    padding-left: 0.3rem;
+    font-size: 4rem;
+    border-top: 0.3rem solid $primary-color;
+    border-bottom: 0.3rem solid $primary-color;
+  }
+
+  h1 {
+    font-size: 6rem;
+  }
+
+  blockquote {
+    font-style: italic;
+    margin: 3em !important;
+  }
+}

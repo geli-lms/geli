@@ -358,6 +358,10 @@
     "addFreeText": "Add free text",
     "addTasks": "Add tasks",
     "addVideos": "Add videos",
+    "viewAs": "Display as",
+    "video": "Video",
+    "file": "File",
+    "cantSwitchToVideo": "Video-view can only contain videos.",
     "import": "Import unit",
     "placeholder": {
       "enterAnswer": "Enter answer here*",
