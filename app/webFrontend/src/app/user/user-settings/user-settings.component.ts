@@ -1,15 +1,13 @@
 import {Component, OnInit} from '@angular/core';
-import {UserService} from '../../shared/services/user.service';
 import {CourseService, NotificationSettingsService} from '../../shared/services/data.service';
 import {MatTableDataSource} from '@angular/material';
 import {SnackBarService} from '../../shared/services/snack-bar.service';
 import {SelectionModel} from '@angular/cdk/collections';
 import {
-  INotificationSettings,
+  INotificationSettingsView,
   NOTIFICATION_TYPE_ALL_CHANGES,
   NOTIFICATION_TYPE_NONE
-} from '../../../../../../shared/models/INotificationSettings';
-import {NotificationSettings} from '../../models/NotificationSettings';
+} from '../../../../../../shared/models/INotificationSettingsView';
 import {ICourseDashboard} from '../../../../../../shared/models/ICourseDashboard';
 
 @Component({
@@ -24,10 +22,9 @@ export class UserSettingsComponent implements OnInit {
   dataSource: MatTableDataSource<ICourseDashboard>;
   notificationSelection = new SelectionModel<ICourseDashboard>(true, []);
   emailSelection = new SelectionModel<ICourseDashboard>(true, []);
-  notificationSettings: INotificationSettings[];
+  notificationSettings: INotificationSettingsView[];
 
-  constructor(private userService: UserService,
-              private courseService: CourseService,
+  constructor(private courseService: CourseService,
               private notificationSettingsService: NotificationSettingsService,
               private snackBar: SnackBarService) {
   }
@@ -50,7 +47,7 @@ export class UserSettingsComponent implements OnInit {
   }
 
   async getNotificationSettings() {
-    this.notificationSettings = await this.notificationSettingsService.getNotificationSettingsPerUser(this.userService.user);
+    this.notificationSettings = await this.notificationSettingsService.getNotificationSettings();
   }
 
   setSelection() {
@@ -58,8 +55,8 @@ export class UserSettingsComponent implements OnInit {
       return;
     }
 
-    this.notificationSettings.forEach((setting: INotificationSettings) => {
-      const course = this.myCourses.find(tmp => tmp._id === setting.course._id);
+    this.notificationSettings.forEach((setting: INotificationSettingsView) => {
+      const course = this.myCourses.find(tmp => tmp._id === setting.course);
 
       if (course === undefined) {
         return;
@@ -80,26 +77,23 @@ export class UserSettingsComponent implements OnInit {
 
     for (const course of this.myCourses) {
       try {
-        let settings = this.notificationSettings.find(tmp => tmp.course._id === course._id);
+        let settings = this.notificationSettings.find(tmp => tmp.course === course._id);
 
         if (settings === undefined) {
-          settings = await this.notificationSettingsService.createItem(new NotificationSettings(this.userService.user, course));
+          settings = {
+            course: course._id,
+            notificationType: NOTIFICATION_TYPE_ALL_CHANGES,
+            emailNotification: false
+          };
           this.notificationSettings.push(settings);
         }
 
-        if (this.notificationSelection.isSelected(course)) {
-          settings.notificationType = NOTIFICATION_TYPE_ALL_CHANGES;
-        } else {
-          settings.notificationType = NOTIFICATION_TYPE_NONE;
-        }
+        settings.notificationType = this.notificationSelection.isSelected(course)
+          ? NOTIFICATION_TYPE_ALL_CHANGES
+          : NOTIFICATION_TYPE_NONE;
+        settings.emailNotification = this.emailSelection.isSelected(course);
 
-        if (this.emailSelection.isSelected(course)) {
-          settings.emailNotification = true;
-        } else {
-          settings.emailNotification = false;
-        }
-
-        await this.notificationSettingsService.updateItem(settings);
+        await this.notificationSettingsService.setNotificationSettings(settings);
       } catch (err) {
         if (errors.indexOf(err.error.message) === -1) {
           errors.push(err.error.message);
