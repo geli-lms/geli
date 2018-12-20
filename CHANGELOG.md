@@ -11,8 +11,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 -->
 
 ## [Unreleased]
-### Changed
-- Bump version number. []()
+### Added
+- Translatable SnackBarService. [#922](https://github.com/geli-lms/geli/issues/922)
 
 ## [[0.8.4](https://github.com/geli-lms/geli/releases/tag/v0.8.4)] - 2018-12-20 - WS 18/19 ❄️-Release
 ### Added
