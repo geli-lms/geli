@@ -72,9 +72,9 @@ export class NotificationSettingsController {
       throw new ForbiddenError();
     }
     await NotificationSettings.findOneAndUpdate(
-        {user: currentUser, course},
-        {user: currentUser, course, notificationType, emailNotification},
-        {new: true, upsert: true});
+      {user: currentUser, course},
+      {user: currentUser, course, notificationType, emailNotification},
+      {new: true, upsert: true});
     return {};
   }
 }
