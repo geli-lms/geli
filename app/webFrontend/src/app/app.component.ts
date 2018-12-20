@@ -10,7 +10,7 @@ import {RavenErrorHandler} from './shared/services/raven-error-handler.service';
 import {ThemeService} from './shared/services/theme.service';
 import {TranslateService} from '@ngx-translate/core';
 import {DomSanitizer, SafeStyle} from '@angular/platform-browser';
-import {TranslatableSnackBarServiceService} from './shared/services/translatable-snack-bar-service.service';
+import {TranslatableSnackBarService} from './shared/services/translatable-snack-bar.service';
 
 @Component({
   selector: 'app-root',
@@ -30,7 +30,7 @@ export class AppComponent implements OnInit {
               private showProgress: ShowProgressService,
               private apiInfoService: APIInfoService,
               private ravenErrorHandler: RavenErrorHandler,
-              private snackBar: TranslatableSnackBarServiceService,
+              private snackBar: TranslatableSnackBarService,
               private themeService: ThemeService,
               public translate: TranslateService,
               private domSanitizer: DomSanitizer) {

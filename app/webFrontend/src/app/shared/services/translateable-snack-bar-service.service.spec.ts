@@ -1,10 +1,10 @@
 import {TestBed} from '@angular/core/testing';
 
-import {TranslatableSnackBarServiceService} from './translatable-snack-bar-service.service';
+import {TranslatableSnackBarService} from './translatable-snack-bar.service';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {SnackBarService} from './snack-bar.service';
 
-describe('TranslatableSnackBarServiceService', () => {
+describe('TranslatableSnackBarService', () => {
 
   beforeEach(() => {
     const snackBarServiceSpy = jasmine.createSpyObj('SnackBarService', ['open']);
@@ -14,7 +14,7 @@ describe('TranslatableSnackBarServiceService', () => {
         TranslateModule.forRoot(),
       ],
       providers: [
-        TranslatableSnackBarServiceService,
+        TranslatableSnackBarService,
         {provide: SnackBarService, useValue: snackBarServiceSpy},
         TranslateService,
       ]
@@ -31,7 +31,7 @@ describe('TranslatableSnackBarServiceService', () => {
       'awesome message from {{user}}': 'translated awesome message from {{user}}',
     });
 
-    const translatableSnackBar: TranslatableSnackBarServiceService = TestBed.get(TranslatableSnackBarServiceService);
+    const translatableSnackBar: TranslatableSnackBarService = TestBed.get(TranslatableSnackBarService);
 
     translatableSnackBar.open('awesome message');
     await expect(snackBar.open)
@@ -51,7 +51,7 @@ describe('TranslatableSnackBarServiceService', () => {
       'awesome short message': 'translated awesome short message',
     });
 
-    const translatableSnackBar: TranslatableSnackBarServiceService = TestBed.get(TranslatableSnackBarServiceService);
+    const translatableSnackBar: TranslatableSnackBarService = TestBed.get(TranslatableSnackBarService);
     translatableSnackBar.openShort('awesome short message');
 
     await expect(snackBar.open)
@@ -68,7 +68,7 @@ describe('TranslatableSnackBarServiceService', () => {
     });
 
 
-    const translatableSnackBar: TranslatableSnackBarServiceService = TestBed.get(TranslatableSnackBarServiceService);
+    const translatableSnackBar: TranslatableSnackBarService = TestBed.get(TranslatableSnackBarService);
     translatableSnackBar.openLong('awesome long message');
 
     await expect(snackBar.open)
