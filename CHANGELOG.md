@@ -26,7 +26,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - `bundle.scss` not available in api container. [#1052](https://github.com/geli-lms/geli/issues/1052)
 
 ### Changed
-- Update `mongoose` to `5.3.x`. [#1003](https://github.com/geli-lms/geli/issues/1003) [#1004](https://github.com/geli-lms/geli/pull/1004) [#1044](https://github.com/geli-lms/geli/pull/1044)
+- Update `mongoose` to `5.4.x`. [#1003](https://github.com/geli-lms/geli/issues/1003) [#1004](https://github.com/geli-lms/geli/pull/1004) [#1044](https://github.com/geli-lms/geli/pull/1044) [#1077](https://github.com/geli-lms/geli/pull/1077)
 - Refactor `LectureController` `GET`/`POST`/`PUT` routes to use `async`/`await`. [#1041](https://github.com/geli-lms/geli/issues/1041)
 - Refactor `NotificationController` unit tests in general. [#1065](https://github.com/geli-lms/geli/issues/1065)
 - Refactor `NotificationController` to utilize `.orFail` and the `errorCodes` file. [#1065](https://github.com/geli-lms/geli/issues/1065)
@@ -35,6 +35,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Sanitize `NotificationController` `POST` route parameters by taking a `targetType` and `targetId` instead of the separate `changedCourse`/`changedLecture`/`changedUnit` which needed a _(missing)_ consistency check. [#1065](https://github.com/geli-lms/geli/issues/1065)
 - Empty success response object in the two `NotificationController` `POST` routes. [#1065](https://github.com/geli-lms/geli/issues/1065)
 - Major `NotificationSettingsController` refactoring and changes in general, plus unit test / front-end adjustments. [#1072](https://github.com/geli-lms/geli/issues/1072)
+- Disable unit submit button when deadline is over. [#964](https://github.com/geli-lms/geli/issues/964)
+- The background image on the index page. [#922](https://github.com/geli-lms/geli/issues/922)
 
 ### Removed
 - Unused `Notification` class in the front-end. [#1065](https://github.com/geli-lms/geli/issues/1065)

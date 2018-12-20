@@ -15,7 +15,11 @@
 </div>
 
 <p>
-  <button mat-raised-button color="primary" [disabled]="validationMode" (click)="validate()">{{ 'unit.text.submitAnswers' | translate }}</button>
+  <button mat-raised-button color="primary"
+      [disabled]="validationMode || deadlineIsOver"
+      (click)="validate()">
+    {{ 'unit.text.submitAnswers' | translate }}
+  </button>
   <button mat-raised-button (click)="reset()">{{ 'common.reset' | translate }}</button>
   <span *ngIf="progress && progress.done" class="progress-done">
     <mat-icon>check</mat-icon>{{ 'unit.text.taskCompleted' | translate }}
