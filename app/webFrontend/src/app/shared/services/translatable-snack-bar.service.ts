@@ -5,7 +5,7 @@ import {LangChangeEvent, TranslateService} from '@ngx-translate/core';
 @Injectable({
   providedIn: 'root'
 })
-export class TranslatableSnackBarServiceService {
+export class TranslatableSnackBarService {
 
   /**
    * @param snackBarService

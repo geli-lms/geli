@@ -18,6 +18,7 @@ RUN mkdir -p /usr/src/app/tmp
 RUN chmod a+rwx /usr/src/app/tmp
 
 COPY api/build/src /usr/src/app/
+COPY api/build/styles /usr/src/styles/
 COPY api/node_modules /usr/src/app/node_modules
 COPY api/nlf-licenses.json /usr/src/app/
 COPY api/package.json /usr/src/app/

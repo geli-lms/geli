@@ -7,7 +7,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ShowProgressService} from '../../shared/services/show-progress.service';
 import {TitleService} from '../../shared/services/title.service';
 import {TranslateService} from '@ngx-translate/core';
-import {TranslatableSnackBarServiceService} from '../../shared/services/translatable-snack-bar-service.service';
+import {TranslatableSnackBarService} from '../../shared/services/translatable-snack-bar.service';
 
 @Component({
   templateUrl: './login.component.html',
@@ -23,7 +23,7 @@ export class LoginComponent implements OnInit {
               private authGuard: AuthGuardService,
               private authenticationService: AuthenticationService,
               private showProgress: ShowProgressService,
-              private snackBar: TranslatableSnackBarServiceService,
+              private snackBar: TranslatableSnackBarService,
               private formBuilder: FormBuilder,
               private titleService: TitleService,
               private translate: TranslateService) {
