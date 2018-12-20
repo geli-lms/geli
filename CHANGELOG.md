@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 -->
 
 ## [Unreleased]
+
+## [[0.8.4](https://github.com/geli-lms/geli/releases/tag/v0.8.4)] - 2018-12-20 - WS 18/19 ❄️-Release
 ### Added
 - Export PDF with styled free text units. [#997](https://github.com/geli-lms/geli/issues/997) [#1047](https://github.com/geli-lms/geli/pull/1047)
 - More predefined custom containers. [#996](https://github.com/geli-lms/geli/issues/996)
@@ -19,8 +21,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Various `NotificationController` unit tests (`200`s, `400`s, `403`s, `404`s). [#1065](https://github.com/geli-lms/geli/issues/1065)
 - Two `NotificationSettingsController` unit tests for `403` & `404` `PUT` request errors. [#1072](https://github.com/geli-lms/geli/issues/1072)
 - `TestHelper` request methods for `PUT` & `DELETE`. [#1041](https://github.com/geli-lms/geli/issues/1041)
-- CodeKata validation service. [#844](https://github.com/geli-lms/geli/issues/844)
-- Course: Added switch for file <-> video unit. [#912](https://github.com/geli-lms/geli/issues/912)
+- Code kata validation service. [#844](https://github.com/geli-lms/geli/issues/844)
+- File ↔ video unit display type switching. [#912](https://github.com/geli-lms/geli/issues/912)
 
 ### Fixed
 - `bundle.scss` not available in api container. [#1052](https://github.com/geli-lms/geli/issues/1052)
