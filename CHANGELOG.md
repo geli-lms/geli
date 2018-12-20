@@ -20,7 +20,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - `TestHelper` request methods for `PUT` & `DELETE`. [#1041](https://github.com/geli-lms/geli/issues/1041)
 - CodeKata validation service. [#844](https://github.com/geli-lms/geli/issues/844)
 - Course: Added switch for file <-> video unit. [#912](https://github.com/geli-lms/geli/issues/912)
-- Translatable SnackBarService. [#922](https://github.com/geli-lms/geli/issues/922)
 
 ### Fixed
 - `bundle.scss` not available in api container. [#1052](https://github.com/geli-lms/geli/issues/1052)
