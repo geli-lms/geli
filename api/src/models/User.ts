@@ -209,11 +209,11 @@ userSchema.pre('remove', async function () {
   try {
     const promises = [];
     // notifications
-    promises.push(Notification.remove({user: localUser._id}));
+    promises.push(Notification.deleteMany({user: localUser._id}));
     // notificationsettings
-    promises.push(NotificationSettings.remove({user: localUser._id}));
+    promises.push(NotificationSettings.deleteMany({user: localUser._id}));
     // whitelists
-    promises.push(WhitelistUser.remove({uid: localUser.uid}));
+    promises.push(WhitelistUser.deleteMany({uid: localUser.uid}));
     // remove user form courses
     promises.push(Course.updateMany(
       {$or: [
@@ -226,7 +226,7 @@ userSchema.pre('remove', async function () {
           }
       }));
     // progress
-    promises.push(Progress.remove({user: localUser._id}));
+    promises.push(Progress.deleteMany({user: localUser._id}));
 
     // image
     const path = localUser.profile.picture.path;

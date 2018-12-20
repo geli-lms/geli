@@ -1,144 +1,80 @@
-import {Authorized, BadRequestError, Body, Get, JsonController, Param, Post, Put, UseBefore} from 'routing-controllers';
+import {Authorized, BodyParam, Get, JsonController, Put, UseBefore, CurrentUser, NotFoundError, ForbiddenError} from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
-import {
-  API_NOTIFICATION_TYPE_ALL_CHANGES,
-  INotificationSettingsModel,
-  NotificationSettings
-} from '../models/NotificationSettings';
-import {INotificationSettings} from '../../../shared/models/INotificationSettings';
+import {NotificationSettings} from '../models/NotificationSettings';
+import {Course} from '../models/Course';
+import {IUser} from '../../../shared/models/IUser';
 
 @JsonController('/notificationSettings')
 @UseBefore(passportJwtMiddleware)
 export class NotificationSettingsController {
 
   /**
-   * @api {get} /api/notificationSettings/user/:id Get notification settings per user
+   * @api {get} /api/notificationSettings/ Get own notification settings for all courses
    * @apiName GetNotificationSettings
    * @apiGroup NotificationSettings
    * @apiPermission student
    * @apiPermission teacher
    * @apiPermission admin
    *
-   * @apiParam {String} id User ID.
-   *
-   * @apiSuccess {INotificationSettingsModel[]} settings List of notification settings.
+   * @apiSuccess {INotificationSettingsView[]} settings List of notification settings.
    *
    * @apiSuccessExample {json} Success-Response:
    *     [{
    *         "_id": "5ab2829142949f000857b8f8",
-   *         "updatedAt": "2018-03-21T16:04:33.335Z",
-   *         "createdAt": "2018-03-21T16:04:33.335Z",
-   *         "user": {...},
-   *         "course": {...},
+   *         "course": "5be0691ee3859d38308dab19",
    *         "notificationType": "allChanges",
-   *         "emailNotification": false,
-   *         "__v": 0
+   *         "emailNotification": false
    *     }, {
    *         "_id": "5ab283b342949f000857b8f9",
-   *         "updatedAt": "2018-03-21T16:09:23.542Z",
-   *         "createdAt": "2018-03-21T16:09:23.542Z",
-   *         "user": {...},
-   *         "course": {...},
-   *         "notificationType": "allChanges",
-   *         "emailNotification": false,
-   *         "__v": 0
-   *     ]}
+   *         "course": "5c0fb47d8d583532143c68a7",
+   *         "notificationType": "relatedChanges",
+   *         "emailNotification": true
+   *     }]
    */
   @Authorized(['student', 'teacher', 'admin'])
-  @Get('/user/:id')
-  async getNotificationSettingsPerUser(@Param('id') id: string) {
-    const notificationSettings: INotificationSettingsModel[] = await NotificationSettings.find({'user': id})
+  @Get('/')
+  async getNotificationSettings(@CurrentUser() currentUser: IUser) {
+    const notificationSettings = await NotificationSettings.find({user: currentUser})
       .populate('user')
       .populate('course');
-    return notificationSettings.map(settings => {
-      return settings.toObject();
-    });
+    return notificationSettings.map(settings => settings.forView());
   }
 
   /**
-   * @api {put} /api/notificationSettings/user/:id Update notification settings
+   * @api {put} /api/notificationSettings/ Set notification settings for a course (i.e. create or update them)
    * @apiName PutNotificationSettings
    * @apiGroup NotificationSettings
    * @apiPermission student
    * @apiPermission teacher
    * @apiPermission admin
    *
-   * @apiParam {String} id ID of notification settings.
-   * @apiParam {INotificationSettings} notificationSettings New notification settings.
+   * @apiParam {String} course ID of the course for which notification settings are to be set.
+   * @apiParam {String} notificationType New value for the primary notification setting (none/relatedChanges/allChanges).
+   * @apiParam {String} emailNotification New value for the email notification setting.
    *
-   * @apiSuccess {INotificationSettingsModel} settings Updated notification settings.
-   *
-   * @apiSuccessExample {json} Success-Response:
-   *     {
-   *         "_id": "5ab283b342949f000857b8f9",
-   *         "updatedAt": "2018-03-21T16:09:23.542Z",
-   *         "createdAt": "2018-03-21T16:09:23.542Z",
-   *         "user": {...},
-   *         "course": {...},
-   *         "notificationType": "allChanges",
-   *         "emailNotification": true,
-   *         "__v": 0
-   *     }
-   *
-   * @apiError BadRequestError notification needs fields course and user
-   */
-  @Authorized(['student', 'teacher', 'admin'])
-  @Put('/:id')
-  async updateNotificationSettings(@Param('id') id: string, @Body() notificationSettings: INotificationSettings) {
-    if (!notificationSettings.course || !notificationSettings.user) {
-      throw new BadRequestError('notification needs fields course and user');
-    }
-    const settings: INotificationSettingsModel =
-      await NotificationSettings.findOneAndUpdate({'_id': id}, notificationSettings, {new: true});
-    return settings.toObject();
-  }
-
-  /**
-   * @api {post} /api/notificationSettings/ Create notification settings
-   * @apiName PostNotificationSettings
-   * @apiGroup NotificationSettings
-   * @apiPermission student
-   * @apiPermission teacher
-   * @apiPermission admin
-   *
-   * @apiParam {Object} data Data for new notification settings.
-   *
-   * @apiSuccess {INotificationSettingsModel} settings Created notification settings.
+   * @apiSuccess {Object} result Empty object.
    *
    * @apiSuccessExample {json} Success-Response:
-   *     {
-   *         "_id": "5ab283b342949f000857b8f9",
-   *         "updatedAt": "2018-03-21T16:09:23.542Z",
-   *         "createdAt": "2018-03-21T16:09:23.542Z",
-   *         "user": {...},
-   *         "course": {...},
-   *         "notificationType": "allChanges",
-   *         "emailNotification": true,
-   *         "__v": 0
-   *     }
+   *     {}
    *
-   * @apiError BadRequestError NotificationSettings need course and user
-   * @apiError BadRequestError NotificationSettings for user: x with course: y already exist
+   * @apiError NotFoundError Did not find the given course.
+   * @apiError ForbiddenError User doesn't have access to the given course.
    */
   @Authorized(['student', 'teacher', 'admin'])
-  @Post('/')
-  async createNotificationSettings(@Body() data: any) {
-    if (!data.user || !data.course) {
-      throw new BadRequestError('NotificationSettings need course and user');
+  @Put('/')
+  async putNotificationSettings(@BodyParam('course', {required: true}) course: string,
+                                @BodyParam('notificationType', {required: true}) notificationType: string,
+                                @BodyParam('emailNotification', {required: true}) emailNotification: string,
+                                @CurrentUser() currentUser: IUser) {
+    const courseDoc = await Course.findById(course).orFail(new NotFoundError());
+    if (!courseDoc.checkPrivileges(currentUser).userCanViewCourse) {
+      // This check isn't absolutely necessary since storing notification settings shouldn't be a security issue.
+      throw new ForbiddenError();
     }
-    const notificationSettings: INotificationSettingsModel =
-      await NotificationSettings.findOne({'user': data.user, 'course': data.course});
-    if (notificationSettings) {
-      throw new BadRequestError('NotificationSettings for user:' + data.user + ' with course: ' + data.course + ' already exist');
-    }
-    const settings: INotificationSettingsModel = await new NotificationSettings({
-      'user': data.user,
-      'course': data.course,
-      'notificationType': API_NOTIFICATION_TYPE_ALL_CHANGES,
-      'emailNotification': false
-    }).save();
-    return settings.toObject();
+    await NotificationSettings.findOneAndUpdate(
+      {user: currentUser, course},
+      {user: currentUser, course, notificationType, emailNotification},
+      {new: true, upsert: true});
+    return {};
   }
-
-
 }

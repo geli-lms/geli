@@ -9,7 +9,7 @@ import {ICourse} from '../../../shared/models/ICourse';
 import {ICourseDashboard} from '../../../shared/models/ICourseDashboard';
 import {ICourseView} from '../../../shared/models/ICourseView';
 import {IUser} from '../../../shared/models/IUser';
-import {Course} from '../models/Course';
+import {Course, ICourseModel} from '../models/Course';
 import {WhitelistUser} from '../models/WhitelistUser';
 import emailService from '../services/EmailService';
 
@@ -21,8 +21,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import ResponsiveImageService from '../services/ResponsiveImageService';
 import {IResponsiveImageData} from '../../../shared/models/IResponsiveImageData';
-
-import { Picture } from '../models/mediaManager/File';
+import {Picture} from '../models/mediaManager/File';
 
 const coursePictureUploadOptions = {
   storage: multer.diskStorage({
@@ -681,18 +680,29 @@ export class CourseController {
     return {};
   }
 
-
+  /**
+   * @api {delete} /api/courses/picture/:id Delete course picture
+   * @apiName DeleteCoursePicture
+   * @apiGroup Course
+   *
+   * @apiParam {String} id Course ID.
+   * @apiParam {IUser} currentUser Currently logged in user.
+   *
+   * @apiSuccess {Object} Empty object.
+   *
+   * @apiSuccessExample {json} Success-Response:
+   *      {}
+   *
+   * @apiError NotFoundError
+   * @apiError ForbiddenError
+   */
   @Authorized(['teacher', 'admin'])
   @Delete('/picture/:id')
   async deleteCoursePicture(
     @Param('id') id: string,
     @CurrentUser() currentUser: IUser) {
 
-    const course = await Course.findById(id);
-
-    if (!course) {
-      throw new NotFoundError();
-    }
+    const course = await Course.findById(id).orFail(new NotFoundError());
 
     if (!course.checkPrivileges(currentUser).userCanEditCourse) {
       throw new ForbiddenError();
@@ -702,13 +712,53 @@ export class CourseController {
       throw new NotFoundError();
     }
 
-    const picture = await Picture.findOne(course.image);
-    await picture.remove();
+    const picture = await Picture.findById(course.image);
+    if (picture) {
+      picture.remove();
+    }
 
     await Course.updateOne({_id: id}, {$unset: {image: 1}});
     return {};
   }
 
+  /**
+   * @api {post} /api/courses/picture/:id Add course picture
+   * @apiName AddCoursePicture
+   * @apiGroup Course
+   *
+   * @apiParam {String} id Course ID.
+   * @apiParam responsiveImageDataRaw Image as data object.
+   * @apiParam {IUser} currentUser Currently logged in user.
+   *
+   * @apiSuccess {Object} Empty object.
+   *
+   * @apiSuccessExample {json} Success-Response:
+   *   {
+   *     "breakpoints":[
+   *       {
+   *         "screenSize":0,
+   *         "imageSize":{
+   *           "width":284,
+   *           "height":190
+   *         },
+   *         "pathToImage":"uploads/courses/5c0fa2770315e73d6c7babfe_1544542544919_0.jpg",
+   *         "pathToRetinaImage":"uploads/courses/5c0fa2770315e73d6c7babfe_1544542544919_0@2x.jpg"
+   *       }
+   *     ],
+   *     "_id":"5c0fd95871707a3a888ae70a",
+   *     "__t":"Picture",
+   *     "name":"5c0fa2770315e73d6c7babfe_1544542544919.jpg",
+   *     "link":"-",
+   *     "size":0,
+   *     "mimeType":"image/jpeg",
+   *     "createdAt":"2018-12-11T15:35:52.423Z",
+   *     "updatedAt":"2018-12-11T15:35:52.423Z",
+   *     "__v":0
+   *   }
+   *
+   * @apiError NotFoundError
+   * @apiError ForbiddenError
+   */
   @Authorized(['teacher', 'admin'])
   @Post('/picture/:id')
   async addCoursePicture(
@@ -718,27 +768,25 @@ export class CourseController {
       @CurrentUser() currentUser: IUser) {
 
     // Remove the old picture if the course already has one.
-    const course = await Course.findById(id);
+    const course = await Course.findById(id).orFail(new NotFoundError());
 
     if (!course.checkPrivileges(currentUser).userCanEditCourse) {
       throw new ForbiddenError();
     }
 
-    const responsiveImageData = <IResponsiveImageData>JSON.parse(responsiveImageDataRaw.imageData);
-
     const mimeFamily = file.mimetype.split('/', 1)[0];
     if (mimeFamily !== 'image') {
       // Remove the file if the type was not correct.
       await fs.unlinkSync(file.path);
-
       throw new BadRequestError('Forbidden format of uploaded picture: ' + mimeFamily);
     }
 
-    if (course.image) {
-      const picture = await Picture.findById(course.image);
-      await picture.remove();
+    const picture = await Picture.findById(course.image);
+    if (picture) {
+      picture.remove();
     }
 
+    const responsiveImageData = <IResponsiveImageData>JSON.parse(responsiveImageDataRaw.imageData);
     await ResponsiveImageService.generateResponsiveImages(file, responsiveImageData);
 
     const image: any = new Picture({
@@ -749,7 +797,6 @@ export class CourseController {
       mimeType: file.mimetype,
       breakpoints: responsiveImageData.breakpoints
     });
-
     await image.save();
 
     course.image = image;

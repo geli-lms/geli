@@ -147,5 +147,27 @@ export const errorCodes = {
       code: 'emptyQuery',
       text: 'Query was empty.'
     }
+  },
+  notification: {
+    missingCourseOfLecture: {
+      code: 'missingCourseOfLecture',
+      text: 'Course of given existing lecture is missing'
+    },
+    missingCourseOfUnit: {
+      code: 'missingCourseOfUnit',
+      text: 'Course of given existing unit is missing'
+    },
+    invalidTargetType: {
+      code: 'invalidTargetType',
+      text: 'targetType is invalid'
+    },
+    textOnlyWithoutText: {
+      code: 'textOnlyWithoutText',
+      text: 'Requested text-only notification creation without supplying any text'
+    },
+    targetUserNotFound: {
+      code: 'targetUserNotFound',
+      text: 'Target user not found'
+    }
   }
 };

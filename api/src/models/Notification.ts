@@ -1,13 +1,12 @@
 import * as mongoose from 'mongoose';
 import {INotification} from '../../../shared/models/INotification';
-import {User} from './User';
-import {Lecture} from './Lecture';
-import {INotificationSettings} from '../../../shared/models/INotificationSettings';
+import {INotificationView} from '../../../shared/models/INotificationView';
 import {IUser} from '../../../shared/models/IUser';
-import {INotificationSettingsModel} from './NotificationSettings';
+import {extractSingleMongoId} from '../utilities/ExtractMongoId';
 
 interface INotificationModel extends INotification, mongoose.Document {
   exportJSON: () => Promise<INotificationModel>;
+  forView: () => INotificationView;
 }
 
 interface INotificationMongoose extends mongoose.Model<INotificationModel> {
@@ -65,6 +64,17 @@ notificationSchema.methods.exportJSON = function () {
   // custom properties
 
   return obj;
+};
+
+notificationSchema.methods.forView = function (this: INotificationModel): INotificationView {
+  return {
+    _id: extractSingleMongoId(this),
+    changedCourse: extractSingleMongoId(this.changedCourse),
+    changedLecture: extractSingleMongoId(this.changedLecture),
+    changedUnit: extractSingleMongoId(this.changedUnit),
+    text: this.text,
+    isOld: this.isOld
+  };
 };
 
 notificationSchema.statics.exportPersonalData = async function(user: IUser) {

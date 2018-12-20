@@ -354,6 +354,10 @@
     "addFreeText": "Add free text",
     "addTasks": "Add tasks",
     "addVideos": "Add videos",
+    "viewAs": "Display as",
+    "video": "Video",
+    "file": "File",
+    "cantSwitchToVideo": "Video-view can only contain videos.",
     "import": "Import unit",
     "placeholder": {
       "enterAnswer": "Enter answer here*",
@@ -371,7 +375,8 @@
       "publishedOn": "Published on",
       "submitAnswers": "Submit answers",
       "taskCompleted": "Task completed",
-      "tasks": "Tasks"
+      "tasks": "Tasks",
+      "deadline": "Deadline"
     },
     "tooltip": {
       "add": "add unit",
