@@ -34,6 +34,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Sanitize `NotificationController` `POST` route parameters by taking a `targetType` and `targetId` instead of the separate `changedCourse`/`changedLecture`/`changedUnit` which needed a _(missing)_ consistency check. [#1065](https://github.com/geli-lms/geli/issues/1065)
 - Empty success response object in the two `NotificationController` `POST` routes. [#1065](https://github.com/geli-lms/geli/issues/1065)
 - Disable unit submit button when deadline is over. [#964](https://github.com/geli-lms/geli/issues/964)
+- The background image on the index page.[#922](https://github.com/geli-lms/geli/issues/922)
 
 ### Removed
 - Unused `Notification` class in the front-end. [#1065](https://github.com/geli-lms/geli/issues/1065)
