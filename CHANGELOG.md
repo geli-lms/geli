@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Styled code snippets. [#1017](https://github.com/geli-lms/geli/issues/1017)
 - `LectureController` success (`200`), access denial (`403`) and not found (`404`) unit tests for all routes. [#1041](https://github.com/geli-lms/geli/issues/1041)
 - Various `NotificationController` unit tests (`200`s, `400`s, `403`s, `404`s). [#1065](https://github.com/geli-lms/geli/issues/1065)
+- Two `NotificationSettingsController` unit tests for `403` & `404` `PUT` request errors. [#1072](https://github.com/geli-lms/geli/issues/1072)
 - `TestHelper` request methods for `PUT` & `DELETE`. [#1041](https://github.com/geli-lms/geli/issues/1041)
 - CodeKata validation service. [#844](https://github.com/geli-lms/geli/issues/844)
 - Course: Added switch for file <-> video unit. [#912](https://github.com/geli-lms/geli/issues/912)
@@ -33,16 +34,20 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Sanitize `{post} /api/lecture/` route parameters by reducing the arbitrary `ILecture` input to `name` & `description`. [#1041](https://github.com/geli-lms/geli/issues/1041)
 - Sanitize `NotificationController` `POST` route parameters by taking a `targetType` and `targetId` instead of the separate `changedCourse`/`changedLecture`/`changedUnit` which needed a _(missing)_ consistency check. [#1065](https://github.com/geli-lms/geli/issues/1065)
 - Empty success response object in the two `NotificationController` `POST` routes. [#1065](https://github.com/geli-lms/geli/issues/1065)
+- Major `NotificationSettingsController` refactoring and changes in general, plus unit test / front-end adjustments. [#1072](https://github.com/geli-lms/geli/issues/1072)
 - Disable unit submit button when deadline is over. [#964](https://github.com/geli-lms/geli/issues/964)
-- The background image on the index page.[#922](https://github.com/geli-lms/geli/issues/922)
+- The background image on the index page. [#922](https://github.com/geli-lms/geli/issues/922)
 
 ### Removed
 - Unused `Notification` class in the front-end. [#1065](https://github.com/geli-lms/geli/issues/1065)
+- Unused `NotificationSettings` class in the front-end. [#1072](https://github.com/geli-lms/geli/issues/1072)
+- `{post} /api/notificationSettings/` route; functionality now handled completely by `{put} /api/notificationSettings/`. [#1072](https://github.com/geli-lms/geli/issues/1072)
 
 ### Fixed
 - Some incorrect `FixtureUtils` return types. [#1041](https://github.com/geli-lms/geli/issues/1041) [#1065](https://github.com/geli-lms/geli/issues/1065)
 - `LectureController` `404` error handling. [#1041](https://github.com/geli-lms/geli/issues/1041)
 - `NotificationController` `404` error handling. [#1065](https://github.com/geli-lms/geli/issues/1065)
+- `NotificationSettingsController` `404` `PUT` error handling. [#1072](https://github.com/geli-lms/geli/issues/1072)
 - Course list broken when course image in invalid state. [#1053](https://github.com/geli-lms/geli/issues/1053)
 
 ### Security
@@ -50,7 +55,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Fix missing `teacher` authorization check for the two `NotificationController` `POST` routes. [#1065](https://github.com/geli-lms/geli/issues/1065)
 - Fix missing `NotificationController` `POST` `teacher` authorization check. [#1065](https://github.com/geli-lms/geli/issues/1065)
 - Fix `{get} /api/notification/` response leaks by introducing `INotificationView`, a reduced and safe variant of the `INotification` interface. [#1065](https://github.com/geli-lms/geli/issues/1065)
+- Fix response leaks for all three _(now two)_ `NotificationSettingsController` routes by introducing `INotificationSettingsView`, a strongly reduced _(no own _id)_ and safe variant of the `INotificationSettings` interface. [#1072](https://github.com/geli-lms/geli/issues/1072)
 - Secure `{get} /api/notification/` by using the `@CurrentUser` instead of allowing arbitrary id requests. [#1065](https://github.com/geli-lms/geli/issues/1065)
+- Secure `{get} /api/notificationSettings/` by using the `@CurrentUser` instead of allowing arbitrary id requests. [#1072](https://github.com/geli-lms/geli/issues/1072)
+- Secure `{put} /api/notificationSettings/` by using the `@CurrentUser` instead of allowing arbitrary id requests. [#1072](https://github.com/geli-lms/geli/issues/1072)
+- Minimize `NotificationSettingsController` attack surface by severely simplifying its routes. [#1072](https://github.com/geli-lms/geli/issues/1072)
 
 ## [[0.8.3](https://github.com/geli-lms/geli/releases/tag/v0.8.3)] - 2018-11-29 - WS 18/19 🚀-Release
 ### Added
