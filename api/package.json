@@ -90,7 +90,7 @@
     "@types/raven": "^2.5.1",
     "@types/validator": "^10.9.0",
     "chai": "4.2.0",
-    "chai-http": "^4.2.0",
+    "chai-http": "^4.2.1",
     "coveralls": "^3.0.2",
     "gulp": "^4.0.0",
     "gulp-apidoc": "^0.2.7",
