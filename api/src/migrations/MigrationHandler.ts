@@ -13,7 +13,7 @@ export class MigrationHandler {
     (<any>mongoose).Promise = global.Promise;
 
     if (!mongoose.connection.readyState) {
-      this.databaseConnection = mongoose.connect(config.database, {useNewUrlParser: true});
+      this.databaseConnection = mongoose.connect(config.database, config.databaseOptions);
     }
 
     fs.readdirSync(__dirname + '/scripts').forEach((file: string) => {
