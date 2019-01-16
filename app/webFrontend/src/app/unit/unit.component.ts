@@ -53,9 +53,8 @@ export class UnitComponent implements OnInit, AfterViewInit {
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         this.scrollToUnit(this.unitId);
-
       }
-    })
+    });
 
     Promise.all(this.units.map(async (unit) => {
       const res = await this.msgService.getMessageCount({room: unit.chatRoom});
@@ -64,13 +63,13 @@ export class UnitComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.scrollToUnit(this.unitId)
+    this.scrollToUnit(this.unitId);
   }
 
 
   scrollToUnit(unitId: string): void {
     // find id
-    const index = this.units.findIndex(e => e._id == unitId);
+    const index = this.units.findIndex(e => e._id === unitId);
 
     if (index < 0) {
       return;
