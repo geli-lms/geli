@@ -8,10 +8,8 @@ import {Lecture} from '../../../src/models/Lecture';
 import {Course} from '../../../src/models/Course';
 import {FixtureUtils} from '../../../fixtures/FixtureUtils';
 import {Unit} from '../../../src/models/units/Unit';
-import {ICodeKataModel} from '../../../src/models/units/CodeKataUnit';
-import {IAssignmentUnit} from "../../../../shared/models/units/IAssignmentUnit";
-import {IAssignmentUnitModel} from "../../../src/models/units/AssignmentUnit";
-import {IAssignment} from "../../../../shared/models/assignment/IAssignment";
+import {IAssignmentUnitModel} from '../../../src/models/units/AssignmentUnit';
+import {IAssignment} from '../../../../shared/models/assignment/IAssignment';
 
 chai.use(chaiHttp);
 const should = chai.should();
@@ -123,5 +121,5 @@ describe(`AssignmentUnit ${BASE_URL}`, () => {
 
       hasBeenRemoved.should.be.true;
     });
-  })
+  });
 });

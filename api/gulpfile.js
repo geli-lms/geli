@@ -136,10 +136,9 @@ gulp.task(BUILD, function (callback) {
 });
 */
 
-gulp.task(BUILD, gulp.series(CLEAN_BUILD, COMPILE_TYPESCRIPT, COMPILE_MD_SASS, COPY_FIXTURES));
+gulp.task(BUILD, gulp.series(CLEAN_BUILD, TSLINT, COMPILE_TYPESCRIPT, COMPILE_MD_SASS, COPY_FIXTURES));
 
 // Runs all required steps for the build in sequence FOR DEVELOP
-/*
 gulp.task(BUILD_DEV, function (callback) {
   runSequence(CLEAN_BUILD, TSLINT_DEV, COMPILE_TYPESCRIPT, COPY_FIXTURES, callback);
 });
