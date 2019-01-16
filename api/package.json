@@ -63,7 +63,7 @@
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
     "raven": "^2.6.4",
-    "reflect-metadata": "^0.1.12",
+    "reflect-metadata": "^0.1.13",
     "routing-controllers": "^0.7.7",
     "sharp": "^0.21.2",
     "socket.io": "^2.2.0",
