@@ -264,7 +264,7 @@ export class UnitController {
    * @apiGroup Unit
    * @apiPermission student
    *
-   * @apiSuccess {boolean} success.
+   * @apiSuccess {IAssignment} assignment.
    *
    * @apiSuccessExample {json} Success-Response:
    *     {
@@ -291,12 +291,9 @@ export class UnitController {
   async addAssignment(@Param('id') id: string,
                       @CurrentUser() currentUser: IUser) {
 
-    const assignmentUnit = <IAssignmentUnitModel> await Unit.findById(id);
-    // Check Params file etc
+    const assignmentUnit = <IAssignmentUnitModel> await Unit.findById(id).orFail(new NotFoundError());
 
-    if (!assignmentUnit) {
-      throw new NotFoundError();
-    }
+    // TODO: check if user is in course.
 
     let assignment: IAssignment = assignmentUnit.assignments.find(submittedAssignment => {
       return submittedAssignment.user._id.toString() === currentUser._id;
@@ -344,15 +341,13 @@ export class UnitController {
                             @UploadedFile('file', {options: uploadOptions}) uploadedFile: any,
                             @CurrentUser() currentUser: IUser) {
 
-    const assignmentUnit = <IAssignmentUnitModel> await Unit.findById(unitId);
-
-    if (!assignmentUnit) {
-      throw new NotFoundError();
-    }
+    const assignmentUnit = <IAssignmentUnitModel> await Unit.findById(unitId)
+      .orFail(new NotFoundError());
 
     const assignment = assignmentUnit.assignments.find(submittedAssignment => {
       return submittedAssignment.user._id.toString() === currentUser._id;
     });
+
     if (!assignment) {
       throw new NotFoundError();
     }
@@ -421,12 +416,7 @@ export class UnitController {
   @Put('/:id/assignment')
   async updateAssignment(@Param('id') id: string, @Body() data: IAssignment, @CurrentUser() currentUser: IUser) {
 
-    const assignmentUnit = <IAssignmentUnitModel> await Unit.findById(id);
-    const dataUserId = !data.user._id ? '' : data.user._id;
-
-    if (!assignmentUnit) {
-      throw new NotFoundError();
-    }
+    const assignmentUnit = <IAssignmentUnitModel> await Unit.findById(id).orFail(new NotFoundError());
 
     let assignment: IAssignment = null;
 

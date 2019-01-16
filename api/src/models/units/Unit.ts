@@ -74,7 +74,7 @@ const unitSchema = new mongoose.Schema({
 
         if (ret.assignments) {
           ret.assigments = ret.assignments.map((assignment: any) => {
-            assignment._id = assignment._id.toString();
+            assignment._id = '';
             return assignment;
           });
         }
