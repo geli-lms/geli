@@ -1,4 +1,5 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import * as moment from 'moment';
 import {SnackBarService} from '../../shared/services/snack-bar.service';
 import {ProgressService} from 'app/shared/services/data/progress.service';
 import {ICodeKataUnitProgress} from '../../../../../../shared/models/progress/ICodeKataProgress';
@@ -32,7 +33,7 @@ export class CodeKataComponent implements OnInit {
   logs: string;
   progress: ICodeKataUnitProgress;
   isExampleCode = false;
-
+  deadlineIsOver = false;
 
   constructor(private route: ActivatedRoute,
               private snackBar: SnackBarService,
@@ -53,6 +54,8 @@ export class CodeKataComponent implements OnInit {
     }
 
     this.applyProgressData();
+
+    this.deadlineIsOver = moment(new Date()).isAfter(this.codeKataUnit.deadline);
   }
 
   async applyProgressData() {

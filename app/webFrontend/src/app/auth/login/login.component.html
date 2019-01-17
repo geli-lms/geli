@@ -9,15 +9,13 @@
         <input matInput formControlName="email" [placeholder]="'common.email'|translate">
       </mat-form-field>
       <mat-form-field>
-        <input matInput type="password" formControlName="password"
-               [placeholder]="'common.password'|translate">
+        <input matInput type="password" formControlName="password" [placeholder]="'common.password'|translate">
       </mat-form-field>
 
-      <button mat-raised-button color="primary" class="mat-button" type="submit"
-              [disabled]="loading">
+      <button mat-raised-button [disabled]="loginForm.invalid || loading" color="primary" class="mat-button" type="submit">
         {{'common.login'|translate}}
       </button>
-      <button mat-raised-button [matTooltip]="'auth.tooltip.ForgotPassword' | translate" type="button" routerLink="/reset" routerLinkActive="active">
+      <button mat-raised-button [matTooltip]="'auth.tooltip.ForgotPassword'|translate" type="button" routerLink="/reset" routerLinkActive="active">
         {{'auth.forgotPassword'|translate}}
       </button>
     </form>

@@ -5,6 +5,7 @@ import {ProgressService} from '../../shared/services/data/progress.service';
 import {ITaskUnit} from '../../../../../../shared/models/units/ITaskUnit';
 import {ITaskUnitProgress} from '../../../../../../shared/models/progress/ITaskUnitProgress';
 import {TaskUnitProgress} from '../../models/progress/TaskUnitProgress';
+import * as moment from 'moment';
 
 const knuth = require('knuth-shuffle').knuthShuffle;
 
@@ -19,6 +20,7 @@ export class TaskUnitComponent implements OnInit {
 
   progress: ITaskUnitProgress;
   validationMode = false;
+  deadlineIsOver = false;
   courseId: string;
 
   constructor(private route: ActivatedRoute,
@@ -35,6 +37,7 @@ export class TaskUnitComponent implements OnInit {
 
     this.applyProgressData();
     this.shuffleAnswers();
+    this.deadlineIsOver = moment(new Date()).isAfter(this.taskUnit.deadline);
   }
 
   async applyProgressData() {

@@ -17,17 +17,18 @@
     }
   },
   "auth": {
+    "login": {
+      "failed": {
+        "couldNotBeVerified": "Login failed: Your login details could not be verified.",
+        "notActiveYet": "Login failed: Your account has not been activated yet.",
+        "unknown": "Login failed: An unknown error occurred."
+      },
+      "success": "Login successful"
+    },
     "changePassword": "Change password",
     "confirmPassword": "Confirm password",
     "forgotPassword": "Forgot password",
     "generatePassword": "Generate new password",
-    "loginFailed": "Login failed",
-    "loginFailedError": {
-      "couldNotBeVerified": "Your login details could not be verified. Please try again.",
-      "notActiveYet": "Your account has not been activated yet.",
-      "unknown": "An unknown error occured."
-    },
-    "loginSuccess": "Login successful",
     "registration": {
       "acceptCheckboxes": "I accept gelis ",
       "back": "Back to frontpage",
@@ -284,7 +285,8 @@
     }
   },
   "home": {
-    "welcomeTo": "Welcome to"
+    "welcomeTo": "Welcome to",
+    "backendError": "Could not connect to backend: {{err}}"
   },
   "lecture": {
     "noUnits": "No units added yet.",
@@ -379,7 +381,8 @@
       "publishedOn": "Published on",
       "submitAnswers": "Submit answers",
       "taskCompleted": "Task completed",
-      "tasks": "Tasks"
+      "tasks": "Tasks",
+      "deadline": "Deadline"
     },
     "tooltip": {
       "add": "add unit",
