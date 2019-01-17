@@ -21,10 +21,11 @@ import {TranslateModule} from '@ngx-translate/core';
 import {AdminMarkdownEditComponent} from './components/admin-markdown-edit/admin-markdown-edit.component';
 import {UserProfileDialog} from 'app/shared/components/user-profile-dialog/user-profile-dialog.component';
 import {NotfoundComponent} from './components/notfound/notfound.component';
-import { ShowCommentsDirective } from './directives/show-comments.directive';
+import {ShowCommentsDirective} from './directives/show-comments.directive';
 
 import {ResponsiveImageComponent} from './components/responsive-image/responsive-image.component';
-import { headersToString } from 'selenium-webdriver/http';
+import {headersToString} from 'selenium-webdriver/http';
+import {StickyElementDirective} from "./directives/sticky-element.directive";
 
 @NgModule({
   imports: [
@@ -56,7 +57,8 @@ import { headersToString } from 'selenium-webdriver/http';
     NotfoundComponent,
     UserProfileDialog,
     ShowCommentsDirective,
-    ResponsiveImageComponent
+    ResponsiveImageComponent,
+    StickyElementDirective
   ],
   exports: [
     GravatarDirective,
@@ -77,7 +79,8 @@ import { headersToString } from 'selenium-webdriver/http';
     AdminMarkdownEditComponent,
     UserProfileDialog,
     ShowCommentsDirective,
-    ResponsiveImageComponent
+    ResponsiveImageComponent,
+    StickyElementDirective
   ],
   entryComponents: [
     PickMediaDialog,
