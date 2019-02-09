@@ -8,7 +8,13 @@ import {UnitService} from '../../../shared/services/data.service';
 import {ShowProgressService} from '../../../shared/services/show-progress.service';
 import {IFile} from '../../../../../../../shared/models/mediaManager/IFile';
 import {UnitFormService} from '../../../shared/services/unit-form.service';
-import {FormArray, FormBuilder, FormControl, FormGroup} from '@angular/forms';
+import {
+  FormArray,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators
+} from '@angular/forms';
 import {SnackBarService} from '../../../shared/services/snack-bar.service';
 import {CourseMediaComponent} from '../../../course/course-edit/course-media/course-media.component';
 import {FileIconService} from '../../../shared/services/file-icon.service';
@@ -19,7 +25,6 @@ import {FileIconService} from '../../../shared/services/file-icon.service';
   styleUrls: ['./file-unit-form.component.scss']
 })
 export class FileUnitFormComponent implements OnInit {
-
   course: ICourse;
   lecture: ILecture;
   model: IFileUnit;
@@ -28,33 +33,50 @@ export class FileUnitFormComponent implements OnInit {
 
   unitForm: FormGroup;
 
-
   @ViewChild(UnitGeneralInfoFormComponent)
   public generalInfo: UnitGeneralInfoFormComponent;
 
-  constructor(public snackBar: SnackBarService,
-              private unitService: UnitService,
-              private showProgress: ShowProgressService,
-              private dialog: MatDialog,
-              private unitFormService: UnitFormService,
-              private formBuilder: FormBuilder,
-              private fileIcon: FileIconService) {
-  }
+  public allowedVideoMime = [
+    'video/mp4',
+    'video/webm',
+    'video/ogg',
+    'video/avi'
+  ];
+
+  constructor(
+    public snackBar: SnackBarService,
+    private unitService: UnitService,
+    private showProgress: ShowProgressService,
+    private dialog: MatDialog,
+    private unitFormService: UnitFormService,
+    private formBuilder: FormBuilder,
+    private fileIcon: FileIconService
+  ) {}
 
   ngOnInit() {
-    this.model = <IFileUnit> this.unitFormService.model;
-    this.lecture = <ILecture> this.unitFormService.lecture;
-    this.course = <ICourse> this.unitFormService.course;
+    this.model = <IFileUnit>this.unitFormService.model;
+    this.lecture = <ILecture>this.unitFormService.lecture;
+    this.course = <ICourse>this.unitFormService.course;
 
-    this.model.fileUnitType = this.fileUnitType;
-
-    this.unitFormService.headline = this.fileUnitType === 'video' ? 'Add Videos' : 'Add Files';
+    this.unitFormService.headline =
+      this.model.fileUnitType === 'video' ? 'Add Videos' : 'Add Files';
     this.unitFormService.unitForm.addControl('files', new FormArray([]));
+    this.unitFormService.unitForm.addControl(
+      'fileUnitType',
+      new FormControl(this.model.fileUnitType, Validators.required)
+    );
+
+    this.unitFormService.unitForm
+      .get('fileUnitType')
+      .valueChanges.subscribe(val => {
+        // update model according (for view purposes)
+        if (!val) {
+          return;
+        }
+        this.model.fileUnitType = val;
+      });
 
     this.unitForm = this.unitFormService.unitForm;
-
-
-
 
     this.buildForm();
   }
@@ -66,19 +88,14 @@ export class FileUnitFormComponent implements OnInit {
   }
 
   removeFile(file: any) {
-    let files =  (<FormArray>this.unitForm.controls.files).controls;
+    let files = (<FormArray>this.unitForm.controls.files).controls;
     files = files.filter((currFile: any) => currFile.value !== file.value);
     (<FormArray>this.unitForm.controls.files).controls = files;
   }
 
   async openAddFilesDialog() {
-
-    const allowedMimeTypes = (this.fileUnitType !== 'video') ? undefined : [
-      'video/mp4',
-      'video/webm',
-      'video/ogg',
-      'video/avi',
-    ];
+    const allowedMimeTypes =
+      this.model.fileUnitType !== 'video' ? undefined : this.allowedVideoMime;
 
     const res = await this.dialog.open(CourseMediaComponent, {
       maxWidth: '90vw',
@@ -90,7 +107,6 @@ export class FileUnitFormComponent implements OnInit {
         allowedMimeTypes: allowedMimeTypes
       }
     });
-
 
     /*
     if (!this.unitFormService.course.media) {
@@ -134,6 +150,15 @@ export class FileUnitFormComponent implements OnInit {
     });
   }
 
+  /**
+   * Returns a list of items, which are NOT of type video
+   */
+  testOnlyVideoFileTypes() {
+    return (<FormArray>this.unitForm.controls.files).controls.find(
+      elem => this.allowedVideoMime.indexOf(elem.value.mimeType) === -1
+    );
+  }
+
   addFileToForm(file: IFile) {
     // create new fileControl as formGroup
     const fileControl = this.formBuilder.group({
@@ -151,6 +176,6 @@ export class FileUnitFormComponent implements OnInit {
     }
 
     // add new element at end of files array
-    (<FormArray> this.unitForm.controls['files']).push(fileControl);
+    (<FormArray>this.unitForm.controls['files']).push(fileControl);
   }
 }

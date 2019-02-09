@@ -27,7 +27,7 @@ describe('Login-form', () => {
     await page.getLoginButton().click();
     await browser.waitForAngular(); // ensure that there are no running http requests
 
-    expect(page.getSnackBar().getText()).toContain('Login failed: Your login details could not be verified. Please try again');
+    expect(page.getSnackBar().getText()).toContain('Login failed: Your login details could not be verified.');
   });
 
   it('should login with valid credentials', async () => {

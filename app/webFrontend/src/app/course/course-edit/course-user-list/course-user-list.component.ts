@@ -78,7 +78,7 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
                 if (index >= 0) {
                   this.notificationService.createNotification(
                     this.dragableUsers[index],
-                    {text: 'You have been removed from course ' + this.course.name});
+                    {targetType: 'text', text: 'You have been removed from course ' + this.course.name});
                   this.onDragendRemove.emit(this.dragableUsers[index]);
                 }
               } else if (value.target.getAttribute('item-id') === 'UserInCourse') {
