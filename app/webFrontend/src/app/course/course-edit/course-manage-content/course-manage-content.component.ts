@@ -69,10 +69,10 @@ export class CourseManageContentComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.dragulaService.dropModel('lectures').subscribe((value :any)=> {
+    this.dragulaService.dropModel('lectures').subscribe(() => {
       this.updateLectureOrder();
     });
-    this.dragulaService.dropModel('units').subscribe((value :any)=> {
+    this.dragulaService.dropModel('units').subscribe((value: any) => {
       this.updateUnitOrder();
 
       // When dragging to another lecture we need to update the other lecture too
