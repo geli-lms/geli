@@ -54,10 +54,7 @@ export class ExportController {
    */
   @Get('/course/:id')
   async exportCourse(@Param('id') id: string, @CurrentUser() currentUser: IUser) {
-    const course = await Course.findById(id);
-    if (!course) {
-      throw new NotFoundError();
-    }
+    const course = await Course.findById(id).orFail(new NotFoundError());
     ExportController.assertUserExportAuthorization(currentUser, course);
     return course.exportJSON();
   }
@@ -85,10 +82,7 @@ export class ExportController {
    */
   @Get('/lecture/:id')
   async exportLecture(@Param('id') id: string, @CurrentUser() currentUser: IUser) {
-    const lecture = await Lecture.findById(id);
-    if (!lecture) {
-      throw new NotFoundError();
-    }
+    const lecture = await Lecture.findById(id).orFail(new NotFoundError());
     const course = await Course.findOne({lectures: id});
     ExportController.assertUserExportAuthorization(currentUser, course);
     return lecture.exportJSON();
@@ -120,10 +114,7 @@ export class ExportController {
    */
   @Get('/unit/:id')
   async exportUnit(@Param('id') id: string, @CurrentUser() currentUser: IUser) {
-    const unit = await Unit.findById(id);
-    if (!unit) {
-      throw new NotFoundError();
-    }
+    const unit = await Unit.findById(id).orFail(new NotFoundError());
     const course = await Course.findById(unit._course);
     ExportController.assertUserExportAuthorization(currentUser, course);
     return unit.exportJSON();

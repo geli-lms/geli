@@ -1,5 +1,3 @@
-/* tslint:disable:no-unused-variable */
-
 import {TestBed} from '@angular/core/testing';
 import {SnackBarService} from './snack-bar.service';
 import {MatSnackBar} from '@angular/material';
@@ -17,34 +15,34 @@ describe('SnackBarService', () => {
     });
   });
 
-  it('should have been called with dismiss and default duration', () => {
+  it('should have been called with dismiss and default duration', async () => {
     const matSnackBar: MatSnackBar = TestBed.get(MatSnackBar);
 
     const snackBar: SnackBarService = TestBed.get(SnackBarService);
     snackBar.open('awesome message');
 
-    expect(matSnackBar.open)
-      .toHaveBeenCalledWith('awesome message', snackBar.defaultAction, {duration: SnackBarService.defaultDuration});
+    await expect(matSnackBar.open)
+      .toHaveBeenCalledWith('awesome message', 'Dismiss', {duration: SnackBarService.defaultDuration});
   });
 
-  it('should have been called with dismiss and short duration', () => {
+  it('should have been called with dismiss and short duration', async () => {
     const matSnackBar: MatSnackBar = TestBed.get(MatSnackBar);
 
     const snackBar: SnackBarService = TestBed.get(SnackBarService);
     snackBar.openShort('awesome short message');
 
-    expect(matSnackBar.open)
-      .toHaveBeenCalledWith('awesome short message', snackBar.defaultAction, {duration: SnackBarService.durationShort});
+    await expect(matSnackBar.open)
+      .toHaveBeenCalledWith('awesome short message', 'Dismiss', {duration: SnackBarService.durationShort});
   });
 
-  it('should have been called with dismiss and long duration', () => {
+  it('should have been called with dismiss and long duration', async () => {
     const matSnackBar: MatSnackBar = TestBed.get(MatSnackBar);
 
     const snackBar: SnackBarService = TestBed.get(SnackBarService);
     snackBar.openLong('awesome long message');
 
-    expect(matSnackBar.open)
-      .toHaveBeenCalledWith('awesome long message', snackBar.defaultAction, {duration: SnackBarService.durationLong});
+    await expect(matSnackBar.open)
+      .toHaveBeenCalledWith('awesome long message', 'Dismiss', {duration: SnackBarService.durationLong});
   });
 
 });

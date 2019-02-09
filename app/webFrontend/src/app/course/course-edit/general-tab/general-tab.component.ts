@@ -179,9 +179,8 @@ export class GeneralTabComponent implements OnInit {
       const course = await this.courseService.updateItem(request);
 
       this.notificationService.createItem({
-        changedCourse: course,
-        changedLecture: null,
-        changedUnit: null,
+        targetId: course._id,
+        targetType: 'course',
         text: 'Course ' + course.name + ' has been updated.'
       });
 
@@ -231,9 +230,8 @@ export class GeneralTabComponent implements OnInit {
 
       this.translate.get(['common.course', 'course.hasBeenDeleted']).subscribe(async (t: string) => {
         await this.notificationService.createItem({
-          changedCourse: this.courseOb,
-          changedLecture: null,
-          changedUnit: null,
+          targetId: this.courseOb._id,
+          targetType: 'course',
           text: t['common.course'] + ' ' + this.courseOb.name + ' ' + t['course.hasBeenDeleted']
         });
         this.snackBar.open(t['common.course'] + ' ' + this.courseOb.name + ' ' + t['course.hasBeenDeleted']);

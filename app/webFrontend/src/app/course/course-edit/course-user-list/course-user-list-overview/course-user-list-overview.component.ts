@@ -63,7 +63,7 @@ export class CourseUserListOverviewComponent implements OnInit {
       this.selectedMembers.forEach(user => {
         this.notificationService.createNotification(
           user,
-          {text: 'You have been removed from course ' + this.course.name});
+          {targetType: 'text', text: 'You have been removed from course ' + this.course.name});
         this.onRemove.emit(user._id);
       });
       this.resetSelectedUsers();

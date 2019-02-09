@@ -64,7 +64,7 @@ export class Server {
   }
 
   start() {
-    mongoose.connect(config.database, {useNewUrlParser: true});
+    mongoose.connect(config.database, config.databaseOptions);
 
     this.app.use(morgan('combined'));
 

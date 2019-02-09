@@ -12,4 +12,3 @@ export interface INotification {
   text: string;
   isOld: boolean;
 }
-

@@ -4,7 +4,7 @@ import {TestHelper} from '../TestHelper';
 import {FixtureUtils} from '../../fixtures/FixtureUtils';
 import {Course} from '../../src/models/Course';
 import {ICourse} from '../../../shared/models/ICourse';
-import {User, IUserModel} from '../../src/models/User';
+import {User} from '../../src/models/User';
 import {Lecture} from '../../src/models/Lecture';
 import {ILecture} from '../../../shared/models/ILecture';
 import {IUnit} from '../../../shared/models/units/IUnit';
@@ -33,10 +33,7 @@ const testHelper = new TestHelper(BASE_URL);
  */
 async function exportAccessDenialSetup() {
   const course = await FixtureUtils.getRandomCourseWithAllUnitTypes();
-  const unauthorizedTeacher = await User.findOne({
-    _id: {$nin: [course.courseAdmin, ...course.teachers]},
-    role: 'teacher'
-  });
+  const unauthorizedTeacher = await FixtureUtils.getUnauthorizedTeacherForCourse(course);
   return {course, unauthorizedTeacher};
 }
 
