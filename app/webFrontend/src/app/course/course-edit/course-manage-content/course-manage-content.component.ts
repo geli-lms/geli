@@ -58,33 +58,26 @@ export class CourseManageContentComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     // Make items only draggable by dragging the handle
-    this.dragulaService.setOptions('lectures', {
+    this.dragulaService.createGroup('lectures', {
       moves: (el, container, handle) => {
         return handle.classList.contains('lecture-drag-handle');
       }
     });
-    this.dragulaService.setOptions('units', {
+    this.dragulaService.createGroup('units', {
       moves: (el, container, handle) => {
         return handle.classList.contains('unit-drag-handle');
       }
     });
 
-    this.dragulaService.dropModel.subscribe((value) => {
-      const [bagName, element, target, container] = value;
+    this.dragulaService.dropModel('lectures').subscribe((value :any)=> {
+      this.updateLectureOrder();
+    });
+    this.dragulaService.dropModel('units').subscribe((value :any)=> {
+      this.updateUnitOrder();
 
-      switch (bagName) {
-        case 'lectures':
-          this.updateLectureOrder();
-          break;
-        case 'units':
-          // Update current lecture
-          this.updateUnitOrder();
-
-          // When dragging to another lecture we need to update the other lecture too
-          if (target.dataset.lectureId) {
-            this.updateUnitOrder(target.dataset.lectureId);
-          }
-          break;
+      // When dragging to another lecture we need to update the other lecture too
+      if (value.target.dataset.lectureId) {
+        this.updateUnitOrder(value.target.dataset.lectureId);
       }
     });
   }

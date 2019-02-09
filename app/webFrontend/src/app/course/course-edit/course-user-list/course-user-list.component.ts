@@ -64,32 +64,30 @@ export class CourseUserListComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     // Make items only draggable by dragging the handle
-    this.dragula.setOptions(this.dragulaBagId, {
+    this.dragula.createGroup(this.dragulaBagId, {
       moves: (el, container, handle) => {
         return handle.classList.contains('user-drag-handle');
       }
     });
-    this.dragula.dropModel.subscribe(value => {
-      const [bagName, el, target, source] = value;
-      if (source.getAttribute('item-id') !== target.getAttribute('item-id')) {
-        if (bagName === this.dragulaBagId) {
-              if (target.getAttribute('item-id') === 'UserNotInCourse') {
+    this.dragula.dropModel(this.dragulaBagId).subscribe(value => {
+      if (value.source.getAttribute('item-id') !== value.target.getAttribute('item-id')) {
+
+              if (value.target.getAttribute('item-id') === 'UserNotInCourse') {
                 const idList: string[] = this.dragableUsers.map(user => user._id);
-                const index: number = idList.indexOf(el.children[0].getAttribute('item-id'));
+                const index: number = idList.indexOf(value.el.children[0].getAttribute('item-id'));
                 if (index >= 0) {
                   this.notificationService.createNotification(
                     this.dragableUsers[index],
                     {text: 'You have been removed from course ' + this.course.name});
                   this.onDragendRemove.emit(this.dragableUsers[index]);
                 }
-              } else if (target.getAttribute('item-id') === 'UserInCourse') {
+              } else if (value.target.getAttribute('item-id') === 'UserInCourse') {
                 const idList: string[] = this.dragableUsersInCourse.map(user => user._id);
-                const index: number = idList.indexOf(el.children[0].getAttribute('item-id'));
+                const index: number = idList.indexOf(value.el.children[0].getAttribute('item-id'));
                 if (index >= 0) {
                   this.onDragendPush.emit(this.dragableUsersInCourse[index]);
                 }
               }
-        }
       }
     });
     this.userCtrl = new FormControl();
