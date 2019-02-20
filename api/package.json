@@ -32,7 +32,7 @@
     "migrate:inspect": "gulp migrate:inspect"
   },
   "dependencies": {
-    "@types/node-sass": "^3.10.32",
+    "@types/node-sass": "^4.11.0",
     "@types/sharp": "^0.21.2",
     "@types/socket.io": "^2.1.2",
     "app-root-path": "^2.1.0",
