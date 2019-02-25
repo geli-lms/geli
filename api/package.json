@@ -42,7 +42,7 @@
     "cookie": "^0.3.1",
     "express": "^4.16.4",
     "fast-csv": "^2.4.1",
-    "highlight.js": "^9.14.2",
+    "highlight.js": "^9.15.2",
     "html-pdf": "^2.2.0",
     "jsonwebtoken": "^8.5.0",
     "markdown-it": "^8.4.2",
