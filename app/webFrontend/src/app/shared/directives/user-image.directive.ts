@@ -2,7 +2,6 @@ import {Directive, HostBinding, Input, OnInit, OnDestroy, SimpleChange} from '@a
 import {DomSanitizer, SafeStyle} from '@angular/platform-browser';
 import {IUser} from '../../../../../../shared/models/IUser';
 import {User} from '../../models/User';
-import {JwtPipe} from '../pipes/jwt/jwt.pipe';
 
 @Directive({selector: '[user-image]'})
 export class UserImageDirective implements OnInit, OnDestroy {
@@ -24,7 +23,7 @@ export class UserImageDirective implements OnInit, OnDestroy {
 
   private objectUrl: string;
 
-  constructor(private jwtPipe: JwtPipe, private domSanitizer: DomSanitizer) {
+  constructor(private domSanitizer: DomSanitizer) {
   }
 
   async ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
@@ -53,10 +52,7 @@ export class UserImageDirective implements OnInit, OnDestroy {
 
       const user = new User(this.user);
       // TODO: Provide a way to supply the image pixel size to user.getUserImageURL for the gravatar path.
-      let url = user.getUserImageURL();
-      if (user.hasUploadedProfilePicture) {
-        url = this.jwtPipe.transform(url);
-      }
+      const url = user.getUserImageURL();
       this.backgroundImage = this.domSanitizer.bypassSecurityTrustStyle(`url(${url})`);
     }
   }

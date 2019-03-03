@@ -17,17 +17,18 @@
     }
   },
   "auth": {
+    "login": {
+      "failed": {
+        "couldNotBeVerified": "Login failed: Your login details could not be verified.",
+        "notActiveYet": "Login failed: Your account has not been activated yet.",
+        "unknown": "Login failed: An unknown error occurred."
+      },
+      "success": "Login successful"
+    },
     "changePassword": "Change password",
     "confirmPassword": "Confirm password",
     "forgotPassword": "Forgot password",
     "generatePassword": "Generate new password",
-    "loginFailed": "Login failed",
-    "loginFailedError": {
-      "couldNotBeVerified": "Your login details could not be verified. Please try again.",
-      "notActiveYet": "Your account has not been activated yet.",
-      "unknown": "An unknown error occured."
-    },
-    "loginSuccess": "Login successful",
     "registration": {
       "acceptCheckboxes": "I accept gelis ",
       "back": "Back to frontpage",
@@ -85,7 +86,7 @@
     "description": "Description",
     "discard": "Discard",
     "dismiss": "Dismiss",
-    "download": "Download",
+    "download": "Download (Beta)",
     "documents": "Documents",
     "duplicate": "Duplicate",
     "edit": "Edit",
@@ -109,7 +110,7 @@
     "misc": "Misc.",
     "ok": "OK",
     "open": "Open",
-    "openInTab" : "Open in new Tab",
+    "openInTab": "Open in new Tab",
     "password": "Password",
     "privacy": "Privacy",
     "profile": "Profile",
@@ -122,7 +123,7 @@
     "question": "Question",
     "register": "Register",
     "reset": "Reset",
-    "rename" : "Rename",
+    "rename": "Rename",
     "role": "Role",
     "roles": {
       "student": "Student",
@@ -155,7 +156,9 @@
     },
     "videos": "Videos",
     "line": "Line",
-    "errors": "Errors"
+    "errors": "Errors",
+    "collapseAll": "Collapse all",
+    "expandAll": "Expand all"
   },
   "course": {
     "delete": "Delete course",
@@ -165,8 +168,10 @@
       "accessKey": "Access key",
       "description": "Course description",
       "name": "Course name",
-      "searchAndAdd": "Search and add user by name, Id or e-mail"
+      "searchAndAdd": "Search and add user by name, Id or e-mail",
+      "freeTextTheme": "Theme for free text"
     },
+    "hasBeenDeleted": "has been deleted.",
     "ShowCourse": "Show course",
     "text": {
       "addMarkdownToCourse": "Add markdown to add text to this course.",
@@ -174,15 +179,15 @@
       "canSeenByStudents": "Course can be seen by students.",
       "downloadHelpText": "Select units or files which you want to download in a zip",
       "downloadNoFiles": "Für diesen Kurs steht kein Material zum herunterladen bereit!",
-      "IndividualPDF":"Individual PDFs",
-      "IndividualPDFExplanation":"One PDF per Unit",
-      "SinglePDF":"Single PDF",
-      "SinglePDFExplanation":"One PDF with everything you selected",
+      "downloadBetaWarning": "Heads up! The download feature is still in development. We assume that for most lectures the export works quite well but there are some corner cases where the export might not work as you expect. If you find a mistake please report it back to",
+      "IndividualPDF": "Individual PDFs",
+      "IndividualPDFExplanation": "One PDF per Unit",
+      "SinglePDF": "Single PDF",
+      "SinglePDFExplanation": "One PDF with everything you selected",
       "editCourse": "Edit course",
       "enterAccessKey": "Please enter the course's access key.",
       "enterAccessKeyForStudents": "Enter an access key for the students.",
       "goToCourse": "Go to course",
-      "hasBeenDeleted": "has been deleted.",
       "inCourse": "In Course",
       "infoWhitelist": "All users on this list are allowed to join this course.",
       "isFreeForEveryone": "The course is free and accessible for everyone.",
@@ -197,6 +202,13 @@
         "free": "Free",
         "accesskey": "Accesskey",
         "whitelist": "Whitelist"
+      },
+      "selectFreeTextTheme": {
+        "": "Default",
+        "theme1": "Theme 1",
+        "theme2": "Theme 2",
+        "theme3": "Theme 3",
+        "theme4": "Theme 4"
       },
       "uploadWhitelist": "Upload your OBS csv file with your course members for whitelisting students. Old whitelist users are removed by uploading a new file.",
       "userResults": "User results",
@@ -254,13 +266,13 @@
       "filename": "File name",
       "filesize": "File size",
       "fileRemove": "Remove File",
-      "filesSelected" : "File selected",
+      "filesSelected": "File selected",
       "infoDropAddFiles": "Drop files here or click here to upload files.",
       "noVideo": "No video available.",
       "noFiles": "No files available.",
       "progress": "Progress",
       "removeFromQueue": "Remove file from queue.",
-      "selectAll" : "Select all",
+      "selectAll": "Select all",
       "takePicture": "Take picture"
     },
     "tooltip": {
@@ -269,7 +281,8 @@
     }
   },
   "home": {
-    "welcomeTo": "Welcome to"
+    "welcomeTo": "Welcome to",
+    "backendError": "Could not connect to backend: {{err}}"
   },
   "lecture": {
     "noUnits": "No units added yet.",
@@ -343,6 +356,10 @@
     "addFreeText": "Add free text",
     "addTasks": "Add tasks",
     "addVideos": "Add videos",
+    "viewAs": "Display as",
+    "video": "Video",
+    "file": "File",
+    "cantSwitchToVideo": "Video-view can only contain videos.",
     "import": "Import unit",
     "placeholder": {
       "enterAnswer": "Enter answer here*",
@@ -360,7 +377,8 @@
       "publishedOn": "Published on",
       "submitAnswers": "Submit answers",
       "taskCompleted": "Task completed",
-      "tasks": "Tasks"
+      "tasks": "Tasks",
+      "deadline": "Deadline"
     },
     "tooltip": {
       "add": "add unit",

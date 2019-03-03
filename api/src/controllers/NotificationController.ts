@@ -1,29 +1,50 @@
-import {
-  Authorized, BadRequestError, Body, CurrentUser, Delete, ForbiddenError, Get, InternalServerError, JsonController, NotFoundError, Param,
-  Post, Req,
-  UseBefore
-} from 'routing-controllers';
+import {Get, Post, Delete, Param, BodyParam, CurrentUser, Authorized,
+        UseBefore, JsonController, BadRequestError, ForbiddenError, NotFoundError, InternalServerError} from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
-import {
-  NotificationSettings, API_NOTIFICATION_TYPE_NONE,
-  API_NOTIFICATION_TYPE_CHANGES_WITH_RELATIONIONSHIP, API_NOTIFICATION_TYPE_ALL_CHANGES,
-} from '../models/NotificationSettings';
+import {NotificationSettings, API_NOTIFICATION_TYPE_ALL_CHANGES} from '../models/NotificationSettings';
 import {Notification} from '../models/Notification';
-import {Course} from '../models/Course';
+import {Course, ICourseModel} from '../models/Course';
+import {Lecture, ILectureModel} from '../models/Lecture';
+import {Unit, IUnitModel} from '../models/units/Unit';
 import {User} from '../models/User';
-import {IUser} from '../../../shared/models/IUser';
 import {ICourse} from '../../../shared/models/ICourse';
 import {ILecture} from '../../../shared/models/ILecture';
 import {IUnit} from '../../../shared/models/units/IUnit';
-import {INotification} from '../../../shared/models/INotification';
-import {Request} from 'express';
+import {IUser} from '../../../shared/models/IUser';
 import {SendMailOptions} from 'nodemailer';
 import emailService from '../services/EmailService';
+import {errorCodes} from '../config/errorCodes';
 
 @JsonController('/notification')
 @UseBefore(passportJwtMiddleware)
 export class NotificationController {
 
+  static async resolveTarget(targetId: string, targetType: string, currentUser: IUser) {
+    let course: ICourseModel;
+    let lecture: ILectureModel;
+    let unit: IUnitModel;
+    switch (targetType) {
+      case 'course':
+        course = await Course.findById(targetId).orFail(new NotFoundError());
+        break;
+      case 'lecture':
+        lecture = await Lecture.findById(targetId).orFail(new NotFoundError());
+        course = await Course.findOne({lectures: targetId})
+          .orFail(new InternalServerError(errorCodes.notification.missingCourseOfLecture.text));
+        break;
+      case 'unit':
+        unit = await Unit.findById(targetId).orFail(new NotFoundError());
+        course = await Course.findById(unit._course)
+          .orFail(new InternalServerError(errorCodes.notification.missingCourseOfUnit.text));
+        break;
+      default:
+        throw new BadRequestError(errorCodes.notification.invalidTargetType.text);
+    }
+    if (!course.checkPrivileges(currentUser).userCanEditCourse) {
+      throw new ForbiddenError();
+    }
+    return {course, lecture, unit};
+  }
 
   /**
    * @api {post} /api/notification/ Create notifications
@@ -32,30 +53,34 @@ export class NotificationController {
    * @apiPermission teacher
    * @apiPermission admin
    *
-   * @apiParam {Object} data Notification text and information on changed course, lecture and unit.
-   * @apiParam {Request} request Request.
+   * @apiParam {String} targetId Target id of the changed course, lecture or unit.
+   * @apiParam {String} targetType Which type the targetId represents: Either 'course', 'lecture' or 'unit'.
+   * @apiParam {String} text Message that the new notification(s) will contain.
    *
-   * @apiSuccess {Boolean} notified Confirmation of notification.
+   * @apiSuccess {Object} result Empty object.
    *
    * @apiSuccessExample {json} Success-Response:
-   *     {
-   *         notified: true
-   *     }
+   *     {}
    *
-   * @apiError BadRequestError Notification needs at least the fields course and text
-   * @apiError InternalServerError Failed to create notification
+   * @apiError NotFoundError Did not find the targetId of targetType.
+   * @apiError BadRequestError Invalid targetType.
+   * @apiError ForbiddenError The teacher doesn't have access to the corresponding course.
+   * @apiError InternalServerError No course was found for a given existing lecture.
+   * @apiError InternalServerError No course was found for a given existing unit.
    */
   @Authorized(['teacher', 'admin'])
   @Post('/')
-  async createNotifications(@Body() data: any, @Req() request: Request) {
-    if (!data.changedCourse || !data.text) {
-      throw new BadRequestError('Notification needs at least the fields course and text');
-    }
-    const course = await Course.findById(data.changedCourse._id);
+  async createNotifications(@BodyParam('targetId', {required: true}) targetId: string,
+                            @BodyParam('targetType', {required: true}) targetType: string,
+                            @BodyParam('text', {required: true}) text: string,
+                            @CurrentUser() currentUser: IUser) {
+    const {course, lecture, unit} = await NotificationController.resolveTarget(targetId, targetType, currentUser);
     await Promise.all(course.students.map(async student => {
-      await this.createNotification(student, data.text, data.changedCourse, data.changedLecture, data.changedUnit);
+      if (await this.shouldCreateNotification(student, course, unit)) {
+        await this.createNotification(student, text, course, lecture, unit);
+      }
     }));
-    return {notified: true};
+    return {};
   }
 
   /**
@@ -65,33 +90,65 @@ export class NotificationController {
    * @apiPermission teacher
    * @apiPermission admin
    *
-   * @apiParam {String} id User ID.
-   * @apiParam {Object} data Notification text and information on changed course, lecture and unit.
+   * @apiParam {String} id ID of the user that the new notification is assigned/sent to.
+   * @apiParam {String} targetId Target id of the changed course, lecture or unit.
+   * @apiParam {String} targetType Which type the targetId represents: Either 'course', 'lecture', 'unit' or 'text'.
+   *                               The 'text' type only uses the 'text' parameter while ignoring the 'targetId'.
+   * @apiParam {String} text Message that the new notification(s) will contain.
    *
-   * @apiSuccess {Boolean} notified Confirmation of notification.
+   * @apiSuccess {Object} result Empty object.
    *
    * @apiSuccessExample {json} Success-Response:
-   *     {
-   *         notified: true
-   *     }
+   *     {}
    *
-   * @apiError InternalServerError Failed to create notification
+   * @apiError NotFoundError Did not find the targetId of targetType.
+   * @apiError BadRequestError Invalid targetType.
+   * @apiError ForbiddenError The teacher doesn't have access to the corresponding course (if targetType isn't 'text'-only).
+   * @apiError InternalServerError No course was found for a given existing lecture.
+   * @apiError InternalServerError No course was found for a given existing unit.
    */
   @Authorized(['teacher', 'admin'])
   @Post('/user/:id')
-  async createNotificationForStudent(@Param('id') userId: string, @Body() data: any) {
-    if (!data.changedCourse && !data.text) {
-      throw new BadRequestError('Notification needs at least the field changedCourse or text');
+  async createNotificationForStudent(@Param('id') userId: string,
+                                    @BodyParam('targetId', {required: false}) targetId: string,
+                                    @BodyParam('targetType', {required: true}) targetType: string,
+                                    @BodyParam('text', {required: false}) text: string,
+                                    @CurrentUser() currentUser: IUser) {
+    if (targetType === 'text' && !text) {
+      throw new BadRequestError(errorCodes.notification.textOnlyWithoutText.text);
     }
-    const user = await User.findById(userId);
-    if (!user) {
-      throw new BadRequestError('Could not create notification because user not found');
+    const {course, lecture, unit} = targetType === 'text'
+      ? {course: undefined, lecture: undefined, unit: undefined}
+      : await NotificationController.resolveTarget(targetId, targetType, currentUser);
+
+    const user = await User.findById(userId).orFail(new NotFoundError(errorCodes.notification.targetUserNotFound.text));
+
+    if (await this.shouldCreateNotification(user, course, unit)) {
+      await this.createNotification(user, text, course, lecture, unit);
     }
-    await this.createNotification(user, data.text, data.changedCourse, data.changedLecture, data.changedUnit);
-    return {notified: true};
+    return {};
+  }
+
+  async shouldCreateNotification(user: IUser, changedCourse: ICourseModel, changedUnit?: IUnitModel) {
+    if (!changedCourse && !changedUnit) {
+      // The notificaiton does not depend on any unit/course. We can create a notification.
+      return true;
+    }
+    if (!changedUnit) {
+      return !(await Notification.findOne({user, changedCourse}));
+    }
+    return !(await Notification.findOne({user, changedUnit}));
   }
 
   async createNotification(user: IUser, text: string, changedCourse?: ICourse, changedLecture?: ILecture, changedUnit?: IUnit) {
+    // create no notification if course is not active
+    if (changedCourse && !changedCourse.active) {
+      return;
+    }
+    // create no notification for unit if unit is invisible
+    if (changedUnit && !changedUnit.visible) {
+      return;
+    }
     const notification = new Notification();
     notification.user = user;
     notification.text = text;
@@ -142,54 +199,37 @@ export class NotificationController {
   }
 
   /**
-   * @api {get} /api/notification/user/:id Get notifications
-   * @apiName GetNotification
+   * @api {get} /api/notification/ Get own notifications
+   * @apiName GetNotifications
    * @apiGroup Notification
    * @apiPermission student
    * @apiPermission teacher
    * @apiPermission admin
    *
-   * @apiParam {String} id User ID.
-   *
-   * @apiSuccess {Notification[]} notifications List of notifications.
+   * @apiSuccess {INotificationView[]} notifications List of notifications.
    *
    * @apiSuccessExample {json} Success-Response:
    *     [{
    *         "_id": "5ab2fbe464efe60006cef0b1",
-   *         "updatedAt": "2018-03-22T00:42:12.577Z",
-   *         "createdAt": "2018-03-22T00:42:12.577Z",
-   *         "changedUnit": {...},
-   *         "changedLecture": {...},
-   *         "changedCourse": {...},
-   *         "isOld": false,
+   *         "changedCourse": "5c0fb47d8d583532143c68a7",
+   *         "changedLecture": "5bdb49f11a09bb3ca8ce0a10",
+   *         "changedUnit": "5be0691ee3859d38308dab18",
    *         "text": "Course ProblemSolver has an updated text unit.",
-   *         "user": {...},
-   *         "__v": 0
+   *         "isOld": false
    *     }, {
    *         "_id": "5ab2fc7b64efe60006cef0bb",
-   *         "updatedAt": "2018-03-22T00:44:43.966Z",
-   *         "createdAt": "2018-03-22T00:44:43.966Z",
-   *         "changedUnit": {...},
-   *         "changedLecture": {...},
-   *         "changedCourse": {...},
-   *         "isOld": false,
+   *         "changedCourse": "5be0691ee3859d38308dab19",
+   *         "changedLecture": "5bdb49ef1a09bb3ca8ce0a01",
+   *         "changedUnit": "5bdb49f11a09bb3ca8ce0a12",
    *         "text": "Course katacourse has an updated unit.",
-   *         "user": {...},
-   *         "__v": 0
+   *         "isOld": false
    *     }]
    */
   @Authorized(['student', 'teacher', 'admin'])
-  @Get('/user/:id')
-  async getNotifications(@Param('id') id: string) {
-    const notifications = await Notification.find({'user': id})
-      .populate('user')
-      .populate('changedCourse')
-      .populate('changedLecture')
-      .populate('changedUnit');
-    return notifications.map(notification => {
-      return notification.toObject();
-    });
-
+  @Get('/')
+  async getNotifications(@CurrentUser() currentUser: IUser) {
+    const notifications = await Notification.find({user: currentUser});
+    return notifications.map(notification => notification.forView());
   }
 
   /**
@@ -201,38 +241,19 @@ export class NotificationController {
    * @apiPermission admin
    *
    * @apiParam {String} id Notification ID.
-   * @apiParam {IUser} currentUser Currently logged in user.
    *
-   * @apiSuccess {Object} deletion Object with deleted notification.
+   * @apiSuccess {Object} result Empty object.
    *
    * @apiSuccessExample {json} Success-Response:
-   *     {
-   *         "$__": {...},
-   *         "isNew": false,
-   *         "_doc": {
-   *             "__v": 0,
-   *             "user": {...},
-   *             "text": "Course ProblemSolver has an updated text unit.",
-   *             "isOld": false,
-   *             "changedCourse": {...},
-   *             "changedLecture": {...},
-   *             "changedUnit": {...},
-   *             "createdAt": "2018-03-22T00:42:12.577Z",
-   *             "updatedAt": "2018-03-22T00:42:12.577Z",
-   *             "_id": {...}
-   *         },
-   *         "$init": true
-   *     }
+   *     {}
    *
    * @apiError NotFoundError Notification could not be found.
    */
   @Authorized(['student', 'teacher', 'admin'])
   @Delete('/:id')
   async deleteNotification(@Param('id') id: string, @CurrentUser() currentUser: IUser) {
-    const notification = await Notification.findOne({_id: id, user: currentUser});
-    if (!notification) {
-      throw new NotFoundError('Notification could not be found.');
-    }
-    return notification.remove();
+    const notification = await Notification.findOne({_id: id, user: currentUser}).orFail(new NotFoundError());
+    await notification.remove();
+    return {};
   }
 }

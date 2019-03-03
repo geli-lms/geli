@@ -1,6 +1,9 @@
-import {Authorized, CurrentUser, Get, JsonController, Param, UseBefore} from 'routing-controllers';
+import {
+  Authorized, CurrentUser, Get, JsonController, Param, UseBefore,
+  ForbiddenError, NotFoundError
+} from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
-import {Course} from '../models/Course';
+import {Course, ICourseModel} from '../models/Course';
 import {Lecture} from '../models/Lecture';
 import {Unit} from '../models/units/Unit';
 import {IUser} from '../../../shared/models/IUser';
@@ -9,11 +12,18 @@ import {Notification} from '../models/Notification';
 import {NotificationSettings} from '../models/NotificationSettings';
 import {WhitelistUser} from '../models/WhitelistUser';
 import {Progress} from '../models/progress/Progress';
+import {Message} from '../models/Message';
 
 @JsonController('/export')
 @UseBefore(passportJwtMiddleware)
 @Authorized(['teacher', 'admin'])
 export class ExportController {
+
+  private static assertUserExportAuthorization(user: IUser, course: ICourseModel) {
+    if (!course.checkPrivileges(user).userCanEditCourse) {
+      throw new ForbiddenError();
+    }
+  }
 
   /**
    * @api {get} /api/export/course/:id Export course
@@ -38,10 +48,14 @@ export class ExportController {
    *         }],
    *         "hasAccessKey": false
    *     }
+   *
+   * @apiError NotFoundError If the course couldn't be found.
+   * @apiError ForbiddenError assertUserExportAuthorization check failed.
    */
   @Get('/course/:id')
-  async exportCourse(@Param('id') id: string) {
-    const course = await Course.findById(id);
+  async exportCourse(@Param('id') id: string, @CurrentUser() currentUser: IUser) {
+    const course = await Course.findById(id).orFail(new NotFoundError());
+    ExportController.assertUserExportAuthorization(currentUser, course);
     return course.exportJSON();
   }
 
@@ -62,10 +76,15 @@ export class ExportController {
    *         "description": "Some lecture desc",
    *         "units": []
    *     }
+   *
+   * @apiError NotFoundError If the lecture couldn't be found.
+   * @apiError ForbiddenError assertUserExportAuthorization check failed.
    */
   @Get('/lecture/:id')
-  async exportLecture(@Param('id') id: string) {
-    const lecture = await Lecture.findById(id);
+  async exportLecture(@Param('id') id: string, @CurrentUser() currentUser: IUser) {
+    const lecture = await Lecture.findById(id).orFail(new NotFoundError());
+    const course = await Course.findOne({lectures: id});
+    ExportController.assertUserExportAuthorization(currentUser, course);
     return lecture.exportJSON();
   }
 
@@ -89,10 +108,15 @@ export class ExportController {
    *         "markdown": "Welcome, this is the start",
    *         "__t": "free-text"
    *     }
+   *
+   * @apiError NotFoundError If the unit couldn't be found.
+   * @apiError ForbiddenError assertUserExportAuthorization check failed.
    */
   @Get('/unit/:id')
-  async exportUnit(@Param('id') id: string) {
-    const unit = await Unit.findById(id);
+  async exportUnit(@Param('id') id: string, @CurrentUser() currentUser: IUser) {
+    const unit = await Unit.findById(id).orFail(new NotFoundError());
+    const course = await Course.findById(unit._course);
+    ExportController.assertUserExportAuthorization(currentUser, course);
     return unit.exportJSON();
   }
 
@@ -153,7 +177,8 @@ export class ExportController {
       notificationSettings: await NotificationSettings.exportPersonalData(user),
       whitelists: await WhitelistUser.exportPersonalData(user),
       courses: await Course.exportPersonalData(user),
-      progress: await Progress.exportPersonalUserData(user)
+      progress: await Progress.exportPersonalUserData(user),
+      messages: await Message.exportPersonalData(user)
     };
   }
 }

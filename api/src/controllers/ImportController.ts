@@ -44,7 +44,7 @@ export class ImportController {
   async importCourse(@UploadedFile('file') file: any,
                      @CurrentUser() user: IUser) {
     const courseDesc = JSON.parse(file.buffer.toString());
-    return Course.schema.statics.importJSON(courseDesc, user);
+    return await Course.schema.statics.importJSON(courseDesc, user);
   }
 
   /**

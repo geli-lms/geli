@@ -33,7 +33,7 @@ describe('Whitelist User', () => {
       const createdWhitelistUser: IWhitelistUser = await WhitelistUser.create(newWhitelistUser);
       const res = await chai.request(app)
         .get(`${BASE_URL}/${createdWhitelistUser._id.toString()}`)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`);
+        .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`);
       res.status.should.be.equal(200);
       res.body.firstName.should.be.equal(newWhitelistUser.firstName);
       res.body.lastName.should.be.equal(newWhitelistUser.lastName);
@@ -53,7 +53,7 @@ describe('Whitelist User', () => {
       const res = await chai.request(app)
         .post(`${BASE_URL}/`)
         .send(whitelistUser)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`);
+        .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`);
       res.status.should.be.equal(200);
       res.body.firstName.should.be.equal(whitelistUser.firstName.toLowerCase());
       res.body.lastName.should.be.equal(whitelistUser.lastName.toLowerCase());
@@ -70,7 +70,7 @@ describe('Whitelist User', () => {
       };
       const res = await chai.request(app)
         .post(`${BASE_URL}/`)
-        .set('Authorization', `JWT awf`)
+        .set('Cookie', `token=awf`)
         .send(whitelistUser)
         .catch(err => err.response);
       res.status.should.be.equal(401);
@@ -96,7 +96,7 @@ describe('Whitelist User', () => {
       };
       const res = await chai.request(app)
         .post(`${BASE_URL}/`)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
         .send(whitelistUser);
       res.status.should.be.equal(200);
       const resCourse = await Course.findById(course._id).populate('students');
@@ -123,7 +123,7 @@ describe('Whitelist User', () => {
         chai.request(app)
           .put(`${BASE_URL}/${createdWhitelistUser._id}`)
           .send(createdWhitelistUser)
-          .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`);
+          .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`);
       res.status.should.be.equal(200);
       res.body.firstName.should.be.equal(newWhitelistUser.firstName);
       res.body.lastName.should.be.equal(newWhitelistUser.lastName);
@@ -143,7 +143,7 @@ describe('Whitelist User', () => {
       const res = await chai.request(app)
         .put(`${BASE_URL}/${createdWhitelistUser._id}`)
         .send(createdWhitelistUser)
-        .set('Authorization', `JWT awf`)
+        .set('Cookie', `token=awf`)
         .catch(err => err.response);
       res.status.should.be.equal(401);
     });
@@ -162,7 +162,7 @@ describe('Whitelist User', () => {
         const createdWhitelistUser = await WhitelistUser.create(newWhitelistUser);
         const res = await chai.request(app)
           .del(`${BASE_URL}/${createdWhitelistUser._id}`)
-          .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`);
+          .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`);
         res.status.should.be.equal(200);
       });
 
@@ -178,7 +178,7 @@ describe('Whitelist User', () => {
         const createdWhitelistUser = await WhitelistUser.create(newWhitelistUser);
         const res = await chai.request(app)
           .del(`${BASE_URL}/${createdWhitelistUser._id}`)
-          .set('Authorization', `JWT awf`)
+          .set('Cookie', `token=awf`)
           .catch(err => err.response);
         res.status.should.be.equal(401);
       });
@@ -199,7 +199,7 @@ describe('Whitelist User', () => {
 
         const res = await chai.request(app)
           .del(`${BASE_URL}/${createdWhitelistUser._id}`)
-          .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`);
+          .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`);
         res.status.should.be.equal(200);
         const resCourse = await Course.findById(course._id).populate('students');
         const emptyUsers: IUser[] = resCourse.students.filter(stud => stud.uid === member.uid);

@@ -1,14 +1,16 @@
 import {User} from '../src/models/User';
 import {Course, ICourseModel} from '../src/models/Course';
-import {Lecture} from '../src/models/Lecture';
-import {Unit} from '../src/models/units/Unit';
+import {IUserModel} from '../src/models/User';
+import {Lecture, ILectureModel} from '../src/models/Lecture';
+import {Unit, IUnitModel} from '../src/models/units/Unit';
 import {ICourse} from '../../shared/models/ICourse';
 import {ILecture} from '../../shared/models/ILecture';
 import {IUnit} from '../../shared/models/units/IUnit';
 import {IUser} from '../../shared/models/IUser';
-import {IWhitelistUser} from '../../shared/models/IWhitelistUser';
 import {ITaskUnit} from '../../shared/models/units/ITaskUnit';
 import {ITaskUnitModel} from '../src/models/units/TaskUnit';
+import {IChatRoom} from '../../shared/models/IChatRoom';
+import {extractSingleMongoId} from '../src/utilities/ExtractMongoId';
 import * as mongoose from 'mongoose';
 import ObjectId = mongoose.Types.ObjectId;
 
@@ -38,12 +40,9 @@ export class FixtureUtils {
     return this.getRandom<IUser>(array, hash);
   }
 
-  public static async getRandomTeacherForCourse(course: ICourse, hash?: string): Promise<IUser> {
-    let array: IUser[] = [];
-    array = array.concat(course.teachers);
-    array.push(course.courseAdmin);
-    const user = await this.getRandom<IUser>(array, hash);
-    return User.findById(user);
+  public static async getRandomTeacherForCourse(course: ICourse, hash?: string): Promise<IUserModel> {
+    const user = await this.getRandom<IUser>([course.courseAdmin, ...course.teachers], hash);
+    return await User.findById(user);
   }
 
   public static async getRandomTeachers(min: number, max: number, hash?: string): Promise<IUser[]> {
@@ -86,9 +85,9 @@ export class FixtureUtils {
     });
   }
 
-  public static async getRandomCourse(hash?: string): Promise<ICourse> {
-    const array = await this.getCourses();
-    return this.getRandom<ICourse>(array, hash);
+  public static async getRandomCourse(hash?: string): Promise<ICourseModel> {
+    const array = <ICourseModel[]>await this.getCourses();
+    return this.getRandom<ICourseModel>(array, hash);
   }
 
   public static async getRandomCourseWithAllUnitTypes(hash?: string): Promise<ICourse> {
@@ -118,17 +117,17 @@ export class FixtureUtils {
     return this.getRandom<ICourse>(coursesWithAllUnitTypes, hash);
   }
 
-  public static async getCoursesFromLecture(lecture: ILecture): Promise<ICourse> {
+  public static async getCourseFromLecture(lecture: ILecture): Promise<ICourseModel> {
     return Course.findOne({lectures: { $in: [ lecture._id ] }});
   }
 
-  public static async getCoursesFromUnit(unit: IUnit): Promise<ICourse> {
+  public static async getCourseFromUnit(unit: IUnit): Promise<ICourseModel> {
     return Course.findById(unit._course);
   }
 
-  public static async getRandomLecture(hash?: string): Promise<ILecture> {
+  public static async getRandomLecture(hash?: string): Promise<ILectureModel> {
     const array = await this.getLectures();
-    return this.getRandom<ILecture>(array, hash);
+    return this.getRandom<ILectureModel>(array, hash);
   }
 
   public static async getRandomLectureFromCourse(course: ICourse, hash?: string): Promise<ILecture> {
@@ -140,23 +139,46 @@ export class FixtureUtils {
     return Lecture.findOne({units: { $in: [ unit._id ] }});
   }
 
-  public static async getRandomUnit(hash?: string): Promise<IUnit> {
+  public static async getRandomUnit(hash?: string): Promise<IUnitModel> {
     const array = await this.getUnits();
-    return this.getRandom<IUnit>(array, hash);
+    return this.getRandom<IUnitModel>(array, hash);
   }
 
-  public static async getRandomUnitFromLecture(lecture: ILecture, hash?: string): Promise<IUnit> {
+  public static async getRandomUnitFromLecture(lecture: ILecture, hash?: string): Promise<IUnitModel> {
     const unitId = await this.getRandom<IUnit>(lecture.units, hash);
     return Unit.findById(unitId);
   }
 
-  public static async getRandomUnitFromCourse(course: ICourse, hash?: string): Promise<IUnit> {
-    let units: Array<IUnit> = [];
-    for (const lecture of course.lectures) {
-      units = units.concat(lecture.units);
-    }
-    const unitId = await this.getRandom<IUnit>(units, hash);
-    return Unit.findById(unitId);
+  public static async getRandomUnitFromCourse(course: ICourse, hash?: string): Promise<IUnitModel> {
+    const units = await Unit.find({_course: course});
+    return await this.getRandom<IUnitModel>(units, hash);
+  }
+
+  /**
+   * Provides simple shared setup functionality currently used by multiple chat system unit tests.
+   *
+   * @param hash The optional RNG seed passed to FixtureUtils.getRandom for random course.chatRooms selection.
+   * @returns A random fixture course and one of its chatRooms, also randomly selected, in form of a roomId.
+   */
+  public static async getSimpleChatRoomSetup(hash?: string) {
+    const course = await FixtureUtils.getRandomCourse();
+    const room = await FixtureUtils.getRandom<IChatRoom>(course.chatRooms, hash);
+    const roomId = extractSingleMongoId(room);
+    return {course, roomId};
+  }
+
+  /**
+   * Obtain an unauthorized teacher for a course.
+   * This teacher can be used for access denial unit tests.
+   *
+   * @param course The teacher can't belong to this given course; i.e. the teacher won't be 'courseAdmin' or one of the 'teachers'.
+   * @returns A user with 'teacher' role that is not authorized to access the given course.
+   */
+  public static async getUnauthorizedTeacherForCourse(course: ICourse): Promise<IUserModel> {
+    return await User.findOne({
+      _id: {$nin: [course.courseAdmin, ...course.teachers]},
+      role: 'teacher'
+    });
   }
 
   private static async getAdmins(): Promise<IUser[]> {
@@ -172,7 +194,7 @@ export class FixtureUtils {
   }
 
   public static async getUserCount(): Promise<number> {
-    return User.count({});
+    return User.countDocuments({});
   }
 
   public static async getCourses(): Promise<ICourse[]> {
@@ -181,11 +203,11 @@ export class FixtureUtils {
       .populate('whitelist');
   }
 
-  public static async getLectures(): Promise<ILecture[]> {
+  public static async getLectures(): Promise<ILectureModel[]> {
     return Lecture.find();
   }
 
-  public static async getUnits(): Promise<IUnit[]> {
+  public static async getUnits(): Promise<IUnitModel[]> {
     return Unit.find();
   }
 

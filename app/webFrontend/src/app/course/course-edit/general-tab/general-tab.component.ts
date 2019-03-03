@@ -5,8 +5,10 @@ import {
   ENROLL_TYPE_WHITELIST,
   ENROLL_TYPE_ACCESSKEY,
   ENROLL_TYPE_FREE,
-  ICourse
+  ICourse,
+  FREETEXT_STYLES
 } from '../../../../../../../shared/models/ICourse';
+
 import {ActivatedRoute, Router} from '@angular/router';
 import {CourseService, DuplicationService, ExportService, NotificationService} from '../../../shared/services/data.service';
 import {SnackBarService} from '../../../shared/services/snack-bar.service';
@@ -43,6 +45,9 @@ export class GeneralTabComponent implements OnInit {
     ENROLL_TYPE_FREE,
     ENROLL_TYPE_ACCESSKEY,
   };
+  freeTextStyles = FREETEXT_STYLES;
+  freeTextStyle: string;
+
 
   courseImageData: IResponsiveImageData;
 
@@ -87,6 +92,7 @@ export class GeneralTabComponent implements OnInit {
         this.active = this.courseOb.active;
         this.enrollType = this.courseOb.enrollType;
         this.mode = (this.enrollType === 'whitelist');
+        this.freeTextStyle = this.courseOb.freeTextStyle;
 
         this.dataSharingService.setDataForKey('course', this.courseOb);
         this.titleService.setTitleCut(['Edit Course: ', this.course]);
@@ -152,8 +158,16 @@ export class GeneralTabComponent implements OnInit {
     this.showProgress.toggleLoadingGlobal(true);
 
     const request: any = {
-      'name': this.course, 'description': this.description, '_id': this.id, 'active': this.active, 'enrollType': this.enrollType
+      'name': this.course,
+      'description': this.description,
+      '_id': this.id,
+      'active': this.active,
+      'enrollType': this.enrollType,
+      'freeTextStyle': this.freeTextStyle || ''
     };
+
+    // update local courseObj
+    this.courseOb = {...this.courseOb, ...request};
 
     if (this.enrollType === ENROLL_TYPE_FREE) {
       request.accessKey = null;
@@ -165,11 +179,13 @@ export class GeneralTabComponent implements OnInit {
       const course = await this.courseService.updateItem(request);
 
       this.notificationService.createItem({
-        changedCourse: course,
-        changedLecture: null,
-        changedUnit: null,
+        targetId: course._id,
+        targetType: 'course',
         text: 'Course ' + course.name + ' has been updated.'
       });
+
+      // propagate changes
+      this.dataSharingService.setDataForKey('course', this.courseOb);
 
       this.showProgress.toggleLoadingGlobal(false);
       this.snackBar.open('Saved successfully');
@@ -207,22 +223,22 @@ export class GeneralTabComponent implements OnInit {
   }
 
   deleteCourse() {
-    this.dialogService.confirmDelete('course', this.courseOb.name)
-      .subscribe(async res => {
-        if (!res) {
-          return;
-        }
-        await this.translate.get(['common.course', 'course.hasBeenDeleted'])
-          .subscribe((t: string) => {
-              this.notificationService.createItem({
-              changedCourse: this.courseOb,
-              changedLecture: null,
-              changedUnit: null,
-              text: t['common.course'] + ' ' + this.courseOb.name + ' ' + t['hasBeenDeleted']
-            });
-          });
-        await this.courseService.deleteItem(this.courseOb);
-        this.router.navigate(['/']);
+    this.dialogService.confirmDelete('course', this.courseOb.name).subscribe(async res => {
+      if (res === false) {
+        return;
+      }
+
+      this.translate.get(['common.course', 'course.hasBeenDeleted']).subscribe(async (t: string) => {
+        await this.notificationService.createItem({
+          targetId: this.courseOb._id,
+          targetType: 'course',
+          text: t['common.course'] + ' ' + this.courseOb.name + ' ' + t['course.hasBeenDeleted']
+        });
+        this.snackBar.open(t['common.course'] + ' ' + this.courseOb.name + ' ' + t['course.hasBeenDeleted']);
       });
+
+      await this.courseService.deleteItem(this.courseOb);
+      await this.router.navigate(['/']);
+    });
   }
 }

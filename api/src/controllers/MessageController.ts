@@ -1,43 +1,39 @@
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import {
   BadRequestError,
-  Body,
   Get,
-  JsonController, NotFoundError, Param,
-  Post, QueryParam,
-  UseBefore
+  JsonController,
+  QueryParam,
+  UseBefore,
+  CurrentUser,
+  NotFoundError,
+  ForbiddenError
 } from 'routing-controllers';
+import {errorCodes} from '../config/errorCodes';
 import {IMessageModel, Message} from '../models/Message';
-import {IMessage} from '../../../shared/models/messaging/IMessage';
+import {IUser} from '../../../shared/models/IUser';
+import {ChatRoom} from '../models/ChatRoom';
 
 @JsonController('/message')
 @UseBefore(passportJwtMiddleware)
 export default class MessageController {
 
-  /**
-   * @api {post} /api/message create new message
-   * @apiName PostMessage
-   * @apiGroup Message
-   *
-   *
-   * @apiSuccess {IMessage} created Message.
-   *
-   */
-  @Post('/')
-  async postMessage(@Body({required: true}) message: IMessage) {
-    const newMessage = new Message(message);
-    try {
-      const createdMessage = await newMessage.save();
-      return createdMessage;
-    } catch (err) {
-      throw new BadRequestError(err);
+  private async assertUserViewAuthForRoomId(currentUser: IUser, roomId: string) {
+    if (!roomId) {
+      throw new BadRequestError();
+    }
+    const room = await ChatRoom.findById(roomId);
+    if (!room) {
+      throw new NotFoundError(errorCodes.chat.roomNotFound.text);
+    }
+    if (!(await room.checkPrivileges(currentUser)).userCanViewMessages) {
+      throw new ForbiddenError();
     }
   }
 
-
   /**
    * @api {get} /api/message get all messages in a given room
-   * @apiName getMessage
+   * @apiName getMessages
    * @apiGroup Message
    *
    * @apiParam {string} room: the room to which the messages belong.
@@ -45,42 +41,37 @@ export default class MessageController {
    * @apiParam {number} limit: number of messages to return.
    * @apiParam {number} order: the order in which the messages are ordered. possible values: 1(ascending) or -1(descending). default to -1.
    *
-   * @apiSuccess {IMessage[]} messages in the given room.
+   * @apiSuccess {IMessageDisplay[]} messages in the given room.
    * @apiSuccessExample {json} Success-Response:
    *     [
    *      {
-   *        author: "5b2d66c84daf0700d5afe7bf",
    *        chatName: "student2",
    *        comments: [],
    *        content: "any message",
    *        createdAt: "2018-06-22T21:14:50.924Z",
-   *        room : "5b2d66c84daf0700d5afe7d8",
    *        updatedAt: "2018-06-22T21:14:50.924Z",
-   *        __v: 0,
+   *        room : "5b2d66c84daf0700d5afe7d8",
    *        _id: "5b2d66ca4daf0700d5aff89c"
    *      }
    *     ]
    *
+   * @apiError BadRequestError
+   * @apiError NotFoundError
+   * @apiError ForbiddenError
    */
   @Get('/')
   async getMessages (
-    @QueryParam('room') room: string, @QueryParam('skip') skip: number= 0,
-    @QueryParam('limit') limit: number, @QueryParam('order') order: number = -1) {
-    if (!room) {
-      throw new BadRequestError();
-    }
-
-    const messages: IMessageModel[] = await Message.find({room: room}).sort({createdAt: order}).skip(skip).limit(limit);
-
-    return messages.map((message: IMessageModel) => {
-      message = message.toObject();
-      return message;
-    });
+    @QueryParam('room') roomId: string, @QueryParam('skip') skip: number= 0,
+    @QueryParam('limit') limit: number, @QueryParam('order') order: number = -1,
+    @CurrentUser() currentUser: IUser) {
+    await this.assertUserViewAuthForRoomId(currentUser, roomId);
+    const messages: IMessageModel[] = await Message.find({room: roomId}).sort({createdAt: order}).skip(skip).limit(limit);
+    return messages.map((message: IMessageModel) => message.forDisplay());
   }
 
   /**
-   * @api {get} /api/count get number of messages in a given room
-   * @apiName getMessage
+   * @api {get} /api/message/count get number of messages in a given room
+   * @apiName getMessageCount
    * @apiGroup Message
    *
    * @apiParam {string} room: the room to which the messages belong.
@@ -88,52 +79,17 @@ export default class MessageController {
    * @apiSuccessExample {json} Success-Response:
    *     {
    *        "count": "45"
-   *
    *     }
    *
+   * @apiError BadRequestError
+   * @apiError NotFoundError
+   * @apiError ForbiddenError
    */
   @Get('/count')
-  async getMessageCount (@QueryParam('room') room: string) {
-    if (!room) {
-      throw new BadRequestError();
-    }
-    const count = await Message.count({room: room});
-
-    return {count: count};
-  }
-
-
-  /**
-   * @api {post} /api/message/id/comments  add a comment to a given message.
-   * @apiName PostMessage
-   * @apiGroup Message
-   *
-   * @apiParam {string} id: id of the message.
-   *
-   * @apiSuccess {IMessage} updated Message.
-   *
-   * @apiSuccessExample {json} Success-Response:
-   *     {
-   *        author: "5b2d66c84daf0700d5afe7bf",
-   *        chatName: "student2",
-   *        comments: [],
-   *        content: "any message",
-   *        createdAt: "2018-06-22T21:14:50.924Z",
-   *        room : "5b2d66c84daf0700d5afe7d8",
-   *        updatedAt: "2018-06-22T21:14:50.924Z",
-   *        __v: 0,
-   *        _id: "5b2d66ca4daf0700d5aff89c"
-   *     }
-   */
-  @Post('/:id([a-fA-F0-9]{24})/comments')
-  async addComment (@Body() comment: IMessage, @Param('id') id: string) {
-     const  message = await Message.findById(id);
-     if (!message) {
-       throw new NotFoundError('message not found');
-     }
-
-     message.comments.push(comment);
-     return message.save();
+  async getMessageCount (@QueryParam('room') roomId: string, @CurrentUser() currentUser: IUser) {
+    await this.assertUserViewAuthForRoomId(currentUser, roomId);
+    const count = await Message.countDocuments({room: roomId});
+    return {count};
   }
 
 }

@@ -4,6 +4,20 @@ export const errorCodes = {
       code: 'chat room not found',
       text: 'Chat room was not found.',
     },
+    parentNotFound: {
+      code: 'parent not found',
+      text: 'Message parent was not found',
+    },
+    badParent: {
+      code: 'bad parent',
+      text: 'Message parent isn\'t in the same room, invalidating the post',
+    }
+  },
+  duplication: {
+    targetNotFound: {
+      code: 'Target notfound',
+      text: 'The specified duplication target could not be found',
+    }
   },
   mail: {
     duplicate: {
@@ -134,10 +148,26 @@ export const errorCodes = {
       text: 'Query was empty.'
     }
   },
-  misc: {
-    mediaTokenInsufficient: {
-      code: 'mediaTokenInsufficient',
-      text: 'Can\'t use media token for this request.'
+  notification: {
+    missingCourseOfLecture: {
+      code: 'missingCourseOfLecture',
+      text: 'Course of given existing lecture is missing'
+    },
+    missingCourseOfUnit: {
+      code: 'missingCourseOfUnit',
+      text: 'Course of given existing unit is missing'
+    },
+    invalidTargetType: {
+      code: 'invalidTargetType',
+      text: 'targetType is invalid'
+    },
+    textOnlyWithoutText: {
+      code: 'textOnlyWithoutText',
+      text: 'Requested text-only notification creation without supplying any text'
+    },
+    targetUserNotFound: {
+      code: 'targetUserNotFound',
+      text: 'Target user not found'
     }
   }
 };

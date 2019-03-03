@@ -23,6 +23,7 @@
   }
 }
 
+
 .subtitle {
   padding-left: 1em;
 }
@@ -43,4 +44,10 @@
   font-size: 36px;
   height: 36px;
   width: 36px;
+}
+
+h1.small {
+  @media only screen and (max-width: $bp-width--sm) {
+    font-size: 1.25em;
+  }
 }

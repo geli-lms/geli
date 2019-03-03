@@ -5,7 +5,7 @@ import {
   Body, Post, Get, Delete, CurrentUser, Authorized
 } from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
-import {Unit, FreeTextUnit, CodeKataUnit, TaskUnit} from '../models/units/Unit';
+import {Unit} from '../models/units/Unit';
 import {IDownload} from '../../../shared/models/IDownload';
 import {IFileUnit} from '../../../shared/models/units/IFileUnit';
 import {Lecture} from '../models/Lecture';
@@ -16,31 +16,34 @@ import {errorCodes} from '../config/errorCodes';
 
 import * as fs from 'fs';
 import * as path from 'path';
+
 const archiver = require('archiver');
 import crypto = require('crypto');
 import {User} from '../models/User';
 import {File} from '../models/mediaManager/File';
 
 const cache = require('node-file-cache').create({life: config.timeToLiveCacheValue});
-const pdf =  require('html-pdf');
+const pdf = require('html-pdf');
 const phantomjs = require('phantomjs-prebuilt');
 const binPath = phantomjs.path;
 
-const PDFtempPath = config.tmpFileCacheFolder + 'temp.pdf';
 
 // Set all routes which should use json to json, the standard is blob streaming data
 @Controller('/download')
 @UseBefore(passportJwtMiddleware)
 export class DownloadController {
 
+  private markdownCss: string;
+
   constructor() {
     setInterval(this.cleanupCache, config.timeToLiveCacheValue * 60);
+    this.markdownCss = this.readMarkdownCss();
   }
 
   cleanupCache() {
     cache.expire((record: any) => {
       return new Promise((resolve, reject) => {
-        fs.unlink( config.tmpFileCacheFolder + record.key + '.zip', (err: Error) => {
+        fs.unlink(config.tmpFileCacheFolder + record.key + '.zip', (err: Error) => {
           if (err) {
             reject(false);
           } else {
@@ -75,10 +78,10 @@ export class DownloadController {
           const fileUnit = <IFileUnit><any>localUnit;
           fileUnit.files.forEach((file, index) => {
             if (unit.files.indexOf(index) > -1) {
-              if ((file.size / 1024 ) > config.maxFileSize) {
+              if ((file.size / 1024) > config.maxFileSize) {
                 localTooLargeFiles.push(file.link);
               }
-              localTotalSize += (file.size / 1024 );
+              localTotalSize += (file.size / 1024);
             }
           });
         }
@@ -211,6 +214,9 @@ export class DownloadController {
           for (const unit of lec.units) {
             const localUnit = await Unit.findOne({_id: unit.unitId});
 
+            // create hashed pdf file
+            const tempPdfFileName = this.tempPdfFileName(user);
+
             if (!localUnit) {
               throw new NotFoundError();
             }
@@ -218,7 +224,7 @@ export class DownloadController {
             if (localUnit.__t === 'file') {
               for (const fileId of unit.files) {
                 const file = await File.findById(fileId);
-                archive.file( 'uploads/' + file.link, {name: lecCounter + '_' + lcName + '/' + unitCounter + '_' + file.name});
+                archive.file('uploads/' + file.link, {name: lecCounter + '_' + lcName + '/' + unitCounter + '_' + file.name});
               }
             } else {
 
@@ -242,26 +248,25 @@ export class DownloadController {
                 '     <style>' +
                 '       #pageHeader {text-align: center;border-bottom: 1px solid;padding-bottom: 5px;}' +
                 '       #pageFooter {text-align: center;border-top: 1px solid;padding-top: 5px;}' +
-                '       body {font-family: \'Helvetica\', \'Arial\', sans-serif; }' +
+                '       html,body {font-family: \'Helvetica\', \'Arial\', sans-serif; font-size: 12px; line-height: 1.5;}' +
                 '       .codeBox {border: 1px solid grey; font-family: Monaco,Menlo,source-code-pro,monospace; padding: 10px}' +
                 '       #firstPage {page-break-after: always;}' +
                 '       .bottomBoxWrapper {height:800px; position: relative}' +
-                '       .bottomBox {position: absolute; bottom: 0;}' +
+                '       .bottomBox {position: absolute; bottom: 0;}' + this.markdownCss +
                 '     </style>' +
                 '  </head>';
-                html += localUnit.toHtmlForIndividualPDF();
-                html += '</html>';
+              html += await localUnit.toHtmlForIndividualPDF();
+              html += '</html>';
               const name = lecCounter + '_' + lcName + '/' + unitCounter + '_' + this.replaceCharInFilename(localUnit.name) + '.pdf';
-              await this.savePdfToFile(html, options, PDFtempPath);
-
-              await this.appendToArchive(archive, name, PDFtempPath, hash);
-
+              await this.savePdfToFile(html, options, tempPdfFileName);
+              await this.appendToArchive(archive, name, tempPdfFileName, hash);
+              fs.unlinkSync(tempPdfFileName);
             }
             unitCounter++;
           }
           lecCounter++;
         }
-        fs.unlinkSync(PDFtempPath);
+
         return new Promise((resolve, reject) => {
           archive.on('error', () => reject(hash));
           archive.finalize();
@@ -294,6 +299,8 @@ export class DownloadController {
   @Post('/pdf/single')
   @ContentType('application/json')
   async postDownloadRequestPDFSingle(@Body() data: IDownload, @CurrentUser() user: IUser) {
+    // create hashed pdf file
+    const tempPdfFileName = this.tempPdfFileName(user);
 
     const course = await Course.findOne({_id: data.courseName});
 
@@ -357,12 +364,12 @@ export class DownloadController {
           '     <style>' +
           '       #pageHeader {text-align: center;border-bottom: 1px solid;padding-bottom: 5px;}' +
           '       #pageFooter {text-align: center;border-top: 1px solid;padding-top: 5px;}' +
-          '       body {font-family: \'Helvetica\', \'Arial\', sans-serif;}' +
+          '       html, body {font-family: \'Helvetica\', \'Arial\', sans-serif; font-size: 12px; line-height: 1.5;}' +
           '       .codeBox {border: 1px solid grey; font-family: Monaco,Menlo,source-code-pro,monospace; padding: 10px}' +
           '       #firstPage {page-break-after: always;}' +
           '       #nextPage {page-break-before: always;}' +
           '       .bottomBoxWrapper {height:800px; position: relative}' +
-          '       .bottomBox {position: absolute; bottom: 0;}' +
+          '       .bottomBox {position: absolute; bottom: 0;}' + this.markdownCss +
           '     </style>' +
           '  </head>' +
           '  <body>' +
@@ -397,10 +404,10 @@ export class DownloadController {
                 archive.file(path.join(config.uploadFolder, file.link),
                   {name: lecCounter + '_' + lcName + '/' + unitCounter + '_' + file.name});
               }
-            } else if ( (localUnit.__t === 'code-kata' || localUnit.__t === 'task') && lecCounter > 1 && unitCounter > 1) {
-              html +=  '<div id="nextPage" >' + localUnit.toHtmlForSinglePDF() + '</div>';
+            } else if ((localUnit.__t === 'code-kata' || localUnit.__t === 'task') && lecCounter > 1 && unitCounter > 1) {
+              html += '<div id="nextPage" >' + await localUnit.toHtmlForSinglePDF() + '</div>';
             } else {
-              html +=  localUnit.toHtmlForSinglePDF();
+              html += await localUnit.toHtmlForSinglePDF();
             }
 
             if (localUnit.__t === 'code-kata' || localUnit.__t === 'task') {
@@ -413,10 +420,10 @@ export class DownloadController {
               } else {
                 solutions += '<div id="nextPage" >';
               }
-              solutions += localUnit.toHtmlForSinglePDFSolutions()  + '</div>';
+              solutions += await localUnit.toHtmlForSinglePDFSolutions() + '</div>';
               solCounter++;
             } else if (localUnit.__t !== 'file') {
-              solutions += localUnit.toHtmlForSinglePDFSolutions();
+              solutions += await localUnit.toHtmlForSinglePDFSolutions();
             }
             unitCounter++;
           }
@@ -427,9 +434,9 @@ export class DownloadController {
         html += '</div></body>' +
           '</html>';
         const name = this.replaceCharInFilename(course.name) + '.pdf';
-        await this.savePdfToFile(html, options, PDFtempPath);
-        await this.appendToArchive(archive, name, PDFtempPath, hash);
-        fs.unlinkSync(PDFtempPath);
+        await this.savePdfToFile(html, options, tempPdfFileName);
+        await this.appendToArchive(archive, name, tempPdfFileName, hash);
+        fs.unlinkSync(tempPdfFileName);
         return new Promise((resolve, reject) => {
           archive.on('error', () => reject(hash));
           archive.finalize();
@@ -444,11 +451,28 @@ export class DownloadController {
     }
   }
 
-  private savePdfToFile(html: any, options: any, pathToFile: String ): Promise<void> {
+  private readMarkdownCss() {
+    try {
+      return fs.readFileSync(path.resolve(__dirname, '../../styles/md/bundle.css'), 'utf8');
+    } catch (e) {
+      console.error(e);
+      return null;
+    }
+  }
+
+  private tempPdfFileName(user: IUser) {
+    return config.tmpFileCacheFolder +
+      crypto.createHash('sha1').update(new Date() + user._id).digest('hex').toString().slice(0, 16) +
+      '_temp.pdf';
+  }
+
+  private savePdfToFile(html: any, options: any, pathToFile: String): Promise<void> {
     return new Promise<void>((resolve, reject) => {
 
-      pdf.create(html, options).toFile(pathToFile, function(err: any, res: any) {
-        if (err) { reject(err); }
+      pdf.create(html, options).toFile(pathToFile, function (err: any, res: any) {
+        if (err) {
+          reject(err);
+        }
         resolve();
       });
 
@@ -458,12 +482,13 @@ export class DownloadController {
   private appendToArchive(archive: any, name: String, pathToFile: String, hash: any) {
     return new Promise<void>((resolve, reject) => {
       archive.on('entry', () => {
-        resolve(); });
+        resolve();
+      });
       archive.on('error', () => reject(hash));
       archive.file(pathToFile,
         {name: name});
     });
-    }
+  }
 
   /**
    * @api {delete} /api/download/ Request to clean up the cache.

@@ -5,13 +5,14 @@ import {ILecture} from '../../../../../../shared/models/ILecture';
 import {IUnit} from '../../../../../../shared/models/units/IUnit';
 import {IUser} from '../../../../../../shared/models/IUser';
 import {ICourse} from '../../../../../../shared/models/ICourse';
-import {INotificationSettings} from '../../../../../../shared/models/INotificationSettings';
 import {IDownload} from '../../../../../../shared/models/IDownload';
 import {IDirectory} from '../../../../../../shared/models/mediaManager/IDirectory';
 import {IFile} from '../../../../../../shared/models/mediaManager/IFile';
+import {IDuplicationResponse} from '../../../../../../shared/models/IDuplicationResponse';
 import {IUserSearchMeta} from '../../../../../../shared/models/IUserSearchMeta';
 import {IConfig} from '../../../../../../shared/models/IConfig';
-import {literalMap} from '@angular/compiler/src/output/output_ast';
+import {INotificationView} from '../../../../../../shared/models/INotificationView';
+import {INotificationSettingsView} from '../../../../../../shared/models/INotificationSettingsView';
 
 export abstract class DataService {
 
@@ -27,7 +28,7 @@ export abstract class DataService {
               public dependentID?: string) {
   }
 
-  createItem<T>(createItem: T): Promise<T> {
+  createItem<T, RT = T>(createItem: T): Promise<RT> {
     return this.backendService
       .post(this.apiPath, createItem)
       .toPromise();
@@ -142,21 +143,21 @@ export class DuplicationService extends DataService {
     super('duplicate/', backendService);
   }
 
-  duplicateCourse(course: ICourse, courseAdmin: IUser): Promise<ICourse> {
+  duplicateCourse(course: ICourse, courseAdmin: IUser): Promise<IDuplicationResponse> {
     return this.backendService
-      .post(this.apiPath + 'course/' + course._id, JSON.stringify({courseAdmin: courseAdmin}))
+      .post(this.apiPath + 'course/' + course._id, JSON.stringify({courseAdmin}))
       .toPromise();
   }
 
-  duplicateLecture(lecture: ILecture, courseId: string): Promise<ILecture> {
+  duplicateLecture(lecture: ILecture, courseId: string): Promise<IDuplicationResponse> {
     return this.backendService
-      .post(this.apiPath + 'lecture/' + lecture._id, JSON.stringify({courseId: courseId}))
+      .post(this.apiPath + 'lecture/' + lecture._id, JSON.stringify({courseId}))
       .toPromise();
   }
 
-  duplicateUnit(unit: IUnit, lectureId: string, courseId: string): Promise<IUnit> {
+  duplicateUnit(unit: IUnit, lectureId: string): Promise<IDuplicationResponse> {
     return this.backendService
-      .post(this.apiPath + 'unit/' + unit._id, JSON.stringify({courseId: courseId, lectureId: lectureId}))
+      .post(this.apiPath + 'unit/' + unit._id, JSON.stringify({lectureId}))
       .toPromise();
   }
 }
@@ -339,16 +340,12 @@ export class NotificationSettingsService extends DataService {
     super('notificationSettings/', backendService);
   }
 
-  getNotificationSettingsPerUser(user: IUser): Promise<any[]> {
-    return new Promise((resolve, reject) => {
-      this.backendService.get(this.apiPath + 'user/' + user._id)
-        .subscribe(
-          (responseItem: any) => {
-            resolve(responseItem);
-          },
-          error => reject(error)
-        );
-    });
+  getNotificationSettings(): Promise<INotificationSettingsView[]> {
+    return this.backendService.get(this.apiPath).toPromise();
+  }
+
+  async setNotificationSettings(settings: INotificationSettingsView) {
+    await this.backendService.put(this.apiPath, settings).toPromise();
   }
 }
 
@@ -364,16 +361,8 @@ export class NotificationService extends DataService {
       .toPromise();
   }
 
-  getNotificationsPerUser(user: IUser): Promise<any[]> {
-    return new Promise((resolve, reject) => {
-      this.backendService.get(this.apiPath + 'user/' + user._id)
-        .subscribe(
-          (responseItem: any) => {
-            resolve(responseItem);
-          },
-          error => reject(error)
-        );
-    });
+  getNotifications(): Promise<INotificationView[]> {
+    return this.backendService.get(this.apiPath).toPromise();
   }
 }
 

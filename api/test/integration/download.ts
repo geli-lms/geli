@@ -30,7 +30,7 @@ describe('DownloadFile', () => {
   async function postValidRequest() {
     const unit = await FixtureUtils.getRandomUnit();
     const lecture = await FixtureUtils.getLectureFromUnit(unit);
-    const course = await FixtureUtils.getCoursesFromLecture(lecture);
+    const course = await FixtureUtils.getCourseFromLecture(lecture);
     const courseAdmin = await User.findById(course.courseAdmin);
     const downloadRequestData: IDownload = {
       courseName: course._id,
@@ -39,7 +39,7 @@ describe('DownloadFile', () => {
 
     const res = await chai.request(app)
       .post(BASE_URL  + '/pdf/single')
-      .set('Authorization', `JWT ${JwtUtils.generateToken(courseAdmin)}`)
+      .set('Cookie', `token=${JwtUtils.generateToken(courseAdmin)}`)
       .send(downloadRequestData)
       .catch(err => err.response);
     res.status.should.be.equal(200);
@@ -49,7 +49,7 @@ describe('DownloadFile', () => {
   function requestCleanup(user: IUser) {
     return chai.request(app)
       .del(BASE_URL + '/cache')
-      .set('Authorization', `JWT ${JwtUtils.generateToken(user)}`)
+      .set('Cookie', `token=${JwtUtils.generateToken(user)}`)
       .catch(err => err.response);
   }
 
@@ -66,7 +66,7 @@ describe('DownloadFile', () => {
 
       const res = await chai.request(app)
         .get(BASE_URL + '/' + postRes.body)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(courseAdmin)}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(courseAdmin)}`)
         .catch(err => err.response);
       res.status.should.be.equal(200);
     });
@@ -77,7 +77,7 @@ describe('DownloadFile', () => {
 
       const res = await chai.request(app)
         .get(BASE_URL + '/%2E%2E%2F' + postRes.body)
-        .set('Authorization', `JWT ${JwtUtils.generateToken(courseAdmin)}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(courseAdmin)}`)
         .catch(err => err.response);
       res.status.should.be.equal(403);
     });
@@ -96,7 +96,7 @@ describe('DownloadFile', () => {
 
       const res = await chai.request(app)
         .get(BASE_URL + '/123456789')
-        .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
         .catch(err => err.response);
       res.status.should.be.equal(404);
     });
@@ -122,7 +122,7 @@ describe('DownloadFile', () => {
       };
       const res = await chai.request(app)
         .post(BASE_URL + '/pdf/individual')
-        .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
         .send(testData)
         .catch(err => err.response);
       res.status.should.be.equal(404);
@@ -140,7 +140,7 @@ describe('DownloadFile', () => {
       };
       const res = await chai.request(app)
         .post(BASE_URL + '/pdf/individual')
-        .set('Authorization', `JWT ${JwtUtils.generateToken(user)}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(user)}`)
         .send(testData)
         .catch(err => err.response);
       res.status.should.be.equal(404);
@@ -154,7 +154,7 @@ describe('DownloadFile', () => {
       };
       const res = await chai.request(app)
         .post(BASE_URL + '/pdf/individual')
-        .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
         .send(testData)
         .catch(err => err.response);
       res.status.should.be.equal(500);
@@ -182,7 +182,7 @@ describe('DownloadFile', () => {
       };
       const res = await chai.request(app)
         .post(BASE_URL + '/pdf/individual')
-        .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
         .send(testData)
         .catch(err => err.response);
       expect(res).to.have.status(200);
@@ -218,7 +218,7 @@ describe('DownloadFile', () => {
 
       const res = await chai.request(app)
         .post(BASE_URL + '/pdf/single')
-        .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
         .send(testData)
         .catch(err => err.response);
       res.status.should.be.equal(404);
@@ -239,7 +239,7 @@ describe('DownloadFile', () => {
 
       const res = await chai.request(app)
         .post(BASE_URL + '/pdf/single')
-        .set('Authorization', `JWT ${JwtUtils.generateToken(user)}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(user)}`)
         .send(testData)
         .catch(err => err.response);
       res.status.should.be.equal(404);
@@ -256,7 +256,7 @@ describe('DownloadFile', () => {
 
       const res = await chai.request(app)
         .post(BASE_URL + '/pdf/single')
-        .set('Authorization', `JWT ${JwtUtils.generateToken(teacher)}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
         .send(testData)
         .catch(err => err.response);
       res.status.should.be.equal(500);

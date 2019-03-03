@@ -1,12 +1,2 @@
-.markdown-wrapper {
-  border-left: 3px solid #000;
-  padding-left: 1em;
-
-  h1, h2, h3, h4, h5, h6 {
-    text-decoration: underline;
-  }
-
-  pre {
-    white-space: pre-wrap;
-  }
-}
+// will be imported from shared style
+@import  "../../../../../../../shared/styles/md/bundle";

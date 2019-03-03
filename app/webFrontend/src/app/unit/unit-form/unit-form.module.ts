@@ -15,6 +15,8 @@ import {FreeTextUnitEditorComponent} from './free-text-unit-form/free-text-unit-
 import {FreeTextUnitEditorDialog} from './free-text-unit-form/free-text-unit-editor/free-text-unit-editor-dialog/free-text-unit-editor.dialog';
 import {SharedModule} from '../../shared/shared.module';
 import {UnitFormService} from '../../shared/services/unit-form.service';
+import {MatButtonToggleModule} from '@angular/material/button-toggle';
+import {MatInputModule} from '@angular/material';
 
 @NgModule({
   imports: [
@@ -24,7 +26,9 @@ import {UnitFormService} from '../../shared/services/unit-form.service';
     SharedModule,
     AceEditorModule,
     FileUploadModule,
-    UnitModule
+    UnitModule,
+    MatButtonToggleModule,
+    MatInputModule
   ],
   declarations: [
     CodeKataUnitFormComponent,

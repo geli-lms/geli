@@ -6,12 +6,11 @@ import {Router} from '@angular/router';
 import {APIInfoService} from './shared/services/data.service';
 import {APIInfo} from './models/APIInfo';
 import {isNullOrUndefined} from 'util';
-import {JwtPipe} from './shared/pipes/jwt/jwt.pipe';
 import {RavenErrorHandler} from './shared/services/raven-error-handler.service';
-import {SnackBarService} from './shared/services/snack-bar.service';
 import {ThemeService} from './shared/services/theme.service';
 import {TranslateService} from '@ngx-translate/core';
 import {DomSanitizer, SafeStyle} from '@angular/platform-browser';
+import {TranslatableSnackBarService} from './shared/services/translatable-snack-bar.service';
 
 @Component({
   selector: 'app-root',
@@ -31,18 +30,15 @@ export class AppComponent implements OnInit {
               private showProgress: ShowProgressService,
               private apiInfoService: APIInfoService,
               private ravenErrorHandler: RavenErrorHandler,
-              private snackBar: SnackBarService,
+              private snackBar: TranslatableSnackBarService,
               private themeService: ThemeService,
               public translate: TranslateService,
-              private jwtPipe: JwtPipe,
               private domSanitizer: DomSanitizer) {
     translate.setDefaultLang('en');
 
-    showProgress.toggleSidenav$.subscribe(
-      toggle => {
-        this.toggleProgressBar();
-      }
-    );
+    showProgress.toggleSidenav$.subscribe(toggle => {
+      this.toggleProgressBar();
+    });
   }
 
   ngOnInit(): void {
@@ -57,7 +53,7 @@ export class AppComponent implements OnInit {
         this.apiInfo = info;
       })
       .catch((err) => {
-        this.snackBar.open('Could not connect to backend', null);
+        this.snackBar.open('home.backendError', {err: err.error}, null);
       });
 
     this.updateCurrentUser();
@@ -72,8 +68,7 @@ export class AppComponent implements OnInit {
       }
 
       actualProfilePicturePath = '/api/' + actualProfilePicturePath;
-      const urlJwt = this.jwtPipe.transform(actualProfilePicturePath);
-      this.avatarBackgroundImage = this.domSanitizer.bypassSecurityTrustStyle(`url(${urlJwt})`);
+      this.avatarBackgroundImage = this.domSanitizer.bypassSecurityTrustStyle(`url(${actualProfilePicturePath})`);
     });
   }
 

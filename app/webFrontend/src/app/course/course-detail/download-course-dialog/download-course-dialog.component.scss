@@ -1,3 +1,5 @@
+@import '../../../../variables';
+
 .chkbox {
   float: right;
 }
@@ -48,4 +50,26 @@
 
 .radio-buttons .radio-button:nth-child(n+2){
   margin-left: 20px;
+}
+
+@media screen and (max-width: $bp-width--sm) {
+
+  .mat-card-actions .radio-buttons .radio-button {
+    width: 100%;
+    margin: 5px 0 5px 0;
+  }
+}
+
+.selectAll {
+  @media screen and (max-width: $bp-width--sm) {
+
+    &.mat-list-item .mat-list-item-content {
+      padding: 0 0 0 16px;
+    }
+  }
+}
+
+.beta-warning {
+  color: red;
+  font-weight: bolder;
 }

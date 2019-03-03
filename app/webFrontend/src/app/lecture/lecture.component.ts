@@ -14,7 +14,7 @@ export class LectureComponent implements OnInit, AfterViewInit {
 
   @Input() course: ICourse;
   @Input() lecture: ILecture;
-  opened: boolean;
+  @Input() opened: boolean;
   lectureId: string;
   private headerTags = ExpandableDivHeaderTags;
 

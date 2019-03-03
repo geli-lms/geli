@@ -12,7 +12,7 @@ export interface ICourseDashboard {
   active: boolean;
   description: string;
   enrollType: string;
-  image: IPicture;
+  image?: IPicture;
 
   // Special properties for the dashboard:
   userCanEditCourse: boolean;

@@ -66,11 +66,11 @@ export class FixtureLoader {
 
   async load() {
     if (!mongoose.connection.readyState) {
-      await mongoose.connect(config.database, {useNewUrlParser: true});
+      await mongoose.connect(config.database, config.databaseOptions);
     }
 
     await mongoose.connection.dropDatabase();
-    await User.ensureIndexes();
+    await User.createIndexes();
 
     const userfixtures = fs.readdirSync(this.usersDirectory);
     const coursefixtures = fs.readdirSync(this.coursesDirectory);

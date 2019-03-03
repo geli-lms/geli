@@ -9,12 +9,11 @@ import * as Raven from 'raven';
 import config from './config/main';
 import passportLoginStrategy from './security/passportLoginStrategy';
 import passportJwtStrategy from './security/passportJwtStrategy';
-import passportJwtStrategyMedia from './security/passportJwtStrategyMedia';
-import passportJwtMiddlewareMedia from './security/passportJwtMiddlewareMedia';
+import passportJwtMiddleware from './security/passportJwtMiddleware';
 import {RoleAuthorization} from './security/RoleAuthorization';
 import {CurrentUserDecorator} from './security/CurrentUserDecorator';
 import './utilities/FilterErrorHandler';
-import ChatServer from './Chatserver';
+import ChatServer from './ChatServer';
 
 if (config.sentryDsn) {
   Raven.config(config.sentryDsn, {
@@ -34,7 +33,6 @@ export class Server {
   static setupPassport() {
     passport.use(passportLoginStrategy);
     passport.use(passportJwtStrategy);
-    passport.use(passportJwtStrategyMedia);
   }
 
   constructor() {
@@ -60,16 +58,16 @@ export class Server {
     Server.setupPassport();
     this.app.use(passport.initialize());
 
-    // Requires authentication via the passportJwtMiddlewareMedia to accesss the static config.uploadFolder (e.g. for images).
+    // Requires authentication via the passportJwtMiddleware to accesss the static config.uploadFolder (e.g. for images).
     // That means this is not meant for truly public files accessible without login!
-    this.app.use('/api/uploads', passportJwtMiddlewareMedia, express.static(config.uploadFolder));
+    this.app.use('/api/uploads', passportJwtMiddleware, express.static(config.uploadFolder));
   }
 
   start() {
-    mongoose.connect(config.database);
+    mongoose.connect(config.database, config.databaseOptions);
 
-    // Request logger
     this.app.use(morgan('combined'));
+
     const server = this.app.listen(config.port, () => {
       process.stdout.write('Server successfully started at port ' + config.port);
     });

@@ -11,7 +11,4 @@ export class TranslationErrorService implements MissingTranslationHandler {
   handle(params: MissingTranslationHandlerParams) {
     this.errorHandler.handleError(`Missing Translation: ${params.key}`);
   }
-
-
 }
-

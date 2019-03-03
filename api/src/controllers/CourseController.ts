@@ -1,17 +1,6 @@
-import {Request} from 'express';
-import {
-  Authorized, BadRequestError,
-  Body,
-  CurrentUser, Delete, ForbiddenError,
-  Get,
-  JsonController, NotFoundError,
-  Param,
-  Post,
-  Put,
-  Req,
-  UploadedFile,
-  UseBefore
-} from 'routing-controllers';
+import { Get, Post, Put, Delete, Param, Body, CurrentUser,
+  Authorized, JsonController, UploadedFile, UseBefore,
+  BadRequestError, ForbiddenError, NotFoundError} from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import {errorCodes} from '../config/errorCodes';
 import config from '../config/main';
@@ -20,12 +9,11 @@ import {ICourse} from '../../../shared/models/ICourse';
 import {ICourseDashboard} from '../../../shared/models/ICourseDashboard';
 import {ICourseView} from '../../../shared/models/ICourseView';
 import {IUser} from '../../../shared/models/IUser';
-import {Course} from '../models/Course';
+import {Course, ICourseModel} from '../models/Course';
 import {WhitelistUser} from '../models/WhitelistUser';
 import emailService from '../services/EmailService';
 
 const multer = require('multer');
-import crypto = require('crypto');
 import {API_NOTIFICATION_TYPE_ALL_CHANGES, NotificationSettings} from '../models/NotificationSettings';
 import {IWhitelistUser} from '../../../shared/models/IWhitelistUser';
 import {DocumentToObjectOptions} from 'mongoose';
@@ -33,23 +21,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import ResponsiveImageService from '../services/ResponsiveImageService';
 import {IResponsiveImageData} from '../../../shared/models/IResponsiveImageData';
-
-import { Picture } from '../models/mediaManager/File';
-
-const uploadOptions = {
-  storage: multer.diskStorage({
-    destination: (req: any, file: any, cb: any) => {
-      cb(null, 'tmp/');
-    },
-    filename: (req: any, file: any, cb: any) => {
-      const extPos = file.originalname.lastIndexOf('.');
-      const ext = (extPos !== -1) ? `.${file.originalname.substr(extPos + 1).toLowerCase()}` : '';
-      crypto.pseudoRandomBytes(16, (err, raw) => {
-        cb(err, err ? undefined : `${raw.toString('hex')}${ext}`);
-      });
-    }
-  }),
-};
+import {Picture} from '../models/mediaManager/File';
 
 const coursePictureUploadOptions = {
   storage: multer.diskStorage({
@@ -126,7 +98,7 @@ export class CourseController {
       // Everyone is allowed to see free courses in overview
       conditions.$or.push({enrollType: 'free'});
       conditions.$or.push({enrollType: 'accesskey'});
-      conditions.$or.push({enrollType: 'whitelist', whitelist:  {$elemMatch: {$in: whitelistUsers}}});
+      conditions.$or.push({enrollType: 'whitelist', whitelist: {$elemMatch: {$in: whitelistUsers}}});
     }
 
     const courses = await Course.find(conditions);
@@ -193,7 +165,7 @@ export class CourseController {
       .populate('teachers')
       .execPopulate();
     await course.processLecturesFor(currentUser);
-    return course.forView();
+    return course.forView(currentUser);
   }
 
   /**
@@ -400,7 +372,6 @@ export class CourseController {
    * @apiPermission admin
    *
    * @apiParam {ICourse} course New course data.
-   * @apiParam {Request} request Request.
    * @apiParam {IUser} currentUser Currently logged in user.
    *
    * @apiSuccess {Course} course Added course.
@@ -440,7 +411,7 @@ export class CourseController {
    */
   @Authorized(['teacher', 'admin'])
   @Post('/')
-  async addCourse(@Body() course: ICourse, @Req() request: Request, @CurrentUser() currentUser: IUser) {
+  async addCourse(@Body() course: ICourse, @CurrentUser() currentUser: IUser) {
     // Note that this might technically have a race condition, but it should never matter because the new course ids remain unique.
     // If a strict version is deemed important, see mongoose Model.findOneAndUpdate for a potential approach.
     const existingCourse = await Course.findOne({name: course.name});
@@ -546,7 +517,6 @@ export class CourseController {
    * @apiPermission student
    *
    * @apiParam {String} id Course ID.
-   * @apiParam {Object} data Body.
    * @apiParam {IUser} currentUser Currently logged in user.
    *
    * @apiSuccess {Object} result Empty object.
@@ -559,7 +529,7 @@ export class CourseController {
    */
   @Authorized(['student'])
   @Post('/:id/leave')
-  async leaveStudent(@Param('id') id: string, @Body() data: any, @CurrentUser() currentUser: IUser) {
+  async leaveStudent(@Param('id') id: string, @CurrentUser() currentUser: IUser) {
     const course = await Course.findById(id);
     if (!course) {
       throw new NotFoundError();
@@ -710,18 +680,29 @@ export class CourseController {
     return {};
   }
 
-
+  /**
+   * @api {delete} /api/courses/picture/:id Delete course picture
+   * @apiName DeleteCoursePicture
+   * @apiGroup Course
+   *
+   * @apiParam {String} id Course ID.
+   * @apiParam {IUser} currentUser Currently logged in user.
+   *
+   * @apiSuccess {Object} Empty object.
+   *
+   * @apiSuccessExample {json} Success-Response:
+   *      {}
+   *
+   * @apiError NotFoundError
+   * @apiError ForbiddenError
+   */
   @Authorized(['teacher', 'admin'])
   @Delete('/picture/:id')
   async deleteCoursePicture(
     @Param('id') id: string,
     @CurrentUser() currentUser: IUser) {
 
-    const course = await Course.findById(id);
-
-    if (!course) {
-      throw new NotFoundError();
-    }
+    const course = await Course.findById(id).orFail(new NotFoundError());
 
     if (!course.checkPrivileges(currentUser).userCanEditCourse) {
       throw new ForbiddenError();
@@ -731,13 +712,53 @@ export class CourseController {
       throw new NotFoundError();
     }
 
-    const picture = await Picture.findOne(course.image);
-    await picture.remove();
+    const picture = await Picture.findById(course.image);
+    if (picture) {
+      picture.remove();
+    }
 
-    await Course.update({ _id: id }, { $unset: { image: 1 } });
-    return { };
+    await Course.updateOne({_id: id}, {$unset: {image: 1}});
+    return {};
   }
 
+  /**
+   * @api {post} /api/courses/picture/:id Add course picture
+   * @apiName AddCoursePicture
+   * @apiGroup Course
+   *
+   * @apiParam {String} id Course ID.
+   * @apiParam responsiveImageDataRaw Image as data object.
+   * @apiParam {IUser} currentUser Currently logged in user.
+   *
+   * @apiSuccess {Object} Empty object.
+   *
+   * @apiSuccessExample {json} Success-Response:
+   *   {
+   *     "breakpoints":[
+   *       {
+   *         "screenSize":0,
+   *         "imageSize":{
+   *           "width":284,
+   *           "height":190
+   *         },
+   *         "pathToImage":"uploads/courses/5c0fa2770315e73d6c7babfe_1544542544919_0.jpg",
+   *         "pathToRetinaImage":"uploads/courses/5c0fa2770315e73d6c7babfe_1544542544919_0@2x.jpg"
+   *       }
+   *     ],
+   *     "_id":"5c0fd95871707a3a888ae70a",
+   *     "__t":"Picture",
+   *     "name":"5c0fa2770315e73d6c7babfe_1544542544919.jpg",
+   *     "link":"-",
+   *     "size":0,
+   *     "mimeType":"image/jpeg",
+   *     "createdAt":"2018-12-11T15:35:52.423Z",
+   *     "updatedAt":"2018-12-11T15:35:52.423Z",
+   *     "__v":0
+   *   }
+   *
+   * @apiError NotFoundError
+   * @apiError ForbiddenError
+   */
   @Authorized(['teacher', 'admin'])
   @Post('/picture/:id')
   async addCoursePicture(
@@ -747,27 +768,25 @@ export class CourseController {
       @CurrentUser() currentUser: IUser) {
 
     // Remove the old picture if the course already has one.
-    const course = await Course.findById(id);
+    const course = await Course.findById(id).orFail(new NotFoundError());
 
     if (!course.checkPrivileges(currentUser).userCanEditCourse) {
       throw new ForbiddenError();
     }
 
-    const responsiveImageData = <IResponsiveImageData>JSON.parse(responsiveImageDataRaw.imageData);
-
     const mimeFamily = file.mimetype.split('/', 1)[0];
     if (mimeFamily !== 'image') {
       // Remove the file if the type was not correct.
       await fs.unlinkSync(file.path);
-
       throw new BadRequestError('Forbidden format of uploaded picture: ' + mimeFamily);
     }
 
-    if (course.image) {
-      const picture = await Picture.findById(course.image);
-      await picture.remove();
+    const picture = await Picture.findById(course.image);
+    if (picture) {
+      picture.remove();
     }
 
+    const responsiveImageData = <IResponsiveImageData>JSON.parse(responsiveImageDataRaw.imageData);
     await ResponsiveImageService.generateResponsiveImages(file, responsiveImageData);
 
     const image: any = new Picture({
@@ -778,12 +797,10 @@ export class CourseController {
       mimeType: file.mimetype,
       breakpoints: responsiveImageData.breakpoints
     });
-
     await image.save();
 
-    const result = await Course.update({ _id: id }, {
-      image: image._id
-    });
+    course.image = image;
+    await course.save();
 
     return image.toObject();
   }
