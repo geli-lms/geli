@@ -4,8 +4,8 @@ import {ICourse} from '../../../../../shared/models/ICourse';
 import {ILecture} from '../../../../../shared/models/ILecture';
 import {ExpandableDivHeaderTags} from '../shared/components/expandable-div/expandable-div-header-tags.enum';
 import {ActivatedRoute, Router} from '@angular/router';
-import {IUnit} from "../../../../../shared/models/units/IUnit";
-import {DataSharingService} from "../shared/services/data-sharing.service";
+import {IUnit} from '../../../../../shared/models/units/IUnit';
+import {DataSharingService} from '../shared/services/data-sharing.service';
 
 @Component({
   selector: 'app-lecture',
@@ -40,7 +40,7 @@ export class LectureComponent implements OnInit, AfterViewInit {
   }
 
   onUnitChange(unitid: string) {
-    let activeUnit = this.lecture.units.find(unit => unit._id == unitid);
+    const activeUnit = this.lecture.units.find(unit => unit._id === unitid);
     if (activeUnit) {
       this.unitScrollEmitter.emit(activeUnit);
     }

@@ -3,7 +3,7 @@ import {ICourse} from '../../../../../../../shared/models/ICourse';
 import {ActivatedRoute} from '@angular/router';
 import {CourseService} from '../../../shared/services/data.service';
 import {DataSharingService} from '../../../shared/services/data-sharing.service';
-import {ILecture} from "../../../../../../../shared/models/ILecture";
+import {ILecture} from '../../../../../../../shared/models/ILecture';
 
 
 @Component({
@@ -20,7 +20,7 @@ export class CourseOverviewComponent implements OnInit {
 
   onLectureChange(lectureId: string) {
     this.currentSection = lectureId;
-    let activeLecture = this.course.lectures.find(lecture => lecture._id == lectureId);
+    const activeLecture = this.course.lectures.find(lecture => lecture._id === lectureId);
     this.lectureScrollEmitter.emit(activeLecture);
   }
 

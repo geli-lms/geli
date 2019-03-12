@@ -25,9 +25,9 @@ import {ShowCommentsDirective} from './directives/show-comments.directive';
 
 import {ResponsiveImageComponent} from './components/responsive-image/responsive-image.component';
 import {headersToString} from 'selenium-webdriver/http';
-import {StickyElementDirective} from "./directives/sticky-element.directive";
-import {StickyToolbarComponent} from "./components/sticky-toolbar/sticky-toolbar.component";
-import {ScrollSpyDirective} from "./directives/scroll-spy.directive";
+import {StickyElementDirective} from './directives/sticky-element.directive';
+import {StickyToolbarComponent} from './components/sticky-toolbar/sticky-toolbar.component';
+import {ScrollSpyDirective} from './directives/scroll-spy.directive';
 
 @NgModule({
   imports: [

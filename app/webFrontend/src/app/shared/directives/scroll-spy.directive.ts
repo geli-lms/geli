@@ -20,8 +20,8 @@ export class ScrollSpyDirective {
     const windowScroll = window.pageYOffset;
 
     const children = this._el.nativeElement.children;
-    const scrollTop = 0;//this._el.nativeElement.scrollTop;
-    const parentOffset = 0;//this._el.nativeElement.offsetTop;
+    const scrollTop = 0; // this._el.nativeElement.scrollTop;
+    const parentOffset = 0; // this._el.nativeElement.offsetTop;
     for (let i = children.length - 1; i >= 0; i--) {
       const element = children[i];
       if (this.spiedTags.some(spiedTag => spiedTag === element.tagName)) {

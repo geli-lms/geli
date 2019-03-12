@@ -16,7 +16,7 @@ export class StickyElementDirective implements OnInit {
 
   ngOnInit(): void {
     // set directly so the changeDetector knows it's set to true later
-    //this.elementRef.nativeElement.focus();
+    // this.elementRef.nativeElement.focus();
   }
 
   @HostListener('window:scroll', ['$event'])
@@ -33,7 +33,6 @@ export class StickyElementDirective implements OnInit {
 
   ngAfterViewInit(): void {
     this.anchorPosition = this.getPosition(this.anchorElement).y;
-    console.log(this.anchorPosition);
   }
 
   getPosition(el) {

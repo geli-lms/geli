@@ -12,8 +12,8 @@ import {DialogService} from '../../shared/services/dialog.service';
 import {DataSharingService} from '../../shared/services/data-sharing.service';
 import {TranslateService} from '@ngx-translate/core';
 import {ICourseView} from '../../../../../../shared/models/ICourseView';
-import {ILecture} from "../../../../../../shared/models/ILecture";
-import {IUnit} from "../../../../../../shared/models/units/IUnit";
+import {ILecture} from '../../../../../../shared/models/ILecture';
+import {IUnit} from '../../../../../../shared/models/units/IUnit';
 
 
 @Component({
@@ -53,8 +53,8 @@ export class CourseDetailComponent implements OnInit, OnDestroy {
     });
     this.reloadTabBar();
 
-    this.dataSharingService.setDataForKey('lectureScrollEmitter', this.lectureScrollEmitter)
-    this.dataSharingService.setDataForKey('unitScrollEmitter', this.unitScrollEmitter)
+    this.dataSharingService.setDataForKey('lectureScrollEmitter', this.lectureScrollEmitter);
+    this.dataSharingService.setDataForKey('unitScrollEmitter', this.unitScrollEmitter);
 
     this.lectureScrollEmitter.subscribe(() => this.unitScrollEmitter.emit(null));
 
