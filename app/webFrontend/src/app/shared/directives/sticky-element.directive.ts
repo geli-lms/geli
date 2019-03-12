@@ -13,6 +13,7 @@ export class StickyElementDirective implements OnInit {
   constructor(private elementRef: ElementRef) {
   }
 
+
   ngOnInit(): void {
     // set directly so the changeDetector knows it's set to true later
     //this.elementRef.nativeElement.focus();
@@ -31,8 +32,6 @@ export class StickyElementDirective implements OnInit {
 
 
   ngAfterViewInit(): void {
-    console.log(this.elementRef);
-    console.log(this.anchorElement);
     this.anchorPosition = this.getPosition(this.anchorElement).y;
     console.log(this.anchorPosition);
   }

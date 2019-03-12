@@ -1,12 +1,17 @@
-<div stickyElement="" [anchor]="stickyAnchor" class="stickytoolbar">
-  <mat-toolbar>
-    <small>My Application</small>
-  </mat-toolbar>
-</div>
-<div class="course-header">
+<app-sticky-toolbar
+  [anchor]="stickyAnchor">
   <div class="header-line">
-    <h1 #stickyAnchor>{{course?.name}}</h1>
-    <span class="course-admin-actions" *ngIf="course.userCanEditCourse">
+    <h2>
+      <span>{{course?.name}}</span>
+      <span *ngIf="lectureScrollEmitter|async as lecture"> > {{lecture?.name}}</span>
+      <span *ngIf="unitScrollEmitter|async as unit"> > {{unit?.name}}</span>
+    </h2>
+    <ng-template [ngTemplateOutlet]="headerAdminButtons"></ng-template>
+  </div>
+</app-sticky-toolbar>
+<div class="course-header">
+  <ng-template #headerAdminButtons>
+      <span class="course-admin-actions" *ngIf="course.userCanEditCourse">
       <button mat-icon-button [routerLink]="['/course', course._id, 'edit']"
               [matTooltip]="'course.text.editCourse' | translate">
         <mat-icon>mode_edit</mat-icon>
@@ -21,7 +26,15 @@
         <mat-icon color="warn" [matTooltip]="'course.text.notVisibleToStudents' | translate">visibility_off</mat-icon>
       </button>
     </span>
+  </ng-template>
+
+  <div #stickyAnchor>
+    <div class="header-line">
+      <h1>{{course?.name}}</h1>
+      <ng-template [ngTemplateOutlet]="headerAdminButtons"></ng-template>
+    </div>
   </div>
+
 
   <mat-chip-list>
     <mat-chip style="cursor:pointer" (click)="showUserProfile(course?.courseAdmin)">
@@ -59,5 +72,5 @@
   </nav>
 </div>
 
-<router-outlet></router-outlet>
+<router-outlet ></router-outlet>
 <app-course-forum [chatRoom]="course?.chatRooms[0]"></app-course-forum>
