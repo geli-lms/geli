@@ -43,6 +43,23 @@ describe('ProgressController', () => {
       const res = await testHelper.commonUserGetRequest(student, `/users/${student._id}`);
       res.status.should.be.equal(200);
     });
+
+    it('should deny access to unit progress for an unauthorized user', async () => {
+      const unit = await FixtureUtils.getRandomUnit();
+      const course = await FixtureUtils.getCourseFromUnit(unit);
+      const unauthorizedUser = await FixtureUtils.getUnauthorizedTeacherForCourse(course);
+
+      const res = await testHelper.commonUserGetRequest(unauthorizedUser, `/units/${unit._id}`);
+      res.status.should.be.equal(403);
+    });
+
+    it('should deny access to course progress for an unauthorized user', async () => {
+      const course = await FixtureUtils.getRandomCourse();
+      const unauthorizedUser = await FixtureUtils.getUnauthorizedTeacherForCourse(course);
+
+      const res = await testHelper.commonUserGetRequest(unauthorizedUser, `/courses/${course._id}`);
+      res.status.should.be.equal(403);
+    });
   });
 
   describe(`POST ${BASE_URL}`, () => {
