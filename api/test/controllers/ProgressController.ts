@@ -5,7 +5,6 @@ import {TestHelper} from '../TestHelper';
 import {FixtureUtils} from '../../fixtures/FixtureUtils';
 import {User, IUserModel} from '../../src/models/User';
 import {Unit} from '../../src/models/units/Unit';
-import {Lecture} from '../../src/models/Lecture';
 import {Course} from '../../src/models/Course';
 import {Progress} from '../../src/models/progress/Progress';
 import * as moment from 'moment';
@@ -17,13 +16,13 @@ const testHelper = new TestHelper(BASE_URL);
 /**
  * Common setup function for the unit tests.
  */
-async function prepareSetup(updateUnitDeadline = false) {
+async function prepareSetup(unitDeadlineAdd = 0) {
   const unit: ICodeKataModel = <ICodeKataModel>await Unit.findOne({progressable: true, __t: 'code-kata'});
   const course = await Course.findById(unit._course);
   const student = await User.findOne({_id: course.students[0] });
 
-  if (updateUnitDeadline) {
-    unit.deadline = moment().add(1, 'hour').format();
+  if (unitDeadlineAdd) {
+    unit.deadline = moment().add(unitDeadlineAdd, 'hour').format();
     await unit.save();
   }
 
@@ -33,24 +32,25 @@ async function prepareSetup(updateUnitDeadline = false) {
 /**
  * Common progress data setup function for the unit tests.
  */
-function createNewProgressFor (unit: ICodeKataModel, student: IUserModel) {
+function createProgressObjFor (unit: ICodeKataModel, student: IUserModel, done: Boolean = true) {
   return {
-    course: unit._course,
+    course: unit._course.toString(),
     unit: unit._id.toString(),
     user: student._id.toString(),
     code: 'let a = test;',
-    done: true,
+    done,
     type: 'codeKata'
   };
 }
 
 /**
- * Helper function for the get route student filter unit test.
+ * Common helper function for the unit tests that posts new progress data for a student and checks the status code.
  */
-async function postProgressTestData (unit: ICodeKataModel, student: IUserModel) {
-  const newProgress = createNewProgressFor(unit, student);
-  const resPost = await testHelper.commonUserPostRequest(student, '', newProgress);
-  resPost.status.should.be.equal(200);
+async function postProgressTestData (unit: ICodeKataModel, student: IUserModel, status: Number = 200) {
+  const newProgress = createProgressObjFor(unit, student);
+  const res = await testHelper.commonUserPostRequest(student, '', newProgress);
+  res.status.should.be.equal(status);
+  return {res, newProgress};
 }
 
 describe('ProgressController', () => {
@@ -60,11 +60,9 @@ describe('ProgressController', () => {
 
   describe(`GET ${BASE_URL}`, () => {
     it('should get unit progress', async () => {
-      const unit = await FixtureUtils.getRandomUnit();
-      const course = await FixtureUtils.getCourseFromUnit(unit);
-      const user = await FixtureUtils.getRandomTeacherForCourse(course);
+      const {unit, student} = await prepareSetup();
 
-      const res = await testHelper.commonUserGetRequest(user, `/units/${unit._id}`);
+      const res = await testHelper.commonUserGetRequest(student, `/units/${unit._id}`);
       res.status.should.be.equal(200);
     });
 
@@ -90,8 +88,7 @@ describe('ProgressController', () => {
     */
 
     it('should deny access to unit progress for an unauthorized user', async () => {
-      const unit = await FixtureUtils.getRandomUnit();
-      const course = await FixtureUtils.getCourseFromUnit(unit);
+      const {unit, course} = await prepareSetup();
       const unauthorizedUser = await FixtureUtils.getUnauthorizedTeacherForCourse(course);
 
       const res = await testHelper.commonUserGetRequest(unauthorizedUser, `/units/${unit._id}`);
@@ -109,8 +106,8 @@ describe('ProgressController', () => {
     });
     */
 
-    it.only('should only return own unit progress for a student', async () => {
-      const {unit, course, student} = await prepareSetup(true);
+    it('should only return own unit progress for a student', async () => {
+      const {unit, course, student} = await prepareSetup(1);
       // Currently the FixtureLoader will enrol at least 2 students per course, so this should never fail.
       const student2 = await User.findOne({_id: course.students[1] });
       await Promise.all([postProgressTestData(unit, student), postProgressTestData(unit, student2)]);
@@ -125,22 +122,8 @@ describe('ProgressController', () => {
 
   describe(`POST ${BASE_URL}`, () => {
     it('should create progress for some progressable unit', async () => {
-      const unit: ICodeKataModel = <ICodeKataModel>await Unit.findOne({progressable: true, __t: 'code-kata'});
-      const lecture = await Lecture.findOne({units: { $in: [ unit._id ] }});
-      const course = await Course.findOne({lectures: { $in: [ lecture._id ] }});
-      const student = await User.findOne({_id: { $in: course.students}});
-
-      const newProgress = {
-        course: course._id.toString(),
-        unit: unit._id.toString(),
-        user: student._id.toString(),
-        code: 'let a = test;',
-        done: true,
-        type: 'codeKata'
-      };
-
-      const res = await testHelper.commonUserPostRequest(student, '', newProgress);
-      res.status.should.be.equal(200);
+      const {unit, student} = await prepareSetup();
+      const {res, newProgress} = await postProgressTestData(unit, student);
       res.body.course.should.be.equal(newProgress.course);
       res.body.unit.should.be.equal(newProgress.unit);
       res.body.user.should.be.equal(newProgress.user);
@@ -149,25 +132,8 @@ describe('ProgressController', () => {
     });
 
     it('should create progress for some progressable unit with a deadline', async () => {
-      const unit: ICodeKataModel = <ICodeKataModel>await Unit.findOne({progressable: true, __t: 'code-kata'});
-      const lecture = await Lecture.findOne({units: { $in: [ unit._id ] }});
-      const course = await Course.findOne({lectures: { $in: [ lecture._id ] }});
-      const student = await User.findOne({_id: { $in: course.students}});
-
-      unit.deadline = moment().add(1, 'hour').format();
-      await unit.save();
-
-      const newProgress = {
-        course: course._id.toString(),
-        unit: unit._id.toString(),
-        user: student._id.toString(),
-        code: 'let a = test',
-        done: true,
-        type: 'codeKata'
-      };
-
-      const res = await testHelper.commonUserPostRequest(student, '', newProgress);
-      res.status.should.be.equal(200);
+      const {unit, student} = await prepareSetup(1);
+      const {res, newProgress} = await postProgressTestData(unit, student);
       res.body.course.should.be.equal(newProgress.course);
       res.body.unit.should.be.equal(newProgress.unit);
       res.body.user.should.be.equal(newProgress.user);
@@ -176,25 +142,8 @@ describe('ProgressController', () => {
     });
 
     it('should fail creating progress for some progressable unit with a deadline', async () => {
-      const unit: ICodeKataModel = <ICodeKataModel>await Unit.findOne({progressable: true, __t: 'code-kata'});
-      const lecture = await Lecture.findOne({units: { $in: [ unit._id ] }});
-      const course = await Course.findOne({lectures: { $in: [ lecture._id ] }});
-      const student = await User.findOne({_id: { $in: course.students}});
-
-      unit.deadline = moment().subtract(1, 'hour').format();
-      await unit.save();
-
-      const newProgress = {
-        course: course._id.toString(),
-        unit: unit._id.toString(),
-        user: student._id.toString(),
-        code: 'let a = test',
-        done: true,
-        type: 'codeKata'
-      };
-
-      const res = await testHelper.commonUserPostRequest(student, '', newProgress);
-      res.status.should.be.equal(400);
+      const {unit, student} = await prepareSetup(-1);
+      const {res} = await postProgressTestData(unit, student, 400);
       res.body.name.should.be.equal('BadRequestError');
       res.body.message.should.be.equal('Past deadline, no further update possible');
     });
@@ -202,30 +151,11 @@ describe('ProgressController', () => {
 
   describe(`PUT ${BASE_URL}`, () => {
     it('should update progress for some progressable unit', async () => {
-      const unit = await Unit.findOne({progressable: true, __t: 'code-kata'});
-      const lecture = await Lecture.findOne({units: { $in: [ unit._id ] }});
-      const course = await Course.findOne({lectures: { $in: [ lecture._id ] }});
-      const student = await User.findOne({_id: { $in: course.students}});
+      const {unit, student} = await prepareSetup();
 
-      const oldProgress = {
-        course: course._id.toString(),
-        unit: unit._id.toString(),
-        user: student._id.toString(),
-        code: 'let b = test',
-        done: false,
-        type: 'codeKata'
-      };
-
+      const oldProgress = createProgressObjFor(unit, student, false);
       const progress = await Progress.create(oldProgress);
-
-      const newProgress = {
-        course: course._id.toString(),
-        unit: unit._id.toString(),
-        user: student._id.toString(),
-        code: 'let a = test',
-        done: true,
-        type: 'codeKata'
-      };
+      const newProgress = createProgressObjFor(unit, student);
 
       const res = await testHelper.commonUserPutRequest(student, `/${progress._id.toString()}`, newProgress);
       res.status.should.be.equal(200);
@@ -237,33 +167,11 @@ describe('ProgressController', () => {
     });
 
     it('should update progress for some progressable unit with a deadline', async () => {
-      const unit: ICodeKataModel = <ICodeKataModel>await Unit.findOne({progressable: true, __t: 'code-kata'});
-      const lecture = await Lecture.findOne({units: { $in: [ unit._id ] }});
-      const course = await Course.findOne({lectures: { $in: [ lecture._id ] }});
-      const student = await User.findOne({_id: { $in: course.students}});
+      const {unit, student} = await prepareSetup(1);
 
-      unit.deadline = moment().add(1, 'hour').format();
-      await unit.save();
-
-      const oldProgress = {
-        course: course._id.toString(),
-        unit: unit._id.toString(),
-        user: student._id.toString(),
-        code: 'let b = test',
-        done: false,
-        type: 'codeKata'
-      };
-
+      const oldProgress = createProgressObjFor(unit, student, false);
       const progress = await Progress.create(oldProgress);
-
-      const newProgress = {
-        course: course._id.toString(),
-        unit: unit._id.toString(),
-        user: student._id.toString(),
-        code: 'let a = test',
-        done: true,
-        type: 'codeKata'
-      };
+      const newProgress = createProgressObjFor(unit, student);
 
       const res = await testHelper.commonUserPutRequest(student, `/${progress._id.toString()}`, newProgress);
       res.status.should.be.equal(200);
@@ -275,33 +183,11 @@ describe('ProgressController', () => {
     });
 
     it('should fail updating progress for some progressable unit with a deadline', async () => {
-      const unit: ICodeKataModel = <ICodeKataModel>await Unit.findOne({progressable: true, __t: 'code-kata'});
-      const lecture = await Lecture.findOne({units: { $in: [ unit._id ] }});
-      const course = await Course.findOne({lectures: { $in: [ lecture._id ] }});
-      const student = await User.findOne({_id: { $in: course.students}});
+      const {unit, student} = await prepareSetup(-1);
 
-      unit.deadline = moment().subtract(1, 'hour').format();
-      await unit.save();
-
-      const oldProgress = {
-        course: course._id.toString(),
-        unit: unit._id.toString(),
-        user: student._id.toString(),
-        code: 'let b = test',
-        done: false,
-        type: 'codeKata'
-      };
-
+      const oldProgress = createProgressObjFor(unit, student, false);
       const progress = await Progress.create(oldProgress);
-
-      const newProgress = {
-        course: course._id.toString(),
-        unit: unit._id.toString(),
-        user: student._id.toString(),
-        code: 'let a = test',
-        done: true,
-        type: 'codeKata'
-      };
+      const newProgress = createProgressObjFor(unit, student);
 
       const res = await testHelper.commonUserPutRequest(student, `/${progress._id.toString()}`, newProgress);
       res.status.should.be.equal(400);
