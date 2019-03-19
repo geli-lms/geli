@@ -160,6 +160,12 @@ describe('ProgressController', () => {
       res.body.name.should.be.equal('BadRequestError');
       res.body.message.should.be.equal('Past deadline, no further update possible');
     });
+
+    it('should fail to create progress for an unauthorized student', async () => {
+      const {unit, course} = await prepareSetup();
+      const unauthorizedStudent = await FixtureUtils.getUnauthorizedStudentForCourse(course);
+      await postProgressTestData(unit, unauthorizedStudent, 403);
+    });
   });
 
   describe(`PUT ${BASE_URL}`, () => {
@@ -194,6 +200,17 @@ describe('ProgressController', () => {
       const {res} = await putProgressTestData(progress, unit, student, 400);
       res.body.name.should.be.equal('BadRequestError');
       res.body.message.should.be.equal('Past deadline, no further update possible');
+    });
+
+    it('should fail to update progress for an unauthorized student', async () => {
+      const {unit, student, course} = await prepareSetup();
+      // Currently the FixtureLoader will enrol at least 2 students per course, so this should never fail.
+      const unauthorizedStudent = await User.findOne({_id: course.students[1] });
+
+      const oldProgress = createProgressObjFor(unit, student, false);
+      const progress = await Progress.create(oldProgress);
+
+      await putProgressTestData(progress, unit, unauthorizedStudent, 403);
     });
   });
 });
