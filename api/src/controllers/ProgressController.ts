@@ -1,12 +1,13 @@
 import {
-  BadRequestError, Body, CurrentUser, Get, JsonController, NotFoundError, Param, Post, Put,
-  UseBefore
+  BadRequestError, Body, CurrentUser, Get, JsonController, Param, Post, Put, UseBefore,
+  NotFoundError, ForbiddenError
 } from 'routing-controllers';
 import * as moment from 'moment';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import {Progress} from '../models/progress/Progress';
+import {Course} from '../models/Course';
+import {Unit, IUnitModel} from '../models/units/Unit';
 import {IUser} from '../../../shared/models/IUser';
-import {IUnitModel, Unit} from '../models/units/Unit';
 import {IProgress} from '../../../shared/models/progress/IProgress';
 
 @JsonController('/progress')
@@ -57,8 +58,14 @@ export class ProgressController {
    *     }]
    */
   @Get('/units/:id')
-  async getUnitProgress(@Param('id') id: string) {
+  async getUnitProgress(@Param('id') id: string, @CurrentUser() currentUser: IUser) {
+    const unit = await Unit.findById(id);
+    const course = await Course.findById(unit._course);
+    if (!course.checkPrivileges(currentUser).userCanViewCourse) {
+      throw new ForbiddenError();
+    }
     const progressSet = await Progress.find({unit: id});
+    // TODO filter progress data for students
     return progressSet.map((progress) => progress.toObject({virtuals: true}));
   }
 
