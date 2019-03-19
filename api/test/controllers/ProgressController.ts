@@ -1,9 +1,7 @@
 import {ICodeKataModel} from '../../src/models/units/CodeKataUnit';
 import * as chai from 'chai';
 import chaiHttp = require('chai-http');
-import {Server} from '../../src/server';
-import {FixtureLoader} from '../../fixtures/FixtureLoader';
-import {JwtUtils} from '../../src/security/JwtUtils';
+import {TestHelper} from '../TestHelper';
 import {User} from '../../src/models/User';
 import {Unit} from '../../src/models/units/Unit';
 import {Lecture} from '../../src/models/Lecture';
@@ -12,15 +10,12 @@ import {Progress} from '../../src/models/progress/Progress';
 import * as moment from 'moment';
 
 chai.use(chaiHttp);
-const should = chai.should();
-const app = new Server().app;
 const BASE_URL = '/api/progress';
-const fixtureLoader = new FixtureLoader();
+const testHelper = new TestHelper(BASE_URL);
 
 describe('ProgressController', () => {
-  // Before each test we reset the database
   beforeEach(async () => {
-    await fixtureLoader.load();
+    await testHelper.resetForNextTest();
   });
 
   describe(`POST ${BASE_URL}`, () => {
@@ -39,11 +34,7 @@ describe('ProgressController', () => {
         type: 'codeKata'
       };
 
-      const res = await chai.request(app)
-        .post(BASE_URL)
-        .set('Cookie', `token=${JwtUtils.generateToken(student)}`)
-        .send(newProgress);
-
+      const res = await testHelper.commonUserPostRequest(student, '', newProgress);
       res.status.should.be.equal(200);
       res.body.course.should.be.equal(newProgress.course);
       res.body.unit.should.be.equal(newProgress.unit);
@@ -70,11 +61,7 @@ describe('ProgressController', () => {
         type: 'codeKata'
       };
 
-      const res = await chai.request(app)
-        .post(BASE_URL)
-        .set('Cookie', `token=${JwtUtils.generateToken(student)}`)
-        .send(newProgress);
-
+      const res = await testHelper.commonUserPostRequest(student, '', newProgress);
       res.status.should.be.equal(200);
       res.body.course.should.be.equal(newProgress.course);
       res.body.unit.should.be.equal(newProgress.unit);
@@ -101,12 +88,7 @@ describe('ProgressController', () => {
         type: 'codeKata'
       };
 
-      const res = await chai.request(app)
-        .post(BASE_URL)
-        .set('Cookie', `token=${JwtUtils.generateToken(student)}`)
-        .send(newProgress)
-        .catch(err => err.response);
-
+      const res = await testHelper.commonUserPostRequest(student, '', newProgress);
       res.status.should.be.equal(400);
       res.body.name.should.be.equal('BadRequestError');
       res.body.message.should.be.equal('Past deadline, no further update possible');
@@ -140,11 +122,7 @@ describe('ProgressController', () => {
         type: 'codeKata'
       };
 
-      const res = await chai.request(app)
-        .put(`${BASE_URL}/${progress._id.toString()}`)
-        .set('Cookie', `token=${JwtUtils.generateToken(student)}`)
-        .send(newProgress);
-
+      const res = await testHelper.commonUserPutRequest(student, `/${progress._id.toString()}`, newProgress);
       res.status.should.be.equal(200);
       res.body.course.should.be.equal(newProgress.course);
       res.body.unit.should.be.equal(newProgress.unit);
@@ -182,11 +160,7 @@ describe('ProgressController', () => {
         type: 'codeKata'
       };
 
-      const res = await chai.request(app)
-        .put(`${BASE_URL}/${progress._id.toString()}`)
-        .set('Cookie', `token=${JwtUtils.generateToken(student)}`)
-        .send(newProgress);
-
+      const res = await testHelper.commonUserPutRequest(student, `/${progress._id.toString()}`, newProgress);
       res.status.should.be.equal(200);
       res.body.course.should.be.equal(newProgress.course);
       res.body.unit.should.be.equal(newProgress.unit);
@@ -224,12 +198,7 @@ describe('ProgressController', () => {
         type: 'codeKata'
       };
 
-      const res = await chai.request(app)
-        .put(`${BASE_URL}/${progress._id.toString()}`)
-        .set('Cookie', `token=${JwtUtils.generateToken(student)}`)
-        .send(newProgress)
-        .catch(err => err.response);
-
+      const res = await testHelper.commonUserPutRequest(student, `/${progress._id.toString()}`, newProgress);
       res.status.should.be.equal(400);
       res.body.name.should.be.equal('BadRequestError');
       res.body.message.should.be.equal('Past deadline, no further update possible');
