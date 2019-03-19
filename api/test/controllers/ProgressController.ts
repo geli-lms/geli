@@ -6,7 +6,7 @@ import {FixtureUtils} from '../../fixtures/FixtureUtils';
 import {User, IUserModel} from '../../src/models/User';
 import {Unit} from '../../src/models/units/Unit';
 import {Course} from '../../src/models/Course';
-import {Progress} from '../../src/models/progress/Progress';
+import {Progress, IProgressModel} from '../../src/models/progress/Progress';
 import * as moment from 'moment';
 
 chai.use(chaiHttp);
@@ -44,11 +44,32 @@ function createProgressObjFor (unit: ICodeKataModel, student: IUserModel, done: 
 }
 
 /**
- * Common helper function for the unit tests that posts new progress data for a student and checks the status code.
+ * Common unit test helper function to check that responses equal the progress object.
+ */
+function checkResponseProgress (res: any, newProgress: any) {
+  res.body.course.should.be.equal(newProgress.course);
+  res.body.unit.should.be.equal(newProgress.unit);
+  res.body.user.should.be.equal(newProgress.user);
+  res.body.done.should.be.equal(newProgress.done);
+  res.body._id.should.be.a('string');
+}
+
+/**
+ * Common helper function for the unit tests that POST new progress data for a student and checks the status code.
  */
 async function postProgressTestData (unit: ICodeKataModel, student: IUserModel, status: Number = 200) {
   const newProgress = createProgressObjFor(unit, student);
   const res = await testHelper.commonUserPostRequest(student, '', newProgress);
+  res.status.should.be.equal(status);
+  return {res, newProgress};
+}
+
+/**
+ * Common helper function for the unit tests that PUT new progress data for a student and checks the status code.
+ */
+async function putProgressTestData (progress: IProgressModel, unit: ICodeKataModel, student: IUserModel, status: Number = 200) {
+  const newProgress = createProgressObjFor(unit, student);
+  const res = await testHelper.commonUserPutRequest(student, `/${progress._id.toString()}`, newProgress);
   res.status.should.be.equal(status);
   return {res, newProgress};
 }
@@ -124,21 +145,13 @@ describe('ProgressController', () => {
     it('should create progress for some progressable unit', async () => {
       const {unit, student} = await prepareSetup();
       const {res, newProgress} = await postProgressTestData(unit, student);
-      res.body.course.should.be.equal(newProgress.course);
-      res.body.unit.should.be.equal(newProgress.unit);
-      res.body.user.should.be.equal(newProgress.user);
-      res.body.done.should.be.equal(newProgress.done);
-      res.body._id.should.be.a('string');
+      checkResponseProgress(res, newProgress);
     });
 
     it('should create progress for some progressable unit with a deadline', async () => {
       const {unit, student} = await prepareSetup(1);
       const {res, newProgress} = await postProgressTestData(unit, student);
-      res.body.course.should.be.equal(newProgress.course);
-      res.body.unit.should.be.equal(newProgress.unit);
-      res.body.user.should.be.equal(newProgress.user);
-      res.body.done.should.be.equal(newProgress.done);
-      res.body._id.should.be.a('string');
+      checkResponseProgress(res, newProgress);
     });
 
     it('should fail creating progress for some progressable unit with a deadline', async () => {
@@ -155,14 +168,9 @@ describe('ProgressController', () => {
 
       const oldProgress = createProgressObjFor(unit, student, false);
       const progress = await Progress.create(oldProgress);
-      const newProgress = createProgressObjFor(unit, student);
 
-      const res = await testHelper.commonUserPutRequest(student, `/${progress._id.toString()}`, newProgress);
-      res.status.should.be.equal(200);
-      res.body.course.should.be.equal(newProgress.course);
-      res.body.unit.should.be.equal(newProgress.unit);
-      res.body.user.should.be.equal(newProgress.user);
-      res.body.done.should.be.equal(newProgress.done);
+      const {res, newProgress} = await putProgressTestData(progress, unit, student);
+      checkResponseProgress(res, newProgress);
       res.body._id.should.be.equal(progress._id.toString());
     });
 
@@ -171,14 +179,9 @@ describe('ProgressController', () => {
 
       const oldProgress = createProgressObjFor(unit, student, false);
       const progress = await Progress.create(oldProgress);
-      const newProgress = createProgressObjFor(unit, student);
 
-      const res = await testHelper.commonUserPutRequest(student, `/${progress._id.toString()}`, newProgress);
-      res.status.should.be.equal(200);
-      res.body.course.should.be.equal(newProgress.course);
-      res.body.unit.should.be.equal(newProgress.unit);
-      res.body.user.should.be.equal(newProgress.user);
-      res.body.done.should.be.equal(newProgress.done);
+      const {res, newProgress} = await putProgressTestData(progress, unit, student);
+      checkResponseProgress(res, newProgress);
       res.body._id.should.be.equal(progress._id.toString());
     });
 
@@ -187,10 +190,8 @@ describe('ProgressController', () => {
 
       const oldProgress = createProgressObjFor(unit, student, false);
       const progress = await Progress.create(oldProgress);
-      const newProgress = createProgressObjFor(unit, student);
 
-      const res = await testHelper.commonUserPutRequest(student, `/${progress._id.toString()}`, newProgress);
-      res.status.should.be.equal(400);
+      const {res} = await putProgressTestData(progress, unit, student, 400);
       res.body.name.should.be.equal('BadRequestError');
       res.body.message.should.be.equal('Past deadline, no further update possible');
     });
