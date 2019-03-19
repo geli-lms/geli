@@ -9,6 +9,7 @@ import {Course} from '../models/Course';
 import {Unit, IUnitModel} from '../models/units/Unit';
 import {IUser} from '../../../shared/models/IUser';
 import {IProgress} from '../../../shared/models/progress/IProgress';
+import {extractSingleMongoId} from '../utilities/ExtractMongoId';
 
 @JsonController('/progress')
 @UseBefore(passportJwtMiddleware)
@@ -64,8 +65,14 @@ export class ProgressController {
     if (!course.checkPrivileges(currentUser).userCanViewCourse) {
       throw new ForbiddenError();
     }
-    const progressSet = await Progress.find({unit: id});
-    // TODO filter progress data for students
+    let progressSet = await Progress.find({unit: id});
+    if (currentUser.role !== 'teacher' && currentUser.role !== 'admin') {
+      // Only send the progress data if the user (student) is the "owner" thereof.
+      const currentUserId = extractSingleMongoId(currentUser);
+      progressSet = await Promise.all(progressSet.map(
+        (progress) => extractSingleMongoId(progress.user) === currentUserId ? progress : undefined));
+      progressSet = progressSet.filter((progress) => progress);
+    }
     return progressSet.map((progress) => progress.toObject({virtuals: true}));
   }
 
