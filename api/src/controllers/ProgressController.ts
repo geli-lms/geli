@@ -100,11 +100,14 @@ export class ProgressController {
    *         "id": "5ab2b9516fab4a3ae0cd6737"
    *     }]
    */
+  // This route has been disabled since it appears to be unused and insufficiently secured.
+  /*
   @Get('/courses/:id')
   getCourseProgress(@Param('id') id: string) {
     return Progress.find({'course': id})
       .then((progresses) => progresses.map((progress) => progress.toObject({virtuals: true})));
   }
+  */
 
   /**
    * @api {get} /api/progress/users/:id Get user progress
@@ -144,11 +147,14 @@ export class ProgressController {
    *         "id": "5ab2b9516fab4a3ae0cd6737"
    *     }]
    */
+  // This route has been disabled since it appears to be unused and insufficiently secured.
+  /*
   @Get('/users/:id')
   getUserProgress(@Param('id') id: string) {
     return Progress.find({'user': id})
       .then((progresses) => progresses.map((progress) => progress.toObject({virtuals: true})));
   }
+  */
 
   /**
    * @api {post} /api/progress/ Create progress

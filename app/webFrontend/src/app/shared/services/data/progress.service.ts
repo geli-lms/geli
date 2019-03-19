@@ -13,6 +13,8 @@ export class ProgressService extends DataService {
     return unitProgress.length > 0 ? unitProgress[0] : null;
   }
 
+  // The corresponding route has been disabled since it appears to be unused and insufficiently secured.
+  /*
   getCourseProgress(courseId: string) {
     const originalApiPath = this.apiPath;
     this.apiPath += 'courses/';
@@ -20,7 +22,10 @@ export class ProgressService extends DataService {
     this.apiPath = originalApiPath;
     return promise;
   }
+  */
 
+  // The corresponding route has been disabled since it appears to be unused and insufficiently secured.
+  /*
   getUserProgress(userId: string) {
     const originalApiPath = this.apiPath;
     this.apiPath += 'users/';
@@ -28,4 +33,5 @@ export class ProgressService extends DataService {
     this.apiPath = originalApiPath;
     return promise;
   }
+  */
 }
