@@ -2,6 +2,7 @@ import {ICodeKataModel} from '../../src/models/units/CodeKataUnit';
 import * as chai from 'chai';
 import chaiHttp = require('chai-http');
 import {TestHelper} from '../TestHelper';
+import {FixtureUtils} from '../../fixtures/FixtureUtils';
 import {User} from '../../src/models/User';
 import {Unit} from '../../src/models/units/Unit';
 import {Lecture} from '../../src/models/Lecture';
@@ -16,6 +17,32 @@ const testHelper = new TestHelper(BASE_URL);
 describe('ProgressController', () => {
   beforeEach(async () => {
     await testHelper.resetForNextTest();
+  });
+
+  describe(`GET ${BASE_URL}`, () => {
+    it('should get unit progress', async () => {
+      const unit = await FixtureUtils.getRandomUnit();
+      const course = await FixtureUtils.getCourseFromUnit(unit);
+      const user = await FixtureUtils.getRandomTeacherForCourse(course);
+
+      const res = await testHelper.commonUserGetRequest(user, `/units/${unit._id}`);
+      res.status.should.be.equal(200);
+    });
+
+    it('should get course progress', async () => {
+      const course = await FixtureUtils.getRandomCourse();
+      const user = await FixtureUtils.getRandomTeacherForCourse(course);
+
+      const res = await testHelper.commonUserGetRequest(user, `/courses/${course._id}`);
+      res.status.should.be.equal(200);
+    });
+
+    it('should get student user progress', async () => {
+      const student = await FixtureUtils.getRandomStudent();
+
+      const res = await testHelper.commonUserGetRequest(student, `/users/${student._id}`);
+      res.status.should.be.equal(200);
+    });
   });
 
   describe(`POST ${BASE_URL}`, () => {
