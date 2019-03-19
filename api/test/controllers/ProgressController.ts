@@ -3,7 +3,7 @@ import * as chai from 'chai';
 import chaiHttp = require('chai-http');
 import {TestHelper} from '../TestHelper';
 import {FixtureUtils} from '../../fixtures/FixtureUtils';
-import {User} from '../../src/models/User';
+import {User, IUserModel} from '../../src/models/User';
 import {Unit} from '../../src/models/units/Unit';
 import {Lecture} from '../../src/models/Lecture';
 import {Course} from '../../src/models/Course';
@@ -13,6 +13,45 @@ import * as moment from 'moment';
 chai.use(chaiHttp);
 const BASE_URL = '/api/progress';
 const testHelper = new TestHelper(BASE_URL);
+
+/**
+ * Common setup function for the unit tests.
+ */
+async function prepareSetup(updateUnitDeadline = false) {
+  const unit: ICodeKataModel = <ICodeKataModel>await Unit.findOne({progressable: true, __t: 'code-kata'});
+  const course = await Course.findById(unit._course);
+  const student = await User.findOne({_id: course.students[0] });
+
+  if (updateUnitDeadline) {
+    unit.deadline = moment().add(1, 'hour').format();
+    await unit.save();
+  }
+
+  return {unit, course, student};
+}
+
+/**
+ * Common progress data setup function for the unit tests.
+ */
+function createNewProgressFor (unit: ICodeKataModel, student: IUserModel) {
+  return {
+    course: unit._course,
+    unit: unit._id.toString(),
+    user: student._id.toString(),
+    code: 'let a = test;',
+    done: true,
+    type: 'codeKata'
+  };
+}
+
+/**
+ * Helper function for the get route student filter unit test.
+ */
+async function postProgressTestData (unit: ICodeKataModel, student: IUserModel) {
+  const newProgress = createNewProgressFor(unit, student);
+  const resPost = await testHelper.commonUserPostRequest(student, '', newProgress);
+  resPost.status.should.be.equal(200);
+}
 
 describe('ProgressController', () => {
   beforeEach(async () => {
@@ -69,6 +108,19 @@ describe('ProgressController', () => {
       res.status.should.be.equal(403);
     });
     */
+
+    it.only('should only return own unit progress for a student', async () => {
+      const {unit, course, student} = await prepareSetup(true);
+      // Currently the FixtureLoader will enrol at least 2 students per course, so this should never fail.
+      const student2 = await User.findOne({_id: course.students[1] });
+      await Promise.all([postProgressTestData(unit, student), postProgressTestData(unit, student2)]);
+
+      const res = await testHelper.commonUserGetRequest(student, `/units/${unit._id}`);
+      res.status.should.be.equal(200);
+      res.body.should.not.be.empty;
+      const studentId = student._id.toString();
+      res.body.forEach((progress: any) => progress.user.should.equal(studentId));
+    });
   });
 
   describe(`POST ${BASE_URL}`, () => {
