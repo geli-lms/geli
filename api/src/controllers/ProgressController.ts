@@ -57,9 +57,9 @@ export class ProgressController {
    *     }]
    */
   @Get('/units/:id')
-  getUnitProgress(@Param('id') id: string) {
-    return Progress.find({'unit': id})
-      .then((progresses) => progresses.map((progress) => progress.toObject({virtuals: true})));
+  async getUnitProgress(@Param('id') id: string) {
+    const progressSet = await Progress.find({unit: id});
+    return progressSet.map((progress) => progress.toObject({virtuals: true}));
   }
 
   /**
