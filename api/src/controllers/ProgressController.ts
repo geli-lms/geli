@@ -176,7 +176,6 @@ export class ProgressController {
    * @apiGroup Progress
    *
    * @apiParam {IProgress} data Progress data.
-   * @apiParam {IUser} currentUser Currently logged in user.
    *
    * @apiParam {String} id Notification ID.@apiSuccess {Progress} progress Created progress.
    *
@@ -212,9 +211,9 @@ export class ProgressController {
    * @apiError BadRequestError progress need fields course, user and unit
    */
   @Post('/')
-  async createProgress(@Body() data: IProgress, @CurrentUser() currentUser?: IUser) {
+  async createProgress(@Body() data: IProgress, @CurrentUser() currentUser: IUser) {
     // discard invalid requests
-    if (!data.course || !data.unit || !currentUser) {
+    if (!data.course || !data.unit) {
       throw new BadRequestError('progress need fields course, user and unit');
     }
 
