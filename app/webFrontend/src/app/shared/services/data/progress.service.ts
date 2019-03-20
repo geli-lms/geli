@@ -19,26 +19,4 @@ export class ProgressService extends DataService {
       .put(this.apiPath, JSON.stringify(updateItem))
       .toPromise();
   }
-
-  // The corresponding route has been disabled since it appears to be unused and insufficiently secured.
-  /*
-  getCourseProgress(courseId: string) {
-    const originalApiPath = this.apiPath;
-    this.apiPath += 'courses/';
-    const promise = this.readSingleItem(courseId);
-    this.apiPath = originalApiPath;
-    return promise;
-  }
-  */
-
-  // The corresponding route has been disabled since it appears to be unused and insufficiently secured.
-  /*
-  getUserProgress(userId: string) {
-    const originalApiPath = this.apiPath;
-    this.apiPath += 'users/';
-    const promise = this.readSingleItem(userId);
-    this.apiPath = originalApiPath;
-    return promise;
-  }
-  */
 }
