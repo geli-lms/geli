@@ -1,7 +1,7 @@
 import * as chai from 'chai';
 import chaiHttp = require('chai-http');
+import {TestHelper} from '../../TestHelper';
 import {Server} from '../../../src/server';
-import {FixtureLoader} from '../../../fixtures/FixtureLoader';
 import {JwtUtils} from '../../../src/security/JwtUtils';
 import {User} from '../../../src/models/User';
 import {Lecture} from '../../../src/models/Lecture';
@@ -11,10 +11,9 @@ import {Unit} from '../../../src/models/units/Unit';
 import {ICodeKataModel} from '../../../src/models/units/CodeKataUnit';
 
 chai.use(chaiHttp);
-const should = chai.should();
 const app = new Server().app;
 const BASE_URL = '/api/units';
-const fixtureLoader = new FixtureLoader();
+const testHelper = new TestHelper(BASE_URL);
 
 describe(`CodeKataUnit ${BASE_URL}`, () => {
   const model = {
@@ -36,9 +35,9 @@ describe(`CodeKataUnit ${BASE_URL}`, () => {
     '\n' +
     '}'
   };
-  // Before each test we reset the database
+
   beforeEach(async () => {
-    await fixtureLoader.load();
+    await testHelper.resetForNextTest();
   });
 
   describe(`POST ${BASE_URL}`, () => {
@@ -54,12 +53,7 @@ describe(`CodeKataUnit ${BASE_URL}`, () => {
     it('should fail with BadRequest (missing lectureId)', async () => {
       const teacher = await FixtureUtils.getRandomTeacher();
 
-      const res = await chai.request(app)
-        .post(BASE_URL)
-        .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
-        .send({model: model})
-        .catch(err => err.response);
-
+      const res = await testHelper.commonUserPostRequest(teacher, '', {model});
       res.status.should.be.equal(400);
     });
 
@@ -68,12 +62,7 @@ describe(`CodeKataUnit ${BASE_URL}`, () => {
       const course = await Course.findOne({lectures: { $in: [ lecture._id ] }});
       const courseAdmin = await User.findOne({_id: course.courseAdmin});
 
-      const res = await chai.request(app)
-        .post(BASE_URL)
-        .set('Cookie', `token=${JwtUtils.generateToken(courseAdmin)}`)
-        .send({lectureId: lecture._id})
-        .catch(err => err.response);
-
+      const res = await testHelper.commonUserPostRequest(courseAdmin, '', {lectureId: lecture._id});
       res.status.should.be.equal(400);
     });
 
@@ -83,11 +72,7 @@ describe(`CodeKataUnit ${BASE_URL}`, () => {
       const courseAdmin = await User.findOne({_id: course.courseAdmin});
       model._course = course._id;
 
-      const res = await chai.request(app)
-        .post(BASE_URL)
-        .set('Cookie', `token=${JwtUtils.generateToken(courseAdmin)}`)
-        .send({lectureId: lecture._id, model: model});
-
+      const res = await testHelper.commonUserPostRequest(courseAdmin, '', {lectureId: lecture._id, model});
       res.status.should.be.equal(200);
       res.body.name.should.equal(model.name);
       res.body.description.should.equal(model.description);
@@ -109,11 +94,7 @@ describe(`CodeKataUnit ${BASE_URL}`, () => {
       model.definition = undefined;
       model.test = undefined;
 
-      const res = await chai.request(app)
-        .post(BASE_URL)
-        .set('Cookie', `token=${JwtUtils.generateToken(courseAdmin)}`)
-        .send({lectureId: lecture._id, model: model});
-
+      const res = await testHelper.commonUserPostRequest(courseAdmin, '', {lectureId: lecture._id, model});
       res.status.should.be.equal(200);
       res.body.name.should.equal(model.name);
       res.body.description.should.equal(model.description);
