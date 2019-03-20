@@ -77,27 +77,6 @@ describe('ProgressController', () => {
       res.status.should.be.equal(200);
     });
 
-    // The corresponding route has been disabled since it appears to be unused and insufficiently secured.
-    /*
-    it('should get course progress', async () => {
-      const course = await FixtureUtils.getRandomCourse();
-      const user = await FixtureUtils.getRandomTeacherForCourse(course);
-
-      const res = await testHelper.commonUserGetRequest(user, `/courses/${course._id}`);
-      res.status.should.be.equal(200);
-    });
-    */
-
-    // The corresponding route has been disabled since it appears to be unused and insufficiently secured.
-    /*
-    it('should get student user progress', async () => {
-      const student = await FixtureUtils.getRandomStudent();
-
-      const res = await testHelper.commonUserGetRequest(student, `/users/${student._id}`);
-      res.status.should.be.equal(200);
-    });
-    */
-
     it('should deny access to unit progress for an unauthorized user', async () => {
       const {unit, course} = await prepareSetup();
       const unauthorizedUser = await FixtureUtils.getUnauthorizedTeacherForCourse(course);
@@ -105,17 +84,6 @@ describe('ProgressController', () => {
       const res = await testHelper.commonUserGetRequest(unauthorizedUser, `/units/${unit._id}`);
       res.status.should.be.equal(403);
     });
-
-    // The corresponding route has been disabled since it appears to be unused and insufficiently secured.
-    /*
-    it('should deny access to course progress for an unauthorized user', async () => {
-      const course = await FixtureUtils.getRandomCourse();
-      const unauthorizedUser = await FixtureUtils.getUnauthorizedTeacherForCourse(course);
-
-      const res = await testHelper.commonUserGetRequest(unauthorizedUser, `/courses/${course._id}`);
-      res.status.should.be.equal(403);
-    });
-    */
 
     it('should only return own unit progress for a student', async () => {
       const {unit, course, student} = await prepareSetup(1);
