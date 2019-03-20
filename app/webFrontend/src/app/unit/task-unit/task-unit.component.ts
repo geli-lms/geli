@@ -81,7 +81,7 @@ export class TaskUnitComponent implements OnInit {
   validate() {
     this.validationMode = true;
 
-    this.progressService.updateItem(this.progress)
+    this.progressService.updateProgress(this.progress)
       .then((savedProgress) => {
         this.snackBar.openShort('Progress has been saved');
         this.progress = savedProgress;

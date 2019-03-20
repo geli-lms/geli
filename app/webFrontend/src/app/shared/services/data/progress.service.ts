@@ -14,6 +14,12 @@ export class ProgressService extends DataService {
     return objectIsEmpty ? null : unitProgress;
   }
 
+  updateProgress<T extends any>(updateItem: T): Promise<T> {
+    return this.backendService
+      .put(this.apiPath, JSON.stringify(updateItem))
+      .toPromise();
+  }
+
   // The corresponding route has been disabled since it appears to be unused and insufficiently secured.
   /*
   getCourseProgress(courseId: string) {

@@ -92,7 +92,7 @@ export class CodeKataComponent implements OnInit {
 
     this.progress.user = this.userService.user._id;
     this.progress.code = this.codeKataUnit.code;
-    this.progressService.updateItem(this.progress)
+    this.progressService.updateProgress(this.progress)
       .then((item) => {
         this.snackBar.open('Progress has been saved');
         this.progress = item;
