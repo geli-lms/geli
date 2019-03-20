@@ -57,6 +57,8 @@ export class ProgressController {
    *         "__t": "task-unit-progress",
    *         "id": "5ab2b9516fab4a3ae0cd6737"
    *     }]
+   *
+   * @apiError ForbiddenError
    */
   @Get('/units/:id')
   async getUnitProgress(@Param('id') id: string, @CurrentUser() currentUser: IUser) {
@@ -209,6 +211,7 @@ export class ProgressController {
    *     }
    *
    * @apiError BadRequestError progress need fields course, user and unit
+   * @apiError ForbiddenError
    */
   @Post('/')
   async createProgress(@Body() data: IProgress, @CurrentUser() currentUser: IUser) {
@@ -270,6 +273,7 @@ export class ProgressController {
    *     }
    *
    * @apiError NotFoundError
+   * @apiError ForbiddenError
    */
   @Put('/:id')
   async updateProgress(@Param('id') id: string, @Body() data: any, @CurrentUser() currentUser: IUser) {
