@@ -12,7 +12,6 @@
     "build": "ng build --prod --source-map",
     "build-pr": "ng build --prod",
     "test": "ng test",
-    "test-ci": "ng test --single-run",
     "lint": "ng lint",
     "lint:fix": "ng lint web-frontend --fix",
     "e2e": "ng e2e"
