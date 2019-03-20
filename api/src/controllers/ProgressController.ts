@@ -1,6 +1,6 @@
 import {
-  BadRequestError, Body, CurrentUser, Get, JsonController, Param, Post, Put, UseBefore,
-  NotFoundError, ForbiddenError
+  BadRequestError, Body, CurrentUser, Get, JsonController, Param, Put, UseBefore,
+  ForbiddenError
 } from 'routing-controllers';
 import * as moment from 'moment';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
@@ -8,7 +8,6 @@ import {Progress} from '../models/progress/Progress';
 import {Course} from '../models/Course';
 import {Unit, IUnitModel} from '../models/units/Unit';
 import {IUser} from '../../../shared/models/IUser';
-import {IProgress} from '../../../shared/models/progress/IProgress';
 import {extractSingleMongoId} from '../utilities/ExtractMongoId';
 
 @JsonController('/progress')
@@ -173,68 +172,7 @@ export class ProgressController {
   */
 
   /**
-   * @api {post} /api/progress/ Create progress
-   * @apiName PostProgress
-   * @apiGroup Progress
-   *
-   * @apiParam {IProgress} data Progress data.
-   *
-   * @apiParam {String} id Notification ID.@apiSuccess {Progress} progress Created progress.
-   *
-   * @apiSuccessExample {json} Success-Response:
-   *     {
-   *         "_id": "5ab2b9516fab4a3ae0cd6737",
-   *         "done": false,
-   *         "updatedAt": "2018-03-21T19:58:09.386Z",
-   *         "createdAt": "2018-03-21T19:58:09.386Z",
-   *         "unit": "5ab2b80a6fab4a3ae0cd672d",
-   *         "course": "5a53c474a347af01b84e54b7",
-   *         "answers": {
-   *             "5ab2b80a6fab4a3ae0cd672e": {
-   *                 "5ab2b80a6fab4a3ae0cd6730": true,
-   *                 "5ab2b80a6fab4a3ae0cd672f": false
-   *             },
-   *             "5ab2b8dd6fab4a3ae0cd6734": {
-   *                 "5ab2b8dd6fab4a3ae0cd6736": false,
-   *                 "5ab2b8dd6fab4a3ae0cd6735": true
-   *             },
-   *             "5ab2b8dd6fab4a3ae0cd6731": {
-   *                 "5ab2b8dd6fab4a3ae0cd6733": false,
-   *                 "5ab2b8dd6fab4a3ae0cd6732": true
-   *             }
-   *         },
-   *         "type": "task-unit-progress",
-   *         "user": "5a037e6a60f72236d8e7c813",
-   *         "__v": 0,
-   *         "__t": "task-unit-progress",
-   *         "id": "5ab2b9516fab4a3ae0cd6737"
-   *     }
-   *
-   * @apiError BadRequestError progress need fields course, user and unit
-   * @apiError ForbiddenError
-   */
-  @Post('/')
-  async createProgress(@Body() data: IProgress, @CurrentUser() currentUser: IUser) {
-    // discard invalid requests
-    if (!data.course || !data.unit) {
-      throw new BadRequestError('progress need fields course, user and unit');
-    }
-
-    const unit: IUnitModel = await Unit.findById(data.unit);
-    const course = await Course.findById(unit._course);
-    if (!course.checkPrivileges(currentUser).userCanViewCourse) {
-      throw new ForbiddenError();
-    }
-    ProgressController.checkDeadline(unit);
-
-    data.user = currentUser;
-
-    const progress = await Progress.create(data);
-    return progress.toObject();
-  }
-
-  /**
-   * @api {put} /api/progress/:id Update progress
+   * @api {put} /api/progress/ Set progress for a unit (i.e. create or update it idempotently)
    * @apiName PutProgress
    * @apiGroup Progress
    *
@@ -272,31 +210,21 @@ export class ProgressController {
    *         "id": "5ab2b9516fab4a3ae0cd6737"
    *     }
    *
-   * @apiError NotFoundError
    * @apiError ForbiddenError
    */
-  @Put('/:id')
-  async updateProgress(@Param('id') id: string, @Body() data: any, @CurrentUser() currentUser: IUser) {
-    const progress = await Progress.findById(id);
-    if (!progress) {
-      throw new NotFoundError();
-    }
-    if (extractSingleMongoId(progress.user) !== extractSingleMongoId(currentUser)) {
-      throw new ForbiddenError();
-    }
-
-    const unit: IUnitModel = await Unit.findById(progress.unit);
+  @Put('/')
+  async updateProgress(@Body() data: any, @CurrentUser() currentUser: IUser) {
+    const unit: IUnitModel = await Unit.findById(data.unit);
     const course = await Course.findById(unit._course);
     if (!course.checkPrivileges(currentUser).userCanViewCourse) {
       throw new ForbiddenError();
     }
     ProgressController.checkDeadline(unit);
 
-    // set user
-    data.user = currentUser._id;
-
-    progress.set(data);
-    await progress.save();
+    const progress = await Progress.findOneAndUpdate(
+      {user: currentUser, unit},
+      {user: currentUser, unit, course, done: data.done, type: data.type},
+      {new: true, upsert: true});
 
     return progress.toObject();
   }

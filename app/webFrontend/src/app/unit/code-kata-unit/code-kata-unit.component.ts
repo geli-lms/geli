@@ -90,27 +90,16 @@ export class CodeKataComponent implements OnInit {
       this.snackBar.open('Your code does not validate.');
     }
 
-    if (!this.progress._id) {
-      this.progress.user = this.userService.user._id;
-      this.progressService.createItem(this.progress)
-        .then((item) => {
-          this.snackBar.open('Progress has been saved');
-          this.progress = item;
-        })
-        .catch((err) => {
-          this.snackBar.open(`An error occurred: ${err.error.message}`);
-        });
-    } else {
-      this.progress.code = this.codeKataUnit.code;
-      this.progressService.updateItem(this.progress)
-        .then((item) => {
-          this.snackBar.open('Progress has been updated');
-          this.progress = item;
-        })
-        .catch((err) => {
-          this.snackBar.open(`An error occurred: ${err.error.message}`);
-        });
-    }
+    this.progress.user = this.userService.user._id;
+    this.progress.code = this.codeKataUnit.code;
+    this.progressService.updateItem(this.progress)
+      .then((item) => {
+        this.snackBar.open('Progress has been saved');
+        this.progress = item;
+      })
+      .catch((err) => {
+        this.snackBar.open(`An error occurred: ${err.error.message}`);
+      });
   }
 
   onUserInput() {

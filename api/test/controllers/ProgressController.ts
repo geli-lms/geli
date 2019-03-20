@@ -6,7 +6,6 @@ import {FixtureUtils} from '../../fixtures/FixtureUtils';
 import {User, IUserModel} from '../../src/models/User';
 import {Unit} from '../../src/models/units/Unit';
 import {Course} from '../../src/models/Course';
-import {Progress, IProgressModel} from '../../src/models/progress/Progress';
 import * as moment from 'moment';
 
 chai.use(chaiHttp);
@@ -19,7 +18,7 @@ const testHelper = new TestHelper(BASE_URL);
 async function prepareSetup(unitDeadlineAdd = 0) {
   const unit: ICodeKataModel = <ICodeKataModel>await Unit.findOne({progressable: true, __t: 'code-kata'});
   const course = await Course.findById(unit._course);
-  const student = await User.findOne({_id: course.students[0] });
+  const student = await User.findById(course.students[0]);
 
   if (unitDeadlineAdd) {
     unit.deadline = moment().add(unitDeadlineAdd, 'hour').format();
@@ -55,21 +54,11 @@ function checkResponseProgress (res: any, newProgress: any) {
 }
 
 /**
- * Common helper function for the unit tests that POST new progress data for a student and checks the status code.
- */
-async function postProgressTestData (unit: ICodeKataModel, student: IUserModel, status: Number = 200) {
-  const newProgress = createProgressObjFor(unit, student);
-  const res = await testHelper.commonUserPostRequest(student, '', newProgress);
-  res.status.should.be.equal(status);
-  return {res, newProgress};
-}
-
-/**
  * Common helper function for the unit tests that PUT new progress data for a student and checks the status code.
  */
-async function putProgressTestData (progress: IProgressModel, unit: ICodeKataModel, student: IUserModel, status: Number = 200) {
+async function putProgressTestData (unit: ICodeKataModel, student: IUserModel, status: Number = 200) {
   const newProgress = createProgressObjFor(unit, student);
-  const res = await testHelper.commonUserPutRequest(student, `/${progress._id.toString()}`, newProgress);
+  const res = await testHelper.commonUserPutRequest(student, '', newProgress);
   res.status.should.be.equal(status);
   return {res, newProgress};
 }
@@ -130,8 +119,8 @@ describe('ProgressController', () => {
     it('should only return own unit progress for a student', async () => {
       const {unit, course, student} = await prepareSetup(1);
       // Currently the FixtureLoader will enrol at least 2 students per course, so this should never fail.
-      const student2 = await User.findOne({_id: course.students[1] });
-      await Promise.all([postProgressTestData(unit, student), postProgressTestData(unit, student2)]);
+      const student2 = await User.findById(course.students[1]);
+      await Promise.all([putProgressTestData(unit, student), putProgressTestData(unit, student2)]);
 
       const res = await testHelper.commonUserGetRequest(student, `/units/${unit._id}`);
       res.status.should.be.equal(200);
@@ -141,76 +130,34 @@ describe('ProgressController', () => {
     });
   });
 
-  describe(`POST ${BASE_URL}`, () => {
-    it('should create progress for some progressable unit', async () => {
-      const {unit, student} = await prepareSetup();
-      const {res, newProgress} = await postProgressTestData(unit, student);
-      checkResponseProgress(res, newProgress);
-    });
-
-    it('should create progress for some progressable unit with a deadline', async () => {
-      const {unit, student} = await prepareSetup(1);
-      const {res, newProgress} = await postProgressTestData(unit, student);
-      checkResponseProgress(res, newProgress);
-    });
-
-    it('should fail creating progress for some progressable unit with a deadline', async () => {
-      const {unit, student} = await prepareSetup(-1);
-      const {res} = await postProgressTestData(unit, student, 400);
-      res.body.name.should.be.equal('BadRequestError');
-      res.body.message.should.be.equal('Past deadline, no further update possible');
-    });
-
-    it('should fail to create progress for an unauthorized student', async () => {
-      const {unit, course} = await prepareSetup();
-      const unauthorizedStudent = await FixtureUtils.getUnauthorizedStudentForCourse(course);
-      await postProgressTestData(unit, unauthorizedStudent, 403);
-    });
-  });
-
   describe(`PUT ${BASE_URL}`, () => {
     it('should update progress for some progressable unit', async () => {
       const {unit, student} = await prepareSetup();
-
-      const oldProgress = createProgressObjFor(unit, student, false);
-      const progress = await Progress.create(oldProgress);
-
-      const {res, newProgress} = await putProgressTestData(progress, unit, student);
+      const progress = (await putProgressTestData(unit, student)).res.body;
+      const {res, newProgress} = await putProgressTestData(unit, student);
       checkResponseProgress(res, newProgress);
-      res.body._id.should.be.equal(progress._id.toString());
+      res.body._id.should.be.equal(progress._id.toString(), 'Progress update ID mismatch');
     });
 
     it('should update progress for some progressable unit with a deadline', async () => {
       const {unit, student} = await prepareSetup(1);
-
-      const oldProgress = createProgressObjFor(unit, student, false);
-      const progress = await Progress.create(oldProgress);
-
-      const {res, newProgress} = await putProgressTestData(progress, unit, student);
+      const progress = (await putProgressTestData(unit, student)).res.body;
+      const {res, newProgress} = await putProgressTestData(unit, student);
       checkResponseProgress(res, newProgress);
-      res.body._id.should.be.equal(progress._id.toString());
+      res.body._id.should.be.equal(progress._id.toString(), 'Progress update ID mismatch');
     });
 
     it('should fail updating progress for some progressable unit with a deadline', async () => {
       const {unit, student} = await prepareSetup(-1);
-
-      const oldProgress = createProgressObjFor(unit, student, false);
-      const progress = await Progress.create(oldProgress);
-
-      const {res} = await putProgressTestData(progress, unit, student, 400);
+      const {res} = await putProgressTestData(unit, student, 400);
       res.body.name.should.be.equal('BadRequestError');
       res.body.message.should.be.equal('Past deadline, no further update possible');
     });
 
     it('should fail to update progress for an unauthorized student', async () => {
-      const {unit, student, course} = await prepareSetup();
-      // Currently the FixtureLoader will enrol at least 2 students per course, so this should never fail.
-      const unauthorizedStudent = await User.findOne({_id: course.students[1] });
-
-      const oldProgress = createProgressObjFor(unit, student, false);
-      const progress = await Progress.create(oldProgress);
-
-      await putProgressTestData(progress, unit, unauthorizedStudent, 403);
+      const {unit, course} = await prepareSetup();
+      const unauthorizedStudent = await FixtureUtils.getUnauthorizedStudentForCourse(course);
+      await putProgressTestData(unit, unauthorizedStudent, 403);
     });
   });
 });
