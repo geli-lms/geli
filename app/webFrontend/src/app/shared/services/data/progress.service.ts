@@ -9,8 +9,9 @@ export class ProgressService extends DataService {
   }
 
   async getUnitProgress<T>(unitId: string): Promise<T> {
-    const unitProgress = await this.readSingleItem<any[]>(unitId, this.apiPath + 'units/');
-    return unitProgress.length > 0 ? unitProgress[0] : null;
+    const unitProgress = await this.readSingleItem<any>(unitId, this.apiPath + 'units/');
+    const objectIsEmpty = Object.keys(unitProgress).length === 0 && unitProgress.constructor === Object;
+    return objectIsEmpty ? null : unitProgress;
   }
 
   // The corresponding route has been disabled since it appears to be unused and insufficiently secured.

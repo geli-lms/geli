@@ -19,6 +19,8 @@ const testHelper = new TestHelper(BASE_URL);
 async function prepareSetup(unitDeadlineAdd = 0) {
   const unit: ICodeKataModel = <ICodeKataModel>await Unit.findOne({progressable: true, __t: 'code-kata'});
   const course = await Course.findById(unit._course);
+  course.active = true; // Ensure that the course is active.
+  await course.save();
   const student = await User.findById(course.students[0]);
 
   if (unitDeadlineAdd) {
@@ -93,9 +95,8 @@ describe('ProgressController', () => {
 
       const res = await testHelper.commonUserGetRequest(student, `/units/${unit._id}`);
       res.status.should.be.equal(200);
-      res.body.should.not.be.empty;
       const studentId = student._id.toString();
-      res.body.forEach((progress: any) => progress.user.should.equal(studentId));
+      res.body.user.should.equal(studentId);
     });
   });
 

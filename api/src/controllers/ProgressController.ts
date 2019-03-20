@@ -9,7 +9,6 @@ import {Progress} from '../models/progress/Progress';
 import {Course} from '../models/Course';
 import {Unit, IUnitModel} from '../models/units/Unit';
 import {IUser} from '../../../shared/models/IUser';
-import {extractSingleMongoId} from '../utilities/ExtractMongoId';
 
 @JsonController('/progress')
 @UseBefore(passportJwtMiddleware)
@@ -27,10 +26,10 @@ export class ProgressController {
    *
    * @apiParam {String} id Unit ID.
    *
-   * @apiSuccess {Progress[]} progresses Progress.
+   * @apiSuccess {Progress} progress Progress data or an empty object if no data is available.
    *
    * @apiSuccessExample {json} Success-Response:
-   *     [{
+   *     {
    *         "_id": "5ab2b9516fab4a3ae0cd6737",
    *         "done": false,
    *         "updatedAt": "2018-03-21T19:58:09.386Z",
@@ -56,7 +55,7 @@ export class ProgressController {
    *         "__v": 0,
    *         "__t": "task-unit-progress",
    *         "id": "5ab2b9516fab4a3ae0cd6737"
-   *     }]
+   *     }
    *
    * @apiError ForbiddenError
    */
@@ -67,15 +66,8 @@ export class ProgressController {
     if (!course.checkPrivileges(currentUser).userCanViewCourse) {
       throw new ForbiddenError();
     }
-    let progressSet = await Progress.find({unit: id});
-    if (currentUser.role !== 'teacher' && currentUser.role !== 'admin') {
-      // Only send the progress data if the user (student) is the "owner" thereof.
-      const currentUserId = extractSingleMongoId(currentUser);
-      progressSet = await Promise.all(progressSet.map(
-        (progress) => extractSingleMongoId(progress.user) === currentUserId ? progress : undefined));
-      progressSet = progressSet.filter((progress) => progress);
-    }
-    return progressSet.map((progress) => progress.toObject({virtuals: true}));
+    const progress = await Progress.findOne({user: currentUser, unit: id});
+    return progress ? progress.toObject({virtuals: true}) : {};
   }
 
   /**
