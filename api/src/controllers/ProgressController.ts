@@ -218,6 +218,10 @@ export class ProgressController {
     }
 
     const unit: IUnitModel = await Unit.findById(data.unit);
+    const course = await Course.findById(unit._course);
+    if (!course.checkPrivileges(currentUser).userCanViewCourse) {
+      throw new ForbiddenError();
+    }
     ProgressController.checkDeadline(unit);
 
     data.user = currentUser;
@@ -270,12 +274,18 @@ export class ProgressController {
   @Put('/:id')
   async updateProgress(@Param('id') id: string, @Body() data: any, @CurrentUser() currentUser: IUser) {
     const progress = await Progress.findById(id);
-
     if (!progress) {
       throw new NotFoundError();
     }
+    if (extractSingleMongoId(progress.user) !== extractSingleMongoId(currentUser)) {
+      throw new ForbiddenError();
+    }
 
     const unit: IUnitModel = await Unit.findById(progress.unit);
+    const course = await Course.findById(unit._course);
+    if (!course.checkPrivileges(currentUser).userCanViewCourse) {
+      throw new ForbiddenError();
+    }
     ProgressController.checkDeadline(unit);
 
     // set user
