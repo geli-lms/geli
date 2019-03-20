@@ -100,20 +100,20 @@ describe('ProgressController', () => {
   });
 
   describe(`PUT ${BASE_URL}`, () => {
-    it('should update progress for some progressable unit', async () => {
-      const {unit, student} = await prepareSetup();
+    async function successTest (unitDeadlineAdd: number) {
+      const {unit, student} = await prepareSetup(unitDeadlineAdd);
       const progress = (await putProgressTestData(unit, student)).res.body;
       const {res, newProgress} = await putProgressTestData(unit, student);
       checkResponseProgress(res, newProgress);
       res.body._id.should.be.equal(progress._id.toString(), 'Progress update ID mismatch');
+    }
+
+    it('should update progress for some progressable unit', async () => {
+      await successTest(0);
     });
 
     it('should update progress for some progressable unit with a deadline', async () => {
-      const {unit, student} = await prepareSetup(1);
-      const progress = (await putProgressTestData(unit, student)).res.body;
-      const {res, newProgress} = await putProgressTestData(unit, student);
-      checkResponseProgress(res, newProgress);
-      res.body._id.should.be.equal(progress._id.toString(), 'Progress update ID mismatch');
+      await successTest(1);
     });
 
     it('should fail updating progress for some progressable unit with a deadline', async () => {
