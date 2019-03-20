@@ -81,26 +81,15 @@ export class TaskUnitComponent implements OnInit {
   validate() {
     this.validationMode = true;
 
-    const handleSave = (promise: Promise<any>) => {
-      promise
-        .then((savedProgress) => {
-          this.progress = savedProgress;
-          this.snackBar.openShort('Progress has been saved');
-        })
-        .catch((err) => {
-          this.snackBar.openShort(`An error occurred: ${err.error.message}`);
-        });
-    };
-
-    if (!this.progress._id) {
-      handleSave(this.progressService.createItem(this.progress));
-    } else {
-      handleSave(this.progressService.updateItem({
-        _id: this.progress._id,
-        answers: this.progress.answers,
-      }));
-    }
-
+    this.progressService.updateProgress(this.progress)
+      .then((savedProgress) => {
+        this.snackBar.openShort('Progress has been saved');
+        this.progress = savedProgress;
+        this.validationMode = false;
+      })
+      .catch((err) => {
+        this.snackBar.openShort(`An error occurred: ${err.error.message}`);
+      });
   }
 
   shuffleAnswers() {
