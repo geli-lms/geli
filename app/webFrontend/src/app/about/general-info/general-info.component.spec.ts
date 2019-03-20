@@ -47,7 +47,7 @@ describe('GeneralInfoComponent', () => {
       { // Position diff
         a: new Contributor('Fn', 'Ln', '15SuSe', 'AAAAAA', 'gh', Contributor.PRESENT),
         b: new Contributor('Fn', 'Ln', '15SuSe', 'Tester', 'gh', Contributor.PRESENT),
-        res: 0
+        res: 1
       },
       { // Github diff
         a: new Contributor('Fn', 'Ln', '15SuSe', 'Tester', 'aa', Contributor.PRESENT),
@@ -77,12 +77,12 @@ describe('GeneralInfoComponent', () => {
       { // From same | to diff | both not present
         a: new Contributor('Fn', 'Ln', '15SuSe', 'Tester', 'gh', '16SuSe'),
         b: new Contributor('Fn', 'Ln', '15SuSe', 'Tester', 'gh', '16WiSe'),
-        res: -1
+        res: 1
       },
       { // Both diff
         a: new Contributor('Fn', 'Ln', '14SuSe', 'Tester', 'gh', '15SuSe'),
         b: new Contributor('Fn', 'Ln', '15SuSe', 'Tester', 'gh', '16WiSe'),
-        res: -1
+        res: 1
       },
     ];
 
