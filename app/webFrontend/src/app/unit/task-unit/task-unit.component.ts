@@ -85,6 +85,7 @@ export class TaskUnitComponent implements OnInit {
       .then((savedProgress) => {
         this.snackBar.openShort('Progress has been saved');
         this.progress = savedProgress;
+        this.validationMode = false;
       })
       .catch((err) => {
         this.snackBar.openShort(`An error occurred: ${err.error.message}`);
