@@ -62,6 +62,7 @@ export class CodeKataComponent implements OnInit {
     const progress = await this.progressService.getUnitProgress<ICodeKataUnitProgress>(this.codeKataUnit._id);
     if (progress) {
       this.progress = progress;
+      this.codeKataUnit.code = progress.code;
     }
   }
 
