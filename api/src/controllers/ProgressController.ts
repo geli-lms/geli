@@ -214,10 +214,16 @@ export class ProgressController {
     }
     ProgressController.checkDeadline(unit);
 
-    const progress = await Progress.findOneAndUpdate(
-      {user: currentUser, unit},
-      {user: currentUser, unit, course, done: data.done, type: data.type},
-      {new: true, upsert: true});
+    data.user = currentUser._id;
+    data.course = course._id;
+
+    let progress = await Progress.findOne({user: currentUser, unit});
+    if (!progress) {
+      progress = await Progress.create(data);
+    } else {
+      progress.set(data);
+      await progress.save();
+    }
 
     return progress.toObject();
   }
