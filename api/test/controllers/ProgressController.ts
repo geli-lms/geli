@@ -7,6 +7,7 @@ import {User, IUserModel} from '../../src/models/User';
 import {Unit} from '../../src/models/units/Unit';
 import {Course} from '../../src/models/Course';
 import * as moment from 'moment';
+import {errorCodes} from '../../src/config/errorCodes';
 
 chai.use(chaiHttp);
 const BASE_URL = '/api/progress';
@@ -151,7 +152,7 @@ describe('ProgressController', () => {
       const {unit, student} = await prepareSetup(-1);
       const {res} = await putProgressTestData(unit, student, 400);
       res.body.name.should.be.equal('BadRequestError');
-      res.body.message.should.be.equal('Past deadline, no further update possible');
+      res.body.message.should.be.equal(errorCodes.progress.pastDeadline.text);
     });
 
     it('should fail to update progress for an unauthorized student', async () => {

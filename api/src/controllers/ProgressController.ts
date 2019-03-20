@@ -4,6 +4,7 @@ import {
 } from 'routing-controllers';
 import * as moment from 'moment';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
+import {errorCodes} from '../config/errorCodes';
 import {Progress} from '../models/progress/Progress';
 import {Course} from '../models/Course';
 import {Unit, IUnitModel} from '../models/units/Unit';
@@ -15,7 +16,7 @@ import {extractSingleMongoId} from '../utilities/ExtractMongoId';
 export class ProgressController {
   private static checkDeadline(unit: any) {
     if (unit.deadline && moment(unit.deadline).isBefore()) {
-      throw new BadRequestError('Past deadline, no further update possible');
+      throw new BadRequestError(errorCodes.progress.pastDeadline.text);
     }
   }
 
