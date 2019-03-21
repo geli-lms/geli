@@ -135,6 +135,8 @@ export class WhitelistController {
    *
    * @apiError BadRequestError That matriculation number is already in use for this course.
    */
+  // This route has been disabled since it appears to be unused and insufficiently secured.
+  /*
   @Put('/:id')
   @Authorized(['teacher', 'admin'])
   async updateWhitelistUser(@Param('id') id: string, @Body() whitelistUser: IWhitelistUser) {
@@ -151,6 +153,7 @@ export class WhitelistController {
     await this.addUserIfFound(updatedWhitelistUser);
     return updatedWhitelistUser ? updatedWhitelistUser.toObject() : undefined;
   }
+  */
 
   /**
    * @api {delete} /api/whitelist/:id Delete whitelist user

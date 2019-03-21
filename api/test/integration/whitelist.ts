@@ -97,6 +97,8 @@ describe('Whitelist', () => {
     });
   });
 
+  // The corresponding route has been disabled since it appears to be unused and insufficiently secured.
+  /*
   describe(`PUT ${BASE_URL}`, () => {
     it('should update a whitelist user', async () => {
       const teacher = await FixtureUtils.getRandomTeacher();
@@ -132,6 +134,7 @@ describe('Whitelist', () => {
       res.status.should.be.equal(401);
     });
   });
+  */
 
     describe(`DELETE ${BASE_URL}`, () => {
       it('should delete a whitelist user', async () => {
