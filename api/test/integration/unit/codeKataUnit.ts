@@ -4,7 +4,7 @@ import {TestHelper} from '../../TestHelper';
 import {Server} from '../../../src/server';
 import {User} from '../../../src/models/User';
 import {Lecture} from '../../../src/models/Lecture';
-import {Course} from '../../../src/models/Course';
+import {Course, ICourseModel} from '../../../src/models/Course';
 import {FixtureUtils} from '../../../fixtures/FixtureUtils';
 import {Unit} from '../../../src/models/units/Unit';
 import {ICodeKataModel} from '../../../src/models/units/CodeKataUnit';
@@ -40,22 +40,21 @@ describe(`CodeKataUnit ${BASE_URL}`, () => {
   });
 
   describe(`GET ${BASE_URL}`, () => {
-    it('should get unit data', async () => {
+    async function commonGetTest (getUserForCourseFunc: Function, status: number) {
       const unit = await Unit.findOne({__t: 'code-kata'});
       const course = await Course.findById(unit._course);
-      const courseAdmin = await User.findById(course.courseAdmin);
+      const courseAdmin = await getUserForCourseFunc(course);
 
       const res = await testHelper.commonUserGetRequest(courseAdmin, `/${unit.id}`);
-      res.status.should.be.equal(200);
+      res.status.should.be.equal(status);
+    }
+
+    it('should get unit data', async () => {
+      await commonGetTest(async (course: ICourseModel) => await User.findById(course.courseAdmin), 200);
     });
 
     it('should deny access to unit data if the user is unauthorized', async () => {
-      const unit = await Unit.findOne({__t: 'code-kata'});
-      const course = await Course.findById(unit._course);
-      const unauthorizedUser = await FixtureUtils.getUnauthorizedStudentForCourse(course);
-
-      const res = await testHelper.commonUserGetRequest(unauthorizedUser, `/${unit.id}`);
-      res.status.should.be.equal(403);
+      await commonGetTest(FixtureUtils.getUnauthorizedStudentForCourse, 403);
     });
   });
 
