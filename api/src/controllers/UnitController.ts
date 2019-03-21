@@ -49,6 +49,9 @@ export class UnitController {
    *         "type": "free-text",
    *         "__v": 0
    *     }
+   *
+   * @apiError NotFoundError
+   * @apiError ForbiddenError
    */
   @Get('/:id')
   async getUnit(@Param('id') id: string, @CurrentUser() currentUser: IUser) {
@@ -87,6 +90,7 @@ export class UnitController {
    * @apiError BadRequestError No unit was submitted.
    * @apiError BadRequestError Unit has no _course set.
    * @apiError BadRequestError
+   * @apiError ForbiddenError
    * @apiError ValidationError
    */
   @Authorized(['teacher', 'admin'])
@@ -140,9 +144,10 @@ export class UnitController {
    *         "__v": 0
    *     }
    *
-   * @apiError NotFoundError
    * @apiError BadRequestError Invalid combination of file upload and unit data.
    * @apiError BadRequestError
+   * @apiError NotFoundError
+   * @apiError ForbiddenError
    * @apiError ValidationError
    */
   @Authorized(['teacher', 'admin'])
@@ -180,6 +185,7 @@ export class UnitController {
    *     }
    *
    * @apiError NotFoundError
+   * @apiError ForbiddenError
    */
   @Authorized(['teacher', 'admin'])
   @Delete('/:id')
