@@ -13,7 +13,7 @@ const app = new Server().app;
 const BASE_URL = '/api/whitelist';
 const testHelper = new TestHelper(BASE_URL);
 
-describe('Whitelist User', () => {
+describe('Whitelist', () => {
   beforeEach(() => testHelper.resetForNextTest());
 
   describe(`GET ${BASE_URL}`, () => {
