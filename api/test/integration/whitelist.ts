@@ -163,70 +163,70 @@ describe('Whitelist', () => {
   });
   */
 
-    describe(`DELETE ${BASE_URL}`, () => {
-      it('should delete a whitelist user', async () => {
-        const course: ICourse = await FixtureUtils.getRandomCourse();
-        const teacher = await FixtureUtils.getRandomTeacherForCourse(course);
-        const newWhitelistUser: IWhitelistUser = new WhitelistUser({
-          firstName: 'Max',
-          lastName: 'Mustermann',
-          uid: '123456',
-          courseId: course._id
-        });
-        const createdWhitelistUser = await WhitelistUser.create(newWhitelistUser);
-        const res = await testHelper.commonUserDeleteRequest(teacher, `/${createdWhitelistUser._id}`);
-        res.status.should.be.equal(200);
+  describe(`DELETE ${BASE_URL}`, () => {
+    it('should delete a whitelist user', async () => {
+      const course: ICourse = await FixtureUtils.getRandomCourse();
+      const teacher = await FixtureUtils.getRandomTeacherForCourse(course);
+      const newWhitelistUser: IWhitelistUser = new WhitelistUser({
+        firstName: 'Max',
+        lastName: 'Mustermann',
+        uid: '123456',
+        courseId: course._id
       });
-
-      it('should fail with wrong authorization', async () => {
-        const course: ICourse = await FixtureUtils.getRandomCourse();
-        const newWhitelistUser: IWhitelistUser = new WhitelistUser({
-          firstName: 'Max',
-          lastName: 'Mustermann',
-          uid: '123456',
-          courseId: course._id
-        });
-        const createdWhitelistUser = await WhitelistUser.create(newWhitelistUser);
-        const res = await chai.request(app)
-          .del(`${BASE_URL}/${createdWhitelistUser._id}`)
-          .set('Cookie', `token=awf`)
-          .catch(err => err.response);
-        res.status.should.be.equal(401);
-      });
-
-      it('should delete an user by synchronizing', async () => {
-        const course: ICourse = await FixtureUtils.getRandomCourse();
-        const teacher = await FixtureUtils.getRandomTeacherForCourse(course);
-        const member = course.students[0];
-        const newWhitelistUser: IWhitelistUser = new WhitelistUser({
-          firstName: member.profile.firstName,
-          lastName: member.profile.lastName,
-          uid: member.uid,
-          courseId: course._id
-        });
-        const createdWhitelistUser = await WhitelistUser.create(newWhitelistUser);
-        course.whitelist = course.whitelist.concat(createdWhitelistUser);
-        await Course.findByIdAndUpdate(course._id, course);
-
-        const res = await testHelper.commonUserDeleteRequest(teacher, `/${createdWhitelistUser._id}`);
-        res.status.should.be.equal(200);
-        const resCourse = await Course.findById(course._id).populate('students');
-        const emptyUsers: IUser[] = resCourse.students.filter(stud => stud.uid === member.uid);
-        emptyUsers.length.should.be.eq(0);
-      });
-
-      it('should fail to delete for an unauthorized teacher', async () => {
-        const course: ICourse = await FixtureUtils.getRandomCourse();
-        const teacher = await FixtureUtils.getUnauthorizedTeacherForCourse(course);
-        const newWhitelistUser: IWhitelistUser = new WhitelistUser({
-          firstName: 'Max',
-          lastName: 'Mustermann',
-          uid: '123456',
-          courseId: course._id
-        });
-        const createdWhitelistUser = await WhitelistUser.create(newWhitelistUser);
-        const res = await testHelper.commonUserDeleteRequest(teacher, `/${createdWhitelistUser._id}`);
-        res.status.should.be.equal(403);
-      });
+      const createdWhitelistUser = await WhitelistUser.create(newWhitelistUser);
+      const res = await testHelper.commonUserDeleteRequest(teacher, `/${createdWhitelistUser._id}`);
+      res.status.should.be.equal(200);
     });
+
+    it('should fail with wrong authorization', async () => {
+      const course: ICourse = await FixtureUtils.getRandomCourse();
+      const newWhitelistUser: IWhitelistUser = new WhitelistUser({
+        firstName: 'Max',
+        lastName: 'Mustermann',
+        uid: '123456',
+        courseId: course._id
+      });
+      const createdWhitelistUser = await WhitelistUser.create(newWhitelistUser);
+      const res = await chai.request(app)
+        .del(`${BASE_URL}/${createdWhitelistUser._id}`)
+        .set('Cookie', `token=awf`)
+        .catch(err => err.response);
+      res.status.should.be.equal(401);
+    });
+
+    it('should delete an user by synchronizing', async () => {
+      const course: ICourse = await FixtureUtils.getRandomCourse();
+      const teacher = await FixtureUtils.getRandomTeacherForCourse(course);
+      const member = course.students[0];
+      const newWhitelistUser: IWhitelistUser = new WhitelistUser({
+        firstName: member.profile.firstName,
+        lastName: member.profile.lastName,
+        uid: member.uid,
+        courseId: course._id
+      });
+      const createdWhitelistUser = await WhitelistUser.create(newWhitelistUser);
+      course.whitelist = course.whitelist.concat(createdWhitelistUser);
+      await Course.findByIdAndUpdate(course._id, course);
+
+      const res = await testHelper.commonUserDeleteRequest(teacher, `/${createdWhitelistUser._id}`);
+      res.status.should.be.equal(200);
+      const resCourse = await Course.findById(course._id).populate('students');
+      const emptyUsers: IUser[] = resCourse.students.filter(stud => stud.uid === member.uid);
+      emptyUsers.length.should.be.eq(0);
+    });
+
+    it('should fail to delete for an unauthorized teacher', async () => {
+      const course: ICourse = await FixtureUtils.getRandomCourse();
+      const teacher = await FixtureUtils.getUnauthorizedTeacherForCourse(course);
+      const newWhitelistUser: IWhitelistUser = new WhitelistUser({
+        firstName: 'Max',
+        lastName: 'Mustermann',
+        uid: '123456',
+        courseId: course._id
+      });
+      const createdWhitelistUser = await WhitelistUser.create(newWhitelistUser);
+      const res = await testHelper.commonUserDeleteRequest(teacher, `/${createdWhitelistUser._id}`);
+      res.status.should.be.equal(403);
+    });
+  });
 });
