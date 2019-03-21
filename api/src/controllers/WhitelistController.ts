@@ -65,6 +65,7 @@ export class WhitelistController {
    *     }
    */
   @Get('/:id')
+  @Authorized(['teacher', 'admin'])
   async getUser(@Param('id') id: string, @CurrentUser() currentUser: IUser) {
     const whitelistUser = await WhitelistUser.findById(id);
     const course = await Course.findById(whitelistUser.courseId);
