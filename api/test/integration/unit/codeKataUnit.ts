@@ -39,6 +39,17 @@ describe(`CodeKataUnit ${BASE_URL}`, () => {
     await testHelper.resetForNextTest();
   });
 
+  describe(`GET ${BASE_URL}`, () => {
+    it('should get unit data', async () => {
+      const unit = await Unit.findOne({__t: 'code-kata'});
+      const course = await Course.findById(unit._course);
+      const courseAdmin = await User.findById(course.courseAdmin);
+
+      const res = await testHelper.commonUserGetRequest(courseAdmin, `/${unit.id}`);
+      res.status.should.be.equal(200);
+    });
+  });
+
   describe(`POST ${BASE_URL}`, () => {
     it('should fail with wrong authorization', async () => {
       const res = await chai.request(app)
