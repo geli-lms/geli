@@ -13,6 +13,20 @@ import {IUser} from '../../../shared/models/IUser';
 @UseBefore(passportJwtMiddleware)
 export class UnitController {
 
+  static async getUnitFor (unitId: string, currentUser: IUser, privilege: 'userCanViewCourse' | 'userCanEditCourse') {
+    const unit = await Unit.findById(unitId);
+    if (!unit) {
+      throw new NotFoundError();
+    }
+
+    const course = await Course.findById(unit._course);
+    if (!course.checkPrivileges(currentUser)[privilege]) {
+      throw new ForbiddenError();
+    }
+
+    return unit;
+  }
+
   /**
    * @api {get} /api/units/:id Request unit
    * @apiName GetUnit
@@ -38,14 +52,7 @@ export class UnitController {
    */
   @Get('/:id')
   async getUnit(@Param('id') id: string, @CurrentUser() currentUser: IUser) {
-    const unit = await Unit.findById(id);
-    if (!unit) {
-      throw new NotFoundError();
-    }
-    const course = await Course.findById(unit._course);
-    if (!course.checkPrivileges(currentUser).userCanViewCourse) {
-      throw new ForbiddenError();
-    }
+    const unit = await UnitController.getUnitFor(id, currentUser, 'userCanViewCourse');
     return unit.toObject();
   }
 
@@ -141,16 +148,7 @@ export class UnitController {
   @Authorized(['teacher', 'admin'])
   @Put('/:id')
   async updateUnit(@Param('id') id: string, @Body() data: any, @CurrentUser() currentUser: IUser) {
-    const oldUnit: IUnitModel = await Unit.findById(id);
-
-    if (!oldUnit) {
-      throw new NotFoundError();
-    }
-
-    const course = await Course.findById(oldUnit._course);
-    if (!course.checkPrivileges(currentUser).userCanEditCourse) {
-      throw new ForbiddenError();
-    }
+    const oldUnit = await UnitController.getUnitFor(id, currentUser, 'userCanEditCourse');
 
     try {
       oldUnit.set(data);
@@ -186,16 +184,7 @@ export class UnitController {
   @Authorized(['teacher', 'admin'])
   @Delete('/:id')
   async deleteUnit(@Param('id') id: string, @CurrentUser() currentUser: IUser) {
-    const unit = await Unit.findById(id);
-
-    if (!unit) {
-      throw new NotFoundError();
-    }
-
-    const course = await Course.findById(unit._course);
-    if (!course.checkPrivileges(currentUser).userCanEditCourse) {
-      throw new ForbiddenError();
-    }
+    const unit = await UnitController.getUnitFor(id, currentUser, 'userCanEditCourse');
 
     await Lecture.updateMany({}, {$pull: {units: id}});
     await unit.remove();
