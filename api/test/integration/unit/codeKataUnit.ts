@@ -172,12 +172,13 @@ describe(`CodeKataUnit ${BASE_URL}`, () => {
     it('should fail to delete unit for an unauthorized teacher', async () => {
       const unit = await Unit.findOne({__t: 'code-kata'});
       const course = await Course.findById(unit._course);
+      const courseAdmin = await User.findById(course.courseAdmin);
       const unauthorizedTeacher = await FixtureUtils.getUnauthorizedTeacherForCourse(course);
 
       const res = await testHelper.commonUserDeleteRequest(unauthorizedTeacher, `/${unit.id}`);
       res.status.should.be.equal(403);
 
-      const res2 = await testHelper.commonUserGetRequest(unauthorizedTeacher, `/${unit.id}`);
+      const res2 = await testHelper.commonUserGetRequest(courseAdmin, `/${unit.id}`);
       res2.status.should.be.equal(200);
     });
   });
