@@ -126,4 +126,18 @@ describe(`CodeKataUnit ${BASE_URL}`, () => {
       res.body.test.should.string('// Test if we can edit a Kata');
     });
   });
+
+  describe(`DELETE ${BASE_URL}`, () => {
+    it('should delete unit', async () => {
+      const unit = await Unit.findOne({__t: 'code-kata'});
+      const course = await Course.findById(unit._course);
+      const courseAdmin = await User.findById(course.courseAdmin);
+
+      const res = await testHelper.commonUserDeleteRequest(courseAdmin, `/${unit.id}`);
+      res.status.should.be.equal(200);
+
+      const res2 = await testHelper.commonUserGetRequest(courseAdmin, `/${unit.id}`);
+      res2.status.should.be.equal(404);
+    });
+  });
 });
