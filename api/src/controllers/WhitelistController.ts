@@ -64,11 +64,9 @@ export class WhitelistController {
    *     }
    */
   @Get('/:id')
-  getUser(@Param('id') id: string) {
-    return WhitelistUser.findById(id)
-      .then((whitelistUser) => {
-        return whitelistUser.toObject({virtuals: true});
-      });
+  async getUser(@Param('id') id: string) {
+    const whitelistUser = await WhitelistUser.findById(id);
+    return whitelistUser.toObject({virtuals: true});
   }
 
   /**
