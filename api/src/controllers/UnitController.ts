@@ -87,6 +87,12 @@ export class UnitController {
   async addUnit(@Body() data: any, @CurrentUser() currentUser: IUser) {
     // discard invalid requests
     this.checkPostParam(data);
+
+    const course = await Course.findById(data.model._course);
+    if (!course.checkPrivileges(currentUser).userCanEditCourse) {
+      throw new ForbiddenError();
+    }
+
     // Set current user as creator, old unit's dont have a creator
     data.model.unitCreator = currentUser._id;
     try {
