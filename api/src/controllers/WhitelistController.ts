@@ -161,19 +161,17 @@ export class WhitelistController {
    *
    * @apiParam {String} id Whitelist user ID.
    *
-   * @apiSuccess {Boolean} result Confirmation of deletion.
+   * @apiSuccess {Object} result Empty object.
    *
    * @apiSuccessExample {json} Success-Response:
-   *     {
-   *         result: true
-   *     }
+   *     {}
    */
   @Delete('/:id')
   @Authorized(['teacher', 'admin'])
   async deleteWhitelistUser(@Param('id') id: string) {
     const whitelistUser = await WhitelistUser.findByIdAndRemove(id);
     await this.deleteUserIfFound(whitelistUser);
-    return {result: true};
+    return {};
   }
 
   private async deleteUserIfFound(whitelistUser: IWhitelistUser) {
