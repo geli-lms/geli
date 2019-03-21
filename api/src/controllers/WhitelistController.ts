@@ -11,7 +11,7 @@ import {IWhitelistUser} from '../../../shared/models/IWhitelistUser';
 
 @JsonController('/whitelist')
 @UseBefore(passportJwtMiddleware)
-export class WitelistController {
+export class WhitelistController {
 
   /**
    * @api {get} /api/whitelist/check/:whitelist
