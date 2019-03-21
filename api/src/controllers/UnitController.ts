@@ -185,18 +185,16 @@ export class UnitController {
    */
   @Authorized(['teacher', 'admin'])
   @Delete('/:id')
-  deleteUnit(@Param('id') id: string) {
-    return Unit.findById(id).then((unit) => {
-      if (!unit) {
-        throw new NotFoundError();
-      }
+  async deleteUnit(@Param('id') id: string) {
+    const unit = await Unit.findById(id);
 
-      return Lecture.updateMany({}, {$pull: {units: id}})
-        .then(() => unit.remove())
-        .then(() => {
-          return {result: true};
-        });
-    });
+    if (!unit) {
+      throw new NotFoundError();
+    }
+
+    await Lecture.updateMany({}, {$pull: {units: id}});
+    await unit.remove();
+    return {result: true};
   }
 
   protected pushToLecture(lectureId: string, unit: any) {
