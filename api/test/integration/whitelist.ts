@@ -47,6 +47,20 @@ describe('Whitelist', () => {
       const res = await testHelper.commonUserGetRequest(teacher, `/${createdWhitelistUser._id.toString()}`);
       res.status.should.be.equal(403);
     });
+
+    it('should deny access to whitelist user data for a student', async () => {
+      const course: ICourse = await FixtureUtils.getRandomCourse();
+      const student = await User.findById(course.students[0]);
+      const newWhitelistUser: IWhitelistUser = new WhitelistUser({
+        firstName: 'Max',
+        lastName: 'Mustermann',
+        uid: '123456',
+        courseId: course._id
+      });
+      const createdWhitelistUser: IWhitelistUser = await WhitelistUser.create(newWhitelistUser);
+      const res = await testHelper.commonUserGetRequest(student, `/${createdWhitelistUser._id.toString()}`);
+      res.status.should.be.equal(403);
+    });
   });
 
   describe(`POST ${BASE_URL}`, () => {
