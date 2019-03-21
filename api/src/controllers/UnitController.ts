@@ -185,11 +185,16 @@ export class UnitController {
    */
   @Authorized(['teacher', 'admin'])
   @Delete('/:id')
-  async deleteUnit(@Param('id') id: string) {
+  async deleteUnit(@Param('id') id: string, @CurrentUser() currentUser: IUser) {
     const unit = await Unit.findById(id);
 
     if (!unit) {
       throw new NotFoundError();
+    }
+
+    const course = await Course.findById(unit._course);
+    if (!course.checkPrivileges(currentUser).userCanEditCourse) {
+      throw new ForbiddenError();
     }
 
     await Lecture.updateMany({}, {$pull: {units: id}});
