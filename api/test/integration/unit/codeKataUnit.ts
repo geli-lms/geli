@@ -101,7 +101,9 @@ describe(`CodeKataUnit ${BASE_URL}`, () => {
       res.body.unitCreator.profile.lastName.should.equal(courseAdmin.profile.lastName);
       res.body.unitCreator.profile.firstName.should.equal(courseAdmin.profile.firstName);
     });
+  });
 
+  describe(`PUT ${BASE_URL}`, () => {
     it('should update a codeKata', async () => {
       const unit = await Unit.findOne({__t: 'code-kata'});
       const lecture = await Lecture.findOne({units: { $in: [ unit._id ] }});
