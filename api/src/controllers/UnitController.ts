@@ -3,7 +3,7 @@ import {
   Authorized, CurrentUser, ForbiddenError
 } from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
-
+import {errorCodes} from '../config/errorCodes';
 import {Course} from '../models/Course';
 import {Lecture} from '../models/Lecture';
 import {IUnitModel, Unit} from '../models/units/Unit';
@@ -216,15 +216,15 @@ export class UnitController {
 
   protected checkPostParam(data: any) {
     if (!data.lectureId) {
-      throw new BadRequestError('No lecture ID was submitted.');
+      throw new BadRequestError(errorCodes.unit.postMissingLectureId.text);
     }
 
     if (!data.model) {
-      throw new BadRequestError('No unit was submitted.');
+      throw new BadRequestError(errorCodes.unit.postMissingUnit.text);
     }
 
     if (!data.model._course) {
-      throw new BadRequestError('Unit has no _course set');
+      throw new BadRequestError(errorCodes.unit.postMissingCourse.text);
     }
   }
 }
