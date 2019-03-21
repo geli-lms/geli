@@ -2,7 +2,6 @@ import * as chai from 'chai';
 import chaiHttp = require('chai-http');
 import {TestHelper} from '../../TestHelper';
 import {Server} from '../../../src/server';
-import {JwtUtils} from '../../../src/security/JwtUtils';
 import {User} from '../../../src/models/User';
 import {Lecture} from '../../../src/models/Lecture';
 import {Course} from '../../../src/models/Course';
@@ -111,11 +110,7 @@ describe(`CodeKataUnit ${BASE_URL}`, () => {
       const courseAdmin = await User.findOne({_id: course.courseAdmin});
       (<ICodeKataModel>unit).test += '\n// Test if we can edit a Kata';
 
-      const res = await chai.request(app)
-        .put(BASE_URL + '/' + unit.id)
-        .set('Cookie', `token=${JwtUtils.generateToken(courseAdmin)}`)
-        .send(unit.toObject());
-
+      const res = await testHelper.commonUserPutRequest(courseAdmin, `/${unit.id}`, unit.toObject());
       res.status.should.be.equal(200);
       res.body.test.should.string('// Test if we can edit a Kata');
     });
