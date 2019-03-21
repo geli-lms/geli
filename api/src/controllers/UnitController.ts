@@ -177,12 +177,10 @@ export class UnitController {
    *
    * @apiParam {String} id Unit ID.
    *
-   * @apiSuccess {Boolean} result Confirmation of deletion.
+   * @apiSuccess {Object} result Empty object.
    *
    * @apiSuccessExample {json} Success-Response:
-   *     {
-   *         "result": true
-   *     }
+   *     {}
    *
    * @apiError NotFoundError
    * @apiError ForbiddenError
@@ -194,7 +192,7 @@ export class UnitController {
 
     await Lecture.updateMany({}, {$pull: {units: id}});
     await unit.remove();
-    return {result: true};
+    return {};
   }
 
   protected pushToLecture(lectureId: string, unit: any) {
