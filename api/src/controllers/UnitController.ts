@@ -140,11 +140,16 @@ export class UnitController {
    */
   @Authorized(['teacher', 'admin'])
   @Put('/:id')
-  async updateUnit(@Param('id') id: string, @Body() data: any) {
+  async updateUnit(@Param('id') id: string, @Body() data: any, @CurrentUser() currentUser: IUser) {
     const oldUnit: IUnitModel = await Unit.findById(id);
 
     if (!oldUnit) {
       throw new NotFoundError();
+    }
+
+    const course = await Course.findById(oldUnit._course);
+    if (!course.checkPrivileges(currentUser).userCanEditCourse) {
+      throw new ForbiddenError();
     }
 
     try {
