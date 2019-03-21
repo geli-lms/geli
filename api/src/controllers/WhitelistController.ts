@@ -1,5 +1,5 @@
-import {Get, Post, Put, Delete, Authorized, Param, Body,
-  UseBefore, JsonController, BadRequestError} from 'routing-controllers';
+import {Get, Post, Delete, Authorized, Param, Body, CurrentUser,
+  UseBefore, JsonController, BadRequestError, ForbiddenError} from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import {WhitelistUser} from '../models/WhitelistUser';
 import {errorCodes} from '../config/errorCodes';
@@ -8,6 +8,7 @@ import ObjectId = mongoose.Types.ObjectId;
 import {Course} from '../models/Course';
 import {User} from '../models/User';
 import {IWhitelistUser} from '../../../shared/models/IWhitelistUser';
+import {IUser} from '../../../shared/models/IUser';
 
 @JsonController('/whitelist')
 @UseBefore(passportJwtMiddleware)
@@ -64,8 +65,13 @@ export class WhitelistController {
    *     }
    */
   @Get('/:id')
-  async getUser(@Param('id') id: string) {
+  async getUser(@Param('id') id: string, @CurrentUser() currentUser: IUser) {
     const whitelistUser = await WhitelistUser.findById(id);
+    const course = await Course.findById(whitelistUser.courseId);
+    if (!course.checkPrivileges(currentUser).userCanEditCourse) {
+      throw new ForbiddenError();
+    }
+
     return whitelistUser.toObject({virtuals: true});
   }
 
@@ -97,7 +103,12 @@ export class WhitelistController {
    */
   @Post('/')
   @Authorized(['teacher', 'admin'])
-  async addWhitelistUser(@Body() whitelistUser: IWhitelistUser) {
+  async addWhitelistUser(@Body() whitelistUser: IWhitelistUser, @CurrentUser() currentUser: IUser) {
+    const course = await Course.findById(whitelistUser.courseId);
+    if (!course.checkPrivileges(currentUser).userCanEditCourse) {
+      throw new ForbiddenError();
+    }
+
     let savedWhitelistUser;
     try {
       savedWhitelistUser = await new WhitelistUser(this.prepareWhitelistUserData(whitelistUser)).save();
@@ -171,8 +182,14 @@ export class WhitelistController {
    */
   @Delete('/:id')
   @Authorized(['teacher', 'admin'])
-  async deleteWhitelistUser(@Param('id') id: string) {
-    const whitelistUser = await WhitelistUser.findByIdAndRemove(id);
+  async deleteWhitelistUser(@Param('id') id: string, @CurrentUser() currentUser: IUser) {
+    const whitelistUser = await WhitelistUser.findById(id);
+    const course = await Course.findById(whitelistUser.courseId);
+    if (!course.checkPrivileges(currentUser).userCanEditCourse) {
+      throw new ForbiddenError();
+    }
+
+    await WhitelistUser.deleteOne({_id: id});
     await this.deleteUserIfFound(whitelistUser);
     return {};
   }
