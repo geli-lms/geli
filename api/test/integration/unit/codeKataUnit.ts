@@ -48,6 +48,15 @@ describe(`CodeKataUnit ${BASE_URL}`, () => {
       const res = await testHelper.commonUserGetRequest(courseAdmin, `/${unit.id}`);
       res.status.should.be.equal(200);
     });
+
+    it('should deny access to unit data if the user is unauthorized', async () => {
+      const unit = await Unit.findOne({__t: 'code-kata'});
+      const course = await Course.findById(unit._course);
+      const unauthorizedUser = await FixtureUtils.getUnauthorizedStudentForCourse(course);
+
+      const res = await testHelper.commonUserGetRequest(unauthorizedUser, `/${unit.id}`);
+      res.status.should.be.equal(403);
+    });
   });
 
   describe(`POST ${BASE_URL}`, () => {
@@ -111,6 +120,16 @@ describe(`CodeKataUnit ${BASE_URL}`, () => {
       res.body.unitCreator.profile.lastName.should.equal(courseAdmin.profile.lastName);
       res.body.unitCreator.profile.firstName.should.equal(courseAdmin.profile.firstName);
     });
+
+    it('should fail to create a new unit for an unauthorized teacher', async () => {
+      const lecture = await FixtureUtils.getRandomLecture();
+      const course = await Course.findOne({lectures: { $in: [ lecture._id ] }});
+      const unauthorizedTeacher = await FixtureUtils.getUnauthorizedTeacherForCourse(course);
+      model._course = course._id;
+
+      const res = await testHelper.commonUserPostRequest(unauthorizedTeacher, '', {lectureId: lecture._id, model});
+      res.status.should.be.equal(403);
+    });
   });
 
   describe(`PUT ${BASE_URL}`, () => {
@@ -125,6 +144,17 @@ describe(`CodeKataUnit ${BASE_URL}`, () => {
       res.status.should.be.equal(200);
       res.body.test.should.string('// Test if we can edit a Kata');
     });
+
+    it('should fail to update a unit for an unauthorized teacher', async () => {
+      const unit = await Unit.findOne({__t: 'code-kata'});
+      const lecture = await Lecture.findOne({units: { $in: [ unit._id ] }});
+      const course = await Course.findOne({lectures: { $in: [ lecture._id ] }});
+      (<ICodeKataModel>unit).test += '\n// Test if we can edit a Kata';
+      const unauthorizedTeacher = await FixtureUtils.getUnauthorizedTeacherForCourse(course);
+
+      const res = await testHelper.commonUserPutRequest(unauthorizedTeacher, `/${unit.id}`, unit.toObject());
+      res.status.should.be.equal(403);
+    });
   });
 
   describe(`DELETE ${BASE_URL}`, () => {
@@ -138,6 +168,18 @@ describe(`CodeKataUnit ${BASE_URL}`, () => {
 
       const res2 = await testHelper.commonUserGetRequest(courseAdmin, `/${unit.id}`);
       res2.status.should.be.equal(404);
+    });
+
+    it('should fail to delete unit for an unauthorized teacher', async () => {
+      const unit = await Unit.findOne({__t: 'code-kata'});
+      const course = await Course.findById(unit._course);
+      const unauthorizedTeacher = await FixtureUtils.getUnauthorizedTeacherForCourse(course);
+
+      const res = await testHelper.commonUserDeleteRequest(unauthorizedTeacher, `/${unit.id}`);
+      res.status.should.be.equal(403);
+
+      const res2 = await testHelper.commonUserGetRequest(unauthorizedTeacher, `/${unit.id}`);
+      res2.status.should.be.equal(200);
     });
   });
 });
