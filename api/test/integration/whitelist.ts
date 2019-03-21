@@ -18,8 +18,8 @@ describe('Whitelist', () => {
 
   describe(`GET ${BASE_URL}`, () => {
     it('should get a whitelist user', async () => {
-      const teacher = await FixtureUtils.getRandomTeacher();
       const course: ICourse = await FixtureUtils.getRandomCourse();
+      const teacher = await FixtureUtils.getRandomTeacherForCourse(course);
       const newWhitelistUser: IWhitelistUser = new WhitelistUser({
         firstName: 'Max',
         lastName: 'Mustermann',
@@ -44,7 +44,7 @@ describe('Whitelist', () => {
         uid: '1236456',
         courseId: course._id
       };
-      const teacher = await FixtureUtils.getRandomTeacher();
+      const teacher = await FixtureUtils.getRandomTeacherForCourse(course);
       const res = await testHelper.commonUserPostRequest(teacher, '', whitelistUser);
       res.status.should.be.equal(200);
       res.body.firstName.should.be.equal(whitelistUser.firstName.toLowerCase());
@@ -69,8 +69,8 @@ describe('Whitelist', () => {
     });
 
     it('should add an user by synchronizing', async () => {
-      const teacher = await FixtureUtils.getRandomTeacher();
       const course: ICourse = await FixtureUtils.getRandomCourse();
+      const teacher = await FixtureUtils.getRandomTeacherForCourse(course);
       const user: IUser = await User.create(
         { uid: '1236456',
           password: 'test1234',
@@ -138,8 +138,8 @@ describe('Whitelist', () => {
 
     describe(`DELETE ${BASE_URL}`, () => {
       it('should delete a whitelist user', async () => {
-        const teacher = await FixtureUtils.getRandomTeacher();
         const course: ICourse = await FixtureUtils.getRandomCourse();
+        const teacher = await FixtureUtils.getRandomTeacherForCourse(course);
         const newWhitelistUser: IWhitelistUser = new WhitelistUser({
           firstName: 'Max',
           lastName: 'Mustermann',
@@ -168,8 +168,8 @@ describe('Whitelist', () => {
       });
 
       it('should delete an user by synchronizing', async () => {
-        const teacher = await FixtureUtils.getRandomTeacher();
         const course: ICourse = await FixtureUtils.getRandomCourse();
+        const teacher = await FixtureUtils.getRandomTeacherForCourse(course);
         const member = course.students[0];
         const newWhitelistUser: IWhitelistUser = new WhitelistUser({
           firstName: member.profile.firstName,
