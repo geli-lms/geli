@@ -13,6 +13,23 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 ### Added
 - Translatable SnackBarService. [#922](https://github.com/geli-lms/geli/issues/922)
+- `ProgressController` `GET` unit tests & access denial tests in general. [#1116](https://github.com/geli-lms/geli/issues/1116)
+
+### Changed
+- Extended `ProgressController` `PUT` route to handle both creation and updates. [#1116](https://github.com/geli-lms/geli/issues/1116)
+- Refactored `ProgressController` unit tests in general. [#1116](https://github.com/geli-lms/geli/issues/1116)
+- Instead of a list of progress data, the `ProgressController` `GET` route now responds with a single progress object or an empty object if no data can be found. [#1116](https://github.com/geli-lms/geli/issues/1116)
+
+### Removed
+- Unused `ProgressController` `GET` routes for `/courses/` & `/users/`. [#1116](https://github.com/geli-lms/geli/issues/1116)
+- `ProgressController` `POST` route _(obviated by extended `PUT` route)_. [#1116](https://github.com/geli-lms/geli/issues/1116)
+
+### Fixed
+- `TaskUnitComponent.validate` `validationMode` reset. [#1116](https://github.com/geli-lms/geli/issues/1116)
+- `CodeKataComponent` `progress.code` loading. [#1116](https://github.com/geli-lms/geli/issues/1116)
+
+### Security
+- Closed `ProgressController` vulnerabilities. [#1116](https://github.com/geli-lms/geli/issues/1116)
 
 ## [[0.8.4](https://github.com/geli-lms/geli/releases/tag/v0.8.4)] - 2018-12-20 - WS 18/19 ❄️-Release
 ### Added
