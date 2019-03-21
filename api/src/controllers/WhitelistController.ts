@@ -102,7 +102,7 @@ export class WhitelistController {
   async addWhitelistUser(@Body() whitelistUser: IWhitelistUser) {
     let savedWhitelistUser;
     try {
-      savedWhitelistUser = await new WhitelistUser(this.toMongooseObjectId(whitelistUser)).save();
+      savedWhitelistUser = await new WhitelistUser(this.prepareWhitelistUserData(whitelistUser)).save();
     } catch (err) {
       throw new BadRequestError(errorCodes.whitelist.duplicateWhitelistUser.text);
     }
@@ -144,7 +144,7 @@ export class WhitelistController {
     const foundWhitelistUser = await WhitelistUser.findById(id);
     try {
       updatedWhitelistUser = await WhitelistUser.findOneAndUpdate(
-        this.toMongooseObjectId(whitelistUser),
+        this.prepareWhitelistUserData(whitelistUser),
         {'new': true});
     } catch (err) {
       throw new BadRequestError(errorCodes.whitelist.duplicateWhitelistUser.text);
@@ -199,7 +199,7 @@ export class WhitelistController {
     }
   }
 
-  toMongooseObjectId(whitelistUser: IWhitelistUser) {
+  prepareWhitelistUserData(whitelistUser: IWhitelistUser) {
     return {
       _id: whitelistUser._id,
       firstName: whitelistUser.firstName,
