@@ -1,9 +1,10 @@
 import {
   Body, Get, Put, Delete, Param, JsonController, UseBefore, NotFoundError, BadRequestError, Post,
-  Authorized, CurrentUser
+  Authorized, CurrentUser, ForbiddenError
 } from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 
+import {Course} from '../models/Course';
 import {Lecture} from '../models/Lecture';
 import {IUnitModel, Unit} from '../models/units/Unit';
 import {IUser} from '../../../shared/models/IUser';
@@ -36,10 +37,14 @@ export class UnitController {
    *     }
    */
   @Get('/:id')
-  async getUnit(@Param('id') id: string) {
+  async getUnit(@Param('id') id: string, @CurrentUser() currentUser: IUser) {
     const unit = await Unit.findById(id);
     if (!unit) {
       throw new NotFoundError();
+    }
+    const course = await Course.findById(unit._course);
+    if (!course.checkPrivileges(currentUser).userCanViewCourse) {
+      throw new ForbiddenError();
     }
     return unit.toObject();
   }
