@@ -33,10 +33,24 @@ describe('Whitelist', () => {
       res.body.lastName.should.be.equal(newWhitelistUser.lastName);
       res.body.uid.should.be.equal(newWhitelistUser.uid);
     });
+
+    it('should deny access to whitelist user data for an unauthorized teacher', async () => {
+      const course: ICourse = await FixtureUtils.getRandomCourse();
+      const teacher = await FixtureUtils.getUnauthorizedTeacherForCourse(course);
+      const newWhitelistUser: IWhitelistUser = new WhitelistUser({
+        firstName: 'Max',
+        lastName: 'Mustermann',
+        uid: '123456',
+        courseId: course._id
+      });
+      const createdWhitelistUser: IWhitelistUser = await WhitelistUser.create(newWhitelistUser);
+      const res = await testHelper.commonUserGetRequest(teacher, `/${createdWhitelistUser._id.toString()}`);
+      res.status.should.be.equal(403);
+    });
   });
 
   describe(`POST ${BASE_URL}`, () => {
-    it('should create a new whitelist User', async () => {
+    it('should create a new whitelist user', async () => {
       const course: ICourse = await FixtureUtils.getRandomCourse();
       const whitelistUser: any = {
         firstName: 'Max',
@@ -94,6 +108,19 @@ describe('Whitelist', () => {
       addedUsers[0].uid.should.be.eq(whitelistUser.uid);
       addedUsers[0].profile.firstName.should.be.eq(whitelistUser.firstName);
       addedUsers[0].profile.lastName.should.be.eq(whitelistUser.lastName);
+    });
+
+    it('should fail to create a new whitelist user for an unauthorized teacher', async () => {
+      const course: ICourse = await FixtureUtils.getRandomCourse();
+      const whitelistUser: any = {
+        firstName: 'Max',
+        lastName: 'Mustermann',
+        uid: '1236456',
+        courseId: course._id
+      };
+      const teacher = await FixtureUtils.getUnauthorizedTeacherForCourse(course);
+      const res = await testHelper.commonUserPostRequest(teacher, '', whitelistUser);
+      res.status.should.be.equal(403);
     });
   });
 
@@ -186,6 +213,20 @@ describe('Whitelist', () => {
         const resCourse = await Course.findById(course._id).populate('students');
         const emptyUsers: IUser[] = resCourse.students.filter(stud => stud.uid === member.uid);
         emptyUsers.length.should.be.eq(0);
+      });
+
+      it('should fail to delete for an unauthorized teacher', async () => {
+        const course: ICourse = await FixtureUtils.getRandomCourse();
+        const teacher = await FixtureUtils.getUnauthorizedTeacherForCourse(course);
+        const newWhitelistUser: IWhitelistUser = new WhitelistUser({
+          firstName: 'Max',
+          lastName: 'Mustermann',
+          uid: '123456',
+          courseId: course._id
+        });
+        const createdWhitelistUser = await WhitelistUser.create(newWhitelistUser);
+        const res = await testHelper.commonUserDeleteRequest(teacher, `/${createdWhitelistUser._id}`);
+        res.status.should.be.equal(403);
       });
     });
 });
