@@ -110,7 +110,7 @@ export class DownloadController {
   @Get('/:id')
   async getArchivedFile(@Param('id') id: string, @Res() response: Response) {
     const tmpFileCacheFolder = path.resolve(config.tmpFileCacheFolder);
-    const filePath = path.join(tmpFileCacheFolder, id + '.zip');
+    const filePath = path.join(tmpFileCacheFolder, 'download_' + id + '.zip');
 
     // Assures that the filePath actually points to a file within the tmpFileCacheFolder.
     // This is because the id parameter could be something like '../forbiddenFile' ('../' via %2E%2E%2F in the URL).
@@ -128,28 +128,12 @@ export class DownloadController {
     return response;
   }
 
-  async createFileHash(pack: IDownload) {
-    let data = '';
-    data += pack.courseName;
-    for (const lec of pack.lectures) {
-      for (const unit of lec.units) {
+  async createFileHash(courseName: string, userId: string) {
+    let data = [
+      courseName, userId, Date.now()
+    ];
 
-        const localUnit = await
-          Unit.findOne({_id: unit.unitId});
-        if (localUnit.__t === 'file') {
-          const fileUnit = <IFileUnit><any>localUnit;
-          fileUnit.files.forEach((file, index) => {
-            if (unit.files.indexOf(index) > -1) {
-              data = data + file.name;
-            }
-          });
-        } else {
-          data = data + localUnit._id;
-        }
-      }
-    }
-
-    return crypto.createHash('sha1').update(data).digest('hex');
+    return crypto.createHash('sha1').update(data.join()).digest('hex');
   }
 
   /**
@@ -190,7 +174,7 @@ export class DownloadController {
         throw new NotFoundError();
       }
 
-      const hash = await this.createFileHash(data);
+      const hash = await this.createFileHash(course.name, user._id);
       const key = cache.get(hash);
 
       if (key === null) {
@@ -320,7 +304,7 @@ export class DownloadController {
       }
 
       data.courseName += 'Single';
-      const hash = await this.createFileHash(data);
+      const hash = await this.createFileHash(course.name, user._id);
       const key = cache.get(hash);
 
       if (key === null) {
