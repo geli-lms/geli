@@ -175,5 +175,19 @@ export const errorCodes = {
       code: 'pastDeadline',
       text: 'Past deadline, no further update possible'
     }
+  },
+  unit: {
+    postMissingLectureId: {
+      code: 'postMissingLectureId',
+      text: 'No lecture ID was submitted.'
+    },
+    postMissingUnit: {
+      code: 'postMissingUnit',
+      text: 'No unit was submitted.'
+    },
+    postMissingCourse: {
+      code: 'postMissingCourse',
+      text: 'Unit has no _course set'
+    }
   }
 };
