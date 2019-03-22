@@ -263,7 +263,7 @@ export class DownloadController {
     }
 
     return new Promise((resolve, reject) => {
-      archive.on('error', reject(hash));
+      archive.on('error', (err: Error) => reject(err));
       archive.finalize();
       archive.on('end', () => resolve(hash));
     });
@@ -416,7 +416,7 @@ export class DownloadController {
     await this.appendBuffer(archive, buffer, name);
 
     return new Promise((resolve, reject) => {
-      archive.on('error', () => reject(hash));
+      archive.on('error', (err: Error) => reject(err));
       archive.finalize();
       archive.on('end', () => resolve(hash));
     });
