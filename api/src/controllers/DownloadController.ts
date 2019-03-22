@@ -34,6 +34,8 @@ import * as mongoose from 'mongoose';
 
 const archiver = require('archiver');
 import crypto = require('crypto');
+import {CreateOptions} from 'html-pdf';
+import {Archiver} from 'archiver';
 
 const cache = require('node-file-cache').create({life: config.timeToLiveCacheValue});
 const pdf = require('html-pdf');
@@ -169,16 +171,15 @@ export class DownloadController {
   @Post('/pdf/individual')
   @ContentType('application/json')
   async postDownloadRequestPDFIndividual(@Body() data: IDownload, @CurrentUser() user: IUser) {
+    if (!data.lectures.length) {
+      throw new BadRequestError();
+    }
 
     const course = await Course
       .findOne({_id: data.courseName})
       .orFail(new NotFoundError());
 
     this.userCanExportCourse(course, user);
-
-    if (!data.lectures.length) {
-      throw new NotFoundError();
-    }
 
     const size = await this.calcPackage(data);
 
@@ -187,89 +188,79 @@ export class DownloadController {
     }
 
     const hash = await this.createFileHash(course.name, user._id);
-    const key = cache.get(hash);
+    const filePath = path.join(path.resolve(config.tmpFileCacheFolder), 'download_' + hash + '.zip');
+    const output = fs.createWriteStream(filePath);
 
-    if (key === null) {
-      const filePath = path.join(path.resolve(config.tmpFileCacheFolder), 'download_' + hash + '.zip');
-      const output = fs.createWriteStream(filePath);
-      const archive = archiver('zip', {
-        zlib: {level: 9}
-      });
+    const archive = archiver('zip', {
+      zlib: {level: 9}
+    });
 
-      archive.pipe(output);
+    archive.pipe(output);
 
-      let lecCounter = 1;
-      for (const lec of data.lectures) {
+    let lecCounter = 1;
+    for (const lec of data.lectures) {
 
-        const localLecture = await Lecture.findOne({_id: lec.lectureId});
-        const lcName = this.replaceCharInFilename(localLecture.name);
-        let unitCounter = 1;
+      const localLecture = await Lecture.findOne({_id: lec.lectureId});
+      const lcName = this.replaceCharInFilename(localLecture.name);
+      let unitCounter = 1;
 
-        for (const unit of lec.units) {
-          const localUnit = await Unit.findOne({_id: unit.unitId});
+      for (const unit of lec.units) {
+        const localUnit = await Unit.findOne({_id: unit.unitId});
 
-          // create hashed pdf file
-          const tempPdfFileName = this.tempPdfFileName(user);
-
-          if (!localUnit) {
-            throw new NotFoundError();
-          }
-
-          if (localUnit.__t === 'file') {
-            for (const fileId of unit.files) {
-              const file = await File.findById(fileId);
-              archive.file('uploads/' + file.link, {name: lecCounter + '_' + lcName + '/' + unitCounter + '_' + file.name});
-            }
-          } else {
-
-            const options = {
-              phantomPath: binPath,
-              format: 'A4',
-              'border': {
-                'left': '1cm',
-                'right': '1cm'
-              },
-              'footer': {
-                'contents': {
-                  default: '<div id="pageFooter">{{page}}/{{pages}}</div>'
-                }
-              }
-            };
-
-            let html = '<!DOCTYPE html>\n' +
-              '<html>\n' +
-              '  <head>' +
-              '     <style>' +
-              '       #pageHeader {text-align: center;border-bottom: 1px solid;padding-bottom: 5px;}' +
-              '       #pageFooter {text-align: center;border-top: 1px solid;padding-top: 5px;}' +
-              '       html,body {font-family: \'Helvetica\', \'Arial\', sans-serif; font-size: 12px; line-height: 1.5;}' +
-              '       .codeBox {border: 1px solid grey; font-family: Monaco,Menlo,source-code-pro,monospace; padding: 10px}' +
-              '       #firstPage {page-break-after: always;}' +
-              '       .bottomBoxWrapper {height:800px; position: relative}' +
-              '       .bottomBox {position: absolute; bottom: 0;}' + this.markdownCss +
-              '     </style>' +
-              '  </head>';
-            html += await localUnit.toHtmlForIndividualPDF();
-            html += '</html>';
-            const name = lecCounter + '_' + lcName + '/' + unitCounter + '_' + this.replaceCharInFilename(localUnit.name) + '.pdf';
-            await this.savePdfToFile(html, options, tempPdfFileName);
-            await this.appendToArchive(archive, name, tempPdfFileName, hash);
-            fs.unlinkSync(tempPdfFileName);
-          }
-          unitCounter++;
+        if (!localUnit) {
+          throw new NotFoundError();
         }
-        lecCounter++;
-      }
 
-      return new Promise((resolve, reject) => {
-        archive.on('error', () => reject(hash));
-        archive.finalize();
-        cache.set(hash, hash);
-        archive.on('end', () => resolve(hash));
-      });
-    } else {
-      return hash;
+        if (localUnit.__t === 'file') {
+          for (const fileId of unit.files) {
+            const file = await File.findById(fileId);
+            archive.file('uploads/' + file.link, {name: lecCounter + '_' + lcName + '/' + unitCounter + '_' + file.name});
+          }
+        } else {
+
+          const options: CreateOptions = {
+            phantomPath: binPath,
+            format: 'A4',
+            'border': {
+              'left': '1cm',
+              'right': '1cm'
+            },
+            'footer': {
+              'contents': {
+                default: '<div id="pageFooter">{{page}}/{{pages}}</div>'
+              }
+            }
+          };
+
+          let html = '<!DOCTYPE html>\n' +
+            '<html>\n' +
+            '  <head>' +
+            '     <style>' +
+            '       #pageHeader {text-align: center;border-bottom: 1px solid;padding-bottom: 5px;}' +
+            '       #pageFooter {text-align: center;border-top: 1px solid;padding-top: 5px;}' +
+            '       html,body {font-family: \'Helvetica\', \'Arial\', sans-serif; font-size: 12px; line-height: 1.5;}' +
+            '       .codeBox {border: 1px solid grey; font-family: Monaco,Menlo,source-code-pro,monospace; padding: 10px}' +
+            '       #firstPage {page-break-after: always;}' +
+            '       .bottomBoxWrapper {height:800px; position: relative}' +
+            '       .bottomBox {position: absolute; bottom: 0;}' + this.markdownCss +
+            '     </style>' +
+            '  </head>';
+          html += await localUnit.toHtmlForIndividualPDF();
+          html += '</html>';
+          const name = lecCounter + '_' + lcName + '/' + unitCounter + '_' + this.replaceCharInFilename(localUnit.name) + '.pdf';
+          const data = await this.createPdf(html, options);
+          await this.appendBuffer(archive, data, name);
+        }
+        unitCounter++;
+      }
+      lecCounter++;
     }
+
+    return new Promise((resolve, reject) => {
+      archive.on('error', reject(hash));
+      archive.finalize();
+      archive.on('end', () => resolve(hash));
+    });
   }
 
   /**
@@ -449,6 +440,25 @@ export class DownloadController {
     return config.tmpFileCacheFolder +
       crypto.createHash('sha1').update(new Date() + user._id).digest('hex').toString().slice(0, 16) +
       '_temp.pdf';
+  }
+
+  private createPdf(html: string, options: CreateOptions): Promise<Buffer> {
+    return new Promise<Buffer>((resolve, reject) => {
+      pdf.create(html, options).toBuffer((err: Error, buffer: Buffer) => {
+        if (err) {
+          reject(err);
+        }
+        resolve(buffer);
+      });
+    });
+  }
+
+  private appendBuffer(archive: Archiver, data: Buffer, name: string): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+      archive.on('entry', () => resolve());
+      archive.on('error', () => reject());
+      archive.append(data, {name});
+    });
   }
 
   private savePdfToFile(html: any, options: any, pathToFile: String): Promise<void> {
