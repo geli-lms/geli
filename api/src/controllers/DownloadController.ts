@@ -221,12 +221,12 @@ export class DownloadController {
           const options: CreateOptions = {
             phantomPath: binPath,
             format: 'A4',
-            'border': {
-              'left': '1cm',
-              'right': '1cm'
+            border: {
+              left: '1cm',
+              right: '1cm'
             },
-            'footer': {
-              'contents': {
+            footer: {
+              contents: {
                 default: '<div id="pageFooter">{{page}}/{{pages}}</div>'
               }
             }
@@ -248,8 +248,8 @@ export class DownloadController {
           html += await localUnit.toHtmlForIndividualPDF();
           html += '</html>';
           const name = lecCounter + '_' + lcName + '/' + unitCounter + '_' + this.replaceCharInFilename(localUnit.name) + '.pdf';
-          const data = await this.createPdf(html, options);
-          await this.appendBuffer(archive, data, name);
+          const buffer = await this.createPdf(html, options);
+          await this.appendBuffer(archive, buffer, name);
         }
         unitCounter++;
       }
@@ -283,18 +283,15 @@ export class DownloadController {
   @Post('/pdf/single')
   @ContentType('application/json')
   async postDownloadRequestPDFSingle(@Body() data: IDownload, @CurrentUser() user: IUser) {
-    // create hashed pdf file
-    const tempPdfFileName = this.tempPdfFileName(user);
+    if (!data.lectures.length) {
+      throw new BadRequestError();
+    }
 
     const course = await Course
       .findOne({_id: data.courseName})
       .orFail(new NotFoundError());
 
     this.userCanExportCourse(course, user);
-
-    if (!data.lectures.length) {
-      throw new NotFoundError();
-    }
 
     const size = await this.calcPackage(data);
 
@@ -304,127 +301,119 @@ export class DownloadController {
 
     data.courseName += 'Single';
     const hash = await this.createFileHash(course.name, user._id);
-    const key = cache.get(hash);
+    const filePath = path.join(path.resolve(config.tmpFileCacheFolder), 'download_' + hash + '.zip');
+    const output = fs.createWriteStream(filePath);
 
-    if (key === null) {
-      const filePath = path.join(path.resolve(config.tmpFileCacheFolder), 'download_' + hash + '.zip');
-      const output = fs.createWriteStream(filePath);
-      const archive = archiver('zip', {
-        zlib: {level: 9}
-      });
+    const archive = archiver('zip', {
+      zlib: {level: 9}
+    });
 
-      archive.pipe(output);
+    archive.pipe(output);
 
-      const options = {
-        phantomPath: binPath,
-        format: 'A4',
-        'border': {
-          'left': '1cm',
-          'right': '1cm',
-          'top': '0',
-          'bottom': '0'
-        },
-        'footer': {
-          'contents': {
-            default: '<div id="pageFooter">{{page}}/{{pages}}</div>'
-          }
-        },
-        'header': {
-          'contents': {
-            default: '<div id="pageHeader">' + course.name + '</div>'
-          },
-          height: '20mm'
+    const options: CreateOptions = {
+      phantomPath: binPath,
+      format: 'A4',
+      border: {
+        left: '1cm',
+        right: '1cm',
+        top: '0',
+        bottom: '0'
+      },
+      footer: {
+        contents: {
+          default: '<div id="pageFooter">{{page}}/{{pages}}</div>'
         }
-      };
-
-      let html = '<!DOCTYPE html>\n' +
-        '<html>\n' +
-        '  <head>' +
-        '     <style>' +
-        '       #pageHeader {text-align: center;border-bottom: 1px solid;padding-bottom: 5px;}' +
-        '       #pageFooter {text-align: center;border-top: 1px solid;padding-top: 5px;}' +
-        '       html, body {font-family: \'Helvetica\', \'Arial\', sans-serif; font-size: 12px; line-height: 1.5;}' +
-        '       .codeBox {border: 1px solid grey; font-family: Monaco,Menlo,source-code-pro,monospace; padding: 10px}' +
-        '       #firstPage {page-break-after: always;}' +
-        '       #nextPage {page-break-before: always;}' +
-        '       .bottomBoxWrapper {height:800px; position: relative}' +
-        '       .bottomBox {position: absolute; bottom: 0;}' + this.markdownCss +
-        '     </style>' +
-        '  </head>' +
-        '  <body>' +
-        '  ';
-
-      let solutions = '<div id="nextPage"><h2><u>Solutions</u></h2>';
-
-      let lecCounter = 1;
-      let firstSol = false;
-      for (const lec of data.lectures) {
-
-        const localLecture = await Lecture.findOne({_id: lec.lectureId});
-        const lcName = this.replaceCharInFilename(localLecture.name);
-        let unitCounter = 1;
-        let solCounter = 1;
-        if (lecCounter > 1) {
-          html += '<div id="nextPage" ><h2>Lecture: ' + localLecture.name + '</h2>';
-        } else {
-          html += '<div><h2>Lecture: ' + localLecture.name + '</h2>';
-        }
-
-        for (const unit of lec.units) {
-          const localUnit = await Unit.findOne({_id: unit.unitId});
-
-          if (!localUnit) {
-            throw new NotFoundError();
-          }
-
-          if (localUnit.__t === 'file') {
-            for (const fileId of unit.files) {
-              const file = await File.findById(fileId);
-              archive.file(path.join(config.uploadFolder, file.link),
-                {name: lecCounter + '_' + lcName + '/' + unitCounter + '_' + file.name});
-            }
-          } else if ((localUnit.__t === 'code-kata' || localUnit.__t === 'task') && lecCounter > 1 && unitCounter > 1) {
-            html += '<div id="nextPage" >' + await localUnit.toHtmlForSinglePDF() + '</div>';
-          } else {
-            html += await localUnit.toHtmlForSinglePDF();
-          }
-
-          if (localUnit.__t === 'code-kata' || localUnit.__t === 'task') {
-
-            if (!firstSol && solCounter === 1) {
-              solutions += '<div><h2>Lecture: ' + localLecture.name + '</h2>';
-              firstSol = true;
-            } else if (solCounter === 1) {
-              solutions += '<div id="nextPage" ><h2>Lecture: ' + localLecture.name + '</h2>';
-            } else {
-              solutions += '<div id="nextPage" >';
-            }
-            solutions += await localUnit.toHtmlForSinglePDFSolutions() + '</div>';
-            solCounter++;
-          } else if (localUnit.__t !== 'file') {
-            solutions += await localUnit.toHtmlForSinglePDFSolutions();
-          }
-          unitCounter++;
-        }
-        html += '</div>';
-        lecCounter++;
+      },
+      header: {
+        contents: '<div id="pageHeader">' + course.name + '</div>',
+        height: '20mm'
       }
-      html += solutions;
-      html += '</div></body>' +
-        '</html>';
-      const name = this.replaceCharInFilename(course.name) + '.pdf';
-      await this.savePdfToFile(html, options, tempPdfFileName);
-      await this.appendToArchive(archive, name, tempPdfFileName, hash);
-      fs.unlinkSync(tempPdfFileName);
-      return new Promise((resolve, reject) => {
-        archive.on('error', () => reject(hash));
-        archive.finalize();
-        cache.set(hash, hash);
-        archive.on('end', () => resolve(hash));
-      });
-    } else {
-      return hash;
+    };
+
+    let html = '<!DOCTYPE html>\n' +
+      '<html>\n' +
+      '  <head>' +
+      '     <style>' +
+      '       #pageHeader {text-align: center;border-bottom: 1px solid;padding-bottom: 5px;}' +
+      '       #pageFooter {text-align: center;border-top: 1px solid;padding-top: 5px;}' +
+      '       html, body {font-family: \'Helvetica\', \'Arial\', sans-serif; font-size: 12px; line-height: 1.5;}' +
+      '       .codeBox {border: 1px solid grey; font-family: Monaco,Menlo,source-code-pro,monospace; padding: 10px}' +
+      '       #firstPage {page-break-after: always;}' +
+      '       #nextPage {page-break-before: always;}' +
+      '       .bottomBoxWrapper {height:800px; position: relative}' +
+      '       .bottomBox {position: absolute; bottom: 0;}' + this.markdownCss +
+      '     </style>' +
+      '  </head>' +
+      '  <body>' +
+      '  ';
+
+    let solutions = '<div id="nextPage"><h2><u>Solutions</u></h2>';
+
+    let lecCounter = 1;
+    let firstSol = false;
+    for (const lec of data.lectures) {
+
+      const localLecture = await Lecture.findOne({_id: lec.lectureId});
+      const lcName = this.replaceCharInFilename(localLecture.name);
+      let unitCounter = 1;
+      let solCounter = 1;
+      if (lecCounter > 1) {
+        html += '<div id="nextPage" ><h2>Lecture: ' + localLecture.name + '</h2>';
+      } else {
+        html += '<div><h2>Lecture: ' + localLecture.name + '</h2>';
+      }
+
+      for (const unit of lec.units) {
+        const localUnit = await Unit.findOne({_id: unit.unitId});
+
+        if (!localUnit) {
+          throw new NotFoundError();
+        }
+
+        if (localUnit.__t === 'file') {
+          for (const fileId of unit.files) {
+            const file = await File.findById(fileId);
+            archive.file(path.join(config.uploadFolder, file.link),
+              {name: lecCounter + '_' + lcName + '/' + unitCounter + '_' + file.name});
+          }
+        } else if ((localUnit.__t === 'code-kata' || localUnit.__t === 'task') && lecCounter > 1 && unitCounter > 1) {
+          html += '<div id="nextPage" >' + await localUnit.toHtmlForSinglePDF() + '</div>';
+        } else {
+          html += await localUnit.toHtmlForSinglePDF();
+        }
+
+        if (localUnit.__t === 'code-kata' || localUnit.__t === 'task') {
+
+          if (!firstSol && solCounter === 1) {
+            solutions += '<div><h2>Lecture: ' + localLecture.name + '</h2>';
+            firstSol = true;
+          } else if (solCounter === 1) {
+            solutions += '<div id="nextPage" ><h2>Lecture: ' + localLecture.name + '</h2>';
+          } else {
+            solutions += '<div id="nextPage" >';
+          }
+          solutions += await localUnit.toHtmlForSinglePDFSolutions() + '</div>';
+          solCounter++;
+        } else if (localUnit.__t !== 'file') {
+          solutions += await localUnit.toHtmlForSinglePDFSolutions();
+        }
+        unitCounter++;
+      }
+      html += '</div>';
+      lecCounter++;
     }
+    html += solutions;
+    html += '</div></body>' +
+      '</html>';
+    const name = this.replaceCharInFilename(course.name) + '.pdf';
+    const buffer = await this.createPdf(html, options);
+    await this.appendBuffer(archive, buffer, name);
+
+    return new Promise((resolve, reject) => {
+      archive.on('error', () => reject(hash));
+      archive.finalize();
+      archive.on('end', () => resolve(hash));
+    });
   }
 
   private readMarkdownCss() {
@@ -434,12 +423,6 @@ export class DownloadController {
       console.error(e);
       return null;
     }
-  }
-
-  private tempPdfFileName(user: IUser) {
-    return config.tmpFileCacheFolder +
-      crypto.createHash('sha1').update(new Date() + user._id).digest('hex').toString().slice(0, 16) +
-      '_temp.pdf';
   }
 
   private createPdf(html: string, options: CreateOptions): Promise<Buffer> {
@@ -458,19 +441,6 @@ export class DownloadController {
       archive.on('entry', () => resolve());
       archive.on('error', () => reject());
       archive.append(data, {name});
-    });
-  }
-
-  private savePdfToFile(html: any, options: any, pathToFile: String): Promise<void> {
-    return new Promise<void>((resolve, reject) => {
-
-      pdf.create(html, options).toFile(pathToFile, function (err: any, res: any) {
-        if (err) {
-          reject(err);
-        }
-        resolve();
-      });
-
     });
   }
 
@@ -496,17 +466,6 @@ export class DownloadController {
     }
 
     throw new ForbiddenError();
-  }
-
-  private appendToArchive(archive: any, name: String, pathToFile: String, hash: any) {
-    return new Promise<void>((resolve, reject) => {
-      archive.on('entry', () => {
-        resolve();
-      });
-      archive.on('error', () => reject(hash));
-      archive.file(pathToFile,
-        {name: name});
-    });
   }
 
   /**
