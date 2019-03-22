@@ -171,11 +171,9 @@ export class DownloadController {
   @ContentType('application/json')
   async postDownloadRequestPDFIndividual(@Body() data: IDownload, @CurrentUser() user: IUser) {
 
-    const course = await Course.findOne({_id: data.courseName});
-
-    if (course === null) {
-      throw new NotFoundError();
-    }
+    const course = await Course
+      .findOne({_id: data.courseName})
+      .orFail(new NotFoundError());
 
     const courseAdmin = await User.findOne({_id: course.courseAdmin});
 
@@ -302,11 +300,9 @@ export class DownloadController {
     // create hashed pdf file
     const tempPdfFileName = this.tempPdfFileName(user);
 
-    const course = await Course.findOne({_id: data.courseName});
-
-    if (course === null) {
-      throw new NotFoundError();
-    }
+    const course = await Course
+      .findOne({_id: data.courseName})
+      .orFail(new NotFoundError());
 
     const courseAdmin = await User.findOne({_id: course.courseAdmin});
 
