@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Extended `ProgressController` `PUT` route to handle both creation and updates. [#1116](https://github.com/geli-lms/geli/issues/1116)
 - Refactored `ProgressController` unit tests in general. [#1116](https://github.com/geli-lms/geli/issues/1116)
 - Instead of a list of progress data, the `ProgressController` `GET` route now responds with a single progress object or an empty object if no data can be found. [#1116](https://github.com/geli-lms/geli/issues/1116)
+- Refactor `DownloadController`. [#913](https://github.com/geli-lms/geli/issues/913)
 
 ### Removed
 - Unused `ProgressController` `GET` routes for `/courses/` & `/users/`. [#1116](https://github.com/geli-lms/geli/issues/1116)
