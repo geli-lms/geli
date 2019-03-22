@@ -19,22 +19,32 @@ describe('Media', async () => {
   beforeEach(() => testHelper.resetForNextTest());
 
   describe(`GET ${BASE_URL}`, async () => {
-    it('should get a directory', async () => {
-      const teacher = await FixtureUtils.getRandomTeacher();
+    async function commonGetSetup () {
+      const course = await FixtureUtils.getRandomCourse();
+      const teacher = await FixtureUtils.getRandomTeacherForCourse(course);
 
       const file = await new File({
+        _course: course._id.toString(),
         name: 'root',
         link: 'test/a',
         size: 129
       }).save();
       const subDirectory = await new Directory({
+        _course: course._id.toString(),
         name: 'sub'
       }).save();
       const rootDirectory = await new Directory({
+        _course: course._id.toString(),
         name: 'root',
         subDirectories: [subDirectory],
         files: [file]
       }).save();
+
+      return {course, teacher, file, subDirectory, rootDirectory};
+    }
+
+    it('should get a directory', async () => {
+      const {teacher, file, subDirectory, rootDirectory} = await commonGetSetup();
 
       const result = await testHelper.commonUserGetRequest(teacher, `/directory/${rootDirectory.id}`);
       result.status.should.be.equal(200,
@@ -50,22 +60,7 @@ describe('Media', async () => {
     });
 
     it('should get a populated directory', async () => {
-      const teacher = await FixtureUtils.getRandomTeacher();
-
-      const file = await new File({
-        name: 'root',
-        link: 'test/a',
-        size: 129
-      }).save();
-      const subDirectory = await new Directory({
-        name: 'sub'
-      }).save();
-      const rootDirectory = await new Directory({
-        name: 'root',
-        subDirectories: [subDirectory],
-        files: [file]
-      }).save();
-
+      const {teacher, file, subDirectory, rootDirectory} = await commonGetSetup();
 
       const result = await testHelper.commonUserGetRequest(teacher, `/directory/${rootDirectory.id}/lazy`);
       result.status.should.be.equal(200,
@@ -90,13 +85,7 @@ describe('Media', async () => {
     });
 
     it('should get a file', async () => {
-      const teacher = await FixtureUtils.getRandomTeacher();
-
-      const file = await new File({
-        name: 'root',
-        link: 'test/a',
-        size: 129
-      }).save();
+      const {teacher, file} = await commonGetSetup();
 
       const result = await testHelper.commonUserGetRequest(teacher, `/file/${file.id}`);
       result.status.should.be.equal(200,
