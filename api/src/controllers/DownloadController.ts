@@ -1,8 +1,19 @@
 import {promisify} from 'util';
 import {Response} from 'express';
 import {
-  NotFoundError, ForbiddenError, ContentType, UseBefore, Param, Res, Controller,
-  Body, Post, Get, Delete, CurrentUser, Authorized
+  Authorized,
+  Body,
+  ContentType,
+  Controller,
+  CurrentUser,
+  Delete,
+  ForbiddenError,
+  Get,
+  NotFoundError,
+  Param,
+  Post,
+  Res,
+  UseBefore
 } from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import {Unit} from '../models/units/Unit';
@@ -16,12 +27,12 @@ import {errorCodes} from '../config/errorCodes';
 
 import * as fs from 'fs';
 import * as path from 'path';
+import {File} from '../models/mediaManager/File';
+import {ICourse} from '../../../shared/models/ICourse';
+import * as mongoose from 'mongoose';
 
 const archiver = require('archiver');
 import crypto = require('crypto');
-import {User} from '../models/User';
-import {File} from '../models/mediaManager/File';
-import {ICourse} from '../../../shared/models/ICourse';
 
 const cache = require('node-file-cache').create({life: config.timeToLiveCacheValue});
 const pdf = require('html-pdf');
@@ -130,7 +141,7 @@ export class DownloadController {
   }
 
   async createFileHash(courseName: string, userId: string) {
-    let data = [
+    const data = [
       courseName, userId, Date.now()
     ];
 
@@ -459,7 +470,7 @@ export class DownloadController {
       return true;
     }
 
-    if (course.courseAdmin._id === user._id) {
+    if (mongoose.Types.ObjectId(user._id).equals(course.courseAdmin._id)) {
       return true;
     }
 
