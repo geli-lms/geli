@@ -32,6 +32,8 @@
     "migrate:inspect": "gulp migrate:inspect"
   },
   "dependencies": {
+    "@types/archiver": "^2.1.3",
+    "@types/html-pdf": "^2.1.2",
     "@types/node-sass": "^4.11.0",
     "@types/sharp": "^0.22.0",
     "@types/socket.io": "^2.1.2",
