@@ -31,13 +31,12 @@ import * as path from 'path';
 import {File} from '../models/mediaManager/File';
 import {ICourse} from '../../../shared/models/ICourse';
 import * as mongoose from 'mongoose';
-
-const archiver = require('archiver');
-import crypto = require('crypto');
 import {CreateOptions} from 'html-pdf';
 import {Archiver} from 'archiver';
 
-const cache = require('node-file-cache').create({life: config.timeToLiveCacheValue});
+const archiver = require('archiver');
+import crypto = require('crypto');
+
 const pdf = require('html-pdf');
 const phantomjs = require('phantomjs-prebuilt');
 const binPath = phantomjs.path;
