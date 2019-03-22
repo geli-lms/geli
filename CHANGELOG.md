@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Extended `ProgressController` `PUT` route to handle both creation and updates. [#1116](https://github.com/geli-lms/geli/issues/1116)
 - Refactored `ProgressController` unit tests in general. [#1116](https://github.com/geli-lms/geli/issues/1116)
 - Instead of a list of progress data, the `ProgressController` `GET` route now responds with a single progress object or an empty object if no data can be found. [#1116](https://github.com/geli-lms/geli/issues/1116)
+- Updated frontend to angular 7[#889](https://github.com/geli-lms/geli/issues/889)
 
 ### Removed
 - Unused `ProgressController` `GET` routes for `/courses/` & `/users/`. [#1116](https://github.com/geli-lms/geli/issues/1116)
@@ -82,8 +83,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Secure `{put} /api/notificationSettings/` by using the `@CurrentUser` instead of allowing arbitrary id requests. [#1072](https://github.com/geli-lms/geli/issues/1072)
 - Minimize `NotificationSettingsController` attack surface by severely simplifying its routes. [#1072](https://github.com/geli-lms/geli/issues/1072)
 
-###Changed
-- Updated frontend to angular 7[#889](https://github.com/geli-lms/geli/issues/889)
 ## [[0.8.3](https://github.com/geli-lms/geli/releases/tag/v0.8.3)] - 2018-11-29 - WS 18/19 🚀-Release
 ### Added
 - Chat system access denial unit tests. [#989](https://github.com/geli-lms/geli/issues/989)
