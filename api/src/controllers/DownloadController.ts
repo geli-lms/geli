@@ -151,9 +151,9 @@ export class DownloadController {
   async createFileHash(courseName: string, userId: string) {
     const data = [
       courseName, userId, Date.now()
-    ];
+    ].join();
 
-    return crypto.createHash('sha1').update(data.join()).digest('hex');
+    return crypto.createHash('sha1').update(data).digest('hex');
   }
 
   /**
