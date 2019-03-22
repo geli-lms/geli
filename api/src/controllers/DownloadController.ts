@@ -188,8 +188,8 @@ export class DownloadController {
     const key = cache.get(hash);
 
     if (key === null) {
-      const filepath = config.tmpFileCacheFolder + hash + '.zip';
-      const output = fs.createWriteStream(filepath);
+      const filePath = path.join(path.resolve(config.tmpFileCacheFolder), 'download_' + hash + '.zip');
+      const output = fs.createWriteStream(filePath);
       const archive = archiver('zip', {
         zlib: {level: 9}
       });
@@ -313,8 +313,8 @@ export class DownloadController {
     const key = cache.get(hash);
 
     if (key === null) {
-      const filepath = config.tmpFileCacheFolder + hash + '.zip';
-      const output = fs.createWriteStream(filepath);
+      const filePath = path.join(path.resolve(config.tmpFileCacheFolder), 'download_' + hash + '.zip');
+      const output = fs.createWriteStream(filePath);
       const archive = archiver('zip', {
         zlib: {level: 9}
       });
