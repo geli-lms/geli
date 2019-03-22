@@ -13,7 +13,7 @@ import {IUser} from '../../../shared/models/IUser';
 @UseBefore(passportJwtMiddleware)
 export class UnitController {
 
-  static async getUnitFor (unitId: string, currentUser: IUser, privilege: 'userCanViewCourse' | 'userCanEditCourse') {
+  protected static async getUnitFor (unitId: string, currentUser: IUser, privilege: 'userCanViewCourse' | 'userCanEditCourse') {
     const unit = await Unit.findById(unitId);
     if (!unit) {
       throw new NotFoundError();
