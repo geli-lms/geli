@@ -18,8 +18,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - `UnitController` status code `403` (not authorized to view / edit course) unit tests for all routes. [#1190](https://github.com/geli-lms/geli/issues/1190)
 
 ### Changed
-- Extended `ProgressController` `PUT` route to handle both creation and updates. [#1116](https://github.com/geli-lms/geli/issues/1116)
-- Refactored `ProgressController` unit tests in general. [#1116](https://github.com/geli-lms/geli/issues/1116)
+- Extend `ProgressController` `PUT` route to handle both creation and updates. [#1116](https://github.com/geli-lms/geli/issues/1116)
+- Refactor `ProgressController` unit tests in general. [#1116](https://github.com/geli-lms/geli/issues/1116)
 - Instead of a list of progress data, the `ProgressController` `GET` route now responds with a single progress object or an empty object if no data can be found. [#1116](https://github.com/geli-lms/geli/issues/1116)
 
 ### Removed
@@ -31,8 +31,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - `CodeKataComponent` `progress.code` loading. [#1116](https://github.com/geli-lms/geli/issues/1116)
 
 ### Security
-- Closed `ProgressController` vulnerabilities. [#1116](https://github.com/geli-lms/geli/issues/1116)
-- Closed `UnitController` vulnerabilities. [#1190](https://github.com/geli-lms/geli/issues/1190)
+- Closes `ProgressController` vulnerabilities. [#1116](https://github.com/geli-lms/geli/issues/1116)
+- Closes `UnitController` vulnerabilities. [#1190](https://github.com/geli-lms/geli/issues/1190)
 
 ## [[0.8.4](https://github.com/geli-lms/geli/releases/tag/v0.8.4)] - 2018-12-20 - WS 18/19 ❄️-Release
 ### Added
