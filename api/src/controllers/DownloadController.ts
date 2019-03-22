@@ -56,17 +56,23 @@ export class DownloadController {
   }
 
   cleanupCache() {
-    cache.expire((record: any) => {
-      return new Promise((resolve, reject) => {
-        fs.unlink(config.tmpFileCacheFolder + record.key + '.zip', (err: Error) => {
-          if (err) {
-            reject(false);
-          } else {
-            resolve(true);
-          }
-        });
-      });
-    });
+    const expire = Date.now() - 3600 * 1000;
+    const files = fs.readdirSync(config.tmpFileCacheFolder);
+
+    for (const fileName of files) {
+      if (/download_(\w+).zip/.test(fileName) === false) {
+        continue;
+      }
+
+      const filePath = path.join(config.tmpFileCacheFolder, fileName);
+      const fileStat = fs.statSync(filePath);
+
+      if (fileStat.ctimeMs >= expire) {
+        continue;
+      }
+
+      fs.unlinkSync(filePath);
+    }
   }
 
   replaceCharInFilename(filename: string) {
