@@ -186,6 +186,20 @@ export class FixtureUtils {
     });
   }
 
+  /**
+   * Obtain an unauthorized student for a course.
+   * This student can be used for access denial unit tests.
+   *
+   * @param course The student can't belong to this given course; i.e. the student won't be part of the 'students'.
+   * @returns A user with 'student' role that is not authorized to access the given course.
+   */
+  public static async getUnauthorizedStudentForCourse(course: ICourse): Promise<IUserModel> {
+    return await User.findOne({
+      _id: {$nin: course.students},
+      role: 'student'
+    });
+  }
+
   private static async getAdmins(): Promise<IUser[]> {
     return this.getUser('admin');
   }

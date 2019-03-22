@@ -169,5 +169,11 @@ export const errorCodes = {
       code: 'targetUserNotFound',
       text: 'Target user not found'
     }
+  },
+  progress: {
+    pastDeadline: {
+      code: 'pastDeadline',
+      text: 'Past deadline, no further update possible'
+    }
   }
 };
