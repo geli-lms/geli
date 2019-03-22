@@ -1,7 +1,7 @@
 import {Server} from '../../src/server';
-import {FixtureLoader} from '../../fixtures/FixtureLoader';
 import * as chai from 'chai';
 import chaiHttp = require('chai-http');
+import {TestHelper} from '../TestHelper';
 import {FixtureUtils} from '../../fixtures/FixtureUtils';
 import {JwtUtils} from '../../src/security/JwtUtils';
 import {Directory} from '../../src/models/mediaManager/Directory';
@@ -13,14 +13,10 @@ chai.use(chaiHttp);
 const should = chai.should();
 const app = new Server().app;
 const BASE_URL = '/api/media';
-const fixtureLoader = new FixtureLoader();
-const appRoot = require('app-root-path');
+const testHelper = new TestHelper(BASE_URL);
 
 describe('Media', async () => {
-  // Before each test we reset the database
-  beforeEach(async () => {
-    await fixtureLoader.load();
-  });
+  beforeEach(() => testHelper.resetForNextTest());
 
   describe(`GET ${BASE_URL}`, async () => {
     it('should get a directory', async () => {
@@ -40,12 +36,7 @@ describe('Media', async () => {
         files: [file]
       }).save();
 
-
-      const result = await chai.request(app)
-        .get(`${BASE_URL}/directory/${rootDirectory.id}`)
-        .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
-        .catch((err) => err.response);
-
+      const result = await testHelper.commonUserGetRequest(teacher, `/directory/${rootDirectory.id}`);
       result.status.should.be.equal(200,
         'could not get directory' +
         ' -> ' + result.body.message);
@@ -76,11 +67,7 @@ describe('Media', async () => {
       }).save();
 
 
-      const result = await chai.request(app)
-        .get(`${BASE_URL}/directory/${rootDirectory.id}/lazy`)
-        .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
-        .catch((err) => err.response);
-
+      const result = await testHelper.commonUserGetRequest(teacher, `/directory/${rootDirectory.id}/lazy`);
       result.status.should.be.equal(200,
         'could not get directory' +
         ' -> ' + result.body.message);
@@ -111,15 +98,10 @@ describe('Media', async () => {
         size: 129
       }).save();
 
-      const result = await chai.request(app)
-        .get(`${BASE_URL}/file/${file.id}`)
-        .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
-        .catch((err) => err.response);
-
+      const result = await testHelper.commonUserGetRequest(teacher, `/file/${file.id}`);
       result.status.should.be.equal(200,
         'could not get file' +
         ' -> ' + result.body.message);
-
       result.body._id.should.be.equal(file.id);
       result.body.name.should.be.equal(file.name);
       result.body.size.should.be.equal(file.size);
@@ -135,12 +117,7 @@ describe('Media', async () => {
         name: 'root'
       });
 
-      const result = await chai.request(app)
-        .post(`${BASE_URL}/directory`)
-        .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
-        .send(rootDirectory)
-        .catch((err) => err.response);
-
+      const result = await testHelper.commonUserPostRequest(teacher, '/directory', rootDirectory);
       result.status.should.be.equal(200,
         'could not create root' +
         ' -> ' + result.body.message);
@@ -162,12 +139,7 @@ describe('Media', async () => {
         name: 'sub'
       });
 
-      const result = await chai.request(app)
-        .post(`${BASE_URL}/directory/${rootDirectory._id}`)
-        .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
-        .send(subDirectory)
-        .catch((err) => err.response);
-
+      const result = await testHelper.commonUserPostRequest(teacher, `/directory/${rootDirectory._id}`, subDirectory);
       result.status.should.be.equal(200,
         'could not create subdirectory' +
         ' -> ' + result.body.message);
@@ -261,17 +233,10 @@ describe('Media', async () => {
       const renamedDirectory = rootDirectory;
       renamedDirectory.name = 'renamedRoot';
 
-
-      const result = await chai.request(app)
-        .put(`${BASE_URL}/directory/${rootDirectory._id}`)
-        .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
-        .send(renamedDirectory)
-        .catch((err) => err.response);
-
+      const result = await testHelper.commonUserPutRequest(teacher, `/directory/${rootDirectory._id}`, renamedDirectory);
       result.status.should.be.equal(200,
         'could not rename directory' +
         ' -> ' + result.body.message);
-
       result.body._id.should.equal(rootDirectory.id);
       result.body.name.should.equal(renamedDirectory.name);
       result.body.subDirectories.should.be.instanceOf(Array)
@@ -292,17 +257,10 @@ describe('Media', async () => {
       const renamedFile = file;
       file.name = 'renamedFile';
 
-
-      const result = await chai.request(app)
-        .put(`${BASE_URL}/file/${file._id}`)
-        .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
-        .send(renamedFile)
-        .catch((err) => err.response);
-
+      const result = await testHelper.commonUserPutRequest(teacher, `/file/${file._id}`, renamedFile);
       result.status.should.be.equal(200,
         'could not rename file' +
         ' -> ' + result.body.message);
-
       result.body._id.should.equal(file.id);
       result.body.name.should.equal(renamedFile.name);
       result.body.link.should.equal(file.link);
@@ -322,15 +280,10 @@ describe('Media', async () => {
         subDirectories: [subDirectory],
       }).save();
 
-      const result = await chai.request(app)
-        .del(`${BASE_URL}/directory/${rootDirectory._id}`)
-        .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
-        .catch((err) => err.response);
-
+      const result = await testHelper.commonUserDeleteRequest(teacher, `/directory/${rootDirectory._id}`);
       result.status.should.be.equal(200,
         'could not delete directory' +
         ' -> ' + result.body.message);
-
       should.not.exist(await Directory.findById(rootDirectory));
     });
 
@@ -345,15 +298,10 @@ describe('Media', async () => {
         subDirectories: [subDirectory],
       }).save();
 
-      const result = await chai.request(app)
-        .del(`${BASE_URL}/directory/${rootDirectory._id}`)
-        .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
-        .catch((err) => err.response);
-
+      const result = await testHelper.commonUserDeleteRequest(teacher, `/directory/${rootDirectory._id}`);
       result.status.should.be.equal(200,
         'could not delete directory' +
         ' -> ' + result.body.message);
-
       should.not.exist(await Directory.findById(rootDirectory));
       should.not.exist(await Directory.findById(subDirectory));
     });
@@ -377,15 +325,10 @@ describe('Media', async () => {
         files: [file]
       }).save();
 
-      const result = await chai.request(app)
-        .del(`${BASE_URL}/directory/${rootDirectory._id}`)
-        .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
-        .catch((err) => err.response);
-
+      const result = await testHelper.commonUserDeleteRequest(teacher, `/directory/${rootDirectory._id}`);
       result.status.should.be.equal(200,
         'could not delete directory' +
         ' -> ' + result.body.message);
-
       should.not.exist(await Directory.findById(rootDirectory));
       should.not.exist(await File.findById(file));
     });
@@ -404,15 +347,10 @@ describe('Media', async () => {
         size: testFile.length
       }).save();
 
-      const result = await chai.request(app)
-        .del(`${BASE_URL}/file/${file._id}`)
-        .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
-        .catch((err) => err.response);
-
+      const result = await testHelper.commonUserDeleteRequest(teacher, `/file/${file._id}`);
       result.status.should.be.equal(200,
         'could not delete file' +
         ' -> ' + result.body.message);
-
       should.not.exist(await File.findById(file));
       fs.existsSync(config.uploadFolder + '/test.file').should.be.equal(false);
     });
@@ -420,22 +358,14 @@ describe('Media', async () => {
     it('should fail when directory not found', async () => {
       const teacher = await FixtureUtils.getRandomTeacher();
 
-      const result = await chai.request(app)
-        .del(`${BASE_URL}/directory/507f1f77bcf86cd799439011`)
-        .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
-        .catch((err) => err.response);
-
+      const result = await testHelper.commonUserDeleteRequest(teacher, '/directory/507f1f77bcf86cd799439011');
       result.status.should.be.equal(404);
     });
 
     it('should fail when file not found', async () => {
       const teacher = await FixtureUtils.getRandomTeacher();
 
-      const result = await chai.request(app)
-        .del(`${BASE_URL}/file/507f1f77bcf86cd799439011`)
-        .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
-        .catch((err) => err.response);
-
+      const result = await testHelper.commonUserDeleteRequest(teacher, '/file/507f1f77bcf86cd799439011');
       result.status.should.be.equal(404);
     });
   });
