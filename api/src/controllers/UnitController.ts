@@ -182,10 +182,7 @@ export class UnitController {
   }
 
   private async getUnitFor (unitId: string, currentUser: IUser, privilege: 'userCanViewCourse' | 'userCanEditCourse') {
-    const unit = await Unit.findById(unitId);
-    if (!unit) {
-      throw new NotFoundError();
-    }
+    const unit = await Unit.findById(unitId).orFail(new NotFoundError());
 
     const course = await Course.findById(unit._course);
     if (!course.checkPrivileges(currentUser)[privilege]) {
