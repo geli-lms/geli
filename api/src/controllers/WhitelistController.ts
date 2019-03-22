@@ -216,7 +216,7 @@ export class WhitelistController {
     }
   }
 
-  prepareWhitelistUserData(whitelistUser: IWhitelistUser) {
+  private prepareWhitelistUserData(whitelistUser: IWhitelistUser) {
     return {
       _id: whitelistUser._id,
       firstName: whitelistUser.firstName,
