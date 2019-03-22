@@ -31,8 +31,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - `CodeKataComponent` `progress.code` loading. [#1116](https://github.com/geli-lms/geli/issues/1116)
 
 ### Security
-- Closes `ProgressController` vulnerabilities. [#1116](https://github.com/geli-lms/geli/issues/1116)
-- Closes `UnitController` vulnerabilities. [#1190](https://github.com/geli-lms/geli/issues/1190)
+- Close `ProgressController` vulnerabilities. [#1116](https://github.com/geli-lms/geli/issues/1116)
+- Close `UnitController` vulnerabilities. [#1190](https://github.com/geli-lms/geli/issues/1190)
 
 ## [[0.8.4](https://github.com/geli-lms/geli/releases/tag/v0.8.4)] - 2018-12-20 - WS 18/19 ❄️-Release
 ### Added
