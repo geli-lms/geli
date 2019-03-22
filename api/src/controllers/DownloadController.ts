@@ -2,6 +2,7 @@ import {promisify} from 'util';
 import {Response} from 'express';
 import {
   Authorized,
+  BadRequestError,
   Body,
   ContentType,
   Controller,
@@ -163,6 +164,7 @@ export class DownloadController {
    *
    * @apiError NotFoundError
    * @apiError ForbiddenError
+   * @apiError BadRequestError
    */
   @Post('/pdf/individual')
   @ContentType('application/json')
@@ -181,7 +183,7 @@ export class DownloadController {
     const size = await this.calcPackage(data);
 
     if (size.totalSize > config.maxZipSize || size.tooLargeFiles.length !== 0) {
-      throw new NotFoundError();
+      throw new BadRequestError();
     }
 
     const hash = await this.createFileHash(course.name, user._id);
@@ -285,6 +287,7 @@ export class DownloadController {
    *
    * @apiError NotFoundError
    * @apiError ForbiddenError
+   * @apiError BadRequestError
    */
   @Post('/pdf/single')
   @ContentType('application/json')
@@ -305,7 +308,7 @@ export class DownloadController {
     const size = await this.calcPackage(data);
 
     if (size.totalSize > config.maxZipSize || size.tooLargeFiles.length !== 0) {
-      throw new NotFoundError();
+      throw new BadRequestError();
     }
 
     data.courseName += 'Single';
