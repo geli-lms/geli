@@ -15,13 +15,21 @@ const app = new Server().app;
 const BASE_URL = '/api/media';
 const testHelper = new TestHelper(BASE_URL);
 
+/**
+ * Common unit test setup helper function.
+ */
+async function commonSetup () {
+  const course = await FixtureUtils.getRandomCourse();
+  const teacher = await FixtureUtils.getRandomTeacherForCourse(course);
+  return {course, teacher};
+}
+
 describe('Media', async () => {
   beforeEach(() => testHelper.resetForNextTest());
 
   describe(`GET ${BASE_URL}`, async () => {
-    async function commonGetSetup () {
-      const course = await FixtureUtils.getRandomCourse();
-      const teacher = await FixtureUtils.getRandomTeacherForCourse(course);
+    async function commonGetSetup (withDirectories = true) {
+      const {course, teacher} = await commonSetup();
 
       const file = await new File({
         _course: course._id.toString(),
@@ -29,11 +37,11 @@ describe('Media', async () => {
         link: 'test/a',
         size: 129
       }).save();
-      const subDirectory = await new Directory({
+      const subDirectory = withDirectories && await new Directory({
         _course: course._id.toString(),
         name: 'sub'
       }).save();
-      const rootDirectory = await new Directory({
+      const rootDirectory = withDirectories && await new Directory({
         _course: course._id.toString(),
         name: 'root',
         subDirectories: [subDirectory],
@@ -44,7 +52,7 @@ describe('Media', async () => {
     }
 
     it('should get a directory', async () => {
-      const {teacher, file, subDirectory, rootDirectory} = await commonGetSetup();
+      const {teacher, file, subDirectory, rootDirectory} = await commonGetSetup(true);
 
       const result = await testHelper.commonUserGetRequest(teacher, `/directory/${rootDirectory.id}`);
       result.status.should.be.equal(200,
@@ -60,7 +68,7 @@ describe('Media', async () => {
     });
 
     it('should get a populated directory', async () => {
-      const {teacher, file, subDirectory, rootDirectory} = await commonGetSetup();
+      const {teacher, file, subDirectory, rootDirectory} = await commonGetSetup(true);
 
       const result = await testHelper.commonUserGetRequest(teacher, `/directory/${rootDirectory.id}/lazy`);
       result.status.should.be.equal(200,
@@ -85,7 +93,7 @@ describe('Media', async () => {
     });
 
     it('should get a file', async () => {
-      const {teacher, file} = await commonGetSetup();
+      const {teacher, file} = await commonGetSetup(false);
 
       const result = await testHelper.commonUserGetRequest(teacher, `/file/${file.id}`);
       result.status.should.be.equal(200,
@@ -99,12 +107,22 @@ describe('Media', async () => {
   });
 
   describe(`POST ${BASE_URL}`, async () => {
-    it('should create a root directory', async () => {
-      const teacher = await FixtureUtils.getRandomTeacher();
+    async function commonPostSetup () {
+      const {course, teacher} = await commonSetup();
 
+      const subDirectory = await new Directory({
+        name: 'sub'
+      });
       const rootDirectory = new Directory({
+        _course: course._id.toString(),
         name: 'root'
       });
+
+      return {course, teacher, subDirectory, rootDirectory};
+    }
+
+    it('should create a root directory', async () => {
+      const {teacher, rootDirectory} = await commonPostSetup();
 
       const result = await testHelper.commonUserPostRequest(teacher, '/directory', rootDirectory);
       result.status.should.be.equal(200,
@@ -118,15 +136,8 @@ describe('Media', async () => {
     });
 
     it('should create a sub directory', async () => {
-      const teacher = await FixtureUtils.getRandomTeacher();
-
-      const rootDirectory = await new Directory({
-        name: 'root'
-      }).save();
-
-      const subDirectory = await new Directory({
-        name: 'sub'
-      });
+      const {teacher, rootDirectory, subDirectory} = await commonPostSetup();
+      await rootDirectory.save();
 
       const result = await testHelper.commonUserPostRequest(teacher, `/directory/${rootDirectory._id}`, subDirectory);
       result.status.should.be.equal(200,
@@ -146,11 +157,8 @@ describe('Media', async () => {
     });
 
     it('should upload a file', async () => {
-      const teacher = await FixtureUtils.getRandomTeacher();
-
-      const rootDirectory = await new Directory({
-        name: 'root'
-      }).save();
+      const {teacher, rootDirectory} = await commonPostSetup();
+      await rootDirectory.save();
 
       const testFileName = 'test_file.txt';
       const testFile = fs.readFileSync('./test/resources/' + testFileName);
@@ -179,11 +187,8 @@ describe('Media', async () => {
 
 
     it('should upload a file without extension', async () => {
-      const teacher = await FixtureUtils.getRandomTeacher();
-
-      const rootDirectory = await new Directory({
-        name: 'root'
-      }).save();
+      const {teacher, rootDirectory} = await commonPostSetup();
+      await rootDirectory.save();
 
       const testFileName = 'test_file_without_extension';
       const testFile = fs.readFileSync('./test/resources/' + testFileName);
@@ -212,12 +217,30 @@ describe('Media', async () => {
   });
 
   describe(`PUT ${BASE_URL}`, async () => {
-    it('should rename a directory', async () => {
-      const teacher = await FixtureUtils.getRandomTeacher();
+    async function commonPutSetup () {
+      const {course, teacher} = await commonSetup();
 
-      const rootDirectory = await new Directory({
+      const file = new File({
+        _course: course._id.toString(),
+        name: 'file',
+        link: 'test/a',
+        size: 129
+      });
+      const subDirectory = await new Directory({
+        _course: course._id.toString(),
+        name: 'sub'
+      });
+      const rootDirectory = new Directory({
+        _course: course._id.toString(),
         name: 'root'
-      }).save();
+      });
+
+      return {course, teacher, file, subDirectory, rootDirectory};
+    }
+
+    it('should rename a directory', async () => {
+      const {teacher, rootDirectory} = await commonPutSetup();
+      await rootDirectory.save();
 
       const renamedDirectory = rootDirectory;
       renamedDirectory.name = 'renamedRoot';
@@ -235,13 +258,8 @@ describe('Media', async () => {
     });
 
     it('should rename a file', async () => {
-      const teacher = await FixtureUtils.getRandomTeacher();
-
-      const file = await new File({
-        name: 'file',
-        link: 'test/a',
-        size: 129
-      }).save();
+      const {teacher, file} = await commonPutSetup();
+      await file.save();
 
       const renamedFile = file;
       file.name = 'renamedFile';
@@ -258,16 +276,47 @@ describe('Media', async () => {
   });
 
   describe(`DELETE ${BASE_URL}`, async () => {
-    it('should delete a directory', async () => {
-      const teacher = await FixtureUtils.getRandomTeacher();
+    async function commonDeleteSetup () {
+      const {course, teacher} = await commonSetup();
 
       const subDirectory = await new Directory({
+        _course: course._id.toString(),
         name: 'sub'
       }).save();
       const rootDirectory = await new Directory({
+        _course: course._id.toString(),
         name: 'root',
         subDirectories: [subDirectory],
       }).save();
+
+      return {course, teacher, subDirectory, rootDirectory};
+    }
+
+    async function commonDeleteFileSetup (withRootDirectory = true) {
+      const {course, teacher} = await commonSetup();
+
+      const testFileName = fs.readdirSync('./')[0];
+      const testFile = fs.readFileSync(testFileName);
+      fs.copyFileSync(testFileName, config.uploadFolder + '/test.file');
+
+      const file = await new File({
+        _course: course._id.toString(),
+        name: 'root',
+        physicalPath: config.uploadFolder + '/test.file',
+        link: testFileName,
+        size: testFile.length
+      }).save();
+      const rootDirectory = withRootDirectory && await new Directory({
+        _course: course._id.toString(),
+        name: 'root',
+        files: [file]
+      }).save();
+
+      return {course, teacher, file, rootDirectory};
+    }
+
+    it('should delete a directory', async () => {
+      const {teacher, rootDirectory} = await commonDeleteSetup();
 
       const result = await testHelper.commonUserDeleteRequest(teacher, `/directory/${rootDirectory._id}`);
       result.status.should.be.equal(200,
@@ -277,15 +326,7 @@ describe('Media', async () => {
     });
 
     it('should delete a directory and its subdirectories', async () => {
-      const teacher = await FixtureUtils.getRandomTeacher();
-
-      const subDirectory = await new Directory({
-        name: 'sub'
-      }).save();
-      const rootDirectory = await new Directory({
-        name: 'root',
-        subDirectories: [subDirectory],
-      }).save();
+      const {teacher, subDirectory, rootDirectory} = await commonDeleteSetup();
 
       const result = await testHelper.commonUserDeleteRequest(teacher, `/directory/${rootDirectory._id}`);
       result.status.should.be.equal(200,
@@ -297,22 +338,7 @@ describe('Media', async () => {
 
 
     it('should delete a directory and its files', async () => {
-      const teacher = await FixtureUtils.getRandomTeacher();
-
-      const testFileName = fs.readdirSync('./')[0];
-      const testFile = fs.readFileSync(testFileName);
-      fs.copyFileSync(testFileName, config.uploadFolder + '/test.file');
-
-      const file = await new File({
-        name: 'root',
-        physicalPath: config.uploadFolder + '/test.file',
-        link: testFileName,
-        size: testFile.length
-      }).save();
-      const rootDirectory = await new Directory({
-        name: 'root',
-        files: [file]
-      }).save();
+      const {teacher, file, rootDirectory} = await commonDeleteFileSetup(true);
 
       const result = await testHelper.commonUserDeleteRequest(teacher, `/directory/${rootDirectory._id}`);
       result.status.should.be.equal(200,
@@ -323,18 +349,7 @@ describe('Media', async () => {
     });
 
     it('should delete a file', async () => {
-      const teacher = await FixtureUtils.getRandomTeacher();
-
-      const testFileName = fs.readdirSync('./')[0];
-      const testFile = fs.readFileSync(testFileName);
-      fs.copyFileSync(testFileName, config.uploadFolder + '/test.file');
-
-      const file = await new File({
-        name: 'root',
-        physicalPath: config.uploadFolder + '/test.file',
-        link: testFileName,
-        size: testFile.length
-      }).save();
+      const {teacher, file} = await commonDeleteFileSetup(false);
 
       const result = await testHelper.commonUserDeleteRequest(teacher, `/file/${file._id}`);
       result.status.should.be.equal(200,
