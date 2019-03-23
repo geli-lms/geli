@@ -131,10 +131,7 @@ export class MediaController {
   @Authorized(['teacher', 'admin'])
   @Delete('/directory/:id')
   async deleteDirectory(@Param('id') directoryId: string, @CurrentUser() currentUser: IUser) {
-    const directoryToDelete = await Directory.findById(directoryId);
-    if (!directoryToDelete) {
-      throw new NotFoundError();
-    }
+    const directoryToDelete = await Directory.findById(directoryId).orFail(new NotFoundError());
     await this.checkCoursePrivilegesFor(directoryToDelete, currentUser, 'userCanEditCourse');
     await directoryToDelete.remove();
 
@@ -144,10 +141,7 @@ export class MediaController {
   @Authorized(['teacher', 'admin'])
   @Delete('/file/:id')
   async deleteFile(@Param('id') fileId: string, @CurrentUser() currentUser: IUser) {
-    const fileToDelete = await File.findById(fileId);
-    if (!fileToDelete) {
-      throw new NotFoundError();
-    }
+    const fileToDelete = await File.findById(fileId).orFail(new NotFoundError());
     await this.checkCoursePrivilegesFor(fileToDelete, currentUser, 'userCanEditCourse');
     await fileToDelete.remove();
 
