@@ -261,10 +261,9 @@ export class DownloadController {
       lecCounter++;
     }
 
-    return new Promise((resolve, reject) => {
-      archive.on('error', (err: Error) => reject(err));
+    return new Promise((resolve) => {
+      output.on('end', () => resolve(hash));
       archive.finalize();
-      archive.on('end', () => resolve(hash));
     });
   }
 
@@ -414,10 +413,9 @@ export class DownloadController {
     const buffer = await this.createPdf(html, options);
     await this.appendBuffer(archive, buffer, name);
 
-    return new Promise((resolve, reject) => {
-      archive.on('error', (err: Error) => reject(err));
+    return new Promise((resolve) => {
+      output.on('end', () => resolve(hash));
       archive.finalize();
-      archive.on('end', () => resolve(hash));
     });
   }
 
@@ -444,7 +442,7 @@ export class DownloadController {
   private appendBuffer(archive: Archiver, data: Buffer, name: string): Promise<void> {
     return new Promise<void>((resolve, reject) => {
       archive.on('entry', () => resolve());
-      archive.on('error', () => reject());
+      archive.on('error', (err: Error) => reject(err));
       archive.append(data, {name});
     });
   }
