@@ -168,8 +168,8 @@ export class AssignmentUnitComponent implements OnInit {
   }
 
   public submitAssignment() {
-    this.assignmentUnit.assignments[0].submitted = true;
-    this.assignmentService.updateAssignment(this.assignmentUnit.assignments[0], this.assignmentUnit._id.toString());
+    this.assignment.submitted = true;
+    this.assignmentService.updateAssignment(this.assignment, this.assignmentUnit._id.toString());
   }
 
   public async downloadAllAssignments() {
