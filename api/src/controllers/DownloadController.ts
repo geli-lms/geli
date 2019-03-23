@@ -88,11 +88,9 @@ export class DownloadController {
     for (const lec of pack.lectures) {
       for (const unit of lec.units) {
 
-        const localUnit = await Unit.findOne({_id: unit.unitId});
-
-        if (localUnit === null) {
-          throw new NotFoundError();
-        }
+        const localUnit = await Unit
+          .findOne({_id: unit.unitId})
+          .orFail(new NotFoundError());
 
         if (localUnit.__t === 'file') {
           const fileUnit = <IFileUnit><any>localUnit;
@@ -107,8 +105,7 @@ export class DownloadController {
         }
       }
     }
-    const size = {totalSize: localTotalSize, tooLargeFiles: localTooLargeFiles};
-    return size;
+    return {totalSize: localTotalSize, tooLargeFiles: localTooLargeFiles};
   }
 
   /**
