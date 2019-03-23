@@ -8,6 +8,7 @@ import chaiHttp = require('chai-http');
 import {IDownload} from '../../../shared/models/IDownload';
 import {IUser} from '../../../shared/models/IUser';
 import {Lecture} from '../../src/models/Lecture';
+import {ICourse} from '../../../shared/models/ICourse';
 
 chai.use(chaiHttp);
 const should = chai.should();
@@ -16,6 +17,26 @@ const expect = chai.expect;
 const app = new Server().app;
 const BASE_URL = '/api/download';
 const fixtureLoader = new FixtureLoader();
+
+/**
+ * Prepare test data
+ * @param course
+ */
+async function prepareTestData(course: ICourse) {
+  const lectures: any[] = [];
+  for (const lectureId of course.lectures) {
+    const lecture = await Lecture.findById(lectureId);
+    const units: any[] = [];
+    for (const unitId of lecture.units) {
+      units.push({unitId});
+    }
+    lectures.push({lectureId, units});
+  }
+  return {
+    'courseName': course._id,
+    'lectures': lectures
+  };
+}
 
 describe('DownloadFile', () => {
   // Before each test we reset the database
@@ -162,24 +183,7 @@ describe('DownloadFile', () => {
     it('should pass (course admin)', async () => {
       const course = await FixtureUtils.getRandomCourseWithAllUnitTypes();
       const teacher = await User.findById(course.courseAdmin);
-      const lectures: any[] = [];
-      for (const lec of course.lectures) {
-        const lecture = await Lecture.findById(lec);
-        const units: any[] = [];
-        for (const unitId of lecture.units) {
-          const temp: any = {};
-          temp['unitId'] = unitId;
-          units.push(temp);
-        }
-        const tempLec: any = {};
-        tempLec['lectureId'] = lec;
-        tempLec['units'] = units;
-        lectures.push(tempLec);
-      }
-      const testData = {
-        'courseName': course._id,
-        'lectures': lectures
-      };
+      const testData = await prepareTestData(course);
       const res = await chai.request(app)
         .post(BASE_URL + '/pdf/individual')
         .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
@@ -191,24 +195,7 @@ describe('DownloadFile', () => {
     it('should pass (student)', async () => {
       const course = await FixtureUtils.getRandomCourseWithAllUnitTypes();
       const student = await User.findById(course.students.pop());
-      const lectures: any[] = [];
-      for (const lec of course.lectures) {
-        const lecture = await Lecture.findById(lec);
-        const units: any[] = [];
-        for (const unitId of lecture.units) {
-          const temp: any = {};
-          temp['unitId'] = unitId;
-          units.push(temp);
-        }
-        const tempLec: any = {};
-        tempLec['lectureId'] = lec;
-        tempLec['units'] = units;
-        lectures.push(tempLec);
-      }
-      const testData = {
-        'courseName': course._id,
-        'lectures': lectures
-      };
+      const testData = await prepareTestData(course);
       const res = await chai.request(app)
         .post(BASE_URL + '/pdf/individual')
         .set('Cookie', `token=${JwtUtils.generateToken(student)}`)
@@ -220,24 +207,7 @@ describe('DownloadFile', () => {
     it('should pass (teacher)', async () => {
       const course = await FixtureUtils.getRandomCourseWithAllUnitTypes();
       const teacher = await User.findById(course.teachers.pop());
-      const lectures: any[] = [];
-      for (const lec of course.lectures) {
-        const lecture = await Lecture.findById(lec);
-        const units: any[] = [];
-        for (const unitId of lecture.units) {
-          const temp: any = {};
-          temp['unitId'] = unitId;
-          units.push(temp);
-        }
-        const tempLec: any = {};
-        tempLec['lectureId'] = lec;
-        tempLec['units'] = units;
-        lectures.push(tempLec);
-      }
-      const testData = {
-        'courseName': course._id,
-        'lectures': lectures
-      };
+      const testData = await prepareTestData(course);
       const res = await chai.request(app)
         .post(BASE_URL + '/pdf/individual')
         .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
