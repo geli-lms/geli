@@ -97,7 +97,7 @@ export class FixtureLoader {
       // assign random courseAdmin
       const teacher = await FixtureUtils.getRandomTeacher(hash);
       // assign random courseTeachers
-      course.teachers = await FixtureUtils.getRandomTeachers(0, 2, hash);
+      course.teachers = await FixtureUtils.getRandomTeachers(1, 3, hash);
       // enroll random array of Students
       course.students = await FixtureUtils.getRandomStudents(2, 10, hash);
       // enroll random array of WhitelistUsers
@@ -113,7 +113,7 @@ export class FixtureLoader {
     }));
 
     // import messages
-    this.loadMessages();
+    await this.loadMessages();
 
     // import files
     const fileUnits = await Unit.find({files: {$exists: true}});
