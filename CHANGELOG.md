@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - `ProgressController` `GET` unit tests & access denial tests in general. [#1116](https://github.com/geli-lms/geli/issues/1116)
 - `UnitController` `GET` & `DELETE` route unit tests for status code `200`. [#1190](https://github.com/geli-lms/geli/issues/1190)
 - `UnitController` status code `403` (not authorized to view / edit course) unit tests for all routes. [#1190](https://github.com/geli-lms/geli/issues/1190)
+- `WhitelistController` status code `403` unit tests for all routes. [#1192](https://github.com/geli-lms/geli/issues/1192)
 
 ### Changed
 - Extend `ProgressController` `PUT` route to handle both creation and updates. [#1116](https://github.com/geli-lms/geli/issues/1116)
@@ -26,6 +27,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Removed
 - Unused `ProgressController` `GET` routes for `/courses/` & `/users/`. [#1116](https://github.com/geli-lms/geli/issues/1116)
 - `ProgressController` `POST` route _(obviated by extended `PUT` route)_. [#1116](https://github.com/geli-lms/geli/issues/1116)
+- Unused `WhitelistController` `PUT` route. [#1192](https://github.com/geli-lms/geli/issues/1192)
 
 ### Fixed
 - `TaskUnitComponent.validate` `validationMode` reset. [#1116](https://github.com/geli-lms/geli/issues/1116)
@@ -34,6 +36,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Security
 - Close `ProgressController` vulnerabilities. [#1116](https://github.com/geli-lms/geli/issues/1116)
 - Close `UnitController` vulnerabilities. [#1190](https://github.com/geli-lms/geli/issues/1190)
+- Close `WhitelistController` vulnerabilities. [#1192](https://github.com/geli-lms/geli/issues/1192)
 
 ## [[0.8.4](https://github.com/geli-lms/geli/releases/tag/v0.8.4)] - 2018-12-20 - WS 18/19 ❄️-Release
 ### Added
