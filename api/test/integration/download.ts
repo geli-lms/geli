@@ -34,16 +34,16 @@ describe('DownloadFile', () => {
     const courseAdmin = await User.findById(course.courseAdmin);
     const downloadRequestData: IDownload = {
       courseName: course._id,
-      lectures: [{ lectureId: lecture._id, units: [{ unitId: unit._id }] }]
+      lectures: [{lectureId: lecture._id, units: [{unitId: unit._id}]}]
     };
 
     const res = await chai.request(app)
-      .post(BASE_URL  + '/pdf/single')
+      .post(BASE_URL + '/pdf/single')
       .set('Cookie', `token=${JwtUtils.generateToken(courseAdmin)}`)
       .send(downloadRequestData)
       .catch(err => err.response);
     res.status.should.be.equal(200);
-    return { postRes: res, courseAdmin };
+    return {postRes: res, courseAdmin};
   }
 
   function requestCleanup(user: IUser) {
@@ -61,7 +61,7 @@ describe('DownloadFile', () => {
 
   describe(`GET ${BASE_URL}`, () => {
     it('should succeed for some valid input with prior POST', async () => {
-      const { postRes, courseAdmin } = await postValidRequest();
+      const {postRes, courseAdmin} = await postValidRequest();
       postRes.body.should.not.be.empty;
 
       const res = await chai.request(app)
@@ -72,7 +72,7 @@ describe('DownloadFile', () => {
     });
 
     it('should fail, malignant file id', async () => {
-      const { postRes, courseAdmin } = await postValidRequest();
+      const {postRes, courseAdmin} = await postValidRequest();
       postRes.body.should.not.be.empty;
 
       const res = await chai.request(app)
@@ -102,7 +102,7 @@ describe('DownloadFile', () => {
     });
   });
 
-    describe(`POST ${BASE_URL + '/pdf/individual'}`, () => {
+  describe(`POST ${BASE_URL + '/pdf/individual'}`, () => {
     it('should fail, no auth', async () => {
       const res = await chai.request(app)
         .post(BASE_URL + '/pdf/individual')
@@ -159,14 +159,14 @@ describe('DownloadFile', () => {
         .catch(err => err.response);
       res.status.should.be.equal(500);
     });
-    it('should pass', async () => {
+    it('should pass (course admin)', async () => {
       const course = await FixtureUtils.getRandomCourseWithAllUnitTypes();
       const teacher = await User.findById(course.courseAdmin);
       const lectures: any[] = [];
       for (const lec of course.lectures) {
         const lecture = await Lecture.findById(lec);
-        const units: any[]  = [];
-        for ( const unitId of lecture.units) {
+        const units: any[] = [];
+        for (const unitId of lecture.units) {
           const temp: any = {};
           temp['unitId'] = unitId;
           units.push(temp);
@@ -183,6 +183,35 @@ describe('DownloadFile', () => {
       const res = await chai.request(app)
         .post(BASE_URL + '/pdf/individual')
         .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
+        .send(testData)
+        .catch(err => err.response);
+      expect(res).to.have.status(200);
+      expect(res).to.be.json;
+    }).timeout(30000);
+    it('should pass (student)', async () => {
+      const course = await FixtureUtils.getRandomCourseWithAllUnitTypes();
+      const student = await User.findById(course.students.pop());
+      const lectures: any[] = [];
+      for (const lec of course.lectures) {
+        const lecture = await Lecture.findById(lec);
+        const units: any[] = [];
+        for (const unitId of lecture.units) {
+          const temp: any = {};
+          temp['unitId'] = unitId;
+          units.push(temp);
+        }
+        const tempLec: any = {};
+        tempLec['lectureId'] = lec;
+        tempLec['units'] = units;
+        lectures.push(tempLec);
+      }
+      const testData = {
+        'courseName': course._id,
+        'lectures': lectures
+      };
+      const res = await chai.request(app)
+        .post(BASE_URL + '/pdf/individual')
+        .set('Cookie', `token=${JwtUtils.generateToken(student)}`)
         .send(testData)
         .catch(err => err.response);
       expect(res).to.have.status(200);
