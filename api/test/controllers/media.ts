@@ -67,6 +67,14 @@ describe('Media', async () => {
         .and.contains(file.id);
     });
 
+    it('should fail to get a directory for an unauthorized user', async () => {
+      const {course, rootDirectory} = await commonGetSetup(true);
+      const unauthorizedUser = await FixtureUtils.getUnauthorizedTeacherForCourse(course);
+
+      const result = await testHelper.commonUserGetRequest(unauthorizedUser, `/directory/${rootDirectory.id}`);
+      result.status.should.be.equal(403);
+    });
+
     it('should get a populated directory', async () => {
       const {teacher, file, subDirectory, rootDirectory} = await commonGetSetup(true);
 
@@ -92,6 +100,14 @@ describe('Media', async () => {
       result.body.files[0].link.should.be.equal(file.link);
     });
 
+    it('should fail to get a populated directory for an unauthorized user', async () => {
+      const {course, rootDirectory} = await commonGetSetup(true);
+      const unauthorizedUser = await FixtureUtils.getUnauthorizedTeacherForCourse(course);
+
+      const result = await testHelper.commonUserGetRequest(unauthorizedUser, `/directory/${rootDirectory.id}/lazy`);
+      result.status.should.be.equal(403);
+    });
+
     it('should get a file', async () => {
       const {teacher, file} = await commonGetSetup(false);
 
@@ -103,6 +119,14 @@ describe('Media', async () => {
       result.body.name.should.be.equal(file.name);
       result.body.size.should.be.equal(file.size);
       result.body.link.should.be.equal(file.link);
+    });
+
+    it('should fail to get a file for an unauthorized user', async () => {
+      const {course, file} = await commonGetSetup(false);
+      const unauthorizedUser = await FixtureUtils.getUnauthorizedTeacherForCourse(course);
+
+      const result = await testHelper.commonUserGetRequest(unauthorizedUser, `/file/${file.id}`);
+      result.status.should.be.equal(403);
     });
   });
 
@@ -135,6 +159,14 @@ describe('Media', async () => {
       result.body.files.should.be.instanceOf(Array).and.lengthOf(0);
     });
 
+    it('should fail to create a root directory for an unauthorized teacher', async () => {
+      const {course, rootDirectory} = await commonPostSetup();
+      const unauthorizedTeacher = await FixtureUtils.getUnauthorizedTeacherForCourse(course);
+
+      const result = await testHelper.commonUserPostRequest(unauthorizedTeacher, '/directory', rootDirectory);
+      result.status.should.be.equal(403);
+    });
+
     it('should create a sub directory', async () => {
       const {teacher, rootDirectory, subDirectory} = await commonPostSetup();
       await rootDirectory.save();
@@ -154,6 +186,15 @@ describe('Media', async () => {
       updatedRoot.subDirectories.should.be.instanceOf(Array)
         .and.have.lengthOf(1)
         .and.contains(result.body._id);
+    });
+
+    it('should fail to create a sub directory for an unauthorized teacher', async () => {
+      const {course, rootDirectory, subDirectory} = await commonPostSetup();
+      const unauthorizedTeacher = await FixtureUtils.getUnauthorizedTeacherForCourse(course);
+      await rootDirectory.save();
+
+      const result = await testHelper.commonUserPostRequest(unauthorizedTeacher, `/directory/${rootDirectory._id}`, subDirectory);
+      result.status.should.be.equal(403);
     });
 
     it('should upload a file', async () => {
@@ -214,6 +255,23 @@ describe('Media', async () => {
         .and.have.lengthOf(1)
         .and.contains(result.body._id);
     });
+
+    it('should fail to upload a file for an unauthorized teacher', async () => {
+      const {course, rootDirectory} = await commonPostSetup();
+      const unauthorizedTeacher = await FixtureUtils.getUnauthorizedTeacherForCourse(course);
+      await rootDirectory.save();
+
+      const testFileName = 'test_file.txt';
+      const testFile = fs.readFileSync('./test/resources/' + testFileName);
+
+      const result = await chai.request(app)
+        .post(`${BASE_URL}/file/${rootDirectory._id}`)
+        .set('Cookie', `token=${JwtUtils.generateToken(unauthorizedTeacher)}`)
+        .attach('file', testFile, testFileName)
+        .catch((err) => err.response);
+
+      result.status.should.be.equal(403);
+    });
   });
 
   describe(`PUT ${BASE_URL}`, async () => {
@@ -257,6 +315,18 @@ describe('Media', async () => {
         .and.lengthOf(rootDirectory.files.length);
     });
 
+    it('should fail to update a directory for an unauthorized teacher', async () => {
+      const {course, rootDirectory} = await commonPutSetup();
+      const unauthorizedTeacher = await FixtureUtils.getUnauthorizedTeacherForCourse(course);
+      await rootDirectory.save();
+
+      const renamedDirectory = rootDirectory;
+      renamedDirectory.name = 'renamedRoot';
+
+      const result = await testHelper.commonUserPutRequest(unauthorizedTeacher, `/directory/${rootDirectory._id}`, renamedDirectory);
+      result.status.should.be.equal(403);
+    });
+
     it('should rename a file', async () => {
       const {teacher, file} = await commonPutSetup();
       await file.save();
@@ -272,6 +342,18 @@ describe('Media', async () => {
       result.body.name.should.equal(renamedFile.name);
       result.body.link.should.equal(file.link);
       result.body.size.should.equal(file.size);
+    });
+
+    it('should fail to update a file for an unauthorized teacher', async () => {
+      const {course, file} = await commonPutSetup();
+      const unauthorizedTeacher = await FixtureUtils.getUnauthorizedTeacherForCourse(course);
+      await file.save();
+
+      const renamedFile = file;
+      file.name = 'renamedFile';
+
+      const result = await testHelper.commonUserPutRequest(unauthorizedTeacher, `/file/${file._id}`, renamedFile);
+      result.status.should.be.equal(403);
     });
   });
 
@@ -357,6 +439,22 @@ describe('Media', async () => {
         ' -> ' + result.body.message);
       should.not.exist(await File.findById(file));
       fs.existsSync(config.uploadFolder + '/test.file').should.be.equal(false);
+    });
+
+    it('should fail to delete a directory for an unauthorized teacher', async () => {
+      const {course, rootDirectory} = await commonDeleteSetup();
+      const unauthorizedTeacher = await FixtureUtils.getUnauthorizedTeacherForCourse(course);
+
+      const result = await testHelper.commonUserDeleteRequest(unauthorizedTeacher, `/directory/${rootDirectory._id}`);
+      result.status.should.be.equal(403);
+    });
+
+    it('should fail to delete a file for an unauthorized teacher', async () => {
+      const {course, file} = await commonDeleteFileSetup(false);
+      const unauthorizedTeacher = await FixtureUtils.getUnauthorizedTeacherForCourse(course);
+
+      const result = await testHelper.commonUserDeleteRequest(unauthorizedTeacher, `/file/${file._id}`);
+      result.status.should.be.equal(403);
     });
 
     it('should fail when directory not found', async () => {
