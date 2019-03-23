@@ -85,7 +85,7 @@ export class CourseMediaComponent implements OnInit {
       // Check if course has root dir
       if (this.course.media === undefined) {
         // Root dir does not exist, add one
-        this.course.media = await this.mediaService.createRootDir(this.course.name);
+        this.course.media = await this.mediaService.createRootDir(this.course, this.course.name);
         // Update course
         await this.courseService.updateItem<ICourse>(this.course);
         // Reload course
