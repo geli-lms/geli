@@ -3,7 +3,6 @@ import * as mongoose from 'mongoose';
 import {ObjectId, ObjectID} from 'bson';
 import {IUser} from '../../../../shared/models/IUser';
 import {IUserModel} from '../../models/User';
-import {extractMongoId} from '../../utilities/ExtractMongoId';
 import {ICourseModel} from '../../models/Course';
 
 const brokenChatRoomSchema = new mongoose.Schema({
