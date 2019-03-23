@@ -35,6 +35,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Fixed
 - `TaskUnitComponent.validate` `validationMode` reset. [#1116](https://github.com/geli-lms/geli/issues/1116)
 - `CodeKataComponent` `progress.code` loading. [#1116](https://github.com/geli-lms/geli/issues/1116)
+- Code order in the `MediaController`'s `createDirectory` & `createFile`. [#1196](https://github.com/geli-lms/geli/issues/1196)
 
 ### Security
 - Close `ProgressController` vulnerabilities. [#1116](https://github.com/geli-lms/geli/issues/1116)
