@@ -210,11 +210,9 @@ export class DownloadController {
       let unitCounter = 1;
 
       for (const unit of lec.units) {
-        const localUnit = await Unit.findOne({_id: unit.unitId});
-
-        if (!localUnit) {
-          throw new NotFoundError();
-        }
+        const localUnit = await Unit
+          .findOne({_id: unit.unitId})
+          .orFail(new NotFoundError());
 
         if (localUnit.__t === 'file') {
           for (const fileId of unit.files) {
@@ -368,11 +366,9 @@ export class DownloadController {
       }
 
       for (const unit of lec.units) {
-        const localUnit = await Unit.findOne({_id: unit.unitId});
-
-        if (!localUnit) {
-          throw new NotFoundError();
-        }
+        const localUnit = await Unit
+          .findOne({_id: unit.unitId})
+          .orFail(new NotFoundError());
 
         if (localUnit.__t === 'file') {
           for (const fileId of unit.files) {
