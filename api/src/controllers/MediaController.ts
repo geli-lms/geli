@@ -65,6 +65,7 @@ export class MediaController {
     const savedDirectory = await new Directory(directory).save();
     return savedDirectory.toObject();
   }
+
   @Authorized(['teacher', 'admin'])
   @Post('/directory/:parent')
   async createDirectory(@Param('parent') parentDirectoryId: string, @Body() directory: IDirectory, @CurrentUser() currentUser: IUser) {
