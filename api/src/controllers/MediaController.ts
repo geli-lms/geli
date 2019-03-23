@@ -134,8 +134,7 @@ export class MediaController {
     const directoryToDelete = await Directory.findById(directoryId).orFail(new NotFoundError());
     await this.checkCoursePrivilegesFor(directoryToDelete, currentUser, 'userCanEditCourse');
     await directoryToDelete.remove();
-
-    return {success: true};
+    return {};
   }
 
   @Authorized(['teacher', 'admin'])
@@ -144,8 +143,7 @@ export class MediaController {
     const fileToDelete = await File.findById(fileId).orFail(new NotFoundError());
     await this.checkCoursePrivilegesFor(fileToDelete, currentUser, 'userCanEditCourse');
     await fileToDelete.remove();
-
-    return {success: true};
+    return {};
   }
 
   private async checkCoursePrivilegesFor (
