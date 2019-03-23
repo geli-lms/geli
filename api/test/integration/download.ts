@@ -217,6 +217,35 @@ describe('DownloadFile', () => {
       expect(res).to.have.status(200);
       expect(res).to.be.json;
     }).timeout(30000);
+    it('should pass (teacher)', async () => {
+      const course = await FixtureUtils.getRandomCourseWithAllUnitTypes();
+      const teacher = await User.findById(course.teachers.pop());
+      const lectures: any[] = [];
+      for (const lec of course.lectures) {
+        const lecture = await Lecture.findById(lec);
+        const units: any[] = [];
+        for (const unitId of lecture.units) {
+          const temp: any = {};
+          temp['unitId'] = unitId;
+          units.push(temp);
+        }
+        const tempLec: any = {};
+        tempLec['lectureId'] = lec;
+        tempLec['units'] = units;
+        lectures.push(tempLec);
+      }
+      const testData = {
+        'courseName': course._id,
+        'lectures': lectures
+      };
+      const res = await chai.request(app)
+        .post(BASE_URL + '/pdf/individual')
+        .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
+        .send(testData)
+        .catch(err => err.response);
+      expect(res).to.have.status(200);
+      expect(res).to.be.json;
+    }).timeout(30000);
   });
 
   describe(`POST ${BASE_URL + '/pdf/single'}`, () => {
