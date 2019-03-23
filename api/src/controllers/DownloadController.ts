@@ -257,7 +257,7 @@ export class DownloadController {
     }
 
     return new Promise((resolve) => {
-      output.on('end', () => resolve(hash));
+      archive.on('end', () => resolve(hash));
       archive.finalize();
     });
   }
@@ -407,7 +407,7 @@ export class DownloadController {
     await this.appendBuffer(archive, buffer, name);
 
     return new Promise((resolve) => {
-      output.on('end', () => resolve(hash));
+      archive.on('end', () => resolve(hash));
       archive.finalize();
     });
   }
