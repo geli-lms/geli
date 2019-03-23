@@ -171,7 +171,7 @@ describe('DownloadFile', () => {
       const teacher = await User.findById(course.courseAdmin);
       const testData = {
         courseName: course._id,
-        'lectures': Array
+        lectures: Array,
       };
       const res = await chai.request(app)
         .post(BASE_URL + '/pdf/individual')
