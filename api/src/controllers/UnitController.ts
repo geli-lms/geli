@@ -3,7 +3,8 @@ import {
   Authorized, CurrentUser, UploadedFile, Res, UploadedFiles, InternalServerError
 } from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
-
+import {errorCodes} from '../config/errorCodes';
+import {Course} from '../models/Course';
 import {Lecture} from '../models/Lecture';
 import {IUnitModel, Unit, AssignmentUnit} from '../models/units/Unit';
 import {IUser} from '../../../shared/models/IUser';
@@ -55,38 +56,6 @@ export class UnitController {
       archive.finalize();
     });
   }
-
-  protected pushToLecture(lectureId: string, unit: any) {
-    return Lecture.findById(lectureId)
-      .then((lecture) => {
-        lecture.units.push(unit);
-        return lecture.save();
-      })
-      .then(() => {
-        return unit.populateUnit();
-      })
-      .then((populatedUnit) => {
-        return populatedUnit.toObject();
-      })
-      .catch((err) => {
-        throw new BadRequestError(err);
-      });
-  }
-
-  protected checkPostParam(data: any) {
-    if (!data.lectureId) {
-      throw new BadRequestError('No lecture ID was submitted.');
-    }
-
-    if (!data.model) {
-      throw new BadRequestError('No unit was submitted.');
-    }
-
-    if (!data.model._course) {
-      throw new BadRequestError('Unit has no _course set');
-    }
-  }
-
   /**
    * @api {get} /api/units/:id Request unit
    * @apiName GetUnit
@@ -109,13 +78,13 @@ export class UnitController {
    *         "type": "free-text",
    *         "__v": 0
    *     }
+   *
+   * @apiError NotFoundError
+   * @apiError ForbiddenError
    */
   @Get('/:id')
-  async getUnit(@Param('id') id: string) {
-    const unit = await Unit.findById(id);
-    if (!unit) {
-      throw new NotFoundError();
-    }
+  async getUnit(@Param('id') id: string, @CurrentUser() currentUser: IUser) {
+    const unit = await this.getUnitFor(id, currentUser, 'userCanViewCourse');
     return unit.toObject();
   }
 
@@ -150,6 +119,7 @@ export class UnitController {
    * @apiError BadRequestError No unit was submitted.
    * @apiError BadRequestError Unit has no _course set.
    * @apiError BadRequestError
+   * @apiError ForbiddenError
    * @apiError ValidationError
    */
   @Authorized(['teacher', 'admin'])
@@ -157,6 +127,12 @@ export class UnitController {
   async addUnit(@Body() data: any, @CurrentUser() currentUser: IUser) {
     // discard invalid requests
     this.checkPostParam(data);
+
+    const course = await Course.findById(data.model._course);
+    if (!course.checkPrivileges(currentUser).userCanEditCourse) {
+      throw new ForbiddenError();
+    }
+
     // Set current user as creator, old unit's dont have a creator
     data.model.unitCreator = currentUser._id;
     try {
@@ -197,19 +173,16 @@ export class UnitController {
    *         "__v": 0
    *     }
    *
-   * @apiError NotFoundError
    * @apiError BadRequestError Invalid combination of file upload and unit data.
    * @apiError BadRequestError
+   * @apiError NotFoundError
+   * @apiError ForbiddenError
    * @apiError ValidationError
    */
   @Authorized(['teacher', 'admin'])
   @Put('/:id')
-  async updateUnit(@Param('id') id: string, @Body() data: any) {
-    const oldUnit: IUnitModel = await Unit.findById(id);
-
-    if (!oldUnit) {
-      throw new NotFoundError();
-    }
+  async updateUnit(@Param('id') id: string, @Body() data: any, @CurrentUser() currentUser: IUser) {
+    const oldUnit = await this.getUnitFor(id, currentUser, 'userCanEditCourse');
 
     try {
       oldUnit.set(data);
@@ -233,29 +206,33 @@ export class UnitController {
    *
    * @apiParam {String} id Unit ID.
    *
-   * @apiSuccess {Boolean} result Confirmation of deletion.
+   * @apiSuccess {Object} result Empty object.
    *
    * @apiSuccessExample {json} Success-Response:
-   *     {
-   *         "result": true
-   *     }
+   *     {}
    *
    * @apiError NotFoundError
+   * @apiError ForbiddenError
    */
   @Authorized(['teacher', 'admin'])
   @Delete('/:id')
-  deleteUnit(@Param('id') id: string) {
-    return Unit.findById(id).then((unit) => {
-      if (!unit) {
-        throw new NotFoundError();
-      }
+  async deleteUnit(@Param('id') id: string, @CurrentUser() currentUser: IUser) {
+    const unit = await this.getUnitFor(id, currentUser, 'userCanEditCourse');
 
-      return Lecture.updateMany({}, {$pull: {units: id}})
-        .then(() => unit.remove())
-        .then(() => {
-          return {result: true};
-        });
-    });
+    await Lecture.updateMany({}, {$pull: {units: id}});
+    await unit.remove();
+    return {};
+  }
+
+  private async getUnitFor (unitId: string, currentUser: IUser, privilege: 'userCanViewCourse' | 'userCanEditCourse') {
+    const unit = await Unit.findById(unitId).orFail(new NotFoundError());
+
+    const course = await Course.findById(unit._course);
+    if (!course.checkPrivileges(currentUser)[privilege]) {
+      throw new ForbiddenError();
+    }
+
+    return unit;
   }
 
   /**
@@ -640,5 +617,36 @@ export class UnitController {
     await promisify<string, void>(response.download.bind(response))(filepath);
 
     return response;
+  }
+
+  private pushToLecture(lectureId: string, unit: any) {
+    return Lecture.findById(lectureId)
+      .then((lecture) => {
+        lecture.units.push(unit);
+        return lecture.save();
+      })
+      .then(() => {
+        return unit.populateUnit();
+      })
+      .then((populatedUnit) => {
+        return populatedUnit.toObject();
+      })
+      .catch((err) => {
+        throw new BadRequestError(err);
+      });
+  }
+
+  private checkPostParam(data: any) {
+    if (!data.lectureId) {
+      throw new BadRequestError(errorCodes.unit.postMissingLectureId.text);
+    }
+
+    if (!data.model) {
+      throw new BadRequestError(errorCodes.unit.postMissingUnit.text);
+    }
+
+    if (!data.model._course) {
+      throw new BadRequestError(errorCodes.unit.postMissingCourse.text);
+    }
   }
 }
