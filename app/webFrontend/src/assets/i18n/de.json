@@ -405,7 +405,8 @@
       "notRated": "Nicht gewertet",
       "failed": "Durchgefallen",
       "accepted": "Bestanden",
-      "numberOfFiles": "{{filesCount}} Datei(en)"
+      "numberOfFiles": "{{filesCount}} Datei(en)",
+      "errorDownload": "Beim Download ist ein Fehler aufgetreten. Versuchen Sie es später erneut."
     }
   },
   "user": {

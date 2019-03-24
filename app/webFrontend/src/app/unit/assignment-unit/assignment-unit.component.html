@@ -56,79 +56,82 @@
     {{ 'unit.assignment.performanceReasons' | translate }}
   </p>
 
-  <table class="w-100">
-    <tr class="heading-row">
-      <td>
-        {{ 'common.roles.student' | translate }}
-      </td>
-      <td>
-        {{ 'common.submitted' | translate}}
-      </td>
-      <td>
-        {{ 'file.text.files' | translate }}
-      </td>
-      <td>&nbsp;</td>
-      <td>
-        {{ 'common.status' | translate }}
-      </td>
-    </tr>
-    <tr class="content-row" *ngFor="let assignment of this.assignmentUnit.assignments;">
-      <td class="{{!assignment.submitted ? 'not-submitted' : ''}}">
-        {{assignment.user.profile.firstName}} {{assignment.user.profile.lastName}}
-      </td>
-      <td class="{{!assignment.submitted ? 'not-submitted' : ''}}">
+  <div class="table-responsive">
+
+    <table class="w-100">
+      <tr class="heading-row">
+        <td>
+          {{ 'common.roles.student' | translate }}
+        </td>
+        <td>
+          {{ 'common.submitted' | translate}}
+        </td>
+        <td>
+          {{ 'file.text.files' | translate }}
+        </td>
+        <td>&nbsp;</td>
+        <td>
+          {{ 'common.status' | translate }}
+        </td>
+      </tr>
+      <tr class="content-row" *ngFor="let assignment of this.assignmentUnit.assignments;">
+        <td class="{{!assignment.submitted ? 'not-submitted' : ''}}">
+          {{assignment.user.profile.firstName}} {{assignment.user.profile.lastName}}
+        </td>
+        <td class="{{!assignment.submitted ? 'not-submitted' : ''}}">
         <span *ngIf="assignment.checked !== -1">
           {{getHumanReadableDate(assignment.submittedDate)}}
         </span>
 
-        <span *ngIf="assignment.checked === -1">
+          <span *ngIf="assignment.checked === -1">
           -
         </span>
-      </td>
-      <td class="{{!assignment.submitted ? 'not-submitted' : ''}}">
-        <mat-expansion-panel>
-          <mat-expansion-panel-header>
-            <mat-panel-title>
-              Dateien anzeigen
-            </mat-panel-title>
-            <mat-panel-description>
-              {{ 'unit.assignment.numberOfFiles' | translate:{filesCount: assignment.files.length} }}
-            </mat-panel-description>
-          </mat-expansion-panel-header>
-          <ng-container *ngFor="let file of assignment.files">
-            <a href="{{ '/api/uploads/' + file.link }}"
-               download="{{file.name}}">{{file.name}}</a><br/>
-          </ng-container>
-        </mat-expansion-panel>
-      </td>
-      <td>
-        <button mat-raised-button color="primary" [disabled]="this.disableDownloadButton" (click)="downloadSingleAssignment(assignment)">
-          {{ 'common.download' | translate }}
-        </button>
-      </td>
-
-      <td *ngIf="assignment.submitted; else notSubmitted">
-        <mat-form-field>
-          <mat-select placeholder="{{ 'common.status' | translate }}" value="{{assignment.checked}}">
-            <mat-option (click)="submitStatusChange(assignment._id, -1)" value={{-1}}>
-              {{ 'unit.assignment.notRated' | translate }}
-            </mat-option>
-            <mat-option (click)="submitStatusChange(assignment._id, 0)" value={{0}}>
-              {{ 'unit.assignment.failed' | translate }}
-            </mat-option>
-            <mat-option (click)="submitStatusChange(assignment._id, 1)" value={{1}}>
-              {{ 'unit.assignment.accepted' | translate }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </td>
-      <ng-template #notSubmitted>
-        <td class="{{!assignment.submitted ? 'not-submitted' : ''}}">
-          {{ 'unit.assignment.notSubmitted' | translate }}
         </td>
-      </ng-template>
-    </tr>
-  </table>
+        <td class="{{!assignment.submitted ? 'not-submitted' : ''}}">
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Dateien anzeigen
+              </mat-panel-title>
+              <mat-panel-description>
+                {{ 'unit.assignment.numberOfFiles' | translate:{filesCount: assignment.files.length} }}
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <ng-container *ngFor="let file of assignment.files">
+              <a href="{{ '/api/uploads/' + file.link }}"
+                 download="{{file.name}}">{{file.name}}</a><br/>
+            </ng-container>
+          </mat-expansion-panel>
+        </td>
+        <td>
+          <button mat-raised-button color="primary" [disabled]="this.disableDownloadButton" (click)="downloadSingleAssignment(assignment)">
+            {{ 'common.download' | translate }}
+          </button>
+        </td>
+
+        <td *ngIf="assignment.submitted; else notSubmitted">
+          <mat-form-field>
+            <mat-select placeholder="{{ 'common.status' | translate }}" value="{{assignment.checked}}">
+              <mat-option (click)="submitStatusChange(assignment._id, -1)" value={{-1}}>
+                {{ 'unit.assignment.notRated' | translate }}
+              </mat-option>
+              <mat-option (click)="submitStatusChange(assignment._id, 0)" value={{0}}>
+                {{ 'unit.assignment.failed' | translate }}
+              </mat-option>
+              <mat-option (click)="submitStatusChange(assignment._id, 1)" value={{1}}>
+                {{ 'unit.assignment.accepted' | translate }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </td>
+        <ng-template #notSubmitted>
+          <td class="{{!assignment.submitted ? 'not-submitted' : ''}}">
+            {{ 'unit.assignment.notSubmitted' | translate }}
+          </td>
+        </ng-template>
+      </tr>
+    </table>
+  </div>
 
 </ng-container>
 

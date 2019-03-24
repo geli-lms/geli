@@ -1,6 +1,6 @@
 import {
   Body, Get, Put, Delete, Param, JsonController, UseBefore, NotFoundError, BadRequestError, Post,
-  Authorized, CurrentUser, UploadedFile, Res, UploadedFiles, InternalServerError
+  Authorized, CurrentUser, UploadedFile, Res, UploadedFiles, InternalServerError, ForbiddenError
 } from 'routing-controllers';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
 import {errorCodes} from '../config/errorCodes';
@@ -502,16 +502,16 @@ export class UnitController {
    *         "__v": 0
    *     }
    */
-  @Get('/:id/assignments/:assignment/files')
+  @Get('/:id/assignments/:user/files')
   @Authorized(['teacher'])
-  async downloadFilesOfSingleAssignment(@Param('id') id: string, @Param('assignment') assignmentId: string, @Res() response: Response) {
+  async downloadFilesOfSingleAssignment(@Param('id') id: string, @Param('user') userId: string, @Res() response: Response) {
     const assignmentUnit = <IAssignmentUnitModel> await Unit.findById(id);
 
     if (!assignmentUnit) {
       throw new NotFoundError();
     }
 
-    const assignment = assignmentUnit.assignments.find(row => `${row._id}` === assignmentId);
+    const assignment = assignmentUnit.assignments.find(row => `${row.user._id}` === userId);
     if (!assignment.files.length) {
       return;
     }

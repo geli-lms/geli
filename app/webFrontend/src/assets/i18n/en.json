@@ -405,7 +405,8 @@
       "notRated": "Not yet rated.",
       "failed": "Failed.",
       "accepted": "Passed.",
-      "numberOfFiles": "{{filesCount}} file(s)"
+      "numberOfFiles": "{{filesCount}} file(s)",
+      "errorDownload": "Something went wrong. Please try again in a few Minutes."
     }
   },
   "user": {

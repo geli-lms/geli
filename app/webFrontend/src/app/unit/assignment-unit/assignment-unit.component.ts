@@ -11,6 +11,7 @@ import {SnackBarService} from '../../shared/services/snack-bar.service';
 import {saveAs} from 'file-saver/FileSaver';
 import {IFile} from '../../../../../../shared/models/mediaManager/IFile';
 import {IAssignment} from '../../../../../../shared/models/assignment/IAssignment';
+import {TranslatableSnackBarService} from "../../shared/services/translatable-snack-bar.service";
 
 enum AssignmentIcon {
   TURNED_IN = 'assignment_turned_in',
@@ -51,7 +52,7 @@ export class AssignmentUnitComponent implements OnInit {
 
 
   constructor(public unitFormService: UnitFormService,
-              public snackBar: SnackBarService,
+              public snackBar: TranslatableSnackBarService,
               public formBuilder: FormBuilder,
               public userService: UserService,
               private assignmentService: AssignmentService) {
@@ -62,6 +63,7 @@ export class AssignmentUnitComponent implements OnInit {
     if (this.assignmentUnit.assignments.length) {
       // The backend controller only sends a single assignment back to the client
       // if the client has a assignment.
+      console.log({ assignmentUnit: this.assignmentUnit });
       this.assignment = this.assignmentUnit.assignments[0];
 
       this.files = this.assignmentUnit.assignments[0].files;
@@ -177,18 +179,24 @@ export class AssignmentUnitComponent implements OnInit {
       this.disableDownloadButton = true;
       const response = <Response> await this.assignmentService.downloadAllAssignments(this.assignmentUnit._id.toString());
       saveAs(response.body, this.assignmentUnit.name + '.zip');
-      this.disableDownloadButton = false;
     } catch (err) {
-      this.disableDownloadButton = false;
-      this.snackBar.openLong('Woops! Something went wrong. Please try again in a few Minutes.');
+      this.snackBar.openLong('unit.assignment.errorDownload');
     }
+    this.disableDownloadButton = false;
   }
 
   async downloadSingleAssignment(assignment) {
-    const {firstName, lastName} = assignment.user.profile;
-    const response = <Response> await this.assignmentService
-      .downloadSingleAssignment(this.assignmentUnit._id.toString(), assignment._id.toString());
-    saveAs(response.body, `${lastName}, ${firstName} - ${this.assignmentUnit.name}.zip`);
+    try {
+      this.disableDownloadButton = true;
+
+      const {firstName, lastName} = assignment.user.profile;
+      const response = <Response> await this.assignmentService
+        .downloadSingleAssignment(this.assignmentUnit._id.toString(), assignment.user._id.toString());
+      saveAs(response.body, `${lastName}, ${firstName} - ${this.assignmentUnit.name}.zip`);
+    } catch (err) {
+      this.snackBar.openLong('unit.assignment.errorDownload');
+    }
+    this.disableDownloadButton = false;
   }
 
   public submitStatusChange(unitId, approved) {
