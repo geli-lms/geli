@@ -7,6 +7,6 @@
   <mat-checkbox *ngIf="showCheckBox" [(ngModel)]="chkbox" (change)="onChange()" class="chkbox"></mat-checkbox>
 </mat-list-item>
 <mat-list>
-    <app-unit-checkbox (valueChanged)="onChildEvent($event)" *ngFor=" let unit of this.lecture.units" [unit]= "unit"></app-unit-checkbox>
+    <app-unit-checkbox (valueChanged)="onChildEvent($event)" *ngFor=" let unit of this.units" [unit]= "unit"></app-unit-checkbox>
 </mat-list>
 </div>
