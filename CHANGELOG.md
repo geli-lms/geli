@@ -31,6 +31,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Unused `ProgressController` `GET` routes for `/courses/` & `/users/`. [#1116](https://github.com/geli-lms/geli/issues/1116)
 - `ProgressController` `POST` route _(obviated by extended `PUT` route)_. [#1116](https://github.com/geli-lms/geli/issues/1116)
 - Unused `WhitelistController` `PUT` route. [#1192](https://github.com/geli-lms/geli/issues/1192)
+- Dependency `migrate-mongoose`. [#1189](https://github.com/geli-lms/geli/pull/1189)
 
 ### Fixed
 - `TaskUnitComponent.validate` `validationMode` reset. [#1116](https://github.com/geli-lms/geli/issues/1116)
