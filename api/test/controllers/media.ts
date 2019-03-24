@@ -329,8 +329,7 @@ describe('Media', async () => {
     });
 
     it('should fail to change the course of a directory to an unauthorized one', async () => {
-      const {course, rootDirectory} = await commonPutSetup();
-      const unauthorizedTeacher = await FixtureUtils.getUnauthorizedTeacherForCourse(course);
+      const {teacher, rootDirectory} = await commonPutSetup();
       await rootDirectory.save();
       const otherCourse = new Course({name: 'Unauthorized Test Course'});
       await otherCourse.save();
@@ -338,7 +337,7 @@ describe('Media', async () => {
       const changedDirectory = rootDirectory;
       changedDirectory._course = otherCourse._id.toString();
 
-      const result = await testHelper.commonUserPutRequest(unauthorizedTeacher, `/directory/${rootDirectory._id}`, changedDirectory);
+      const result = await testHelper.commonUserPutRequest(teacher, `/directory/${rootDirectory._id}`, changedDirectory);
       result.status.should.be.equal(403);
     });
 
@@ -372,8 +371,7 @@ describe('Media', async () => {
     });
 
     it('should fail to change the course of a file to an unauthorized one', async () => {
-      const {course, file} = await commonPutSetup();
-      const unauthorizedTeacher = await FixtureUtils.getUnauthorizedTeacherForCourse(course);
+      const {teacher, file} = await commonPutSetup();
       await file.save();
       const otherCourse = new Course({name: 'Unauthorized Test Course'});
       await otherCourse.save();
@@ -381,7 +379,7 @@ describe('Media', async () => {
       const changedFile = file;
       changedFile._course = otherCourse._id.toString();
 
-      const result = await testHelper.commonUserPutRequest(unauthorizedTeacher, `/file/${file._id}`, changedFile);
+      const result = await testHelper.commonUserPutRequest(teacher, `/file/${file._id}`, changedFile);
       result.status.should.be.equal(403);
     });
   });
