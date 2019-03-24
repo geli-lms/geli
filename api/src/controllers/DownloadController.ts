@@ -197,6 +197,10 @@ export class DownloadController {
       zlib: {level: 9}
     });
 
+    archive.on('error', (err: Error) => {
+      throw err;
+    });
+
     archive.pipe(output);
 
     let lecCounter = 1;
@@ -249,7 +253,7 @@ export class DownloadController {
           html += '</html>';
           const name = lecCounter + '_' + lcName + '/' + unitCounter + '_' + this.replaceCharInFilename(localUnit.name) + '.pdf';
           const buffer = await this.createPdf(html, options);
-          await this.appendBuffer(archive, buffer, name);
+          archive.append(buffer, {name});
         }
         unitCounter++;
       }
@@ -257,7 +261,7 @@ export class DownloadController {
     }
 
     return new Promise((resolve) => {
-      archive.on('end', () => resolve(hash));
+      output.on('close', () => resolve(hash));
       archive.finalize();
     });
   }
@@ -305,6 +309,10 @@ export class DownloadController {
 
     const archive = archiver('zip', {
       zlib: {level: 9}
+    });
+
+    archive.on('error', (err: Error) => {
+      throw err;
     });
 
     archive.pipe(output);
@@ -404,10 +412,10 @@ export class DownloadController {
       '</html>';
     const name = this.replaceCharInFilename(course.name) + '.pdf';
     const buffer = await this.createPdf(html, options);
-    await this.appendBuffer(archive, buffer, name);
+    archive.append(buffer, {name});
 
     return new Promise((resolve) => {
-      archive.on('end', () => resolve(hash));
+      output.on('close', () => resolve(hash));
       archive.finalize();
     });
   }
@@ -429,14 +437,6 @@ export class DownloadController {
         }
         resolve(buffer);
       });
-    });
-  }
-
-  private appendBuffer(archive: Archiver, data: Buffer, name: string): Promise<void> {
-    return new Promise<void>((resolve, reject) => {
-      archive.on('entry', () => resolve());
-      archive.on('error', (err: Error) => reject(err));
-      archive.append(data, {name});
     });
   }
 
