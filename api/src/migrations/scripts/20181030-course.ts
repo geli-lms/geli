@@ -1,9 +1,7 @@
 // tslint:disable:no-console
 import * as mongoose from 'mongoose';
-import {ObjectId, ObjectID} from 'bson';
 import {IUser} from '../../../../shared/models/IUser';
 import {IUserModel} from '../../models/User';
-import {extractMongoId} from '../../utilities/ExtractMongoId';
 import {ICourseModel} from '../../models/Course';
 
 const brokenChatRoomSchema = new mongoose.Schema({
@@ -99,7 +97,7 @@ const brokenCourseSchema = new mongoose.Schema({
           ret._id = ret._id.toString();
         }
 
-        if (ret.hasOwnProperty('courseAdmin') && ret.courseAdmin !== null && (ret.courseAdmin instanceof ObjectID)) {
+        if (ret.hasOwnProperty('courseAdmin') && ret.courseAdmin !== null && (ret.courseAdmin instanceof mongoose.Types.ObjectId)) {
           ret.courseAdmin = ret.courseAdmin.toString();
         }
         ret.hasAccessKey = false;
@@ -127,21 +125,21 @@ class BrokenCourseMigration {
   async up() {
     console.log('BrokenCourse up was called');
     try {
-      const brokenCourses: ICourseModel[] = await BrokenCourse.find({'chatRooms': { $exists: true }});
+      const brokenCourses: ICourseModel[] = await BrokenCourse.find({'chatRooms': {$exists: true}});
       await Promise.all(brokenCourses.map(async (brokenCourse: ICourseModel) => {
         const courseObj = brokenCourse.toObject();
 
         const fixedChatRooms = courseObj.chatRooms.map((chatRoom: any) => {
-          if (chatRoom instanceof ObjectID) {
+          if (chatRoom instanceof mongoose.Types.ObjectId) {
             return chatRoom;
           } else {
-            return new ObjectID(chatRoom._id);
+            return mongoose.Types.ObjectId(chatRoom._id);
           }
         });
 
         courseObj.chatRooms = fixedChatRooms;
 
-        courseObj._id = new ObjectId(courseObj._id);
+        courseObj._id = mongoose.Types.ObjectId(courseObj._id);
 
         return await mongoose.connection.collection('courses')
           .findOneAndReplace({'_id': courseObj._id}, courseObj);

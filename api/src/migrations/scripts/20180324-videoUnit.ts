@@ -1,6 +1,5 @@
 // tslint:disable:no-console
 import * as mongoose from 'mongoose';
-import {ObjectID} from 'bson';
 import {IUnitModel} from '../../models/units/Unit';
 import {IFileUnit} from '../../../../shared/models/units/IFileUnit';
 
@@ -42,11 +41,11 @@ class VideoUnitMigration {
     console.log('VideoUnit up was called');
     try {
       const videoUnits = await Unit.find({'__t': 'video'}).exec();
-      const updatedFileUnits = await Promise.all(videoUnits.map(async(videoUnit) => {
+      const updatedFileUnits = await Promise.all(videoUnits.map(async (videoUnit) => {
         const videoUnitObj: IFileUnit = <IFileUnit>videoUnit.toObject();
         videoUnitObj.fileUnitType = videoUnitObj.__t;
         videoUnitObj.__t = 'file';
-        videoUnitObj._id = new ObjectID(videoUnitObj._id);
+        videoUnitObj._id = mongoose.Types.ObjectId(videoUnitObj._id);
 
         const unitsAfterReplace = await mongoose.connection.collection('units')
           .findOneAndReplace({'_id': videoUnit._id}, videoUnitObj);
