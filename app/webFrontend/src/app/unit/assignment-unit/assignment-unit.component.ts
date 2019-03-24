@@ -11,7 +11,7 @@ import {SnackBarService} from '../../shared/services/snack-bar.service';
 import {saveAs} from 'file-saver/FileSaver';
 import {IFile} from '../../../../../../shared/models/mediaManager/IFile';
 import {IAssignment} from '../../../../../../shared/models/assignment/IAssignment';
-import {TranslatableSnackBarService} from "../../shared/services/translatable-snack-bar.service";
+import {TranslatableSnackBarService} from '../../shared/services/translatable-snack-bar.service';
 
 enum AssignmentIcon {
   TURNED_IN = 'assignment_turned_in',
@@ -63,7 +63,6 @@ export class AssignmentUnitComponent implements OnInit {
     if (this.assignmentUnit.assignments.length) {
       // The backend controller only sends a single assignment back to the client
       // if the client has a assignment.
-      console.log({ assignmentUnit: this.assignmentUnit });
       this.assignment = this.assignmentUnit.assignments[0];
 
       this.files = this.assignmentUnit.assignments[0].files;
