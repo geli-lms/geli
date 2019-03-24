@@ -6,6 +6,7 @@ import {FixtureUtils} from '../../fixtures/FixtureUtils';
 import {JwtUtils} from '../../src/security/JwtUtils';
 import {Directory} from '../../src/models/mediaManager/Directory';
 import {File} from '../../src/models/mediaManager/File';
+import {Course} from '../../src/models/Course';
 import config from '../../src/config/main';
 import * as fs from 'fs';
 
@@ -327,6 +328,20 @@ describe('Media', async () => {
       result.status.should.be.equal(403);
     });
 
+    it('should fail to change the course of a directory to an unauthorized one', async () => {
+      const {course, rootDirectory} = await commonPutSetup();
+      const unauthorizedTeacher = await FixtureUtils.getUnauthorizedTeacherForCourse(course);
+      await rootDirectory.save();
+      const otherCourse = new Course({name: 'Unauthorized Test Course'});
+      await otherCourse.save();
+
+      const changedDirectory = rootDirectory;
+      changedDirectory._course = otherCourse._id.toString();
+
+      const result = await testHelper.commonUserPutRequest(unauthorizedTeacher, `/directory/${rootDirectory._id}`, changedDirectory);
+      result.status.should.be.equal(403);
+    });
+
     it('should rename a file', async () => {
       const {teacher, file} = await commonPutSetup();
       await file.save();
@@ -353,6 +368,20 @@ describe('Media', async () => {
       file.name = 'renamedFile';
 
       const result = await testHelper.commonUserPutRequest(unauthorizedTeacher, `/file/${file._id}`, renamedFile);
+      result.status.should.be.equal(403);
+    });
+
+    it('should fail to change the course of a file to an unauthorized one', async () => {
+      const {course, file} = await commonPutSetup();
+      const unauthorizedTeacher = await FixtureUtils.getUnauthorizedTeacherForCourse(course);
+      await file.save();
+      const otherCourse = new Course({name: 'Unauthorized Test Course'});
+      await otherCourse.save();
+
+      const changedFile = file;
+      changedFile._course = otherCourse._id.toString();
+
+      const result = await testHelper.commonUserPutRequest(unauthorizedTeacher, `/file/${file._id}`, changedFile);
       result.status.should.be.equal(403);
     });
   });
