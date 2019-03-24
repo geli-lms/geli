@@ -574,7 +574,7 @@ export class UnitController {
    *         "__v": 0
    *     }
    */
-  @Get('/:id/assignments')
+  @Get('/:id/assignments/files')
   @Authorized(['teacher'])
   async getAllAssignments(@Param('id') id: string, @Res() response: Response) {
     const assignmentUnit = <IAssignmentUnitModel> await Unit.findById(id);

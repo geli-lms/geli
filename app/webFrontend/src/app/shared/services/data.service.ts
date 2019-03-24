@@ -327,7 +327,7 @@ export class AssignmentService extends DataService {
   }
 
   downloadAllAssignments(unitId: string): Promise<Response> {
-    return this.backendService.getDownload(this.apiPath + unitId + '/assignments')
+    return this.backendService.getDownload(this.apiPath + unitId + '/assignments/files')
         .toPromise();
   }
 
