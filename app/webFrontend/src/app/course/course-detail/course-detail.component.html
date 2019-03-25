@@ -1,10 +1,11 @@
 <app-sticky-toolbar
   [anchor]="stickyAnchor">
+
   <div class="header-line">
-    <h2>
+    <h2 class="headings">
       <span>{{course?.name}}</span>
-      <span *ngIf="lectureScrollEmitter|async as lecture"> > {{lecture?.name}}</span>
-      <span *ngIf="unitScrollEmitter|async as unit"> > {{unit?.name}}</span>
+      <span *ngIf="lectureScrollEmitter|async as lecture">{{lecture?.name}}</span>
+      <span *ngIf="unitScrollEmitter|async as unit">{{unit?.name}}</span>
     </h2>
     <ng-template [ngTemplateOutlet]="headerAdminButtons"></ng-template>
   </div>
@@ -72,5 +73,5 @@
   </nav>
 </div>
 
-<router-outlet ></router-outlet>
+<router-outlet></router-outlet>
 <app-course-forum [chatRoom]="course?.chatRooms[0]"></app-course-forum>

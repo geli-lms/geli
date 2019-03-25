@@ -77,5 +77,31 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+
+  .headings {
+    overflow-x: scroll;
+    overflow-y: hidden;
+    white-space: nowrap;
+
+    span {
+      height: 48px;
+      box-sizing: border-box;
+      text-align: center;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      white-space: nowrap;
+      vertical-align: top;
+      text-decoration: none;
+      position: relative;
+      overflow: hidden;
+    }
+
+    span+span:before {
+      content: ">";
+      padding: 0 0.5rem;
+    }
+  }
+
 }
