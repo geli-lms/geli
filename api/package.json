@@ -35,7 +35,7 @@
     "@types/node-sass": "^4.11.0",
     "@types/sharp": "^0.22.0",
     "@types/socket.io": "^2.1.2",
-    "app-root-path": "^2.1.0",
+    "app-root-path": "^2.2.0",
     "archiver": "^3.0.0",
     "bcrypt": "^3.0.5",
     "body-parser": "^1.18.2",
