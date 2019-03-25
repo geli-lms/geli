@@ -1,13 +1,12 @@
 // tslint:disable:no-console
 import * as mongoose from 'mongoose';
 import {IUnitModel} from '../../models/units/Unit';
-import {ObjectID} from 'bson';
 import {IFileUnit} from '../../../../shared/models/units/IFileUnit';
-import fs = require('fs');
 import {File} from '../../models/mediaManager/File';
 import {Course} from '../../models/Course';
 import {Directory} from '../../models/mediaManager/Directory';
 import {ICourse} from '../../../../shared/models/ICourse';
+import fs = require('fs');
 
 const unitSchema = new mongoose.Schema({
     _course: {
@@ -90,20 +89,20 @@ class FileUnitMigration {
         const courseObj: ICourse = <ICourse>course.toObject();
         const returnObj: any = {};
         if (!courseObj.hasOwnProperty('media')) {
-         const directoryObj: any = {
-           name: courseObj.name,
-           subDirectories: [],
-           files: []
-         };
+          const directoryObj: any = {
+            name: courseObj.name,
+            subDirectories: [],
+            files: []
+          };
 
-         const createdDirectory: any = await Directory.create(directoryObj);
-         courseObj.media = createdDirectory._id;
-         const updatedCourse = await Course.findOneAndUpdate({'_id': courseObj._id}, courseObj, {new: true}).exec();
+          const createdDirectory: any = await Directory.create(directoryObj);
+          courseObj.media = createdDirectory._id;
+          const updatedCourse = await Course.findOneAndUpdate({'_id': courseObj._id}, courseObj, {new: true}).exec();
 
-         directories[createdDirectory._id] = await createdDirectory.toObject();
+          directories[createdDirectory._id] = await createdDirectory.toObject();
 
-         updatedCoursesMap[courseObj._id] = await updatedCourse.toObject();
-         return updatedCourse;
+          updatedCoursesMap[courseObj._id] = await updatedCourse.toObject();
+          return updatedCourse;
         } else {
           const directory = await Directory.findById(courseObj.media).exec();
           directories[directory._id] = await directory.toObject();
@@ -113,10 +112,10 @@ class FileUnitMigration {
       }));
       const fileUnits = await Unit.find({'__t': 'file'}).exec();
       const updatedFileUnits = await Promise.all(fileUnits.map(async (fileUnit) => {
-        if (fileUnit._id instanceof ObjectID) {
+        if (fileUnit._id instanceof mongoose.Types.ObjectId) {
           const fileUnitObj: IFileUnit = <IFileUnit>fileUnit.toObject();
           fileUnitObj.files = await Promise.all(fileUnitObj.files.map(async (file) => {
-            if (file instanceof ObjectID) {
+            if (file instanceof mongoose.Types.ObjectId) {
               return file;
             }
 
@@ -161,8 +160,8 @@ class FileUnitMigration {
           });
 
           const directoryId = updatedCoursesMap[fileUnitObj._course].media.toString();
-          fileUnitObj._id = new ObjectID(fileUnitObj._id);
-          fileUnitObj._course = new ObjectID(fileUnitObj._course);
+          fileUnitObj._id = mongoose.Types.ObjectId(fileUnitObj._id);
+          fileUnitObj._course = mongoose.Types.ObjectId(fileUnitObj._course);
           directories[directoryId].files = directories[directoryId].files.concat(fileUnitObj.files);
 
           const unitAfterReplace = await mongoose.connection.collection('units')
