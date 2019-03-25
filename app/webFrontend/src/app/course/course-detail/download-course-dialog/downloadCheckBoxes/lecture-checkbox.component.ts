@@ -4,7 +4,7 @@ import {
 } from '@angular/core';
 import {ILecture} from '../../../../../../../../shared/models/ILecture';
 import {UnitCheckboxComponent} from './unit-checkbox.component';
-import {IUnit} from "../../../../../../../../shared/models/units/IUnit";
+import {IUnit} from '../../../../../../../../shared/models/units/IUnit';
 
 @Component({
   selector: 'app-lecture-checkbox',
