@@ -44,6 +44,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Close `WhitelistController` vulnerabilities. [#1192](https://github.com/geli-lms/geli/issues/1192)
 - Close `MediaController` vulnerabilities. [#1196](https://github.com/geli-lms/geli/issues/1196)
 
+### Fixed
+- Notification scroll bug. [#1082](https://github.com/geli-lms/geli/issues/1082)
+
 ## [[0.8.4](https://github.com/geli-lms/geli/releases/tag/v0.8.4)] - 2018-12-20 - WS 18/19 ❄️-Release
 ### Added
 - Export PDF with styled free text units. [#997](https://github.com/geli-lms/geli/issues/997) [#1047](https://github.com/geli-lms/geli/pull/1047)
