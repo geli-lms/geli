@@ -1,6 +1,5 @@
 // tslint:disable:no-console
 import * as mongoose from 'mongoose';
-import {ObjectID} from 'bson';
 import {IUnit} from '../../../../shared/models/units/IUnit';
 import {IUnitModel} from '../../models/units/Unit';
 
@@ -42,7 +41,7 @@ class UnitMigration {
   async up() {
     console.log('Unit up was called');
     try {
-      const oldUnits: IUnitModel[] = await Unit.find({'__t': { $exists: false }});
+      const oldUnits: IUnitModel[] = await Unit.find({'__t': {$exists: false}});
       const updatedUnitObjs: IUnit[] = await Promise.all(oldUnits.map(async (oldUnit: IUnitModel) => {
         const oldUnitObj: IUnit = <IUnit>oldUnit.toObject();
         oldUnitObj.__t = oldUnitObj.type;
@@ -55,7 +54,7 @@ class UnitMigration {
           return updatedUnit._id === oldUnit._id.toString();
         });
 
-        updatedUnitObj._id = new ObjectID(updatedUnitObj._id);
+        updatedUnitObj._id = mongoose.Types.ObjectId(updatedUnitObj._id);
 
         const unitAfterReplace = await mongoose.connection.collection('units')
           .findOneAndReplace({'_id': oldUnit._id}, updatedUnitObj);

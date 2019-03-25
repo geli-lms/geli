@@ -1,20 +1,18 @@
 import * as chai from 'chai';
 import chaiHttp = require('chai-http');
+import {TestHelper} from '../../TestHelper';
 import {Server} from '../../../src/server';
-import {FixtureLoader} from '../../../fixtures/FixtureLoader';
-import {JwtUtils} from '../../../src/security/JwtUtils';
 import {User} from '../../../src/models/User';
 import {Lecture} from '../../../src/models/Lecture';
-import {Course} from '../../../src/models/Course';
+import {Course, ICourseModel} from '../../../src/models/Course';
 import {FixtureUtils} from '../../../fixtures/FixtureUtils';
 import {Unit} from '../../../src/models/units/Unit';
 import {ICodeKataModel} from '../../../src/models/units/CodeKataUnit';
 
 chai.use(chaiHttp);
-const should = chai.should();
 const app = new Server().app;
 const BASE_URL = '/api/units';
-const fixtureLoader = new FixtureLoader();
+const testHelper = new TestHelper(BASE_URL);
 
 describe(`CodeKataUnit ${BASE_URL}`, () => {
   const model = {
@@ -36,9 +34,28 @@ describe(`CodeKataUnit ${BASE_URL}`, () => {
     '\n' +
     '}'
   };
-  // Before each test we reset the database
+
   beforeEach(async () => {
-    await fixtureLoader.load();
+    await testHelper.resetForNextTest();
+  });
+
+  describe(`GET ${BASE_URL}`, () => {
+    async function commonGetTest (getUserForCourseFunc: Function, status: number) {
+      const unit = await Unit.findOne({__t: 'code-kata'});
+      const course = await Course.findById(unit._course);
+      const courseAdmin = await getUserForCourseFunc(course);
+
+      const res = await testHelper.commonUserGetRequest(courseAdmin, `/${unit.id}`);
+      res.status.should.be.equal(status);
+    }
+
+    it('should get unit data', async () => {
+      await commonGetTest(async (course: ICourseModel) => await User.findById(course.courseAdmin), 200);
+    });
+
+    it('should deny access to unit data if the user is unauthorized', async () => {
+      await commonGetTest(FixtureUtils.getUnauthorizedStudentForCourse, 403);
+    });
   });
 
   describe(`POST ${BASE_URL}`, () => {
@@ -54,12 +71,7 @@ describe(`CodeKataUnit ${BASE_URL}`, () => {
     it('should fail with BadRequest (missing lectureId)', async () => {
       const teacher = await FixtureUtils.getRandomTeacher();
 
-      const res = await chai.request(app)
-        .post(BASE_URL)
-        .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
-        .send({model: model})
-        .catch(err => err.response);
-
+      const res = await testHelper.commonUserPostRequest(teacher, '', {model});
       res.status.should.be.equal(400);
     });
 
@@ -68,12 +80,7 @@ describe(`CodeKataUnit ${BASE_URL}`, () => {
       const course = await Course.findOne({lectures: { $in: [ lecture._id ] }});
       const courseAdmin = await User.findOne({_id: course.courseAdmin});
 
-      const res = await chai.request(app)
-        .post(BASE_URL)
-        .set('Cookie', `token=${JwtUtils.generateToken(courseAdmin)}`)
-        .send({lectureId: lecture._id})
-        .catch(err => err.response);
-
+      const res = await testHelper.commonUserPostRequest(courseAdmin, '', {lectureId: lecture._id});
       res.status.should.be.equal(400);
     });
 
@@ -83,11 +90,7 @@ describe(`CodeKataUnit ${BASE_URL}`, () => {
       const courseAdmin = await User.findOne({_id: course.courseAdmin});
       model._course = course._id;
 
-      const res = await chai.request(app)
-        .post(BASE_URL)
-        .set('Cookie', `token=${JwtUtils.generateToken(courseAdmin)}`)
-        .send({lectureId: lecture._id, model: model});
-
+      const res = await testHelper.commonUserPostRequest(courseAdmin, '', {lectureId: lecture._id, model});
       res.status.should.be.equal(200);
       res.body.name.should.equal(model.name);
       res.body.description.should.equal(model.description);
@@ -109,11 +112,7 @@ describe(`CodeKataUnit ${BASE_URL}`, () => {
       model.definition = undefined;
       model.test = undefined;
 
-      const res = await chai.request(app)
-        .post(BASE_URL)
-        .set('Cookie', `token=${JwtUtils.generateToken(courseAdmin)}`)
-        .send({lectureId: lecture._id, model: model});
-
+      const res = await testHelper.commonUserPostRequest(courseAdmin, '', {lectureId: lecture._id, model});
       res.status.should.be.equal(200);
       res.body.name.should.equal(model.name);
       res.body.description.should.equal(model.description);
@@ -121,6 +120,18 @@ describe(`CodeKataUnit ${BASE_URL}`, () => {
       res.body.unitCreator.profile.firstName.should.equal(courseAdmin.profile.firstName);
     });
 
+    it('should fail to create a new unit for an unauthorized teacher', async () => {
+      const lecture = await FixtureUtils.getRandomLecture();
+      const course = await Course.findOne({lectures: { $in: [ lecture._id ] }});
+      const unauthorizedTeacher = await FixtureUtils.getUnauthorizedTeacherForCourse(course);
+      model._course = course._id;
+
+      const res = await testHelper.commonUserPostRequest(unauthorizedTeacher, '', {lectureId: lecture._id, model});
+      res.status.should.be.equal(403);
+    });
+  });
+
+  describe(`PUT ${BASE_URL}`, () => {
     it('should update a codeKata', async () => {
       const unit = await Unit.findOne({__t: 'code-kata'});
       const lecture = await Lecture.findOne({units: { $in: [ unit._id ] }});
@@ -128,13 +139,47 @@ describe(`CodeKataUnit ${BASE_URL}`, () => {
       const courseAdmin = await User.findOne({_id: course.courseAdmin});
       (<ICodeKataModel>unit).test += '\n// Test if we can edit a Kata';
 
-      const res = await chai.request(app)
-        .put(BASE_URL + '/' + unit.id)
-        .set('Cookie', `token=${JwtUtils.generateToken(courseAdmin)}`)
-        .send(unit.toObject());
-
+      const res = await testHelper.commonUserPutRequest(courseAdmin, `/${unit.id}`, unit.toObject());
       res.status.should.be.equal(200);
       res.body.test.should.string('// Test if we can edit a Kata');
+    });
+
+    it('should fail to update a unit for an unauthorized teacher', async () => {
+      const unit = await Unit.findOne({__t: 'code-kata'});
+      const lecture = await Lecture.findOne({units: { $in: [ unit._id ] }});
+      const course = await Course.findOne({lectures: { $in: [ lecture._id ] }});
+      (<ICodeKataModel>unit).test += '\n// Test if we can edit a Kata';
+      const unauthorizedTeacher = await FixtureUtils.getUnauthorizedTeacherForCourse(course);
+
+      const res = await testHelper.commonUserPutRequest(unauthorizedTeacher, `/${unit.id}`, unit.toObject());
+      res.status.should.be.equal(403);
+    });
+  });
+
+  describe(`DELETE ${BASE_URL}`, () => {
+    it('should delete unit', async () => {
+      const unit = await Unit.findOne({__t: 'code-kata'});
+      const course = await Course.findById(unit._course);
+      const courseAdmin = await User.findById(course.courseAdmin);
+
+      const res = await testHelper.commonUserDeleteRequest(courseAdmin, `/${unit.id}`);
+      res.status.should.be.equal(200);
+
+      const res2 = await testHelper.commonUserGetRequest(courseAdmin, `/${unit.id}`);
+      res2.status.should.be.equal(404);
+    });
+
+    it('should fail to delete unit for an unauthorized teacher', async () => {
+      const unit = await Unit.findOne({__t: 'code-kata'});
+      const course = await Course.findById(unit._course);
+      const courseAdmin = await User.findById(course.courseAdmin);
+      const unauthorizedTeacher = await FixtureUtils.getUnauthorizedTeacherForCourse(course);
+
+      const res = await testHelper.commonUserDeleteRequest(unauthorizedTeacher, `/${unit.id}`);
+      res.status.should.be.equal(403);
+
+      const res2 = await testHelper.commonUserGetRequest(courseAdmin, `/${unit.id}`);
+      res2.status.should.be.equal(200);
     });
   });
 });

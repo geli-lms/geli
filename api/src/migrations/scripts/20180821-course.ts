@@ -2,7 +2,6 @@
 import * as mongoose from 'mongoose';
 import {Course, ICourseModel} from '../../models/Course';
 import {ChatRoom, IChatRoomModel} from '../../models/ChatRoom';
-import {ObjectId} from 'bson';
 
 
 class CourseV2Migration {
@@ -10,7 +9,7 @@ class CourseV2Migration {
   async up() {
     console.log('Course Chatroom Migration up was called');
     try {
-      const oldCourses: ICourseModel[] = await Course.find({$or: [{'chatRooms': { $exists: false}}, {'chatRooms': {$size: 0}} ]});
+      const oldCourses: ICourseModel[] = await Course.find({$or: [{'chatRooms': {$exists: false}}, {'chatRooms': {$size: 0}}]});
       await Promise.all(oldCourses.map(async (course: ICourseModel) => {
         const courseObj = course.toObject();
         const newChatRoom: IChatRoomModel = await ChatRoom.create({
@@ -24,7 +23,7 @@ class CourseV2Migration {
 
         courseObj.chatRooms = [newChatRoom._id];
 
-        courseObj._id = new ObjectId(courseObj._id);
+        courseObj._id = mongoose.Types.ObjectId(courseObj._id);
 
         return await mongoose.connection.collection('courses')
           .findOneAndReplace({'_id': courseObj._id}, courseObj);
