@@ -17,11 +17,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - `UnitController` `GET` & `DELETE` route unit tests for status code `200`. [#1190](https://github.com/geli-lms/geli/issues/1190)
 - `UnitController` status code `403` (not authorized to view / edit course) unit tests for all routes. [#1190](https://github.com/geli-lms/geli/issues/1190)
 - `WhitelistController` status code `403` unit tests for all routes. [#1192](https://github.com/geli-lms/geli/issues/1192)
+- Sticky header for course view. [#1115](https://github.com/geli-lms/geli/issues/1115)
+- `MediaController` status code `403` unit tests for all routes. [#1196](https://github.com/geli-lms/geli/issues/1196)
+- `CourseMediaMigration` to patch the `_course` properties of a `Course`'s `Directory` / `File` tree. [#1196](https://github.com/geli-lms/geli/issues/1196)
 
 ### Changed
 - Extend `ProgressController` `PUT` route to handle both creation and updates. [#1116](https://github.com/geli-lms/geli/issues/1116)
 - Refactor `ProgressController` unit tests in general. [#1116](https://github.com/geli-lms/geli/issues/1116)
+- Refactor `MediaController` unit tests in general using the `TestHelper`. [#1196](https://github.com/geli-lms/geli/issues/1196)
 - Instead of a list of progress data, the `ProgressController` `GET` route now responds with a single progress object or an empty object if no data can be found. [#1116](https://github.com/geli-lms/geli/issues/1116)
+- `Directory` / `File` schemata and the corresponding interfaces now reference their `Course` as `_course` (analogous to the `Unit` schema). [#1196](https://github.com/geli-lms/geli/issues/1196)
 
 ### Removed
 - Unused `ProgressController` `GET` routes for `/courses/` & `/users/`. [#1116](https://github.com/geli-lms/geli/issues/1116)
@@ -32,11 +37,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Fixed
 - `TaskUnitComponent.validate` `validationMode` reset. [#1116](https://github.com/geli-lms/geli/issues/1116)
 - `CodeKataComponent` `progress.code` loading. [#1116](https://github.com/geli-lms/geli/issues/1116)
+- Code order in the `MediaController`'s `createDirectory` & `createFile`. [#1196](https://github.com/geli-lms/geli/issues/1196)
 
 ### Security
 - Close `ProgressController` vulnerabilities. [#1116](https://github.com/geli-lms/geli/issues/1116)
 - Close `UnitController` vulnerabilities. [#1190](https://github.com/geli-lms/geli/issues/1190)
 - Close `WhitelistController` vulnerabilities. [#1192](https://github.com/geli-lms/geli/issues/1192)
+- Close `MediaController` vulnerabilities. [#1196](https://github.com/geli-lms/geli/issues/1196)
+
+### Fixed
+- Notification scroll bug. [#1082](https://github.com/geli-lms/geli/issues/1082)
 
 ## [[0.8.4](https://github.com/geli-lms/geli/releases/tag/v0.8.4)] - 2018-12-20 - WS 18/19 ❄️-Release
 ### Added

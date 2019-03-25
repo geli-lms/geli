@@ -169,8 +169,8 @@ export class MediaService extends DataService {
     super('media/', backendService);
   }
 
-  createRootDir(rootDirName: string): Promise<IDirectory> {
-    return this.backendService.post(this.apiPath + 'directory', JSON.stringify({name: rootDirName}))
+  createRootDir(course: ICourse, rootDirName: string): Promise<IDirectory> {
+    return this.backendService.post(this.apiPath + 'directory', JSON.stringify({_course: course._id, name: rootDirName}))
       .toPromise();
   }
 
