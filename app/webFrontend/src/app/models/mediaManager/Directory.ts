@@ -3,6 +3,7 @@ import {IFile} from '../../../../../../shared/models/mediaManager/IFile';
 
 export class Directory implements IDirectory {
   _id: any;
+  _course: any;
   name: string;
   subDirectories: IDirectory[];
   files: IFile[];
