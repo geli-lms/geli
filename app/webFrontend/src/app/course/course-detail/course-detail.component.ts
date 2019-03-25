@@ -14,7 +14,6 @@ import {TranslateService} from '@ngx-translate/core';
 import {ICourseView} from '../../../../../../shared/models/ICourseView';
 
 
-
 @Component({
   selector: 'app-course-detail',
   templateUrl: './course-detail.component.html',
@@ -36,11 +35,12 @@ export class CourseDetailComponent implements OnInit, OnDestroy {
               private userDataService: UserDataService,
               private dialogService: DialogService,
               private dataSharingService: DataSharingService,
-              private translate: TranslateService) {}
+              private translate: TranslateService) {
+  }
 
   ngOnInit() {
     const data: any = this.route.snapshot.data;
-    this.course = <ICourseView> data.course;
+    this.course = <ICourseView>data.course;
     this.id = this.course._id;
     LastVisitedCourseContainerUpdater.addCourseToLastVisitedCourses(this.id, this.userService, this.userDataService);
     this.titleService.setTitleCut(['Course: ', this.course.name]);
