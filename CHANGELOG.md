@@ -22,7 +22,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Extend `ProgressController` `PUT` route to handle both creation and updates. [#1116](https://github.com/geli-lms/geli/issues/1116)
 - Refactor `ProgressController` unit tests in general. [#1116](https://github.com/geli-lms/geli/issues/1116)
 - Instead of a list of progress data, the `ProgressController` `GET` route now responds with a single progress object or an empty object if no data can be found. [#1116](https://github.com/geli-lms/geli/issues/1116)
-- Updated frontend to angular 7[#889](https://github.com/geli-lms/geli/issues/889)
+- Update frontend to Angular 7[#889](https://github.com/geli-lms/geli/issues/889)
 
 ### Removed
 - Unused `ProgressController` `GET` routes for `/courses/` & `/users/`. [#1116](https://github.com/geli-lms/geli/issues/1116)
