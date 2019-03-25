@@ -174,8 +174,8 @@ export class AssignmentUnitComponent implements OnInit {
   }
 
   public async downloadAllAssignments() {
+    this.disableDownloadButton = true;
     try {
-      this.disableDownloadButton = true;
       const response = <Response> await this.assignmentService.downloadAllAssignments(this.assignmentUnit._id.toString());
       saveAs(response.body, this.assignmentUnit.name + '.zip');
     } catch (err) {
@@ -185,9 +185,9 @@ export class AssignmentUnitComponent implements OnInit {
   }
 
   async downloadSingleAssignment(assignment) {
-    try {
-      this.disableDownloadButton = true;
+    this.disableDownloadButton = true;
 
+    try {
       const {firstName, lastName} = assignment.user.profile;
       const response = <Response> await this.assignmentService
         .downloadSingleAssignment(this.assignmentUnit._id.toString(), assignment.user._id.toString());
@@ -198,10 +198,9 @@ export class AssignmentUnitComponent implements OnInit {
     this.disableDownloadButton = false;
   }
 
-  public submitStatusChange(unitId, approved) {
-    const assignmentIndex = this.getElementIndexById(this.assignmentUnit.assignments, unitId);
-    this.assignmentUnit.assignments[assignmentIndex].checked = approved;
-    this.assignmentService.updateAssignment(this.assignmentUnit.assignments[assignmentIndex], this.assignmentUnit._id.toString());
+  public submitStatusChange(assignment, approved) {
+    assignment.checked = approved;
+    this.assignmentService.updateAssignment(assignment, this.assignmentUnit._id.toString());
   }
 
   private getElementIndexById(arr, id) {

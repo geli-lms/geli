@@ -145,7 +145,6 @@ gulp.task(BUILD_DEV, function (callback) {
 });
 */
 
-
 gulp.task(BUILD_DEV, gulp.series(CLEAN_BUILD, TSLINT_DEV, COMPILE_TYPESCRIPT, COMPILE_MD_SASS, COPY_FIXTURES));
 
 // Generates a documentation based on the code comments in the *.ts files.

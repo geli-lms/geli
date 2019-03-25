@@ -27,6 +27,9 @@
       <span class="status-group" *ngIf="readyToBeGraded()">
         {{ 'common.status' | translate }}:
         <mat-icon id="{{assignmentIcon}}">{{assignmentIcon}}</mat-icon>
+        <span *ngIf="assignment.checked === 1">{{ 'unit.assignment.accepted' | translate }}</span>
+        <span *ngIf="assignment.checked === -1">{{ 'unit.assignment.notRated' | translate }}</span>
+        <span *ngIf="assignment.checked === 0">{{ 'unit.assignment.failed' | translate }}</span>
       </span>
     </div>
 
@@ -79,13 +82,12 @@
           {{assignment.user.profile.firstName}} {{assignment.user.profile.lastName}}
         </td>
         <td class="{{!assignment.submitted ? 'not-submitted' : ''}}">
-        <span *ngIf="assignment.checked !== -1">
-          {{getHumanReadableDate(assignment.submittedDate)}}
-        </span>
-
-          <span *ngIf="assignment.checked === -1">
-          -
-        </span>
+          <span *ngIf="assignment.submitted">
+            {{getHumanReadableDate(assignment.submittedDate)}}
+          </span>
+          <span *ngIf="!assignment.submitted">
+            -
+          </span>
         </td>
         <td class="{{!assignment.submitted ? 'not-submitted' : ''}}">
           <mat-expansion-panel>
@@ -112,13 +114,13 @@
         <td *ngIf="assignment.submitted; else notSubmitted">
           <mat-form-field>
             <mat-select placeholder="{{ 'common.status' | translate }}" value="{{assignment.checked}}">
-              <mat-option (click)="submitStatusChange(assignment._id, -1)" value={{-1}}>
+              <mat-option (click)="submitStatusChange(assignment, -1)" value={{-1}}>
                 {{ 'unit.assignment.notRated' | translate }}
               </mat-option>
-              <mat-option (click)="submitStatusChange(assignment._id, 0)" value={{0}}>
+              <mat-option (click)="submitStatusChange(assignment, 0)" value={{0}}>
                 {{ 'unit.assignment.failed' | translate }}
               </mat-option>
-              <mat-option (click)="submitStatusChange(assignment._id, 1)" value={{1}}>
+              <mat-option (click)="submitStatusChange(assignment, 1)" value={{1}}>
                 {{ 'unit.assignment.accepted' | translate }}
               </mat-option>
             </mat-select>
