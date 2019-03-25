@@ -12,6 +12,10 @@ interface IFileModel extends IFile, mongoose.Document {
 }
 
 const fileSchema = new mongoose.Schema({
+  _course: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Course'
+  },
   name: {
     type: String,
     required: true
@@ -37,6 +41,7 @@ const fileSchema = new mongoose.Schema({
       if (ret._id) {
         ret._id = ret._id.toString();
       }
+      delete ret._course;
       delete ret.physicalPath;
       return ret;
     }

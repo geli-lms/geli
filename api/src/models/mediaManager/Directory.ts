@@ -8,6 +8,10 @@ interface IDirectoryModel extends IDirectory, mongoose.Document {
 }
 
 const directorySchema = new mongoose.Schema({
+  _course: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Course'
+  },
   name: {
     type: String,
     required: true
@@ -35,6 +39,7 @@ const directorySchema = new mongoose.Schema({
       if (doc.populated('files') === undefined) {
         ret.files = ret.files.map(extractSingleMongoId);
       }
+      delete ret._course;
     }
   },
 });
