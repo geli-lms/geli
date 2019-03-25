@@ -27,7 +27,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Refactor `MediaController` unit tests in general using the `TestHelper`. [#1196](https://github.com/geli-lms/geli/issues/1196)
 - Instead of a list of progress data, the `ProgressController` `GET` route now responds with a single progress object or an empty object if no data can be found. [#1116](https://github.com/geli-lms/geli/issues/1116)
 - `Directory` / `File` schemata and the corresponding interfaces now reference their `Course` as `_course` (analogous to the `Unit` schema). [#1196](https://github.com/geli-lms/geli/issues/1196)
-- Update frontend to Angular 7[#889](https://github.com/geli-lms/geli/issues/889)
+- Update frontend to Angular 7. [#889](https://github.com/geli-lms/geli/issues/889)
 
 ### Removed
 - Unused `ProgressController` `GET` routes for `/courses/` & `/users/`. [#1116](https://github.com/geli-lms/geli/issues/1116)
