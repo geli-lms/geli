@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 -->
 
 ## [Unreleased]
+### Added
+- Assignment unit. [#600](https://github.com/geli-lms/geli/issues/600)
 
 ## [[0.8.5](https://github.com/geli-lms/geli/releases/tag/v0.8.5)] - 2019-03-26 - WS 18/19 🎉-Release
 ### Added
@@ -58,7 +60,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Two `NotificationSettingsController` unit tests for `403` & `404` `PUT` request errors. [#1072](https://github.com/geli-lms/geli/issues/1072)
 - `TestHelper` request methods for `PUT` & `DELETE`. [#1041](https://github.com/geli-lms/geli/issues/1041)
 - CodeKata validation service. [#844](https://github.com/geli-lms/geli/issues/844)
-- Assignment unit. [#600](https://github.com/geli-lms/geli/issues/600)
 - Course: Added switch for file <-> video unit. [#912](https://github.com/geli-lms/geli/issues/912)
 
 ### Fixed
