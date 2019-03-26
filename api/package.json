@@ -79,7 +79,7 @@
     "@types/jsonwebtoken": "^8.3.2",
     "@types/markdown-it": "0.0.7",
     "@types/mocha": "^5.2.6",
-    "@types/mongoose": "~5.3.23",
+    "@types/mongoose": "~5.3.24",
     "@types/morgan": "1.7.35",
     "@types/nodemailer": "^4.6.6",
     "@types/passport": "^1.0.0",
