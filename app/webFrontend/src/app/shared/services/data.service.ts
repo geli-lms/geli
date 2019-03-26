@@ -14,6 +14,7 @@ import {IConfig} from '../../../../../../shared/models/IConfig';
 import {IAssignment} from '../../../../../../shared/models/assignment/IAssignment';
 import {INotificationView} from '../../../../../../shared/models/INotificationView';
 import {INotificationSettingsView} from '../../../../../../shared/models/INotificationSettingsView';
+import {HttpResponse} from '@angular/common/http';
 
 export abstract class DataService {
 
@@ -326,12 +327,12 @@ export class AssignmentService extends DataService {
     });
   }
 
-  downloadAllAssignments(unitId: string): Promise<Response> {
+  downloadAllAssignments(unitId: string): Promise<HttpResponse<Blob>> {
     return this.backendService.getDownload(this.apiPath + unitId + '/assignments/files')
         .toPromise();
   }
 
-  downloadSingleAssignment(unitId: string, userId: string): Promise<Response> {
+  downloadSingleAssignment(unitId: string, userId: string): Promise<HttpResponse<Blob>> {
     return this.backendService.getDownload(this.apiPath + unitId + '/assignments/' + userId + '/files')
       .toPromise();
   }

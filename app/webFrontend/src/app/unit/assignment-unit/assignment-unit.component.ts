@@ -176,8 +176,8 @@ export class AssignmentUnitComponent implements OnInit {
   public async downloadAllAssignments() {
     this.disableDownloadButton = true;
     try {
-      const response = <Response> await this.assignmentService.downloadAllAssignments(this.assignmentUnit._id.toString());
-      saveAs(await response.blob(), this.assignmentUnit.name + '.zip');
+      const response = await this.assignmentService.downloadAllAssignments(this.assignmentUnit._id.toString());
+      saveAs(response.body, this.assignmentUnit.name + '.zip');
     } catch (err) {
       this.snackBar.openLong('unit.assignment.errorDownload');
     }
@@ -186,12 +186,11 @@ export class AssignmentUnitComponent implements OnInit {
 
   async downloadSingleAssignment(assignment) {
     this.disableDownloadButton = true;
-
     try {
       const {firstName, lastName} = assignment.user.profile;
-      const response = <Response> await this.assignmentService
+      const response = await this.assignmentService
         .downloadSingleAssignment(this.assignmentUnit._id.toString(), assignment.user._id.toString());
-      saveAs(await response.blob(), `${lastName}, ${firstName} - ${this.assignmentUnit.name}.zip`);
+      saveAs(response.body, `${lastName}, ${firstName} - ${this.assignmentUnit.name}.zip`);
     } catch (err) {
       this.snackBar.openLong('unit.assignment.errorDownload');
     }
