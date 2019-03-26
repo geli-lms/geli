@@ -307,6 +307,7 @@ export class UnitController {
    *
    * @apiParam {String} unitId
    * @apiParam {Object} uploadedFile
+   * @apiParam {IUser} currentUser
    *
    * @apiError NotFoundError The unit was not found or there isn't an assignment from the current user in the unit.
    */
