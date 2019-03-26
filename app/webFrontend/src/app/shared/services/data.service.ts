@@ -542,7 +542,7 @@ export class DownloadFileService extends DataService {
       .toPromise();
   }
 
-  getFile(id: string): Promise<Response> {
+  getFile(id: string): Promise<HttpResponse<Blob>> {
     return this.backendService
       .getDownload(this.apiPath + id)
       .toPromise();

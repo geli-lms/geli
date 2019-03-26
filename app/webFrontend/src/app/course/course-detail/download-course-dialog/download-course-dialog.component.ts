@@ -123,8 +123,8 @@ export class DownloadCourseDialogComponent implements OnInit {
         } else if (this.radioSelect === 'Single') {
           result = await this.downloadReq.postDownloadReqForCoursePDFSingle(downloadObj);
         }
-        const response = <Response> await this.downloadReq.getFile(result.toString());
-        saveAs(await response.blob(), this.saveFileService.replaceCharInFilename(this.course.name) + '.zip');
+        const response = await this.downloadReq.getFile(result.toString());
+        saveAs(response.body, this.saveFileService.replaceCharInFilename(this.course.name) + '.zip');
         this.showSpinner = false;
         this.disableDownloadButton = false;
       } catch (err) {
