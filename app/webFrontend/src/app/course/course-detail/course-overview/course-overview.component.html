@@ -1,10 +1,14 @@
-<div class="lectures" *ngIf="course">
+<div class="lectures" *ngIf="course"
+     scrollSpy=""
+     [spiedTags]="['APP-LECTURE']"
+     (sectionChange)="onLectureChange($event)">
   <div class="toggle-lectures-container">
     <button (click)="toggleAllLectures()" mat-button class="toggle-lectures">
       <span *ngIf="openAllLectures">{{'common.collapseAll' | translate}}</span>
       <span *ngIf="!openAllLectures">{{'common.expandAll' | translate}}</span>
     </button>
   </div>
-  <app-lecture [course]="course"  [opened]="openAllLectures"  [lecture]="lecture" *ngFor="let lecture of course.lectures">
+  <app-lecture [course]="course" [opened]="openAllLectures" [lecture]="lecture" *ngFor="let lecture of course.lectures"
+               [id]="lecture._id">
   </app-lecture>
 </div>

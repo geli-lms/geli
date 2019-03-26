@@ -2,7 +2,6 @@
 import * as mongoose from 'mongoose';
 import {IUnitModel, Unit} from '../../models/units/Unit';
 import {ChatRoom} from '../../models/ChatRoom';
-import {ObjectID} from 'bson';
 
 class UnitV2Migration {
 
@@ -21,7 +20,7 @@ class UnitV2Migration {
         const chatRoomObj = chatRoom.toObject();
 
         unitObj.chatRoom = chatRoomObj._id;
-        unitObj._id  = new ObjectID(unitObj._id);
+        unitObj._id = mongoose.Types.ObjectId(unitObj._id);
 
         await mongoose.connection.collection('units')
           .findOneAndReplace({'_id': unit._id}, unitObj);

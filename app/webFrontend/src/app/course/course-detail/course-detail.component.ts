@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnDestroy, OnInit} from '@angular/core';
+import {AfterViewInit, Component, EventEmitter, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 
 import {CourseService, UserDataService} from '../../shared/services/data.service';
@@ -12,8 +12,8 @@ import {DialogService} from '../../shared/services/dialog.service';
 import {DataSharingService} from '../../shared/services/data-sharing.service';
 import {TranslateService} from '@ngx-translate/core';
 import {ICourseView} from '../../../../../../shared/models/ICourseView';
-
-
+import {ILecture} from '../../../../../../shared/models/ILecture';
+import {IUnit} from '../../../../../../shared/models/units/IUnit';
 
 @Component({
   selector: 'app-course-detail',
@@ -25,6 +25,8 @@ export class CourseDetailComponent implements OnInit, OnDestroy {
   course: ICourseView;
   id: string;
   tabs = [];
+  lectureScrollEmitter = new EventEmitter<ILecture>();
+  unitScrollEmitter = new EventEmitter<IUnit>();
 
   constructor(private router: Router,
               private route: ActivatedRoute,
@@ -36,11 +38,12 @@ export class CourseDetailComponent implements OnInit, OnDestroy {
               private userDataService: UserDataService,
               private dialogService: DialogService,
               private dataSharingService: DataSharingService,
-              private translate: TranslateService) {}
+              private translate: TranslateService) {
+  }
 
   ngOnInit() {
     const data: any = this.route.snapshot.data;
-    this.course = <ICourseView> data.course;
+    this.course = <ICourseView>data.course;
     this.id = this.course._id;
     LastVisitedCourseContainerUpdater.addCourseToLastVisitedCourses(this.id, this.userService, this.userDataService);
     this.titleService.setTitleCut(['Course: ', this.course.name]);
@@ -48,6 +51,11 @@ export class CourseDetailComponent implements OnInit, OnDestroy {
       this.reloadTabBar();
     });
     this.reloadTabBar();
+
+    this.dataSharingService.setDataForKey('lectureScrollEmitter', this.lectureScrollEmitter);
+    this.dataSharingService.setDataForKey('unitScrollEmitter', this.unitScrollEmitter);
+
+    this.lectureScrollEmitter.subscribe(() => this.unitScrollEmitter.emit(null));
 
 
   }
@@ -66,6 +74,7 @@ export class CourseDetailComponent implements OnInit, OnDestroy {
   showUserProfile(teacher: User) {
     this.dialogService.userProfile(teacher);
   }
+
 
   ngOnDestroy() {
     this.dataSharingService.deleteDataForKey('course');

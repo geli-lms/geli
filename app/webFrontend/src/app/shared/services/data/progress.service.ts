@@ -9,23 +9,14 @@ export class ProgressService extends DataService {
   }
 
   async getUnitProgress<T>(unitId: string): Promise<T> {
-    const unitProgress = await this.readSingleItem<any[]>(unitId, this.apiPath + 'units/');
-    return unitProgress.length > 0 ? unitProgress[0] : null;
+    const unitProgress = await this.readSingleItem<any>(unitId, this.apiPath + 'units/');
+    const objectIsEmpty = Object.keys(unitProgress).length === 0 && unitProgress.constructor === Object;
+    return objectIsEmpty ? null : unitProgress;
   }
 
-  getCourseProgress(courseId: string) {
-    const originalApiPath = this.apiPath;
-    this.apiPath += 'courses/';
-    const promise = this.readSingleItem(courseId);
-    this.apiPath = originalApiPath;
-    return promise;
-  }
-
-  getUserProgress(userId: string) {
-    const originalApiPath = this.apiPath;
-    this.apiPath += 'users/';
-    const promise = this.readSingleItem(userId);
-    this.apiPath = originalApiPath;
-    return promise;
+  updateProgress<T extends any>(updateItem: T): Promise<T> {
+    return this.backendService
+      .put(this.apiPath, JSON.stringify(updateItem))
+      .toPromise();
   }
 }

@@ -2,7 +2,6 @@ import {Injectable} from '@angular/core';
 import {MatSnackBar} from '@angular/material';
 import {MatSnackBarRef} from '@angular/material/snack-bar/typings/snack-bar-ref';
 import {SimpleSnackBar} from '@angular/material/snack-bar/typings/simple-snack-bar';
-import {TranslateService} from '@ngx-translate/core';
 
 @Injectable()
 export class SnackBarService {
@@ -10,23 +9,21 @@ export class SnackBarService {
   public static readonly durationShort = 3000;
   public static readonly durationLong = 9000;
   public static readonly defaultDuration = 6000;
-  public defaultAction;
+  private defaultAction = 'Dismiss';
 
   /**
    * @param {MatSnackBar} matSnackBar
    */
-  constructor(private matSnackBar: MatSnackBar,
-              private translate: TranslateService) {
-    this.translate.onLangChange.subscribe(() => {
-      this.setButtonLabel();
-    });
-    this.setButtonLabel();
+  constructor(private matSnackBar: MatSnackBar) {
   }
 
-  setButtonLabel(): void {
-    this.translate.get(['snackbarMessages.dismiss']).subscribe((t: string) => {
-      this.defaultAction = t['snackbarMessages.dismiss'];
-    });
+  /**
+   * Set default action label. "Dismiss" by default.
+   *
+   * @param defaultAction
+   */
+  setDefaultAction(defaultAction: string): void {
+    this.defaultAction = defaultAction;
   }
 
   /**
