@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 -->
 
 ## [Unreleased]
+
+## [[0.8.5](https://github.com/geli-lms/geli/releases/tag/v0.8.5)] - 2019-03-26 - WS 18/19 🎉-Release
 ### Added
 - Translatable SnackBarService. [#922](https://github.com/geli-lms/geli/issues/922)
 - `ProgressController` `GET` unit tests & access denial tests in general. [#1116](https://github.com/geli-lms/geli/issues/1116)
@@ -38,15 +40,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - `TaskUnitComponent.validate` `validationMode` reset. [#1116](https://github.com/geli-lms/geli/issues/1116)
 - `CodeKataComponent` `progress.code` loading. [#1116](https://github.com/geli-lms/geli/issues/1116)
 - Code order in the `MediaController`'s `createDirectory` & `createFile`. [#1196](https://github.com/geli-lms/geli/issues/1196)
+- Notification scroll bug. [#1082](https://github.com/geli-lms/geli/issues/1082)
 
 ### Security
 - Close `ProgressController` vulnerabilities. [#1116](https://github.com/geli-lms/geli/issues/1116)
 - Close `UnitController` vulnerabilities. [#1190](https://github.com/geli-lms/geli/issues/1190)
 - Close `WhitelistController` vulnerabilities. [#1192](https://github.com/geli-lms/geli/issues/1192)
 - Close `MediaController` vulnerabilities. [#1196](https://github.com/geli-lms/geli/issues/1196)
-
-### Fixed
-- Notification scroll bug. [#1082](https://github.com/geli-lms/geli/issues/1082)
 
 ## [[0.8.4](https://github.com/geli-lms/geli/releases/tag/v0.8.4)] - 2018-12-20 - WS 18/19 ❄️-Release
 ### Added
