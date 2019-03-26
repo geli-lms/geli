@@ -305,9 +305,8 @@ export class UnitController {
    * Is called when the user wants to add a file to the assignment.
    * The user can add as much file as she wants as long as the assignment is not finalized/submitted yet.
    *
-   * @apiParam unitId
-   * @apiParam uploadedFile
-   * @apiParam currentUser
+   * @apiParam {String} unitId
+   * @apiParam {Object} uploadedFile
    *
    * @apiError NotFoundError The unit was not found or there isn't an assignment from the current user in the unit.
    */
