@@ -6,7 +6,7 @@ import {VideoUnit} from '../../models/units/VideoUnit';
 import {CodeKataUnit} from '../../models/units/CodeKataUnit';
 import {TaskUnit} from '../../models/units/TaskUnit';
 import {FreeTextUnit} from '../../models/units/FreeTextUnit';
-
+import {AssignmentUnit} from '../../models/units/AssignmentUnit';
 
 @Injectable()
 export class UnitFactoryService {
@@ -20,6 +20,7 @@ export class UnitFactoryService {
       case 'video' : return new VideoUnit(course);
       case 'code-kata': return new CodeKataUnit(course);
       case 'task' : return new TaskUnit(course);
+      case 'assignment' : return new AssignmentUnit(course);
     }
   }
 

@@ -49,7 +49,13 @@ describe('DownloadFile', () => {
   });
 
   async function postValidRequest() {
-    const unit = await FixtureUtils.getRandomUnit();
+    let unit = null;
+    while (unit === null) {
+      unit = await FixtureUtils.getRandomUnit();
+      if (unit.__t === 'assignment') {
+         unit = null;
+      }
+    }
     const lecture = await FixtureUtils.getLectureFromUnit(unit);
     const course = await FixtureUtils.getCourseFromLecture(lecture);
     const courseAdmin = await User.findById(course.courseAdmin);
