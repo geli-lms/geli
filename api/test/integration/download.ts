@@ -180,9 +180,9 @@ describe('DownloadFile', () => {
         .catch(err => err.response);
       res.status.should.be.equal(500);
     });
-    it('should pass (course admin)', async () => {
+    it('should pass (teacher)', async () => {
       const course = await FixtureUtils.getRandomCourseWithAllUnitTypes();
-      const teacher = await User.findById(course.courseAdmin);
+      const teacher = await FixtureUtils.getRandomTeacherForCourse(course);
       const testData = await prepareTestData(course);
       const res = await chai.request(app)
         .post(BASE_URL + '/pdf/individual')
@@ -199,19 +199,6 @@ describe('DownloadFile', () => {
       const res = await chai.request(app)
         .post(BASE_URL + '/pdf/individual')
         .set('Cookie', `token=${JwtUtils.generateToken(student)}`)
-        .send(testData)
-        .catch(err => err.response);
-      expect(res).to.have.status(200);
-      expect(res).to.be.json;
-    }).timeout(30000);
-    // For some reason there is no teacher for a course.
-    it('should pass (teacher)', async () => {
-      const course = await FixtureUtils.getRandomCourseWithAllUnitTypes();
-      const teacher = await User.findById(course.teachers[0]);
-      const testData = await prepareTestData(course);
-      const res = await chai.request(app)
-        .post(BASE_URL + '/pdf/individual')
-        .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
         .send(testData)
         .catch(err => err.response);
       expect(res).to.have.status(200);
