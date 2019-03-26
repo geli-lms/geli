@@ -200,7 +200,7 @@ describe('DownloadFile', () => {
     }).timeout(30000);
     it('should pass (student)', async () => {
       const course = await FixtureUtils.getRandomCourseWithAllUnitTypes();
-      const student = await User.findById(course.students[0]);
+      const student = await FixtureUtils.getRandomStudentForCourse(course);
       const testData = await prepareTestData(course);
       const res = await chai.request(app)
         .post(BASE_URL + '/pdf/individual')
