@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 -->
 
 ## [Unreleased]
+### Changed
+- Bump version number to 0.8.6. [#1206](https://github.com/geli-lms/geli/pull/1206)
 
 ## [[0.8.5](https://github.com/geli-lms/geli/releases/tag/v0.8.5)] - 2019-03-26 - WS 18/19 🎉-Release
 ### Added
