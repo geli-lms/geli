@@ -4,11 +4,11 @@ import {FixtureLoader} from '../../fixtures/FixtureLoader';
 import {JwtUtils} from '../../src/security/JwtUtils';
 import {User} from '../../src/models/User';
 import {FixtureUtils} from '../../fixtures/FixtureUtils';
-import chaiHttp = require('chai-http');
 import {IDownload} from '../../../shared/models/IDownload';
 import {IUser} from '../../../shared/models/IUser';
 import {Lecture} from '../../src/models/Lecture';
 import {ICourse} from '../../../shared/models/ICourse';
+import chaiHttp = require('chai-http');
 
 chai.use(chaiHttp);
 const should = chai.should();
@@ -194,7 +194,7 @@ describe('DownloadFile', () => {
     }).timeout(30000);
     it('should pass (student)', async () => {
       const course = await FixtureUtils.getRandomCourseWithAllUnitTypes();
-      const student = await User.findById(course.students.pop());
+      const student = await User.findById(course.students[0]);
       const testData = await prepareTestData(course);
       const res = await chai.request(app)
         .post(BASE_URL + '/pdf/individual')
@@ -205,18 +205,18 @@ describe('DownloadFile', () => {
       expect(res).to.be.json;
     }).timeout(30000);
     // For some reason there is no teacher for a course.
-    // it('should pass (teacher)', async () => {
-    //   const course = await FixtureUtils.getRandomCourseWithAllUnitTypes();
-    //   const teacher = await User.findById(course.teachers.pop());
-    //   const testData = await prepareTestData(course);
-    //   const res = await chai.request(app)
-    //     .post(BASE_URL + '/pdf/individual')
-    //     .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
-    //     .send(testData)
-    //     .catch(err => err.response);
-    //   expect(res).to.have.status(200);
-    //   expect(res).to.be.json;
-    // }).timeout(30000);
+    it('should pass (teacher)', async () => {
+      const course = await FixtureUtils.getRandomCourseWithAllUnitTypes();
+      const teacher = await User.findById(course.teachers[0]);
+      const testData = await prepareTestData(course);
+      const res = await chai.request(app)
+        .post(BASE_URL + '/pdf/individual')
+        .set('Cookie', `token=${JwtUtils.generateToken(teacher)}`)
+        .send(testData)
+        .catch(err => err.response);
+      expect(res).to.have.status(200);
+      expect(res).to.be.json;
+    }).timeout(30000);
   });
 
   describe(`POST ${BASE_URL + '/pdf/single'}`, () => {
