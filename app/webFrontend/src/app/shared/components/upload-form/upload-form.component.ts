@@ -18,6 +18,8 @@ export class UploadFormComponent implements OnInit, OnChanges {
     @Input() maxFileNumber: number;
     @Input() uploadSingleFile: boolean;
     @Input() profilePictureUrl: string;
+    @Input() showPreviewImage = false;
+
     @Output() onFileSelectedChange = new EventEmitter();
     @Output() onFileUploaded = new EventEmitter();
     @Output() onAllUploaded = new EventEmitter();
@@ -148,7 +150,7 @@ export class UploadFormComponent implements OnInit, OnChanges {
     }
 
     preparePreviewImage(event) {
-        if (event.target.files && event.target.files[0]) {
+        if (this.showPreviewImage && event.target.files && event.target.files[0]) {
             const reader = new FileReader();
 
             reader.readAsDataURL(event.target.files[0]);

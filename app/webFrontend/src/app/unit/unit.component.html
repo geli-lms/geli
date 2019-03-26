@@ -24,6 +24,7 @@
       <app-code-kata *ngSwitchCase="'code-kata'" [codeKataUnit]="unit"></app-code-kata>
       <app-free-text-unit *ngSwitchCase="'free-text'" [theme]="course?.freeTextStyle"
                           [freeTextUnit]="unit"></app-free-text-unit>
+      <app-assignment-unit *ngSwitchCase="'assignment'" [assignmentUnit]="unit"></app-assignment-unit>
       <div class="unit-detail">
         <span>{{chatMessageCount[unit._id]}}</span>
         <button mat-icon-button appShowComments [room]="unit.chatRoom" [title]="unit.name">
