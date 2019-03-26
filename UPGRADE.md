@@ -1,3 +1,15 @@
+# Upgrade from 0.8.4 to 0.8.5
+
+- MediaController vulnerabilities [#1196](https://github.com/geli-lms/geli/issues/1196) requires database migration
+
+### Production / Staging
+
+`docker-compose run --rm api node migrate.js --up 20190323-course-media`
+
+### Develop
+
+`npm run migrate -- --up 20190323-course-media`
+
 # Upgrade from 0.8.0 to 0.8.1
 
 - Invalid course chatroom [#942](https://github.com/geli-lms/geli/pull/942) requires database migration
