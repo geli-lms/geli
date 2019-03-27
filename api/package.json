@@ -1,6 +1,6 @@
 {
   "name": "geli-api",
-  "version": "0.8.5",
+  "version": "0.8.6",
   "license": "Apache-2.0",
   "repository": "geli-lms/geli",
   "description": "This is the API-Package.json for geli.",
@@ -110,7 +110,7 @@
     "temp": "^0.9.0",
     "tslint": "5.14.0",
     "typedoc": "^0.14.2",
-    "typescript": "^3.2.4"
+    "typescript": "^3.3.4000"
   },
   "engines": {
     "node": ">=4.0.0"
