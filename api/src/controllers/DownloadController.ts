@@ -32,10 +32,9 @@ import {File} from '../models/mediaManager/File';
 import {ICourse} from '../../../shared/models/ICourse';
 import * as mongoose from 'mongoose';
 import {CreateOptions} from 'html-pdf';
-import {Archiver} from 'archiver';
 
-const archiver = require('archiver');
 import crypto = require('crypto');
+import archiver = require('archiver');
 
 const pdf = require('html-pdf');
 const phantomjs = require('phantomjs-prebuilt');
@@ -145,12 +144,8 @@ export class DownloadController {
     return response;
   }
 
-  async createFileHash(courseName: string, userId: string) {
-    const data = [
-      courseName, userId, Date.now()
-    ].join();
-
-    return crypto.createHash('sha1').update(data).digest('hex');
+  async createFileHash() {
+    return crypto.randomBytes(16).toString('hex');
   }
 
   /**
@@ -189,7 +184,7 @@ export class DownloadController {
       throw new BadRequestError();
     }
 
-    const hash = await this.createFileHash(course.name, user._id);
+    const hash = await this.createFileHash();
     const filePath = path.join(path.resolve(config.tmpFileCacheFolder), 'download_' + hash + '.zip');
     const output = fs.createWriteStream(filePath);
 
@@ -303,7 +298,7 @@ export class DownloadController {
     }
 
     data.courseName += 'Single';
-    const hash = await this.createFileHash(course.name, user._id);
+    const hash = await this.createFileHash();
     const filePath = path.join(path.resolve(config.tmpFileCacheFolder), 'download_' + hash + '.zip');
     const output = fs.createWriteStream(filePath);
 
