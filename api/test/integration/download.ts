@@ -197,7 +197,7 @@ describe('DownloadFile', () => {
         .catch(err => err.response);
       expect(res).to.have.status(200);
       expect(res).to.be.json;
-    }).timeout(30000);
+    }).timeout(45000);
     it('should pass (student)', async () => {
       const course = await FixtureUtils.getRandomCourseWithAllUnitTypes();
       const student = await FixtureUtils.getRandomStudentForCourse(course);
@@ -209,7 +209,7 @@ describe('DownloadFile', () => {
         .catch(err => err.response);
       expect(res).to.have.status(200);
       expect(res).to.be.json;
-    }).timeout(30000);
+    }).timeout(45000);
   });
 
   describe(`POST ${BASE_URL + '/pdf/single'}`, () => {
