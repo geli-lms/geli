@@ -27,7 +27,6 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 const archiver = require('archiver');
-const cache = require('node-file-cache').create({life: config.timeToLiveCacheValue});
 
 const uploadOptions = {
   storage: multer.diskStorage({
