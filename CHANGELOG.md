@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
 - Bump version number to 0.8.6. [#1206](https://github.com/geli-lms/geli/pull/1206)
 - Refactor `DownloadController`. [#913](https://github.com/geli-lms/geli/issues/913)
+- Timeout for pdf export tests increased. [#1248](https://github.com/geli-lms/geli/pull/1248)
 
 ### Fixed
 - Apidoc: parser plugin 'param' not found in block. [#1207](https://github.com/geli-lms/geli/pull/1207)
