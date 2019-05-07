@@ -11,6 +11,7 @@ import {IFile} from '../../../../../../shared/models/mediaManager/IFile';
 import {IDuplicationResponse} from '../../../../../../shared/models/IDuplicationResponse';
 import {IUserSearchMeta} from '../../../../../../shared/models/IUserSearchMeta';
 import {IConfig} from '../../../../../../shared/models/IConfig';
+import {IAssignment} from '../../../../../../shared/models/assignment/IAssignment';
 import {INotificationView} from '../../../../../../shared/models/INotificationView';
 import {INotificationSettingsView} from '../../../../../../shared/models/INotificationSettingsView';
 
@@ -288,6 +289,53 @@ export class TaskService extends DataService {
         );
     });
   }
+}
+
+@Injectable()
+export class AssignmentService extends DataService {
+  constructor(public backendService: BackendService) {
+    super('units/', backendService);
+  }
+
+  createAssignment(unitId: string): Promise<any> {
+    return this.backendService.post(this.apiPath + unitId + '/assignment', null)
+      .toPromise();
+  }
+
+  updateAssignment(assignment: IAssignment, unitId: string): Promise<any[]> {
+    return new Promise((resolve, reject) => {
+      this.backendService.put(this.apiPath + unitId + '/assignment', assignment)
+        .subscribe(
+          (responseItem: any) => {
+            resolve(responseItem);
+          },
+          error => reject(error)
+        );
+    });
+  }
+
+  deleteAssignment(unitId: string): Promise<any[]> {
+    return new Promise((resolve, reject) => {
+      this.backendService.delete(this.apiPath + unitId + '/assignment')
+        .subscribe(
+          (responseItem: any) => {
+            resolve(responseItem);
+          },
+          error => reject(error)
+        );
+    });
+  }
+
+  downloadAllAssignments(unitId: string): Promise<Response> {
+    return this.backendService.getDownload(this.apiPath + unitId + '/assignments/files')
+        .toPromise();
+  }
+
+  downloadSingleAssignment(unitId: string, userId: string): Promise<Response> {
+    return this.backendService.getDownload(this.apiPath + unitId + '/assignments/' + userId + '/files')
+      .toPromise();
+  }
+
 }
 
 @Injectable()

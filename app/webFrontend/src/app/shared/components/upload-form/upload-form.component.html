@@ -47,7 +47,7 @@
         </mat-action-row>
     </div>
   </div>
-  <div *ngIf="uploadSingleFile" class="image-preview-group">
+  <div *ngIf="uploadSingleFile && showPreviewImage" class="image-preview-group">
     <h3>Image preview</h3>
     <img class="preview-image" [src]="profilePictureUrl">
   </div>

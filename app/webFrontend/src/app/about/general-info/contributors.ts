@@ -17,7 +17,7 @@ export class ContributorsList {
       // Students
       new Contributor('Tobias', 'Neumann', '18SuSe', 'Student', 'Gargamil'),
       new Contributor('David', 'Boschmann', '18SuSe', 'Student', 'dboschm'),
-      new Contributor('Daniel', 'Kesselberg', '18SuSe', 'Student', 'danielkesselberg'),
+      new Contributor('Daniel', 'Kesselberg', '18SuSe', 'Student', 'kesselb'),
       new Contributor('Torsten', 'Schlett', '18SuSe', 'Student', 'torss'),
       new Contributor('Lukas', 'Schardt', '18SuSe', 'Student', 'lukas-schardt'),
 

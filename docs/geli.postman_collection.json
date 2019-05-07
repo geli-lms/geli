@@ -1,0 +1,71 @@
+{
+	"info": {
+		"_postman_id": "4a129fb4-ac05-45ef-897d-f2f4cd899bc3",
+		"name": "Geli",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Admin",
+			"item": [
+				{
+					"name": "auth/login (admin@test.local)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"email\": \"admin@test.local\",\n\t\"password\": \"test1234\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:4200/api/auth/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4200",
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "download/cache",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:4200/api/download/cache",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4200",
+							"path": [
+								"api",
+								"download",
+								"cache"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

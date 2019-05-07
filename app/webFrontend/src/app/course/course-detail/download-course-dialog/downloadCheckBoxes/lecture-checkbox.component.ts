@@ -4,6 +4,7 @@ import {
 } from '@angular/core';
 import {ILecture} from '../../../../../../../../shared/models/ILecture';
 import {UnitCheckboxComponent} from './unit-checkbox.component';
+import {IUnit} from '../../../../../../../../shared/models/units/IUnit';
 
 @Component({
   selector: 'app-lecture-checkbox',
@@ -22,11 +23,16 @@ export class LectureCheckboxComponent implements OnInit, AfterViewChecked {
   valueChanged: EventEmitter<any> = new EventEmitter();
   showCheckBox = true;
 
+  units: IUnit[];
+
   constructor(private changeDetector: ChangeDetectorRef) {
     this.chkbox = false;
   }
 
   ngOnInit() {
+    this.units = this.lecture.units.filter(unit => {
+      return unit.__t !== 'assignment';
+    });
   }
 
   ngAfterViewChecked() {

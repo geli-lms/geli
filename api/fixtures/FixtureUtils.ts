@@ -45,6 +45,11 @@ export class FixtureUtils {
     return await User.findById(user);
   }
 
+  public static async getRandomStudentForCourse(course: ICourse, hash?: string): Promise<IUserModel> {
+    const user = await this.getRandom<IUser>([...course.students], hash);
+    return await User.findById(user);
+  }
+
   public static async getRandomTeachers(min: number, max: number, hash?: string): Promise<IUser[]> {
     const array = await this.getTeacher();
     return this.getRandomArray<IUser>(array, min, max, hash);
