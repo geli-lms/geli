@@ -1,6 +1,6 @@
 {
   "name": "geli-api",
-  "version": "0.8.6",
+  "version": "0.8.7",
   "license": "Apache-2.0",
   "repository": "geli-lms/geli",
   "description": "This is the API-Package.json for geli.",
