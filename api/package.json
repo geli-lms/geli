@@ -39,7 +39,7 @@
     "archiver": "^3.0.0",
     "bcrypt": "^3.0.6",
     "body-parser": "^1.19.0",
-    "cookie": "^0.3.1",
+    "cookie": "^0.4.0",
     "express": "^4.16.4",
     "fast-csv": "^2.5.0",
     "highlight.js": "^9.15.6",
