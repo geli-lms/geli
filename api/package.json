@@ -82,7 +82,7 @@
     "@types/mocha": "^5.2.6",
     "@types/mongoose": "~5.5.1",
     "@types/morgan": "1.7.35",
-    "@types/nodemailer": "^6.1.0",
+    "@types/nodemailer": "^6.1.1",
     "@types/passport": "^1.0.0",
     "@types/passport-jwt": "^3.0.1",
     "@types/passport-local": "^1.0.33",
