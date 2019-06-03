@@ -79,7 +79,7 @@
     "@types/html-pdf": "^2.1.2",
     "@types/jsonwebtoken": "^8.3.2",
     "@types/markdown-it": "0.0.7",
-    "@types/mocha": "^5.2.6",
+    "@types/mocha": "^5.2.7",
     "@types/mongoose": "~5.5.1",
     "@types/morgan": "1.7.35",
     "@types/nodemailer": "^6.1.1",
