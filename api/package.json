@@ -52,7 +52,7 @@
     "markdown-it-emoji": "^1.4.0",
     "markdown-it-mark": "^2.0.0",
     "moment": "^2.24.0",
-    "mongoose": "~5.4.21",
+    "mongoose": "~5.6.2",
     "morgan": "^1.9.1",
     "multer": "^1.4.1",
     "nodemailer": "^6.2.1",
