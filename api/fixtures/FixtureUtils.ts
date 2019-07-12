@@ -45,6 +45,11 @@ export class FixtureUtils {
     return await User.findById(user);
   }
 
+  public static async getRandomStudentForCourse(course: ICourse, hash?: string): Promise<IUserModel> {
+    const user = await this.getRandom<IUser>([...course.students], hash);
+    return await User.findById(user);
+  }
+
   public static async getRandomTeachers(min: number, max: number, hash?: string): Promise<IUser[]> {
     const array = await this.getTeacher();
     return this.getRandomArray<IUser>(array, min, max, hash);
@@ -178,6 +183,20 @@ export class FixtureUtils {
     return await User.findOne({
       _id: {$nin: [course.courseAdmin, ...course.teachers]},
       role: 'teacher'
+    });
+  }
+
+  /**
+   * Obtain an unauthorized student for a course.
+   * This student can be used for access denial unit tests.
+   *
+   * @param course The student can't belong to this given course; i.e. the student won't be part of the 'students'.
+   * @returns A user with 'student' role that is not authorized to access the given course.
+   */
+  public static async getUnauthorizedStudentForCourse(course: ICourse): Promise<IUserModel> {
+    return await User.findOne({
+      _id: {$nin: course.students},
+      role: 'student'
     });
   }
 

@@ -16,7 +16,7 @@ import {VideoViewComponent} from './video-view/video-view.component';
 import {GridComponent} from './video-view/grid/grid.component';
 import {MessagingModule} from '../../messaging/messaging.module';
 import {PickerModule} from '@ctrl/ngx-emoji-mart';
-import { CourseForumComponent } from './course-forum/course-forum.component';
+import {CourseForumComponent} from './course-forum/course-forum.component';
 
 @NgModule({
   imports: [

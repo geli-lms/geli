@@ -2,6 +2,7 @@ import {IFile} from '../../../../../../shared/models/mediaManager/IFile';
 
 export class File implements IFile {
   _id: any;
+  _course: any;
   name: string;
   link: string;
   size: number;

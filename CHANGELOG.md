@@ -11,13 +11,58 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 -->
 
 ## [Unreleased]
-### Added
-- Translatable SnackBarService. [#922](https://github.com/geli-lms/geli/issues/922)
-
 ### Fixed
 - Karma test suite. [#655](https://github.com/geli-lms/geli/issues/655)
 
-## [[0.8.4](https://github.com/geli-lms/geli/releases/tag/v0.8.4)] - 2018-12-20 - WS 18/19 ❄️-Release
+## [0.8.6] - 2019-05-07 - WS 18/19 🏁-Release
+### Added
+- Add new unit type `Assignment`. [#600](https://github.com/geli-lms/geli/issues/600)
+
+### Changed
+- Bump version number to 0.8.6. [#1206](https://github.com/geli-lms/geli/pull/1206)
+- Refactor `DownloadController`. [#913](https://github.com/geli-lms/geli/issues/913)
+- Timeout for pdf export tests increased. [#1248](https://github.com/geli-lms/geli/pull/1248)
+
+### Fixed
+- Apidoc: parser plugin 'param' not found in block. [#1207](https://github.com/geli-lms/geli/pull/1207)
+
+## [0.8.5] - 2019-03-26 - WS 18/19 🎉-Release
+### Added
+- Translatable SnackBarService. [#922](https://github.com/geli-lms/geli/issues/922)
+- `ProgressController` `GET` unit tests & access denial tests in general. [#1116](https://github.com/geli-lms/geli/issues/1116)
+- `UnitController` `GET` & `DELETE` route unit tests for status code `200`. [#1190](https://github.com/geli-lms/geli/issues/1190)
+- `UnitController` status code `403` (not authorized to view / edit course) unit tests for all routes. [#1190](https://github.com/geli-lms/geli/issues/1190)
+- `WhitelistController` status code `403` unit tests for all routes. [#1192](https://github.com/geli-lms/geli/issues/1192)
+- Sticky header for course view. [#1115](https://github.com/geli-lms/geli/issues/1115)
+- `MediaController` status code `403` unit tests for all routes. [#1196](https://github.com/geli-lms/geli/issues/1196)
+- `CourseMediaMigration` to patch the `_course` properties of a `Course`'s `Directory` / `File` tree. [#1196](https://github.com/geli-lms/geli/issues/1196)
+
+### Changed
+- Extend `ProgressController` `PUT` route to handle both creation and updates. [#1116](https://github.com/geli-lms/geli/issues/1116)
+- Refactor `ProgressController` unit tests in general. [#1116](https://github.com/geli-lms/geli/issues/1116)
+- Refactor `MediaController` unit tests in general using the `TestHelper`. [#1196](https://github.com/geli-lms/geli/issues/1196)
+- Instead of a list of progress data, the `ProgressController` `GET` route now responds with a single progress object or an empty object if no data can be found. [#1116](https://github.com/geli-lms/geli/issues/1116)
+- `Directory` / `File` schemata and the corresponding interfaces now reference their `Course` as `_course` (analogous to the `Unit` schema). [#1196](https://github.com/geli-lms/geli/issues/1196)
+
+### Removed
+- Unused `ProgressController` `GET` routes for `/courses/` & `/users/`. [#1116](https://github.com/geli-lms/geli/issues/1116)
+- `ProgressController` `POST` route _(obviated by extended `PUT` route)_. [#1116](https://github.com/geli-lms/geli/issues/1116)
+- Unused `WhitelistController` `PUT` route. [#1192](https://github.com/geli-lms/geli/issues/1192)
+- Dependency `migrate-mongoose`. [#1189](https://github.com/geli-lms/geli/pull/1189)
+
+### Fixed
+- `TaskUnitComponent.validate` `validationMode` reset. [#1116](https://github.com/geli-lms/geli/issues/1116)
+- `CodeKataComponent` `progress.code` loading. [#1116](https://github.com/geli-lms/geli/issues/1116)
+- Code order in the `MediaController`'s `createDirectory` & `createFile`. [#1196](https://github.com/geli-lms/geli/issues/1196)
+- Notification scroll bug. [#1082](https://github.com/geli-lms/geli/issues/1082)
+
+### Security
+- Close `ProgressController` vulnerabilities. [#1116](https://github.com/geli-lms/geli/issues/1116)
+- Close `UnitController` vulnerabilities. [#1190](https://github.com/geli-lms/geli/issues/1190)
+- Close `WhitelistController` vulnerabilities. [#1192](https://github.com/geli-lms/geli/issues/1192)
+- Close `MediaController` vulnerabilities. [#1196](https://github.com/geli-lms/geli/issues/1196)
+
+## [0.8.4] - 2018-12-20 - WS 18/19 ❄️-Release
 ### Added
 - Export PDF with styled free text units. [#997](https://github.com/geli-lms/geli/issues/997) [#1047](https://github.com/geli-lms/geli/pull/1047)
 - More predefined custom containers. [#996](https://github.com/geli-lms/geli/issues/996)
@@ -26,8 +71,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Various `NotificationController` unit tests (`200`s, `400`s, `403`s, `404`s). [#1065](https://github.com/geli-lms/geli/issues/1065)
 - Two `NotificationSettingsController` unit tests for `403` & `404` `PUT` request errors. [#1072](https://github.com/geli-lms/geli/issues/1072)
 - `TestHelper` request methods for `PUT` & `DELETE`. [#1041](https://github.com/geli-lms/geli/issues/1041)
-- Code kata validation service. [#844](https://github.com/geli-lms/geli/issues/844)
-- File ↔ video unit display type switching. [#912](https://github.com/geli-lms/geli/issues/912)
+- CodeKata validation service. [#844](https://github.com/geli-lms/geli/issues/844)
+- Course: Added switch for file <-> video unit. [#912](https://github.com/geli-lms/geli/issues/912)
 
 ### Fixed
 - `bundle.scss` not available in api container. [#1052](https://github.com/geli-lms/geli/issues/1052)
@@ -68,7 +113,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Secure `{put} /api/notificationSettings/` by using the `@CurrentUser` instead of allowing arbitrary id requests. [#1072](https://github.com/geli-lms/geli/issues/1072)
 - Minimize `NotificationSettingsController` attack surface by severely simplifying its routes. [#1072](https://github.com/geli-lms/geli/issues/1072)
 
-## [[0.8.3](https://github.com/geli-lms/geli/releases/tag/v0.8.3)] - 2018-11-29 - WS 18/19 🚀-Release
+## [0.8.3] - 2018-11-29 - WS 18/19 🚀-Release
 ### Added
 - Chat system access denial unit tests. [#989](https://github.com/geli-lms/geli/issues/989)
 - `DuplicationController` access denial (`403`) unit tests. [#1016](https://github.com/geli-lms/geli/issues/1016)
@@ -111,7 +156,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Fix missing `teacher` authorization checks in the `ExportController` `course`/`lecture`/`unit` routes. [#1039](https://github.com/geli-lms/geli/issues/1039)
 - Update `node` to latest LTS (Long Term Support) version. [#1019](https://github.com/geli-lms/geli/issues/1019)
 
-## [[0.8.2](https://github.com/geli-lms/geli/releases/tag/v0.8.2)] - 2018-11-08 - WS 18/19 🍪-Release
+## [0.8.2] - 2018-11-08 - WS 18/19 🍪-Release
 ### Added
 - My courses: Make title or teaser image clickable. [#904](https://github.com/geli-lms/geli/issues/904)
 - EU-DSGVO: Export Chat User Data. [#862](https://github.com/geli-lms/geli/issues/862)
@@ -140,11 +185,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Progress leak of invisible units and courses. [#735](https://github.com/geli-lms/geli/issues/735)
 - Reduce XSS attack surface by switching from `localStorage` tokens to `HttpOnly`, strict `SameSite` cookie-based JWT authentication. [#840](https://github.com/geli-lms/geli/issues/840)
 
-## [[0.8.1](https://github.com/geli-lms/geli/releases/tag/v0.8.1)] - 2018-10-31 - WS 18/19 Hotfix-Release
+## [0.8.1] - 2018-10-31 - WS 18/19 Hotfix-Release
 ### Fixed
 - People can enroll in courses again. [#942](https://github.com/geli-lms/geli/pull/942)
 
-## [[0.8.0](https://github.com/geli-lms/geli/releases/tag/v0.8.0)] - 2018-10-29 - WS 18/19 Bugfix & Tweak-Release
+## [0.8.0] - 2018-10-29 - WS 18/19 Bugfix & Tweak-Release
 ### Added
 - Cookie information banner. [#565](https://github.com/geli-lms/geli/pull/565)
 - Course progress can now be exported as a CSV-file. [#766](https://github.com/geli-lms/geli/pull/766)
@@ -244,7 +289,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Secure `DownloadController` → `getArchivedFile` → `id` input usage. [#729](https://github.com/geli-lms/geli/issues/729)
 - _(Scrapped experiment of a `@Controller`-based replacement for the static `'uploads'` route: `UploadsController`. [#729](https://github.com/geli-lms/geli/issues/729))_
 
-## [[0.7.0](https://github.com/geli-lms/geli/releases/tag/v0.7.0)] - 2018-05-05 - SS 18 intermediate Release
+## [0.7.0] - 2018-05-05 - SS 18 intermediate Release
 ### Added
 - A dedicated `FileViewComponent` and restyled the course section. [#599](https://github.com/geli-lms/geli/issues/599)
 - The possibility to sort all courses alphabetically. [#567](https://github.com/geli-lms/geli/issues/567)
@@ -307,12 +352,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Fix multiple severe course related security issues. [#594](https://github.com/geli-lms/geli/issues/594) [#653](https://github.com/geli-lms/geli/issues/653) [#691](https://github.com/geli-lms/geli/issues/691)
 - Update the dependencies for security. [#661](https://github.com/geli-lms/geli/issues/661)
 
-## [[0.6.0](https://github.com/geli-lms/geli/releases/tag/v0.6.0)] - 2018-03-31 - Introduces MediaManager and some minor changes
+## [0.6.0] - 2018-03-31 - Introduces MediaManager and some minor changes
 ### Added
 - MediaManager for file management in courses
 
 
-## [[0.5.0](https://github.com/geli-lms/geli/releases/tag/v0.5.0)] - 2018-03-24 - WS 17/18 intermediate Release
+## [0.5.0] - 2018-03-24 - WS 17/18 intermediate Release
 ### Added
 - selective download of the course
 - progress dashboard for teacher
@@ -326,7 +371,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - adds imprint
 
 
-## [[0.4.0](https://github.com/geli-lms/geli/releases/tag/v0.4.0)] - 2017-12-04 - WS 17/18 Second feature release
+## [0.4.0] - 2017-12-04 - WS 17/18 Second feature release
 ### Added
 - Responsivness improved
 - leave course function
@@ -340,31 +385,50 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - randomize tasks after validation
 
 
-## [[0.3.1](https://github.com/geli-lms/geli/releases/tag/v0.3.1)] - 2017-11-05 - Dynamic db name update
+## [0.3.1] - 2017-11-05 - Dynamic db name update
 ### Added
 - The possibility to use a other database name then 'test'
 
 
-## [[0.3.0](https://github.com/geli-lms/geli/releases/tag/v0.3.0)] - 2017-11-02
+## [0.3.0] - 2017-11-02
 ### Added
 - a lot of major bugfixes and optimizations
 
 
-## [[0.2.2](https://github.com/geli-lms/geli/releases/tag/v0.2.2)] - 2017-10-19 - Security improvements
+## [0.2.2] - 2017-10-19 - Security improvements
 ### Added 
 - security for free courses
 
 
-## [[0.2.1](https://github.com/geli-lms/geli/releases/tag/v0.2.1)] - 2017-10-03 - First Live-Ready release
+## [0.2.1] - 2017-10-03 - First Live-Ready release
 ### Added
 - first live functionality
 
 
-## [[0.2.0](https://github.com/geli-lms/geli/releases/tag/v0.2.0)] - 2017-06-29 - Almost production ready
+## [0.2.0] - 2017-06-29 - Almost production ready
 ### Added
 - Many new feature for production
 
 
-## [[0.1.0](https://github.com/geli-lms/geli/releases/tag/v0.1.0)] - 2017-05-11 - Basics implemented
+## [0.1.0] - 2017-05-11 - Basics implemented
 ### Added
 - Many basic implementations of ground functionality
+
+[Unreleased]: https://github.com/geli-lms/geli/compare/v0.8.6...HEAD
+[0.8.6]: https://github.com/geli-lms/geli/compare/v0.8.5...v0.8.6
+[0.8.5]: https://github.com/geli-lms/geli/compare/v0.8.4...v0.8.5
+[0.8.4]: https://github.com/geli-lms/geli/compare/v0.8.3...v0.8.4
+[0.8.3]: https://github.com/geli-lms/geli/compare/v0.8.2...v0.8.3
+[0.8.2]: https://github.com/geli-lms/geli/compare/v0.8.1...v0.8.2
+[0.8.1]: https://github.com/geli-lms/geli/compare/v0.8.0...v0.8.1
+[0.8.0]: https://github.com/geli-lms/geli/compare/v0.7.0...v0.8.0
+[0.7.0]: https://github.com/geli-lms/geli/compare/v0.6.0...v0.7.0
+[0.6.0]: https://github.com/geli-lms/geli/compare/v0.5.0...v0.6.0
+[0.5.0]: https://github.com/geli-lms/geli/compare/v0.4.0...v0.5.0
+[0.4.0]: https://github.com/geli-lms/geli/compare/v0.3.1...v0.4.0
+[0.3.1]: https://github.com/geli-lms/geli/compare/v0.3.0...v0.3.1
+[0.3.0]: https://github.com/geli-lms/geli/compare/v0.2.2...v0.3.0
+[0.2.2]: https://github.com/geli-lms/geli/compare/v0.2.1...v0.2.2
+[0.2.1]: https://github.com/geli-lms/geli/compare/v0.2.0...v0.2.1
+[0.2.0]: https://github.com/geli-lms/geli/compare/v0.1.0...v0.2.0
+[0.1.0]: https://github.com/geli-lms/geli/releases/tag/v0.1.0

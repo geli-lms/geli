@@ -1,6 +1,5 @@
 // tslint:disable:no-console
 import * as mongoose from 'mongoose';
-import {ObjectID} from 'bson';
 import {IUnitModel} from '../../models/units/Unit';
 import {ITaskUnitModel} from '../../models/units/TaskUnit';
 import {ITaskUnit} from '../../../../shared/models/units/ITaskUnit';
@@ -87,13 +86,12 @@ class TaskUnitMigration {
       const updatedUnitObjs: IUnit[] = await Promise.all(oldUnits.map(async (oldUnit: ITaskUnitModel) => {
         const oldUnitObj: ITaskUnit = <ITaskUnit>oldUnit.toObject();
         oldUnitObj.tasks = <ITask[]>(await Promise.all(oldUnitObj.tasks.map(async (task) => {
-          if (task instanceof ObjectID) {
+          if (task instanceof mongoose.Types.ObjectId) {
             const taskData = await Task.findById(task).exec();
             if (taskData === null) {
               return null;
             }
-            const taskDataObj = taskData.toObject();
-            return taskDataObj;
+            return taskData.toObject();
           } else {
             return task;
           }
@@ -107,7 +105,7 @@ class TaskUnitMigration {
           return updatedUnit._id === oldUnit._id.toString();
         });
 
-        updatedUnitObj._id = new ObjectID(updatedUnitObj._id);
+        updatedUnitObj._id = mongoose.Types.ObjectId(updatedUnitObj._id);
 
         const unitAfterReplace = await mongoose.connection.collection('units')
           .findOneAndReplace({'_id': oldUnit._id}, updatedUnitObj);

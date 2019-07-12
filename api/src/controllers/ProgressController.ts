@@ -1,20 +1,21 @@
 import {
-  BadRequestError, Body, CurrentUser, Get, JsonController, NotFoundError, Param, Post, Put,
-  UseBefore
+  BadRequestError, Body, CurrentUser, Get, JsonController, Param, Put, UseBefore,
+  ForbiddenError
 } from 'routing-controllers';
 import * as moment from 'moment';
 import passportJwtMiddleware from '../security/passportJwtMiddleware';
+import {errorCodes} from '../config/errorCodes';
 import {Progress} from '../models/progress/Progress';
+import {Course} from '../models/Course';
+import {Unit, IUnitModel} from '../models/units/Unit';
 import {IUser} from '../../../shared/models/IUser';
-import {IUnitModel, Unit} from '../models/units/Unit';
-import {IProgress} from '../../../shared/models/progress/IProgress';
 
 @JsonController('/progress')
 @UseBefore(passportJwtMiddleware)
 export class ProgressController {
   private static checkDeadline(unit: any) {
     if (unit.deadline && moment(unit.deadline).isBefore()) {
-      throw new BadRequestError('Past deadline, no further update possible');
+      throw new BadRequestError(errorCodes.progress.pastDeadline.text);
     }
   }
 
@@ -25,140 +26,7 @@ export class ProgressController {
    *
    * @apiParam {String} id Unit ID.
    *
-   * @apiSuccess {Progress[]} progresses Progress.
-   *
-   * @apiSuccessExample {json} Success-Response:
-   *     [{
-   *         "_id": "5ab2b9516fab4a3ae0cd6737",
-   *         "done": false,
-   *         "updatedAt": "2018-03-21T19:58:09.386Z",
-   *         "createdAt": "2018-03-21T19:58:09.386Z",
-   *         "unit": "5ab2b80a6fab4a3ae0cd672d",
-   *         "course": "5a53c474a347af01b84e54b7",
-   *         "answers": {
-   *             "5ab2b80a6fab4a3ae0cd672e": {
-   *                 "5ab2b80a6fab4a3ae0cd6730": true,
-   *                 "5ab2b80a6fab4a3ae0cd672f": false
-   *             },
-   *             "5ab2b8dd6fab4a3ae0cd6734": {
-   *                 "5ab2b8dd6fab4a3ae0cd6736": false,
-   *                 "5ab2b8dd6fab4a3ae0cd6735": true
-   *             },
-   *             "5ab2b8dd6fab4a3ae0cd6731": {
-   *                 "5ab2b8dd6fab4a3ae0cd6733": false,
-   *                 "5ab2b8dd6fab4a3ae0cd6732": true
-   *             }
-   *         },
-   *         "type": "task-unit-progress",
-   *         "user": "5a037e6a60f72236d8e7c813",
-   *         "__v": 0,
-   *         "__t": "task-unit-progress",
-   *         "id": "5ab2b9516fab4a3ae0cd6737"
-   *     }]
-   */
-  @Get('/units/:id')
-  getUnitProgress(@Param('id') id: string) {
-    return Progress.find({'unit': id})
-      .then((progresses) => progresses.map((progress) => progress.toObject({virtuals: true})));
-  }
-
-  /**
-   * @api {get} /api/progress/courses/:id Get course progress
-   * @apiName GetCourseProgress
-   * @apiGroup Progress
-   *
-   * @apiParam {String} id Course ID.
-   *
-   * @apiSuccess {Progress[]} progresses List of progress.
-   *
-   * @apiSuccessExample {json} Success-Response:
-   *     [{
-   *         "_id": "5ab2b9516fab4a3ae0cd6737",
-   *         "done": false,
-   *         "updatedAt": "2018-03-21T19:58:09.386Z",
-   *         "createdAt": "2018-03-21T19:58:09.386Z",
-   *         "unit": "5ab2b80a6fab4a3ae0cd672d",
-   *         "course": "5a53c474a347af01b84e54b7",
-   *         "answers": {
-   *             "5ab2b80a6fab4a3ae0cd672e": {
-   *                 "5ab2b80a6fab4a3ae0cd6730": true,
-   *                 "5ab2b80a6fab4a3ae0cd672f": false
-   *             },
-   *             "5ab2b8dd6fab4a3ae0cd6734": {
-   *                 "5ab2b8dd6fab4a3ae0cd6736": false,
-   *                 "5ab2b8dd6fab4a3ae0cd6735": true
-   *             },
-   *             "5ab2b8dd6fab4a3ae0cd6731": {
-   *                 "5ab2b8dd6fab4a3ae0cd6733": false,
-   *                 "5ab2b8dd6fab4a3ae0cd6732": true
-   *             }
-   *         },
-   *         "type": "task-unit-progress",
-   *         "user": "5a037e6a60f72236d8e7c813",
-   *         "__v": 0,
-   *         "__t": "task-unit-progress",
-   *         "id": "5ab2b9516fab4a3ae0cd6737"
-   *     }]
-   */
-  @Get('/courses/:id')
-  getCourseProgress(@Param('id') id: string) {
-    return Progress.find({'course': id})
-      .then((progresses) => progresses.map((progress) => progress.toObject({virtuals: true})));
-  }
-
-  /**
-   * @api {get} /api/progress/users/:id Get user progress
-   * @apiName GetUserProgress
-   * @apiGroup Progress
-   *
-   * @apiParam {String} id User ID.
-   *
-   * @apiSuccess {Progress[]} progresses List of progress.
-   *
-   * @apiSuccessExample {json} Success-Response:
-   *     [{
-   *         "_id": "5ab2b9516fab4a3ae0cd6737",
-   *         "done": false,
-   *         "updatedAt": "2018-03-21T19:58:09.386Z",
-   *         "createdAt": "2018-03-21T19:58:09.386Z",
-   *         "unit": "5ab2b80a6fab4a3ae0cd672d",
-   *         "course": "5a53c474a347af01b84e54b7",
-   *         "answers": {
-   *             "5ab2b80a6fab4a3ae0cd672e": {
-   *                 "5ab2b80a6fab4a3ae0cd6730": true,
-   *                 "5ab2b80a6fab4a3ae0cd672f": false
-   *             },
-   *             "5ab2b8dd6fab4a3ae0cd6734": {
-   *                 "5ab2b8dd6fab4a3ae0cd6736": false,
-   *                 "5ab2b8dd6fab4a3ae0cd6735": true
-   *             },
-   *             "5ab2b8dd6fab4a3ae0cd6731": {
-   *                 "5ab2b8dd6fab4a3ae0cd6733": false,
-   *                 "5ab2b8dd6fab4a3ae0cd6732": true
-   *             }
-   *         },
-   *         "type": "task-unit-progress",
-   *         "user": "5a037e6a60f72236d8e7c813",
-   *         "__v": 0,
-   *         "__t": "task-unit-progress",
-   *         "id": "5ab2b9516fab4a3ae0cd6737"
-   *     }]
-   */
-  @Get('/users/:id')
-  getUserProgress(@Param('id') id: string) {
-    return Progress.find({'user': id})
-      .then((progresses) => progresses.map((progress) => progress.toObject({virtuals: true})));
-  }
-
-  /**
-   * @api {post} /api/progress/ Create progress
-   * @apiName PostProgress
-   * @apiGroup Progress
-   *
-   * @apiParam {IProgress} data Progress data.
-   * @apiParam {IUser} currentUser Currently logged in user.
-   *
-   * @apiParam {String} id Notification ID.@apiSuccess {Progress} progress Created progress.
+   * @apiSuccess {Progress} progress Progress data or an empty object if no data is available.
    *
    * @apiSuccessExample {json} Success-Response:
    *     {
@@ -189,26 +57,21 @@ export class ProgressController {
    *         "id": "5ab2b9516fab4a3ae0cd6737"
    *     }
    *
-   * @apiError BadRequestError progress need fields course, user and unit
+   * @apiError ForbiddenError
    */
-  @Post('/')
-  async createProgress(@Body() data: IProgress, @CurrentUser() currentUser?: IUser) {
-    // discard invalid requests
-    if (!data.course || !data.unit || !currentUser) {
-      throw new BadRequestError('progress need fields course, user and unit');
+  @Get('/units/:id')
+  async getUnitProgress(@Param('id') id: string, @CurrentUser() currentUser: IUser) {
+    const unit = await Unit.findById(id);
+    const course = await Course.findById(unit._course);
+    if (!course.checkPrivileges(currentUser).userCanViewCourse) {
+      throw new ForbiddenError();
     }
-
-    const unit: IUnitModel = await Unit.findById(data.unit);
-    ProgressController.checkDeadline(unit);
-
-    data.user = currentUser;
-
-    const progress = await Progress.create(data);
-    return progress.toObject();
+    const progress = await Progress.findOne({user: currentUser, unit: id});
+    return progress ? progress.toObject({virtuals: true}) : {};
   }
 
   /**
-   * @api {put} /api/progress/:id Update progress
+   * @api {put} /api/progress/ Set progress for a unit (i.e. create or update it idempotently)
    * @apiName PutProgress
    * @apiGroup Progress
    *
@@ -246,24 +109,27 @@ export class ProgressController {
    *         "id": "5ab2b9516fab4a3ae0cd6737"
    *     }
    *
-   * @apiError NotFoundError
+   * @apiError ForbiddenError
    */
-  @Put('/:id')
-  async updateProgress(@Param('id') id: string, @Body() data: any, @CurrentUser() currentUser: IUser) {
-    const progress = await Progress.findById(id);
-
-    if (!progress) {
-      throw new NotFoundError();
+  @Put('/')
+  async updateProgress(@Body() data: any, @CurrentUser() currentUser: IUser) {
+    const unit: IUnitModel = await Unit.findById(data.unit);
+    const course = await Course.findById(unit._course);
+    if (!course.checkPrivileges(currentUser).userCanViewCourse) {
+      throw new ForbiddenError();
     }
-
-    const unit: IUnitModel = await Unit.findById(progress.unit);
     ProgressController.checkDeadline(unit);
 
-    // set user
     data.user = currentUser._id;
+    data.course = course._id;
 
-    progress.set(data);
-    await progress.save();
+    let progress = await Progress.findOne({user: currentUser, unit});
+    if (!progress) {
+      progress = await Progress.create(data);
+    } else {
+      progress.set(data);
+      await progress.save();
+    }
 
     return progress.toObject();
   }

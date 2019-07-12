@@ -50,6 +50,9 @@
   <app-free-text-unit-form
     *ngIf="type == 'free-text'"
     ></app-free-text-unit-form>
+  <app-assignment-unit-form
+          *ngIf="type == 'assignment'"
+  ></app-assignment-unit-form>
 
   <div class="btn-wrapper">
     <app-button-save-cancel [saveButtonDisabled]="unitForm.invalid">

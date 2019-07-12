@@ -1,0 +1,70 @@
+.table-responsive {
+  overflow-x: auto;
+}
+
+table {
+  border-collapse: collapse;
+
+  .content-row {
+    font-size: 14px;
+  }
+
+  td {
+    border-bottom: 1px solid grey;
+    padding: 10px;
+    width: 15rem;
+
+    &.not-submitted {
+      opacity: 0.5;
+    }
+  }
+
+  .heading-row {
+    font-size: 12px;
+    font-weight: 500;
+  }
+
+  &.w-100 {
+    width: 100%;
+  }
+}
+
+.submit-button-group {
+  margin-top: 20px;
+
+  .delete-button {
+    margin-left: 10px;
+  }
+}
+
+.assignment-status-group {
+  display: flex;
+  flex-direction: column;
+  margin-top: 30px;
+
+  .status-group {
+    align-items: center;
+    display: flex;
+    margin-top:10px;
+
+    #assignment_turned_in {
+      color: orange;
+    }
+
+    #done {
+      color: green;
+    }
+
+    #clear {
+      color: red;
+    }
+  }
+}
+
+.upload-button-group {
+  margin-top: 1rem
+}
+
+.spinner {
+  margin-top: 1rem;
+}

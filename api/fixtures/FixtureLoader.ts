@@ -113,7 +113,7 @@ export class FixtureLoader {
     }));
 
     // import messages
-    this.loadMessages();
+    await this.loadMessages();
 
     // import files
     const fileUnits = await Unit.find({files: {$exists: true}});
