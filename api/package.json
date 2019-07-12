@@ -90,7 +90,7 @@
     "@types/validator": "^10.11.1",
     "chai": "4.2.0",
     "chai-http": "^4.3.0",
-    "coveralls": "^3.0.4",
+    "coveralls": "^3.0.5",
     "gulp": "^4.0.2",
     "gulp-apidoc": "^0.2.7",
     "gulp-istanbul": "1.1.3",
