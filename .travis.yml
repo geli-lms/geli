@@ -81,6 +81,7 @@ jobs:
         - npm start &
         - cd ${TRAVIS_BUILD_DIR}/app/webFrontend
         - npm run lint
+        - npm run test
         - npm run e2e
         - npm run build
     - stage: deploy

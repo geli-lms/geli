@@ -12,7 +12,6 @@
     "build": "ng build --prod --source-map",
     "build-pr": "ng build --prod",
     "test": "ng test",
-    "test-ci": "ng test --single-run",
     "lint": "ng lint",
     "lint:fix": "ng lint web-frontend --fix",
     "e2e": "ng e2e"
@@ -77,7 +76,7 @@
     "codelyzer": "~4.2.1",
     "jasmine-core": "~3.1.0",
     "jasmine-spec-reporter": "~4.2.1",
-    "karma": "^2.0.4",
+    "karma": "^3.1.4",
     "karma-chrome-launcher": "~2.2.0",
     "karma-cli": "~1.0.1",
     "karma-coverage-istanbul-reporter": "^1.4.3",

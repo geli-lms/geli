@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 -->
 
 ## [Unreleased]
+### Fixed
+- Karma test suite. [#655](https://github.com/geli-lms/geli/issues/655)
 
 ## [0.8.6] - 2019-05-07 - WS 18/19 🏁-Release
 ### Added

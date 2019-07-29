@@ -1,13 +1,26 @@
 /* tslint:disable:no-unused-variable */
 
-import {TestBed, async} from '@angular/core/testing';
+import {async, TestBed} from '@angular/core/testing';
 import {AppComponent} from './app.component';
+import {PrivacyModule} from './privacy/privacy.module';
+import {TranslateModule} from '@ngx-translate/core';
+import {MaterialImportModule} from './shared/modules/material-import.module';
+import {RouterTestingModule} from '@angular/router/testing';
+import {NotificationModule} from './notification/notification.module';
 
 describe('AppComponent', () => {
+
   beforeEach(() => {
     TestBed.configureTestingModule({
+      imports: [
+        PrivacyModule,
+        MaterialImportModule,
+        NotificationModule,
+        TranslateModule.forRoot(),
+        RouterTestingModule
+      ],
       declarations: [
-        AppComponent
+        AppComponent,
       ],
     });
     TestBed.compileComponents();
