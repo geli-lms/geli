@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 - Update chromedriver. [#1343](https://github.com/geli-lms/geli/pull/1343)
+- Remove unused dependency `fast-csv`. [#1352](https://github.com/geli-lms/geli/pull/1352)
 
 ## [0.8.6] - 2019-05-07 - WS 18/19 🏁-Release
 ### Added
