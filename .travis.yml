@@ -9,18 +9,8 @@ node_js:
   - "10.13"
 
 addons:
-  apt:
-    sources:
-      - google-chrome
-    packages:
-      # manually update dependencies for chrome
-      - libfontconfig1
-      - libstdc++6
-      - lsb-base
-      # used for frontend e2e tests
-      - google-chrome-stable
-      - rsync
-
+  chrome: stable
+  
 services:
   - mongodb
   - docker
