@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 -->
 
 ## [Unreleased]
+- Install chrome as travis addon. []()
 - Update chromedriver. [#1343](https://github.com/geli-lms/geli/pull/1343)
 - Remove unused dependency `fast-csv`. [#1352](https://github.com/geli-lms/geli/pull/1352)
 
