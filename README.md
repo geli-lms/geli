@@ -39,7 +39,7 @@ The codebase is written entirely in [TypeScript](https://www.typescriptlang.org/
 The API is based on [Node.js](https://nodejs.org) together with [Express](http://expressjs.com), 
 [routing controllers](https://github.com/pleerock/routing-controllers) and 
 [MongoDB](https://www.mongodb.com).
-Have a look at our [API documentation](https://h-da.github.io/geli-docs/).
+Have a look at our [API documentation](https://github.com/geli-lms/geli-docs/).
 
 The web frontend is built with [Angular](https://angular.io/) 6 and 
 [Angular Material](https://material.angular.io/) components.
