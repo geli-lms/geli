@@ -1,4 +1,4 @@
- # geli
+ # geli -- unfortunately no active developers for now :(
 
 ![geli-Logo](.var/geli-readme-icon.png)
 
