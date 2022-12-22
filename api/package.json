@@ -43,7 +43,7 @@
     "express": "^4.17.1",
     "highlight.js": "^9.15.10",
     "html-pdf": "^2.2.0",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.0",
     "markdown-it": "^8.4.2",
     "markdown-it-abbr": "^1.0.4",
     "markdown-it-container": "^2.0.0",
